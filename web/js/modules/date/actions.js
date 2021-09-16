@@ -5,6 +5,7 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
   TOGGLE_CUSTOM_MODAL,
+  INIT_SECOND_DATE,
   ARROW_DOWN,
   ARROW_UP,
   SET_PRELOAD,
@@ -46,6 +47,11 @@ export function updateAppNow(date) {
   return {
     type: UPDATE_APP_NOW,
     value: date,
+  };
+}
+export function initSecondDate() {
+  return {
+    type: INIT_SECOND_DATE,
   };
 }
 export function selectDate(date) {

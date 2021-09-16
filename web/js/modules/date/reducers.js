@@ -6,6 +6,7 @@ import {
   UPDATE_APP_NOW,
   TOGGLE_CUSTOM_MODAL,
   customModalType,
+  INIT_SECOND_DATE,
   ARROW_DOWN,
   ARROW_UP,
   SET_PRELOAD,
@@ -44,6 +45,11 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         selectedZoom: action.value,
+      };
+    case INIT_SECOND_DATE:
+      return {
+        ...state,
+        selectedB: util.dateAdd(state.selected, 'day', -7),
       };
     case CHANGE_CUSTOM_INTERVAL:
       return {
