@@ -195,7 +195,7 @@
       bottom: 90px;
     }
   }
-  @media only screen and (max-width: 450px) {
+  @media only screen and (max-width: 483px) {
     .wv-animation-widget-wrapper.minimized {
       bottom: 90px;
       left: 10px;
