@@ -220,8 +220,12 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   let exceededLengthLimit = false;
   const { pixels, map, swipeOffset } = mapProps;
   const featureOptions = isMobile ? { hitTolerance: 5 } : {};
+  // max displayed results of features at pixel
+  const desktopLimit = 12;
+  const mobileLimit = 5;
+  const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-    const lengthCheck = (arr) => arr.length >= (isMobile ? 5 : 12);
+    const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
     if (lengthCheck(metaArray)) {
       exceededLengthLimit = true;
       return true;
