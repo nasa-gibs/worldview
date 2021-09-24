@@ -31,7 +31,6 @@ function Zoom({
         type="button"
         disabled={zoomLevel === 0}
         className="wv-map-zoom wv-map-zoom-out"
-        title="Zoom out view."
         onClick={() => { mapUtilZoomAction(map, -1); }}
         onMouseMove={(e) => e.stopPropagation()}
       >
