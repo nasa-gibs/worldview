@@ -153,7 +153,7 @@ const addLineOverlay = function(map, dateA, dateB) {
   const draggerCircleEl = document.createElement('div');
   const firstLabel = document.createElement('span');
   const secondLabel = document.createElement('span');
-  const windowWidth = util.browser.dimensions[0];
+  const windowWidth = window.innerWidth;
   mapCase = map.getTargetElement();
   draggerCircleEl.className = 'swipe-dragger-circle';
   firstLabel.className = 'ab-swipe-span left-label';
@@ -223,7 +223,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
       dragging = true;
       events.trigger('compare:movestart');
     }
-    const windowWidth = util.browser.dimensions[0];
+    const windowWidth = window.innerWidth;
     if (listenerObj.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
