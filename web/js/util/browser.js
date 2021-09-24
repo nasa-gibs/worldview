@@ -4,7 +4,6 @@ export default (function() {
 
   const init = function() {
     self.mobileAndTabletDevice = self.tests.mobileAndTabletDevice();
-    self.dimensions = self.tests.getWindowDimensions();
   };
 
   self.tests = {};
@@ -24,10 +23,6 @@ export default (function() {
       }
     }(navigator.userAgent || navigator.vendor || window.opera));
     return check;
-  };
-
-  self.tests.getWindowDimensions = function() {
-    return [window.innerWidth, window.innerHeight];
   };
 
   init();
