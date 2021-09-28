@@ -6,6 +6,10 @@ export default function AboutPage() {
 
     <Scrollbar style={{ height: 'calc(var(--vh, 1vh) * 100 - 200px)' }}>
       <div className="about-page">
+        <h1>
+          Welcome to @NAME@
+        </h1>
+
         <div className="right">
           <div className="caption">
             Version @BUILD_VERSION@
@@ -15,16 +19,12 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <h1>
-          Welcome to @NAME@
-        </h1>
-
         <p>
           This app from NASA&apos;s
           {' '}
           <a href="https://earthdata.nasa.gov/eosdis" target="_blank" rel="noopener noreferrer">EOSDIS</a>
           {' '}
-          provides the capability to interactively browse over 900 global, full-resolution satellite imagery
+          provides the capability to interactively browse over 1000 global, full-resolution satellite imagery
           layers and then download the underlying data. Many of the imagery layers are updated daily and are available within three hours
           of observation - essentially showing the entire Earth as it looks &quot;right now&quot;. This supports time-critical application
           areas such as wildfire management, air quality measurements, and flood monitoring. Arctic and Antarctic views
@@ -91,6 +91,16 @@ export default function AboutPage() {
                   {' '}
                   +
                   {' '}
+                  <code>T</code>
+                </td>
+                <td>Jump to today/now on the timeline</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>Shift</code>
+                  {' '}
+                  +
+                  {' '}
                   <code>D</code>
                 </td>
                 <td>Toggle distraction free mode</td>
@@ -134,7 +144,7 @@ export default function AboutPage() {
         <hr />
         <h2>Acknowledgements</h2>
         <p>
-          With over 900 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
+          With over 1000 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
         </p>
         <p>
           While Worldview provides the highest priority products/parameters as decided by the data providers and users, not all NASA standard products (or all parameters within each product) are available via Worldview, see
@@ -253,7 +263,14 @@ export default function AboutPage() {
 
         <ul>
           <li>
-            Geostationary imagery layers are provided by the
+            GeoColor imagery layers from GOES-East and GOES-West are provided by
+            {' '}
+            <a href="https://www.star.nesdis.noaa.gov/goes/" target="_blank" rel="noopener noreferrer">NOAA/NESDIS/STAR</a>
+            {' '}
+            .
+          </li>
+          <li>
+            Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, and Air Mass) are provided by the
             {' '}
             <a href="https://weather.msfc.nasa.gov/sport/" target="_blank" rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a>
             {' '}

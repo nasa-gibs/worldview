@@ -8,7 +8,7 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/Areas_NoData",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Data_No_Data"
@@ -17,7 +17,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/Areas_NoData",
+                    "description": "modis/terra/AreasNoData",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Data_No_Data"

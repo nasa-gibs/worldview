@@ -13,8 +13,6 @@
                     "settings": [
                         "MODIS_Aqua_Land_Surface_Temp_Day",
                         "MODIS_Aqua_Land_Surface_Temp_Night",
-                        "MODIS_Aqua_Land_Surface_Temp_Day_TES",
-                        "MODIS_Aqua_Land_Surface_Temp_Night_TES",
                         "MODIS_Aqua_L3_Land_Surface_Temp_Daily_Day",
                         "MODIS_Aqua_L3_Land_Surface_Temp_Daily_Night",
                         "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Day",
@@ -44,8 +42,6 @@
                     "settings": [
                         "MODIS_Terra_Land_Surface_Temp_Day",
                         "MODIS_Terra_Land_Surface_Temp_Night",
-                        "MODIS_Terra_Land_Surface_Temp_Day_TES",
-                        "MODIS_Terra_Land_Surface_Temp_Night_TES",
                         "MODIS_Terra_L3_Land_Surface_Temp_Daily_Day",
                         "MODIS_Terra_L3_Land_Surface_Temp_Daily_Night",
                         "MODIS_Terra_L3_Land_Surface_Temp_8Day_Day",
@@ -71,7 +67,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/LandSurfaceTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Summer_Day_Max_Land_Surface_Temp_2013",

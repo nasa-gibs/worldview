@@ -8,7 +8,7 @@
                 "MERRA-2": {
                     "id": "merra-2",
                     "title": "MERRA-2",
-                    "description": "merra/SurfacePressure",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Surface_Pressure_Monthly"

@@ -32,7 +32,7 @@
   }
   &.search-row.selected {
     left: 0;
-    transition: background 200ms linear, border 200ms linear;
+    transition: background-color 200ms linear;
     background: #eee;
     border-left: 6px solid #d54f21;
     border-top: 1px solid #ddd;
@@ -42,18 +42,18 @@
       color: #666;
     }
     & .layers-all-header > h3 {
-      transition: all 200ms ease;
+      transition: background-color 200ms ease;
       color: #000;
       font-weight: 500;
     }
     & .layers-all-header > h4,
     .layers-all-header > h5 {
-      transition: all 200ms ease;
+      transition: background-color 200ms ease;
       color: #333;
     }
   }
   &:hover:not(.selected) {
-    transition: all 100ms linear;
+    transition: background-color 100ms linear;
     background-color: #5a5a5a;
   }
   &.search-row:hover:not(.selected) {
@@ -129,20 +129,22 @@
   margin-right: 10px;
   margin-top: 10px;
   padding: 10px;
+  .layer-date-ranges {
+    padding-left: 0;
+    .list-group-item {
+      border: 0;
+      padding: 0;
+      background: none;
+      list-style-type: disc;
+      display: list-item;
+      margin: 2px 0 6px 20px;
+      color: #bbb;
+    }
+  }
 }
 
-.layer-date-wrap .layer-date-ranges {
-  padding-left: 0;
-}
-
-.layer-date-wrap .layer-date-ranges .list-group-item {
-  border: 0;
-  padding: 0;
-  background: none;
-  list-style-type: disc;
-  display: list-item;
-  margin: 2px 0 6px 20px;
-  color: #bbb;
+.source-metadata .layer-date-wrap {
+  background: #dfdfdf;
 }
 
 .layer-date-range .layer-date-ranges-button,
@@ -157,11 +159,7 @@
 
 .layer-description .layer-title,
 .layer-modal-content .source-metadata h1,
-.layer-modal-content .source-metadata h2,
-.layer-modal-content .source-metadata h3,
-.layer-modal-content .source-metadata h4,
-.layer-modal-content .source-metadata h5,
-.layer-modal-content .source-metadata h6 {
+.layer-modal-content .source-metadata h2 {
   color: #ddd;
   font-weight: 700;
 }
@@ -169,20 +167,27 @@
 .source-metadata h3 {
   font-weight: 500;
   margin: 10px 0 5px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 16px;
   padding-top: 15px;
   border-top: 1px solid #aaa;
 }
 
 .layer-description .layer-title,
-.layer-modal .source-metadata h3 {
+.layer-info-modal .source-metadata h3 {
   display: block;
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
   font-family: 'Open Sans', sans-serif;
   margin-top: 4px;
+}
+
+.layer-info-modal .source-metadata {
+  p {
+    color: #ccc;
+    margin-bottom: 15px;
+  }
 }
 
 /* Layer search rows */
@@ -267,7 +272,6 @@
 }
 
 .layers-all .source-metadata a,
-.layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layer-description .layer-date-wrap p,
 .layers-all .source-metadata span,
@@ -275,8 +279,6 @@
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
 .layer-date-wrap,
-.layer-metadata ul,
-.source-metadata ul,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -285,6 +287,7 @@
   line-height: 16px;
   margin-bottom: 15px;
 }
+
 .layer-metadata li,
 .source-metadata li {
   line-height: 16px;
@@ -293,12 +296,15 @@
 .layer-metadata ul {
   list-style-position: inside;
 }
+.layer-metadata hr {
+  background: #aaa;
+}
 
 .layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layers-all .source-metadata span,
 .layers-all .source-metadata code {
-  color: #bbb;
+  color: #666;
 }
 
 .layer-date-range,
@@ -424,7 +430,6 @@
     .source-metadata code,
     .list-group-item {
       color: #333;
-      background: transparent;
     }
     .source-metadata a {
       color: #0056b3;

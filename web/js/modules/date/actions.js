@@ -6,8 +6,36 @@ import {
   UPDATE_APP_NOW,
   TOGGLE_CUSTOM_MODAL,
   INIT_SECOND_DATE,
+  ARROW_DOWN,
+  ARROW_UP,
+  SET_PRELOAD,
+  CLEAR_PRELOAD,
 } from './constants';
-import { getMaxActiveLayersDate } from './util';
+import { getSelectedDate } from './selectors';
+import { getMaxActiveLayersDate, outOfStepChange } from './util';
+
+export function triggerTodayButton() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      date,
+      compare,
+    } = state;
+    const activeString = compare.isCompareA ? 'selected' : 'selectedB';
+    const selectedDate = getSelectedDate(state, activeString);
+    const { appNow } = date;
+
+    const selectedDateTime = selectedDate.getTime();
+    const appNowTime = appNow.getTime();
+    if (selectedDateTime !== appNowTime) {
+      dispatch({
+        type: SELECT_DATE,
+        activeString,
+        value: appNow,
+      });
+    }
+  };
+}
 
 export function changeTimeScale(num) {
   return {
@@ -26,38 +54,47 @@ export function initSecondDate() {
     type: INIT_SECOND_DATE,
   };
 }
-export function selectDate(value) {
+export function selectDate(date) {
   return (dispatch, getState) => {
     const state = getState();
-    const {
-      compare,
-    } = state;
-    const activeString = compare.isCompareA ? 'selected' : 'selectedB';
+    const { lastArrowDirection, preloaded } = state.date;
+    const activeString = state.compare.isCompareA ? 'selected' : 'selectedB';
+    const prevDate = getSelectedDate(state);
     const maxDate = getMaxActiveLayersDate(state);
-    const selectedDate = value > maxDate
-      ? maxDate
-      : value;
+    const selectedDate = date > maxDate ? maxDate : date;
+    const direction = selectedDate > prevDate ? 'right' : 'left';
+    const directionChange = direction && lastArrowDirection !== direction;
 
+    if (preloaded && (directionChange || outOfStepChange(state, selectedDate))) {
+      dispatch(clearPreload());
+    }
     dispatch({
       type: SELECT_DATE,
       activeString,
       value: selectedDate,
+      lastArrowDirection: direction,
     });
   };
 }
 export function changeCustomInterval(delta, customInterval) {
-  return {
-    type: CHANGE_CUSTOM_INTERVAL,
-    value: customInterval,
-    delta,
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_CUSTOM_INTERVAL,
+      value: customInterval,
+      delta,
+    });
   };
 }
 export function selectInterval(delta, interval, customSelected) {
-  return {
-    type: CHANGE_INTERVAL,
-    value: interval,
-    delta,
-    customSelected,
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_INTERVAL,
+      value: interval,
+      delta,
+      customSelected,
+    });
   };
 }
 export function toggleCustomModal(open, toggleBy) {
@@ -65,5 +102,36 @@ export function toggleCustomModal(open, toggleBy) {
     type: TOGGLE_CUSTOM_MODAL,
     value: open,
     toggleBy,
+  };
+}
+export function setArrowDown (direction) {
+  return (dispatch, getState) => {
+    const { date } = getState();
+    const { lastArrowDirection } = date;
+    const directionChange = direction && lastArrowDirection !== direction;
+    if (directionChange) {
+      dispatch(clearPreload());
+    }
+    dispatch({
+      type: ARROW_DOWN,
+      value: direction,
+    });
+  };
+}
+export function setArrowUp () {
+  return {
+    type: ARROW_UP,
+  };
+}
+export function setPreload (preloaded, lastPreloadDate) {
+  return {
+    type: SET_PRELOAD,
+    preloaded,
+    lastPreloadDate,
+  };
+}
+export function clearPreload () {
+  return {
+    type: CLEAR_PRELOAD,
   };
 }

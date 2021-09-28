@@ -1,16 +1,13 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
-import OlPoint from 'ol/geom/Point';
-import OlFeature from 'ol/Feature';
-import OlLayerVector from 'ol/layer/Vector';
-import OlSourceVector from 'ol/source/Vector';
-import {
-  Style as OlStyle,
-  Icon as OlIcon,
-} from 'ol/style';
+import OlOverlay from 'ol/Overlay';
 import { containsXY } from 'ol/extent';
+import LocationMarker from '../../components/location-search/location-marker';
 import { coordinatesCRSTransform } from '../projection/util';
 import safeLocalStorage from '../../util/local-storage';
+import { fly } from '../../map/util';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -21,17 +18,14 @@ const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
  * @param {Array} coordinates
  * @param {Number} zoom
  */
-export function animateCoordinates(map, config, coordinates, zoom) {
-  const { projections } = config;
-  const { selected } = map.ui;
-  const { proj } = selected;
-  const { crs } = projections[proj];
+export function animateCoordinates(map, proj, coordinates, zoom) {
+  const { crs } = proj.selected;
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
     [x, y] = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
-  map.ui.animate.fly([x, y], zoom);
+  fly(map, proj, [x, y], zoom);
 }
 
 /**
@@ -58,7 +52,7 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(proj, coordinates, reverseGeocodeResults) {
+export function getCoordinatesMarker(proj, coordinates, results, clearMarker, isMobile, dialogVisible) {
   const { crs } = proj.selected;
 
   // only add marker within current map extent
@@ -68,13 +62,21 @@ export function getCoordinatesMarker(proj, coordinates, reverseGeocodeResults) {
   }
 
   // transform coordinates if not CRS EPSG:4326
-  let transformedCoordinates = false;
+  let transformedCoords = coordinates;
   if (proj !== 'geographic') {
-    transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    transformedCoords = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
 
+  const pinProps = {
+    reverseGeocodeResults: results,
+    coordinates,
+    clearMarker,
+    isMobile,
+    dialogVisible,
+  };
+
   // create Ol vector layer map pin
-  const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults);
+  const marker = createPin(transformedCoords, pinProps);
   return marker;
 }
 
@@ -84,37 +86,21 @@ export function getCoordinatesMarker(proj, coordinates, reverseGeocodeResults) {
  * @param {Array} transformedCoordinates
  * @param {Object} reverseGeocodeResults
  */
-const createPin = function(coordinates, transformedCoordinates = false, reverseGeocodeResults = {}) {
-  const [longitude, latitude] = coordinates;
-  const iconFeature = new OlFeature({
-    geometry: new OlPoint(transformedCoordinates || coordinates),
-    reverseGeocodeResults,
-    latitude,
-    longitude,
+const createPin = function(coordinates, pinProps) {
+  const overlayEl = document.createElement('div');
+  ReactDOM.render(
+    React.createElement(LocationMarker, pinProps),
+    overlayEl,
+  );
+  const markerPin = new OlOverlay({
+    element: overlayEl,
+    position: coordinates,
+    positioning: 'bottom-center',
+    stopEvent: false,
+    id: 'coordinates-map-pin',
   });
 
-  const iconStyle = new OlStyle({
-    image: new OlIcon({
-      anchorOrigin: 'bottom-left',
-      anchorXUnits: 'fraction',
-      anchorYUnits: 'pixels',
-      scale: 0.5,
-      src: 'images/map-pin.png',
-    }),
-  });
-
-  iconFeature.setStyle(iconStyle);
-  iconFeature.setId('coordinates-map-marker');
-
-  const vectorSource = new OlSourceVector({
-    wrapX: false,
-    features: [iconFeature],
-  });
-  const vectorLayer = new OlLayerVector({
-    source: vectorSource,
-  });
-
-  return vectorLayer;
+  return markerPin;
 };
 
 /**

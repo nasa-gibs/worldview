@@ -8,7 +8,7 @@
               "Aqua/Space-Track.org": {
                   "id": "space-track-org-aqua",
                   "title": "Aqua/Space-Track.org",
-                  "description": "reference/orbits/Aqua",
+                  "description": "",
                   "image": "",
                   "settings": [
                       "OrbitTracks_Aqua_Ascending",
@@ -18,7 +18,7 @@
                 "Terra/Space-Track.org": {
                     "id": "space-track-org-terra",
                     "title": "Terra/Space-Track.org",
-                    "description": "reference/orbits/Terra",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Terra_Ascending",
@@ -28,7 +28,7 @@
                 "Aura/Space-Track.org": {
                     "id": "space-track-org-aura",
                     "title": "Aura/Space-Track.org",
-                    "description": "reference/orbits/Aura",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Aura_Ascending",
@@ -38,7 +38,7 @@
                 "CALIPSO/Space-Track.org": {
                     "id": "space-track-org-calipso",
                     "title": "CALIPSO/Space-Track.org",
-                    "description": "reference/orbits/CALIPSO",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Calipso_Ascending",
@@ -48,7 +48,7 @@
                 "CloudSat/Space-Track.org": {
                     "id": "space-track-org-cloudsat",
                     "title": "CloudSat/Space-Track.org",
-                    "description": "reference/orbits/CloudSat",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_CloudSat_Ascending",
@@ -58,7 +58,7 @@
                 "CYGNSS/Space-Track.org": {
                     "id": "space-track-org-cygnss",
                     "title": "CYGNSS/Space-Track.org",
-                    "description": "reference/orbits/CYGNSS",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_CYGNSS_Ascending",
@@ -68,7 +68,7 @@
                 "GCOM-C/Space-Track.org": {
                     "id": "space-track-org-gcomc",
                     "title": "GCOM-C/Space-Track.org",
-                    "description": "reference/orbits/GCOM-C",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_GCOM-C_Ascending",
@@ -78,7 +78,7 @@
                 "GCOM-W1/Space-Track.org": {
                     "id": "space-track-org-gcomw1",
                     "title": "GCOM-W1/Space-Track.org",
-                    "description": "reference/orbits/GCOM-W1",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_GCOM-W1_Ascending",
@@ -88,7 +88,7 @@
                 "GOSAT/Space-Track.org": {
                     "id": "space-track-org-gosat",
                     "title": "GOSAT/Space-Track.org",
-                    "description": "reference/orbits/GOSAT",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_GOSAT_Ascending",
@@ -98,7 +98,7 @@
                 "GOSAT-2/Space-Track.org": {
                     "id": "space-track-org-gosat-2",
                     "title": "GOSAT-2/Space-Track.org",
-                    "description": "reference/orbits/GOSAT-2",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_GOSAT-2_Ascending",
@@ -108,7 +108,7 @@
                 "GPM/Space-Track.org": {
                     "id": "space-track-org-gpm",
                     "title": "GPM/Space-Track.org",
-                    "description": "reference/orbits/GPM",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_GPM_Ascending",
@@ -118,7 +118,7 @@
                 "ICESat-2/Space-Track.org": {
                     "id": "space-track-org-icesat-2",
                     "title": "ICESat-2/Space-Track.org",
-                    "description": "reference/orbits/ICESAT-2",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_ICESAT-2_Ascending",
@@ -128,7 +128,7 @@
                 "ISS/Space-Track.org": {
                     "id": "space-track-org-iss",
                     "title": "ISS/Space-Track.org",
-                    "description": "reference/orbits/ISS",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_ISS_Ascending",
@@ -138,7 +138,7 @@
                 "Landsat 7/Space-Track.org": {
                     "id": "space-track-org-landsat-7",
                     "title": "Landsat 7/Space-Track.org",
-                    "description": "reference/orbits/Landsat_7",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Landsat-7_Ascending",
@@ -148,7 +148,7 @@
                 "Landsat 8/Space-Track.org": {
                     "id": "space-track-org-landsat-8",
                     "title": "Landsat 8/Space-Track.org",
-                    "description": "reference/orbits/Landsat_8",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Landsat-8_Ascending",
@@ -158,7 +158,7 @@
                 "MetOp-A/Space-Track.org": {
                     "id": "space-track-org-metop-a",
                     "title": "MetOp-A/Space-Track.org",
-                    "description": "reference/orbits/METOP-A",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-A_Ascending",
@@ -168,7 +168,7 @@
                 "MetOp-B/Space-Track.org": {
                     "id": "space-track-org-metop-b",
                     "title": "MetOp-B/Space-Track.org",
-                    "description": "reference/orbits/METOP-B",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-B_Ascending",
@@ -178,7 +178,7 @@
                 "MetOp-C/Space-Track.org": {
                     "id": "space-track-org-metop-c",
                     "title": "MetOp-C/Space-Track.org",
-                    "description": "reference/orbits/METOP-C",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-C_Ascending",
@@ -188,7 +188,7 @@
                 "NOAA-20/Space-Track.org": {
                     "id": "space-track-org-noaa-20",
                     "title": "NOAA-20/Space-Track.org",
-                    "description": "reference/orbits/NOAA_20",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_NOAA-20_Ascending",
@@ -198,7 +198,7 @@
                 "OCO-2/Space-Track.org": {
                     "id": "space-track-org-oco-2",
                     "title": "OCO-2/Space-Track.org",
-                    "description": "reference/orbits/OCO-2",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_OCO-2_Ascending",
@@ -208,7 +208,7 @@
                 "SAOCOM1-A/Space-Track.org": {
                     "id": "space-track-org-saocom1-a",
                     "title": "SAOCOM1-A/Space-Track.org",
-                    "description": "reference/orbits/SAOCOM1-A",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_SAOCOM1-A_Ascending",
@@ -218,7 +218,7 @@
                 "Sentinel-1A/Space-Track.org": {
                     "id": "space-track-org-sentinel-1a",
                     "title": "Sentinel-1A/Space-Track.org",
-                    "description": "reference/orbits/Sentinel_1A",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Sentinel-1A_Ascending",
@@ -228,7 +228,7 @@
                 "Sentinel-1B/Space-Track.org": {
                     "id": "space-track-org-sentinel-1b",
                     "title": "Sentinel-1B/Space-Track.org",
-                    "description": "reference/orbits/Sentinel_1B",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Sentinel-1B_Ascending",
@@ -238,7 +238,7 @@
                 "Sentinel-2A/Space-Track.org": {
                     "id": "space-track-org-sentinel-2a",
                     "title": "Sentinel-2A/Space-Track.org",
-                    "description": "reference/orbits/Sentinel_2A",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Sentinel-2A_Ascending",
@@ -248,7 +248,7 @@
                 "Sentinel-2B/Space-Track.org": {
                     "id": "space-track-org-sentinel-2b",
                     "title": "Sentinel-2B/Space-Track.org",
-                    "description": "reference/orbits/Sentinel_2B",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Sentinel-2B_Ascending",
@@ -258,7 +258,7 @@
                 "Sentinel-5P/Space-Track.org": {
                     "id": "space-track-org-sentinel-5p",
                     "title": "Sentinel-5P/Space-Track.org",
-                    "description": "reference/orbits/Sentinel_5P",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Sentinel-5P_Ascending",
@@ -268,7 +268,7 @@
                 "SMAP/Space-Track.org": {
                     "id": "space-track-org-smap",
                     "title": "SMAP/Space-Track.org",
-                    "description": "reference/orbits/SMAP",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_SMAP_Ascending",
@@ -278,7 +278,7 @@
                 "Suomi NPP/Space-Track.org": {
                     "id": "space-track-org-suomi-npp",
                     "title": "Suomi NPP/Space-Track.org",
-                    "description": "reference/orbits/SNPP",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OrbitTracks_Suomi_NPP_Ascending",

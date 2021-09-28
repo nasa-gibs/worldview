@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.11.3",
+  "version": "3.12.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -110,7 +110,7 @@
     "eslint-config-standard": "^14.1.0",
     "eslint-import-resolver-node": "^0.3.3",
     "eslint-import-resolver-webpack": "^0.12.1",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-no-storage": "^1.0.2",
@@ -155,6 +155,7 @@
     "shelljs": "^0.8.2",
     "showdown": "^1.9.1",
     "stylelint": "^13.2.0",
+    "stylelint-high-performance-animation": "^1.5.2",
     "tar": "^6.0.1",
     "terser-webpack-plugin": "^4.2.3",
     "url-loader": "^4.1.0",
@@ -168,7 +169,6 @@
   "dependencies": {
     "@elastic/react-search-ui": "^1.5.1",
     "@elastic/react-search-ui-views": "^1.5.1",
-    "@entryline/gifstream": "^1.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
@@ -181,7 +181,6 @@
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.4",
     "copy-to-clipboard": "^3.3.1",
-    "core-js": "^3.6.4",
     "elm-pep": "^1.0.6",
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",
@@ -225,21 +224,17 @@
     "shp-write": "^0.3.2",
     "simplebar-react": "^2.1.0",
     "supercluster": "7.0.0",
-    "web-streams-polyfill": "^2.0.6",
-    "what-input": "^5.2.7",
-    "whatwg-fetch": "^3.0.0"
+    "what-input": "^5.2.7"
   },
   "browserslist": [
-    "last 4 versions",
-    "not ie < 11",
-    "not edge < 17",
-    "not IE_Mob 11",
+    "last 2 versions",
+    "not IE 11",
     "not dead",
-    "> 2%"
+    "> 1%"
   ],
   "jest": {
     "setupFiles": [
-      "./test-env.js"
+      "jest-canvas-mock"
     ],
     "moduleDirectories": [
       "node_modules"

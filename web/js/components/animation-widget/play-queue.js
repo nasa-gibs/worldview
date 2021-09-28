@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { isEmpty as lodashIsEmpty } from 'lodash';
-import Spinner from 'react-loader';
 import Queue from 'promise-queue';
+import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
-import { getLayersActiveAtDate } from '../../modules/date/util';
 
 /*
  * Preload and play animation
@@ -353,8 +351,7 @@ class PlayAnimation extends React.Component {
    * @returns {object} JS Date
    */
   addDate(date) {
-    const { layers, promiseImageryForTime } = this.props;
-    const activeLayers = getLayersActiveAtDate(layers, date);
+    const { promiseImageryForTime } = this.props;
     const strDate = util.toISOStringSeconds(date);
 
     if (this.inQueueObject[strDate] || this.preloadObject[strDate]) {
@@ -363,7 +360,7 @@ class PlayAnimation extends React.Component {
 
     this.addToInQueue(date);
     this.queue
-      .add(() => promiseImageryForTime(date, activeLayers))
+      .add(() => promiseImageryForTime(date))
       .then((addedDate) => {
         if (this.mounted) {
           this.preloadObject[strDate] = addedDate;
@@ -450,38 +447,25 @@ class PlayAnimation extends React.Component {
     this.interval = setTimeout(player, speed);
   }
 
-  renderSpinner() {
-    const { onClose } = this.props;
-    return (
-      <Modal
-        isOpen
-        toggle={onClose}
-        size="sm"
-        backdrop={false}
-        wrapClassName="clickable-behind-modal"
-      >
-        <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
-        <ModalBody>
-          <div style={{ minHeight: 50 }}>
-            <Spinner color="#fff" loaded={false}>
-              Loaded
-            </Spinner>
-          </div>
-        </ModalBody>
-      </Modal>
-    );
-  }
-
   render() {
     const { isPlaying } = this.state;
-    return !isPlaying ? this.renderSpinner() : '';
+    const { onClose } = this.props;
+
+    return isPlaying
+      ? ''
+      : (
+        <PreloadSpinner
+          title="Loading ..."
+          bodyMsg="Preloading imagery for smooth animation"
+          onClose={onClose}
+        />
+      );
   }
 }
 
 PlayAnimation.propTypes = {
   endDate: PropTypes.object.isRequired,
   isPlaying: PropTypes.bool.isRequired,
-  layers: PropTypes.array.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   queueLength: PropTypes.number.isRequired,
   selectDate: PropTypes.func.isRequired,

@@ -19,7 +19,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/CorrectedReflectance",
+                    "description": "modis/terra/CorrectedReflectance",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_CorrectedReflectance_TrueColor",
@@ -31,7 +31,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/CorrectedReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                 	"VIIRS_SNPP_CorrectedReflectance_TrueColor",
@@ -43,7 +43,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/CorrectedReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                 	"VIIRS_NOAA20_CorrectedReflectance_TrueColor",
@@ -55,7 +55,7 @@
                 "Landsat/WELD": {
                     "id": "landsat-weld",
                     "title": "Landsat/WELD",
-                    "description": "landsat/Reflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly",

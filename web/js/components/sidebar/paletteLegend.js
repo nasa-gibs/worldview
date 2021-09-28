@@ -35,15 +35,18 @@ const getLegendObject = (legend, hex, acceptableDifference) => {
    * @param {Number} width | Case width
    */
 const getRunningLabelStyle = (xOffset, textWidth, width) => {
-  if (!xOffset || !textWidth || !width) return { left: '0' };
+  if (!xOffset || !textWidth || !width) return { transform: 'translateX(0)' };
   const halfTextWidth = textWidth / 2 || 0;
   if (halfTextWidth > xOffset) {
-    return { left: '0' };
+    return { transform: 'translateX(0)' };
   } if (xOffset + halfTextWidth > width) {
     return { right: '0' };
   }
-  return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
+  return { transform: `translateX(${Math.floor(xOffset - halfTextWidth)}px)` };
 };
+
+
+// `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
 
 class PaletteLegend extends React.Component {
   constructor(props) {
@@ -250,7 +253,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              left: isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0,
+              transform: `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden',
             }}
           />
@@ -390,7 +393,7 @@ class PaletteLegend extends React.Component {
       <div
         className={
           isHoveringLegend
-            ? `active-lengend wv-palettes-panel${customClass}`
+            ? `active-legend wv-palettes-panel${customClass}`
             : `wv-palettes-panel${customClass}`
         }
         datalayer={layer.id}

@@ -115,10 +115,11 @@ function filterSearch (layer, val, terms) {
   const conceptIdsArray = layer.conceptIds || [];
   const conceptIds = conceptIdsArray.map(({ value = '' }) => value.toLowerCase());
   const shortNames = conceptIdsArray.map(({ shortName = '' }) => shortName.toLowerCase());
-  const matchItems = [title, subtitle, tags, layerId, conceptIds, shortNames];
+  const matchItems = [title, subtitle, tags, layerId, conceptIds];
 
   lodashForEach(terms, (term) => {
-    isFilteredOut = matchItems.every((item) => !item.includes(term));
+    isFilteredOut = matchItems.every((item) => !item.includes(term))
+      && shortNames.every((name) => name.indexOf(term) < 0);
     if (isFilteredOut) return false;
   });
   return isFilteredOut;
@@ -185,7 +186,6 @@ export default function initSearch(state) {
   });
 
   return {
-    // debug: true,
     alwaysSearchOnInitialLoad: true,
     trackUrlState: false,
     initialState: {

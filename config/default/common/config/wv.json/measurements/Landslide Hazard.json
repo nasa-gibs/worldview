@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/LandslideHazard",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "NDH_Landslide_Hazard_Distribution_2000"

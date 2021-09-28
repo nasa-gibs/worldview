@@ -2,4 +2,4 @@ The MISR NRT Color Radiance layer displays the daily radiance data captured by M
 
 This layer is produced from the Red Radiance/RDQI, Green Radiance/RDQI, and Blue Radiance/RDQI fields of the MISR Level 1 Near Real Time Georectified Ellipsoid Radiance Product. It is available globally over both land and ocean on a daily basis, with a resolution of 250 meters per pixel. The images become available approximately three hours after they are captured by the MISR instrument. The images are processed in 10-50 minute portions of the complete MISR orbit.
 
-References: MISR Near Real Time (NRT) Level 1B2 Ellipsoid Data V001. [doi:10.5067/Terra/MISR/MI1B2\_ELLIPSOID\_NRT\_L1.001](https://doi.org/10.5067/Terra/MISR/MI1B2_ELLIPSOID_NRT_L1.001)
+References: MI1B2_ELLIPSOID_NRT_1 [doi:10.5067/Terra/MISR/MI1B2_ELLIPSOID_NRT_L1.001](https://doi.org/10.5067/Terra/MISR/MI1B2_ELLIPSOID_NRT_L1.001)

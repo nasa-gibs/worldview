@@ -8,14 +8,14 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/CloudOpticalThickness",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Cloud_Optical_Thickness",
                         "MODIS_Aqua_Cloud_Optical_Thickness_PCL",
                         "MODIS_Aqua_Cloud_Optical_Thickness_16",
-                        "MODIS_Aqua_Cloud_Optical_Thickness_1621",
                         "MODIS_Aqua_Cloud_Optical_Thickness_16_PCL",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_1621",
                         "MODIS_Aqua_Cloud_Optical_Thickness_PCL_1621",
                         "OrbitTracks_Aqua_Ascending"
                     ]
@@ -23,14 +23,14 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/CloudOpticalThickness",
+                    "description": "modis/terra/CloudOpticalThickness",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Optical_Thickness",
                         "MODIS_Terra_Cloud_Optical_Thickness_PCL",
                         "MODIS_Terra_Cloud_Optical_Thickness_16",
-                        "MODIS_Terra_Cloud_Optical_Thickness_1621",
                         "MODIS_Terra_Cloud_Optical_Thickness_16_PCL",
+                        "MODIS_Terra_Cloud_Optical_Thickness_1621",
                         "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
                         "OrbitTracks_Terra_Descending"
                     ]
@@ -38,7 +38,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa-20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/CloudOpticalThickness",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Cloud_Optical_Thickness",
@@ -48,7 +48,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/CloudOpticalThickness",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Cloud_Optical_Thickness",

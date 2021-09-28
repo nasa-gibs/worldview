@@ -1,5 +1,4 @@
 /* eslint-disable no-multi-assign */
-import ReactDOM from 'react-dom';
 import {
   throttle as lodashThrottle,
   forOwn as lodashForOwn,
@@ -26,11 +25,11 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
+import Queue from 'promise-queue';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import mapPrecacheTile from './precachetile';
-import { getActiveLayerGroup, saveRotation } from './util';
+import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
@@ -40,7 +39,7 @@ import {
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
 } from '../modules/location-search/constants';
-import { SELECT_DATE } from '../modules/date/constants';
+import * as dateConstants from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -55,74 +54,62 @@ import {
   getAllActiveLayers,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
+import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
-import { getLeadingExtent } from '../modules/map/util';
+import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
-import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/location-search/ol-coordinates-marker-util';
-
 
 const { events } = util;
 
 export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
-  const self = {};
-  let cache;
   const dateline = mapDateLineBuilder(store);
-  const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(store);
-  const dataRunner = self.runningdata = new MapRunningData(
-    models,
-    compareMapUi,
-    store,
-  );
+  const runningdata = new MapRunningData(models, compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  cache = self.cache = new Cache(400);
-  self.mapIsbeingDragged = false;
-  self.mapIsbeingZoomed = false;
-  self.proj = {}; // One map for each projection
-  self.selected = null; // The map for the selected projection
-  const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    config,
+  const cache = new Cache(400);
+  const layerQueue = new Queue(5, Infinity);
+  const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
+  const self = {
     cache,
-    store,
-  );
-  self.layerKey = layerBuilder.layerKey;
-  const createLayer = self.createLayer = layerBuilder.createLayer;
-  self.promiseDay = precache.promiseDay;
-  self.selectedVectors = {};
-  self.activeMarker = null;
-  self.coordinatesDialogDOMEl = null;
+    mapIsbeingDragged: false,
+    mapIsbeingZoomed: false,
+    proj: {}, // One map for each projection
+    selected: null, // The map for the selected projection
+    selectedVectors: {},
+    activeMarker: null,
+    runningdata,
+    layerKey,
+    createLayer,
+  };
+
   /**
    * Subscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function(action) {
+    const state = store.getState();
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
+        store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
         return addLayer(def);
       }
       case CLEAR_MARKER:
         return removeCoordinatesMarker();
       case SET_MARKER: {
-        return addMarkerAndUpdateStore(null, action.isInputSearch);
+        return addMarkerAndUpdateStore(true, null, action.isInputSearch);
       }
-      case TOGGLE_DIALOG_VISIBLE: {
-        if (action.value) {
-          addCoordinatesTooltip();
-        } else {
-          removeCoordinatesTooltip();
-        }
-        return;
-      }
+      case TOGGLE_DIALOG_VISIBLE:
+        return addMarkerAndUpdateStore(false);
       case CLEAR_ROTATE: {
         self.selected.getView().animate({
           duration: 500,
@@ -138,7 +125,6 @@ export default function mapui(models, config, store, ui) {
         return;
       }
       case LOCATION_POP_ACTION: {
-        const state = store.getState();
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
         const rotate = lodashGet(state, 'map.rotation') || 0;
@@ -152,8 +138,12 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action.layersToRemove);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
-      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
-        return updateLayerVisibilities();
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
+        updateLayerVisibilities();
+        updateDate().then(preloadNextTiles);
+        return;
+      }
+
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -167,7 +157,9 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
-        return reloadLayers();
+        reloadLayers();
+        preloadForCompareMode();
+        return;
       case CHANGE_PROJECTION:
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -183,7 +175,6 @@ export default function mapui(models, config, store, ui) {
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
         const newSelection = action.payload;
-        const state = store.getState();
         updateVectorSelection(
           action.payload,
           self.selectedVectors,
@@ -195,12 +186,21 @@ export default function mapui(models, config, store, ui) {
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
         return onStopAnimation();
-      case SELECT_DATE:
-        return updateDate();
+      case dateConstants.CHANGE_CUSTOM_INTERVAL:
+      case dateConstants.CHANGE_INTERVAL:
+        return preloadNextTiles();
+      case dateConstants.SELECT_DATE: {
+        layerQueue.add(updateDate).then(preloadNextTiles);
+        break;
+      }
+      case dateConstants.ARROW_DOWN:
+        bufferQuickAnimate(action.value);
+        break;
       default:
         break;
     }
   };
+
   const onStopAnimation = function() {
     const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
     if (hasActiveVectors) {
@@ -232,6 +232,8 @@ export default function mapui(models, config, store, ui) {
       }, 100);
     });
     events.on('redux:action-dispatched', subscribeToStore);
+    events.on('map:reload-layers', reloadLayers);
+    events.on('map:update-date', updateDate);
     updateProjection(true);
   };
 
@@ -250,34 +252,12 @@ export default function mapui(models, config, store, ui) {
     if (coordinates && coordinates.length > 0) {
       if (start) {
         reverseGeocode(coordinates, config).then((results) => {
-          addMarkerAndUpdateStore(results);
+          addMarkerAndUpdateStore(true, results);
         });
       } else {
-        addMarkerAndUpdateStore(reverseGeocodeResults);
+        addMarkerAndUpdateStore(true, reverseGeocodeResults);
       }
     }
-  };
-
-  /*
-   * Remove coordinates tooltip from all projections
-   *
-   * @method removeCoordinatesTooltip
-   * @static
-   *
-   * @returns {void}
-   */
-  const removeCoordinatesTooltip = () => {
-    const mapProjections = Object.keys(self.proj);
-    mapProjections.forEach((mapProjection) => {
-      const mapOverlays = self.proj[mapProjection].getOverlays().getArray();
-      const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
-        const { id } = overlay;
-        return id && id.includes('coordinates-map-marker');
-      });
-      if (coordinatesTooltipOverlay.length > 0) {
-        self.proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
-      }
-    });
   };
 
   /*
@@ -291,54 +271,8 @@ export default function mapui(models, config, store, ui) {
   const removeCoordinatesMarker = () => {
     if (self.activeMarker) {
       self.activeMarker.setMap(null);
-      self.selected.removeLayer(self.activeMarker);
+      self.selected.removeOverlay(self.activeMarker);
     }
-    // remove tooltip from all projections
-    removeCoordinatesTooltip();
-  };
-
-  /*
-   * Add map marker coordinate tooltip
-   *
-   * @method addCoordinatesTooltip
-   * @static
-   *
-   * @param {Object} geocodeResults
-   *
-   * @returns {void}
-   */
-  const addCoordinatesTooltip = (geocodeResults) => {
-    const state = store.getState();
-    const {
-      browser, locationSearch,
-    } = state;
-    const { coordinates, reverseGeocodeResults } = locationSearch;
-    const results = geocodeResults || reverseGeocodeResults;
-    const isMobile = browser.lessThan.medium;
-    const [longitude, latitude] = coordinates;
-    const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
-    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-
-    // handle clearing coordinates using created marker
-    const clearMarker = () => {
-      store.dispatch({ type: CLEAR_MARKER });
-    };
-    // handle toggling dialog visibility to retain preference between proj changes
-    const toggleDialogVisible = (isVisible) => {
-      store.dispatch({ type: TOGGLE_DIALOG_VISIBLE, value: isVisible });
-    };
-
-    // render coordinates dialog
-    const coordinatesTooltipDOMEl = renderCoordinatesDialog(
-      self.selected,
-      config,
-      [latitude, longitude],
-      coordinatesMetadata,
-      isMobile,
-      clearMarker,
-      toggleDialogVisible,
-    );
-    self.coordinatesDialogDOMEl = coordinatesTooltipDOMEl;
   };
 
   /*
@@ -351,23 +285,28 @@ export default function mapui(models, config, store, ui) {
    * @param {Boolean} shouldFlyToCoordinates - if location search via input
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
+  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
-    const { locationSearch, proj } = state;
+    const { locationSearch, proj, browser } = state;
     const {
-      coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
+      coordinates, reverseGeocodeResults,
     } = locationSearch;
     const results = geocodeResults || reverseGeocodeResults;
     const { sources } = config;
+    const clearMarker = () => {
+      store.dispatch({ type: CLEAR_MARKER });
+    };
 
-    // unmount coordinate dialog to prevent residual tooltips being hovered
-    if (self.coordinatesDialogDOMEl) {
-      ReactDOM.unmountComponentAtNode(self.coordinatesDialogDOMEl);
-      self.coordinatesDialogDOMEl = null;
-    }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
-    const marker = getCoordinatesMarker(proj, coordinates, results);
+    const marker = getCoordinatesMarker(
+      proj,
+      coordinates,
+      results,
+      clearMarker,
+      browser.lessThan.medium,
+      showDialog,
+    );
 
     // prevent marker if outside of extent
     if (!marker) {
@@ -375,7 +314,7 @@ export default function mapui(models, config, store, ui) {
     }
 
     self.activeMarker = marker;
-    self.selected.addLayer(marker);
+    self.selected.addOverlay(marker);
     self.selected.renderSync();
 
     if (shouldFlyToCoordinates) {
@@ -383,13 +322,7 @@ export default function mapui(models, config, store, ui) {
       const zoom = self.selected.getView().getZoom();
       const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-      animateCoordinates({ ui: self }, config, coordinates, maxZoom);
-    }
-
-    // handle render initial tooltip
-    const isDialogOpen = shouldFlyToCoordinates || isCoordinatesDialogOpen;
-    if (isDialogOpen) {
-      addCoordinatesTooltip(results);
+      animateCoordinates(self.selected, proj, coordinates, maxZoom);
     }
 
     store.dispatch({
@@ -399,6 +332,8 @@ export default function mapui(models, config, store, ui) {
   };
 
   const flyToNewExtent = function(extent, rotation) {
+    const state = store.getState();
+    const { proj } = state;
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
     const coordinates = [coordinateX, coordinateY];
@@ -406,7 +341,7 @@ export default function mapui(models, config, store, ui) {
     const zoom = self.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return self.animate.fly(coordinates, zoom, rotation);
+    return fly(self.selected, proj, coordinates, zoom, rotation);
   };
 
   /*
@@ -431,7 +366,6 @@ export default function mapui(models, config, store, ui) {
     const map = self.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-
     const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
@@ -461,7 +395,6 @@ export default function mapui(models, config, store, ui) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
           const extent = view.calculateExtent(map.getSize());
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
@@ -469,7 +402,6 @@ export default function mapui(models, config, store, ui) {
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
           view.setRotation(rotationStart);
         };
@@ -510,6 +442,7 @@ export default function mapui(models, config, store, ui) {
       map.addControl(map.wv.scaleMetric);
     }
   }
+
   /*
    * Hide Map
    *
@@ -523,6 +456,7 @@ export default function mapui(models, config, store, ui) {
   function hideMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'none';
   }
+
   /*
    * Show Map
    *
@@ -536,6 +470,7 @@ export default function mapui(models, config, store, ui) {
   function showMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'block';
   }
+
   /*
    * Remove Layers from map
    *
@@ -556,6 +491,7 @@ export default function mapui(models, config, store, ui) {
     });
     cache.clear();
   };
+
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -567,7 +503,7 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const reloadLayers = self.reloadLayers = function(map) {
+  function reloadLayers(map) {
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
@@ -581,10 +517,6 @@ export default function mapui(models, config, store, ui) {
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
-      // add active map marker back after destroying from layer/compare change
-      if (self.activeMarker) {
-        addMarkerAndUpdateStore();
-      }
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
@@ -599,13 +531,9 @@ export default function mapui(models, config, store, ui) {
         map.addLayer(getCompareLayerGroup(arr, state));
       });
       compareMapUi.create(map, compare.mode);
-      // add active map marker back in compare mode post createLayer
-      if (self.activeMarker) {
-        addMarkerAndUpdateStore();
-      }
     }
     updateLayerVisibilities();
-  };
+  }
 
   /**
    * Create a Layergroup given the date and layerGroups
@@ -647,6 +575,7 @@ export default function mapui(models, config, store, ui) {
           layer.wv.id,
           getActiveLayers(state),
           getSelectedDate(state),
+          null,
           state,
         );
         layer.setVisible(renderable);
@@ -662,6 +591,7 @@ export default function mapui(models, config, store, ui) {
             subLayer.wv.id,
             getActiveLayers(state, compareActiveString),
             getSelectedDate(state, compareDateString),
+            null,
             state,
           );
           subLayer.setVisible(renderable);
@@ -670,6 +600,7 @@ export default function mapui(models, config, store, ui) {
       }
     });
   }
+
   /*
    * Sets new opacity to layer
    *
@@ -692,6 +623,7 @@ export default function mapui(models, config, store, ui) {
     layer.setOpacity(action.opacity);
     updateLayerVisibilities();
   }
+
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -702,7 +634,6 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-
   function addLayer(def, date, activeLayers) {
     const state = store.getState();
     const { compare } = state;
@@ -730,6 +661,7 @@ export default function mapui(models, config, store, ui) {
       self.selected.getLayers().insertAt(mapIndex, createLayer(def));
     }
     updateLayerVisibilities();
+    preloadNextTiles();
   }
 
   function removeLayer(layersToRemove) {
@@ -758,70 +690,163 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const updateDate = self.updateDate = function() {
-    const state = store.getState();
-    const { embed, compare } = state;
-    let activeLayers = getAllActiveLayers(state);
-    let layerGroups;
-    let layerGroup;
-    if (compare && compare.active) {
-      layerGroups = self.selected.getLayers().getArray();
-      if (layerGroups.length > 1) {
-        layerGroup = layerGroups[0].get('group') === compare.activeString
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === compare.activeString
-            ? layerGroups[1]
-            : null;
-      }
-    }
-    if (embed.isEmbedModeActive) {
-      activeLayers = activeLayers.filter((layer) => layer.visible);
-    }
-    lodashEach(activeLayers, (def) => {
-      const layerName = def.layer || def.id;
-
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-        return;
-      }
+  const updateDate = self.updateDate = async function() {
+    return new Promise((resolve) => {
+      const state = store.getState();
+      const { compare } = state;
+      const activeLayers = getAllActiveLayers(state);
+      let layerGroups;
+      let layerGroup;
 
       if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
-          const index = findLayerIndex(def, layerGroup);
-          const layerValue = self.selected.getLayers().getArray()[index];
-          layerGroup.getLayers().setAt(
-            index,
-            createLayer(def, {
-              group: compare.activeString,
-              date: getSelectedDate(state),
-              previousLayer: layerValue ? layerValue.wv : null,
-            }),
-          );
-          compareMapUi.update(compare.activeString);
+        layerGroups = self.selected.getLayers().getArray();
+        if (layerGroups.length > 1) {
+          layerGroup = layerGroups[0].get('group') === compare.activeString
+            ? layerGroups[0]
+            : layerGroups[1].get('group') === compare.activeString
+              ? layerGroups[1]
+              : null;
         }
-      } else {
-        const index = findLayerIndex(def);
-        const layerValue = self.selected.getLayers().getArray()[index];
-        self.selected
-          .getLayers()
-          .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
-      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-        const { vectorStyles } = config;
-        let vectorStyleId;
 
-        vectorStyleId = def.vectorStyle.id;
-        if (getActiveLayers(state)) {
-          getActiveLayers(state).forEach((layer) => {
-            if (layer.id === layerName && layer.custom) {
-              vectorStyleId = layer.custom;
-            }
-          });
+      const group = compare && compare.active ? layerGroup : self.selected;
+      const layers = group.getLayers().getArray();
+      const visibleLayers = activeLayers.filter(
+        ({ id }) => layers
+          .filter((l) => l.getVisible())
+          .map(({ wv }) => wv.def.id)
+          .includes(id),
+      );
+
+      lodashEach(visibleLayers, (def) => {
+        const layerName = def.layer || def.id;
+
+        if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+          return;
         }
-        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-      }
+
+        if (compare && compare.active) {
+          if (layers.length) {
+            const index = findLayerIndex(def, layerGroup);
+            const layerValue = self.selected.getLayers().getArray()[index];
+            layerGroup.getLayers().setAt(
+              index,
+              createLayer(def, {
+                group: compare.activeString,
+                date: getSelectedDate(state),
+                previousLayer: layerValue ? layerValue.wv : null,
+              }),
+            );
+            compareMapUi.update(compare.activeString);
+          }
+        } else {
+          const index = findLayerIndex(def);
+          const layer = createLayer(def, { previousLayer: layers[index] ? layers[index].wv : null });
+          self.selected.getLayers().setAt(index, layer);
+        }
+
+        if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+          const { vectorStyles } = config;
+          let vectorStyleId;
+
+          vectorStyleId = def.vectorStyle.id;
+          if (getActiveLayers(state)) {
+            getActiveLayers(state).forEach((layer) => {
+              if (layer.id === layerName && layer.custom) {
+                vectorStyleId = layer.custom;
+              }
+            });
+          }
+          setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+        }
+      });
+      updateLayerVisibilities();
+      resolve();
     });
-    updateLayerVisibilities();
   };
+
+  /**
+   * Preload tiles for the next and previous time interval so they are visible
+   * as soon as the user changes the date. We will usually only end up actually requesting
+   * either previous or next interval tiles since tiles are cached.
+   * (e.g. user adjust from July 1 => July 2, we preload July 3 which is "next"
+   * but no requests get made for "previous", July 1, since those are cached already.
+   */
+  async function preloadNextTiles(date, compareString) {
+    const state = store.getState();
+    const {
+      lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
+    } = state.date;
+    const { activeString } = state.compare;
+    const useActiveString = compareString || activeString;
+    const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(state));
+    const nextDate = getNextDateTime(state, 1, useDate);
+    const prevDate = getNextDateTime(state, -1, useDate);
+    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+
+    // If we've preloaded N dates out, we need to use the latest
+    // preloaded date the next time we call this function or the buffer
+    // won't stay ahead of the 'animation' when holding down timetep arrows
+    if (preloaded && lastArrowDirection) {
+      store.dispatch({
+        type: dateConstants.SET_PRELOAD,
+        preloaded: true,
+        lastPreloadDate: subsequentDate,
+      });
+      await promiseImageryForTime(state, subsequentDate, useActiveString);
+      self.selected.getView().changed();
+      return;
+    }
+
+    await promiseImageryForTime(state, nextDate, useActiveString);
+    await promiseImageryForTime(state, prevDate, useActiveString);
+    self.selected.getView().changed();
+
+    if (!date && !arrowDown) {
+      preloadNextTiles(nextDate, useActiveString);
+      preloadNextTiles(prevDate, useActiveString);
+    }
+  }
+
+  function preloadForCompareMode() {
+    const { date, compare } = store.getState();
+    const { selected, selectedB } = date;
+    preloadNextTiles(selected, 'active');
+    if (compare.active) {
+      preloadNextTiles(selectedB, 'activeB');
+    }
+  }
+
+  async function bufferQuickAnimate(arrowDown) {
+    const BUFFER_SIZE = 8;
+    const preloadPromises = [];
+    const state = store.getState();
+    const { preloaded, lastPreloadDate } = state.date;
+    const selectedDate = getSelectedDate(state);
+    const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
+
+    if (currentBuffer >= BUFFER_SIZE) {
+      return;
+    }
+
+    const currentDate = preloaded ? lastPreloadDate : selectedDate;
+    const direction = arrowDown === 'right' ? 1 : -1;
+    let nextDate = getNextDateTime(state, direction, currentDate);
+
+    for (let step = 1; step <= BUFFER_SIZE; step += 1) {
+      preloadPromises.push(promiseImageryForTime(state, nextDate));
+      if (step !== BUFFER_SIZE) {
+        nextDate = getNextDateTime(state, direction, nextDate);
+      }
+    }
+    await Promise.all(preloadPromises);
+
+    store.dispatch({
+      type: dateConstants.SET_PRELOAD,
+      preloaded: true,
+      lastPreloadDate: nextDate,
+    });
+  }
 
   /*
    * Update layers for the correct Date
@@ -898,14 +923,13 @@ export default function mapui(models, config, store, ui) {
   }
 
   const updateExtent = () => {
-    const view = self.selected.getView();
-    const extent = view.calculateExtent(self.selected.getSize());
+    const map = self.selected;
+    const view = map.getView();
+    const extent = view.calculateExtent(map.getSize());
     store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
-    lodashThrottle(
-      () => events.trigger('map:extent'),
-      500,
-      { trailing: true },
-    )();
+    if (map.isRendered()) {
+      store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
+    }
   };
 
   /*
@@ -1046,6 +1070,7 @@ export default function mapui(models, config, store, ui) {
         ui: self,
         rotation: self.selected.getView().getRotation(),
       });
+      setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
     };
     map.on('rendercomplete', onRenderComplete);
@@ -1092,16 +1117,20 @@ export default function mapui(models, config, store, ui) {
       const isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      dataRunner.newPoint(pixels, map);
+      runningdata.newPoint(pixels, map);
     }, 300);
 
     events.on('map:mousemove', throttledOnMouseMove);
     events.on('map:mouseout', (e) => {
       throttledOnMouseMove.cancel();
-      dataRunner.clearAll();
+      runningdata.clearAll();
     });
   }
 
   init();
-  return self;
+  return {
+    ...self,
+    updateDate,
+    reloadLayers,
+  };
 }

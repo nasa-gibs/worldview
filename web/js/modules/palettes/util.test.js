@@ -5,7 +5,6 @@ import {
   loadPalettes,
   mapLocationToPaletteState,
 } from './util';
-import util from '../../util/util';
 import fixtures from '../../fixtures';
 
 const state = fixtures.getState();
@@ -29,11 +28,6 @@ test('hasCustomTypePalette func determines if custom palette is in string', () =
 });
 
 test('loadPalettes func updates state with correct palette attributes', () => {
-  util.browser = jest.fn(() => ({
-    webWorkers: true,
-    ie: false,
-    cors: true,
-  }))();
   const updatedState = update(state, {
     layers: {
       active: {

@@ -13,7 +13,7 @@ module.exports = {
   gifResults: '.gif-results-dialog-case img',
   animationWidget: '#wv-animation-widget',
   animationButtonCase: '#timeline-header .animate-button',
-  animationButton: '#animate-button',
+  animationButton: '.animate-button',
 
   // sidebar, layers
   sidebarContainer: '#productsHolder',
@@ -127,8 +127,8 @@ module.exports = {
   layerContainer: '.layer-container.sidebar-panel',
   sourceMetadataCollapsed: '.source-metadata.overflow',
   sourceMetadataExpanded: '.source-metadata',
-  aquaTerraModisHeader: '#modisterraandaquacombinedvalueaddedaerosolopticaldepth',
-  maiacHeader: '#maiacaerosolopticaldepth',
+  aquaTerraModisHeader: '#aerosol-optical-depth-aqua-terra-modis h3:first-of-type',
+  maiacHeader: '#aerosol-optical-depth-aqua-terra-modis h3:last-of-type',
   sourceTabs: '.source-nav-item',
   aodSearchRow: '#MODIS_Aqua_Aerosol-search-row',
   aodSearchCheckbox: '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox',

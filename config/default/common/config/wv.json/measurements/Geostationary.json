@@ -8,7 +8,7 @@
                 "GOES-East": {
                     "id": "goes-east",
                     "title": "GOES-East",
-                    "description": "goes/goes-east",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "GOES-East_ABI_GeoColor",
@@ -20,7 +20,7 @@
                 "GOES-West": {
                     "id": "goes-west",
                     "title": "GOES-West",
-                    "description": "goes/goes-west",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "GOES-West_ABI_GeoColor",
@@ -32,7 +32,7 @@
                 "Himawari-8": {
                     "id": "himawari-8",
                     "title": "Himawari-8",
-                    "description": "himawari/himawari-8",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "Himawari_AHI_Band3_Red_Visible_1km",

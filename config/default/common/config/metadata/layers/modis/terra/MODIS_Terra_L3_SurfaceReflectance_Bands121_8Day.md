@@ -4,6 +4,4 @@ The Land Surface Reflectance (L3, 8-Day, Bands 1-2-1) layer is created from the 
 
 Vegetation is very reflective in the near infrared (Band 2), and absorbent in Band 1. Assigning band 2 to green means even the smallest hint of vegetation will appear bright green in the image. Liquid water on the ground will be very dark since it absorbs in the red and the SWIR and sediments in water appear pink. This band combination is good for identifying vegetation changes, drought and floods.
 
-NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
-
 References: MOD09Q1 [doi:10.5067/MODIS/MOD09Q1.061](https://doi.org/10.5067/MODIS/MOD09Q1.061)

@@ -31,12 +31,12 @@ module.exports = {
   },
 
   'Next two zooms are 1km': function(c) {
-    zoomIn(c, 'arctic');
+    zoomIn(c);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="4"]')
       .to.be.selected;
     closeImageDownloadPanel(c);
-    zoomIn(c, 'arctic');
+    zoomIn(c);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="4"]')
       .to.be.selected;
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   'Next zoom is 500m': function(c) {
-    zoomIn(c, 'arctic');
+    zoomIn(c);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="2"]')
       .to.be.selected;
@@ -52,12 +52,12 @@ module.exports = {
   },
 
   'Next zoom is 250m': function(c) {
-    zoomIn(c, 'arctic');
+    zoomIn(c);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="1"]')
       .to.be.selected;
     closeImageDownloadPanel(c);
-    zoomIn(c, 'arctic');
+    zoomIn(c);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="1"]')
       .to.be.selected;
@@ -67,7 +67,7 @@ module.exports = {
   'Last zoom level is 250m': function(c) {
     // mash the zoom button a bunch of times and see if it changes
     for (let i = 0; i < 5; i += 1) {
-      zoomIn(c, 'arctic');
+      zoomIn(c);
     }
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="1"]')

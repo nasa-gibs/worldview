@@ -1,7 +1,3 @@
-**4 May 2021 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance at the poles. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
-
----
-
 False Color: Red = Band 7, Green = Band 2, Blue = Band 1
 
 This combination is most useful for distinguishing burn scars from naturally low vegetation or bare soil and enhancing floods. This combination can also be used to distinguish snow and ice from clouds. Snow and ice are very reflective in the visible part of the spectrum (Band 1), and absorbent in Bands 2 (near infrared) and 7 (short-wave infrared, or SWIR). Thick ice and snow appear vivid sky blue, while small ice crystals in high-level clouds will also appear blueish, and water clouds will appear white.
@@ -17,11 +13,4 @@ Burned areas or fire-affected areas are characterized by deposits of charcoal an
 #### Water
 Liquid water on the ground appears very dark since it absorbs in the red and the SWIR. Sediments in water appear dark blue. Ice and snow appear as bright turquoise. Clouds comprised of small water droplets scatter light equally in both the visible and the SWIR and will appear white. These clouds are usually lower to the ground and warmer. High and cold clouds are comprised of ice crystals and will appear turquoise.
 
-### MODIS Corrected Reflectance vs. MODIS Surface Reflectance
-
-The MODIS Corrected Reflectance algorithm utilizes MODIS Level 1B data (the calibrated, geolocated radiances). It is not a standard, science quality product. The purpose of this algorithm is to provide natural-looking images by removing gross atmospheric effects, such as Rayleigh scattering, from MODIS visible bands 1-7. The algorithm was developed by the original MODIS Rapid Response team to address the needs of the fire monitoring community who want to see smoke. Corrected Reflectance shows smoke more clearly than the standard Surface Reflectance product. In contrast, the MODIS Land Surface Reflectance product (MOD09) is a more complete atmospheric correction algorithm that includes aerosol correction, and is designed to derive land surface properties. In clear atmospheric conditions the Corrected Reflectance product is very similar to the MOD09 product, but they depart from each other in presence of aerosols. If you wish to perform a complete atmospheric correction, please do not use the Corrected Reflectance algorithm. An additional difference is that the Land Surface Reflectance product is only tuned for calculating the reflectance over land surfaces.
-
-NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
-
-References: MOD02QKM [doi:10.5067/MODIS/MOD02QKM.061](https://doi.org/10.5067/MODIS/MOD02QKM.061); MOD02HKM [doi:10.5067/MODIS/MOD02HKM.061](https://doi.org/10.5067/MODIS/MOD02HKM.061); MOD021KM [doi:10.5067/MODIS/MOD021KM.061](https://doi.org/10.5067/MODIS/MOD021KM.061); [NASA Earthdata - Creating Reprojected True Color MODIS Images: A Tutorial](https://earthdata.nasa.gov/files/MODIS_True_Color.pdf); [NASA Earthdata - LANCE FAQ](https://earthdata.nasa.gov/faq/lance-faq#ed-CRvsSR)
-
+References: MOD02QKM [doi:10.5067/MODIS/MOD02QKM.061](https://doi.org/10.5067/MODIS/MOD02QKM.061); MOD02HKM [doi:10.5067/MODIS/MOD02HKM.061](https://doi.org/10.5067/MODIS/MOD02HKM.061); MOD021KM [doi:10.5067/MODIS/MOD021KM.061](https://doi.org/10.5067/MODIS/MOD021KM.061); MYD02QKM [doi:10.5067/MODIS/MYD02QKM.061](https://doi.org/10.5067/MODIS/MYD02QKM.061)

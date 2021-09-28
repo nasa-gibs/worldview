@@ -78,7 +78,7 @@ function EventFilterModalBody (props) {
     return msg;
   };
   const minDate = new Date('2000-01-01');
-  const maxDate = new Date();
+  const maxDate = util.now();
 
   return (
     <div className="events-filter">

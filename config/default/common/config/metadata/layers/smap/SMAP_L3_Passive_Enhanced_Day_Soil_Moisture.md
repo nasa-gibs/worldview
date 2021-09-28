@@ -2,6 +2,8 @@ The Soil Moisture Active Passive (SMAP) "Soil Moisture 9 km (L3, Passive, Day)" 
 
 The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (passive), that together make global measurements of land surface soil moisture and freeze/thaw state. It is useful for monitoring and predicting natural hazards such as floods and droughts, understanding the linkages between Earth’s water, energy and carbon cycles, and reducing uncertainties in predicting weather and climate.
 
-References: [SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL3SMP_E)
-
 Data field: `soil_moisture`
+
+References: SPL3SMP_E [doi:10.5067/NJ34TQ2LFE90](https://doi.org/10.5067/NJ34TQ2LFE90)
+
+

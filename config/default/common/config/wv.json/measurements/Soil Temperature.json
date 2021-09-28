@@ -9,7 +9,7 @@
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
-                    "description": "smap/SurfaceSoilTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "SMAP_L4_Soil_Temperature_Layer_1"

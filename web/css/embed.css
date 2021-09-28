@@ -125,6 +125,7 @@
   .mobile-date-change-arrows-btn {
     left: 168px;
     transform: scale(0.75);
+    transform-origin: bottom left;
   }
 
   /* COMPARE */
@@ -196,7 +197,8 @@
   }
   @media only screen and (max-width: 450px) {
     .wv-animation-widget-wrapper.minimized {
-      left: 93px;
+      bottom: 90px;
+      left: 10px;
     }
   }
 }

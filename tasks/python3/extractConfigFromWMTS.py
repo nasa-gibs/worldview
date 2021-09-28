@@ -29,7 +29,7 @@ config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
 
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 
 tolerant = config.get("tolerant", False)
@@ -241,7 +241,7 @@ def process_entry(entry):
             process_matrix_set(gc_matrix_set)
 
     output_file = os.path.join(output_dir, entry["to"])
-    with open(output_file, "w") as fp:
+    with open(output_file, "w", encoding="utf-8") as fp:
         json.dump(wv, fp, **json_options)
     print("%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
             error_count, warning_count, layer_count, entry["source"]))

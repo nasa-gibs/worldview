@@ -49,12 +49,13 @@ export default function mapLayerBuilder(config, cache, store) {
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
     const layer = createLayerFunc(def, options, null, state, attributes);
+    layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
     const layerNext = createLayerFunc(def, options, 1, state, attributes);
     const layerPrior = createLayerFunc(def, options, -1, state, attributes);
-    layer.wv = attributes;
+
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
@@ -261,8 +262,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let style = '';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
-    // Don't key by time if this is a static layer--it is valid for
-    // every date.
+    // Don't key by time if this is a static layer
     if (def.period) {
       date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
@@ -343,6 +343,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayerWMTS = function(def, options, day, state) {
     const proj = state.proj.selected;
     const source = config.sources[def.source];
+    const isSubdaily = def.period === 'subdaily';
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
@@ -351,11 +352,11 @@ export default function mapLayerBuilder(config, cache, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
     let date = options.date || getSelectedDate(state);
-    if (def.period === 'subdaily' && !date) {
+    if (isSubdaily && !date) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
+    if (day && def.wrapadjacentdays && !isSubdaily) {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
@@ -387,7 +388,7 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     return new OlLayerTile({
-      preload: Infinity,
+      preload: 0,
       className: def.id,
       extent,
       source: new OlSourceWMTS(sourceOptions),
@@ -479,7 +480,7 @@ export default function mapLayerBuilder(config, cache, store) {
       renderMode: 'image',
       className: def.id,
       vector: true,
-      preload: 10,
+      preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
@@ -583,7 +584,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
-      preload: Infinity,
+      preload: 0,
       className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },

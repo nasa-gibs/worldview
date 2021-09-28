@@ -187,7 +187,7 @@ DateTooltip.propTypes = {
   hoverTime: PropTypes.string,
   isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
-  selectedDate: PropTypes.string,
+  selectedDate: PropTypes.object,
   selectedDraggerPosition: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,

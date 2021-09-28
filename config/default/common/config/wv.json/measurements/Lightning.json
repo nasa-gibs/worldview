@@ -12,29 +12,32 @@
                     "image": "",
                     "settings": [
                        "LIS_ISS_Flash_Count",
-                       "LIS_ISS_Flash_Radiance"
+                       "LIS_ISS_Flash_Radiance",
+                       "OrbitTracks_ISS_Descending",
+                       "OrbitTracks_ISS_Ascending"
                     ]
                 },
                 "TRMM/LIS": {
                     "id": "trmm-lis",
                     "title": "TRMM/LIS",
-                    "description": "trmm/LightningFlashes&Rate",
+                    "description": "",
                     "image": "",
                     "settings": [
+                      "LIS_TRMM_Flash_Radiance",
                       "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
                       "LIS_High_Resolution_Full_Climatology_LIS_Scaled_Flashes",
                       "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
                       "LIS_Very_High_Resolution_Lightning_Daily_Climatology_LIS_Mean_Flash_Rate",
                       "LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
                       "LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate",
-                      "LIS_Very_High_Resolution_Lightning_Seasonal_Climatology_LIS_Mean_Flash_Rate",
-                      "LIS_TRMM_Flash_Radiance"
+                      "LIS_Very_High_Resolution_Lightning_Seasonal_Climatology_LIS_Mean_Flash_Rate"
+
                     ]
                 },
                 "OrbView-1/OTD": {
                     "id": "orbview-otd",
                     "title": "OrbView-1/OTD",
-                    "description": "orbview/LightningFlashes&Rate",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
@@ -46,7 +49,7 @@
                 "TRMM/LIS & OrbView-1/OTD": {
                     "id": "trmm-lis&orbview-otd",
                     "title": "TRMM/LIS & OrbView-1/OTD",
-                    "description": "multi-mission/LightningFlashRate",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology"
@@ -55,7 +58,7 @@
                 "DMSP-F10/OLS": {
                     "id": "dmsp-f10-ols",
                     "title": "DMSP-F10/OLS",
-                    "description": "ols/OLS_DMSP_F10_Digital_Derived_Lightning",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "OLS_DMSP_F10_Digital_Derived_Lightning"
@@ -64,7 +67,7 @@
                 "DMSP-F12/OLS": {
                     "id": "dmsp-f12-ols",
                     "title": "DMSP-F12/OLS",
-                    "description": "ols/OLS_DMSP_F12_Digital_Derived_Lightning",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "OLS_DMSP_F12_Digital_Derived_Lightning"

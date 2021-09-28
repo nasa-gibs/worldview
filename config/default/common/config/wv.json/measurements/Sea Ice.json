@@ -18,7 +18,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/SeaIce",
+                    "description": "modis/terra/SeaIce",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Sea_Ice",
@@ -28,7 +28,7 @@
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
-                    "description": "amsre/SeaIceConcentration",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRE_Sea_Ice_Concentration_12km",
@@ -40,7 +40,7 @@
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
                     "title": "GCOM-W1/AMSR2",
-                    "description": "amsr2/SeaIceConcentration",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRU2_Sea_Ice_Concentration_12km",
@@ -52,7 +52,7 @@
                 "Multi-mission/GHRSST": {
                     "id": "multi-mission-ghrsst",
                     "title": "Multi-mission/GHRSST",
-                    "description": "multi-mission/ghrsst/SeaIceConcentration",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GHRSST_L4_MUR_Sea_Ice_Concentration",
@@ -63,7 +63,7 @@
                 "SSMI": {
                     "id": "ssmi",
                     "title": "SSMI",
-                    "description": "ssmi/SeaIceConcentration",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMIS_Sea_Ice_Concentration"
@@ -72,7 +72,7 @@
                 "SSMIS": {
                     "id": "ssmis",
                     "title": "SSMIS",
-                    "description": "ssmi/SeaIceConcentrationSnowExtent",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMIS_Sea_Ice_Concentration_Snow_Extent"
@@ -81,7 +81,7 @@
                 "MEaSUREs": {
                     "id": "measures",
                     "title": "MEaSUREs",
-                    "description": "multi-mission/SeaIceandSnowExtent",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MEaSUREs_Sea_Ice_Snow_Extent"

@@ -2,5 +2,5 @@ The MISR Cloud Stereo Height product displays the fraction of global cloud stere
 
 This layer is produced from the Stereo height histogram field of the MISR Level 3 Component Global Cloud Product. It is available globally over land and ocean on a monthly basis, with a spatial resolution of 0.5 degrees latitude by 0.5 degrees longitude. Coverage may be limited where high clouds are rarely observed, over ice, and where daylight is not present (i.e., near the poles).
 
-References: MISR Level 3 Component Global Cloud Product covering a month V002. [doi:10.5067/Terra/MISR/MIL3MCLD_L3.002](https://doi.org/10.5067/Terra/MISR/MIL3MCLD_L3.002)
+References: MIL3MCLD_L3 [doi:10.5067/Terra/MISR/MIL3MCLD_L3.002](https://doi.org/10.5067/Terra/MISR/MIL3MCLD_L3.002)
 
