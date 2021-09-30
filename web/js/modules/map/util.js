@@ -40,7 +40,6 @@ export function getMapParameterSetup(
           return extent;
         },
         serialize: (currentItemState, currentState) => {
-          const rendered = lodashGet(currentState, 'map.rendered');
           const rotation = lodashGet(currentState, 'map.rotation');
 
           if (rotation) {
@@ -48,7 +47,6 @@ export function getMapParameterSetup(
             currentItemState = getRotatedExtent(map);
           }
 
-          if (!rendered) return undefined;
           const actualLeadingExtent = lodashGet(
             currentState,
             'map.leadingExtent',
@@ -157,7 +155,7 @@ export function getLeadingExtent(loadtime) {
  * the extent for prev, next & current day
  */
 function calculateExtent(layerExtent, map) {
-  const viewportExtent = map.getView().calculateExtent(map.getSize());
+  const viewportExtent = map.getView().calculateExtent();
   const visibleExtent = olExtent.getIntersection(viewportExtent, layerExtent);
 
   if (map.proj === 'geographic') {
