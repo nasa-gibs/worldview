@@ -1,3 +1,4 @@
+import googleTagManager from 'googleTagManager';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
@@ -28,6 +29,10 @@ export function triggerTodayButton() {
     const selectedDateTime = selectedDate.getTime();
     const appNowTime = appNow.getTime();
     if (selectedDateTime !== appNowTime) {
+      googleTagManager.pushEvent({
+        event: 'trigger_today_button',
+      });
+
       dispatch({
         type: SELECT_DATE,
         activeString,
