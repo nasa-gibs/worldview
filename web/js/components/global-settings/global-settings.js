@@ -8,16 +8,16 @@ import {
 
 function GlobalSettings(props) {
   const {
-    globalTemperatureUnit,
     changeTemperatureUnitAction,
+    globalTemperatureUnit,
   } = props;
 
   return (
     <>
       <div className="global-setting-container">
         <TemperatureUnitButtons
-          globalTemperatureUnit={globalTemperatureUnit}
           changeTemperatureUnit={changeTemperatureUnitAction}
+          globalTemperatureUnit={globalTemperatureUnit}
         />
       </div>
     </>
