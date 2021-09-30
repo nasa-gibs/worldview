@@ -925,7 +925,7 @@ export default function mapui(models, config, store, ui) {
   const updateExtent = () => {
     const map = self.selected;
     const view = map.getView();
-    const extent = view.calculateExtent(map.getSize());
+    const extent = view.calculateExtent();
     store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
     if (map.isRendered()) {
       store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
