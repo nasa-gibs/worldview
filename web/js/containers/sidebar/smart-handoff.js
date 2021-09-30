@@ -11,6 +11,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
+import AlertUtil from '../../components/util/alert';
 import util from '../../util/util';
 import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import SmartHandoffNotAvailableModal from '../../components/smart-handoffs/smart-handoff-not-available-modal';
@@ -51,6 +52,7 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       showBoundingBox: false,
+      showZoomedIntoWingsAlert: false,
       currentExtent: {},
       coordinates: {},
       validatedLayers: [],
@@ -65,13 +67,19 @@ class SmartHandoff extends Component {
   }
 
   componentDidMount() {
+    const { proj } = this.props;
     this.validateConceptIds();
+    if (proj.id === 'geographic') {
+      this.checkMapExtentWithinWings();
+    }
   }
 
   componentDidUpdate(prevProps) {
     const {
+      isActive,
       availableLayers,
       proj,
+      map,
       selectedLayer,
       selectedCollection,
     } = this.props;
@@ -86,7 +94,19 @@ class SmartHandoff extends Component {
       this.setState(this.baseState);
     }
     if (proj.id !== prevProps.proj.id) {
-      this.setState({ showBoundingBox: false });
+      const projChangeStateUpdate = { showBoundingBox: false };
+      if (proj.id !== 'geographic') {
+        projChangeStateUpdate.showZoomedIntoWingsAlert = false;
+      }
+      this.setState(projChangeStateUpdate);
+    }
+
+    if (proj.id === 'geographic') {
+      const tabChange = isActive && !prevProps.isActive;
+      const extentChange = !lodashEqual(map.extent, prevProps.map.extent);
+      if (tabChange || extentChange) {
+        this.checkMapExtentWithinWings();
+      }
     }
   }
 
@@ -121,6 +141,19 @@ class SmartHandoff extends Component {
     }, []);
 
     this.setState({ validatedLayers, validatedConceptIds });
+  }
+
+  /**
+   * Check if entire map extent is within a wing that is not available in data download
+   *
+   * @returns {Boolean} is map extent within wing
+   */
+  checkMapExtentWithinWings = () => {
+    const { map: { extent }, proj: { maxExtent } } = this.props;
+    const inLeftWing = extent[0] < maxExtent[0] && extent[2] < maxExtent[0];
+    const inRightWing = extent[0] > maxExtent[2] && extent[2] > maxExtent[2];
+    const isWithinWings = inLeftWing || inRightWing;
+    this.setState({ showZoomedIntoWingsAlert: isWithinWings });
   }
 
   /**
@@ -245,6 +278,23 @@ class SmartHandoff extends Component {
       continueToEDS();
     }
   }
+
+  /**
+   * Render alert to indicate the map view is zoomed entirely into the map wings (geographic projection only)
+   * Typically from activeTab change to data download when zoomed into wing, but triggers on changing the extent as well
+   */
+   renderZoomedIntoWingsAlert = () => {
+     const { showZoomedIntoWingsAlert } = this.state;
+     const message = 'The view is zoomed into the map wings which are unavailable in data download mode. Zoom out to see available map.';
+     return showZoomedIntoWingsAlert && (
+     <AlertUtil
+       id="map-zoomed-into-wings-alert"
+       isOpen
+       title="Map Zoomed Into Unavailable Wings"
+       message={message}
+     />
+     );
+   }
 
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
     const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
@@ -438,37 +488,39 @@ class SmartHandoff extends Component {
       return this.renderNoLayersToDownload();
     }
     return (
-      <div className="smart-handoff-side-panel">
-
-        <div className="esd-notification">
-          Downloading data will be performed using
-          <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
-          application.
+      <>
+        {this.renderZoomedIntoWingsAlert()}
+        <div className="smart-handoff-side-panel">
+          <div className="esd-notification">
+            Downloading data will be performed using
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
+            application.
+          </div>
+          <h2>
+            <a className="help-link" onClick={showNotAvailableModal}>
+              Why are some layers not available?
+            </a>
+          </h2>
+          <hr />
+          {this.renderLayerChoices()}
+          <hr />
+          {this.renderCropBox()}
+          <GranuleCount
+            displayDate={displayDate}
+            currentExtent={showBoundingBox ? currentExtent : undefined}
+            selectedDate={selectedDate}
+            selectedLayer={selectedLayer}
+            selectedCollection={selectedCollection}
+            showGranuleHelpModal={showGranuleHelpModal}
+          />
+          <Button
+            onClick={this.onClickDownload}
+            text="DOWNLOAD VIA EARTHDATA SEARCH"
+            className="download-btn red"
+            valid={!!isValidDownload}
+          />
         </div>
-        <h2>
-          <a className="help-link" onClick={showNotAvailableModal}>
-            Why are some layers not available?
-          </a>
-        </h2>
-        <hr />
-        {this.renderLayerChoices()}
-        <hr />
-        {this.renderCropBox()}
-        <GranuleCount
-          displayDate={displayDate}
-          currentExtent={showBoundingBox ? currentExtent : undefined}
-          selectedDate={selectedDate}
-          selectedLayer={selectedLayer}
-          selectedCollection={selectedCollection}
-          showGranuleHelpModal={showGranuleHelpModal}
-        />
-        <Button
-          onClick={this.onClickDownload}
-          text="DOWNLOAD VIA EARTHDATA SEARCH"
-          className="download-btn red"
-          valid={!!isValidDownload}
-        />
-      </div>
+      </>
     );
   }
 }
