@@ -33,6 +33,7 @@ import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
   CLEAR_MARKER,
   SET_MARKER,
@@ -122,6 +123,15 @@ export default function mapui(models, config, store, ui) {
           rotation: action.rotation,
           duration: 500,
         });
+        return;
+      }
+      case CHANGE_TAB: {
+        const { sidebar, proj } = state;
+        const { activeTab, previousTab } = sidebar;
+        const dataDownloadTabSwitched = activeTab === 'download' || previousTab === 'download';
+        if (proj.id === 'geographic' && dataDownloadTabSwitched) {
+          return reloadLayers();
+        }
         return;
       }
       case LOCATION_POP_ACTION: {

@@ -15,6 +15,7 @@ const SSTRadioButton = '#C1664741463-PODAAC-GHRSST_L4_MUR_Sea_Surface_Temperatur
 const urlParams = '?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-12-01';
 const permalinkParams = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=2020-02-06-T06%3A00%3A00Z';
 const permalinkParams1980 = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=1980-02-06-T06%3A00%3A00Z';
+const inWingsAlertURL = '?v=226.32336353630282,-35.84415340249873,233.47009302183025,-31.309041515170094&l=VIIRS_NOAA20_Thermal_Anomalies_375m_All,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&sh=VIIRS_NOAA20_Thermal_Anomalies_375m_All,C1355615368-LANCEMODIS&t=2021-08-29-T17%3A56%3A03Z';
 
 module.exports = {
 
@@ -103,6 +104,16 @@ module.exports = {
     c.expect
       .element('.smart-handoff-side-panel > h1')
       .to.have.text.equal('None of your current layers are available for download.');
+  },
+
+  'Map extent entirely in wings displays warning for user to zoom out to see available map': (c) => {
+    c.url(c.globals.url + inWingsAlertURL);
+    c.pause(5000);
+    c.expect.element('#map-zoomed-into-wings-alert').to.be.present;
+    c.waitForElementVisible('#map-zoomed-into-wings-alert', TIME_LIMIT, () => {
+      c.assert.containsText('#map-zoomed-into-wings-alert div.wv-alert-message',
+        'The view is zoomed into the map wings which are unavailable in data download mode. Zoom out to see available map.');
+    });
   },
 
   after(c) {

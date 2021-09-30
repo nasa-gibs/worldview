@@ -365,7 +365,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events, proj,
+    animation, sidebar, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events, proj,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -377,6 +377,8 @@ const mapStateToProps = (state) => {
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
   const { isAnimatingToEvent } = events;
+  const { activeTab } = sidebar;
+  const isDataDownloadTabActive = activeTab === 'download';
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -392,7 +394,7 @@ const mapStateToProps = (state) => {
     activePalettes,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
-      && !isCompareActive,
+      && !isCompareActive && !isDataDownloadTabActive,
     ),
     isAnimatingToEvent,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
