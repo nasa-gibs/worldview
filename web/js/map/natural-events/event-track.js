@@ -28,6 +28,8 @@ import { getFilteredEvents } from '../../modules/natural-events/selectors';
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
+const vectorLayers = {};
+const sources = {};
 
 class EventTrack extends React.Component {
   constructor(props) {
@@ -88,12 +90,17 @@ class EventTrack extends React.Component {
   }
 
   initialize() {
-    const { map } = this.props;
+    const { map, projections } = this.props;
     if (!map) return;
     // NOTE: Does not cause additional listeners to be registered on subsequent calls
     map.on('moveend', this.onMoveEnd);
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
     this.debouncedTrackUpdate();
+
+    projections.forEach((key) => {
+      vectorLayers[key] = null;
+      sources[key] = new OlSourceVector({ wrapX: false });
+    });
   }
 
   updateCurrentTrack() {
@@ -150,9 +157,17 @@ class EventTrack extends React.Component {
    * @return {Object} Empty object
    */
   removeTrack = function(map) {
+    const {
+      proj,
+    } = this.props;
     const { trackDetails } = this.state;
-    const { track } = trackDetails;
-    map.removeLayer(track);
+    const { crs } = proj.selected;
+
+    if (vectorLayers[crs]) {
+      sources[crs].clear();
+      vectorLayers[crs].setMap(null);
+      vectorLayers[crs] = null;
+    }
     removeOldPoints(map, trackDetails);
     return {};
   };
@@ -175,7 +190,14 @@ class EventTrack extends React.Component {
     const sameDate = trackDetails.selectedDate === date;
     const createAndAddTrack = () => {
       newTrackDetails = createTrack(proj, event, map, date, selectEvent);
-      map.addLayer(newTrackDetails.track);
+      const { crs } = proj.selected;
+      const source = sources[crs];
+      if (!vectorLayers[crs]) {
+        vectorLayers[crs] = new OlLayerVector({
+          source,
+          map,
+        });
+      }
     };
 
     if (!event || event.geometry.length < 2) {
@@ -199,8 +221,8 @@ class EventTrack extends React.Component {
         createAndAddTrack();
       }
     } else {
-      // If no track element currenlty exists,
-      // but there is a multiday event, build a new track
+      // If no track element currently exists,
+      // but there is a multi-day event, build a new track
       createAndAddTrack();
     }
     this.setState({ trackDetails: newTrackDetails });
@@ -240,20 +262,22 @@ const getOverDateLineCoordinates = function(coordinates) {
 /**
  * Create vector layer
  *
- * @param  {Array} featuresArray Array of linstring
+ * @param  {Array} featuresArray Array of linestring
  *                               points
  * @return {Object} OpenLayers Vector Layer
  */
 const naturalEventsTrackLayer = function(proj, featuresArray) {
+  const { crs, id, maxExtent } = proj.selected;
+  const source = sources[crs];
+  const [track] = featuresArray;
+  track.setStyle([getLineStyle('black', 2), getLineStyle('white', 2)]);
+  source.addFeature(track);
   return new OlLayerVector({
-    source: new OlSourceVector({
-      features: featuresArray,
-    }),
+    source,
     extent:
-      proj.selected.id === 'geographic'
+      id === 'geographic'
         ? [-250, -90, 250, 90]
-        : proj.selected.maxExtent,
-    style: [getLineStyle('black', 2), getLineStyle('white', 1)],
+        : maxExtent,
   });
 };
 
@@ -263,7 +287,7 @@ const naturalEventsTrackLayer = function(proj, featuresArray) {
  * @param  {Object} clusterPoint
  * @param  {Boolean} isSelected
  * @param  {Function} callback
- * @return {Object} Openlayers overlay object
+ * @return {Object} OpenLayers overlay object
  */
 const naturalEventsTrackPoint = function(
   proj,
@@ -415,10 +439,11 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
 
   pointObject = addPoints(proj, clusters, map, selectedDate, callback);
   olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray));
+  addPointOverlays(map, pointObject.overlayArray);
 
   return {
     id: eventObj.id,
-    track: naturalEventsTrackLayer(proj, olTrackLineFeatures, map),
+    track: naturalEventsTrackLayer(proj, olTrackLineFeatures),
     pointArray: pointObject.overlayArray,
     selectedDate,
     hidden: false,
@@ -448,6 +473,7 @@ const removeOldPoints = function(map, { pointArray }) {
  * @return {void}
  */
 const addPointOverlays = function(map, pointOverlayArray) {
+  console.log('addPointOverlays');
   lodashEach(pointOverlayArray, (pointOverlay) => {
     addOverlayIfIsVisible(map, pointOverlay);
   });
@@ -557,7 +583,7 @@ const addPoints = function(proj, clusters, map, selectedDate, callback) {
       const arrowOverlay = createArrows(lineSegmentArray, map);
       overlays.push(arrowOverlay);
       trackArray.push(lineSegmentArray);
-      addOverlayIfIsVisible(map, arrowOverlay);
+      // addOverlayIfIsVisible(map, arrowOverlay);
     }
     if (clusterPoint.properties.cluster) {
       point = getClusterPointEl(
@@ -649,12 +675,14 @@ function addOverlayIfIsVisible(map, overlay) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, date,
+    config, map, proj, events, date,
   } = state;
   const { isAnimatingToEvent } = events;
+  const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
     map: map.ui.selected,
     proj,
+    projections,
     selectedDate: date.selected,
     selectedEvent: events.selected,
     eventsData: getFilteredEvents(state),
@@ -673,6 +701,7 @@ EventTrack.propTypes = {
   map: PropTypes.object,
   isAnimatingToEvent: PropTypes.bool,
   proj: PropTypes.object,
+  projections: PropTypes.array,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
   selectedDate: PropTypes.object,
