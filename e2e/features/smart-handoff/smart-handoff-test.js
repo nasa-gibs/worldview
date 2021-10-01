@@ -70,19 +70,6 @@ module.exports = {
     c.waitForElementVisible('.granule-count-info', TIME_LIMIT);
   },
 
-  'Download via Earthdata Search': (c) => {
-    c.click('.download-btn');
-    c.expect
-      .element('#transferring-to-earthdata-search')
-      .to.be.present;
-
-    // Check that Earthdata Search opens in new tab
-    c.click('#continue-btn').pause(2500);
-    c.windowHandles((tabs) => {
-      c.assert.equal(tabs.value.length, 2);
-    });
-  },
-
   'Arriving via permalink, data tab selected and granule count shows': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.url(c.globals.url + permalinkParams);
@@ -108,11 +95,24 @@ module.exports = {
 
   'Map extent entirely in wings displays warning for user to zoom out to see available map': (c) => {
     c.url(c.globals.url + inWingsAlertURL);
-    c.pause(5000);
-    c.expect.element('#map-zoomed-into-wings-alert').to.be.present;
+    c.expect.element(dataTabButton).to.be.visible;
     c.waitForElementVisible('#map-zoomed-into-wings-alert', TIME_LIMIT, () => {
       c.assert.containsText('#map-zoomed-into-wings-alert div.wv-alert-message',
-        'The view is zoomed into the map wings which are unavailable in data download mode. Zoom out to see available map.');
+        'The map is zoomed into an area over the dateline that is unavailable in data download mode. Zoom out to see available map.');
+    });
+  },
+
+  'Download via Earthdata Search': (c) => {
+    c.url(c.globals.url + permalinkParams);
+    c.click('.download-btn');
+    c.expect
+      .element('#transferring-to-earthdata-search')
+      .to.be.present;
+
+    // Check that Earthdata Search opens in new tab
+    c.click('#continue-btn').pause(2500);
+    c.windowHandles((tabs) => {
+      c.assert.equal(tabs.value.length, 2);
     });
   },
 
