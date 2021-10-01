@@ -285,7 +285,7 @@ class SmartHandoff extends Component {
    */
    renderZoomedIntoWingsAlert = () => {
      const { showZoomedIntoWingsAlert } = this.state;
-     const message = 'The view is zoomed into the map wings which are unavailable in data download mode. Zoom out to see available map.';
+     const message = 'The map is zoomed into an area over the dateline that is unavailable in data download mode. Zoom out to see available map.';
      return showZoomedIntoWingsAlert && (
      <AlertUtil
        id="map-zoomed-into-wings-alert"
