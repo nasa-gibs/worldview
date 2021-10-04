@@ -42,10 +42,12 @@ function MeasurementMetadataDetail (props) {
     return () => (controller ? controller.abort() : null);
   }, [source]);
 
-  const renderMetadataForLayers = () => layers.map((l) => (
-    <div className="layer-description" key={l.id}>
-      <h3>{l.title}</h3>
-      {showPreviewImage && (
+  const renderMetadataForLayers = () => layers
+    .filter(({ projections }) => !!projections[selectedProjection])
+    .map((l) => (
+      <div className="layer-description" key={l.id}>
+        <h3>{l.title}</h3>
+        {showPreviewImage && (
         <div className="text-center">
           <a
             href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
@@ -58,10 +60,10 @@ function MeasurementMetadataDetail (props) {
             />
           </a>
         </div>
-      )}
-      <LayerInfo key={l.id} layer={l} />
-    </div>
-  ));
+        )}
+        <LayerInfo key={l.id} layer={l} />
+      </div>
+    ));
 
   const renderMobile = () => {
     const sourceTextLong = metadataForSource && metadataForSource.length >= 1000;
