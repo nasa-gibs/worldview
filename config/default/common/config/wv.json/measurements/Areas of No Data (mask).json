@@ -17,7 +17,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/terra/AreasNoData",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Data_No_Data"

@@ -29,7 +29,7 @@ export default function AboutPage() {
           of observation - essentially showing the entire Earth as it looks &quot;right now&quot;. This supports time-critical application
           areas such as wildfire management, air quality measurements, and flood monitoring. Arctic and Antarctic views
           of many products are also available for a &quot;full globe&quot; perspective. Geostationary imagery layers are also now available.
-          These are provided in ten minute increments for the last 30 days. These full disk hemispheric views allow for almost real-time viewing of
+          These are provided in ten minute increments for the last 90 days. These full disk hemispheric views allow for almost real-time viewing of
           changes occurring around most of the world. Browsing on tablet and smartphone devices is generally supported for mobile access to the imagery.
         </p>
 
@@ -162,29 +162,32 @@ export default function AboutPage() {
 
         <ul>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips" target="_blank" rel="noopener noreferrer">AMSR SIPS</a>
+          AMSR2 and LIS aboard ISS layers from <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips" target="_blank" rel="noopener noreferrer">AMSR SIPS</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank" rel="noopener noreferrer">ASDC</a>
+          VIIRS-Atmosphere layers from <a href="https://earthdata.nasa.gov/atmosphere-sips" target="_blank" rel="noopener noreferrer">Atmosphere SIPS</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ges-disc" target="_blank" rel="noopener noreferrer">GES DISC</a>
+           MISR layers <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank" rel="noopener noreferrer">ASDC</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-modaps" target="_blank" rel="noopener noreferrer">MODAPS</a>
+            AIRS and MLS layers from <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ges-disc" target="_blank" rel="noopener noreferrer">GES DISC</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/sips/sips-mopitt" target="_blank" rel="noopener noreferrer">MOPITT SIPS</a>
+            MODIS and VIIRS-Land layers from <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-modaps" target="_blank" rel="noopener noreferrer">MODAPS</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips" target="_blank" rel="noopener noreferrer">OMI SIPS</a>
+            MOPITT layer from <a href="https://earthdata.nasa.gov/eosdis/sips/sips-mopitt" target="_blank" rel="noopener noreferrer">MOPITT SIPS</a>
+          </li>
+          <li>
+           OMI and OMPS layers from <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips" target="_blank" rel="noopener noreferrer">OMI SIPS</a>
             {' '}
             and
             {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ozone-sips" target="_blank" rel="noopener noreferrer">Ozone SIPS</a>
           </li>
           <li>
-            <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank" rel="noopener noreferrer">FIRMS</a>
+          MODIS and VIIRS Fires and Thermal Anomalies layers from <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank" rel="noopener noreferrer">FIRMS</a>
           </li>
         </ul>
 
