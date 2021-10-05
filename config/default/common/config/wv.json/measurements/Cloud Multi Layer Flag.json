@@ -18,7 +18,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/terra/CloudMultiLayerFlag",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Multi_Layer_Flag",

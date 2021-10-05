@@ -23,7 +23,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/terra/CloudOpticalThickness",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Optical_Thickness",
