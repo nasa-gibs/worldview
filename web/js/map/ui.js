@@ -714,7 +714,7 @@ export default function mapui(models, config, store, ui) {
       const visibleLayers = activeLayers.filter(
         ({ id }) => layers
           .filter((l) => l.getVisible())
-          .map(({ wv }) => wv.def.id)
+          .map(({ wv }) => lodashGet(wv, 'def.id'))
           .includes(id),
       );
 
