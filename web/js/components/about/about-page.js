@@ -162,16 +162,16 @@ export default function AboutPage() {
 
         <ul>
           <li>
-           AMSR2 and LIS aboard ISS layers from
-           <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips" target="_blank" rel="noopener noreferrer">AMSR SIPS</a>
+            AMSR2 and LIS aboard ISS layers from
+            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips" target="_blank" rel="noopener noreferrer">AMSR SIPS</a>
           </li>
           <li>
             VIIRS-Atmosphere layers from
-           <a href="https://earthdata.nasa.gov/atmosphere-sips" target="_blank" rel="noopener noreferrer">Atmosphere SIPS</a>
+            <a href="https://earthdata.nasa.gov/atmosphere-sips" target="_blank" rel="noopener noreferrer">Atmosphere SIPS</a>
           </li>
           <li>
             MISR layers
-           <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank" rel="noopener noreferrer">ASDC</a>
+            <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank" rel="noopener noreferrer">ASDC</a>
           </li>
           <li>
             AIRS and MLS layers from
@@ -187,7 +187,7 @@ export default function AboutPage() {
           </li>
           <li>
             OMI and OMPS layers from
-           <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips" target="_blank" rel="noopener noreferrer">OMI SIPS</a>
+            <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips" target="_blank" rel="noopener noreferrer">OMI SIPS</a>
             {' '}
             and
             {' '}
@@ -195,7 +195,7 @@ export default function AboutPage() {
           </li>
           <li>
             MODIS and VIIRS Fires and Thermal Anomalies layers from
-           <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank" rel="noopener noreferrer">FIRMS</a>
+            <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank" rel="noopener noreferrer">FIRMS</a>
           </li>
         </ul>
 
