@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
+import { getSourcesForProjection } from '../../../../modules/product-picker/selectors';
 import LayerInfo from '../../info/info';
 
 function MeasurementMetadataDetail (props) {
@@ -150,8 +150,10 @@ const mapStateToProps = (state) => {
   const {
     productPicker, layers, config, proj,
   } = state;
-  const source = getMeasurementSource(state);
-  const { category } = productPicker;
+
+  const { category, selectedMeasurementSourceIndex } = productPicker;
+  const sources = getSourcesForProjection(state);
+  const source = sources && sources[selectedMeasurementSourceIndex];
   const { layerConfig } = layers;
   const settings = source ? source.settings : [];
   const layersForSource = settings.map((id) => layerConfig[id]);
