@@ -52,7 +52,9 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       showBoundingBox: false,
-      showZoomedIntoWingsAlert: false,
+      showZoomedIntoDatelineArea: false,
+      showAreaOfInterestCrossedDateline: false,
+      showEntireAreaOfInterestCrossedDateline: false,
       currentExtent: {},
       coordinates: {},
       validatedLayers: [],
@@ -96,7 +98,7 @@ class SmartHandoff extends Component {
     if (proj.id !== prevProps.proj.id) {
       const projChangeStateUpdate = { showBoundingBox: false };
       if (proj.id !== 'geographic') {
-        projChangeStateUpdate.showZoomedIntoWingsAlert = false;
+        projChangeStateUpdate.showZoomedIntoDatelineArea = false;
       }
       this.setState(projChangeStateUpdate);
     }
@@ -153,7 +155,7 @@ class SmartHandoff extends Component {
     const inLeftWing = extent[0] < maxExtent[0] && extent[2] < maxExtent[0];
     const inRightWing = extent[0] > maxExtent[2] && extent[2] > maxExtent[2];
     const isWithinWings = inLeftWing || inRightWing;
-    this.setState({ showZoomedIntoWingsAlert: isWithinWings });
+    this.setState({ showZoomedIntoDatelineArea: isWithinWings });
   }
 
   /**
@@ -174,6 +176,7 @@ class SmartHandoff extends Component {
    *                              the granule count async requests
    */
   onBoundaryChange(boundaries, setExtent) {
+    const { showAreaOfInterestCrossedDateline, showEntireAreaOfInterestCrossedDateline } = this.state;
     const { proj, map, selectedCollection } = this.props;
 
     if (!selectedCollection) return;
@@ -202,17 +205,60 @@ class SmartHandoff extends Component {
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
+    let crossedDateline = false;
+    let entireAreaCrossed = false;
     // Determine longitude out of bounds areas and reset to limits
-    if (geolonlat1[0] > 180) geolonlat1[0] = 180;
-    else if (geolonlat1[0] < -180) geolonlat1[0] = -180;
-    if (geolonlat2[0] > 180) geolonlat2[0] = 180;
-    else if (geolonlat2[0] < -180) geolonlat2[0] = -180;
+    if (geolonlat1[0] > 180) {
+      // entire area of interest crossed right dateline
+      entireAreaCrossed = true;
+      geolonlat1[0] = 180;
+    } else if (geolonlat1[0] < -180) {
+      // part of area of interest crossed left dateline
+      crossedDateline = true;
+      geolonlat1[0] = -180;
+    }
+    if (geolonlat2[0] > 180) {
+      // part of area of interest crossed right dateline
+      crossedDateline = true;
+      geolonlat2[0] = 180;
+    } else if (geolonlat2[0] < -180) {
+      // entire area of interest crossed left dateline
+      entireAreaCrossed = true;
+      geolonlat2[0] = -180;
+    }
 
     // Determine latitude out of bounds areas and reset to limits
-    if (geolonlat1[1] > 90) geolonlat1[1] = 90;
-    else if (geolonlat1[1] < -90) geolonlat1[1] = -90;
-    if (geolonlat2[1] > 90) geolonlat2[1] = 90;
-    else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
+    if (geolonlat1[1] > 90) {
+      geolonlat1[1] = 90;
+    } else if (geolonlat1[1] < -90) {
+      geolonlat1[1] = -90;
+    }
+    if (geolonlat2[1] > 90) {
+      geolonlat2[1] = 90;
+    } else if (geolonlat2[1] < -90) {
+      geolonlat2[1] = -90;
+    }
+
+    if (entireAreaCrossed) {
+      this.setState({ showEntireAreaOfInterestCrossedDateline: true });
+    } else if (crossedDateline) {
+      if (!showAreaOfInterestCrossedDateline) {
+        this.setState({
+          showAreaOfInterestCrossedDateline: true,
+          showEntireAreaOfInterestCrossedDateline: false,
+        });
+      }
+      if (showEntireAreaOfInterestCrossedDateline) {
+        this.setState({
+          showEntireAreaOfInterestCrossedDateline: false,
+        });
+      }
+    } else if (showAreaOfInterestCrossedDateline || showEntireAreaOfInterestCrossedDateline) {
+      this.setState({
+        showAreaOfInterestCrossedDateline: false,
+        showEntireAreaOfInterestCrossedDateline: false,
+      });
+    }
 
     const extent = {
       southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
@@ -240,7 +286,10 @@ class SmartHandoff extends Component {
       });
       this.setState({ showBoundingBox: true });
     } else {
-      this.setState({ showBoundingBox: false });
+      this.setState({
+        showBoundingBox: false,
+        showAreaOfInterestCrossedDateline: false,
+      });
     }
   }
 
@@ -280,17 +329,33 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Render alert to indicate the map view is zoomed entirely into the map wings (geographic projection only)
-   * Typically from activeTab change to data download when zoomed into wing, but triggers on changing the extent as well
+   * Render alerts to indicate map view/area of interest dateline crossing (geographic projection only):
+   * 1) The map view is zoomed entirely into the map wings
+   * 2) The area of interest crossed the dateline
+   * 3) The entire area of interest crossed the dateline
    */
-   renderZoomedIntoWingsAlert = () => {
-     const { showZoomedIntoWingsAlert } = this.state;
-     const message = 'The map is zoomed into an area over the dateline that is unavailable in data download mode. Zoom out to see available map.';
-     return showZoomedIntoWingsAlert && (
+   renderWingsAlert = () => {
+     const {
+       showBoundingBox,
+       showAreaOfInterestCrossedDateline,
+       showEntireAreaOfInterestCrossedDateline,
+       showZoomedIntoDatelineArea,
+     } = this.state;
+
+     const message = showEntireAreaOfInterestCrossedDateline
+       ? 'The entire area of interest crossed the dateline(s) which is unavailable in data download mode. Select an area within the available map.'
+       : showAreaOfInterestCrossedDateline
+         ? 'The area of interest crosses the dateline(s) which is unavailable in data download mode. Available data is cut off at the dateline(s).'
+         : showZoomedIntoDatelineArea
+           ? 'The map is zoomed into an area that crossed the dateline which is unavailable in data download mode. Zoom out to see available map.'
+           : '';
+
+     const showAreaOfInterestAlert = showBoundingBox && (showAreaOfInterestCrossedDateline || showEntireAreaOfInterestCrossedDateline);
+     return (showAreaOfInterestAlert || showZoomedIntoDatelineArea) && (
      <AlertUtil
-       id="map-zoomed-into-wings-alert"
+       id="data-download-unavailable-dateline-alert"
        isOpen
-       title="Map Zoomed Into Unavailable Wings"
+       title="Data Download In Unavailable Dateline Map Area"
        message={message}
      />
      );
@@ -476,20 +541,22 @@ class SmartHandoff extends Component {
       selectedDate,
       showGranuleHelpModal,
     } = this.props;
-    const { showBoundingBox, currentExtent, validatedLayers } = this.state;
+    const {
+      showBoundingBox, showEntireAreaOfInterestCrossedDateline, showZoomedIntoDatelineArea, currentExtent, validatedLayers,
+    } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id;
+    const isValidDownload = selectedLayer && selectedLayer.id && !showEntireAreaOfInterestCrossedDateline && !showZoomedIntoDatelineArea;
 
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
       <>
-        {this.renderZoomedIntoWingsAlert()}
+        {this.renderWingsAlert()}
         <div className="smart-handoff-side-panel">
           <div className="esd-notification">
             Downloading data will be performed using
@@ -507,7 +574,7 @@ class SmartHandoff extends Component {
           {this.renderCropBox()}
           <GranuleCount
             displayDate={displayDate}
-            currentExtent={showBoundingBox ? currentExtent : undefined}
+            currentExtent={isValidDownload && showBoundingBox ? currentExtent : undefined}
             selectedDate={selectedDate}
             selectedLayer={selectedLayer}
             selectedCollection={selectedCollection}
