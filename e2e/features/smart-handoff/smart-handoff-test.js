@@ -10,12 +10,13 @@ const TIME_LIMIT = 10000;
 
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
+const downloadButton = '.download-btn';
 const cloudRadiusRadioButton = '#C1443536017-LAADS-MODIS_Aqua_Cloud_Effective_Radius-collection-choice-label';
 const SSTRadioButton = '#C1664741463-PODAAC-GHRSST_L4_MUR_Sea_Surface_Temperature-collection-choice-label';
 const urlParams = '?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-12-01';
 const permalinkParams = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=2020-02-06-T06%3A00%3A00Z';
 const permalinkParams1980 = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=1980-02-06-T06%3A00%3A00Z';
-const inWingsAlertURL = '?v=226.32336353630282,-35.84415340249873,233.47009302183025,-31.309041515170094&l=VIIRS_NOAA20_Thermal_Anomalies_375m_All,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&sh=VIIRS_NOAA20_Thermal_Anomalies_375m_All,C1355615368-LANCEMODIS&t=2021-08-29-T17%3A56%3A03Z';
+const extentInWingsAlertURL = '?v=226.32336353630282,-35.84415340249873,233.47009302183025,-31.309041515170094&l=VIIRS_NOAA20_Thermal_Anomalies_375m_All,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&sh=VIIRS_NOAA20_Thermal_Anomalies_375m_All,C1355615368-LANCEMODIS&t=2021-08-29-T17%3A56%3A03Z';
 
 module.exports = {
 
@@ -93,18 +94,19 @@ module.exports = {
       .to.have.text.equal('None of your current layers are available for download.');
   },
 
-  'Map extent entirely in wings displays warning for user to zoom out to see available map': (c) => {
-    c.url(c.globals.url + inWingsAlertURL);
-    c.expect.element(dataTabButton).to.be.visible;
-    c.waitForElementVisible('#map-zoomed-into-wings-alert', TIME_LIMIT, () => {
-      c.assert.containsText('#map-zoomed-into-wings-alert div.wv-alert-message',
-        'The map is zoomed into an area over the dateline that is unavailable in data download mode. Zoom out to see available map.');
+  'Map extent entirely in wings disabled download button and displays warning for user to zoom out to see available map': (c) => {
+    c.url(c.globals.url + extentInWingsAlertURL);
+    c.expect.element(downloadButton).to.be.visible;
+    c.useCss().assert.cssClassPresent(downloadButton, 'wv-disabled');
+    c.waitForElementVisible('#data-download-unavailable-dateline-alert', TIME_LIMIT, () => {
+      c.assert.containsText('#data-download-unavailable-dateline-alert div.wv-alert-message',
+        'The map is zoomed into an area that crossed the dateline which is unavailable in data download mode. Zoom out to see available map.');
     });
   },
 
   'Download via Earthdata Search': (c) => {
     c.url(c.globals.url + permalinkParams);
-    c.click('.download-btn');
+    c.click(downloadButton);
     c.expect
       .element('#transferring-to-earthdata-search')
       .to.be.present;
