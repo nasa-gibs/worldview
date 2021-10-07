@@ -52,9 +52,9 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       showBoundingBox: false,
-      showZoomedIntoDatelineArea: false,
-      showAreaOfInterestCrossedDateline: false,
-      showEntireAreaOfInterestCrossedDateline: false,
+      showZoomedIntoDatelineAlert: false,
+      showAOICrossedDateline: false,
+      showEntireAOICrossedDateline: false,
       currentExtent: {},
       coordinates: {},
       validatedLayers: [],
@@ -72,7 +72,7 @@ class SmartHandoff extends Component {
     const { proj } = this.props;
     this.validateConceptIds();
     if (proj.id === 'geographic') {
-      this.checkMapExtentWithinWings();
+      this.checkMapExtentValid();
     }
   }
 
@@ -98,7 +98,7 @@ class SmartHandoff extends Component {
     if (proj.id !== prevProps.proj.id) {
       const projChangeStateUpdate = { showBoundingBox: false };
       if (proj.id !== 'geographic') {
-        projChangeStateUpdate.showZoomedIntoDatelineArea = false;
+        projChangeStateUpdate.showZoomedIntoDatelineAlert = false;
       }
       this.setState(projChangeStateUpdate);
     }
@@ -107,7 +107,7 @@ class SmartHandoff extends Component {
       const tabChange = isActive && !prevProps.isActive;
       const extentChange = !lodashEqual(map.extent, prevProps.map.extent);
       if (tabChange || extentChange) {
-        this.checkMapExtentWithinWings();
+        this.checkMapExtentValid();
       }
     }
   }
@@ -146,16 +146,16 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Check if entire map extent is within a wing that is not available in data download
+   * Check if entire map extent is over dateline (within a wing)
    *
    * @returns {Boolean} is map extent within wing
    */
-  checkMapExtentWithinWings = () => {
+  checkMapExtentValid = () => {
     const { map: { extent }, proj: { maxExtent } } = this.props;
     const inLeftWing = extent[0] < maxExtent[0] && extent[2] < maxExtent[0];
     const inRightWing = extent[0] > maxExtent[2] && extent[2] > maxExtent[2];
     const isWithinWings = inLeftWing || inRightWing;
-    this.setState({ showZoomedIntoDatelineArea: isWithinWings });
+    this.setState({ showZoomedIntoDatelineAlert: isWithinWings });
   }
 
   /**
@@ -176,7 +176,6 @@ class SmartHandoff extends Component {
    *                              the granule count async requests
    */
   onBoundaryChange(boundaries, setExtent) {
-    const { showAreaOfInterestCrossedDateline, showEntireAreaOfInterestCrossedDateline } = this.state;
     const { proj, map, selectedCollection } = this.props;
 
     if (!selectedCollection) return;
@@ -239,26 +238,7 @@ class SmartHandoff extends Component {
       geolonlat2[1] = -90;
     }
 
-    if (entireAreaCrossed) {
-      this.setState({ showEntireAreaOfInterestCrossedDateline: true });
-    } else if (crossedDateline) {
-      if (!showAreaOfInterestCrossedDateline) {
-        this.setState({
-          showAreaOfInterestCrossedDateline: true,
-          showEntireAreaOfInterestCrossedDateline: false,
-        });
-      }
-      if (showEntireAreaOfInterestCrossedDateline) {
-        this.setState({
-          showEntireAreaOfInterestCrossedDateline: false,
-        });
-      }
-    } else if (showAreaOfInterestCrossedDateline || showEntireAreaOfInterestCrossedDateline) {
-      this.setState({
-        showAreaOfInterestCrossedDateline: false,
-        showEntireAreaOfInterestCrossedDateline: false,
-      });
-    }
+    this.triggerDatelineAlerts(crossedDateline, entireAreaCrossed);
 
     const extent = {
       southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
@@ -288,7 +268,7 @@ class SmartHandoff extends Component {
     } else {
       this.setState({
         showBoundingBox: false,
-        showAreaOfInterestCrossedDateline: false,
+        showAOICrossedDateline: false,
       });
     }
   }
@@ -329,29 +309,59 @@ class SmartHandoff extends Component {
   }
 
   /**
+   * Determine if dateline alert updates are necessary
+   *
+   * @param {Boolean} crossedDateline
+   * @param {Boolean} entireAreaCrossed
+   */
+   triggerDatelineAlerts = (crossedDateline, entireAreaCrossed) => {
+     const { showAOICrossedDateline, showEntireAOICrossedDateline } = this.state;
+     if (entireAreaCrossed) {
+       this.setState({ showEntireAOICrossedDateline: true });
+     } else if (crossedDateline) {
+       if (!showAOICrossedDateline) {
+         this.setState({
+           showAOICrossedDateline: true,
+           showEntireAOICrossedDateline: false,
+         });
+       }
+       if (showEntireAOICrossedDateline) {
+         this.setState({
+           showEntireAOICrossedDateline: false,
+         });
+       }
+     } else if (showAOICrossedDateline || showEntireAOICrossedDateline) {
+       this.setState({
+         showAOICrossedDateline: false,
+         showEntireAOICrossedDateline: false,
+       });
+     }
+   }
+
+   /**
    * Render alerts to indicate map view/area of interest dateline crossing (geographic projection only):
    * 1) The map view is zoomed entirely into the map wings
    * 2) The area of interest crossed the dateline
    * 3) The entire area of interest crossed the dateline
    */
-   renderWingsAlert = () => {
+   renderDatelineWarning = () => {
      const {
        showBoundingBox,
-       showAreaOfInterestCrossedDateline,
-       showEntireAreaOfInterestCrossedDateline,
-       showZoomedIntoDatelineArea,
+       showAOICrossedDateline,
+       showEntireAOICrossedDateline,
+       showZoomedIntoDatelineAlert,
      } = this.state;
 
-     const message = showEntireAreaOfInterestCrossedDateline
-       ? 'The entire area of interest crossed the dateline(s) which is unavailable in data download mode. Select an area within the available map.'
-       : showAreaOfInterestCrossedDateline
-         ? 'The area of interest crosses the dateline(s) which is unavailable in data download mode. Available data is cut off at the dateline(s).'
-         : showZoomedIntoDatelineArea
-           ? 'The map is zoomed into an area that crossed the dateline which is unavailable in data download mode. Zoom out to see available map.'
+     const message = showBoundingBox && showEntireAOICrossedDateline
+       ? 'The entire area of interest crossed the dateline and is outside of the available map in data mode. Download is disabled. Select an area within the available map.'
+       : showBoundingBox && showAOICrossedDateline
+         ? 'The area of interest crosses the dateline(s) which is unavailable in data mode. Available data is cut off at the dateline(s).'
+         : showZoomedIntoDatelineAlert
+           ? 'The map is zoomed into an area that crossed the dateline and is outside of the available map in data mode. Download is disabled. Zoom out to see available map.'
            : '';
 
-     const showAreaOfInterestAlert = showBoundingBox && (showAreaOfInterestCrossedDateline || showEntireAreaOfInterestCrossedDateline);
-     return (showAreaOfInterestAlert || showZoomedIntoDatelineArea) && (
+     const showAOIAlert = showBoundingBox && (showAOICrossedDateline || showEntireAOICrossedDateline);
+     return (showAOIAlert || showZoomedIntoDatelineAlert) && (
      <AlertUtil
        id="data-download-unavailable-dateline-alert"
        isOpen
@@ -542,21 +552,21 @@ class SmartHandoff extends Component {
       showGranuleHelpModal,
     } = this.props;
     const {
-      showBoundingBox, showEntireAreaOfInterestCrossedDateline, showZoomedIntoDatelineArea, currentExtent, validatedLayers,
+      showBoundingBox, showEntireAOICrossedDateline, showZoomedIntoDatelineAlert, currentExtent, validatedLayers,
     } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id && !showEntireAreaOfInterestCrossedDateline && !showZoomedIntoDatelineArea;
+    const isValidDownload = selectedLayer && selectedLayer.id && !showEntireAOICrossedDateline && !showZoomedIntoDatelineAlert;
 
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
       <>
-        {this.renderWingsAlert()}
+        {this.renderDatelineWarning()}
         <div className="smart-handoff-side-panel">
           <div className="esd-notification">
             Downloading data will be performed using
