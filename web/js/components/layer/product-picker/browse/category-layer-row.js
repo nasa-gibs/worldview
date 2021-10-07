@@ -53,6 +53,7 @@ class CategoryLayerRow extends React.Component {
     const {
       layerConfig,
       measurement,
+      projection,
     } = this.props;
     const OrbitSourceList = [];
     const LayerSouceList = [];
@@ -60,6 +61,11 @@ class CategoryLayerRow extends React.Component {
 
     source.settings.forEach((layerId) => {
       const layer = layerConfig[layerId];
+      const inProjection = Object.keys(layer.projections).indexOf(projection) > -1;
+
+      if (!layer || layer.id !== layerId || !inProjection) {
+        return;
+      }
 
       if (layer.layergroup === 'Orbital Track') {
         orbitTitle = getOrbitTrackTitle(layer);
@@ -227,6 +233,7 @@ CategoryLayerRow.propTypes = {
   isSelected: PropTypes.bool,
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
+  projection: PropTypes.string,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
   selectedMeasurement: PropTypes.string,
