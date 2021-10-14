@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { each as lodashEach } from 'lodash';
+import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
   TabContent, TabPane, Nav, NavItem, NavLink,
 } from 'reactstrap';
@@ -313,7 +313,7 @@ function mapStateToProps(state, ownProps) {
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-  const { globalTemperatureUnit } = globalUnit;
+  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
   return {
     paletteOrder: config.paletteOrder,
     groupName,

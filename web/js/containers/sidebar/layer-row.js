@@ -349,7 +349,7 @@ const makeMapStateToProps = () => {
     } = state;
     const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
-    const { globalTemperatureUnit } = globalUnit;
+    const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
     const hasPalette = !lodashIsEmpty(layer.palette);
     const renderedPalettes = palettes.rendered;
     const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
