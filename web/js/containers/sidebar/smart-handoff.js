@@ -53,8 +53,8 @@ class SmartHandoff extends Component {
       },
       showBoundingBox: false,
       showZoomedIntoDatelineAlert: false,
-      showAOICrossedDateline: false,
-      showEntireAOICrossedDateline: false,
+      partialOutsideExtents: false,
+      selectionOutsideExtents: false,
       currentExtent: {},
       coordinates: {},
       validatedLayers: [],
@@ -201,53 +201,50 @@ class SmartHandoff extends Component {
     const { crs } = proj;
 
     // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const bottomLeft = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const topRight = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    let [x1, y1] = bottomLeft;
+    let [x2, y2] = topRight;
 
-    let crossedDateline = false;
-    let entireAreaCrossed = false;
+    const selectionOutside = x1 < -180 || x2 > 180;
+    const entireSelectionOutside = x1 > 180 || x2 < -180 || y1 > 90 || y2 < -90;
+
     // Determine longitude out of bounds areas and reset to limits
-    if (geolonlat1[0] > 180) {
-      // entire area of interest crossed right dateline
-      entireAreaCrossed = true;
-      geolonlat1[0] = 180;
-    } else if (geolonlat1[0] < -180) {
-      // part of area of interest crossed left dateline
-      crossedDateline = true;
-      geolonlat1[0] = -180;
+    if (x1 > 180) {
+      x1 = 180;
+    } else if (x1 < -180) {
+      x1 = -180;
     }
-    if (geolonlat2[0] > 180) {
-      // part of area of interest crossed right dateline
-      crossedDateline = true;
-      geolonlat2[0] = 180;
-    } else if (geolonlat2[0] < -180) {
-      // entire area of interest crossed left dateline
-      entireAreaCrossed = true;
-      geolonlat2[0] = -180;
+
+    if (x2 > 180) {
+      x2 = 180;
+    } else if (x2 < -180) {
+      x2 = -180;
     }
 
     // Determine latitude out of bounds areas and reset to limits
-    if (geolonlat1[1] > 90) {
-      geolonlat1[1] = 90;
-    } else if (geolonlat1[1] < -90) {
-      geolonlat1[1] = -90;
-    }
-    if (geolonlat2[1] > 90) {
-      geolonlat2[1] = 90;
-    } else if (geolonlat2[1] < -90) {
-      geolonlat2[1] = -90;
+    if (y1 > 90) {
+      y1 = 90;
+    } else if (y1 < -90) {
+      y1 = -90;
     }
 
-    this.triggerDatelineAlerts(crossedDateline, entireAreaCrossed);
+    if (y2 > 90) {
+      y2 = 90;
+    } else if (y2 < -90) {
+      y2 = -90;
+    }
+
+    this.updateSelectionAlerts(selectionOutside, entireSelectionOutside);
 
     const extent = {
-      southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
-      northEast: `${geolonlat2[0].toFixed(5)},${geolonlat2[1].toFixed(5)}`,
+      southWest: `${x1.toFixed(5)},${y1.toFixed(5)}`,
+      northEast: `${x2.toFixed(5)},${y2.toFixed(5)}`,
     };
 
     const coordinates = {
-      bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-      topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
+      bottomLeft: util.formatCoordinate([x1, y1]),
+      topRight: util.formatCoordinate([x2, y2]),
     };
 
     if (selectedCollection && extent) {
@@ -268,7 +265,7 @@ class SmartHandoff extends Component {
     } else {
       this.setState({
         showBoundingBox: false,
-        showAOICrossedDateline: false,
+        partialOutsideExtents: false,
       });
     }
   }
@@ -311,29 +308,29 @@ class SmartHandoff extends Component {
   /**
    * Determine if dateline alert updates are necessary
    *
-   * @param {Boolean} crossedDateline
-   * @param {Boolean} entireAreaCrossed
+   * @param {Boolean} selectionOutside
+   * @param {Boolean} entireSelectionOutside
    */
-   triggerDatelineAlerts = (crossedDateline, entireAreaCrossed) => {
-     const { showAOICrossedDateline, showEntireAOICrossedDateline } = this.state;
-     if (entireAreaCrossed) {
-       this.setState({ showEntireAOICrossedDateline: true });
-     } else if (crossedDateline) {
-       if (!showAOICrossedDateline) {
+   updateSelectionAlerts = (selectionOutside, entireSelectionOutside) => {
+     const { partialOutsideExtents, selectionOutsideExtents } = this.state;
+     if (entireSelectionOutside) {
+       this.setState({ selectionOutsideExtents: true });
+     } else if (selectionOutside) {
+       if (!partialOutsideExtents) {
          this.setState({
-           showAOICrossedDateline: true,
-           showEntireAOICrossedDateline: false,
+           partialOutsideExtents: true,
+           selectionOutsideExtents: false,
          });
        }
-       if (showEntireAOICrossedDateline) {
+       if (selectionOutsideExtents) {
          this.setState({
-           showEntireAOICrossedDateline: false,
+           selectionOutsideExtents: false,
          });
        }
-     } else if (showAOICrossedDateline || showEntireAOICrossedDateline) {
+     } else if (partialOutsideExtents || selectionOutsideExtents) {
        this.setState({
-         showAOICrossedDateline: false,
-         showEntireAOICrossedDateline: false,
+         partialOutsideExtents: false,
+         selectionOutsideExtents: false,
        });
      }
    }
@@ -347,25 +344,21 @@ class SmartHandoff extends Component {
    renderDatelineWarning = () => {
      const {
        showBoundingBox,
-       showAOICrossedDateline,
-       showEntireAOICrossedDateline,
+       selectionOutsideExtents,
        showZoomedIntoDatelineAlert,
      } = this.state;
 
-     const message = showBoundingBox && showEntireAOICrossedDateline
-       ? 'The entire area of interest crossed the dateline and is outside of the available map in data mode. Download is disabled. Select an area within the available map.'
-       : showBoundingBox && showAOICrossedDateline
-         ? 'The area of interest crosses the dateline(s) which is unavailable in data mode. Available data is cut off at the dateline(s).'
-         : showZoomedIntoDatelineAlert
-           ? 'The map is zoomed into an area that crossed the dateline and is outside of the available map in data mode. Download is disabled. Zoom out to see available map.'
-           : '';
+     const message = showBoundingBox && selectionOutsideExtents
+       ? 'The entire selection is outside of the available map area; download is disabled. Select an area within the visible map.'
+       : showZoomedIntoDatelineAlert
+         ? 'The map is zoomed into an area with no available data; download is disabled. Zoom out to see available map.'
+         : '';
 
-     const showAOIAlert = showBoundingBox && (showAOICrossedDateline || showEntireAOICrossedDateline);
-     return (showAOIAlert || showZoomedIntoDatelineAlert) && (
+     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && (
      <AlertUtil
        id="data-download-unavailable-dateline-alert"
        isOpen
-       title="Data Download In Unavailable Dateline Map Area"
+       title="Data Download Unavailable"
        message={message}
      />
      );
@@ -552,14 +545,14 @@ class SmartHandoff extends Component {
       showGranuleHelpModal,
     } = this.props;
     const {
-      showBoundingBox, showEntireAOICrossedDateline, showZoomedIntoDatelineAlert, currentExtent, validatedLayers,
+      showBoundingBox, selectionOutsideExtents, showZoomedIntoDatelineAlert, currentExtent, validatedLayers,
     } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id && !showEntireAOICrossedDateline && !showZoomedIntoDatelineAlert;
+    const isValidDownload = selectedLayer && selectedLayer.id && !selectionOutsideExtents && !showZoomedIntoDatelineAlert;
 
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
