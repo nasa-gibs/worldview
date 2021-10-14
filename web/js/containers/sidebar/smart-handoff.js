@@ -531,7 +531,7 @@ class SmartHandoff extends Component {
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : true;
+    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (!validatedLayers.length) {
