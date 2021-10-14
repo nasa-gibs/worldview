@@ -44,13 +44,16 @@ export default class VectorMetaTable extends React.Component {
                     let description = properties.Description;
                     let unit = properties.Units;
                     if (value && unit) {
+                      const { disableUnitConversion } = obj;
                       const initialUnit = unit;
                       unit = getAbbrevFromTemperatureUnit(unit) || unit;
-                      const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(unit, globalTemperatureUnit);
-                      if (needsConversion) {
-                        value = `${convertPaletteValue(`${value}`, legendTempUnit, globalTemperatureUnit)}`;
-                        description = description.replace(initialUnit, globalTemperatureUnit);
-                        unit = '';
+                      if (!disableUnitConversion) {
+                        const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(unit, globalTemperatureUnit);
+                        if (needsConversion) {
+                          value = `${convertPaletteValue(`${value}`, legendTempUnit, globalTemperatureUnit)}`;
+                          description = description.replace(initialUnit, globalTemperatureUnit);
+                          unit = '';
+                        }
                       }
                     }
 

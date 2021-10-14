@@ -3,6 +3,7 @@
         "Brightness Temperature": {
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
+            "disableUnitConversion": true,
             "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, NOAA-20/VIIRS+CrIS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, Suomi NPP/VIIRS+CrIS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
             "sources": {
                 "Aqua/AMSR-E": {

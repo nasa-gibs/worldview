@@ -1516,3 +1516,20 @@ export function getLayersFromGroups (state, groups) {
       .concat(baselayers)
     : [];
 }
+
+export function adjustMeasurementsValidUnitConversion(config) {
+  const { measurements, layers } = config;
+  const applyDisableUnitConversionCheck = (layer) => {
+    const { layergroup } = layer;
+    if (!layergroup || !measurements[layergroup]) {
+      return;
+    }
+
+    const { disableUnitConversion } = measurements[layergroup];
+    if (disableUnitConversion) {
+      layer.disableUnitConversion = true;
+    }
+  };
+
+  return Object.values(layers).forEach(applyDisableUnitConversionCheck);
+}

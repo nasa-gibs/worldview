@@ -262,6 +262,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
         title: def.title || layerId,
         subTitle: def.subtitle,
         featureTitle: title,
+        disableUnitConversion: !!def.disableUnitConversion,
 
       };
       metaArray.push(obj);
