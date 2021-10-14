@@ -328,7 +328,7 @@ class SmartHandoff extends Component {
      } = this.state;
 
      const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
-       ? 'The selection is outside of the available map area.'
+       ? 'The selection is outside the available map area.'
        : showZoomedIntoDatelineAlert
          ? 'The map is zoomed into an area with no available data.'
          : '';
