@@ -53,7 +53,6 @@ class SmartHandoff extends Component {
       },
       showBoundingBox: false,
       showZoomedIntoDatelineAlert: false,
-      partialOutsideExtents: false,
       selectionOutsideExtents: false,
       currentExtent: {},
       coordinates: {},
@@ -206,7 +205,6 @@ class SmartHandoff extends Component {
     let [x1, y1] = bottomLeft;
     let [x2, y2] = topRight;
 
-    const selectionOutside = x1 < -180 || x2 > 180;
     const entireSelectionOutside = x1 > 180 || x2 < -180 || y1 > 90 || y2 < -90;
 
     // Determine longitude out of bounds areas and reset to limits
@@ -235,7 +233,7 @@ class SmartHandoff extends Component {
       y2 = -90;
     }
 
-    this.updateSelectionAlerts(selectionOutside, entireSelectionOutside);
+    this.updateSelectionAlerts(entireSelectionOutside);
 
     const extent = {
       southWest: `${x1.toFixed(5)},${y1.toFixed(5)}`,
@@ -265,7 +263,6 @@ class SmartHandoff extends Component {
     } else {
       this.setState({
         showBoundingBox: false,
-        partialOutsideExtents: false,
       });
     }
   }
@@ -311,47 +308,29 @@ class SmartHandoff extends Component {
    * @param {Boolean} selectionOutside
    * @param {Boolean} entireSelectionOutside
    */
-   updateSelectionAlerts = (selectionOutside, entireSelectionOutside) => {
-     const { partialOutsideExtents, selectionOutsideExtents } = this.state;
-     if (entireSelectionOutside) {
-       this.setState({ selectionOutsideExtents: true });
-     } else if (selectionOutside) {
-       if (!partialOutsideExtents) {
-         this.setState({
-           partialOutsideExtents: true,
-           selectionOutsideExtents: false,
-         });
-       }
-       if (selectionOutsideExtents) {
-         this.setState({
-           selectionOutsideExtents: false,
-         });
-       }
-     } else if (partialOutsideExtents || selectionOutsideExtents) {
-       this.setState({
-         partialOutsideExtents: false,
-         selectionOutsideExtents: false,
-       });
+   updateSelectionAlerts = (entireSelectionOutside) => {
+     const { selectionOutsideExtents } = this.state;
+     if (entireSelectionOutside !== selectionOutsideExtents) {
+       this.setState({ selectionOutsideExtents: entireSelectionOutside });
      }
    }
 
    /**
-   * Render alerts to indicate map view/area of interest dateline crossing (geographic projection only):
+   * Render alerts to indicate map view/area of interest outside visible extents
    * 1) The map view is zoomed entirely into the map wings
-   * 2) The area of interest crossed the dateline
-   * 3) The entire area of interest crossed the dateline
+   * 2) The entire area of interest crossed the dateline
    */
-   renderDatelineWarning = () => {
+   renderSelectionWarning = () => {
      const {
        showBoundingBox,
        selectionOutsideExtents,
        showZoomedIntoDatelineAlert,
      } = this.state;
 
-     const message = showBoundingBox && selectionOutsideExtents
-       ? 'The entire selection is outside of the available map area; download is disabled. Select an area within the visible map.'
+     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
+       ? 'The selection is outside of the available map area.'
        : showZoomedIntoDatelineAlert
-         ? 'The map is zoomed into an area with no available data; download is disabled. Zoom out to see available map.'
+         ? 'The map is zoomed into an area with no available data.'
          : '';
 
      return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && (
@@ -552,14 +531,15 @@ class SmartHandoff extends Component {
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id && !selectionOutsideExtents && !showZoomedIntoDatelineAlert;
+    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : true;
+    const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
       <>
-        {this.renderDatelineWarning()}
+        {this.renderSelectionWarning()}
         <div className="smart-handoff-side-panel">
           <div className="esd-notification">
             Downloading data will be performed using
@@ -575,14 +555,16 @@ class SmartHandoff extends Component {
           {this.renderLayerChoices()}
           <hr />
           {this.renderCropBox()}
-          <GranuleCount
-            displayDate={displayDate}
-            currentExtent={isValidDownload && showBoundingBox ? currentExtent : undefined}
-            selectedDate={selectedDate}
-            selectedLayer={selectedLayer}
-            selectedCollection={selectedCollection}
-            showGranuleHelpModal={showGranuleHelpModal}
-          />
+          {isValidDownload && (
+            <GranuleCount
+              displayDate={displayDate}
+              currentExtent={isValidDownload && showBoundingBox ? currentExtent : undefined}
+              selectedDate={selectedDate}
+              selectedLayer={selectedLayer}
+              selectedCollection={selectedCollection}
+              showGranuleHelpModal={showGranuleHelpModal}
+            />
+          )}
           <Button
             onClick={this.onClickDownload}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
@@ -615,12 +597,6 @@ SmartHandoff.propTypes = {
   showNotAvailableModal: PropTypes.func,
 };
 
-/**
- * ReactRedux; used for selecting the part of the data from the store
- * that the Smarthandoff component needs. This is called every time the
- * store state changes.
- * @param {*} state | Encapsulates the entire Redux store state.
- */
 const mapStateToProps = (state) => {
   const {
     browser,
@@ -665,10 +641,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-/**
- * React-Redux; used for SmartHandoff component to fire specific actions events
- * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
- */
 const mapDispatchToProps = (dispatch) => ({
   selectCollection: (conceptId, layerId) => {
     dispatch(selectCollection(conceptId, layerId));
