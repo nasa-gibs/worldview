@@ -333,7 +333,7 @@ class SmartHandoff extends Component {
          ? 'The map is zoomed into an area with no available data.'
          : '';
 
-     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && (
+     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
      <AlertUtil
        id="data-download-unavailable-dateline-alert"
        isOpen
