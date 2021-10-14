@@ -52,6 +52,7 @@ export default class AlertUtil extends React.Component {
           className="alert-content"
           title={title}
           onClick={onClick}
+          style={{ paddingRight: !onDismiss ? 8 : 5 }}
         >
           <FontAwesomeIcon
             icon={icon || 'exclamation-triangle'}
