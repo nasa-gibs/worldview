@@ -100,7 +100,7 @@ module.exports = {
     c.useCss().assert.cssClassPresent(downloadButton, 'wv-disabled');
     c.waitForElementVisible('#data-download-unavailable-dateline-alert', TIME_LIMIT, () => {
       c.assert.containsText('#data-download-unavailable-dateline-alert div.wv-alert-message',
-        'The map is zoomed into an area that crossed the dateline and is outside of the available map in data mode. Download is disabled. Zoom out to see available map.');
+        'The map is zoomed into an area with no available data.');
     });
   },
 
