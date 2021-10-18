@@ -13,7 +13,7 @@ const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }
       <span><FontAwesomeIcon id="temperature-unit-buttons-info-icon" icon="info-circle" /></span>
       <HoverTooltip
         isMobile={false}
-        labelText="Applied to all layers and metadata that use temperature"
+        labelText="Applied to relevant temperature layers"
         target="temperature-unit-buttons-info-icon"
         placement="right"
       />
