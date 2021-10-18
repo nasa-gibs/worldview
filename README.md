@@ -89,8 +89,6 @@ To update Worldview, pull down any branch or tag from GitHub. From the `main` br
 - [Docker](doc/docker.md)
 - [Data Download (Smart Handoffs)](doc/smart_handoffs.md)
 - [Embedding](doc/embed.md)
-- [Release Notes](doc/release_notes.md)
-- [Changelog](CHANGELOG.md)
 
 ## Contact
 
