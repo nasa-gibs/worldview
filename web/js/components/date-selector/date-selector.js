@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './date-input-column';
 import util from '../../util/util';
-import { monthStringArray } from './util';
+import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 
 /*
  * DateSelector used within Timeline and AnimationWidget.
@@ -168,7 +168,7 @@ class DateSelector extends Component {
       }
 
       if (month) {
-        const realMonth = util.stringInArray(monthStringArray, month);
+        const realMonth = util.stringInArray(dAY, month);
         const maxDatePrev = new Date(
           date.getUTCFullYear(),
           date.getUTCMonth() + 1,
@@ -221,7 +221,7 @@ class DateSelector extends Component {
 
         let dateCheck;
         if (day <= maxDayDate) {
-          const realMonth = util.stringInArray(monthStringArray, month);
+          const realMonth = util.stringInArray(MONTH_STRING_ARRAY, month);
           date = new Date(new Date(date).setUTCDate(day));
           dateCheck = new Date(inputDate);
           dateCheck = new Date(new Date(date).setUTCDate(1));
@@ -370,7 +370,7 @@ class DateSelector extends Component {
     };
 
     const yearValue = year || date.getUTCFullYear();
-    const monthValue = month || monthStringArray[date.getUTCMonth()];
+    const monthValue = month || MONTH_STRING_ARRAY[date.getUTCMonth()];
     const dayValue = day || util.pad(date.getUTCDate(), 2, '0');
     const hourValue = hour || util.pad(date.getUTCHours(), 2, '0');
     const minuteValue = minute || util.pad(date.getUTCMinutes(), 2, '0');

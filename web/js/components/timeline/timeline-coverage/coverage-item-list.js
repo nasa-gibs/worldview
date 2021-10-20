@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { datesInDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
 import {
-  timeScaleToNumberKey,
+  TIME_SCALE_TO_NUMBER,
 } from '../../../modules/date/constants';
 import CoverageItemContainer from './coverage-item-container';
 
@@ -380,8 +380,8 @@ class CoverageItemList extends Component {
           let layerPeriod = this.getFormattedTimePeriod(period);
 
           // get layer scale number to determine relation to current axis zoom level
-          const timeScaleNumber = timeScaleToNumberKey[timeScale];
-          const layerScaleNumber = timeScaleToNumberKey[layerPeriod];
+          const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];
+          const layerScaleNumber = TIME_SCALE_TO_NUMBER[layerPeriod];
           const isLayerGreaterIncrementThanZoom = layerScaleNumber < timeScaleNumber;
           const isLayerEqualIncrementThanZoom = layerScaleNumber === timeScaleNumber;
 

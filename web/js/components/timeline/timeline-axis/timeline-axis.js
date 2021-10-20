@@ -11,7 +11,7 @@ import GridRange from './grid-range/grid-range';
 import getTimeRange from './date-calc';
 import {
   timeScaleOptions,
-  timeScaleToNumberKey,
+  TIME_SCALE_TO_NUMBER,
 } from '../../../modules/date/constants';
 import {
   getIsBetween,
@@ -346,7 +346,7 @@ class TimelineAxis extends Component {
     if (!isYearOrMonth) {
       // determine if changing timeScale from greater to lesser (e.g., 'year' to 'month')
       const greaterToLesserTimescale = timeScale && previousTimeScale
-        ? timeScaleToNumberKey[timeScale] < timeScaleToNumberKey[previousTimeScale]
+        ? TIME_SCALE_TO_NUMBER[timeScale] < TIME_SCALE_TO_NUMBER[previousTimeScale]
         : null;
 
       if (greaterToLesserTimescale) {

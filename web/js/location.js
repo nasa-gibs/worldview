@@ -33,7 +33,7 @@ import {
   serializeGroupOverlays,
   mapLocationToLayerState,
 } from './modules/layers/util';
-import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
+import { resetLayers, subdailyLayersActive } from './modules/layers/selectors';
 import { getInitialEventsState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToEmbedState } from './modules/embed/util';
@@ -177,8 +177,7 @@ const getParameters = function(config, parameters) {
           let zoom = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (zoom > 3) {
-            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
-            if (!hasSubdailyLayers) {
+            if (!subdailyLayersActive(state)) {
               zoom = 3; // reset to day
             }
           }
@@ -196,8 +195,7 @@ const getParameters = function(config, parameters) {
           let interval = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (interval > 3) {
-            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
-            if (!hasSubdailyLayers) {
+            if (!subdailyLayersActive(state)) {
               interval = 3; // reset to day
             }
           }
@@ -233,8 +231,7 @@ const getParameters = function(config, parameters) {
           let customInterval = currentItemState;
           // check if subdaily customInterval to determine if reset is needed
           if (customInterval > 3) {
-            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
-            if (!hasSubdailyLayers) {
+            if (!subdailyLayersActive(state)) {
               customInterval = 3; // reset to day
             }
           }

@@ -29,8 +29,8 @@ import {
   toggleCustomModal,
 } from '../modules/date/actions';
 import {
-  timeScaleFromNumberKey,
-  timeScaleToNumberKey,
+  TIME_SCALE_FROM_NUMBER,
+  TIME_SCALE_TO_NUMBER,
   customModalType,
 } from '../modules/date/constants';
 import {
@@ -39,7 +39,7 @@ import {
   snapToIntervalDelta,
 } from '../modules/animation/util';
 import {
-  hasSubDaily as hasSubDailySelector,
+  subdailyLayersActive,
   getActiveLayers,
   getAllActiveLayers,
   dateRange as getDateRange,
@@ -274,7 +274,7 @@ class AnimationWidget extends React.Component {
       timeScale = customInterval;
       delta = customDelta;
     } else {
-      timeScale = Number(timeScaleToNumberKey[timeScale]);
+      timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       delta = 1;
     }
     onIntervalSelect(delta, timeScale, customSelected);
@@ -651,7 +651,7 @@ function mapStateToProps(state) {
     customInterval,
   } = date;
   const activeLayers = getActiveLayers(state);
-  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const hasSubdailyLayers = subdailyLayersActive(state);
   const activeLayersForProj = getAllActiveLayers(state);
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
@@ -687,7 +687,7 @@ function mapStateToProps(state) {
   const numberOfFrames = util.getNumberOfDays(
     startDate,
     endDate,
-    timeScaleFromNumberKey[useInterval],
+    TIME_SCALE_FROM_NUMBER[useInterval],
     customSelected && customDelta ? customDelta : delta,
     maxFrames,
   );
@@ -710,7 +710,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyMode,
     delta: customSelected && customDelta ? customDelta : delta,
-    interval: timeScaleFromNumberKey[useInterval] || 'day',
+    interval: TIME_SCALE_FROM_NUMBER[useInterval] || 'day',
     customDelta: customDelta || 1,
     customInterval: customInterval || 3,
     numberOfFrames,

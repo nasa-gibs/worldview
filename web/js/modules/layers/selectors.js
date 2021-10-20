@@ -214,6 +214,11 @@ export function hasSubDaily(layers) {
   return false;
 }
 
+export const subdailyLayersActive = () => createSelector(
+  [getActiveLayers],
+  (layers) => hasSubDaily(layers),
+);
+
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
