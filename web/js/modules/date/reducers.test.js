@@ -45,7 +45,7 @@ describe('dateReducer', () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_CUSTOM_INTERVAL,
-          value: 4,
+          interval: 4,
           delta: 10,
         }),
       ).toEqual({
@@ -64,7 +64,7 @@ describe('dateReducer', () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_INTERVAL,
-          value: 2,
+          interval: 2,
           delta: 1,
           customSelected: false,
         }),

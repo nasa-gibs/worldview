@@ -111,7 +111,7 @@ describe('Date timescale changes', () => {
       expect(store.getActions()[1]).toEqual(expectedSecond);
     });
 
-  test(`selectDate action returns ${SELECT_DATE}as type and selectedB as activeString and ${mockDate} as value`,
+  test(`selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value`,
     () => {
       const expectedFirst = {
         type: CLEAR_PRELOAD,
@@ -163,7 +163,7 @@ describe('Date timescale changes', () => {
       };
       const expectedSecond = {
         type: CHANGE_CUSTOM_INTERVAL,
-        value: customInterval,
+        interval: customInterval,
         delta,
       };
       store.dispatch(changeCustomInterval(delta, customInterval));
@@ -188,7 +188,7 @@ describe('Date timescale changes', () => {
       };
       const expectedSecond = {
         type: CHANGE_INTERVAL,
-        value: interval,
+        interval,
         delta,
         customSelected: true,
       };
