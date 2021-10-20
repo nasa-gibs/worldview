@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  timeScaleToNumberKey,
-  timeScaleFromNumberKey,
+  TIME_SCALE_TO_NUMBER,
+  TIME_SCALE_FROM_NUMBER,
 } from '../../../modules/date/constants';
 import {
   toggleCustomModal as toggleCustomModalAction,
@@ -105,7 +105,7 @@ class TimeScaleIntervalChange extends PureComponent {
         newTimeScale = customInterval;
         delta = customDelta;
       } else {
-        newTimeScale = Number(timeScaleToNumberKey[newTimeScale]);
+        newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
         delta = 1;
       }
       selectInterval(delta, newTimeScale, customSelected);
@@ -115,7 +115,7 @@ class TimeScaleIntervalChange extends PureComponent {
   setCustomIntervalText = () => {
     const { customDelta, customInterval } = this.props;
     this.setState({
-      customIntervalText: `${customDelta} ${timeScaleFromNumberKey[customInterval]}`,
+      customIntervalText: `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`,
     });
   }
 
@@ -150,7 +150,7 @@ class TimeScaleIntervalChange extends PureComponent {
             id="current-interval"
             className={`no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
-            {customSelected ? customIntervalText : `${1} ${timeScaleFromNumberKey[interval]}`}
+            {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}

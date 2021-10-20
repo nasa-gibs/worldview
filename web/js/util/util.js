@@ -7,6 +7,7 @@ import browser from './browser';
 import events from './events';
 import load from './load';
 import safeLocalStorage from './local-storage';
+import { MONTH_STRING_ARRAY } from '../modules/date/constants';
 
 const { COORDINATE_FORMAT } = safeLocalStorage.keys;
 
@@ -34,6 +35,7 @@ export default (function(self) {
     }
     return value;
   };
+
   /**
    * Creates an object representation of a query string.
    *
@@ -232,7 +234,7 @@ export default (function(self) {
     const parsedDate = this.parseDate(date);
     switch (period) {
       case 'subdaily':
-        dateString = `${moment(parsedDate).format('DD MMMM YYYY HH:mm')}Z`;
+        dateString = `${moment(parsedDate).format('YYYY MMMM DD HH:mm')}Z`;
         break;
 
       case 'yearly':
@@ -242,11 +244,11 @@ export default (function(self) {
 
       case 'monthly':
         if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
-        dateString = moment(parsedDate).format('MMMM YYYY');
+        dateString = moment(parsedDate).format('YYYY MMM');
         break;
 
       default:
-        dateString = moment(parsedDate).format('DD MMMM YYYY');
+        dateString = moment(parsedDate).format('YYYY MMM DD ');
         break;
     }
 
@@ -279,24 +281,8 @@ export default (function(self) {
    * @return {string} ISO string in the form of ``YYYY-MM-DD``.
    */
   self.toISOStringDate = function(date) {
-    return date.toISOString()
-      .split('T')[0];
+    return date.toISOString().split('T')[0];
   };
-
-  self.monthStringArray = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
 
   /**
    * Converts a date into an ISO string with only the date portion and month abbreviation.
@@ -313,7 +299,7 @@ export default (function(self) {
     const month = stringDate[1];
     const day = stringDate[2];
 
-    const monthAbbrev = self.monthStringArray[Number(month) - 1];
+    const monthAbbrev = MONTH_STRING_ARRAY[Number(month) - 1];
 
     if (hasSubdaily) {
       return `${year} ${monthAbbrev} ${day} ${self.toHourMinutes(date)}Z`;

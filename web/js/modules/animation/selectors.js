@@ -4,8 +4,8 @@ import {
   imageUtilGetCoordsFromPixelValues,
   getDownloadUrl,
 } from '../image-download/util';
-import { getActiveLayers, getLayers, hasSubDaily } from '../layers/selectors';
-import { timeScaleFromNumberKey } from '../date/constants';
+import { subdailyLayersActive, getLayers } from '../layers/selectors';
+import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
 /*
  * loops through dates and created image
  * download urls and pushs them to an
@@ -35,7 +35,7 @@ export default function getImageArray(
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
   const markerCoordinates = locationSearch.coordinates;
-  const isSubDaily = hasSubDaily(getActiveLayers(state));
+  const isSubDaily = subdailyLayersActive(state);
   let current = fromDate;
   let j = 0;
   let src;
@@ -43,8 +43,8 @@ export default function getImageArray(
   let products;
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const increment = customSelected
-    ? timeScaleFromNumberKey[customInterval]
-    : timeScaleFromNumberKey[interval];
+    ? TIME_SCALE_FROM_NUMBER[customInterval]
+    : TIME_SCALE_FROM_NUMBER[interval];
 
   while (current <= toDate) {
     j += 1;

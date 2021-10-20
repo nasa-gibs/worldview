@@ -10,21 +10,21 @@ export const ARROW_UP = 'DATE/ARROW_UP';
 export const SET_PRELOAD = 'DATE/SET_PRELOAD';
 export const CLEAR_PRELOAD = 'DATE/CLEAR_PRELOAD';
 
-export const monthMap = {
-  1: 'Jan',
-  2: 'Feb',
-  3: 'Mar',
-  4: 'Apr',
-  5: 'May',
-  6: 'Jun',
-  7: 'Jul',
-  8: 'Aug',
-  9: 'Sep',
-  10: 'Oct',
-  11: 'Nov',
-  12: 'Dec',
-};
-export const timeScaleFromNumberKey = {
+export const MONTH_STRING_ARRAY = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+];
+export const TIME_SCALE_FROM_NUMBER = {
   0: 'custom',
   1: 'year',
   2: 'month',
@@ -32,7 +32,7 @@ export const timeScaleFromNumberKey = {
   4: 'hour',
   5: 'minute',
 };
-export const timeScaleToNumberKey = {
+export const TIME_SCALE_TO_NUMBER = {
   custom: 0,
   year: 1,
   month: 2,

@@ -34,7 +34,7 @@ import {
 } from '../../components/timeline/date-util';
 import {
   dateRange as getDateRange,
-  hasSubDaily,
+  subdailyLayersActive,
   getActiveLayers,
 } from '../../modules/layers/selectors';
 import { getSelectedDate, getDeltaIntervalUnit } from '../../modules/date/selectors';
@@ -61,8 +61,8 @@ import {
   changeEndDate,
 } from '../../modules/animation/actions';
 import {
-  timeScaleFromNumberKey,
-  timeScaleToNumberKey,
+  TIME_SCALE_FROM_NUMBER,
+  TIME_SCALE_TO_NUMBER,
   timeScaleOptions,
   customModalType,
 } from '../../modules/date/constants';
@@ -492,7 +492,7 @@ class Timeline extends React.Component {
     const { hasSubdailyLayers, timeScale } = this.props;
     // prevent left/right arrows changing date within inputs
     if (e.target.tagName !== 'INPUT' && e.target.className !== 'rc-slider-handle' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
-      const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+      const timeScaleNumber = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
       if (e.keyCode === 38) {
         e.preventDefault();
@@ -544,7 +544,7 @@ class Timeline extends React.Component {
       timeScale,
       hasSubdailyLayers,
     } = this.props;
-    const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+    const timeScaleNumber = Number(TIME_SCALE_TO_NUMBER[timeScale]);
     const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
 
     // handle time scale change on y axis wheel event
@@ -1303,9 +1303,10 @@ function mapStateToProps(state) {
   const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
-  const hasSubdailyLayers = isCompareModeActive
-    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
-    : hasSubDaily(activeLayers);
+  // const hasSubdailyLayers = isCompareModeActive
+  //   ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
+  //   : hasSubDaily(activeLayers);
+  const hasSubdailyLayers = subdailyLayersActive(state);
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1378,7 +1379,7 @@ function mapStateToProps(state) {
     animEndLocationDate: animation.endDate,
     axisWidth: dimensionsAndOffsetValues.width,
     selectedDate,
-    timeScale: timeScaleFromNumberKey[updatedSelectedZoom.toString()],
+    timeScale: TIME_SCALE_FROM_NUMBER[updatedSelectedZoom.toString()],
     timeScaleChangeUnit: unit,
     customIntervalValue: customDelta || 1,
     customIntervalZoomLevel: updatedCustomInterval || 3,

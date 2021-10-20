@@ -66,7 +66,7 @@ function Event (props) {
           style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
           {event.geometry.map((geometry, index) => {
-            const date = geometry.date.split('T')[0];
+            const date = util.toISOStringDateMonthAbbrev(new Date(geometry.date));
             return (
               <li key={`${event.id}-${date}`} className="dates">
                 <a
