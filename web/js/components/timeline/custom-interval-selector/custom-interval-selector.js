@@ -25,6 +25,7 @@ class CustomIntervalSelector extends PureComponent {
     const {
       changeCustomInterval,
       customInterval,
+      customSelected,
       hasSubdailyLayers,
       interval,
       selectInterval,
@@ -35,13 +36,16 @@ class CustomIntervalSelector extends PureComponent {
       this.customIntervalWidget.focus();
     }
 
+    const subdailyAdded = hasSubdailyLayers && !prevProps.hasSubdailyLayers;
+    const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
     const subdailyInterval = customInterval > 3 || interval > 3;
-    if (!hasSubdailyLayers && prevProps.hasSubdailyLayers && subdailyInterval) {
+
+    if (subdailyRemoved && subdailyInterval) {
       changeCustomInterval();
       selectInterval(1, timeScaleToNumberKey.day, false);
     }
 
-    if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
+    if (subdailyAdded && !customSelected) {
       changeCustomInterval(10, timeScaleToNumberKey.minute);
     }
   }
@@ -115,11 +119,12 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   const { date } = state;
   const {
-    interval, customInterval, customDelta,
+    interval, customInterval, customDelta, customSelected,
   } = date;
   return {
     customDelta: customDelta || 1,
     customInterval: customInterval || interval,
+    customSelected,
     interval,
   };
 };
@@ -134,6 +139,7 @@ CustomIntervalSelector.propTypes = {
   closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
+  customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.number,
   selectInterval: PropTypes.func,
