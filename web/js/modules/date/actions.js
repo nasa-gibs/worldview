@@ -86,7 +86,7 @@ export function changeCustomInterval(delta, customInterval) {
     dispatch(clearPreload());
     dispatch({
       type: CHANGE_CUSTOM_INTERVAL,
-      value: customInterval,
+      interval: customInterval,
       delta,
     });
   };
@@ -96,7 +96,7 @@ export function selectInterval(delta, interval, customSelected) {
     dispatch(clearPreload());
     dispatch({
       type: CHANGE_INTERVAL,
-      value: interval,
+      interval,
       delta,
       customSelected,
     });

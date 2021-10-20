@@ -3,35 +3,55 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DeltaInput from './delta-input';
-import TimeScaleSelect from './interval-select';
+import IntervalSelect from './interval-select';
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey,
 } from '../../../modules/date/constants';
-import { toggleCustomModal } from '../../../modules/date/actions';
-
+import {
+  toggleCustomModal,
+  selectInterval as selectIntervalAction,
+  changeCustomInterval as changeCustomIntervalAction,
+} from '../../../modules/date/actions';
 
 /*
- * CustomIntervalSelectorWidget for Custom Interval Selector
+ * CustomIntervalSelector for Custom Interval Selector
  * group. It is a parent component of this group.
  *
- * @class CustomIntervalSelectorWidget
+ * @class CustomIntervalSelector
  */
-class CustomIntervalSelectorWidget extends PureComponent {
+class CustomIntervalSelector extends PureComponent {
   componentDidUpdate(prevProps) {
-    const { customIntervalModalOpen } = this.props;
-    // handle focus widget on opening
-    if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+    const {
+      changeCustomInterval,
+      customInterval,
+      hasSubdailyLayers,
+      interval,
+      selectInterval,
+      modalOpen,
+    } = this.props;
+
+    if (modalOpen && !prevProps.modalOpen) {
       this.customIntervalWidget.focus();
+    }
+
+    const subdailyInterval = customInterval > 3 || interval > 3;
+    if (!hasSubdailyLayers && prevProps.hasSubdailyLayers && subdailyInterval) {
+      changeCustomInterval();
+      selectInterval(1, timeScaleToNumberKey.day, false);
+    }
+
+    if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
+      changeCustomInterval(10, timeScaleToNumberKey.minute);
     }
   }
 
   changeDelta = (value) => {
     const {
-      changeCustomInterval, customIntervalZoomLevel,
+      changeCustomInterval, customInterval,
     } = this.props;
     if (value >= 0 && value <= 1000) {
-      changeCustomInterval(value, customIntervalZoomLevel);
+      changeCustomInterval(value, customInterval);
     }
   }
 
@@ -49,13 +69,13 @@ class CustomIntervalSelectorWidget extends PureComponent {
 
   render() {
     const {
-      customIntervalModalOpen,
+      modalOpen,
       hasSubdailyLayers,
       customDelta,
-      customIntervalZoomLevel,
+      customInterval,
       closeModal,
     } = this.props;
-    return customIntervalModalOpen && (
+    return modalOpen && (
       <div
         onKeyDown={this.handleKeyPress}
         className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
@@ -68,9 +88,9 @@ class CustomIntervalSelectorWidget extends PureComponent {
             deltaValue={customDelta}
             changeDelta={this.changeDelta}
           />
-          <TimeScaleSelect
+          <IntervalSelect
             hasSubdailyLayers={hasSubdailyLayers}
-            zoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
+            zoomLevel={timeScaleFromNumberKey[customInterval]}
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
@@ -84,18 +104,38 @@ const mapDispatchToProps = (dispatch) => ({
   closeModal: () => {
     dispatch(toggleCustomModal(false, undefined));
   },
+  changeCustomInterval: (delta, timeScale) => {
+    dispatch(changeCustomIntervalAction(delta, timeScale));
+  },
+  selectInterval: (delta, timeScale, customSelected) => {
+    dispatch(selectIntervalAction(delta, timeScale, customSelected));
+  },
 });
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(CustomIntervalSelectorWidget);
+const mapStateToProps = (state) => {
+  const { date } = state;
+  const {
+    interval, customInterval, customDelta,
+  } = date;
+  return {
+    customDelta: customDelta || 1,
+    customInterval: customInterval || interval,
+    interval,
+  };
+};
 
-CustomIntervalSelectorWidget.propTypes = {
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CustomIntervalSelector);
+
+CustomIntervalSelector.propTypes = {
   changeCustomInterval: PropTypes.func,
   closeModal: PropTypes.func,
   customDelta: PropTypes.number,
-  customIntervalModalOpen: PropTypes.bool,
-  customIntervalZoomLevel: PropTypes.number,
+  customInterval: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
+  interval: PropTypes.number,
+  selectInterval: PropTypes.func,
+  modalOpen: PropTypes.bool,
 };

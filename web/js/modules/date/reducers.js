@@ -51,17 +51,19 @@ export function dateReducer(state = dateReducerState, action) {
         ...state,
         selectedB: util.dateAdd(state.selected, 'day', -7),
       };
-    case CHANGE_CUSTOM_INTERVAL:
+    case CHANGE_CUSTOM_INTERVAL: {
+      const { interval, delta } = action;
       return {
         ...state,
-        customInterval: action.value,
-        customDelta: action.delta,
-        customSelected: true,
+        customInterval: interval,
+        customDelta: delta,
+        customSelected: !(!interval && !delta),
       };
+    }
     case CHANGE_INTERVAL:
       return {
         ...state,
-        interval: action.value,
+        interval: action.interval,
         delta: action.delta,
         customSelected: action.customSelected,
       };
