@@ -34,6 +34,7 @@ import {
 } from '../../components/timeline/date-util';
 import {
   dateRange as getDateRange,
+  hasSubDaily,
   subdailyLayersActive,
   getActiveLayers,
 } from '../../modules/layers/selectors';
@@ -1303,10 +1304,10 @@ function mapStateToProps(state) {
   const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
-  // const hasSubdailyLayers = isCompareModeActive
-  //   ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
-  //   : hasSubDaily(activeLayers);
-  const hasSubdailyLayers = subdailyLayersActive(state);
+  const hasSubdailyLayers = isCompareModeActive
+    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
+    : subdailyLayersActive(state);
+
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);

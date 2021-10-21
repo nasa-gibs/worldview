@@ -168,7 +168,7 @@ class DateSelector extends Component {
       }
 
       if (month) {
-        const realMonth = util.stringInArray(dAY, month);
+        const realMonth = util.stringInArray(day, month);
         const maxDatePrev = new Date(
           date.getUTCFullYear(),
           date.getUTCMonth() + 1,
