@@ -234,7 +234,7 @@ export default (function(self) {
     const parsedDate = this.parseDate(date);
     switch (period) {
       case 'subdaily':
-        dateString = `${moment(parsedDate).format('YYYY MMMM DD HH:mm')}Z`;
+        dateString = `${moment(parsedDate).format('YYYY MMMM DD HH:mm')}Z`.toUpperCase();
         break;
 
       case 'yearly':
@@ -244,11 +244,11 @@ export default (function(self) {
 
       case 'monthly':
         if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
-        dateString = moment(parsedDate).format('YYYY MMM');
+        dateString = moment(parsedDate).format('YYYY MMM').toUpperCase();
         break;
 
       default:
-        dateString = moment(parsedDate).format('YYYY MMM DD ');
+        dateString = moment(parsedDate).format('YYYY MMM DD ').toUpperCase();
         break;
     }
 
