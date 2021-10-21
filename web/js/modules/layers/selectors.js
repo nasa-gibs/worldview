@@ -214,7 +214,7 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export const subdailyLayersActive = () => createSelector(
+export const subdailyLayersActive = createSelector(
   [getActiveLayers],
   (layers) => hasSubDaily(layers),
 );
