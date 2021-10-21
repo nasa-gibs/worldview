@@ -14,7 +14,6 @@
                     "Chlorophyll A",
                     "Dams",
                     "Earth at Night",
-                    "Global Digital Elevation Map",
                     "Latitude-Longitude Lines",
                     "Orbital Track",
                     "Photosynthetically Available Radiation",
@@ -25,6 +24,7 @@
                     "Reservoirs",
                     "Sea Surface Temperature",
                     "Settlements",
+                    "Terrain Elevation",
                     "Urban Extents",
                     "Water Bodies"
                 ]

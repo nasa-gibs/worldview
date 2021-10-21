@@ -1,8 +1,8 @@
 {
     "measurements": {
-        "Global Digital Elevation Map": {
-            "id": "global-digital-elevation-map",
-            "title": "Global Digital Elevation Map",
+        "Terrain Elevation": {
+            "id": "terrain-elevation",
+            "title": "Terrain Elevation",
             "subtitle": "Terra/ASTER, Space Shuttle Endeavour/STS-99",
             "sources": {
                 "Terra/ASTER": {
