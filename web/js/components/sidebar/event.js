@@ -17,11 +17,7 @@ function Event (props) {
     sources,
   } = props;
   const eventDate = util.parseDateUTC(event.geometry[0].date);
-  const weekday = util.giveWeekDay(eventDate);
-  const day = eventDate.getUTCDate();
-  const month = util.giveMonth(eventDate);
-  const year = eventDate.getUTCFullYear();
-  const dateString = `${weekday}, ${month} ${day}, ${year}`;
+  const dateString = util.toISOStringDateMonthAbbrev(eventDate);
   const itemClass = isSelected
     ? 'item-selected selectorItem item'
     : 'selectorItem item';
