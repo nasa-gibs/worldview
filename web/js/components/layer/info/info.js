@@ -4,10 +4,6 @@ import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
 import util from '../../../util/util';
 
-function configureTemporalDate(dateType, date, period) {
-  return util.coverageDateFormatter(dateType, date, period);
-}
-
 export default function LayerInfo ({ layer, measurementDescriptionPath }) {
   const {
     dateRanges,
@@ -63,13 +59,13 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
           <span id={`${id}-startDate`} className="layer-date-start">
             {startDate
               ? `Temporal coverage: ${
-                configureTemporalDate('START-DATE', startDate, period)}`
+                util.coverageDateFormatter('START-DATE', startDate, period)}`
               : ''}
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
             {startDate && endDate
               ? ` - ${
-                configureTemporalDate('END-DATE', endDate, period)}`
+                util.coverageDateFormatter('END-DATE', endDate, period)}`
               : startDate
                 ? ' - Present'
                 : ''}
