@@ -18,11 +18,13 @@ import {
 } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import Notifications from './notifications';
+import GlobalSettings from '../components/global-settings/global-settings';
 
 function InfoList (props) {
   const {
     sendFeedback,
     feedbackIsInitiated,
+    globalSettingsClick,
     aboutClick,
     config,
     startTour,
@@ -101,18 +103,13 @@ function InfoList (props) {
         ...feedbackAction,
       },
       {
-        text: 'Source Code',
+        text: 'Settings',
         iconClass: 'ui-icon',
-        iconName: 'code',
-        id: 'source_code_info_item',
-        href: 'https://github.com/nasa-gibs/worldview',
-      },
-      {
-        text: 'What\'s new',
-        iconClass: 'ui-icon',
-        iconName: 'flag',
-        id: 'whats_new_info_item',
-        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS',
+        iconName: 'cog',
+        id: 'settings_info_item',
+        onClick: () => {
+          globalSettingsClick();
+        },
       },
       {
         text: 'About',
@@ -136,7 +133,7 @@ function InfoList (props) {
       }
     }
     if (notifications.isActive && notifications.number > 0) {
-      arr.splice(4, 0, getNotificationListItem());
+      arr.splice(2, 0, getNotificationListItem());
     }
     arr.push(getDistractionFreeObj());
     return arr;
@@ -200,6 +197,17 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(startTourAction());
     }
   },
+  globalSettingsClick: () => {
+    dispatch(
+      openCustomContent('GLOBAL_SETTINGS_MODAL', {
+        headerText: 'Global Settings',
+        backdrop: false,
+        bodyComponent: GlobalSettings,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
   aboutClick: () => {
     // Create new functionality here that renders the about page
     // inside a modal window.
@@ -220,6 +228,7 @@ export default connect(
 
 InfoList.propTypes = {
   aboutClick: PropTypes.func,
+  globalSettingsClick: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,

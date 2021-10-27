@@ -91,6 +91,7 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   self.createLayer = function(def, options) {
     const state = store.getState();
+    const { sidebar: { activeTab } } = state;
     options = options || {};
     const group = options.group || null;
     const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
@@ -120,7 +121,8 @@ export default function mapLayerBuilder(config, cache, store) {
       lodashMerge(def, def.projections[proj.id]);
       if (def.breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
 
-      const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+      const isDataDownloadTabActive = activeTab === 'download';
+      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && (def.wrapadjacentdays === true || def.wrapX);
       switch (def.type) {
         case 'wmts':
           layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);

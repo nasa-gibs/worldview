@@ -11,11 +11,11 @@ import {
 import safeLocalStorage from '../../util/local-storage';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
-const wasCallapseRequested = safeLocalStorage.getItem(SIDEBAR_COLLAPSED) === 'collapsed';
+const wasCollapseRequested = safeLocalStorage.getItem(SIDEBAR_COLLAPSED) === 'collapsed';
 export const sidebarState = {
-  isCollapsed: wasCallapseRequested || false,
-  wasCallapseRequested,
+  isCollapsed: wasCollapseRequested || false,
   activeTab: 'layers',
+  previousTab: null,
   mobileCollapsed: true,
 };
 
@@ -23,6 +23,7 @@ export default function sidebarReducer(state = sidebarState, action) {
   switch (action.type) {
     case CHANGE_TAB:
       return lodashAssign({}, state, {
+        previousTab: state.activeTab,
         activeTab: action.activeTab,
       });
     case TOGGLE_COLLAPSE:

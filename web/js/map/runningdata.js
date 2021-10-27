@@ -11,7 +11,7 @@ import {
 
 const { events } = util;
 
-export default function MapRunningData(models, compareUi, store) {
+export default function MapRunningData(compareUi, store) {
   const self = this;
   let dataObj = {};
   /**
@@ -39,6 +39,7 @@ export default function MapRunningData(models, compareUi, store) {
   self.newPoint = function(pixels, map) {
     const state = store.getState();
     const { proj } = state;
+
     const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
     let swipeOffset;

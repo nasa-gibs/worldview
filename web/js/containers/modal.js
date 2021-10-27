@@ -36,13 +36,16 @@ class ModalContainer extends Component {
     this.onResize = this.onResize.bind(this);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {
       isCustom,
       id,
       isOpen,
       customProps,
+      orientation,
       isMobile,
+      screenHeight,
+      screenWidth,
     } = this.props;
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
@@ -52,29 +55,46 @@ class ModalContainer extends Component {
       desktopOnly,
     } = newProps;
 
+    const orientationChanged = orientation !== prevProps.orientation;
+    const screenHeightChanged = screenHeight !== prevProps.screenHeight;
+    const screenWidthChanged = screenWidth !== prevProps.screenWidth;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    if (isMobile && isOpen && desktopOnly) {
-      toggleFunction();
+    if (isMobile && isOpen) {
+      if (desktopOnly || orientationChanged) {
+        toggleFunction();
+      }
+      if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
+        this.onResize(null, { size: { width: screenWidth, height: screenHeight } });
+      }
     }
   }
 
   getStyle() {
     const {
+      isMobile, customProps,
+    } = this.props;
+    const {
       offsetLeft, offsetRight, offsetTop, width, height,
     } = this.state;
-
+    const { mobileFullScreen } = customProps;
+    const mobileTopOffset = 106;
+    const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
+    const margin = isMobile && mobileFullScreen ? 0 : '0.5rem auto';
     return {
       left: offsetLeft,
       right: offsetRight,
-      top: offsetTop,
+      top,
       width,
       height,
       maxHeight: height,
+      margin,
     };
   }
 
   onResize(e, { size }) {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
     this.setState({
       width: size.width, height: size.height,
     });
@@ -247,22 +267,25 @@ function mapStateToProps(state) {
     bodyTemplate = state[template];
     isTemplateModal = true;
   }
-  const isMobile = browser.lessThan.medium;
+  const {
+    screenHeight, screenWidth, lessThan, orientation,
+  } = browser;
+  const isMobile = lessThan.medium;
   const { isEmbedModeActive } = embed;
-
   return {
-    isOpen,
+    bodyTemplate,
     bodyText,
+    customProps,
     headerText,
-    isCustom,
     id,
+    isCustom,
     isEmbedModeActive,
     isMobile,
-    screenHeight: isMobile ? undefined : state.browser.screenHeight,
-    screenWidth: isMobile ? undefined : state.browser.screenWidth,
-    bodyTemplate,
+    isOpen,
     isTemplateModal,
-    customProps,
+    orientation,
+    screenHeight,
+    screenWidth,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -275,9 +298,11 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(ModalContainer);
+
 ModalContainer.defaultProps = {
   customProps: {},
 };
+
 ModalContainer.propTypes = {
   bodyTemplate: PropTypes.object,
   customProps: PropTypes.object,
@@ -288,5 +313,7 @@ ModalContainer.propTypes = {
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
+  orientation: PropTypes.string,
   screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
 };

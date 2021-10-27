@@ -52,4 +52,3 @@ export const getCoordinatesMetadata = (geocodeProperties) => {
     title: title || coordinates,
   };
 };
-
