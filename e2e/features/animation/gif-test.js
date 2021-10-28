@@ -79,13 +79,13 @@ module.exports = {
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewStartDate,
-                '2018-03-28',
+                '2018 MAR 28',
               );
             client
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewEndDate,
-                '2018-04-04',
+                '2018 APR 04',
               );
             client
               .useCss()
