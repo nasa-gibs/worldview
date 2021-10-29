@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Day_TES": {
+      "id": "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+      "title": "Land Surface Temperature (L3, Monthly, Day)",
+      "subtitle": "Aqua / MODIS / ASTER",
+      "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+      "tags": "lst TES",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "MYD21C3",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}
