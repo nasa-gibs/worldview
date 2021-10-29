@@ -87,10 +87,6 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
-                        false
-                    ],
-                    [
                         "VIIRS_SNPP_DayNightBand_ENCC",
                         false
                     ],
@@ -158,10 +154,6 @@
                     ],
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
@@ -259,10 +251,6 @@
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
                         true
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
-                        false
                     ],
                     [
                         "VIIRS_SNPP_DayNightBand_ENCC",
@@ -419,6 +407,10 @@
                         false
                     ],
                     [
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
                         "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
@@ -498,6 +490,10 @@
                     ],
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
                         false
                     ],
                     [
@@ -607,6 +603,10 @@
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
                         true
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        false
                     ],
                     [
                         "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
@@ -729,6 +729,18 @@
                         false
                     ],
                     [
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_ENCC",
+                        false
+                    ],
+                    [
                         "Reference_Features_15m",
                         true
                     ],
@@ -769,6 +781,18 @@
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
                         true
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_DayNightBand_ENCC",
+                        false
                     ]
                 ],
                 "Dust and Haze": [
@@ -881,10 +905,6 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
-                        false
-                    ],
-                    [
                         "VIIRS_SNPP_DayNightBand_ENCC",
                         false
                     ],
@@ -956,10 +976,6 @@
                     ],
                     [
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
@@ -1035,10 +1051,6 @@
                     ],
                     [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
