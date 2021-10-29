@@ -124,7 +124,7 @@
               },
               {
                 "target": "#wv-info-button",
-                "content": "Click here for ways to provide feedback, explore the app through self-guided tours (like this one!), view service notifications, and find out more about developing the Worldview application including links to its open source code and recent changes with \"What's new\". You can also access Distraction Free mode, which hides most of the application so you can focus solely on the map imagery.",
+                "content": "Click here to provide feedback, explore the app through self-guided tours (like this one!), view service notifications, change global/app-wide settings (just temperature units for now!), and find out more about developing the Worldview application including links to its open source code and recent changes with \"What's new\". You can also access Distraction Free mode, which hides most of the application so you can focus solely on the map imagery.",
                 "placementBeacon": "bottom"
               }
             ]
