@@ -1,5 +1,5 @@
 from datetime import datetime
-import isodate2
+import isodate
 import re
 import traceback
 
