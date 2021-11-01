@@ -9,6 +9,7 @@ import xmltodict
 import isodate
 from processTemporalLayer import process_temporal
 from collections import OrderedDict
+import traceback
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -72,7 +73,11 @@ def process_layer(gc_layer, wv_layers):
     if "Dimension" in gc_layer:
         dimension = gc_layer["Dimension"]
         if dimension["ows:Identifier"] == "Time":
-            wv_layer = process_temporal(wv_layer, dimension["Value"])
+            try:
+                wv_layer = process_temporal(wv_layer, dimension["Value"])
+            except Exception as e:
+                print(traceback.format_exc())
+                sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, ident, "Error processing time values."))
     # Extract matrix set
     matrixSetLink = gc_layer["TileMatrixSetLink"]
     matrixSet = matrixSetLink["TileMatrixSet"]
@@ -189,8 +194,8 @@ def process_entry(entry):
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, ident))
         except Exception as e:
             error_count += 1
-            sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                    ident, str(e)))
+            print(traceback.format_exc())
+            sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id, ident, str(e)))
     else:
         for gc_layer in gc_contents["Layer"]:
             ident = gc_layer["ows:Identifier"]
@@ -202,8 +207,8 @@ def process_entry(entry):
                 sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
             except Exception as e:
                 error_count += 1
-                sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                        ident, str(e)))
+                print(traceback.format_exc())
+                sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id, ident, str(e)))
 
     def process_matrix_set(gc_matrix_set):
         tileMatrixArr = gc_matrix_set["TileMatrix"]
