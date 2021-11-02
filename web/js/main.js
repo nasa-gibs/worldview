@@ -35,6 +35,7 @@ import {
   adjustEndDates,
   adjustActiveDateRanges,
   adjustStartDates,
+  adjustMeasurementsValidUnitConversion,
   mockFutureTimeLayerOptions,
 } from './modules/layers/util';
 import { debugConfig } from './debug';
@@ -185,6 +186,9 @@ window.onload = () => {
         mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
       }
       adjustEndDates(config.layers);
+
+      // handle checking measurements to prevent unit conversion
+      adjustMeasurementsValidUnitConversion(config);
       // Remove any mock stories
       if (!parameters.mockTour) {
         Object.keys(config.stories).forEach((storyId) => {

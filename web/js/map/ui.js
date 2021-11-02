@@ -33,6 +33,7 @@ import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
   CLEAR_MARKER,
   SET_MARKER,
@@ -71,7 +72,7 @@ export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
   const dateline = mapDateLineBuilder(store);
   const compareMapUi = mapCompare(store);
-  const runningdata = new MapRunningData(models, compareMapUi, store);
+  const runningdata = new MapRunningData(compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
@@ -122,6 +123,15 @@ export default function mapui(models, config, store, ui) {
           rotation: action.rotation,
           duration: 500,
         });
+        return;
+      }
+      case CHANGE_TAB: {
+        const { sidebar, proj } = state;
+        const { activeTab, previousTab } = sidebar;
+        const dataDownloadTabSwitched = activeTab === 'download' || previousTab === 'download';
+        if (proj.id === 'geographic' && dataDownloadTabSwitched) {
+          return reloadLayers();
+        }
         return;
       }
       case LOCATION_POP_ACTION: {
@@ -713,10 +723,9 @@ export default function mapui(models, config, store, ui) {
       const layers = group.getLayers().getArray();
       const visibleLayers = activeLayers.filter(
         ({ id }) => layers
-          .filter((l) => l.getVisible())
           .map(({ wv }) => lodashGet(wv, 'def.id'))
           .includes(id),
-      );
+      ).filter(({ visible }) => visible);
 
       lodashEach(visibleLayers, (def) => {
         const layerName = def.layer || def.id;
@@ -1090,22 +1099,21 @@ export default function mapui(models, config, store, ui) {
    *
    * @param {object} map - OpenLayers Map Object
    *
-   * @param {object} proj - Projection properties
-   *
-   *
    * @returns {void}
    *
    * @todo move this component to another Location
    */
-  function createMousePosSel(map, proj) {
+  function createMousePosSel(map) {
     const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
-      const { browser, sidebar } = state;
+      const { browser, locationSearch, sidebar } = state;
+      const { isCoordinateSearchActive } = locationSearch;
       const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
       if (isMobile) return;
       if (state.measure.isActive) return;
+      if (isCoordinateSearchActive) return;
 
       const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);

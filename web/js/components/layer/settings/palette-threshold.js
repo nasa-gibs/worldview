@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
 import Checkbox from '../../util/checkbox';
+import {
+  checkTemperatureUnitConversion, convertPaletteValue,
+} from '../../../modules/global-unit/util';
 
 class ThresholdSelect extends React.Component {
   constructor(props) {
@@ -40,7 +43,7 @@ class ThresholdSelect extends React.Component {
 
   /**
    * Update threshold values
-   * @param {Array} thresholdArray | Array of start/end indexs for colormap
+   * @param {Array} thresholdArray | Array of start/end indexes for colormap
    */
   updateThreshold(thresholdArray) {
     const {
@@ -80,17 +83,30 @@ class ThresholdSelect extends React.Component {
   }
 
   render() {
-    const { start, end, squashed } = this.state;
     const {
-      index, min, max, legend,
+      start, end, squashed,
+    } = this.state;
+    const {
+      index, min, max, legend, globalTemperatureUnit,
     } = this.props;
     const units = legend.units || '';
-    const startLabel = start === 0 && legend.minLabel
-      ? `${legend.minLabel} ${units}`
-      : `${legend.tooltips[start]} ${units}`;
-    const endLabel = end === legend.tooltips.length - 1 && legend.maxLabel
-      ? `${legend.maxLabel} ${units}`
-      : `${legend.tooltips[end]} ${units}`;
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    let startLabel = start === 0 && legend.minLabel
+      ? legend.minLabel
+      : legend.tooltips[start];
+    let endLabel = end === legend.tooltips.length - 1 && legend.maxLabel
+      ? legend.maxLabel
+      : legend.tooltips[end];
+
+    if (needsConversion) {
+      const parsedMin = convertPaletteValue(startLabel, legendTempUnit, globalTemperatureUnit);
+      const parsedMax = convertPaletteValue(endLabel, legendTempUnit, globalTemperatureUnit);
+      startLabel = parsedMin;
+      endLabel = parsedMax;
+    } else {
+      startLabel += ` ${units}`;
+      endLabel += ` ${units}`;
+    }
 
     return (
       <div className="layer-threshold-select settings-component">
@@ -135,6 +151,7 @@ ThresholdSelect.propTypes = {
   index: PropTypes.number,
   layerId: PropTypes.string,
   legend: PropTypes.object,
+  globalTemperatureUnit: PropTypes.string,
   max: PropTypes.number,
   min: PropTypes.number,
   palette: PropTypes.object,

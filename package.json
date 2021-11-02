@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.12.2",
+  "version": "3.13.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -65,7 +65,6 @@
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
     "lint:js": "eslint . --quiet",
-    "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
     "postinstall": "npm run python",
     "python": "run-script-os",
@@ -174,6 +173,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@khanisak/temperature-converter": "^1.2.0",
     "bluebird": "3.7.2",
     "bootstrap": "4.4.1",
     "cachai": "^1.0.2",
@@ -212,7 +212,7 @@
     "react-resizable": "^1.9.0",
     "react-swipe-to-delete-component": "^0.5.4",
     "react-visibility-sensor": "^5.1.1",
-    "reactstrap": "^8.0.1",
+    "reactstrap": "8.1.x",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-location-state": "^2.6.0",

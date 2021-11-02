@@ -921,13 +921,13 @@ class Timeline extends React.Component {
     if (hasSubdailyLayers && screenWidth >= 484) {
       mobileLeft = 287;
       if (isEmbedModeActive) {
-        mobileLeft = 210;
+        mobileLeft = 220;
       }
     } else if (isScreenWidthLessThan484) {
       mobileLeft = isCompareModeActive ? 112 : 10;
       mobileBottom = 65;
       if (isEmbedModeActive) {
-        mobileLeft = isCompareModeActive ? 80 : 10;
+        mobileLeft = isCompareModeActive ? 90 : 10;
         mobileBottom = 50;
       }
     }
@@ -1634,7 +1634,6 @@ const getTimelineEndDateLimit = (state) => {
   }
 
   let timelineEndDateLimit;
-  console.log(layerDateRange && layerDateRange.end > appNow);
   if (layerDateRange && layerDateRange.end > appNow) {
     const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
     const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);

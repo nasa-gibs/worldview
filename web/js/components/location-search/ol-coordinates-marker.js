@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Alert from '../util/alert';
-import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import {
   setPlaceMarker, toggleReverseGeocodeActive,
 } from '../../modules/location-search/actions';
@@ -23,50 +22,18 @@ export class CoordinatesMarker extends Component {
     this.state = {
       showExtentAlert: false,
     };
-    this.mouseMove = this.mouseMove.bind(this);
     this.singleClick = this.singleClick.bind(this);
     this.rightClick = this.rightClick.bind(this);
   }
 
   componentDidMount() {
-    events.on('map:mousemove', this.mouseMove);
     events.on('map:singleclick', this.singleClick);
     events.on('map:contextmenu', this.rightClick);
   }
 
   componentWillUnmount() {
-    events.off('map:mousemove', this.mouseMove);
     events.off('map:singleclick', this.singleClick);
     events.off('map:contextmenu', this.rightClick);
-  }
-
-  mouseMove(event, map, crs) {
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
-
-    const {
-      isShowingClick,
-      changeCursor,
-      measureIsActive,
-    } = this.props;
-
-    if (!coord) {
-      return;
-    }
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
-      return;
-    }
-    const hasFeatures = map.hasFeatureAtPixel(pixels);
-    if (hasFeatures && !isShowingClick && !measureIsActive) {
-      const featureCheck = (feature) => feature.getId() === 'coordinates-map-marker';
-      const isActiveLayer = map.forEachFeatureAtPixel(pixels, featureCheck);
-      if (isActiveLayer) {
-        changeCursor(true);
-      }
-    } else if (!hasFeatures && isShowingClick) {
-      changeCursor(false);
-    }
   }
 
   rightClick(e) {
@@ -83,38 +50,35 @@ export class CoordinatesMarker extends Component {
   singleClick(e, map, crs) {
     const {
       config,
-      proj,
       isCoordinateSearchActive,
       measureIsActive,
+      proj,
       setPlaceMarker,
       toggleReverseGeocodeActive,
     } = this.props;
 
+    if (measureIsActive || !isCoordinateSearchActive) return;
+
+    // handle reverse geocoding mouse click
     const pixels = e.pixel;
     const coord = map.getCoordinateFromPixel(pixels);
-
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-
     const latitude = getCoordinateFixedPrecision(lat);
     const longitude = getCoordinateFixedPrecision(lon);
 
-    if (measureIsActive) return;
-    // handle reverse geocoding mouse click
-    if (isCoordinateSearchActive) {
-      // show alert warning and exit mode if outside current map extent
-      const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
-      const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
-      if (!validNums || !withinExtent) {
-        this.setState({ showExtentAlert: true });
-        toggleReverseGeocodeActive(false);
-        return;
-      }
-      // get available reverse geocoding for coordinates and fly to point
-      reverseGeocode([longitude, latitude], config).then((results) => {
-        setPlaceMarker([longitude, latitude], results);
-      });
-      this.setState({ showExtentAlert: false });
+    // show alert warning and exit mode if outside current map extent
+    const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
+    const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
+    if (!validNums || !withinExtent) {
+      this.setState({ showExtentAlert: true });
+      toggleReverseGeocodeActive(false);
+      return;
     }
+    // get available reverse geocoding for coordinates and fly to point
+    reverseGeocode([longitude, latitude], config).then((results) => {
+      setPlaceMarker([longitude, latitude], results);
+    });
+    this.setState({ showExtentAlert: false });
   }
 
   // render Location Search extent alert for selecting points outside of the current map extent
@@ -152,20 +116,17 @@ function mapStateToProps(state) {
 
   return {
     config,
-    proj,
-    map,
     coordinates,
     isCoordinateSearchActive,
     isMobile,
     isShowingClick: map.isClickable,
+    map,
     measureIsActive: measure.isActive,
+    proj,
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  changeCursor: (bool) => {
-    dispatch(changeCursorActionCreator(bool));
-  },
   setPlaceMarker: (coordinates, reverseGeocodeResults) => {
     dispatch(setPlaceMarker(coordinates, reverseGeocodeResults));
   },
@@ -174,10 +135,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 CoordinatesMarker.propTypes = {
-  changeCursor: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
-  isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   proj: PropTypes.object,
   setPlaceMarker: PropTypes.func.isRequired,

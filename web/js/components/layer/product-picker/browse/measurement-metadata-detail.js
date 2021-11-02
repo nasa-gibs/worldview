@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
+import { getSourcesForProjection } from '../../../../modules/product-picker/selectors';
 import LayerInfo from '../../info/info';
 
 function MeasurementMetadataDetail (props) {
@@ -42,10 +42,12 @@ function MeasurementMetadataDetail (props) {
     return () => (controller ? controller.abort() : null);
   }, [source]);
 
-  const renderMetadataForLayers = () => layers.map((l) => (
-    <div className="layer-description" key={l.id}>
-      <h3>{l.title}</h3>
-      {showPreviewImage && (
+  const renderMetadataForLayers = () => layers
+    .filter(({ projections }) => !!projections[selectedProjection])
+    .map((l) => (
+      <div className="layer-description" key={l.id}>
+        <h3>{l.title}</h3>
+        {showPreviewImage && (
         <div className="text-center">
           <a
             href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
@@ -58,10 +60,10 @@ function MeasurementMetadataDetail (props) {
             />
           </a>
         </div>
-      )}
-      <LayerInfo key={l.id} layer={l} />
-    </div>
-  ));
+        )}
+        <LayerInfo key={l.id} layer={l} />
+      </div>
+    ));
 
   const renderMobile = () => {
     const sourceTextLong = metadataForSource && metadataForSource.length >= 1000;
@@ -148,8 +150,10 @@ const mapStateToProps = (state) => {
   const {
     productPicker, layers, config, proj,
   } = state;
-  const source = getMeasurementSource(state);
-  const { category } = productPicker;
+
+  const { category, selectedMeasurementSourceIndex } = productPicker;
+  const sources = getSourcesForProjection(state);
+  const source = sources && sources[selectedMeasurementSourceIndex];
   const { layerConfig } = layers;
   const settings = source ? source.settings : [];
   const layersForSource = settings.map((id) => layerConfig[id]);

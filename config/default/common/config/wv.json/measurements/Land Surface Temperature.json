@@ -31,6 +31,13 @@
                     "settings": [
                         "MODIS_Aqua_Land_Surface_Temp_Day_TES",
                         "MODIS_Aqua_Land_Surface_Temp_Night_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_Daily_Day_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_Daily_Night_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Day_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+                        "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Night_TES",
+                        "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]
                 },
@@ -60,6 +67,12 @@
                     "settings": [
                         "MODIS_Terra_Land_Surface_Temp_Day_TES",
                         "MODIS_Terra_Land_Surface_Temp_Night_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_Daily_Day_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_Daily_Night_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_8Day_Day_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_8Day_Night_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+                        "MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Night_TES",
                         "OrbitTracks_Terra_Descending",
                         "OrbitTracks_Terra_Ascending"
                     ]
