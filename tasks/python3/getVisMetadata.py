@@ -16,7 +16,7 @@ input_file = args[1]
 output_file = args[2]
 
 # NOTE:  Only using these properties at this time
-use_keys = ['conceptIds']
+use_keys = ['conceptIds', 'dataCenter']
 layer_metadata = {}
 
 def get_metadata(layer_id, base_url):
@@ -24,7 +24,17 @@ def get_metadata(layer_id, base_url):
   if (response.status_code != 200):
     print('%s WARNING: No metadata config found for [%s]' % (prog, layer_id))
     return
-  layer_metadata[layer_id] = response.json()
+  metadata = response.json()
+
+  if metadata.get('conceptIds', None) is not None:
+    for collection in metadata.get("conceptIds"):
+      dataCenter = collection.get("dataCenter", None)
+      if metadata.get("dataCenter", None) is None:
+        metadata["dataCenter"] = [dataCenter]
+      elif dataCenter not in metadata["dataCenter"]:
+        metadata["dataCenter"].append(dataCenter)
+
+  layer_metadata[layer_id] = metadata
 
   # Remove any props we don't expect to use
   metadata_keys = dict(layer_metadata[layer_id]).keys()

@@ -54,4 +54,12 @@ export default [
     tooltip: 'Whether the layer represents daytime or nighttime imagery or data',
     hideZeroCount: true,
   },
+  {
+    field: 'dataCenter',
+    label: 'Data Center',
+    filterType: 'any',
+    tooltip: '',
+    show: 30,
+    hideZeroCount: true,
+  },
 ];
