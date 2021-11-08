@@ -18,6 +18,22 @@ output_file = args[2]
 # NOTE:  Only using these properties at this time
 use_keys = ['conceptIds', 'dataCenter']
 layer_metadata = {}
+daacMap = {}
+
+def get_daac(metadata):
+  if metadata.get('conceptIds', None) is None:
+    return metadata
+  for collection in metadata.get("conceptIds"):
+    origDataCenter = collection.get("dataCenter", None)
+    dataCenter = daacMap.get(origDataCenter, None)
+    collection.pop('dataCenter', None)
+    if dataCenter is  None:
+      continue
+    if metadata.get("dataCenter", None) is None:
+      metadata["dataCenter"] = [dataCenter]
+    elif dataCenter not in metadata["dataCenter"]:
+      metadata["dataCenter"].append(dataCenter)
+  return metadata
 
 def get_metadata(layer_id, base_url):
   response = requests.get(base_url + layer_id + '.json')
@@ -25,16 +41,7 @@ def get_metadata(layer_id, base_url):
     print('%s WARNING: No metadata config found for [%s]' % (prog, layer_id))
     return
   metadata = response.json()
-
-  if metadata.get('conceptIds', None) is not None:
-    for collection in metadata.get("conceptIds"):
-      dataCenter = collection.get("dataCenter", None)
-      if metadata.get("dataCenter", None) is None:
-        metadata["dataCenter"] = [dataCenter]
-      elif dataCenter not in metadata["dataCenter"]:
-        metadata["dataCenter"].append(dataCenter)
-
-  layer_metadata[layer_id] = metadata
+  layer_metadata[layer_id] = get_daac(metadata)
 
   # Remove any props we don't expect to use
   metadata_keys = dict(layer_metadata[layer_id]).keys()
@@ -58,6 +65,8 @@ def main(url):
     except Exception as e:
       print("%s:" % (e))
 
+  print(layer_metadata)
+
   with open(output_file, "w", encoding="utf-8") as fp:
     # Format of this object will determine how this data is combined into wv.json
     json.dump({ 'layers': layer_metadata}, fp, indent=2, sort_keys=True)
@@ -68,6 +77,8 @@ if __name__ == "__main__":
     metadata_config = json.load(features).get('features').get('vismetadata')
     if metadata_config is not None:
       url = metadata_config.get('url')
+      daacMap = metadata_config.get('daacMap', {})
+      print(daacMap)
       main(url)
     else:
       print('%s: Visualization metadata not configured. Exiting.' % (prog))
