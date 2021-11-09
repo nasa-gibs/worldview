@@ -62,12 +62,12 @@ const scrapeLinks = async(htmlLinks) => {
 
 // get URLs from natural events EONET
 // scraped URLs are saved in an array of objects with a key value pair of link text and href:
-// 'Wildfire MB-CE042, Manitoba, Canada': 'https://eonet.sci.gsfc.nasa.gov/api/v2.1/events/EONET_3518'
+// 'Wildfire MB-CE042, Manitoba, Canada': 'https://eonet.gsfc.nasa.gov/api/v2.1/events/EONET_3518'
 const initExtractor = async() => {
   // target EONET sources from natural events
-  const links = ['https://eonet.sci.gsfc.nasa.gov/api/v2.1/sources',
-    'https://eonet.sci.gsfc.nasa.gov/api/v2.1/events',
-    'https://eonet.sci.gsfc.nasa.gov/api/v2.1/categories'];
+  const links = ['https://eonet.gsfc.nasa.gov/api/v2.1/sources',
+    'https://eonet.gsfc.nasa.gov/api/v2.1/events',
+    'https://eonet.gsfc.nasa.gov/api/v2.1/categories'];
   const results = await scrapeLinks(links);
   return results;
 };

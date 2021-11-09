@@ -46,7 +46,7 @@ const EventsAlertModalBody = () => (
     <p>
       Events are curated and provided by the
       {' '}
-      <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">
+      <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">
         Earth Observatory Natural Event Tracker
       </a>
     </p>
