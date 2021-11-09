@@ -364,7 +364,7 @@ export default function AboutPage() {
           <li>
             Natural events database is provided by the
             {' '}
-            <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>
+            <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>
             .
           </li>
           <li>

@@ -382,19 +382,19 @@ fixtures.config = function() {
           id: 'dustHaze',
           title: 'Dust and Haze',
           description: 'Related to dust storms, air pollution and other non-volcanic aerosols. Volcano-related plumes shall be included with the originating eruption event.',
-          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/dustHaze',
+          layers: 'https://eonet.gsfc.nasa.gov/api/v3/layers/dustHaze',
         },
         {
           id: 'manmade',
           title: 'Manmade',
           description: 'Events that have been human-induced and are extreme in their extent.',
-          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/manmade',
+          layers: 'https://eonet.gsfc.nasa.gov/api/v3/layers/manmade',
         },
         {
           id: 'seaLakeIce',
           title: 'Sea and Lake Ice',
           description: 'Related to all ice that resides on oceans and lakes, including sea and lake ice (permanent and seasonal) and icebergs.',
-          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/seaLakeIce',
+          layers: 'https://eonet.gsfc.nasa.gov/api/v3/layers/seaLakeIce',
         }],
     },
     features: {
