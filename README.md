@@ -45,7 +45,7 @@ View the [Configuration](doc/configuration.md) section for information on how to
 
 The following are required to install and run Worldview:
 
-- [Node v10 or Later](https://nodejs.org/en/download/)
+- [Node v12.21.0 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v3.7.1 or Later](https://www.python.org/)
 

@@ -1,5 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  timeScaleToNumberKey,
+  timeScaleFromNumberKey,
+} from '../../../modules/date/constants';
+import {
+  toggleCustomModal as toggleCustomModalAction,
+  selectInterval as selectIntervalAction,
+} from '../../../modules/date/actions';
 
 /*
  * Change timescale interval (time unit) by selecting from default timescales
@@ -19,8 +28,8 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 
   componentDidMount() {
-    const { customDelta, customIntervalZoomLevel } = this.props;
-    if (customDelta !== 1 && customIntervalZoomLevel) {
+    const { customDelta, customInterval } = this.props;
+    if (customDelta !== 1 && customInterval) {
       this.setCustomIntervalText();
     }
   }
@@ -48,14 +57,12 @@ class TimeScaleIntervalChange extends PureComponent {
     }
   }
 
-  // Interval select tooltip on
   toolTipHoverOn = () => {
     this.setState({
       toolTipHovered: true,
     });
   }
 
-  // Interval select tooltip off
   toolTipHoverOff = () => {
     this.setState({
       toolTipHovered: false,
@@ -69,20 +76,46 @@ class TimeScaleIntervalChange extends PureComponent {
     });
   }
 
-  // handle click of timescale intervals
   handleClickInterval = (timescale, openModal = false) => {
-    const { setTimeScaleIntervalChangeUnit } = this.props;
     // send props function to change timescale interval throughout app
     this.setState({
       toolTipHovered: false,
-    }, setTimeScaleIntervalChangeUnit(timescale, openModal));
+    }, this.setTimeScaleIntervalChangeUnit(timescale, openModal));
   }
+
+  /**
+  * @desc handle SELECT of LEFT/RIGHT interval selection
+  * @param {String} timeScale
+  * @param {Boolean} modalOpen - is custom interval modal open
+  */
+    setTimeScaleIntervalChangeUnit = (timeScale, openModal) => {
+      const {
+        customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
+      } = this.props;
+      const customSelected = timeScale === 'custom';
+      let delta;
+      let newTimeScale = timeScale;
+
+      if (openModal) {
+        toggleCustomModal(openModal, modalType);
+        return;
+      }
+
+      if (customSelected && customInterval && customDelta) {
+        newTimeScale = customInterval;
+        delta = customDelta;
+      } else {
+        newTimeScale = Number(timeScaleToNumberKey[newTimeScale]);
+        delta = 1;
+      }
+      selectInterval(delta, newTimeScale, customSelected);
+    };
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
-    const { customDelta, customIntervalZoomLevel } = this.props;
+    const { customDelta, customInterval } = this.props;
     this.setState({
-      customIntervalText: `${customDelta} ${customIntervalZoomLevel}`,
+      customIntervalText: `${customDelta} ${timeScaleFromNumberKey[customInterval]}`,
     });
   }
 
@@ -101,7 +134,7 @@ class TimeScaleIntervalChange extends PureComponent {
     const {
       customSelected,
       hasSubdailyLayers,
-      timeScaleChangeUnit,
+      interval,
     } = this.props;
     return (
       <>
@@ -117,7 +150,7 @@ class TimeScaleIntervalChange extends PureComponent {
             id="current-interval"
             className={`no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
-            {customSelected ? customIntervalText : `${1} ${timeScaleChangeUnit}`}
+            {customSelected ? customIntervalText : `${1} ${timeScaleFromNumberKey[interval]}`}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
@@ -188,13 +221,41 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 }
 
-TimeScaleIntervalChange.propTypes = {
-  customDelta: PropTypes.number,
-  customIntervalZoomLevel: PropTypes.string,
-  customSelected: PropTypes.bool,
-  hasSubdailyLayers: PropTypes.bool,
-  setTimeScaleIntervalChangeUnit: PropTypes.func,
-  timeScaleChangeUnit: PropTypes.string,
+const mapDispatchToProps = (dispatch) => ({
+  toggleCustomModal: (isOpen, modalType) => {
+    dispatch(toggleCustomModalAction(isOpen, modalType));
+  },
+  selectInterval: (delta, timeScale, customSelected) => {
+    dispatch(selectIntervalAction(delta, timeScale, customSelected));
+  },
+});
+
+const mapStateToProps = (state) => {
+  const { date } = state;
+  const {
+    interval, customInterval, customDelta, customSelected,
+  } = date;
+  return {
+    interval,
+    customInterval,
+    customDelta,
+    customSelected,
+  };
 };
 
-export default TimeScaleIntervalChange;
+TimeScaleIntervalChange.propTypes = {
+  customDelta: PropTypes.number,
+  customInterval: PropTypes.number,
+  customSelected: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
+  interval: PropTypes.number,
+  selectInterval: PropTypes.func,
+  timeScaleChangeUnit: PropTypes.string,
+  toggleCustomModal: PropTypes.func,
+  modalType: PropTypes.string,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TimeScaleIntervalChange);

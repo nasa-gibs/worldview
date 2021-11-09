@@ -15,11 +15,11 @@ import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
 import TimelineLayerCoveragePanel from '../../components/timeline/timeline-coverage/timeline-coverage';
-import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
+import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/timescale-interval-change';
 import DraggerContainer from '../../components/timeline/timeline-draggers/dragger-container';
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
 import DateTooltip from '../../components/timeline/timeline-axis/date-tooltip/date-tooltip';
-import CustomIntervalSelectorWidget from '../../components/timeline/custom-interval-selector/interval-selector-widget';
+import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
 
 import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
@@ -560,44 +560,6 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc handle SET of custom time scale panel
-  * @param {Number} delta
-  * @param {Number} timeScale
-  * @returns {void}
-  */
-  changeCustomInterval = (delta, timeScale) => {
-    const { changeCustomInterval } = this.props;
-    changeCustomInterval(delta, timeScale);
-  };
-
-  /**
-  * @desc handle SELECT of LEFT/RIGHT interval selection
-  * @param {String} timeScale
-  * @param {Boolean} modalOpen - is custom interval modal open
-  * @returns {void}
-  */
-  setTimeScaleIntervalChangeUnit = (timeScale, openModal) => {
-    const { customIntervalZoomLevel, customIntervalValue, selectInterval } = this.props;
-    const customSelected = timeScale === 'custom';
-    let delta;
-    let newTimeScale = timeScale;
-
-    if (openModal) {
-      this.toggleCustomIntervalModal(openModal);
-      return;
-    }
-
-    if (customSelected && customIntervalZoomLevel && customIntervalValue) {
-      newTimeScale = customIntervalZoomLevel;
-      delta = customIntervalValue;
-    } else {
-      newTimeScale = Number(timeScaleToNumberKey[newTimeScale]);
-      delta = 1;
-    }
-    selectInterval(delta, newTimeScale, customSelected);
-  };
-
-  /**
   * @desc open animation widget
   * @returns {void}
   */
@@ -990,9 +952,6 @@ class Timeline extends React.Component {
       animStartLocationDate,
       appNow,
       axisWidth,
-      customIntervalValue,
-      customIntervalZoomLevel,
-      customSelected,
       dateA,
       dateB,
       draggerSelected,
@@ -1098,14 +1057,13 @@ class Timeline extends React.Component {
                         />
                       </div>
                       <div id="zoom-buttons-group">
+
                         <TimeScaleIntervalChange
-                          setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
-                          customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
-                          customSelected={customSelected}
-                          customDelta={customIntervalValue}
                           timeScaleChangeUnit={timeScaleChangeUnit}
                           hasSubdailyLayers={hasSubdailyLayers}
+                          modalType={customModalType.TIMELINE}
                         />
+
                         {this.renderDateChangeArrows()}
                       </div>
                       <AnimationButton
@@ -1267,12 +1225,10 @@ class Timeline extends React.Component {
                           )}
                       </div>
                       )}
+
                     {/* Custom Interval Selector Widget */}
-                    <CustomIntervalSelectorWidget
-                      customDelta={customIntervalValue}
-                      customIntervalZoomLevel={customIntervalZoomLevel}
-                      changeCustomInterval={this.changeCustomInterval}
-                      customIntervalModalOpen={timelineCustomModalOpen}
+                    <CustomIntervalSelector
+                      modalOpen={timelineCustomModalOpen}
                       hasSubdailyLayers={hasSubdailyLayers}
                     />
 
@@ -1511,11 +1467,8 @@ Timeline.propTypes = {
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
-  changeCustomInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
-  customIntervalValue: PropTypes.number,
-  customIntervalZoomLevel: PropTypes.number,
   customSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
@@ -1546,7 +1499,6 @@ Timeline.propTypes = {
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   selectedDate: PropTypes.object,
-  selectInterval: PropTypes.func,
   timelineCustomModalOpen: PropTypes.bool,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,

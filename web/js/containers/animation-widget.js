@@ -17,8 +17,8 @@ import ErrorBoundary from './error-boundary';
 import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
-import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
-import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
+import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
+import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
 import PlayQueue from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
 import { promiseImageryForTime } from '../modules/map/util';
@@ -26,7 +26,6 @@ import GifContainer from './gif';
 import {
   selectDate,
   selectInterval,
-  changeCustomInterval,
   toggleCustomModal,
 } from '../modules/date/actions';
 import {
@@ -344,17 +343,6 @@ class AnimationWidget extends React.Component {
     toggleCustomModal(isOpen, customModalType.ANIMATION);
   };
 
-  /**
-  * @desc handle SET of custom time scale panel
-  * @param {Number} delta
-  * @param {Number} timeScale
-  * @returns {void}
-  */
-  changeCustomInterval = (delta, timeScale) => {
-    const { changeCustomInterval } = this.props;
-    changeCustomInterval(delta, timeScale);
-  };
-
   renderCollapsedWidget() {
     const {
       onClose,
@@ -479,9 +467,6 @@ class AnimationWidget extends React.Component {
       onPushPause,
       subDailyMode,
       interval,
-      customSelected,
-      customDelta,
-      customInterval,
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
@@ -505,15 +490,18 @@ class AnimationWidget extends React.Component {
             <div className="wv-animation-widget-header">
               {'Animate Map in '}
               <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
-                customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
-                customSelected={customSelected}
-                customDelta={customDelta}
                 timeScaleChangeUnit={interval}
                 hasSubdailyLayers={hasSubdailyLayers}
+                modalType={customModalType.ANIMATION}
               />
               {' Increments'}
             </div>
+
+            {/* Custom time interval selection */}
+            <CustomIntervalSelector
+              modalOpen={animationCustomModalOpen}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
 
             <PlayButton
               playing={isPlaying}
@@ -554,14 +542,6 @@ class AnimationWidget extends React.Component {
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
-            {/* Custom time interval selection */}
-            <CustomIntervalSelectorWidget
-              customDelta={customDelta}
-              customIntervalZoomLevel={customInterval}
-              customIntervalModalOpen={animationCustomModalOpen}
-              changeCustomInterval={this.changeCustomInterval}
-              hasSubdailyLayers={hasSubdailyLayers}
-            />
           </div>
         </div>
       </Draggable>
@@ -822,9 +802,6 @@ const mapDispatchToProps = (dispatch) => ({
   onIntervalSelect: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
   },
-  changeCustomInterval: (delta, timeScale) => {
-    dispatch(changeCustomInterval(delta, timeScale));
-  },
   onUpdateStartDate(date) {
     dispatch(changeStartDate(date));
   },
@@ -851,11 +828,9 @@ AnimationWidget.propTypes = {
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
-  changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
-  customSelected: PropTypes.bool,
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
