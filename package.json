@@ -155,7 +155,7 @@
     "showdown": "^1.9.1",
     "stylelint": "^13.2.0",
     "stylelint-high-performance-animation": "^1.5.2",
-    "tar": "^6.0.1",
+    "tar": "^6.1.9",
     "terser-webpack-plugin": "^4.2.3",
     "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
