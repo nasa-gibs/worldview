@@ -220,3 +220,17 @@ export function fly (map, proj, endPoint, endZoom = 5, rotation = 0) {
     ),
   ]);
 }
+
+export const crossesDateLine = ([active], [next]) => Math.abs(active - next) > 180;
+
+export const getOverDateLineCoordinates = (coordinates) => {
+  const long = coordinates[0];
+  const lat = coordinates[1];
+  return long < 0
+    ? [Math.abs(180 + 180 - Math.abs(long)), lat]
+    : [-Math.abs(180 + 180 - Math.abs(long)), lat];
+};
+
+export const getExtent = (proj) => (proj.selected.id === 'geographic'
+  ? [-250, -90, 250, 90]
+  : [-180, -90, 180, 90]);
