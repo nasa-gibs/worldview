@@ -69,19 +69,19 @@ describe('parseDateUTC', () => {
   });
 });
 
-test('toISOStringDate', () => {
+test('toISOStringDate with date', () => {
   const d = new Date(Date.UTC(2013, 0, 15));
+  expect(util.toISOStringDate(d)).toBe('2013-01-15');
+});
+
+test('toISOStringDate with string', () => {
+  const d = '2013-01-15T11:22:33Z';
   expect(util.toISOStringDate(d)).toBe('2013-01-15');
 });
 
 test('toISOStringSeconds', () => {
   const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
   expect(util.toISOStringSeconds(d)).toBe('2013-01-15T11:22:33Z');
-});
-
-test('toHourMinutes', () => {
-  const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
-  expect(util.toHourMinutes(d)).toBe('11:22');
 });
 
 test('clearTimeUTC', () => {
