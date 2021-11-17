@@ -168,7 +168,7 @@ module.exports = {
 
     c.click(addLayers);
     // Confirm available facet still enabled but date changed
-    c.assert.containsText(availableFilterTextEl, 'Available 2012 Apr 14');
+    c.assert.containsText(availableFilterTextEl, 'Available 2012 APR 14');
     c.expect.element(availableFilterCheckboxInput).to.be.selected;
   },
   'Disabling coverage filter updates list': (c) => {

@@ -136,7 +136,7 @@ module.exports = {
   },
 
   // date subdaily tooltip date present on load
-  'Date subdaily tooltip date present load': (c) => {
+  'Date subdaily tooltip date present on load': (c) => {
     c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
     c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
       .assert.containsText('.date-tooltip', '2019 OCT 04 09:46Z (DOY 277)');
