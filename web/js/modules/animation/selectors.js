@@ -6,6 +6,8 @@ import {
 } from '../image-download/util';
 import { subdailyLayersActive, getLayers } from '../layers/selectors';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
+import { formatDisplayDate } from '../date/util';
+
 /*
  * loops through dates and created image
  * download urls and pushs them to an
@@ -48,11 +50,7 @@ export default function getImageArray(
 
   while (current <= toDate) {
     j += 1;
-    if (isSubDaily) {
-      strDate = util.toISOStringMinutes(current);
-    } else {
-      strDate = util.toISOStringDate(current);
-    }
+    strDate = formatDisplayDate(current, isSubDaily);
     products = getProducts(current, state);
 
     const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
