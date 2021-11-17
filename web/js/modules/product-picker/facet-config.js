@@ -58,7 +58,7 @@ export default [
     field: 'dataCenter',
     label: 'DAAC/SIPS',
     filterType: 'any',
-    tooltip: 'Distributed Active Archive Centers / Science Investigator-led Processing System',
+    tooltip: 'Distributed Active Archive Center / Science Investigator-led Processing System',
     show: 30,
     hideZeroCount: true,
   },
