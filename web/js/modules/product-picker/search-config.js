@@ -5,11 +5,11 @@ import {
   forEach as lodashForEach,
   toLower as lodashToLower,
 } from 'lodash';
-import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
 import { getSelectedDate } from '../date/selectors';
+import { formatDisplayDate } from '../date/util';
 
 let initialLayersArray;
 let configRef;
@@ -134,7 +134,7 @@ function filterSearch (layer, val, terms) {
  */
 function updateCoverageFilter (filters, selectedDate) {
   if (!filters || !filters.length) return;
-  const formattedDate = moment.utc(selectedDate).format('YYYY MMM DD');
+  const formattedDate = formatDisplayDate(selectedDate);
   const oldValueMatch = (value) => !value.includes(formattedDate) && !value.includes('Always');
 
   filters.forEach((f) => {

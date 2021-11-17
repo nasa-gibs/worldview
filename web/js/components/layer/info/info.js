@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
-import util from '../../../util/util';
+import { coverageDateFormatter } from '../../../modules/date/util';
 
 export default function LayerInfo ({ layer, measurementDescriptionPath }) {
   const {
@@ -59,13 +59,13 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
           <span id={`${id}-startDate`} className="layer-date-start">
             {startDate
               ? `Temporal coverage: ${
-                util.coverageDateFormatter('START-DATE', startDate, period)}`
+                coverageDateFormatter('START-DATE', startDate, period)}`
               : ''}
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
             {startDate && endDate
               ? ` - ${
-                util.coverageDateFormatter('END-DATE', endDate, period)}`
+                coverageDateFormatter('END-DATE', endDate, period)}`
               : startDate
                 ? ' - Present'
                 : ''}

@@ -21,6 +21,7 @@ import {
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
+import { parseDate } from '../date/util';
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -861,9 +862,9 @@ export function serializeGroupOverlays (groupOverlays, state, activeString) {
 export function dateOverlap(period, dateRanges) {
   const sortedRanges = dateRanges.sort((previous, current) => {
     // get the start date from previous and current
-    let previousTime = util.parseDate(previous.startDate);
+    let previousTime = parseDate(previous.startDate);
     previousTime = previousTime.getTime();
-    let currentTime = util.parseDate(current.startDate);
+    let currentTime = parseDate(current.startDate);
     currentTime = currentTime.getTime();
 
     // if the previous is earlier than the current
@@ -889,7 +890,7 @@ export function dateOverlap(period, dateRanges) {
       const previous = arr[idx - 1];
 
       // check for any overlap
-      let previousEnd = util.parseDate(previous.endDate);
+      let previousEnd = parseDate(previous.endDate);
       // Add dateInterval
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
@@ -914,7 +915,7 @@ export function dateOverlap(period, dateRanges) {
       }
       previousEnd = previousEnd.getTime();
 
-      let currentStart = util.parseDate(current.startDate);
+      let currentStart = parseDate(current.startDate);
       currentStart = currentStart.getTime();
 
       const overlap = previousEnd >= currentStart;

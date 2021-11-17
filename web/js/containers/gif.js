@@ -26,6 +26,7 @@ import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 import { subdailyLayersActive } from '../modules/layers/selectors';
+import { formatDisplayDate } from '../modules/date/util';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 const gifStream = new GifStream();
@@ -403,8 +404,8 @@ function mapStateToProps(state) {
     boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
-    startDate: util.toISOStringDateMonthAbbrev(startDate, subdailyLayersActive(state)),
-    endDate: util.toISOStringDateMonthAbbrev(endDate, subdailyLayersActive(state)),
+    startDate: formatDisplayDate(startDate, subdailyLayersActive(state)),
+    endDate: formatDisplayDate(endDate, subdailyLayersActive(state)),
     increment: `${increment} Between Frames`,
     speed,
     map,

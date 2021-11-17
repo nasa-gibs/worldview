@@ -10,6 +10,46 @@ import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
+/**
+   * Parses a UTC ISO 8601 date to a non UTC date
+   *
+   * @method parseDate
+   * @static
+   * @param str {string} Date to parse in the form of YYYY-MM-DDTHH:MM:SSZ`.
+   * @return {Date} converted string as a non UTC date object, throws an exception if
+   * the string is invalid
+   */
+export const parseDate = (dateAsString) => {
+  const dateTimeArr = dateAsString.split(/T/);
+
+  const yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
+
+  // Parse elements of date and time
+  const year = yyyymmdd[0];
+  const month = yyyymmdd[1] - 1;
+  const day = yyyymmdd[2];
+
+  let hour = 0;
+  let minute = 0;
+  let second = 0;
+  let millisecond = 0;
+
+  // Use default of midnight if time is not specified
+  if (dateTimeArr.length > 1) {
+    const hhmmss = dateTimeArr[1].split(/[:.Z]/);
+    hour = hhmmss[0] || 0;
+    minute = hhmmss[1] || 0;
+    second = hhmmss[2] || 0;
+    millisecond = hhmmss[3] || 0;
+  }
+  const date = new Date(year, month, day, hour, minute, second, millisecond);
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid date: ${dateAsString}`);
+  }
+  return date;
+};
+
 export function serializeDate(date) {
   return (
     `${date.toISOString().split('T')[0]
@@ -310,3 +350,39 @@ export const outOfStepChange = (state, newDate) => {
   const prevStepDate = getNextDateTime(state, -1, previousSelectedDate).toISOString();
   return date !== nextStepDate && date !== prevStepDate;
 };
+
+export const coverageDateFormatter = (dateType, date, period) => {
+  let dateString;
+  const parsedDate = parseDate(date);
+  switch (period) {
+    case 'subdaily':
+      dateString = `${moment(parsedDate).format('YYYY MMM DD HH:mm')}Z`.toUpperCase();
+      break;
+
+    case 'yearly':
+      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
+      dateString = moment(parsedDate).format('YYYY');
+      break;
+
+    case 'monthly':
+      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
+      dateString = moment(parsedDate).format('YYYY MMM').toUpperCase();
+      break;
+
+    default:
+      dateString = formatDisplayDate(parsedDate);
+      break;
+  }
+
+  return dateString;
+};
+
+export const formatDisplayDate = (date, subdaily) => {
+  const format = subdaily ? 'YYYY MMM DD HH:mmZ' : 'YYYY MMM DD';
+  return moment
+    .utc(date)
+    .format(format)
+    .toUpperCase();
+};
+
+export const formatISODate = (date) => moment(date).format('YYYY-MM-DD');

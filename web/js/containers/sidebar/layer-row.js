@@ -29,6 +29,7 @@ import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
+import { coverageDateFormatter } from '../../modules/date/util';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -126,12 +127,12 @@ function LayerRow (props) {
     // start date
     let layerStartDate;
     if (startDate) {
-      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
+      layerStartDate = coverageDateFormatter('START-DATE', startDate, period);
     }
     // end date
     let layerEndDate;
     if (endDate) {
-      layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
+      layerEndDate = coverageDateFormatter('END-DATE', endDate, period);
     }
 
     if (layerStartDate && layerEndDate) {
