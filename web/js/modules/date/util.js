@@ -356,7 +356,7 @@ export const coverageDateFormatter = (dateType, date, period) => {
   const parsedDate = parseDate(date);
   switch (period) {
     case 'subdaily':
-      dateString = `${moment(parsedDate).format('YYYY MMM DD HH:mm')}Z`.toUpperCase();
+      dateString = formatDisplayDate(parsedDate, true);
       break;
 
     case 'yearly':
@@ -378,11 +378,9 @@ export const coverageDateFormatter = (dateType, date, period) => {
 };
 
 export const formatDisplayDate = (date, subdaily) => {
-  const format = subdaily ? 'YYYY MMM DD HH:mmZ' : 'YYYY MMM DD';
-  return moment
-    .utc(date)
-    .format(format)
-    .toUpperCase();
+  const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
+  const dateString = moment.utc(date).format(format);
+  return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;
 };
 
 export const formatISODate = (date) => moment(date).format('YYYY-MM-DD');
