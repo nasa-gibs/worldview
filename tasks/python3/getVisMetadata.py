@@ -65,8 +65,6 @@ def main(url):
     except Exception as e:
       print("%s:" % (e))
 
-  print(layer_metadata)
-
   with open(output_file, "w", encoding="utf-8") as fp:
     # Format of this object will determine how this data is combined into wv.json
     json.dump({ 'layers': layer_metadata}, fp, indent=2, sort_keys=True)
@@ -78,7 +76,6 @@ if __name__ == "__main__":
     if metadata_config is not None:
       url = metadata_config.get('url')
       daacMap = metadata_config.get('daacMap', {})
-      print(daacMap)
       main(url)
     else:
       print('%s: Visualization metadata not configured. Exiting.' % (prog))
