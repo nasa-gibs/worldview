@@ -1,0 +1,1 @@
+The Himawari-8 satellite is centered on 140.7 degrees East, covering most of the Pacific Ocean, a portion of Eastern Asia, and parts of Australasia.
