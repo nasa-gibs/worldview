@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import OlFeature from 'ol/Feature';
 import * as olExtent from 'ol/extent';
-import OlGeomMultiLineString from 'ol/geom/MultiLineString';
 import * as olProj from 'ol/proj';
 import {
   each as lodashEach,
@@ -18,7 +16,7 @@ import { getFilteredEvents } from '../../modules/natural-events/selectors';
 
 
 import {
-  getTrack, getTrackPoint, getArrows, getClusterPointEl,
+  getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
 } from './util';
 
 class EventTrack extends React.Component {
@@ -58,7 +56,7 @@ class EventTrack extends React.Component {
       if (prevMap) {
         this.update(null);
         this.removeTrack(prevMap);
-        removeOldPoints(prevMap, trackDetails);
+        removeOldPoints(prevMap, trackDetails.pointsAndArrows);
       }
       this.initialize();
     }
@@ -102,7 +100,7 @@ class EventTrack extends React.Component {
     const { trackDetails } = this.state;
 
     if (trackDetails.id) {
-      addPointOverlays(map, trackDetails.pointArray);
+      addPointOverlays(map, trackDetails.pointsAndArrows);
     } else {
       this.debouncedTrackUpdate();
     }
@@ -132,7 +130,7 @@ class EventTrack extends React.Component {
         isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
       }
       if (isNewTarget) {
-        removeOldPoints(map, trackDetails);
+        removeOldPoints(map, trackDetails.pointsAndArrows);
       }
     }
   }
@@ -143,9 +141,9 @@ class EventTrack extends React.Component {
    */
   removeTrack = function(map) {
     const { trackDetails } = this.state;
-    const { track } = trackDetails;
-    map.removeLayer(track);
-    removeOldPoints(map, trackDetails);
+    const { track, pointsAndArrows } = trackDetails;
+    map.removeOverlay(track);
+    removeOldPoints(map, pointsAndArrows);
     return {};
   };
 
@@ -167,8 +165,22 @@ class EventTrack extends React.Component {
     const sameDate = trackDetails.selectedDate === date;
 
     const createAndAddTrack = () => {
-      newTrackDetails = createTrack(proj, event, map, date, selectEvent);
-      map.addLayer(newTrackDetails.track);
+      const {
+        track,
+        pointsAndArrows,
+      } = getTracksAndPoints(event, proj, map, date, selectEvent);
+
+      newTrackDetails = {
+        id: event.id,
+        selectedDate: date,
+        track,
+        pointsAndArrows,
+        hidden: false,
+      };
+
+      map.addOverlay(track);
+      track.changed();
+      console.log('adding track');
     };
 
     if (!event || event.geometry.length < 2) {
@@ -204,38 +216,8 @@ class EventTrack extends React.Component {
   }
 }
 
-/**
- * Loop through event geometries and create
- * track points and line
- *
- * @param  {Object} proj
- * @param  {Object} eventObj EONET event Object
- * @param  {Object} map Openlayers map Object
- * @param  {String} selectedDate
- * @param  {Function} callback date-change callback
- * @return {Object} Object with Track elements and info
- */
-const createTrack = function(proj, eventObj, map, selectedDate, callback) {
-  const olTrackLineFeatures = [];
-
-  const { tracks, overlays } = getTracksAndPoints(eventObj, proj, map, selectedDate, callback);
-  olTrackLineFeatures.push(
-    new OlFeature({
-      geometry: new OlGeomMultiLineString(tracks),
-    }),
-  );
-
-  return {
-    id: eventObj.id,
-    track: getTrack(proj, olTrackLineFeatures, map),
-    pointArray: overlays,
-    selectedDate,
-    hidden: false,
-  };
-};
-
-const removeOldPoints = function(map, { pointArray }) {
-  lodashEach(pointArray, (pointOverlay) => {
+const removeOldPoints = function(map, pointsAndArrows) {
+  lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
       map.removeOverlay(pointOverlay);
     }
@@ -275,8 +257,8 @@ const updateSelection = function(newDate) {
  * @return {Object} Object Containing track info and elements
  */
 const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback) {
-  const overlays = [];
-  const tracks = [];
+  const pointsAndArrows = [];
+  const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map);
 
   clusters.forEach((clusterPoint, index) => {
@@ -298,21 +280,21 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback)
 
       const lineSegmentArray = [prevCoordinates, nextCoordinates];
       const arrowOverlay = getArrows(lineSegmentArray, map);
-      overlays.push(arrowOverlay);
-      tracks.push(lineSegmentArray);
+      pointsAndArrows.push(arrowOverlay);
+      trackSegments.push(lineSegmentArray);
       addOverlayIfIsVisible(map, arrowOverlay);
     }
 
     const point = clusterPoint.properties.cluster
       ? getClusterPointEl(proj, clusterPoint, map, pointClusterObj, callback)
-      : getTrackPoint(proj, clusterPoint, isSelected, map, callback);
-    overlays.push(point);
+      : getTrackPoint(proj, clusterPoint, isSelected, callback);
+    pointsAndArrows.push(point);
 
     addOverlayIfIsVisible(map, point);
   });
   return {
-    tracks,
-    overlays,
+    track: getTrackLines(map, trackSegments),
+    pointsAndArrows,
   };
 };
 
