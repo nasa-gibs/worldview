@@ -1,1 +1,1 @@
-The Himawari-8 satellite is centered on 140.7 degrees E, covering most of the Pacific Ocean, a portion of Eastern Asia, and parts of Australasia.
+The Geostationary Operational Environmental Satellites (GOES)-West satellite (currently, GOES-S/GOES-17) is centered on 137.2 degrees West, covering most of the Pacific Ocean, the USA, most of Canada, Central, the western half of South America, parts of Australasia.
