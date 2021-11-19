@@ -97,53 +97,55 @@ export const getArrows = function(lineSegmentCoords, map) {
 export const getTrackLines = function(map, trackCoords) {
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  const outlineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
   let lineString = '';
-  const first = trackCoords[0][0];
-  const last = trackCoords[trackCoords.length - 1][0];
-  const bottomLeft = [first[0], first[1]];
-  const topRight = [last[0], last[1]];
+  const pixelCoords = trackCoords.map(([start, end]) => [
+    map.getPixelFromCoordinate(end),
+    map.getPixelFromCoordinate(start),
+  ]);
+  const first = pixelCoords[0][0];
+  const last = pixelCoords[pixelCoords.length - 1][0];
+  const topLeft = [first[0], first[1]];
+  const bottomRight = [last[0], last[1]];
 
-  trackCoords.forEach(([[x1, y1], [x2, y2]]) => {
-    bottomLeft[0] = Math.min(x1, x2, bottomLeft[0]);
-    bottomLeft[1] = Math.min(y1, y2, bottomLeft[1]);
-    topRight[0] = Math.max(x1, x2, topRight[0]);
-    topRight[1] = Math.max(y1, y2, topRight[1]);
+  pixelCoords.forEach(([[x1, y1], [x2, y2]]) => {
+    topLeft[0] = Math.min(x1, x2, topLeft[0]);
+    topLeft[1] = Math.min(y1, y2, topLeft[1]);
+    bottomRight[0] = Math.max(x1, x2, bottomRight[0]);
+    bottomRight[1] = Math.max(y1, y2, bottomRight[1]);
   });
-  const pixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
-  const pixelTopRight = map.getPixelFromCoordinate(topRight);
 
-  const [minX, maxY] = pixelBottomLeft;
-  const [maxX, minY] = pixelTopRight;
+  const [minX, minY] = topLeft;
+  const [maxX, maxY] = bottomRight;
   const height = Math.abs(maxY - minY);
   const width = Math.abs(maxX - minX);
-  const rotation = Number(map.getView().getRotation() * (180 / Math.PI)).toFixed();
 
-  svgEl.setAttribute('height', height);
-  svgEl.setAttribute('width', width);
-  svgEl.style.height = `${height}px`;
-  svgEl.style.width = `${width}px`;
-  svgEl.style.backgroundColor = 'rgba(255, 0, 0, 0.15)';
-  svgEl.style.display = 'inline-block';
-  svgEl.style.transform = `rotate(${rotation}deg)`;
+  svgEl.style.height = `${height + 5}px`;
+  svgEl.style.width = `${width + 5}px`;
+  svgEl.setAttribute('height', height.toFixed(0));
+  svgEl.setAttribute('width', width.toFixed(0));
+  svgEl.appendChild(outlineEl);
   svgEl.appendChild(lineEl);
 
-  trackCoords.forEach(([start, end], index) => {
-    const [x1, y1] = map.getPixelFromCoordinate(start);
-    const [x2, y2] = map.getPixelFromCoordinate(end);
-    const newStart = `${x1 - minX},${y1 - minY}`;
-    const newEnd = `${x2 - minX},${y2 - minY}`;
-    lineString += index === 0 ? `${newStart} ${newEnd} ` : `${newEnd} `;
+  pixelCoords.forEach(([[x1, y1], [x2, y2]], index) => {
+    const newEnd = `${(x1 - minX).toFixed(0)},${(y1 - minY).toFixed(0)}`;
+    const newStart = `${(x2 - minX).toFixed(0)},${(y2 - minY).toFixed(0)}`;
+    lineString += `${newStart} ${newEnd} `;
   });
 
   lineEl.style.fill = 'transparent';
-  lineEl.style.stroke = 'black';
+  lineEl.style.stroke = 'white';
   lineEl.style.strokeWidth = '1px';
-  lineEl.style.display = 'inline-block';
   lineEl.setAttribute('points', lineString);
 
+  outlineEl.style.fill = 'transparent';
+  outlineEl.style.stroke = 'rgba(0,0,0,0.5)';
+  outlineEl.style.strokeWidth = '3px';
+  outlineEl.setAttribute('points', lineString);
+
   return new OlOverlay({
-    position: bottomLeft,
-    positioning: 'bottom-left',
+    position: map.getCoordinateFromPixel(topLeft),
+    positioning: 'top-left',
     insertFirst: true,
     stopEvent: false,
     element: svgEl,
