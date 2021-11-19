@@ -31,7 +31,7 @@ function NavCase (props) {
     label={
       isCompareMode
         ? 'You must exit comparison mode to download data'
-        : 'Data download'
+        : 'Data Download'
     }
     className={
       activeTab === 'download'
@@ -89,13 +89,13 @@ function NavCase (props) {
       {renderDataDownload()}
       <div className="toggleIconHolder">
         <UncontrolledTooltip placement="right" target="accordion-toggler-button">
-          Hide Sidebar
+          Hide sidebar
         </UncontrolledTooltip>
         <a
           id="accordion-toggler-button"
           className="accordionToggler atcollapse arrow"
           onClick={toggleSidebar}
-          aria-label="Hide Sidebar"
+          aria-label="Hide sidebar"
         />
       </div>
     </Nav>

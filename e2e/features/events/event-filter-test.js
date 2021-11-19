@@ -76,7 +76,9 @@ module.exports = {
     c.assert.containsText(filterDates, '2011 SEP 02 - 2011 DEC 31');
   },
   'Filter modal inputs are correct': (c) => {
-    openFilterModal(c);
+    c.pause(3000);
+    c.click(filterButton);
+    c.waitForElementVisible(filterModal, TIME_LIMIT);
     assertDateInputValues(c, '2011-SEP-02', '2011-DEC-31');
     c.expect.element(dustSwitch).to.be.selected;
     c.expect.element(manmadeSwitch).to.be.selected;

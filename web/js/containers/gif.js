@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-loader';
 import { connect } from 'react-redux';
-import GifStream from '@entryline/gifstream';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
 import {
   Progress, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
+import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
 
@@ -20,12 +20,15 @@ import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
-import { timeScaleFromNumberKey } from '../modules/date/constants';
+import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
+import { subdailyLayersActive } from '../modules/layers/selectors';
+import { formatDisplayDate } from '../modules/date/util';
 
+const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 const gifStream = new GifStream();
 
 class GIF extends Component {
@@ -384,21 +387,25 @@ function mapStateToProps(state) {
     customSelected, interval, customInterval, customDelta,
   } = date;
   const increment = customSelected
-    ? `${customDelta} ${timeScaleFromNumberKey[customInterval]}`
-    : `1 ${timeScaleFromNumberKey[interval]}`;
-  let url = 'http://localhost:3002/api/v1/snapshot';
+    ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
+    : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+  let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
+  }
+  if ('imageDownload' in config.parameters) {
+    url = config.parameters.imageDownload;
     util.warn(`Redirecting GIF download to: ${url}`);
   }
+
   return {
     screenWidth,
     screenHeight,
     boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
-    startDate: util.toISOStringMinutes(startDate),
-    endDate: util.toISOStringMinutes(endDate),
+    startDate: formatDisplayDate(startDate, subdailyLayersActive(state)),
+    endDate: formatDisplayDate(endDate, subdailyLayersActive(state)),
     increment: `${increment} Between Frames`,
     speed,
     map,
@@ -407,8 +414,8 @@ function mapStateToProps(state) {
       startDate,
       endDate,
       customSelected
-        ? timeScaleFromNumberKey[customInterval]
-        : timeScaleFromNumberKey[interval],
+        ? TIME_SCALE_FROM_NUMBER[customInterval]
+        : TIME_SCALE_FROM_NUMBER[interval],
       customSelected ? customDelta : 1,
     ),
     getImageArray: (gifComponentProps, gifComponentState, dimensions) => getImageArray(

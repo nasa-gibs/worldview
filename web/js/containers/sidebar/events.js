@@ -1,11 +1,10 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import {
   Button,
 } from 'reactstrap';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
 import EventIcon from '../../components/sidebar/event-icon';
@@ -16,10 +15,10 @@ import {
   deselectEvent as deselectEventActionCreator,
 } from '../../modules/natural-events/actions';
 import { collapseSidebar } from '../../modules/sidebar/actions';
-import { selectDate } from '../../modules/date/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
 import util from '../../util/util';
+import { formatDisplayDate } from '../../modules/date/util';
 
 function Events(props) {
   const {
@@ -46,8 +45,8 @@ function Events(props) {
   const maxHeight = Math.max(height - filterControlHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
-  const startDate = moment(selectedStartDate).format('YYYY MMM DD');
-  const endDate = moment(selectedEndDate).format('YYYY MMM DD');
+  const startDate = formatDisplayDate(selectedStartDate);
+  const endDate = formatDisplayDate(selectedEndDate);
 
   const errorOrLoadingText = isLoading
     ? 'Loading ...'
@@ -138,9 +137,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(selectEventActionCreator(id, dateStr));
     if (shouldCollapse) {
       dispatch(collapseSidebar());
-    }
-    if (dateStr) {
-      dispatch(selectDate(new Date(dateStr)));
     }
   },
   deselectEvent: () => {

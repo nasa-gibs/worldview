@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/Vectors",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GRanD_Dams",

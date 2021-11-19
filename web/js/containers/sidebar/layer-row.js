@@ -28,7 +28,8 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
-import { getActiveLayers } from '../../modules/layers/selectors';
+import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
+import { coverageDateFormatter } from '../../modules/date/util';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -51,6 +52,7 @@ function LayerRow (props) {
     palette,
     renderedPalette,
     requestPalette,
+    globalTemperatureUnit,
     isCustomPalette,
     isDistractionFreeModeActive,
     isEmbedModeActive,
@@ -72,6 +74,7 @@ function LayerRow (props) {
     tracksForLayer,
     isVectorLayer,
     runningObject,
+    measurementDescriptionPath,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -98,6 +101,7 @@ function LayerRow (props) {
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           colorHex={colorHex}
+          globalTemperatureUnit={globalTemperatureUnit}
           isDistractionFreeModeActive={isDistractionFreeModeActive}
           isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
@@ -106,8 +110,8 @@ function LayerRow (props) {
     }
   };
 
-  // Request the layer palette only if it hasn't been loaded and is not currently being loaded
   useEffect(() => {
+    // Request the layer palette only if it hasn't been loaded and is not currently being loaded
     if (!isLoading && layer && hasPalette && lodashIsEmpty(renderedPalette)) {
       requestPalette(layer.id);
     }
@@ -123,12 +127,12 @@ function LayerRow (props) {
     // start date
     let layerStartDate;
     if (startDate) {
-      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
+      layerStartDate = coverageDateFormatter('START-DATE', startDate, period);
     }
     // end date
     let layerEndDate;
     if (endDate) {
-      layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
+      layerEndDate = coverageDateFormatter('END-DATE', endDate, period);
     }
 
     if (layerStartDate && layerEndDate) {
@@ -148,19 +152,19 @@ function LayerRow (props) {
   const renderControls = () => {
     const { title } = names;
     const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
-    const removeLayerBtnTitle = 'Remove Layer';
+    const removeLayerBtnTitle = 'Remove layer';
 
     const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
-    const layerOptionsBtnTitle = 'View Options';
+    const layerOptionsBtnTitle = 'View options';
 
     const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
-    const layerInfoBtnTitle = 'View Description';
+    const layerInfoBtnTitle = 'View description';
 
     return (
       <>
         <a
           id={removeLayerBtnId}
-          arira-label={removeLayerBtnTitle}
+          aria-label={removeLayerBtnTitle}
           className="button wv-layers-close"
           onClick={() => onRemoveClick(layer.id)}
         >
@@ -186,7 +190,7 @@ function LayerRow (props) {
           aria-label={layerInfoBtnTitle}
           className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
           onMouseDown={stopPropagation}
-          onClick={() => onInfoClick(layer, title)}
+          onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
           <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
             {layerInfoBtnTitle}
@@ -247,16 +251,15 @@ function LayerRow (props) {
       ? `${visibilityButtonClasses} layer-hidden`
       : `${visibilityButtonClasses} layer-enabled layer-visible`;
   const visibilityTitle = !isVisible && !isDisabled
-    ? 'Show Layer'
+    ? 'Show layer'
     : isDisabled
       ? getDisabledTitle(layer)
-      : 'Hide Layer';
+      : 'Hide layer';
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
-
 
   const renderLayerRow = () => (
     <>
@@ -334,47 +337,54 @@ function LayerRow (props) {
   );
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const {
-    layer,
-    isVisible,
-    compareState,
-  } = ownProps;
-  const {
-    palettes, config, embed, map, compare, proj, ui,
-  } = state;
-  const { isDistractionFreeModeActive } = ui;
-  const hasPalette = !lodashIsEmpty(layer.palette);
-  const renderedPalettes = palettes.rendered;
-  const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
-  const paletteLegends = hasPalette && renderedPalettes[paletteName]
-    ? getPaletteLegends(layer.id, compareState, state)
-    : [];
-  const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const { isEmbedModeActive } = embed;
-  const selectedMap = lodashGet(map, 'ui.selected');
-  const isVector = layer.type === 'vector';
-  const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
-  const tracksForLayer = getActiveLayers(state).filter(
-    (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
-  );
+const makeMapStateToProps = () => {
+  const getDescriptionPath = makeGetDescription();
+  return (state, ownProps) => {
+    const {
+      layer,
+      isVisible,
+      compareState,
+    } = ownProps;
+    const {
+      browser, palettes, config, embed, map, compare, proj, ui, globalUnit,
+    } = state;
+    const isMobile = browser.lessThan.medium;
+    const { isDistractionFreeModeActive } = ui;
+    const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
+    const hasPalette = !lodashIsEmpty(layer.palette);
+    const renderedPalettes = palettes.rendered;
+    const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
+    const paletteLegends = hasPalette && renderedPalettes[paletteName]
+      ? getPaletteLegends(layer.id, compareState, state)
+      : [];
+    const isCustomPalette = hasPalette && palettes.custom[layer.id];
+    const { isEmbedModeActive } = embed;
+    const selectedMap = lodashGet(map, 'ui.selected');
+    const isVector = layer.type === 'vector';
+    const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
+    const tracksForLayer = getActiveLayers(state).filter(
+      (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
+    );
+    const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
-  return {
-    compare,
-    tracksForLayer,
-    layer,
-    isVisible,
-    paletteLegends,
-    isCustomPalette,
-    isDistractionFreeModeActive,
-    isEmbedModeActive,
-    isLoading: palettes.isLoading[paletteName],
-    renderedPalette: renderedPalettes[paletteName],
-    isVectorLayer: isVector,
-    hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
-    isMobile: state.browser.lessThan.medium,
-    hasPalette,
-    getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
+    return {
+      compare,
+      tracksForLayer,
+      measurementDescriptionPath,
+      globalTemperatureUnit,
+      isCustomPalette,
+      isDistractionFreeModeActive,
+      isEmbedModeActive,
+      isLoading: palettes.isLoading[paletteName],
+      isMobile,
+      isVisible,
+      isVectorLayer: isVector,
+      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
+      hasPalette,
+      getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
+      paletteLegends,
+      renderedPalette: renderedPalettes[paletteName],
+    };
   };
 };
 
@@ -410,7 +420,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  onInfoClick: (layer, title) => {
+  onInfoClick: (layer, title, measurementDescriptionPath) => {
     const key = `LAYER_INFO_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info',
@@ -428,6 +438,7 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'lg',
         bodyComponentProps: {
           layer,
+          measurementDescriptionPath,
         },
       }),
     );
@@ -438,7 +449,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  makeMapStateToProps,
   mapDispatchToProps,
 )(LayerRow);
 
@@ -450,6 +461,7 @@ LayerRow.propTypes = {
   compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
+  globalTemperatureUnit: PropTypes.string,
   hover: PropTypes.func,
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
@@ -462,6 +474,7 @@ LayerRow.propTypes = {
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
   compareState: PropTypes.string,
+  measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,

@@ -3,12 +3,13 @@
         "Sea Ice Brightness Temperature": {
             "id": "sea-ice-brightness-temperature",
             "title":    "Sea Ice Brightness Temperature",
+            "disableUnitConversion": true,
             "subtitle": "Aqua/AMSR-E, GCOM-W1/AMSR2",
             "sources": {
                 "Aqua/AMSR-E": {
                         "id": "aqua-amsre",
                         "title": "Aqua/AMSR-E",
-                        "description": "amsre/BrightnessTemperature",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "AMSRE_Brightness_Temp_89H_Day",
@@ -24,7 +25,7 @@
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
                     "title": "GCOM-W1/AMSR2",
-                    "description": "amsr2/SeaIceBrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H",

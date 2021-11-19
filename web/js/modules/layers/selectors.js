@@ -18,12 +18,13 @@ const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
+const getConfig = ({ config }) => config;
+const getLayerId = (state, { layer }) => layer && layer.id;
 
 /**
  * Is overlay grouping currently enabled?
  */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
-
 
 /**
  * Return a list of layers for the currently active compare state
@@ -126,6 +127,15 @@ export const getAllActiveOverlaysBaselayers = createSelector(
   (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
 
+export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const { proj } = state;
+  const layers = getActiveLayers(state, activeString);
+  const baseLayers = layers.filter(({ group }) => group === 'baselayers');
+  return layers.filter(
+    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+  );
+};
+
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
   Object.values(current.sources).forEach((source) => {
@@ -135,6 +145,28 @@ export function hasMeasurementSource(current, config, projId) {
   });
   return hasSource;
 }
+
+/**
+ * Look up the measurement description path for a given layer
+ * so that metadata can be shown in the layer info modal.  Ignore
+ * Orbital Track layers since they will be in multiple measurements.
+ */
+export const makeGetDescription = () => createSelector(
+  [getConfig, getLayerId],
+  ({ layers, measurements }, layerId) => {
+    if (!layerId) return;
+    const { layergroup } = layers[layerId];
+    if (layergroup === 'Orbital Track') {
+      return;
+    }
+    const [setting] = Object.keys(measurements)
+      .filter((key) => !key.includes('Featured'))
+      .map((key) => measurements[key])
+      .flatMap(({ sources }) => Object.values(sources))
+      .filter(({ settings }) => settings.find((id) => id === layerId));
+    return (setting || {}).description;
+  },
+);
 
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
@@ -181,6 +213,11 @@ export function hasSubDaily(layers) {
   }
   return false;
 }
+
+export const subdailyLayersActive = createSelector(
+  [getActiveLayers],
+  (layers) => hasSubDaily(layers),
+);
 
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
@@ -307,7 +344,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
     const notRenderable = spec.renderable
-      && !isRenderable(def.id, activeLayers, spec.date, state);
+      && !isRenderable(def.id, activeLayers, spec.date, null, state);
     if (notInProj || notRenderable) {
       return;
     }
@@ -328,7 +365,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
  */
 export function getFutureLayerEndDate(layer) {
   const { futureTime } = layer;
-  const max = new Date();
+  const max = util.now();
   const dateType = futureTime.slice(-1);
   const dateInterval = futureTime.slice(0, -1);
 
@@ -454,7 +491,7 @@ export const memoizedAvailable = createSelector(
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, state) {
+export function isRenderable(id, layers, date, bLayers, state) {
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
@@ -467,7 +504,7 @@ export function isRenderable(id, layers, date, state) {
     return true;
   }
   let obscured = false;
-  const baselayers = getLayers(state, { group: 'baselayers' }, layers);
+  const baselayers = bLayers || getLayers(state, { group: 'baselayers' }, layers);
   lodashEach(
     baselayers,
     (otherDef) => {

@@ -24,6 +24,7 @@ import {
 import { mapUtilZoomAction } from '../util';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { formatDisplayDate } from '../../modules/date/util';
 
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
@@ -52,10 +53,11 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      map, selectedDate, isAnimatingToEvent, eventsData,
+      map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
+    const eventDeselect = (selectedEvent !== prevProps.selectedEvent.id) && !selectedEvent.id;
     const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
     const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevProps.eventsData);
     const prevMap = prevProps.map;
@@ -72,6 +74,10 @@ class EventTrack extends React.Component {
 
     if (selectedDateChange || finishedAnimating || eventsLoaded) {
       this.debouncedTrackUpdate();
+    }
+
+    if (eventDeselect) {
+      this.removeTrack(map);
     }
   }
 
@@ -271,7 +277,6 @@ const naturalEventsTrackPoint = function(
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
   const { properties } = clusterPoint;
-  const content = document.createTextNode(properties.date);
   const { date } = properties;
   const eventID = properties.event_id;
   let { coordinates } = clusterPoint.geometry;
@@ -286,6 +291,8 @@ const naturalEventsTrackPoint = function(
   overlayEl.onclick = function() {
     callback(eventID, date);
   };
+  const displayDate = formatDisplayDate(date);
+  const content = document.createTextNode(displayDate);
   textEl.appendChild(content);
   textEl.className = 'track-marker-date';
   circleEl.className = `track-marker track-marker-${date}`;
@@ -597,8 +604,9 @@ function getClusterPointEl(proj, cluster, map, pointClusterObj) {
   const clusterId = properties.cluster_id;
   const number = properties.point_count_abbreviated;
   const numberEl = document.createTextNode(number);
+  const { startDate, endDate } = properties;
   const dateRangeTextEl = document.createTextNode(
-    `${properties.startDate} to ${properties.endDate}`,
+    `${formatDisplayDate(startDate)} to ${formatDisplayDate(endDate)}`,
   );
   let { coordinates } = cluster.geometry;
   const mapView = map.getView();

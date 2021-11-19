@@ -2,4 +2,4 @@ The CYGNSS/DDMI Level 3 Wind Speed (CDR, Daily) layer is the daily ocean surface
 
 The CYGNSS constellation includes 8 spacecraft observatories, in which one day will nominally contain data from 6 out of 8 CYGNSS observatories. Data latency ranges from 24 hours to 6 days from the last available observation. Daily coverage is constrained to the global tropical oceans and basins within the 40 degree north and south latitude band.
 
-References: Dataset doi:[10.5067/CYGNS-L3C10](https://doi.org/10.5067/CYGNS-L3C10)
+References: CYGNSS_L3_CDR_V1.0 [doi:10.5067/CYGNS-L3C10](https://doi.org/10.5067/CYGNS-L3C10)

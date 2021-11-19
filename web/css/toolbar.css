@@ -68,6 +68,9 @@
 
 .toolbar-list-modal.modal-dialog {
   width: 160px;
+  @media (max-width: 768px) {
+    width: 180px;
+  }
 }
 
 .toolbar-medium-modal {
@@ -100,7 +103,8 @@
 
 /* Snapshot modal */
 .toolbar-snapshot-modal {
-  right: 70px;
+  top: 85px;
+  right: 10px;
 }
 
 .toolbar-snapshot-modal .modal-body {
@@ -144,8 +148,43 @@
   width: 100%;
 }
 
+/* Global Settings Modal */
+.global-settings-modal.modal-dialog {
+  width: 420px;
+}
+.global-settings-modal {
+  .global-setting-container {
+    margin-bottom: 16px;
+  }
+
+  .wv-header {
+    margin-bottom: 12px;
+  }
+  .temperature-unit-buttons {
+    .temperature-unit-button {
+      color: #fff;
+      background: #222;
+      &.active {
+        background: #d54e21;
+        border-color: #d54e21;
+      }
+      &:hover {
+        background: #fff;
+        color: #000;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .global-settings-modal.modal-dialog {
+    width: 96%;
+    margin: 0;
+  }
+}
+
 @media (min-width: 576px) {
-  .toolbar-modal {
+  .toolbar-modal:not(.toolbar-snapshot-modal) {
     top: 33px;
   }
 

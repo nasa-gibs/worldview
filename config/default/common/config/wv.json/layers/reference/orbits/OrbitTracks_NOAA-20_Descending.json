@@ -5,7 +5,7 @@
       "title": "NOAA-20 - Orbit Track & Time",
       "subtitle": "NOAA-20 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_NOAA-20_Descending",
-      "tags": "JPSS-1 tracks night vector",
+      "tags": "jpss jpss-1 tracks night vector",
       "group": "overlays",
       "type": "vector",
       "period": "daily",

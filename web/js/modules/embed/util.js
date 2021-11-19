@@ -37,11 +37,6 @@ export function mapLocationToEmbedState(
       layers: layersClone,
     };
 
-    // revert to 'layers' tab if 'events' tab with no event selected
-    if (parameters.e === 'true') {
-      updatedState.sidebar = { activeTab: 'layers' };
-    }
-
     stateFromLocation = lodashAssign({}, stateFromLocation, updatedState);
   }
 

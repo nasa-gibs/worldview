@@ -5,7 +5,7 @@ export default function SmartHandoffNotAvailableModal() {
     <div className="basic-modal">
       <h1>Why are some layers not available for download?</h1>
       <p>
-        Data will not be available on dates outside of each layer&apo;s respective coverage date range.
+        Data will not be available on dates outside of each layer&#39;s respective coverage date range.
         These layers will be hidden from the layers available to download.
       </p>
       <p>

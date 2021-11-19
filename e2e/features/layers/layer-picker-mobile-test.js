@@ -27,7 +27,6 @@ const {
   aquaTerraMODISTab,
   aquaTerraModisHeader,
   aquaModisTab,
-  maiacHeader,
   filterButton,
   sourceTabs,
   sourceMetadataCollapsed,
@@ -92,9 +91,10 @@ module.exports = {
   'Expanding measurement details': (c) => {
     c.click('.ellipsis');
     c.waitForElementVisible(sourceMetadataExpanded, TIME_LIMIT, (e) => {
-      c.assert.containsText(aquaTerraModisHeader, 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
-      c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
-      c.expect.elements('.source-metadata > p').count.to.equal(10);
+      // c.pause(30000);
+      c.assert.containsText(aquaTerraModisHeader, 'About Aerosol Optical Depth (AOD)');
+      // c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
+      // c.expect.elements('.source-metadata > p').count.to.equal(10);
       c.expect.element('.ellipsis.up').to.be.present;
     });
   },
@@ -105,8 +105,8 @@ module.exports = {
   'Switching source tabs': (c) => {
     c.click(aquaModisTab).pause(250);
     c.expect.element(aodCheckbox).to.be.present;
-    c.expect.element('h3#aerosolopticaldepth').to.be.present;
-    c.assert.containsText('h3#aerosolopticaldepth', 'Aerosol Optical Depth');
+    c.expect.element('h3#aboutaerosolopticaldepthaod').to.be.present;
+    c.assert.containsText('h3#aboutaerosolopticaldepthaod', 'About Aerosol Optical Depth (AOD)');
     c.click(aodCheckbox);
   },
   'Back button returns to categories': (c) => {

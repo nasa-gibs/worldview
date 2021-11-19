@@ -35,7 +35,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/Aerosol",
+                    "description": "modis/terra/Aerosol",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Aerosol",
@@ -50,7 +50,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/combined/Aerosol_Combined",
+                    "description": "modis/Aerosol",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_Value_Added_AOD",
@@ -60,7 +60,7 @@
                 "Terra/MISR": {
                     "id": "terra-misr",
                     "title": "Terra/MISR",
-                    "description": "misr/Aerosol",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MISR_Aerosol_Optical_Depth_Avg_Green_Monthly"
@@ -69,7 +69,7 @@
                 "SeaWiFS Deep Blue": {
                     "id": "seawifs-deepblue",
                     "title": "SeaWiFS Deep Blue",
-                    "description": "seawifs/SWDBAerosol",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "SWDB_Aerosol_Optical_Thickness_550nm_Daily",
@@ -87,13 +87,14 @@
                         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
-                        "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean"
+                        "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
+                        "OrbitTracks_Suomi_NPP_Ascending"
                       ]
                 },
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/AerosolOpticalThickness",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly",

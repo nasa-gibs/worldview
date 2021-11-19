@@ -5,11 +5,11 @@ import {
   forEach as lodashForEach,
   toLower as lodashToLower,
 } from 'lodash';
-import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
 import { getSelectedDate } from '../date/selectors';
+import { formatDisplayDate } from '../date/util';
 
 let initialLayersArray;
 let configRef;
@@ -115,10 +115,11 @@ function filterSearch (layer, val, terms) {
   const conceptIdsArray = layer.conceptIds || [];
   const conceptIds = conceptIdsArray.map(({ value = '' }) => value.toLowerCase());
   const shortNames = conceptIdsArray.map(({ shortName = '' }) => shortName.toLowerCase());
-  const matchItems = [title, subtitle, tags, layerId, conceptIds, shortNames];
+  const matchItems = [title, subtitle, tags, layerId, conceptIds];
 
   lodashForEach(terms, (term) => {
-    isFilteredOut = matchItems.every((item) => !item.includes(term));
+    isFilteredOut = matchItems.every((item) => !item.includes(term))
+      && shortNames.every((name) => name.indexOf(term) < 0);
     if (isFilteredOut) return false;
   });
   return isFilteredOut;
@@ -133,7 +134,7 @@ function filterSearch (layer, val, terms) {
  */
 function updateCoverageFilter (filters, selectedDate) {
   if (!filters || !filters.length) return;
-  const formattedDate = moment.utc(selectedDate).format('YYYY MMM DD');
+  const formattedDate = formatDisplayDate(selectedDate);
   const oldValueMatch = (value) => !value.includes(formattedDate) && !value.includes('Always');
 
   filters.forEach((f) => {
@@ -185,7 +186,6 @@ export default function initSearch(state) {
   });
 
   return {
-    // debug: true,
     alwaysSearchOnInitialLoad: true,
     trackUrlState: false,
     initialState: {

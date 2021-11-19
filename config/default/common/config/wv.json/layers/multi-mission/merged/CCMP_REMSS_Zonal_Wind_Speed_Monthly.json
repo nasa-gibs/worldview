@@ -4,7 +4,7 @@
       "id": "CCMP_REMSS_Zonal_Wind_Speed_Monthly",
       "title": "Wind Speed (Zonal, Monthly)",
       "subtitle": "CCMP",
-      "description": "CCMP_REMSS_Zonal_Wind_Speed_Monthly",
+      "description": "multi-mission/merged/CCMP_REMSS_Zonal_Wind_Speed_Monthly",
       "tags": "podaac PO.DAAC",
       "layergroup": "Wind Speed",
       "product": "CCMP_MEASURES_ATLAS_L4_OW_L3_5A_MONTHLY_WIND_VECTORS_FLK",

@@ -21,6 +21,7 @@ import {
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
+import { parseDate } from '../date/util';
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -861,9 +862,9 @@ export function serializeGroupOverlays (groupOverlays, state, activeString) {
 export function dateOverlap(period, dateRanges) {
   const sortedRanges = dateRanges.sort((previous, current) => {
     // get the start date from previous and current
-    let previousTime = util.parseDate(previous.startDate);
+    let previousTime = parseDate(previous.startDate);
     previousTime = previousTime.getTime();
-    let currentTime = util.parseDate(current.startDate);
+    let currentTime = parseDate(current.startDate);
     currentTime = currentTime.getTime();
 
     // if the previous is earlier than the current
@@ -889,7 +890,7 @@ export function dateOverlap(period, dateRanges) {
       const previous = arr[idx - 1];
 
       // check for any overlap
-      let previousEnd = util.parseDate(previous.endDate);
+      let previousEnd = parseDate(previous.endDate);
       // Add dateInterval
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
@@ -914,7 +915,7 @@ export function dateOverlap(period, dateRanges) {
       }
       previousEnd = previousEnd.getTime();
 
-      let currentStart = util.parseDate(current.startDate);
+      let currentStart = parseDate(current.startDate);
       currentStart = currentStart.getTime();
 
       const overlap = previousEnd >= currentStart;
@@ -1278,11 +1279,11 @@ export const hasVectorLayers = (activeLayers) => {
  *
  * @return {Boolean}
  */
-export const isVectorLayerClickable = (layer, mapRes, projId) => {
+export const isVectorLayerClickable = (layer, mapRes, projId, isMobile) => {
   if (!mapRes) return false;
-  const resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
-
+  let resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
   if (resolutionBreakPoint) {
+    if (isMobile) resolutionBreakPoint /= 2;
     return mapRes < resolutionBreakPoint;
   }
   return true;
@@ -1297,14 +1298,14 @@ export const isVectorLayerClickable = (layer, mapRes, projId) => {
  *
  * @return {Boolean}
  */
-export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId) => {
+export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId, isMobile) => {
   if (!mapRes) return false;
   let isNonClickableVectorLayer = false;
   const len = activeLayers.length;
   for (let i = 0; i < len; i += 1) {
     const def = activeLayers[i];
     if (def.type === 'vector' && def.visible) {
-      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId);
+      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId, isMobile);
       if (isNonClickableVectorLayer) break;
     }
   }
@@ -1515,4 +1516,21 @@ export function getLayersFromGroups (state, groups) {
       .map((id) => activeLayersMap[id])
       .concat(baselayers)
     : [];
+}
+
+export function adjustMeasurementsValidUnitConversion(config) {
+  const { measurements, layers } = config;
+  const applyDisableUnitConversionCheck = (layer) => {
+    const { layergroup } = layer;
+    if (!layergroup || !measurements[layergroup]) {
+      return;
+    }
+
+    const { disableUnitConversion } = measurements[layergroup];
+    if (disableUnitConversion) {
+      layer.disableUnitConversion = true;
+    }
+  };
+
+  return Object.values(layers).forEach(applyDisableUnitConversionCheck);
 }

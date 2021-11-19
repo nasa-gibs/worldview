@@ -11,7 +11,7 @@ import {
  */
 const HoverTooltip = (props) => {
   const {
-    isMobile, labelText, placement, target,
+    delay, fade, innerClassName, isMobile, labelText, placement, target,
   } = props;
 
   return !isMobile && (
@@ -20,6 +20,9 @@ const HoverTooltip = (props) => {
       target={target}
       boundariesElement="window"
       placement={placement}
+      delay={delay}
+      fade={fade}
+      innerClassName={innerClassName}
     >
       {labelText}
     </UncontrolledTooltip>
@@ -28,9 +31,15 @@ const HoverTooltip = (props) => {
 
 HoverTooltip.defaultProps = {
   placement: 'bottom',
+  delay: { show: 50, hide: 0 },
+  fade: true,
+  innerClassName: '',
 };
 
 HoverTooltip.propTypes = {
+  delay: PropTypes.object,
+  fade: PropTypes.bool,
+  innerClassName: PropTypes.string,
   isMobile: PropTypes.bool,
   labelText: PropTypes.string,
   placement: PropTypes.string,

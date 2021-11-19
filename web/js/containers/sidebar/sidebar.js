@@ -30,7 +30,6 @@ import {
 import { getAllActiveLayers } from '../../modules/layers/selectors';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import ErrorBoundary from '../error-boundary';
-import util from '../../util/util';
 import {
   changeTab as changeTabAction,
   toggleSidebarCollapse as toggleSidebarCollapseAction,
@@ -81,16 +80,6 @@ class Sidebar extends React.Component {
     // prevent events tab if embed init layers tab
     if (isEmbedModeActive && activeTab === 'layers') {
       this.setState({ isEventsTabDisabledEmbed: true });
-    }
-
-    // prevent browser zooming in safari
-    if (util.browser.safari) {
-      const onGestureCallback = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      };
-      this.iconElement.addEventListener('gesturestart', onGestureCallback);
-      this.sideBarCase.addEventListener('gesturestart', onGestureCallback);
     }
   }
 
@@ -203,7 +192,6 @@ class Sidebar extends React.Component {
       isEmbedModeActive,
       selectedDate,
     } = this.props;
-    const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
       ? 'Click to Open This Worldview Map in a New Tab'
@@ -217,8 +205,6 @@ class Sidebar extends React.Component {
         id="wv-logo"
         className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
         onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-        ref={(iconElement) => { this.iconElement = iconElement; }}
-        onWheel={wheelCallBack}
       />
     );
   }
@@ -248,14 +234,13 @@ class Sidebar extends React.Component {
       tabTypes,
     } = this.props;
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
-    const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
 
     const maxHeight = isCollapsed
       ? '0'
       : isEmbedModeActive
-        ? '70vh'
+        ? '95vh'
         : `${screenHeight}px`;
     return (
       <ErrorBoundary>
@@ -272,14 +257,10 @@ class Sidebar extends React.Component {
             <div
               id="productsHolder"
               className="products-holder-case"
-              ref={(el) => {
-                this.sideBarCase = el;
-              }}
               style={{
                 maxHeight,
                 display: isDistractionFreeModeActive ? 'none' : 'block',
               }}
-              onWheel={wheelCallBack}
             >
               {!isCollapsed && (
                 <>

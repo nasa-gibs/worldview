@@ -2,13 +2,13 @@
 {
 	"title": "EONET Events",
 	"description": "Natural events from EONET.",
-	"link": "https://eonet.sci.gsfc.nasa.gov/api/v2/events",
+	"link": "https://eonet.gsfc.nasa.gov/api/v2/events",
 	"events": [
 		{
 			"id": "EONET_2793",
 			"title": "Elm Fire, California",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2793",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_2793",
 			"categories": [
 				{
 					"id": "wildfires",
@@ -38,7 +38,7 @@
 			"id": "EONET_2792",
 			"title": "Santiago, Chile Flooding",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2792",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_2792",
 			"categories": [
 				{
 					"id": "floods",
@@ -68,7 +68,7 @@
 			"id": "EONET_2781",
 			"title": "Langila Volcano, Papua New Guinea",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2781",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_2781",
 			"categories": [
 				{
 					"id": "volcanoes",
@@ -98,7 +98,7 @@
 			"id": "EONET_2733",
 			"title": "Iceberg B30",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
 					"id": "seaLakeIce",
@@ -239,7 +239,7 @@
 			"id": "EONET_2733",
 			"title": "Iceberg B30-TEST",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
 					"id": "seaLakeIce",
@@ -385,7 +385,7 @@
 			"id": "EONET_0001",
 			"title": "Example id 1",
       "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_0001",
+			"link": "http://eonet.gsfc.nasa.gov/api/v2/events/EONET_0001",
 			"categories": [
 				{
 					"id": "seaLakeIce",

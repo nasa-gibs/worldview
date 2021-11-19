@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import EventIcon from './event-icon';
+import { formatDisplayDate } from '../../modules/date/util';
 
 function Event (props) {
   const {
@@ -16,12 +17,7 @@ function Event (props) {
     selectEvent,
     sources,
   } = props;
-  const eventDate = util.parseDateUTC(event.geometry[0].date);
-  const weekday = util.giveWeekDay(eventDate);
-  const day = eventDate.getUTCDate();
-  const month = util.giveMonth(eventDate);
-  const year = eventDate.getUTCFullYear();
-  const dateString = `${weekday}, ${month} ${day}, ${year}`;
+  const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
     ? 'item-selected selectorItem item'
     : 'selectorItem item';
@@ -66,7 +62,7 @@ function Event (props) {
           style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
           {event.geometry.map((geometry, index) => {
-            const date = geometry.date.split('T')[0];
+            const date = util.toISOStringDate(geometry.date);
             return (
               <li key={`${event.id}-${date}`} className="dates">
                 <a
@@ -80,7 +76,7 @@ function Event (props) {
                       : 'date item-selected '
                   }
                 >
-                  {date}
+                  {formatDisplayDate(date)}
                 </a>
               </li>
             );

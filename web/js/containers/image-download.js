@@ -8,14 +8,14 @@ import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
+  getAlertMessageIfCrossesDateline,
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
 import util from '../util/util';
 import {
-  hasSubDaily as hasSubDailySelector,
   getLayers,
-  getActiveLayers,
+  subdailyLayersActive,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -117,6 +117,7 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
+          datelineMessage={getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, proj)}
           url={url}
           crs={crs}
           getLayers={getLayers}
@@ -166,8 +167,7 @@ function mapStateToProps(state) {
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
   const markerCoordinates = locationSearch.coordinates;
-  const activeLayers = getActiveLayers(state);
-  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const hasSubdailyLayers = subdailyLayersActive(state);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -216,9 +216,6 @@ export default connect(
   mapDispatchToProps,
 )(ImageDownloadContainer);
 
-ImageDownloadContainer.defualtProps = {
-  fileType: 'image/jpeg',
-};
 ImageDownloadContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,

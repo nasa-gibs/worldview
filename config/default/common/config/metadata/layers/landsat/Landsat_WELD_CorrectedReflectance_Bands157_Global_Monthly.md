@@ -9,6 +9,6 @@ Vegetation will appear greenish in this band combination. Bare soil will appear 
 #### Water
 Liquid water on the ground will be very dark, but small liquid water drops in clouds will appear white. Sediments in water appear dark red.
 
-The sensor resolution is 30 m with an imagery resolution is 31.25 m. The temporal availability is monthly for December 1988 - November 2001.
+The sensor resolution is 30 m with an imagery resolution is 31.25 m.
 
-References: [LP DAAC GWELDMO Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)
+References: GWELDMO [doi:10.5067/MEaSUREs/GWELD/GWELDMO.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)

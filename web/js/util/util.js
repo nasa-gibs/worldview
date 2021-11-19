@@ -2,7 +2,6 @@ import {
   isObject as lodashIsObject,
   each as lodashEach,
 } from 'lodash';
-import moment from 'moment';
 import browser from './browser';
 import events from './events';
 import load from './load';
@@ -34,12 +33,7 @@ export default (function(self) {
     }
     return value;
   };
-  self.preventPinch = function(e) {
-    if (e.deltaY && !Number.isInteger(e.deltaY)) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  };
+
   /**
    * Creates an object representation of a query string.
    *
@@ -173,6 +167,7 @@ export default (function(self) {
     }
     return date;
   };
+
   self.appendAttributesForURL = function(item) {
     if (lodashIsObject(item)) {
       let part = item.id || '';
@@ -191,72 +186,6 @@ export default (function(self) {
     }
     self.warn(`Is not an object: ${item}`);
     return '';
-  };
-  /**
-   * Parses a UTC ISO 8601 date to a non UTC date
-   *
-   * @method parseDate
-   * @static
-   * @param str {string} Date to parse in the form of YYYY-MM-DDTHH:MM:SSZ`.
-   * @return {Date} converted string as a non UTC date object, throws an exception if
-   * the string is invalid
-   */
-  self.parseDate = function(dateAsString) {
-    const dateTimeArr = dateAsString.split(/T/);
-
-    const yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
-
-    // Parse elements of date and time
-    const year = yyyymmdd[0];
-    const month = yyyymmdd[1] - 1;
-    const day = yyyymmdd[2];
-
-    let hour = 0;
-    let minute = 0;
-    let second = 0;
-    let millisecond = 0;
-
-    // Use default of midnight if time is not specified
-    if (dateTimeArr.length > 1) {
-      const hhmmss = dateTimeArr[1].split(/[:.Z]/);
-      hour = hhmmss[0] || 0;
-      minute = hhmmss[1] || 0;
-      second = hhmmss[2] || 0;
-      millisecond = hhmmss[3] || 0;
-    }
-    const date = new Date(year, month, day, hour, minute, second,
-      millisecond);
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(date.getTime())) {
-      throw new Error(`Invalid date: ${dateAsString}`);
-    }
-    return date;
-  };
-
-  self.coverageDateFormatter = function(dateType, date, period) {
-    let dateString;
-    const parsedDate = this.parseDate(date);
-    switch (period) {
-      case 'subdaily':
-        dateString = `${moment(parsedDate).format('DD MMMM YYYY HH:mm')}Z`;
-        break;
-
-      case 'yearly':
-        if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
-        dateString = moment(parsedDate).format('YYYY');
-        break;
-
-      case 'monthly':
-        if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
-        dateString = moment(parsedDate).format('MMMM YYYY');
-        break;
-
-      default:
-        dateString = moment(parsedDate).format('DD MMMM YYYY');
-        break;
-    }
-
-    return dateString;
   };
 
   /**
@@ -285,42 +214,9 @@ export default (function(self) {
    * @return {string} ISO string in the form of ``YYYY-MM-DD``.
    */
   self.toISOStringDate = function(date) {
-    return date.toISOString()
-      .split('T')[0];
-  };
-
-  self.monthStringArray = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
-
-  /**
-   * Converts a date into an ISO string with only the date portion and month abbreviation.
-   *
-   * @method toISOStringDateMonthAbbrev
-   * @static
-   * @param date {Date} the date to convert
-   * @return {string} ISO string in the form of ``YYYY-MMM-DD``.
-   */
-  self.toISOStringDateMonthAbbrev = function(date) {
-    const stringDate = self.toISOStringDate(date).split('-');
-    const year = stringDate[0];
-    const month = stringDate[1];
-    const day = stringDate[2];
-
-    const monthAbbrev = self.monthStringArray[Number(month) - 1];
-
-    return `${year} ${monthAbbrev} ${day}`;
+    const isString = typeof date === 'string' || date instanceof String;
+    const dateString = isString ? date : date.toISOString();
+    return dateString.split('T')[0];
   };
 
   /**
@@ -333,34 +229,6 @@ export default (function(self) {
    */
   self.toISOStringSeconds = function(date) {
     return `${date.toISOString().split('.')[0]}Z`;
-  };
-
-  /**
-   * Converts a time into an ISO string without seconds.
-   *
-   * @method toISOStringMinutes
-   * @static
-   * @param  {Date} date the date to convert
-   * @return {string} ISO string in the form of `YYYY-MM-DDThh:mmZ`.
-   */
-  self.toISOStringMinutes = function(date) {
-    const parts = date.toISOString().split(':');
-    return `${parts[0]}:${parts[1]}Z`;
-  };
-
-  /**
-   * Converts a time into a HH:MM string
-   *
-   * @method toHourMinutes
-   * @static
-   * @param date {Date} the date to convert
-   * @return {string} ISO string in the form of HH:MM`.
-   */
-  self.toHourMinutes = function(date) {
-    const time = date.toISOString()
-      .split('T')[1];
-    const parts = time.split('.')[0].split(':');
-    return `${parts[0]}:${parts[1]}`;
   };
 
   /**
@@ -675,35 +543,28 @@ export default (function(self) {
   };
 
   /**
-   * Gets the current time. Use this instead of the Date methods to allow
-   * debugging alternate "now" times.
+   * Gets the current time minus minutesOffset for geostationary layers.
+   * Use this instead of the Date methods to allow debugging alternate "now" times.
    *
    * @method now
    * @static
    * @return {Date} The current time or an overridden value.
    */
-  const now = function() {
-    return new Date();
+  const minutesOffset = 40 * 60000; // 40 minutes
+  self.now = function() {
+    return new Date(new Date().getTime() - minutesOffset);
   };
-
-  self.now = now;
 
   /**
-   * Gets the current day. Use this instead of the Date methods to allow
-   * debugging alternate "now" dates.
+   * Gets now minus one day, minus minutesOffset minutes for geostationary layers.
    *
-   * @method today
+   * @method yesterday
    * @static
    * @return {Date} The current time with the UTC hours, minutes, and seconds
-   * fields set to zero or an overridden value.
    */
-  self.today = function() {
-    return self.now();
-  };
-
   self.yesterday = function() {
-    const now = new Date();
-    return new Date(now.setDate(now.getDate() - 1));
+    const nowDate = self.now();
+    return new Date(nowDate.setDate(nowDate.getDate() - 1));
   };
 
   /**

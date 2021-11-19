@@ -1,4 +1,4 @@
-import util from '../../util/util';
+import { formatDisplayDate } from '../../modules/date/util';
 
 // return boolean based on is dateChecking is between front and back dates
 export const getIsBetween = (date, frontDate, backDate) => {
@@ -22,11 +22,7 @@ export const getISODateFormatted = (date) => `${new Date(date).toISOString().spl
 
 // display date as '2000 OCT 28' for default or '2000 OCT 28 20:28Z' for subdaily
 export const getDisplayDate = (date, isSubdaily) => {
-  let displayDate = util.toISOStringDateMonthAbbrev(new Date(date));
-  if (isSubdaily) {
-    const subdailyHHSSZ = `${getISODateFormatted(date).split('T')[1].split(':', 2).join(':')}Z`;
-    displayDate += ` ${subdailyHHSSZ}`;
-  }
+  const displayDate = formatDisplayDate(new Date(date), isSubdaily);
   return displayDate;
 };
 

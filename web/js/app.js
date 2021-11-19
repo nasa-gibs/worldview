@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import googleTagManager from 'googleTagManager';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -58,7 +57,7 @@ import '../css/button.css';
 import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
-import '../css/link.css';
+import '../css/share.css';
 import '../css/palettes.css';
 import '../css/image.css';
 import '../css/projection.css';
@@ -137,11 +136,12 @@ class App extends React.Component {
       }
 
       if (Brand.release()) {
-        if (config.features.googleTagManager) {
-          if (window.location.href.includes(Brand.BRAND_URL)) {
-            googleTagManager.getIpAddress();
-          }
-        }
+        // Disabled GTM ipAddress - https://www.ipify.org/ API
+        // if (config.features.googleTagManager) {
+        //   if (window.location.href.includes(Brand.BRAND_URL)) {
+        //     googleTagManager.getIpAddress();
+        //   }
+        // }
         // Console build version notifications
         console.info(
           `${Brand.NAME

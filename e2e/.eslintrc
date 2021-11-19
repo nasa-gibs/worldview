@@ -35,6 +35,7 @@
       "never"
     ],
     "no-storage/no-browser-storage": "off",
+    "no-multiple-empty-lines": "off",
     // Must be disabled for e2e assertions
     "no-unused-expressions": "off",
     /* BEGIN Airbnb overrides
@@ -49,6 +50,7 @@
     "func-names": "off",
     "no-shadow": "off",
     "no-plusplus": "off",
-    "prefer-arrow-callback": "off"
+    "prefer-arrow-callback": "off",
+    "import/extensions": "off",
   }
 }

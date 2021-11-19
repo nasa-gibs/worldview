@@ -8,7 +8,7 @@
                     "Terra/MISR": {
                         "id": "terra-misr",
                         "title": "Terra/MISR",
-                        "description": "misr/TOAAlbedo",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "MISR_TOA_Albedo_Average_Red_Monthly"

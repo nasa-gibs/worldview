@@ -4,32 +4,44 @@ import Scrollbar from '../util/scrollbar';
 export default function AboutPage() {
   return (
 
-    <Scrollbar style={{ height: 'calc(var(--vh, 1vh) * 100 - 200px)' }}>
+    <Scrollbar style={{ height: 'calc(var(--vh, 1vh) * 100 - 100px)' }}>
       <div className="about-page">
-        <div className="right">
-          <div className="caption">
+        <h1>
+          Welcome to @NAME@
+          <span className="version">
+            {' '}
             Version @BUILD_VERSION@
             (
             <a href="https://github.com/nasa-gibs/worldview/releases" target="_blank" rel="noopener noreferrer">Release Notes</a>
             )
+          </span>
+        </h1>
+
+        <div className="right">
+          <div className="caption">
+            <a href="https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS" target="_blank" rel="noopener noreferrer">
+              {' '}
+              What&apos;s new in @NAME@!
+              {' '}
+            </a>
           </div>
         </div>
 
-        <h1>
-          Welcome to @NAME@
-        </h1>
-
         <p>
-          This app from NASA&apos;s
+          This
+          {' '}
+          <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source code</a>
+          {' '}
+          app from NASA&apos;s
           {' '}
           <a href="https://earthdata.nasa.gov/eosdis" target="_blank" rel="noopener noreferrer">EOSDIS</a>
           {' '}
-          provides the capability to interactively browse over 900 global, full-resolution satellite imagery
+          provides the capability to interactively browse over 1000 global, full-resolution satellite imagery
           layers and then download the underlying data. Many of the imagery layers are updated daily and are available within three hours
           of observation - essentially showing the entire Earth as it looks &quot;right now&quot;. This supports time-critical application
           areas such as wildfire management, air quality measurements, and flood monitoring. Arctic and Antarctic views
           of many products are also available for a &quot;full globe&quot; perspective. Geostationary imagery layers are also now available.
-          These are provided in ten minute increments for the last 30 days. These full disk hemispheric views allow for almost real-time viewing of
+          These are provided in ten minute increments for the last 90 days. These full disk hemispheric views allow for almost real-time viewing of
           changes occurring around most of the world. Browsing on tablet and smartphone devices is generally supported for mobile access to the imagery.
         </p>
 
@@ -91,6 +103,16 @@ export default function AboutPage() {
                   {' '}
                   +
                   {' '}
+                  <code>T</code>
+                </td>
+                <td>Jump to today/now on the timeline</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>Shift</code>
+                  {' '}
+                  +
+                  {' '}
                   <code>D</code>
                 </td>
                 <td>Toggle distraction free mode</td>
@@ -134,7 +156,7 @@ export default function AboutPage() {
         <hr />
         <h2>Acknowledgements</h2>
         <p>
-          With over 900 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
+          With over 1000 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
         </p>
         <p>
           While Worldview provides the highest priority products/parameters as decided by the data providers and users, not all NASA standard products (or all parameters within each product) are available via Worldview, see
@@ -152,29 +174,56 @@ export default function AboutPage() {
 
         <ul>
           <li>
+            AMSR2 and ISS LIS layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips" target="_blank" rel="noopener noreferrer">AMSR SIPS</a>
+            {' '}
           </li>
           <li>
+            VIIRS-Atmosphere layers from
+            {' '}
+            <a href="https://earthdata.nasa.gov/atmosphere-sips" target="_blank" rel="noopener noreferrer">Atmosphere SIPS</a>
+            {' '}
+          </li>
+          <li>
+            MISR layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank" rel="noopener noreferrer">ASDC</a>
+            {' '}
           </li>
           <li>
+            AIRS and MLS layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ges-disc" target="_blank" rel="noopener noreferrer">GES DISC</a>
+            {' '}
           </li>
           <li>
+            MODIS and VIIRS-Land layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-modaps" target="_blank" rel="noopener noreferrer">MODAPS</a>
+            {' '}
           </li>
           <li>
+            MOPITT layer from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/sips/sips-mopitt" target="_blank" rel="noopener noreferrer">MOPITT SIPS</a>
+            {' '}
           </li>
           <li>
+            OMI and OMPS layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips" target="_blank" rel="noopener noreferrer">OMI SIPS</a>
             {' '}
             and
             {' '}
             <a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ozone-sips" target="_blank" rel="noopener noreferrer">Ozone SIPS</a>
+            {' '}
           </li>
           <li>
+            MODIS and VIIRS Fires and Thermal Anomalies layers from
+            {' '}
             <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank" rel="noopener noreferrer">FIRMS</a>
+            {' '}
           </li>
         </ul>
 
@@ -253,7 +302,14 @@ export default function AboutPage() {
 
         <ul>
           <li>
-            Geostationary imagery layers are provided by the
+            GeoColor imagery layers from GOES-East and GOES-West are provided by
+            {' '}
+            <a href="https://www.star.nesdis.noaa.gov/goes/" target="_blank" rel="noopener noreferrer">NOAA/NESDIS/STAR</a>
+            {' '}
+            .
+          </li>
+          <li>
+            Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, and Air Mass) are provided by the
             {' '}
             <a href="https://weather.msfc.nasa.gov/sport/" target="_blank" rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a>
             {' '}
@@ -308,7 +364,7 @@ export default function AboutPage() {
           <li>
             Natural events database is provided by the
             {' '}
-            <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>
+            <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>
             .
           </li>
           <li>

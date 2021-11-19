@@ -1,18 +1,18 @@
 import update from 'immutability-helper';
 import { initialCompareState } from './reducers';
-import util from '../../util/util';
+import { formatDisplayDate } from '../date/util';
 
 export function mapLocationToCompareState(parameters, stateFromLocation) {
   if (parameters.ca !== undefined) {
     stateFromLocation = update(stateFromLocation, {
-      compare: { active: { $set: true } },
+      compare: {
+        active: { $set: true },
+        bStatesInitiated: { $set: true },
+      },
     });
     if (parameters.ca === 'false') {
       stateFromLocation = update(stateFromLocation, {
         compare: { activeString: { $set: 'activeB' } },
-      });
-      stateFromLocation = update(stateFromLocation, {
-        compare: { bStatesInitiated: { $set: true } },
       });
     }
   } else {
@@ -45,7 +45,7 @@ export function isFromActiveCompareRegion(coords, layerAttributes, compareModel,
 }
 
 export const getFormattedMonthAbbrevDates = function(selected, selectedB) {
-  const dateA = util.toISOStringDateMonthAbbrev(selected);
-  const dateB = util.toISOStringDateMonthAbbrev(selectedB);
+  const dateA = formatDisplayDate(selected);
+  const dateB = formatDisplayDate(selectedB);
   return { dateA, dateB };
 };

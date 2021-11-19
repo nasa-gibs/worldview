@@ -5,29 +5,15 @@ import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
 import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
-import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
+import {
+  drawSidebarPaletteOnCanvas,
+  drawTicksOnCanvas,
+} from '../../modules/palettes/util';
+import {
+  checkTemperatureUnitConversion,
+  convertPaletteValue,
+} from '../../modules/global-unit/util';
 import util from '../../util/util';
-
-/**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
-   */
-const getLegendObject = (legend, hex, acceptableDifference) => {
-  const units = legend.units || '';
-  for (let i = 0, len = legend.colors.length; i < len; i += 1) {
-    if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
-      // If the two colors are close
-      return {
-        label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
-        len,
-        index: i,
-      };
-    }
-  }
-  return null;
-};
 
 /**
    * @param {Number} xOffset | X px Location of running-data
@@ -35,15 +21,18 @@ const getLegendObject = (legend, hex, acceptableDifference) => {
    * @param {Number} width | Case width
    */
 const getRunningLabelStyle = (xOffset, textWidth, width) => {
-  if (!xOffset || !textWidth || !width) return { left: '0' };
+  if (!xOffset || !textWidth || !width) return { transform: 'translateX(0)' };
   const halfTextWidth = textWidth / 2 || 0;
   if (halfTextWidth > xOffset) {
-    return { left: '0' };
+    return { transform: 'translateX(0)' };
   } if (xOffset + halfTextWidth > width) {
     return { right: '0' };
   }
-  return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
+  return { transform: `translateX(${Math.floor(xOffset - halfTextWidth)}px)` };
 };
+
+
+// `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
 
 class PaletteLegend extends React.Component {
   constructor(props) {
@@ -52,7 +41,6 @@ class PaletteLegend extends React.Component {
       isRunningData: props.isRunningData,
       colorHex: props.colorHex,
       width: props.width,
-
       scrollContainerEl: null,
     };
   }
@@ -182,6 +170,37 @@ class PaletteLegend extends React.Component {
   }
 
   /**
+   * Find wanted legend object from Hex
+   * @param {Object} legend
+   * @param {String} hex
+   * @param {Number} acceptableDifference
+   */
+  getLegendObject(legend, hex, acceptableDifference) {
+    const { globalTemperatureUnit } = this.props;
+    const units = legend.units || '';
+
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    for (let i = 0, len = legend.colors.length; i < len; i += 1) {
+      if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
+        const tooltipRange = legend.tooltips[i];
+        // If the two colors are close
+        let label;
+        if (needsConversion) {
+          label = convertPaletteValue(tooltipRange, legendTempUnit, globalTemperatureUnit);
+        } else {
+          label = units ? `${tooltipRange} ${units}` : tooltipRange;
+        }
+        return {
+          label,
+          len,
+          index: i,
+        };
+      }
+    }
+    return null;
+  }
+
+  /**
    * Render scale-type paletteLegends
    * @param {Object} legend
    * @param {Number} index
@@ -189,9 +208,11 @@ class PaletteLegend extends React.Component {
    */
   renderScale(legend, index, isMoreThanOneColorBar) {
     const {
-      layer, width, getPalette, isEmbedModeActive, isMobile,
+      layer, width, getPalette, isEmbedModeActive, isMobile, globalTemperatureUnit,
     } = this.props;
-    const { isRunningData, colorHex, isHoveringLegend } = this.state;
+    const {
+      isRunningData, colorHex, isHoveringLegend,
+    } = this.state;
     const palette = getPalette(layer.id, index);
     let percent;
     let textWidth;
@@ -200,7 +221,7 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = getLegendObject(legend, colorHex, 3); // {label,len,index}
+      legendObj = this.getLegendObject(legend, colorHex, 3); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
@@ -212,13 +233,21 @@ class PaletteLegend extends React.Component {
         }
       }
     }
+
+    const units = legend.units || '';
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let min = legend.minLabel || legend.tooltips[0];
     let max = legend.maxLabel || legend.tooltips[toolTipLength];
     min = palette.min ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
     max = palette.max ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
 
-    min = legend.units ? `${min} ${legend.units}` : min;
-    max = legend.units ? `${max} ${legend.units}` : max;
+    if (needsConversion) {
+      min = `${convertPaletteValue(min, legendTempUnit, globalTemperatureUnit)}`;
+      max = `${convertPaletteValue(max, legendTempUnit, globalTemperatureUnit)}`;
+    } else {
+      min = units ? `${min} ${units}` : min;
+      max = units ? `${max} ${units}` : max;
+    }
     return (
       <div
         className={
@@ -250,7 +279,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              left: isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0,
+              transform: `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden',
             }}
           />
@@ -295,7 +324,7 @@ class PaletteLegend extends React.Component {
     const {
       layer, parentLayer, compareState, getPalette,
     } = this.props;
-    const activeKeyObj = isRunningData && colorHex && getLegendObject(legend, colorHex, 5);
+    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
@@ -390,7 +419,7 @@ class PaletteLegend extends React.Component {
       <div
         className={
           isHoveringLegend
-            ? `active-lengend wv-palettes-panel${customClass}`
+            ? `active-legend wv-palettes-panel${customClass}`
             : `wv-palettes-panel${customClass}`
         }
         datalayer={layer.id}
@@ -410,6 +439,7 @@ PaletteLegend.propTypes = {
   colorHex: PropTypes.string,
   getPalette: PropTypes.func,
   height: PropTypes.number,
+  globalTemperatureUnit: PropTypes.string,
   isCustomPalette: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,

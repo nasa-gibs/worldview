@@ -8,7 +8,6 @@ export default function EventIcon ({
   const slug = category.toLowerCase().split(' ').join('-');
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const toggle = ({ buttons }) => {
-    console.log(buttons);
     const open = buttons ? false : !tooltipOpen;
     setTooltipOpen(open);
   };

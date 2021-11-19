@@ -18,6 +18,9 @@ import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
 
+import { fly } from '../util';
+
+const { events } = util;
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -31,7 +34,6 @@ class NaturalEvents extends React.Component {
     this.state = {
       prevSelectedEvent: {},
     };
-
     this.selectEvent = this.selectEvent.bind(this);
   }
 
@@ -87,7 +89,7 @@ class NaturalEvents extends React.Component {
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      mapUi, selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
+      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -112,7 +114,7 @@ class NaturalEvents extends React.Component {
        * for today, this may not help.
        */
       if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
-        const today = dateFormat(new Date());
+        const today = dateFormat(util.now());
         const yesterday = dateFormat(util.yesterday());
         if (date !== today || date !== yesterday) {
           selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1));
@@ -125,9 +127,7 @@ class NaturalEvents extends React.Component {
       }
       // hack to update layers
       if (isIdChange) {
-        mapUi.reloadLayers();
-      } else {
-        mapUi.updateDate();
+        events.trigger('map:reload-layers');
       }
 
       selectEventFinished();
@@ -135,7 +135,7 @@ class NaturalEvents extends React.Component {
   }
 
   zoomToEvent = function(event, date, isSameEventID) {
-    const { proj, map, mapUi } = this.props;
+    const { proj, map } = this.props;
     const { crs } = proj.selected;
     const category = event.categories[0].title;
     const zoom = isSameEventID ? map.getView().getZoom() : zoomLevelReference[category];
@@ -151,7 +151,7 @@ class NaturalEvents extends React.Component {
     } else {
       coordinates = olProj.transform(geometry.coordinates, 'EPSG:4326', crs);
     }
-    return mapUi.animate.fly(coordinates, zoom, null);
+    return fly(map, proj, coordinates, zoom, null);
   };
 
   render() {
@@ -166,17 +166,17 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    events, map, proj, requestedEvents,
+    map, proj, requestedEvents,
   } = state;
+  const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
   return {
-    eventsActive: events.active,
+    eventsActive: active,
     map: selectedMap,
-    mapUi: map.ui,
     proj,
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: getFilteredEvents(state),
-    selectedEvent: events.selected,
+    selectedEvent: selected,
   };
 };
 
@@ -200,7 +200,6 @@ NaturalEvents.propTypes = {
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
   map: PropTypes.object,
-  mapUi: PropTypes.object,
   proj: PropTypes.object,
 };
 

@@ -34,14 +34,22 @@ export const getLayersForProjection = createSelector(
   },
 );
 
-export const getMeasurementSource = createSelector(
-  [getConfig, getProductPicker],
-  (config, { selectedMeasurement, selectedMeasurementSourceIndex }) => {
+export const getSourcesForProjection = createSelector(
+  [getConfig, getProjection, getProductPicker],
+  (config, projection, { selectedMeasurement }) => {
     const measurements = Object.values(config.measurements);
     const currentMeasurement = measurements.find(({ id }) => id === selectedMeasurement);
     const sources = currentMeasurement && Object.values(currentMeasurement.sources);
-    const sortedSources = sources && sources.sort((a, b) => a.title.localeCompare(b.title));
-    return sortedSources && sortedSources[selectedMeasurementSourceIndex];
+    const trackGroup = currentMeasurement && currentMeasurement.id === 'orbital-track';
+    const sourcesForProj = sources && sources.filter(
+      (source) => source.settings.some((layerId) => {
+        const { projections, layergroup } = config.layers[layerId];
+        const isOrbitTrack = layergroup === 'Orbital Track';
+        const inProj = !!projections[projection];
+        return trackGroup ? inProj : !isOrbitTrack && inProj;
+      }),
+    );
+    return sourcesForProj && sourcesForProj.sort((a, b) => a.title.localeCompare(b.title));
   },
 );
 

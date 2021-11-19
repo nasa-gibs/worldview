@@ -34,7 +34,7 @@ for root, dirs, files in os.walk(input_dir):
             if not file.endswith(".json"):
               continue
             file_count += 1
-            with open(os.path.join(root, file)) as fp:
+            with open(os.path.join(root, file), "r", encoding="utf-8") as fp:
                 data = json.load(fp)
             dict_merge(conf, data)
         except Exception as e:
@@ -46,7 +46,7 @@ json_options = {}
 json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
-with open(output_file, "w") as fp:
+with open(output_file, "w", encoding="utf-8") as fp:
     json.dump(conf, fp, **json_options)
 
 print("%s: %s file(s) merged into %s" % (prog, file_count,

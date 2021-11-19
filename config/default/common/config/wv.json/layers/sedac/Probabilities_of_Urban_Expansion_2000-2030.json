@@ -7,7 +7,7 @@
       "description": "sedac/Probabilities_of_Urban_Expansion_2000-2030",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": "Urban Expansion",
+      "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_LULC_PUEXPANS_2030",
       "inactive": true,
       "wrapX": true

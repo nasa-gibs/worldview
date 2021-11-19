@@ -15,16 +15,13 @@ import toggleDistractionFreeMode from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
-import ShareLinks from './share';
+import Share from './share';
 import HoverTooltip from '../components/util/hover-tooltip';
 import ErrorBoundary from './error-boundary';
 import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import {
-  REQUEST_NOTIFICATIONS,
-} from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
@@ -58,7 +55,7 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
     wrapClassName: 'toolbar_modal_outer',
-    bodyComponent: ShareLinks,
+    bodyComponent: Share,
   },
   TOOLBAR_INFO: {
     headerText: null,
@@ -118,13 +115,14 @@ class toolbarContainer extends Component {
       toggleDialogVisible,
       hasNonDownloadableLayer,
       visibleLayersForProj,
+      proj,
     } = this.props;
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-    await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+    await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
       'TOOLBAR_SNAPSHOT',
@@ -367,7 +365,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events,
+    animation, sidebar, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events, proj,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -379,12 +377,15 @@ const mapStateToProps = (state) => {
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
   const { isAnimatingToEvent } = events;
+  const { activeTab } = sidebar;
+  const isDataDownloadTabActive = activeTab === 'download';
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
+    proj,
     faSize,
     notificationType: type,
     notificationContentNumber: number,
@@ -393,7 +394,7 @@ const mapStateToProps = (state) => {
     activePalettes,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
-      && !isCompareActive,
+      && !isCompareActive && !isDataDownloadTabActive,
     ),
     isAnimatingToEvent,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
@@ -471,7 +472,7 @@ const mapDispatchToProps = (dispatch) => ({
   }),
   requestNotifications: (location) => {
     const promise = dispatch(
-      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json'),
+      requestNotifications(location),
     );
     promise.then((data) => {
       const obj = JSON.parse(data);
@@ -492,6 +493,7 @@ toolbarContainer.propTypes = {
   hasNonDownloadableLayer: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
   config: PropTypes.object,
+  proj: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,

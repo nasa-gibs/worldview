@@ -8,8 +8,8 @@ import {
   dayValidation,
   hourValidation,
   minuteValidation,
-  monthStringArray,
 } from './util';
+import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 
 /*
  * DateInputColumn used in DateSelector within
@@ -191,7 +191,7 @@ class DateInputColumn extends Component {
         // transform month number to string (e.g., 3 -> 'MAR')
         // eslint-disable-next-line no-restricted-globals
         if (newDate !== null && !isNaN(value)) {
-          value = monthStringArray[value - 1];
+          value = MONTH_STRING_ARRAY[value - 1];
         }
         break;
       case 'day':
@@ -254,7 +254,7 @@ class DateInputColumn extends Component {
 
     // eslint-disable-next-line no-restricted-globals
     if (type === 'month' && !isNaN(newValue)) {
-      newValue = monthStringArray[newValue - 1];
+      newValue = MONTH_STRING_ARRAY[newValue - 1];
     } else if (newValue.length === 1) {
       newValue = `0${newValue}`;
     }

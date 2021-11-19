@@ -5,9 +5,9 @@ The ultra-sensitivity of the VIIRS Day/Night Band enables scientists to capture 
 
 The Black Marble Nighttime At Sensor Radiance (Day/Night Band) layer is available in near real-time from the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 750 m at nadir, imagery resolution is 500 m, and the temporal resolution is daily.
 
-[Dataset doi:10.5067/VIIRS/VNP46A1.001](https://doi.org/10.5067/VIIRS/VNP46A1.001)
 
-References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights); [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
+
+References: VNP46A1 [doi:10.5067/VIIRS/VNP46A1.001](https://doi.org/10.5067/VIIRS/VNP46A1.001); [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights); [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
 
 Román, M. O., Z. Wang, Q. Sun, V. Kalb, S. D. Miller, A. Molthan, L. Schultz, J. Bell, E. C. Stokes, B. Pandey, K. C. Seto, D. Hall, T. Oda, R. E. Wolfe, G. Lin, N. Golpayegani, S. Devadiga, C. Davidson, S. Sarkar, C. Praderas, J. Schmaltz, R. Boller, J. Stevens, O. M. Ramos Gonzalez, E. Padilla, J. Alonso, Y. Detrés, R. Armstrong, I. Miranda, Y. Conte, N. Marrero, K. MacManus, T. Esch, and E. J. Masuoka. 2018. "NASA’s Black Marble nighttime lights product suite." Remote Sensing of Environment 210 113-143 [doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017)
 

@@ -1,10 +1,8 @@
 /* global DEBUG */
-// IE11 corejs polyfills container
-import 'core-js/stable';
+// polyfills
 import 'elm-pep';
 import 'regenerator-runtime/runtime';
-// IE11 corejs polyfills container
-import 'whatwg-fetch';
+// polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -37,6 +35,7 @@ import {
   adjustEndDates,
   adjustActiveDateRanges,
   adjustStartDates,
+  adjustMeasurementsValidUnitConversion,
   mockFutureTimeLayerOptions,
 } from './modules/layers/util';
 import { debugConfig } from './debug';
@@ -141,8 +140,8 @@ window.onload = () => {
       config.initialIsMobile = crs.innerWidth <= 768;
 
       config.pageLoadTime = parameters.now
-        ? util.parseDateUTC(parameters.now) || new Date()
-        : new Date();
+        ? util.parseDateUTC(parameters.now) || util.now()
+        : util.now();
 
       const pageLoadTime = new Date(config.pageLoadTime);
 
@@ -187,6 +186,9 @@ window.onload = () => {
         mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
       }
       adjustEndDates(config.layers);
+
+      // handle checking measurements to prevent unit conversion
+      adjustMeasurementsValidUnitConversion(config);
       // Remove any mock stories
       if (!parameters.mockTour) {
         Object.keys(config.stories).forEach((storyId) => {

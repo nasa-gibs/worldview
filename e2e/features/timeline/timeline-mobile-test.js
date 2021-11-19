@@ -28,7 +28,7 @@ module.exports = {
       c.assert.containsText(mobileDatePickerSelectBtn, '2013 MAR 15');
     });
   },
-  'date.mob.init.3b:After 3:00 UTC: right button is  disabled': (c) => {
+  'date.mob.init.3b:After 3:00 UTC: right button is disabled': (c) => {
     c.expect.element(nextDayArrowContainer).to.be.present;
     c.expect.element(`${nextDayArrowContainer}.button-disabled`).to.be.present;
   },
@@ -56,16 +56,16 @@ module.exports = {
     c.assert.containsText(datepickerHeader, '2012 MAR 15');
   },
   'date.mob.range.4: Date in header should be 2012 JAN 15 after month drag': (c) => {
-    c.moveToElement('xpath', "//li[text()='Mar']", 10, 10)
+    c.moveToElement('xpath', "//li[text()='MAR']", 10, 10)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Apr']", 10, 10)
+      .moveToElement('xpath', "//li[text()='APR']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='Feb']", 10, 10)
+      .moveToElement('xpath', "//li[text()='FEB']", 10, 10)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Mar']", 10, 10)
+      .moveToElement('xpath', "//li[text()='MAR']", 10, 10)
       .pause(300)
       .mouseButtonUp(0);
     c.pause(300);
@@ -128,34 +128,34 @@ module.exports = {
     });
   },
   'date.mob.nav.3: Date in header should be 2013 FEB 20 after year drag': (c) => {
-    c.moveToElement('xpath', "//li[text()='Jul']", 15, 15)
+    c.moveToElement('xpath', "//li[text()='JUL']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Aug']", 10, 10)
+      .moveToElement('xpath', "//li[text()='AUG']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='Jun']", 15, 15)
+      .moveToElement('xpath', "//li[text()='JUN']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Jul']", 10, 10)
+      .moveToElement('xpath', "//li[text()='JUL']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='May']", 15, 15)
+      .moveToElement('xpath', "//li[text()='MAY']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Jun']", 10, 10)
+      .moveToElement('xpath', "//li[text()='JUN']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='Apr']", 15, 15)
+      .moveToElement('xpath', "//li[text()='APR']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='May']", 10, 10)
+      .moveToElement('xpath', "//li[text()='MAY']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='Mar']", 15, 15)
+      .moveToElement('xpath', "//li[text()='MAR']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Apr']", 10, 10)
+      .moveToElement('xpath', "//li[text()='APR']", 10, 10)
       .pause(300)
       .mouseButtonUp(0);
     c.pause(300);
@@ -174,16 +174,16 @@ module.exports = {
     c.assert.containsText(datepickerHeader, '2014 FEB 20');
   },
   'date.mob.nav.5: Date in header should be 2013 DEC 20 after year drag': (c) => {
-    c.moveToElement('xpath', "//li[text()='Feb']", 15, 15)
+    c.moveToElement('xpath', "//li[text()='FEB']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Mar']", 10, 10)
+      .moveToElement('xpath', "//li[text()='MAR']", 10, 10)
       .pause(300)
       .mouseButtonUp(0)
-      .moveToElement('xpath', "//li[text()='Jan']", 15, 15)
+      .moveToElement('xpath', "//li[text()='JAN']", 15, 15)
       .pause(300)
       .mouseButtonDown(0)
-      .moveToElement('xpath', "//li[text()='Feb']", 10, 10)
+      .moveToElement('xpath', "//li[text()='FEB']", 10, 10)
       .pause(300)
       .mouseButtonUp(0);
     c.pause(300);

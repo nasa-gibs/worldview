@@ -282,6 +282,7 @@ class ShareLinkContainer extends Component {
   }
 
   renderSocialTab = () => {
+    const { isMobile } = this.props;
     const {
       activeTab,
     } = this.state;
@@ -290,7 +291,10 @@ class ShareLinkContainer extends Component {
       <TabPane tabId="social" className="share-tab-social">
         {activeTab === 'social' && (
           <>
-            <ShareLinks onClick={this.onLinkClick} />
+            <ShareLinks
+              isMobile={isMobile}
+              onClick={this.onLinkClick}
+            />
             <p>
               Share Worldview on social media.
             </p>

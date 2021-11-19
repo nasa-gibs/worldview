@@ -8,7 +8,7 @@
                 "Aura/OMI": {
                     "id": "aura-omi",
                     "title": "Aura/OMI",
-                    "description": "omi/UVRadiation",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "OMI_UV_Erythemal_Daily_Dose",
@@ -19,7 +19,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/IncidentShortwaveRadiation",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "MERRA2_Incident_Shortwave_Over_Land_Monthly"

@@ -2,10 +2,4 @@ The DMSP-F16 SSMIS Water Vapor Over Oceans layer indicates the amount of water v
 
 The F16 spacecraft is flown by the DMSP and had an orbit that was near-circular, sun-synchronous, and near-polar with an altitude of about 850 kilometers. The SSMIS sensor collects data forward of nadir at 21 frequencies and 24 channel microwave radiometers ranging from 54 to 183 gigahertz bands, as well as collected microwave energy measurements from the surface and the atmosphere of the Earth with a rotating 24-inch parabolic reflector.
 
-References:
-[RSS SSMIS Ocean Product Grids Daily from DMSP F16 NetCDF](https://doi.org/10.5067/MEASURES/DMSP-F16/SSMIS/DATA301);
-[WMO Observing System Capability Analysis and Review Tool (OSCAR) - Satellite: DMSP-F16](https://www.wmo-sat.info/oscar/satellites/view/63);
-[WMO Observing System Capability Analysis and Review Tool (OSCAR) - Instrument: SSMIS](https://www.wmo-sat.info/oscar/instruments/view/536);
-[NSIDC: Special Sensor Microwave Imager/Sounder (SSMIS)](https://nsidc.org/data/docs/daac/ssmis_instrument/);
-[Algorithm and Data User Manual (ADUM) for the Special Sensor Microwave Imager/Sounder (SSMIS) Technical Report, 2002](http://rain.atmos.colostate.edu/FCDR/ssmis.html);
-[SSM/I and SSMIS Data in NetCDF User's Guide, Global Hydrology Research Center, The University of Alabama in Huntsville, 2012.](https://ghrc.nsstc.nasa.gov/pub/doc/ssmi_netcdf/SSMI_Data_in_NetCDF.docx)
+References: rssmif16d [doi:10.5067/MEASURES/DMSP-F16/SSMIS/DATA301](https://doi.org/10.5067/MEASURES/DMSP-F16/SSMIS/DATA301)

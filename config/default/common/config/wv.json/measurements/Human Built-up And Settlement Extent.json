@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/Human_Built-up_And_Settlement_Extent",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Landsat_Human_Built-up_And_Settlement_Extent"

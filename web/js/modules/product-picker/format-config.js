@@ -1,10 +1,11 @@
 import {
   forEach as lodashForEach,
   map as lodashMap,
+  get as lodashGet,
 } from 'lodash';
-import moment from 'moment';
 import { available } from '../layers/selectors';
 import util from '../../util/util';
+import { formatDisplayDate } from '../date/util';
 
 const periodIntervalMap = {
   daily: 'Day',
@@ -51,7 +52,10 @@ function setCategoryFacetProps (layers, measurements, categories) {
         return;
       }
       (subCategoryObj.measurements || []).forEach((measureKey) => {
-        const { sources } = measurements[measureKey];
+        const sources = lodashGet(measurements, `[${measureKey}].sources`);
+        if (!sources) {
+          throw new Error(`No measurement config entry for "${measureKey}".`);
+        }
         lodashForEach(sources, ({ settings = [] }) => {
           settings.forEach((id) => {
             setLayerProp(layers[id], 'categories', subCategoryKey);
@@ -110,7 +114,7 @@ function setCoverageFacetProp(layer, selectedDate) {
   if (!startDate && !endDate && !dateRanges) {
     layer.coverage = ['Always Available'];
   } else if (available(id, selectedDate, [layer], {})) {
-    layer.coverage = [`Available ${moment.utc(selectedDate).format('YYYY MMM DD')}`];
+    layer.coverage = [`Available ${formatDisplayDate(selectedDate)}`];
   }
 }
 

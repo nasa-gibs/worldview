@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/Settlements",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GRUMP_Settlements"

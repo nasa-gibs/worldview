@@ -2,6 +2,6 @@ The Surface Reflectance (NBAR, True Color, Global, Monthly, Version 3.1) layer i
 
 These images are called true color or natural color because the combination of wavelengths is similar to what the human eye would see. These are natural looking images of land surface, oceanic and atmospheric features.
 
-The sensor resolution is 30 m with an imagery resolution is 31.25 m. The temporal availability is monthly for December 1988 - November 2001.
+The sensor resolution is 30 m with an imagery resolution is 31.25 m.
 
-References: [LP DAAC GWELDMO Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)
+References: GWELDMO [doi:10.5067/MEaSUREs/GWELD/GWELDMO.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)

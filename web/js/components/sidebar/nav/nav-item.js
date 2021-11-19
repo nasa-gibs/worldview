@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavItem, NavLink } from 'reactstrap';
+import HoverTooltip from '../../util/hover-tooltip';
 
 const CustomNavItem = (props) => {
   const {
@@ -26,13 +27,18 @@ const CustomNavItem = (props) => {
       <NavLink
         disabled={isDisabled}
         aria-label={label}
-        title={label}
         className={className}
         id={tabId}
         onClick={() => onTabClick(id)}
       >
         <i className={`productsIcon selected ${iconClassName}`} />
         {text}
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText={label}
+          target={tabId}
+          placement="top"
+        />
       </NavLink>
     </NavItem>
   );

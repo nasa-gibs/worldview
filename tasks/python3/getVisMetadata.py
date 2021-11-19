@@ -33,7 +33,7 @@ def get_metadata(layer_id, base_url):
       layer_metadata[layer_id].pop(key, None)
 
 def main(url):
-  with open(input_file, 'rt') as layer_order:
+  with open(input_file, 'rt', encoding="utf-8") as layer_order:
     layer_ids = json.load(layer_order).get('layerOrder')
     print('%s: Pulling vis metadata for %s layers... ' % (prog, len(layer_ids)))
 
@@ -48,13 +48,13 @@ def main(url):
     except Exception as e:
       print("%s:" % (e))
 
-  with open(output_file, "w") as fp:
+  with open(output_file, "w", encoding="utf-8") as fp:
     # Format of this object will determine how this data is combined into wv.json
     json.dump({ 'layers': layer_metadata}, fp, indent=2, sort_keys=True)
 
 #MAIN
 if __name__ == "__main__":
-  with open(features_file, 'rt') as features:
+  with open(features_file, 'rt', encoding="utf-8") as features:
     metadata_config = json.load(features).get('features').get('vismetadata')
     if metadata_config is not None:
       url = metadata_config.get('url')

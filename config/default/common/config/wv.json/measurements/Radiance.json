@@ -8,7 +8,7 @@
                 "Terra/MISR": {
                     "id": "terra-misr",
                     "title": "Terra/MISR",
-                    "description": "misr/Radiance",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MISR_AM1_Ellipsoid_Radiance_RGB_DF",
@@ -29,18 +29,21 @@
                         "MISR_AM1_Ellipsoid_Radiance_NGB_BA",
                         "MISR_AM1_Ellipsoid_Radiance_NGB_CA",
                         "MISR_AM1_Ellipsoid_Radiance_NGB_DA",
+                        "OrbitTracks_Terra_Descending",
                         "MISR_Radiance_Average_Natural_Color_Monthly",
                         "MISR_Radiance_Average_Infrared_Color_Monthly"
+
                     ]
                 },
                     "CALISPO/WFC": {
                         "id": "calipso-wfc",
                         "title": "CALIPSO/WFC",
-                        "description": "calipso/Radiance",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "CALIPSO_Wide_Field_Camera_Radiance_v3-01",
-                            "CALIPSO_Wide_Field_Camera_Radiance_v3-02"
+                            "CALIPSO_Wide_Field_Camera_Radiance_v3-02",
+                            "OrbitTracks_Calipso_Ascending"
                         ]
                     }
             }

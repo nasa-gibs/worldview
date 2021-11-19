@@ -17,7 +17,6 @@
   box-sizing: border-box;
   padding: 0;
   border-top: none;
-  transition: max-height 0.1s ease;
   overflow: hidden;
   .layer-container {
     box-sizing: border-box;
@@ -112,15 +111,20 @@
 }
 
 /* override bootstrap styles */
-.tab-content .ab-tabs-case .nav-item {
-  .active {
-    color: #495057;
+.tab-content .ab-tabs-case {
+  .nav-tabs {
+    flex-wrap: nowrap;
   }
-  .ab-tab {
-    overflow: hidden;
-    white-space: nowrap;
-    width: 141px;
-    padding-left: 5px;
+  .nav-item {
+    .active {
+      color: #495057;
+    }
+    .ab-tab {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 140px;
+      padding-left: 5px;
+    }
   }
 }
 .nav-item .sidebar-tab.active {
@@ -455,6 +459,10 @@ footer .compare-toggle-button {
 
 .layer-info-modal {
   width: 500px;
+  .modal-body {
+    overflow-y: scroll;
+    max-height: calc(100vh - 200px);
+  }
 }
 
 .layer-settings-modal {
@@ -513,6 +521,11 @@ footer .compare-toggle-button {
   .settings-component {
     margin-bottom: 14px;
     padding: 0 4px;
+  }
+
+  .classification-list {
+    padding-top: 3px;
+    padding-left: 2px;
   }
 
   .layer-threshold-select {
