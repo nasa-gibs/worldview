@@ -165,7 +165,7 @@
   background: url("../images/natural-events/dot.svg");
 }
 .marker.selected {
-  z-index: 100;
+  z-index: 1;
   div {
     transform: scale(1.4);
     transform-origin: center bottom;
@@ -186,15 +186,23 @@
   z-index: 99;
 }
 .track-marker-case-selected {
-  z-index: 100;
+  z-index: 1;
+  .track-marker {
+    opacity: 0.7;
+    z-index: 1;
+  }
+  .track-marker-date {
+    top: 25px;
+    left: -34px;
+  }
+  .track-marker-date::before {
+    display: none;
+  }
 }
 .track-marker-case-hidden {
   display: none;
 }
-.track-marker-case-selected .track-marker {
-  opacity: 0.7;
-  z-index: 100;
-}
+
 .track-marker {
   width: 12px;
   height: 12px;
@@ -209,8 +217,8 @@
   display: none;
   position: absolute;
   width: 95px;
-  top: 20px;
-  left: -34px;
+  top: -30px;
+  left: -40px;
   padding: 4px;
   background-color: rgba(40, 40, 40, 0.9);
   border-radius: 3px;
@@ -221,25 +229,34 @@
   z-index: 900;
 }
 .cluster-track-marker-date {
-  top: 28px;
-  left: -29px;
+  top: -35px;
+  left: -33px;
   width: 110px;
+  z-index: 900;
 }
 .track-marker-date::before {
   position: absolute;
-  top: -4px;
-  left: 36px;
+  bottom: -5px;
+  left: 40px;
   content: "";
-  border-bottom: 5px solid #000;
-  border-bottom: 5px solid rgba(51, 51, 51, 0.9);
+  border-top: 5px solid #000;
+  border-top: 5px solid rgba(51, 51, 51, 0.9);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
+  z-index: 900;
 }
 
 .track-marker-case:not(.track-marker-case-selected) .track-marker:hover {
   transform: scale(1.5);
   border: 1px solid #22a;
   cursor: pointer;
+}
+
+.event-track-line {
+  z-index: 0;
+}
+.event-track-point, .event-track-cluster-point{
+  z-index: 1;
 }
 
 .event-track-arrows {
@@ -283,7 +300,6 @@
   font-family: "Open Sans", sans-serif;
   width: 24px;
   height: 24px;
-  z-index: 99;
 }
 .cluster-marker:hover {
   cursor: pointer;
