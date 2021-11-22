@@ -28,10 +28,10 @@ class EventTrack extends React.Component {
     };
 
     this.onMoveEnd = this.onMoveEnd.bind(this);
-    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 250);
+    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 50);
     this.debouncedOnPropertyChange = lodashDebounce(
       this.onPropertyChange.bind(this),
-      500,
+      50,
       { leading: true, trailing: false },
     );
   }
@@ -40,9 +40,9 @@ class EventTrack extends React.Component {
     this.initialize();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
-      map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
+      isPlaying, map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
@@ -56,12 +56,12 @@ class EventTrack extends React.Component {
       if (prevMap) {
         this.update(null);
         this.removeTrack(prevMap);
-        removeOldPoints(prevMap, trackDetails.pointsAndArrows);
+        removePointOverlays(prevMap, trackDetails.pointsAndArrows);
       }
       this.initialize();
     }
 
-    if (selectedDateChange || finishedAnimating || eventsLoaded) {
+    if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded)) {
       this.debouncedTrackUpdate();
     }
 
@@ -83,7 +83,10 @@ class EventTrack extends React.Component {
     // NOTE: Does not cause additional listeners to be registered on subsequent calls
     map.on('moveend', this.onMoveEnd);
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
-    this.debouncedTrackUpdate();
+    // Don't render until map position is set
+    setTimeout(() => {
+      this.debouncedTrackUpdate();
+    }, 500);
   }
 
   updateCurrentTrack() {
@@ -130,20 +133,21 @@ class EventTrack extends React.Component {
         isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
       }
       if (isNewTarget) {
-        removeOldPoints(map, trackDetails.pointsAndArrows);
+        removePointOverlays(map, trackDetails.pointsAndArrows);
       }
     }
   }
 
-  /**
-   * @param  {Object} map Openlayers map object
-   * @return {Object} Empty object
-   */
+  addTrack = (map, { track, pointsAndArrows }) => {
+    map.addOverlay(track);
+    addPointOverlays(map, pointsAndArrows);
+  }
+
   removeTrack = function(map) {
     const { trackDetails } = this.state;
     const { track, pointsAndArrows } = trackDetails;
     map.removeOverlay(track);
-    removeOldPoints(map, pointsAndArrows);
+    removePointOverlays(map, pointsAndArrows);
     return {};
   };
 
@@ -151,9 +155,7 @@ class EventTrack extends React.Component {
    * Update track
    *
    * @param  {Object} event EONET event object
-   * @param  {Object} map Ol map object
    * @param  {String} selectedDate
-   * @return {[type]}
    */
   update = function(event, date) {
     const {
@@ -177,10 +179,7 @@ class EventTrack extends React.Component {
         pointsAndArrows,
         hidden: false,
       };
-
-      map.addOverlay(track);
-      track.changed();
-      console.log('adding track');
+      this.addTrack(map, newTrackDetails);
     };
 
     if (!event || event.geometry.length < 2) {
@@ -216,7 +215,7 @@ class EventTrack extends React.Component {
   }
 }
 
-const removeOldPoints = function(map, pointsAndArrows) {
+const removePointOverlays = function(map, pointsAndArrows) {
   lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
       map.removeOverlay(pointOverlay);
@@ -270,27 +269,21 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback)
     if (index !== 0) {
       let prevCoordinates = clusters[index - 1].geometry.coordinates;
       let nextCoordinates = clusterPoint.geometry.coordinates;
-
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
         const { crs } = proj.selected;
         prevCoordinates = olProj.transform(prevCoordinates, 'EPSG:4326', crs);
         nextCoordinates = olProj.transform(nextCoordinates, 'EPSG:4326', crs);
       }
-
       const lineSegmentArray = [prevCoordinates, nextCoordinates];
       const arrowOverlay = getArrows(lineSegmentArray, map);
       pointsAndArrows.push(arrowOverlay);
       trackSegments.push(lineSegmentArray);
-      addOverlayIfIsVisible(map, arrowOverlay);
     }
-
     const point = clusterPoint.properties.cluster
       ? getClusterPointEl(proj, clusterPoint, map, pointClusterObj, callback)
       : getTrackPoint(proj, clusterPoint, isSelected, callback);
     pointsAndArrows.push(point);
-
-    addOverlayIfIsVisible(map, point);
   });
   return {
     track: getTrackLines(map, trackSegments),
@@ -299,28 +292,27 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback)
 };
 
 function addOverlayIfIsVisible(map, overlay) {
-  if (
-    olExtent.containsCoordinate(
-      map.getView().calculateExtent(),
-      overlay.getPosition(),
-    )
-  ) {
+  const extent = map.getView().calculateExtent();
+  const position = overlay.getPosition();
+  if (olExtent.containsCoordinate(extent, position)) {
     map.addOverlay(overlay);
   }
 }
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, date,
+    map, proj, events, date, animation,
   } = state;
   const { isAnimatingToEvent } = events;
+  const { isPlaying } = animation;
   return {
+    eventsData: getFilteredEvents(state),
+    isAnimatingToEvent,
+    isPlaying,
     map: map.ui.selected,
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
-    eventsData: getFilteredEvents(state),
-    isAnimatingToEvent,
   };
 };
 
@@ -332,8 +324,9 @@ const mapDispatchToProps = (dispatch) => ({
 
 EventTrack.propTypes = {
   eventsData: PropTypes.array,
-  map: PropTypes.object,
   isAnimatingToEvent: PropTypes.bool,
+  isPlaying: PropTypes.bool,
+  map: PropTypes.object,
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
