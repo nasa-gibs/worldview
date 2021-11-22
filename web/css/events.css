@@ -255,7 +255,7 @@
 .event-track-line {
   z-index: 0;
 }
-.event-track-point, .event-track-cluster-point{
+.event-track-point, .event-track-cluster-point {
   z-index: 1;
 }
 
