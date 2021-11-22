@@ -39,6 +39,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   overlayEl.appendChild(textEl);
 
   return new OlOverlay({
+    className: 'event-track-point',
     position: coordinates,
     positioning: 'center-center',
     element: overlayEl,
@@ -60,7 +61,7 @@ export const getArrows = function(lineSegmentCoords, map) {
   const overlayEl = document.createElement('div');
   const arrowEl = document.createElement('div');
 
-  const clusterPadding = 20; // 10px on each side
+  const clusterPadding = 30; // 10px on each side
   const end = lineSegmentCoords[0];
   const start = lineSegmentCoords[1];
   const dxCoord = end[0] - start[0];
@@ -144,6 +145,7 @@ export const getTrackLines = function(map, trackCoords) {
   outlineEl.setAttribute('points', lineString);
 
   return new OlOverlay({
+    className: 'event-track-line',
     position: map.getCoordinateFromPixel(topLeft),
     positioning: 'top-left',
     insertFirst: true,
@@ -198,6 +200,7 @@ export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) 
   overlayEl.appendChild(textEl);
 
   return new OlOverlay({
+    className: 'event-track-cluster-point',
     position: coordinates,
     positioning: 'center-center',
     element: overlayEl,
