@@ -120,6 +120,13 @@ function InfoList (props) {
           aboutClick();
         },
       },
+      {
+        text: 'Source Code',
+        iconClass: 'ui-icon',
+        iconName: 'code',
+        id: 'source_code_info_item',
+        href: 'https://github.com/nasa-gibs/worldview',
+      },
     ];
 
     // limit explore for larger device displays
