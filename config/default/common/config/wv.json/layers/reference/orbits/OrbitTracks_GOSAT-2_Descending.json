@@ -9,6 +9,7 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
+      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ],
