@@ -13,7 +13,6 @@
         "day"
       ],
       "track": "descending",
-      "startDate": "2009-01-23",
       "palette": {
         "id": "OrbitTracks_GOSAT_Descending",
         "immutable": true
