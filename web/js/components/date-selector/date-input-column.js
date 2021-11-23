@@ -219,8 +219,9 @@ class DateInputColumn extends Component {
 
   rollDate = (amt) => {
     const {
-      date, minDate, maxDate, type, updateDate,
+      date, minDate, maxDate, type, updateDate, isDisabled,
     } = this.props;
+    if (isDisabled) return;
     const newDate = util.rollDate(
       date,
       type,
@@ -278,6 +279,7 @@ class DateInputColumn extends Component {
       isValid,
       isStartDate,
       isEndDate,
+      isDisabled,
       type,
     } = this.props;
     const {
@@ -304,7 +306,7 @@ class DateInputColumn extends Component {
       >
         <Arrow
           direction="up"
-          onClick={() => this.rollDate(1)}
+          onClick={isDisabled ? () => {} : () => this.rollDate(1)}
           type={type}
         />
         <input
@@ -322,10 +324,11 @@ class DateInputColumn extends Component {
           onTouchCancel={this.blur}
           onFocus={this.handleFocus}
           onTouchStart={this.handleFocus}
+          disabled={isDisabled}
         />
         <Arrow
           direction="down"
-          onClick={() => this.rollDate(-1)}
+          onClick={isDisabled ? () => {} : () => this.rollDate(-1)}
           type={type}
         />
       </div>
@@ -340,6 +343,7 @@ DateInputColumn.propTypes = {
   isValid: PropTypes.bool,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   onFocus: PropTypes.func,

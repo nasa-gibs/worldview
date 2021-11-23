@@ -57,15 +57,11 @@ class TimeScaleIntervalChange extends PureComponent {
     }
   }
 
-  toolTipHoverOn = () => {
+  setTooltipState = (hovered) => {
+    const { isDisabled } = this.props;
+    if (isDisabled) return;
     this.setState({
-      toolTipHovered: true,
-    });
-  }
-
-  toolTipHoverOff = () => {
-    this.setState({
-      toolTipHovered: false,
+      toolTipHovered: hovered,
     });
   }
 
@@ -126,95 +122,104 @@ class TimeScaleIntervalChange extends PureComponent {
     });
   }
 
+  renderTooltip = () => {
+    const { toolTipHovered, customIntervalText } = this.state;
+    const { hasSubdailyLayers } = this.props;
+    return (
+      <div
+        className="wv-tooltip"
+        style={{ display: toolTipHovered ? 'block' : 'none' }}
+      >
+        <div id="timeline-interval" className="timeline-interval">
+          <span
+            id="interval-years"
+            className="interval-btn interval-years"
+            onClick={() => this.handleClickInterval('year')}
+          >
+            Year
+          </span>
+          <span
+            id="interval-months"
+            className="interval-btn interval-months"
+            onClick={() => this.handleClickInterval('month')}
+          >
+            Month
+          </span>
+          <span
+            id="interval-days"
+            className="interval-btn interval-days"
+            onClick={() => this.handleClickInterval('day')}
+          >
+            Day
+          </span>
+          {hasSubdailyLayers ? (
+            <>
+              <span
+                id="interval-hours"
+                className="interval-btn interval-hours"
+                onClick={() => this.handleClickInterval('hour')}
+              >
+                Hour
+              </span>
+              <span
+                id="interval-minutes"
+                className="interval-btn interval-minutes"
+                onClick={() => this.handleClickInterval('minute')}
+              >
+                Minute
+              </span>
+            </>
+          ) : null}
+          <span
+            id="interval-custom"
+            className="interval-btn interval-custom custom-interval-text"
+            style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
+            onClick={() => this.handleClickInterval('custom')}
+          >
+            {customIntervalText}
+          </span>
+          <span
+            id="interval-custom-static"
+            className="interval-btn interval-custom custom-interval-text"
+            onClick={() => this.handleClickInterval('custom', true)}
+          >
+            Custom
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const {
       customIntervalText,
-      toolTipHovered,
     } = this.state;
     const {
       customSelected,
-      hasSubdailyLayers,
       interval,
+      isDisabled,
     } = this.props;
+
+    const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
     return (
       <>
         <div
           id="timeline-interval-btn-container"
           className="interval-btn-container noselect no-drag"
-          onMouseEnter={this.toolTipHoverOn}
-          onMouseLeave={this.toolTipHoverOff}
+          onMouseEnter={() => this.setTooltipState(true)}
+          onMouseLeave={() => this.setTooltipState(false)}
           onClick={this.onClick}
         >
-          {/* timeScale display */}
+
           <span
             id="current-interval"
-            className={`no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
+            className={className}
           >
             {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
           </span>
 
-          {/* hover timeScale unit dialog / entry point to Custom selector */}
-          <div
-            className="wv-tooltip"
-            style={{ display: toolTipHovered ? 'block' : 'none' }}
-          >
-            <div id="timeline-interval" className="timeline-interval">
-              <span
-                id="interval-years"
-                className="interval-btn interval-years"
-                onClick={() => this.handleClickInterval('year')}
-              >
-                Year
-              </span>
-              <span
-                id="interval-months"
-                className="interval-btn interval-months"
-                onClick={() => this.handleClickInterval('month')}
-              >
-                Month
-              </span>
-              <span
-                id="interval-days"
-                className="interval-btn interval-days"
-                onClick={() => this.handleClickInterval('day')}
-              >
-                Day
-              </span>
-              {hasSubdailyLayers ? (
-                <>
-                  <span
-                    id="interval-hours"
-                    className="interval-btn interval-hours"
-                    onClick={() => this.handleClickInterval('hour')}
-                  >
-                    Hour
-                  </span>
-                  <span
-                    id="interval-minutes"
-                    className="interval-btn interval-minutes"
-                    onClick={() => this.handleClickInterval('minute')}
-                  >
-                    Minute
-                  </span>
-                </>
-              ) : null}
-              <span
-                id="interval-custom"
-                className="interval-btn interval-custom custom-interval-text"
-                style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
-                onClick={() => this.handleClickInterval('custom')}
-              >
-                {customIntervalText}
-              </span>
-              <span
-                id="interval-custom-static"
-                className="interval-btn interval-custom custom-interval-text"
-                onClick={() => this.handleClickInterval('custom', true)}
-              >
-                Custom
-              </span>
-            </div>
-          </div>
+          {!isDisabled ? this.renderTooltip() : null}
+
         </div>
       </>
     );
@@ -249,6 +254,7 @@ TimeScaleIntervalChange.propTypes = {
   customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.number,
+  isDisabled: PropTypes.bool,
   selectInterval: PropTypes.func,
   timeScaleChangeUnit: PropTypes.string,
   toggleCustomModal: PropTypes.func,

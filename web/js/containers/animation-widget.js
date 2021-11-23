@@ -493,6 +493,7 @@ class AnimationWidget extends React.Component {
                 timeScaleChangeUnit={interval}
                 hasSubdailyLayers={hasSubdailyLayers}
                 modalType={customModalType.ANIMATION}
+                isDisabled={isPlaying}
               />
               {' Increments'}
             </div>
@@ -521,6 +522,7 @@ class AnimationWidget extends React.Component {
                 onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
                 onAfterChange={() => { onSlide(speed); }}
+                disabled={isPlaying}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
@@ -537,6 +539,7 @@ class AnimationWidget extends React.Component {
               minDate={minDate}
               maxDate={maxDate}
               subDailyMode={subDailyMode}
+              isDisabled={isPlaying}
             />
 
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
