@@ -7,6 +7,9 @@
     left: 10px;
   }
 }
+.wv-animation-widget .input-range.rc-slider-disabled {
+  cursor: default;
+}
 .wv-animation-widget {
   width: 334px;
   border-radius: 5px;
@@ -30,6 +33,9 @@
     & .interval-btn.interval-btn-active {
       color: #ce4c21;
       display: inline;
+      &.disabled {
+        color: #fff;
+      }
     }
     & .wv-tooltip {
       bottom: 128px;

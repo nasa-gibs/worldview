@@ -17,44 +17,66 @@
 .wv-date-selector-widget .input-wrapper:nth-child(4) {
   max-width: 35px;
 }
-
-.wv-date-selector-widget input {
-  color: #fff;
-  background: transparent;
-  border: 0;
-  font-family: "Roboto Mono", monospace;
-  vertical-align: middle;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  padding: 0;
-  height: inherit;
-  text-align: center;
-  width: 100%;
+.disabled .wv-date-selector-widget .input-wrapper {
+  &:hover {
+    border: 1px solid transparent;
+  }
+  input {
+    cursor: default;
+  }
+  .date-arrows {
+    &:hover {
+      background-color: transparent;
+      cursor: default;
+    }
+    svg path {
+      visibility: hidden;
+    }
+  }
 }
 
-.wv-date-selector-widget .input-wrapper:hover {
-  border-color: #666;
-}
-
-.wv-date-selector-widget .input-wrapper:hover .date-arrows {
-  visibility: visible;
-}
-
-.wv-date-selector-widget .input-wrapper:hover .date-arrows svg path {
-  fill: #888;
-}
-
-.wv-date-selector-widget .input-wrapper.selected {
-  border-color: #fff;
-}
-
-.wv-date-selector-widget .input-wrapper.selected .date-arrows svg path {
-  fill: #fff;
-}
-
-.wv-date-selector-widget div {
-  display: inline-block;
+.wv-date-selector-widget {
+  div {
+    display: inline-block;
+  }
+  input {
+    color: #fff;
+    background: transparent;
+    border: 0;
+    font-family: "Roboto Mono", monospace;
+    vertical-align: middle;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0;
+    height: inherit;
+    text-align: center;
+    width: 100%;
+  }
+  .input-wrapper:hover {
+    border-color: #666;
+    &.disabled {
+      border-color: transparent;
+    }
+    .date-arrows {
+      visibility: visible;
+      &.disabled {
+        visibility: hidden;
+      }
+    }
+    .date-arrows svg path {
+      fill: #888;
+      &.disabled {
+        fill: trasparent
+      }
+    }
+  }
+  .input-wrapper.selected {
+    border-color: #fff;
+    .date-arrows svg path {
+      fill: #fff;
+    }
+  }
 }
 
 .button-action-group {
