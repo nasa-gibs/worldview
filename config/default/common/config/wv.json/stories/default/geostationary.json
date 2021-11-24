@@ -34,7 +34,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,Himawari_AHI_Band13_Clean_Infrared,GOES-West_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band13_Clean_Infrared,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T16%3A30%3A00Z"
+          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,Himawari_AHI_Band13_Clean_Infrared,GOES-West_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band13_Clean_Infrared,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T16%3A00%3A00Z"
         },
         {
           "id": "003",
