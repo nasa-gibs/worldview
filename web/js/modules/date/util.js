@@ -384,3 +384,139 @@ export const formatDisplayDate = (date, subdaily) => {
 };
 
 export const formatISODate = (date) => moment(date).format('YYYY-MM-DD');
+
+const getMinDate = function() {
+  return new Date(Date.UTC(1000, 0, 1, 0, 0));
+};
+
+const getMaxDate = function() {
+  return new Date(Date.UTC(3000, 11, 30, 23, 59));
+};
+
+const roll = function(val, min, max) {
+  if (val < min) {
+    return max - (min - val) + 1;
+  }
+  if (val > max) {
+    return min + (val - max) - 1;
+  }
+  return val;
+};
+
+const getDaysInMonth = function(d) {
+  let year;
+  let month;
+  if (d.getUTCFullYear) {
+    year = d.getUTCFullYear();
+    month = d.getUTCMonth();
+  } else {
+    year = d.year;
+    month = d.month;
+  }
+  const lastDay = new Date(Date.UTC(year, month + 1, 0));
+  return lastDay.getUTCDate();
+};
+
+const rollRange = function(date, interval, minDate, maxDate) {
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+  let first;
+  let last;
+  switch (interval) {
+    case 'minute': {
+      const firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
+      const lastMinute = new Date(Date.UTC(year, month, getDaysInMonth(date), 23, 59));
+      first = new Date(Math.max(firstMinute, minDate))
+        .getUTCMinutes();
+      last = new Date(Math.min(lastMinute, maxDate))
+        .getUTCMinutes();
+      break;
+    }
+    case 'hour': {
+      const firstHour = new Date(Date.UTC(year, month, 1, 0));
+      const lastHour = new Date(Date.UTC(year, month, getDaysInMonth(date), 23));
+      first = new Date(Math.max(firstHour, minDate))
+        .getUTCHours();
+      last = new Date(Math.min(lastHour, maxDate))
+        .getUTCHours();
+      break;
+    }
+    case 'day': {
+      const firstDay = new Date(Date.UTC(year, month, 1));
+      const lastDay = new Date(Date.UTC(year, month, getDaysInMonth(date)));
+      first = new Date(Math.max(firstDay, minDate))
+        .getUTCDate();
+      last = new Date(Math.min(lastDay, maxDate))
+        .getUTCDate();
+      break;
+    }
+    case 'month': {
+      const firstMonth = new Date(Date.UTC(year, 0, 1));
+      const lastMonth = new Date(Date.UTC(year, 11, 31));
+      first = new Date(Math.max(firstMonth, minDate))
+        .getUTCMonth();
+      last = new Date(Math.min(lastMonth, maxDate))
+        .getUTCMonth();
+      break;
+    }
+    case 'year': {
+      const firstYear = getMinDate();
+      const lastYear = getMaxDate();
+      first = new Date(Math.max(firstYear, minDate))
+        .getUTCFullYear();
+      last = new Date(Math.min(lastYear, maxDate))
+        .getUTCFullYear();
+      break;
+    }
+    default:
+      break;
+  }
+  return {
+    first,
+    last,
+  };
+};
+
+export const rollDate = function(date, interval, amount, minDate, maxDate) {
+  const newMinDate = minDate || getMinDate();
+  const newMaxDate = maxDate || getMaxDate();
+  const range = rollRange(date, interval, newMinDate, newMaxDate);
+  const min = range.first;
+  const max = range.last;
+  const second = date.getUTCSeconds();
+  let minute = date.getUTCMinutes();
+  let hour = date.getUTCHours();
+  let day = date.getUTCDate();
+  let month = date.getUTCMonth();
+  let year = date.getUTCFullYear();
+  switch (interval) {
+    // TODO: change minute and hour hard-coded min & max to be dynamic
+    case 'minute':
+      minute = roll(minute + amount, 0, 59);
+      break;
+    case 'hour':
+      hour = roll(hour + amount, 0, 23);
+      break;
+    case 'day':
+      day = roll(day + amount, min, max);
+      break;
+    case 'month':
+      month = roll(month + amount, min, max);
+      break;
+    case 'year':
+      year = roll(year + amount, min, max);
+      break;
+    default:
+      throw new Error(`[rollDate] Invalid interval: ${interval}`);
+  }
+  const daysInMonth = getDaysInMonth({
+    year,
+    month,
+  });
+  if (day > daysInMonth) {
+    day = daysInMonth;
+  }
+  let newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
+  newDate = new Date(util.clamp(newDate, newMinDate, newMaxDate));
+  return newDate;
+};

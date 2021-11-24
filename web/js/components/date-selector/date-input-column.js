@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from '../util/arrow';
-import util from '../../util/util';
+import { rollDate } from '../../modules/date/util';
 import {
   yearValidation,
   monthValidation,
@@ -153,13 +153,13 @@ class DateInputColumn extends Component {
     if (keyCode === 38) {
       // up
       e.preventDefault();
-      this.rollDate(1);
+      this.changeDate(1);
       return;
     }
     if (keyCode === 40) {
       // down
       e.preventDefault();
-      this.rollDate(-1);
+      this.changeDate(-1);
       return;
     }
     if (e.type === 'focusout' || entered || tabbed) {
@@ -217,12 +217,12 @@ class DateInputColumn extends Component {
     return newDate;
   }
 
-  rollDate = (amt) => {
+  changeDate = (amt) => {
     const {
       date, minDate, maxDate, type, updateDate, isDisabled,
     } = this.props;
     if (isDisabled) return;
-    const newDate = util.rollDate(
+    const newDate = rollDate(
       date,
       type,
       amt,
@@ -306,7 +306,7 @@ class DateInputColumn extends Component {
       >
         <Arrow
           direction="up"
-          onClick={isDisabled ? () => {} : () => this.rollDate(1)}
+          onClick={isDisabled ? () => {} : () => this.changeDate(1)}
           type={type}
         />
         <input
@@ -328,7 +328,7 @@ class DateInputColumn extends Component {
         />
         <Arrow
           direction="down"
-          onClick={isDisabled ? () => {} : () => this.rollDate(-1)}
+          onClick={isDisabled ? () => {} : () => this.changeDate(-1)}
           type={type}
         />
       </div>
