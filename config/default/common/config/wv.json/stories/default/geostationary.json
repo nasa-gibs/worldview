@@ -4,7 +4,7 @@
       "id": "geostationary",
       "type": "default",
       "title": "Geostationary imagery every 10 minutes!",
-      "description": "Geostationary satellites provide rapid viewing of specific locations on Earth.",
+      "description": "Geostationary satellites provide almost real-time viewing of changes occurring around most of the world.",
       "backgroundImage": "geostationary_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
