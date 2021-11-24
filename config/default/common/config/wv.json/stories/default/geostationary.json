@@ -70,7 +70,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-94.99760485836387,17.641714595069764,-59.134833084300936,34.48512875412404&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T11%3A00%3A00Z&ae=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-East_ABI_Band2_Red_Visible_1km&lg=false&al=true&av=9&ab=on&t=2019-09-01-T16%3A30%3A00Z"
+          "stepLink": "v=-94.99760485836387,17.641714595069764,-59.134833084300936,34.48512875412404&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T11%3A00%3A00Z&ae=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-East_ABI_Band2_Red_Visible_1km&lg=false&al=true&av=9&ab=on&t=2019-09-01-T11%3A00%3A00Z"
         },
         {
           "id": "007",
@@ -79,7 +79,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-124.18581059784594,11.156951608707,-62.71722572100833,40.02646675310939&z=4&i=4&ics=true&ici=5&icd=10&as=2021-09-13-T09%3A50%3A00Z&ae=2021-09-14-T09%3A20%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-West_ABI_Band13_Clean_Infrared&lg=true&tr=geostationary&av=10&ab=on&t=2021-09-13-T10%3A05%3A00Z"
+          "stepLink": "v=-124.18581059784593,8.909525999174768,-62.71722572100835,42.273892362641625&z=4&i=4&ics=true&ici=5&icd=10&as=2021-09-13-T09%3A50%3A00Z&ae=2021-09-14-T09%3A20%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-West_ABI_Band13_Clean_Infrared&lg=true&al=true&av=10&ab=on&t=2021-09-13-T10%3A05%3A00Z"
         },
         {
           "id": "008",
@@ -97,7 +97,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-131.59576218628234,36.3836230759241,-110.01769405924279,46.51804158952246&z=4&ics=true&ici=5&icd=10&as=2021-08-05-T18%3A40%3A00Z&ae=2021-08-05-T22%3A30%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),GOES-West_ABI_GeoColor&lg=true&tr=geostationary&al=true&av=7&ab=on&t=2021-08-05-T20%3A00%3A00Z"
+          "stepLink": "v=-131.59576218628234,36.3836230759241,-110.01769405924279,46.51804158952246&z=4&ics=true&ici=5&icd=10&as=2021-08-05-T18%3A40%3A00Z&ae=2021-08-05-T22%3A30%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),GOES-West_ABI_GeoColor&lg=true&tr=geostationary&al=true&av=7&ab=on&t=2021-08-05-T18%3A40%3A00Z"
         },
         {
           "id": "010",
