@@ -393,7 +393,7 @@ const getMaxDate = function() {
   return new Date(Date.UTC(3000, 11, 30, 23, 59));
 };
 
-const roll = function(val, min, max) {
+export const roll = function(val, min, max) {
   if (val < min) {
     return max - (min - val) + 1;
   }
@@ -403,7 +403,7 @@ const roll = function(val, min, max) {
   return val;
 };
 
-const getDaysInMonth = function(d) {
+export const getDaysInMonth = function(d) {
   let year;
   let month;
   if (d.getUTCFullYear) {
