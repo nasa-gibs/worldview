@@ -24,14 +24,14 @@
   input {
     cursor: default;
   }
-  .date-arrows {
-    &:hover {
-      background-color: transparent;
-      cursor: default;
-    }
-    svg path {
-      visibility: hidden;
-    }
+}
+.disabled .wv-date-selector-widget {
+  .date-arrows &:hover {
+    background-color: transparent;
+    cursor: default;
+  }
+  .date-arrows svg path {
+    visibility: hidden;
   }
 }
 
@@ -67,7 +67,7 @@
     .date-arrows svg path {
       fill: #888;
       &.disabled {
-        fill: trasparent
+        fill: trasparent;
       }
     }
   }
