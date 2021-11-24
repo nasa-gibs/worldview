@@ -308,8 +308,7 @@ export default (function(self) {
       case 'month':
         year = newDate.getUTCFullYear();
         month = newDate.getUTCMonth();
-        maxDay = new Date(year, month + amount + 1, 0)
-          .getUTCDate();
+        maxDay = new Date(year, month + amount + 1, 0).getUTCDate();
         if (maxDay <= date.getUTCDate()) {
           newDate.setUTCDate(maxDay);
         }
@@ -324,12 +323,12 @@ export default (function(self) {
     return newDate;
   };
 
-  self.getNumberOfDays = function(start, end, interval, increment = 1, maxToCheck) {
+  self.getNumberOfSteps = function(start, end, interval, delta = 1, maxToCheck) {
     let i = 1;
     let currentDate = start;
     while (currentDate < end) {
       i += 1;
-      currentDate = self.dateAdd(currentDate, interval, increment);
+      currentDate = self.dateAdd(currentDate, interval, delta);
       // if checking for a max number limit, break out after reaching it
       if (maxToCheck && i >= maxToCheck) {
         return i;

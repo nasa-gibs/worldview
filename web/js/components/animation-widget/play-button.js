@@ -7,16 +7,22 @@ import { UncontrolledTooltip } from 'reactstrap';
  * @class PlayButton
  * @extends React.Component
  */
-const PlayButton = (props) => {
-  const { playing, pause, play } = props;
+const PlayButton = ({
+  playing, pause, play, isDisabled,
+}) => {
   const buttonId = 'play-button';
-  const labelText = playing ? 'Pause animation' : 'Play animation';
+  const labelText = isDisabled
+    ? 'Too many animation frames. Reduce time range or increase increment size.'
+    : playing
+      ? 'Pause animation' : 'Play animation';
+  const onClick = isDisabled ? () => {} : playing ? pause : play;
+
   return (
     <a
       id={buttonId}
       aria-label={labelText}
-      className="wv-anim-play-case wv-icon-case no-drag"
-      onClick={playing ? pause : play}
+      className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
+      onClick={onClick}
     >
       <UncontrolledTooltip
         target={buttonId}
@@ -35,6 +41,7 @@ PlayButton.propTypes = {
   pause: PropTypes.func,
   play: PropTypes.func,
   playing: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 export default PlayButton;

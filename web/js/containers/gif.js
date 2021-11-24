@@ -410,7 +410,7 @@ function mapStateToProps(state) {
     speed,
     map,
     url,
-    numberOfFrames: util.getNumberOfDays(
+    numberOfFrames: util.getNumberOfSteps(
       startDate,
       endDate,
       customSelected

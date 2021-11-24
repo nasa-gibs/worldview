@@ -94,7 +94,8 @@ const RangeHandle = (props) => {
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
-const maxFrames = 40;
+const maxFrames = 300;
+const maxGifFrames = 40;
 
 /*
  * A react component, Builds a rather specific
@@ -349,6 +350,7 @@ class AnimationWidget extends React.Component {
       isPlaying,
       onPushPause,
       hasSubdailyLayers,
+      numberOfFrames,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -371,6 +373,7 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
+              isDisabled={numberOfFrames >= maxFrames}
             />
             <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
@@ -395,9 +398,9 @@ class AnimationWidget extends React.Component {
       visibleLayersForProj,
       proj,
     } = this.props;
-    const gifDisabled = numberOfFrames >= maxFrames;
+    const gifDisabled = numberOfFrames >= maxGifFrames;
     const elemExists = document.querySelector('#create-gif-button');
-    const showWarning = elemExists && numberOfFrames >= maxFrames;
+    const showWarning = elemExists && numberOfFrames >= maxGifFrames;
     const warningMessage = (
       <span>
         Too many frames were selected.
@@ -409,7 +412,7 @@ class AnimationWidget extends React.Component {
 
     const openGif = async () => {
       const { startDate, endDate } = this.zeroDates();
-      if (numberOfFrames >= maxFrames) {
+      if (numberOfFrames >= maxGifFrames) {
         return;
       }
       const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
@@ -469,6 +472,7 @@ class AnimationWidget extends React.Component {
       interval,
       animationCustomModalOpen,
       hasSubdailyLayers,
+      numberOfFrames,
     } = this.props;
     const { speed, widgetPosition } = this.state;
     const cancelSelector = '.no-drag, .date-arrows';
@@ -508,6 +512,7 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
+              isDisabled={numberOfFrames >= maxFrames}
             />
             <LoopButton looping={looping} onLoop={this.onLoop} />
 
@@ -563,7 +568,7 @@ class AnimationWidget extends React.Component {
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
-      currentDate,
+      snappedCurrentDate,
       isGifActive,
       delta,
       interval,
@@ -578,13 +583,6 @@ class AnimationWidget extends React.Component {
       delta,
     );
 
-    const snappedCurrentDate = snapToIntervalDelta(
-      currentDate,
-      startDate,
-      endDate,
-      interval,
-      delta,
-    );
 
     if (!isActive) {
       return null;
@@ -687,7 +685,7 @@ function mapStateToProps(state) {
   const useInterval = customSelected ? customInterval || 3 : interval;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
-  const numberOfFrames = util.getNumberOfDays(
+  const numberOfFrames = util.getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
@@ -696,6 +694,20 @@ function mapStateToProps(state) {
   );
   const { rotation } = map;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
+  const currentDate = getSelectedDate(state);
+  let snappedCurrentDate;
+  if (numberOfFrames <= maxFrames) {
+    snappedCurrentDate = snapToIntervalDelta(
+      currentDate,
+      startDate,
+      endDate,
+      TIME_SCALE_FROM_NUMBER[useInterval],
+      delta,
+    );
+  } else {
+    snappedCurrentDate = currentDate;
+  }
+
   return {
     appNow,
     screenWidth: browser.screenWidth,
@@ -704,7 +716,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     activePalettes,
-    currentDate: getSelectedDate(state),
+    snappedCurrentDate,
     minDate,
     maxDate,
     isActive: animationIsActive,
@@ -831,7 +843,7 @@ AnimationWidget.propTypes = {
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   delta: PropTypes.number,
