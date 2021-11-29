@@ -2,4 +2,4 @@ The Surface Precipitation (Day) layer displays instantaneous surface precipitati
 
 The Advanced Microwave Scanning Radiometer 2 (AMSR2) instrument on the Global Change Observation Mission - Water 1 (GCOM-W1) provides global passive microwave measurements of terrestrial, oceanic, and atmospheric parameters for the investigation of global water and energy cycles. The GCOM-W1 NRT AMSR2 Unified Global Swath Surface Precipitation GSFC Profiling Algorithm is a swath product containing global rain rate and type, calculated by the GPROF 2017 V2R rainfall retrieval algorithm using resampled NRT Level-1R data provided by JAXA. This is the same algorithm that generates the corresponding standard science products in the AMSR SIPS.
 
-References: AU_Rain_NRT [doi:10.5067/AMSRU/AU_RAIN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_RAIN_NRT_R01)
+References: AU_Rain_NRT [doi:10.5067/AMSRU/AU_RAIN_NRT_R02](https://doi.org/10.5067/AMSRU/AU_RAIN_NRT_R02)
