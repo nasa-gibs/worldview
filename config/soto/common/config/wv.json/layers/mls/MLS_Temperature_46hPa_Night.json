@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MLS_Temperature_46hPa_Night": {
+      "id": "MLS_Temperature_46hPa_Night",
+      "title": "Temperature (46 hPa, Night)",
+      "subtitle": "Aura / MLS",
+      "description": "mls/MLS_Temperature_46hPa_Night",
+      "group": "overlays",
+      "layergroup": "Temperature",
+      "product": "ML2T",
+      "tracks": [
+        "OrbitTracks_Aura_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

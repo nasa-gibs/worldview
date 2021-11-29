@@ -1,0 +1,1 @@
+Fires often emit smoke and this can cause air quality issues. The Aerosol Index layer from the Suomi NPP/Ozone Mapping and Profiler Suite (OMPS) is helpful for identifying areas of high amounts of aerosol in the atmosphere. Here you can see the high aerosol index, with reds showing high aerosol index, over Russia on 21 July 2019.

@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "UHI_Avg_Summer_Day_Max_Land_Surface_Temp_2013": {
+      "id": "UHI_Avg_Summer_Day_Max_Land_Surface_Temp_2013",
+      "title": "Average Summer Daytime Maximum Land Surface Temperature",
+      "subtitle": "Global Urban Heat Island (UHI), v1 (2013)",
+      "description": "sedac/UHI_Avg_Summer_Day_Max_Land_Surface_Temp_2013",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "CIESIN_SEDAC_SDEI_UHI2013",
+      "inactive": true,
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

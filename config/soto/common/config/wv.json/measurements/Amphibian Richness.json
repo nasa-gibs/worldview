@@ -1,0 +1,24 @@
+{
+    "measurements": {
+        "Amphibian Richness": {
+            "id": "amphibian-richness",
+            "title":    "Amphibian Richness",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/AmphibianRichness",
+                    "image": "",
+                    "settings": [
+                      "Amphibian_Richness_All_Species_2013",
+                      "Amphibian_Richness_Vulnerable_Species_2013",
+                      "Amphibian_Richness_Critically_Endangered_Species_2013",
+                      "Amphibian_Richness_Endangered_Species_2013",
+                      "Amphibian_Richness_All_Threats_2013"
+                    ]
+                }
+            }
+        }
+    }
+}

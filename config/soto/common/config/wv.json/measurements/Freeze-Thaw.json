@@ -1,0 +1,51 @@
+{
+    "measurements": {
+        "Freeze/Thaw": {
+            "id": "freeze-thaw",
+            "title":    "Freeze/Thaw",
+            "subtitle": "Aqua/AMSR-E, DMSP/SSMI, SMAP/Radar, SMAP/Radiometer",
+            "sources": {
+                "Aqua/AMSR-E": {
+                    "id": "aqua-amsr-e",
+                    "title": "Aqua/AMSR-E",
+                    "description": "amsre/FreezeThaw",
+                    "image": "",
+                    "settings": [
+                        "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE"
+                    ]
+                },
+                "DMSP/SSMI": {
+                    "id": "dmsp-ssmi",
+                    "title": "DMSP/SSMI",
+                    "description": "ssmi/FreezeThaw",
+                    "image": "",
+                    "settings": [
+                        "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI"
+                    ]
+                },
+                "SMAP/Radar": {
+                    "id": "smap-radar",
+                    "title": "SMAP/Radar",
+                    "description": "smap/FreezeThaw",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L3_Active_Day_Freeze_Thaw"
+                    ]
+                },
+                "SMAP/Radiometer": {
+                    "id": "smap-radiometer",
+                    "title": "SMAP/Radiometer",
+                    "description": "smap/FreezeThaw",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw",
+                        "SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw",
+                        "SMAP_L3_Passive_Day_Freeze_Thaw",
+                        "SMAP_L3_Passive_Night_Freeze_Thaw"
+
+                    ]
+                }
+            }
+        }
+    }
+}

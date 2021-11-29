@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "ASTER_GDEM_Color_Shaded_Relief": {
+      "id": "ASTER_GDEM_Color_Shaded_Relief",
+      "title": "Global Digital Elevation Map (Color Shaded Relief)",
+      "subtitle": "Terra / ASTER",
+      "description": "aster/ASTER_GDEM_Color_Shaded_Relief",
+      "tags": "gdem",
+      "group": "baselayers",
+      "layergroup": "Global Digital Elevation Map",
+      "product": "ASTGTM",
+      "wrapX": true
+    }
+  }
+}

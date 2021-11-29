@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MLS_O3_46hPa_Day": {
+      "id": "MLS_O3_46hPa_Day",
+      "title": "Ozone (46 hPa, Day)",
+      "subtitle": "Aura / MLS",
+      "description": "mls/MLS_O3_46hPa_Day",
+      "tags": "o3",
+      "group": "overlays",
+      "layergroup": "Ozone",
+      "product": "ML2O3",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

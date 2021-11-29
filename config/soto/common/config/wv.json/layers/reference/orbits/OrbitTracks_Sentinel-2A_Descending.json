@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "OrbitTracks_Sentinel-2A_Descending": {
+      "id": "OrbitTracks_Sentinel-2A_Descending",
+      "title": "Sentinel-2A - Orbit Track & Time",
+      "subtitle": "Sentinel-2A / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_Sentinel-2A_Descending",
+      "tags": "tracks day",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
+      ],
+      "track": "descending",
+      "startDate": "2015-06-24",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_Sentinel-2A_Descending",
+        "immutable": true
+      }
+    }
+  }
+}

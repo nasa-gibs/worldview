@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "OrbitTracks_GCOM-C_Descending": {
+      "id": "OrbitTracks_GCOM-C_Descending",
+      "title": "GCOM-C - Orbit Track & Time",
+      "subtitle": "GCOM-C / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_GCOM-C_Descending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
+      ],
+      "track": "descending",
+      "startDate": "2018-10-27",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_GCOM-C_Descending",
+        "immutable": true
+      },
+      "tags": "tracks day"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+    "measurements": {
+        "Carbon Dioxide": {
+            "id": "carbon-dioxide",
+            "title":    "Carbon Dioxide",
+            "subtitle": "Aqua/AIRS+AMSU, Aqua/AIRS, OCO-2, OCO-3",
+            "sources": {
+                "Aqua/AIRS+AMSU": {
+                    "id": "aqua-airs-amsu",
+                    "title": "Aqua/AIRS+AMSU",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L3_Carbon_Dioxide_AIRS_AMSU_Monthly"
+                    ]
+                },
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aura/AIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L3_Carbon_Dioxide_IR_Monthly"
+                    ]
+                },
+                "OCO-2": {
+                    "id": "oco-2",
+                    "title": "OCO-2",
+                    "description": "oco2/CarbonDioxide",
+                    "image": "oco2/CarbonDioxide",
+                    "settings": [
+                        "OCO-2_Carbon_Dioxide_Global_Mean_Difference",
+                        "OCO-2_Carbon_Dioxide_Total_Column_Average",
+                        "OrbitTracks_OCO-2_Ascending"
+                    ]
+                },
+                "OCO-3": {
+                    "id": "oco-3",
+                    "title": "OCO-3",
+                    "description": "oco3/CarbonDioxide",
+                    "image": "oco3/CarbonDioxide",
+                    "settings": [
+                        "OCO-3_Carbon_Dioxide_Global_Mean_Difference",
+                        "OCO-3_Carbon_Dioxide_Total_Column_Average"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AMSRU2_Columnar_Water_Vapor_Day": {
+      "id": "AMSRU2_Columnar_Water_Vapor_Day",
+      "title": "Columnar Water Vapor (Day, Near Real-Time)",
+      "subtitle": "GCOM-W1 / AMSRU2",
+      "description": "amsr2/AMSRU2_Columnar_Water_Vapor_Day",
+      "tags": "amsru2",
+      "group": "overlays",
+      "layergroup": "Water Vapor",
+      "product": "AU_Rain_NRT_R01",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

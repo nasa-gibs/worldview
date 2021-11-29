@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MERRA2_Air_Temperature_250hPa_Monthly": {
+      "id": "MERRA2_Air_Temperature_250hPa_Monthly",
+      "title": "Air Temperature at 250hPa (Monthly)",
+      "subtitle": "MERRA-2",
+      "description": "merra/MERRA2_Air_Temperature_250hPa_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Temperature",
+      "product": "M2IMNPASM",
+      "wrapadjacentdays": true
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "stories": {
+    "swath_gaps": {
+      "id": "swath_gaps",
+      "type": "default",
+      "title": "Swath Gaps",
+      "description": "What are those black gaps in the imagery?",
+      "backgroundImage": "swath_gaps_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-02-10-T00%3A00%3A00Z&z=3&v=-255.13947597940853,-142.1613803242112,242.67302402059147,109.2761196757888"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-02-10-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-82.27540854563338,-32.77673424120905,42.17771645436662,30.08264075879095"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-02-10-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-82.27540854563338,-32.77673424120905,42.17771645436662,30.08264075879095"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Aqua_Data_No_Data(hidden),MODIS_Terra_Data_No_Data,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-02-10-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-149.29520185689177,-66.0006120371056,99.61104814310825,59.7181379628944"
+        }
+      ]
+    }
+  }
+}

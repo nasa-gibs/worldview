@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Terra_Cloud_Multi_Layer_Flag": {
+      "id": "MODIS_Terra_Cloud_Multi_Layer_Flag",
+      "title": "Cloud Multi Layer Flag",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Multi_Layer_Flag",
+      "group": "overlays",
+      "layergroup": "Cloud Multi Layer Flag",
+      "product": "MOD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Shipping": {
+                "title": "Shipping",
+                "id": "shipping",
+                "image": "shipping.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Brightness Temperature",
+                    "Land Surface Reflectance",
+                    "Radiance",
+                    "Sea Ice",
+                    "Sea Ice Brightness Temperature",
+                    "Sea Surface Currents",
+                    "Sea Surface Temperature",
+                    "Sea Surface Temperature Anomalies",
+                    "Water Bodies",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

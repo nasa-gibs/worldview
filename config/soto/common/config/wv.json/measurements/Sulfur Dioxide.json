@@ -1,0 +1,73 @@
+{
+    "measurements": {
+        "Sulfur Dioxide": {
+            "id": "sulfur-dioxide",
+            "title":    "Sulfur Dioxide",
+            "subtitle": "Aqua/AIRS, Aura/MLS, Aura/OMI, Suomi NPP/OMPS, MERRA-2",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/SO2",
+                    "image": "",
+                    "settings": [
+                        "AIRS_Prata_SO2_Index_Day",
+                        "AIRS_Prata_SO2_Index_Night",
+                        "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day",
+                        "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/SO2",
+                    "image": "",
+                    "settings": [
+                        "MLS_SO2_147hPa_Day",
+                        "MLS_SO2_147hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                },
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/SO2",
+                    "image": "",
+                    "settings": [
+                        "OMI_SO2_Planetary_Boundary_Layer",
+                        "OMI_SO2_Lower_Troposphere",
+                        "OMI_SO2_Middle_Troposphere",
+                        "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                },
+                "Suomi NPP/OMPS": {
+                    "id": "suomi-npp-omps",
+                    "title": "Suomi NPP/OMPS",
+                    "description": "omps/SO2",
+                    "image": "",
+                    "settings": [
+                      "OMPS_SO2_Planetary_Boundary_Layer",
+                       "OMPS_SO2_Lower_Troposphere",
+                       "OMPS_SO2_Middle_Troposphere",
+                       "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
+                       "OrbitTracks_Suomi_NPP_Ascending"
+
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra-2",
+                    "title": "MERRA-2",
+                    "description": "merra/SO2",
+                    "image": "",
+                    "settings": [
+                       "MERRA2_SO2_Column_Mass_Density_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

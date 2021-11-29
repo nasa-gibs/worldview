@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "OrbitTracks_GOSAT_Ascending": {
+      "id": "OrbitTracks_GOSAT_Ascending",
+      "title": "GOSAT - Orbit Track & Time",
+      "subtitle": "GOSAT / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_GOSAT_Ascending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
+      ],
+      "track": "ascending",
+      "startDate": "2009-01-23",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_GOSAT_Ascending",
+        "immutable": true
+      },
+      "tags": "tracks day"
+    }
+  }
+}

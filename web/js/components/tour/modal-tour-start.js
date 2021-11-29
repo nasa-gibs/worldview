@@ -79,7 +79,7 @@ class ModalStart extends React.Component {
         innerRef={this.setWrapperRef}
       >
         <ModalHeader toggle={endTour}>
-          Welcome to Worldview!
+          Welcome to SOTO!
         </ModalHeader>
 
         <Scrollbars style={{ maxHeight: `${height - 200}px` }}>

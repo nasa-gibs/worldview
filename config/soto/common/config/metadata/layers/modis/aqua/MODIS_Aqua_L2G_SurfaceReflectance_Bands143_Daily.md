@@ -1,0 +1,3 @@
+The MYD09GA Version 6 product provides an estimate of the surface spectral reflectance of Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Bands 1 through 7, corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Provided along with the 500 meter (m) surface reflectance, observation, and quality bands are a set of ten 1 km observation bands and geolocation flags. The reflectance layers from the MYD09GA are used as the source data for many of the MODIS land products.
+
+Reference: [LP DAAC - MYD09GA Version 6](https://lpdaac.usgs.gov/products/myd09gav006/)

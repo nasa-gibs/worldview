@@ -1,0 +1,57 @@
+{
+  "measurements": {
+    "Sea Surface Temperature - Featured": {
+      "id": "featured-sea-surface-temperature",
+      "title": "Sea Surface Temperature",
+      "subtitle": "Multi-mission/GHRSST",
+      "sources": {
+        "Multi-mission/GHRSST": {
+          "id": "multi-mission-ghrsst",
+          "title": "Multi-mission/GHRSST",
+          "description": "multi-mission/ghrsst/SeaSurfaceTemperature",
+          "image": "",
+          "settings": [
+            "GHRSST_L4_MUR_Sea_Surface_Temperature",
+            "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature"
+          ]
+        },
+        "Terra/MODIS": {
+            "id": "terra-modis",
+            "title": "Terra/MODIS",
+            "description": "modis/terra/SeaSurfaceTemperature",
+            "image": "",
+            "settings": [
+              "MODIS_Terra_L2_Sea_Surface_Temp_Day",
+              "MODIS_Terra_L2_Sea_Surface_Temp_Night",
+              "OrbitTracks_Terra_Ascending",
+              "OrbitTracks_Terra_Descending"
+            ]
+         },
+        "Aqua/MODIS": {
+            "id": "aqua-modis",
+            "title": "Aqua/MODIS",
+            "description": "modis/aqua/SeaSurfaceTemperature",
+            "image": "",
+            "settings": [
+                "MODIS_Aqua_L2_Sea_Surface_Temp_Day",
+                "MODIS_Aqua_L2_Sea_Surface_Temp_Night",  
+                "OrbitTracks_Aqua_Ascending",
+                "OrbitTracks_Aqua_Descending"
+            ]
+         },
+        "Suomi NPP/VIIRS": {
+            "id": "suomi-npp-viirs",
+            "title": "Suomi NPP/VIIRS",
+            "description": "viirs/SeaSurfaceTemperature",
+            "image": "",
+            "settings": [
+                "VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
+                "VIIRS_SNPP_L2_Sea_Surface_Temp_Night",
+                "OrbitTracks_Suomi_NPP_Ascending",
+                "OrbitTracks_Suomi_NPP_Descending"
+            ]
+         }
+      }
+    }
+  }
+}

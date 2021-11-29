@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual": {
+      "id": "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual",
+      "title": "Surface Reflectance (Bands 1-5-7, Global, Annual, V3.1)",
+      "subtitle": "Landsat / WELD",
+      "description": "landsat/Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual",
+      "tags": "corrected snow ice bands 3-6-7",
+      "group": "baselayers",
+      "layergroup": "Corrected Reflectance",
+      "product": "",
+      "inactive": true,
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

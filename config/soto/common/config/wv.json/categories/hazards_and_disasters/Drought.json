@@ -1,0 +1,33 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Drought": {
+                "title": "Drought",
+                "id": "drought",
+                "description": "",
+                "image": "drought.jpg",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Dams",
+                    "Drought Hazard",
+                    "Human Built-up And Settlement Extent",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Population Density",
+                    "Precipitation Estimate",
+                    "Precipitation Rate",
+                    "Temperature",
+                    "Radiance",
+                    "Reservoirs",
+                    "Settlements",
+                    "Snow Cover",
+                    "Snow Water Equivalent",
+                    "Soil Moisture",
+                    "Urban Extents",
+                    "Urban Expansion",
+                    "Vegetation Indices"
+                ]
+            }
+        }
+    }
+}

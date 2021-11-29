@@ -1,0 +1,11 @@
+The VIIRS Dark Target Aerosol Optical Thickness layer is useful for studying aerosol optical depth over the ocean as well as vegetation/dark-soiled land, which are both dark in the visible wavelengths.
+
+This layer is created from two separate and distinct DT algorithms. One helps retrieve aerosol information over ocean (dark in visible and longer wavelengths), while the second aids retrievals over vegetated/dark-soiled land (dark in the visible).
+
+The VIIRS Dark Target Aerosol Ångström Exponent layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (`AERDT_L2_VIIRS_SNPP`) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
+
+
+References: [doi:10.5067/VIIRS/AERDT\_L2\_VIIRS\_SNPP\_NRT.001](http://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP_NRT.001); [doi:10.5067/VIIRS/AERDT\_L2\_VIIRS\_SNPP.001](https://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001)
+
+### Aerosol Optical Depth
+Aerosol Optical Depth (AOD) (or Aerosol Optical Thickness) indicates the level at which particles in the air (aerosols) prevent light from traveling through the atmosphere. Aerosols scatter and absorb incoming sunlight, which reduces visibility. From an observer on the ground, an AOD of less than 0.1 is “clean” - characteristic of clear blue sky, bright sun and maximum visibility. As AOD increases to 0.5, 1.0, and greater than 3.0, aerosols become so dense that sun is obscured. Sources of aerosols include pollution from factories, smoke from fires, dust from dust storms, sea salt, and volcanic ash and smog. Aerosols compromise human health when inhaled by people, particularly those with asthma or other respiratory illnesses. Aerosols also have an effect on the weather and climate by cooling or warming the Earth, helping or preventing clouds from forming. Since aerosols are difficult to identify when they occur over different types of land surfaces and ocean surfaces, Worldview provides several different types of imagery layers to assist in the identification.

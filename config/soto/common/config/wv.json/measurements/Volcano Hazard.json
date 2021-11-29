@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Volcano Hazard": {
+            "id": "volcano-hazard",
+            "title": "Volcano Hazard",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/VolcanoHazard",
+                    "image": "",
+                    "settings": [
+                        "NDH_Volcano_Hazard_Frequency_Distribution_1979-2000",
+                        "NDH_Volcano_Mortality_Risks_Distribution_2000",
+                        "NDH_Volcano_Proportional_Economic_Loss_Risk_Deciles_2000"
+                    ]
+                }
+            }
+        }
+    }
+}

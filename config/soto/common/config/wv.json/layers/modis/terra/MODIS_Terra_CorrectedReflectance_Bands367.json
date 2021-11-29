@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Terra_CorrectedReflectance_Bands367": {
+      "id": "MODIS_Terra_CorrectedReflectance_Bands367",
+      "title": "Corrected Reflectance (Bands 3-6-7)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_CorrectedReflectance_Bands367",
+      "tags": "cr m3-i3-m11",
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ],
+      "layergroup": "Corrected Reflectance",
+      "disableSmartHandoff": true
+    }
+  }
+}

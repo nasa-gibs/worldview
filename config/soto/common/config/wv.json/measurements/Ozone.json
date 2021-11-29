@@ -1,0 +1,52 @@
+{
+    "measurements": {
+        "Ozone": {
+            "id": "ozone",
+            "title":    "Ozone",
+            "subtitle": "Aura/MLS, Aura/OMI, Suomi NPP/OMPS, MERRA-2",
+            "sources": {
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/O3",
+                    "image": "",
+                    "settings": [
+                        "MLS_O3_46hPa_Day",
+                        "MLS_O3_46hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                },
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/Ozone",
+                    "image": "",
+                    "settings": [
+                        "OMI_Ozone_DOAS_Total_Column",
+                        "OMI_Ozone_TOMS_Total_Column",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                },
+                "Suomi NPP/OMPS": {
+                    "id": "suomi-npp-omps",
+                    "title": "Suomi NPP/OMPS",
+                    "description": "omps/Ozone",
+                    "image": "",
+                    "settings": [
+                        "OMPS_Ozone_Total_Column"
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/Ozone",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

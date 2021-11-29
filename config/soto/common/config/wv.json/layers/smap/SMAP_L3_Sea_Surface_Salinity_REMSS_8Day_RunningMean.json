@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SMAP_L3_Sea_Surface_Salinity_REMSS_8Day_RunningMean": {
+      "id": "SMAP_L3_Sea_Surface_Salinity_REMSS_8Day_RunningMean",
+      "title": "Sea Surface Salinity (L3, 8-Day Running Mean, Radiometer)",
+      "subtitle": "SMAP",
+      "description": "smap/SMAP_L3_Sea_Surface_Salinity_REMSS_8Day_RunningMean",
+      "tags": "sss podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Surface Salinity",
+      "product": "SMAP_RSS_L3_SSS_SMI_8DAY-RUNNINGMEAN_V4",
+      "wrapadjacentdays": true
+    }
+  }
+}

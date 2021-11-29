@@ -1,0 +1,34 @@
+{
+    "measurements": {
+        "Land Surface Reflectance - Featured": {
+            "id": "featured-land-surface-reflectance",
+            "title":    "Land Surface Reflectance",
+            "subtitle": "Harmonized Landsat Sentinel-2",
+            "sources": {
+                "HLS-Sentinel2": {
+                    "id": "HLS: Sentinel-2",
+                    "title": "HLS: Sentinel-2A & 2B/MSI",
+                    "description": "multi-mission/hls/ReflectanceSentinel2",
+                    "image": "",
+                    "settings": [
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Sentinel-2A_Descending",
+                        "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "HLS-Landsat8": {
+                    "id": "HLS: Landsat 8",
+                    "title": "HLS: Landsat 8/OLI",
+                    "description": "multi-mission/hls/ReflectanceLandsat",
+                    "image": "",
+                    "settings": [
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Landsat-8_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

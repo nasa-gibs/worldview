@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AIRS_L2_Dust_Score_Day": {
+      "id": "AIRS_L2_Dust_Score_Day",
+      "title": "Dust Score (L2, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Dust_Score_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2SUP",
+      "layergroup": "Dust",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

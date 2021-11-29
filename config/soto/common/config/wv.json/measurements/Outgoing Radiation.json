@@ -1,0 +1,27 @@
+{
+    "measurements": {
+        "Outgoing Radiation": {
+            "id": "outgoing-radiation",
+            "title":    "Outgoing Radiation",
+            "subtitle": "Aqua/AIRS",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/OutgoingLongwaveRadiation",
+                    "image": "",
+                    "settings": [
+                      "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Day",
+                      "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Night",
+                      "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+                      "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Night",
+                      "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Day",
+                      "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night",
+                      "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+                      "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Monthly_Night"
+                    ]
+                }
+            }
+        }
+    }
+}

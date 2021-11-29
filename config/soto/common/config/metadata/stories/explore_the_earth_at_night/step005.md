@@ -1,0 +1,1 @@
+<p>To the west of Chicago, Il, USA, there was a marked increase in light between 2012 and 2016 along I-90 due to a road infrastructure project. <br> Choose the next step to change the year to 2016.</p>

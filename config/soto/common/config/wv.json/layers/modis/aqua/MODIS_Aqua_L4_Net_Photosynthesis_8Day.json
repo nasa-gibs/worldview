@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MODIS_Aqua_L4_Net_Photosynthesis_8Day": {
+      "id": "MODIS_Aqua_L4_Net_Photosynthesis_8Day",
+      "title": "Net Photosynthesis (L4, 8-Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L4_Net_Photosynthesis_8Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Photosynthesis, Net",
+      "product": "MYD17A2H",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

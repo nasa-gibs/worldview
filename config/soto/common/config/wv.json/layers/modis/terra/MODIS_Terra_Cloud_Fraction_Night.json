@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Terra_Cloud_Fraction_Night": {
+      "id": "MODIS_Terra_Cloud_Fraction_Night",
+      "title": "Cloud Fraction (Night)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Fraction_Night",
+      "group": "overlays",
+      "layergroup": "Cloud Fraction",
+      "product": "MOD06_L2_NIGHT",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

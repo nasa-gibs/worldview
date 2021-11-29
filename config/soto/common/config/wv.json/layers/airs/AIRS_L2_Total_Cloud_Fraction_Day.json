@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AIRS_L2_Total_Cloud_Fraction_Day": {
+      "id": "AIRS_L2_Total_Cloud_Fraction_Day",
+      "title": "Total Cloud Fraction (L2, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Total_Cloud_Fraction_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": "Cloud Fraction",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

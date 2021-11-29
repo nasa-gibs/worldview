@@ -1,0 +1,33 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Other": {
+                "title": "Other",
+                "placement": "last",
+                "id": "legacy-other",
+                "description": "",
+                "measurements": [
+                    "Areas of No Data (mask)",
+                    "Blue Marble",
+                    "Brightness Temperature",
+                    "Chlorophyll A",
+                    "Dams",
+                    "Earth at Night",
+                    "Global Digital Elevation Map",
+                    "Latitude-Longitude Lines",
+                    "Orbital Track",
+                    "Photosynthetically Available Radiation",
+                    "Population Density",
+                    "Power Plants, Nuclear",
+                    "Radiance",
+                    "Reference Map",
+                    "Reservoirs",
+                    "Sea Surface Temperature",
+                    "Settlements",
+                    "Urban Extents",
+                    "Water Bodies"
+                ]
+            }
+        }
+    }
+}

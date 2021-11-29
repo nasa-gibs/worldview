@@ -1,0 +1,26 @@
+{
+  "layers": {
+    "MODIS_Terra_Aerosol": {
+      "id": "MODIS_Terra_Aerosol",
+      "title": "Aerosol Optical Depth",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Aerosol",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "product": "MOD04_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      },
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

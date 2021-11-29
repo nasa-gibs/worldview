@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MODIS_Terra_L3_NDVI_Monthly": {
+      "id": "MODIS_Terra_L3_NDVI_Monthly",
+      "title": "Vegetation Index (L3, Monthly)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_NDVI_Monthly",
+      "group": "overlays",
+      "tags": "ndvi normalized difference vegetation index",
+      "layergroup": "Vegetation Indices",
+      "product": "MOD13A3",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Radiation": {
+            "id": "radiation",
+            "title":    "Radiation",
+            "subtitle": "Aura/OMI, MERRA-2",
+            "sources": {
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/UVRadiation",
+                    "image": "",
+                    "settings": [
+                      "OMI_UV_Erythemal_Daily_Dose",
+                      "OMI_UV_Erythemal_Dose_Rate",
+                      "OMI_UV_Index"
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/IncidentShortwaveRadiation",
+                    "image": "",
+                    "settings": [
+                      "MERRA2_Incident_Shortwave_Over_Land_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

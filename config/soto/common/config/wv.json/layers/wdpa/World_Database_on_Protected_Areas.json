@@ -1,0 +1,32 @@
+{
+  "layers": {
+    "World_Database_on_Protected_Areas": {
+      "id": "World_Database_on_Protected_Areas",
+      "layer": "0,1",
+      "title": "Protected Areas",
+      "subtitle": "The World Database on Protected Areas (WDPA): UNEP-WCMC and IUCN, Protected Planet",
+      "description": "wdpa/World_Database_on_Protected_Areas",
+      "group": "overlays",
+      "tags": "wdpa pa national park protected areas",
+      "format": "image/png",
+      "type": "wms",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "projections": {
+        "geographic": {
+          "source": "WDPA:wms"
+        },
+        "arctic": {
+          "source": "WDPA:wms"
+        },
+        "antarctic": {
+          "source": "WDPA:wms"
+        }
+      },
+      "palette": {
+        "id": "World_Database_on_Protected_Areas",
+        "immutable": true
+      }
+    }
+  }
+}

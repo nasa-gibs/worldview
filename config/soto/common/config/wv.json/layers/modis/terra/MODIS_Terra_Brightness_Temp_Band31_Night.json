@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Terra_Brightness_Temp_Band31_Night": {
+      "id": "MODIS_Terra_Brightness_Temp_Band31_Night",
+      "title": "Brightness Temperature (Band 31-Night)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Brightness_Temp_Band31_Night",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "MOD021KM_NIGHT",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

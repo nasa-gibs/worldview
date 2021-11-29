@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Albedo": {
+            "id": "albedo",
+            "title":    "Albedo",
+            "subtitle": "Aqua and Terra/MODIS",
+            "sources": {
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra/MODIS",
+                    "description": "modis/Albedo",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_L3_White_Sky_Albedo_Daily"
+                    ]
+                }
+            }
+        }
+    }
+}

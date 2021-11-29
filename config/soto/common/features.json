@@ -1,0 +1,32 @@
+{
+    "features": {
+        "smartHandoffs": true,
+        "animation": true,
+        "urlShortening": true,
+        "customPalettes": true,
+        "compare": true,
+        "tour": true,
+        "feedback": true,
+        "previewSnapshots": true,
+        "vismetadata": {
+            "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/"
+        },
+        "googleTagManager": true,
+        "notification": {
+            "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
+            "releases": "https://github.com/nasa-gibs/worldview/releases"
+        },
+        "imageDownload": {
+            "url": "https://wvs.earthdata.nasa.gov/api/v1/snapshot"
+        },
+        "naturalEvents": {
+            "host": "https://eonet.sci.gsfc.nasa.gov/api/v3"
+        },
+        "locationSearch": {
+            "url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/"
+        }
+    },
+    "scripts": [
+        "https://fbm.earthdata.nasa.gov/for/worldview/feedback.js"
+    ]
+}

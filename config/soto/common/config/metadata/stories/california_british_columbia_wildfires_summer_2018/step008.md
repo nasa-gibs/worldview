@@ -1,0 +1,1 @@
+<p>In this view, we can see the high aerosol index that was a result of the different fires occurring on the west coast of North America. The aerosols in the smoke are from the fires and you can see the trail of the smoke extending across the continent and even out across the seas.</p>

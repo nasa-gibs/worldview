@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Flood Hazard Economic Risk">
+    <Entries>
+      <ColorMapEntry rgb="236,231,242" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="166,189,219" transparent="false" ref="2"/>
+      <ColorMapEntry rgb="43,140,190" transparent="false" ref="3"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="236,231,242" tooltip="1st - 4th" id="1" showLabel="true"/>
+      <LegendEntry rgb="166,189,219" tooltip="5th - 7th" id="2" showLabel="true"/>
+      <LegendEntry rgb="43,140,190" tooltip="8th - 10th" id="3" showLabel="true"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

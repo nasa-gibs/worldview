@@ -48,7 +48,7 @@ const ModalComplete = (props) => {
             You have now completed a story in Worldview. To view more stories,
             click the &ldquo;More Stories&rdquo; button below to explore more events
             within the app. Click the &ldquo;Exit Tutorial&rdquo; button or close this
-            window to start using Worldview on your own.
+            window to start using SOTO on your own.
           </p>
           {list}
         </ModalBody>

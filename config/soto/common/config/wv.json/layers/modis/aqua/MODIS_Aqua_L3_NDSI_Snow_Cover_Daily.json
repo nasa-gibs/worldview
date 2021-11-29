@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_L3_NDSI_Snow_Cover_Daily": {
+      "id": "MODIS_Aqua_L3_NDSI_Snow_Cover_Daily",
+      "title": "Snow Cover (Normalized Difference Snow Index, L3, Daily)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_NDSI_Snow_Cover_Daily",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Snow Cover",
+      "product": "MYD10A1",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Terra_Cloud_Top_Height_Night": {
+      "id": "MODIS_Terra_Cloud_Top_Height_Night",
+      "title": "Cloud Top Height (Night)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Top_Height_Night",
+      "group": "overlays",
+      "layergroup": "Cloud Top Height",
+      "product": "MOD06_L2_NIGHT",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

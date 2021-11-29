@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Aqua_Cloud_Water_Path_PCL": {
+      "id": "MODIS_Aqua_Cloud_Water_Path_PCL",
+      "title": "Cloud Water Path (PCL)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Water_Path_PCL",
+      "group": "overlays",
+      "layergroup": "Cloud Water Path",
+      "product": "MYD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

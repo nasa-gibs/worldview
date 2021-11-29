@@ -1,0 +1,36 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Vegetation": {
+                "title": "Vegetation",
+                "id": "vegetation",
+                "image": "vegetation.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Forests, Mangrove",
+                    "Freeze/Thaw",
+                    "FPAR",
+                    "Gross Primary Productivity",
+                    "Heterotrophic Respiration",
+                    "Land Cover",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Leaf Area Index",
+                    "Net Ecosystem CO2 Exchange",
+                    "Photosynthesis, Net",
+                    "Precipitation Estimate",
+					"Precipitation Rate",
+                    "Radiance",
+                    "Snow Cover",
+                    "Snow Mass",
+                    "Solar Induced Chlorophyll Fluorescence",
+                    "Soil Moisture",
+                    "Vegetation Indices",
+                    "Vegetation Light Use Efficiency"
+
+                ]
+            }
+        }
+    }
+}

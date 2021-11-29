@@ -1,0 +1,107 @@
+{
+    "measurements": {
+        "Aerosol Optical Depth": {
+            "id": "aerosol-optical-depth",
+            "title":    "Aerosol Optical Depth",
+            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, MERRA-2",
+            "sources": {
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/Aerosol",
+                    "image": "",
+                    "settings": [
+                        "OMI_Aerosol_Optical_Depth",
+                        "OMI_Absorbing_Aerosol_Optical_Depth",
+                        "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                },
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/Aerosol",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Aerosol",
+                        "MODIS_Aqua_Aerosol_Optical_Depth_3km",
+                        "MODIS_Aqua_Angstrom_Exponent_Land",
+                        "MODIS_Aqua_Angstrom_Exponent_Ocean",
+                        "MODIS_Aqua_AOD_Deep_Blue_Land",
+                        "MODIS_Aqua_AOD_Deep_Blue_Combined",
+                        "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/Aerosol",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Aerosol",
+                        "MODIS_Terra_Aerosol_Optical_Depth_3km",
+                        "MODIS_Terra_Angstrom_Exponent_Land",
+                        "MODIS_Terra_Angstrom_Exponent_Ocean",
+                        "MODIS_Terra_AOD_Deep_Blue_Land",
+                        "MODIS_Terra_AOD_Deep_Blue_Combined",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra/MODIS",
+                    "description": "modis/combined/Aerosol_Combined",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_Value_Added_AOD",
+                        "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth"
+                    ]
+                },
+                "Terra/MISR": {
+                    "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/Aerosol",
+                    "image": "",
+                    "settings": [
+                        "MISR_Aerosol_Optical_Depth_Avg_Green_Monthly"
+                    ]
+                },
+                "SeaWiFS Deep Blue": {
+                    "id": "seawifs-deepblue",
+                    "title": "SeaWiFS Deep Blue",
+                    "description": "seawifs/SWDBAerosol",
+                    "image": "",
+                    "settings": [
+                      "SWDB_Aerosol_Optical_Thickness_550nm_Daily",
+                      "SWDB_Aerosol_Angstrom_Exponent_Daily",
+                      "SWDB_Aerosol_Optical_Thickness_550nm_Monthly",
+                      "SWDB_Aerosol_Angstrom_Exponent_Monthly"
+                    ]
+                  },
+                  "Suomi NPP/VIIRS": {
+                      "id": "suomi-npp-viirs",
+                      "title": "Suomi NPP/VIIRS",
+                      "description": "viirs/Aerosol",
+                      "image": "",
+                      "settings": [
+                        "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
+                        "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
+                        "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
+                        "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean"
+                      ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/AerosolOpticalThickness",
+                    "image": "",
+                    "settings": [
+                      "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly",
+                      "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly",
+                      "MERRA2_Aerosol_Optical_Depth_Analysis_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MISR_AM1_Ellipsoid_Radiance_NGB_AA": {
+      "id": "MISR_AM1_Ellipsoid_Radiance_NGB_AA",
+      "title": "Color Radiance (Aa, NGB)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_AM1_Ellipsoid_Radiance_NGB_AA",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Radiance",
+      "product": "MI1B2_ELLIPSOID_AA",
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

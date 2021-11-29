@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Aqua_Cloud_Multi_Layer_Flag": {
+      "id": "MODIS_Aqua_Cloud_Multi_Layer_Flag",
+      "title": "Cloud Multi Layer Flag",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Multi_Layer_Flag",
+      "group": "overlays",
+      "layergroup": "Cloud Multi Layer Flag",
+      "product": "MYD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

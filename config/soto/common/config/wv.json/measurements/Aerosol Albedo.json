@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Aerosol Albedo": {
+            "id": "aerosol-albedo",
+            "title":    "Aerosol Albedo",
+            "subtitle": "Aura/OMI",
+            "sources": {
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/AerosolAlbedo",
+                    "image": "",
+                    "settings": [
+                        "OMI_Single_Scattering_Albedo",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}

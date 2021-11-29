@@ -1,0 +1,31 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Fires": {
+                "title": "Fires",
+                "id": "fires",
+                "image": "fires.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Fires and Thermal Anomalies",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Earth at Night",
+                    "Geostationary",
+                    "Human Built-up And Settlement Extent",
+                    "Land Cover",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Sulfur Dioxide",
+                    "Urban Extents",
+                    "Urban Expansion"
+                ]
+            }
+        }
+    }
+}

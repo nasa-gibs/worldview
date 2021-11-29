@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Terra_Cloud_Phase_Optical_Properties": {
+      "id": "MODIS_Terra_Cloud_Phase_Optical_Properties",
+      "title": "Cloud Phase Optical Properties",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Phase_Optical_Properties",
+      "group": "overlays",
+      "layergroup": "Cloud Phase",
+      "product": "MOD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000": {
+      "id": "NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000",
+      "title": "Cyclone Hazard: Economic Risk",
+      "subtitle": "Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
+      "description": "sedac/NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": "Cyclone Hazard",
+      "product": "CIESIN_CHRR_NDH_CYCLONE_PELRD",
+      "inactive": true,
+      "wrapX": true
+    }
+  }
+}

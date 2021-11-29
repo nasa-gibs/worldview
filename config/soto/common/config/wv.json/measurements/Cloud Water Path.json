@@ -1,0 +1,34 @@
+{
+    "measurements": {
+        "Cloud Water Path": {
+            "id": "cloud-water-path",
+            "title":    "Cloud Water Path",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudWaterPath",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Water_Path",
+                        "MODIS_Aqua_Cloud_Water_Path_PCL",
+                        "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudWaterPath",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Water_Path",
+                        "MODIS_Terra_Cloud_Water_Path_PCL",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+
+                }
+            }
+        }
+    }
+}
