@@ -1334,6 +1334,8 @@ export function adjustStartDates(layers) {
     if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
       firstDateRange.startDate = adjustDate(rollingWindow);
+    } else {
+      console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
 
     if (Array.isArray(historicalRanges) && historicalRanges.length) {
