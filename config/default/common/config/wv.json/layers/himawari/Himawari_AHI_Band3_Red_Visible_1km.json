@@ -14,11 +14,16 @@
         "day"
       ],
       "availability": {
-        "rollingWindow": 90,
+        "rollingWindow": 30,
         "historicalRanges": [
           {
             "startDate": "2020-01-03",
             "endDate": "2020-01-04",
+            "dateInterval": "10"
+          },
+          {
+            "startDate": "2021-09-30T02:00:00Z",
+            "endDate": "2021-09-30T02:00:00Z",
             "dateInterval": "10"
           }
         ]
