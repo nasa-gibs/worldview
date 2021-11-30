@@ -15,7 +15,7 @@
         "night"
       ],
       "availability": {
-        "rollingWindow": 90
+        "rollingWindow": 30
       }
     }
   }
