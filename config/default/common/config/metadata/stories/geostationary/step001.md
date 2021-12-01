@@ -1,0 +1,1 @@
+Worldview has routinely provided daily imagery from low-earth orbit satellites, including polar orbiting satellites like the joint NASA/NOAA Suomi NPP satellite, and some imagery from non-polar orbiting satellites like the Global Precipitation Measurement (GPM) mission.

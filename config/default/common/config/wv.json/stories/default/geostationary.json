@@ -1,0 +1,114 @@
+{
+  "stories": {
+    "geostationary": {
+      "id": "geostationary",
+      "type": "default",
+      "title": "Geostationary Imagery Every 10 Minutes!",
+      "description": "Geostationary satellites provide almost real-time viewing of changes occurring around most of the world.",
+      "backgroundImage": "geostationary_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Now Available in NASA Worldview: Earth Every 10 Minutes",
+          "link": "https://earthdata.nasa.gov/learn/articles/geostationary-in-worldview"
+        },
+        {
+          "title": "NASA Worldview Adds GeoColor Imagery from the joint NASA/NOAA GOES-East and GOES-West Satellites",
+          "link": "https://earthdata.nasa.gov/learn/articles/goes-geocolor-worldview"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,GMI_Rain_Rate_Asc,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T00%3A0%3A00Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,Himawari_AHI_Band13_Clean_Infrared,GOES-West_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band13_Clean_Infrared,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T16%3A00%3A00Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-236.68921746414853,-88.7543666038432,120.1538326496441,78.84158277544368&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T16%3A00%3A00Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-313.24190115496936,-89.14397113576092,43.601148958823245,78.45197824352596&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,GOES-West_ABI_Band2_Red_Visible_1km,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T21%3A00%3A00Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-69.16286427996796,-90.56020494353214,287.6801858338247,77.03574443575474&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,Himawari_AHI_Band3_Red_Visible_1km,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T02%3A00%3A00Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-94.99760485836387,17.641714595069764,-59.134833084300936,34.48512875412404&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T11%3A00%3A00Z&ae=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-East_ABI_Band2_Red_Visible_1km&lg=false&al=true&av=9&ab=on&t=2019-09-01-T11%3A00%3A00Z"
+        },
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-124.18581059784593,8.909525999174768,-62.71722572100835,42.273892362641625&z=4&i=4&ics=true&ici=5&icd=10&as=2021-09-13-T09%3A50%3A00Z&ae=2021-09-14-T09%3A20%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,GOES-West_ABI_Band13_Clean_Infrared&lg=true&al=true&av=10&ab=on&t=2021-09-13-T10%3A05%3A00Z"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=94.57604177861708,13.976546514912148,186.27281695462221,57.04312182229434&z=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,Himawari_AHI_Air_Mass&lg=true&t=2021-10-01-T00%3A00%3A00Z"
+        },
+        {
+          "id": "009",
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-131.59576218628234,36.3836230759241,-110.01769405924279,46.51804158952246&z=4&ics=true&ici=5&icd=10&as=2021-08-05-T18%3A40%3A00Z&ae=2021-08-05-T22%3A30%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),GOES-West_ABI_GeoColor&lg=true&tr=geostationary&al=true&av=7&ab=on&t=2021-08-05-T18%3A40%3A00Z"
+        },
+        {
+          "id": "010",
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-119.44206817757143,16.85322062217488,-59.34642026505742,45.077918181085955&z=4&i=4&ics=true&ici=5&icd=10&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GOES-East_ABI_GeoColor,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-08-30-T08%3A40%3A00Z"
+        }
+      ]
+    }
+  }
+}

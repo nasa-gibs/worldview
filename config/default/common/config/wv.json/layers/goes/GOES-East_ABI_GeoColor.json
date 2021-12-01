@@ -15,7 +15,14 @@
         "night"
       ],
       "availability": {
-        "rollingWindow": 90
+        "rollingWindow": 90,
+        "historicalRanges": [
+          {
+            "startDate": "2021-08-30T08:40:00Z",
+            "endDate": "2021-08-30T08:40:00Z",
+            "dateInterval": "10"
+          }
+        ]
       }
     }
   }

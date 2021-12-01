@@ -1332,12 +1332,14 @@ export function adjustStartDates(layers) {
     }
     const { rollingWindow, historicalRanges } = availability;
 
-    if (dateRanges.length) {
+    if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
       firstDateRange.startDate = adjustDate(rollingWindow);
+    } else {
+      console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
 
-    if (historicalRanges && historicalRanges.length) {
+    if (Array.isArray(historicalRanges) && historicalRanges.length) {
       layer.startDate = historicalRanges[0].startDate;
       historicalRanges.reverse().forEach((range) => {
         layer.dateRanges.unshift(range);

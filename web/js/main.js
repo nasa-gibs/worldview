@@ -127,7 +127,7 @@ window.onload = () => {
       return response.json();
     })
     .then((config) => {
-    // Perform check to see if app was in the midst of a tour
+      // Perform check to see if app was in the midst of a tour
       const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
       if (hasTour) {
         const isMockTour = parameters.mockTour;
