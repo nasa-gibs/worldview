@@ -37,6 +37,7 @@ import {
   getQueueLength,
   getMaxQueueLength,
   snapToIntervalDelta,
+  getNumberOfSteps,
 } from '../modules/animation/util';
 import {
   subdailyLayersActive,
@@ -685,7 +686,7 @@ function mapStateToProps(state) {
   const useInterval = customSelected ? customInterval || 3 : interval;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
-  const numberOfFrames = util.getNumberOfSteps(
+  const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
@@ -696,7 +697,7 @@ function mapStateToProps(state) {
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
-  if (numberOfFrames <= maxFrames) {
+  if (numberOfFrames < maxFrames) {
     snappedCurrentDate = snapToIntervalDelta(
       currentDate,
       startDate,

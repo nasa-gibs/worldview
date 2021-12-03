@@ -10,7 +10,6 @@ import {
 import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
-
 import Crop from '../components/util/image-crop';
 import {
   resolutionsGeo,
@@ -23,7 +22,7 @@ import {
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';
-import { getStampProps, svgToPng } from '../modules/animation/util';
+import { getStampProps, svgToPng, getNumberOfSteps } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 import { subdailyLayersActive } from '../modules/layers/selectors';
 import { formatDisplayDate } from '../modules/date/util';
@@ -410,7 +409,7 @@ function mapStateToProps(state) {
     speed,
     map,
     url,
-    numberOfFrames: util.getNumberOfSteps(
+    numberOfFrames: getNumberOfSteps(
       startDate,
       endDate,
       customSelected
