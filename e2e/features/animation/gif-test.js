@@ -112,7 +112,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with standard interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQueryStrings.animationTooManyFrames);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFramesGif);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
@@ -124,7 +124,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with custom interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQueryStrings.animationTooManyFramesCustomInterval);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFramesGifCustomInterval);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
