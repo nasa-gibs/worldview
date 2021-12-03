@@ -34,7 +34,7 @@ module.exports = {
   'Mobile comparison A|B toggle buttons are visible and only A is selected by default': (c) => {
     c.waitForElementVisible(compareMobileSelectToggle, TIME_LIMIT);
     c.assert.cssClassPresent(aMobileCompareButton, 'compare-btn-selected');
-    c.assert.cssClassNotPresent(bMobileCompareButton, 'compare-btn-selected');
+    c.assert.not.cssClassPresent(bMobileCompareButton, 'compare-btn-selected');
   },
 
   // toggle select B change compare mode date to B
@@ -72,7 +72,7 @@ module.exports = {
   'B compare button toggle is only selected on B permalink load': (c) => {
     c.url(c.globals.url + localQueryStrings.spyAndBIsActive);
     c.waitForElementVisible(swipeDragger, TIME_LIMIT);
-    c.assert.cssClassNotPresent(aMobileCompareButton, 'compare-btn-selected');
+    c.assert.not.cssClassPresent(aMobileCompareButton, 'compare-btn-selected');
     c.assert.cssClassPresent(bMobileCompareButton, 'compare-btn-selected');
   },
 
