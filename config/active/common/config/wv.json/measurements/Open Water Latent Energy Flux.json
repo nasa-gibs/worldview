@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Open Water Latent Energy Flux": {
+            "id": "open-water-latent-energy-flux",
+            "title":    "Open Water Latent Energy Flux",
+            "subtitle": "MERRA-2",
+            "sources": {
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/OpenWaterLatentEnergyFlux",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Open_Water_Latent_Energy_Flux_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

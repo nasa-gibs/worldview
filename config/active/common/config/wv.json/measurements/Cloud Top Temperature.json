@@ -1,0 +1,35 @@
+{
+    "measurements": {
+        "Cloud Top Temperature": {
+            "id": "cloud-top-temperature",
+            "title":    "Cloud Top Temperature",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudTopTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Top_Temp_Day",
+                        "MODIS_Aqua_Cloud_Top_Temp_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudTopTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Top_Temp_Day",
+                        "MODIS_Terra_Cloud_Top_Temp_Night",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

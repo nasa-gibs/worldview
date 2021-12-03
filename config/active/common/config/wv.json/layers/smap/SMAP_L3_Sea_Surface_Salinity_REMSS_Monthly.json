@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SMAP_L3_Sea_Surface_Salinity_REMSS_Monthly": {
+      "id": "SMAP_L3_Sea_Surface_Salinity_REMSS_Monthly",
+      "title": "Sea Surface Salinity (L3, Monthly, Radiometer)",
+      "subtitle": "SMAP",
+      "description": "smap/SMAP_L3_Sea_Surface_Salinity_REMSS_Monthly",
+      "tags": "sss podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Surface Salinity",
+      "product": "SMAP_RSS_L3_SSS_SMI_MONTHLY_V4",
+      "wrapadjacentdays": true
+    }
+  }
+}

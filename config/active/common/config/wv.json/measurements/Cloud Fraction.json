@@ -1,0 +1,48 @@
+{
+    "measurements": {
+        "Cloud Fraction": {
+            "id": "cloud-fraction",
+            "title":    "Cloud Fraction",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS",
+            "sources": {
+              "Aqua/AIRS": {
+                 "id": "aqua-airs",
+                 "title": "Aqua/AIRS",
+                 "description": "airs/CloudFraction",
+                 "image": "",
+                 "settings": [
+                     "AIRS_L2_Total_Cloud_Fraction_Day",
+                     "AIRS_L2_Total_Cloud_Fraction_Night",
+                     "OrbitTracks_Aqua_Ascending",
+                     "OrbitTracks_Aqua_Descending"
+                 ]
+             },
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudFraction",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Fraction_Day",
+                        "MODIS_Aqua_Cloud_Fraction_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudFraction",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Fraction_Day",
+                        "MODIS_Terra_Cloud_Fraction_Night",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+
+                }
+            }
+        }
+    }
+}

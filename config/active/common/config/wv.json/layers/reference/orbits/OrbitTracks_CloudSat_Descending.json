@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "OrbitTracks_CloudSat_Descending": {
+      "id": "OrbitTracks_CloudSat_Descending",
+      "title": "CloudSat - Orbit Track & Time",
+      "subtitle": "CloudSat / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_CloudSat_Descending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
+      ],
+      "track": "descending",
+      "startDate": "2006-06-06",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_CloudSat_Descending",
+        "immutable": true
+      },
+      "tags": "tracks night"
+    }
+  }
+}

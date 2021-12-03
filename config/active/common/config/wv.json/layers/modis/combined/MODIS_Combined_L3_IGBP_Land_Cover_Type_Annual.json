@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual": {
+      "id": "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
+      "title": "Land Cover Type (L3, IGBP, Yearly)",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Land Cover",
+      "product": "MCD12Q1",
+      "wrapadjacentdays": true,
+      "inactive": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

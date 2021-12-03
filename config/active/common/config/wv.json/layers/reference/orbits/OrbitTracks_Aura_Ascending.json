@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "OrbitTracks_Aura_Ascending": {
+      "id": "OrbitTracks_Aura_Ascending",
+      "title": "Aura - Orbit Track & Time",
+      "subtitle": "Aura / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_Aura_Ascending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
+      ],
+      "track": "ascending",
+      "startDate": "2004-07-15",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_Aura_Ascending",
+        "immutable": true
+      },
+      "tags": "tracks day"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "MODIS_Aqua_Cloud_Top_Pressure_Night": {
+      "id": "MODIS_Aqua_Cloud_Top_Pressure_Night",
+      "title": "Cloud Top Pressure (Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Pressure_Night",
+      "group": "overlays",
+      "layergroup": "Cloud Pressure",
+      "product": "MYD06_L2_NIGHT",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_4"
+        ]
+      },
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

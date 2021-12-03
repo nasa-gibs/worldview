@@ -1,0 +1,39 @@
+{
+    "measurements": {
+        "Leaf Area Index": {
+            "id": "leaf-area-index",
+            "title":    "Leaf Area Index",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/LeafAreaIndex",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_L4_LAI_8Day"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/LeafAreaIndex",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_L4_LAI_8Day"
+                    ]
+                },
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra/MODIS",
+                    "description": "modis/combined/LeafAreaIndex",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_L4_LAI_4Day",
+                        "MODIS_Combined_L4_LAI_8Day"
+                    ]
+                }
+            }
+        }
+    }
+}

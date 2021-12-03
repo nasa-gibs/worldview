@@ -30,6 +30,7 @@ e2e/reports
 # Config
 /config/*
 !/config/default
+!/config/active
 gc
 # Jest
 /coverage

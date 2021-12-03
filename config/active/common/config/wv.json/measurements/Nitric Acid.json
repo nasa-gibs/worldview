@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Nitric Acid": {
+            "id": "nitric-acid",
+            "title":    "Nitric Acid",
+            "subtitle": "Aura/MLS",
+            "sources": {
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/NitricAcid",
+                    "image": "",
+                    "settings": [
+                        "MLS_HNO3_46hPa_Day",
+                        "MLS_HNO3_46hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

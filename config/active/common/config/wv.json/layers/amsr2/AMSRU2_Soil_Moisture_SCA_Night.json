@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AMSRU2_Soil_Moisture_SCA_Night": {
+      "id": "AMSRU2_Soil_Moisture_SCA_Night",
+      "title": "Soil Moisture (Single Channel Algorithm, Night)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Soil_Moisture_SCA_Night",
+      "tags": "amsr-u2",
+      "group": "overlays",
+      "layergroup": "Soil Moisture",
+      "product": "AU_Land",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

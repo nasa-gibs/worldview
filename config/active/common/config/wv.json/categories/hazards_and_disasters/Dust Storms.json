@@ -1,0 +1,25 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Dust Storms": {
+                "title": "Dust Storms",
+                "id": "dust-storms",
+                "image": "dust-storms.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Dust",
+                    "Corrected Reflectance",
+                    "Human Built-up And Settlement Extent",
+                    "Land Surface Reflectance",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Urban Extents"
+
+                ]
+            }
+        }
+    }
+}

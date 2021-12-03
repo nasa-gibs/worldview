@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Sea Surface Temperature Anomalies": {
+            "id": "sea-surface-temperature-anomalies",
+            "title":    "Sea Surface Temperature Anomalies",
+            "subtitle": "Multi-mission/GHRSST",
+            "sources": {
+                "Multi-mission/GHRSST": {
+                    "id": "multi-mission-ghrsst",
+                    "title": "Multi-mission/GHRSST",
+                    "description": "multi-mission/ghrsst/SeaSurfaceTemperatureAnomalies",
+                    "image": "",
+                    "settings": [
+                        "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
+                        "GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,1 @@
+<p>Using the compare tool, we can compare the start of the B-46 iceberg calving around 6 November 2018 ("B" side) to 8 January 2019 ("A" side). Use the swipe button to move the line back and forth to see the movement of the iceberg between the two dates.</p>

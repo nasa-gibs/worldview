@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Vegetation Light Use Efficiency": {
+            "id": "potential-vegetation-light-use-efficiency",
+            "title":    "Percent of Potential Vegetation Light Use Efficiency",
+            "subtitle": "SMAP/Model Value-Added",
+            "sources": {
+                "SMAP/Model Value-Added": {
+                    "id": "smap-model-value-added",
+                    "title": "SMAP/Model Value-Added",
+                    "description": "smap/PercentPotentialVegetationLightUseEfficiency",
+                    "image": "",
+                    "settings": [
+			                 "SMAP_L4_Emult_Average"
+                    ]
+                  }
+            }
+        }
+    }
+}

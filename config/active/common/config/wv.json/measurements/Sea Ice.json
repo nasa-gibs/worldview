@@ -1,0 +1,93 @@
+{
+    "measurements": {
+        "Sea Ice": {
+            "id": "sea-ice",
+            "title":    "Sea Ice",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/SeaIce",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Sea_Ice",
+                        "MODIS_Aqua_L3_Sea_Ice_Daily"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/SeaIce",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Sea_Ice",
+                        "MODIS_Terra_L3_Sea_Ice_Daily"
+                    ]
+                },
+                "Aqua/AMSR-E": {
+                    "id": "aqua-amsr-e",
+                    "title": "Aqua/AMSR-E",
+                    "description": "amsre/SeaIceConcentration",
+                    "image": "",
+                    "settings": [
+                        "AMSRE_Sea_Ice_Concentration_12km",
+                        "AMSRE_Sea_Ice_Concentration_25km",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "amsr2/SeaIceConcentration",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Sea_Ice_Concentration_12km",
+                        "AMSRU2_Sea_Ice_Concentration_25km",
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
+                    ]
+                },
+                "Multi-mission/GHRSST": {
+                    "id": "multi-mission-ghrsst",
+                    "title": "Multi-mission/GHRSST",
+                    "description": "multi-mission/ghrsst/SeaIceConcentration",
+                    "image": "",
+                    "settings": [
+                        "GHRSST_L4_MUR_Sea_Ice_Concentration",
+                        "GHRSST_L4_MUR25_Sea_Ice_Concentration",
+                        "GHRSST_L4_GAMSSA_GDS2_Sea_Ice_Concentration"
+                    ]
+                },
+                "SSMI": {
+                    "id": "ssmi",
+                    "title": "SSMI",
+                    "description": "ssmi/SeaIceConcentration",
+                    "image": "",
+                    "settings": [
+                        "SSMIS_Sea_Ice_Concentration"
+                    ]
+                },
+                "SSMIS": {
+                    "id": "ssmis",
+                    "title": "SSMIS",
+                    "description": "ssmi/SeaIceConcentrationSnowExtent",
+                    "image": "",
+                    "settings": [
+                        "SSMIS_Sea_Ice_Concentration_Snow_Extent"
+                    ]
+                },
+                "MEaSUREs": {
+                    "id": "measures",
+                    "title": "MEaSUREs",
+                    "description": "multi-mission/SeaIceandSnowExtent",
+                    "image": "",
+                    "settings": [
+                        "MEaSUREs_Sea_Ice_Snow_Extent"
+                    ]
+                }
+            }
+        }
+    }
+}

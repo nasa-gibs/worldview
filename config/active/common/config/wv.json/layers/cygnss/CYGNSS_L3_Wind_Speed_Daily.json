@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "CYGNSS_L3_Wind_Speed_Daily": {
+      "id": "CYGNSS_L3_Wind_Speed_Daily",
+      "title": "Wind Speed (CDR, Daily)",
+      "subtitle": "CYGNSS / DDMI",
+      "description": "cygnss/CYGNSS_L3_Wind_Speed_Daily",
+      "group": "overlays",
+      "tags": "podaac PO.DAAC",
+      "layergroup": "Wind Speed",
+      "product": "CYGNSS_L3_CDR_V1.0"
+    }
+  }
+}

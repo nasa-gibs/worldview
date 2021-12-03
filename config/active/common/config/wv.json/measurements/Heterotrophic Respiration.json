@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Heterotrophic Respiration": {
+            "id": "heterotrophic-respiration",
+            "title":    "Heterotrophic Respiration",
+            "subtitle": "SMAP/Model Value-Added",
+            "sources": {
+                "SMAP/Model Value-Added": {
+                    "id": "smap-model-value-added",
+                    "title": "SMAP/Model Value-Added",
+                    "description": "smap/HeterotrophicResipration",
+                    "image": "",
+                    "settings": [
+			                  "SMAP_L4_Mean_Heterotrophic_Respiration"
+                    ]
+                }
+            }
+        }
+    }
+}

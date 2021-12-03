@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Clear_Sky_Confidence_Night": {
+      "id": "VIIRS_SNPP_Clear_Sky_Confidence_Night",
+      "title": "Clear Sky Confidence (Night)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Clear_Sky_Confidence_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Clear Sky Confidence",
+      "product": "CLDMSK_L2_VIIRS_SNPP_NRT",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SSMI_DMSP_F8_Wind_Speed_Over_Oceans_Descending": {
+      "id": "SSMI_DMSP_F8_Wind_Speed_Over_Oceans_Descending",
+      "title": "Surface Wind Speed Over Oceans (Descending, Local PM)",
+      "subtitle": "DMSP-F8 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F8_Wind_Speed_Over_Oceans_Descending",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Wind Speed",
+      "product": "rssmif08d",
+      "inactive": true
+    }
+  }
+}

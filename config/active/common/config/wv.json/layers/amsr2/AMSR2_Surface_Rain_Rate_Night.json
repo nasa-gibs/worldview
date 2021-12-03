@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "AMSR2_Surface_Rain_Rate_Night": {
+      "id": "AMSR2_Surface_Rain_Rate_Night",
+      "title": "Surface Rain Rate (Night, Historical)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSR2_Surface_Rain_Rate_Night",
+      "tags": "amsr-2 precipitation",
+      "inactive": true,
+      "group": "overlays",
+      "layergroup": "Precipitation Rate",
+      "product": "A2_RainOcn_NRT",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

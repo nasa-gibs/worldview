@@ -1,0 +1,49 @@
+{
+    "measurements": {
+        "Radiance": {
+            "id": "radiance",
+            "title":    "Radiance",
+            "subtitle": "Terra/MISR, CALIPSO/WFC",
+            "sources": {
+                "Terra/MISR": {
+                    "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/Radiance",
+                    "image": "",
+                    "settings": [
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_DF",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_CF",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_BF",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_AF",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_AN",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_AA",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_BA",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_CA",
+                        "MISR_AM1_Ellipsoid_Radiance_RGB_DA",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_DF",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_CF",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_BF",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_AF",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_AN",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_AA",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_BA",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_CA",
+                        "MISR_AM1_Ellipsoid_Radiance_NGB_DA",
+                        "MISR_Radiance_Average_Natural_Color_Monthly",
+                        "MISR_Radiance_Average_Infrared_Color_Monthly"
+                    ]
+                },
+                    "CALISPO/WFC": {
+                        "id": "calipso-wfc",
+                        "title": "CALIPSO/WFC",
+                        "description": "calipso/Radiance",
+                        "image": "",
+                        "settings": [
+                            "CALIPSO_Wide_Field_Camera_Radiance_v3-01",
+                            "CALIPSO_Wide_Field_Camera_Radiance_v3-02"
+                        ]
+                    }
+            }
+        }
+    }
+}

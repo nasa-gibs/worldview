@@ -1,0 +1,34 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Air Quality": {
+                "title": "Air Quality",
+                "id": "air-quality",
+                "image": "air-quality.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Dust",
+                    "Fires and Thermal Anomalies",
+                    "Human Built-up And Settlement Extent",
+                    "Land Surface Reflectance",
+                    "Methane",
+                    "Nitric Acid",
+                    "Nitrogen Dioxide",
+                    "Nitrous Oxide",
+                    "Ozone",
+                    "Particulate Matter",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Sulfur Dioxide",
+                    "Urban Extents",
+                    "Volcano Hazard"
+                ]
+            }
+        }
+    }
+}

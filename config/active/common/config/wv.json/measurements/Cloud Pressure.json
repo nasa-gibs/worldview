@@ -1,0 +1,45 @@
+{
+    "measurements": {
+        "Cloud Pressure": {
+            "id": "cloud-pressure",
+            "title":    "Cloud Pressure",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aura/OMI",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudTopPressure",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Top_Pressure_Day",
+                        "MODIS_Aqua_Cloud_Top_Pressure_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudTopPressure",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Top_Pressure_Day",
+                        "MODIS_Terra_Cloud_Top_Pressure_Night",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/CloudPressure",
+                    "image": "",
+                    "settings": [
+                        "OMI_Cloud_Pressure",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}

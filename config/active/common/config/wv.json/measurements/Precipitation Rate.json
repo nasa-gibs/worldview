@@ -1,0 +1,195 @@
+{
+    "measurements": {
+        "Precipitation Rate": {
+            "id": "precipitation-rate",
+            "title":    "Precipitation Rate",
+            "subtitle": "IMERG, GPM/GMI, GCOM-W1/AMSR2, TRMM, Aqua/AMSR-E, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, GLDAS, NLDAS, Merged Microwave Radiometers, MERRA-2",
+            "sources": {
+              "IMERG": {
+                  "id": "imerg",
+                  "title": "IMERG",
+                  "description": "multi-mission/imerg/Precipitation",
+                  "image": "",
+                  "settings": [
+                      "IMERG_Precipitation_Rate"
+                  ]
+              },
+                "GPM/GMI": {
+                    "id": "gpm-gmi",
+                    "title": "GPM/GMI",
+                    "description": "gpm/PrecipitationRate",
+                    "image": "",
+                    "settings": [
+                        "GMI_Rain_Rate_Asc",
+                        "GMI_Rain_Rate_Dsc",
+                        "GMI_Snow_Rate_Asc",
+                        "GMI_Snow_Rate_Dsc",
+                        "OrbitTracks_GPM_Ascending",
+                        "OrbitTracks_GPM_Descending"
+                    ]
+                },
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "amsr2/PrecipitationRate",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Surface_Precipitation_Day",
+                        "AMSRU2_Surface_Precipitation_Night",
+                        "AMSRU2_Total_Precipitable_Water_Day",
+                        "AMSRU2_Total_Precipitable_Water_Night",
+                        "AMSR2_Surface_Precipitation_Rate_Day",
+                        "AMSR2_Surface_Precipitation_Rate_Night",
+                        "AMSR2_Surface_Rain_Rate_Day",
+                        "AMSR2_Surface_Rain_Rate_Night",
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
+                    ]
+                  },
+                  "TRMM": {
+                      "id": "trmm",
+                      "title": "TRMM",
+                      "description": "trmm/PrecipitationRate",
+                      "image": "",
+                      "settings": [
+                          "TRMM_Precipitation_Rate_Asc",
+                          "TRMM_Precipitation_Rate_Dsc"
+                      ]
+                    },
+                  "Aqua/AMSR-E": {
+                      "id": "aqua-amsr-e",
+                      "title": "Aqua/AMSR-E",
+                      "description": "amsre/SurfacePrecipitationRate",
+                      "image": "",
+                      "settings": [
+                          "AMSRE_Surface_Precipitation_Rate_Day",
+                          "AMSRE_Surface_Precipitation_Rate_Night",
+                          "AMSRE_Surface_Rain_Rate_Day",
+                          "AMSRE_Surface_Rain_Rate_Night",
+                          "OrbitTracks_Aqua_Ascending",
+                          "OrbitTracks_Aqua_Descending"
+                      ]
+                },
+                "DMSP-F08/SSMI": {
+                    "id": "dmsp-f08-ssmi",
+                    "title": "DMSP-F08/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F8",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F8_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F8_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F10/SSMI": {
+                    "id": "dmsp-f10-ssmi",
+                    "title": "DMSP-F10/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F10",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F11/SSMI": {
+                    "id": "dmsp-f11-ssmi",
+                    "title": "DMSP-F11/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F11",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F11_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F11_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F13/SSMI": {
+                    "id": "dmsp-f13-ssmi",
+                    "title": "DMSP-F13/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F13",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F14/SSMI": {
+                    "id": "dmsp-f14-ssmi",
+                    "title": "DMSP-F14/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F14",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F14_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F14_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F15/SSMI": {
+                    "id": "dmsp-f15-ssmi",
+                    "title": "DMSP-F15/SSMI",
+                    "description": "ssmi/RainRateOverOceansDMSP-F15",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F15_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F15_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F16/SSMIS": {
+                    "id": "dmsp-f16-ssmis",
+                    "title": "DMSP-F16/SSMIS",
+                    "description": "ssmi/RainRateOverOceansDMSP-F16",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F16_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F16_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F17/SSMIS": {
+                    "id": "dmsp-f17-ssmis",
+                    "title": "DMSP-F17/SSMIS",
+                    "description": "ssmi/RainRateOverOceansDMSP-F17",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F17_Rain_Rate_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F17_Rain_Rate_Over_Oceans_Descending"
+                    ]
+                },
+                "GLDAS": {
+                    "id": "gldas",
+                    "title": "GLDAS",
+                    "description": "ldas/GLDASPrecipitationRate",
+                    "image": "",
+                    "settings": [
+                        "GLDAS_Surface_Total_Precipitation_Rate_Monthly"
+                    ]
+                },
+                "NLDAS": {
+                    "id": "nldas",
+                    "title": "NLDAS",
+                    "description": "ldas/NLDASPrecipitationTotal",
+                    "image": "",
+                    "settings": [
+                        "NLDAS_Surface_Total_Precipitation_Primary_Monthly",
+                        "NLDAS_Surface_Total_Precipitation_Secondary_Monthly"
+                    ]
+                },
+                "Merged Microwave Radiometers": {
+                    "id": "merged-microwave-radiometers",
+                    "title": "Merged Microwave Radiometers",
+                    "description": "multi-mission/PrecipitableWaterOverIceFreeOceans",
+                    "image": "",
+                    "settings": [
+                        "RSS_Total_Precipitable_Water_Climatology_Monthly"
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/Precipitation",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Precipitation_Bias_Corrected_Monthly",
+                        "MERRA2_Snowfall_Monthly",
+                        "MERRA2_Total_Precipitable_Water_Vapor_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

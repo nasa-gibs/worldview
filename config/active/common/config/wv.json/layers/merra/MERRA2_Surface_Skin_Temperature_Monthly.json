@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MERRA2_Surface_Skin_Temperature_Monthly": {
+      "id": "MERRA2_Surface_Skin_Temperature_Monthly",
+      "title": "Surface Skin Temperature (Monthly)",
+      "subtitle": "MERRA-2",
+      "description": "merra/MERRA2_Surface_Skin_Temperature_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Temperature",
+      "product": "M2TMNXSLV",
+      "wrapadjacentdays": true
+    }
+  }
+}

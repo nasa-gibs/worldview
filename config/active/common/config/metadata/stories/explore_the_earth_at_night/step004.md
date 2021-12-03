@@ -1,0 +1,1 @@
+<p>Fishing Boats in the Tsushima Strait in 2016 - The lights in the strait are likely from fishing boats attempting to lure squid to the surface. <br> Also evident is the Korean Demilitarized Zone (DMZ) between North and South Korea.</p>

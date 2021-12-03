@@ -1,0 +1,71 @@
+{
+    "measurements": {
+        "Surface Flux": {
+            "id": "surface-flux",
+            "title":    "Surface Flux",
+            "subtitle": "Aqua and Terra/CERES, Terra/CERES",
+            "sources": {
+                "Terra/CERES": {
+                    "id": "terra-ceres",
+                    "title": "Terra/CERES",
+                    "description": "ceres/Terra_SurfaceFlux",
+                    "image": "",
+                    "settings": [
+                      "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
+                      "CERES_EBAF_Surface_CRE_Net_Longwave_Flux_Monthly",
+                      "CERES_EBAF_Surface_CRE_Net_Shortwave_Flux_Monthly",
+                      "CERES_EBAF_Surface_Net_Total_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Net_Total_Flux_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Net_Longwave_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Net_Longwave_Flux_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Net_Shortwave_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Net_Shortwave_Flux_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Shortwave_Flux_Up_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Longwave_Flux_Up_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Longwave_Flux_Down_All_Sky_Monthly",
+                      "CERES_EBAF_Surface_Longwave_Flux_Up_Clear_Sky_Monthly",
+                      "CERES_EBAF_Surface_Longwave_Flux_Down_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Longwave_Flux_Up_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Longwave_Flux_Down_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Direct_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Diffuse_All_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Up_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Longwave_Flux_Up_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Longwave_Flux_Down_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_UV_Index_All_Sky_Monthly"
+                    ]
+                  },
+
+                      "Aqua and Terra/CERES": {
+                          "id": "aqua-terra-ceres",
+                          "title": "Aqua and Terra/CERES",
+                          "description": "ceres/Combined_SurfaceFlux",
+                          "image": "",
+                          "settings": [
+                            "CERES_Combined_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Longwave_Flux_Up_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Longwave_Flux_Down_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Direct_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Diffuse_All_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Up_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_Longwave_Flux_Up_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_Longwave_Flux_Down_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_UV_Index_All_Sky_Monthly"
+                          ]
+                }
+            }
+        }
+    }
+}

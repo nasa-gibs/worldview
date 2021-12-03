@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Latitude-Longitude Lines": {
+            "id": "latitude-longitude-lines",
+            "title":    "Latitude-Longitude Lines",
+            "subtitle": "OpenLayers/Graticule Control",
+            "multichoice": true,
+            "sources": {
+                "OpenLayers": {
+                    "id": "openlayers",
+                    "title": "OpenLayers",
+                    "description": "reference/LatLongLines",
+                    "image": "",
+                    "settings": [
+                        "Graticule"
+                    ]
+                }
+            }
+        }
+    }
+}

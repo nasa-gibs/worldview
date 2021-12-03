@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "HLS_MGRS_Granule_Grid": {
+      "id": "HLS_MGRS_Granule_Grid",
+      "title": "MGRS/HLS Grid",
+      "subtitle": "MGRS/HLS",
+      "description": "multi-mission/hls/HLS_MGRS_Granule_Grid",
+      "tags": "military grid reference system harmonized landsat sentinel-2",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "product": "",
+      "type": "vector",
+      "wrapX": true,
+      "disableSnapshot": true
+    }
+  }
+}

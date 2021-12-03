@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MLS_H2O_46hPa_Night": {
+      "id": "MLS_H2O_46hPa_Night",
+      "title": "Water Vapor (46 hPa, Night)",
+      "subtitle": "Aura / MLS",
+      "description": "mls/MLS_H2O_46hPa_Night",
+      "tags": "h2o",
+      "group": "overlays",
+      "layergroup": "Water Vapor",
+      "product": "ML2H2O",
+      "tracks": [
+        "OrbitTracks_Aura_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

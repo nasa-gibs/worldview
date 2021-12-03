@@ -1,0 +1,25 @@
+{
+    "measurements": {
+        "Earth at Night": {
+            "id": "earth-at-night",
+            "title":    "Earth at Night",
+            "subtitle": "Suomi NPP/VIIRS",
+            "sources": {
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/EarthAtNight",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        "VIIRS_SNPP_DayNightBand_ENCC",
+                        "VIIRS_Night_Lights",
+                        "VIIRS_Black_Marble",
+                        "VIIRS_CityLights_2012"
+                    ]
+                }
+            }
+        }
+    }
+}

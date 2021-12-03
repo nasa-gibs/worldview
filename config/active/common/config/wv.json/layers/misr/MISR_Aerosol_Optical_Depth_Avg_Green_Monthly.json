@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MISR_Aerosol_Optical_Depth_Avg_Green_Monthly": {
+      "id": "MISR_Aerosol_Optical_Depth_Avg_Green_Monthly",
+      "title": "Aerosol Optical Depth Average (Green, Monthly)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_Aerosol_Optical_Depth_Avg_Green_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "product": "MIL3MAE",
+      "wrapadjacentdays": true
+    }
+  }
+}

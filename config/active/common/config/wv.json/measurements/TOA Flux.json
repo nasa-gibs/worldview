@@ -1,0 +1,50 @@
+{
+    "measurements": {
+        "TOA Flux": {
+            "id": "toa-flux",
+            "title":    "TOA Flux",
+            "subtitle": "Aqua and Terra/CERES, Terra/CERES",
+            "sources": {
+                "Terra/CERES": {
+                    "id": "terra-ceres",
+                    "title": "Terra/CERES",
+                    "description": "ceres/Terra_TOAFlux",
+                    "image": "",
+                    "settings": [
+                      "CERES_EBAF_TOA_CRE_Net_Flux_Monthly",
+                      "CERES_EBAF_TOA_CRE_Longwave_Flux_Monthly",
+                      "CERES_EBAF_TOA_CRE_Shortwave_Flux_Monthly",
+                      "CERES_EBAF_TOA_Net_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly",
+                      "CERES_EBAF_TOA_Incoming_Solar_Flux_Monthly",
+                      "CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_TOA_Shortwave_Flux_Clear_Sky_Monthly",
+                      "CERES_EBAF_TOA_Longwave_Flux_All_Sky_Monthly",
+                      "CERES_EBAF_TOA_Longwave_Flux_Clear_Sky_Monthly",
+                      "CERES_Terra_TOA_Longwave_Flux_All_Sky_Monthly",
+                      "CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly",
+                      "CERES_Terra_TOA_Longwave_Flux_Clear_Sky_Monthly",
+                      "CERES_Terra_TOA_Shortwave_Flux_Clear_Sky_Monthly",
+                      "CERES_Terra_TOA_Window_Region_Flux_All_Sky_Monthly",
+                      "CERES_Terra_TOA_Window_Region_Flux_Clear_Sky_Monthly"
+                    ]
+                },
+
+                    "Aqua and Terra/CERES": {
+                        "id": "aqua-terra-ceres",
+                        "title": "Aqua and Terra/CERES",
+                        "description": "ceres/Combined_TOAFlux",
+                        "image": "",
+                        "settings": [
+                          "CERES_Combined_TOA_Longwave_Flux_All_Sky_Monthly",
+                          "CERES_Combined_TOA_Shortwave_Flux_All_Sky_Monthly",
+                          "CERES_Combined_TOA_Longwave_Flux_Clear_Sky_Monthly",
+                          "CERES_Combined_TOA_Shortwave_Flux_Clear_Sky_Monthly",
+                          "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly",
+                          "CERES_Combined_TOA_Window_Region_Flux_Clear_Sky_Monthly"
+                        ]
+                    }
+            }
+        }
+    }
+}

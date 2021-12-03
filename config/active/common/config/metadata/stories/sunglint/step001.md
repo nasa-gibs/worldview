@@ -1,0 +1,1 @@
+<p>Why are there bright streaks in the corrected reflectance imagery? These shiny, bright, but blurry areas in bodies of water are caused by sunglint. This occurs when sunlight reflects off the surface of the water at the same angle that a satellite sensor views it.</p>

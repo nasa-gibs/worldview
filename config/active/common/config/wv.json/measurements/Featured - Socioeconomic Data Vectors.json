@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Socioeconomic Data Vectors - Featured": {
+            "id": "featured-socioeconomic-data-vectors",
+            "title": "Socioeconomic Data (Vectors)",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/Vectors",
+                    "image": "",
+                    "settings": [
+                        "GRanD_Dams",
+                        "GRanD_Reservoirs",
+                        "Nuclear_Power_Plant_Locations",
+                        "GRUMP_Settlements"
+                    ]
+                }
+            }
+        }
+    }
+}

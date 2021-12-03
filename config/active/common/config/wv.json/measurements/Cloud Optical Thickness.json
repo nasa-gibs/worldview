@@ -1,0 +1,51 @@
+{
+    "measurements": {
+        "Cloud Optical Thickness": {
+            "id": "cloud-optical-thickness",
+            "title":    "Cloud Optical Thickness",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudOpticalThickness",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Optical_Thickness",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_PCL",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_16",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_1621",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_16_PCL",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_PCL_1621",
+                        "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudOpticalThickness",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Optical_Thickness",
+                        "MODIS_Terra_Cloud_Optical_Thickness_PCL",
+                        "MODIS_Terra_Cloud_Optical_Thickness_16",
+                        "MODIS_Terra_Cloud_Optical_Thickness_1621",
+                        "MODIS_Terra_Cloud_Optical_Thickness_16_PCL",
+                        "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/CloudOpticalThickness",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Cloud_Optical_Thickness",
+                        "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}

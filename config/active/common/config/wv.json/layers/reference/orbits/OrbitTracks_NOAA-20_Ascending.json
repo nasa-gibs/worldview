@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "OrbitTracks_NOAA-20_Ascending": {
+      "id": "OrbitTracks_NOAA-20_Ascending",
+      "title": "NOAA-20 - Orbit Track & Time",
+      "subtitle": "NOAA-20 / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_NOAA-20_Ascending",
+      "tags": "JPSS-1 tracks day",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
+      ],
+      "track": "ascending",
+      "startDate": "2017-11-19",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_NOAA-20_Ascending",
+        "immutable": true
+      }
+    }
+  }
+}

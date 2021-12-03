@@ -1,0 +1,3 @@
+To add more context, we can change the underlying image to one like the Aqua/MODIS Corrected Reflectance Bands 7-2-1 layer. This layer is useful for distinguishing burn scars where burned vegetation shows as red/black and vegetation is bright green. Using the comparison tool you can see the difference between the true color reflectance imagery on the left with the false color, Bands 7-2-1 reflectance imagery on the right. Swipe left and right to look at those differences. Turn on and off the fire point layers to see how the fire points correspond to the burned areas.
+
+Tip: The VIIRS Bands M11-I2-I1 layer is similar to the MODIS Bands 7-2-1 layer.

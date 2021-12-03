@@ -1,0 +1,91 @@
+{
+    "measurements": {
+        "Temperature": {
+            "id": "temperature",
+            "title":    "Temperature",
+            "subtitle": "Aqua/AIRS, Aura/MLS, GLDAS, NLDAS, Daymet, MERRA-2",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/Temperature",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_Temperature_500hPa_Day",
+                        "AIRS_L2_Temperature_500hPa_Night",
+                        "AIRS_L2_Temperature_700hPa_Day",
+                        "AIRS_L2_Temperature_700hPa_Night",
+                        "AIRS_L2_Temperature_850hPa_Day",
+                        "AIRS_L2_Temperature_850hPa_Night",
+                        "AIRS_L2_Surface_Air_Temperature_Day",
+                        "AIRS_L2_Surface_Air_Temperature_Night",
+                        "AIRS_L2_Surface_Skin_Temperature_Day",
+                        "AIRS_L2_Surface_Skin_Temperature_Night",
+                        "AIRS_L3_Surface_Air_Temperature_Daily_Day",
+                        "AIRS_L3_Surface_Air_Temperature_Daily_Night",
+                        "AIRS_L3_Surface_Air_Temperature_Monthly_Day",
+                        "AIRS_L3_Surface_Air_Temperature_Monthly_Night",
+                        "AIRS_L3_Surface_Skin_Temperature_Daily_Day",
+                        "AIRS_L3_Surface_Skin_Temperature_Daily_Night",
+                        "AIRS_L3_Surface_Skin_Temperature_Monthly_Day",
+                        "AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/Temperature",
+                    "image": "",
+                    "settings": [
+                        "MLS_Temperature_46hPa_Day",
+                        "MLS_Temperature_46hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                },
+                "GLDAS": {
+                    "id": "gldas",
+                    "title": "GLDAS",
+                    "description": "ldas/GLDASAirTemperature",
+                    "image": "",
+                    "settings": [
+                        "GLDAS_Near_Surface_Air_Temperature_Monthly"
+                    ]
+                },
+                "NLDAS": {
+                    "id": "nldas",
+                    "title": "NLDAS",
+                    "description": "ldas/NLDASAirTemperature",
+                    "image": "",
+                    "settings": [
+                        "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly"
+                    ]
+                },
+                "Daymet": {
+                    "id": "daymet",
+                    "title": "Daymet",
+                    "description": "daymet/Temperature",
+                    "image": "",
+                    "settings": [
+                      "Daymet_Maximum_Air_Temp_Daily",
+                      "Daymet_Minimum_Air_Temp_Daily"
+                    ]
+                },
+                    "MERRA-2": {
+                        "id": "merra-2",
+                        "title": "MERRA-2",
+                        "description": "merra/Temperature",
+                        "image": "",
+                        "settings": [
+                            "MERRA2_Surface_Skin_Temperature_Monthly",
+                            "MERRA2_2m_Air_Temperature_Monthly",
+                            "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
+                            "MERRA2_Air_Temperature_250hPa_Monthly"
+                        ]
+                      }
+            }
+        }
+    }
+}

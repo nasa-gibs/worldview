@@ -1,0 +1,32 @@
+{
+  "layers": {
+    "Himawari_AHI_Band13_Clean_Infrared": {
+      "id": "Himawari_AHI_Band13_Clean_Infrared",
+      "title": "Clean Infrared (10.3 µm, Band 13, 10 minute)",
+      "subtitle": "Himawari-8/AHI",
+      "description": "himawari/Himawari_AHI_Band13_Clean_Infrared",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": "Geostationary",
+      "product": "",
+      "palette": {
+        "immutable": true
+      },
+      "wrapX": true,
+      "daynight": [
+        "day",
+        "night"
+      ],
+      "availability": {
+        "rollingWindow": 30,
+        "historicalRanges": [
+          {
+            "startDate": "2020-01-03",
+            "endDate": "2020-01-04",
+            "dateInterval": "10"
+          }
+        ]
+      }
+    }
+  }
+}

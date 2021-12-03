@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "TRMM_Brightness_Temp_Dsc": {
+      "id": "TRMM_Brightness_Temp_Dsc",
+      "title": "Brightness Temperature (Descending)",
+      "subtitle": "TRMM",
+      "description": "trmm/TRMM_Brightness_Temp_Dsc",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "GPM_1CTRMMTMI",
+      "inactive": true
+    }
+  }
+}

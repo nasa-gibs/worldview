@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Cloud Multi Layer Flag": {
+            "id": "cloud-multi-layer-flag",
+            "title":    "Cloud Multi Layer Flag",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudMultiLayerFlag",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Multi_Layer_Flag",
+                        "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudMultiLayerFlag",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Multi_Layer_Flag",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

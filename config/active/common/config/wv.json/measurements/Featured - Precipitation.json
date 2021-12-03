@@ -1,0 +1,48 @@
+{
+  "measurements": {
+      "Precipitation Rate - Featured": {
+          "id": "featured-precipitation-rate",
+          "title":    "Precipitation Rate",
+          "subtitle": "IMERG, GPM/GMI, GCOM-W1/AMSR2",
+          "sources": {
+            "IMERG": {
+              "id": "imerg",
+              "title": "IMERG",
+              "description": "multi-mission/imerg/Precipitation",
+              "image": "",
+              "settings": [
+                  "IMERG_Precipitation_Rate"
+              ]
+            },
+            "GPM/GMI": {
+              "id": "gpm-gmi",
+              "title": "GPM/GMI",
+              "description": "gpm/PrecipitationRate",
+              "image": "",
+              "settings": [
+                  "GMI_Rain_Rate_Asc",
+                  "GMI_Rain_Rate_Dsc",
+                  "GMI_Snow_Rate_Asc",
+                  "GMI_Snow_Rate_Dsc",
+                  "OrbitTracks_GPM_Ascending",
+                  "OrbitTracks_GPM_Descending"
+              ]
+            },
+            "GCOM-W1/AMSR2": {
+              "id": "gcom-w1-amsr2",
+              "title": "GCOM-W1/AMSR2",
+              "description": "amsr2/PrecipitationRate",
+              "image": "",
+              "settings": [
+                  "AMSR2_Surface_Precipitation_Rate_Day",
+                  "AMSR2_Surface_Precipitation_Rate_Night",
+                  "AMSR2_Surface_Rain_Rate_Day",
+                  "AMSR2_Surface_Rain_Rate_Night",
+                  "OrbitTracks_GCOM-W1_Ascending",
+                  "OrbitTracks_GCOM-W1_Descending"
+              ]
+            }
+          }
+      }
+  }
+}

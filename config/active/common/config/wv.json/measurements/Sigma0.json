@@ -1,0 +1,30 @@
+{
+    "measurements": {
+        "Sigma0": {
+            "id": "sigma0",
+            "title":    "Sigma0",
+            "subtitle": "SMAP/Radar",
+            "sources": {
+                "SMAP/Radar": {
+                    "id": "smap-radar",
+                    "title": "SMAP/Radar",
+                    "description": "smap/Sigma0",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L3_Active_Sigma0_HH",
+                        "SMAP_L3_Active_Sigma0_VV",
+                        "SMAP_L3_Active_Sigma0_XPOL",
+                        "SMAP_L3_Active_Sigma0_HH_RFI",
+                        "SMAP_L3_Active_Sigma0_VV_RFI",
+                        "SMAP_L3_Active_Sigma0_XPOL_RFI",
+                        "SMAP_L3_Active_Sigma0_HH_QA",
+                        "SMAP_L3_Active_Sigma0_VV_QA",
+                        "SMAP_L3_Active_Sigma0_XPOL_QA",
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

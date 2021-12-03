@@ -1,0 +1,104 @@
+{
+  "stories": {
+    "australia_fires_2019_2020": {
+      "id": "australia_fires_2019_2020",
+      "type": "wildfire",
+      "title": "Bushfires in Australia (Sep 2019 - Jan 2020)",
+      "description": "Satellite views of Australian fires shows extent of burning.",
+      "backgroundImage": "australia_fires_falsecolor.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "NASA Earth Observatory - Explosive Fire Activity in Australia",
+          "link": "https://earthobservatory.nasa.gov/images/146125/explosive-fire-activity-in-australia"
+        },
+        {
+          "title": "NASA Earth Observatory - Fires and Smoke Engulf Southeastern Australia",
+          "link": "https://earthobservatory.nasa.gov/images/146110/fires-and-smoke-engulf-southeastern-australia"
+        },
+        {
+          "title": "NASA Earthdata - Wildfires Data Pathfinder",
+          "link": "https://earthdata.nasa.gov/learn/pathfinders/wildfire-data-pathfinder"
+        },
+        {
+          "title": "NASA Earthdata - Wildfires Toolkit",
+          "link": "https://earthdata.nasa.gov/learn/toolkits/wildfires"
+        },
+        {
+          "title": "NASA Earthdata - Fire Information for Resource Management System (FIRMS) - Download MODIS/VIIRS Fire Data",
+          "link": "https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms"
+        },
+        {
+          "title": "NASA Disasters Program - Australia Fires 2020",
+          "link": "https://disasters.nasa.gov/australia-fires-2020"
+        }
+      ],
+      "steps": [
+        {
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=89.82139148048981,-48.20074873233189,173.64445519346083,-6.436481569649917&t=2019-09-07-T15%3A25%3A24Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=141.4227059892276,-34.95377641947437,163.0174555581704,-24.19434040796318&t=2019-09-07-T02%3A00%3A00Z&as=2019-09-07-T00%3A00%3A00Z&ae=2019-09-30-T00%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day,VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=3.5&ab=on"
+        },
+        {
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=145.58021732237302,-38.86674246393228,152.7695987585215,-34.77364677513118&t=2019-01-14-T00%3A00%3A00Z&t1=2020-01-11-T00%3A00%3A00Z&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&l1=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&ca=false&cv=49"
+        },
+        {
+          "description": "step004.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "v=135.3898843909766,-36.762868566628185,138.77386045480637,-35.106130285378185&t=2020-01-03-T00%3A00%3A00Z&ics=true&ici=3&icd=9&as=2020-01-03-T00%3A00%3A00Z&ae=2020-01-12-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=0.5&ab=on"
+        },
+        {
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=78.18571067651742,-66.83229979196913,227.94342094169116,6.070585552396697&t=2020-01-06-T00%3A00%3A00Z&l=OMPS_Aerosol_Index_PyroCumuloNimbus(opacity=0.60,min=1.5,max=19.25,squash=true),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-271.0830531684005,-102.08855557058017,-57.77916129886543,-1.5098454459868833&t=2019-12-30-T08%3A00%3A00Z&as=2019-12-30-T00%3A00%3A00Z&ae=2020-01-11-T00%3A00%3A00Z&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=1.5&ab=on"
+        },
+        {
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=142.88576948467386,-39.248622498527695,155.6710197628903,-32.989177049817556&t=2020-01-04-T00%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),GPW_Population_Density_2015(palette=blue_9),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=138.76439954075093,-41.011555472792075,159.1537205949957,-31.029283706651423&t=2020-01-03-T16%3A36%3A03Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand_ENCC,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        }
+      ]
+    }
+  }
+}

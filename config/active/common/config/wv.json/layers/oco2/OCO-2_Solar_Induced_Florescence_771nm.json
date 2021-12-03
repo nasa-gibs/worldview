@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "OCO-2_Solar_Induced_Florescence_771nm": {
+      "id": "OCO-2_Solar_Induced_Florescence_771nm",
+      "title": "Solar-induced Chlorophyll Fluorescence (771nm)",
+      "subtitle": "OCO-2",
+      "description": "oco2/OCO-2_Solar_Induced_Florescence_771nm",
+      "tags": "oco2",
+      "group": "overlays",
+      "layergroup": "Solar Induced Chlorophyll Fluorescence",
+      "product": "OCO2_L2_Lite_SIF",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_OCO-2_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

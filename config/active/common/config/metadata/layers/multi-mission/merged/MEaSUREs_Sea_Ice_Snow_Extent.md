@@ -1,0 +1,7 @@
+The MEaSUREs Sea Ice and Snow Extent layer reports the location of Northern Hemisphere snow cover and sea ice extent derived from the Terra, DMSP 5D-2/F13, and DMSP 5D-3/F17 satellites.
+
+Snow is precipitation that forms from water vapor in the atmosphere where temperatures are below 0° Celsius. If the ground temperature is also below freezing, snow will accumulate on the ground as bright, white layer of snowpack. Snow cover reflects sunlight back into the atmosphere, helping to cool the Earth’s surface. Ice forms in the sea when air and sea temperatures are consistently cold. Some areas of the sea in the world are consistently covered in sea ice, and the sea ice even builds up to form multi-year ice packs, some areas only form sea ice in the winter. The presence of sea ice changes the normally dark blue ocean into solid white ice. This has an effect on the weather and Earth’s climate. Sunlight that would normally be absorbed by the dark blue ocean is now reflected back by the ice, increasing the surface albedo.
+
+The MEaSUREs Sea Ice and Snow Cover layer's sensor and imagery resolution is 25 km, and the temporal resolution is daily.
+
+References: [MEaSUREs Northern Hemisphere State of Cryosphere Daily 25km EASE-Grid 2.0, Version 1 (NSIDC-0534)](https://nsidc.org/data/nsidc-0534); [NASA Earth Observations - Snow Cover](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_M_SNOW); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)

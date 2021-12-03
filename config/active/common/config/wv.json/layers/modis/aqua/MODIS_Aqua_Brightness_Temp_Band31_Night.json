@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Aqua_Brightness_Temp_Band31_Night": {
+      "id": "MODIS_Aqua_Brightness_Temp_Band31_Night",
+      "title": "Brightness Temperature (Band 31-Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Brightness_Temp_Band31_Night",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "MYD021KM_NIGHT",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

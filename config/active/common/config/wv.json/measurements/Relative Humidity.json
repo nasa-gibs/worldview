@@ -1,0 +1,42 @@
+{
+    "measurements": {
+        "Relative Humidity": {
+            "id": "relative-humidity",
+            "title":    "Relative Humidity",
+            "subtitle": "Aqua/AIRS, MERRA-2",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/RelativeHumidity",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_RelativeHumidity_500hPa_Day",
+                        "AIRS_L2_RelativeHumidity_500hPa_Night",
+                        "AIRS_L2_RelativeHumidity_700hPa_Day",
+                        "AIRS_L2_RelativeHumidity_700hPa_Night",
+                        "AIRS_L2_RelativeHumidity_850hPa_Day",
+                        "AIRS_L2_RelativeHumidity_850hPa_Night",
+                        "AIRS_L2_Surface_Relative_Humidity_Day",
+                        "AIRS_L2_Surface_Relative_Humidity_Night",
+                        "AIRS_L3_Surface_Relative_Humidity_Daily_Day",
+                        "AIRS_L3_Surface_Relative_Humidity_Daily_Night",
+                        "AIRS_L3_Surface_Relative_Humidity_Monthly_Day",
+                        "AIRS_L3_Surface_Relative_Humidity_Monthly_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/RelativeHumidity",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Relative_Humidity_After_Moist_700hPa_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

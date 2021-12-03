@@ -1,0 +1,56 @@
+{
+  "stories": {
+    "snow_in_lesotho_south_africa_august_2018": {
+      "id": "snow_in_lesotho_south_africa_august_2018",
+      "type": "snow",
+      "title": "Snow in Lesotho, Africa (August 2018)",
+      "description": "View the winter storm that brought snow to Lesotho",
+      "backgroundImage": "background.png",
+      "backgroundImageHover": "backgroundHover.gif",
+      "readMoreLinks": [
+        {
+          "title": "Earth Observatory - A Winter Blanket for Lesotho",
+          "link": "https://earthobservatory.nasa.gov/images/92617/a-winter-blanket-for-lesotho"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m&t=2018-08-06-T00%3A00%3A00Z&z=3&v=22.398519440339328,-32.68895232513138,33.87839794650209,-27.13237224263455"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m&t=2018-08-12-T00%3A00%3A00Z&z=3&v=22.398519440339328,-32.68895232513138,33.87839794650209,-27.13237224263455&ab=on&as=2018-08-08T00%3A00%3A00Z&ae=2018-08-12T00%3A00%3A00Z&av=2&al=false"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Snow_Rate,Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m&t=2018-08-09-T00%3A00%3A00Z&z=3&v=22.398519440339328,-32.68895232513138,33.87839794650209,-27.13237224263455&ab=off&as=2018-08-08T00%3A00%3A00Z&ae=2018-08-12T00%3A00%3A00Z&av=2&al=false"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Snow_Rate,Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m&t=2018-08-15-T00%3A00%3A00Z&z=3&v=22.398519440339328,-32.68895232513138,33.87839794650209,-27.13237224263455"
+        }
+      ]
+    }
+  }
+}

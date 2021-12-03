@@ -1,0 +1,1 @@
+<p>Click on the "eye" icon next to the Precipitation Rate layer to toggle on and off the Precipitation Rate layer shown over the Human Footprint layer. The Human Footprint layer shows the Human Influence Index normalized by biome and realm. It shows the storm impacted areas high on the human influence index.</p>

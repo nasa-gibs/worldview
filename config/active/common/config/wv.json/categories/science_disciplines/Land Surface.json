@@ -1,0 +1,39 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Land Surface": {
+                "title": "Land Surface",
+                "id": "land-surface",
+                "image": "land-surface.jpg",
+                "description": "",
+                "measurements": [
+                    "Albedo",
+                    "Blue Marble",
+                    "Corrected Reflectance",
+                    "Earth at Night",
+                    "Evaporation",
+                    "Fires and Thermal Anomalies",
+                    "FPAR",
+                    "Global Digital Elevation Map",
+                    "Human Built-up And Settlement Extent",
+                    "Impervious Surface",
+                    "Isotropic Kernel Parameters",
+                    "Land Cover",
+                    "Landslide Hazard",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Photosynthesis, Net",
+                    "Radiance",
+                    "Solar Induced Chlorophyll Fluorescence",
+                    "Soil Moisture",
+                    "Soil Temperature",
+                    "Surface Albedo",
+                    "Surface Flux",
+                    "Surface Pressure",
+                    "Temperature",
+                    "Vegetation Indices"
+                ]
+            }
+        }
+    }
+}

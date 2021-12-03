@@ -1,0 +1,27 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Smoke Plumes": {
+                "title": "Smoke Plumes",
+                "id": "smoke-plumes",
+                "image": "smoke-plumes.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Fires and Thermal Anomalies",
+                    "Geostationary",
+                    "Human Built-up And Settlement Extent",
+                    "Land Surface Reflectance",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Urban Extents",
+                    "Urban Expansion"
+                ]
+            }
+        }
+    }
+}

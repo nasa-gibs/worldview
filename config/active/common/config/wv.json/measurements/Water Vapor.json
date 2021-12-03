@@ -1,0 +1,169 @@
+{
+    "measurements": {
+        "Water Vapor": {
+            "id": "water-vapor",
+            "title":    "Water Vapor",
+            "subtitle": "Aqua/MODIS, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Water_Vapor_5km_Day",
+                        "MODIS_Aqua_Water_Vapor_5km_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "MLS_H2O_46hPa_Day",
+                        "MLS_H2O_46hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Water_Vapor_5km_Day",
+                        "MODIS_Terra_Water_Vapor_5km_Night",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                  },
+                  "Aqua and Terra/MODIS": {
+                      "id": "aqua-terra-modis",
+                      "title": "Aqua and Terra/MODIS",
+                      "description": "modis/combined/WaterVapor",
+                      "image": "",
+                      "settings": [
+                          "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor"
+                      ]
+                },
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "amsr2/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Columnar_Water_Vapor_Day",
+                        "AMSRU2_Columnar_Water_Vapor_Night",
+                        "AMSR2_Columnar_Water_Vapor_Day",
+                        "AMSR2_Columnar_Water_Vapor_Night",
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
+                    ]
+                },
+                "OCO-2": {
+                    "id": "oco-2",
+                    "title": "OCO-2",
+                    "description": "oco2/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "OCO-2_Water_Vapor_Total_Column_Average",
+                        "OrbitTracks_OCO-2_Ascending"
+                    ]
+                },
+                "OCO-3": {
+                    "id": "oco-3",
+                    "title": "OCO-3",
+                    "description": "oco3/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "OCO-3_Water_Vapor_Total_Column_Average"
+                    ]
+                },
+                    "DMSP-F08/SSMI": {
+                        "id": "dmsp-f08-ssmi",
+                        "title": "DMSP-F08/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F8",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F10/SSMI": {
+                        "id": "dmsp-f10-ssmi",
+                        "title": "DMSP-F10/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F10",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F10_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F10_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F11/SSMI": {
+                        "id": "dmsp-f11-ssmi",
+                        "title": "DMSP-F11/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F11",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F13/SSMI": {
+                        "id": "dmsp-f13-ssmi",
+                        "title": "DMSP-F13/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F13",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F13_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F13_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F14/SSMI": {
+                        "id": "dmsp-f14-ssmi",
+                        "title": "DMSP-F14/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F14",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F14_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F14_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F15/SSMI": {
+                        "id": "dmsp-f15-ssmi",
+                        "title": "DMSP-F15/SSMI",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F15",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F15_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F15_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F16/SSMIS": {
+                        "id": "dmsp-f16-ssmis",
+                        "title": "DMSP-F16/SSMIS",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F16",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F16_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F16_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    },
+                    "DMSP-F17/SSMIS": {
+                        "id": "dmsp-f17-ssmis",
+                        "title": "DMSP-F17/SSMIS",
+                        "description": "ssmi/WaterVaporOverOceansDMSP-F17",
+                        "image": "",
+                        "settings": [
+                            "SSMI_DMSP_F17_Water_Vapor_Over_Oceans_Ascending",
+                            "SSMI_DMSP_F17_Water_Vapor_Over_Oceans_Descending"
+                        ]
+                    }
+            }
+        }
+    }
+}

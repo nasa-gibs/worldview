@@ -1,0 +1,9 @@
+{
+    "packageName":  "soto-by-worldview",
+    "officialName": "SOTO by Worldview",
+    "longName":     "SOTO by Worldview",
+    "shortName":    "Soto",
+    "description":  "Interactive State of the Ocean (SOTO) viewer",
+    "url":          "https://podaac.worldview.earthdata.nasa.gov/",
+    "email":        "support@podaac.earthdata.nasa.gov"
+}

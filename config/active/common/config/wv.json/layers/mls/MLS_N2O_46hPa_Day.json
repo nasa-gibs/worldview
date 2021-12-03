@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MLS_N2O_46hPa_Day": {
+      "id": "MLS_N2O_46hPa_Day",
+      "title": "Nitrous Oxide (46 hPa, Day)",
+      "subtitle": "Aura / MLS",
+      "description": "mls/MLS_N2O_46hPa_Day",
+      "tags": "n2o",
+      "group": "overlays",
+      "layergroup": "Nitrous Oxide",
+      "product": "ML2N2O",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

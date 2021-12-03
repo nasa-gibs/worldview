@@ -1,0 +1,34 @@
+{
+    "measurements": {
+        "Dust": {
+            "id": "dust",
+            "title":    "Dust",
+            "subtitle": "Aqua/AIRS, MERRA-2",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/Dust_Score",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_Dust_Score_Day",
+                        "AIRS_L2_Dust_Score_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/Dust",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Dust_Surface_Mass_Concentration_PM25_Monthly",
+                        "MERRA2_Dust_Surface_Mass_Concentration_Monthly",
+                        "MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Cryosphere": {
+                "title": "Cryosphere",
+                "id": "cryosphere",
+                "image": "cryosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Freeze/Thaw",
+                    "Frozen Area",
+                    "Ice Surface Temperature",
+                    "Ice Velocity Antarctica",
+                    "Ice Velocity Greenland",
+                    "Sea Ice",
+                    "Sea Ice Brightness Temperature",
+                    "Sea Surface Temperature",
+                    "Sea Surface Temperature Anomalies",
+                    "Snow Cover",
+                    "Snow Depth",
+                    "Snow Extent",
+                    "Snow Mass",
+                    "Snow Water Equivalent"
+                ]
+            }
+        }
+    }
+}

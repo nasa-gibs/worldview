@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Ascending": {
+      "id": "SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Ascending",
+      "title": "Rain Rate Over Oceans (Ascending, Local PM)",
+      "subtitle": "DMSP-F10 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Ascending",
+      "tags": "precipitation",
+      "group": "overlays",
+      "layergroup": "Precipitation Rate",
+      "product": "rssmif10d",
+      "inactive": true
+    }
+  }
+}

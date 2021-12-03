@@ -1,0 +1,37 @@
+{
+    "measurements": {
+        "Snow Cover": {
+            "id": "snow-cover",
+            "title":    "Snow Cover",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/SnowCover",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_NDSI_Snow_Cover",
+                        "MODIS_Aqua_L3_NDSI_Snow_Cover_Daily",
+                        "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/SnowCover",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_NDSI_Snow_Cover",
+                        "MODIS_Terra_L3_NDSI_Snow_Cover_Daily",
+                        "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

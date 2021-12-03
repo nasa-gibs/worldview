@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "BlueMarble_NextGeneration": {
+      "id": "BlueMarble_NextGeneration",
+      "title": "Blue Marble (August 2004)",
+      "subtitle": "MODIS / NASA Earth Observatory",
+      "description": "reference/blue_marble/BlueMarble_NextGeneration",
+      "tags": "bm bmng",
+      "group": "baselayers",
+      "layergroup": "Blue Marble",
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

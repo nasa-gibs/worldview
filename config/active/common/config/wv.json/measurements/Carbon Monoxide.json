@@ -1,0 +1,67 @@
+{
+    "measurements": {
+        "Carbon Monoxide": {
+            "id": "carbon-monoxide",
+            "title":    "Carbon Monoxide",
+            "subtitle": "Aqua/AIRS, Aura/MLS, Terra/MOPITT, MERRA-2",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/CarbonMonoxide",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
+                        "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Day",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/CO",
+                    "image": "",
+                    "settings": [
+                        "MLS_CO_215hPa_Day",
+                        "MLS_CO_215hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                },
+                "Terra/MOPITT": {
+                    "id": "terra-mopitt",
+                    "title": "Terra/MOPITT",
+                    "description": "mopitt/CarbonMonoxide",
+                    "image": "",
+                    "settings": [
+                        "MOPITT_CO_Daily_Total_Column_L2",
+                        "MOPITT_CO_Daily_Surface_Mixing_Ratio_Day",
+                        "MOPITT_CO_Daily_Surface_Mixing_Ratio_Night",
+                        "MOPITT_CO_Daily_Total_Column_Day",
+                        "MOPITT_CO_Daily_Total_Column_Night",
+                        "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day",
+                        "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Night",
+                        "MOPITT_CO_Monthly_Total_Column_Day",
+                        "MOPITT_CO_Monthly_Total_Column_Night"
+
+                    ]
+                },
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/CarbonMonoxide",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Carbon_Monoxide_Emission_Monthly"
+
+                    ]
+                }
+            }
+        }
+    }
+}

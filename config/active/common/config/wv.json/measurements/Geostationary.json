@@ -1,0 +1,44 @@
+{
+    "measurements": {
+        "Geostationary": {
+            "id": "geostationary",
+            "title":    "Geostationary",
+            "subtitle": "GOES-East, GOES-West, Himawari-8",
+            "sources": {
+                "GOES-East": {
+                    "id": "goes-east",
+                    "title": "GOES-East",
+                    "description": "goes/goes-east",
+                    "image": "",
+                    "settings": [
+                      "GOES-East_ABI_Band2_Red_Visible_1km",
+                      "GOES-East_ABI_Band13_Clean_Infrared",
+                      "GOES-East_ABI_Air_Mass"
+                    ]
+                  },
+                "GOES-West": {
+                    "id": "goes-west",
+                    "title": "GOES-West",
+                    "description": "goes/goes-west",
+                    "image": "",
+                    "settings": [
+                      "GOES-West_ABI_Band2_Red_Visible_1km",
+                      "GOES-West_ABI_Band13_Clean_Infrared",
+                      "GOES-West_ABI_Air_Mass"
+                    ]
+                  },
+                "Himawari-8": {
+                    "id": "himawari-8",
+                    "title": "Himawari-8",
+                    "description": "himawari/himawari-8",
+                    "image": "",
+                    "settings": [
+                      "Himawari_AHI_Band3_Red_Visible_1km",
+                      "Himawari_AHI_Band13_Clean_Infrared",
+                      "Himawari_AHI_Air_Mass"
+                    ]
+                }
+            }
+        }
+    }
+}

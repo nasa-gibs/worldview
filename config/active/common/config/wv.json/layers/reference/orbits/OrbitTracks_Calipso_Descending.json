@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "OrbitTracks_Calipso_Descending": {
+      "id": "OrbitTracks_Calipso_Descending",
+      "title": "CALIPSO - Orbit Track & Time",
+      "subtitle": "CALIPSO / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_Calipso_Descending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
+      ],
+      "track": "descending",
+      "startDate": "2006-04-28",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_Calipso_Descending",
+        "immutable": true
+      },
+      "tags": "tracks night"
+    }
+  }
+}

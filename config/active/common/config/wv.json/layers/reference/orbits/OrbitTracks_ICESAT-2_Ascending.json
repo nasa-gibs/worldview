@@ -1,0 +1,33 @@
+{
+  "layers": {
+    "OrbitTracks_ICESAT-2_Ascending": {
+      "id": "OrbitTracks_ICESAT-2_Ascending",
+      "title": "ICESat-2 - Orbit Track & Time",
+      "subtitle": "ICESat-2 / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_ICESAT-2_Ascending",
+      "tags": "tracks",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "track": "ascending",
+      "startDate": "2018-09-15",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_ICESAT-2_Ascending",
+        "immutable": true
+      }
+    }
+  }
+}

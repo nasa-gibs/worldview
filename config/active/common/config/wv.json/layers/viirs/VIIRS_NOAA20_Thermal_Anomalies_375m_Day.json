@@ -1,0 +1,48 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": {
+      "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+      "title": "Fires and Thermal Anomalies (Day, 375m)",
+      "subtitle": "NOAA-20 / VIIRS",
+      "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+      "tags": "hotspots noaa20 jpss1 jpss vectors",
+      "group": "overlays",
+      "type": "vector",
+      "vectorStyle": {
+        "id": "FIRMS_VIIRS_Thermal_Anomalies",
+        "arctic": {
+          "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
+        }
+      },
+      "period": "daily",
+      "palette": {
+        "id": "VIIRS_All_Thermal_Anomalies",
+        "immutable": true
+      },
+      "tracks": [
+        "OrbitTracks_NOAA-20_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ],
+      "transition": true,
+      "breakPointLayer": {
+        "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "resolutionBreakPoint": 0.017578125,
+            "source": "GIBS:wms"
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
+          }
+        }
+      },
+      "layergroup": "Fires and Thermal Anomalies"
+    }
+  }
+}

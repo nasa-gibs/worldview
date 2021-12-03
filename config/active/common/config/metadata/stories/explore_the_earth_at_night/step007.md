@@ -1,0 +1,1 @@
+<p>Aurora in the Northern Hemisphere - Here we turn on the daily Nighttime imagery layer from the Day/Night Band of the VIIRS instrument. This layer shows the Earth’s surface and atmosphere using a sensor designed to capture low-light emission sources, under varying illumination conditions. The oval band around the North Pole is the aurora.</p>

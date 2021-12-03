@@ -1,0 +1,33 @@
+{
+  "layers": {
+    "OrbitTracks_GPM_Ascending": {
+      "id": "OrbitTracks_GPM_Ascending",
+      "title": "GPM - Orbit Track & Time",
+      "subtitle": "GPM / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_GPM_Ascending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "track": "ascending",
+      "startDate": "2014-02-27",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_GPM_Ascending",
+        "immutable": true
+      },
+      "tags": "tracks ascending"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Day": {
+      "id": "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Day",
+      "title": "Outgoing Longwave Radiation (L3, Day, Daily)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STD",
+      "wrapadjacentdays": true,
+      "layergroup": "Outgoing Radiation",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

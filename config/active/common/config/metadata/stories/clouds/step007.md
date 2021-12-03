@@ -1,0 +1,3 @@
+Popcorn clouds, or low altitude cumulus clouds, appear in this image of the Congo Basin in Central Africa. The popcorn clouds appear over the tropical forest but avoid the Congo River and its tributaries. The rivers are quite wide which deter cloud formation - the river waters and the air above the waters are cooler than the surrounding tropical forest which means there is less moisture rising into the air to promote cloud formation above the rivers.
+
+Read more at NASA Earth Observatory: [Cloudy Congo Basin](https://earthobservatory.nasa.gov/images/144608/cloudy-congo-river-basin)

@@ -1,0 +1,35 @@
+{
+    "measurements": {
+        "Clear Sky Confidence": {
+            "id": "clear-sky-confidence",
+            "title":    "Clear Sky Confidence",
+            "subtitle": "NOAA-20/VIIRS, Suomi NPP/VIIRS",
+            "sources": {
+                "NOAA-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/ClearSkyConfidence",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Clear_Sky_Confidence_Day",
+                        "VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
+                    ]
+                },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/ClearSkyConfidence",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Night",
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

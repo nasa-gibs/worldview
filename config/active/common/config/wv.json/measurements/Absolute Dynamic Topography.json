@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Absolute Dynamic Topography": {
+            "id": "absolute-dynamic-topography",
+            "title":    "Absolute Dynamic Topography",
+            "subtitle": "AVISO",
+            "sources": {
+                "AVISO": {
+                    "id": "aviso",
+                    "title": "AVISO",
+                    "description": "multi-mission/aviso/AVISO_Absolute_Dynamic_Topography",
+                    "image": "",
+                    "settings": [
+                      "AVISO_Absolute_Dynamic_Topography"
+                    ]
+                }
+            }
+        }
+    }
+}

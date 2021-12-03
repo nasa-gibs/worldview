@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Urban Expansion": {
+            "id": "urban-expansion",
+            "title":    "Urban Expansion",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/UrbanExpansion",
+                    "image": "",
+                    "settings": [
+                        "Probabilities_of_Urban_Expansion_2000-2030"
+                    ]
+                }
+            }
+        }
+    }
+}

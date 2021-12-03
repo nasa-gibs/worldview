@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "Mammal_Richness_Grids_All_Threats_2013": {
+      "id": "Mammal_Richness_Grids_All_Threats_2013",
+      "title": "Mammal Richness - All Threats",
+      "subtitle": "Species: Global Mammal Richness Grids, 2015 Release (2013)",
+      "description": "sedac/Mammal_Richness_Grids_All_Threats_2013",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": "Mammal Richness",
+      "product": "CIESIN_SEDAC_SPECIES_MAM_RICH15",
+      "inactive": true,
+      "wrapX": true
+    }
+  }
+}

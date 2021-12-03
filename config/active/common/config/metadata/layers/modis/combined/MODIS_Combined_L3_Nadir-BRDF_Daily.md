@@ -1,0 +1,3 @@
+The Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A4 Version 6 Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Land Surface Reflectance (NBAR) dataset is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution. The view angle effects are removed from the directional reflectances, resulting in a stable and consistent NBAR product. Data are temporally weighted to the ninth day which is reflected in the Julian date in the file name. This NBAR layer is a representation of MODIS reflectance bands 1, 4 and 3.
+
+Reference: [LP DAAC - MCD43A4 Version 6](https://doi.org/10.5067/MODIS/MCD43A4.006)

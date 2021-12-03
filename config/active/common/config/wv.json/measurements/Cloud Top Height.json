@@ -1,0 +1,69 @@
+{
+    "measurements": {
+        "Cloud Top Height": {
+            "id": "cloud-top-height",
+            "title":    "Cloud Top Height",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS, Terra/MISR, Suomi NPP/VIIRS",
+            "sources": {
+              "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_Cloud_Top_Height_Day",
+                        "AIRS_L2_Cloud_Top_Height_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Top_Height_Day",
+                        "MODIS_Aqua_Cloud_Top_Height_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Top_Height_Day",
+                        "MODIS_Terra_Cloud_Top_Height_Night",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Terra/MISR": {
+                    "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/CloudStereoHeight",
+                    "image": "",
+                    "settings": [
+                        "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly",
+                        "MISR_Cloud_Stereo_Height_Histogram_Bin_1.5-2.0km_Monthly"
+                    ]
+                },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Cloud_Top_Height_Day",
+                        "VIIRS_SNPP_Cloud_Top_Height_Night",
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

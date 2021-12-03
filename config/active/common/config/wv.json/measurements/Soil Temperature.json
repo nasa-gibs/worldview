@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Soil Temperature": {
+            "id": "soil-temperature",
+            "title":    "Soil Temperature",
+            "subtitle": "SMAP/Model Value-Added",
+            "sources": {
+
+                "SMAP/Model Value-Added": {
+                    "id": "smap-model-value-added",
+                    "title": "SMAP/Model Value-Added",
+                    "description": "smap/SurfaceSoilTemperature",
+                    "image": "",
+                    "settings": [
+			                  "SMAP_L4_Soil_Temperature_Layer_1"
+                    ]
+                  }
+            }
+        }
+    }
+}

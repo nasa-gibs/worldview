@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MERRA2_Open_Water_Latent_Energy_Flux_Monthly": {
+      "id": "MERRA2_Open_Water_Latent_Energy_Flux_Monthly",
+      "title": "Open Water Latent Energy Flux (Monthly)",
+      "subtitle": "MERRA-2",
+      "description": "merra/MERRA2_Open_Water_Latent_Energy_Flux_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Open Water Latent Energy Flux",
+      "product": "M2TMNXOCN",
+      "wrapadjacentdays": true
+    }
+  }
+}

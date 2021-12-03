@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SSMI_DMSP_F13_Water_Vapor_Over_Oceans_Ascending": {
+      "id": "SSMI_DMSP_F13_Water_Vapor_Over_Oceans_Ascending",
+      "title": "Water Vapor Over Oceans (Ascending, Local PM)",
+      "subtitle": "DMSP-F13 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F13_Water_Vapor_Over_Oceans_Ascending",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Water Vapor",
+      "product": "rssmif13d",
+      "inactive": true
+    }
+  }
+}

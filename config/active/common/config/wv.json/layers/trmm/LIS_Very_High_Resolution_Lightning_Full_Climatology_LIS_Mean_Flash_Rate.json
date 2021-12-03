@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate": {
+      "id": "LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
+      "title": "Climatology Mean Lightning Flash Rate",
+      "subtitle": "TRMM / LIS",
+      "description": "trmm/LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Lightning",
+      "product": "lisvhrfc",
+      "inactive": true,
+      "wrapadjacentdays": true
+    }
+  }
+}

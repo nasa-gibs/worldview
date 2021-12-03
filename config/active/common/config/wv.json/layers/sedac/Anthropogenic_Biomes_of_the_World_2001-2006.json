@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "Anthropogenic_Biomes_of_the_World_2001-2006": {
+      "id": "Anthropogenic_Biomes_of_the_World_2001-2006",
+      "title": "Anthropogenic Biomes",
+      "subtitle": "Anthropogenic Biomes of the World, v1 (2001-2006)",
+      "description": "sedac/Anthropogenic_Biomes_of_the_World_2001-2006",
+      "tags": "human sedac biosphere anthrome",
+      "group": "overlays",
+      "layergroup": "Land Cover",
+      "product": "CIESIN_SEDAC_ANTHROMES_v1",
+      "inactive": true,
+      "wrapX": true
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Global Digital Elevation Map": {
+            "id": "global-digital-elevation-map",
+            "title": "Global Digital Elevation Map",
+            "subtitle": "Terra/ASTER, Space Shuttle Endeavour/STS-99",
+            "sources": {
+                "Terra/ASTER": {
+                    "id": "terra-aster",
+                    "title": "Terra/ASTER",
+                    "description": "aster/GDEM",
+                    "image": "",
+                    "settings": [
+                        "ASTER_GDEM_Color_Index",
+                        "ASTER_GDEM_Color_Shaded_Relief",
+                        "ASTER_GDEM_Greyscale_Shaded_Relief"
+                    ]
+                },
+                "Space Shuttle Endeavour/STS-99": {
+                    "id": "space-shuttle-endeavour-sts-99",
+                    "title": "Space Shuttle Endeavour/STS-99",
+                    "description": "srtm/SRTM_Color_Index",
+                    "image": "",
+                    "settings": [
+                        "SRTM_Color_Index"
+                    ]
+                }
+            }
+        }
+    }
+}
