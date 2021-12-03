@@ -323,20 +323,6 @@ export default (function(self) {
     return newDate;
   };
 
-  self.getNumberOfSteps = function(start, end, interval, delta = 1, maxToCheck) {
-    let i = 1;
-    let currentDate = start;
-    while (currentDate < end) {
-      i += 1;
-      currentDate = self.dateAdd(currentDate, interval, delta);
-      // if checking for a max number limit, break out after reaching it
-      if (maxToCheck && i >= maxToCheck) {
-        return i;
-      }
-    }
-    return i;
-  };
-
   self.daysInYear = function(date) {
     const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
     const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
