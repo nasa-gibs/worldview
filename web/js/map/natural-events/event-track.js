@@ -28,10 +28,10 @@ class EventTrack extends React.Component {
     };
 
     this.onMoveEnd = this.onMoveEnd.bind(this);
-    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 50);
+    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 200);
     this.debouncedOnPropertyChange = lodashDebounce(
       this.onPropertyChange.bind(this),
-      50,
+      20,
       { leading: true, trailing: false },
     );
   }
@@ -42,7 +42,7 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      isPlaying, map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
+      isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
@@ -50,6 +50,8 @@ class EventTrack extends React.Component {
     const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
     const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevProps.eventsData);
     const prevMap = prevProps.map;
+    const prevExtent = prevProps.extent;
+    const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
     const { trackDetails } = this.state;
 
     if (map !== prevMap) {
@@ -61,7 +63,7 @@ class EventTrack extends React.Component {
       this.initialize();
     }
 
-    if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded)) {
+    if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedTrackUpdate();
     }
 
@@ -83,10 +85,6 @@ class EventTrack extends React.Component {
     // NOTE: Does not cause additional listeners to be registered on subsequent calls
     map.on('moveend', this.onMoveEnd);
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
-    // Don't render until map position is set
-    setTimeout(() => {
-      this.debouncedTrackUpdate();
-    }, 500);
   }
 
   updateCurrentTrack() {
@@ -101,7 +99,6 @@ class EventTrack extends React.Component {
   onMoveEnd = function(e) {
     const { map } = this.props;
     const { trackDetails } = this.state;
-
     if (trackDetails.id) {
       addPointOverlays(map, trackDetails.pointsAndArrows);
     } else {
@@ -112,7 +109,6 @@ class EventTrack extends React.Component {
   onPropertyChange = (e) => {
     const { map } = this.props;
     const { trackDetails } = this.state;
-
     if (e.key === 'resolution' || e.key === 'rotation') {
       const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
       this.setState({ trackDetails: newTrackDetails });
@@ -310,6 +306,7 @@ const mapStateToProps = (state) => {
     isAnimatingToEvent,
     isPlaying,
     map: map.ui.selected,
+    extent: map.extent,
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
@@ -327,6 +324,7 @@ EventTrack.propTypes = {
   isAnimatingToEvent: PropTypes.bool,
   isPlaying: PropTypes.bool,
   map: PropTypes.object,
+  extent: PropTypes.array,
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
