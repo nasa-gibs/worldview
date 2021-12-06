@@ -85,6 +85,7 @@ class EventTrack extends React.Component {
     // NOTE: Does not cause additional listeners to be registered on subsequent calls
     map.on('moveend', this.onMoveEnd);
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
+    map.once('postrender', () => { this.debouncedTrackUpdate(); });
   }
 
   updateCurrentTrack() {
