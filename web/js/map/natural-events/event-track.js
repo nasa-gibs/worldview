@@ -27,12 +27,11 @@ class EventTrack extends React.Component {
       trackDetails: {},
     };
 
-    this.onMoveEnd = this.onMoveEnd.bind(this);
-    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 200);
+    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 50);
     this.debouncedOnPropertyChange = lodashDebounce(
       this.onPropertyChange.bind(this),
-      20,
-      { leading: true, trailing: false },
+      100,
+      { leading: true, trailing: true },
     );
   }
 
@@ -75,15 +74,12 @@ class EventTrack extends React.Component {
   componentWillUnmount() {
     const { map } = this.props;
     this.update(null);
-    map.un('moveend', this.onMoveEnd);
     map.getView().un('propertychange', this.debouncedOnPropertyChange);
   }
 
   initialize() {
     const { map } = this.props;
     if (!map) return;
-    // NOTE: Does not cause additional listeners to be registered on subsequent calls
-    map.on('moveend', this.onMoveEnd);
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
     map.once('postrender', () => { this.debouncedTrackUpdate(); });
   }
@@ -97,41 +93,13 @@ class EventTrack extends React.Component {
     this.update(event, date);
   }
 
-  onMoveEnd = function(e) {
-    const { map } = this.props;
-    const { trackDetails } = this.state;
-    if (trackDetails.id) {
-      addPointOverlays(map, trackDetails.pointsAndArrows);
-    } else {
-      this.debouncedTrackUpdate();
-    }
-  }
-
   onPropertyChange = (e) => {
     const { map } = this.props;
     const { trackDetails } = this.state;
+    if (!trackDetails.id) return;
     if (e.key === 'resolution' || e.key === 'rotation') {
       const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
       this.setState({ trackDetails: newTrackDetails });
-    } else if (e.key === 'center') {
-      // if old values equal target, map is not moving
-      // restricts track/cluster points from disappearing on min/max zoom
-      let isNewTarget = true;
-      if (e.target) {
-        const valueCheck = (val) => (typeof val === 'number' ? val.toFixed(6) : 0);
-        const oldValues = e.oldValue.map((val) => valueCheck(val));
-        const targetValues = e.target.values_.center.map((val) => valueCheck(val));
-
-        const oldLon = oldValues[0];
-        const oldLat = oldValues[1];
-        const targetLon = targetValues[0];
-        const targetLat = targetValues[1];
-
-        isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
-      }
-      if (isNewTarget) {
-        removePointOverlays(map, trackDetails.pointsAndArrows);
-      }
     }
   }
 
