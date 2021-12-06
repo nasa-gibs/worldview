@@ -5,28 +5,49 @@
       "title": "ISS - Orbit Track & Time",
       "subtitle": "Int'l Space Station / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ISS_Ascending",
-      "tags": "international tracks",
+      "tags": "international tracks vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "ascending",
       "startDate": "1998-11-20",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_ISS_Ascending",
         "immutable": true
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_ISS_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_ISS_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_ISS_Ascending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_ISS_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
       }
     }
   }

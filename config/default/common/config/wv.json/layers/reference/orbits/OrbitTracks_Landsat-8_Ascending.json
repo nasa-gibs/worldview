@@ -6,8 +6,7 @@
       "subtitle": "Landsat 8 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Landsat-8_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
@@ -15,22 +14,44 @@
       ],
       "track": "ascending",
       "startDate": "2013-02-11",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Landsat-8_Ascending",
         "immutable": true
       },
-      "tags": "tracks night"
+      "tags": "tracks night vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_Landsat-8_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_Landsat-8_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Landsat-8_Ascending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_Landsat-8_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
     }
   }
 }

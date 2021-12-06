@@ -1,0 +1,611 @@
+{
+  "version": 8,
+  "name": "FIRMS_MODIS_Thermal_Anomalies",
+  "sources": {
+    "MODIS_Aqua_Thermal_Anomalies_All": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Aqua_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Aqua_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Aqua_Thermal_Anomalies_Day": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Aqua_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Aqua_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Aqua_Thermal_Anomalies_Night": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Aqua_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Aqua_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Combined_Thermal_Anomalies_All": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Combined_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Combined_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Combined_Thermal_Anomalies_Day": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Combined_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Combined_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Combined_Thermal_Anomalies_Night": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Combined_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Combined_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Terra_Thermal_Anomalies_All": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Terra_Thermal_Anomalies_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Terra_Thermal_Anomalies_Day": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Terra_Thermal_Anomalies_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "MODIS_Terra_Thermal_Anomalies_Night": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt",
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/MODIS_Terra_Thermal_Anomalies_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Day_v6_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Day_v6_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Night_v6_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v6_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_All_v6_STD",
+      "source": "MODIS_Aqua_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Day_v6_STD",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_STD",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v6_STD",
+      "source": "MODIS_Combined_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Day_v6_STD",
+      "source": "MODIS_Combined_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Night_v6_STD",
+      "source": "MODIS_Combined_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_STD",
+      "source": "MODIS_Terra_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Day_v6_STD",
+      "source": "MODIS_Terra_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Night_v6_STD",
+      "source": "MODIS_Terra_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v6_STD",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    }
+  ]
+}

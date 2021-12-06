@@ -280,7 +280,7 @@ function LayerRow (props) {
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
-      <div className="layer-main">
+      <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}

@@ -10,5 +10,6 @@ web/ext/*
 web/dist/*
 web/build/*
 test/*
+/tasks/temp/*
 web/js/lib/*
 

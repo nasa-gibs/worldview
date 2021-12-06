@@ -34,3 +34,4 @@ config/default/release/gc
 config/default/release/layer-metadata
 # Jest
 /coverage
+/tasks/temp

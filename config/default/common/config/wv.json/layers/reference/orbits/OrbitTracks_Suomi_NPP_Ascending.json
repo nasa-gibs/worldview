@@ -6,9 +6,8 @@
       "subtitle": "Suomi NPP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Suomi_NPP_Ascending",
       "group": "overlays",
-      "tags": "snpp s-npp tracks day",
-      "format": "image/png",
-      "type": "wms",
+      "tags": "snpp s-npp tracks day vector",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -17,20 +16,42 @@
       ],
       "track": "ascending",
       "startDate": "2011-10-28",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Suomi_NPP_Ascending",
         "immutable": true
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_Suomi_NPP_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_Suomi_NPP_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Suomi_NPP_Ascending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_Suomi_NPP_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
       }
     }
   }
