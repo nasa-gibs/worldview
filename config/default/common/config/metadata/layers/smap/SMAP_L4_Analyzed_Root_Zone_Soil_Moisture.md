@@ -4,5 +4,5 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 Data field: `sm_rootzone_analysis`
 
-References: SPL4SMAU [doi:10.5067/0D8JT6S27BS9](https://doi.org/10.5067/0D8JT6S27BS9)
+References: SPL4SMAU [doi:10.5067/6P2EV47VMYPC](https://doi.org/10.5067/6P2EV47VMYPC)
 
