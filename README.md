@@ -2,7 +2,7 @@
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=main)](https://travis-ci.org/nasa-gibs/worldview)
+[![Build Status](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml/badge.svg?branch=main)](https://github.com/nasa-gibs/worldview)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
