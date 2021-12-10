@@ -2,13 +2,13 @@
   "layers": {
     "AMSRU2_Wind_Speed_Day": {
       "id": "AMSRU2_Wind_Speed_Day",
-      "title": "Wind Speed (Day, Near Real-Time)",
+      "title": "Wind Speed (Day)",
       "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Wind_Speed_Day",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Wind Speed",
-      "product": "AU_Ocean_NRT_R01",
+      "product": "",
       "tracks": [
         "OrbitTracks_GCOM-W1_Ascending"
       ],

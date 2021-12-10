@@ -4,4 +4,5 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 Data field: `soil_moisture_option3`
 
-References: SPL2SMP [doi:10.5067/F1TZ0CBN1F5N](https://doi.org/10.5067/F1TZ0CBN1F5N)
+References: SPL2SMP [doi:10.5067/LPJ8F0TAK6E0](https://doi.org/10.5067/LPJ8F0TAK6E0)
+

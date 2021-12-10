@@ -4,6 +4,6 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 Data field: `snow_mass`
 
-References: SPL4SMGP [doi:10.5067/9LNYIYOBNBR5](https://doi.org/10.5067/9LNYIYOBNBR5))
+References: SPL4SMGP [doi:10.5067/08S1A6811J0U](https://doi.org/10.5067/08S1A6811J0U)
 
 
