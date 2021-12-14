@@ -1,8 +1,7 @@
 The CERES TOA Shortwave Flux (Monthly, All-Sky) layer shows CERES-observed temporally interpolated and spatially gridded top-of-atmosphere (TOA) outgoing observed flux or radiance (W/m<sup>2</sup>) contained within the SYN1deg product, which is a primary input to the EBAF product. This layer is for the shortwave broadband channel (0.2-5 µm), under all-sky conditions. CERES footprints (20 km nominal resolution) are classified as clear if they contain 99% of pixels identified as clear by the CERES-MODIS clear-sky mask.
 
-The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a collection of instruments carried on different satellites, the first launched in 1999 (Terra) as a follow-on to the successful Earth Radiation Budget Experiment (ERBE) mission, and as a flagship component of the Earth Observing System (EOS) program. The second satellite (Aqua) was launched in 2002. There are two identical CERES instruments aboard both the Terra and Aqua satellites, that measure the Earth's total radiation budget and provide cloud property estimates that enable scientists to assess clouds' roles in radiative fluxes from the surface to the top of the atmosphere. One of the instruments operates in a cross-track scan mode and the other in a biaxial scan mode. The cross-track mode data is what is used to align the CERES measurements with ERBE and the Tropical Rainfall Measuring Mission (TRMM), essentially extending the data record.
-
 The CERES TOA Shortwave Flux (Monthly, All-Sky) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `SW_TOA_ALL_Sky`  
-Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`
+Data parameter: `SW_TOA_ALL_Sky`
+
+References: CER_SYN1deg-Month_Terra-MODIS_Edition4A [doi:10.5067/TERRA/CERES/SYN1DEGMONTH_L3.004A](https://doi.org/10.5067/TERRA/CERES/SYN1DEGMONTH_L3.004A)

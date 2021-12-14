@@ -12,6 +12,7 @@ import {
 
 export const notificationReducerState = {
   number: null,
+  numberUnseen: null,
   type: '',
   isActive: false,
   object: {},
@@ -30,6 +31,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         return {
           ...state,
           number: getCount(notificationsByType),
+          numberUnseen: getCount(notificationsByType, true),
           type: getPriority(notificationsByType),
           isActive: true,
           object: notificationsByType,
@@ -40,7 +42,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case NOTIFICATIONS_SEEN:
       return {
         ...state,
-        number: null,
+        numberUnseen: null,
         type: '',
         isActive: true,
       };

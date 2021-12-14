@@ -8,7 +8,7 @@
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
-                    "description": "smap/HeterotrophicResipration",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "SMAP_L4_Mean_Heterotrophic_Respiration"

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import googleTagManager from 'googleTagManager';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -20,6 +19,7 @@ import LocationSearch from './components/location-search/location-search';
 
 // Other/MISC
 import Brand from './brand';
+import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
@@ -57,13 +57,14 @@ import '../css/button.css';
 import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
-import '../css/link.css';
+import '../css/share.css';
 import '../css/palettes.css';
 import '../css/image.css';
 import '../css/projection.css';
 import '../css/tour.css';
 import '../css/products.css';
 import '../css/events.css';
+import '../css/event-filter.css';
 import '../css/smart-handoff.css';
 import '../css/sidebar.css';
 import '../css/layer-categories.css';
@@ -80,11 +81,11 @@ import '../css/mobile.css';
 import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
-import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
+import '../css/embed.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
@@ -135,11 +136,12 @@ class App extends React.Component {
       }
 
       if (Brand.release()) {
-        if (config.features.googleTagManager) {
-          if (window.location.href.includes(Brand.BRAND_URL)) {
-            googleTagManager.getIpAddress();
-          }
-        }
+        // Disabled GTM ipAddress - https://www.ipify.org/ API
+        // if (config.features.googleTagManager) {
+        //   if (window.location.href.includes(Brand.BRAND_URL)) {
+        //     googleTagManager.getIpAddress();
+        //   }
+        // }
         // Console build version notifications
         console.info(
           `${Brand.NAME
@@ -164,15 +166,17 @@ class App extends React.Component {
   render() {
     const {
       isAnimationWidgetActive,
+      isEmbedModeActive,
       isMobile,
       isTourActive,
       locationKey,
       modalId,
       parameters,
     } = this.props;
+    const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
-      <div className="wv-content" id="wv-content" data-role="content">
-        {!isMobile && <LocationSearch />}
+      <div className={appClass} id="wv-content" data-role="content">
+        {!isMobile && !isEmbedModeActive && <LocationSearch />}
         <Toolbar />
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -190,6 +194,7 @@ class App extends React.Component {
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
+        <Embed />
         <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={parameters} />
@@ -203,6 +208,7 @@ function mapStateToProps(state) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
+    isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.browser.lessThan.medium,
     isTourActive: state.tour.active,
     tour: state.tour,
@@ -228,6 +234,7 @@ export default connect(
 
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,

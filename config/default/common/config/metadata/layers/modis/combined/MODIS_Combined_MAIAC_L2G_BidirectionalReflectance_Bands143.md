@@ -4,4 +4,4 @@ MAIAC Collection 6 provides daily SR at 1km (bands 1-12) and 500m (bands 1-7) re
 
 The MAIAC Reflectance (BRDF-Adjusted) layer is available as a combined Terra satellite and Aqua satellite layer (MCD19A1). The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)
+References: MCD19A1N NRT [doi:10.5067/MODIS/MCD19A1N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)

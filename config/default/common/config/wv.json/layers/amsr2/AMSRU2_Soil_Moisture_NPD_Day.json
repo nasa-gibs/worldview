@@ -5,7 +5,7 @@
       "title": "Soil Moisture (Normalized Polarization Difference, Day)",
       "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Soil_Moisture_NPD_Day",
-      "tags": "amsr-u2",
+      "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Soil Moisture",
       "product": "AU_Land",

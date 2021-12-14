@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/ImperviousSurface",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Landsat_Global_Man-made_Impervious_Surface"

@@ -7,7 +7,7 @@ import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import { stop } from '../modules/animation/actions';
 import { onProjectionSwitch } from '../modules/product-picker/actions';
-import IconList from '../components/util/list';
+import IconList from '../components/util/icon-list';
 
 const DEFAULT_PROJ_ARRAY = [
   {
@@ -66,13 +66,13 @@ class ProjectionList extends Component {
   }
 
   render() {
-    const { projection, projectionArray } = this.props;
+    const { projection, projectionArray, isMobile } = this.props;
     return (
       <IconList
         list={projectionArray}
         active={projection}
         onClick={this.onClick}
-        size="small"
+        size={isMobile ? 'large' : 'small'}
       />
     );
   }
@@ -80,15 +80,17 @@ class ProjectionList extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    config, models, animation, proj,
+    config, models, animation, proj, browser,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
     ? getInfoArray(projArray)
     : DEFAULT_PROJ_ARRAY;
+  const isMobile = browser.lessThan.medium;
   return {
     models,
     config,
+    isMobile,
     isPlaying: animation.isPlaying,
     projection: proj.id,
     projectionArray,
@@ -116,6 +118,7 @@ export default connect(
 ProjectionList.propTypes = {
   config: PropTypes.object,
   onCloseModal: PropTypes.func,
+  isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,
   projection: PropTypes.string,
   projectionArray: PropTypes.array,

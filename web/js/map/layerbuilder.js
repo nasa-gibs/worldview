@@ -19,8 +19,8 @@ import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
-import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import getSelectedDate from '../modules/date/selectors';
+import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,
@@ -35,12 +35,8 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 
-export default function mapLayerBuilder(models, config, cache, ui, store) {
+export default function mapLayerBuilder(config, cache, store) {
   const self = {};
-
-  self.init = function() {
-    self.extentLayers = [];
-  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -53,12 +49,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
     const layer = createLayerFunc(def, options, null, state, attributes);
+    layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
     const layerNext = createLayerFunc(def, options, 1, state, attributes);
     const layerPrior = createLayerFunc(def, options, -1, state, attributes);
-    layer.wv = attributes;
+
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
@@ -70,7 +67,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    * For subdaily layers, if the layer date is within 30 minutes of current
    * time, set expiration to ten minutes from now
    */
-  const getCacheOptions = (period, date, state) => {
+  const getCacheOptions = (period, date) => {
     const tenMin = 10 * 60000;
     const thirtyMin = 30 * 60000;
     const now = Date.now();
@@ -94,6 +91,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.createLayer = function(def, options) {
     const state = store.getState();
+    const { sidebar: { activeTab } } = state;
     options = options || {};
     const group = options.group || null;
     const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
@@ -108,7 +106,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || getSelectedDate(state);
-      const cacheOptions = getCacheOptions(def.period, date, state);
+      const cacheOptions = getCacheOptions(def.period, date);
       const attributes = {
         id: def.id,
         key,
@@ -123,7 +121,8 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       lodashMerge(def, def.projections[proj.id]);
       if (def.breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
 
-      const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+      const isDataDownloadTabActive = activeTab === 'download';
+      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && (def.wrapadjacentdays === true || def.wrapX);
       switch (def.type) {
         case 'wmts':
           layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
@@ -178,6 +177,8 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.getRequestDates = function(def, options) {
     const state = store.getState();
+    const { date } = state;
+    const { appNow } = date;
     const stateCurrentDate = new Date(getSelectedDate(state));
     const previousLayer = options.previousLayer || {};
     let closestDate = options.date || stateCurrentDate;
@@ -194,7 +195,40 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
-      const dateRange = datesinDateRanges(def, closestDate);
+      const { dateRanges, inactive, period } = def;
+      let dateRange;
+      if (inactive) {
+        dateRange = datesInDateRanges(def, closestDate);
+      } else {
+        let endDateLimit;
+        let startDateLimit;
+
+        let interval = 1;
+        if (dateRanges && dateRanges.length > 0) {
+          for (let i = 0; i < dateRanges.length; i += 1) {
+            const d = dateRanges[i];
+            const int = Number(d.dateInterval);
+            if (int > interval) {
+              interval = int;
+            }
+          }
+        }
+
+        if (period === 'daily') {
+          endDateLimit = util.dateAdd(closestDate, 'day', interval);
+          startDateLimit = util.dateAdd(closestDate, 'day', -interval);
+        } else if (period === 'monthly') {
+          endDateLimit = util.dateAdd(closestDate, 'month', interval);
+          startDateLimit = util.dateAdd(closestDate, 'month', -interval);
+        } else if (period === 'yearly') {
+          endDateLimit = util.dateAdd(closestDate, 'year', interval);
+          startDateLimit = util.dateAdd(closestDate, 'year', -interval);
+        } else {
+          endDateLimit = new Date(closestDate);
+          startDateLimit = new Date(closestDate);
+        }
+        dateRange = datesInDateRanges(def, closestDate, startDateLimit, endDateLimit, appNow);
+      }
       const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
       previousDateFromRange = previous;
       previousLayerDate = previous;
@@ -230,8 +264,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     let style = '';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
-    // Don't key by time if this is a static layer--it is valid for
-    // every date.
+    // Don't key by time if this is a static layer
     if (def.period) {
       date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
@@ -274,7 +307,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
 
     // If number of set limits doesn't match sets, we are assuming this product
-    // crosses the antimeridian and don't have a reliable way to calculate a single
+    // crosses the anti-meridian and don't have a reliable way to calculate a single
     // extent based on multiple set limits.
     if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {
       return { origin, extent };
@@ -312,6 +345,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   const createLayerWMTS = function(def, options, day, state) {
     const proj = state.proj.selected;
     const source = config.sources[def.source];
+    const isSubdaily = def.period === 'subdaily';
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
@@ -320,11 +354,11 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
     let date = options.date || getSelectedDate(state);
-    if (def.period === 'subdaily' && !date) {
+    if (isSubdaily && !date) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
+    if (day && def.wrapadjacentdays && !isSubdaily) {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
@@ -356,7 +390,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     return new OlLayerTile({
-      preload: Infinity,
+      preload: 0,
       className: def.id,
       extent,
       source: new OlSourceWMTS(sourceOptions),
@@ -448,7 +482,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       renderMode: 'image',
       className: def.id,
       vector: true,
-      preload: 10,
+      preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
@@ -552,7 +586,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
-      preload: Infinity,
+      preload: 0,
       className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
@@ -562,6 +596,5 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     return layer;
   };
 
-  self.init();
   return self;
 }

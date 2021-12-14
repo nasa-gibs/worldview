@@ -1,5 +1,6 @@
-The monthly surface pressure layer is an assimilated data from NASA second Modern-Era Retrospective analysis for Research and Applications (MERRA-2), produced by the Goddard Earth Observing System Model, Version 5 (GEOS-5) data assimilation system. The layer’s units are in hectopascals (hPa). The monthly surface pressure is time aggregated from corresponding 3-hourly data with spatial resolution of 0.625° × 0.5°.
+The MERRA-2 Surface Pressure (Monthly) layer created from the M2IMNPASM (or instM_3d_asm_Np) data collection. M2IMNPASM is an instantaneous 3-dimensional monthly mean data collection in Modern-Era Retrospective analysis for Research and Applications version 2 (MERRA-2). This collection consists of assimilations of meteorological parameters at 42 pressure levels, such as temperature, wind components, vertical pressure velocity, water vapor, ozone mass mixing ratio, and layer height. The information on the pressure levels can be found in the section 4.2 of the MERRA-2 File Specification document. The collection also includes certain quadratic information (such as the variance and covariance of certain parameters). MERRA-2 is the latest version of global atmospheric reanalysis for the satellite era produced by NASA Global Modeling and Assimilation Office (GMAO) using the Goddard Earth Observing System Model (GEOS) version 5.12.4.
 
-This parameter (PS) was extracted from the product M2IMNPASM.5.12.4 (Monthly mean, Instantaneous, Pressure-Level, Assimilation, Assimilated Meteorological Fields).
+The layer’s units are in hectopascals (hPa). The monthly surface pressure is time aggregated from corresponding 3-hourly data with spatial resolution of 0.625° × 0.5°.
 
-References: [Modern-Era Retrospective analysis for Research and Applications, Version 2 Documentation](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/docs/)
+References: M2IMNPASM [doi:10.5067/2E096JV59PK7](https://doi.org/10.5067/2E096JV59PK7)
+

@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DateInputColumn from './input';
+import DateInputColumn from './date-input-column';
 import util from '../../util/util';
+import { monthStringArray } from './util';
 
 /*
  * DateSelector used within Timeline and AnimationWidget.
@@ -13,8 +15,6 @@ class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      previousTab: null,
-      tab: null,
       year: null,
       month: null,
       day: null,
@@ -46,7 +46,6 @@ class DateSelector extends Component {
       dayValid,
       hourValid,
       minuteValid,
-      tab,
     } = this.state;
 
     const updateCheck = year === nextState.year
@@ -59,7 +58,6 @@ class DateSelector extends Component {
       && dayValid === nextState.dayValid
       && hourValid === nextState.hourValid
       && minuteValid === nextState.minuteValid
-      && tab === nextState.tab
       && date.getTime() === nextProps.date.getTime()
       && subDailyMode === nextProps.subDailyMode
       && maxDate.getTime() === nextProps.maxDate.getTime()
@@ -70,9 +68,10 @@ class DateSelector extends Component {
   componentDidUpdate(prevProps) {
     const {
       date,
-      id,
       minDate,
       maxDate,
+      isStartDate,
+      isEndDate,
     } = this.props;
     const {
       year,
@@ -87,8 +86,8 @@ class DateSelector extends Component {
       this.clearTimeValuesAndValidation();
     }
     // handle animation start/end date limit changes and pending invalid -> valid dates
-    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.getTime() !== minDate.getTime();
-    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.getTime() !== maxDate.getTime();
+    const minDateChangeEndUpdate = isEndDate && prevProps.minDate.getTime() !== minDate.getTime();
+    const maxDateChangeStartUpdate = isStartDate && prevProps.maxDate.getTime() !== maxDate.getTime();
     const anyPendingTimeUnits = year || month || day || hour || minute;
     if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
       this.updateDate();
@@ -108,49 +107,8 @@ class DateSelector extends Component {
     }, this.updateDate);
   }
 
-  /**
-  * @desc set focused tab and previous tab
-  *
-  * @param {Number} tab - input
-  * @param {Number} previousTab - input
-  * @returns {void}
-  */
-  setFocusedTab = (tab, previousTabParam) => {
-    const { previousTab } = this.state;
-    this.setState({
-      tab,
-      previousTab: previousTabParam || previousTab,
-    });
-  }
-
-  /**
-  * @desc change tab
-  *
-  * @param {Number} index
-  * @param {Number} previousTab
-  * @returns {void}
-  */
-  changeTab = (index, previousTab) => {
-    const { subDailyMode } = this.props;
-    const { tab } = this.state;
-    let nextTab = index;
-    let maxTab;
-    if (subDailyMode) {
-      maxTab = 5;
-    } else {
-      maxTab = 3;
-    }
-    if (index > tab && index > maxTab) {
-      // past max tab
-      nextTab = 1;
-    } else if (index < 1) {
-      // below min tab
-      nextTab = maxTab;
-    }
-    this.setState({
-      tab: nextTab,
-      previousTab,
-    });
+  setFocus = (type) => {
+    this.setState({ focusedUnit: type });
   }
 
   /**
@@ -166,10 +124,9 @@ class DateSelector extends Component {
   updateDateCheck = (date, isRollDate) => {
     const { minDate, maxDate } = this.props;
     const {
-      year, month, day, hour, minute, previousTab,
+      year, month, day, hour, minute, focusedUnit,
     } = this.state;
-    const timePrefix = ['year', 'month', 'day', 'hour', 'minute'];
-    const tabToCheck = timePrefix[previousTab - 1];
+    const tabToCheck = focusedUnit;
     const inputDate = new Date(date);
     const tempDay = day || date.getUTCDate();
     let validDate = true;
@@ -211,7 +168,7 @@ class DateSelector extends Component {
       }
 
       if (month) {
-        const realMonth = util.stringInArray(util.monthStringArray, month);
+        const realMonth = util.stringInArray(monthStringArray, month);
         const maxDatePrev = new Date(
           date.getUTCFullYear(),
           date.getUTCMonth() + 1,
@@ -264,7 +221,7 @@ class DateSelector extends Component {
 
         let dateCheck;
         if (day <= maxDayDate) {
-          const realMonth = util.stringInArray(util.monthStringArray, month);
+          const realMonth = util.stringInArray(monthStringArray, month);
           date = new Date(new Date(date).setUTCDate(day));
           dateCheck = new Date(inputDate);
           dateCheck = new Date(new Date(date).setUTCDate(1));
@@ -345,11 +302,11 @@ class DateSelector extends Component {
   */
   // eslint-disable-next-line react/destructuring-assignment
   updateDate = (date = this.props.date, isRollDate = false) => {
-    const { id, onDateChange } = this.props;
+    const { onDateChange } = this.props;
     const newDate = this.updateDateCheck(date, isRollDate);
 
     if (newDate) {
-      onDateChange(newDate, id);
+      onDateChange(newDate);
       // clear the pending timeunit inputs and reset validation
       this.clearTimeValuesAndValidation();
     }
@@ -383,6 +340,8 @@ class DateSelector extends Component {
       fontSize,
       idSuffix,
       subDailyMode,
+      isStartDate,
+      isEndDate,
     } = this.props;
     const {
       year,
@@ -395,45 +354,45 @@ class DateSelector extends Component {
       dayValid,
       hourValid,
       minuteValid,
-      tab,
     } = this.state;
     const sharedProps = {
+      idSuffix,
+      onFocus: this.setFocus,
+      subDailyMode,
+      isStartDate,
+      isEndDate,
       date,
       updateDate: this.updateDate,
-      setFocusedTab: this.setFocusedTab,
-      changeTab: this.changeTab,
       maxDate,
       minDate,
       fontSize,
       updateTimeUnitInput: this.updateTimeUnitInput,
     };
+
+    const yearValue = year || date.getUTCFullYear();
+    const monthValue = month || monthStringArray[date.getUTCMonth()];
+    const dayValue = day || util.pad(date.getUTCDate(), 2, '0');
+    const hourValue = hour || util.pad(date.getUTCHours(), 2, '0');
+    const minuteValue = minute || util.pad(date.getUTCMinutes(), 2, '0');
+
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
           {...sharedProps}
           type="year"
-          inputId={`year-${idSuffix}`}
-          value={year || date.getUTCFullYear()}
-          tabIndex={1}
-          focused={tab === 1}
+          value={yearValue}
           isValid={yearValid}
         />
         <DateInputColumn
           {...sharedProps}
           type="month"
-          inputId={`month-${idSuffix}`}
-          value={month || util.monthStringArray[date.getUTCMonth()]}
-          tabIndex={2}
-          focused={tab === 2}
+          value={monthValue}
           isValid={monthValid}
         />
         <DateInputColumn
           {...sharedProps}
           type="day"
-          inputId={`day-${idSuffix}`}
-          value={day || util.pad(date.getUTCDate(), 2, '0')}
-          tabIndex={3}
-          focused={tab === 3}
+          value={dayValue}
           isValid={dayValid}
         />
         { subDailyMode && (
@@ -441,20 +400,14 @@ class DateSelector extends Component {
             <DateInputColumn
               {...sharedProps}
               type="hour"
-              inputId={`hour-${idSuffix}`}
-              value={hour || util.pad(date.getUTCHours(), 2, '0')}
-              tabIndex={4}
-              focused={tab === 4}
+              value={hourValue}
               isValid={hourValid}
             />
             <div className="input-time-divider">:</div>
             <DateInputColumn
               {...sharedProps}
               type="minute"
-              value={minute || util.pad(date.getUTCMinutes(), 2, '0')}
-              inputId={`minute-${idSuffix}`}
-              tabIndex={5}
-              focused={tab === 5}
+              value={minuteValue}
               isValid={minuteValid}
             />
             <div className="input-time-zmark">Z</div>
@@ -470,8 +423,9 @@ DateSelector.defaultProps = {
 DateSelector.propTypes = {
   date: PropTypes.object,
   fontSize: PropTypes.number,
-  id: PropTypes.string,
   idSuffix: PropTypes.string,
+  isStartDate: PropTypes.bool,
+  isEndDate: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   onDateChange: PropTypes.func,

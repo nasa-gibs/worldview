@@ -2,4 +2,4 @@ The Surface Normalized Difference Vegetation Index (NDVI) (NBAR, Global, Monthly
 
 The sensor resolution is 30 m with an imagery resolution is 31.25 m. The temporal availability is monthly for December 1988 - November 2001.
 
-References: [LP DAAC GWELDMO Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)
+References: GWELDMO [doi:10.5067/MEaSUREs/GWELD/GWELDMO.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)

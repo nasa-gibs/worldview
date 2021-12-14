@@ -1,6 +1,7 @@
-from datetime import datetime, date, timedelta
+from datetime import datetime
 import isodate
 import re
+import traceback
 
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
@@ -65,6 +66,8 @@ def process_temporal(wv_layer, value):
             if date_range_start and date_range_end:
                 wv_layer["dateRanges"] = [{"startDate": s, "endDate": e, "dateInterval": i} for s, e, i in zip(date_range_start, date_range_end, range_interval)]
     except ValueError:
-        raise
         raise Exception("Invalid time: {0}".format(range))
+    except Exception as e:
+        print(traceback.format_exc())
+        raise Exception("Error processing temporal layer: {0}".format(e))
     return wv_layer

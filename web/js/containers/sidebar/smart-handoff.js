@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
+import { get as lodashGet, isEqual as lodashEqual } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +11,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
+import AlertUtil from '../../components/util/alert';
 import util from '../../util/util';
 import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import SmartHandoffNotAvailableModal from '../../components/smart-handoffs/smart-handoff-not-available-modal';
@@ -17,8 +19,8 @@ import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff
 import GranuleCount from '../../components/smart-handoffs/granule-count';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
-import { getActiveLayers } from '../../modules/layers/selectors';
-import getSelectedDate from '../../modules/date/selectors';
+import { memoizedAvailable as availableSelector, getActiveLayers } from '../../modules/layers/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
 import selectCollection from '../../modules/smart-handoff/actions';
@@ -50,8 +52,12 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       showBoundingBox: false,
+      showZoomedIntoDatelineAlert: false,
+      selectionOutsideExtents: false,
       currentExtent: {},
       coordinates: {},
+      validatedLayers: [],
+      validatedConceptIds: {},
     };
 
     this.baseState = this.state;
@@ -61,10 +67,20 @@ class SmartHandoff extends Component {
     this.updateExtent = this.updateExtent.bind(this);
   }
 
+  componentDidMount() {
+    const { proj } = this.props;
+    this.validateConceptIds();
+    if (proj.id === 'geographic') {
+      this.checkMapExtentValid();
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const {
+      isActive,
       availableLayers,
       proj,
+      map,
       selectedLayer,
       selectedCollection,
     } = this.props;
@@ -72,12 +88,73 @@ class SmartHandoff extends Component {
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
     const isLayerStillActive = availableLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
+    if (!lodashEqual(availableLayers, prevProps.availableLayers)) {
+      this.validateConceptIds();
+    }
     if (selectedCollection && !isLayerStillActive) {
       this.setState(this.baseState);
     }
     if (proj.id !== prevProps.proj.id) {
-      this.setState({ showBoundingBox: false });
+      const projChangeStateUpdate = { showBoundingBox: false };
+      if (proj.id !== 'geographic') {
+        projChangeStateUpdate.showZoomedIntoDatelineAlert = false;
+      }
+      this.setState(projChangeStateUpdate);
     }
+
+    if (proj.id === 'geographic') {
+      const tabChange = isActive && !prevProps.isActive;
+      const extentChange = !lodashEqual(map.extent, prevProps.map.extent);
+      if (tabChange || extentChange) {
+        this.checkMapExtentValid();
+      }
+    }
+  }
+
+  async validateConceptIds() {
+    const { validatedConceptIds } = this.state;
+    const { availableLayers } = this.props;
+    const baseUrl = 'https://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
+    const conceptIdRequest = async (url) => {
+      const granulesResponse = await fetch(url, { timeout: 5000 });
+      const result = await granulesResponse.json();
+      return lodashGet(result, 'feed.entry', []);
+    };
+    const allConceptIds = availableLayers.reduce((prev, curr) => {
+      (curr.conceptIds || []).forEach(({ value }) => {
+        if (value) prev.push(value);
+      });
+      return prev;
+    }, []);
+
+    await Promise.all(allConceptIds.map(
+      async (id) => {
+        if (validatedConceptIds[id] !== undefined) return;
+        const response = await conceptIdRequest(baseUrl + id);
+        validatedConceptIds[id] = !!response.length;
+      },
+    ));
+
+    const validatedLayers = availableLayers.reduce((prev, curr) => {
+      const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
+      if (validIdsArray.length) prev.push(curr);
+      return prev;
+    }, []);
+
+    this.setState({ validatedLayers, validatedConceptIds });
+  }
+
+  /**
+   * Check if entire map extent is over dateline (within a wing)
+   *
+   * @returns {Boolean} is map extent within wing
+   */
+  checkMapExtentValid = () => {
+    const { map: { extent }, proj: { maxExtent } } = this.props;
+    const inLeftWing = extent[0] < maxExtent[0] && extent[2] < maxExtent[0];
+    const inRightWing = extent[0] > maxExtent[2] && extent[2] > maxExtent[2];
+    const isWithinWings = inLeftWing || inRightWing;
+    this.setState({ showZoomedIntoDatelineAlert: isWithinWings });
   }
 
   /**
@@ -123,29 +200,49 @@ class SmartHandoff extends Component {
     const { crs } = proj;
 
     // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const bottomLeft = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const topRight = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    let [x1, y1] = bottomLeft;
+    let [x2, y2] = topRight;
+
+    const entireSelectionOutside = x1 > 180 || x2 < -180 || y1 > 90 || y2 < -90;
 
     // Determine longitude out of bounds areas and reset to limits
-    if (geolonlat1[0] > 180) geolonlat1[0] = 180;
-    else if (geolonlat1[0] < -180) geolonlat1[0] = -180;
-    if (geolonlat2[0] > 180) geolonlat2[0] = 180;
-    else if (geolonlat2[0] < -180) geolonlat2[0] = -180;
+    if (x1 > 180) {
+      x1 = 180;
+    } else if (x1 < -180) {
+      x1 = -180;
+    }
+
+    if (x2 > 180) {
+      x2 = 180;
+    } else if (x2 < -180) {
+      x2 = -180;
+    }
 
     // Determine latitude out of bounds areas and reset to limits
-    if (geolonlat1[1] > 90) geolonlat1[1] = 90;
-    else if (geolonlat1[1] < -90) geolonlat1[1] = -90;
-    if (geolonlat2[1] > 90) geolonlat2[1] = 90;
-    else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
+    if (y1 > 90) {
+      y1 = 90;
+    } else if (y1 < -90) {
+      y1 = -90;
+    }
+
+    if (y2 > 90) {
+      y2 = 90;
+    } else if (y2 < -90) {
+      y2 = -90;
+    }
+
+    this.updateSelectionAlerts(entireSelectionOutside);
 
     const extent = {
-      southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
-      northEast: `${geolonlat2[0].toFixed(5)},${geolonlat2[1].toFixed(5)}`,
+      southWest: `${x1.toFixed(5)},${y1.toFixed(5)}`,
+      northEast: `${x2.toFixed(5)},${y2.toFixed(5)}`,
     };
 
     const coordinates = {
-      bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-      topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
+      bottomLeft: util.formatCoordinate([x1, y1]),
+      topRight: util.formatCoordinate([x2, y2]),
     };
 
     if (selectedCollection && extent) {
@@ -164,7 +261,9 @@ class SmartHandoff extends Component {
       });
       this.setState({ showBoundingBox: true });
     } else {
-      this.setState({ showBoundingBox: false });
+      this.setState({
+        showBoundingBox: false,
+      });
     }
   }
 
@@ -203,6 +302,47 @@ class SmartHandoff extends Component {
     }
   }
 
+  /**
+   * Determine if dateline alert updates are necessary
+   *
+   * @param {Boolean} selectionOutside
+   * @param {Boolean} entireSelectionOutside
+   */
+   updateSelectionAlerts = (entireSelectionOutside) => {
+     const { selectionOutsideExtents } = this.state;
+     if (entireSelectionOutside !== selectionOutsideExtents) {
+       this.setState({ selectionOutsideExtents: entireSelectionOutside });
+     }
+   }
+
+   /**
+   * Render alerts to indicate map view/area of interest outside visible extents
+   * 1) The map view is zoomed entirely into the map wings
+   * 2) The entire area of interest crossed the dateline
+   */
+   renderSelectionWarning = () => {
+     const {
+       showBoundingBox,
+       selectionOutsideExtents,
+       showZoomedIntoDatelineAlert,
+     } = this.state;
+
+     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
+       ? 'The selection is outside the available map area.'
+       : showZoomedIntoDatelineAlert
+         ? 'The map is zoomed into an area with no available data.'
+         : '';
+
+     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
+     <AlertUtil
+       id="data-download-unavailable-dateline-alert"
+       isOpen
+       title="Data Download Unavailable"
+       message={message}
+     />
+     );
+   }
+
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
     const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
     return (
@@ -228,16 +368,16 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const {
-      availableLayers,
       selectCollection,
       selectedCollection,
       selectedLayer,
     } = this.props;
+    const { validatedLayers, validatedConceptIds } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
 
-        {availableLayers.map((layer) => {
+        {validatedLayers.map((layer) => {
           const layerIsSelected = (selectedLayer || {}).id === layer.id;
           const itemClass = layerIsSelected ? 'layer-item selected' : 'layer-item';
 
@@ -246,7 +386,7 @@ class SmartHandoff extends Component {
               <div className="layer-title">{layer.title}</div>
               <div className="layer-subtitle">{layer.subtitle}</div>
 
-              {layer.conceptIds.map((collection) => {
+              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value]).map((collection) => {
                 const {
                   type, value, version,
                 } = collection;
@@ -375,7 +515,6 @@ class SmartHandoff extends Component {
    */
   render() {
     const {
-      availableLayers,
       displayDate,
       isActive,
       showNotAvailableModal,
@@ -384,49 +523,56 @@ class SmartHandoff extends Component {
       selectedDate,
       showGranuleHelpModal,
     } = this.props;
-    const { showBoundingBox, currentExtent } = this.state;
+    const {
+      showBoundingBox, selectionOutsideExtents, showZoomedIntoDatelineAlert, currentExtent, validatedLayers,
+    } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id;
+    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
+    const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
-    if (!availableLayers.length) {
+    if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
-      <div className="smart-handoff-side-panel">
-
-        <div className="esd-notification">
-          Downloading data will be performed using
-          <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
-          application.
+      <>
+        {this.renderSelectionWarning()}
+        <div className="smart-handoff-side-panel">
+          <div className="esd-notification">
+            Downloading data will be performed using
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
+            application.
+          </div>
+          <h2>
+            <a className="help-link" onClick={showNotAvailableModal}>
+              Why are some layers not available?
+            </a>
+          </h2>
+          <hr />
+          {this.renderLayerChoices()}
+          <hr />
+          {this.renderCropBox()}
+          {isValidDownload && (
+            <GranuleCount
+              displayDate={displayDate}
+              currentExtent={isValidDownload && showBoundingBox ? currentExtent : undefined}
+              selectedDate={selectedDate}
+              selectedLayer={selectedLayer}
+              selectedCollection={selectedCollection}
+              showGranuleHelpModal={showGranuleHelpModal}
+            />
+          )}
+          <Button
+            onClick={this.onClickDownload}
+            text="DOWNLOAD VIA EARTHDATA SEARCH"
+            className="download-btn red"
+            valid={!!isValidDownload}
+          />
         </div>
-        <h2>
-          <a className="help-link" onClick={showNotAvailableModal}>
-            Why are some layers not available?
-          </a>
-        </h2>
-        <hr />
-        {this.renderLayerChoices()}
-        <hr />
-        {this.renderCropBox()}
-        <GranuleCount
-          displayDate={displayDate}
-          currentExtent={showBoundingBox ? currentExtent : undefined}
-          selectedDate={selectedDate}
-          selectedLayer={selectedLayer}
-          selectedCollection={selectedCollection}
-          showGranuleHelpModal={showGranuleHelpModal}
-        />
-        <Button
-          onClick={this.onClickDownload}
-          text="DOWNLOAD VIA EARTHDATA SEARCH"
-          className="download-btn red"
-          valid={!!isValidDownload}
-        />
-      </div>
+      </>
     );
   }
 }
@@ -451,12 +597,6 @@ SmartHandoff.propTypes = {
   showNotAvailableModal: PropTypes.func,
 };
 
-/**
- * ReactRedux; used for selecting the part of the data from the store
- * that the Smarthandoff component needs. This is called every time the
- * store state changes.
- * @param {*} state | Encapsulates the entire Redux store state.
- */
 const mapStateToProps = (state) => {
   const {
     browser,
@@ -476,9 +616,12 @@ const mapStateToProps = (state) => {
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
   const filterForSmartHandoff = (layer) => {
-    const { projections, disableSmartHandoff, conceptIds } = layer;
+    const {
+      id, projections, disableSmartHandoff, conceptIds,
+    } = layer;
+    const isAvailable = availableSelector(state)(id);
     const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
-    return projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
   };
   const availableLayers = getActiveLayers(state).filter(filterForSmartHandoff);
 
@@ -498,10 +641,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-/**
- * React-Redux; used for SmartHandoff component to fire specific actions events
- * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
- */
 const mapDispatchToProps = (dispatch) => ({
   selectCollection: (conceptId, layerId) => {
     dispatch(selectCollection(conceptId, layerId));
@@ -542,7 +681,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       openCustomContent('granule-help', {
         desktopOnly: true,
-        headerText: 'Granule Availablilty',
+        headerText: 'Granule Availability',
         bodyComponent: GranuleAlertModalBody,
         size: 'md',
       }),

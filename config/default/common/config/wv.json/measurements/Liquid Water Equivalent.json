@@ -8,7 +8,7 @@
                 "GRACE Tellus": {
                     "id": "grace-tellus",
                     "title": "GRACE Tellus",
-                    "description": "grace/LiquidWaterEquivalent",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI"

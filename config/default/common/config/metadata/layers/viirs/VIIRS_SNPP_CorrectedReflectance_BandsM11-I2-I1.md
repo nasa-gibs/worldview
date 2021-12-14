@@ -16,4 +16,5 @@ Burned areas or fire-affected areas are characterized by deposits of charcoal an
 Liquid water on the ground appears very dark since it absorbs in the red and the SWIR. Sediments in water appear dark blue. Ice and snow appear as bright turquoise.
 Clouds comprised of small water droplets scatter light equally in both the visible and the SWIR and will appear white. These clouds are usually lower to the ground and warmer. High and cold clouds are comprised of ice crystals and will appear turquoise.
 
-References: [Earthdata: VIIRS](https://earthdata.nasa.gov/earth-observation-data/near-real-time/download-nrt-data/viirs-nrt)
+References: VNP09_NRT [doi:10.5067/VIIRS/VNP09_NRT.001](https://doi.org/10.5067/VIIRS/VNP09_NRT.001)
+

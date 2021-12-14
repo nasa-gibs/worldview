@@ -34,7 +34,7 @@
                 "Landsat/WELD": {
                       "id": "landsat-weld",
                       "title": "Landsat/WELD",
-                      "description": "landsat/NDVI",
+                      "description": "",
                       "image": "",
                       "settings": [
                           "Landsat_WELD_NDVI_Global_Monthly",
@@ -44,7 +44,7 @@
                   "Terra/MISR": {
                       "id": "terra-misr",
                       "title": "Terra/MISR",
-                      "description": "misr/NDVI",
+                      "description": "",
                       "image": "",
                       "settings": [
                           "MISR_Land_NDVI_Average_Monthly"

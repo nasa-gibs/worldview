@@ -8,7 +8,8 @@
       "tags": "lightning international space station iss",
       "group": "overlays",
       "layergroup": "Lightning",
-      "product": "isslis_p0_nrt",
+      "product": "",
+      "inactive": true,
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_ISS_Ascending",

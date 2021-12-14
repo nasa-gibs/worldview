@@ -80,20 +80,25 @@ export function getPriority(sortedNotifications) {
 }
 
 /**
- * Gets a total count of the unseen notifications
- * @function getCounts
+ * Gets a total count of the notifications - excluding layerNotices
+ * @function getCount
  * @private
+ * @param {boolean} unseenOnly - count only unseen notifications
  * @returns {Number}
  */
-export function getCount(notifications) {
+export function getCount(notifications, unseenOnly) {
   const {
     messages, outages, alerts,
   } = notifications;
-  const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
-  const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
-  const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
 
-  return messageCount + outageCount + alertCount;
+  if (unseenOnly) {
+    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
+    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
+    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
+
+    return messageCount + outageCount + alertCount;
+  }
+  return messages.length + alerts.length + outages.length;
 }
 
 export function addToLocalStorage({ messages, outages, alerts }) {

@@ -2,5 +2,6 @@ The MISR Aerosol Optical Depth Average layer displays the temporal averages of a
 
 This layer is produced from the Optical depth average field of the MISR Level 3 Component Global Aerosol Product. It is available globally over both land and ocean on a monthly basis, with a spatial resolution of 0.5 degrees latitude by 0.5 degrees longitude. Coverage may be limited in areas with frequent cloudiness.
 
-References: MISR Level 3 Component Global Aerosol Product covering a month V004. [doi:10.5067/Terra/MISR/MIL3MAE_L3.004](https://doi.org/10.5067/Terra/MISR/MIL3MAE_L3.004)
+References: MIL3MAE_L3 [doi:10.5067/Terra/MISR/MIL3MAE_L3.004](https://doi.org/10.5067/Terra/MISR/MIL3MAE_L3.004)
+
 

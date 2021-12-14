@@ -49,6 +49,8 @@
     "no-useless-call": "error",
     "no-extra-parens": "error",
     "space-before-function-paren": "off",
+    "import/extensions": "off",
+    "no-multiple-empty-lines": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {

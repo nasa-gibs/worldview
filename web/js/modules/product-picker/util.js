@@ -1,4 +1,5 @@
 import safeLocalStorage from '../../util/local-storage';
+import util from '../../util/util';
 
 const { RECENT_LAYERS } = safeLocalStorage.keys;
 const MAX_RECENT_LAYERS = 20;
@@ -74,7 +75,7 @@ export function updateRecentLayers(layer, allProjections) {
 
     if (existingEntry) {
       existingEntry.count += 1;
-      existingEntry.dateAdded = new Date().valueOf();
+      existingEntry.dateAdded = util.now().valueOf();
     } else {
       if (layers.length === MAX_RECENT_LAYERS) {
         const [lowestCountLayer] = layers.sort((a, b) => a.count - b.count);
@@ -89,7 +90,7 @@ export function updateRecentLayers(layer, allProjections) {
       recentLayers[proj].push({
         id: layerId,
         count: 1,
-        dateAdded: new Date().valueOf(),
+        dateAdded: util.now().valueOf(),
       });
     }
   });

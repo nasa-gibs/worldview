@@ -57,12 +57,13 @@ export function toggleReverseGeocodeActive(isActive) {
  * Set coordinates and reverse geocode results for place
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
+ * @param {Boolean} isInputSearch
  */
-export function setPlaceMarker(coordinates, reverseGeocodeResults) {
+export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      config, map,
+      proj,
     } = state;
 
     if (reverseGeocodeResults) {
@@ -72,7 +73,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults) {
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
     if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,
@@ -86,6 +87,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults) {
       reverseGeocodeResults,
       coordinates,
       isCoordinatesDialogOpen: true,
+      isInputSearch,
     });
   };
 }

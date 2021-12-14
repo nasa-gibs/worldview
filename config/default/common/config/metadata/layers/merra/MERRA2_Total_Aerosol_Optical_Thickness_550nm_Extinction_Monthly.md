@@ -1,0 +1,5 @@
+The Total Aerosol Optical Thickness Extinction 550nm (Monthly) layer indicates Aerosol Optical Thickness Extinction at 550nm and is from the M2TMNXAER (or tavgM_2d_aer_Nx) data collection. It is a time-averaged 2-dimensional monthly mean data collection in Modern-Era Retrospective analysis for Research and Applications version 2 (MERRA-2). This collection consists of assimilated aerosol diagnostics, such as column mass density of aerosol components (black carbon, dust, sea salt, sulfate, and organic carbon), surface mass concentration of aerosol components, and total extinction (and scattering ) aerosol optical thickness (AOT) at 550 nm.
+
+MERRA-2 is the latest version of global atmospheric reanalysis for the satellite era produced by NASA Global Modeling and Assimilation Office (GMAO) using the Goddard Earth Observing System Model (GEOS) version 5.12.4.
+
+References: M2TMNXAER [doi:10.5067/FH9A0MLJPC7N](https://doi.org/10.5067/FH9A0MLJPC7N)

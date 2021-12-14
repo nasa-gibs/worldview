@@ -1,1 +1,5 @@
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)
+The MODIS Cloud Optical Thickness (1.6 microns) layer is a measure of the amount of sunlight affected by absorption and scattering when passing through the clouds using Band 6 (1.6 μm). Clouds scatter and reflect most visible light. Hence it is simultaneously retrieved with Cloud Effective Radius by simultaneously measuring the reflection function of a non-absorbing and absorbing spectral channel (e.g., Visible/Near Infrared (VIS/NIR) and Shortwave Infrared (SWIR), respectively) and comparing the resulting measurements with theoretical forward model calculations.
+
+The MODIS Cloud Optical Thickness layers are available from both the Terra (MOD06) and Aqua (MYD06) satellites for daytime overpasses. The sensor/algorithm resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: MYD06_L2 NRT [doi:10.5067/MODIS/MYD06_L2.NRT.061](https://doi.org/10.5067/MODIS/MYD06_L2.NRT.061); MYD06_L2 [doi:10.5067/MODIS/MYD06_L2.061](https://doi.org/10.5067/MODIS/MYD06_L2.061); [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)

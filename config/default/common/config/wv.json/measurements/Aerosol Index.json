@@ -8,7 +8,7 @@
                 "Aura/OMI": {
                     "id": "aura-omi",
                     "title": "Aura/OMI",
-                    "description": "omi/AerosolIndex",
+                    "description": "omi/Aerosol",
                     "image": "",
                     "settings": [
                         "OMI_Aerosol_Index",

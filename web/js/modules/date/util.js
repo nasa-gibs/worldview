@@ -1,10 +1,12 @@
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
+import moment from 'moment';
 import util from '../../util/util';
 import { layersParse12 } from '../layers/util';
 import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
+import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
@@ -149,6 +151,28 @@ export function getMaxActiveLayersDate(state) {
 }
 
 /**
+ * Checks if future time layer is within included layers
+ *
+ * @method checkHasFutureLayers
+ * @param  {Object} state
+ * @returns {Boolean} hasFutureLayers
+ */
+export function checkHasFutureLayers(state) {
+  const { compare, proj, layers } = state;
+  let hasFutureLayers;
+  if (compare.active) {
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+  } else {
+    const activeLayers = getActiveLayers(state);
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
+  }
+  return hasFutureLayers;
+}
+
+/**
  * Checks the date provided against the active layers.
  *
  * @method getLayersActiveAtDate
@@ -209,3 +233,80 @@ export function mapLocationToDateState(
   }
   return stateFromLocation;
 }
+
+/**
+ * @param  {Number} delta Date and direction to change
+ * @param  {Number} increment Zoom level of change
+ *                  e.g. months, minutes, years, days
+ * @param  {Object} prevDate JS Date Object
+ * @param  {Object} minDate timelineStartDateLimit JS Date Object
+ * @param  {Object} maxDate timelineEndDateLimit JS Date Object
+ * @return {Object} JS Date Object
+ */
+export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
+  let date;
+  // eslint-disable-next-line default-case
+  switch (increment) {
+    case 'year':
+      date = new Date(
+        new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta),
+      );
+      break;
+    case 'month':
+      date = new Date(
+        new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta),
+      );
+      break;
+    case 'day':
+      date = new Date(
+        new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta),
+      );
+      break;
+    case 'hour':
+      date = new Date(
+        new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta),
+      );
+      break;
+    case 'minute':
+      date = new Date(
+        new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta),
+      );
+      break;
+  }
+  if (date < minDate) {
+    return minDate;
+  } if (date > maxDate) {
+    return maxDate;
+  }
+  return date;
+};
+
+export function getNumberStepsBetween(state, start, end) {
+  const { delta, unit } = getDeltaIntervalUnit(state);
+  const a = moment(start);
+  const b = moment(end);
+  const diff = a.diff(b, unit);
+  return diff / delta;
+}
+
+/**
+ * Get the next date when using left/right arrows based on
+ * current interval and delta
+ */
+export const getNextDateTime = (state, direction, date) => {
+  const { delta, unit } = getDeltaIntervalUnit(state);
+  const useDate = date || getSelectedDate(state);
+  return getNextTimeSelection(delta * direction, unit, useDate);
+};
+
+/**
+ * Determine if the date change was not in sync with the current
+ * interval/delta step (e.g. a time unit was manually changed: 2003 -> 2004)
+ */
+export const outOfStepChange = (state, newDate) => {
+  const date = newDate.toISOString();
+  const previousSelectedDate = getSelectedDate(state);
+  const nextStepDate = getNextDateTime(state, 1, previousSelectedDate).toISOString();
+  const prevStepDate = getNextDateTime(state, -1, previousSelectedDate).toISOString();
+  return date !== nextStepDate && date !== prevStepDate;
+};

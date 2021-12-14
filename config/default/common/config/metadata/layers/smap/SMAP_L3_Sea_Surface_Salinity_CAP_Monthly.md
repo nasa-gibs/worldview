@@ -4,6 +4,7 @@ While the NASA SMAP (Soil Moisture Active Passive) mission was designed principa
 
 The SMAP Sea Surface Salinity (Level 3, CAP, Monthly) layer is available from the Soil Moisture Active Passive (SMAP) observatory. The sensor/algorithm resolution is 60 km, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-References:  Fore, A.G, S.H. Yueh, W. Tang, B.W. Stiles, and A.K. Hayashi (2016). Combined Active/Passive Retrievals of Ocean Vector Wind and Sea Surface Salinity With SMAP. IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 54, NO. 12. p.7396-7404. [doi: 10.1109/TGRS.2016.2601486](https://doi.org/10.1109/TGRS.2016.2601486)
+References: SMAP_JPL_L3_SSS_CAP_MONTHLY_V5 [doi:10.5067/SMP50-3TMCS](https://doi.org/10.5067/SMP50-3TMCS)
 
-JPL. 2020. JPL CAP SMAP Sea Surface Salinity Products. Ver. 5.0. PO.DAAC, CA, USA. [doi:10.5067/SMP50-3TMCS](https://doi.org/10.5067/SMP50-3TMCS)
+Fore, A.G, S.H. Yueh, W. Tang, B.W. Stiles, and A.K. Hayashi (2016). Combined Active/Passive Retrievals of Ocean Vector Wind and Sea Surface Salinity With SMAP. IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 54, NO. 12. p.7396-7404. [doi: 10.1109/TGRS.2016.2601486](https://doi.org/10.1109/TGRS.2016.2601486)
+

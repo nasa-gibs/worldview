@@ -52,7 +52,6 @@ function mapStateToProps(state) {
   const eventsEnabled = config.features.naturalEvents;
 
   return {
-    config,
     isShowingClick: map.isClickable,
     isDistractionFreeModeActive,
     isCoordinateSearchActive,

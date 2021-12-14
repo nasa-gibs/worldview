@@ -13,7 +13,6 @@
 }
 .list-group-item svg.svg-inline--fa {
   margin-right: 6px;
-  line-height: 1.5;
   height: 1em;
 }
 button.list-group-item {
@@ -21,4 +20,13 @@ button.list-group-item {
 }
 .list-group-item.small-item {
   padding: 5px;
+}
+.list-group-item.large-item {
+  font-size: 14px;
+  svg.svg-inline--fa {
+    margin-right: 12px;
+    height: 1.25em;
+    position: relative;
+    top: 2px;
+  }
 }

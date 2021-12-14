@@ -5,7 +5,7 @@
       "title": "Clear Sky Confidence (Day)",
       "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_Clear_Sky_Confidence_Day",
-      "tags": "cloud mask",
+      "tags": "cloud mask jpss jpss-1",
       "group": "overlays",
       "layergroup": "Clear Sky Confidence",
       "wrapadjacentdays": true,

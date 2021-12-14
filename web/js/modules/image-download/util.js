@@ -50,7 +50,7 @@ const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opaciti
     if (layerId.includes('OrbitTracks')) {
       // track index for modifications from splicing
       const idx = i + mod;
-      // revise OrbitTracks layerId requested to indiviudal 'Lines' and 'Points' layers
+      // revise OrbitTracks layerId requested to individual 'Lines' and 'Points' layers
       // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
       // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
       processedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
@@ -387,7 +387,7 @@ export function getNamesOfNondownloadableLayers(nonDownloadableLayers) {
   return names;
 }
 /**
- * Get warning that shows layers that will be removed if nofication is accepted
+ * Get warning that shows layers that will be removed if notification is accepted
  * @param {Array} nonDownloadableLayers
  *
  * @return {String}
@@ -401,11 +401,43 @@ export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
   return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot. Would you like to temporarily hide ${thisTheseStr} layer?`;
 }
 /**
- * Get array of layers that will be removed if nofication is accepted
+ * Get array of layers that will be removed if notification is accepted
  * @param {Array} visibleLayers
  *
  * @return {Array}
  */
 export function getNonDownloadableLayers(visibleLayers) {
   return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
+}
+/**
+ * Get dateline message for selecting snapshot area
+ * @param {Object} date
+ * @param {Array} geolonlat1
+ * @param {Array} geolonlat2
+ * @param {Object} proj
+ *
+ * @return {String}
+ */
+export function getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, proj) {
+  const { maxExtent, id } = proj.selected;
+  let alertMessage = '';
+  if (id === 'geographic') {
+    const crossesNextDay = geolonlat1[0] < maxExtent[0];
+    const crossesPrevDay = geolonlat2[0] > maxExtent[2];
+    const zeroedDate = util.clearTimeUTC(date);
+    const nextDay = util.toISOStringDateMonthAbbrev(util.dateAdd(zeroedDate, 'day', 1));
+    const prevDay = util.toISOStringDateMonthAbbrev(util.dateAdd(zeroedDate, 'day', -1));
+    const buildString = (lineStr, dateStr) => `The selected snapshot area crosses ${lineStr} and uses imagery from the ${dateStr}.`;
+    if (crossesNextDay && crossesPrevDay) {
+      // snapshot extends over both map wings
+      alertMessage = buildString('both datelines', `previous day ${prevDay} and next day ${nextDay}`);
+    } else if (crossesNextDay) {
+      // min longitude less than maxExtent min longitude (-180 geographic)
+      alertMessage = buildString('the dateline', `next day ${nextDay}`);
+    } else if (crossesPrevDay) {
+      // max longitude greater than maxExtent max longitude (180 geographic)
+      alertMessage = buildString('the dateline', `previous day ${prevDay}`);
+    }
+  }
+  return alertMessage;
 }

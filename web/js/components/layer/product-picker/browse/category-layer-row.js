@@ -16,6 +16,7 @@ import {
   selectSource as selectSourceAction,
   selectMeasurement as selectMeasurementAction,
 } from '../../../../modules/product-picker/actions';
+import { getSourcesForProjection } from '../../../../modules/product-picker/selectors';
 import {
   hasMeasurementSetting as hasSettingSelector,
 } from '../../../../modules/layers/selectors';
@@ -145,9 +146,9 @@ class CategoryLayerRow extends React.Component {
       hasMeasurementSetting,
       measurement,
       isMobile,
+      sources,
       selectedMeasurementSourceIndex,
     } = this.props;
-    const sources = Object.values(measurement.sources);
 
     // set first valid index to handle invalid activeSourceIndex indexes after projection change
     let minValidIndex = -1;
@@ -237,6 +238,7 @@ CategoryLayerRow.propTypes = {
   selectMeasurement: PropTypes.func,
   selectedMeasurement: PropTypes.string,
   selectedMeasurementSourceIndex: PropTypes.number,
+  sources: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
@@ -252,11 +254,13 @@ const mapStateToProps = (state) => {
     selectedMeasurementSourceIndex,
     categoryType,
   } = productPicker;
+
   return {
     categoryType,
     layerConfig: config.layers,
     isMobile,
     projection: proj.id,
+    sources: getSourcesForProjection(state),
     selectedMeasurement,
     selectedMeasurementSourceIndex,
     hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),

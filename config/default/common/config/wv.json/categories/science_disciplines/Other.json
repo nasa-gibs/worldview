@@ -9,10 +9,10 @@
                 "measurements": [
                     "Areas of No Data (mask)",
                     "Blue Marble",
-                    "Global Digital Elevation Map",
                     "Latitude-Longitude Lines",
                     "Orbital Track",
                     "Reference Map",
+                    "Terrain Elevation",
                     "Water Bodies"
                 ]
             }

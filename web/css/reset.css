@@ -144,6 +144,7 @@ body {
 }
 
 .wv-content {
+  min-width: 320px;
   position: fixed;
   width: 100%;
   height: 100%;

@@ -1,4 +1,4 @@
-### Sea Surface Temperature (Day, L2) 
+### Sea Surface Temperature (Day, L2)
 Temporal coverage: 1 April - 3 April 2020; 6 June 2020 - present
 
 ### Sea Surface Temperature (Night, L2)
@@ -39,6 +39,6 @@ Temporal coverage: 26 February 2000 - present
 The MODIS L3 SST 9km layer shows global nighttime sea surface temperature (SST) at a depth of a few micrometers with ranges from -1.8 to 32 degree Celsius. The SST is derived with a Thermal-Infrared (Long–Wave) SST Algorithm that uses MODIS bands 31 and 32 at 11 and 12 μm. This Level 3 product is derived from native 1 km Level 2 SST observations that are mapped to a global 9 km grid. The temporal resolution of MODIS L3 SST is daily, 8-Day, monthly, and annually. More information and access to the data sources is available at these locations:
 [MODIS Terra Level 3 SST Thermal Daily 9km Nighttime v2014.0](https://podaac.jpl.nasa.gov/dataset/MODIS_TERRA_L3_SST_THERMAL_DAILY_9KM_NIGHTTIME_V2014.0) (daily); [MODIS Terra Level 3 SST Thermal 8-Day 9km Nighttime v2014.0](https://podaac.jpl.nasa.gov/dataset/MODIS_TERRA_L3_SST_THERMAL_8DAY_9KM_NIGHTTIME_V2014.0) (8-Day); [MODIS Terra Level 3 SST Thermal Monthly 9km Nighttime v2014.0](https://podaac.jpl.nasa.gov/dataset/MODIS_TERRA_L3_SST_THERMAL_MONTHLY_9KM_NIGHTTIME_V2014.0) (monthly); and [MODIS Terra Level 3 SST Thermal Annual 9km Nighttime v2014.0](https://podaac.jpl.nasa.gov/dataset/MODIS_TERRA_L3_SST_THERMAL_ANNUAL_9KM_NIGHTTIME_V2014.0) (annually)
 
-References: Details of the [algorithm](https://oceancolor.gsfc.nasa.gov/atbd/sst4/) can be found at Ocean Biology Processing Group (OBPG) website.
+References: Details of the [algorithm](https://oceancolor.gsfc.nasa.gov/atbd/sst4/) can be found at Ocean Biology Processing Group (OBPG/OB.DAAC) website.
 
 P. J. Minnett et al., "Sea-surface temperature measurements from the Moderate-Resolution Imaging Spectroradiometer (MODIS) on Aqua and Terra," IGARSS 2004. 2004 IEEE International Geoscience and Remote Sensing Symposium, Anchorage, AK, 2004, pp. 4576-4579 vol.7. [doi: 10.1109/IGARSS.2004.1370173](https://doi.org/10.1109/IGARSS.2004.1370173).

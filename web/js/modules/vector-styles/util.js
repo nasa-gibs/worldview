@@ -210,21 +210,26 @@ function getModalOffset(dimensionProps) {
 /**
  * Get Organized data for each feature at pixel
  * @param {Object} mapProps
- * @param Object*} config
+ * @param {Object} config
  * @param {Object} compareState
+ * @param {Boolean} isMobile
  */
-function getModalContentsAtPixel(mapProps, config, compareState) {
+function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const metaArray = [];
   const selected = {};
-  let isCoordinatesMarker = false;
+  let exceededLengthLimit = false;
   const { pixels, map, swipeOffset } = mapProps;
+  const featureOptions = isMobile ? { hitTolerance: 5 } : {};
+  // max displayed results of features at pixel
+  const desktopLimit = 12;
+  const mobileLimit = 5;
+  const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-    const featureId = feature.getId();
-    if (featureId === 'coordinates-map-marker') {
-      isCoordinatesMarker = true;
-      return;
+    const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
+    if (lengthCheck(metaArray)) {
+      exceededLengthLimit = true;
+      return true;
     }
-
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
       return;
@@ -257,13 +262,16 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
         title: def.title || layerId,
         subTitle: def.subtitle,
         featureTitle: title,
+        disableUnitConversion: !!def.disableUnitConversion,
 
       };
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);
     }
-  });
-  return { selected, metaArray, isCoordinatesMarker };
+  }, featureOptions);
+  return {
+    selected, metaArray, exceededLengthLimit,
+  };
 }
 /**
  * Get organized vector modal contents for clicked
@@ -287,13 +295,15 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
-  const { selected, metaArray, isCoordinatesMarker } = getModalContentsAtPixel(mapProps, config, compare);
+  const {
+    selected, metaArray, exceededLengthLimit,
+  } = getModalContentsAtPixel(mapProps, config, compare, isMobile);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
-    isCoordinatesMarker,
+    exceededLengthLimit,
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {

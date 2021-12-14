@@ -32,7 +32,7 @@ export default class DateRanges extends React.Component {
     })
 
   render() {
-    const { layer, screenHeight } = this.props;
+    const { layer } = this.props;
     const { showRanges } = this.state;
     const style = showRanges ? { display: 'block' } : { display: 'none' };
     const listItems = this.renderListItem(layer);
@@ -55,7 +55,7 @@ export default class DateRanges extends React.Component {
           <div>
             <p>Date Ranges:</p>
           </div>
-          <Scrollbar style={{ maxHeight: `${screenHeight - 400}px` }}>
+          <Scrollbar style={{ maxHeight: 400 }}>
             <ListGroup className="layer-date-ranges" id="layer-settings-date-range-list">
               {listItems}
             </ListGroup>
@@ -68,5 +68,4 @@ export default class DateRanges extends React.Component {
 
 DateRanges.propTypes = {
   layer: PropTypes.object,
-  screenHeight: PropTypes.number,
 };

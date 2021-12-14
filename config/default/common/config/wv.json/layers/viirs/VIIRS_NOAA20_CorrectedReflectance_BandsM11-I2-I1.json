@@ -5,7 +5,7 @@
       "title": "Corrected Reflectance (Bands M11-I2-I1)",
       "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
-      "tags": "false color jpss1 7-2-1",
+      "tags": "false color jpss1 7-2-1 jpss-1",
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
       "wrapadjacentdays": true,

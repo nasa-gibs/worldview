@@ -33,13 +33,19 @@ class LineText extends React.Component {
       util.getTextWidth(dateRight, '13px Open Sans') * 100,
     ) / 100 || textWidth;
     const svgStyle = {
-      transform: `translateX(${-(leftTextWidth + 20)}px)`,
+      position: 'absolute',
+      transform: `translateX(${-(leftTextWidth + 25)}px)`,
+      overflow: 'visible',
+      width: '100px',
+      userSelect: 'none',
+      pointerEvents: 'none',
+      left: '0',
     };
     return (
       <svg className="dateline-text" style={svgStyle}>
         <rect
           fill={fill}
-          width={leftTextWidth + 12}
+          width={leftTextWidth + 10}
           height={textHeight}
           x={0}
           rx={recRadius}
@@ -56,7 +62,7 @@ class LineText extends React.Component {
         </text>
         <rect
           fill={fill}
-          width={rightTextWidth + 12}
+          width={rightTextWidth + 10}
           height={textHeight}
           x={leftTextWidth + 40}
           rx={recRadius}
@@ -80,7 +86,7 @@ LineText.defaultProps = {
   width: '300',
   color: 'white',
   textY: 14,
-  fill: 'rgba(40,40,40,0.5)',
+  fill: 'rgba(40,40,40,0.75)',
   textWidth: 80,
   textHeight: 20,
   recRadius: 3,
