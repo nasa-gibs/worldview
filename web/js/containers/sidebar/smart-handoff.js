@@ -24,6 +24,7 @@ import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
 import selectCollection from '../../modules/smart-handoff/actions';
+import { formatDisplayDate } from '../../modules/date/util';
 
 const STD_NRT_MAP = {
   STD: 'Standard',
@@ -614,7 +615,7 @@ const mapStateToProps = (state) => {
 
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
-  const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
+  const displayDate = formatDisplayDate(selectedDate); // 2020 JAN 01
   const filterForSmartHandoff = (layer) => {
     const {
       id, projections, disableSmartHandoff, conceptIds,

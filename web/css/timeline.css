@@ -507,6 +507,11 @@ button:focus {
 .interval-btn-active:hover {
   background-color: #fff;
   color: #1a1a1a;
+  &.disabled {
+    background-color: transparent;
+    color: #ccc;
+    cursor: default;
+  }
 }
 
 .zoom-btn, .interval-btn {

@@ -11,7 +11,10 @@
       "wrapadjacentdays": true,
       "daynight": [
         "day"
-      ]
+      ],
+       "availability": {
+        "rollingWindow": 20
+     }
     }
   }
 }

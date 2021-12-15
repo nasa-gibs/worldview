@@ -36,6 +36,20 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
   return currentDate || startDate;
 }
 
+export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
+  let i = 1;
+  let currentDate = start;
+  while (currentDate < end) {
+    i += 1;
+    currentDate = util.dateAdd(currentDate, interval, delta);
+    // if checking for a max number limit, break out after reaching it
+    if (maxToCheck && i >= maxToCheck) {
+      return i;
+    }
+  }
+  return i;
+}
+
 export function getStampProps(
   stampWidthRatio,
   breakPoint,

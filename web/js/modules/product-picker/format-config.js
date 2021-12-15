@@ -3,9 +3,9 @@ import {
   map as lodashMap,
   get as lodashGet,
 } from 'lodash';
-import moment from 'moment';
 import { available } from '../layers/selectors';
 import util from '../../util/util';
+import { formatDisplayDate } from '../date/util';
 
 const periodIntervalMap = {
   daily: 'Day',
@@ -114,7 +114,7 @@ function setCoverageFacetProp(layer, selectedDate) {
   if (!startDate && !endDate && !dateRanges) {
     layer.coverage = ['Always Available'];
   } else if (available(id, selectedDate, [layer], {})) {
-    layer.coverage = [`Available ${moment.utc(selectedDate).format('YYYY MMM DD')}`];
+    layer.coverage = [`Available ${formatDisplayDate(selectedDate)}`];
   }
 }
 

@@ -62,7 +62,7 @@ module.exports = {
     // Verify granules and date are correct
     c.expect
       .element('.granule-count-header')
-      .to.have.text.equal('Available granules for 2019 Dec 01:');
+      .to.have.text.equal('Available granules for 2019 DEC 01:');
     c.waitForElementVisible('.granule-count-info', TIME_LIMIT);
   },
 

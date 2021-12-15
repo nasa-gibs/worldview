@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
+import { coverageDateFormatter } from '../../../modules/date/util';
 
 export default class DateRanges extends React.Component {
   constructor(props) {
@@ -19,10 +19,10 @@ export default class DateRanges extends React.Component {
       let listItemStartDate;
       let listItemEndDate;
       if (l.startDate) {
-        listItemStartDate = util.coverageDateFormatter('START-DATE', l.startDate, layer.period);
+        listItemStartDate = coverageDateFormatter('START-DATE', l.startDate, layer.period);
       }
       if (l.endDate) {
-        listItemEndDate = util.coverageDateFormatter('END-DATE', l.endDate, layer.period);
+        listItemEndDate = coverageDateFormatter('END-DATE', l.endDate, layer.period);
       }
       return (
         <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>

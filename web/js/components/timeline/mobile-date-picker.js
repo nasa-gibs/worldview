@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';
-import { monthMap } from '../../modules/date/constants';
+import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 import HoverTooltip from '../util/hover-tooltip';
 
 // https://www.npmjs.com/package/react-mobile-datepicker
@@ -14,7 +14,7 @@ const defaultDateConfig = {
     step: 1,
   },
   month: {
-    format: (value) => monthMap[value.getMonth() + 1],
+    format: (value) => MONTH_STRING_ARRAY[value.getMonth()],
     caption: 'Mon',
     step: 1,
   },
@@ -32,7 +32,7 @@ const subDailyDateConfig = {
     step: 1,
   },
   month: {
-    format: (value) => monthMap[value.getMonth() + 1],
+    format: (value) => MONTH_STRING_ARRAY[value.getMonth()],
     caption: 'Mon',
     step: 1,
   },
