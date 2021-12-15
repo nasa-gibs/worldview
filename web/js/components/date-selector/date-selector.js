@@ -28,43 +28,6 @@ class DateSelector extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const {
-      date,
-      subDailyMode,
-      maxDate,
-      minDate,
-    } = this.props;
-    const {
-      year,
-      month,
-      day,
-      hour,
-      minute,
-      yearValid,
-      monthValid,
-      dayValid,
-      hourValid,
-      minuteValid,
-    } = this.state;
-
-    const updateCheck = year === nextState.year
-      && month === nextState.month
-      && day === nextState.day
-      && hour === nextState.hour
-      && minute === nextState.minute
-      && yearValid === nextState.yearValid
-      && monthValid === nextState.monthValid
-      && dayValid === nextState.dayValid
-      && hourValid === nextState.hourValid
-      && minuteValid === nextState.minuteValid
-      && date.getTime() === nextProps.date.getTime()
-      && subDailyMode === nextProps.subDailyMode
-      && maxDate.getTime() === nextProps.maxDate.getTime()
-      && minDate.getTime() === nextProps.minDate.getTime();
-    return !updateCheck;
-  }
-
   componentDidUpdate(prevProps) {
     const {
       date,
@@ -342,6 +305,7 @@ class DateSelector extends Component {
       subDailyMode,
       isStartDate,
       isEndDate,
+      isDisabled,
     } = this.props;
     const {
       year,
@@ -382,18 +346,21 @@ class DateSelector extends Component {
           type="year"
           value={yearValue}
           isValid={yearValid}
+          isDisabled={isDisabled}
         />
         <DateInputColumn
           {...sharedProps}
           type="month"
           value={monthValue}
           isValid={monthValid}
+          isDisabled={isDisabled}
         />
         <DateInputColumn
           {...sharedProps}
           type="day"
           value={dayValue}
           isValid={dayValid}
+          isDisabled={isDisabled}
         />
         { subDailyMode && (
           <>
@@ -402,6 +369,7 @@ class DateSelector extends Component {
               type="hour"
               value={hourValue}
               isValid={hourValid}
+              isDisabled={isDisabled}
             />
             <div className="input-time-divider">:</div>
             <DateInputColumn
@@ -409,6 +377,7 @@ class DateSelector extends Component {
               type="minute"
               value={minuteValue}
               isValid={minuteValid}
+              isDisabled={isDisabled}
             />
             <div className="input-time-zmark">Z</div>
           </>
@@ -426,6 +395,7 @@ DateSelector.propTypes = {
   idSuffix: PropTypes.string,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   onDateChange: PropTypes.func,

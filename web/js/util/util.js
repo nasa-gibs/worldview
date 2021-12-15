@@ -308,8 +308,7 @@ export default (function(self) {
       case 'month':
         year = newDate.getUTCFullYear();
         month = newDate.getUTCMonth();
-        maxDay = new Date(year, month + amount + 1, 0)
-          .getUTCDate();
+        maxDay = new Date(year, month + amount + 1, 0).getUTCDate();
         if (maxDay <= date.getUTCDate()) {
           newDate.setUTCDate(maxDay);
         }
@@ -322,34 +321,6 @@ export default (function(self) {
         throw new Error(`[dateAdd] Invalid interval: ${interval}`);
     }
     return newDate;
-  };
-
-  self.getNumberOfDays = function(start, end, interval, increment = 1, maxToCheck) {
-    let i = 1;
-    let currentDate = start;
-    while (currentDate < end) {
-      i += 1;
-      currentDate = self.dateAdd(currentDate, interval, increment);
-      // if checking for a max number limit, break out after reaching it
-      if (maxToCheck && i >= maxToCheck) {
-        return i;
-      }
-    }
-    return i;
-  };
-
-  self.daysInMonth = function(d) {
-    let year;
-    let month;
-    if (d.getUTCFullYear) {
-      year = d.getUTCFullYear();
-      month = d.getUTCMonth();
-    } else {
-      year = d.year;
-      month = d.month;
-    }
-    const lastDay = new Date(Date.UTC(year, month + 1, 0));
-    return lastDay.getUTCDate();
   };
 
   self.daysInYear = function(date) {
@@ -422,125 +393,6 @@ export default (function(self) {
     return val;
   };
 
-  self.roll = function(val, min, max) {
-    if (val < min) {
-      return max - (min - val) + 1;
-    }
-    if (val > max) {
-      return min + (val - max) - 1;
-    }
-    return val;
-  };
-
-  self.minDate = function() {
-    return new Date(Date.UTC(1000, 0, 1, 0, 0));
-  };
-
-  self.maxDate = function() {
-    return new Date(Date.UTC(3000, 11, 30, 23, 59));
-  };
-
-  self.rollRange = function(date, interval, minDate, maxDate) {
-    const year = date.getUTCFullYear();
-    const month = date.getUTCMonth();
-    let first;
-    let last;
-    switch (interval) {
-      case 'minute': {
-        const firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
-        const lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
-        first = new Date(Math.max(firstMinute, minDate))
-          .getUTCMinutes();
-        last = new Date(Math.min(lastMinute, maxDate))
-          .getUTCMinutes();
-        break;
-      }
-      case 'hour': {
-        const firstHour = new Date(Date.UTC(year, month, 1, 0));
-        const lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
-        first = new Date(Math.max(firstHour, minDate))
-          .getUTCHours();
-        last = new Date(Math.min(lastHour, maxDate))
-          .getUTCHours();
-        break;
-      }
-      case 'day': {
-        const firstDay = new Date(Date.UTC(year, month, 1));
-        const lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
-        first = new Date(Math.max(firstDay, minDate))
-          .getUTCDate();
-        last = new Date(Math.min(lastDay, maxDate))
-          .getUTCDate();
-        break;
-      }
-      case 'month': {
-        const firstMonth = new Date(Date.UTC(year, 0, 1));
-        const lastMonth = new Date(Date.UTC(year, 11, 31));
-        first = new Date(Math.max(firstMonth, minDate))
-          .getUTCMonth();
-        last = new Date(Math.min(lastMonth, maxDate))
-          .getUTCMonth();
-        break;
-      }
-      case 'year': {
-        const firstYear = self.minDate();
-        const lastYear = self.maxDate();
-        first = new Date(Math.max(firstYear, minDate))
-          .getUTCFullYear();
-        last = new Date(Math.min(lastYear, maxDate))
-          .getUTCFullYear();
-        break;
-      }
-      default:
-        break;
-    }
-    return {
-      first,
-      last,
-    };
-  };
-
-  self.rollDate = function(date, interval, amount, minDate = self.minDate(), maxDate = self.maxDate()) {
-    const range = self.rollRange(date, interval, minDate, maxDate);
-    const min = range.first;
-    const max = range.last;
-    const second = date.getUTCSeconds();
-    let minute = date.getUTCMinutes();
-    let hour = date.getUTCHours();
-    let day = date.getUTCDate();
-    let month = date.getUTCMonth();
-    let year = date.getUTCFullYear();
-    switch (interval) {
-      // TODO: change minute and hour hard-coded min & max to be dynamic
-      case 'minute':
-        minute = self.roll(minute + amount, 0, 59);
-        break;
-      case 'hour':
-        hour = self.roll(hour + amount, 0, 23);
-        break;
-      case 'day':
-        day = self.roll(day + amount, min, max);
-        break;
-      case 'month':
-        month = self.roll(month + amount, min, max);
-        break;
-      case 'year':
-        year = self.roll(year + amount, min, max);
-        break;
-      default:
-        throw new Error(`[rollDate] Invalid interval: ${interval}`);
-    }
-    const daysInMonth = self.daysInMonth({
-      year,
-      month,
-    });
-    if (day > daysInMonth) {
-      day = daysInMonth;
-    }
-    let newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
-    newDate = new Date(self.clamp(newDate, minDate, maxDate));
-    return newDate;
-  };
 
   /**
    * Gets the current time minus minutesOffset for geostationary layers.
