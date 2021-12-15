@@ -109,8 +109,6 @@ button:focus {
     height: 30px;
     width: 100%;
     max-width: inherit;
-    // border: 1px solid red;
-
   }
 
   & .input-wrapper:hover .date-arrows svg path {
