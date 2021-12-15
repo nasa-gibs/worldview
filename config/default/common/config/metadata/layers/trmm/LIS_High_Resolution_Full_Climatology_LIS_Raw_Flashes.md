@@ -2,8 +2,4 @@ The TRMM/LIS Lightning Flashes (Raw) layer indicates the average number of total
 
 The LIS instrument contains a staring imager which is optimized to locate and detect lightning with storm-scale resolution of 3 to 6 kilometers over a large region of the Earth’s surface. The field-of-view is sufficient to observe a point on the Earth or a cloud for about 80 seconds, adequate to estimate the flashing rate of many storms. The instrument records the time of occurrence of a lightning event and estimates the location.
 
-References: [GHRC: LIS/OTD 2.5 Degree Low Resolution Full Climatology (LRFC)](https://doi.org/10.5067/LIS/LIS-OTD/DATA308);
-[GHRC: Lighting Imaging Sensor (LIS) Overview](https://lightning.nsstc.nasa.gov/lis/overview_lis_instrument.html);
-[Albrecht, R.I., et al. The 13 years of TRMM Lightning Imaging Sensor: From individual flash characteristics to decadal tendencies. XIV International Conference on Atmospheric Electricity, August 8-12 2011, Rio de Janeiro, Brazil](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20110015779.pdf);
-[Products in LIS-OTD gridded climatology files](https://ghrc.nsstc.nasa.gov/pub/doc/lis_climatology/LISOTD_Climo_prod_table.doc);
-[Cecil, D.J., et al. Gridded lightning climatology from TRMM-LIS and OTD: Dataset description, Atmospheric Research, Volumes 135–136, January 2014, Pages 404–414](https://doi.org/10.1016/j.atmosres.2012.06.028)
+References: lohrfc [doi:10.5067/LIS/LIS-OTD/DATA302](https://doi.org/10.5067/LIS/LIS-OTD/DATA302)

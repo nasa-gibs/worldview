@@ -2,4 +2,4 @@ The MAIAC Isotropic Kernel Parameters (RTLS Model, 8-Day) layer is an RGB image 
 
 The MAIAC Combined Isotropic Kernel Parameters layer is available as a combined Terra satellite and Aqua satellite layer (MCD19A3). The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is 8-day.
 
-References: [doi: 10.5067/MODIS/MCD19A3N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A3N.NRT.006)
+References: MCD19A3N [doi:10.5067/MODIS/MCD19A3N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A3N.NRT.006)

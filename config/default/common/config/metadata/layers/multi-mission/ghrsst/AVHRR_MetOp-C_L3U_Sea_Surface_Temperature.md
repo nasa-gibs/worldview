@@ -1,0 +1,3 @@
+This layer contains L3U (Level 3 Uncollated) Sea Surface Temperature (SST) data on a 0.02 degree horizontal grid resolution from the Meteorological Operational satellite C (Metop-C) Advanced Very High Resolution Radiometer 3 (AVHRR/3) instrument. Only input SSTs with QL=5 (highest quality) are included, ensuring that only valid SSTs are provided for users. Per GDS2 specifications, two additional Sensor-Specific Error Statistics layers (SSES bias and standard deviation) are reported in each pixel with valid SST.
+
+References: [10.5067/GHMTC-3US28](https://doi.org/10.5067/GHMTC-3US28)

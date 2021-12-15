@@ -1,1 +1,5 @@
-References: [GES DISC - OMUVBd: OMI/Aura Surface UVB Irradiance and Erythemal Dose Daily L3 Global Gridded 1.0 degree x 1.0 degree V3](https://disc.gsfc.nasa.gov/datasets/OMUVBd_V003/summary)
+The UV Aerosol Index layer indicates the presence of UV-absorbing aerosols such as dust and soot. UV Aerosol Index (AI) is based on a spectral contrast method in a UV region where the ozone absorption is very small. It is the difference between the observations and model calculations of absorbing and non-absorbing spectral radiance ratios. Positive values of Aerosol Index generally represent absorbing aerosols (dust and smoke) while small or negative values represent non-absorbing aerosols and clouds. The Index can be interpreted in terms of optical depth if the index of refraction, particle size distribution, and the height of the aerosol layer are known from other measurements.
+
+The UV Aerosol Index layer is a science parameter of the Ozone Monitoring Instrument (OMI) Level-3 Near UV Aerosol Optical Depth and Single Scattering Albedo product (OMAERUVd) product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution of 1.0 x 1.0 degrees.
+
+References: OMAERUVd [doi:10.5067/Aura/OMI/DATA3003](https://doi.org/10.5067/Aura/OMI/DATA3003)

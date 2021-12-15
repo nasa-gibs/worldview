@@ -31,9 +31,9 @@ warning_count = 0
 remove_count = 0
 
 main_config_file = os.path.join(config_dir, "wv.json")
-with open(main_config_file) as fp:
+with open(main_config_file, "r", encoding="utf-8") as fp:
     wv = json.load(fp)
-with open(options_file) as fp:
+with open(options_file, "r", encoding="utf-8") as fp:
     opt = json.load(fp)
 
 tolerant = opt.get("tolerant", False)
@@ -71,7 +71,7 @@ start_date = datetime.max
 
 for layer_id in list(wv["layers"].keys()):
     layer = wv["layers"][layer_id]
-    
+
     if layer_id != layer.get('id'):
         error("[%s] layer id does not match id of %s" % (layer_id, layer.get('id')))
     if layer_id not in wv["layerOrder"]:
@@ -193,7 +193,7 @@ json_options = {}
 json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
-with open(main_config_file, "w") as fp:
+with open(main_config_file, "w", encoding="utf-8") as fp:
     json.dump(wv, fp)
 
 if error_count > 0:

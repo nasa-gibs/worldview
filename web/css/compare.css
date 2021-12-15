@@ -8,13 +8,25 @@
   cursor: move;
   cursor: grab;
   user-select: none;
+  & .show-date-label {
+    width: 109px;
+  }
+  & .left-label {
+    left: -23px;
+    &.show-date-label {
+      left: -118px;
+    }
+  }
+  & .right-label {
+    left: 13px;
+  }
 }
 .ab-swipe-line:active {
   cursor: grabbing;
 }
 .ab-swipe-dragger {
   position: absolute;
-  bottom: 30%;
+  bottom: 210px;
   width: 65px;
   height: 65px;
   margin-top: -45px;
@@ -38,20 +50,13 @@
   font-size: 26px;
   margin-top: 11px;
 }
-.ab-swipe-line .left-label {
-  left: -23px;
-}
-.ab-swipe-line .right-label {
-  left: 13px;
-}
 .ab-slider-case {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
   left: 0;
   right: 0;
-  bottom: 25%;
-  width: 232px;
+  bottom: 195px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 3px;
@@ -59,21 +64,24 @@
   height: 36px;
 }
 .ab-slider-case .input-range {
-  width: 146px;
+  width: 110px;
   display: inline-block;
-  margin: 6px 17px;
+  margin: 6px 14px;
 }
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
   margin-top: 12px;
-  width: 15px;
-  font-size: 16px;
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
 }
 .ab-slider-case .wv-slider-label h4 {
+  font-weight: 400;
+}
+.ab-slider-case .wv-slider-label span {
+  font-size: 15px;
   font-weight: 700;
-  font-size: 16px;
+  vertical-align: top;
 }
 .ab-slider-case .input-range__slider {
   height: 20px;
@@ -83,7 +91,7 @@
 }
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
-  bottom: 25%;
+  bottom: 195px;
   padding: 2px;
   background: #fff;
   color: #000;
@@ -100,6 +108,7 @@
   background: rgba(40, 40, 40, 0.8);
   color: rgba(255, 255, 255, 0.9);
   display: block;
+  white-space: nowrap;
   font-size: 14px;
   border-radius: 3px;
   border: 1px solid #000;

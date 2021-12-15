@@ -7,3 +7,5 @@ The fusion method consists of two steps: (a) performing a nearest-neighbor searc
 The fusion product is produced for each 6-minute granule. It performs best within the CrIS swath but is also produced to full VIIRS swath width.
 
 The VIIRS+CrIS Band 33 Fusion Brightness Temperature layer is available from the joint NASA/NOAA NOAA 20 satellite. The sensor resolution is 750m, the imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: FSNRAD_L2_VIIRS_CrIS_NOAA20 [doi:10.5067/VIIRS/FSNRAD_L2_VIIRS_CRIS_NOAA20.001](https://doi.org/10.5067/VIIRS/FSNRAD_L2_VIIRS_CRIS_NOAA20.001)

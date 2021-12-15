@@ -8,7 +8,7 @@
                 "AVISO": {
                     "id": "aviso",
                     "title": "AVISO",
-                    "description": "multi-mission/aviso/AVISO_Absolute_Dynamic_Topography",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "AVISO_Absolute_Dynamic_Topography"

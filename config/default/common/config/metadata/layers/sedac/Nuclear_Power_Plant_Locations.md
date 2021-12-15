@@ -2,4 +2,4 @@ The Nuclear Power Plants vector layer indicates the location of nuclear power pl
 
 The nuclear power plants locations data set combines information from a global data set developed by Declan Butler of Nature News and the Power Reactor Information System (PRIS), an up-to-date database of nuclear reactors maintained by the International Atomic Energy Agency (IAEA). The locations of nuclear reactors around the world are represented as point features associated with reactor specification and performance history attributes as of March 2012.
 
-References: doi: [10.7927/H4WH2MXH](https://doi.org/10.7927/H4WH2MXH)
+References: [doi:10.7927/H4WH2MXH](https://doi.org/10.7927/H4WH2MXH)

@@ -12,25 +12,29 @@ import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
+const getConfig = ({ config }) => config;
+const getLayerId = (state, { layer }) => layer && layer.id;
 
 /**
  * Is overlay grouping currently enabled?
  */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
  */
 export const getActiveLayers = (state, activeString) => {
-  const { compare, layers } = state;
+  const { embed, compare, layers } = state;
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveLayersEmbed(state, activeString);
+  }
   return layers[activeString || compare.activeString].layers;
 };
 
@@ -39,14 +43,66 @@ export const getActiveLayers = (state, activeString) => {
  * that are available for the currently active projection
  */
 export const getActiveOverlayGroups = (state) => {
-  const { compare, layers, proj } = state;
+  const {
+    embed, compare, layers, proj,
+  } = state;
   const { overlayGroups } = layers[compare.activeString];
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveOverlayGroupsEmbed(state);
+  }
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
       (id) => !!activeLayersMap[id].projections[proj.id],
     ).length,
   );
+};
+
+/**
+ * Return a list of layers for the currently active compare state
+ * regardless of projection (no hidden layers)
+ */
+const getActiveLayersEmbed = (state, activeString) => {
+  const { compare, layers } = state;
+  const activeLayers = layers[activeString || compare.activeString].layers;
+  return activeLayers.filter((layer) => layer.visible);
+};
+
+/**
+ * Return an array of filtered overlay groups for the currently active compare state
+ * that are available for the currently active projection (no hidden or reference layers)
+ *
+ * @param {Object} state
+ */
+const getActiveOverlayGroupsEmbed = (state) => {
+  const {
+    compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  const activeLayersMap = getActiveLayersMap(state);
+  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
+  return (overlayGroupsFiltered || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
+          && !!activeLayersMap[id].visible,
+    ).length,
+  );
+};
+
+/**
+ * Return a list of layer groups that filter out removed, hidden layers
+ */
+export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
+  const overlaysLayerIds = overlays.map((layer) => layer.id);
+  // remove reference layers and revise overlay layers group
+  return overlayGroups
+    .filter((group) => group.groupName !== 'Reference')
+    .map((group) => {
+      const filteredLayers = group.layers.filter((layer) => overlaysLayerIds.includes(layer));
+      const filteredGroup = { ...group };
+      filteredGroup.layers = filteredLayers;
+      return filteredGroup;
+    });
 };
 
 /**
@@ -71,6 +127,15 @@ export const getAllActiveOverlaysBaselayers = createSelector(
   (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
 
+export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const { proj } = state;
+  const layers = getActiveLayers(state, activeString);
+  const baseLayers = layers.filter(({ group }) => group === 'baselayers');
+  return layers.filter(
+    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+  );
+};
+
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
   Object.values(current.sources).forEach((source) => {
@@ -80,6 +145,28 @@ export function hasMeasurementSource(current, config, projId) {
   });
   return hasSource;
 }
+
+/**
+ * Look up the measurement description path for a given layer
+ * so that metadata can be shown in the layer info modal.  Ignore
+ * Orbital Track layers since they will be in multiple measurements.
+ */
+export const makeGetDescription = () => createSelector(
+  [getConfig, getLayerId],
+  ({ layers, measurements }, layerId) => {
+    if (!layerId) return;
+    const { layergroup } = layers[layerId];
+    if (layergroup === 'Orbital Track') {
+      return;
+    }
+    const [setting] = Object.keys(measurements)
+      .filter((key) => !key.includes('Featured'))
+      .map((key) => measurements[key])
+      .flatMap(({ sources }) => Object.values(sources))
+      .filter(({ settings }) => settings.find((id) => id === layerId));
+    return (setting || {}).description;
+  },
+);
 
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
@@ -252,7 +339,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
     const notRenderable = spec.renderable
-      && !isRenderable(def.id, activeLayers, spec.date, state);
+      && !isRenderable(def.id, activeLayers, spec.date, null, state);
     if (notInProj || notRenderable) {
       return;
     }
@@ -273,7 +360,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
  */
 export function getFutureLayerEndDate(layer) {
   const { futureTime } = layer;
-  const max = new Date();
+  const max = util.now();
   const dateType = futureTime.slice(-1);
   const dateInterval = futureTime.slice(0, -1);
 
@@ -399,7 +486,7 @@ export const memoizedAvailable = createSelector(
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, state) {
+export function isRenderable(id, layers, date, bLayers, state) {
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
@@ -412,7 +499,7 @@ export function isRenderable(id, layers, date, state) {
     return true;
   }
   let obscured = false;
-  const baselayers = getLayers(state, { group: 'baselayers' }, layers);
+  const baselayers = bLayers || getLayers(state, { group: 'baselayers' }, layers);
   lodashEach(
     baselayers,
     (otherDef) => {
@@ -432,17 +519,24 @@ export function isRenderable(id, layers, date, state) {
   return !obscured;
 }
 
-export function activateLayersForEventCategory(activeLayers, state) {
+export function activateLayersForEventCategory(state, category) {
+  const projection = state.proj.id;
+  const { layers } = state.config.naturalEvents;
   const { layerConfig } = state.layers;
-  // Turn off all layers in list first
+  const categoryLayers = layers[projection][category];
+
   let newLayers = getActiveLayers(state);
-  lodashEach(newLayers, (layer, index) => {
+  if (!categoryLayers) {
+    return newLayers;
+  }
+  // Turn off all layers in list first
+  newLayers.forEach((layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
     });
   });
   // Turn on or add new layers
-  lodashEach(activeLayers, (layer) => {
+  categoryLayers.forEach((layer) => {
     const [id, visible] = layer;
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
@@ -450,12 +544,13 @@ export function activateLayersForEventCategory(activeLayers, state) {
         [index]: { visible: { $set: visible } },
       });
     } else {
+      const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
         { visible },
         newLayers,
         layerConfig,
-        getLayers(state, { group: 'overlays' }, newLayers).length,
+        overlays.length,
       );
     }
   });

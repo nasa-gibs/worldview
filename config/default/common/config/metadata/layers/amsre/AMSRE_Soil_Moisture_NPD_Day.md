@@ -1,0 +1,3 @@
+The Soil Moisture (Normalized Polarization Difference, Day) layer displays gridded estimates of soil moisture in the top 1 cm of soil, averaged over the AMSR-E retrieval footprint, and is measured in grams per centimeter by volume (g/cm<sup3</sup>) Soil moisture is estimated from AMSR-E/Aqua L2A brightness temperature (Tb) measurements using the Normalized Polarization Difference algorithm (NPD) approach.
+
+References: AE_Land [doi:10.5067/3JUPY6PAHHCP](https://doi.org/10.5067/3JUPY6PAHHCP)

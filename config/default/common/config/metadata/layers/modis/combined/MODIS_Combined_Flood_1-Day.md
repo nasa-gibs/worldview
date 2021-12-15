@@ -13,9 +13,8 @@ Common situations in which the flood product may be unable to accurately identif
 - Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely be reported as flood.
 - Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
-
 #### Spatial Coverage
-Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA.pdf) for included tiles).
+Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevB.pdf) for included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
@@ -23,4 +22,4 @@ Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the pol
 #### Frequency
 One product per day, per tile. During the day, data products are updated as NRT MOD09 data are received (an initial product may be updated if additional intersecting swath data is later received).
 
-[Dataset doi:10.5067/MODIS/MCDWD_L3_NRT.061](https://doi.org/10.5067/MODIS/MCDWD_L3_NRT.061)
+References: MCDWD_L3_NRT [doi:10.5067/MODIS/MCDWD_L3_NRT.061](https://doi.org/10.5067/MODIS/MCDWD_L3_NRT.061)

@@ -1,0 +1,5 @@
+The Aerosol Optical Thickness 550nm (Monthly) layer indicates aerosol optical thickness. Aerosol Optical Depth (AOD) (or Aerosol Optical Thickness) indicates the level at which particles in the air (aerosols) prevent light from traveling through the atmosphere. Aerosols scatter and absorb incoming sunlight, which reduces visibility. From an observer on the ground, an AOD of less than 0.1 is “clean” - characteristic of clear blue sky, bright sun and maximum visibility. As AOD increases to 0.5, 1.0, and greater than 3.0, aerosols become so dense that sun is obscured.
+
+The layer is from the SeaWiFS Deep Blue (SWDB) Level 3 daily global gridded (0.5 x 0.5 deg) data which is derived from SeaWiFS Deep Blue Level 2 data. The sensor resolution is 0.5 degrees, imagery resolution is 2 km and is available monthly.
+
+References: SWDB_L3M05 [doi:10.5067/MEASURES/SWDB/DATA303](https://doi.org/10.5067/MEASURES/SWDB/DATA303)

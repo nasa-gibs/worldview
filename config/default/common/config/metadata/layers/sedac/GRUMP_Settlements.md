@@ -2,4 +2,4 @@ The Settlements vector layer indicates the locations of settlements around the w
 
 The settlement points served as an input to the population gridding algorithm and the urban extents products of the Global Rural-Urban Mapping Project, Version 1.01 (GRUMPv1).
 
-References: doi: [10.7927/H4M906KR](https://doi.org/10.7927/H4M906KR)
+References: [doi:10.7927/H4M906KR](https://doi.org/10.7927/H4M906KR)

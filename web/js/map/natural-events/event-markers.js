@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashIsEmpty from 'lodash/isEmpty';
@@ -12,8 +13,10 @@ import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
+import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
-import { getDefaultEventDate } from './util';
+import { getDefaultEventDate } from '../../modules/natural-events/util';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 
 const icons = [
   'Dust and Haze',
@@ -46,13 +49,14 @@ class EventMarkers extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      proj, eventsDataIsLoading, selectedEvent,
+      proj, eventsDataIsLoading, isAnimatingToEvent, selectedEvent,
     } = this.props;
-    const finishedLoading = !eventsDataIsLoading && (eventsDataIsLoading !== prevProps.eventsDataIsLoading);
     const projChange = proj !== prevProps.proj;
-    const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
+    const finishedLoading = !eventsDataIsLoading && eventsDataIsLoading !== prevProps.eventsDataIsLoading;
+    const animationFinished = !isAnimatingToEvent && isAnimatingToEvent !== prevProps.isAnimatingToEvent;
+    const selectedEventChanged = selectedEvent && selectedEvent !== prevProps.selectedEvent;
 
-    if (finishedLoading || projChange || selectedEventChange) {
+    if (finishedLoading || projChange || animationFinished || selectedEventChanged) {
       this.remove();
       this.draw();
     }
@@ -64,7 +68,7 @@ class EventMarkers extends React.Component {
 
   draw() {
     const {
-      eventsData, selectedEvent, proj, map,
+      eventsData, selectedEvent, proj, map, isMobile, isAnimatingToEvent,
     } = this.props;
 
     if (!eventsData || eventsData.length < 1) return null;
@@ -72,7 +76,7 @@ class EventMarkers extends React.Component {
     const markers = eventsData.reduce((collection, event) => {
       const marker = {};
       const isSelected = event.id === selectedEvent.id;
-      const { maxExtent, crs } = proj.selected;
+      const { crs } = proj.selected;
       let date = getDefaultEventDate(event);
       if (isSelected && selectedEvent.date) {
         date = selectedEvent.date;
@@ -90,11 +94,12 @@ class EventMarkers extends React.Component {
         if (geometry.type === 'Polygon') {
           const coordinatesTransform = coordinates[0].map(transformCoords);
           const extent = olExtent.boundingExtent(coordinatesTransform);
-          coordinates = olExtent.getCenter(extent);
+
           if (isSelected) {
-            marker.boundingBox = createBoundingBox(coordinatesTransform);
+            marker.boundingBox = createBoundingBox(coordinates, event.title, crs);
             map.addLayer(marker.boundingBox);
           }
+          coordinates = olExtent.getCenter(extent);
         } else {
           // if normal geometries, transform given lon/lat array
           coordinates = transformCoords(coordinates);
@@ -103,26 +108,23 @@ class EventMarkers extends React.Component {
         const extent = olExtent.boundingExtent(geometry.coordinates[0]);
         coordinates = olExtent.getCenter(extent);
         if (isSelected) {
-          marker.boundingBox = createBoundingBox(geometry.coordinates);
+          marker.boundingBox = createBoundingBox(geometry.coordinates, event.title);
           map.addLayer(marker.boundingBox);
         }
       }
 
+      const hideTooltips = isMobile || isAnimatingToEvent;
       let category = event.categories[0];
       // Assign a default category if we don't have an icon
       category = icons.includes(category.title)
         ? category
         : { title: 'Default', slug: 'default' };
 
-      // get maxExtent of current projection and check if marker is within range
-      const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
-      // only create marker if within projection extent range
-      if (maxExtentCheck) {
-        marker.pin = createPin(event.id, category, isSelected, event.title);
-        marker.pin.setPosition(coordinates);
-        map.addOverlay(marker.pin);
-        this.addInteractions(marker, event, date, isSelected);
-      }
+      marker.pin = createPin(event.id, category, isSelected, event.title, hideTooltips);
+      marker.pin.setPosition(coordinates);
+      map.addOverlay(marker.pin);
+      this.addInteractions(marker, event, date, isSelected);
+
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
         collection.push(marker);
@@ -130,8 +132,10 @@ class EventMarkers extends React.Component {
       return collection;
     }, []);
 
-    map.renderSync(); // Marker position will be off until this is called
-    this.setState({ markers });
+    this.setState({ markers }, () => {
+      map.getView().changed();
+      map.renderSync(); // Marker position will be off until this is called
+    });
   }
 
   addInteractions(marker, event, date, isSelected) {
@@ -200,28 +204,32 @@ class EventMarkers extends React.Component {
   }
 }
 
-const createPin = function(id, category, isSelected, title) {
+const createPin = function(id, category, isSelected, title, hideTooltip) {
   const overlayEl = document.createElement('div');
-  const icon = document.createElement('i');
-  overlayEl.className = 'marker';
-  if (isSelected) overlayEl.classList.add('marker-selected');
-  icon.className = `event-icon event-icon-${category.slug}`;
-  icon.title = title || category.title;
-  overlayEl.appendChild(icon);
+  ReactDOM.render(
+    React.createElement(EventIcon, {
+      category: category.title,
+      title,
+      id,
+      hideTooltip,
+    }),
+    overlayEl,
+  );
   return new OlOverlay({
     element: overlayEl,
     positioning: 'bottom-center',
     stopEvent: false,
+    className: isSelected ? 'marker selected' : 'marker',
     id,
   });
 };
 
-const createBoundingBox = function(coordinates) {
+const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
   const lightStroke = new OlStyleStyle({
     stroke: new OlStyleStroke({
       color: [255, 255, 255, 0.6],
       width: 2,
-      lineDash: [4, 8],
+      lineDash: [8, 12],
       lineDashOffset: 6,
     }),
   });
@@ -229,27 +237,30 @@ const createBoundingBox = function(coordinates) {
     stroke: new OlStyleStroke({
       color: [0, 0, 0, 0.6],
       width: 2,
-      lineDash: [4, 8],
+      lineDash: [8, 12],
     }),
   });
+  const boxPolygon = new OlGeomPolygon(coordinates).transform('EPSG:4326', proj);
+  const boxFeature = new OlFeature({
+    geometry: boxPolygon,
+    name: title,
+  });
+  const vectorSource = new OlSourceVector({
+    features: [boxFeature],
+    wrapX: false,
+  });
+
   return new OlLayerVector({
-    source: new OlSourceVector({
-      features: [
-        new OlFeature({
-          geometry: new OlGeomPolygon(coordinates),
-          name: 'NaturalEvent',
-        }),
-      ],
-      wrapX: false,
-    }),
+    source: vectorSource,
     style: [lightStroke, darkStroke],
   });
 };
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar, date,
+    map, proj, events, requestedEvents, sidebar, date, browser,
   } = state;
+
   return {
     activeTab: sidebar.activeTab,
     map: map.ui.selected,
@@ -257,7 +268,9 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    eventsData: requestedEvents.response,
+    isMobile: browser.lessThan.medium,
+    isAnimatingToEvent: events.isAnimatingToEvent,
+    eventsData: getFilteredEvents(state),
     eventsDataIsLoading: requestedEvents.isLoading,
   };
 };
@@ -271,6 +284,8 @@ const mapDispatchToProps = (dispatch) => ({
 EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
+  isMobile: PropTypes.bool,
   map: PropTypes.object,
   mapUi: PropTypes.object,
   proj: PropTypes.object,

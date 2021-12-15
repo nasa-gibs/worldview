@@ -61,7 +61,7 @@
                 "MERRA-2": {
                     "id": "merra-2",
                     "title": "MERRA-2",
-                    "description": "merra/SO2",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "MERRA2_SO2_Column_Mass_Density_Monthly"

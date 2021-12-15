@@ -9,7 +9,7 @@
                 "OpenLayers": {
                     "id": "openlayers",
                     "title": "OpenLayers",
-                    "description": "reference/LatLongLines",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Graticule"

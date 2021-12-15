@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/UrbanExtents",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GRUMP_Urban_Extents_Grid_1995",

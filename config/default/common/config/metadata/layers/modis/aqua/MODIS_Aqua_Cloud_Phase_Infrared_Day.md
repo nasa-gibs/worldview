@@ -2,4 +2,4 @@ The MODIS Cloud Phase Infrared layer indicates the phase of cloud particles infe
 
 The MODIS Cloud Phase Infrared layer is available from both the Terra (MOD06) and Aqua (MYD06) satellites for day and nighttime overpasses. The sensor/algorithm resolution is 1 km and 5 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [MODIS Cloud Optical Properties: User Guide for the Collection 6 Level-2 MOD06/MYD06 Product and Associated Level-3 Datasets: July 2018](https://modis-atmos.gsfc.nasa.gov/sites/default/files/ModAtmo/MODISCloudOpticalPropertyUserGuideFinal_v1.1.pdf); [Cloud Top Properties and Cloud Phase Algorithm Theoretical Basis Document: May 2015](https://modis-atmos.gsfc.nasa.gov/sites/default/files/ModAtmo/MOD06-ATBD_2015_05_01_1.pdf)
+References: MYD06_L2 NRT [doi:10.5067/MODIS/MYD06_L2.NRT.061](https://doi.org/10.5067/MODIS/MYD06_L2.NRT.061); MYD06_L2 [doi:10.5067/MODIS/MYD06_L2.061](https://doi.org/10.5067/MODIS/MYD06_L2.061); [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)

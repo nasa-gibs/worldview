@@ -36,7 +36,7 @@
                 "Aura/MLS": {
                     "id": "aura-mls",
                     "title": "Aura/MLS",
-                    "description": "mls/Temperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MLS_Temperature_46hPa_Day",
@@ -48,7 +48,7 @@
                 "GLDAS": {
                     "id": "gldas",
                     "title": "GLDAS",
-                    "description": "ldas/GLDASAirTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GLDAS_Near_Surface_Air_Temperature_Monthly"
@@ -57,7 +57,7 @@
                 "NLDAS": {
                     "id": "nldas",
                     "title": "NLDAS",
-                    "description": "ldas/NLDASAirTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly"
@@ -66,7 +66,7 @@
                 "Daymet": {
                     "id": "daymet",
                     "title": "Daymet",
-                    "description": "daymet/Temperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "Daymet_Maximum_Air_Temp_Daily",
@@ -76,7 +76,7 @@
                     "MERRA-2": {
                         "id": "merra-2",
                         "title": "MERRA-2",
-                        "description": "merra/Temperature",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "MERRA2_Surface_Skin_Temperature_Monthly",

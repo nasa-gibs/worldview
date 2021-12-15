@@ -8,7 +8,7 @@
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
-                    "description": "amsre/SnowDepthOverIce",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRE_Snow_Depth_Over_Ice"
@@ -17,7 +17,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/SnowDepth",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Snow_Depth_Over_Glaciated_Surface_Monthly"

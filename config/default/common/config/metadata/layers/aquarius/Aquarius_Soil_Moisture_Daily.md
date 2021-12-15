@@ -2,6 +2,7 @@ The Aquarius “Soil Moisture (Daily, Radiometer)” layer displays global soil 
 
 The Aquarius instrument includes three radiometers and one scatterometer. The soil moisture data are collected by the radiometers. The radiometers measure brightness temperature at 1.414 GHz in the horizontal and vertical polarizations (T<sub>H</sub> and T<sub>V</sub>).
 
-References: [Aquarius L3 Gridded 1-Degree Daily Soil Moisture](https://nsidc.org/data/AQ3_DYSM/versions/4); [Aquarius Soil Moisture ATBD Users Guide](https://nsidc.org/data/docs/daac/aquarius/pdfs/Aquarius_VSM_ATBD_UsersGuide.pdf)
-
 Data Field: `l3m_data`
+
+References: AQ3_DYSM [doi:10.5067/Aquarius/AQ3_DYSM.004](https://doi.org/10.5067/Aquarius/AQ3_DYSM.004)
+

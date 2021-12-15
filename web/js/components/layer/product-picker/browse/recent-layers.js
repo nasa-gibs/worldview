@@ -57,7 +57,7 @@ function RecentLayersList(props) {
           </div>
           { !selectedLayer && smallView ? null : !!recentLayers.length && (
           <div className="layer-detail-container layers-all search">
-            <LayerMetadataDetail />
+            <LayerMetadataDetail layer={selectedLayer} />
           </div>
           )}
         </div>

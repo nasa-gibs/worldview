@@ -32,12 +32,17 @@ beforeEach(() => {
       onCloseModal={jest.fn()}
       modalState={{ id: [], isOpen: false }}
       isDistractionFreeModeActive={false}
+      isMobile={false}
+      proj={{ id: 'geographic' }}
+      activeLayers={[{ def: { type: 'vector' } }]}
     />,
   );
   map = {
     getEventPixel: jest.fn(),
     getCoordinateFromPixel: () => [0, 0],
     hasFeatureAtPixel: () => false,
+    getView: jest.fn().mockReturnThis(),
+    getResolution: () => 0.0175,
   };
 });
 

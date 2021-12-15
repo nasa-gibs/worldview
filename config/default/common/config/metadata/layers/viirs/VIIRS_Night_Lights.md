@@ -2,4 +2,4 @@ The Black Marble – Nighttime Lights only layer is a nighttime view of the Eart
 
 Currently, the Black Marble imagery is available only as a single snapshot in time for 2012 and 2016. The sensor resolution is 750 m and the image resolution is 500 m. The imagery can be visualized in Worldview/Global Imagery Browse Services (GIBS).
 
-References: [NASA Earth Observatory: Night Light Maps Open Up New Applications](https://earthobservatory.nasa.gov/Features/NightLights)
+References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights); [NASA Earth Observatory: Night Light Maps Open Up New Applications](https://earthobservatory.nasa.gov/Features/NightLights)

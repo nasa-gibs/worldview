@@ -9,9 +9,10 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
 } from './constants';
+import util from '../../util/util';
 
 // test variables
-const mockDate = new Date();
+const mockDate = util.now();
 const selectedZoom = 2;
 
 describe('dateReducer', () => {
@@ -44,7 +45,7 @@ describe('dateReducer', () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_CUSTOM_INTERVAL,
-          value: 4,
+          interval: 4,
           delta: 10,
         }),
       ).toEqual({
@@ -63,7 +64,7 @@ describe('dateReducer', () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_INTERVAL,
-          value: 2,
+          interval: 2,
           delta: 1,
           customSelected: false,
         }),
@@ -76,8 +77,7 @@ describe('dateReducer', () => {
     },
   );
   test(
-    `${SELECT_DATE
-    }action type and ${mockDate} as value and selected `
+    `${SELECT_DATE} action type and ${mockDate} as value and selected `
       + 'as activeString should return new state',
     () => {
       expect(

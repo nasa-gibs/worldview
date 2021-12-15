@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
-import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
+import {
+  findIndex as lodashFindIndex,
+  get as lodashGet,
+  uniqBy,
+  isEmpty as lodashIsEmpty,
+} from 'lodash';
 import update from 'immutability-helper';
 
 import JoyrideWrapper from '../components/tour/joyride-wrapper';
@@ -16,6 +21,9 @@ import {
   preloadPalettes,
   hasCustomTypePalette,
 } from '../modules/palettes/util';
+import {
+  clearCustoms,
+} from '../modules/palettes/actions';
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
@@ -468,6 +476,9 @@ const mapDispatchToProps = (dispatch) => ({
     });
     dispatch(stopAnimation());
     dispatch(closeModal());
+    if (!lodashIsEmpty(rendered)) {
+      dispatch(clearCustoms());
+    }
     if (
       (parameters.l && hasCustomTypePalette(parameters.l))
       || (parameters.l1 && hasCustomTypePalette(parameters.l1))

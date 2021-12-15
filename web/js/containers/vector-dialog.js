@@ -62,7 +62,11 @@ class VectorDialog extends React.Component {
 
         <ModalBody>
           <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
-            <VectorMetaTable id={dialogKey} metaArray={activeMetaArray} title={keyArray[activeIndex]} />
+            <VectorMetaTable
+              id={dialogKey}
+              metaArray={activeMetaArray}
+              title={keyArray[activeIndex]}
+            />
           </Scrollbars>
         </ModalBody>
       </div>

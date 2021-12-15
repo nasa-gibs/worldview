@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { each as lodashEach } from 'lodash';
+import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
   TabContent, TabPane, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+
 import Opacity from './opacity';
 import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
-
 import {
   palettesTranslate,
 } from '../../../modules/palettes/util';
@@ -63,6 +63,7 @@ class LayerSettings extends React.Component {
       paletteOrder,
       getDefaultLegend,
       getCustomPalette,
+      globalTemperatureUnit,
       setCustomPalette,
       palettesTranslate,
       groupName,
@@ -123,6 +124,7 @@ class LayerSettings extends React.Component {
                 key={`${layer.id + i}_threshold`}
                 legend={legend}
                 setRange={setThresholdRange}
+                globalTemperatureUnit={globalTemperatureUnit}
                 min={0}
                 max={max}
                 start={start}
@@ -172,6 +174,7 @@ class LayerSettings extends React.Component {
       clearCustomPalette,
       getDefaultLegend,
       getCustomPalette,
+      globalTemperatureUnit,
       palettesTranslate,
       getPaletteLegends,
       getPalette,
@@ -212,6 +215,7 @@ class LayerSettings extends React.Component {
             <PaletteThreshold
               key={`${layer.id}0_threshold`}
               legend={legend}
+              globalTemperatureUnit={globalTemperatureUnit}
               setRange={setThresholdRange}
               min={0}
               max={max}
@@ -305,22 +309,22 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser,
+    config, palettes, compare, browser, globalUnit,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-
+  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
   return {
     paletteOrder: config.paletteOrder,
     groupName,
     screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
+    globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
     getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
     getCustomPalette: (id) => getCustomPalette(id, custom),
     getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
-
     getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
     getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
@@ -383,6 +387,7 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
+  globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,

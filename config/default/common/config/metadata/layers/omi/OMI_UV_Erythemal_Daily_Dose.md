@@ -2,4 +2,4 @@ The OMI UltraViolet (UV) Erythemal Daily Dose layer displays the UV erythemal da
 
 The Ozone Monitoring Instrument (OMI) Level-3 UV (OMUVBd) product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution of 1.0 x 1.0 degrees.
 
-References: [OMUVBd README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMUVBd.003/doc/OMUVB_L3d_readme.pdf); [doi: 10.5067/Aura/OMI/DATA3009](https://disc.gsfc.nasa.gov/datacollection/OMUVBd_V003.html)
+References: OMUVBd [doi:10.5067/Aura/OMI/DATA3009](https://doi.org/10.5067/Aura/OMI/DATA3009)

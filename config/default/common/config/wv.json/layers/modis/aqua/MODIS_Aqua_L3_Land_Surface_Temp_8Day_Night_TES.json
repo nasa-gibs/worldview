@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night_TES": {
+      "id": "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night_TES",
+      "title": "Land Surface Temperature (L3, 8-Day, Night)",
+      "subtitle": "Aqua / MODIS / ASTER",
+      "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night_TES",
+      "tags": "lst TES",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "MYD21A2",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

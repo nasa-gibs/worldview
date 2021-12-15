@@ -2,4 +2,4 @@ The Human Footprint, 1995-2004 layer is from the Global Human Footprint Dataset 
 
 The purpose of the data set is to provide an updated map of anthropogenic impacts on the environment in geographic projection which can be used in wildlife conservation planning, natural resource management, and research on human-environment interactions.
 
-References: [doi: 10.7927/H4M61H5F](https://doi.org/10.7927/H4M61H5F)
+References: [doi:10.7927/H4M61H5F](https://doi.org/10.7927/H4M61H5F)

@@ -13,7 +13,7 @@ import {
 } from './constants';
 import util from '../../util/util';
 import { timeScaleFromNumberKey } from '../date/constants';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 
 export function onActivate() {
   return (dispatch, getState) => {

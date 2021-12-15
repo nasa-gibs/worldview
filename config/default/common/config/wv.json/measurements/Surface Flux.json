@@ -8,7 +8,7 @@
                 "Terra/CERES": {
                     "id": "terra-ceres",
                     "title": "Terra/CERES",
-                    "description": "ceres/Terra_SurfaceFlux",
+                    "description": "ceres/CERES",
                     "image": "",
                     "settings": [
                       "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
@@ -47,7 +47,7 @@
                       "Aqua and Terra/CERES": {
                           "id": "aqua-terra-ceres",
                           "title": "Aqua and Terra/CERES",
-                          "description": "ceres/Combined_SurfaceFlux",
+                          "description": "ceres/CERES",
                           "image": "",
                           "settings": [
                             "CERES_Combined_Surface_Shortwave_Flux_Up_All_Sky_Monthly",

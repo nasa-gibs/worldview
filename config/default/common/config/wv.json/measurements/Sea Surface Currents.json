@@ -8,7 +8,7 @@
                 "OSCAR": {
                     "id": "oscar",
                     "title": "OSCAR",
-                    "description": "oscar/SeaSurfaceCurrents",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "OSCAR_Sea_Surface_Currents_Zonal",
@@ -18,7 +18,7 @@
                 "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2": {
                     "id": "tpj",
                     "title": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2",
-                    "description": "multi-mission/tpj/SeaSurfaceCurrents",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "TOPEX-Poseidon_JASON_Sea_Surface_Currents_Meridional_US_West_Coast_GAFECC",

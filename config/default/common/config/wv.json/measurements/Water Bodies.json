@@ -8,7 +8,7 @@
               "Terra/MODIS": {
                   "id": "terra-modis",
                   "title": "Terra/MODIS",
-                  "description": "modis/LandWaterMask",
+                  "description": "",
                   "image": "",
                   "settings": [
                     "MODIS_Terra_L3_Land_Water_Mask"
@@ -17,7 +17,7 @@
                 "Terra/MODIS and SRTM": {
                     "id": "terra-modis-srtm",
                     "title": "Terra/MODIS and SRTM",
-                    "description": "modis/WaterMask",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Water_Mask"
@@ -26,7 +26,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/Reservoirs",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GRanD_Reservoirs"
