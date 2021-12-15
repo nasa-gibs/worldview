@@ -105,7 +105,7 @@ button:focus {
   & .input-wrapper .date-arrows::before {
     content: "";
     position: absolute;
-    top:-15px;
+    top: -15px;
     height: 30px;
     width: 100%;
     max-width: inherit;
