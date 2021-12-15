@@ -101,6 +101,18 @@ button:focus {
   & .input-wrapper:hover .date-arrows {
     visibility: visible;
   }
+
+  & .input-wrapper .date-arrows::before {
+    content: "";
+    position: absolute;
+    top:-15px;
+    height: 30px;
+    width: 100%;
+    max-width: inherit;
+    // border: 1px solid red;
+
+  }
+
   & .input-wrapper:hover .date-arrows svg path {
     fill: #888;
   }
@@ -127,7 +139,9 @@ button:focus {
   & .date-arrows {
     display: block;
     height: 10px;
+    max-width: inherit;
   }
+
   & .date-arrows svg {
     vertical-align: top;
     display: block;
