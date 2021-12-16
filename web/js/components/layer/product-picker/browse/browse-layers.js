@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -68,7 +68,7 @@ function BrowseLayers (props) {
     && selectedProjection === 'geographic'
     && categoryType !== 'recent';
 
-  const selectedCategoryName = (lastAction.type === 'PRODUCT_PICKER/TOGGLE_CATEGORY_MODE') ? '' : category;
+  const selectedCategoryName = lastAction.type === 'PRODUCT_PICKER/TOGGLE_CATEGORY_MODE' ? '' : category;
 
   /**
    * Update category type in which to show
@@ -172,8 +172,8 @@ function BrowseLayers (props) {
   }
 
   function renderSelectedCategoryName() {
-    return selectedCategoryName == '' ? null
-    : <div className='selected-category'>{selectedCategoryName}</div>
+    return selectedCategoryName === '' ? null
+      : <div className="selected-category">{selectedCategoryName}</div>;
   }
 
   function renderMobileDropdown() {
@@ -224,9 +224,11 @@ function BrowseLayers (props) {
 
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
+  category: PropTypes.string,
   categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
+  lastAction: PropTypes.object,
   mode: PropTypes.string,
   recentLayers: PropTypes.array,
   selectCategoryType: PropTypes.func,
