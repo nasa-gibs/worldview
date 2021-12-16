@@ -68,7 +68,8 @@ function BrowseLayers (props) {
     && selectedProjection === 'geographic'
     && categoryType !== 'recent';
 
-  const selectedCategoryName = useSelector((state) => state.productPicker.category.title);
+  const selectedCategoryName = (lastAction.type === 'PRODUCT_PICKER/TOGGLE_CATEGORY_MODE') ? '' : category;
+
   /**
    * Update category type in which to show
    * e.g. Hazards and disasters or science disciplines
