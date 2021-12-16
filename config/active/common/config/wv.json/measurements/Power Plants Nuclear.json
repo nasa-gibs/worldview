@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/PowerPlants_Nuclear",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Nuclear_Power_Plant_Locations"

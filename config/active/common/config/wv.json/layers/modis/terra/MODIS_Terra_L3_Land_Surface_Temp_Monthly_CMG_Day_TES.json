@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Day_TES": {
+      "id": "MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+      "title": "Land Surface Temperature (L3, Monthly, Day)",
+      "subtitle": "Terra / MODIS / ASTER",
+      "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Day_TES",
+      "tags": "lst TES",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "MOD21C3",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

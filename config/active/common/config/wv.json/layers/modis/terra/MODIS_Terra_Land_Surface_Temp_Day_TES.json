@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "MODIS_Terra_Land_Surface_Temp_Day_TES": {
+      "id": "MODIS_Terra_Land_Surface_Temp_Day_TES",
+      "title": "Land Surface Temperature (Day)",
+      "subtitle": "Terra / MODIS / ASTER",
+      "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Day_TES",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

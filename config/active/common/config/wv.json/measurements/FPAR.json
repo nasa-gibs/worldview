@@ -26,7 +26,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/combined/FPAR",
+                    "description": "modis/FPAR",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_L4_FPAR_4Day",

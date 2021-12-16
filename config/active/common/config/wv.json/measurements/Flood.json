@@ -8,7 +8,7 @@
                 "Terra and Aqua/MODIS": {
                     "id": "terra-aqua-modis",
                     "title": "Terra and Aqua/MODIS",
-                    "description": "modis/combined/Flood",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_Flood_2-Day",

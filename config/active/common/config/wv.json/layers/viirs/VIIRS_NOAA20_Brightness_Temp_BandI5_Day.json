@@ -5,7 +5,7 @@
       "title": "Brightness Temperature (Band I5, Day)",
       "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
-      "tags": "jpss1",
+      "tags": "jpss jpss-1",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
       "product": "",

@@ -9,6 +9,7 @@
                 "measurements": [
                     "Aerosol Index",
                     "Aerosol Optical Depth",
+                    "Aerosol Type",
                     "Fires and Thermal Anomalies",
                     "Carbon Monoxide",
                     "Corrected Reflectance",

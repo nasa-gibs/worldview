@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Aqua_Land_Surface_Temp_Night_TES": {
+      "id": "MODIS_Aqua_Land_Surface_Temp_Night_TES",
+      "title": "Land Surface Temperature (Night)",
+      "subtitle": "Aqua / MODIS / ASTER",
+      "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Night_TES",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

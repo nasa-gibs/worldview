@@ -2,4 +2,4 @@ The Sea Ice Concentration layer provides daily sea ice concentrations for the po
 
 The sensor/algorithm resolution is 25 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [Sea Ice Concentrations from Nimbus-7 SMMR and DMSP SSM/I-SSMIS Passive Microwave Data](https://nsidc.org/data/nsidc-0051);[Near-Real-Time DMSP SSMIS Daily Polar Gridded Sea Ice Concentrations](https://nsidc.org/data/nsidc-0081)
+References: NSIDC-0051 [doi:10.5067/8GQ8LZQVL0VL](https://doi.org/10.5067/8GQ8LZQVL0VL); NSIDC-0081 [doi:10.5067/U8C09DWVX9LM](https://doi.org/10.5067/U8C09DWVX9LM)

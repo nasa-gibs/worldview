@@ -2,4 +2,4 @@ The VIIRS Brightness Temperature, Band I5, Day layer is the brightness temperatu
 
 The VIIRS Brightness Temperature layer is calculated from VIIRS Calibrated Radiances (VNP02) and is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 375m, the imagery resolution is 250m, and the temporal resolution is daily.
 
-References: [VIIRS SDR Users Guide](https://lpdaac.usgs.gov/documents/134/VNP03_User_Guide_V1.2.pdf)
+References: VNP02IMG_NRT [doi:10.5067/VIIRS/VNP02IMG_NRT.001](http://dx.doi.org/10.5067/VIIRS/VNP02IMG_NRT.001)

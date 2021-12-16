@@ -8,7 +8,7 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/CloudTopTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Cloud_Top_Temp_Day",
@@ -20,7 +20,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/CloudTopTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Top_Temp_Day",

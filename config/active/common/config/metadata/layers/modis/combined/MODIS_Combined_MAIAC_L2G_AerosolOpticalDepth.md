@@ -4,4 +4,4 @@ Aerosol Optical Depth (AOD) is a vertically integrated extinction by aerosol par
 
 The MAIAC Combined Aerosol Optical Depth layer is a near real-time layer and available as a combined Terra satellite and Aqua satellite layer (MCD19A2). The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [doi: 10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)
+References: MCD19A2N [doi:10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)

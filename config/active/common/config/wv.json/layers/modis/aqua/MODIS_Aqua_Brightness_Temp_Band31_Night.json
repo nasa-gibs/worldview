@@ -2,7 +2,7 @@
   "layers": {
     "MODIS_Aqua_Brightness_Temp_Band31_Night": {
       "id": "MODIS_Aqua_Brightness_Temp_Band31_Night",
-      "title": "Brightness Temperature (Band 31-Night)",
+      "title": "Brightness Temperature (Band 31, Night)",
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Brightness_Temp_Band31_Night",
       "group": "overlays",

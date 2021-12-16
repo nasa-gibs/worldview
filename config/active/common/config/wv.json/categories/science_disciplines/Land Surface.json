@@ -14,7 +14,6 @@
                     "Evaporation",
                     "Fires and Thermal Anomalies",
                     "FPAR",
-                    "Global Digital Elevation Map",
                     "Human Built-up And Settlement Extent",
                     "Impervious Surface",
                     "Isotropic Kernel Parameters",
@@ -31,6 +30,7 @@
                     "Surface Flux",
                     "Surface Pressure",
                     "Temperature",
+                    "Terrain Elevation",
                     "Vegetation Indices"
                 ]
             }

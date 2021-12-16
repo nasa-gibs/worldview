@@ -2,4 +2,4 @@ The OMI Sulfur Dioxide (SO2) Planetary Boundary Layer (PBL) indicates the column
 
 The OMSO2e product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and sensor/algorithm resolution of 0.25 x 0.25 degrees.
 
-References: [OMSO2 Readme](https://so2.gsfc.nasa.gov/Documentation/OMSO2Readme_V120_20140926.htm); [OMSO2e Readme](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMSO2e.003/doc/README.OMSO2e.pdf); [doi: 10.5067/Aura/OMI/DATA3008](https://disc.gsfc.nasa.gov/datacollection/OMSO2e_V003.html)
+References: OMSO2e [doi: 10.5067/Aura/OMI/DATA3008](https://disc.gsfc.nasa.gov/datacollection/OMSO2e_V003.html)

@@ -2,4 +2,4 @@ The OMI Total Ozone Differential Optical Absorption Spectroscopy (DOAS) layer in
 
 The OMDOA3e product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and a sensor/algorithm resolution of 0.25 x 0.25 degrees.
 
-References: [OMDOAO3e README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMDOAO3e.003/doc/OMDOAO3e_OSIPS_README_V003.doc); [ATBD II](https://eospso.gsfc.nasa.gov/sites/default/files/atbd/ATBD-OMI-02.pdf); [doi: 10.5067/Aura/OMI/DATA3005](https://disc.gsfc.nasa.gov/datacollection/OMDOAO3e_V003.html); [KNMI: Ozone](http://projects.knmi.nl/omi/research/product/product_generator.php?info=page&product=Ozone&flavour=OMDOAO3&long=DOAS%20Total%20Ozone%20column)
+References: OMDOAO3e [doi:10.5067/Aura/OMI/DATA3005](https://doi.org/10.5067/Aura/OMI/DATA3005)

@@ -2,8 +2,8 @@ The Soil Moisture Active Passive (SMAP)/Sentinel-1 "Soil Moisture (L2, Active-Pa
 
 This data set contains modified Copernicus Sentinel-1 data (2015-present), acquired by the European Space Agency (ESA), distributed through the Alaska Satellite Facility (ASF), and processed by the SMAP Science Data System.
 
-References: [SMAP/Sentinel-1 L2 Radiometer/Radar 30-Second Scene 3 km EASE-Grid Soil Moisture, Version 1](https://nsidc.org/data/SPL2SMAP_S)
-
-This data set contains modified Copernicus Sentinel-1 data (2015-present), acquired by the European Space Agency (ESA), distributed through the Alaska Satellite Facility (ASF), and processed by the SMAP Science Data System.
-
 Data field: `soil_moisture_3km`
+
+References: SPL2SMAP_S [doi:10.5067/ASB0EQO2LYJV](https://doi.org/10.5067/ASB0EQO2LYJV)
+
+

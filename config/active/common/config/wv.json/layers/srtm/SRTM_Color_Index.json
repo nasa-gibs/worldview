@@ -5,9 +5,9 @@
       "title": "Shuttle Radar Topography Mission (NASA SRTM v3, Color Index)",
       "subtitle": "Space Shuttle Endeavour / STS-99",
       "description": "srtm/SRTM_Color_Index",
-      "tags": "srtm gdem",
+      "tags": "srtm gdem dem terrain",
       "group": "overlays",
-      "layergroup": "Global Digital Elevation Map",
+      "layergroup": "Terrain Elevation",
       "product": "SRTMGL1",
       "wrapadjacentdays": true
     }

@@ -8,7 +8,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/EarthAtNight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",

@@ -8,7 +8,7 @@
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
                     "title": "Aqua/AIRS",
-                    "description": "airs/OutgoingLongwaveRadiation",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Daily_Day",
