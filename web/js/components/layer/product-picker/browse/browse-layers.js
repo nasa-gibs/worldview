@@ -170,6 +170,11 @@ function BrowseLayers (props) {
       );
   }
 
+  function renderSelectedCategoryName() {
+    return selectedCategoryName == '' ? null
+    : <div className='selected-category'>{selectedCategoryName}</div>
+  }
+
   function renderMobileDropdown() {
     return (
       <div className="categories-dropdown-header">
@@ -195,7 +200,8 @@ function BrowseLayers (props) {
           </DropdownMenu>
         </Dropdown>
         {recentLayersHeader()}
-        {selectedCategoryName}
+
+        {renderSelectedCategoryName()}
       </div>
     );
   }
