@@ -32,8 +32,10 @@ import safeLocalStorage from '../../../../util/local-storage';
 function BrowseLayers (props) {
   const {
     browser,
+    category,
     categoryTabNames,
     categoryType,
+    lastAction,
     mode,
     width,
     recentLayers,
@@ -253,9 +255,11 @@ function mapStateToProps(state) {
     proj,
     productPicker,
     layers,
+    lastAction,
   } = state;
   const {
     mode,
+    category,
     categoryType,
     listScrollTop,
     selectedMeasurement,
@@ -265,9 +269,11 @@ function mapStateToProps(state) {
   return {
     browser,
     mode,
+    category: category ? category.title : '',
     categoryType,
     categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,
+    lastAction,
     layerConfig: layers.layerConfig,
     listScrollTop,
     recentLayers,
