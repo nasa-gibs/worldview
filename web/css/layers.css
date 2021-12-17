@@ -633,7 +633,7 @@
     height: calc(var(--vh, 1vh) * 100 - 70px);
   }
   .browse-search-width .search-layers-container.browse {
-    height: calc(var(--vh, 1vh) * 100 - 93px);
+    height: calc(var(--vh, 1vh) * 100 - 122px);
   }
   .browse-search-width .search-layers-container.recent-layers {
     height: calc(var(--vh, 1vh) * 100 - 95px);
