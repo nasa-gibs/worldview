@@ -32,7 +32,6 @@ import safeLocalStorage from '../../../../util/local-storage';
 function BrowseLayers (props) {
   const {
     browser,
-    category,
     categoryTabNames,
     categoryType,
     mode,
@@ -217,11 +216,10 @@ function BrowseLayers (props) {
 
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
-  category: PropTypes.string,
   categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
-  lastAction: PropTypes.object,
+  selectedCategoryName: PropTypes.string,
   mode: PropTypes.string,
   recentLayers: PropTypes.array,
   selectCategoryType: PropTypes.func,
