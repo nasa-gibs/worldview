@@ -35,11 +35,11 @@ function BrowseLayers (props) {
     category,
     categoryTabNames,
     categoryType,
-    lastAction,
     mode,
     width,
     recentLayers,
     selectCategoryType,
+    selectedCategoryName,
     selectedProjection,
     toggleMeasurementsTab,
     toggleFeatureTab,
@@ -67,8 +67,6 @@ function BrowseLayers (props) {
   const isCategoryDisplay = mode === 'category'
     && selectedProjection === 'geographic'
     && categoryType !== 'recent';
-
-  const selectedCategoryName = lastAction.type === 'PRODUCT_PICKER/TOGGLE_CATEGORY_MODE' ? '' : category;
 
   /**
    * Update category type in which to show
@@ -171,11 +169,6 @@ function BrowseLayers (props) {
       );
   }
 
-  function renderSelectedCategoryName() {
-    return selectedCategoryName === '' ? null
-      : <div className="selected-category">{selectedCategoryName}</div>;
-  }
-
   function renderMobileDropdown() {
     return (
       <div className="categories-dropdown-header">
@@ -202,7 +195,7 @@ function BrowseLayers (props) {
         </Dropdown>
         {recentLayersHeader()}
 
-        {renderSelectedCategoryName()}
+        {selectedCategoryName && <div className="selected-category">{selectedCategoryName}</div>}
       </div>
     );
   }
@@ -278,7 +271,7 @@ function mapStateToProps(state) {
   return {
     browser,
     mode,
-    category: category ? category.title : '',
+    selectedCategoryName: category && category.title,
     categoryType,
     categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,
