@@ -255,7 +255,6 @@ function mapStateToProps(state) {
     proj,
     productPicker,
     layers,
-    lastAction,
   } = state;
   const {
     mode,
@@ -273,7 +272,6 @@ function mapStateToProps(state) {
     categoryType,
     categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,
-    lastAction,
     layerConfig: layers.layerConfig,
     listScrollTop,
     recentLayers,
