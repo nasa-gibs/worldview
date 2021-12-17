@@ -2,4 +2,4 @@ The Reflectance (Nadir BRDF Adjusted) imagery layer from Sentinel 2A and 2B/MSI 
 
 The Reflectance (Nadir BRDF-Adjusted) product (S30) is available through the HLS project from the Multi-Spectral Instrument (MSI) aboard the European Union’s Copernicus Sentinel-2A and Sentinel-2B satellites. The sensor resolution is 10, 20, and 60 m, imagery resolution is resampled to 30 m, and the temporal resolution is daily with a 5 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate Landsat imagery layer available.
 
-References: HLSS30 v015 [doi:10.5067/HLS/HLSS30.015](https://doi.org/10.5067/HLS/HLSS30.015); HLSS30 v002 [doi:10.5067/HLS/HLSS30.002](https://doi.org/doi:10.5067/HLS/HLSS30.002)
+References: HLSS30 v002 [doi:10.5067/HLS/HLSS30.002](https://doi.org/doi:10.5067/HLS/HLSS30.002)
