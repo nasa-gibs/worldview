@@ -8,7 +8,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  UncontrolledTooltip,
+  UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
@@ -78,7 +78,25 @@ function LayerRow (props) {
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
+  const { title } = names;
+  const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
+  const removeLayerBtnTitle = 'Remove layer';
+
+  const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
+  const layerOptionsBtnTitle = 'View options';
+
+  const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
+  const layerInfoBtnTitle = 'View description';
   const [showButtons, toggleShowButtons] = useState(isMobile);
+  const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
+  const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+
+  const toggleDropdownMenuVisible = () => {
+    if (showDropdownMenu) {
+      setDropdownBtnVisible(false);
+    }
+    setDropdownMenuVisible(!showDropdownMenu);
+  };
 
   const getPaletteLegend = () => {
     if (!lodashIsEmpty(renderedPalette)) {
@@ -149,58 +167,68 @@ function LayerRow (props) {
     e.preventDefault();
   };
 
-  const renderControls = () => {
-    const { title } = names;
-    const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
-    const removeLayerBtnTitle = 'Remove layer';
+  const renderDropdownMenu = () => (
+    <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
+      <DropdownToggle>
+        <FontAwesomeIcon
+          className="layer-group-more"
+          icon="ellipsis-v"
+        />
+      </DropdownToggle>
+      <DropdownMenu positionFixed>
+        <DropdownItem id={removeLayerBtnId} onClick={() => onRemoveClick(layer.id)}>
+          {removeLayerBtnTitle}
+        </DropdownItem>
+        <DropdownItem id={layerOptionsBtnId} aria-label={layerOptionsBtnTitle} className="button wv-layers-options" onClick={() => onOptionsClick(layer, title)}>
+          {layerOptionsBtnTitle}
+        </DropdownItem>
+        <DropdownItem id={layerInfoBtnId} aria-label={layerInfoBtnTitle} className="button wv-layers-info" onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}>
+          {layerInfoBtnTitle}
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
 
-    const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
-    const layerOptionsBtnTitle = 'View options';
-
-    const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
-    const layerInfoBtnTitle = 'View description';
-
-    return (
-      <>
-        <a
-          id={removeLayerBtnId}
-          aria-label={removeLayerBtnTitle}
-          className="button wv-layers-close"
-          onClick={() => onRemoveClick(layer.id)}
-        >
-          <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
-            {removeLayerBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="times" fixedWidth />
-        </a>
-        <a
-          id={layerOptionsBtnId}
-          aria-label={layerOptionsBtnTitle}
-          className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
-          onMouseDown={stopPropagation}
-          onClick={() => onOptionsClick(layer, title)}
-        >
-          <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
-            {layerOptionsBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
-        </a>
-        <a
-          id={layerInfoBtnId}
-          aria-label={layerInfoBtnTitle}
-          className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
-          onMouseDown={stopPropagation}
-          onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
-        >
-          <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
-            {layerInfoBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
-        </a>
-      </>
-    );
-  };
-
+  const renderControls = () => (
+    <>
+      {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
+      <a
+        id={removeLayerBtnId}
+        aria-label={removeLayerBtnTitle}
+        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
+        onClick={() => onRemoveClick(layer.id)}
+      >
+        <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
+          {removeLayerBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="times" fixedWidth />
+      </a>
+      <a
+        id={layerOptionsBtnId}
+        aria-label={layerOptionsBtnTitle}
+        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
+        onMouseDown={stopPropagation}
+        onClick={() => onOptionsClick(layer, title)}
+      >
+        <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
+          {layerOptionsBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
+      </a>
+      <a
+        id={layerInfoBtnId}
+        aria-label={layerInfoBtnTitle}
+        className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
+        onMouseDown={stopPropagation}
+        onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
+      >
+        <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
+          {layerInfoBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
+      </a>
+    </>
+  );
   const renderVectorIcon = () => {
     const classNames = hasClickableFeature
       ? 'layer-pointer-icon'
