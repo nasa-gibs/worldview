@@ -195,7 +195,7 @@ function LayerRow (props) {
       <a
         id={removeLayerBtnId}
         aria-label={removeLayerBtnTitle}
-        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
+        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
         onClick={() => onRemoveClick(layer.id)}
       >
         <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
