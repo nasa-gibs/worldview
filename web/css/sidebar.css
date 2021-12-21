@@ -471,7 +471,7 @@ footer .compare-toggle-button {
   width: 500px;
 
   @media (max-width: 768px) {
-    width:100%;
+    width: 100%;
   }
 
   .modal-body {
@@ -484,7 +484,7 @@ footer .compare-toggle-button {
   width: 300px;
 
   @media (max-width: 768px) {
-    width:100%;
+    width: 100%;
   }
 
   .nav-tabs {
