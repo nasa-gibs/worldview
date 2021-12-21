@@ -80,13 +80,13 @@ function LayerRow (props) {
   const encodedLayerId = util.encodeId(layer.id);
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
-  const removeLayerBtnTitle = 'Remove layer';
+  const removeLayerBtnTitle = 'Remove Layer';
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
-  const layerOptionsBtnTitle = 'View options';
+  const layerOptionsBtnTitle = 'View Options';
 
   const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
-  const layerInfoBtnTitle = 'View description';
+  const layerInfoBtnTitle = 'View Description';
   const [showButtons, toggleShowButtons] = useState(isMobile);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
@@ -176,14 +176,14 @@ function LayerRow (props) {
         />
       </DropdownToggle>
       <DropdownMenu positionFixed>
-        <DropdownItem id={removeLayerBtnId} onClick={() => onRemoveClick(layer.id)}>
-          {removeLayerBtnTitle}
+        <DropdownItem id={layerInfoBtnId} aria-label={layerInfoBtnTitle} className="button wv-layers-info" onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}>
+          {layerInfoBtnTitle}
         </DropdownItem>
         <DropdownItem id={layerOptionsBtnId} aria-label={layerOptionsBtnTitle} className="button wv-layers-options" onClick={() => onOptionsClick(layer, title)}>
           {layerOptionsBtnTitle}
         </DropdownItem>
-        <DropdownItem id={layerInfoBtnId} aria-label={layerInfoBtnTitle} className="button wv-layers-info" onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}>
-          {layerInfoBtnTitle}
+        <DropdownItem id={removeLayerBtnId} onClick={() => onRemoveClick(layer.id)}>
+          {removeLayerBtnTitle}
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
