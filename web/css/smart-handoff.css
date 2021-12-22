@@ -79,7 +79,7 @@
     color: #999;
   }
   .collection-choice {
-    margin: 8px 5px 8px 15px;
+    margin: 8px 0 8px 6px;
     input {
       cursor: pointer;
       position: relative;
