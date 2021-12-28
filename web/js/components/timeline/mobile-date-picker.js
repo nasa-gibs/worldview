@@ -193,7 +193,7 @@ class MobileDatePicker extends Component {
 }
 
 MobileDatePicker.propTypes = {
-  date: PropTypes.string,
+  date: PropTypes.object,
   endDateLimit: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   isMobile: PropTypes.bool,
