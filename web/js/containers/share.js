@@ -269,7 +269,7 @@ class ShareLinkContainer extends Component {
           <>
             {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
             <p>
-              Embed Worldview in your website. See our
+              Embed @NAME@ in your website. See our
               {' '}
               <a className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
               {' '}
@@ -296,7 +296,7 @@ class ShareLinkContainer extends Component {
               onClick={this.onLinkClick}
             />
             <p>
-              Share Worldview on social media.
+              Share @NAME@ on social media.
             </p>
           </>
         )}

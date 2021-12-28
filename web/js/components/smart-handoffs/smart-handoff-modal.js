@@ -66,7 +66,7 @@ function SmartHandoffModal({
           <p>
             Earthdata Search provides the only means for data discovery, filtering, visualization, and
             access across all of NASA Earth science data holdings. The current selected layer and the designated
-            viewport region in Worldview will be used to derive data granules within Earthdata Search.
+            viewport region in @NAME@ will be used to derive data granules within Earthdata Search.
           </p>
 
           <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />

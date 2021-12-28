@@ -9,12 +9,12 @@ export default function SmartHandoffNotAvailableModal() {
         These layers will be hidden from the layers available to download.
       </p>
       <p>
-        In addition, some layers in Worldview do not have corresponding source data products available for download.
+        In addition, some layers in @NAME@ do not have corresponding source data products available for download.
         These include Geostationary, Reference, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
       </p>
       <p>
         For a downloadable product similar to MODIS Corrected Reflectance,
-        please try the MODIS Land Surface Reflectance layers available in Worldview.
+        please try the MODIS Land Surface Reflectance layers available in @NAME@.
         If you would like to generate MODIS Corrected Reflectance imagery yourself, please&nbsp;
         <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank" rel="noreferrer">
           see this document
