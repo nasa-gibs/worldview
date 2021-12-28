@@ -45,10 +45,10 @@ const ModalComplete = (props) => {
         </ModalHeader>
         <ModalBody>
           <p>
-            You have now completed a story in Worldview. To view more stories,
+            You have now completed a story in @NAME@. To view more stories,
             click the &ldquo;More Stories&rdquo; button below to explore more events
             within the app. Click the &ldquo;Exit Tutorial&rdquo; button or close this
-            window to start using Worldview on your own.
+            window to start using @NAME@ on your own.
           </p>
           {list}
         </ModalBody>
