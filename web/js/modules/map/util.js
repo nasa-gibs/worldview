@@ -193,9 +193,10 @@ function promiseTileLayer(layer, extent, map) {
   let i;
   let tileGrid;
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (!extent) {
       resolve('resolve tile layer');
+      return;
     }
     // OL object describing the current map frame
     const { pixelRatio, viewState } = map.frameState_;
@@ -292,6 +293,6 @@ export async function promiseImageryForTime(state, date, activeString) {
     const layerGroup = cache.getItem(key) || createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
   }));
-
+  selected.getView().changed();
   return date;
 }

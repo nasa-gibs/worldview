@@ -176,7 +176,7 @@ export default function mapui(models, config, store, ui) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
-        return updateLookup();
+        return reloadLayers();
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
@@ -218,14 +218,6 @@ export default function mapui(models, config, store, ui) {
     }
   };
 
-  /*
-   * Sets up map listeners
-   *
-   * @method init
-   * @static
-   *
-   * @returns {void}
-   */
   const init = function() {
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
@@ -243,7 +235,6 @@ export default function mapui(models, config, store, ui) {
     });
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('map:reload-layers', reloadLayers);
-    events.on('map:update-date', updateDate);
     updateProjection(true);
   };
 
@@ -576,9 +567,9 @@ export default function mapui(models, config, store, ui) {
     let renderable;
     const state = store.getState();
     const layers = self.selected.getLayers();
+
     layers.forEach((layer) => {
       const compareActiveString = layer.get('group');
-
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -590,7 +581,7 @@ export default function mapui(models, config, store, ui) {
         );
         layer.setVisible(renderable);
 
-        // If in A|B layer-group will have a 'group' string
+      // If in A|B layer-group will have a 'group' string
       } else if (compareActiveString) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
           if (!subLayer.wv) {
@@ -691,88 +682,113 @@ export default function mapui(models, config, store, ui) {
     updateLayerVisibilities();
   }
 
-  /*
-   * Update layers for the correct Date
-   *
-   * @method updateDate
-   * @static
-   *
-   *
-   * @returns {void}
-   */
-  const updateDate = self.updateDate = async function() {
-    return new Promise((resolve) => {
-      const state = store.getState();
-      const { compare } = state;
-      const activeLayers = getAllActiveLayers(state);
-      let layerGroups;
-      let layerGroup;
+  function updateVectorStyles (def) {
+    const state = store.getState();
+    const activeLayers = getActiveLayers(state);
+    const { vectorStyles } = config;
+    const layerName = def.layer || def.id;
+    let vectorStyleId;
 
-      if (compare && compare.active) {
-        layerGroups = self.selected.getLayers().getArray();
-        if (layerGroups.length > 1) {
-          layerGroup = layerGroups[0].get('group') === compare.activeString
-            ? layerGroups[0]
-            : layerGroups[1].get('group') === compare.activeString
-              ? layerGroups[1]
-              : null;
-        }
-      }
-
-      const group = compare && compare.active ? layerGroup : self.selected;
-      const layers = group.getLayers().getArray();
-      const visibleLayers = activeLayers.filter(
-        ({ id }) => layers
-          .map(({ wv }) => lodashGet(wv, 'def.id'))
-          .includes(id),
-      ).filter(({ visible }) => visible);
-
-      lodashEach(visibleLayers, (def) => {
-        const layerName = def.layer || def.id;
-
-        if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-          return;
-        }
-
-        if (compare && compare.active) {
-          if (layers.length) {
-            const index = findLayerIndex(def, layerGroup);
-            const layerValue = self.selected.getLayers().getArray()[index];
-            layerGroup.getLayers().setAt(
-              index,
-              createLayer(def, {
-                group: compare.activeString,
-                date: getSelectedDate(state),
-                previousLayer: layerValue ? layerValue.wv : null,
-              }),
-            );
-            compareMapUi.update(compare.activeString);
-          }
-        } else {
-          const index = findLayerIndex(def);
-          const layer = createLayer(def, { previousLayer: layers[index] ? layers[index].wv : null });
-          self.selected.getLayers().setAt(index, layer);
-        }
-
-        if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-          const { vectorStyles } = config;
-          let vectorStyleId;
-
-          vectorStyleId = def.vectorStyle.id;
-          if (getActiveLayers(state)) {
-            getActiveLayers(state).forEach((layer) => {
-              if (layer.id === layerName && layer.custom) {
-                vectorStyleId = layer.custom;
-              }
-            });
-          }
-          setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+    vectorStyleId = def.vectorStyle.id;
+    if (activeLayers) {
+      activeLayers.forEach((layer) => {
+        if (layer.id === layerName && layer.custom) {
+          vectorStyleId = layer.custom;
         }
       });
-      updateLayerVisibilities();
-      resolve();
+    }
+    setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+  }
+
+  function getLayerGroup (compare = {}) {
+    const { active, activeString } = compare;
+    if (active) {
+      const layerGroups = self.selected.getLayers().getArray();
+      if (layerGroups.length > 1) {
+        return layerGroups[0].get('group') === activeString
+          ? layerGroups[0]
+          : layerGroups[1].get('group') === activeString
+            ? layerGroups[1]
+            : null;
+      }
+    }
+    return self.selected;
+  }
+
+  function updateCompareLayer (def, index, compare, layerCollection) {
+    const { activeString } = compare;
+    const state = store.getState();
+    const prevLayer = layerCollection.getArray()[index];
+    const updatedLayer = createLayer(def, {
+      group: activeString,
+      date: getSelectedDate(state),
+      previousLayer: prevLayer ? prevLayer.wv : null,
+      fade: true,
     });
-  };
+    layerCollection.insertAt(index, updatedLayer);
+    compareMapUi.update(activeString);
+    return updatedLayer;
+  }
+
+  function updateLayer (def, index, layers, layerCollection) {
+    const prevLayer = layers[index];
+    const updatedLayer = createLayer(def, {
+      previousLayer: prevLayer ? prevLayer.wv : null,
+      fade: true,
+    });
+    console.log('INSERT: ', updatedLayer.wv.key);
+    layerCollection.insertAt(index, updatedLayer);
+    return updatedLayer;
+  }
+
+  async function updateDate() {
+    const state = store.getState();
+    const { compare } = state;
+    const layerGroup = getLayerGroup(compare);
+    const layers = layerGroup.getLayers().getArray();
+    const mapLayerCollection = layerGroup.getLayers();
+    const activeLayers = getAllActiveLayers(state);
+    const visibleLayers = activeLayers.filter(
+      ({ id }) => layers
+        .map(({ wv }) => lodashGet(wv, 'def.id'))
+        .includes(id),
+    ).filter(({ visible }) => visible);
+
+    const layerPromises = visibleLayers.map((def) => {
+      let index;
+      let updatedLayer;
+      let fadePromise = new Promise((resolve) => resolve());
+
+      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+        return fadePromise;
+      }
+
+      if (compare && compare.active && layers.length) {
+        index = findLayerIndex(def, layerGroup);
+        updatedLayer = updateCompareLayer(def, index, compare, mapLayerCollection);
+      } else {
+        index = findLayerIndex(def);
+        updatedLayer = updateLayer(def, index, layers, mapLayerCollection);
+      }
+
+      fadePromise = new Promise((resolve) => {
+        updatedLayer.setVisible(true);
+        updatedLayer.wv.crossFade().then(() => {
+          console.log('REMOVE: ', updatedLayer.wv.key);
+          mapLayerCollection.removeAt(index + 1);
+          resolve();
+        });
+      });
+
+      if (config.vectorStyles && lodashGet(def, 'vectorStyle.id')) {
+        updateVectorStyles(def);
+      }
+      return fadePromise;
+    });
+
+    return Promise.all(layerPromises).then(updateLayerVisibilities);
+  }
+
 
   /**
    * Preload tiles for the next and previous time interval so they are visible
@@ -803,13 +819,11 @@ export default function mapui(models, config, store, ui) {
         lastPreloadDate: subsequentDate,
       });
       await promiseImageryForTime(state, subsequentDate, useActiveString);
-      self.selected.getView().changed();
       return;
     }
 
     await promiseImageryForTime(state, nextDate, useActiveString);
     await promiseImageryForTime(state, prevDate, useActiveString);
-    self.selected.getView().changed();
 
     if (!date && !arrowDown) {
       preloadNextTiles(nextDate, useActiveString);
@@ -855,21 +869,6 @@ export default function mapui(models, config, store, ui) {
       preloaded: true,
       lastPreloadDate: nextDate,
     });
-  }
-
-  /*
-   * Update layers for the correct Date
-   *
-   * @method updateLookup
-   * @static
-   *
-   *
-   * @returns {void}
-   *
-   * @todo Check if this function can be combined with updateLayerOrder
-   */
-  function updateLookup(layerId) {
-    reloadLayers();
   }
 
   /*
