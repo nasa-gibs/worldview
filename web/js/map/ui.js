@@ -90,7 +90,6 @@ export default function mapui(models, config, store, ui) {
     runningdata,
     layerKey,
     createLayer,
-    layersToFade: [],
   };
 
   /**
