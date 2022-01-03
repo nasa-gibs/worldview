@@ -42,7 +42,6 @@ class ModalContainer extends Component {
       id,
       isOpen,
       customProps,
-      orientation,
       isMobile,
       screenHeight,
       screenWidth,
