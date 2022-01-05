@@ -218,7 +218,6 @@ export default function mapui(models, config, store, ui) {
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, (proj) => {
       const map = createMap(proj);
-      // map.getLayers().on('add', onLayerAdd);
       self.proj[proj.id] = map;
     });
     events.on('map:disable-click-zoom', () => {

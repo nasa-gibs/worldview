@@ -260,7 +260,7 @@ function promiseTileLayer(layer, extent, map) {
  * @return {object}            Promise
  */
 function promiseLayerGroup(layerGroup, map) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Current layer's 3 layer array (prev, current, next days)
     const layers = layerGroup.getLayersArray() || [layerGroup];
 
