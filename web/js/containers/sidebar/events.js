@@ -88,46 +88,44 @@ function Events(props) {
   );
 
   const renderEventList = () => (
-    <Scrollbars
-      className="event-scroll-list"
-      style={{ maxHeight: `${scrollbarMaxHeight}` }}
-    >
-      <div id="wv-events">
-        {(isLoading || hasRequestError) && (
-          <div className="events-loading-text">
-            {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
-            {errorOrLoadingText}
-          </div>
-        )}
-
-        {eventsData && eventsData.length ? (
-          <div className="wv-eventslist sidebar-panel">
-            <ul id="wv-eventscontent" className="content map-item-list">
-              {sources && eventsData.map((event) => (
-                <Event
-                  showAlert={showAlert}
-                  key={event.id}
-                  event={event}
-                  selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-                  deselectEvent={deselectEvent}
-                  isSelected={selected.id === event.id}
-                  selectedDate={selectedDate}
-                  sources={sources}
-                />
-              ))}
-            </ul>
-          </div>
-        ) : !isLoading && (
-          <h3 className="no-events"> No events meet current criteria</h3>
-        )}
+    eventsData && eventsData.length ? (
+      <div className="wv-eventslist sidebar-panel">
+        <ul id="wv-eventscontent" className="content map-item-list">
+          {sources && eventsData.map((event) => (
+            <Event
+              showAlert={showAlert}
+              key={event.id}
+              event={event}
+              selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+              deselectEvent={deselectEvent}
+              isSelected={selected.id === event.id}
+              selectedDate={selectedDate}
+              sources={sources}
+            />
+          ))}
+        </ul>
       </div>
-    </Scrollbars>
+    ) : !isLoading && (
+      <h3 className="no-events"> No events meet current criteria</h3>
+    )
   );
 
   return (
     <div className="event-container">
       {renderFilterControls()}
-      {renderEventList()}
+      <Scrollbars
+        className="event-scroll-list"
+        style={{ maxHeight: `${scrollbarMaxHeight}` }}
+      >
+        <div id="wv-events">
+          {isLoading || hasRequestError ? (
+            <div className="events-loading-text">
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
+              {errorOrLoadingText}
+            </div>
+          ) : renderEventList()}
+        </div>
+      </Scrollbars>
     </div>
   );
 }
