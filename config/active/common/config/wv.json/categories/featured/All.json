@@ -7,18 +7,8 @@
               "id": "featured-all",
               "description": "",
               "measurements": [
-                "Land Surface Reflectance - Featured",
-                "Geostationary",
-                "Fires and Thermal Anomalies - Featured",
-                "Flood",
-                "Socioeconomic Data Vectors - Featured",
                 "Corrected Reflectance",
-                "Precipitation Rate - Featured",
-                "Population Density",
-                "Earth at Night",
-                "Land Surface Temperature",
-                "Sea Surface Temperature - Featured",
-                "Orbital Track"
+                "Sea Surface Temperature - Featured"
               ]
           }
       }
