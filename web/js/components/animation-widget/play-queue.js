@@ -417,6 +417,7 @@ class PlayAnimation extends React.Component {
       this.checkQueue();
       if (isPlaying) {
         selectDate(currentDateParsed);
+        console.log(currentDateStr);
       }
       this.pastDates[currentDateStr] = currentDateParsed;
       this.currentPlayingDate = currentDateStr;
