@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty as lodashIsEmpty } from 'lodash';
-import Queue from 'promise-queue';
+import PQueue from 'p-queue/dist';
 import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
 
@@ -17,7 +17,7 @@ class PlayAnimation extends React.Component {
     this.state = {
       isPlaying: false,
     };
-    this.queue = new Queue(5, Infinity);
+    this.queue = new PQueue({ concurrency: 2 });
     this.preloadObject = {};
     this.inQueueObject = {};
     this.preloadedArray = [];

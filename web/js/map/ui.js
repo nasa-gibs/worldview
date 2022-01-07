@@ -25,7 +25,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import Queue from 'promise-queue';
+import PQueue from 'p-queue/dist';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
@@ -77,7 +77,7 @@ export default function mapui(models, config, store, ui) {
     duration: animationDuration,
   });
   const cache = new Cache(400);
-  const layerQueue = new Queue(5, Infinity);
+  const layerQueue = new PQueue({ concurrency: 5 });
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
   const self = {
     cache,
