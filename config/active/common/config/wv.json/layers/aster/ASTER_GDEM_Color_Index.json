@@ -5,10 +5,10 @@
       "title": "Global Digital Elevation Map (Color Index)",
       "subtitle": "Terra / ASTER",
       "description": "aster/ASTER_GDEM_Color_Index",
-      "tags": "gdem",
+      "tags": "gdem dem terrain",
       "group": "overlays",
       "type": "wmts",
-      "layergroup": "Global Digital Elevation Map",
+      "layergroup": "Terrain Elevation",
       "product": "ASTGTM",
       "wrapadjacentdays": true
     }

@@ -8,7 +8,7 @@
       "type": "vector",
       "tags": "vectors",
       "group": "overlays",
-      "layergroup": "Settlements",
+      "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
       "inactive": true,
       "palette": {

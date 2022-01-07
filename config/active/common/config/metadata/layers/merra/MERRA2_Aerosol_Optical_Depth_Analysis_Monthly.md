@@ -1,0 +1,3 @@
+The Aerosol Optical Depth Analysis (Monthly) layer is from the M2IMNXGAS (or instM_3d_gas_Nx) data collection. It is an instantaneous 2-dimensional monthly mean data collection in Modern-Era Retrospective analysis for Research and Applications version 2 (MERRA-2). This collection consists of assimilation of aerosol optical depth analysis and aerosol optical depth analysis increment. The collection also includes the variance of parameters. MERRA-2 is the latest version of global atmospheric reanalysis for the satellite era produced by NASA Global Modeling and Assimilation Office (GMAO) using the Goddard Earth Observing System Model (GEOS) version 5.12.4.
+
+References: M2IMNXGAS [doi:10.5067/XOGNBQEPLUC5](https://doi.org/10.5067/XOGNBQEPLUC5)

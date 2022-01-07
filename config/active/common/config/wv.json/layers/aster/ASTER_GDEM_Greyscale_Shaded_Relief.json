@@ -5,9 +5,9 @@
       "title": "Global Digital Elevation Map (Greyscale Shaded Relief)",
       "subtitle": "Terra / ASTER",
       "description": "aster/ASTER_GDEM_Greyscale_Shaded_Relief",
-      "tags": "gdem",
+      "tags": "gdem dem terrain",
       "group": "baselayers",
-      "layergroup": "Global Digital Elevation Map",
+      "layergroup": "Terrain Elevation",
       "product": "ASTGTM",
       "wrapX": true
     }

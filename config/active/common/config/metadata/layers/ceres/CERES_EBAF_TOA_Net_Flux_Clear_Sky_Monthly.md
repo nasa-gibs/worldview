@@ -4,9 +4,8 @@ The CERES Energy Balanced and Filled (EBAF) layers are derived from CERES SYN1De
 
 For EBAF surface fluxes, all-sky and clear-sky fluxes are calculated at all hourly increments during the month, regardless of cloud amount. For the all-sky condition, corresponding cloud type is specified for each pixel (e.g. ITCZ, maritime stratus, etc.). In regions with frequent cloudiness, it is possible that no clear-sky observations exist over a given month. Whereas the SSF1deg product, from which this product originates, does not attempt to fill in these non-measured clear-sky regions and default values are placed where there are no CERES observed clear-sky footprints in the spatial or temporal domain, the EBAF clear-sky filled product is a spatially complete clear-sky product.
 
-The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a collection of instruments carried on different satellites, the first launched in 1999 (Terra) as a follow-on to the successful Earth Radiation Budget Experiment (ERBE) mission, and as a flagship component of the Earth Observing System (EOS) program. The second satellite (Aqua) was launched in 2002. There are two identical CERES instruments aboard both the Terra and Aqua satellites, that measure the Earth's total radiation budget and provide cloud property estimates that enable scientists to assess clouds' roles in radiative fluxes from the surface to the top of the atmosphere. One of the instruments operates in a cross-track scan mode and the other in a biaxial scan mode. The cross-track mode data is what is used to align the CERES measurements with ERBE and the Tropical Rainfall Measuring Mission (TRMM), essentially extending the data record.
-
 The CERES TOA Net TOA Flux (Monthly, Energy Balanced and Filled, Clear-Sky) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `toa_net_clr_mon`  
-Data product: `CERES_EBAF-SFC_Edition4.0`
+Data parameter: `toa_net_clr_mon`
+
+References: CERES_EBAF-Sfc_Edition4.0 [doi:10.5067/TERRA+AQUA/CERES/EBAF-SURFACE_L3B004.0](https://doi.org/10.5067/TERRA+AQUA/CERES/EBAF-SURFACE_L3B004.0)

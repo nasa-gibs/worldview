@@ -4,4 +4,4 @@ An ice sheet is a mass of glacial land ice extending more than 50,000 square kil
 
 The MEaSUREs Ice Velocity (Greenland) layer's sensor and imagery resolution is 500 m, and the temporal resolution is 5-6 months.
 
-References: [MEaSUREs Greenland Ice Sheet Velocity Map from InSAR Data, Version 2 (NSIDC-0478)](https://nsidc.org/data/nsidc-0478); [NSIDC Quick Facts on Ice Sheets](https://nsidc.org/cryosphere/quickfacts/icesheets.html)
+References: NSIDC-0478 [doi:10.5067/OC7B04ZM9G6Q](https://doi.org/10.5067/OC7B04ZM9G6Q); [NSIDC Quick Facts on Ice Sheets](https://nsidc.org/cryosphere/quickfacts/icesheets.html)

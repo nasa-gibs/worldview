@@ -2,4 +2,5 @@ The MODIS Precipitable Water Vapor layer shows the total amount of water vapor i
 
 The MODIS Water Vapor product is available from both the Terra (MOD05) and Aqua (MYD05) satellites. The sensor resolution is 5 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Water Vapor (05_L2)](https://modis-atmos.gsfc.nasa.gov/products/water-vapor); [NASA Earth Observations - Water Vapor](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MYDAL2_M_SKY_WV)
+References: MOD05_L2 NRT [doi:10.5067/MODIS/MOD05_L2.NRT.061](https://doi.org/10.5067/MODIS/MOD05_L2.NRT.061); MOD05_L2 [doi:10.5067/MODIS/MOD05_L2.061](https://doi.org/10.5067/MODIS/MOD05_L2.061)
+

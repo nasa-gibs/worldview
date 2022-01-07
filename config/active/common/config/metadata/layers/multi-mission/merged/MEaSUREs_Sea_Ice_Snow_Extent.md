@@ -4,4 +4,4 @@ Snow is precipitation that forms from water vapor in the atmosphere where temper
 
 The MEaSUREs Sea Ice and Snow Cover layer's sensor and imagery resolution is 25 km, and the temporal resolution is daily.
 
-References: [MEaSUREs Northern Hemisphere State of Cryosphere Daily 25km EASE-Grid 2.0, Version 1 (NSIDC-0534)](https://nsidc.org/data/nsidc-0534); [NASA Earth Observations - Snow Cover](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_M_SNOW); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)
+References: NSIDC-0534 [doi:10.5067/MEASURES/CRYOSPHERE/nsidc-0534.001](https://doi.org/10.5067/MEASURES/CRYOSPHERE/nsidc-0534.001); [NASA Earth Observations - Snow Cover](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_M_SNOW); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)

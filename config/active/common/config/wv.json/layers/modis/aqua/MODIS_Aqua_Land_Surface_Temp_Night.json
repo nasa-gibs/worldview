@@ -12,12 +12,6 @@
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],
-      "palette": {
-        "recommended": [
-          "rainbow_1",
-          "purple_2"
-        ]
-      },
       "daynight": [
         "night"
       ]

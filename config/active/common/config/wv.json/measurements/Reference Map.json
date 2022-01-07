@@ -9,7 +9,7 @@
                 "OpenStreetMap.org": {
                     "id": "openstreetmap",
                     "title": "OpenStreetMap.org",
-                    "description": "reference/ReferenceMap",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Reference_Features_15m",
@@ -17,15 +17,6 @@
                         "Coastlines_15m",
                         "Land_Mask",
                         "Land_Water_Map"
-                    ]
-                },
-                "WDPA": {
-                    "id": "wdpa",
-                    "title": "WDPA",
-                    "description": "wdpa/ProtectedAreas",
-                    "image": "",
-                    "settings": [
-                        "World_Database_on_Protected_Areas"
                     ]
                 }
             }

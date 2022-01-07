@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Terrain Elevation": {
+            "id": "terrain-elevation",
+            "title": "Terrain Elevation",
+            "subtitle": "Terra/ASTER, Space Shuttle Endeavour/STS-99",
+            "sources": {
+                "Terra/ASTER": {
+                    "id": "terra-aster",
+                    "title": "Terra/ASTER",
+                    "description": "aster/GDEM",
+                    "image": "",
+                    "settings": [
+                        "ASTER_GDEM_Greyscale_Shaded_Relief"
+                    ]
+                }
+            }
+        }
+    }
+}

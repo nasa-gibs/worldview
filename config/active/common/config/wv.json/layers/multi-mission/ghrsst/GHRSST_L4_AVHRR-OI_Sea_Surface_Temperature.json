@@ -2,7 +2,7 @@
   "layers": {
     "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature": {
       "id": "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
-      "title": "Sea Surface Temperature (L4)",
+      "title": "Sea Surface Temperature (L4, AVHRR-OI)",
       "subtitle": "Multi-mission / GHRSST / AVHRR-OI",
       "description": "multi-mission/ghrsst/GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
       "tags": "sst ghrsst podaac PO.DAAC",

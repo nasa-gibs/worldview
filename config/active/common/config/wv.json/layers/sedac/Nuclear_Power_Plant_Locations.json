@@ -8,7 +8,7 @@
       "group": "overlays",
       "type": "vector",
       "tags": "vectors",
-      "layergroup": "Power Plants, Nuclear",
+      "layergroup": "Socioeconomic",
       "palette": {
         "id": "Nuclear_Power_Plant_Locations",
         "immutable": true
