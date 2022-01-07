@@ -3,14 +3,7 @@
         "projection": "geographic",
         "startingLayers": [
             {
-                "id": "MODIS_Aqua_L2_Chlorophyll_A",
-                "hidden": "true"
-            },
-            {
-                "id": "GHRSST_L4_MUR_Sea_Surface_Temperature"
-            },
-            {
-                "id": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
+                "id": "MODIS_Aqua_CorrectedReflectance_TrueColor",
                 "hidden": "true"
             },
             {
@@ -25,7 +18,14 @@
                 "hidden": "true"
             },
             {
-                "id": "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "id": "GHRSST_L4_MUR_Sea_Surface_Temperature"
+            },
+            {
+                "id": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
+                "hidden": "true"
+            },
+            {
+                "id": "MODIS_Aqua_L2_Chlorophyll_A",
                 "hidden": "true"
             }
         ]
