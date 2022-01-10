@@ -42,7 +42,6 @@ class ModalContainer extends Component {
       id,
       isOpen,
       customProps,
-      orientation,
       isMobile,
       screenHeight,
       screenWidth,
@@ -55,12 +54,11 @@ class ModalContainer extends Component {
       desktopOnly,
     } = newProps;
 
-    const orientationChanged = orientation !== prevProps.orientation;
     const screenHeightChanged = screenHeight !== prevProps.screenHeight;
     const screenWidthChanged = screenWidth !== prevProps.screenWidth;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if (isMobile && isOpen) {
-      if (desktopOnly || orientationChanged) {
+      if (desktopOnly) {
         toggleFunction();
       }
       if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
