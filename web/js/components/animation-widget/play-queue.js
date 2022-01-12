@@ -28,25 +28,12 @@ class PlayQueue extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
-
     this.queue.on('completed', (dateStr) => {
       console.debug(dateStr, Date.now(), this.queue.size);
     });
-
-    this.queue.on('active', () => {
-      // console.debug('qSize', this.queue.size);
-    });
-
     this.playingDate = this.getStartDate();
     this.checkQueue();
     this.checkShouldPlay();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { isPlaying } = this.props;
-    if (prevProps.isPlaying && !isPlaying) {
-      console.debug('user pressed pause');
-    }
   }
 
   componentWillUnmount() {
@@ -121,12 +108,11 @@ class PlayQueue extends React.Component {
 
   getAverageFetchTime = () => {
     const { subDailyMode } = this.props;
-    const defaultTime = subDailyMode ? 1500 : 500;
+    const defaultTime = subDailyMode ? 1800 : 500;
     // Filter outliers (e.g. layers that have already been loaded)
     const filteredTimes = fetchTimes.filter((time) => time >= 200);
     const averageFetchTime = filteredTimes.length && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
     // If we don't have enough real times, use a reasonably default
-    console.debug(filteredTimes);
     const averageTime = filteredTimes.length > 10 ? averageFetchTime : defaultTime;
     return averageTime;
   }
@@ -142,7 +128,6 @@ class PlayQueue extends React.Component {
     if (remainingLoadTime >= remainingPlayTime) {
       const preloadTime = remainingLoadTime - remainingPlayTime;
       totalBufferSize = Math.ceil(preloadTime / 1000);
-    // Can load before play finishes
     }
 
     console.debug('fetch time: ', (averageFetchTime / 1000).toFixed(2));
@@ -155,6 +140,9 @@ class PlayQueue extends React.Component {
 
   isPreloadSufficient() {
     const currentBufferSize = util.objectLength(this.bufferObject);
+    if (this.canPreloadAll) {
+      return true;
+    }
     if (currentBufferSize < this.defaultBufferSize) {
       return false;
     }
