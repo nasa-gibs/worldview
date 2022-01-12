@@ -34,8 +34,6 @@ import {
   customModalType,
 } from '../modules/date/constants';
 import {
-  getQueueLength,
-  getMaxQueueLength,
   snapToIntervalDelta,
   getNumberOfSteps,
 } from '../modules/animation/util';
@@ -573,17 +571,10 @@ class AnimationWidget extends React.Component {
       isGifActive,
       delta,
       interval,
+      numberOfFrames,
+      subDailyMode,
     } = this.props;
     const { speed, collapsed } = this.state;
-    const maxLength = getMaxQueueLength(speed);
-    const queueLength = getQueueLength(
-      startDate,
-      endDate,
-      speed,
-      interval,
-      delta,
-    );
-
 
     if (!isActive) {
       return null;
@@ -597,19 +588,18 @@ class AnimationWidget extends React.Component {
           <PlayQueue
             isLoopActive={looping}
             isPlaying={isPlaying}
-            canPreloadAll={queueLength <= maxLength}
+            numberOfFrames={numberOfFrames}
             currentDate={snappedCurrentDate}
             startDate={startDate}
             endDate={endDate}
             hasCustomPalettes={hasCustomPalettes}
-            maxQueueLength={maxLength}
-            queueLength={queueLength}
             interval={interval}
             delta={delta}
             speed={speed}
             selectDate={selectDate}
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
+            subDailyMode={subDailyMode}
             onClose={onPushPause}
           />
         )}
@@ -753,6 +743,7 @@ function mapStateToProps(state) {
     ),
   };
 }
+
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
     dispatch(selectDate(val));
