@@ -674,13 +674,14 @@ function mapStateToProps(state) {
     customInterval = customInterval > 3 ? 3 : customInterval;
   }
   const useInterval = customSelected ? customInterval || 3 : interval;
+  const useDelta = customSelected && customDelta ? customDelta : delta;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
   const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
-    customSelected && customDelta ? customDelta : delta,
+    useDelta,
     maxFrames,
   );
   const { rotation } = map;
@@ -693,7 +694,7 @@ function mapStateToProps(state) {
       startDate,
       endDate,
       TIME_SCALE_FROM_NUMBER[useInterval],
-      delta,
+      useDelta,
     );
   } else {
     snappedCurrentDate = currentDate;
@@ -715,7 +716,7 @@ function mapStateToProps(state) {
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
-    delta: customSelected && customDelta ? customDelta : delta,
+    delta: useDelta,
     interval: TIME_SCALE_FROM_NUMBER[useInterval] || 'day',
     customDelta: customDelta || 1,
     customInterval: customInterval || 3,

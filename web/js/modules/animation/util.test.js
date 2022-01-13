@@ -69,6 +69,15 @@ test('snapToIntervalDelta snaps at a custom hour interval', () => {
   expect(snappedDate.valueOf()).toBe(expected.valueOf());
 });
 
+test('snapToIntervalDelta snaps at custom 10 minute interval', () => {
+  const currentDate = new Date('2018-04-19 08:24:00Z');
+  const startDate = new Date('  2018-04-19 08:00:00Z');
+  const endDate = new Date('    2018-04-19 09:00:00Z');
+  const expected = new Date('2018-04-19 08:20:00Z');
+  const snappedDate = snapToIntervalDelta(currentDate, startDate, endDate, 'minute', 10);
+  expect(snappedDate.valueOf()).toBe(expected.valueOf());
+});
+
 test('snapToIntervalDelta snaps to startDate if currentDate is after endDate', () => {
   const currentDate = new Date('2019-05-15 08:00:00Z');
   const startDate = new Date('  2018-04-19 08:15:30Z');
