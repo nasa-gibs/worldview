@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty as lodashIsEmpty } from 'lodash';
 import PQueue from 'p-queue/dist';
 import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
@@ -21,7 +20,7 @@ class PlayQueue extends React.Component {
     this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
     this.inQueueObject = {};
     this.bufferObject = {};
-    this.preloadedArray = [];
+    this.bufferArray = [];
     this.pastDates = {};
     this.playInterval = 0;
     this.defaultBufferSize = numberOfFrames < 15 ? numberOfFrames : 15;
@@ -86,8 +85,6 @@ class PlayQueue extends React.Component {
 
   /**
    * Queue up initial dates to create a minimum buffer
-   *
-   * @param currentDate {object} JS date
    */
   initialPreload(date) {
     const {
@@ -117,7 +114,7 @@ class PlayQueue extends React.Component {
     const filteredTimes = fetchTimes.filter((time) => time >= 200);
     const averageFetchTime = filteredTimes.length
       && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
-    // If we don't have enough real times, use a reasonably default
+    // If we don't have enough real times, use a reasonable default
     const averageTime = filteredTimes.length > 10 ? averageFetchTime : defaultTime;
     return averageTime;
   }
@@ -146,7 +143,6 @@ class PlayQueue extends React.Component {
     console.debug('rLoad time: ', totalLoadTime, (remainingLoadTime / 1000).toFixed(2));
     console.debug('total frames:', numberOfFrames);
 
-    // The buffer should be at LEAST the defaultBufferSize but at MOST the numberOfFrames
     const totalBuffer = bufferSize + this.defaultBufferSize;
     if (totalBuffer >= numberOfFrames) {
       this.minBufferLength = numberOfFrames;
@@ -175,9 +171,7 @@ class PlayQueue extends React.Component {
    * Determine if we should play
    */
   checkShouldPlay = function(loopStart) {
-    const {
-      startDate, hasCustomPalettes,
-    } = this.props;
+    const { startDate } = this.props;
     const { isPlaying } = this.state;
     const currentDate = toDate(this.playingDate);
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
@@ -187,9 +181,6 @@ class PlayQueue extends React.Component {
     }
     if (this.isPreloadSufficient() || restartLoop) {
       console.debug('Started: ', Date.now());
-      return this.play();
-    }
-    if (hasCustomPalettes && this.bufferObject[this.playingDate] && lodashIsEmpty(this.inQueueObject)) {
       return this.play();
     }
     this.checkQueue();
@@ -217,37 +208,28 @@ class PlayQueue extends React.Component {
   }
 
   /**
-   * Determines what dates should be queued
+   * Either do inital preload or queue next item
    */
   checkQueue() {
-    const { startDate, endDate, hasCustomPalettes } = this.props;
     const currentDate = toDate(this.playingDate);
-    const nextInQueue = this.minBufferLength ? this.getNextBufferDate() : this.getLastInQueue();
-    const nextDate = this.nextDate(currentDate);
-    const nextDateStr = toString(nextDate);
+    const nextInQueue = this.minBufferLength
+      ? this.getNextBufferDate()
+      : this.getLastInQueue();
 
-    if (!this.preloadedArray[0] && !this.inQueueObject[this.playingDate]) {
+    if (!this.bufferArray[0] && !this.inQueueObject[this.playingDate]) {
       this.initialPreload(currentDate);
     } else if (
       !this.bufferObject[nextInQueue]
       && !this.inQueueObject[nextInQueue]
-      && !hasCustomPalettes
       && !this.canPreloadAll
     ) {
-      // if last preload date doesn't exist
       this.addItemToQueue();
-    } else if (
-      hasCustomPalettes
-      && this.preloadedArray[0]
-      && !this.inQueueObject[nextDateStr]
-    ) {
-      this.customQueuer(currentDate, startDate, endDate);
     }
   }
 
   clearCache = () => {
     this.bufferObject = {};
-    this.preloadedArray = [];
+    this.bufferArray = [];
     this.inQueueObject = {};
   }
 
@@ -256,25 +238,9 @@ class PlayQueue extends React.Component {
     return util.dateAdd(date, interval, delta);
   }
 
-  /*
-   * Custom date queuer created for custom colormaps
-   */
-  customQueuer(currentDate, startDate, endDate) {
-    const { isPlaying } = this.state;
-    let nextDate = this.nextDate(currentDate);
-    if (nextDate > endDate) {
-      nextDate = startDate;
-    }
-    const nextDateStr = toString(nextDate);
-    if (!this.bufferObject[nextDateStr] && !this.inQueueObject[nextDateStr] && !isPlaying) {
-      this.clearCache();
-      this.checkQueue();
-    }
-  }
-
   getNextBufferDate() {
     const { startDate, endDate } = this.props;
-    const strDate = this.preloadedArray[this.preloadedArray.length - 1];
+    const strDate = this.bufferArray[this.bufferArray.length - 1];
     const lastInBuffer = toDate(strDate);
     const nextDate = this.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || nextDate > endDate) {
@@ -308,7 +274,7 @@ class PlayQueue extends React.Component {
       return;
     }
     this.inQueueObject[strDate] = date;
-    this.preloadedArray.push(strDate);
+    this.bufferArray.push(strDate);
 
     await this.queue.add(async () => {
       const startTime = Date.now();
@@ -417,7 +383,6 @@ PlayQueue.propTypes = {
   togglePlaying: PropTypes.func.isRequired,
   currentDate: PropTypes.object,
   delta: PropTypes.number,
-  hasCustomPalettes: PropTypes.bool,
   interval: PropTypes.string,
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,

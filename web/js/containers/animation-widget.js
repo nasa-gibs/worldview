@@ -567,7 +567,6 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
@@ -596,7 +595,6 @@ class AnimationWidget extends React.Component {
             currentDate={snappedCurrentDate}
             startDate={startDate}
             endDate={endDate}
-            hasCustomPalettes={hasCustomPalettes}
             interval={interval}
             delta={delta}
             speed={speed}
