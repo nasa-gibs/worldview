@@ -6,6 +6,7 @@ import PQueue from 'p-queue/dist';
 import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
 
+const CONCURRENT_REQUESTS = 3;
 const fetchTimes = [0];
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
@@ -17,7 +18,7 @@ class PlayQueue extends React.Component {
     this.state = {
       isPlaying: false,
     };
-    this.queue = new PQueue({ concurrency: 3 });
+    this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
     this.inQueueObject = {};
     this.bufferObject = {};
     this.preloadedArray = [];
@@ -114,19 +115,22 @@ class PlayQueue extends React.Component {
     const defaultTime = subDailyMode ? 1800 : 500;
     // Filter outliers (e.g. layers that have already been loaded)
     const filteredTimes = fetchTimes.filter((time) => time >= 200);
-    const averageFetchTime = filteredTimes.length && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
+    const averageFetchTime = filteredTimes.length
+      && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
     // If we don't have enough real times, use a reasonably default
-    const averageTime = filteredTimes.length > 10 ? averageFetchTime * 1.10 : defaultTime;
+    const averageTime = filteredTimes.length > 10 ? averageFetchTime : defaultTime;
     return averageTime;
   }
 
   calcBufferSize() {
+    // NOTE: for some reason playback takes about 1.5 times as long as it is calculated to be
+    // (likely due to setTimeout being unreliable) which means we often buffer a little more than needed
     let bufferSize = 0;
     const { numberOfFrames, speed } = this.props;
-    const averageFetchTime = this.getAverageFetchTime();
+    const avgFetchTime = this.getAverageFetchTime();
     const remainingFrames = numberOfFrames - this.defaultBufferSize;
     const remainingPlayTime = (remainingFrames / speed) * 1000;
-    const remainingLoadTime = averageFetchTime * remainingFrames;
+    const remainingLoadTime = (avgFetchTime * remainingFrames) / CONCURRENT_REQUESTS;
     const totalPlayTime = (numberOfFrames / speed) * 1000;
     const timeToBufferEnd = totalPlayTime - remainingPlayTime;
     const canFinishLoadWhilePlaying = timeToBufferEnd > remainingLoadTime;
@@ -136,9 +140,9 @@ class PlayQueue extends React.Component {
       bufferSize = Math.ceil(preloadTime / 1000);
     }
 
-    console.debug('fetch time: ', (averageFetchTime / 1000).toFixed(2));
+    console.debug('fetch time: ', (avgFetchTime / 1000).toFixed(2));
     console.debug('Play time: ', (totalPlayTime / 1000).toFixed(2), (remainingPlayTime / 1000).toFixed(2));
-    const totalLoadTime = ((averageFetchTime * numberOfFrames) / 1000).toFixed(2);
+    const totalLoadTime = ((avgFetchTime * numberOfFrames) / 1000 / CONCURRENT_REQUESTS).toFixed(2);
     console.debug('rLoad time: ', totalLoadTime, (remainingLoadTime / 1000).toFixed(2));
     console.debug('total frames:', numberOfFrames);
 
