@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty as lodashIsEmpty } from 'lodash';
@@ -12,6 +13,7 @@ const toDate = (dateString) => util.parseDateUTC(dateString);
 class PlayQueue extends React.Component {
   constructor(props) {
     super(props);
+    const { numberOfFrames } = props;
     this.state = {
       isPlaying: false,
     };
@@ -21,9 +23,9 @@ class PlayQueue extends React.Component {
     this.preloadedArray = [];
     this.pastDates = {};
     this.playInterval = 0;
-    this.defaultBufferSize = 15;
+    this.defaultBufferSize = numberOfFrames < 15 ? numberOfFrames : 15;
     this.minBufferLength = null;
-    this.canPreloadAll = props.numberOfFrames <= this.defaultBufferSize;
+    this.canPreloadAll = numberOfFrames <= this.defaultBufferSize;
   }
 
   componentDidMount() {
@@ -63,7 +65,8 @@ class PlayQueue extends React.Component {
   getLastInQueue = function() {
     const { isLoopActive, startDate, endDate } = this.props;
     let currentDate = toDate(this.playingDate);
-    const queueLength = this.minBufferLength || this.defaultBufferSize;
+    const currentBufferSize = util.objectLength(this.bufferObject);
+    const queueLength = currentBufferSize || this.defaultBufferSize;
 
     let i = 1;
     while (i < queueLength) {
@@ -113,35 +116,46 @@ class PlayQueue extends React.Component {
     const filteredTimes = fetchTimes.filter((time) => time >= 200);
     const averageFetchTime = filteredTimes.length && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
     // If we don't have enough real times, use a reasonably default
-    const averageTime = filteredTimes.length > 10 ? averageFetchTime : defaultTime;
+    const averageTime = filteredTimes.length > 10 ? averageFetchTime * 1.10 : defaultTime;
     return averageTime;
   }
 
   calcBufferSize() {
-    let totalBufferSize = this.defaultBufferSize;
+    let bufferSize = 0;
     const { numberOfFrames, speed } = this.props;
     const averageFetchTime = this.getAverageFetchTime();
     const remainingFrames = numberOfFrames - this.defaultBufferSize;
     const remainingPlayTime = (remainingFrames / speed) * 1000;
     const remainingLoadTime = averageFetchTime * remainingFrames;
+    const totalPlayTime = (numberOfFrames / speed) * 1000;
+    const timeToBufferEnd = totalPlayTime - remainingPlayTime;
+    const canFinishLoadWhilePlaying = timeToBufferEnd > remainingLoadTime;
 
-    if (remainingLoadTime >= remainingPlayTime) {
-      const preloadTime = remainingLoadTime - remainingPlayTime;
-      totalBufferSize = Math.ceil(preloadTime / 1000);
+    if (!canFinishLoadWhilePlaying && remainingLoadTime >= remainingPlayTime) {
+      const preloadTime = remainingLoadTime - timeToBufferEnd;
+      bufferSize = Math.ceil(preloadTime / 1000);
     }
 
     console.debug('fetch time: ', (averageFetchTime / 1000).toFixed(2));
-    console.debug('play time: ', (remainingPlayTime / 1000).toFixed(2));
-    console.debug('load time: ', (remainingLoadTime / 1000).toFixed(2));
-    console.debug('total size:', numberOfFrames);
+    console.debug('Play time: ', (totalPlayTime / 1000).toFixed(2), (remainingPlayTime / 1000).toFixed(2));
+    const totalLoadTime = ((averageFetchTime * numberOfFrames) / 1000).toFixed(2);
+    console.debug('rLoad time: ', totalLoadTime, (remainingLoadTime / 1000).toFixed(2));
+    console.debug('total frames:', numberOfFrames);
 
-    this.minBufferLength = remainingFrames <= totalBufferSize ? remainingFrames : totalBufferSize;
+    // The buffer should be at LEAST the defaultBufferSize but at MOST the numberOfFrames
+    const totalBuffer = bufferSize + this.defaultBufferSize;
+    if (totalBuffer >= numberOfFrames) {
+      this.minBufferLength = numberOfFrames;
+    } else {
+      this.minBufferLength = totalBuffer;
+    }
   }
 
   isPreloadSufficient() {
+    const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
     if (this.canPreloadAll) {
-      return true;
+      return currentBufferSize === numberOfFrames;
     }
     if (currentBufferSize < this.defaultBufferSize) {
       return false;
@@ -149,7 +163,7 @@ class PlayQueue extends React.Component {
     if (!this.minBufferLength) {
       this.calcBufferSize();
     }
-    console.debug(`buffer progress: ${currentBufferSize} / ${this.minBufferLength}`);
+    console.debug(`buffer: ${currentBufferSize} / ${this.minBufferLength}`);
     return currentBufferSize >= this.minBufferLength;
   }
 
@@ -175,7 +189,6 @@ class PlayQueue extends React.Component {
       return this.play();
     }
     this.checkQueue();
-    this.shiftCache();
   };
 
   /**
@@ -183,13 +196,16 @@ class PlayQueue extends React.Component {
    */
   checkShouldLoop() {
     const { isLoopActive, startDate, togglePlaying } = this.props;
+    // Could base this off animation speed?
+    const loopDelay = 1000;
+
     if (isLoopActive) {
-      this.shiftCache();
       this.playingDate = toString(startDate);
       setTimeout(() => {
+        if (!this.mounted) return;
         this.checkShouldPlay(true);
         this.checkQueue();
-      }, 1000);
+      }, loopDelay);
     } else {
       togglePlaying();
       console.debug('Stopped: ', Date.now());
@@ -200,21 +216,17 @@ class PlayQueue extends React.Component {
    * Determines what dates should be queued
    */
   checkQueue() {
-    const {
-      startDate,
-      endDate,
-      hasCustomPalettes,
-    } = this.props;
+    const { startDate, endDate, hasCustomPalettes } = this.props;
     const currentDate = toDate(this.playingDate);
-    const lastInQueue = this.getLastInQueue();
+    const nextInQueue = this.minBufferLength ? this.getNextBufferDate() : this.getLastInQueue();
     const nextDate = this.nextDate(currentDate);
+    const nextDateStr = toString(nextDate);
 
     if (!this.preloadedArray[0] && !this.inQueueObject[this.playingDate]) {
       this.initialPreload(currentDate);
     } else if (
-      // TODO Can't lookup this array entry with date string as key. Is this causing bugs?
-      !this.bufferObject[lastInQueue]
-      && !this.inQueueObject[lastInQueue]
+      !this.bufferObject[nextInQueue]
+      && !this.inQueueObject[nextInQueue]
       && !hasCustomPalettes
       && !this.canPreloadAll
     ) {
@@ -223,8 +235,7 @@ class PlayQueue extends React.Component {
     } else if (
       hasCustomPalettes
       && this.preloadedArray[0]
-      && !this.inQueueObject[nextDate]
-      // && queueLength > maxQueueLength
+      && !this.inQueueObject[nextDateStr]
     ) {
       this.customQueuer(currentDate, startDate, endDate);
     }
@@ -257,23 +268,6 @@ class PlayQueue extends React.Component {
     }
   }
 
-  /**
-   * Removes item from cache after it has been played and quelimit reached
-   */
-  shiftCache() {
-    const hasPlayed = !this.isInToPlayGroup(this.preloadedArray[0])
-      && this.pastDates[this.preloadedArray[0]]
-      && this.bufferObject[this.preloadedArray[0]];
-    const preloadExceedsQueue = util.objectLength(this.bufferObject) > this.minBufferLength;
-
-    if (hasPlayed && preloadExceedsQueue && !this.canPreloadAll) {
-      // TODO Why do we need to remove previously preloaded dates?
-      const key = this.preloadedArray.shift();
-      delete this.bufferObject[key];
-      delete this.pastDates[key];
-    }
-  }
-
   getNextBufferDate() {
     const { startDate, endDate } = this.props;
     const strDate = this.preloadedArray[this.preloadedArray.length - 1];
@@ -296,40 +290,8 @@ class PlayQueue extends React.Component {
     const shouldQueue = !this.inQueueObject[nextDateStr] && !this.bufferObject[nextDateStr];
 
     if (shouldQueue && dateInRange) {
-      // console.debug('Queue:', nextDateStr, Date.now());
       this.addDate(nextDate);
-      // this.checkQueue();
     }
-  }
-
-  /**
-   * checks if this date is in array of dates that need to play in future within buffer length
-   *
-   * @param testDate {string} JS date string
-   */
-  isInToPlayGroup(testDate) {
-    const {
-      startDate, endDate, isLoopActive,
-    } = this.props;
-    let i = 0;
-    let currentDate = toDate(this.playingDate);
-    const jsTestDate = toDate(testDate);
-
-    while (i < this.minBufferLength) {
-      if (this.nextDate(currentDate) > endDate) {
-        if (!isLoopActive) {
-          return false;
-        }
-        currentDate = startDate;
-      } else {
-        currentDate = this.nextDate(currentDate);
-      }
-      if (currentDate.valueOf() === jsTestDate.valueOf()) {
-        return true;
-      }
-      i += 1;
-    }
-    return false;
   }
 
   /**
@@ -354,7 +316,6 @@ class PlayQueue extends React.Component {
     if (!this.mounted) return;
     this.bufferObject[strDate] = strDate;
     delete this.inQueueObject[strDate];
-    this.shiftCache();
     this.checkQueue();
     this.checkShouldPlay();
   }
@@ -394,7 +355,6 @@ class PlayQueue extends React.Component {
       nextDate = this.nextDate(currentDate);
       nextDateStr = toString(nextDate);
 
-      this.shiftCache();
       this.checkQueue();
       if (isPlaying) {
         selectDate(currentDate);
@@ -415,7 +375,6 @@ class PlayQueue extends React.Component {
       // Reached the end of preload
       if (!this.bufferObject[nextDateStr]) {
         this.stopPlaying();
-        this.shiftCache();
         this.checkQueue();
         return;
       }

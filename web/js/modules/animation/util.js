@@ -19,18 +19,18 @@ import util from '../../util/util';
 export function snapToIntervalDelta(currDate, startDate, endDate, interval, delta) {
   // moment pluralizes: 'days', 'hours', etc
   const units = `${interval}s`;
-  const dateArray = [];
   let tempDate = startDate;
-  let currentDate; let prevMoment; let
-    nextMoment;
+  let currentDate;
+  let prevMoment;
+  let nextMoment;
 
   while (tempDate <= endDate) {
     prevMoment = moment.utc(tempDate);
     nextMoment = moment.utc(tempDate).add(delta, units);
     if (currDate >= prevMoment && currDate <= nextMoment) {
       currentDate = new Date(prevMoment);
+      break;
     }
-    dateArray.push(tempDate);
     tempDate = new Date(nextMoment);
   }
   return currentDate || startDate;
