@@ -317,9 +317,13 @@ class AnimationWidget extends React.Component {
       endDate,
     } = this.props;
     if (subDailyMode) {
-      // for subdaily, zero start and end dates to UTC XX:YY:00:00
+      // for subdaily, zero start and end dates to UTC HH:MM:00:00
+      const startMinutes = startDate.getMinutes();
+      const endMinutes = endDate.getMinutes();
+      startDate.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
       startDate.setUTCSeconds(0);
       startDate.setUTCMilliseconds(0);
+      endDate.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
       endDate.setUTCSeconds(0);
       endDate.setUTCMilliseconds(0);
     } else {
