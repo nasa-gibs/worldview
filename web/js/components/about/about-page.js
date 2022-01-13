@@ -156,10 +156,10 @@ export default function AboutPage() {
         <hr />
         <h2>Acknowledgements</h2>
         <p>
-          With over 1000 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
+          With over 1000 imagery layers, @NAME@ acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers.
         </p>
         <p>
-          While Worldview provides the highest priority products/parameters as decided by the data providers and users, not all NASA standard products (or all parameters within each product) are available via Worldview, see
+          While @NAME@ provides the highest priority products/parameters as decided by the data providers and users, not all NASA standard products (or all parameters within each product) are available via @NAME@, see
           {' '}
           <a href="https://search.earthdata.nasa.gov/">Earthdata Search</a>
           {' '}
@@ -290,7 +290,7 @@ export default function AboutPage() {
         </p>
 
         <p>
-          Please also note that Worldview provides the “best available” layer information to users; this often means providing a “best” layer that prioritizes the composition of imagery products as follows: 1) Latest Version Standard Product; 2) Latest Version NRT; 3) Previous Version Standard Product; 4) Previous Version NRT.
+          Please also note that @NAME@ provides the “best available” layer information to users; this often means providing a “best” layer that prioritizes the composition of imagery products as follows: 1) Latest Version Standard Product; 2) Latest Version NRT; 3) Previous Version Standard Product; 4) Previous Version NRT.
           {' '}
           <a href="https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers#GIBSAPIforDevelopers-%22BestAvailable%22Layers" target="_blank" rel="noopener noreferrer">Learn more about “Best Available” Layers from GIBS</a>
           .

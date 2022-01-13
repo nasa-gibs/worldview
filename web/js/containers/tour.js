@@ -311,7 +311,7 @@ class Tour extends React.Component {
         isOpen
         timeout={10000}
         onDismiss={endTour}
-        message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
+        message="To view these tours again, click the 'Explore @NAME@' link in the “i” menu."
       />
     );
   }
