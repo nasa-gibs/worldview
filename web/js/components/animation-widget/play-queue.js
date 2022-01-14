@@ -15,6 +15,7 @@ class PlayQueue extends React.Component {
     const { numberOfFrames } = props;
     this.state = {
       isAnimating: false,
+      loadedItems: 0,
     };
     this.fetchTimes = [0];
     this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
@@ -22,7 +23,7 @@ class PlayQueue extends React.Component {
     this.bufferObject = {};
     this.bufferArray = [];
     this.playInterval = 0;
-    this.defaultBufferSize = numberOfFrames < 15 ? numberOfFrames : 15;
+    this.defaultBufferSize = numberOfFrames < 10 ? numberOfFrames : 10;
     this.minBufferLength = null;
     this.canPreloadAll = numberOfFrames <= this.defaultBufferSize;
   }
@@ -263,6 +264,7 @@ class PlayQueue extends React.Component {
    */
   async addDate(date) {
     const { promiseImageryForTime } = this.props;
+    let { loadedItems } = this.state;
     const strDate = toString(date);
     if (this.inQueueObject[strDate] || this.bufferObject[strDate]) {
       return;
@@ -274,6 +276,7 @@ class PlayQueue extends React.Component {
       const startTime = Date.now();
       await promiseImageryForTime(date);
       this.fetchTimes.push(Date.now() - startTime);
+      this.setState({ loadedItems: loadedItems += 1 });
       return strDate;
     });
 
@@ -355,14 +358,18 @@ class PlayQueue extends React.Component {
   render() {
     const { isAnimating } = this.state;
     const { onClose } = this.props;
+    const loadedItems = util.objectLength(this.bufferObject);
+    const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
 
     return isAnimating
       ? ''
       : (
         <PreloadSpinner
-          title="Loading ..."
-          bodyMsg="Preloading imagery for smooth animation"
+          title={title}
           onClose={onClose}
+          preload={!this.minBufferLength}
+          loadedItems={loadedItems}
+          totalItems={this.minBufferLength || this.defaultBufferSize}
         />
       );
   }
