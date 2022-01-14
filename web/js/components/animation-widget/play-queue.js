@@ -6,7 +6,6 @@ import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
 
 const CONCURRENT_REQUESTS = 3;
-const fetchTimes = [0];
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
 
@@ -15,13 +14,13 @@ class PlayQueue extends React.Component {
     super(props);
     const { numberOfFrames } = props;
     this.state = {
-      isPlaying: false,
+      isAnimating: false,
     };
+    this.fetchTimes = [0];
     this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
     this.inQueueObject = {};
     this.bufferObject = {};
     this.bufferArray = [];
-    this.pastDates = {};
     this.playInterval = 0;
     this.defaultBufferSize = numberOfFrames < 15 ? numberOfFrames : 15;
     this.minBufferLength = null;
@@ -111,7 +110,7 @@ class PlayQueue extends React.Component {
     const { subDailyMode } = this.props;
     const defaultTime = subDailyMode ? 1800 : 500;
     // Filter outliers (e.g. layers that have already been loaded)
-    const filteredTimes = fetchTimes.filter((time) => time >= 200);
+    const filteredTimes = this.fetchTimes.filter((time) => time >= 200);
     const averageFetchTime = filteredTimes.length
       && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
     // If we don't have enough real times, use a reasonable default
@@ -167,16 +166,13 @@ class PlayQueue extends React.Component {
     return currentBufferSize >= this.minBufferLength;
   }
 
-  /**
-   * Determine if we should play
-   */
   checkShouldPlay = function(loopStart) {
     const { startDate } = this.props;
-    const { isPlaying } = this.state;
+    const { isAnimating } = this.state;
     const currentDate = toDate(this.playingDate);
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
 
-    if (isPlaying && !loopStart) {
+    if (isAnimating && !loopStart) {
       return;
     }
     if (this.isPreloadSufficient() || restartLoop) {
@@ -186,9 +182,7 @@ class PlayQueue extends React.Component {
     this.checkQueue();
   };
 
-  /**
-   * Check if we should loop
-   */
+
   checkShouldLoop() {
     const { isLoopActive, startDate, togglePlaying } = this.props;
     // Could base this off animation speed?
@@ -279,7 +273,7 @@ class PlayQueue extends React.Component {
     await this.queue.add(async () => {
       const startTime = Date.now();
       await promiseImageryForTime(date);
-      fetchTimes.push(Date.now() - startTime);
+      this.fetchTimes.push(Date.now() - startTime);
       return strDate;
     });
 
@@ -292,8 +286,10 @@ class PlayQueue extends React.Component {
 
   play() {
     const { togglePlaying } = this.props;
-    const { isPlaying } = this.state;
-    if (!isPlaying) this.setState({ isPlaying: true });
+    const { isAnimating } = this.state;
+    if (!isAnimating) {
+      this.setState({ isAnimating: true });
+    }
     this.animate();
     if (document.hidden) {
       togglePlaying();
@@ -302,12 +298,12 @@ class PlayQueue extends React.Component {
 
   stopPlaying() {
     clearInterval(this.playInterval);
-    this.setState({ isPlaying: false });
+    this.setState({ isAnimating: false });
     console.debug('Stopped', Date.now());
   }
 
   /**
-   * loops through frame at a specified time interval
+   * Loops through frames at a specified time interval
    */
   animate() {
     const {
@@ -329,7 +325,6 @@ class PlayQueue extends React.Component {
       if (isPlaying) {
         selectDate(currentDate);
       }
-      this.pastDates[currentDateStr] = currentDate;
       this.playingDate = currentDateStr;
 
       // Advance to next
@@ -342,7 +337,7 @@ class PlayQueue extends React.Component {
         return;
       }
 
-      // Reached the end of preload
+      // Playback caught up with buffer :(
       if (!this.bufferObject[nextDateStr]) {
         this.stopPlaying();
         this.checkQueue();
@@ -358,10 +353,10 @@ class PlayQueue extends React.Component {
   }
 
   render() {
-    const { isPlaying } = this.state;
+    const { isAnimating } = this.state;
     const { onClose } = this.props;
 
-    return isPlaying
+    return isAnimating
       ? ''
       : (
         <PreloadSpinner
