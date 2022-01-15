@@ -10,13 +10,13 @@ import FooterCustom from './footer-custom';
 
 // If 'true', [section]-custom.js will be used.
 // If false, the respective functions below will be used.
-const overrideWelcome = true;
-const overrideKeyboardShortcuts = true;
-const overrideImageryUse = true;
-const overrideAcknowledgments = true;
-const overrideDisclaimer = true;
-const overrideLicense = true;
-const overrideFooter = true;
+const overrideWelcome = false;
+const overrideKeyboardShortcuts = false;
+const overrideImageryUse = false;
+const overrideAcknowledgments = false;
+const overrideDisclaimer = false;
+const overrideLicense = false;
+const overrideFooter = false;
 
 function Welcome() {
   return (
