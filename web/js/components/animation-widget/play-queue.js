@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PQueue from 'p-queue/dist';
-import PreloadSpinner from './preload-spinner';
+import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
 
 const CONCURRENT_REQUESTS = 3;
@@ -364,12 +364,11 @@ class PlayQueue extends React.Component {
     return isAnimating
       ? ''
       : (
-        <PreloadSpinner
+        <LoadingIndicator
           title={title}
           onClose={onClose}
-          preload={!this.minBufferLength}
           loadedItems={loadedItems}
-          totalItems={this.minBufferLength || this.defaultBufferSize}
+          totalItems={this.minBufferLength || 100}
         />
       );
   }

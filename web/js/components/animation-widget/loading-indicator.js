@@ -5,29 +5,30 @@ import {
 } from 'reactstrap';
 import Spinner from 'react-loader';
 
-export default function PreloadSpinner(props) {
+export default function LoadingIndicator(props) {
   const {
-    onClose, title, bodyMsg, loadedItems, totalItems, preload,
+    onClose, title, bodyMsg, loadedItems, totalItems,
   } = props;
 
   const msgStyle = {
     minHeight: 30, marginBottom: 50, fontSize: 14, textAlign: 'center',
   };
+  const barStyle = { margin: 12 };
+  const spinnerStyle = { minHeight: 50 };
   const progressValue = ((loadedItems / totalItems) * 100).toFixed(0);
+
   const renderProgressBar = () => (
-    <div style={{ margin: 12 }}>
+    <div style={barStyle}>
       <Progress
         animated
         striped
         value={progressValue}
-        color={!preload && 'success'}
-      >
-        {!preload && `${loadedItems} / ${totalItems} `}
-      </Progress>
+      />
     </div>
   );
+
   const renderSpinner = () => (
-    <div style={{ minHeight: 50 }}>
+    <div style={spinnerStyle}>
       <Spinner color="#fff" loaded={false} />
     </div>
   );
@@ -51,11 +52,10 @@ export default function PreloadSpinner(props) {
   );
 }
 
-PreloadSpinner.propTypes = {
+LoadingIndicator.propTypes = {
   onClose: PropTypes.func,
   title: PropTypes.string,
   bodyMsg: PropTypes.string,
   loadedItems: PropTypes.number,
   totalItems: PropTypes.number,
-  preload: PropTypes.bool,
 };
