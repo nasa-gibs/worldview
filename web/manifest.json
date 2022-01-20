@@ -1,0 +1,35 @@
+{
+  "short_name": "@NAME@",
+  "name": "@LONG_NAME@",
+  "icons": [
+    {
+      "src": "/images/wv-logo-mobile.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/wv-logo-mobile.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#849ccc",
+  "display": "standalone",
+  "prefered_related_applications": false,
+  "scope": "/",
+  "theme_color": "#849ccc",
+  "description": "@DESCRIPTION@",
+  "screenshots": [
+    {
+      "src": "web/images/preview.jpg",
+      "type": "image/jpg",
+      "sizes": "2400x1260"
+    },
+    {
+      "src": "web/images/readme-preview.jpg",
+      "type": "image/jpg",
+      "sizes": "1200x800"
+    }
+  ]
+}
