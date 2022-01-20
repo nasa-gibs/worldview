@@ -29,6 +29,7 @@ function LayersContainer (props) {
     isCompareActive,
     isEmbedModeActive,
     isMobile,
+    isAnimating,
     overlayGroups,
     overlays,
     reorderOverlayGroups,
@@ -66,7 +67,7 @@ function LayersContainer (props) {
         key={groupName}
         draggableId={groupName}
         index={idx}
-        isDragDisabled={isEmbedModeActive}
+        isDragDisabled={isEmbedModeActive || isAnimating}
       >
         {(provided) => (
           <li
@@ -178,7 +179,7 @@ function LayersContainer (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    browser, compare, embed, layers,
+    browser, compare, embed, layers, animation,
   } = state;
   const isCompareActive = compare.active;
   const { isEmbedModeActive } = embed;
@@ -195,6 +196,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
+    isAnimating: animation.isPlaying,
     isCompareActive,
     isEmbedModeActive,
     isMobile,
@@ -232,6 +234,7 @@ LayersContainer.propTypes = {
   groupOverlays: PropTypes.bool,
   height: PropTypes.number,
   isActive: PropTypes.bool,
+  isAnimating: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
@@ -33,7 +34,6 @@ import { coverageDateFormatter } from '../../modules/date/util';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
-const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   ...draggableStyle,
@@ -75,6 +75,7 @@ function LayerRow (props) {
     isVectorLayer,
     runningObject,
     measurementDescriptionPath,
+    isAnimating,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -154,9 +155,9 @@ function LayerRow (props) {
     }
 
     if (layerStartDate && layerEndDate) {
-      return `Data available between ${layerStartDate} - ${layerEndDate}`;
+      return (<> Data available between &#13; {layerStartDate} - {layerEndDate} </>);
     } if (layerStartDate) {
-      return `Data available between ${layerStartDate} - Present`;
+      return (<> Data available between &#13; {layerStartDate} - Present </>);
     }
     return 'No data on selected date for this layer';
   };
@@ -176,20 +177,33 @@ function LayerRow (props) {
         />
       </DropdownToggle>
       <DropdownMenu positionFixed>
-        <DropdownItem id={layerInfoBtnId} aria-label={layerInfoBtnTitle} className="button wv-layers-info" onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}>
+        <DropdownItem
+          id={layerInfoBtnId}
+          aria-label={layerInfoBtnTitle}
+          className="button wv-layers-info"
+          onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
+        >
           {layerInfoBtnTitle}
         </DropdownItem>
-        <DropdownItem id={layerOptionsBtnId} aria-label={layerOptionsBtnTitle} className="button wv-layers-options" onClick={() => onOptionsClick(layer, title)}>
+        <DropdownItem
+          id={layerOptionsBtnId}
+          aria-label={layerOptionsBtnTitle}
+          className="button wv-layers-options"
+          onClick={() => onOptionsClick(layer, title)}
+        >
           {layerOptionsBtnTitle}
         </DropdownItem>
-        <DropdownItem id={removeLayerBtnId} onClick={() => onRemoveClick(layer.id)}>
+        <DropdownItem
+          id={removeLayerBtnId}
+          onClick={() => onRemoveClick(layer.id)}
+        >
           {removeLayerBtnTitle}
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );
 
-  const renderControls = () => (
+  const renderControls = () => !isAnimating && (
     <>
       {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
       <a
@@ -229,6 +243,7 @@ function LayerRow (props) {
       </a>
     </>
   );
+
   const renderVectorIcon = () => {
     const classNames = hasClickableFeature
       ? 'layer-pointer-icon'
@@ -265,24 +280,39 @@ function LayerRow (props) {
     toggleShowButtons(false);
   };
 
-  const baseClasses = 'item productsitem';
-  const containerClass = isDisabled
-    ? `${baseClasses} disabled layer-hidden`
-    : !isVisible
-      ? `${baseClasses} layer-hidden`
-      : zot
-        ? `${baseClasses} layer-enabled layer-visible zotted`
-        : `${baseClasses} layer-enabled layer-visible`;
-  const visibilityToggleClass = isDisabled
-    ? `${visibilityButtonClasses} layer-hidden`
-    : !isVisible
-      ? `${visibilityButtonClasses} layer-hidden`
-      : `${visibilityButtonClasses} layer-enabled layer-visible`;
+  const getLayerItemClasses = () => {
+    let baseClasses = 'item productsitem layer-enabled';
+    if (isAnimating) baseClasses += ' disabled';
+    if (!isVisible || isDisabled) {
+      baseClasses += ' layer-hidden';
+    } else {
+      baseClasses += ' layer-visible';
+    }
+    if (zot) baseClasses += ' zotted';
+    return baseClasses;
+  };
+
+  const getVisibilityToggleClass = () => {
+    let baseClasses = 'visibility';
+    if (isDisabled || isAnimating) {
+      baseClasses += ' disabled';
+    } else {
+      baseClasses += ' layer-enabled';
+    }
+    if (isVisible && !isDisabled) {
+      baseClasses += ' layer-visible';
+    } else {
+      baseClasses += ' layer-hidden';
+    }
+    return baseClasses;
+  };
+
   const visibilityTitle = !isVisible && !isDisabled
     ? 'Show layer'
     : isDisabled
       ? getDisabledTitle(layer)
       : 'Hide layer';
+
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
@@ -293,16 +323,18 @@ function LayerRow (props) {
     <>
       <a
         id={`hide${encodedLayerId}`}
-        className={visibilityToggleClass}
+        className={getVisibilityToggleClass()}
         aria-label={visibilityTitle}
-        onClick={() => toggleVisibility(layer.id, !isVisible)}
+        onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
       >
-        <UncontrolledTooltip
-          placement="right"
-          target={`hide${encodedLayerId}`}
-        >
-          {visibilityTitle}
-        </UncontrolledTooltip>
+        {!isAnimating && (
+          <UncontrolledTooltip
+            placement="right"
+            target={`hide${encodedLayerId}`}
+          >
+            {visibilityTitle}
+          </UncontrolledTooltip>
+        )}
         <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
       </a>
 
@@ -335,7 +367,7 @@ function LayerRow (props) {
 
   return (
     <Draggable
-      isDragDisabled={isEmbedModeActive}
+      isDragDisabled={isEmbedModeActive || isAnimating}
       draggableId={`${encodedLayerId}-${compareState}`}
       index={index}
       direction="vertical"
@@ -343,7 +375,7 @@ function LayerRow (props) {
       {(provided, snapshot) => (isInProjection ? (
         <li
           id={`${compareState}-${encodedLayerId}`}
-          className={containerClass}
+          className={getLayerItemClasses()}
           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
           ref={provided.innerRef}
           onMouseOver={mouseOver}
@@ -374,7 +406,7 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui, globalUnit,
+      browser, palettes, config, embed, map, compare, proj, ui, globalUnit, animation,
     } = state;
     const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
@@ -407,6 +439,7 @@ const makeMapStateToProps = () => {
       isMobile,
       isVisible,
       isVectorLayer: isVector,
+      isAnimating: animation.isPlaying,
       hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
@@ -518,4 +551,5 @@ LayerRow.propTypes = {
   openVectorAlertModal: PropTypes.func,
   zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
+  isAnimating: PropTypes.bool,
 };
