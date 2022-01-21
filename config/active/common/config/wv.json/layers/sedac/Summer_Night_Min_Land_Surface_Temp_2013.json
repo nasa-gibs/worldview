@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "Summer_Night_Min_Land_Surface_Temp_2013": {
+      "id": "Summer_Night_Min_Land_Surface_Temp_2013",
+      "title": "Summer Nighttime Minimum Land Surface Temperature",
+      "subtitle": "Global Summer Land Surface Temperature (LST) Grids, v1 (2013)",
+      "description": "sedac/Summer_Night_Min_Land_Surface_Temp_2013",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "CIESIN_SEDAC_SDEI_LST2013",
+      "inactive": true,
+      "wrapX": true,
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

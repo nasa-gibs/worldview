@@ -20,7 +20,7 @@
                 "Aura/OMI": {
                     "id": "aura-omi",
                     "title": "Aura/OMI",
-                    "description": "omi/Ozone",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "OMI_Ozone_DOAS_Total_Column",
@@ -34,13 +34,14 @@
                     "description": "omps/Ozone",
                     "image": "",
                     "settings": [
-                        "OMPS_Ozone_Total_Column"
+                        "OMPS_Ozone_Total_Column",
+                        "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/Ozone",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly"

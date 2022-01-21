@@ -1,0 +1,1 @@
+This MODIS/Aqua image shows the ash plume dissipating after the initial eruption in the morning. The Terra satellite has an approximate 10:30am local time satellite overpass whilst the Aqua satellite has an approximate 1:30pm local time overpass.

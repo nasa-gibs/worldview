@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L3_Passive_Brightness_Temp_H": {
+      "id": "SMAP_L3_Passive_Brightness_Temp_H",
+      "title": "Corrected Brightness Temperature (L3, Passive, H Polarization)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L3_Passive_Brightness_Temp_H",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "SPL3SMP",
+      "wrapadjacentdays": true
+    }
+  }
+}

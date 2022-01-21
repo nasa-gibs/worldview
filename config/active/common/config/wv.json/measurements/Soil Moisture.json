@@ -1,0 +1,30 @@
+{
+    "measurements": {
+        "Soil Moisture": {
+            "id": "soil-moisture",
+            "title":    "Soil Moisture",
+            "subtitle": "Aqua/AMSR-E, CYGNSS/DDMI, GCOM-W1/AMSR2, SMAP/Radar, SMAP/Radiometer, SMAP/Model Value-Added, SMAP/Radiometer and Sentinel-1/Radar, SAC-D/Aquarius, GLDAS, NLDAS, MERRA-2",
+            "sources": {
+                "CYGNSS/DDMI": {
+                    "id": "cygnss-ddmi",
+                    "title": "CYGNSS/DDMI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "CYGNSS_L3_Soil_Moisture_SDR_Daily"
+                    ]
+                },
+              "SMAP/Radiometer": {
+                    "id": "smap-radiometer",
+                    "title": "SMAP/Radiometer",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L3_Passive_Day_Soil_Moisture",
+                        "SMAP_L3_Passive_Night_Soil_Moisture"
+                    ]
+                }
+            }
+        }
+    }
+}

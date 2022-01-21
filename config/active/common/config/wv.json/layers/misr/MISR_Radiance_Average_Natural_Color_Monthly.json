@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MISR_Radiance_Average_Natural_Color_Monthly": {
+      "id": "MISR_Radiance_Average_Natural_Color_Monthly",
+      "title": "Radiance Average (Monthly, Natural Color)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_Radiance_Average_Natural_Color_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Radiance",
+      "product": "MIL3MRD",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

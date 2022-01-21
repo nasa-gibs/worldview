@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate": {
+      "id": "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate",
+      "title": "Deep Blue Aerosol Type",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

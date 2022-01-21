@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day": {
+      "id": "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day",
+      "title": "Carbon Monoxide (L3, Monthly, Day, Surface Mixing Ratio)",
+      "subtitle": "Terra / MOPITT",
+      "description": "mopitt/MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day",
+      "tags": "co",
+      "group": "overlays",
+      "layergroup": "Carbon Monoxide",
+      "product": "MOP03JM",
+      "wrapadjacentdays": true,
+      "inactive": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

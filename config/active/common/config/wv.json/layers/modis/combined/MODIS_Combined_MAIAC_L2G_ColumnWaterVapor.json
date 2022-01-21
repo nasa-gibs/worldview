@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor": {
+      "id": "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor",
+      "title": "MAIAC Columnar Water Vapor",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_MAIAC_L2G_ColumnWaterVapor",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Water Vapor",
+      "product": "",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

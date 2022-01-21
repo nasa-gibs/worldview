@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Night": {
+      "id": "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Night",
+      "title": "Land Surface Temperature (L3, Monthly, Night)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Monthly_Night",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "product": "MOD11C3",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

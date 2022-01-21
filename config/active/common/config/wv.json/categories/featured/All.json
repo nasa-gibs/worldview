@@ -1,0 +1,16 @@
+{
+  "categories": {
+      "featured": {
+          "All": {
+              "title": "All",
+              "placement": "first",
+              "id": "featured-all",
+              "description": "",
+              "measurements": [
+                "Corrected Reflectance",
+                "Sea Surface Temperature - Featured"
+              ]
+          }
+      }
+  }
+}

@@ -86,14 +86,14 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const { selected } = state.vectorStyles;
-  const activeLayers = getAllActiveLayers(state).reverse();
+  const activeLayers = [...getAllActiveLayers(state)].reverse();
   let layerGroups;
   let layerGroup;
 
   if (olMap) {
     layerGroups = olMap.getLayers().getArray();
     if (compare && compare.active) {
-      if (layerGroups.length === 2) {
+      if (layerGroups.length > 1) {
         layerGroup = layerGroups[0].get('group') === compare.activeString
           ? layerGroups[0]
           : layerGroups[1].get('group') === compare.activeString
@@ -118,6 +118,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         });
       }
     });
+  }
+  if (!layer) {
+    return null;
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
 

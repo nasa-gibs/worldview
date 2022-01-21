@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_L3_Ice_Surface_Temp_Daily_Night": {
+      "id": "MODIS_Aqua_L3_Ice_Surface_Temp_Daily_Night",
+      "title": "Ice Surface Temperature (L3, Daily, Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_Ice_Surface_Temp_Daily_Night",
+      "tags": "ist",
+      "group": "overlays",
+      "layergroup": "Ice Surface Temperature",
+      "product": "MYD29P1N",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

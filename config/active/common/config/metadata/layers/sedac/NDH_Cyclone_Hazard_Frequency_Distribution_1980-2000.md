@@ -1,0 +1,5 @@
+The Cyclone Hazard: Frequency and Distribution layer indicates the relative distribution and frequency of global cyclone hazard. The information displayed in Worldview/Global Imagery Browse Services (GIBS) shows the range of the frequency of cyclones from 1980-2000: 1 to 65.
+
+The SEDAC Cyclone Hazard: Frequency and Distribution layer is a 2.5 minute grid based on more than 1,600 storm tracks for the period 1 January 1980 through 31 December 2000 for the Atlantic, Pacific, and Indian Oceans that were assembled and modeled at UNEP/GRID-Geneva PreView. Wind speeds around storm tracks were modeled using Holland's model (1997) to assess the grid cells likely to have been exposed to high wind levels. Post-modeling, the cells were divided into deciles, 10 classes consisting of approximately equal number of grid cells. The higher the value of the grid cell, the higher the decile ranking and the greater the frequency of the hazard relative to other cells.
+
+References: [doi:10.7927/H4CZ353K](https://doi.org/10.7927/H4CZ353K)

@@ -8,7 +8,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/ConvectiveRainwaterSource",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Convective_Rainwater_Source_700hPa_Monthly"

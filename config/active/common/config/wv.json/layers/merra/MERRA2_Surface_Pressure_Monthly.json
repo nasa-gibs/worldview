@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MERRA2_Surface_Pressure_Monthly": {
+      "id": "MERRA2_Surface_Pressure_Monthly",
+      "title": "Surface Pressure (Monthly)",
+      "subtitle": "MERRA-2",
+      "description": "merra/MERRA2_Surface_Pressure_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Surface Pressure",
+      "product": "M2IMNPASM",
+      "wrapadjacentdays": true
+    }
+  }
+}

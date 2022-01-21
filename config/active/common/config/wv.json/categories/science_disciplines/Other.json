@@ -1,0 +1,18 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Other": {
+                "title": "Other",
+                "id": "scientific-other",
+                "placement": "last",
+                "description": "",
+                "measurements": [
+                    "Blue Marble",
+                    "Latitude-Longitude Lines",
+                    "Reference Map",
+                    "Terrain Elevation"
+                ]
+            }
+        }
+    }
+}

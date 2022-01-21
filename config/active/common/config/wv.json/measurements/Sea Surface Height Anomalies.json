@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Sea Surface Height Anomalies": {
+            "id": "sea-surface-height-anomalies",
+            "title":    "Sea Surface Height Anomalies",
+            "subtitle": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2, Jason-3",
+            "sources": {
+                "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2, Jason-3": {
+                    "id": "tpj",
+                    "title": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2, Jason-3",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                      "JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies"
+                    ]
+                }
+            }
+        }
+    }
+}

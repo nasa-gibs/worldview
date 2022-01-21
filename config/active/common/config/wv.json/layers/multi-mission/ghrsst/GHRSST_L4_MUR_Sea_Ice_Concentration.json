@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "GHRSST_L4_MUR_Sea_Ice_Concentration": {
+      "id": "GHRSST_L4_MUR_Sea_Ice_Concentration",
+      "title": "Sea Ice Concentration (L4, MUR)",
+      "subtitle": "Multi-mission / GHRSST",
+      "description": "multi-mission/ghrsst/GHRSST_L4_MUR_Sea_Ice_Concentration",
+      "tags": "ghrsst podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Ice",
+      "product": "MUR-JPL-L4-GLOB-v4.1",
+      "wrapadjacentdays": true
+    }
+  }
+}

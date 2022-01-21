@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "SMAP_L3_Active_Passive_Brightness_Temp_V": {
+      "id": "SMAP_L3_Active_Passive_Brightness_Temp_V",
+      "title": "Disaggregated Brightness Temperature 9 km (L3, Active/Passive, V Polarization)",
+      "subtitle": "SMAP / Radar + Radiometer",
+      "description": "smap/SMAP_L3_Active_Passive_Brightness_Temp_V",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "SPL3SMAP",
+      "inactive": true,
+      "wrapadjacentdays": true
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Corrected Reflectance": {
+            "id": "corrected-reflectance",
+            "title":    "Corrected Reflectance",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, Landsat/WELD",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CorrectedReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor"
+                    ]
+                }
+            }
+        }
+    }
+}

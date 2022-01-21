@@ -1,0 +1,27 @@
+{
+  "version": 8,
+  "name": "SEDAC",
+  "sources": {
+    "GRUMP_Settlements": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/std/GRUMP_Settlements_v1.01_STD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [{
+
+    "id": "GRUMP_Settlements_v1.01_STD",
+    "source": "GRUMP_Settlements",
+    "source-layer": "GRUMP_Settlements_v1.01_STD",
+    "source-description": "Default",
+    "type": "circle",
+    "paint": {
+      "circle-radius": ["step", ["zoom"], 1, 17, 2, 19, 3, 22, 5],
+      "circle-color": "rgb(0, 123, 255)",
+      "circle-stroke-color": "rgba(0,0,0,0.7)",
+      "circle-opacity": 0.7,
+      "circle-stroke-width": 0.3
+    }
+  }]
+}

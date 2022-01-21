@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "Coastlines_15m": {
+      "id": "Coastlines_15m",
+      "title": "Coastlines",
+      "description": "reference/Coastlines_15m",
+      "group": "overlays",
+      "format": "image/png",
+      "layergroup": "Reference",
+      "noTransition": true,
+      "projections": {
+        "antarctic": {
+          "id": "Coastlines",
+          "subtitle": "SCAR Antarctic Digital Database / Coastlines",
+          "tags": "borders reference",
+          "source": "GIBS:antarctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "subtitle": "&copy; OpenStreetMap contributors",
+          "tags": "borders reference osm",
+          "source": "GIBS:geographic"
+        },
+        "arctic": {
+          "id": "Coastlines",
+          "subtitle": "&copy; OpenStreetMap contributors",
+          "tags": "borders reference osm",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        }
+      },
+      "wrapX": true
+    }
+  }
+}

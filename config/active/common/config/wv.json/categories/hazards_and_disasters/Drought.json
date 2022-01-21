@@ -1,0 +1,17 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Drought": {
+                "title": "Drought",
+                "id": "drought",
+                "description": "",
+                "image": "drought.jpg",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Precipitation Rate",
+                    "Soil Moisture"
+                ]
+            }
+        }
+    }
+}

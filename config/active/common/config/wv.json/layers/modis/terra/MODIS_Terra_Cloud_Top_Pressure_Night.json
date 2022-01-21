@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "MODIS_Terra_Cloud_Top_Pressure_Night": {
+      "id": "MODIS_Terra_Cloud_Top_Pressure_Night",
+      "title": "Cloud Top Pressure (Night)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Night",
+      "group": "overlays",
+      "layergroup": "Cloud Pressure",
+      "product": "MOD06_L2_NIGHT",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_4"
+        ]
+      },
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

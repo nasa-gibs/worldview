@@ -8,7 +8,7 @@
                 "SSMI": {
                     "id": "ssmi",
                     "title": "SSMI",
-                    "description": "multi-mission/IceVelocityGreenland",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MEaSUREs_Ice_Velocity_Greenland"

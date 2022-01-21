@@ -2,15 +2,13 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
-/**
- * Selectors
- */
+
 const listOfEvents = '#wv-events ul.map-item-list';
 const eventIcons = '.marker .event-icon';
 const firstEvent = '#wv-events ul.map-item-list .item:first-child h4';
 const secondEvent = '#wv-events #sidebar-event-EONET_99999';
 const selectedFirstEvent = '#wv-events ul.map-item-list .item-selected:first-child h4';
-const selectedMarker = '.marker-selected';
+const selectedMarker = '.marker.selected';
 const firstExternalEventLink = '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child';
 const trackMarker = '.track-marker';
 const layersTab = '#layers-sidebar-tab';
@@ -18,16 +16,6 @@ const layersTab = '#layers-sidebar-tab';
 module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-  },
-  'Loading an inactive event shows an alert': (c) => {
-    const inactiveEventAlert = '#event-unavailable-alert';
-    const inactiveAlertMsgContainer = `${inactiveEventAlert} .wv-alert-message`;
-    const inactiveEventMsg = 'The event with an id of EONET_5133 is no longer active.';
-
-    c.url(c.globals.url + localQueryStrings.closedEvent);
-    c.waitForElementVisible(inactiveEventAlert, TIME_LIMIT);
-    c.expect.element(inactiveEventAlert).to.be.present;
-    c.assert.containsText(inactiveAlertMsgContainer, inactiveEventMsg);
   },
   'Make sure that 4 fire layers are not present in layer list: use mock': (c) => {
     c.url(c.globals.url + localQueryStrings.mockEvents);
@@ -64,17 +52,19 @@ module.exports = {
       },
     );
   },
+
   'Use Mock to make sure appropriate number of event markers are appended to map': (c) => {
     c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
-      c.expect.elements(eventIcons).count.to.equal(9);
+      c.expect.elements(eventIcons).count.to.equal(8);
     });
   },
-  'On events tab click events list is loaded': (c) => {
+
+  'On events tab click, events list is loaded': (c) => {
     c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT);
   },
-  'Use Mock to ensure number of event track points is correct and event markers and tabs are not visible when layer tab is clicked': (c) => {
+  'Selecting event shows track points and markers which are not visible when switched to layer tab': (c) => {
     const globalSelectors = c.globals.selectors;
     c.click(secondEvent);
     c.waitForElementVisible(trackMarker, TIME_LIMIT, () => {
@@ -87,7 +77,8 @@ module.exports = {
       c.expect.element(eventIcons).to.be.present;
     });
   },
-  'Click Events tab and select an Event from the List': (c) => {
+
+  'Clicking an event in the list selects the event': (c) => {
     c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
       c.click(firstEvent);
@@ -127,8 +118,7 @@ module.exports = {
     c.click('#event_visibility_info .close').pause(500);
     c.expect.element('#event_visibility_info').to.not.be.present;
     c.click(globalSelectors.notificationDismissButton).pause(500);
-    c.expect.element(globalSelectors.notificationDismissButton).to.not.be
-      .present;
+    c.expect.element(globalSelectors.notificationDismissButton).to.not.be.present;
   },
   'Clicking selected event deselects event': (c) => {
     c.click(selectedFirstEvent).pause(500);

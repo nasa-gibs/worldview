@@ -1,0 +1,1 @@
+<p>Each orange dot/active fire detection represents the center of an approximately 1km pixel flagged as containing one or more fires. The "location" of the dot is the center point of the pixel, and not necessarily the coordinates of the actual fire. <br> Let's use the animation feature to see when these fires started.</p>

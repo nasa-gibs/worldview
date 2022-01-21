@@ -8,7 +8,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/combined/IsotropicKernelParameters",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day"

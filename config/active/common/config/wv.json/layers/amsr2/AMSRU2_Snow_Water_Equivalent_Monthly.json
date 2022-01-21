@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "AMSRU2_Snow_Water_Equivalent_Monthly": {
+      "id": "AMSRU2_Snow_Water_Equivalent_Monthly",
+      "title": "Snow Water Equivalent (25 km, Monthly)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Snow_Water_Equivalent_Monthly",
+      "tags": "amsr-u2 amsru2 swe",
+      "group": "overlays",
+      "layergroup": "Snow Water Equivalent",
+      "product": "AU_MoSno"
+    }
+  }
+}

@@ -12,7 +12,7 @@ import {
 } from '../../../../modules/product-picker/actions';
 import { getActiveLayersMap } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
-import getSelectedDate from '../../../../modules/date/selectors';
+import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 import util from '../../../../util/util';
 

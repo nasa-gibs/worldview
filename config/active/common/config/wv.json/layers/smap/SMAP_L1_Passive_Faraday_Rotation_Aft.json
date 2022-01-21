@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "SMAP_L1_Passive_Faraday_Rotation_Aft": {
+      "id": "SMAP_L1_Passive_Faraday_Rotation_Aft",
+      "title": "Faraday Rotation Angle (L1, Passive, Aft)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L1_Passive_Faraday_Rotation_Aft",
+      "group": "overlays",
+      "layergroup": "Faraday Rotation",
+      "product": "SPL1BTB"
+    }
+  }
+}

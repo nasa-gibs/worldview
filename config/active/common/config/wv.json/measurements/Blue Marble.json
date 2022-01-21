@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Blue Marble": {
+            "id": "blue-marble",
+            "title":    "Blue Marble",
+            "subtitle": "NASA EO/MODIS",
+            "sources": {
+                "NASAEO/MODIS": {
+                    "id": "nasaeo-modis",
+                    "title": "NASA EO/MODIS",
+                    "description": "modis/BlueMarble",
+                    "image": "",
+                    "settings": [
+                        "BlueMarble_ShadedRelief_Bathymetry"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@ import xmltodict
 import isodate
 from processTemporalLayer import process_temporal
 from collections import OrderedDict
+import traceback
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -29,7 +30,7 @@ config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
 
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 
 tolerant = config.get("tolerant", False)
@@ -72,7 +73,11 @@ def process_layer(gc_layer, wv_layers):
     if "Dimension" in gc_layer:
         dimension = gc_layer["Dimension"]
         if dimension["ows:Identifier"] == "Time":
-            wv_layer = process_temporal(wv_layer, dimension["Value"])
+            try:
+                wv_layer = process_temporal(wv_layer, dimension["Value"])
+            except Exception as e:
+                print(traceback.format_exc())
+                sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, ident, "Error processing time values."))
     # Extract matrix set
     matrixSetLink = gc_layer["TileMatrixSetLink"]
     matrixSet = matrixSetLink["TileMatrixSet"]
@@ -189,8 +194,8 @@ def process_entry(entry):
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, ident))
         except Exception as e:
             error_count += 1
-            sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                    ident, str(e)))
+            print(traceback.format_exc())
+            sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id, ident, str(e)))
     else:
         for gc_layer in gc_contents["Layer"]:
             ident = gc_layer["ows:Identifier"]
@@ -202,8 +207,8 @@ def process_entry(entry):
                 sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
             except Exception as e:
                 error_count += 1
-                sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                        ident, str(e)))
+                print(traceback.format_exc())
+                sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id, ident, str(e)))
 
     def process_matrix_set(gc_matrix_set):
         tileMatrixArr = gc_matrix_set["TileMatrix"]
@@ -241,7 +246,7 @@ def process_entry(entry):
             process_matrix_set(gc_matrix_set)
 
     output_file = os.path.join(output_dir, entry["to"])
-    with open(output_file, "w") as fp:
+    with open(output_file, "w", encoding="utf-8") as fp:
         json.dump(wv, fp, **json_options)
     print("%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
             error_count, warning_count, layer_count, entry["source"]))

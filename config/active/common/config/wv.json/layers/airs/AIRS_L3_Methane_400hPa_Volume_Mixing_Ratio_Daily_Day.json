@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "AIRS_L3_Methane_400hPa_Volume_Mixing_Ratio_Daily_Day": {
+      "id": "AIRS_L3_Methane_400hPa_Volume_Mixing_Ratio_Daily_Day",
+      "title": "Methane (L3, 400 hPa, Day, Daily)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_Methane_400hPa_Volume_Mixing_Ratio_Daily_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STD",
+      "wrapadjacentdays": true,
+      "layergroup": "Methane",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

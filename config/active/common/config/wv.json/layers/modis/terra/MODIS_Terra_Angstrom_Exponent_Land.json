@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Terra_Angstrom_Exponent_Land": {
+      "id": "MODIS_Terra_Angstrom_Exponent_Land",
+      "title": "Deep Blue Aerosol Angstrom Exponent (Land)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Angstrom_Exponent_Land",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "product": "MOD04_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

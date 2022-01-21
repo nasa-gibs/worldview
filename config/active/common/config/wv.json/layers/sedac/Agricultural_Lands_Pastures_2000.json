@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "Agricultural_Lands_Pastures_2000": {
+      "id": "Agricultural_Lands_Pastures_2000",
+      "title": "Pastures",
+      "subtitle": "Global Agricultural Lands, v1 (2000)",
+      "description": "sedac/Agricultural_Lands_Pastures_2000",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": "Land Cover",
+      "product": "CIESIN_SEDAC_AGLANDS_PAS2000",
+      "inactive": true,
+      "wrapX": true
+    }
+  }
+}

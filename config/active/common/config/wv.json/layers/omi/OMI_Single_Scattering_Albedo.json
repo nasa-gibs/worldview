@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "OMI_Single_Scattering_Albedo": {
+      "id": "OMI_Single_Scattering_Albedo",
+      "title": "Aerosol Single Scattering Albedo (Near-UV, 388.0 nm)",
+      "subtitle": "Aura / OMI",
+      "description": "omi/OMI_Single_Scattering_Albedo",
+      "group": "overlays",
+      "layergroup": "Aerosol Albedo",
+      "product": "OMAERUVd",
+      "tags": "ultra violet",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

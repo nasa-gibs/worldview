@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "GPW_Population_Density_2000": {
+      "id": "GPW_Population_Density_2000",
+      "title": "Population Density, 2000",
+      "subtitle": "GPWv4: UN-Adjusted Population Density, v4 (2000, 2005, 2010, 2015, 2020)",
+      "description": "sedac/GPW_Population_Density_2000",
+      "tags": "human sedac population",
+      "group": "overlays",
+      "layergroup": "Population Density",
+      "product": "CIESIN_SEDAC_GPWv4_APDENS_WPP_2015",
+      "inactive": true,
+      "wrapX": true
+    }
+  }
+}

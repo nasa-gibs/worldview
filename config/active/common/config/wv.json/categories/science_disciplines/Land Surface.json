@@ -1,0 +1,18 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Land Surface": {
+                "title": "Land Surface",
+                "id": "land-surface",
+                "image": "land-surface.jpg",
+                "description": "",
+                "measurements": [
+                    "Blue Marble",
+                    "Corrected Reflectance",
+                    "Soil Moisture",
+                    "Terrain Elevation"
+                ]
+            }
+        }
+    }
+}

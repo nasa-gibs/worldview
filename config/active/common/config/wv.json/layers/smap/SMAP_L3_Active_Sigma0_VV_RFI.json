@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L3_Active_Sigma0_VV_RFI": {
+      "id": "SMAP_L3_Active_Sigma0_VV_RFI",
+      "title": "Sigma0 3 km RFI (L3, Active, VV Polarization)",
+      "subtitle": "SMAP / Radar",
+      "description": "smap/SMAP_L3_Active_Sigma0_VV_RFI",
+      "group": "overlays",
+      "layergroup": "Sigma0",
+      "inactive": true,
+      "wrapadjacentdays": true
+    }
+  }
+}

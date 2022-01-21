@@ -26,8 +26,8 @@
                 "OCO-2": {
                     "id": "oco-2",
                     "title": "OCO-2",
-                    "description": "oco2/CarbonDioxide",
-                    "image": "oco2/CarbonDioxide",
+                    "description": "",
+                    "image": "",
                     "settings": [
                         "OCO-2_Carbon_Dioxide_Global_Mean_Difference",
                         "OCO-2_Carbon_Dioxide_Total_Column_Average",
@@ -37,11 +37,13 @@
                 "OCO-3": {
                     "id": "oco-3",
                     "title": "OCO-3",
-                    "description": "oco3/CarbonDioxide",
-                    "image": "oco3/CarbonDioxide",
+                    "description": "",
+                    "image": "",
                     "settings": [
                         "OCO-3_Carbon_Dioxide_Global_Mean_Difference",
-                        "OCO-3_Carbon_Dioxide_Total_Column_Average"
+                        "OCO-3_Carbon_Dioxide_Total_Column_Average",
+                        "OrbitTracks_ISS_Ascending",
+                        "OrbitTracks_ISS_Descending"
                     ]
                 }
             }

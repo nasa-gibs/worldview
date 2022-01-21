@@ -1,0 +1,22 @@
+{
+  "layers": {
+    "OCO-3_Carbon_Dioxide_Total_Column_Average": {
+      "id": "OCO-3_Carbon_Dioxide_Total_Column_Average",
+      "title": "Carbon Dioxide (Total Column Average)",
+      "subtitle": "OCO-3",
+      "description": "oco3/OCO-3_Carbon_Dioxide_Total_Column_Average",
+      "tags": "oco3 co2",
+      "group": "overlays",
+      "layergroup": "Carbon Dioxide",
+      "product": "OCO3_L2_Lite_FP",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_ISS_Ascending",
+        "OrbitTracks_ISS_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

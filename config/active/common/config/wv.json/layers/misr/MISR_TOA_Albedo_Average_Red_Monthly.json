@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MISR_TOA_Albedo_Average_Red_Monthly": {
+      "id": "MISR_TOA_Albedo_Average_Red_Monthly",
+      "title": "TOA Albedo Average (Red, Monthly)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_TOA_Albedo_Average_Red_Monthly",
+      "tags": "top of atmosphere",
+      "group": "overlays",
+      "layergroup": "TOA Albedo",
+      "product": "MIL3MAL",
+      "wrapadjacentdays": true
+    }
+  }
+}

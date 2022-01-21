@@ -1,0 +1,29 @@
+{
+    "categories": {
+        "science disciplines": {
+            "All": {
+                "title": "All",
+                "id": "scientific-all",
+                "placement": "first",
+                "description": "",
+                "measurements": [
+                  "Blue Marble",
+                  "Chlorophyll A",
+                  "Corrected Reflectance",
+                  "Latitude-Longitude Lines",
+                  "Liquid Water Equivalent",
+                  "Precipitation Rate",
+                  "Reference Map",
+                  "Sea Ice",
+                  "Sea Surface Height Anomalies",
+                  "Sea Surface Salinity",
+                  "Sea Surface Temperature",
+                  "Sea Surface Temperature Anomalies",
+                  "Soil Moisture",
+                  "Terrain Elevation",
+                  "Wind Speed"
+                ]
+            }
+        }
+    }
+}

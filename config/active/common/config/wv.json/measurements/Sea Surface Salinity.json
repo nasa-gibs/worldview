@@ -1,0 +1,30 @@
+{
+    "measurements": {
+        "Sea Surface Salinity": {
+            "id": "sea-surface-salinity",
+            "title":    "Sea Surface Salinity",
+            "subtitle": "SAC-D/Aquarius, SMAP/Radiometer",
+            "sources": {
+                "SAC-D/Aquarius": {
+                    "id": "sac-d-aquarius",
+                    "title": "SAC-D/Aquarius",
+                    "description": "aquarius/SeaSurfaceSalinity",
+                    "image": "",
+                    "settings": [
+                      "Aquarius_Sea_Surface_Salinity_L3_7Day_RunningMean"
+                    ]
+                },
+                    "SMAP/Radiometer": {
+                        "id": "smap-radiometer",
+                        "title": "SMAP/Radiometer",
+                        "description": "",
+                        "image": "",
+                        "settings": [
+                          "SMAP_L3_Sea_Surface_Salinity_REMSS_8Day_RunningMean",
+                          "SMAP_L3_Sea_Surface_Salinity_CAP_8Day_RunningMean"
+                        ]
+                    }
+            }
+        }
+    }
+}

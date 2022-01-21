@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual": {
+      "id": "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual",
+      "title": "Surface Reflectance (NBAR, True Color, Global, Annual, V3.1)",
+      "subtitle": "Landsat / WELD",
+      "description": "landsat/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual",
+      "tags": "corrected, Nadir BRDF Adjusted Reflectance, Bi-directional Reflectance Distribution Function",
+      "group": "baselayers",
+      "layergroup": "Corrected Reflectance",
+      "product": "",
+      "inactive": true,
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

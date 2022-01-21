@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "SMAP_L1_Passive_Brightness_Temp_Aft_V_QA": {
+      "id": "SMAP_L1_Passive_Brightness_Temp_Aft_V_QA",
+      "title": "Uncorrected Brightness Temperature 36 km QA (L1, Passive, Aft, V Polarization)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L1_Passive_Brightness_Temp_Aft_V_QA",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "SPL1CTB"
+    }
+  }
+}

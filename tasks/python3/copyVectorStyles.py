@@ -25,7 +25,7 @@ config_file = args[0]
 vectorstyles_input_dir = args[1]
 output_dir = args[2]
 
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 skips = config.get("skipPalettes", [])
 

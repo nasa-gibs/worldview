@@ -62,7 +62,10 @@ module.exports = {
     const disableMessage = 'You must exit comparison mode to download data';
     c.assert.cssClassPresent(dataDownloadTabButton, 'disabled');
     c.assert.attributeContains(dataDownloadTabButton, 'aria-label', disableMessage);
-    c.assert.attributeContains(dataDownloadTabButton, 'title', disableMessage);
+    c.moveToElement('#download-sidebar-tab', 10, 10);
+    c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
+      c.assert.containsText(tooltipSelector, disableMessage);
+    });
 
     // Clicking does not switch tabs
     c.click(dataDownloadTabButton);
@@ -79,7 +82,10 @@ module.exports = {
     c.expect.element('#wv-eventscontent').to.not.be.present;
     c.assert.cssClassPresent(eventsSidebarTabButton, 'disabled');
     c.assert.attributeContains(eventsSidebarTabButton, 'aria-label', disableMessage);
-    c.assert.attributeContains(eventsSidebarTabButton, 'title', disableMessage);
+    c.moveToElement('#events-sidebar-tab', 10, 10);
+    c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
+      c.assert.containsText(tooltipSelector, disableMessage);
+    });
   },
 
   'Removing layer removes correct layer from correct layer group': (c) => {

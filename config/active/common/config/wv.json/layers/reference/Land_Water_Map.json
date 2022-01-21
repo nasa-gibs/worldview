@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "Land_Water_Map": {
+      "id": "Land_Water_Map",
+      "title": "Land / Water Map",
+      "description": "reference/Land_Water_Map",
+      "tags": "borders",
+      "group": "baselayers",
+      "format": "image/png",
+      "type": "wmts",
+      "layergroup": "Reference",
+      "projections": {
+        "antarctic": {
+          "layer": "SCAR_Land_Water_Map",
+          "subtitle": "SCAR Antarctic Digital Database",
+          "source": "GIBS:antarctic",
+          "matrixSet": "250m"
+        },
+        "arctic": {
+          "layer": "OSM_Land_Water_Map",
+          "subtitle": "&copy; OpenStreetMap contributors",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "layer": "OSM_Land_Water_Map",
+          "subtitle": "&copy; OpenStreetMap contributors",
+          "source": "GIBS:geographic",
+          "matrixSet": "250m"
+        }
+      },
+      "wrapX": true
+    }
+  }
+}

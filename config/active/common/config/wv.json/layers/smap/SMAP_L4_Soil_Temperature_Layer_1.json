@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L4_Soil_Temperature_Layer_1": {
+      "id": "SMAP_L4_Soil_Temperature_Layer_1",
+      "title": "Surface Soil Temperature 9 km (L4, 12z Instantaneous)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Soil_Temperature_Layer_1",
+      "group": "overlays",
+      "layergroup": "Soil Temperature",
+      "product": "SPL4SMAU",
+      "wrapadjacentdays": true
+    }
+  }
+}

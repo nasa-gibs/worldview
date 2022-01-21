@@ -41,12 +41,12 @@ module.exports = {
   'Toggling to B compare side changes mobile date picker date': (c) => {
     // confirm initial A mobile date picker date
     c.waitForElementVisible(mobileDatePickerSelectButton, TIME_LIMIT, (e) => {
-      c.assert.containsText(mobileDatePickerSelectButton, '2018-08-17');
+      c.assert.containsText(mobileDatePickerSelectButton, '2018 AUG 17');
     });
     // click B compare toggle button and confirm B mobile date picker date
     c.click(bMobileCompareButton);
     c.waitForElementVisible(mobileDatePickerSelectButton, TIME_LIMIT, (e) => {
-      c.assert.containsText(mobileDatePickerSelectButton, '2018-08-16');
+      c.assert.containsText(mobileDatePickerSelectButton, '2018 AUG 16');
     });
   },
 

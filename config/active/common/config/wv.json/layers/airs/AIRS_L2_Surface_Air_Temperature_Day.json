@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AIRS_L2_Surface_Air_Temperature_Day": {
+      "id": "AIRS_L2_Surface_Air_Temperature_Day",
+      "title": "Surface Air Temperature (L2, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Surface_Air_Temperature_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": "Temperature",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

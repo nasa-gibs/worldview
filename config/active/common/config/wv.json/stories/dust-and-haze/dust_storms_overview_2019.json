@@ -1,0 +1,60 @@
+{
+  "stories": {
+    "dust_storms_overview_2019": {
+      "id": "dust_storms_overview_2019",
+      "type": "dust-and-haze",
+      "title": "Dust Storms",
+      "description": "View dust storms from a satellite's perspective.",
+      "backgroundImage": "dust_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-207.35143578589685,-95.47050496575888,185.11940156978534,86.74809809223642&t=2019-02-01-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MERRA2_Dust_Surface_Mass_Concentration_Monthly,MERRA2_Dust_Surface_Mass_Concentration_PM25_Monthly(hidden),MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-64.01813363483058,-0.5882954090996471,10.341185121696746,33.93567401357376&t=2019-08-30-T00%3A00%3A00Z&as=2019-08-22-T00%3A00%3A00Z&ae=2019-08-31-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&ab=on"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=12.475446192767667,-0.4793315568688481,72.85535571312502,32.3886089797392&t=2019-04-22-T00%3A00%3A00Z&as=2019-04-22-T00%3A00%3A00Z&ae=2019-04-28-T00%3A00%3A00Z&l=AIRS_L2_Dust_Score_Day(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=dust_storms_overview_2019&al=true&av=1.5&ab=on"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=59.04221627970749,24.64396408207581,108.31309705061092,47.51973015428098&t=2019-05-19-T00%3A00%3A00Z&l=Reference_Labels_15m,OMPS_Aerosol_Index,Reference_Features_15m(hidden),Coastlines_15m(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-155.11641872527633,54.30769055906417,-137.407896341408,62.52950452300304&t=2017-11-15-T00%3A00%3A00Z&l=MODIS_Aqua_Aerosol_Optical_Depth_3km(hidden),MODIS_Terra_Aerosol_Optical_Depth_3km(hidden),Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        }
+      ]
+    }
+  }
+}

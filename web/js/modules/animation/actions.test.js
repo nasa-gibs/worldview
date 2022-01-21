@@ -70,7 +70,7 @@ describe('Open, play, stop, close and toggle actions', () => {
   );
 });
 describe('Animation Datechange actions', () => {
-  const now = new Date();
+  const now = util.now();
   const then = util.dateAdd(now, 'day', -7);
   test(
     `changeStartDate action returns ${

@@ -17,7 +17,7 @@ category_dict = {}
 for root, dirs, files in os.walk(category_directory):
     for file in files:
       file_path = os.path.join(root, file)
-      with open(file_path) as category_config:
+      with open(file_path, "r", encoding="utf-8") as category_config:
         config = json.load(category_config)
         try:
           category = list(config['categories'])[0]
@@ -26,6 +26,6 @@ for root, dirs, files in os.walk(category_directory):
           print("%s ERROR: Could not read category config. Check formatting of: %s" % (prog, file))
           sys.exit(1)
 
-with open(output_dir + '/categoryGroupOrder.json', "w") as fp:
+with open(output_dir + '/categoryGroupOrder.json', "w", encoding="utf-8") as fp:
   json.dump({ 'categoryGroupOrder': list(category_dict) }, fp, indent=2, sort_keys=True)
   print("%s Successfully generated categoryGroupOrder.json with these categories: %s" % (prog, list(category_dict)))

@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "SMAP_L3_Passive_Day_Freeze_Thaw": {
+      "id": "SMAP_L3_Passive_Day_Freeze_Thaw",
+      "title": "Freeze/Thaw 36 km (L3, Passive, Day)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L3_Passive_Day_Freeze_Thaw",
+      "group": "overlays",
+      "layergroup": "Freeze/Thaw",
+      "product": "SPL3FTP",
+      "tracks": [
+        "OrbitTracks_SMAP_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

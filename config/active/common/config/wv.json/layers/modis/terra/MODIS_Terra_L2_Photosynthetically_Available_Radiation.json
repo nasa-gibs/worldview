@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Terra_L2_Photosynthetically_Available_Radiation": {
+      "id": "MODIS_Terra_L2_Photosynthetically_Available_Radiation",
+      "title": "Photosynthetically Available Radiation (L2)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L2_Photosynthetically_Available_Radiation",
+      "tags": "par",
+      "group": "overlays",
+      "layergroup": "Photosynthetically Available Radiation",
+      "product": "",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

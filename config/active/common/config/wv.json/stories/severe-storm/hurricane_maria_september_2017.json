@@ -1,0 +1,56 @@
+{
+  "stories": {
+    "hurricane_maria_september_2017": {
+      "id": "hurricane_maria_september_2017",
+      "type": "severe-storm",
+      "title": "Hurricane Maria (September 2017)",
+      "description": "Hurricane Maria devastated Puerto Rico. Follow the storm as it forms from a tropical depression to a category 5 hurricane.",
+      "backgroundImage": "background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Earth Observatory - Hurricane Maria",
+          "link": "https://earthobservatory.nasa.gov/images/event/91003/hurricane-maria"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m(hidden)&t=2017-09-25-T00%3A00%3A00Z&z=3&v=-107.24207099143044,-2.0669535253145774,-24.811280146353198,37.83183898789295&ab=on&as=2017-09-18T00%3A00%3A00Z&ae=2017-09-25T00%3A00%3A00Z&av=3&al=true"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2017-09-20-T00%3A00%3A00Z&z=3&v=-88.41235502068209,7.635276360042516,-47.69132538906318,27.345385841458054"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Precipitation_Rate(opacity=0.42),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2017-09-20-T00%3A00%3A00Z&z=3&v=-88.41235502068209,7.635276360042516,-47.69132538906318,27.345385841458054"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Features_15m,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_Brightness_Temp_BandI5_Day,MODIS_Terra_Brightness_Temp_Band31_Day(hidden),Reference_Labels_15m(hidden),Coastlines_15m(hidden)&t=2017-09-20-T00%3A00%3A00Z&z=3&v=-80.61751401300474,11.200071704159402,-54.04656045879581,24.061151306439694&ab=off&as=2017-09-18T00%3A00%3A00Z&ae=2017-09-25T00%3A00%3A00Z&av=3&al=false"
+        }
+      ]
+    }
+  }
+}

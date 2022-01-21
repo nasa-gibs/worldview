@@ -16,16 +16,13 @@ import {
   SET_DISABLED_CLASSIFICATION,
 } from './constants';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
-import util from '../../util/util';
 
-const { browser } = util;
 export const defaultPaletteState = {
   rendered: {},
   custom: {},
   active: {},
   activeB: {},
   isLoading: {},
-  supported: !(browser.ie || !browser.webWorkers || !browser.cors),
 };
 export function getInitialPaletteState(config) {
   const rendered = lodashGet(config, 'palettes.rendered') || {};

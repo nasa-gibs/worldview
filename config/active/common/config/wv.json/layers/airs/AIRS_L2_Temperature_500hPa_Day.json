@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AIRS_L2_Temperature_500hPa_Day": {
+      "id": "AIRS_L2_Temperature_500hPa_Day",
+      "title": "Temperature (L2, 500 hPa, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Temperature_500hPa_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": "Temperature",
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

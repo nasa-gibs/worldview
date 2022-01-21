@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_L2_Sea_Surface_Temp_Night": {
+      "id": "MODIS_Aqua_L2_Sea_Surface_Temp_Night",
+      "title": "Sea Surface Temperature (Night, L2)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L2_Sea_Surface_Temp_Night",
+      "tags": "sst",
+      "group": "overlays",
+      "layergroup": "Sea Surface Temperature",
+      "product": "",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

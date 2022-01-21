@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture": {
+      "id": "SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture",
+      "title": "Root Zone Soil Moisture Uncertainty 9 km (L4, 12z Instantaneous)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture",
+      "group": "overlays",
+      "layergroup": "Soil Moisture",
+      "product": "SPL4SMAU",
+      "wrapadjacentdays": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "OMPS_SO2_Lower_Troposphere": {
+      "id": "OMPS_SO2_Lower_Troposphere",
+      "title": "Sulfur Dioxide (Lower Troposphere)",
+      "subtitle": "Suomi NPP / OMPS",
+      "description": "omps/OMPS_SO2_Lower_Troposphere",
+      "tags": "SO2, sulphur",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Sulfur Dioxide",
+      "product": "NMSO2-PCA-L2",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

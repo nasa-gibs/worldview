@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "MODIS_Terra_L3_EVI_Monthly": {
+      "id": "MODIS_Terra_L3_EVI_Monthly",
+      "title": "Enhanced Vegetation Index (L3, Monthly)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_EVI_Monthly",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices",
+      "product": "MYD13A3",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

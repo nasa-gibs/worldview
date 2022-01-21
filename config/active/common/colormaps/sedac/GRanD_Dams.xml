@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Dams">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="152,230,0"   transparent="false" ref="2"/>
+      <ColorMapEntry rgb="168,0,0"     transparent="false" ref="3"/>
+      <ColorMapEntry rgb="230,230,0"   transparent="false" ref="4"/>
+      <ColorMapEntry rgb="137,112,68"  transparent="false" ref="5"/>
+      <ColorMapEntry rgb="230,152,0"   transparent="false" ref="6"/>
+      <ColorMapEntry rgb="255,190,232" transparent="false" ref="7"/>
+      <ColorMapEntry rgb="132,0,168"   transparent="false" ref="8"/>
+      <ColorMapEntry rgb="38,115,0"    transparent="false" ref="9"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" id="1" tooltip="Not Classified" />
+      <LegendEntry rgb="152,230,0"   id="2" tooltip="Fisheries" />
+      <LegendEntry rgb="168,0,0"     id="3" tooltip="Flood Control" />
+      <LegendEntry rgb="230,230,0"   id="4" tooltip="Hydroelectricity" />
+      <LegendEntry rgb="137,112,68"  id="5" tooltip="Irrigation" />
+      <LegendEntry rgb="230,152,0"   id="6" tooltip="Navigation" />
+      <LegendEntry rgb="255,190,232" id="7" tooltip="Other" />
+      <LegendEntry rgb="132,0,168"   id="8" tooltip="Recreation" />
+      <LegendEntry rgb="38,115,0"    id="9" tooltip="Water Supply" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

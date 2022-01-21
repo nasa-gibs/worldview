@@ -1,0 +1,1 @@
+<p>Hurricane Maria made landfall on 20 September 2017 in southeastern Puerto Rico. The storm had sustained winds of 155 miles per hour (250 kilometers per hour), making it the fifth strongest hurricane to hit the United States.</p>

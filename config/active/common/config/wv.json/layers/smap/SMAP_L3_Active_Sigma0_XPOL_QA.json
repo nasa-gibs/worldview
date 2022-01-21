@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L3_Active_Sigma0_XPOL_QA": {
+      "id": "SMAP_L3_Active_Sigma0_XPOL_QA",
+      "title": "Sigma0 3 km QA (L3, Active, XPOL Polarization)",
+      "subtitle": "SMAP / Radar",
+      "description": "smap/SMAP_L3_Active_Sigma0_XPOL_QA",
+      "group": "overlays",
+      "layergroup": "Sigma0",
+      "inactive": true,
+      "wrapadjacentdays": true
+    }
+  }
+}

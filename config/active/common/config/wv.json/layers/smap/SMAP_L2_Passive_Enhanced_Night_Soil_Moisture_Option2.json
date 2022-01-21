@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option2": {
+      "id": "SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option2",
+      "title": "Soil Moisture 9 km (L2, Passive, Night, Single Channel Algorithm, V-pol)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option2",
+      "tags": "enhanced",
+      "group": "overlays",
+      "layergroup": "Soil Moisture",
+      "product": "SPL2SMP_E",
+      "tracks": [
+        "OrbitTracks_SMAP_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

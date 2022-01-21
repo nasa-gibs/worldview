@@ -1,0 +1,19 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Severe Storms": {
+                "title": "Severe Storms",
+                "id": "severe-storms",
+                "image": "severe-storms.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Precipitation Rate",
+                    "Sea Surface Temperature",
+                    "Soil Moisture",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

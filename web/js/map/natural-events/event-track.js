@@ -11,7 +11,6 @@ import * as olExtent from 'ol/extent';
 import OlGeomMultiLineString from 'ol/geom/MultiLineString';
 import * as olProj from 'ol/proj';
 import {
-  find as lodashFind,
   each as lodashEach,
   debounce as lodashDebounce,
 } from 'lodash';
@@ -24,6 +23,7 @@ import {
 } from './cluster';
 import { mapUtilZoomAction } from '../util';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
@@ -52,16 +52,15 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      map, selectedEvent, selectedDate, isAnimatingToEvent,
+      map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
     } = this.props;
-    const selectedEventChange = (selectedEvent && selectedEvent.id)
-      !== (prevProps.selectedEvent && prevProps.selectedEvent.id);
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
+    const eventDeselect = (selectedEvent !== prevProps.selectedEvent.id) && !selectedEvent.id;
     const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
+    const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevProps.eventsData);
     const prevMap = prevProps.map;
     const { trackDetails } = this.state;
-
 
     if (map !== prevMap) {
       if (prevMap) {
@@ -72,8 +71,12 @@ class EventTrack extends React.Component {
       this.initialize();
     }
 
-    if (selectedEventChange || selectedDateChange || finishedAnimating) {
+    if (selectedDateChange || finishedAnimating || eventsLoaded) {
       this.debouncedTrackUpdate();
+    }
+
+    if (eventDeselect) {
+      this.removeTrack(map);
     }
   }
 
@@ -351,10 +354,11 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
     ? [-250, -90, 250, 90]
     : [-180, -90, 180, 90];
 
-  const selectedCoords = lodashFind(eventObj.geometry, (geometry) => geometry.date.split('T')[0] === selectedDate).coordinates;
-  lodashEach(eventObj.geometry, (geometry, index) => {
-    let { coordinates } = geometry;
-    const date = geometry.date.split('T')[0];
+  const { geometry } = eventObj;
+  const selectedCoords = geometry.find(({ date }) => date.split('T')[0] === selectedDate).coordinates;
+  geometry.forEach((geom, index) => {
+    let { coordinates } = geom;
+    const date = geom.date.split('T')[0];
     const isSelected = selectedDate === date;
     const isOverDateline = proj.selected.id === 'geographic'
       ? crossesDateLine(selectedCoords, coordinates)
@@ -524,7 +528,7 @@ const createArrows = function(lineSegmentCoords, map) {
 const addPoints = function(proj, clusters, map, selectedDate, callback) {
   const overlays = [];
   const trackArray = [];
-  lodashEach(clusters, (clusterPoint, index) => {
+  clusters.forEach((clusterPoint, index) => {
     let point;
     const date = clusterPoint.properties.date || clusterPoint.properties.startDate;
     const isSelected = selectedDate === date;
@@ -645,7 +649,7 @@ function addOverlayIfIsVisible(map, overlay) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, date,
+    map, proj, events, date,
   } = state;
   const { isAnimatingToEvent } = events;
   return {
@@ -653,7 +657,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
-    eventsData: requestedEvents.response,
+    eventsData: getFilteredEvents(state),
     isAnimatingToEvent,
   };
 };

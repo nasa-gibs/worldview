@@ -32,33 +32,35 @@ export default class VectorMetaTable extends React.Component {
                 </thead>
                 <tbody>
                   {metaLegend.map((properties, index) => {
-                    const featureId = properties.Identifier;
-                    const isIntegerToStyle = properties.Function !== 'Identify' && (properties.DataType === 'int');
-                    const value = properties.ValueMap
-                      ? properties.ValueMap[metaFeatures[featureId]]
-                      : isIntegerToStyle ? metaFeatures[featureId].toLocaleString('en')
-                        : metaFeatures[featureId];
+                    const {
+                      Function, ValueMap, DataType, Title, Identifier, Units, Description,
+                    } = properties;
+
+                    const isIntegerToStyle = Function !== 'Identify' && (DataType === 'int');
+                    const value = ValueMap
+                      ? ValueMap[metaFeatures[Identifier]]
+                      : isIntegerToStyle ? metaFeatures[Identifier].toLocaleString('en')
+                        : metaFeatures[Identifier];
                     const id = util.cleanId(String(`${title}-${metaIndex + index}`));
+
                     if (!value) return undefined;
                     return (
                       <tr key={`vector-row-${id}`}>
                         <td>
-
-                          {properties && properties.Description ? (
-                            <VectorMetaTooltip id={id} index={index} description={properties.Description} />
+                          {Description ? (
+                            <VectorMetaTooltip id={id} index={index} description={Description} />
                           ) : undefined}
-                          <div className="vector-feature-name-cell">{properties.Title ? properties.Title : featureId}</div>
+                          <div className="vector-feature-name-cell">{Title || Identifier}</div>
                         </td>
                         <td>
                           <span>{value}</span>
-                          {properties && properties.Units ? (
+                          {Units && (
                             <span>
-                              {` ${properties.Units}`}
                               {' '}
+                              {Units}
                             </span>
-                          ) : undefined}
+                          )}
                         </td>
-
                       </tr>
                     );
                   })}

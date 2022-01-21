@@ -14,19 +14,18 @@ import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
-import TimeSelector from '../components/date-selector/date-selector';
+import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
-import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
-import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
+import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
+import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
 import PlayQueue from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
-import promiseImageryForTime from '../modules/map/selectors';
+import { promiseImageryForTime } from '../modules/map/util';
 import GifContainer from './gif';
 import {
   selectDate,
   selectInterval,
-  changeCustomInterval,
   toggleCustomModal,
 } from '../modules/date/actions';
 import {
@@ -45,7 +44,7 @@ import {
   getAllActiveLayers,
   dateRange as getDateRange,
 } from '../modules/layers/selectors';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   play,
   onClose,
@@ -125,6 +124,19 @@ class AnimationWidget extends React.Component {
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
     this.onExpandedDrag = this.onExpandedDrag.bind(this);
+  }
+
+  componentDidMount() {
+    const { isEmbedModeActive } = this.props;
+    if (isEmbedModeActive) {
+      this.setState({
+        collapsed: true,
+        widgetPosition: {
+          x: 10,
+          y: 0,
+        },
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -225,12 +237,15 @@ class AnimationWidget extends React.Component {
     onPushLoop(loop);
   }
 
-  onDateChange(date, id) {
-    const { onUpdateStartDate, onUpdateEndDate } = this.props;
-    if (id === 'start') {
-      onUpdateStartDate(date);
-    } else {
-      onUpdateEndDate(date);
+  onDateChange([newStartDate, newEndDate]) {
+    const {
+      onUpdateStartDate, onUpdateEndDate, startDate, endDate,
+    } = this.props;
+    if (newStartDate !== startDate) {
+      onUpdateStartDate(newStartDate);
+    }
+    if (newEndDate !== endDate) {
+      onUpdateEndDate(newEndDate);
     }
   }
 
@@ -328,17 +343,6 @@ class AnimationWidget extends React.Component {
     toggleCustomModal(isOpen, customModalType.ANIMATION);
   };
 
-  /**
-  * @desc handle SET of custom time scale panel
-  * @param {Number} delta
-  * @param {Number} timeScale
-  * @returns {void}
-  */
-  changeCustomInterval = (delta, timeScale) => {
-    const { changeCustomInterval } = this.props;
-    changeCustomInterval(delta, timeScale);
-  };
-
   renderCollapsedWidget() {
     const {
       onClose,
@@ -389,6 +393,7 @@ class AnimationWidget extends React.Component {
       refreshStateAfterGif,
       hasNonDownloadableLayer,
       visibleLayersForProj,
+      proj,
     } = this.props;
     const gifDisabled = numberOfFrames >= maxFrames;
     const elemExists = document.querySelector('#create-gif-button');
@@ -412,7 +417,7 @@ class AnimationWidget extends React.Component {
 
       await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
       await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-      await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
       await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
       await onUpdateStartAndEndDate(startDate, endDate);
       googleTagManager.pushEvent({
@@ -462,9 +467,6 @@ class AnimationWidget extends React.Component {
       onPushPause,
       subDailyMode,
       interval,
-      customSelected,
-      customDelta,
-      customInterval,
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
@@ -488,15 +490,18 @@ class AnimationWidget extends React.Component {
             <div className="wv-animation-widget-header">
               {'Animate Map in '}
               <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
-                customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
-                customSelected={customSelected}
-                customDelta={customDelta}
                 timeScaleChangeUnit={interval}
                 hasSubdailyLayers={hasSubdailyLayers}
+                modalType={customModalType.ANIMATION}
               />
               {' Increments'}
             </div>
+
+            {/* Custom time interval selection */}
+            <CustomIntervalSelector
+              modalOpen={animationCustomModalOpen}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
 
             <PlayButton
               playing={isPlaying}
@@ -524,38 +529,19 @@ class AnimationWidget extends React.Component {
             {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
-            <div className="wv-anim-dates-case">
-              <TimeSelector
-                id="start"
-                idSuffix="animation-widget-start"
-                date={startDate}
-                onDateChange={this.onDateChange}
-                maxDate={endDate}
-                minDate={minDate}
-                subDailyMode={subDailyMode}
-              />
-              <div className="thru-label">To</div>
-              <TimeSelector
-                id="end"
-                idSuffix="animation-widget-end"
-                date={endDate}
-                onDateChange={this.onDateChange}
-                maxDate={maxDate}
-                minDate={startDate}
-                subDailyMode={subDailyMode}
-              />
-            </div>
+            <DateRangeSelector
+              idSuffix="animation-widget"
+              startDate={startDate}
+              endDate={endDate}
+              setDateRange={this.onDateChange}
+              minDate={minDate}
+              maxDate={maxDate}
+              subDailyMode={subDailyMode}
+            />
+
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
-            {/* Custom time interval selection */}
-            <CustomIntervalSelectorWidget
-              customDelta={customDelta}
-              customIntervalZoomLevel={customInterval}
-              customIntervalModalOpen={animationCustomModalOpen}
-              changeCustomInterval={this.changeCustomInterval}
-              hasSubdailyLayers={hasSubdailyLayers}
-            />
           </div>
         </div>
       </Draggable>
@@ -570,7 +556,6 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      layers,
       hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
@@ -617,7 +602,6 @@ class AnimationWidget extends React.Component {
             hasCustomPalettes={hasCustomPalettes}
             maxQueueLength={maxLength}
             queueLength={queueLength}
-            layers={layers}
             interval={interval}
             delta={delta}
             speed={speed}
@@ -642,6 +626,7 @@ function mapStateToProps(state) {
     compare,
     animation,
     date,
+    embed,
     sidebar,
     modal,
     palettes,
@@ -649,6 +634,7 @@ function mapStateToProps(state) {
     map,
     browser,
     ui,
+    proj,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
@@ -683,8 +669,9 @@ function mapStateToProps(state) {
   }
 
   const { isDistractionFreeModeActive } = ui;
+  const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
-    && browser.greaterThan.small
+    && (browser.greaterThan.small || isEmbedModeActive)
     && lodashGet(map, 'ui.selected.frameState_')
     && sidebar.activeTab !== 'download' // No Animation when data download is active
     && !compare.active
@@ -728,17 +715,18 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,
     hasCustomPalettes,
     map,
+    proj,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     visibleLayersForProj,
-    promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
+    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isGifActive: gifActive,
     isCompareActive: compare.active,
+    isEmbedModeActive,
     isRotated: Boolean(rotation !== 0),
     rotation,
     hasGraticule: Boolean(
@@ -814,9 +802,6 @@ const mapDispatchToProps = (dispatch) => ({
   onIntervalSelect: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
   },
-  changeCustomInterval: (delta, timeScale) => {
-    dispatch(changeCustomInterval(delta, timeScale));
-  },
   onUpdateStartDate(date) {
     dispatch(changeStartDate(date));
   },
@@ -843,11 +828,9 @@ AnimationWidget.propTypes = {
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
-  changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
-  customSelected: PropTypes.bool,
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
@@ -858,10 +841,10 @@ AnimationWidget.propTypes = {
   interval: PropTypes.string,
   isActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
-  layers: PropTypes.array,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
@@ -877,6 +860,7 @@ AnimationWidget.propTypes = {
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
+  proj: PropTypes.object,
   refreshStateAfterGif: PropTypes.func,
   rotation: PropTypes.number,
   screenWidth: PropTypes.number,

@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "AIRS_L3_Surface_Air_Temperature_Daily_Night": {
+      "id": "AIRS_L3_Surface_Air_Temperature_Daily_Night",
+      "title": "Surface Air Temperature (L3, Night, Daily)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_Surface_Air_Temperature_Daily_Night",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STD",
+      "wrapadjacentdays": true,
+      "layergroup": "Temperature",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "layers": {
+    "MODIS_Aqua_Cloud_Top_Pressure_Day": {
+      "id": "MODIS_Aqua_Cloud_Top_Pressure_Day",
+      "title": "Cloud Top Pressure (Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Pressure_Day",
+      "group": "overlays",
+      "layergroup": "Cloud Pressure",
+      "product": "MYD06_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_4"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -26,7 +26,7 @@
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
-                    "description": "smap/GrossPrimaryProduction",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "SMAP_L4_Mean_Gross_Primary_Productivity"

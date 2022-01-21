@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "OrbitTracks_GCOM-W1_Descending": {
+      "id": "OrbitTracks_GCOM-W1_Descending",
+      "title": "GCOM-W1 - Orbit Track & Time",
+      "subtitle": "GCOM-W1 / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_GCOM-W1_Descending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
+      ],
+      "track": "descending",
+      "startDate": "2012-05-17",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_GCOM-W1_Descending",
+        "immutable": true
+      },
+      "tags": "tracks night"
+    }
+  }
+}

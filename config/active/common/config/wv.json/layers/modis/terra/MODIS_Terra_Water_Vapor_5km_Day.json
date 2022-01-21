@@ -1,0 +1,25 @@
+{
+  "layers": {
+    "MODIS_Terra_Water_Vapor_5km_Day": {
+      "id": "MODIS_Terra_Water_Vapor_5km_Day",
+      "title": "Water Vapor (Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Water_Vapor_5km_Day",
+      "group": "overlays",
+      "layergroup": "Water Vapor",
+      "product": "MOD05_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_1"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "Aquarius_Sea_Surface_Salinity_L3_Monthly": {
+      "id": "Aquarius_Sea_Surface_Salinity_L3_Monthly",
+      "title": "Sea Surface Salinity (L3, Monthly)",
+      "subtitle": "SAC-D / Aquarius",
+      "description": "aquarius/Aquarius_Sea_Surface_Salinity_L3_Monthly",
+      "tags": "sss podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Surface Salinity",
+      "product": "AQUARIUS_L3_SSS_SMI_MONTHLY-CLIMATOLOGY_V5",
+      "inactive": true,
+      "wrapadjacentdays": true
+    }
+  }
+}

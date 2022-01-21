@@ -1,0 +1,16 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Atmosphere": {
+                "title": "Atmosphere",
+                "id": "atmosphere",
+                "image": "atmosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Precipitation Rate",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

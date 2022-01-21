@@ -10,7 +10,7 @@ import {
   collapseFacet as collapseFacetAction,
 } from '../../../../modules/product-picker/actions';
 import facetConfig from '../../../../modules/product-picker/facet-config';
-import getSelectedDate from '../../../../modules/date/selectors';
+import { getSelectedDate } from '../../../../modules/date/selectors';
 
 function Facets(props) {
   const {

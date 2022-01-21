@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MODIS_Terra_Data_No_Data": {
+      "id": "MODIS_Terra_Data_No_Data",
+      "title": "Areas of No Data (mask)",
+      "subtitle": "Terra / MODIS",
+      "description": "reference/MODIS_Terra_Data_No_Data",
+      "group": "overlays",
+      "layergroup": "Areas of No Data (mask)",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

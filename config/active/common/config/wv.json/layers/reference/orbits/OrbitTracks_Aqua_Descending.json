@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "OrbitTracks_Aqua_Descending": {
+      "id": "OrbitTracks_Aqua_Descending",
+      "title": "Aqua - Orbit Track & Time",
+      "subtitle": "Aqua / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_Aqua_Descending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
+      ],
+      "track": "descending",
+      "startDate": "2002-05-04",
+      "projections": {
+        "antarctic": {
+          "source": "GIBS:wms:antarctic"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "OrbitTracks_Aqua_Descending",
+        "immutable": true
+      },
+      "tags": "tracks night"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "MODIS_Combined_Flood_3-Day": {
+      "id": "MODIS_Combined_Flood_3-Day",
+      "title": "Flood (3-Day Window)",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_Flood_3-Day",
+      "tags": "floods mcdwd",
+      "group": "overlays",
+      "layergroup": "Flood"
+    }
+  }
+}

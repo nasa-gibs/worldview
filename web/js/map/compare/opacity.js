@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 import util from '../../util/util';
 
 const { events } = util;
@@ -9,14 +10,17 @@ let slider;
 let value = 50;
 
 export default class Opacity {
-  constructor(olMap, isAactive, eventListenerStringObj, valueOverride) {
+  constructor(olMap, state, eventListenerStringObj, valueOverride) {
     this.map = olMap;
     this.sliderCase = document.createElement('div');
     value = Number(valueOverride) || value;
-    this.create();
+    this.create(state);
   }
 
-  create() {
+  create(state) {
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    this.dateA = dateA;
+    this.dateB = dateB;
     slider = this.createSlider(this.map.getLayers().getArray());
     this.oninput(value);
   }
@@ -24,9 +28,15 @@ export default class Opacity {
   /**
    * Refresh secondLayer layer group (after date change for example)
    */
-  update() {
-    [this.firstLayer, this.secondLayer] = this.map.getLayers().getArray();
-    this.oninput(value);
+  update(state) {
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    if (dateA !== this.dateA || dateB !== this.dateB) {
+      this.destroy();
+      this.create(state);
+    } else {
+      [this.firstLayer, this.secondLayer] = this.map.getLayers().getArray();
+      this.oninput(value);
+    }
   }
 
   /**
@@ -48,6 +58,8 @@ export default class Opacity {
     const Props = {
       onSlide: this.oninput.bind(this),
       value,
+      dateA: this.dateA,
+      dateB: this.dateB,
     };
     this.mapCase.appendChild(this.sliderCase);
     ReactDOM.render(React.createElement(OpacitySlider, Props), this.sliderCase);

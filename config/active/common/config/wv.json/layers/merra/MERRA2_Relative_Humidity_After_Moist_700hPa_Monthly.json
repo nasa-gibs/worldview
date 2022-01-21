@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "MERRA2_Relative_Humidity_After_Moist_700hPa_Monthly": {
+      "id": "MERRA2_Relative_Humidity_After_Moist_700hPa_Monthly",
+      "title": "Relative Humidity After Moist at 700hPa (Monthly)",
+      "subtitle": "MERRA-2",
+      "description": "merra/MERRA2_Relative_Humidity_After_Moist_700hPa_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Relative Humidity",
+      "product": "M2TMNPCLD",
+      "wrapadjacentdays": true
+    }
+  }
+}

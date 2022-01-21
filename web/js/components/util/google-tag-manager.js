@@ -24,14 +24,14 @@ export default {
   * @return {void}
   */
   // get user IP address for GTM/GA using https://www.ipify.org/ API
-  async getIpAddress() {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const json = await response.json();
-    const ipAddress = json.ip;
+  // async getIpAddress() {
+  //   const response = await fetch('https://api.ipify.org?format=json');
+  //   const json = await response.json();
+  //   const ipAddress = json.ip;
 
-    this.pushEvent({
-      event: 'ipAddress',
-      ipAddress,
-    });
-  }
+  //   this.pushEvent({
+  //     event: 'ipAddress',
+  //     ipAddress,
+  //   });
+  // }
 };

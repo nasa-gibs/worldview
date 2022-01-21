@@ -1,0 +1,1 @@
+With maximum sustained winds of 185 mph (295km/h) on 1 September, the storm continued its slow march westward. Click the "Play" button to view an animation of the hurricane on 1 September in 10 minute increments.

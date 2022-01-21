@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AIRS_L2_RelativeHumidity_850hPa_Night": {
+      "id": "AIRS_L2_RelativeHumidity_850hPa_Night",
+      "title": "Relative Humidity (L2, 850 hPa, Night)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_RelativeHumidity_850hPa_Night",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": "Relative Humidity",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

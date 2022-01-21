@@ -11,10 +11,16 @@ class CoordinatesDialog extends Component {
     super(props);
     this.state = {
       tooltipToggleTime: 0,
-      showTooltips: true,
+      showTooltips: false,
       isCopyToClipboardTooltipVisible: false,
     };
     this.copyToClipboard = this.copyToClipboard.bind(this);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ showTooltips: true });
+    }, 200);
   }
 
   copyToClipboard(coords) {

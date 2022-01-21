@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MISR_Land_NDVI_Average_Monthly": {
+      "id": "MISR_Land_NDVI_Average_Monthly",
+      "title": "Land NDVI Average (Monthly)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_Land_NDVI_Average_Monthly",
+      "tags": "normalized difference vegetation index",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices",
+      "product": "MIL3MLS",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

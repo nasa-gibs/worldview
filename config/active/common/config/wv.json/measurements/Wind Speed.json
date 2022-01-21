@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Wind Speed": {
+            "id": "wind-speed",
+            "title":    "Wind Speed",
+            "subtitle": "GCOM-W1/AMSR2, CYGNSS/DDMI, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, Merged Microwave Radiometers, CCMP, MERRA-2",
+            "sources": {
+                "CYGNSS/DDMI": {
+                    "id": "cygnss-ddmi",
+                    "title": "CYGNSS/DDMI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "CYGNSS_L3_Wind_Speed_SDR_Daily",
+                        "CYGNSS_L3_Wind_Speed_Daily"
+                    ]
+                }
+							}
+        }
+    }
+}

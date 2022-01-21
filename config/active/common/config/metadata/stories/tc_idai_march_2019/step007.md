@@ -1,0 +1,1 @@
+<p>Here we show the Flood Hazard: Mortality Risk layer. If you toggle on and off the Precipitation Rate layer (using the eye icon in the layer list), you are able to see that the storm hit an area that was classified as having a high mortality risk due to flooding.</p>

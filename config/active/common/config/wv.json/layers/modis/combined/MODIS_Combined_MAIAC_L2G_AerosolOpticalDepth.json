@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth": {
+      "id": "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth",
+      "title": "MAIAC Aerosol Optical Depth",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "product": "",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

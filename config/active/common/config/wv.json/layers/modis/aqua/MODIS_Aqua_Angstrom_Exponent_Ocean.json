@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_Angstrom_Exponent_Ocean": {
+      "id": "MODIS_Aqua_Angstrom_Exponent_Ocean",
+      "title": "Dark Target Aerosol Angstrom Exponent (Ocean)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Angstrom_Exponent_Ocean",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "product": "MYD04_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

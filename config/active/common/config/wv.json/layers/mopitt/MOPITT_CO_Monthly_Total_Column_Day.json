@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "MOPITT_CO_Monthly_Total_Column_Day": {
+      "id": "MOPITT_CO_Monthly_Total_Column_Day",
+      "title": "Carbon Monoxide (L3, Monthly, Day, Total Column)",
+      "subtitle": "Terra / MOPITT",
+      "description": "mopitt/MOPITT_CO_Monthly_Total_Column_Day",
+      "tags": "co",
+      "group": "overlays",
+      "layergroup": "Carbon Monoxide",
+      "product": "MOP03JM",
+      "wrapadjacentdays": true,
+      "inactive": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

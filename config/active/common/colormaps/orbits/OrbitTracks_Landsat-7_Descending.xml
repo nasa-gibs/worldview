@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Landsat 7 Orbital Track">
+    <Entries>
+      <ColorMapEntry rgb="102,204,204" sourceValue="200" transparent="false" ref="1" />
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="102,204,204" id="1" tooltip="Acquisition Time (UTC)" label="Acquisition Time (UTC)" showLabel="true" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "MODIS_Aqua_SurfaceReflectance_Bands143": {
+      "id": "MODIS_Aqua_SurfaceReflectance_Bands143",
+      "title": "Land Surface Reflectance (True Color)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands143",
+      "tags": "lsr true color myd09",
+      "group": "baselayers",
+      "layergroup": "Land Surface Reflectance",
+      "product": "MYD09GA",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

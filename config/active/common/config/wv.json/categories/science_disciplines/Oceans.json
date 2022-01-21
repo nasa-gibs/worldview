@@ -1,0 +1,23 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Oceans": {
+                "title": "Oceans",
+                "id": "oceans",
+                "image": "oceans.jpg",
+                "description": "",
+                "measurements": [
+                    "Chlorophyll A",
+                    "Liquid Water Equivalent",
+                    "Precipitation Rate",
+                    "Sea Ice",
+                    "Sea Surface Height Anomalies",
+                    "Sea Surface Salinity",
+                    "Sea Surface Temperature",
+                    "Sea Surface Temperature Anomalies",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

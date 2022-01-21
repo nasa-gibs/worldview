@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "SMAP_L3_Passive_Enhanced_Day_Soil_Moisture": {
+      "id": "SMAP_L3_Passive_Enhanced_Day_Soil_Moisture",
+      "title": "Soil Moisture 9 km (L3, Passive, Day)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L3_Passive_Enhanced_Day_Soil_Moisture",
+      "group": "overlays",
+      "tags": "enhanced",
+      "layergroup": "Soil Moisture",
+      "product": "SPL3SMP_E",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_SMAP_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "SMAP_L4_Emult_Average": {
+      "id": "SMAP_L4_Emult_Average",
+      "title": "Percent of Potential Vegetation Light Use Efficiency (L4, 9 km Grid Cell Mean)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Emult_Average",
+      "group": "overlays",
+      "layergroup": "Vegetation Light Use Efficiency",
+      "product": "SPL4CMDL",
+      "wrapadjacentdays": true
+    }
+  }
+}

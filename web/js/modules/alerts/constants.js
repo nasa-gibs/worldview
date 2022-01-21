@@ -1,10 +1,11 @@
 import EventsAlertModalBody from '../../components/events/alert-body';
 import CompareAlertModalBody from '../../components/compare/alert';
-import VectorAlertModalBody from '../../components/feature-alert/vector-alert-modal';
+import VectorZoomAlertModalBody from '../../components/feature-alert/vector-alert-modal';
 
-export const TOGGLE_VECTOR_ALERT = 'ALERTS/TOGGLE_VECTOR_ALERT';
-export const DISABLE_VECTOR_ALERT = 'ALERTS/DISABLE_VECTOR_ALERT';
-export const ACTIVATE_VECTOR_ALERT = 'ALERTS/ACTIVATE_VECTOR_ALERT';
+export const DISABLE_VECTOR_ZOOM_ALERT = 'ALERTS/DISABLE_VECTOR_ZOOM_ALERT';
+export const ACTIVATE_VECTOR_ZOOM_ALERT = 'ALERTS/ACTIVATE_VECTOR_ZOOM_ALERT';
+export const DISABLE_VECTOR_EXCEEDED_ALERT = 'ALERTS/DISABLE_VECTOR_EXCEEDED_ALERT';
+export const ACTIVATE_VECTOR_EXCEEDED_ALERT = 'ALERTS/ACTIVATE_VECTOR_EXCEEDED_ALERT';
 
 export const MODAL_PROPERTIES = {
   eventModalProps: {
@@ -36,7 +37,7 @@ export const MODAL_PROPERTIES = {
       backdrop: false,
       size: 'lg',
       clickableBehindModal: true,
-      bodyComponent: VectorAlertModalBody,
+      bodyComponent: VectorZoomAlertModalBody,
       desktopOnly: true,
     },
   },

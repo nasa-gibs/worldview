@@ -47,13 +47,6 @@
   width: 100%;
 }
 
-/* IE11 align-items center fix */
-.alert-content::after {
-  content: '';
-  min-height: inherit;
-  font-size: 0;
-}
-
 /* ErrorBoundary */
 .error-icon {
   margin-right: 10px;

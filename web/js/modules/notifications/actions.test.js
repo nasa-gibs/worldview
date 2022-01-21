@@ -30,7 +30,7 @@ describe('Notification fetch action', () => {
     ];
     const store = mockStore({ notifications: {} });
     return store
-      .dispatch(actions.requestNotifications(loc, 'application/json'))
+      .dispatch(actions.requestNotifications(loc))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -49,7 +49,7 @@ describe('Notification fetch action', () => {
     ];
     const store = mockStore({ shortLink: {} });
     return store
-      .dispatch(actions.requestNotifications(loc, 'application/json'))
+      .dispatch(actions.requestNotifications(loc))
       .catch(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -57,7 +57,7 @@ describe('Notification fetch action', () => {
 });
 describe('Notification post-request actions', () => {
   test(
-    `setNotication action returns ${
+    `setNotification action returns ${
       constants.SET_NOTIFICATIONS
     } action type with array`,
     () => {

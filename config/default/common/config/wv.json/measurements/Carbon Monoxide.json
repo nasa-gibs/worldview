@@ -24,7 +24,7 @@
                 "Aura/MLS": {
                     "id": "aura-mls",
                     "title": "Aura/MLS",
-                    "description": "mls/CO",
+                    "description": "mls/CarbonMonoxide",
                     "image": "",
                     "settings": [
                         "MLS_CO_215hPa_Day",
@@ -54,7 +54,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/CarbonMonoxide",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Carbon_Monoxide_Emission_Monthly"

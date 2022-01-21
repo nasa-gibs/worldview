@@ -1,0 +1,67 @@
+{
+    "blue_light": {
+        "id": "blue_light",
+        "name": "Blue, Light",
+        "colors": ["a6cee3ff"]
+    },
+    "blue_dark": {
+        "id": "blue_dark",
+        "name": "Blue, Dark",
+        "colors": ["1f78b4ff"]
+    },
+    "green_light": {
+        "id": "green_light",
+        "name": "Green, Light",
+        "colors": ["b2df8aff"]
+    },
+    "green_dark": {
+        "id": "green_dark",
+        "name": "Green, Dark",
+        "colors": ["33a02cff"]
+    },
+    "pink": {
+        "id": "pink",
+        "name": "Pink",
+        "colors": ["fb9a99ff"]
+    },
+    "red": {
+        "id": "red",
+        "name": "Red",
+        "colors": ["e31a1cff"]
+    },
+    "orange_light": {
+        "id": "orange_light",
+        "name": "Orange, Light",
+        "colors": ["fdbf6fff"]
+    },
+    "orange_dark": {
+        "id": "orange_dark",
+        "name": "Orange, Dark",
+        "colors": ["ff7f00ff"]
+    },
+    "purple_light": {
+        "id": "purple_light",
+        "name": "Purple, Light",
+        "colors": ["cab2d6ff"]
+    },
+    "purple_dark": {
+        "id": "purple_dark",
+        "name": "Purple, Dark",
+        "colors": ["6a3d9aff"]
+    },
+    "yellow": {
+        "id": "yellow",
+        "name": "Yellow",
+        "colors": ["ffff99ff"]
+    },
+    "brown": {
+        "id": "brown",
+        "name": "Brown",
+        "colors": ["b15928ff"]
+    },
+    "transparent": {
+        "id": "transparent",
+        "name": "Transparent",
+        "colors": ["00000000"]
+    }
+}

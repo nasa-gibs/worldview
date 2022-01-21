@@ -1,0 +1,44 @@
+{
+    "measurements": {
+        "Sea Surface Temperature": {
+            "id": "sea-surface-temperature",
+            "title":    "Sea Surface Temperature",
+            "subtitle": "Multi-mission/GHRSST, Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
+            "sources": {
+                "Multi-mission/GHRSST": {
+                    "id": "multi-mission-ghrsst",
+                    "title": "Multi-mission/GHRSST",
+                    "description": "multi-mission/ghrsst/GHRSST",
+                    "image": "",
+                    "settings": [
+                        "AVHRR_MetOp-A_L3U_Sea_Surface_Temperature",
+                        "AVHRR_MetOp-B_L3U_Sea_Surface_Temperature",
+                        "AVHRR_MetOp-C_L3U_Sea_Surface_Temperature",
+                        "GHRSST_L4_MUR_Sea_Surface_Temperature",
+                        "GHRSST_L4_MUR25_Sea_Surface_Temperature"
+                    ]
+                },
+                "Aqua/MODIS": {
+                     "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_L3_SST_Thermal_4km_Day_Daily",
+                        "MODIS_Aqua_L3_SST_Thermal_4km_Night_Daily"
+                    ]
+                },
+                "Terra/MODIS": {
+                        "id": "terra-modis",
+                        "title": "Terra/MODIS",
+                        "description": "",
+                        "image": "",
+                        "settings": [
+                            "MODIS_Terra_L3_SST_Thermal_4km_Day_Daily",
+                            "MODIS_Terra_L3_SST_Thermal_4km_Night_Daily"
+                        ]
+                    }
+            }
+        }
+    }
+}

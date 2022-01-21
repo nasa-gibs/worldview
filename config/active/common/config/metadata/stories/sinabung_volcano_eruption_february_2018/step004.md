@@ -1,0 +1,1 @@
+Next let's look at the differing Sulfur Dioxide layers we have from the Ozone Mapping and Profiler Suite (OMPS) sensor on the joint NASA/NOAA Suomi NPP satellite. We've turned on the Sulfur Dioxide (Lower Troposphere) in this view.

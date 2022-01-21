@@ -1,0 +1,56 @@
+{
+  "stories": {
+    "pine_island_glacier_icebergb46_nov_2018": {
+      "id": "pine_island_glacier_icebergb46_nov_2018",
+      "type": "iceberg",
+      "title": "Pine Island Glacier/Iceberg B-46 (November 2018)",
+      "description": "View the newest iceberg, B-46, from the Pine Island Glacier, Antarctica.",
+      "backgroundImage": "b46iceberg_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Earth Observatory - Pine Island Glacier Quickly Drops Another Iceberg",
+          "link": "https://earthobservatory.nasa.gov/images/144212/pine-island-glacier-quickly-drops-another-iceberg"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines_15m&t=2018-11-06-T00%3A00%3A00Z&z=3&t1=2018-11-06-T00%3A00%3A00Z&v=-6081777.346876615,-3729582.9574279566,6198030.653123385,3168081.0425720434"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines_15m(hidden)&t=2018-11-06-T00%3A00%3A00Z&z=3&t1=2018-11-06-T00%3A00%3A00Z&v=-1800791.3662902983,-425559.4607334064,-1420375.3452790277,-244069.31737594615&ab=off&as=2019-01-08T00%3A00%3A00Z&ae=2019-01-31T00%3A00%3A00Z&av=3&al=false"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "ca=true&cm=swipe&cv=50&p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines_15m(hidden)&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines_15m(hidden)&t=2019-01-08-T00%3A00%3A00Z&z=3&t1=2018-11-06-T00%3A00%3A00Z&v=-1790842.1390098445,-429564.14682761685,-1421713.2088633222,-253458.88640354667&ab=off&as=2019-01-08T00%3A00%3A00Z&ae=2019-01-31T00%3A00%3A00Z&av=3&al=false"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines_15m(hidden)&t=2019-01-08-T00%3A00%3A00Z&z=3&t1=2018-11-06-T00%3A00%3A00Z&v=-1834544.3337452402,-466732.61945394776,-1387466.1194473123,-253439.05471597798&ab=on&as=2019-01-08T00%3A00%3A00Z&ae=2019-01-31T00%3A00%3A00Z&av=3&al=false"
+        }
+      ]
+    }
+  }
+}

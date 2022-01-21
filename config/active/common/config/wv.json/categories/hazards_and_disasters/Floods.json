@@ -1,0 +1,17 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Floods": {
+                "title": "Floods",
+                "id": "floods",
+                "image": "floods.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Precipitation Rate",
+                    "Soil Moisture"
+                ]
+            }
+        }
+    }
+}

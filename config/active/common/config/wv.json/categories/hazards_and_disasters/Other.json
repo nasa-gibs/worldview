@@ -1,0 +1,20 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Other": {
+                "title": "Other",
+                "placement": "last",
+                "id": "legacy-other",
+                "description": "",
+                "measurements": [
+                    "Blue Marble",
+                    "Chlorophyll A",
+                    "Latitude-Longitude Lines",
+                    "Reference Map",
+                    "Sea Surface Temperature",
+                    "Terrain Elevation"
+                ]
+            }
+        }
+    }
+}

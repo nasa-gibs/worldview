@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "MODIS_Terra_L4_Net_Photosynthesis_8Day": {
+      "id": "MODIS_Terra_L4_Net_Photosynthesis_8Day",
+      "title": "Net Photosynthesis (L4, 8-Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L4_Net_Photosynthesis_8Day",
+      "group": "overlays",
+      "layergroup": "Photosynthesis, Net",
+      "product": "MOD17A2H",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

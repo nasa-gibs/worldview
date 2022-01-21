@@ -1,0 +1,1 @@
+A less typical image you may have seen of tropical storms is this night time image from the Day/Night Band of the VIIRS instrument on board the joint NASA/NOAA Suomi NPP satellite. It shows the swirling clouds from Hurricanes Katia, Irma and Jose crossing the North Atlantic Ocean, Caribbean Sea and Gulf of Mexico on 8 September 2017.

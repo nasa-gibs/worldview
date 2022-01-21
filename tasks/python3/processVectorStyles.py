@@ -25,7 +25,7 @@ config_file = args[0]
 vectordata_input_dir = args[1]
 output_dir = args[2]
 
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 
 def copy_file(file):
@@ -36,11 +36,11 @@ def copy_file(file):
         vector_layer_id = vector_layer_filename.split(".json", 1)[0]
         response_data["vectorStyles"] = {}
         response_data["vectorStyles"][vector_layer_id] = {}
-        with open(input_file) as json_file:
+        with open(input_file, "r", encoding="utf-8") as json_file:
             initial_data = json.load(json_file)
             for i in initial_data:
                 response_data["vectorStyles"][vector_layer_id][i] = initial_data[i]
-        with open(input_file, 'w') as json_file:
+        with open(input_file, "w", encoding="utf-8") as json_file:
             json.dump(response_data, json_file,indent=2)
         shutil.copy(input_file, output_dir)
 

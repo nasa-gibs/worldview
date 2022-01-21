@@ -1,0 +1,1 @@
+<p>Click on the "play" button in the animation tool to watch the iceberg moving away from Pine Island Glacier from 8 January to 31 January 2019. Click on the "video camera in a file" icon to create an animated GIF and share the animation with the world!</p>

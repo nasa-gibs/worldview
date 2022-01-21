@@ -1,0 +1,321 @@
+{
+    "naturalEvents": {
+        "categories": [
+            {
+                "id": "dustHaze",
+                "title": "Dust and Haze",
+                "description": "Related to dust storms, air pollution and other non-volcanic aerosols. Volcano-related plumes shall be included with the originating eruption event.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/dustHaze"
+            },
+            {
+                "id": "manmade",
+                "title": "Manmade",
+                "description": "Events that have been human-induced and are extreme in their extent.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/manmade"
+            },
+            {
+                "id": "seaLakeIce",
+                "title": "Sea and Lake Ice",
+                "description": "Related to all ice that resides on oceans and lakes, including sea and lake ice (permanent and seasonal) and icebergs.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/seaLakeIce"
+            },
+            {
+                "id": "severeStorms",
+                "title": "Severe Storms",
+                "link": "https://eonet.gsfc.nasa.gov/api/v3/categories/severeStorms",
+                "description": "Related to the atmospheric aspect of storms (hurricanes, cyclones, tornadoes, etc.). Results of storms may be included under floods, landslides, etc.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/severeStorms"
+            },
+            {
+                "id": "snow",
+                "title": "Snow",
+                "description": "Related to snow events, particularly extreme/anomalous snowfall in either timing or extent/depth.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/snow"
+            },
+            {
+                "id": "volcanoes",
+                "title": "Volcanoes",
+                "description": "Related to both the physical effects of an eruption (rock, ash, lava) and the atmospheric (ash and gas plumes).",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/volcanoes"
+            },
+            {
+                "id": "waterColor",
+                "title": "Water Color",
+                "description": "Related to events that alter the appearance of water: phytoplankton, red tide, algae, sediment, whiting, etc.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/waterColor"
+            },
+            {
+                "id": "wildfires",
+                "title": "Wildfires",
+                "description": "Wildfires includes all nature of fire, including forest and plains fires, as well as urban and industrial fire events. Fires may be naturally caused or manmade.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/wildfires"
+            }
+        ],
+        "layers": {
+            "arctic": {
+                "Wildfires": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ],
+                "Sea and Lake Ice": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Water Color": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Severe Storms": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Snow": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Floods": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ],
+                "Volcanoes": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ]
+            },
+            "geographic": {
+                "Wildfires": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ],
+                "Sea and Lake Ice": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Water Color": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "MODIS_Aqua_Chlorophyll_A",
+                        false
+                    ]
+                ],
+                "Severe Storms": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Snow": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Volcanoes": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ],
+                "Manmade": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Dust and Haze": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ]
+            },
+            "antarctic": {
+                "Wildfires": [
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ]
+                ],
+                "Sea and Lake Ice": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Severe Storms": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ],
+                "Snow": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ]
+                ]
+            }
+        }
+    }
+}
