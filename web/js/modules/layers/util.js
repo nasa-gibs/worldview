@@ -599,14 +599,19 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
   // runningMinDate used for overlapping ranges
   let runningMinDate;
 
-  // TODO make this binary search instead of linear
-  lodashEach(dateRanges, ({ startDate, endDate, dateInterval }, index) => {
+  // Binary search to find relevant date range
+  const findRange = (start, end) => {
     console.log('looping');
+
+    if (start > end) return false;
+    const midIndex = Math.floor((start + end) / 2);
+
+    const { startDate, endDate, dateInterval } = dateRanges[midIndex];
     const dateIntervalNum = Number(dateInterval);
     let currentDateTime = currentDate.getTime();
     const lastDateInDateArray = dateArray[dateArray.length - 1];
     const minDate = new Date(startDate);
-    let maxDate = new Date(endDate);
+    const maxDate = new Date(endDate);
     const minDateTime = minDate.getTime();
     const maxDateTime = maxDate.getTime();
     const currentDateLessThanMinDate = currentDateTime < minDateTime;
@@ -652,9 +657,11 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         currentDateTime = currentDate.getTime();
       }
       // set maxDate to current date if layer coverage is ongoing
-      if (index === dateRanges.length - 1 && !inactive) {
-        maxDate = futureTime ? new Date(endDate) : new Date(appNow);
-      }
+
+      // TODO handle this case?
+      // if (index === dateRanges.length - 1 && !inactive) {
+      //   maxDate = futureTime ? new Date(endDate) : new Date(appNow);
+      // }
     }
 
     // single date range and interval allows only returning prev, current, and next dates
@@ -664,6 +671,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
       dateArray = [...limitedDateRange];
       return;
     }
+    runningMinDate = minDate;
 
     const dateRangeBuildOptions = {
       rangeLimitsProvided,
@@ -675,15 +683,21 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
       dateIntervalNum,
       dateArray,
     };
-
     const dateRangeFn = dateRangeFnMap[period];
     dateArray = [...dateRangeFn(dateRangeBuildOptions)];
+
+    // Break out of loop once we find the range
     if (dateArray.length) {
-      // Break out of loop once we find the range
-      return false;
+      return;
     }
-    runningMinDate = minDate;
-  });
+    if (date < new Date(startDate)) {
+      findRange(start, midIndex);
+      return;
+    }
+    findRange(midIndex, end);
+  };
+
+  findRange(0, dateRanges.length - 1);
   return dateArray;
 }
 
