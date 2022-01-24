@@ -292,8 +292,9 @@ export default (function(self) {
   };
 
   self.dateAdd = function(date, interval, amount) {
-    let month; let maxDay; let
-      year;
+    let month;
+    let maxDay;
+    let year;
     const newDate = new Date(date);
     switch (interval) {
       case 'minute':

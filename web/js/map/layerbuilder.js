@@ -35,6 +35,13 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 
+const TIME_UNIT_MAP = {
+  daily: 'day',
+  monthly: 'month',
+  yearly: 'year',
+  subdaily: 'minute',
+};
+
 export default function mapLayerBuilder(config, cache, store) {
   const self = {};
 
@@ -116,6 +123,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const { group } = options;
+
+    // TODO why do we need nextDate, previousDate for subdaily layers to render?
     const { closestDate, nextDate, previousDate } = getRequestDates(def, options);
     let date = closestDate;
     if (date) {
@@ -183,70 +192,46 @@ export default function mapLayerBuilder(config, cache, store) {
     const { date } = state;
     const { appNow } = date;
     const stateCurrentDate = new Date(getSelectedDate(state));
-    const previousLayer = options.previousLayer || {};
     let closestDate = options.date || stateCurrentDate;
 
-    let previousDateFromRange;
-    let previousLayerDate = previousLayer.previousDate;
-    let nextLayerDate = previousLayer.nextDate;
-
-    const dateTime = closestDate.getTime();
     // if current date is outside previous and next available dates, recheck date range
-    if (previousLayerDate && nextLayerDate
-      && dateTime > previousLayerDate.getTime()
-      && dateTime < nextLayerDate.getTime()
-    ) {
-      previousDateFromRange = previousLayerDate;
-    } else {
-      const { dateRanges, inactive, period } = def;
-      let dateRange;
-      if (inactive) {
-        dateRange = datesInDateRanges(def, closestDate);
-      } else {
-        let endDateLimit;
-        let startDateLimit;
+    const { dateRanges, inactive, period } = def;
+    let dateRange;
 
-        let interval = 1;
-        if (dateRanges && dateRanges.length > 0) {
-          for (let i = 0; i < dateRanges.length; i += 1) {
-            const d = dateRanges[i];
-            const int = Number(d.dateInterval);
-            if (int > interval) {
-              interval = int;
-            }
+    if (inactive) {
+      dateRange = datesInDateRanges(def, closestDate);
+    } else {
+      let interval = 1;
+      if (dateRanges && dateRanges.length > 0) {
+        for (let i = 0; i < dateRanges.length; i += 1) {
+          const d = dateRanges[i];
+          const int = Number(d.dateInterval);
+          if (int > interval) {
+            interval = int;
           }
         }
-
-        if (period === 'daily') {
-          endDateLimit = util.dateAdd(closestDate, 'day', interval);
-          startDateLimit = util.dateAdd(closestDate, 'day', -interval);
-        } else if (period === 'monthly') {
-          endDateLimit = util.dateAdd(closestDate, 'month', interval);
-          startDateLimit = util.dateAdd(closestDate, 'month', -interval);
-        } else if (period === 'yearly') {
-          endDateLimit = util.dateAdd(closestDate, 'year', interval);
-          startDateLimit = util.dateAdd(closestDate, 'year', -interval);
-        } else {
-          endDateLimit = new Date(closestDate);
-          startDateLimit = new Date(closestDate);
-        }
-        dateRange = datesInDateRanges(def, closestDate, startDateLimit, endDateLimit, appNow);
       }
-      const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
-      previousDateFromRange = previous;
-      previousLayerDate = previous;
-      nextLayerDate = next;
+
+      const timeUnit = TIME_UNIT_MAP[period];
+      const endDateLimit = timeUnit ? util.dateAdd(closestDate, timeUnit, interval) : new Date(closestDate);
+      const startDateLimit = timeUnit ? util.dateAdd(closestDate, timeUnit, -interval) : new Date(closestDate);
+      dateRange = datesInDateRanges(def, closestDate, startDateLimit, endDateLimit, appNow);
     }
+    const { nextDate, previousDate } = prevDateInDateRange(def, closestDate, dateRange);
 
     if (def.period === 'subdaily') {
       closestDate = nearestInterval(def, closestDate);
-    } else if (previousDateFromRange) {
-      closestDate = util.clearTimeUTC(previousDateFromRange);
+    } else if (previousDate) {
+      closestDate = util.clearTimeUTC(previousDate);
     } else {
       closestDate = util.clearTimeUTC(closestDate);
     }
 
-    return { closestDate, previousDate: previousLayerDate, nextDate: nextLayerDate };
+    return {
+      closestDate,
+      previousDate,
+      nextDate,
+    };
   };
 
   /**
