@@ -3,21 +3,20 @@
   "name": "@LONG_NAME@",
   "icons": [
     {
-      "src": "/images/wv-logo-mobile.svg",
+      "src": "/build/images/wv-logo-mobile.svg",
       "type": "image/svg+xml",
       "sizes": "512x512"
     },
     {
-      "src": "/images/wv-logo-mobile.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192"
+      "src": "/build/images/wv-logo-mobile.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/",
   "background_color": "#849ccc",
   "display": "standalone",
   "prefered_related_applications": false,
-  "scope": "/",
   "theme_color": "#849ccc",
   "description": "@DESCRIPTION@",
   "screenshots": [
