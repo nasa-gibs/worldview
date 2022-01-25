@@ -1,4 +1,4 @@
-<h1>Welcome to Worldview<span class="version"> Version 3.16.0 (<a href="https://github.com/nasa-gibs/worldview/releases"
+<h1>Welcome to Worldview<span class="version"> Version @BUILD_VERSION@ (<a href="https://github.com/nasa-gibs/worldview/releases"
             target="_blank" rel="noopener noreferrer">Release
             Notes</a>)</span></h1>
 <div class="right">
