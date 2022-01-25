@@ -17,7 +17,7 @@ export default function AboutSection(props) {
         const data = await fetch(`brand/about/${sectionName}.html`);
         const dataHTML = await data.text();
         controller = null;
-        const setData = data.ok ? dataHTML : 'No description available for this section.';
+        const setData = data.ok ? dataHTML : '';
         setFn(setData);
       } catch (e) {
         if (!controller.signal.aborted) {
