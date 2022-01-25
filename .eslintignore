@@ -12,3 +12,4 @@ web/build/*
 test/*
 web/js/lib/*
 web/sw.js*
+web/workbox*
