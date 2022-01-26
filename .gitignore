@@ -35,6 +35,6 @@ config/default/release/layer-metadata
 # Jest
 /coverage
 # PWA Files
-/web/sw.js
-/web/sw.js.map
-/web/workbox*
+web/sw.js
+web/sw.js.map
+web/workbox*
