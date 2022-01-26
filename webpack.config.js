@@ -31,7 +31,9 @@ const pluginSystem = [
   }),
   new WriteFilePlugin(),
   new MomentLocalesPlugin(),
-  new WorkboxPlugin.GenerateSW({ // Do not precache images
+  new WorkboxPlugin.GenerateSW({
+    swDest: '../sw.js',
+    // Do not precache images
     exclude: [/\.(?:png|jpg|jpeg|svg)$/],
 
     // Define runtime caching rules.
@@ -48,7 +50,8 @@ const pluginSystem = [
 
         // Only cache 10 images.
         expiration: {
-          maxEntries: 10,
+          maxEntries: 30,
+          maxAgeSeconds: 60 * 60 * 24, // 24 hours
         },
       },
     }],
