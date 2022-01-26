@@ -65,13 +65,13 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (https://opensource.g
   <script type="text/javascript" src="build/wv.js?v=@BUILD_NONCE@"></script>
 
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#849ccc"/>
+  <meta name="theme-color" content="#0b3d91"/>
   <script>
     // Check that service workers are supported
     if ('serviceWorker' in navigator) {
       // Use the window load event to keep the page load performant
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('sw.js');
       });
     }
     </script>
