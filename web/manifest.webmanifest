@@ -8,11 +8,11 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
-  "scope":"/",
+  "start_url": ".",
+  "scope": ".",
+  "id":"/",
   "background_color": "#212529",
   "display": "standalone",
-  "prefered_related_applications": false,
   "theme_color": "#0b3d91",
   "description": "@DESCRIPTION@",
   "screenshots": [
