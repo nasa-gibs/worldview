@@ -16,7 +16,6 @@ const devMode = process.env.NODE_ENV !== 'production';
 const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const pluginSystem = [
   new CleanWebpackPlugin(),
@@ -31,31 +30,6 @@ const pluginSystem = [
   }),
   new WriteFilePlugin(),
   new MomentLocalesPlugin(),
-  new WorkboxPlugin.GenerateSW({
-    swDest: '../sw.js',
-    // Do not precache images
-    exclude: [/\.(?:png|jpg|jpeg|svg)$/],
-
-    // Define runtime caching rules.
-    runtimeCaching: [{
-      // Match any request that ends with .png, .jpg, .jpeg or .svg.
-      urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
-
-      // Apply a cache-first strategy.
-      handler: 'CacheFirst',
-
-      options: {
-        // Use a custom cache name.
-        cacheName: 'images',
-
-        // Only cache 10 images.
-        expiration: {
-          maxEntries: 30,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
-        },
-      },
-    }],
-  }),
 ];
 
 /* Conditional Plugin Management */
