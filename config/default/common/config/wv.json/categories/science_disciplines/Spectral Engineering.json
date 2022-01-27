@@ -8,6 +8,7 @@
                 "description": "",
                 "measurements": [
                     "Brightness Temperature",
+                    "Lidar",
                     "Sigma0",
                     "Faraday Rotation",
                     "Outgoing Radiation",
