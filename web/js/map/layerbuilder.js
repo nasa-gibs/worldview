@@ -227,6 +227,11 @@ export default function mapLayerBuilder(config, cache, store) {
       closestDate = util.clearTimeUTC(closestDate);
     }
 
+    console.log(def.id);
+    console.log(previousDate && previousDate.toISOString());
+    console.log(closestDate && closestDate.toISOString());
+    console.log(nextDate && nextDate.toISOString());
+    console.log('---------');
     return {
       closestDate,
       previousDate,

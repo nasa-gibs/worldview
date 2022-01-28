@@ -449,9 +449,9 @@ describe('Date range building', () => {
     });
 
     test('2 - layer has a date range that is a single day (same start/end date)', () => {
-      const currentDate = new Date('2020-06-20T00:00:00Z');
-      const startLimit = new Date('2020-06-19T00:00:00Z');
-      const endLimit = new Date('2020-06-21T00:00:00Z');
+      const currentDate = new Date('2020-06-20T05:13:00Z');
+      const startLimit = new Date('2020-06-19T05:13:00Z');
+      const endLimit = new Date('2020-06-21T05:1300Z');
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit);
       expect(dates.length).toBe(2);
       expect(dates[0]).toEqual(startLimit);
@@ -523,20 +523,17 @@ describe('Date range building', () => {
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     test('1 - date is within a range', () => {
-      const currentDate = new Date('2018-01-09T00:00:00Z');
+      const currentDate = new Date('2018-01-11T05:00:00Z');
       const startLimit = util.dateAdd(currentDate, 'day', -4);
       const endLimit = util.dateAdd(currentDate, 'day', 4);
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit);
-      expect(dates.length).toBe(2);
-      expect(dates[0]).toEqual(startLimit);
-      expect(dates[1]).toEqual(currentDate);
-    });
-
-    test('2 - layer has a date range that is a single day (same start/end date)', () => {
+      expect(dates.length).toBe(91);
+      expect(dates[0]).toEqual(new Date('2018-01-01T00:00:00Z'));
+      expect(dates[dates.length - 1]).toEqual(new Date('2018-12-27T00:00:00Z'));
     });
 
     test('3 - current datetime falls between two date ranges (not available)', () => {
-      const currentDate = new Date('2018-12-28T00:00:00Z');
+      const currentDate = new Date('2018-12-28T01:32:00Z');
       const startLimit = util.dateAdd(currentDate, 'day', -4);
       const endLimit = util.dateAdd(currentDate, 'day', 4);
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit);
@@ -548,30 +545,31 @@ describe('Date range building', () => {
       const startLimit = util.dateAdd(currentDate, 'day', -4);
       const endLimit = util.dateAdd(currentDate, 'day', 4);
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit);
-      expect(dates.length).toBe(2);
-      expect(dates[0]).toEqual(startLimit);
-      expect(dates[1]).toEqual(currentDate);
+      expect(dates.length).toBe(91);
+      expect(dates[0]).toEqual(currentDate);
+      expect(dates[dates.length - 1]).toEqual(new Date('2019-12-27T00:00:00Z'));
     });
 
     test('5 - current datetime falls on end date of a range', () => {
-      const currentDate = new Date('2020-09-26T00:00:00Z');
+      const currentDate = new Date('2020-09-25T00:00:00Z');
       const startLimit = util.dateAdd(currentDate, 'day', -4);
       const endLimit = util.dateAdd(currentDate, 'day', 4);
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit);
-      expect(dates.length).toBe(2);
-      expect(dates[0]).toEqual(startLimit);
-      expect(dates[1]).toEqual(currentDate);
+      expect(dates.length).toBe(68);
+      expect(dates[0]).toEqual(new Date('2020-01-01T00:00:00Z'));
+      expect(dates[dates.length - 1]).toEqual(new Date('2020-09-25T00:00:00Z'));
     });
 
     test('6 - current datetime falls after end date of latest range, ongoing layer', () => {
       const currentDate = new Date('2020-10-08T00:00:00Z');
       const startLimit = util.dateAdd(currentDate, 'day', -4);
       const endLimit = util.dateAdd(currentDate, 'day', 4);
-      const appNow = new Date('2021-07-01');
+      const appNow = new Date('2021-03-01');
       const dates = datesInDateRanges(activeLayers[0], currentDate, startLimit, endLimit, appNow);
-      expect(dates.length).toBe(2);
-      expect(dates[0]).toEqual(startLimit);
-      expect(dates[1]).toEqual(currentDate);
+      console.log(dates);
+      expect(dates.length).toBe(39);
+      expect(dates[0]).toEqual(new Date('2020-09-29T00:00:00.000Z'));
+      expect(dates[dates.length - 1]).toEqual(new Date('2021-02-28T00:00:00.000Z'));
     });
 
     test('7 - current datetime falls after end date of latest range, inactive layer', () => {

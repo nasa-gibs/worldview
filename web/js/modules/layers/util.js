@@ -477,58 +477,40 @@ const getMonthDateRange = ({
 const getDayDateRange = ({
   rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
 }) => {
-  let newDateArray = [...dateArray];
-  const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(endDateLimit, 'max');
-  const { minYear, minMonth, minDay } = util.getUTCNumbers(startDateLimit, 'min');
+  const newDateArray = [...dateArray];
+  const beginDate = dateIntervalNum === 1 ? startDateLimit : minDate;
+  const endDate = dateIntervalNum === 1 ? endDateLimit : maxDate;
+
+  const { minYear, minMonth, minDay } = util.getUTCNumbers(beginDate, 'min');
+  const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(endDate, 'max');
 
   // conditional revision of maxEndDate for data availability partial coverage
-  const minDateTime = minDate.getTime();
+  const minDateTime = beginDate.getTime();
   const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateIntervalNum);
-  let maxEndDateTime;
-  let maxEndDate;
-  if (rangeLimitsProvided) {
-    maxEndDate = getRevisedMaxEndDate(minDate, maxDayDate, startDateLimit, endDateLimit);
-    maxEndDateTime = maxEndDate.getTime();
-  } else {
-    maxEndDate = maxDayDate;
-    maxEndDateTime = maxDayDate.getTime();
-  }
+  const maxEndDateTime = maxDayDate.getTime();
 
   let dayDifference;
   if (currentDateTime >= minDateTime && currentDateTime <= maxEndDateTime) {
-    dayDifference = util.dayDiff(startDateLimit, endDateLimit);
+    dayDifference = util.dayDiff(beginDate, endDate);
     // handle non-1 day dateIntervalNums to prevent over pushing unused dates to dateArray
     dayDifference = Math.ceil(dayDifference / dateIntervalNum);
   }
 
-  let minStartDayDate;
-  if (rangeLimitsProvided) {
-    // get minStartDate for partial range coverage starting date
-    minStartDayDate = dayDifference
-    && getMinStartDate(dayDifference, 'daily', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
-  }
-
+  newDateArray.push(beginDate);
   for (let i = 0; i <= (dayDifference + 1); i += 1) {
     let day = new Date(minYear, minMonth, minDay + i * dateIntervalNum);
     day = util.getTimezoneOffsetDate(day);
     const dayTime = day.getTime();
-    if (dayTime < maxEndDateTime) {
-      if (rangeLimitsProvided) {
-        if (newDateArray.length > 0) {
-          newDateArray = getDateArrayLastDateInOrder(day, newDateArray);
-        }
-        if (minStartDayDate) {
-          const minStartDayDateTime = minStartDayDate.getTime();
-          const dayWithinRange = day > minStartDayDate && day < maxDayDate;
-          if (dayTime === minStartDayDateTime || dayWithinRange) {
-            newDateArray.push(day);
-          }
-        } else {
-          newDateArray.push(day);
-        }
-      } else {
+    const dayWithinRange = day > beginDate && day <= endDate;
+
+    if (dayTime > endDate || !dayWithinRange) continue;
+
+    if (rangeLimitsProvided) {
+      if (dayWithinRange) {
         newDateArray.push(day);
       }
+    } else {
+      newDateArray.push(day);
     }
   }
   return newDateArray;
@@ -542,7 +524,7 @@ const getDayDateRange = ({
    * @return {Array}   An array of dates with normalized timezones
    */
 const getSubdailyDateRange = ({
-  rangeLimitsProvided, currentDateTime, minDate, maxDate, dateIntervalNum, dateArray,
+  currentDateTime, minDate, maxDate, dateIntervalNum, dateArray,
 }) => {
   const newDateArray = [...dateArray];
   let minuteDifference;
@@ -574,11 +556,44 @@ const dateRangeFnMap = {
  * @param {*} lastRange - last date range found in config
  * @param {*} appNow - current app now time
  */
-const getCalculatedRange = ({ endDate, dateInterval }, appNow) => ({
-  startDate: endDate,
-  endDate: appNow,
-  dateInterval,
-});
+const getCalculatedRange = ({ startDate, endDate, dateInterval }, period, appNow) => {
+  const unitMap = {
+    subdaily: 'minute',
+    daily: 'day',
+    monthly: 'month',
+    yearly: 'year',
+  };
+  const intervalNum = Number(dateInterval);
+
+  // Handle subdaily, multi-day, etc
+  if (intervalNum !== 1) {
+    let newStartDate;
+    let date = new Date(startDate);
+    const endDateDate = new Date(endDate);
+
+    while (date <= appNow) {
+      if (date > endDateDate && !newStartDate) {
+        newStartDate = date;
+      }
+      date = util.dateAdd(date, unitMap[period], intervalNum);
+    }
+
+    const newEndDate = date > appNow
+      ? util.dateAdd(date, unitMap[period], -intervalNum)
+      : date;
+    return {
+      startDate: newStartDate.toISOString(),
+      endDate: newEndDate.toISOString(),
+      dateInterval,
+    };
+  }
+
+  return {
+    startDate: endDate,
+    endDate: appNow,
+    dateInterval,
+  };
+};
 
 /**
    * Return an array of dates based on the dateRange the current date falls in.
@@ -603,9 +618,8 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
   const lastRange = dateRanges[dateRanges.length - 1];
 
   if (date > new Date(lastRange.endDate) && !inactive) {
-    dateRanges.push(getCalculatedRange(lastRange, appNow));
+    dateRanges.push(getCalculatedRange(lastRange, period, appNow));
   }
-
 
   // Binary search to find relevant date range
   const findRange = (start, end) => {
