@@ -385,6 +385,8 @@ export function getFutureLayerEndDate(layer) {
  * @param {*} activeLayers
  * @param {*} config
  */
+
+// TODO this is assuming a date range of [startDate - enDate] but there may be gaps
 export function dateRange({ layer }, activeLayers, parameters = {}) {
   const now = util.now();
   const { debugGIBS, ignoreDateRange } = parameters;
