@@ -68,8 +68,8 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (https://opensource.g
   <meta name="theme-color" content="#0b3d91"/>
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        const serviceWorker = await navigator.serviceWorker.register('/service-worker.js');
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
       });
     }
     </script>
