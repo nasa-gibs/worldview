@@ -23,6 +23,7 @@ export default {
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     DISMISSED_DISTRACTION_FREE_ALERT: 'dismissedDistractionFreeAlert',
+    DISMISSED_ANIM_MOBILE_ALERT: 'hasDismissedMobileAnimation',
     GLOBAL_TEMPERATURE_UNIT: 'globalTemperatureUnit',
     HIDE_TOUR: 'hideTour',
     HIDE_EDS_WARNING: 'hideEDS',

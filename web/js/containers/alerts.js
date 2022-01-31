@@ -14,6 +14,7 @@ const {
   DISMISSED_COMPARE_ALERT,
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
+  DISMISSED_ANIM_MOBILE_ALERT,
 } = safeLocalStorage.keys;
 class DismissableAlerts extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
       hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
+      hasDismissedMobileAnimation: !!safeLocalStorage.getItem(DISMISSED_ANIM_MOBILE_ALERT),
       distractionFreeModeInitLoad: false,
     };
   }
@@ -68,6 +70,8 @@ class DismissableAlerts extends React.Component {
       isEmbedModeActive,
       isEventsActive,
       isSmall,
+      isMobile,
+      isAnimationActive,
       isVectorZoomAlertPresent,
       isVectorExceededAlertPresent,
       openAlertModal,
@@ -76,6 +80,7 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents,
       hasDismissedCompare,
       hasDismissedDistractionFree,
+      hasDismissedMobileAnimation,
       distractionFreeModeInitLoad,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
@@ -86,6 +91,7 @@ class DismissableAlerts extends React.Component {
 
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
     const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
+    const showAnimationAlert = isMobile && isAnimationActive && !hasDismissedMobileAnimation;
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -134,6 +140,16 @@ class DismissableAlerts extends React.Component {
             message="Too many results at selected point. Zoom in map to see more individual points."
           />
           )}
+          { showAnimationAlert && (
+            <AlertUtil
+              isOpen
+              noPortal
+              icon="info-circle"
+              onDismiss={() => this.dismissAlert(DISMISSED_ANIM_MOBILE_ALERT, 'hasDismissedMobileAnimation')}
+              message="Some longer animations may use a large amount of data (>100MB)"
+            />
+          )}
+
         </>
       );
   }
@@ -147,7 +163,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, embed, events, sidebar, compare, alerts, ui,
+    browser, embed, events, sidebar, compare, alerts, ui, animation,
   } = state;
   const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
   const activeLayers = getActiveLayers(state);
@@ -159,6 +175,8 @@ const mapStateToProps = (state) => {
     isEmbedModeActive: embed.isEmbedModeActive,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isSmall: browser.lessThan.small,
+    isMobile: browser.lessThan.medium,
+    isAnimationActive: animation.isActive,
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
     isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,
   };
@@ -171,11 +189,13 @@ export default connect(
 DismissableAlerts.propTypes = {
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
+  isAnimationActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isEventsActive: PropTypes.bool,
   isSmall: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isVectorZoomAlertPresent: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   openAlertModal: PropTypes.func,

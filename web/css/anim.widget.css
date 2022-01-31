@@ -137,6 +137,7 @@
       right: 8px;
       bottom: 9px;
     }
+
     /* No hover styles on mobile */
     @media (min-width: 769px) {
       &:hover {
