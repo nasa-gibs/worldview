@@ -25,7 +25,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import Queue from 'promise-queue';
+import PQueue from 'p-queue/dist';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
@@ -77,7 +77,7 @@ export default function mapui(models, config, store, ui) {
     duration: animationDuration,
   });
   const cache = new Cache(400);
-  const layerQueue = new Queue(5, Infinity);
+  const layerQueue = new PQueue({ concurrency: 3 });
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
   const self = {
     cache,
@@ -195,7 +195,7 @@ export default function mapui(models, config, store, ui) {
       case dateConstants.SELECT_DATE:
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
-        updateDate();
+        updateDate(action.outOfStep);
         break;
       }
       case dateConstants.ARROW_DOWN:
@@ -722,7 +722,7 @@ export default function mapui(models, config, store, ui) {
     compareMapUi.update(compare.activeString);
   }
 
-  function updateDate() {
+  function updateDate(outOfStepChange) {
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getLayerGroup(state);
@@ -750,7 +750,9 @@ export default function mapui(models, config, store, ui) {
       }
     });
     updateLayerVisibilities();
-    layerQueue.add(preloadNextTiles);
+    if (!outOfStepChange) {
+      preloadNextTiles();
+    }
   }
 
   /**
@@ -781,16 +783,15 @@ export default function mapui(models, config, store, ui) {
         preloaded: true,
         lastPreloadDate: subsequentDate,
       });
-      await promiseImageryForTime(state, subsequentDate, useActiveString);
+      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
       return;
     }
 
-    await promiseImageryForTime(state, nextDate, useActiveString);
-    await promiseImageryForTime(state, prevDate, useActiveString);
+    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
 
     if (!date && !arrowDown) {
-      layerQueue.add(() => preloadNextTiles(nextDate, useActiveString));
-      layerQueue.add(() => preloadNextTiles(prevDate, useActiveString));
+      preloadNextTiles(subsequentDate, useActiveString);
     }
   }
 

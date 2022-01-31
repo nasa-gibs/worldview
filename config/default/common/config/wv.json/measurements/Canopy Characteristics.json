@@ -1,0 +1,25 @@
+{
+    "measurements": {
+        "Canopy Characteristics": {
+            "id": "canopy-characteristics",
+            "title":    "Canopy Characteristics",
+            "subtitle": "ISS/GEDI",
+            "sources": {
+                "AVISO": {
+                    "id": "iss-gedi",
+                    "title": "ISS/GEDI",
+                    "description": "gedi/LandSurfaceMetrics",
+                    "image": "",
+                    "settings": [
+                        "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202004",
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202004",
+                        "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202010",
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202010",
+                        "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202104",
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202104"
+                    ]
+                }
+            }
+        }
+    }
+}

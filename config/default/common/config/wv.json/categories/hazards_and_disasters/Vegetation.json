@@ -8,6 +8,7 @@
                 "description": "",
                 "measurements": [
                     "Corrected Reflectance",
+                    "Canopy Characteristics",
                     "Forests, Mangrove",
                     "Freeze/Thaw",
                     "FPAR",

@@ -14,20 +14,21 @@ const converter = new showdown.Converter({
 });
 
 const configFiles = glob.sync('build/options/config/metadata/**/*.md');
-for (const configFile of configFiles) {
-  const dest = configFile.replace(/\.md$/, '.html');
-  const markdown = fs.readFileSync(configFile, { encoding: 'utf-8' });
-  const html = converter.makeHtml(markdown);
-  fs.writeFileSync(dest, html);
+const storyFiles = glob.sync('build/options/stories/**/*.md');
+const aboutFiles = glob.sync('build/options/brand/about/*.md');
+
+function convertMDtoHTML(mdFiles) {
+  for (const mdFile of mdFiles) {
+    const dest = mdFile.replace(/\.md$/, '.html');
+    const markdown = fs.readFileSync(mdFile, { encoding: 'utf-8' });
+    const html = converter.makeHtml(markdown);
+    fs.writeFileSync(dest, html);
+  }
 }
 
-const storyFiles = glob.sync('build/options/stories/**/*.md');
-for (const configFile of storyFiles) {
-  const dest = configFile.replace(/\.md$/, '.html');
-  const markdown = fs.readFileSync(configFile, { encoding: 'utf-8' });
-  const html = converter.makeHtml(markdown);
-  fs.writeFileSync(dest, html);
-}
+convertMDtoHTML(configFiles);
+convertMDtoHTML(storyFiles);
+convertMDtoHTML(aboutFiles);
 
 console.log('Copying options to web directory');
 shell.cp('-r', 'build/options/config', 'web');

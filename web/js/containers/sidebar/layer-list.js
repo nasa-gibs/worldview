@@ -51,7 +51,9 @@ function LayerList(props) {
     toggleCollapse,
     isMobile,
     numVisible,
+    isAnimating,
   } = props;
+
   const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
@@ -127,7 +129,7 @@ function LayerList(props) {
     );
   };
 
-  const renderDropdownMenu = () => (
+  const renderDropdownMenu = () => !isAnimating && (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
       <DropdownToggle>
         <FontAwesomeIcon
@@ -209,6 +211,7 @@ LayerList.propTypes = {
   dragHandleProps: PropTypes.object,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
+  isAnimating: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   layers: PropTypes.array,
@@ -225,7 +228,7 @@ LayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    embed, proj, config, map,
+    embed, proj, config, map, animation,
   } = state;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
@@ -245,6 +248,7 @@ const mapStateToProps = (state, ownProps) => {
     getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),
     numVisible,
+    isAnimating: animation.isPlaying,
   };
 };
 

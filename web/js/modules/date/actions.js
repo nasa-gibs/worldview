@@ -69,8 +69,9 @@ export function selectDate(date) {
     const selectedDate = date > maxDate ? maxDate : date;
     const direction = selectedDate > prevDate ? 'right' : 'left';
     const directionChange = direction && lastArrowDirection !== direction;
+    const outOfStep = outOfStepChange(state, selectedDate);
 
-    if (preloaded && (directionChange || outOfStepChange(state, selectedDate))) {
+    if (preloaded && directionChange) {
       dispatch(clearPreload());
     }
     dispatch({
@@ -78,6 +79,7 @@ export function selectDate(date) {
       activeString,
       value: selectedDate,
       lastArrowDirection: direction,
+      outOfStep,
     });
   };
 }
