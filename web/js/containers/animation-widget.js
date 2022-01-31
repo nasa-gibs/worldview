@@ -356,6 +356,7 @@ class AnimationWidget extends React.Component {
       numberOfFrames,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
+    const { isMobile } = this.props;
     const cancelSelector = '.no-drag, svg';
     return (
       <Draggable
@@ -364,6 +365,7 @@ class AnimationWidget extends React.Component {
         onStart={this.handleDragStart}
         position={collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}
+        disabled={isMobile}
       >
         <div
           className={`wv-animation-widget-wrapper minimized${hasSubdailyLayers ? ' subdaily' : ''}`}
@@ -378,8 +380,8 @@ class AnimationWidget extends React.Component {
               pause={onPushPause}
               isDisabled={numberOfFrames >= maxFrames}
             />
-            <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
+            {!isMobile && <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} /> }
+            {!isMobile && <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} /> }
           </div>
         </div>
       </Draggable>
@@ -564,6 +566,7 @@ class AnimationWidget extends React.Component {
       looping,
       isPlaying,
       startDate,
+      isMobile,
       endDate,
       onPushPause,
       isActive,
@@ -607,7 +610,7 @@ class AnimationWidget extends React.Component {
         )}
         {!isDistractionFreeModeActive && (
           <>
-            {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
+            {collapsed || isMobile ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
           </>
         )}
       </ErrorBoundary>
@@ -665,7 +668,6 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
-    && (browser.greaterThan.small || isEmbedModeActive)
     && lodashGet(map, 'ui.selected.frameState_')
     && sidebar.activeTab !== 'download' // No Animation when data download is active
     && !compare.active
@@ -715,6 +717,7 @@ function mapStateToProps(state) {
     maxDate,
     isActive: animationIsActive,
     isDistractionFreeModeActive,
+    isMobile: browser.lessThan.medium,
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
@@ -853,6 +856,7 @@ AnimationWidget.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
   looping: PropTypes.bool,

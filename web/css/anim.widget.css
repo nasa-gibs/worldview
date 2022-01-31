@@ -1,10 +1,33 @@
 .wv-animation-widget-wrapper {
   position: absolute;
-  bottom: 88px;
   z-index: 100;
-  &.minimized {
-    bottom: 83px;
-    left: 10px;
+}
+@media (min-width: 769px) {
+  .wv-animation-widget-wrapper {
+    bottom: 88px;
+    &.minimized {
+      bottom: 83px;
+      left: 10px;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .wv-animation-widget-wrapper {
+    bottom: 0;
+    &.minimized {
+      bottom: 10px;
+      right: 80px;
+    }
+    .wv-animation-widget.minimized {
+      border: 1px solid #333;
+      height: 44px;
+      width: 114px;
+      .wv-icon-case {
+        margin: 0;
+        height: 40px;
+        width: 112px;
+      }
+    }
   }
 }
 .wv-animation-widget .input-range.rc-slider-disabled {
@@ -114,9 +137,12 @@
       right: 8px;
       bottom: 9px;
     }
-    &:hover {
-      color: #999;
-      cursor: pointer;
+    /* No hover styles on mobile */
+    @media (min-width: 769px) {
+      &:hover {
+        color: #999;
+        cursor: pointer;
+      }
     }
   }
   .wv-date-range-selector {
@@ -132,9 +158,11 @@ a .wv-animation-widget-icon {
   -webkit-transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
-  &:hover {
-    color: #fff;
-    opacity: 0.5;
+  @media (min-width: 769px) {
+    &:hover {
+      color: #fff;
+      opacity: 0.5;
+    }
   }
   &.fa-file-video {
     font-size: 29px;
