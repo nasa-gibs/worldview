@@ -358,7 +358,10 @@ class AnimationWidget extends React.Component {
     const { collapsedWidgetPosition } = this.state;
     const { isMobile } = this.props;
     const cancelSelector = '.no-drag, svg';
-    return (
+    const isDisabled = numberOfFrames >= maxFrames;
+    const dontShow = isMobile && isDisabled;
+
+    return !dontShow && (
       <Draggable
         bounds="body"
         cancel={cancelSelector}
