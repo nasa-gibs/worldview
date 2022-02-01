@@ -8,7 +8,7 @@ import OlMeasureTool from '../../components/map/ol-measure-tool';
 import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
 import OlRotationButtons from '../../components/map/rotation';
 import OlZoomButtons from '../../components/map/zoom';
-import RightClickMenu from '../../components/context-menu/context-menu';
+import ContextMenu from '../../components/context-menu/context-menu';
 import NaturalEvents from '../../map/natural-events/natural-events';
 import DateLines from '../../components/dateline/datelines';
 
@@ -30,10 +30,7 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
-        <ContextMenuTrigger id="context-menu-trigger">
-          <div id="wv-map" className={mapClasses} />
-        </ContextMenuTrigger>
-        <RightClickMenu />
+        <ContextMenu />
         <OlZoomButtons />
         <OlRotationButtons />
         <OlCoordinates show={!isDistractionFreeModeActive} />
