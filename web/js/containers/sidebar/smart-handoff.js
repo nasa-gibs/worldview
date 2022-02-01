@@ -655,7 +655,7 @@ const mapDispatchToProps = (dispatch) => ({
     });
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
-        headerText: 'Leaving Worldview',
+        headerText: 'Leaving @NAME@',
         bodyComponent: SmartHandoffModal,
         desktopOnly: true,
         bodyComponentProps: {

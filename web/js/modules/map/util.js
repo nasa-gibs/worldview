@@ -193,9 +193,10 @@ function promiseTileLayer(layer, extent, map) {
   let i;
   let tileGrid;
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (!extent) {
       resolve('resolve tile layer');
+      return;
     }
     // OL object describing the current map frame
     const { pixelRatio, viewState } = map.frameState_;
@@ -259,7 +260,7 @@ function promiseTileLayer(layer, extent, map) {
  * @return {object}            Promise
  */
 function promiseLayerGroup(layerGroup, map) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Current layer's 3 layer array (prev, current, next days)
     const layers = layerGroup.getLayersArray() || [layerGroup];
 
@@ -284,14 +285,13 @@ export async function promiseImageryForTime(state, date, activeString) {
   const {
     cache, selected, createLayer, layerKey,
   } = map.ui;
-  const options = { date, group: activeString };
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
-
   await Promise.all(layers.map((layer) => {
+    const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
     const layerGroup = cache.getItem(key) || createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
   }));
-
+  selected.getView().changed();
   return date;
 }

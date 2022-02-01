@@ -34,8 +34,6 @@ import {
   customModalType,
 } from '../modules/date/constants';
 import {
-  getQueueLength,
-  getMaxQueueLength,
   snapToIntervalDelta,
   getNumberOfSteps,
 } from '../modules/animation/util';
@@ -319,9 +317,13 @@ class AnimationWidget extends React.Component {
       endDate,
     } = this.props;
     if (subDailyMode) {
-      // for subdaily, zero start and end dates to UTC XX:YY:00:00
+      // for subdaily, zero start and end dates to UTC HH:MM:00:00
+      const startMinutes = startDate.getMinutes();
+      const endMinutes = endDate.getMinutes();
+      startDate.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
       startDate.setUTCSeconds(0);
       startDate.setUTCMilliseconds(0);
+      endDate.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
       endDate.setUTCSeconds(0);
       endDate.setUTCMilliseconds(0);
     } else {
@@ -565,7 +567,6 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
@@ -573,17 +574,10 @@ class AnimationWidget extends React.Component {
       isGifActive,
       delta,
       interval,
+      numberOfFrames,
+      subDailyMode,
     } = this.props;
     const { speed, collapsed } = this.state;
-    const maxLength = getMaxQueueLength(speed);
-    const queueLength = getQueueLength(
-      startDate,
-      endDate,
-      speed,
-      interval,
-      delta,
-    );
-
 
     if (!isActive) {
       return null;
@@ -597,19 +591,17 @@ class AnimationWidget extends React.Component {
           <PlayQueue
             isLoopActive={looping}
             isPlaying={isPlaying}
-            canPreloadAll={queueLength <= maxLength}
+            numberOfFrames={numberOfFrames}
             currentDate={snappedCurrentDate}
             startDate={startDate}
             endDate={endDate}
-            hasCustomPalettes={hasCustomPalettes}
-            maxQueueLength={maxLength}
-            queueLength={queueLength}
             interval={interval}
             delta={delta}
             speed={speed}
             selectDate={selectDate}
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
+            subDailyMode={subDailyMode}
             onClose={onPushPause}
           />
         )}
@@ -684,13 +676,14 @@ function mapStateToProps(state) {
     customInterval = customInterval > 3 ? 3 : customInterval;
   }
   const useInterval = customSelected ? customInterval || 3 : interval;
+  const useDelta = customSelected && customDelta ? customDelta : delta;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
   const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
-    customSelected && customDelta ? customDelta : delta,
+    useDelta,
     maxFrames,
   );
   const { rotation } = map;
@@ -703,7 +696,7 @@ function mapStateToProps(state) {
       startDate,
       endDate,
       TIME_SCALE_FROM_NUMBER[useInterval],
-      delta,
+      useDelta,
     );
   } else {
     snappedCurrentDate = currentDate;
@@ -725,7 +718,7 @@ function mapStateToProps(state) {
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
-    delta: customSelected && customDelta ? customDelta : delta,
+    delta: useDelta,
     interval: TIME_SCALE_FROM_NUMBER[useInterval] || 'day',
     customDelta: customDelta || 1,
     customInterval: customInterval || 3,
@@ -753,6 +746,7 @@ function mapStateToProps(state) {
     ),
   };
 }
+
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
     dispatch(selectDate(val));

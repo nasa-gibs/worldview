@@ -121,7 +121,6 @@ a.atexpand {
 
 .sidebar-panel li.item {
   padding: 0;
-  cursor: move;
   margin: 0 auto;
 }
 
@@ -204,7 +203,7 @@ img.sidebar-panel-item-img {
   display: block;
 }
 
-img.hideReg {
+.visibility img {
   height: 14px;
   width: 20px;
 }
@@ -242,7 +241,7 @@ li.item.productsitem.inmotion,
   border-color: #fff;
 }
 
-.productsitem a.hdanchor.hideReg {
+.productsitem a.visibility {
   width: 30px;
   background-color: #ccc;
   position: absolute;
@@ -250,25 +249,41 @@ li.item.productsitem.inmotion,
   bottom: 0;
   cursor: pointer;
   border-right: 1px solid #333;
+  &.layer-enabled:hover {
+    background: #fff;
+  }
+  &.disabled:hover {
+    cursor: not-allowed;
+  }
+  &.layer-visible.disabled:hover {
+    cursor: not-allowed;
+    background: #c5c5c8;
+    .svg-inline--fa {
+      color: #333;
+    }
+  }
+  &.layer-hidden.disabled:hover {
+    background: #666;
+    cursor: not-allowed;
+    .svg-inline--fa {
+      color: #c5c5c8;
+    }
+  }
+  .layer-eye-icon {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    font-size: 18px;
+  }
 }
 
-.productsitem.layer-visible a.hdanchor:hover {
-  background: #fff;
-}
-
-.productsitem .layer-eye-icon {
-  text-align: center;
-  display: inline-block;
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  margin-top: -10px;
-  font-size: 18px;
-}
 .productsitem svg.svg-inline--fa {
   color: #333;
 }
-.productsitem .hdanchor:hover .layer-eye-icon {
+.productsitem .visibility:hover .layer-eye-icon {
   color: #000;
 }
 .layer-hidden svg.svg-inline--fa {
@@ -281,7 +296,7 @@ li.item.productsitem.inmotion,
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;
-  top: 22px;
+  bottom: 7px;
 }
 
 .productsitem .layer-pointer-icon svg.svg-inline--fa {
@@ -448,10 +463,10 @@ li.item.productsitem.inmotion,
 }
 
 .productsitem {
+  cursor: grab;
   & .layer-info {
     background-color: #ccc;
     min-height: 40px;
-    cursor: grab;
     & .layer-buttons {
       position: absolute;
       right: 0;
@@ -475,7 +490,6 @@ li.item.productsitem.inmotion,
   & .layer-main {
     width: auto;
     margin-left: 30px;
-    cursor: default;
     min-height: 40px;
     overflow: hidden;
   }
@@ -483,14 +497,6 @@ li.item.productsitem.inmotion,
 
 .productsitem.zotted .layer-main {
   margin-left: 41px;
-}
-
-.productsitem.layer-hidden a.hdanchor {
-  background: #666;
-}
-
-.productsitem.layer-hidden a.hdanchor:hover {
-  background: rgba(255, 255, 255, 1);
 }
 
 .productsitem.layer-hidden .layer-info h4,
@@ -513,16 +519,21 @@ li.item.productsitem.inmotion,
   height: 42px;
 }
 
-.sidebar-panel li.item.productsitem.disabled.layer-hidden:hover {
-  border-color: transparent;
+.productsitem.layer-hidden a.visibility {
+  background: #666;
 }
 
-.disabled.layer-hidden a.hdanchor:hover {
+.sidebar-panel li.item.productsitem.disabled:hover {
+  border-color: transparent;
+  cursor: default;
+}
+
+.disabled.layer-hidden a.visibility:hover {
   background: rgba(255, 255, 255, 0.2);
   cursor: default;
 }
 
-.productsitem.disabled.layer-hidden a.hdanchor:hover svg.svg-inline--fa {
+.productsitem.disabled.layer-hidden a.visibility:hover svg.svg-inline--fa {
   color: #c5c5c8;
 }
 
@@ -575,7 +586,7 @@ li.item.productsitem.inmotion,
       font-size: 26px;
       margin-top: -13px;
     }
-    a.hdanchor.hideReg {
+    a.visibility {
       width: 45px;
     }
   }

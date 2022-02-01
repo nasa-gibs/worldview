@@ -19,18 +19,18 @@ import util from '../../util/util';
 export function snapToIntervalDelta(currDate, startDate, endDate, interval, delta) {
   // moment pluralizes: 'days', 'hours', etc
   const units = `${interval}s`;
-  const dateArray = [];
   let tempDate = startDate;
-  let currentDate; let prevMoment; let
-    nextMoment;
+  let currentDate;
+  let prevMoment;
+  let nextMoment;
 
   while (tempDate <= endDate) {
     prevMoment = moment.utc(tempDate);
     nextMoment = moment.utc(tempDate).add(delta, units);
     if (currDate >= prevMoment && currDate <= nextMoment) {
       currentDate = new Date(prevMoment);
+      break;
     }
-    dateArray.push(tempDate);
     tempDate = new Date(nextMoment);
   }
   return currentDate || startDate;
@@ -100,63 +100,6 @@ export function svgToPng(svgURL, stampHeight) {
   newImage.height = canvasEl.height;
 
   return newImage;
-}
-
-/**
- * Returns the queueLength based on the play speed selected
- * @method getMaxQueueLength
- * @static
- *
- * @return {number}  The queueLength amount
- */
-export function getMaxQueueLength(speed) {
-  let queueLength = 10;
-  switch (true) {
-    case speed > 8 && speed <= 10:
-      queueLength = 40;
-      break;
-    case speed > 7 && speed <= 8:
-      queueLength = 32;
-      break;
-    case speed > 5 && speed <= 7:
-      queueLength = 24;
-      break;
-    case speed > 3 && speed <= 5:
-      queueLength = 16;
-      break;
-    case speed > 0 && speed <= 3:
-      queueLength = 10;
-      break;
-    default:
-      break;
-  }
-  return queueLength;
-}
-
-/*
- * default queueLength
- *
- * @method getQueueLength
- * @static
- *
- * @param startDate {object} JS date
- * @param endDate {object} JS date
- *
- * @returns {number} new buffer length
- *
- */
-export function getQueueLength(startDate, endDate, speed, interval, delta) {
-  let day = startDate;
-  let i = 0;
-  const maxQueueLength = getMaxQueueLength(speed);
-  while (i <= maxQueueLength) {
-    i += 1;
-    day = util.dateAdd(day, interval, delta);
-    if (day > endDate) {
-      return i;
-    }
-  }
-  return i;
 }
 
 export function mapLocationToAnimationState(
