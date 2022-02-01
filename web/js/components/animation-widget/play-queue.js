@@ -109,13 +109,13 @@ class PlayQueue extends React.Component {
 
   getAverageFetchTime = () => {
     const { subDailyMode } = this.props;
-    const defaultTime = subDailyMode ? 1800 : 500;
+    const defaultTime = subDailyMode ? 1800 : 750;
     // Filter outliers (e.g. layers that have already been loaded)
     const filteredTimes = this.fetchTimes.filter((time) => time >= 200);
     const averageFetchTime = filteredTimes.length
       && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
     // If we don't have enough real times, use a reasonable default
-    const averageTime = filteredTimes.length > 10 ? averageFetchTime : defaultTime;
+    const averageTime = filteredTimes.length >= 10 ? averageFetchTime : defaultTime;
     return averageTime;
   }
 
@@ -130,10 +130,11 @@ class PlayQueue extends React.Component {
     const remainingLoadTime = (avgFetchTime * remainingFrames) / CONCURRENT_REQUESTS;
     const totalPlayTime = (numberOfFrames / speed) * 1000;
     const timeToBufferEnd = totalPlayTime - remainingPlayTime;
-    const canFinishLoadWhilePlaying = timeToBufferEnd > remainingLoadTime;
+    const framesLoadedDuringInitialBufferPlayback = timeToBufferEnd / avgFetchTime;
+    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.defaultBufferSize;
 
-    if (!canFinishLoadWhilePlaying && remainingLoadTime >= remainingPlayTime) {
-      const preloadTime = remainingLoadTime - timeToBufferEnd;
+    if (!canKeepUp && remainingLoadTime >= remainingPlayTime) {
+      const preloadTime = remainingLoadTime - remainingPlayTime;
       bufferSize = Math.ceil(preloadTime / 1000);
     }
 
