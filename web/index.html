@@ -64,15 +64,15 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (https://opensource.g
   <link type="text/css" rel="Stylesheet" href="build/wv.css?v=@BUILD_NONCE@">
   <script type="text/javascript" src="build/wv.js?v=@BUILD_NONCE@"></script>
 
-  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0b3d91"/>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js');
+        navigator.serviceWorker.register('service-worker.js');
       });
     }
-    </script>
+  </script>
 </head>
 
 <body>
