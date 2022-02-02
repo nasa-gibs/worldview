@@ -8,19 +8,14 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
-  "scope": "/",
+  "start_url": ".",
+  "scope": ".",
   "id":"/",
   "background_color": "#212529",
   "display": "fullscreen",
   "theme_color": "#0b3d91",
   "description": "@DESCRIPTION@",
   "screenshots": [
-    {
-      "src": "images/preview.jpg",
-      "type": "image/jpg",
-      "sizes": "2400x1260"
-    },
     {
       "src": "images/readme-preview.jpg",
       "type": "image/jpg",
