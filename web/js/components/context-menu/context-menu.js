@@ -10,13 +10,9 @@ const ContextMenu = () => {
         className="context-menu"
         style={{ top: anchorPoint.y, left: anchorPoint.x }}
       >
-        <li>Share to..</li>
-        <li>Cut</li>
-        <li>Copy</li>
-        <li>Paste</li>
-        <hr />
-        <li>Refresh</li>
-        <li>Exit</li>
+        <li>Copy Coordinates to Clipboard</li>
+        <li>Start a Measurement</li>
+        <li>Add a Place Marker</li>
       </ul>
     );
   }
