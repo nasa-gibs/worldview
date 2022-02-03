@@ -1,6 +1,6 @@
 {
-  "short_name": "@NAME@",
-  "name": "@LONG_NAME@",
+  "short_name": "Worldview",
+  "name": "EOSDIS Worldview",
   "icons": [
     {
       "src": "images/wv-logo-mobile.png",
