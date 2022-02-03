@@ -1,19 +1,25 @@
 .context-menu {
   font-size: 14px;
-  background-color: #fff;
-  border-radius: 2px;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  border-radius: 5px;
   padding: 15px;
-  width: 150px;
+  width: auto;
   height: auto;
   margin: 0;
   position: absolute;
   list-style: none;
-  box-shadow: 0 0 20px 0 #ccc;
+  box-shadow: 5px 5px 10px 0 #333;
   opacity: 1;
   transition: opacity 0.5s linear;
   z-index: 9999;
+  cursor: pointer;
 }
 
 .context-menu li {
   padding: 5px;
+}
+
+.context-menu li:hover {
+  background-color: #191970;
 }
