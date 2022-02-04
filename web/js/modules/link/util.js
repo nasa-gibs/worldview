@@ -50,7 +50,7 @@ export function emailUrlParams(subject, body) {
 }
 
 export function getShareLink(type, url) {
-  const shareMessage = 'Check out what I found in NASA Worldview!';
+  const shareMessage = 'Check out what I found in NASA @NAME@!';
   const twMessage = 'Check out what I found in #NASAWorldview -';
   const emailBody = `${shareMessage} - ${url}`;
 

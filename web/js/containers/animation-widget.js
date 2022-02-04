@@ -29,17 +29,16 @@ import {
   toggleCustomModal,
 } from '../modules/date/actions';
 import {
-  timeScaleFromNumberKey,
-  timeScaleToNumberKey,
+  TIME_SCALE_FROM_NUMBER,
+  TIME_SCALE_TO_NUMBER,
   customModalType,
 } from '../modules/date/constants';
 import {
-  getQueueLength,
-  getMaxQueueLength,
   snapToIntervalDelta,
+  getNumberOfSteps,
 } from '../modules/animation/util';
 import {
-  hasSubDaily as hasSubDailySelector,
+  subdailyLayersActive,
   getActiveLayers,
   getAllActiveLayers,
   dateRange as getDateRange,
@@ -94,7 +93,8 @@ const RangeHandle = (props) => {
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
-const maxFrames = 40;
+const maxFrames = 300;
+const maxGifFrames = 40;
 
 /*
  * A react component, Builds a rather specific
@@ -274,7 +274,7 @@ class AnimationWidget extends React.Component {
       timeScale = customInterval;
       delta = customDelta;
     } else {
-      timeScale = Number(timeScaleToNumberKey[timeScale]);
+      timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       delta = 1;
     }
     onIntervalSelect(delta, timeScale, customSelected);
@@ -317,9 +317,13 @@ class AnimationWidget extends React.Component {
       endDate,
     } = this.props;
     if (subDailyMode) {
-      // for subdaily, zero start and end dates to UTC XX:YY:00:00
+      // for subdaily, zero start and end dates to UTC HH:MM:00:00
+      const startMinutes = startDate.getMinutes();
+      const endMinutes = endDate.getMinutes();
+      startDate.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
       startDate.setUTCSeconds(0);
       startDate.setUTCMilliseconds(0);
+      endDate.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
       endDate.setUTCSeconds(0);
       endDate.setUTCMilliseconds(0);
     } else {
@@ -349,6 +353,7 @@ class AnimationWidget extends React.Component {
       isPlaying,
       onPushPause,
       hasSubdailyLayers,
+      numberOfFrames,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -371,6 +376,7 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
+              isDisabled={numberOfFrames >= maxFrames}
             />
             <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
@@ -395,9 +401,9 @@ class AnimationWidget extends React.Component {
       visibleLayersForProj,
       proj,
     } = this.props;
-    const gifDisabled = numberOfFrames >= maxFrames;
+    const gifDisabled = numberOfFrames >= maxGifFrames;
     const elemExists = document.querySelector('#create-gif-button');
-    const showWarning = elemExists && numberOfFrames >= maxFrames;
+    const showWarning = elemExists && numberOfFrames >= maxGifFrames;
     const warningMessage = (
       <span>
         Too many frames were selected.
@@ -409,7 +415,7 @@ class AnimationWidget extends React.Component {
 
     const openGif = async () => {
       const { startDate, endDate } = this.zeroDates();
-      if (numberOfFrames >= maxFrames) {
+      if (numberOfFrames >= maxGifFrames) {
         return;
       }
       const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
@@ -469,6 +475,7 @@ class AnimationWidget extends React.Component {
       interval,
       animationCustomModalOpen,
       hasSubdailyLayers,
+      numberOfFrames,
     } = this.props;
     const { speed, widgetPosition } = this.state;
     const cancelSelector = '.no-drag, .date-arrows';
@@ -493,6 +500,7 @@ class AnimationWidget extends React.Component {
                 timeScaleChangeUnit={interval}
                 hasSubdailyLayers={hasSubdailyLayers}
                 modalType={customModalType.ANIMATION}
+                isDisabled={isPlaying}
               />
               {' Increments'}
             </div>
@@ -507,6 +515,7 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
+              isDisabled={numberOfFrames >= maxFrames}
             />
             <LoopButton looping={looping} onLoop={this.onLoop} />
 
@@ -521,6 +530,7 @@ class AnimationWidget extends React.Component {
                 onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
                 onAfterChange={() => { onSlide(speed); }}
+                disabled={isPlaying}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
@@ -537,6 +547,7 @@ class AnimationWidget extends React.Component {
               minDate={minDate}
               maxDate={maxDate}
               subDailyMode={subDailyMode}
+              isDisabled={isPlaying}
             />
 
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
@@ -556,32 +567,17 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
-      currentDate,
+      snappedCurrentDate,
       isGifActive,
       delta,
       interval,
+      numberOfFrames,
+      subDailyMode,
     } = this.props;
     const { speed, collapsed } = this.state;
-    const maxLength = getMaxQueueLength(speed);
-    const queueLength = getQueueLength(
-      startDate,
-      endDate,
-      speed,
-      interval,
-      delta,
-    );
-
-    const snappedCurrentDate = snapToIntervalDelta(
-      currentDate,
-      startDate,
-      endDate,
-      interval,
-      delta,
-    );
 
     if (!isActive) {
       return null;
@@ -595,19 +591,17 @@ class AnimationWidget extends React.Component {
           <PlayQueue
             isLoopActive={looping}
             isPlaying={isPlaying}
-            canPreloadAll={queueLength <= maxLength}
+            numberOfFrames={numberOfFrames}
             currentDate={snappedCurrentDate}
             startDate={startDate}
             endDate={endDate}
-            hasCustomPalettes={hasCustomPalettes}
-            maxQueueLength={maxLength}
-            queueLength={queueLength}
             interval={interval}
             delta={delta}
             speed={speed}
             selectDate={selectDate}
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
+            subDailyMode={subDailyMode}
             onClose={onPushPause}
           />
         )}
@@ -651,7 +645,7 @@ function mapStateToProps(state) {
     customInterval,
   } = date;
   const activeLayers = getActiveLayers(state);
-  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const hasSubdailyLayers = subdailyLayersActive(state);
   const activeLayersForProj = getAllActiveLayers(state);
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
@@ -682,17 +676,32 @@ function mapStateToProps(state) {
     customInterval = customInterval > 3 ? 3 : customInterval;
   }
   const useInterval = customSelected ? customInterval || 3 : interval;
+  const useDelta = customSelected && customDelta ? customDelta : delta;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
-  const numberOfFrames = util.getNumberOfDays(
+  const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
-    timeScaleFromNumberKey[useInterval],
-    customSelected && customDelta ? customDelta : delta,
+    TIME_SCALE_FROM_NUMBER[useInterval],
+    useDelta,
     maxFrames,
   );
   const { rotation } = map;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
+  const currentDate = getSelectedDate(state);
+  let snappedCurrentDate;
+  if (numberOfFrames < maxFrames) {
+    snappedCurrentDate = snapToIntervalDelta(
+      currentDate,
+      startDate,
+      endDate,
+      TIME_SCALE_FROM_NUMBER[useInterval],
+      useDelta,
+    );
+  } else {
+    snappedCurrentDate = currentDate;
+  }
+
   return {
     appNow,
     screenWidth: browser.screenWidth,
@@ -701,7 +710,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     activePalettes,
-    currentDate: getSelectedDate(state),
+    snappedCurrentDate,
     minDate,
     maxDate,
     isActive: animationIsActive,
@@ -709,8 +718,8 @@ function mapStateToProps(state) {
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
-    delta: customSelected && customDelta ? customDelta : delta,
-    interval: timeScaleFromNumberKey[useInterval] || 'day',
+    delta: useDelta,
+    interval: TIME_SCALE_FROM_NUMBER[useInterval] || 'day',
     customDelta: customDelta || 1,
     customInterval: customInterval || 3,
     numberOfFrames,
@@ -737,6 +746,7 @@ function mapStateToProps(state) {
     ),
   };
 }
+
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
     dispatch(selectDate(val));
@@ -828,7 +838,7 @@ AnimationWidget.propTypes = {
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   delta: PropTypes.number,

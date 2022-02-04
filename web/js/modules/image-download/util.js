@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import { boundingExtent, containsCoordinate } from 'ol/extent';
 import util from '../../util/util';
+import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
 import { coordinatesCRSTransform } from '../projection/util';
 
@@ -425,8 +426,8 @@ export function getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, p
     const crossesNextDay = geolonlat1[0] < maxExtent[0];
     const crossesPrevDay = geolonlat2[0] > maxExtent[2];
     const zeroedDate = util.clearTimeUTC(date);
-    const nextDay = util.toISOStringDateMonthAbbrev(util.dateAdd(zeroedDate, 'day', 1));
-    const prevDay = util.toISOStringDateMonthAbbrev(util.dateAdd(zeroedDate, 'day', -1));
+    const nextDay = formatDisplayDate(util.dateAdd(zeroedDate, 'day', 1));
+    const prevDay = formatDisplayDate(util.dateAdd(zeroedDate, 'day', -1));
     const buildString = (lineStr, dateStr) => `The selected snapshot area crosses ${lineStr} and uses imagery from the ${dateStr}.`;
     if (crossesNextDay && crossesPrevDay) {
       // snapshot extends over both map wings

@@ -57,7 +57,7 @@ function InfoList (props) {
 
   function getExploreWorldviewObj() {
     return {
-      text: 'Explore SOTO',
+      text: 'Explore @NAME@',
       iconClass: 'ui-icon',
       iconName: 'truck',
       id: 'start_tour_info_item',

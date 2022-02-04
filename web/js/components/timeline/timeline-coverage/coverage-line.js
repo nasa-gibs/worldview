@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import util from '../../../util/util';
+import { formatDisplayDate } from '../../../modules/date/util';
 
 /*
  * Coverage Line for DOM Element layer coverage.
@@ -28,8 +28,8 @@ class CoverageLine extends PureComponent {
     // eslint-disable-next-line default-case
     switch (lineType) {
       case 'SINGLE':
-        dateRangeStart = (startDate && util.toISOStringDateMonthAbbrev(new Date(startDate))) || 'Start';
-        dateRangeEnd = (endDate && util.toISOStringDateMonthAbbrev(new Date(endDate))) || 'Present';
+        dateRangeStart = (startDate && formatDisplayDate(new Date(startDate))) || 'Start';
+        dateRangeEnd = (endDate && formatDisplayDate(new Date(endDate))) || 'Present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
@@ -43,8 +43,8 @@ class CoverageLine extends PureComponent {
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
           dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
         } else {
-          dateRangeStart = util.toISOStringDateMonthAbbrev(new Date(startDate));
-          dateRangeEnd = util.toISOStringDateMonthAbbrev(new Date(endDate));
+          dateRangeStart = formatDisplayDate(new Date(startDate));
+          dateRangeEnd = formatDisplayDate(new Date(endDate));
           toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         }
         break;

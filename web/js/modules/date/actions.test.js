@@ -17,7 +17,6 @@ import {
 } from './constants';
 import fixtures from '../../fixtures';
 import { addLayer, getLayers } from '../layers/selectors';
-import util from '../../util/util';
 
 const config = fixtures.config();
 function getState(layers) {
@@ -52,7 +51,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 // test variables
-const mockDate = util.now();
+const mockDate = new Date('2022-01-01');
 const customInterval = 3;
 const delta = 5;
 const interval = 3;
@@ -86,12 +85,17 @@ describe('Date timescale changes', () => {
         activeString: 'selected',
         value: mockDate,
         lastArrowDirection: 'left',
+        outOfStep: true,
       };
       let layers = addLayer('terra-cr', {}, [], config.layers, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
           preloaded: true,
+          selected: mockDate,
+          delta: 1,
+          interval: 1,
+          unit: 'year',
         },
         compare: {
           isCompareA: true,
@@ -113,6 +117,7 @@ describe('Date timescale changes', () => {
 
   test(`selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value`,
     () => {
+      const prevDate = new Date('2021-01-01');
       const expectedFirst = {
         type: CLEAR_PRELOAD,
       };
@@ -120,13 +125,18 @@ describe('Date timescale changes', () => {
         type: SELECT_DATE,
         activeString: 'selectedB',
         value: mockDate,
-        lastArrowDirection: 'left',
+        lastArrowDirection: 'right',
+        outOfStep: false,
       };
       let layers = addLayer('terra-cr', {}, [], config.layers, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
           preloaded: true,
+          selectedB: prevDate,
+          delta: 1,
+          interval: 1,
+          unit: 'year',
         },
         compare: {
           isCompareA: false,

@@ -211,6 +211,12 @@ footer .compare-toggle-button {
       color: #eee;
       font-size: 14px;
       padding: 6px 12px;
+
+      @media (max-width: 768px) {
+        font-size: 18px;
+        padding: 12px 14px;
+      }
+
       &:hover {
         color: #fff;
         background-color: #d54e21;
@@ -285,6 +291,10 @@ footer .compare-toggle-button {
       cursor: pointer;
       display: inline;
     }
+  }
+
+  .layer-group-case .layer-group-more-options {
+    top: 10px;
   }
 
   #productsHolder footer .product-buttons {
@@ -431,7 +441,7 @@ footer .compare-toggle-button {
       > div {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         max-height: calc(var(--vh, 1vh) * 100 - 2px);
         height: 100%;
       }
@@ -459,14 +469,29 @@ footer .compare-toggle-button {
 
 .layer-info-modal {
   width: 500px;
+
   .modal-body {
     overflow-y: scroll;
     max-height: calc(100vh - 200px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+
+    .modal-body {
+      overflow-y: scroll;
+      max-height: 100%;
+    }
   }
 }
 
 .layer-settings-modal {
   width: 300px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   .nav-tabs {
     border-bottom: none;
   }

@@ -38,6 +38,7 @@ function BrowseLayers (props) {
     width,
     recentLayers,
     selectCategoryType,
+    selectedCategoryName,
     selectedProjection,
     toggleMeasurementsTab,
     toggleFeatureTab,
@@ -192,6 +193,8 @@ function BrowseLayers (props) {
           </DropdownMenu>
         </Dropdown>
         {recentLayersHeader()}
+
+        {selectedCategoryName && <div className="selected-category">{selectedCategoryName}</div>}
       </div>
     );
   }
@@ -216,6 +219,7 @@ BrowseLayers.propTypes = {
   categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
+  selectedCategoryName: PropTypes.string,
   mode: PropTypes.string,
   recentLayers: PropTypes.array,
   selectCategoryType: PropTypes.func,
@@ -254,6 +258,7 @@ function mapStateToProps(state) {
   } = state;
   const {
     mode,
+    category,
     categoryType,
     listScrollTop,
     selectedMeasurement,
@@ -263,6 +268,7 @@ function mapStateToProps(state) {
   return {
     browser,
     mode,
+    selectedCategoryName: category && category.title,
     categoryType,
     categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,

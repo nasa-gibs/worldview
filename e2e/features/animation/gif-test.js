@@ -79,13 +79,13 @@ module.exports = {
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewStartDate,
-                '2018-03-28',
+                '2018 MAR 28',
               );
             client
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewEndDate,
-                '2018-04-04',
+                '2018 APR 04',
               );
             client
               .useCss()
@@ -112,7 +112,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with standard interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQueryStrings.animationTooManyFrames);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFramesGif);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
@@ -124,7 +124,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with custom interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQueryStrings.animationTooManyFramesCustomInterval);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFramesGifCustomInterval);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,

@@ -7,7 +7,7 @@ const EventsAlertModalBody = () => (
     </h1>
     <p>
       There are a variety of factors as to why you may not be seeing an
-      event in Worldview at the moment.
+      event in @NAME@ at the moment.
     </p>
     <ul>
       <li>

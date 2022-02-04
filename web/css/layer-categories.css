@@ -16,8 +16,12 @@
 }
 
 .categories-dropdown-header {
-  height: 45px;
   margin-top: 2px;
+  text-align: center;
+}
+
+.selected-category {
+  margin-bottom: 10px;
 }
 
 .categories-dropdown,
