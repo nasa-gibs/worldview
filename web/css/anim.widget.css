@@ -11,30 +11,35 @@
     }
   }
 }
-@media (max-width: 768px) {
-  .wv-animation-widget-wrapper {
-    bottom: 0;
-    &.minimized {
+
+/* Mobile Style */
+.wv-animation-widget-wrapper.mobile {
+  bottom: 0;
+  &.minimized {
+    bottom: 10px;
+    right: 80px;
+  }
+  &.subdaily {
+    bottom: 65px;
+    left: 165px;
+    &.landscape {
       bottom: 10px;
-      right: 80px;
+      left: 420px;
     }
-    &.subdaily {
-      bottom: 65px;
-      right: 114px;
-    }
-    .wv-animation-widget.minimized {
-      background: transparent;
-      height: 44px;
-      width: 114px;
-      .wv-icon-case {
-        border: 2px solid #333;
-        margin: 0;
-        height: 40px;
-        width: 112px;
-      }
+  }
+  .wv-animation-widget.minimized {
+    background: transparent;
+    height: 44px;
+    width: 114px;
+    .wv-icon-case {
+      border: 2px solid #333;
+      margin: 0;
+      height: 42px;
+      width: 112px;
     }
   }
 }
+
 .wv-animation-widget .input-range.rc-slider-disabled {
   cursor: default;
 }

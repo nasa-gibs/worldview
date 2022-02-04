@@ -65,7 +65,6 @@ import {
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getNonDownloadableLayers, getNonDownloadableLayerWarning, hasNonDownloadableVisibleLayer } from '../modules/image-download/util';
 
-
 const RangeHandle = (props) => {
   const {
     value, offset, dragging, ...restProps
@@ -353,13 +352,17 @@ class AnimationWidget extends React.Component {
       isPlaying,
       onPushPause,
       hasSubdailyLayers,
-      numberOfFrames,
+      playDisabled,
+      isLandscape,
+      isMobile,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
-    const { isMobile } = this.props;
     const cancelSelector = '.no-drag, svg';
-    const isDisabled = numberOfFrames >= maxFrames;
-    const dontShow = isMobile && isDisabled;
+    const dontShow = isMobile && playDisabled;
+    const widgetClasses = 'wv-animation-widget-wrapper minimized '
+      + `${hasSubdailyLayers ? 'subdaily ' : ''}`
+      + `${isMobile ? 'mobile ' : ''}`
+      + `${isLandscape ? 'landscape ' : ''}`;
 
     return !dontShow && (
       <Draggable
@@ -371,7 +374,7 @@ class AnimationWidget extends React.Component {
         disabled={isMobile}
       >
         <div
-          className={`wv-animation-widget-wrapper minimized${hasSubdailyLayers ? ' subdaily' : ''}`}
+          className={widgetClasses}
         >
           <div
             id="wv-animation-widget"
@@ -381,7 +384,8 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
-              isDisabled={numberOfFrames >= maxFrames}
+              isDisabled={playDisabled}
+              isMobile={isMobile}
             />
             {!isMobile && <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} /> }
             {!isMobile && <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} /> }
@@ -480,7 +484,7 @@ class AnimationWidget extends React.Component {
       interval,
       animationCustomModalOpen,
       hasSubdailyLayers,
-      numberOfFrames,
+      playDisabled,
     } = this.props;
     const { speed, widgetPosition } = this.state;
     const cancelSelector = '.no-drag, .date-arrows';
@@ -520,7 +524,7 @@ class AnimationWidget extends React.Component {
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
-              isDisabled={numberOfFrames >= maxFrames}
+              isDisabled={playDisabled}
             />
             <LoopButton looping={looping} onLoop={this.onLoop} />
 
@@ -721,6 +725,7 @@ function mapStateToProps(state) {
     isActive: animationIsActive,
     isDistractionFreeModeActive,
     isMobile: browser.lessThan.medium,
+    isLandscape: browser.orientation === 'landscape',
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
@@ -750,6 +755,7 @@ function mapStateToProps(state) {
         'visible',
       ),
     ),
+    playDisabled: numberOfFrames >= maxFrames || numberOfFrames === 1,
   };
 }
 
@@ -862,6 +868,7 @@ AnimationWidget.propTypes = {
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
+  isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
@@ -876,6 +883,7 @@ AnimationWidget.propTypes = {
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
+  playDisabled: PropTypes.bool,
   promiseImageryForTime: PropTypes.func,
   proj: PropTypes.object,
   refreshStateAfterGif: PropTypes.func,

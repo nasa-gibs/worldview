@@ -7,15 +7,15 @@ import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
-import { getActiveLayers } from '../modules/layers/selectors';
+import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 const {
   DISMISSED_COMPARE_ALERT,
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
-  DISMISSED_ANIM_MOBILE_ALERT,
 } = safeLocalStorage.keys;
+
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +24,6 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
       hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
-      hasDismissedMobileAnimation: !!safeLocalStorage.getItem(DISMISSED_ANIM_MOBILE_ALERT),
       distractionFreeModeInitLoad: false,
     };
   }
@@ -65,6 +64,7 @@ class DismissableAlerts extends React.Component {
     const {
       dismissVectorZoomAlert,
       dismissVectorExceededAlert,
+      hasSubdailyLayers,
       isCompareActive,
       isDistractionFreeModeActive,
       isEmbedModeActive,
@@ -80,7 +80,6 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents,
       hasDismissedCompare,
       hasDismissedDistractionFree,
-      hasDismissedMobileAnimation,
       distractionFreeModeInitLoad,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
@@ -91,7 +90,7 @@ class DismissableAlerts extends React.Component {
 
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
     const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
-    const showAnimationAlert = isMobile && isAnimationActive && !hasDismissedMobileAnimation;
+    const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -140,13 +139,13 @@ class DismissableAlerts extends React.Component {
             message="Too many results at selected point. Zoom in map to see more individual points."
           />
           )}
-          { showAnimationAlert && (
+          {showAnimationAlert && (
             <AlertUtil
               isOpen
               noPortal
               icon="info-circle"
-              onDismiss={() => this.dismissAlert(DISMISSED_ANIM_MOBILE_ALERT, 'hasDismissedMobileAnimation')}
-              message="Some longer animations may use a large amount of data (>100MB)"
+              message="Some animations may use a large amount of data (>100MB)"
+              onDismiss={() => {}}
             />
           )}
 
@@ -179,6 +178,7 @@ const mapStateToProps = (state) => {
     isAnimationActive: animation.isActive,
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
     isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,
+    hasSubdailyLayers: subdailyLayersActive(state),
   };
 };
 export default connect(
@@ -189,6 +189,7 @@ export default connect(
 DismissableAlerts.propTypes = {
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
   isAnimationActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
