@@ -445,7 +445,6 @@ class AnimationWidget extends React.Component {
       delta,
       interval,
       numberOfFrames,
-      subDailyMode,
     } = this.props;
     const { speed, collapsed } = this.state;
 
@@ -470,7 +469,6 @@ class AnimationWidget extends React.Component {
             selectDate={selectDate}
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
-            subDailyMode={subDailyMode}
             onClose={onPushPause}
           />
         )}
