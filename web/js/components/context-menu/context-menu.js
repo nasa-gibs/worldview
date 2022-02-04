@@ -11,7 +11,7 @@ function ContextMenu(props) {
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [pixelCoords, setPixelCoords] = useState({ pixel: [0, 0] });
   const [coord, setCoord] = useState();
-  const [isCopied, setIsCopied] = useState(false);
+  // const [isCopied, setIsCopied] = useState(false);
   // const [isCopyToolTipVisible, setIsCopyToolTipVisible] = useState(false);
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const { map, crs } = props;
@@ -19,7 +19,7 @@ function ContextMenu(props) {
 
   const handleClick = (event, olMap) => {
     console.debug('click: ', olMap);
-    setIsCopied(false);
+    // setIsCopied(false);
     return show ? setShow(false) : null;
   };
 
@@ -37,12 +37,12 @@ function ContextMenu(props) {
 
   function copyCoordsToClipboard(coords) {
     navigator.clipboard.writeText(coords);
-    setIsCopied(true);
+    // setIsCopied(true);
     setToolTipToggleTime(Date.now());
   }
 
   function toggleIsCopyToolTipVisible() {
-    setIsCopied(false);
+    // setIsCopied(false);
   }
 
   // function addPlaceMarkerHandler(olMap) {
