@@ -8,8 +8,7 @@
       "tags": "",
       "layergroup": "Wind Speed",
       "product": "rss1windnv7r01",
-      "group": "overlays",
-      "wrapadjacentdays": true
+      "group": "overlays"
     }
   }
 }

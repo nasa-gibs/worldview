@@ -7,17 +7,6 @@
                 "hidden": "true"
             },
             {
-                "id": "Coastlines_15m"
-            },
-            {
-                "id": "Reference_Features_15m",
-                "hidden": "true"
-            },
-            {
-                "id": "Reference_Labels_15m",
-                "hidden": "true"
-            },
-            {
                 "id": "GHRSST_L4_MUR_Sea_Surface_Temperature"
             },
             {
@@ -26,6 +15,17 @@
             },
             {
                 "id": "MODIS_Aqua_L2_Chlorophyll_A",
+                "hidden": "true"
+            },
+            {
+                "id": "Coastlines_15m"
+            },
+            {
+                "id": "Reference_Features_15m",
+                "hidden": "true"
+            },
+            {
+                "id": "Reference_Labels_15m",
                 "hidden": "true"
             }
         ]

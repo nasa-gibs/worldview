@@ -13,5 +13,4 @@ Vegetation will appear green in this band combination, as vegetation is absorben
 #### Water
 Liquid water on the ground will appear very dark since it absorbs in the red and the SWIR, but small liquid water drops in clouds scatter light equally in both the visible and the SWIR, and will therefore appear white. Sediments in water appear dark red.
 
-References: VNP09_NRT [doi:10.5067/VIIRS/VNP09_NRT.001](https://doi.org/10.5067/VIIRS/VNP09_NRT.001)
-
+References: VNP03MOD_NRT [doi:10.5067/VIIRS/VNP03MOD_NRT.002](https://doi.org/10.5067/VIIRS/VNP03MOD_NRT.002); VNP03IMG_NRT [doi:10.5067/VIIRS/VNP03IMG_NRT.002](https://doi.org/10.5067/VIIRS/VNP03IMG_NRT.002); VNP02MOD_NRT [doi:10.5067/VIIRS/VNP02MOD_NRT.002](https://doi.org/10.5067/VIIRS/VNP02MOD_NRT.002); VNP02IMG_NRT [doi:10.5067/VIIRS/VNP02IMG_NRT.002](https://doi.org/10.5067/VIIRS/VNP02IMG_NRT.002)
