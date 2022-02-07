@@ -46,11 +46,6 @@ function ContextMenu(props) {
     // setIsCopied(false);
   }
 
-  function handleStartAMeasurement() {
-    setShow(false);
-    events.trigger('measure:distance');
-  }
-
   function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
     console.debug(coordStuff, olMap, crsStuff);
     toggleReverseGeocodeActive(true);
@@ -92,7 +87,7 @@ function ContextMenu(props) {
             Copy Coordinates to Clipboard
           </li>
           <li
-            onClick={handleStartAMeasurement}
+            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
           >
             Start a Measurement
 
