@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import DateRangeSelector from '../components/date-selector/date-range-selector';
@@ -276,13 +277,13 @@ class AnimationWidget extends React.Component {
 
   renderCollapsedWidget() {
     const {
-      onClose,
-      isPlaying,
-      onPushPause,
       hasSubdailyLayers,
-      playDisabled,
       isLandscape,
       isMobile,
+      isPlaying,
+      onClose,
+      onPushPause,
+      playDisabled,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -439,6 +440,7 @@ class AnimationWidget extends React.Component {
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
+      currentDate,
       snappedCurrentDate,
       delta,
       interval,
@@ -454,10 +456,12 @@ class AnimationWidget extends React.Component {
       <ErrorBoundary>
         {isPlaying && (
           <PlayQueue
+            isMobile={isMobile}
             isLoopActive={looping}
             isPlaying={isPlaying}
             numberOfFrames={numberOfFrames}
-            currentDate={snappedCurrentDate}
+            snappedCurrentDate={snappedCurrentDate}
+            currentDate={currentDate}
             startDate={startDate}
             endDate={endDate}
             interval={interval}
@@ -567,6 +571,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     snappedCurrentDate,
+    currentDate,
     minDate,
     maxDate,
     isActive: animationIsActive,
@@ -643,6 +648,7 @@ AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   snappedCurrentDate: PropTypes.object,
+  currentDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   delta: PropTypes.number,

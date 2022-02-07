@@ -17,7 +17,10 @@
   bottom: 0;
   &.minimized {
     bottom: 10px;
-    right: 80px;
+    left: 188px;
+    &.landscape {
+      left: 323px;
+    }
   }
   &.subdaily {
     bottom: 65px;
