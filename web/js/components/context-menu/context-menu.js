@@ -15,7 +15,7 @@ function ContextMenu(props) {
   // const [isCopied, setIsCopied] = useState(false);
   // const [isCopyToolTipVisible, setIsCopyToolTipVisible] = useState(false);
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
-  const { map, crs, toggleReverseGeocodeActive } = props;
+  const { map, crs } = props;
   const [getMap, setMap] = useState(map);
 
   const handleClick = (event, olMap) => {
@@ -48,13 +48,11 @@ function ContextMenu(props) {
 
   function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
     console.debug(coordStuff, olMap, crsStuff);
-    toggleReverseGeocodeActive(true);
-    events.trigger('map:singleclick', coordStuff, olMap, crsStuff);
+    events.trigger('context-menu:location', coordStuff, olMap, crsStuff);
   }
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
-
 
     // if (isCopied) {
     //   return () => {
@@ -122,7 +120,6 @@ const mapDispatchToProps = (dispatch) => ({
 ContextMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
-  toggleReverseGeocodeActive: PropTypes.func.isRequired,
 };
 
 export default connect(
