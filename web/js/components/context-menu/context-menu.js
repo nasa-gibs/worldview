@@ -53,13 +53,12 @@ function ContextMenu(props) {
 
   function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
     console.debug(coordStuff, olMap, crsStuff);
-    toggleReverseGeocodeActive(true);
-    events.trigger('map:singleclick', coordStuff, olMap, crsStuff);
+    events.trigger('context-menu:location', coordStuff, olMap, crsStuff);
   }
+
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
-
 
     // if (isCopied) {
     //   return () => {
@@ -92,7 +91,7 @@ function ContextMenu(props) {
             Copy Coordinates to Clipboard
           </li>
           <li
-            onClick={handleStartAMeasurement}
+            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
           >
             Start a Measurement
 
