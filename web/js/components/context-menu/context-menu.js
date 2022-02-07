@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
-import { toggleReverseGeocodeActive } from '../../modules/location-search/actions';
+import { changeUnits } from '../../modules/measure/actions';
 
 const { events } = util;
 
@@ -15,18 +15,14 @@ function ContextMenu(props) {
   // const [isCopied, setIsCopied] = useState(false);
   // const [isCopyToolTipVisible, setIsCopyToolTipVisible] = useState(false);
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
-  const { map, crs } = props;
+  const {
+    map, crs, unitOfMeasure, onToggleUnits,
+  } = props;
   const [getMap, setMap] = useState(map);
 
-  const handleClick = (event, olMap) => {
-    console.debug('click: ', olMap);
-    // setIsCopied(false);
-    return show ? setShow(false) : null;
-  };
-
+  const handleClick = (event, olMap) => (show ? setShow(false) : null);
 
   function handleContextEvent(event, olMap) {
-    console.debug('right click: ', olMap);
     event.originalEvent.preventDefault();
     const pixels = event.pixel;
     setPixelCoords({ pixel: pixels });
@@ -46,20 +42,21 @@ function ContextMenu(props) {
     // setIsCopied(false);
   }
 
+  function handleMeasurementMenu(action) {
+    if (action === 'units') {
+      const unit = unitOfMeasure === 'km' ? 'mi' : 'km';
+      return onToggleUnits(unit);
+    }
+    setShow(false);
+    events.trigger(`measure:${action}`);
+  }
+
   function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
-    console.debug(coordStuff, olMap, crsStuff);
     events.trigger('context-menu:location', coordStuff, olMap, crsStuff);
   }
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
-
-    // if (isCopied) {
-    //   return () => {
-    //     events.off('map:singleclick', handleClick);
-    //     events.off('map:contextmenu', handleContextEvent);
-    //   };
-    // }
 
     return () => {
       events.off('map:singleclick', handleClick);
@@ -87,11 +84,31 @@ function ContextMenu(props) {
           <li
             onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
           >
-            Start a Measurement
-
-          </li>
-          <li>
             Add a Place Marker
+          </li>
+          <li
+            onClick={() => handleMeasurementMenu('distance')}
+          >
+            Measure Distance in
+            {' '}
+            {unitOfMeasure}
+          </li>
+          <li
+            onClick={() => handleMeasurementMenu('area')}
+          >
+            Measure Area in
+            {' '}
+            {unitOfMeasure}
+          </li>
+          <li
+            onClick={() => handleMeasurementMenu('clear')}
+          >
+            Remove Measurements
+          </li>
+          <li
+            onClick={() => handleMeasurementMenu('units')}
+          >
+            Change Units of Measure
           </li>
         </ul>
       </div>
@@ -103,23 +120,25 @@ function ContextMenu(props) {
 
 function mapStateToProps(state) {
   const {
-    map, proj,
+    map, proj, measure,
   } = state;
+  const { unitOfMeasure } = measure;
   const { crs } = proj.selected;
   return {
-    map, crs,
+    map, crs, unitOfMeasure,
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleReverseGeocodeActive: (isActive) => {
-    dispatch(toggleReverseGeocodeActive(isActive));
+  onToggleUnits: (unitOfMeasure) => {
+    dispatch(changeUnits(unitOfMeasure));
   },
 });
-
 ContextMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
+  unitOfMeasure: PropTypes.string,
+  onToggleUnits: PropTypes.func,
 };
 
 export default connect(
