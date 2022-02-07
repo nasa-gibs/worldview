@@ -27,22 +27,29 @@ export class CoordinatesMarker extends Component {
   }
 
   componentDidMount() {
-    events.on('map:singleclick', this.singleClick);
-    events.on('map:contextmenu', this.rightClick);
+    events.on('context-menu:location', this.singleClick);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isCoordinateSearchActive } = this.props;
+    if (isCoordinateSearchActive) {
+      events.on('map:singleclick', this.singleClick);
+      events.on('map:contextmenu', this.rightClick);
+    } else if (prevProps.isCoordinateSearchActive && !isCoordinateSearchActive) {
+      events.off('map:singleclick', this.singleClick);
+      events.off('map:contextmenu', this.rightClick);
+    }
   }
 
   componentWillUnmount() {
-    events.off('map:singleclick', this.singleClick);
-    events.off('map:contextmenu', this.rightClick);
+    events.off('context-menu:location', this.singleClick);
   }
 
   rightClick(e) {
     const {
-      isCoordinateSearchActive,
       toggleReverseGeocodeActive,
     } = this.props;
 
-    if (!isCoordinateSearchActive) return;
     e.preventDefault();
     toggleReverseGeocodeActive(false);
   }
@@ -50,14 +57,10 @@ export class CoordinatesMarker extends Component {
   singleClick(e, map, crs) {
     const {
       config,
-      isCoordinateSearchActive,
-      measureIsActive,
       proj,
       setPlaceMarker,
       toggleReverseGeocodeActive,
     } = this.props;
-
-    if (measureIsActive || !isCoordinateSearchActive) return;
 
     // handle reverse geocoding mouse click
     const pixels = e.pixel;
@@ -137,7 +140,6 @@ const mapDispatchToProps = (dispatch) => ({
 CoordinatesMarker.propTypes = {
   config: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
-  measureIsActive: PropTypes.bool.isRequired,
   proj: PropTypes.object,
   setPlaceMarker: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
