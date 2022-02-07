@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
+import { toggleReverseGeocodeActive } from '../../modules/location-search/actions';
 
 const { events } = util;
 
@@ -14,7 +15,7 @@ function ContextMenu(props) {
   // const [isCopied, setIsCopied] = useState(false);
   // const [isCopyToolTipVisible, setIsCopyToolTipVisible] = useState(false);
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
-  const { map, crs } = props;
+  const { map, crs, toggleReverseGeocodeActive } = props;
   const [getMap, setMap] = useState(map);
 
   const handleClick = (event, olMap) => {
@@ -45,10 +46,11 @@ function ContextMenu(props) {
     // setIsCopied(false);
   }
 
-  // function addPlaceMarkerHandler(olMap) {
-  //   console.debug('add place marker: ', olMap);
-  //   // events.trigger('map:singleClick', pixelCoords, map, crs);
-  // }
+  function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
+    console.debug(coordStuff, olMap, crsStuff);
+    toggleReverseGeocodeActive(true);
+    events.trigger('map:singleclick', coordStuff, olMap, crsStuff);
+  }
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
@@ -86,7 +88,7 @@ function ContextMenu(props) {
           </li>
           <li>Start a Measurement</li>
           <li
-            onClick={() => events.trigger('map:singleClick', pixelCoords, getMap, crs)}
+            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
           >
             Add a Place Marker
           </li>
@@ -108,11 +110,19 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  toggleReverseGeocodeActive: (isActive) => {
+    dispatch(toggleReverseGeocodeActive(isActive));
+  },
+});
+
 ContextMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
+  toggleReverseGeocodeActive: PropTypes.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(ContextMenu);
