@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
@@ -19,6 +21,15 @@ function ContextMenu(props) {
     map, crs, unitOfMeasure, onToggleUnits,
   } = props;
   const [getMap, setMap] = useState(map);
+
+  const oppositeUnitOfMeasure = () => {
+    const faToggle = unitOfMeasure === 'km' ? faToggleOff : faToggleOn;
+    const oppositeUnit = unitOfMeasure === 'km' ? 'mi' : 'km';
+    return {
+      oppositeUnit,
+      fontAwesomeTag: <FontAwesomeIcon icon={faToggle} />,
+    };
+  };
 
   const handleClick = (event, olMap) => (show ? setShow(false) : null);
 
@@ -44,8 +55,8 @@ function ContextMenu(props) {
 
   function handleMeasurementMenu(action) {
     if (action === 'units') {
-      const unit = unitOfMeasure === 'km' ? 'mi' : 'km';
-      return onToggleUnits(unit);
+      const oppositeUnit = unitOfMeasure === 'km' ? 'mi' : 'km';
+      return onToggleUnits(oppositeUnit);
     }
     setShow(false);
     events.trigger(`measure:${action}`);
@@ -80,16 +91,22 @@ function ContextMenu(props) {
           <li
             onClick={() => copyCoordsToClipboard(coord)}
           >
+            <FontAwesomeIcon icon="copy" fixedWidth />
+            {' '}
             Copy Coordinates to Clipboard
           </li>
           <li
             onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
           >
+            <FontAwesomeIcon icon="map-marker-alt" fixedWidth />
+            {' '}
             Add a Place Marker
           </li>
           <li
             onClick={() => handleMeasurementMenu('distance')}
           >
+            <FontAwesomeIcon icon="ruler" fixedWidth />
+            {' '}
             Measure Distance in
             {' '}
             {unitOfMeasure}
@@ -97,6 +114,8 @@ function ContextMenu(props) {
           <li
             onClick={() => handleMeasurementMenu('area')}
           >
+            <FontAwesomeIcon icon="ruler-combined" fixedWidth />
+            {' '}
             Measure Area in
             {' '}
             {unitOfMeasure}
@@ -104,12 +123,18 @@ function ContextMenu(props) {
           <li
             onClick={() => handleMeasurementMenu('clear')}
           >
+            <FontAwesomeIcon icon="trash" fixedWidth />
+            {' '}
             Remove Measurements
           </li>
           <li
             onClick={() => handleMeasurementMenu('units')}
           >
-            Change Units of Measure
+            {oppositeUnitOfMeasure().fontAwesomeTag}
+            {' '}
+            Change Units to
+            {' '}
+            {oppositeUnitOfMeasure().oppositeUnit}
           </li>
         </ul>
       </div>
