@@ -19,8 +19,9 @@ class Line extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      overlay: '',
       hovered: false,
-      textActive: false,
+      textActive: props.alwaysShow,
       textCoords: [0, 0],
     };
     this.nodeRef = React.createRef();
@@ -34,19 +35,13 @@ class Line extends React.Component {
     });
     overlay.setPosition([lineX, 90]);
     map.addOverlay(overlay);
+    this.setState({ overlay });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { hovered } = this.state;
-    const { active, height } = this.props;
-    const checkForStateUpdates = nextProps.active === active
-      && nextProps.height === height
-      && nextState.hovered === hovered;
-
-    if (checkForStateUpdates) {
-      return false;
-    }
-    return true;
+  componentDidUpdate() {
+    const { lineX, lineY } = this.props;
+    const { overlay } = this.state;
+    overlay.setPosition([lineX, lineY]);
   }
 
   mouseOver = () => {
@@ -76,7 +71,7 @@ class Line extends React.Component {
   render() {
     const {
       id,
-      active,
+      alwaysShow,
       date,
       lineX,
       isCompareActive,
@@ -85,12 +80,12 @@ class Line extends React.Component {
       height,
     } = this.props;
     const { hovered, textCoords, textActive } = this.state;
+
     const {
-      opacity, strokeWidth, dashArray, color, svgStyle, width,
+      strokeWidth, dashArray, color, svgStyle, width,
     } = lineStyles;
-    const useOpacity = (hovered && active)
-    || (active && util.browser.mobileAndTabletDevice)
-      ? opacity
+    const useOpacity = alwaysShow || util.browser.mobileAndTabletDevice || hovered
+      ? lineStyles.opacity
       : '0';
 
     return (
@@ -131,7 +126,7 @@ class Line extends React.Component {
           />
         </svg>
         <LineText
-          active={textActive}
+          active={alwaysShow || textActive}
           map={map}
           date={date}
           x={lineX}
@@ -146,12 +141,13 @@ class Line extends React.Component {
 }
 
 Line.propTypes = {
-  active: PropTypes.bool,
+  alwaysShow: PropTypes.bool,
   date: PropTypes.object,
   height: PropTypes.number,
   id: PropTypes.string,
   isCompareActive: PropTypes.bool,
   lineX: PropTypes.number,
+  lineY: PropTypes.number,
   map: PropTypes.object,
   style: PropTypes.object,
 };

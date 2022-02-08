@@ -10,16 +10,15 @@ const { events } = util;
 
 function DateLines(props) {
   const {
-    map, proj, date, isCompareActive, mapIsRendered,
+    map, proj, date, isCompareActive, mapIsRendered, alwaysShow,
   } = props;
 
-  if (!map) return null;
+  if (!mapIsRendered) return null;
 
   const [height, setHeight] = useState(0);
   const [startY, setStartY] = useState(0);
-  const [lineVisible, setLineVisible] = useState(true);
 
-  const position = () => {
+  const updatePosition = () => {
     let topY;
     let bottomY;
     let newStartY;
@@ -48,36 +47,17 @@ function DateLines(props) {
       [, bottomY] = map.getPixelFromCoordinate([extent[2], -90]);
     }
     const newHeight = Math.round(Math.abs(bottomY - topY));
-    return [newHeight, startY];
-  };
-
-  const updatePosition = () => {
-    const [newHeight, newStartY] = position();
     setHeight(newHeight);
     setStartY(newStartY);
-  };
-  const moveEndHandler = () => {
-    setLineVisible(true);
-    updatePosition();
-  };
-  const dragHandler = () => {
-    setLineVisible(false);
-  };
-  const moveStartHandler = () => {
-    setLineVisible(false);
   };
 
   useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
       return;
     }
-    events.on('map:moveend', moveEndHandler);
-    events.on('map:drag', dragHandler);
-    events.on('map:movestart', moveStartHandler);
+    events.on('map:moveend', updatePosition);
     return () => {
-      events.off('map:moveend', moveEndHandler);
-      events.off('map:drag', dragHandler);
-      events.off('map:movestart', moveStartHandler);
+      events.off('map:moveend', updatePosition);
     };
   }, [mapIsRendered]);
 
@@ -88,21 +68,21 @@ function DateLines(props) {
       <Line
         id="dateline-left"
         map={map}
-        active={lineVisible}
+        alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
         height={height}
         lineX={-180}
-        startY={startY}
+        lineY={startY}
         date={date}
       />
       <Line
         id="dateline-right"
         map={map}
-        active={lineVisible}
+        alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
         height={height}
         lineX={180}
-        startY={startY}
+        lineY={startY}
         date={util.dateAdd(date, 'day', -1)}
       />
     </>
@@ -111,7 +91,7 @@ function DateLines(props) {
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, compare,
+    proj, map, compare, settings,
   } = state;
   return {
     proj,
@@ -119,6 +99,7 @@ const mapStateToProps = (state) => {
     date: getSelectedDate(state),
     isCompareActive: compare.active,
     mapIsRendered: map.rendered,
+    alwaysShow: settings.alwaysShowDatelines,
   };
 };
 
@@ -128,6 +109,7 @@ DateLines.propTypes = {
   date: PropTypes.object,
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
+  alwaysShow: PropTypes.bool,
 };
 
 export default connect(

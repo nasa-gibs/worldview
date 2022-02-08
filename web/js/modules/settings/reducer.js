@@ -10,9 +10,10 @@ export const initialState = {
 };
 
 export function getInitialState() {
+  const alwaysShowDatelines = Boolean(safeLocalStorage.getItem(ALWAYS_SHOW_DATELINES));
   return {
     globalTemperatureUnit: safeLocalStorage.getItem(GLOBAL_TEMPERATURE_UNIT),
-    alwaysShowDatelines: safeLocalStorage.getItem(ALWAYS_SHOW_DATELINES),
+    alwaysShowDatelines,
   };
 }
 
@@ -26,7 +27,7 @@ export const settingsReducer = (state = initialState, action) => {
     case CHANGE_DATELINE_VISIBILITY: {
       return {
         ...state,
-        alwaysShowDatelines: !state.alwaysShowDatelines,
+        alwaysShowDatelines: action.value,
       };
     }
     default:
