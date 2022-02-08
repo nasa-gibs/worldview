@@ -10,6 +10,7 @@ import OlRotationButtons from '../../components/map/rotation';
 import OlZoomButtons from '../../components/map/zoom';
 import RightClickMenu from '../../components/context-menu/context-menu';
 import NaturalEvents from '../../map/natural-events/natural-events';
+import DateLines from '../../components/dateline/datelines';
 
 class MapInteractions extends PureComponent {
   getMapClasses = () => {
@@ -44,6 +45,7 @@ class MapInteractions extends PureComponent {
         {isNaturalEventsActive && (
           <NaturalEvents />
         )}
+        <DateLines />
       </>
     );
   }
