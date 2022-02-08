@@ -34,6 +34,7 @@ function ContextMenu(props) {
 
   function copyCoordsToClipboard(coords) {
     navigator.clipboard.writeText(coords);
+    // setIsCopied(true);
     setToolTipToggleTime(Date.now());
   }
 
@@ -59,6 +60,7 @@ function ContextMenu(props) {
     };
   };
 
+
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
@@ -74,7 +76,8 @@ function ContextMenu(props) {
       <div>
         <CopyClipboardTooltip
           tooltipToggleTime={toolTipToggleTime}
-          clearCopyToClipboardTooltip={toggleIsCopyToolTipVisible}
+          clearCopyToClipboardTooltip={() => {}}
+          placement="top"
         />
         <ul
           className="context-menu"
