@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TemperatureUnitButtons from './temperature-unit-buttons';
 import {
   changeTemperatureUnit,
-} from '../../modules/global-unit/actions';
+} from '../../modules/settings/actions';
 
 function GlobalSettings(props) {
   const {
@@ -25,10 +25,11 @@ function GlobalSettings(props) {
 }
 
 function mapStateToProps(state) {
-  const { globalUnit } = state;
-  const { globalTemperatureUnit } = globalUnit;
+  const { settings } = state;
+  const { globalTemperatureUnit, alwaysShowDatelines } = settings;
   return {
     globalTemperatureUnit,
+    alwaysShowDatelines,
   };
 }
 
