@@ -14,24 +14,13 @@ function ContextMenu(props) {
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [pixelCoords, setPixelCoords] = useState({ pixel: [0, 0] });
   const [coord, setCoord] = useState();
-  // const [isCopied, setIsCopied] = useState(false);
-  // const [isCopyToolTipVisible, setIsCopyToolTipVisible] = useState(false);
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const {
     map, crs, unitOfMeasure, onToggleUnits,
   } = props;
   const [getMap, setMap] = useState(map);
 
-  const oppositeUnitOfMeasure = () => {
-    const faToggle = unitOfMeasure === 'km' ? faToggleOff : faToggleOn;
-    const oppositeUnit = unitOfMeasure === 'km' ? 'mi' : 'km';
-    return {
-      oppositeUnit,
-      fontAwesomeTag: <FontAwesomeIcon icon={faToggle} />,
-    };
-  };
-
-  const handleClick = (event, olMap) => (show ? setShow(false) : null);
+  const handleClick = () => (show ? setShow(false) : null);
 
   function handleContextEvent(event, olMap) {
     event.originalEvent.preventDefault();
@@ -45,12 +34,7 @@ function ContextMenu(props) {
 
   function copyCoordsToClipboard(coords) {
     navigator.clipboard.writeText(coords);
-    // setIsCopied(true);
     setToolTipToggleTime(Date.now());
-  }
-
-  function toggleIsCopyToolTipVisible() {
-    // setIsCopied(false);
   }
 
   function handleMeasurementMenu(action) {
@@ -62,9 +46,19 @@ function ContextMenu(props) {
     events.trigger(`measure:${action}`);
   }
 
-  function addPlaceMarkerHandler(coordStuff, olMap, crsStuff) {
-    events.trigger('context-menu:location', coordStuff, olMap, crsStuff);
+  function addPlaceMarkerHandler(coords, olMap, crsData) {
+    events.trigger('context-menu:location', coords, olMap, crsData);
   }
+
+  const oppositeUnitOfMeasure = () => {
+    const faToggle = unitOfMeasure === 'km' ? faToggleOff : faToggleOn;
+    const oppositeUnit = unitOfMeasure === 'km' ? 'mi' : 'km';
+    return {
+      oppositeUnit,
+      fontAwesomeTag: <FontAwesomeIcon icon={faToggle} />,
+    };
+  };
+
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
