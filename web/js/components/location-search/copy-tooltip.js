@@ -41,9 +41,10 @@ class CopyClipboardTooltip extends PureComponent {
 
   render() {
     const { showCopiedToolTip } = this.state;
+    const { placement } = this.props;
     return (
       <Tooltip
-        placement="bottom"
+        placement={placement}
         isOpen={showCopiedToolTip}
         hideArrow
         target="copy-coordinates-to-clipboard-button"
@@ -57,6 +58,7 @@ class CopyClipboardTooltip extends PureComponent {
 CopyClipboardTooltip.propTypes = {
   clearCopyToClipboardTooltip: PropTypes.func,
   tooltipToggleTime: PropTypes.number,
+  placement: PropTypes.string,
 };
 
 export default CopyClipboardTooltip;
