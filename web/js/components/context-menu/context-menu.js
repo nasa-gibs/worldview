@@ -6,6 +6,7 @@ import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
+import { getCoordinateFixedPrecision } from '../location-search/util';
 
 const { events } = util;
 
@@ -25,9 +26,12 @@ function ContextMenu(props) {
   function handleContextEvent(event, olMap) {
     event.originalEvent.preventDefault();
     const pixels = event.pixel;
+    const [lat, lon] = olMap.getCoordinateFromPixel(pixels);
+    const latitude = getCoordinateFixedPrecision(lat);
+    const longitude = getCoordinateFixedPrecision(lon);
     setPixelCoords({ pixel: pixels });
     setAnchorPoint({ x: pixels[0], y: pixels[1] });
-    setCoord(olMap.getCoordinateFromPixel(pixels));
+    setCoord(`${longitude}°, ${latitude}°`);
     setMap(olMap);
     setShow(true);
   }
