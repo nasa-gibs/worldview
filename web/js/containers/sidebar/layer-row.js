@@ -155,9 +155,9 @@ function LayerRow (props) {
     }
 
     if (layerStartDate && layerEndDate) {
-      return (<> Data available between &#13; {layerStartDate} - {layerEndDate} </>);
+      return (<> Data available between <br /> {layerStartDate} - {layerEndDate} </>);
     } if (layerStartDate) {
-      return (<> Data available between &#13; {layerStartDate} - Present </>);
+      return (<> Data available between <br /> {layerStartDate} - Present </>);
     }
     return 'No data on selected date for this layer';
   };
