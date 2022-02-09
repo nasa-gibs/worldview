@@ -373,20 +373,6 @@
   height: 100px;
 }
 
-.wv-alert {
-  position: relative;
-  color: #fff;
-  background: #282828;
-  border: #282828;
-  border-radius: 0;
-}
-
-@media only screen and (max-width: 420px) {
-  .wv-alert {
-    left: 10px !important;
-  }
-}
-
 .event-alert-modal-body ul {
   padding-left: 20px;
   margin: 10px 0;

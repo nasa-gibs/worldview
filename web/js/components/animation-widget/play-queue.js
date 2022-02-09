@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PQueue from 'p-queue/dist';
+import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
 
@@ -36,6 +37,7 @@ class PlayQueue extends React.Component {
     this.playingDate = this.getStartDate();
     this.checkQueue();
     this.checkShouldPlay();
+    this.determineFrameDates();
   }
 
   componentWillUnmount() {
@@ -48,12 +50,26 @@ class PlayQueue extends React.Component {
   }
 
   /**
+   * Create an array of each date to be played
+   */
+  determineFrameDates() {
+    const { startDate, endDate } = this.props;
+    let frameDate = startDate;
+    this.frameDates = [];
+    this.frameDates.push(toString(frameDate));
+    while (frameDate < endDate) {
+      frameDate = this.nextDate(frameDate);
+      this.frameDates.push(toString(frameDate));
+    }
+  }
+
+  /**
    * Determines whether to start at current date or the selected start date
    */
   getStartDate() {
-    const { endDate, startDate, currentDate } = this.props;
-    const nextDate = this.nextDate(currentDate);
-    if (currentDate > startDate && nextDate < endDate) {
+    const { endDate, startDate, snappedCurrentDate } = this.props;
+    const nextDate = this.nextDate(snappedCurrentDate);
+    if (snappedCurrentDate > startDate && nextDate < endDate) {
       return toString(nextDate);
     }
     return toString(startDate);
@@ -183,7 +199,6 @@ class PlayQueue extends React.Component {
     }
     this.checkQueue();
   };
-
 
   checkShouldLoop() {
     const { isLoopActive, startDate, togglePlaying } = this.props;
@@ -356,14 +371,39 @@ class PlayQueue extends React.Component {
     this.playInterval = setTimeout(player, speed);
   }
 
+  getPlaybackPosition() {
+    const { isAnimating } = this.state;
+    const { currentDate } = this.props;
+    if (!isAnimating) {
+      return 0;
+    }
+    const currentDateStr = toString(currentDate);
+    const position = this.frameDates.indexOf(currentDateStr) + 1;
+    const percentage = (position / this.frameDates.length) * 100;
+    console.log(percentage);
+    return percentage;
+  }
+
   render() {
     const { isAnimating } = this.state;
-    const { onClose } = this.props;
+    const { onClose, isMobile } = this.props;
     const loadedItems = util.objectLength(this.bufferObject);
     const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
+    const mobileProgressStyle = {
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+      height: '6px',
+    };
 
     return isAnimating
-      ? ''
+      ? isMobile && (
+        <Progress
+          style={mobileProgressStyle}
+          value={this.getPlaybackPosition()}
+          color="dark"
+        />
+      )
       : (
         <LoadingIndicator
           title={title}
@@ -377,6 +417,7 @@ class PlayQueue extends React.Component {
 
 PlayQueue.propTypes = {
   endDate: PropTypes.object.isRequired,
+  isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   selectDate: PropTypes.func.isRequired,
@@ -390,6 +431,7 @@ PlayQueue.propTypes = {
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
   subDailyMode: PropTypes.bool,
+  snappedCurrentDate: PropTypes.object,
 };
 
 export default PlayQueue;
