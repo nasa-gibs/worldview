@@ -30,6 +30,7 @@ const applyTo = [
   'build/worldview/build/wv.js',
   'build/worldview/build/wv.css.map',
   'build/worldview/pages/*.html',
+  'build/worldview/manifest.webmanifest',
 ];
 
 // Build date shown in the About box

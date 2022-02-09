@@ -1,0 +1,25 @@
+{
+  "short_name": "@NAME@",
+  "name": "@LONG_NAME@",
+  "icons": [
+    {
+      "src": "images/wv-logo-mobile.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "scope": ".",
+  "id":"/",
+  "background_color": "#212529",
+  "display": "fullscreen",
+  "theme_color": "#0b3d91",
+  "description": "@DESCRIPTION@",
+  "screenshots": [
+    {
+      "src": "images/readme-preview.jpg",
+      "type": "image/jpg",
+      "sizes": "1200x800"
+    }
+  ]
+}
