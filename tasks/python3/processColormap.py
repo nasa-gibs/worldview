@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from concurrent.futures import ProcessPoolExecutor
 from optparse import OptionParser
 import os
 import re
@@ -134,16 +133,19 @@ def process_entries(colormap):
 
     return result
 
-def read_file(file):
-    id = os.path.splitext(os.path.basename(file))[0]
+def process_file(file):
+    input_file = os.path.join(root, file)
+    id = os.path.splitext(os.path.basename(input_file))[0]
     if id in skips:
-        sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, file), "Skipping")
+        sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, input_file,
+                "Skipping"))
         return
     with open(file, "r", encoding="utf-8") as fp:
         xml = fp.read()
     return (id, xml)
 
-def process_file(id, xml):
+with open(input_file) as fp:
+    xml = fp.read()
     document = xmltodict.parse(xml)
     colormaps = to_list(document["ColorMaps"]["ColorMap"])
     maps = []
@@ -178,23 +180,17 @@ def process_file(id, xml):
 # Main
 file_count = 0
 error_count = 0
-futures = []
-if __name__ == "__main__":
-    with ProcessPoolExecutor() as readExecutor:
-        for root, dirs, files in os.walk(input_dir):
-            for file in files:
-                input_file = os.path.join(root, file)
-                futures.append(readExecutor.submit(read_file, input_file))
-    with ProcessPoolExecutor() as writeExecutor:
-        for future in futures:
-            try:
-                file_count += 1
-                (id, xml) = future.result()
-                writeExecutor.submit(process_file, id, xml)
-            except Exception as e:
-                sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
-                error_count += 1
-    print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
+
+for root, dirs, files in os.walk(input_dir):
+    for file in files:
+        try:
+            file_count += 1
+            process_file(file)
+        except Exception as e:
+            sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, file, str(e)))
+            error_count += 1
+
+print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
 if error_count > 0:
     sys.exit(1)
