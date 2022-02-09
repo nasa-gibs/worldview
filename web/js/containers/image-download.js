@@ -14,9 +14,8 @@ import {
 } from '../modules/image-download/util';
 import util from '../util/util';
 import {
-  hasSubDaily as hasSubDailySelector,
   getLayers,
-  getActiveLayers,
+  subdailyLayersActive,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -168,8 +167,7 @@ function mapStateToProps(state) {
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
   const markerCoordinates = locationSearch.coordinates;
-  const activeLayers = getActiveLayers(state);
-  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const hasSubdailyLayers = subdailyLayersActive(state);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;

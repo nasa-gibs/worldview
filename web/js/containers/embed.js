@@ -29,7 +29,7 @@ function Embed (props) {
   const renderEmbedLinkBtn = function() {
     const { isMobile } = props;
     const buttonId = 'wv-embed-link-button';
-    const labelText = 'Open this Worldview map in a new tab';
+    const labelText = 'Open this @NAME@ map in a new tab';
     return (
       <Button
         id={buttonId}

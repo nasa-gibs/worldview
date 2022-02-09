@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
@@ -8,7 +9,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  UncontrolledTooltip,
+  UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
@@ -29,10 +30,10 @@ import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
+import { coverageDateFormatter } from '../../modules/date/util';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
-const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   ...draggableStyle,
@@ -74,10 +75,29 @@ function LayerRow (props) {
     isVectorLayer,
     runningObject,
     measurementDescriptionPath,
+    isAnimating,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
+  const { title } = names;
+  const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
+  const removeLayerBtnTitle = 'Remove Layer';
+
+  const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
+  const layerOptionsBtnTitle = 'View Options';
+
+  const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
+  const layerInfoBtnTitle = 'View Description';
   const [showButtons, toggleShowButtons] = useState(isMobile);
+  const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
+  const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+
+  const toggleDropdownMenuVisible = () => {
+    if (showDropdownMenu) {
+      setDropdownBtnVisible(false);
+    }
+    setDropdownMenuVisible(!showDropdownMenu);
+  };
 
   const getPaletteLegend = () => {
     if (!lodashIsEmpty(renderedPalette)) {
@@ -126,18 +146,18 @@ function LayerRow (props) {
     // start date
     let layerStartDate;
     if (startDate) {
-      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
+      layerStartDate = coverageDateFormatter('START-DATE', startDate, period);
     }
     // end date
     let layerEndDate;
     if (endDate) {
-      layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
+      layerEndDate = coverageDateFormatter('END-DATE', endDate, period);
     }
 
     if (layerStartDate && layerEndDate) {
-      return `Data available between ${layerStartDate} - ${layerEndDate}`;
+      return (<> Data available between &#13; {layerStartDate} - {layerEndDate} </>);
     } if (layerStartDate) {
-      return `Data available between ${layerStartDate} - Present`;
+      return (<> Data available between &#13; {layerStartDate} - Present </>);
     }
     return 'No data on selected date for this layer';
   };
@@ -148,57 +168,81 @@ function LayerRow (props) {
     e.preventDefault();
   };
 
-  const renderControls = () => {
-    const { title } = names;
-    const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
-    const removeLayerBtnTitle = 'Remove layer';
-
-    const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
-    const layerOptionsBtnTitle = 'View options';
-
-    const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
-    const layerInfoBtnTitle = 'View description';
-
-    return (
-      <>
-        <a
-          id={removeLayerBtnId}
-          aria-label={removeLayerBtnTitle}
-          className="button wv-layers-close"
-          onClick={() => onRemoveClick(layer.id)}
-        >
-          <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
-            {removeLayerBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="times" fixedWidth />
-        </a>
-        <a
-          id={layerOptionsBtnId}
-          aria-label={layerOptionsBtnTitle}
-          className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
-          onMouseDown={stopPropagation}
-          onClick={() => onOptionsClick(layer, title)}
-        >
-          <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
-            {layerOptionsBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
-        </a>
-        <a
+  const renderDropdownMenu = () => (
+    <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
+      <DropdownToggle>
+        <FontAwesomeIcon
+          className="layer-group-more"
+          icon="ellipsis-v"
+        />
+      </DropdownToggle>
+      <DropdownMenu positionFixed>
+        <DropdownItem
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
-          className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
-          onMouseDown={stopPropagation}
+          className="button wv-layers-info"
           onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
-          <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
-            {layerInfoBtnTitle}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
-        </a>
-      </>
-    );
-  };
+          {layerInfoBtnTitle}
+        </DropdownItem>
+        <DropdownItem
+          id={layerOptionsBtnId}
+          aria-label={layerOptionsBtnTitle}
+          className="button wv-layers-options"
+          onClick={() => onOptionsClick(layer, title)}
+        >
+          {layerOptionsBtnTitle}
+        </DropdownItem>
+        <DropdownItem
+          id={removeLayerBtnId}
+          onClick={() => onRemoveClick(layer.id)}
+        >
+          {removeLayerBtnTitle}
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
+
+  const renderControls = () => !isAnimating && (
+    <>
+      {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
+      <a
+        id={removeLayerBtnId}
+        aria-label={removeLayerBtnTitle}
+        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
+        onClick={() => onRemoveClick(layer.id)}
+      >
+        <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
+          {removeLayerBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="times" fixedWidth />
+      </a>
+      <a
+        id={layerOptionsBtnId}
+        aria-label={layerOptionsBtnTitle}
+        className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
+        onMouseDown={stopPropagation}
+        onClick={() => onOptionsClick(layer, title)}
+      >
+        <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
+          {layerOptionsBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
+      </a>
+      <a
+        id={layerInfoBtnId}
+        aria-label={layerInfoBtnTitle}
+        className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
+        onMouseDown={stopPropagation}
+        onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
+      >
+        <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
+          {layerInfoBtnTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
+      </a>
+    </>
+  );
 
   const renderVectorIcon = () => {
     const classNames = hasClickableFeature
@@ -236,24 +280,39 @@ function LayerRow (props) {
     toggleShowButtons(false);
   };
 
-  const baseClasses = 'item productsitem';
-  const containerClass = isDisabled
-    ? `${baseClasses} disabled layer-hidden`
-    : !isVisible
-      ? `${baseClasses} layer-hidden`
-      : zot
-        ? `${baseClasses} layer-enabled layer-visible zotted`
-        : `${baseClasses} layer-enabled layer-visible`;
-  const visibilityToggleClass = isDisabled
-    ? `${visibilityButtonClasses} layer-hidden`
-    : !isVisible
-      ? `${visibilityButtonClasses} layer-hidden`
-      : `${visibilityButtonClasses} layer-enabled layer-visible`;
+  const getLayerItemClasses = () => {
+    let baseClasses = 'item productsitem layer-enabled';
+    if (isAnimating) baseClasses += ' disabled';
+    if (!isVisible || isDisabled) {
+      baseClasses += ' layer-hidden';
+    } else {
+      baseClasses += ' layer-visible';
+    }
+    if (zot) baseClasses += ' zotted';
+    return baseClasses;
+  };
+
+  const getVisibilityToggleClass = () => {
+    let baseClasses = 'visibility';
+    if (isDisabled || isAnimating) {
+      baseClasses += ' disabled';
+    } else {
+      baseClasses += ' layer-enabled';
+    }
+    if (isVisible && !isDisabled) {
+      baseClasses += ' layer-visible';
+    } else {
+      baseClasses += ' layer-hidden';
+    }
+    return baseClasses;
+  };
+
   const visibilityTitle = !isVisible && !isDisabled
     ? 'Show layer'
     : isDisabled
       ? getDisabledTitle(layer)
       : 'Hide layer';
+
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
@@ -264,16 +323,18 @@ function LayerRow (props) {
     <>
       <a
         id={`hide${encodedLayerId}`}
-        className={visibilityToggleClass}
+        className={getVisibilityToggleClass()}
         aria-label={visibilityTitle}
-        onClick={() => toggleVisibility(layer.id, !isVisible)}
+        onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
       >
-        <UncontrolledTooltip
-          placement="right"
-          target={`hide${encodedLayerId}`}
-        >
-          {visibilityTitle}
-        </UncontrolledTooltip>
+        {!isAnimating && (
+          <UncontrolledTooltip
+            placement="right"
+            target={`hide${encodedLayerId}`}
+          >
+            {visibilityTitle}
+          </UncontrolledTooltip>
+        )}
         <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
       </a>
 
@@ -306,7 +367,7 @@ function LayerRow (props) {
 
   return (
     <Draggable
-      isDragDisabled={isEmbedModeActive}
+      isDragDisabled={isEmbedModeActive || isAnimating}
       draggableId={`${encodedLayerId}-${compareState}`}
       index={index}
       direction="vertical"
@@ -314,7 +375,7 @@ function LayerRow (props) {
       {(provided, snapshot) => (isInProjection ? (
         <li
           id={`${compareState}-${encodedLayerId}`}
-          className={containerClass}
+          className={getLayerItemClasses()}
           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
           ref={provided.innerRef}
           onMouseOver={mouseOver}
@@ -345,7 +406,7 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui, globalUnit,
+      browser, palettes, config, embed, map, compare, proj, ui, globalUnit, animation,
     } = state;
     const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
@@ -378,6 +439,7 @@ const makeMapStateToProps = () => {
       isMobile,
       isVisible,
       isVectorLayer: isVector,
+      isAnimating: animation.isPlaying,
       hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
@@ -489,4 +551,5 @@ LayerRow.propTypes = {
   openVectorAlertModal: PropTypes.func,
   zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
+  isAnimating: PropTypes.bool,
 };

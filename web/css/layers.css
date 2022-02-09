@@ -291,11 +291,15 @@
 .layer-metadata li,
 .source-metadata li {
   line-height: 16px;
+  margin-bottom: 5px;
 }
+
 .source-metadata ul,
 .layer-metadata ul {
   list-style-position: inside;
+  margin-bottom: 15px;
 }
+
 .layer-metadata hr {
   background: #aaa;
 }
@@ -633,7 +637,7 @@
     height: calc(var(--vh, 1vh) * 100 - 70px);
   }
   .browse-search-width .search-layers-container.browse {
-    height: calc(var(--vh, 1vh) * 100 - 93px);
+    height: calc(var(--vh, 1vh) * 100 - 122px);
   }
   .browse-search-width .search-layers-container.recent-layers {
     height: calc(var(--vh, 1vh) * 100 - 95px);

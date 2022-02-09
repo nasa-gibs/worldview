@@ -9,7 +9,13 @@
       "tags": "ndvi normalized difference vegetation index",
       "layergroup": "Vegetation Indices",
       "product": "MOD13Q4N",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ],
+      "availability": {
+        "rollingWindow": 20
+      }
     }
   }
 }

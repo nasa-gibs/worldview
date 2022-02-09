@@ -169,13 +169,13 @@ class Sidebar extends React.Component {
     if (window.location.search === '') return; // Nothing to reset
     let msg;
     if (isEmbedModeActive) {
-      msg = 'Do you want to open full featured Worldview in a new tab with current content loaded?';
+      msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
       // eslint-disable-next-line no-alert
       if (window.confirm(msg)) {
         window.open(permalink, '_blank');
       }
     } else {
-      msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
+      msg = 'Do you want to reset @NAME@ to its defaults? You will lose your current state.';
       // eslint-disable-next-line no-alert
       if (window.confirm(msg)) {
         googleTagManager.pushEvent({
@@ -194,8 +194,8 @@ class Sidebar extends React.Component {
     } = this.props;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
-      ? 'Click to Open This Worldview Map in a New Tab'
-      : 'Click to Reset Worldview to Defaults';
+      ? 'Click to Open This @NAME@ Map in a New Tab'
+      : 'Click to Reset @NAME@ to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
 
     return (

@@ -20,6 +20,8 @@ the following instead:
 To add a logo, replace `config/default/common/brand/images/wv-logo.png` with an image
 that is 247x45 pixels.
 
+To customize the descriptions on the "About" modal, edit the markdown files in `config/default/common/brand/about`.  These can contain either markdown syntax or HTML code, but markdown is recommended.
+
 ## Rebuilding
 
 After making changes to a custom configuration, run `npm run build` again to

@@ -21,7 +21,7 @@ const getProjection = ({ proj }) => proj.selected;
 export const getFilteredEvents = createSelector(
   [getActiveCategories, getEvents, getProjection],
   (activeCategories, events, proj) => {
-    if (!events) return;
+    if (!events) return [];
     return events
       .reduce((filteredEvents, event) => {
         const { geometry } = event;

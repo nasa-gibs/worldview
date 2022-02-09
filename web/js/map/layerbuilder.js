@@ -80,6 +80,29 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
+  const getGraticule = (proj) => new OlGraticule({
+    lonLabelStyle: new OlText({
+      font: '12px Calibri,sans-serif',
+      textBaseline: 'top',
+      fill: new OlFill({
+        color: 'rgba(0,0,0,1)',
+      }),
+      stroke: new OlStroke({
+        color: 'rgba(255,255,255,1)',
+        width: 3,
+      }),
+    }),
+    // the style to use for the lines, optional.
+    strokeStyle: new OlStroke({
+      color: 'rgb(255, 255, 255)',
+      width: 2,
+      lineDash: [0.5, 4],
+    }),
+    extent: proj.maxExtent,
+    lonLabelPosition: 1,
+    showLabels: true,
+  });
+
   /**
    * Create a new OpenLayers Layer
    *
@@ -89,18 +112,17 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = function(def, options) {
+  self.createLayer = function(def, options = {}) {
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
-    options = options || {};
-    const group = options.group || null;
-    const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
+    const { group } = options;
+    const { closestDate, nextDate, previousDate } = getRequestDates(def, options);
     let date = closestDate;
     if (date) {
       options.date = date;
     }
-    const key = self.layerKey(def, options, state);
     const proj = state.proj.selected;
+    const key = self.layerKey(def, options, state);
     let layer = cache.getItem(key);
 
     if (!layer) {
@@ -122,7 +144,8 @@ export default function mapLayerBuilder(config, cache, store) {
       if (def.breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
 
       const isDataDownloadTabActive = activeTab === 'download';
-      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && (def.wrapadjacentdays === true || def.wrapX);
+      const wrapDefined = def.wrapadjacentdays === true || def.wrapX;
+      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
       switch (def.type) {
         case 'wmts':
           layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
@@ -134,28 +157,7 @@ export default function mapLayerBuilder(config, cache, store) {
           layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
           break;
         case 'graticule':
-          layer = new OlGraticule({
-            lonLabelStyle: new OlText({
-              font: '12px Calibri,sans-serif',
-              textBaseline: 'top',
-              fill: new OlFill({
-                color: 'rgba(0,0,0,1)',
-              }),
-              stroke: new OlStroke({
-                color: 'rgba(255,255,255,1)',
-                width: 3,
-              }),
-            }),
-            // the style to use for the lines, optional.
-            strokeStyle: new OlStroke({
-              color: 'rgb(255, 255, 255)',
-              width: 2,
-              lineDash: [0.5, 4],
-            }),
-            extent: proj.maxExtent,
-            lonLabelPosition: 1,
-            showLabels: true,
-          });
+          layer = getGraticule(proj);
           break;
         default:
           throw new Error(`Unknown layer type: ${def.type}`);
@@ -165,6 +167,7 @@ export default function mapLayerBuilder(config, cache, store) {
       layer.setVisible(false);
     }
     layer.setOpacity(def.opacity || 1.0);
+
     return layer;
   };
 
@@ -175,7 +178,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  self.getRequestDates = function(def, options) {
+  const getRequestDates = function(def, options) {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -355,7 +358,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     let date = options.date || getSelectedDate(state);
     if (isSubdaily && !date) {
-      date = self.getRequestDates(def, options).closestDate;
+      date = getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
     if (day && def.wrapadjacentdays && !isSubdaily) {

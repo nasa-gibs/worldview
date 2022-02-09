@@ -54,4 +54,12 @@ export default [
     tooltip: 'Whether the layer represents daytime or nighttime imagery or data',
     hideZeroCount: true,
   },
+  {
+    field: 'dataCenter',
+    label: 'DAAC/SIPS',
+    filterType: 'any',
+    tooltip: 'Distributed Active Archive Center / Science Investigator-led Processing System',
+    show: 30,
+    hideZeroCount: true,
+  },
 ];

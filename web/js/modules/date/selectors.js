@@ -1,4 +1,4 @@
-import { timeScaleFromNumberKey } from './constants';
+import { TIME_SCALE_FROM_NUMBER } from './constants';
 
 export function getDates (state) {
   const { date } = state;
@@ -20,7 +20,7 @@ export function getDeltaIntervalUnit (state) {
   } = state.date;
   const useDelta = customSelected ? customDelta : delta;
   const useInterval = customSelected ? customInterval : interval;
-  const changeUnit = timeScaleFromNumberKey[useInterval];
+  const changeUnit = TIME_SCALE_FROM_NUMBER[useInterval];
 
   return {
     delta: useDelta,

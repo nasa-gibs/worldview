@@ -101,6 +101,16 @@ button:focus {
   & .input-wrapper:hover .date-arrows {
     visibility: visible;
   }
+
+  & .input-wrapper .date-arrows::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    height: 30px;
+    width: 100%;
+    max-width: inherit;
+  }
+
   & .input-wrapper:hover .date-arrows svg path {
     fill: #888;
   }
@@ -127,7 +137,9 @@ button:focus {
   & .date-arrows {
     display: block;
     height: 10px;
+    max-width: inherit;
   }
+
   & .date-arrows svg {
     vertical-align: top;
     display: block;
@@ -507,6 +519,11 @@ button:focus {
 .interval-btn-active:hover {
   background-color: #fff;
   color: #1a1a1a;
+  &.disabled {
+    background-color: transparent;
+    color: #ccc;
+    cursor: default;
+  }
 }
 
 .zoom-btn, .interval-btn {
