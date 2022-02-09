@@ -181,8 +181,8 @@ class PlayQueue extends React.Component {
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
-    if (this.canPreloadAll) {
-      return currentBufferSize === numberOfFrames;
+    if (currentBufferSize === numberOfFrames) {
+      return true;
     }
     if (currentBufferSize < this.defaultBufferSize) {
       return false;
@@ -312,8 +312,9 @@ class PlayQueue extends React.Component {
     if (!this.mounted) return;
     this.bufferObject[strDate] = strDate;
     delete this.inQueueObject[strDate];
+    const bufferLength = this.bufferArray.length;
 
-    if (!initialLoad || this.canPreloadAll) {
+    if (!initialLoad || this.canPreloadAll || bufferLength >= this.defaultBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();
     }
