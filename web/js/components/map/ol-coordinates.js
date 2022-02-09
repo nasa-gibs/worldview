@@ -1,5 +1,6 @@
 import React from 'react';
 import { transform } from 'ol/proj';
+import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 
@@ -114,7 +115,6 @@ export default class OlCoordinates extends React.Component {
     if (!hasMouse) {
       return null;
     }
-
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         <Coordinates
@@ -124,6 +124,9 @@ export default class OlCoordinates extends React.Component {
           crs={crs}
           onFormatChange={this.changeFormat}
         />
+        <UncontrolledTooltip placement="bottom" target="ol-coords-case">
+          Change coordinates format
+        </UncontrolledTooltip>
       </div>
     );
   }

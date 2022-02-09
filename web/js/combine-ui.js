@@ -54,8 +54,7 @@ function registerMapMouseHandlers(maps) {
       .getProjection()
       .getCode();
     element.addEventListener('mousemove', (event) => {
-      // TODO fix
-      // events.trigger('map:mousemove', event, map, crs);
+      events.trigger('map:mousemove', event, map, crs);
     });
     element.addEventListener('mouseout', (event) => {
       events.trigger('map:mouseout', event, map, crs);

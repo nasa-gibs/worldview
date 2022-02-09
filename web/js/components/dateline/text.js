@@ -19,10 +19,10 @@ const textStyles = {
 class LineText extends React.Component {
   constructor(props) {
     super(props);
-    this.nodeRef = React.createRef();
     this.state = {
       overlay: '',
     };
+    this.nodeRef = React.createRef();
   }
 
   componentDidMount() {

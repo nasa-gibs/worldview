@@ -6,8 +6,6 @@ import Line from './line';
 import util from '../../util/util';
 import { getSelectedDate } from '../../modules/date/selectors';
 
-const { events } = util;
-
 function DateLines(props) {
   const {
     map, proj, date, isCompareActive, mapIsRendered, alwaysShow,
@@ -17,6 +15,7 @@ function DateLines(props) {
 
   const [height, setHeight] = useState(0);
   const [startY, setStartY] = useState(0);
+  const [hideLines, setHideLines] = useState(false);
 
   const updatePosition = () => {
     let topY;
@@ -49,15 +48,18 @@ function DateLines(props) {
     const newHeight = Math.round(Math.abs(bottomY - topY));
     setHeight(newHeight);
     setStartY(newStartY);
+    setHideLines(false);
   };
 
   useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
       return;
     }
-    events.on('map:moveend', updatePosition);
+    map.on('movestart', () => { setHideLines(true); });
+    map.on('moveend', updatePosition);
     return () => {
-      events.off('map:moveend', updatePosition);
+      map.off('movestart', updatePosition);
+      map.off('moveend', updatePosition);
     };
   }, [mapIsRendered]);
 
@@ -70,7 +72,7 @@ function DateLines(props) {
         map={map}
         alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
-        height={height}
+        height={hideLines ? 0 : height}
         lineX={-180}
         lineY={startY}
         date={date}
@@ -80,7 +82,7 @@ function DateLines(props) {
         map={map}
         alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
-        height={height}
+        height={hideLines ? 0 : height}
         lineX={180}
         lineY={startY}
         date={util.dateAdd(date, 'day', -1)}
