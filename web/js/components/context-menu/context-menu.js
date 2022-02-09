@@ -6,7 +6,9 @@ import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
-import { getCoordinateFixedPrecision } from '../location-search/util';
+import { reverseGeocode } from '../../modules/location-search/util-api';
+import { getCoordinateFixedPrecision, getFormattedCoordinates } from '../location-search/util';
+import { setCoordinates } from '../../modules/location-search/actions';
 
 const { events } = util;
 
@@ -14,10 +16,10 @@ function ContextMenu(props) {
   const [show, setShow] = useState(false);
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [pixelCoords, setPixelCoords] = useState({ pixel: [0, 0] });
-  const [coord, setCoord] = useState();
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
+  const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits,
+    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates,
   } = props;
   const [getMap, setMap] = useState(map);
 
@@ -25,21 +27,23 @@ function ContextMenu(props) {
 
   function handleContextEvent(event, olMap) {
     event.originalEvent.preventDefault();
-    const pixels = event.pixel;
-    const [lat, lon] = olMap.getCoordinateFromPixel(pixels);
+    const [lon, lat] = olMap.getCoordinateFromPixel(event.pixel);
     const latitude = getCoordinateFixedPrecision(lat);
     const longitude = getCoordinateFixedPrecision(lon);
-    setPixelCoords({ pixel: pixels });
-    setAnchorPoint({ x: pixels[0], y: pixels[1] });
-    setCoord(`${longitude}°, ${latitude}°`);
+    setPixelCoords({ pixel: event.pixel });
+    setAnchorPoint({ x: event.pixel[0], y: event.pixel[1] });
+    updateStateCoordinates([longitude, latitude]);
+    setFormattedCoordinates(getFormattedCoordinates(lat, lon));
     setMap(olMap);
     setShow(true);
   }
 
-  function copyCoordsToClipboard(coords) {
-    navigator.clipboard.writeText(coords);
-    // setIsCopied(true);
+  function copyCoordsToClipboard() {
+    navigator.clipboard.writeText(formattedCoordinates);
     setToolTipToggleTime(Date.now());
+    setTimeout(() => {
+      setShow(false);
+    }, 1500);
   }
 
   function handleMeasurementMenu(action) {
@@ -53,6 +57,7 @@ function ContextMenu(props) {
 
   function addPlaceMarkerHandler(coords, olMap, crsData) {
     events.trigger('context-menu:location', coords, olMap, crsData);
+    setShow(false);
   }
 
   const oppositeUnitOfMeasure = () => {
@@ -86,52 +91,37 @@ function ContextMenu(props) {
         <ul
           className="context-menu"
           style={{ top: anchorPoint.y, left: anchorPoint.x }}
-          id="copy-coordinates-to-clipboard-button"
         >
           <li
-            onClick={() => copyCoordsToClipboard(coord)}
+            onClick={() => copyCoordsToClipboard()}
+            id="copy-coordinates-to-clipboard-button"
           >
-            <FontAwesomeIcon icon="copy" fixedWidth />
-            {' '}
-            Copy Coordinates to Clipboard
+            {formattedCoordinates}
           </li>
           <li
             onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
+            className="endSection"
           >
-            <FontAwesomeIcon icon="map-marker-alt" fixedWidth />
-            {' '}
-            Add a Place Marker
+            Add Place Marker
           </li>
           <li
             onClick={() => handleMeasurementMenu('distance')}
           >
-            <FontAwesomeIcon icon="ruler" fixedWidth />
-            {' '}
-            Measure Distance in
-            {' '}
-            {unitOfMeasure}
+            Measure Distance
           </li>
           <li
             onClick={() => handleMeasurementMenu('area')}
           >
-            <FontAwesomeIcon icon="ruler-combined" fixedWidth />
-            {' '}
-            Measure Area in
-            {' '}
-            {unitOfMeasure}
+            Measure Area
           </li>
           <li
             onClick={() => handleMeasurementMenu('clear')}
           >
-            <FontAwesomeIcon icon="trash" fixedWidth />
-            {' '}
             Remove Measurements
           </li>
           <li
             onClick={() => handleMeasurementMenu('units')}
           >
-            {oppositeUnitOfMeasure().fontAwesomeTag}
-            {' '}
             Change Units to
             {' '}
             {oppositeUnitOfMeasure().oppositeUnit}
@@ -146,12 +136,18 @@ function ContextMenu(props) {
 
 function mapStateToProps(state) {
   const {
-    map, proj, measure,
+    map, proj, measure, locationSearch, config,
   } = state;
   const { unitOfMeasure } = measure;
   const { crs } = proj.selected;
+  const { coordinates } = locationSearch;
   return {
-    map, crs, unitOfMeasure,
+    map,
+    crs,
+    unitOfMeasure,
+    coordinates,
+    config,
+    getReverseGeocode: (coords) => reverseGeocode(coords, config),
   };
 }
 
@@ -159,12 +155,16 @@ const mapDispatchToProps = (dispatch) => ({
   onToggleUnits: (unitOfMeasure) => {
     dispatch(changeUnits(unitOfMeasure));
   },
+  updateStateCoordinates: (coordinates) => {
+    dispatch(setCoordinates(coordinates));
+  },
 });
 ContextMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
+  updateStateCoordinates: PropTypes.func,
 };
 
 export default connect(

@@ -1,9 +1,9 @@
 .context-menu {
   font-size: 14px;
-  background: rgba(40, 40, 40, 0.85);
+  background: #333;
   color: #fff;
   border-radius: 5px;
-  padding: 15px;
+  padding: 5px;
   width: auto;
   height: auto;
   margin: 0;
@@ -22,4 +22,10 @@
 
 .context-menu li:hover {
   background-color: #191970;
+}
+
+.context-menu li.endSection {
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #808080;
 }
