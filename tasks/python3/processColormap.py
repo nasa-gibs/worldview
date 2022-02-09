@@ -140,42 +140,40 @@ def process_file(file):
         sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, input_file,
                 "Skipping"))
         return
-    with open(file, "r", encoding="utf-8") as fp:
+    with open(input_file) as fp:
         xml = fp.read()
-    return (id, xml)
+        document = xmltodict.parse(xml)
+        colormaps = to_list(document["ColorMaps"]["ColorMap"])
+        maps = []
+        for colormap in colormaps:
+            result = process_entries(colormap)
+            if result == "transparent":
+                continue
+            result["title"] = colormap["@title"]
+            result["entries"]["title"] = colormap["@title"]
+            result["legend"]["title"] = colormap["@title"]
+            result["legend"]["id"] = id + "_" + str(len(maps)) + "_legend"
+            if "@minLabel" in colormap["Legend"]:
+                result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
+            if "@maxLabel" in colormap["Legend"]:
+                result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
+            if "@units" in colormap:
+                result["legend"]["units"] = colormap["@units"]
+            maps += [result]
 
-with open(input_file) as fp:
-    xml = fp.read()
-    document = xmltodict.parse(xml)
-    colormaps = to_list(document["ColorMaps"]["ColorMap"])
-    maps = []
-    for colormap in colormaps:
-        result = process_entries(colormap)
-        if result == "transparent":
-            continue
-        result["title"] = colormap["@title"]
-        result["entries"]["title"] = colormap["@title"]
-        result["legend"]["title"] = colormap["@title"]
-        result["legend"]["id"] = id + "_" + str(len(maps)) + "_legend"
-        if "@minLabel" in colormap["Legend"]:
-            result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
-        if "@maxLabel" in colormap["Legend"]:
-            result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
-        if "@units" in colormap:
-            result["legend"]["units"] = colormap["@units"]
-        maps += [result]
+        data = {
+            "id": id,
+            "maps": maps
+        }
+        json_options = {}
+        json_options["indent"] = 2
+        json_options["separators"] = (',', ': ')
 
-    data = {
-        "id": id,
-        "maps": maps
-    }
-    json_options = {}
-    json_options["indent"] = 2
-    json_options["separators"] = (',', ': ')
+        output_file = os.path.join(output_dir, id + ".json")
+        with open(output_file, "w", encoding="utf-8") as fp:
+            json.dump(data, fp, **json_options)
 
-    output_file = os.path.join(output_dir, id + ".json")
-    with open(output_file, "w", encoding="utf-8") as fp:
-        json.dump(data, fp, **json_options)
+
 
 # Main
 file_count = 0
