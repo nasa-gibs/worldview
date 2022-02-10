@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import { ContextMenu, MenuItem } from 'react-contextmenu';
+import copy from 'copy-to-clipboard';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
@@ -12,9 +15,8 @@ import { setCoordinates } from '../../modules/location-search/actions';
 
 const { events } = util;
 
-function ContextMenu(props) {
+function RightClickMenu(props) {
   const [show, setShow] = useState(false);
-  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [pixelCoords, setPixelCoords] = useState({ pixel: [0, 0] });
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
@@ -27,19 +29,22 @@ function ContextMenu(props) {
 
   function handleContextEvent(event, olMap) {
     event.originalEvent.preventDefault();
-    const [lon, lat] = olMap.getCoordinateFromPixel(event.pixel);
+    const coord = olMap.getCoordinateFromPixel(event.pixel);
+    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     const latitude = getCoordinateFixedPrecision(lat);
     const longitude = getCoordinateFixedPrecision(lon);
     setPixelCoords({ pixel: event.pixel });
-    setAnchorPoint({ x: event.pixel[0], y: event.pixel[1] });
     updateStateCoordinates([longitude, latitude]);
-    setFormattedCoordinates(getFormattedCoordinates(lat, lon));
+    setFormattedCoordinates(getFormattedCoordinates(lat, lon).join(','));
     setMap(olMap);
     setShow(true);
   }
 
   function copyCoordsToClipboard() {
-    navigator.clipboard.writeText(formattedCoordinates);
+    const options = {
+      format: 'text/plain',
+    };
+    copy(formattedCoordinates, options);
     setToolTipToggleTime(Date.now());
     setTimeout(() => {
       setShow(false);
@@ -88,45 +93,31 @@ function ContextMenu(props) {
           clearCopyToClipboardTooltip={() => {}}
           placement="top"
         />
-        <ul
-          className="context-menu"
-          style={{ top: anchorPoint.y, left: anchorPoint.x }}
-        >
-          <li
-            onClick={() => copyCoordsToClipboard()}
-            id="copy-coordinates-to-clipboard-button"
-          >
-            {formattedCoordinates}
-          </li>
-          <li
-            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
-            className="endSection"
-          >
+        <ContextMenu id="context-menu-trigger">
+          <MenuItem onClick={() => copyCoordsToClipboard()}>
+            <div id="copy-coordinates-to-clipboard-button">
+              {formattedCoordinates}
+            </div>
+          </MenuItem>
+          <MenuItem onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}>
             Add Place Marker
-          </li>
-          <li
-            onClick={() => handleMeasurementMenu('distance')}
-          >
+          </MenuItem>
+          <MenuItem divider />
+          <MenuItem onClick={() => handleMeasurementMenu('distance')}>
             Measure Distance
-          </li>
-          <li
-            onClick={() => handleMeasurementMenu('area')}
-          >
+          </MenuItem>
+          <MenuItem onClick={() => handleMeasurementMenu('area')}>
             Measure Area
-          </li>
-          <li
-            onClick={() => handleMeasurementMenu('clear')}
-          >
+          </MenuItem>
+          <MenuItem onClick={() => handleMeasurementMenu('clear')}>
             Remove Measurements
-          </li>
-          <li
-            onClick={() => handleMeasurementMenu('units')}
-          >
+          </MenuItem>
+          <MenuItem onClick={() => handleMeasurementMenu('units')}>
             Change Units to
             {' '}
             {oppositeUnitOfMeasure().oppositeUnit}
-          </li>
-        </ul>
+          </MenuItem>
+        </ContextMenu>
       </div>
     );
   }
@@ -159,7 +150,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setCoordinates(coordinates));
   },
 });
-ContextMenu.propTypes = {
+RightClickMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
   unitOfMeasure: PropTypes.string,
@@ -170,4 +161,4 @@ ContextMenu.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ContextMenu);
+)(RightClickMenu);

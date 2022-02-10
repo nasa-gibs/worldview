@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { ContextMenuTrigger } from 'react-contextmenu';
 import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
 import OlMeasureTool from '../../components/map/ol-measure-tool';
 import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
 import OlRotationButtons from '../../components/map/rotation';
 import OlZoomButtons from '../../components/map/zoom';
-import ContextMenu from '../../components/context-menu/context-menu';
+import RightClickMenu from '../../components/context-menu/context-menu';
 import NaturalEvents from '../../map/natural-events/natural-events';
 
 class MapInteractions extends PureComponent {
@@ -28,10 +29,13 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
-        <ContextMenu />
+        {/* <ContextMenu /> */}
+        <RightClickMenu />
         <OlZoomButtons />
         <OlRotationButtons />
-        <div id="wv-map" className={mapClasses} />
+        <ContextMenuTrigger id="context-menu-trigger">
+          <div id="wv-map" className={mapClasses} />
+        </ContextMenuTrigger>
         {!isDistractionFreeModeActive && (
           <OlCoordinates />
         )}

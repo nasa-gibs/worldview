@@ -32,9 +32,12 @@ class CoordinatesDialog extends Component {
       });
 
       // Prevent keyboard overlay in iOS
-      setTimeout(() => {
-        document.getElementById('location-search-autocomplete').blur();
-      }, 50);
+      const searchElement = document.getElementById('location-search-autocomplete');
+      if (searchElement) {
+        setTimeout(() => {
+          searchElement.blur();
+        }, 50);
+      }
     };
     copy(coords, options);
   }
