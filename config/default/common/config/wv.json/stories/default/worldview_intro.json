@@ -7,7 +7,16 @@
       "description": "Discover and learn how to use Worldview's tools and features!",
       "backgroundImage": "wv_intro.png",
       "backgroundImageHover": "",
-      "readMoreLinks": [],
+      "readMoreLinks": [
+        {
+          "title": "Getting Started with Worldview (December 2021 Video Tutorial)",
+          "link": "https://youtu.be/uMkuiRJr_-E"
+        },
+        {
+          "title": "NASA Worldview - Explore the Earth from Past to Present with Global Satellite Observations (May) 2021 Webinar Video)",
+          "link": "https://youtu.be/WqkX-b-jYGI"
+        }
+      ],
       "steps": [
         {
           "id": "001",
