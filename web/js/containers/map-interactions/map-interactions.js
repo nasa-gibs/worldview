@@ -29,7 +29,6 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
-        {/* <ContextMenu /> */}
         <RightClickMenu />
         <OlZoomButtons />
         <OlRotationButtons />
