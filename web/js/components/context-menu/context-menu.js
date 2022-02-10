@@ -9,7 +9,6 @@ import { transform } from 'ol/proj';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
-import { reverseGeocode } from '../../modules/location-search/util-api';
 import { getCoordinateFixedPrecision, getFormattedCoordinates } from '../location-search/util';
 import { setCoordinates } from '../../modules/location-search/actions';
 
@@ -21,7 +20,7 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates,
+    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive,
   } = props;
   const [getMap, setMap] = useState(map);
 
@@ -46,9 +45,6 @@ function RightClickMenu(props) {
     };
     copy(formattedCoordinates, options);
     setToolTipToggleTime(Date.now());
-    setTimeout(() => {
-      setShow(false);
-    }, 1500);
   }
 
   function handleMeasurementMenu(action) {
@@ -74,10 +70,13 @@ function RightClickMenu(props) {
     };
   };
 
-
   useEffect(() => {
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
+    if (isCoordinateSearchActive) {
+      events.off('map:singleclick', handleClick);
+      events.off('map:contextmenu', handleContextEvent);
+    }
 
     return () => {
       events.off('map:singleclick', handleClick);
@@ -131,14 +130,14 @@ function mapStateToProps(state) {
   } = state;
   const { unitOfMeasure } = measure;
   const { crs } = proj.selected;
-  const { coordinates } = locationSearch;
+  const { coordinates, isCoordinateSearchActive } = locationSearch;
   return {
     map,
     crs,
     unitOfMeasure,
     coordinates,
+    isCoordinateSearchActive,
     config,
-    getReverseGeocode: (coords) => reverseGeocode(coords, config),
   };
 }
 
@@ -156,6 +155,7 @@ RightClickMenu.propTypes = {
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   updateStateCoordinates: PropTypes.func,
+  isCoordinateSearchActive: PropTypes.bool,
 };
 
 export default connect(
