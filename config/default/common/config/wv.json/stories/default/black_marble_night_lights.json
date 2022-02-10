@@ -4,7 +4,7 @@
       "id": "black_marble_night_lights",
       "type": "default",
       "title": "Night Lights from NASA's Black Marble",
-      "description": "View Earth's Lights at Night!",
+      "description": "NASA's Black Marble provides daily insights into nocturnal lights around the world.",
       "backgroundImage": "blackmarble_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
@@ -56,7 +56,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-99.4616306421031,27.619877814697574,-91.32410995301612,31.528630729961264&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.52),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.47),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=51&t=2021-02-07-T17%3A19%3A37Z&t1=2021-02-16-T14%3A18%3A55Z"
+          "stepLink": "v=-99.46163064210312,27.522740072778575,-91.32410995301613,31.625768471880264&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.52),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(palette=cb_safe_1),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.47),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(palette=cb_safe_1),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=50&tr=black_marble_night_lights&t=2021-02-07-T17%3A19%3A37Z&t1=2021-02-16-T14%3A18%3A55Z"
         },
         {
           "id": "005",
@@ -83,7 +83,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-106.36549173018315,46.23193745067281,-99.98277639999964,49.2977922862385&l=VIIRS_SNPP_Thermal_Anomalies_375m_Night,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_DayNightBand_AtSensor_M15,MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-01-12-T00%3A37%3A21Z"
+          "stepLink": "v=-105.16366179488708,46.112889698260446,-99.1013087311693,49.1695955102866&l=VIIRS_SNPP_Thermal_Anomalies_375m_Night,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_DayNightBand_AtSensor_M15,MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=black_marble_night_lights&t=2022-01-12-T00%3A37%3A21Z"
         }
       ]
     }
