@@ -1,0 +1,1 @@
+Besides being able to see anthropogenic light sources from space, this swirling streak of light over the Hudson Bay is actually an aurora borealis event on 4 February 2022.

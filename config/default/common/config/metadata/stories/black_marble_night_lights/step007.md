@@ -1,0 +1,1 @@
+This image shows many lights associated with the oil pads in the Bakken Formation which lies partly in North Dakota. Clustered city lights are also evident. Overlaid on the nighttime image are the nighttime fire and thermal anomalies layer. These thermal anomalies are gas flares. Natural gas is a byproduct of oil drilling and sometimes the gas is burned at the site.
