@@ -111,22 +111,22 @@ export default class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    // Don't render until a mouse is being used
-    if (!hasMouse) {
-      return null;
-    }
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
-        <Coordinates
-          format={format}
-          latitude={latitude}
-          longitude={longitude}
-          crs={crs}
-          onFormatChange={this.changeFormat}
-        />
-        <UncontrolledTooltip placement="bottom" target="ol-coords-case">
-          Change coordinates format
-        </UncontrolledTooltip>
+        {hasMouse && (
+          <>
+            <Coordinates
+              format={format}
+              latitude={latitude}
+              longitude={longitude}
+              crs={crs}
+              onFormatChange={this.changeFormat}
+            />
+            <UncontrolledTooltip placement="bottom" target="ol-coords-case">
+              Change coordinates format
+            </UncontrolledTooltip>
+          </>
+        )}
       </div>
     );
   }
