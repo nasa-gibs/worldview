@@ -86,6 +86,7 @@ import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
 import '../css/embed.css';
+import '../css/context-menu.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
