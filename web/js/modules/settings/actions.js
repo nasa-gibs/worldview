@@ -1,10 +1,11 @@
 import {
   CHANGE_TEMPERATURE_UNIT,
+  CHANGE_DATELINE_VISIBILITY,
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
 
-const { GLOBAL_TEMPERATURE_UNIT } = safeLocalStorage.keys;
-// eslint-disable-next-line import/prefer-default-export
+const { GLOBAL_TEMPERATURE_UNIT, ALWAYS_SHOW_DATELINES } = safeLocalStorage.keys;
+
 export function changeTemperatureUnit(value) {
   if (!value) {
     safeLocalStorage.removeItem(GLOBAL_TEMPERATURE_UNIT);
@@ -13,6 +14,18 @@ export function changeTemperatureUnit(value) {
   }
   return {
     type: CHANGE_TEMPERATURE_UNIT,
+    value,
+  };
+}
+
+export function changeDatelineVisibility(value) {
+  if (!value) {
+    safeLocalStorage.removeItem(ALWAYS_SHOW_DATELINES);
+  } else {
+    safeLocalStorage.setItem(ALWAYS_SHOW_DATELINES, value);
+  }
+  return {
+    type: CHANGE_DATELINE_VISIBILITY,
     value,
   };
 }

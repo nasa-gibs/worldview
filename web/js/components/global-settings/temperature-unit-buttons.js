@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HoverTooltip from '../util/hover-tooltip';
-import { TEMPERATURE_UNITS } from '../../modules/global-unit/constants';
+import { TEMPERATURE_UNITS } from '../../modules/settings/constants';
 
 const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }) => (
   <div className="temperature-unit-buttons settings-component">
