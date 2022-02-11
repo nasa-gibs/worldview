@@ -156,6 +156,9 @@
   .global-setting-container {
     margin-bottom: 16px;
   }
+  .settings-component {
+    margin-bottom: 15px;
+  }
 
   .wv-header {
     margin-bottom: 12px;

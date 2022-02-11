@@ -309,11 +309,11 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser, globalUnit,
+    config, palettes, compare, browser, settings,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
+  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
   return {
     paletteOrder: config.paletteOrder,
     groupName,
