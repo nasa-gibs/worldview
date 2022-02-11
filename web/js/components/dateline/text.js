@@ -89,39 +89,43 @@ class LineText extends React.Component {
         className="dateline-text"
         style={svgStyle}
       >
-        <rect
-          fill={fill}
-          width={leftTextWidth + 10}
-          height={textHeight}
-          x={0}
-          rx={recRadius}
-          opacity={active && dateLeft ? rectOpacity : '0'}
-        />
-        <text
-          y={textY}
-          x={6}
-          fill={color}
-          width={width}
-          opacity={active && dateLeft ? textOpacity : '0'}
-        >
-          {dateLeft}
-        </text>
-        <rect
-          fill={fill}
-          width={rightTextWidth + 10}
-          height={textHeight}
-          x={leftTextWidth + 40}
-          rx={recRadius}
-          opacity={active && dateRight ? rectOpacity : '0'}
-        />
-        <text
-          y={textY}
-          x={leftTextWidth + 46}
-          fill={color}
-          opacity={active && dateRight ? textOpacity : '0'}
-        >
-          {dateRight}
-        </text>
+        {active && (
+          <>
+            <rect
+              fill={fill}
+              width={leftTextWidth + 10}
+              height={textHeight}
+              x={0}
+              rx={recRadius}
+              opacity={dateLeft ? rectOpacity : '0'}
+            />
+            <text
+              y={textY}
+              x={6}
+              fill={color}
+              width={width}
+              opacity={dateLeft ? textOpacity : '0'}
+            >
+              {dateLeft}
+            </text>
+            <rect
+              fill={fill}
+              width={rightTextWidth + 10}
+              height={textHeight}
+              x={leftTextWidth + 40}
+              rx={recRadius}
+              opacity={dateRight ? rectOpacity : '0'}
+            />
+            <text
+              y={textY}
+              x={leftTextWidth + 46}
+              fill={color}
+              opacity={dateRight ? textOpacity : '0'}
+            >
+              {dateRight}
+            </text>
+          </>
+        )}
       </svg>
     );
   }

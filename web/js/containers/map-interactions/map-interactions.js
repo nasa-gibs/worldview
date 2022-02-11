@@ -30,15 +30,13 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
-        <RightClickMenu />
-        <OlZoomButtons />
-        <OlRotationButtons />
         <ContextMenuTrigger id="context-menu-trigger">
           <div id="wv-map" className={mapClasses} />
         </ContextMenuTrigger>
-        {!isDistractionFreeModeActive && (
-          <OlCoordinates />
-        )}
+        <RightClickMenu />
+        <OlZoomButtons />
+        <OlRotationButtons />
+        <OlCoordinates show={!isDistractionFreeModeActive} />
         <OlVectorInteractions />
         <OlMeasureTool />
         <OlCoordinatesMarker />
