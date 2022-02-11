@@ -3,6 +3,7 @@ import {
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
+  SET_COORDINATES,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
@@ -137,6 +138,19 @@ export function setSuggestion(suggestion) {
     dispatch({
       type: SET_SUGGESTION,
       value: suggestion,
+    });
+  };
+}
+
+/**
+ * Set coordinates
+ * @param {Array} coordinates
+ */
+export function setCoordinates(coordinates) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_COORDINATES,
+      coordinates,
     });
   };
 }
