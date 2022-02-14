@@ -6,7 +6,7 @@ import HoverTooltip from '../util/hover-tooltip';
 import { TEMPERATURE_UNITS } from '../../modules/settings/constants';
 
 const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }) => (
-  <div className="temperature-unit-buttons settings-component">
+  <div className="settings-component">
     <h3 className="wv-header">
       Temperature Unit
       {' '}
@@ -24,7 +24,7 @@ const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }
           key={`${unit}-button`}
           aria-label={`Set ${unit} Unit`}
           outline
-          className="temperature-unit-button"
+          className="setting-button"
           active={globalTemperatureUnit === unit}
           onClick={() => changeTemperatureUnit(unit)}
         >
@@ -34,7 +34,7 @@ const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }
       <Button
         aria-label="Reset to Default Unit"
         outline
-        className="temperature-unit-button"
+        className="setting-button"
         active={!globalTemperatureUnit}
         onClick={() => changeTemperatureUnit('')}
       >
