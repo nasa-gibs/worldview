@@ -8,8 +8,8 @@ const {
 const TIME_LIMIT = 5000;
 const settingsInfoItem = '#settings_info_item';
 const globalSettingsModal = '#global_settings_modal';
-const globalSettingsTemperatureButtons = '.temperature-unit-buttons';
-const KelvinSettingsButton = '#global_settings_modal button.temperature-unit-button:nth-child(1)';
+const settingContainer = '.global-setting-container';
+const KelvinSettingsButton = '#global_settings_modal button.setting-button:nth-child(1)';
 
 const SSTQueryString = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&t=2020-09-28-T20%3A40%3A53Z';
 const SSTMinPalette = '#GHRSST_L4_MUR_Sea_Surface_Temperature_GHRSST_Sea_Surface_Temperature_0_legend_0 > div.wv-palettes-min';
@@ -31,7 +31,7 @@ module.exports = {
     c.pause(500);
 
     c.expect.element(globalSettingsModal).to.be.present;
-    c.expect.element(globalSettingsTemperatureButtons).to.be.present;
+    c.expect.element(settingContainer).to.be.present;
   },
 
   'Initial temp unit is default value in layer palette legend': (c) => {
