@@ -16,6 +16,7 @@ function DateLines(props) {
   const [height, setHeight] = useState(0);
   const [startY, setStartY] = useState(0);
   const [hideLines, setHideLines] = useState(false);
+  const [textCoords, setTextCoords] = useState([0, 0]);
 
   const updatePosition = () => {
     let topY;
@@ -76,6 +77,8 @@ function DateLines(props) {
         lineX={-180}
         lineY={startY}
         date={date}
+        textCoords={textCoords}
+        setTextCoords={setTextCoords}
       />
       <Line
         id="dateline-right"
@@ -86,6 +89,8 @@ function DateLines(props) {
         lineX={180}
         lineY={startY}
         date={util.dateAdd(date, 'day', -1)}
+        textCoords={textCoords}
+        setTextCoords={setTextCoords}
       />
     </>
   );
