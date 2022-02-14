@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, ButtonGroup } from 'reactstrap';
 import HoverTooltip from '../util/hover-tooltip';
 import TemperatureUnitButtons from './temperature-unit-buttons';
 import {
   changeTemperatureUnit,
   changeDatelineVisibility,
 } from '../../modules/settings/actions';
-import Switch from '../util/switch';
 
 function GlobalSettings(props) {
   const {
@@ -29,7 +29,7 @@ function GlobalSettings(props) {
 
         <div className="settings-component">
           <h3 className="wv-header">
-            Show Datelines
+            Show Antimeridian / Approximate Date Line
             {' '}
             <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" /></span>
             <HoverTooltip
@@ -39,13 +39,24 @@ function GlobalSettings(props) {
               placement="right"
             />
           </h3>
-          <Switch
-            id="dateline-visibility-toggle"
-            label={alwaysShowDatelines ? 'Always' : 'On Hover'}
-            containerClassAddition="header"
-            active={alwaysShowDatelines}
-            toggle={() => toggleAlwaysShowDatelines(!alwaysShowDatelines)}
-          />
+          <ButtonGroup>
+            <Button
+              outline
+              className="setting-button"
+              active={alwaysShowDatelines}
+              onClick={() => toggleAlwaysShowDatelines(true)}
+            >
+              Always
+            </Button>
+            <Button
+              outline
+              className="setting-button"
+              active={!alwaysShowDatelines}
+              onClick={() => toggleAlwaysShowDatelines(false)}
+            >
+              On Hover
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
     </>

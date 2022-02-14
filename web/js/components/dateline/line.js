@@ -22,7 +22,6 @@ class Line extends React.Component {
       overlay: '',
       hovered: false,
       textActive: props.alwaysShow,
-      textCoords: [0, 0],
     };
     this.nodeRef = React.createRef();
   }
@@ -38,10 +37,14 @@ class Line extends React.Component {
     this.setState({ overlay });
   }
 
-  componentDidUpdate() {
-    const { lineX, lineY } = this.props;
+  componentDidUpdate(prevProps) {
+    const { lineX, lineY, alwaysShow } = this.props;
     const { overlay } = this.state;
     overlay.setPosition([lineX, lineY]);
+    if (!alwaysShow && alwaysShow !== prevProps.alwaysShow) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ textActive: false });
+    }
   }
 
   mouseOver = () => {
@@ -57,10 +60,10 @@ class Line extends React.Component {
   }
 
   mouseOverHidden = (e) => {
-    const { map } = this.props;
+    const { map, setTextCoords } = this.props;
+    setTextCoords(map.getCoordinateFromPixel([e.clientX, e.clientY]));
     this.setState({
       textActive: true,
-      textCoords: map.getCoordinateFromPixel([e.clientX, e.clientY]),
     });
   }
 
@@ -78,8 +81,9 @@ class Line extends React.Component {
       style,
       map,
       height,
+      textCoords,
     } = this.props;
-    const { hovered, textCoords, textActive } = this.state;
+    const { hovered, textActive } = this.state;
 
     const {
       strokeWidth, dashArray, color, svgStyle, width,
@@ -150,6 +154,8 @@ Line.propTypes = {
   lineY: PropTypes.number,
   map: PropTypes.object,
   style: PropTypes.object,
+  setTextCoords: PropTypes.func,
+  textCoords: PropTypes.array,
 };
 
 export default Line;
