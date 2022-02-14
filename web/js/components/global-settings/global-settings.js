@@ -34,7 +34,7 @@ function GlobalSettings(props) {
             <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" /></span>
             <HoverTooltip
               isMobile={false}
-              labelText="Either always show or only on mouse hover"
+              labelText="For many layers, this line represents the transition of daytime imagery from one day to the next."
               target="datelines-toggle"
               placement="right"
             />
