@@ -10,7 +10,7 @@ import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
 import { getCoordinateFixedPrecision, getFormattedCoordinates } from '../location-search/util';
-import { setCoordinates } from '../../modules/location-search/actions';
+import { clearCoordinates, setCoordinates } from '../../modules/location-search/actions';
 
 const { events } = util;
 
@@ -20,11 +20,16 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive,
+    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive, removeCoordinates,
   } = props;
   const [getMap, setMap] = useState(map);
 
-  const handleClick = () => (show ? setShow(false) : null);
+  const handleClick = () => {
+    if (show) {
+      removeCoordinates();
+    }
+    return show ? setShow(false) : null;
+  };
 
   function handleContextEvent(event, olMap) {
     event.originalEvent.preventDefault();
@@ -144,6 +149,9 @@ const mapDispatchToProps = (dispatch) => ({
   updateStateCoordinates: (coordinates) => {
     dispatch(setCoordinates(coordinates));
   },
+  removeCoordinates: () => {
+    dispatch(clearCoordinates());
+  },
 });
 RightClickMenu.propTypes = {
   map: PropTypes.object,
@@ -152,6 +160,7 @@ RightClickMenu.propTypes = {
   onToggleUnits: PropTypes.func,
   updateStateCoordinates: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
+  removeCoordinates: PropTypes.func,
 };
 
 export default connect(
