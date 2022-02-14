@@ -13,7 +13,7 @@
   .wv-header {
     margin-bottom: 12px;
   }
- .btn-group button.setting-button {
+  .btn-group button.setting-button {
     color: #fff;
     background: #222;
     &.active {
