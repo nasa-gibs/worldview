@@ -109,8 +109,14 @@ export default function mapui(models, config, store, ui) {
       case SET_MARKER: {
         return addMarkerAndUpdateStore(true, null, action.isInputSearch);
       }
-      case TOGGLE_DIALOG_VISIBLE:
-        return addMarkerAndUpdateStore(false);
+      case TOGGLE_DIALOG_VISIBLE: {
+        const { locationSearch } = state;
+        const { isMarkerPlaced } = locationSearch;
+        if (isMarkerPlaced) {
+          return addMarkerAndUpdateStore(false);
+        }
+        return;
+      }
       case CLEAR_ROTATE: {
         self.selected.getView().animate({
           duration: 500,

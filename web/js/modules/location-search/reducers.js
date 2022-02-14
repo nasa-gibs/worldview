@@ -16,6 +16,7 @@ import { getLocalStorageCollapseState } from './util';
 const localStorageCollapseState = getLocalStorageCollapseState();
 export const locationSearchState = {
   coordinates: [],
+  isMarkerPlaced: false,
   isCoordinateSearchActive: false,
   isCoordinatesDialogOpen: false,
   isExpanded: !localStorageCollapseState,
@@ -50,6 +51,7 @@ export function locationSearchReducer(state = locationSearchState, action) {
       return {
         ...state,
         coordinates: action.coordinates,
+        isMarkerPlaced: true,
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
         isCoordinatesDialogOpen: action.isCoordinatesDialogOpen,
@@ -58,6 +60,7 @@ export function locationSearchReducer(state = locationSearchState, action) {
       return {
         ...state,
         coordinates: [],
+        isMarkerPlaced: false,
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
       };
