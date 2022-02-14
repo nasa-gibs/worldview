@@ -20,12 +20,12 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive, removeCoordinates,
+    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive, removeCoordinates, isMarkerPlaced,
   } = props;
   const [getMap, setMap] = useState(map);
 
   const handleClick = () => {
-    if (show) {
+    if (show && !isMarkerPlaced) {
       removeCoordinates();
     }
     return show ? setShow(false) : null;
@@ -131,7 +131,7 @@ function mapStateToProps(state) {
   } = state;
   const { unitOfMeasure } = measure;
   const { crs } = proj.selected;
-  const { coordinates, isCoordinateSearchActive } = locationSearch;
+  const { coordinates, isCoordinateSearchActive, isMarkerPlaced } = locationSearch;
   return {
     map,
     crs,
@@ -139,6 +139,7 @@ function mapStateToProps(state) {
     coordinates,
     isCoordinateSearchActive,
     config,
+    isMarkerPlaced,
   };
 }
 
@@ -161,6 +162,7 @@ RightClickMenu.propTypes = {
   updateStateCoordinates: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
   removeCoordinates: PropTypes.func,
+  isMarkerPlaced: PropTypes.bool,
 };
 
 export default connect(
