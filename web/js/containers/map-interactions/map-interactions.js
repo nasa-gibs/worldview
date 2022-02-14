@@ -36,9 +36,7 @@ class MapInteractions extends PureComponent {
         <ContextMenuTrigger id="context-menu-trigger">
           <div id="wv-map" className={mapClasses} />
         </ContextMenuTrigger>
-        {!isDistractionFreeModeActive && (
-          <OlCoordinates />
-        )}
+        <OlCoordinates show={!isDistractionFreeModeActive} />
         <OlVectorInteractions />
         <OlMeasureTool />
         <OlCoordinatesMarker />
