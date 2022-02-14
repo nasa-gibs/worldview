@@ -93,6 +93,7 @@ describe('locationSearch', () => {
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
+        isMarkerPlaced: true,
         coordinates,
         reverseGeocodeResults,
         isCoordinatesDialogOpen: true,
@@ -111,6 +112,7 @@ describe('locationSearch', () => {
       ).toEqual({
         ...locationSearchState,
         coordinates: [],
+        isMarkerPlaced: false,
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
       });
