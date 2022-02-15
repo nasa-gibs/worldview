@@ -8,7 +8,7 @@ import { UncontrolledTooltip } from 'reactstrap';
  * @extends React.Component
  */
 const PlayButton = ({
-  playing, pause, play, isDisabled,
+  playing, pause, play, isDisabled, isMobile,
 }) => {
   const buttonId = 'play-button';
   const labelText = isDisabled
@@ -24,12 +24,14 @@ const PlayButton = ({
       className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
     >
-      <UncontrolledTooltip
-        target={buttonId}
-        placement="top"
-      >
-        {labelText}
-      </UncontrolledTooltip>
+      {!isMobile && (
+        <UncontrolledTooltip
+          target={buttonId}
+          placement="top"
+        >
+          {labelText}
+        </UncontrolledTooltip>
+      )}
       {playing
         ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
         : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
@@ -42,6 +44,7 @@ PlayButton.propTypes = {
   play: PropTypes.func,
   playing: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 export default PlayButton;

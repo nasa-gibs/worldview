@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.17.0",
+  "version": "3.18.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -200,6 +200,7 @@
     "react": "16.11.x",
     "react-autocomplete": "^1.8.1",
     "react-beautiful-dnd": "^13.0.0",
+    "react-contextmenu": "^2.14.0",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
     "react-image-crop": "^8.5.0",
