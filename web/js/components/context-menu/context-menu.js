@@ -9,8 +9,7 @@ import { transform } from 'ol/proj';
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
-import { getCoordinateFixedPrecision, getFormattedCoordinates } from '../location-search/util';
-import { setCoordinates } from '../../modules/location-search/actions';
+import { getFormattedCoordinates } from '../location-search/util';
 
 const { events } = util;
 
@@ -20,7 +19,7 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, updateStateCoordinates, isCoordinateSearchActive,
+    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
   } = props;
   const [getMap, setMap] = useState(map);
 
@@ -30,10 +29,7 @@ function RightClickMenu(props) {
     event.originalEvent.preventDefault();
     const coord = olMap.getCoordinateFromPixel(event.pixel);
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    const latitude = getCoordinateFixedPrecision(lat);
-    const longitude = getCoordinateFixedPrecision(lon);
     setPixelCoords({ pixel: event.pixel });
-    updateStateCoordinates([longitude, latitude]);
     setFormattedCoordinates(getFormattedCoordinates(lat, lon).join(','));
     setMap(olMap);
     setShow(true);
@@ -141,16 +137,12 @@ const mapDispatchToProps = (dispatch) => ({
   onToggleUnits: (unitOfMeasure) => {
     dispatch(changeUnits(unitOfMeasure));
   },
-  updateStateCoordinates: (coordinates) => {
-    dispatch(setCoordinates(coordinates));
-  },
 });
 RightClickMenu.propTypes = {
   map: PropTypes.object,
   crs: PropTypes.string,
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
-  updateStateCoordinates: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
 };
 
