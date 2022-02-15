@@ -13,7 +13,7 @@
   position: absolute;
   right: 0;
   z-index: 1;
-  background: none rgba(40, 40, 40, 0.85);
+  background: none $wv-transparent-black;
   border: 1px solid #333;
   margin-right: 0;
   border-radius: 0;
@@ -97,7 +97,7 @@
 }
 
 @media (max-width: 768px) {
-  .wv-zoom-buttons, {
+  .wv-zoom-buttons {
     display: none;
   }
   .wv-rotation-buttons {
@@ -115,7 +115,7 @@
 }
 
 @media (max-height: 667px) {
-  .wv-zoom-buttons, {
+  .wv-zoom-buttons {
     top: calc(var(--vh, 1vh) * 100 - 516px);
   }
   .wv-rotation-buttons {
@@ -124,7 +124,7 @@
 }
 
 @media (max-height: 578px) {
-  .wv-zoom-buttons, {
+  .wv-zoom-buttons {
     top: 58px;
   }
   .wv-rotation-buttons {
@@ -148,7 +148,7 @@
   z-index: 10;
   right: 58px;
   color: #fff;
-  background-color: rgba(40, 40, 40, 0.85);
+  background-color: $wv-transparent-black;
   text-shadow: -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
@@ -198,7 +198,7 @@
 }
 
 .wv-coords-map:hover {
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
 }
 
 .wv-coords-map:hover div.coord-btn {
@@ -227,7 +227,7 @@
   position: relative;
   width: 20px;
   height: 35px;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border: 1px solid transparent;
   display: inline-block;
   margin-left: 5px;

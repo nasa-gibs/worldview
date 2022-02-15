@@ -41,7 +41,7 @@ a.staticLayers:not([href]):not([tabindex]) {
   position: absolute;
   top: 67px;
   height: auto;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border-radius: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;

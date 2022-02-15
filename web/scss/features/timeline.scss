@@ -11,7 +11,7 @@ button:focus {
 .timeline-inner {
   position: absolute;
   border: thin solid #333;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border-radius: 5px;
   display: flex;
   flex-flow: row nowrap;
@@ -259,7 +259,7 @@ button:focus {
 }
 
 .button-action-group {
-  height: 60px;
+  height: 40px;
   width: 40px;
   vertical-align: middle;
   position: relative;
@@ -369,7 +369,7 @@ button:focus {
   width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   position: absolute;
   top: -54px;
   left: 85px;
@@ -696,7 +696,7 @@ button:focus {
   position: absolute;
   left: 10px;
   bottom: 10px;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   color: #fff;
   border: thin solid #333;
   font-size: 23px;
@@ -727,7 +727,7 @@ button:focus {
   position: absolute;
   left: 120px;
   bottom: 10px;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border: thin solid #333;
   border-radius: 5px;
   cursor: pointer;

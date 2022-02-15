@@ -9,7 +9,7 @@
 .wv-toolbar-button,
 [data-whatintent='mouse'] .wv-toolbar-button:focus {
   display: inline-block;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border: 1px solid #333;
   border-radius: 5px;
   &:focus {
@@ -21,7 +21,7 @@
     color: #1a1a1a;
   }
   &.disabled:hover {
-    background-color: rgba(40, 40, 40, 0.85);
+    background-color: $wv-transparent-black;
     color: #eee;
   }
 }

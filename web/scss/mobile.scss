@@ -55,7 +55,7 @@
 
     #wv-logo {
       background: url('../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@')
-        no-repeat center rgba(40, 40, 40, 0.85);
+        no-repeat center $wv-transparent-black;
       display: block;
       height: 42px;
       width: 56px;

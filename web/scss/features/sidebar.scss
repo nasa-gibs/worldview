@@ -33,12 +33,12 @@
     padding-right: 10px;
   }
   .main-nav {
-    background: rgba(40, 40, 40, 0.85);
+    background: $wv-transparent-black;
     border-right: 1px solid #333;
     border-left: 1px solid #333;
   }
   > .tab-content {
-    background: rgba(40, 40, 40, 0.85);
+    background: $wv-transparent-black;
     border: 1px solid #333;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -52,7 +52,7 @@
 }
 
 #wv-logo {
-  background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40, 40, 40, 0.85);
+  background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center $wv-transparent-black;
   display: block;
   width: 286px;
   height: 55px;

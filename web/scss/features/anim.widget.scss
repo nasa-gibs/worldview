@@ -57,7 +57,7 @@
   &.minimized {
     height: 52px;
     width: 80px;
-    background: rgba(40, 40, 40, 0.85);
+    background: $wv-transparent-black;
     cursor: move;
   }
   & .wv-animation-widget-header {

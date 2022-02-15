@@ -94,7 +94,7 @@
   top: 10px;
   width: 350px;
   margin-right: 1px;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border-radius: 5px;
   z-index: 1;
 }
@@ -133,7 +133,7 @@
     color: #1a1a1a;
   }
   &.disabled:hover {
-    background-color: rgba(40, 40, 40, 0.85);
+    background-color: $wv-transparent-black;
     color: #eee;
   }
 }

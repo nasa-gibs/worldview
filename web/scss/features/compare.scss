@@ -58,7 +58,7 @@
   right: 0;
   bottom: 195px;
   text-align: center;
-  background: rgba(40, 40, 40, 0.85);
+  background: $wv-transparent-black;
   border-radius: 3px;
   color: #fff;
   height: 36px;
@@ -137,7 +137,7 @@
   border-radius: 5px;
   height: 44px;
   border: thin solid #333;
-  background-color: rgba(40, 40, 40, 0.85);
+  background-color: $wv-transparent-black;
   position: absolute;
   bottom: 65px;
   left: 10px;
