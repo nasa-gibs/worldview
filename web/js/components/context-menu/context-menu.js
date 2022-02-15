@@ -19,7 +19,7 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
+    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements,
   } = props;
   const [getMap, setMap] = useState(map);
 
@@ -66,6 +66,11 @@ function RightClickMenu(props) {
     };
   };
 
+  const checkForMeasurements = () => {
+    if (Object.keys(allMeasurements[crs]).length) return false;
+    return true;
+  };
+
   useEffect(() => {
     if (isCoordinateSearchActive) return;
     events.on('map:singleclick', handleClick);
@@ -100,7 +105,10 @@ function RightClickMenu(props) {
           <MenuItem onClick={() => handleMeasurementMenu('area')}>
             Measure Area
           </MenuItem>
-          <MenuItem onClick={() => handleMeasurementMenu('clear')}>
+          <MenuItem
+            disabled={checkForMeasurements()}
+            onClick={() => handleMeasurementMenu('clear')}
+          >
             Remove Measurements
           </MenuItem>
           <MenuItem onClick={() => handleMeasurementMenu('units')}>
@@ -120,13 +128,14 @@ function mapStateToProps(state) {
   const {
     map, proj, measure, locationSearch, config,
   } = state;
-  const { unitOfMeasure } = measure;
+  const { unitOfMeasure, allMeasurements } = measure;
   const { crs } = proj.selected;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
   return {
     map,
     crs,
     unitOfMeasure,
+    allMeasurements,
     coordinates,
     isCoordinateSearchActive,
     config,
@@ -144,6 +153,7 @@ RightClickMenu.propTypes = {
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
+  allMeasurements: PropTypes.object,
 };
 
 export default connect(
