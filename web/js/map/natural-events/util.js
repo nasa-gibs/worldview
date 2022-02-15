@@ -15,8 +15,10 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
-  const { properties } = clusterPoint;
+  const { properties, geometry } = clusterPoint;
+  const { magnitudeUnit, magnitudeValue } = geometry;
   const content = document.createTextNode(formatDisplayDate(properties.date));
+  const magnitudeContent = document.createTextNode(`${magnitudeValue} ${magnitudeUnit}`);
   const { date } = properties;
   const eventID = properties.event_id;
   let { coordinates } = clusterPoint.geometry;
@@ -32,6 +34,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
     callback(eventID, date);
   };
   textEl.appendChild(content);
+  textEl.appendChild(magnitudeContent);
   textEl.className = 'track-marker-date';
   circleEl.className = `track-marker track-marker-${date}`;
   circleEl.id = `track-marker-${date}`;
