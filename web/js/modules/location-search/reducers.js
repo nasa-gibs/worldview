@@ -6,7 +6,6 @@ import {
   SET_REVERSE_GEOCODE_RESULTS,
   SET_MARKER,
   SET_SUGGESTION,
-  SET_COORDINATES,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
@@ -65,11 +64,6 @@ export function locationSearchReducer(state = locationSearchState, action) {
       return {
         ...state,
         suggestedPlace: action.value,
-      };
-    case SET_COORDINATES:
-      return {
-        ...state,
-        coordinates: action.coordinates,
       };
     case REQUEST_SUGGEST_PLACE_SUCCESS:
       return {
