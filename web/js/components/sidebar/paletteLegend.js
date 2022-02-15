@@ -12,7 +12,7 @@ import {
 import {
   checkTemperatureUnitConversion,
   convertPaletteValue,
-} from '../../modules/global-unit/util';
+} from '../../modules/settings/util';
 import util from '../../util/util';
 
 /**

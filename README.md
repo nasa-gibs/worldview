@@ -20,8 +20,8 @@ views of several imagery layers are available for a “full globe” perspective
 
 Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from the
 [Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs). This
-imagery can also be used [with libraries such as Leaflet, Cesium, Google Maps](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage)
-or [custom GDAL scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
+imagery can also be used [with libraries such as Leaflet, Cesium, Google Maps](https://nasa-gibs.github.io/gibs-api-docs/map-library-usage/)
+or [custom GDAL scripts](https://nasa-gibs.github.io/gibs-api-docs/map-library-usage/#gdal).
 We encourage interested developers to fork Worldview or build their own clients
 using GIBS services.
 

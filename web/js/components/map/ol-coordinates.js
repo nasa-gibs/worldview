@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
+import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 
@@ -110,21 +112,30 @@ export default class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    // Don't render until a mouse is being used
-    if (!hasMouse) {
-      return null;
-    }
-
+    const { show } = this.props;
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
-        <Coordinates
-          format={format}
-          latitude={latitude}
-          longitude={longitude}
-          crs={crs}
-          onFormatChange={this.changeFormat}
-        />
+        {hasMouse && show && (
+          <>
+            <Coordinates
+              format={format}
+              latitude={latitude}
+              longitude={longitude}
+              crs={crs}
+              onFormatChange={this.changeFormat}
+            />
+            {latitude && latitude && (
+              <UncontrolledTooltip placement="bottom" target="ol-coords-case">
+                Change coordinates format
+              </UncontrolledTooltip>
+            )}
+          </>
+        )}
       </div>
     );
   }
 }
+
+OlCoordinates.propTypes = {
+  show: PropTypes.bool,
+};

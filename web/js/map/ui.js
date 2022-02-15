@@ -26,7 +26,6 @@ import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
 import PQueue from 'p-queue/dist';
-import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import { getActiveLayerGroup, fly, saveRotation } from './util';
@@ -70,7 +69,6 @@ const { events } = util;
 
 export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
-  const dateline = mapDateLineBuilder(store);
   const compareMapUi = mapCompare(store);
   const runningdata = new MapRunningData(compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
@@ -988,8 +986,6 @@ export default function mapui(models, config, store, ui) {
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
-    } else if (proj.id === 'geographic') {
-      dateline.init(map, dateSelected);
     }
 
     const onRotate = () => {

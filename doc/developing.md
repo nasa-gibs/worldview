@@ -5,7 +5,7 @@
 
 This project uses `npm` to run build scripts and other tasks. The scripts are a combination of JavaScript, Bash, and Python scripts. Webpack is used as a module bundler.
 
-**`npm run build`**: Main build script cleans previous build directory, gets available imagery metadata via the [GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers), adds the build configuration (options), and builds the Webpack bundle in Development mode. Generates the build in `build/`. If you have a custom configuration subdirectory, pass it to the command with `npm run build -- subdirectory_name`.
+**`npm run build`**: Main build script cleans previous build directory, gets available imagery metadata via the [GIBS `GetCapabilities` API](https://nasa-gibs.github.io/gibs-api-docs/), adds the build configuration (options), and builds the Webpack bundle in Development mode. Generates the build in `build/`. If you have a custom configuration subdirectory, pass it to the command with `npm run build -- subdirectory_name`.
 
 To build the app with an incomplete configuration, prefix the command like this:
 `IGNORE_ERRORS=true npm run build`.
