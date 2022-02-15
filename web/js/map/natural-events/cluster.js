@@ -95,6 +95,8 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
   const selectedCoords = geometry.find(({ date }) => date.split('T')[0] === selectedDate).coordinates;
   geometry.forEach((geom) => {
     let { coordinates } = geom;
+    const { magnitudeUnit, magnitudeValue } = geom;
+    const magnitude = { magnitudeUnit, magnitudeValue };
     const date = geom.date.split('T')[0];
     const isSelected = selectedDate === date;
     const isOverDateline = proj.selected.id === 'geographic'
