@@ -19,9 +19,10 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
+    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements,
   } = props;
   const [getMap, setMap] = useState(map);
+  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
 
   const handleClick = () => (show ? setShow(false) : null);
 
@@ -100,9 +101,14 @@ function RightClickMenu(props) {
           <MenuItem onClick={() => handleMeasurementMenu('area')}>
             Measure Area
           </MenuItem>
-          <MenuItem onClick={() => handleMeasurementMenu('clear')}>
+          {measurementsInProj
+          && (
+          <MenuItem
+            onClick={() => handleMeasurementMenu('clear')}
+          >
             Remove Measurements
           </MenuItem>
+          )}
           <MenuItem onClick={() => handleMeasurementMenu('units')}>
             Change Units to
             {' '}
@@ -120,13 +126,14 @@ function mapStateToProps(state) {
   const {
     map, proj, measure, locationSearch, config,
   } = state;
-  const { unitOfMeasure } = measure;
+  const { unitOfMeasure, allMeasurements } = measure;
   const { crs } = proj.selected;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
   return {
     map,
     crs,
     unitOfMeasure,
+    allMeasurements,
     coordinates,
     isCoordinateSearchActive,
     config,
@@ -144,6 +151,7 @@ RightClickMenu.propTypes = {
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
+  allMeasurements: PropTypes.object,
 };
 
 export default connect(
