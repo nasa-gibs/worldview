@@ -22,6 +22,7 @@ function RightClickMenu(props) {
     map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements,
   } = props;
   const [getMap, setMap] = useState(map);
+  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
 
   const handleClick = () => (show ? setShow(false) : null);
 
@@ -66,11 +67,6 @@ function RightClickMenu(props) {
     };
   };
 
-  const checkForMeasurements = () => {
-    if (Object.keys(allMeasurements[crs]).length) return false;
-    return true;
-  };
-
   useEffect(() => {
     if (isCoordinateSearchActive) return;
     events.on('map:singleclick', handleClick);
@@ -105,12 +101,14 @@ function RightClickMenu(props) {
           <MenuItem onClick={() => handleMeasurementMenu('area')}>
             Measure Area
           </MenuItem>
+          {measurementsInProj
+          && (
           <MenuItem
-            disabled={checkForMeasurements()}
             onClick={() => handleMeasurementMenu('clear')}
           >
             Remove Measurements
           </MenuItem>
+          )}
           <MenuItem onClick={() => handleMeasurementMenu('units')}>
             Change Units to
             {' '}
