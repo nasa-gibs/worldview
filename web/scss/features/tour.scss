@@ -2,13 +2,18 @@
   a {
     color: #00457b;
     font-weight: 400;
+
     &:hover {
       color: #2276ac;
       text-decoration: none;
     }
   }
+
   .modal-body {
-    h1, h2, h3, h4 {
+    h1,
+    h2,
+    h3,
+    h4 {
       margin-bottom: 15px;
     }
   }
@@ -21,17 +26,20 @@
   padding: 12px 14px;
   color: #ddd;
   text-shadow: 1px 1px 0 #333;
+
   &:hover {
     color: #fff;
   }
 }
+
 .about-page-modal .modal-header,
 .tour-complete .modal-header,
 .tour-start .modal-header {
   position: relative;
-  background-color: rgb(0, 69, 123);
+  background-color: rgb(0 69 123);
   padding: 6px 8px;
 }
+
 .about-page-modal .modal-title,
 .tour-start .modal-title,
 .tour-complete .modal-title {
@@ -40,6 +48,7 @@
   line-height: 22px;
   font-weight: 300;
 }
+
 .about-page-modal .modal-body,
 .tour-complete .modal-body,
 .tour-start .modal-body {
@@ -53,27 +62,33 @@
     margin-left: auto;
     margin-right: auto;
   }
+
   .modal-dialog {
     overflow-y: initial;
     border: 1px solid #333;
   }
+
   .modal.fade .modal-dialog {
     transform: translate(0, 0);
-    -webkit-transform: translate(0, 0);
   }
+
   .modal-dialog .modal-content {
     border: 0;
   }
+
   .modal-body {
     padding: 4px;
     background-color: #eee;
   }
+
   .scrollbar-visible .modal-body {
     padding-right: 10px;
   }
+
   .modal-footer {
     background: #eee;
     padding: 0 4px 4px;
+
     .wv-checkbox span {
       font-size: 14px;
       margin-left: 5px;
@@ -82,7 +97,7 @@
 
   .tour-box {
     position: relative;
-    background: url('../images/tour/tour-box-background.jpg');
+    background: url("../images/tour/tour-box-background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -91,6 +106,7 @@
     margin: 4px auto 0;
     text-decoration: none;
     border: 1px solid #333;
+
     .tour-box-header {
       width: 100%;
       color: #fff;
@@ -99,6 +115,7 @@
       padding: 4px;
       order: 0;
     }
+
     .tour-box-title {
       line-height: 16px;
     }
@@ -106,36 +123,47 @@
     &.feature .tour-box-header {
       background-color: #d54e21;
     }
+
     &.wildfire .tour-box-header {
       background-color: #8d3b36;
     }
+
     &.volcano .tour-box-header {
       background-color: #a5734b;
     }
+
     &.snow .tour-box-header {
       background-color: #5a7784;
     }
+
     &.sea-and-lake-ice .tour-box-header {
       background-color: #328697;
     }
+
     &.iceberg .tour-box-header {
       background-color: #3889ad;
     }
+
     &.water-color .tour-box-header {
       background-color: #457d73;
     }
+
     &.dust-and-haze .tour-box-header {
       background-color: #a09758;
     }
+
     &.severe-storm .tour-box-header {
       background-color: #465a64;
     }
+
     &.man-made .tour-box-header {
       background-color: #3e3e3e;
     }
+
     &.critical .tour-box-header {
       background-color: #585858;
     }
+
     .tour-box-content {
       height: 198px;
       display: flex;
@@ -143,18 +171,21 @@
       justify-content: flex-start;
       overflow: hidden;
     }
+
     .tour-box-description {
       display: none;
     }
+
     &:hover .tour-box-description {
       display: block;
       cursor: pointer;
       color: #fff;
-      background-color: rgba(20, 20, 20, 0.75);
+      background-color: rgb(20 20 20 / 75%);
       padding: 4px;
       order: 1;
     }
   }
+
   .tour-intro {
     background-color: #fff;
     border: 1px solid #333;
@@ -194,6 +225,7 @@
     height: 200px;
     overflow: visible;
   }
+
   .modal-dialog {
     position: absolute;
     width: 248px;
@@ -203,33 +235,37 @@
     margin: 0;
     border: none;
   }
+
   .modal-content {
     height: 350px;
   }
+
   .modal-dialog .modal-content {
     min-width: 248px;
     max-height: 357px;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgb(255 255 255 / 85%);
     border-radius: 8px 0 0 8px;
     border: none;
   }
+
   .modal.fade .modal-dialog {
     transform: translate(100%, 0);
-    -webkit-transform: translate(100%, 0);
     transition: transform 0.5s ease-out;
   }
+
   .modal.show .modal-dialog {
     transform: translate(0, 0);
-    -webkit-transform: translate(0, 0);
   }
+
   .modal-header {
     display: block;
     position: relative;
     color: #fff;
     border-radius: 8px 0 0;
-    background-color: rgb(0, 69, 123);
+    background-color: rgb(0 69 123);
     padding: 8px 20px 8px 16px;
     border-bottom: 1px solid #fff;
+
     .close {
       position: absolute;
       padding: 0;
@@ -239,37 +275,45 @@
       font-size: 24px;
     }
   }
+
   .modal-body {
     color: #fff;
     padding: 0;
     overflow-y: auto;
-    -ms-flex: 1 1 25px;
+    flex: 1 1 25px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+
     p {
       font-size: 13px;
       line-height: 20px;
       font-weight: 400;
       margin-bottom: 10px;
     }
+
     > div {
       padding: 12px 8px 6px 12px;
     }
+
     a {
       text-decoration: underline;
     }
+
     ul {
       padding-left: 16px;
       line-height: 16px;
     }
+
     li {
       margin-bottom: 4px;
       line-height: 16px;
     }
+
     strong {
       font-weight: 600;
     }
   }
+
   .modal-footer {
     border-radius: 0 0 0 8px;
     padding: 0;
@@ -278,37 +322,47 @@
   }
 
   .feature .modal-header {
-    background-color: rgb(213, 78, 33);
+    background-color: rgb(213 78 33);
   }
+
   .wildfire .modal-header {
-    background-color: rgb(141, 59, 54);
+    background-color: rgb(141 59 54);
   }
+
   .volcano .modal-header {
-    background-color: rgb(165, 115, 75);
+    background-color: rgb(165 115 75);
   }
+
   .snow .modal-header {
-    background-color: rgb(90, 119, 132);
+    background-color: rgb(90 119 132);
   }
+
   .sea-and-lake-ice .modal-header {
-    background-color: rgb(50, 134, 151);
+    background-color: rgb(50 134 151);
   }
+
   .iceberg .modal-header {
-    background-color: rgb(56, 137, 173);
+    background-color: rgb(56 137 173);
   }
+
   .water-color .modal-header {
-    background-color: rgb(69, 125, 115);
+    background-color: rgb(69 125 115);
   }
+
   .dust-and-haze .modal-header {
-    background-color: rgb(160, 151, 88);
+    background-color: rgb(160 151 88);
   }
+
   .severe-storm .modal-header {
-    background-color: rgb(70, 90, 100);
+    background-color: rgb(70 90 100);
   }
+
   .man-made .modal-header {
-    background-color: rgb(62, 62, 62);
+    background-color: rgb(62 62 62);
   }
+
   .critical .modal-header {
-    background-color: rgb(88, 88, 88);
+    background-color: rgb(88 88 88);
   }
 
   .modal-title {
@@ -327,7 +381,7 @@
     z-index: 3;
     background-color: #fff;
     border-radius: 50%;
-    background-image: url('../images/natural-events/icon-default.svg');
+    background-image: url("../images/natural-events/icon-default.svg");
     background-size: 64px 64px;
     background-position: -2px -2px;
   }
@@ -340,13 +394,11 @@
     font-size: 32px;
     padding-top: 14px;
     padding-left: 8px;
-    font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     display: inline-block;
     font-style: normal;
-    -webkit-font-feature-settings: normal;
     font-feature-settings: normal;
     font-variant: normal;
     text-rendering: auto;
@@ -354,113 +406,150 @@
   }
 
   .feature .modal-icon::before {
-    content: '\F1D8';
+    content: "\F1D8";
   }
+
   .wildfire .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-wildfires.svg');
+    background-image: url("../images/natural-events/icon-wildfires.svg");
   }
+
   .volcano .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-volcanoes.svg');
+    background-image: url("../images/natural-events/icon-volcanoes.svg");
   }
+
   .snow .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-snow.svg');
+    background-image: url("../images/natural-events/icon-snow.svg");
   }
+
   .sea-and-lake-ice .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-sea-and-lake-ice.svg');
+    background-image: url("../images/natural-events/icon-sea-and-lake-ice.svg");
   }
+
   .iceberg .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-icebergs.svg');
+    background-image: url("../images/natural-events/icon-icebergs.svg");
   }
+
   .water-color .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-water-color.svg');
+    background-image: url("../images/natural-events/icon-water-color.svg");
   }
+
   .dust-and-haze .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-dust-and-haze.svg');
+    background-image: url("../images/natural-events/icon-dust-and-haze.svg");
   }
+
   .severe-storm .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-severe-storms.svg');
+    background-image: url("../images/natural-events/icon-severe-storms.svg");
   }
+
   .man-made .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-manmade.svg');
+    background-image: url("../images/natural-events/icon-manmade.svg");
   }
+
   .critical .modal-icon {
     background-color: transparent;
     background-size: 68px 68px;
     background-position: -4px -4px;
-    background-image: url('../images/natural-events/icon-critical.svg');
+    background-image: url("../images/natural-events/icon-critical.svg");
   }
-  .modal-body, .modal-footer {
-    background-color: rgba(0, 69, 123, 0.8);
+
+  .modal-body,
+  .modal-footer {
+    background-color: rgb(0 69 123 / 80%);
   }
-  .feature .modal-body, .feature .modal-footer {
-    background-color: rgba(213, 78, 33, 0.8);
+
+  .feature .modal-body,
+  .feature .modal-footer {
+    background-color: rgb(213 78 33 / 80%);
   }
-  .wildfire .modal-body, .wildfire .modal-footer {
-    background-color: rgba(141, 59, 54, 0.8);
+
+  .wildfire .modal-body,
+  .wildfire .modal-footer {
+    background-color: rgb(141 59 54 / 80%);
   }
-  .volcano .modal-body, .volcano .modal-footer {
-    background-color: rgba(165, 115, 75, 0.8);
+
+  .volcano .modal-body,
+  .volcano .modal-footer {
+    background-color: rgb(165 115 75 / 80%);
   }
-  .snow .modal-body, .snow .modal-footer {
-    background-color: rgba(90, 119, 132, 0.8);
+
+  .snow .modal-body,
+  .snow .modal-footer {
+    background-color: rgb(90 119 132 / 80%);
   }
-  .sea-and-lake-ice .modal-body, .sea-and-lake-ice .modal-footer {
-    background-color: rgba(50, 134, 151, 0.8);
+
+  .sea-and-lake-ice .modal-body,
+  .sea-and-lake-ice .modal-footer {
+    background-color: rgb(50 134 151 / 80%);
   }
-  .iceberg .modal-body, .iceberg .modal-footer {
-    background-color: rgba(56, 137, 173, 0.8);
+
+  .iceberg .modal-body,
+  .iceberg .modal-footer {
+    background-color: rgb(56 137 173 / 80%);
   }
-  .water-color .modal-body, .water-color .modal-footer {
-    background-color: rgba(69, 125, 115, 0.8);
+
+  .water-color .modal-body,
+  .water-color .modal-footer {
+    background-color: rgb(69 125 115 / 80%);
   }
-  .dust-and-haze .modal-body, .dust-and-haze .modal-footer {
-    background-color: rgba(160, 151, 88, 0.8);
+
+  .dust-and-haze .modal-body,
+  .dust-and-haze .modal-footer {
+    background-color: rgb(160 151 88 / 80%);
   }
-  .severe-storm .modal-body, .severe-storm .modal-footer {
-    background-color: rgba(70, 90, 100, 0.8);
+
+  .severe-storm .modal-body,
+  .severe-storm .modal-footer {
+    background-color: rgb(70 90 100 / 80%);
   }
-  .man-made .modal-body, .man-made .modal-footer {
-    background-color: rgba(62, 62, 62, 0.8);
+
+  .man-made .modal-body,
+  .man-made .modal-footer {
+    background-color: rgb(62 62 62 / 80%);
   }
-  .critical .modal-body, .critical .modal-footer {
-    background-color: rgba(88, 88, 88, 0.8);
+
+  .critical .modal-body,
+  .critical .modal-footer {
+    background-color: rgb(88 88 88 / 80%);
   }
+
   .default .modal-body a,
   .wildfire .modal-body a {
     color: #7bf;
     font-weight: 400;
   }
+
   .default .modal-body a:hover,
   .wildfire .modal-body a:hover {
     color: #9df;
   }
+
   .step-container {
     display: flex;
     height: 40px;
@@ -468,6 +557,7 @@
     flex-flow: row wrap;
     justify-content: space-between;
   }
+
   .step-previous {
     color: #fff;
     font-size: 40px;
@@ -475,17 +565,20 @@
     width: 40px;
     margin: auto;
   }
+
   .step-counter {
     color: #fff;
     width: 132px;
     margin: 6px auto;
     text-align: center;
+
     p {
       font-size: 22px;
       line-height: 24px;
       font-weight: 300;
     }
   }
+
   .step-next {
     color: #fff;
     font-size: 40px;
@@ -529,55 +622,69 @@
   .modal-dialog {
     border: 1px solid #333;
   }
+
   .modal.fade .modal-dialog {
     transform: translate(0, 0);
-    -webkit-transform: translate(0, 0);
   }
+
   .modal-dialog .modal-content {
     border: 0;
   }
+
   .modal-body {
     padding: 15px 15px 0;
     background-color: #eee;
   }
+
   .modal-footer {
     background-color: #eee;
     display: block;
     border-top: none;
     padding: 8px 15px 15px;
   }
+
   .feature .modal-header {
-    background-color: rgb(213, 78, 33);
+    background-color: rgb(213 78 33);
   }
+
   .wildfire .modal-header {
-    background-color: rgb(141, 59, 54);
+    background-color: rgb(141 59 54);
   }
+
   .volcano .modal-header {
-    background-color: rgb(165, 115, 75);
+    background-color: rgb(165 115 75);
   }
+
   .snow .modal-header {
-    background-color: rgb(90, 119, 132);
+    background-color: rgb(90 119 132);
   }
+
   .sea-and-lake-ice .modal-header {
-    background-color: rgb(50, 134, 151);
+    background-color: rgb(50 134 151);
   }
+
   .iceberg .modal-header {
-    background-color: rgb(56, 137, 173);
+    background-color: rgb(56 137 173);
   }
+
   .water-color .modal-header {
-    background-color: rgb(69, 125, 115);
+    background-color: rgb(69 125 115);
   }
+
   .dust-and-haze .modal-header {
-    background-color: rgb(160, 151, 88);
+    background-color: rgb(160 151 88);
   }
+
   .severe-storm .modal-header {
-    background-color: rgb(70, 90, 100);
+    background-color: rgb(70 90 100);
   }
+
   .man-made .modal-header {
-    background-color: rgb(62, 62, 62);
+    background-color: rgb(62 62 62);
   }
+
   .critical .modal-header {
-    background-color: rgb(88, 88, 88);
+    background-color: rgb(88 88 88);
   }
 }
 
@@ -689,6 +796,7 @@
   .tour-in-progress .modal {
     bottom: 290px;
   }
+
   .tour-in-progress .modal-content {
     height: 300px;
   }
@@ -697,15 +805,19 @@
 @media (max-height: 720px) {
   .tour-in-progress .modal {
     right: 55px;
+
     .modal-dialog {
-      box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.45);
+      box-shadow: 2px 2px 16px rgb(0 0 0 / 45%);
+
       .modal-content {
         border-radius: 8px;
       }
+
       .modal-header {
         border-top-right-radius: 8px;
         border-top-left-radius: 8px;
       }
+
       .modal-footer {
         border-bottom-right-radius: 8px;
         border-bottom-left-radius: 8px;

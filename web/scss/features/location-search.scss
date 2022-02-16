@@ -8,6 +8,7 @@
   padding: 0 5px;
   border-radius: 0;
   border: none;
+
   &::placeholder {
     color: #999;
   }
@@ -29,6 +30,7 @@
   word-wrap: break-word;
   padding: 5px 0 5px 7px;
   color: #333;
+
   &:hover {
     cursor: pointer;
   }
@@ -42,30 +44,35 @@
   right: 62px;
   margin-right: 0;
   background: none;
+
   & .location-search-submit-button,
   & .location-search-clear-button {
     background: none;
     border: none;
     color: #999;
     margin-right: 2px;
-    border-left: 2px solid rgba(51, 51, 51, 0.65);
+    border-left: 2px solid rgb(51 51 51 / 65%);
     border-radius: 0;
     box-sizing: border-box;
     width: 31px;
     box-shadow: none;
     cursor: default;
+
     &:active:focus {
       box-shadow: none;
     }
+
     & svg.svg-inline--fa.fa-search-location {
       position: absolute;
       left: 8px;
       top: 13px;
     }
   }
+
   &.submit-group {
     right: 31px;
   }
+
   & .location-search-clear-button {
     cursor: pointer;
     color: #fff;
@@ -74,12 +81,14 @@
     right: 0;
     height: 38px;
   }
+
   & svg.svg-inline--fa.fa-exclamation-triangle {
     color: #d54e21;
     position: absolute;
     left: 8px;
     top: 13px;
   }
+
   & svg.svg-inline--fa.fa-times {
     position: absolute;
     left: 10px;
@@ -107,6 +116,7 @@
   width: 31px;
   border: none;
   background: #00457b;
+
   &:focus,
   &:hover {
     box-shadow: none;
@@ -117,21 +127,23 @@
 
 /* Location Search Component Minimize Button */
 .location-search-minimize-button {
-  background: rgba(40, 40, 40, 0.15);
+  background: rgb(40 40 40 / 15%);
   width: 21px;
   margin-right: 2px;
   border: none;
   overflow: hidden;
+
   &:focus {
     box-shadow: none;
-    -webkit-box-shadow: none;
     background-color: #eee;
     color: #1a1a1a;
   }
+
   &:hover {
     background-color: #eee;
     color: #1a1a1a;
   }
+
   &.disabled:hover {
     background-color: $wv-transparent-black;
     color: #eee;
@@ -140,14 +152,14 @@
 
 .location-search-minimize-button-chevron {
   position: absolute;
-  background: url('../images/icon-sprite.svg') -201px -5px no-repeat;
-  -webkit-box-sizing: border-box;
+  background: url("../images/icon-sprite.svg") -201px -5px no-repeat;
   box-sizing: border-box;
   width: 42px;
   top: 9px;
   left: -9px;
   height: 24px;
   transform: rotate(90deg);
+
   &:hover {
     background-position: -201px -65px;
   }
@@ -172,35 +184,45 @@
     position: static;
     width: 100%;
   }
+
   .location-search-input-container {
     width: 100%;
   }
+
   .location-search-input-clear-container {
     right: 70px;
   }
+
   .location-search-input-alert-icon {
     right: 135px;
   }
+
   .location-search-autocomplete {
     font-size: 16px;
+
     &::placeholder {
       font-size: 14px;
     }
   }
+
   .location-search-results-menu {
     width: 100%;
   }
+
   .location-search-item {
     padding: 8px 0 8px 7px;
     line-height: 16px;
     font-size: 16px;
   }
+
   .location-search-input-group-addon {
     margin-right: 6px;
     background: none;
+
     & .location-search-submit-button {
       border-left: none;
     }
+
     & .location-search-clear-button {
       background: #3b3b3b;
     }

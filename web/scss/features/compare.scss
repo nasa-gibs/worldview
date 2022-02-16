@@ -8,22 +8,28 @@
   cursor: move;
   cursor: grab;
   user-select: none;
+
   & .show-date-label {
     width: 109px;
   }
+
   & .left-label {
     left: -23px;
+
     &.show-date-label {
       left: -118px;
     }
   }
+
   & .right-label {
     left: 13px;
   }
 }
+
 .ab-swipe-line:active {
   cursor: grabbing;
 }
+
 .ab-swipe-dragger {
   position: absolute;
   bottom: 210px;
@@ -34,6 +40,7 @@
   left: -30px;
   text-align: center;
 }
+
 .ab-swipe-dragger .swipe-dragger-circle {
   width: 45px;
   height: 45px;
@@ -43,13 +50,16 @@
   color: #000;
   margin: 10px;
 }
+
 .ab-swipe-dragger:hover {
   transform: scale(1.2);
 }
+
 .ab-swipe-dragger svg.svg-inline--fa {
   font-size: 26px;
   margin-top: 11px;
 }
+
 .ab-slider-case {
   position: absolute;
   margin-left: auto;
@@ -63,11 +73,13 @@
   color: #fff;
   height: 36px;
 }
+
 .ab-slider-case .input-range {
   width: 110px;
   display: inline-block;
   margin: 6px 14px;
 }
+
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
@@ -75,20 +87,24 @@
   text-align: left;
   white-space: nowrap;
 }
+
 .ab-slider-case .wv-slider-label h4 {
   font-weight: 400;
 }
+
 .ab-slider-case .wv-slider-label span {
   font-size: 15px;
   font-weight: 700;
   vertical-align: top;
 }
+
 .ab-slider-case .input-range__slider {
   height: 20px;
   width: 20px;
   margin-top: -12px;
   margin-left: -10px;
 }
+
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
   bottom: 195px;
@@ -105,8 +121,8 @@
 
 .ab-spy-span {
   position: absolute;
-  background: rgba(40, 40, 40, 0.8);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgb(40 40 40 / 80%);
+  color: rgb(255 255 255 / 90%);
   display: block;
   white-space: nowrap;
   font-size: 14px;
@@ -115,18 +131,22 @@
   padding: 2px;
   margin-left: -4px;
 }
+
 .compare-dialog ul {
   display: flex;
 }
+
 .compare-dialog .compare-dialog-list-item {
   flex: 0 32%;
   margin: 0 auto;
   list-style: none;
 }
+
 .compare-dialog p {
   margin-bottom: 10px;
   line-height: 1.2;
 }
+
 .compare-dialog img {
   display: block;
   max-width: 100%;
@@ -152,14 +172,17 @@
   padding: 13.5px;
   color: #fff;
   border: thin solid transparent;
+
   &:first-child {
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
   }
+
   &:last-child {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
+
   &:hover:not(.compare-btn-selected) {
     border-color: #fff;
   }

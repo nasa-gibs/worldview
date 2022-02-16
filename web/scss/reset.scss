@@ -99,7 +99,7 @@ html,
 li,
 p,
 ul {
-  font: 400 13px/13px 'Open Sans', sans-serif;
+  font: 400 13px/13px "Open Sans", sans-serif;
 }
 
 h1,
@@ -163,7 +163,7 @@ blockquote::after,
 blockquote::before,
 q::after,
 q::before {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -188,8 +188,8 @@ sup {
   top: -0.5em;
 }
 
-[data-whatintent='mouse'] *:focus,
-[data-whatintent='mouse'] button:focus {
+[data-whatintent="mouse"] *:focus,
+[data-whatintent="mouse"] button:focus {
   outline: 0;
 }
 

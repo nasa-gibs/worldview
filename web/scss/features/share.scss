@@ -1,7 +1,7 @@
 .social-share {
   padding-top: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  display: box;
+  display: flexbox;
   display: flex;
   -ms-flex-pack: distribute;
   justify-content: space-around;
@@ -20,9 +20,11 @@
   cursor: pointer;
   text-decoration: none;
   border: 2px solid transparent;
+
   &:hover {
     border: 2px solid #fff;
   }
+
   & svg.svg-inline--fa {
     margin-bottom: 2px;
   }
@@ -52,24 +54,29 @@
   .input-group {
     padding-top: 10px;
   }
+
   .share-tab-link {
     p {
       padding: 20px 1px;
     }
   }
+
   .share-tab-embed {
     p {
       padding: 10px 1px;
     }
   }
+
   .share-tab-social {
     p {
       padding: 10px 1px;
     }
   }
+
   & .nav-item {
     flex: 1;
   }
+
   & .nav-link {
     padding: 6px;
   }
@@ -78,17 +85,21 @@
     color: #fff;
     user-select: none;
     cursor: pointer;
+
     &:hover:not(.active) {
       color: #fff !important;
       text-decoration: none;
     }
   }
+
   a.share-embed-doc-link {
     color: #7bf;
+
     &:hover {
       color: #7df;
     }
   }
+
   .wv-checkbox {
     position: absolute;
     right: 12px;

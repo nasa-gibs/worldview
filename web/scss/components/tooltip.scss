@@ -43,14 +43,14 @@
   left: 15%;
   content: "";
   border-top: 5px solid #000;
-  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-top: 5px solid hsl(0deg 0% 20% / 90%);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
 }
 
 .wv-tooltip-case .wv-tooltip ul {
   background-color: #000;
-  background-color: hsla(0, 0%, 20%, 0.9);
+  background-color: hsl(0deg 0% 20% / 90%);
   border-radius: 3px;
   color: #fff;
   padding: 5px 10px;
@@ -73,7 +73,7 @@
   color: #fff;
   border: thin solid #666;
   font-size: 17px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   border-radius: 5px;
   height: 25px;
   line-height: 23px;
@@ -104,26 +104,29 @@
   position: relative;
   font-weight: 500;
   font-size: 16px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   background: #000;
   border-radius: 4px;
   color: #fff;
   padding: 5px 8px;
   white-space: nowrap;
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 3px 3px 6px rgb(0 0 0 / 75%);
+  border: 1px solid rgb(255 255 255 / 50%);
+
   &.tooltip-active {
     opacity: 0.85;
     color: #ddd;
     background-color: #333;
   }
+
   &.tooltip-static {
     color: #fff;
     background-color: #000;
   }
+
   &.tooltip-active::before,
   &.tooltip-static::before {
-    border-top: 6px solid rgba(0, 0, 0, 1);
+    border-top: 6px solid rgb(0 0 0 / 100%);
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     content: "";
@@ -132,17 +135,21 @@
     margin-left: -7px;
     left: 50%;
   }
+
   &.tooltip-static::before {
     border-top-color: #000;
   }
+
   &.tooltip-coordinates-container {
     max-width: 420px;
     bottom: 6px;
+
     & svg.svg-inline--fa.fa-copy {
       position: absolute;
       right: 6px;
       bottom: 6px;
     }
+
     & .copy-coordinates-to-clipboard-button {
       position: absolute;
       right: 0;
@@ -151,6 +158,7 @@
       width: 23px;
     }
   }
+
   .tooltip-coordinates-title {
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -158,31 +166,38 @@
     font-size: 16px;
     padding-right: 50px;
   }
+
   .tooltip-coordinates {
     margin-top: 6px;
     padding-right: 26px;
   }
+
   .close-tooltip,
   .minimize-tooltip {
     padding-left: 6px;
     margin-left: 8px;
     border-left: 1px solid #777;
+
     &.close-coordinates-tooltip,
     &.minimize-coordinates-tooltip {
       position: absolute;
       padding: 3px 0 3px 6px;
       top: 0;
     }
+
     &.close-coordinates-tooltip {
       right: 6px;
     }
+
     &.minimize-coordinates-tooltip {
       right: 30px;
     }
   }
+
   .svg-inline--fa {
     width: 12px;
     color: #ccc;
+
     &:hover {
       cursor: pointer;
       color: #fff;

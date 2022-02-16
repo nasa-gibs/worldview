@@ -1,6 +1,7 @@
 li.recent-tab.nav-item {
   margin-left: 10px;
   background: transparent;
+
   a.nav-link {
     background: #d54e21;
     color: #fff;
@@ -10,6 +11,7 @@ li.recent-tab.nav-item {
     border-right: 1px solid #9b2704;
     border-left: 1px solid #9b2704;
   }
+
   .svg-inline--fa {
     margin-right: 4px;
   }
@@ -27,10 +29,12 @@ li.recent-tab.nav-item {
     line-height: 38px;
     font-size: 20px;
   }
+
   .svg-inline--fa {
     height: 20px;
     color: #555;
   }
+
   button {
     top: 7px;
     right: 5px;

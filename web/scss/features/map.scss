@@ -19,10 +19,12 @@
   border-radius: 0;
   padding: 0;
   color: #eee;
+
   &:hover {
     background-color: #fff;
     color: #1a1a1a;
     border: 1px solid #333;
+
     &[disabled] {
       opacity: 0.5;
       color: #eee;
@@ -30,6 +32,7 @@
       cursor: not-allowed;
     }
   }
+
   &[disabled] {
     opacity: 0.5;
   }
@@ -42,6 +45,7 @@
   height: 78px;
   width: 38px;
 }
+
 .wv-rotation-buttons {
   top: 251px;
   right: 10px;
@@ -100,14 +104,17 @@
   .wv-zoom-buttons {
     display: none;
   }
+
   .wv-rotation-buttons {
     top: 96px;
   }
+
   .wv-map-rotate-left svg.svg-inline--fa,
   .wv-map-rotate-right svg.svg-inline--fa {
     width: 47px;
     padding: 8px;
   }
+
   .wv-map-reset-rotation {
     font-size: 1.35em;
     width: 49px;
@@ -118,6 +125,7 @@
   .wv-zoom-buttons {
     top: calc(var(--vh, 1vh) * 100 - 516px);
   }
+
   .wv-rotation-buttons {
     top: calc(var(--vh, 1vh) * 100 - 415px);
   }
@@ -127,6 +135,7 @@
   .wv-zoom-buttons {
     top: 58px;
   }
+
   .wv-rotation-buttons {
     top: 160px;
   }
@@ -137,6 +146,7 @@
   .wv-zoom-buttons {
     display: none;
   }
+
   .wv-rotation-buttons {
     top: 58px;
   }
@@ -149,13 +159,11 @@
   right: 58px;
   color: #fff;
   background-color: $wv-transparent-black;
-  text-shadow: -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+  text-shadow: $wv-map-text-shadow;
   padding: 2px;
   border-left: 2px solid #fff;
 }
+
 .wv-map-scale-imperial {
   bottom: 148px;
   border-top: 2px solid #fff;
@@ -184,10 +192,7 @@
   white-space: pre;
   outline: none;
   color: #fff;
-  text-shadow: -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+  text-shadow: $wv-map-text-shadow;
   font-size: 100%;
   border: none;
   border-radius: 0;
@@ -233,7 +238,6 @@
   margin-left: 5px;
   cursor: pointer;
   padding: 1px;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -254,7 +258,7 @@
   margin-left: -7px;
   width: 14px;
   height: 13px;
-  background: url('../images/map/latlon.png') no-repeat;
+  background: url("../images/map/latlon.png") no-repeat;
   background-position: -14px;
 }
 

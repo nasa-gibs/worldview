@@ -20,32 +20,39 @@
   z-index: 100;
   margin-bottom: 5px;
 }
+
 .alert-content {
   padding-right: 3px;
   display: flex;
   align-items: center;
   height: 40px;
 }
+
 .wv-alert .close-alert {
   padding: 11px 2px;
   text-align: center;
 }
+
 .wv-alert div:hover {
   background-color: #ddd;
   color: #333;
 }
+
 .wv-alert svg.svg-inline--fa {
   color: #d54e21;
   margin: 0 10px;
   font-size: 1.4em;
 }
+
 .wv-alert svg.svg-inline--fa.exit {
   color: #fff;
   margin-left: 10px;
 }
+
 .wv-alert div:hover .exit {
   color: #333;
 }
+
 .wv-alert-icon svg.svg-inline--fa {
   padding-left: 3px;
   margin-left: 5px;
@@ -56,9 +63,11 @@
   margin-right: 10px;
   vertical-align: middle;
 }
+
 .error-header {
   margin-top: 5px;
 }
+
 .error-body {
   margin-top: 10px;
 }
@@ -67,33 +76,40 @@
   .wv-alert {
     min-height: 50px;
     font-size: 12px;
+
     svg.svg-inline--fa.wv-alert-icon {
       font-size: 2em;
     }
   }
+
   .alert-content {
     width: 85%;
     left: 0;
     position: absolute;
   }
+
   .wv-alert-container {
     position: absolute;
     top: 110px;
     right: 5px;
     left: 5px;
   }
+
   .wv-alert-icon {
     padding-left: 3px;
     margin-left: 5px;
   }
+
   .wv-alert-message {
     font-size: 14px;
     line-height: 16px;
   }
+
   .close-alert {
     position: absolute;
     right: 0;
     width: 15%;
+
     svg.svg-inline--fa.exit {
       font-size: 1.75em;
     }

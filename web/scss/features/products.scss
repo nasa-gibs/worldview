@@ -1,37 +1,31 @@
-#productsHolder .ui-tabs-panel {
+#products-holder .ui-tabs-panel {
   padding: 0 0 37px;
   position: relative;
 }
 
-#productsHolder-tabs {
+#products-holder-tabs {
   padding: 0;
   background: none;
   border: 0;
   border-bottom: 3px #00457b solid;
 }
 
-#productsHolder-tabs .ui-state-default {
+#products-holder-tabs .ui-state-default {
   background: none;
   border: 0;
   margin: 0;
   padding: 0;
 }
 
-#productsHolder-tabs .ui-state-active a {
+#products-holder-tabs .ui-state-active a {
   color: #fff;
   background-color: #00457b;
 }
 
-#productsHolder-tabs .ui-tabs-anchor {
+#products-holder-tabs .ui-tabs-anchor {
   padding: 0.5em 0.7em;
   float: none;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -53,24 +47,24 @@
   display: block;
 }
 
-#productsHolder-tabs .ui-state-default a {
+#products-holder-tabs .ui-state-default a {
   color: #fff;
 }
 
-#productsHolder-tabs .ui-state-default:hover a {
+#products-holder-tabs .ui-state-default:hover a {
   background-color: #ccc;
   color: #000;
 }
 
-#productsHolder-tabs .ui-state-default:hover i {
+#products-holder-tabs .ui-state-default:hover i {
   color: #000;
 }
 
-#productsHolder-tabs .ui-state-active .ui-tabs-anchor {
+#products-holder-tabs .ui-state-active .ui-tabs-anchor {
   cursor: default;
 }
 
-#productsHolder-tabs .ui-state-active a:hover {
+#products-holder-tabs .ui-state-active a:hover {
   background-color: #00457b;
   color: #fff;
 }
@@ -88,11 +82,12 @@
   background: url("../images/icon-sprite.svg") transparent 0 -10px;
   margin: 0 4px 0 0;
 }
+
 .ab-tab.active .productsIcon {
   background-position: 0 20px;
 }
 
-/***********************************Icons***********************************/
+/***********************************  Icons  ***********************************/
 .icon-layers {
   background-position: 0 -10px;
 }

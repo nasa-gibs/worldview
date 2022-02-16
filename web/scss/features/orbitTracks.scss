@@ -5,13 +5,15 @@
 .wv-orbit-track {
   padding-top: 4px;
   background-color: #ccc;
+
   & svg.svg-inline--fa {
     color: #333;
   }
 
   &.not-visible {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(255 255 255 / 20%);
     color: #999;
+
     & svg.svg-inline--fa {
       color: #999;
     }
@@ -21,8 +23,9 @@
     display: inline-block;
     background: transparent;
     border: none;
+
     &:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgb(255 255 255 / 25%);
     }
   }
 
@@ -32,6 +35,7 @@
 
   & .wv-palettes-legend {
     display: inline-block;
+
     & .wv-palettes-class {
       display: inline-block;
     }

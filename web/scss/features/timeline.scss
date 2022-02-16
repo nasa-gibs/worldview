@@ -28,10 +28,12 @@ button:focus {
 
   &.subdaily {
     width: 414px;
+
     & .zoom-minutes,
     & .zoom-hours {
       display: block;
     }
+
     & .timeline-interval,
     & .input-wrapper-hour,
     & .input-time-divider,
@@ -46,29 +48,35 @@ button:focus {
     border: thin solid transparent;
     vertical-align: top;
     box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     margin: 0 2px;
   }
+
   & .input-wrapper-year {
     max-width: 62px;
   }
+
   & .input-wrapper-month {
     max-width: 46px;
   }
+
   & .input-wrapper-day {
     max-width: 32px;
   }
+
   & .input-wrapper-hour,
   & .input-wrapper-minute {
     width: 32px;
   }
+
   & .input-wrapper-hour {
     margin-left: 8px;
   }
+
   & div {
     display: inline-block;
     vertical-align: top;
   }
+
   & input {
     width: 100%;
     height: 40px;
@@ -77,12 +85,10 @@ button:focus {
     font-size: 24px;
     background: transparent;
     border: 0;
-    font-family: 'Roboto Mono', monospace;
+    font-family: "Roboto Mono", monospace;
     line-height: 1.2em;
     vertical-align: baseline;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     padding: 0;
   }
 
@@ -98,6 +104,7 @@ button:focus {
   & .input-wrapper:hover {
     border-color: #666;
   }
+
   & .input-wrapper:hover .date-arrows {
     visibility: visible;
   }
@@ -114,26 +121,30 @@ button:focus {
   & .input-wrapper:hover .date-arrows svg path {
     fill: #888;
   }
+
   & .input-wrapper.selected {
     border-color: #fff;
   }
+
   & .input-wrapper.selected .date-arrows svg path {
     fill: #fff;
   }
 
   & .input-time-divider {
-    font-family: 'Roboto Mono', monospace;
+    font-family: "Roboto Mono", monospace;
     color: #fff;
     font-size: 24px;
     width: 13px;
     margin-top: 23px;
   }
+
   & .input-time-zmark {
-    font-family: 'Roboto Mono', monospace;
+    font-family: "Roboto Mono", monospace;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
   }
+
   & .date-arrows {
     display: block;
     height: 10px;
@@ -145,6 +156,7 @@ button:focus {
     display: block;
     margin: 0 auto;
   }
+
   & .date-arrows svg path {
     fill: #666;
   }
@@ -154,11 +166,10 @@ button:focus {
   }
 
   & .date-arrow-down {
-    -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
-    -webkit-filter: FlipV;
-    filter: FlipV;
-    -ms-filter: 'FlipV';
+    transform: scaleY(-1);
+    filter: flipv;
+    filter: "FlipV";
   }
 
   & .date-arrows:hover,
@@ -167,11 +178,13 @@ button:focus {
     background-color: #fff;
     cursor: pointer;
   }
+
   & > .button-action-group .button-disabled:hover,
   & .button-disabled:hover {
     background-color: transparent;
     cursor: default;
   }
+
   & .button-action-group svg {
     position: absolute;
     top: 50%;
@@ -179,19 +192,22 @@ button:focus {
     left: 50%;
     margin-left: -12px;
   }
+
   & #left-arrow-group {
-    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
     transform: scaleX(-1);
   }
+
   & #left-arrow-group svg {
-    -webkit-filter: FlipH;
-    filter: FlipH;
-    -ms-filter: 'FlipH';
+    filter: fliph;
+    filter: "FlipH";
   }
+
   & #now-button-group {
     width: 34px;
     height: 34px;
     top: -2px;
+
     svg {
       left: 15px;
     }
@@ -203,40 +219,49 @@ button:focus {
     fill-opacity: 1;
     stroke: none;
   }
+
   & > .button-action-group.button-disabled .arrow,
   & #zoom-buttons-group .button-disabled .arrow {
     fill: #4d4d4d;
   }
+
   & > .button-action-group.button-disabled:hover .arrow,
   & #zoom-buttons-group .button-disabled:hover .arrow {
     fill: #4d4d4d;
   }
+
   & #animate-button {
     width: 100%;
     height: 100%;
   }
+
   & .animate-button {
     position: absolute;
     height: 34px;
     width: 37px;
     top: 16px;
     right: 4px;
+
     & svg {
       top: 5px;
       left: 4px;
       margin: 0;
     }
   }
+
   & .animate-button:hover svg.wv-animate path {
     fill: #1a1a1a;
   }
+
   & .animate-button.wv-disabled-button {
     cursor: auto;
     pointer-events: auto;
   }
+
   & .animate-button.wv-disabled-button:hover {
     background-color: transparent;
   }
+
   & .animate-button.wv-disabled-button svg.wv-animate path {
     fill: #4d4d4d;
     pointer-events: none;
@@ -245,6 +270,7 @@ button:focus {
   & .button-action-group svg path {
     fill: #fff;
   }
+
   & .button-action-group:hover svg path {
     fill: #000;
   }
@@ -312,7 +338,7 @@ button:focus {
 
 .axis-grid-text {
   font-size: 18px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   pointer-events: none;
   user-select: none;
 }
@@ -336,14 +362,12 @@ button:focus {
 
 .zoom-level-display-text {
   color: #fff;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   text-align: center;
   font-size: 12px;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   text-transform: uppercase;
   margin: 4px 0;
   display: block;
@@ -359,7 +383,6 @@ button:focus {
   border: thin solid transparent;
   vertical-align: middle;
   box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   width: 55px;
 }
 
@@ -375,6 +398,7 @@ button:focus {
   left: 85px;
   color: #fff;
   border-bottom: thin solid #444;
+
   &.subdaily {
     left: 189px;
   }
@@ -409,12 +433,10 @@ button:focus {
   opacity: 1;
   font-size: 16px;
   background: transparent;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   padding: 0;
   text-align: center;
   border: thin solid #fff;
@@ -427,12 +449,10 @@ button:focus {
   font-size: 16px;
   background: transparent;
   border: 0;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   text-align: center;
 }
 
@@ -449,7 +469,7 @@ button:focus {
 }
 
 .custom-interval-timescale-select-option {
-  background: rgb(40, 40, 40);
+  background: rgb(40 40 40);
 }
 
 #current-interval {
@@ -463,7 +483,7 @@ button:focus {
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
-  background-color: rgba(40, 40, 40, 0.9);
+  background-color: rgb(40 40 40 / 90%);
   border-radius: 3px;
 }
 
@@ -493,9 +513,9 @@ button:focus {
   position: absolute;
   top: 100%;
   left: 15%;
-  content: '';
+  content: "";
   border-top: 5px solid #000;
-  border-top: 5px solid rgba(51, 51, 51, 0.9);
+  border-top: 5px solid rgb(51 51 51 / 90%);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
 }
@@ -511,7 +531,7 @@ button:focus {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   margin-top: -2px;
 }
 
@@ -519,6 +539,7 @@ button:focus {
 .interval-btn-active:hover {
   background-color: #fff;
   color: #1a1a1a;
+
   &.disabled {
     background-color: transparent;
     color: #ccc;
@@ -526,20 +547,22 @@ button:focus {
   }
 }
 
-.zoom-btn, .interval-btn {
+.zoom-btn,
+.interval-btn {
   display: block;
   clear: both;
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
   padding: 2px 0;
 }
 
-.zoom-btn:hover, .interval-btn:hover {
+.zoom-btn:hover,
+.interval-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
 }
@@ -575,9 +598,8 @@ button:focus {
   height: 21px;
   width: 30px;
   position: absolute;
-  background: url('../images/icon-sprite.svg') -206px -8px no-repeat;
+  background: url("../images/icon-sprite.svg") -206px -8px no-repeat;
   border-radius: 0;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   border-right: 0;
 }
@@ -600,7 +622,7 @@ button:focus {
   cursor: pointer;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  background-color: rgba(40, 40, 40, 0.65);
+  background-color: rgb(40 40 40 / 65%);
   border: thin solid #fff;
   border-bottom: none;
   overflow: hidden;
@@ -608,8 +630,7 @@ button:focus {
 
 .timeline-layer-coverage-panel-handle-chevron {
   position: absolute;
-  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
-  -webkit-box-sizing: border-box;
+  background: url("../images/icon-sprite.svg") -206px -3px no-repeat;
   box-sizing: border-box;
   left: 50%;
   width: 57px;
@@ -650,24 +671,29 @@ button:focus {
 #timeline-footer .ab-group-case text {
   font-size: 20px;
 }
+
 .ab-group-case {
   display: none;
   cursor: pointer;
 }
+
 .ab-group-case-active {
   fill: #fff;
 }
+
 .ab-group-case polygon,
 .ab-group-case path,
 .ab-group-case rect {
   fill: #808080;
   opacity: 0.7;
 }
+
 .ab-group-case-active path {
   stroke: #515151;
   stroke-width: 1;
   stroke-opacity: 1;
 }
+
 .ab-group-case-active polygon,
 .ab-group-case-active path,
 .ab-group-case-active rect {
@@ -675,13 +701,16 @@ button:focus {
   opacity: 1;
   pointer-events: initial;
 }
+
 .ab-group-case text {
   fill: #fff;
   pointer-events: none;
 }
+
 .ab-group-case-active text {
   fill: #000;
 }
+
 .ab-active .ab-group-case {
   display: block;
 }
@@ -705,17 +734,21 @@ button:focus {
   white-space: nowrap;
   cursor: pointer;
   height: 44px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
+
 .datepicker-modal {
-  & div, li {
-    font-family: 'Roboto Mono', monospace;
+  & div,
+  li {
+    font-family: "Roboto Mono", monospace;
   }
+
   & .datepicker-header,
   .datepicker-navbar-btn {
     font-weight: 700;
     font-size: 18px;
   }
+
   .datepicker .datepicker-navbar-btn:hover {
     background: #ccc;
     color: #333;
@@ -732,17 +765,22 @@ button:focus {
   border-radius: 5px;
   cursor: pointer;
   height: 44px;
+
   & .button-action-group {
     height: 44px;
   }
-  & #left-arrow-group, #now-button-group {
+
+  & #left-arrow-group,
+  #now-button-group {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
+
   & #now-button-group {
     height: 44px;
     width: 40px;
     top: 0;
+
     svg {
       left: 18px;
     }
@@ -764,7 +802,7 @@ button:focus {
 }
 
 .datepicker.android-dark .datepicker-scroll li.disabled {
-  color: rgb(88, 88, 88) !important;
+  color: rgb(88 88 88) !important;
 }
 
 .datepicker-navbar-btn:hover {

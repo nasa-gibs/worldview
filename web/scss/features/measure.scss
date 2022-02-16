@@ -14,19 +14,24 @@
   & .modal-body {
     padding: 8px 0 0;
     border-radius: 6px;
+
     & div {
       padding: 0 5px 10px 10px;
+
       & .form-check-label {
         margin-left: 24px;
       }
+
       & svg.svg-inline--fa {
         margin-left: 5px;
       }
+
       & .form-check-input {
         margin: 0 0 0 -20px;
       }
     }
   }
+
   .measure-download {
     border-top: 1px solid #666;
     margin-top: 4px;
@@ -38,6 +43,7 @@
   .wv-measure-button {
     bottom: 10px;
   }
+
   .modal-dialog.measure-tool-modal {
     bottom: 55px;
     margin: 0;
@@ -47,15 +53,19 @@
 .measure-unit-toggle {
   border-bottom: 1px solid #666;
   padding: 6px 5px 6px 27px;
+
   & .custom-control-input:checked ~ .custom-control-label::before {
     border-color: #fff;
   }
+
   & .custom-control-label {
     margin-left: 30px;
+
     &::before {
       background-color: #007bff;
       top: 1px;
     }
+
     &::after {
       top: 3px;
       background-color: #fff;

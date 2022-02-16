@@ -7,26 +7,28 @@
 }
 
 .wv-toolbar-button,
-[data-whatintent='mouse'] .wv-toolbar-button:focus {
+[data-whatintent="mouse"] .wv-toolbar-button:focus {
   display: inline-block;
   background: $wv-transparent-black;
   border: 1px solid #333;
   border-radius: 5px;
+
   &:focus {
     box-shadow: none;
-    -webkit-box-shadow: none;
   }
+
   &:hover {
     background-color: #eee;
     color: #1a1a1a;
   }
+
   &.disabled:hover {
     background-color: $wv-transparent-black;
     color: #eee;
   }
 }
 
-[data-whatintent='keyboard'] .wv-toolbar-button:focus {
+[data-whatintent="keyboard"] .wv-toolbar-button:focus {
   background-color: #eee;
   color: #1a1a1a;
 }
@@ -50,15 +52,19 @@
   top: 48px;
   border-radius: 6px;
 }
+
 .toolbar-modal.modal-dialog {
   padding: 1px;
   background: #333;
   border-color: #444;
+
   .modal-body {
     border-radius: 6px;
   }
+
   a {
     color: #fff;
+
     &:hover {
       color: #000;
       text-decoration: none;
@@ -68,6 +74,7 @@
 
 .toolbar-list-modal.modal-dialog {
   width: 160px;
+
   @media (max-width: 768px) {
     width: 180px;
   }
@@ -75,19 +82,18 @@
 
 .toolbar-medium-modal {
   width: 230px;
+
   &.modal-dialog .modal-header {
     padding: 5px 10px 5px 6px;
   }
 }
 
 .toolbar_modal_outer .modal.fade .modal-dialog {
-  -webkit-transform: translate(0, 25%);
   transform: translate(0, 25%);
   transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 
 .toolbar_modal_outer .modal.fade.show .modal-dialog {
-  -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
 
@@ -178,7 +184,7 @@
 
 @media (min-width: 769px) {
   .wv-toolbar-button,
-  [data-whatintent='mouse'] .wv-toolbar-button:focus {
+  [data-whatintent="mouse"] .wv-toolbar-button:focus {
     font-size: 20px;
     height: 38px;
     margin: 0 0 0 5px;

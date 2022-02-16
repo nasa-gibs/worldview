@@ -9,23 +9,25 @@
   border-color: #666;
   font-size: 1em;
   background-image: linear-gradient(#555, #666);
-  background-image: -ms-linear-gradient(#555, #666);
-  background-image: -o-linear-gradient(#555, #666);
-  font-family: 'Segoe UI', 'Arial', sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   padding: 0;
 }
+
 .wv-button span {
   padding: 6px 13px 7px;
   display: block;
   font-size: 13px;
 }
+
 .wv-button.red {
   background: #d54e21;
   border-color: #d54e21;
 }
+
 .wv-button.black {
   background: #212121;
 }
+
 .wv-button:hover {
   border-color: #eee;
   background-color: #eee;
@@ -34,9 +36,11 @@
   color: #404040;
   cursor: pointer;
 }
+
 .wv-button.no-pointer-events {
   pointer-events: none;
 }
+
 .wv-button:disabled {
   opacity: 0.35;
   background: #555;
@@ -51,6 +55,7 @@
 * Bootstrap/Reactstrap Button Overrides
 */
 
-.btn.disabled, .btn:disabled {
+.btn.disabled,
+.btn:disabled {
   cursor: not-allowed;
 }

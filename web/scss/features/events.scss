@@ -9,6 +9,7 @@
 
 .event-container {
   background: #333;
+
   .no-events {
     text-align: center;
     color: #eee;
@@ -16,15 +17,19 @@
     padding: 20px;
     margin: 15px auto;
   }
+
   min-height: 166px;
+
   @media (max-width: 768px) {
     height: calc(var(--vh, 1vh) * 100 - 75px);
   }
+
   .event-scroll-list {
     border-top: 1px solid #666;
     border-bottom: 1px solid #666;
     background: #222;
     min-height: 260px;
+
     @media (max-width: 768px) {
       min-height: calc(var(--vh, 1vh) * 100 - 140px);
     }
@@ -40,15 +45,18 @@
   cursor: pointer;
   background: transparent;
 }
+
 .map-item-list li.item.hidden {
   display: none;
 }
 
 .map-item-list li.item h4 {
   font-size: 0.85em;
+
   @media (max-width: 768px) {
     font-size: 1em;
   }
+
   color: #ccc;
   padding: 0 3px;
   margin-left: 40px;
@@ -71,8 +79,9 @@
 .map-item-list li.item-selected,
 .map-item-list li.item.item-selected:hover {
   cursor: default;
-  background: rgba(250, 250, 250, 1);
+  background: rgb(250 250 250 / 100%);
 }
+
 .map-item-list li.item:hover {
   background: #666;
   color: #fff;
@@ -107,9 +116,11 @@
 
 .wv-eventslist li.item ul li.dates {
   margin: 4px 0;
+
   a {
     font-size: 14px;
     cursor: pointer;
+
     &.active {
       font-weight: 700;
     }
@@ -170,8 +181,10 @@
   width: 26px;
   background: url("../images/natural-events/dot.svg");
 }
+
 .marker.selected {
   z-index: 1;
+
   div {
     transform: scale(1.4);
     transform-origin: center bottom;
@@ -187,24 +200,30 @@
   position: relative;
   cursor: pointer;
 }
+
 .track-marker-case {
   position: relative;
   z-index: 99;
 }
+
 .track-marker-case-selected {
   z-index: 1;
+
   .track-marker {
     opacity: 0.7;
     z-index: 1;
   }
+
   .track-marker-date {
     top: 25px;
     left: -34px;
   }
+
   .track-marker-date::before {
     display: none;
   }
 }
+
 .track-marker-case-hidden {
   display: none;
 }
@@ -226,7 +245,7 @@
   top: -30px;
   left: -40px;
   padding: 4px;
-  background-color: rgba(40, 40, 40, 0.9);
+  background-color: rgb(40 40 40 / 90%);
   border-radius: 3px;
   text-align: center;
   font-family: "Roboto Mono", monospace;
@@ -234,19 +253,21 @@
   color: #ccc;
   z-index: 900;
 }
+
 .cluster-track-marker-date {
   top: -35px;
   left: -33px;
   width: 110px;
   z-index: 900;
 }
+
 .track-marker-date::before {
   position: absolute;
   bottom: -5px;
   left: 40px;
   content: "";
   border-top: 5px solid #000;
-  border-top: 5px solid rgba(51, 51, 51, 0.9);
+  border-top: 5px solid rgb(51 51 51 / 90%);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   z-index: 900;
@@ -261,7 +282,9 @@
 .event-track-line {
   z-index: 0;
 }
-.event-track-point, .event-track-cluster-point {
+
+.event-track-point,
+.event-track-cluster-point {
   z-index: 1;
 }
 
@@ -273,43 +296,52 @@
   position: absolute;
   pointer-events: none;
 }
+
 .track-marker-case .track-marker:hover ~ .track-marker-date {
   display: block;
 }
+
 .cluster-marker:hover ~ .cluster-track-marker-date {
   display: block;
 }
+
 .cluster-marker-small {
-  background-color: rgba(243, 165, 49, 0.6);
+  background-color: rgb(243 165 49 / 60%);
   transform: scale(0.8);
 }
+
 .cluster-marker-small .cluster-marker-inner {
-  background-color: rgba(243, 165, 49, 0.6);
+  background-color: rgb(243 165 49 / 60%);
 }
 
 .cluster-marker-medium {
-  background-color: rgba(249, 106, 23, 0.6);
+  background-color: rgb(249 106 23 / 60%);
   transform: scale(0.9);
 }
+
 .cluster-marker-medium .cluster-marker-inner {
-  background-color: rgba(255, 94, 0, 0.6);
+  background-color: rgb(255 94 0 / 60%);
 }
 
 .cluster-marker-large {
-  background-color: rgba(253, 107, 73, 0.6);
+  background-color: rgb(253 107 73 / 60%);
 }
+
 .cluster-marker-large .cluster-marker-inner {
-  background-color: rgba(247, 53, 10, 0.6);
+  background-color: rgb(247 53 10 / 60%);
 }
+
 .cluster-marker {
   border-radius: 12px;
   font-family: "Open Sans", sans-serif;
   width: 24px;
   height: 24px;
 }
+
 .cluster-marker:hover {
   cursor: pointer;
 }
+
 .cluster-marker .cluster-marker-inner {
   position: absolute;
   height: 16px;
@@ -321,12 +353,14 @@
   margin-top: 4px;
   font-size: 11px;
 }
+
 .event-icon {
   display: block;
   height: 30px;
   width: 30px;
   background: url("../images/natural-events/icon-critical.svg");
 }
+
 .wv-map .event-icon {
   height: 26px;
   width: 26px;
@@ -389,8 +423,9 @@
   display: list-item;
   margin: 2px 0 2px 20px;
 }
+
 .events-footer-case {
   color: #fff;
   padding-top: 5px;
-  border-top: 0.5px solid rgba(250, 250, 250, 0.5);
+  border-top: 0.5px solid rgb(250 250 250 / 50%);
 }

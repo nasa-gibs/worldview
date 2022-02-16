@@ -4,7 +4,7 @@ const localQueryStrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 10000;
 
 const sidebarButton = '#accordion-toggler-button';
-const sidebarContent = '#productsHolder';
+const sidebarContent = '#products-holder';
 const eventsTab = '#events-sidebar-tab';
 const icebergEvent = '#wv-events #sidebar-event-EONET_2703';
 const selectedMarker = '.marker.selected';

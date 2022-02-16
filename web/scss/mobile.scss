@@ -2,17 +2,22 @@
   div.olControlScaleLineCustom {
     bottom: 10px;
   }
+
   .olControlScaleLineCustomBottom {
     display: none;
   }
+
   div.olControlMousePosition {
     display: none;
   }
+
   div.olControlMousePosition,
   div.olControlScaleLineCustom {
     display: none !important;
   }
-  .wv-coords-map, .wv-coords-container {
+
+  .wv-coords-map,
+  .wv-coords-container {
     display: none !important;
   }
 
@@ -21,7 +26,8 @@
     #wv-sidebar {
       position: static;
     }
-    #productsHolder {
+
+    #products-holder {
       display: block;
       float: left;
       left: 0;
@@ -30,7 +36,7 @@
       height: 100%;
       position: absolute !important;
       overflow: hidden;
-      background: rgb(38, 43, 49);
+      background: rgb(38 43 49);
       top: 0;
       z-index: 1000;
     }
@@ -49,13 +55,12 @@
       width: auto;
     }
 
-    #productsHolder li.third {
+    #products-holder li.third {
       display: none;
     }
 
     #wv-logo {
-      background: url('../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@')
-        no-repeat center $wv-transparent-black;
+      background: url("../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@") no-repeat center $wv-transparent-black;
       display: block;
       height: 42px;
       width: 56px;
@@ -70,6 +75,7 @@
       background-image: none;
       border-radius: 5px;
       top: 58px;
+
       & svg.svg-inline--fa {
         font-size: 33px;
         position: absolute;
@@ -77,6 +83,7 @@
         top: 5px;
         color: #fff;
       }
+
       & span.layer-count {
         color: #fff;
         position: relative;
@@ -122,6 +129,7 @@
       position: relative;
       left: 0;
       height: 50px;
+
       span {
         font-size: 18px;
       }

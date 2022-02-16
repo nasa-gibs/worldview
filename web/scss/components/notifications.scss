@@ -3,7 +3,7 @@
 }
 
 #wv-info-button::before {
-  content: attr(data-content) '';
+  content: attr(data-content) "";
   display: block;
   width: 20px;
   height: 20px;
@@ -46,7 +46,7 @@
 }
 
 .ui-menu-item a::before {
-  content: attr(data-content) '';
+  content: attr(data-content) "";
   text-align: center;
   font-weight: 700;
   display: block;
@@ -60,10 +60,12 @@
   top: 4px;
   z-index: 33;
 }
+
 .list-group-item .badge {
   position: absolute;
   right: 5px;
 }
+
 .outage-notification .badge {
   background: #ff1a1e;
 }
@@ -83,22 +85,22 @@
 .wv-notify-modal h2 {
   text-transform: capitalize;
   font-size: 18px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 700;
   color: #eee;
   padding: 0.75em 10px;
 }
 
 .wv-notify-modal .outage-notification-item h2 {
-  background: rgba(179, 41, 43, 0.3);
+  background: rgb(179 41 43 / 30%);
 }
 
 .wv-notify-modal .alert-notification-item h2 {
-  background: rgba(229, 201, 55, 0.3);
+  background: rgb(229 201 55 / 30%);
 }
 
 .wv-notify-modal .message-notification-item h2 {
-  background: rgba(64, 169, 219, 0.3);
+  background: rgb(64 169 219 / 30%);
 }
 
 .wv-notify-modal h2 span {
@@ -109,7 +111,7 @@
 }
 
 .wv-notify-modal p {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
   line-height: 22px;
   margin: 10px;
@@ -129,6 +131,7 @@
 .wv-notify-modal ul li div {
   padding: 0;
 }
+
 .notification_list_modal .modal-body {
   padding-top: 0;
 }

@@ -8,7 +8,7 @@
   margin: 2px 0 0;
   min-width: 160px;
   outline: none;
-  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 16px rgb(0 0 0 / 75%);
   opacity: 0;
   padding: 5px 0;
   pointer-events: none;
@@ -45,19 +45,20 @@
 .react-contextmenu-item.react-contextmenu-item--disabled,
 .react-contextmenu-item.react-contextmenu-item--disabled:hover {
   background-color: transparent;
-  border-color: rgba(0, 0, 0, 0.15);
+  border-color: rgb(0 0 0 / 15%);
   color: #878a8c;
 }
 
 .react-contextmenu-item--divider {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgb(255 255 255 / 25%);
   cursor: inherit;
   margin-bottom: 3px;
   padding: 2px 0;
 }
+
 .react-contextmenu-item--divider:hover {
   background-color: transparent;
-  border-color: rgba(0, 0, 0, 0.15);
+  border-color: rgb(0 0 0 / 15%);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {

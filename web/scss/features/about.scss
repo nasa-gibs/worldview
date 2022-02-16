@@ -1,7 +1,3 @@
-#about_modal {
-  max-width: 692px;
-}
-
 .about-page {
   background-color: #282828;
   padding: 5px;
@@ -14,7 +10,7 @@
 .about-page p {
   color: #eee;
   font-weight: 100;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .about-page div,
@@ -45,6 +41,7 @@
 
 .about-page p {
   margin: 1.12em 0;
+
   &:first-of-type {
     display: inline-block;
     margin-bottom: 0;
@@ -71,6 +68,7 @@
 .about-page a {
   color: #7bf;
   text-decoration: none;
+
   &:hover {
     color: #7df;
     text-decoration: none;
@@ -80,12 +78,15 @@
 .about-page .right {
   float: right;
   margin: 0.4em 0.2em 0;
+
   &:first-of-type {
     width: 100%;
+
     a {
       float: right;
     }
   }
+
   &:last-of-type {
     margin: 1.4em 0.2em 0;
   }
@@ -122,26 +123,33 @@
 .about-page .keyboard-shortcuts-section {
   display: none;
 }
+
 .about-page .keyboard-shortcuts-table {
   width: 100%;
   margin-top: 20px;
+
   thead tr th {
     padding-bottom: 8px;
   }
+
   tr {
     &:not(:last-of-type) {
       border-bottom: 1px solid #404040;
     }
+
     :first-child {
       text-align: left;
     }
+
     :last-child {
       text-align: right;
     }
   }
+
   td {
     padding: 11px 0;
   }
+
   code {
     color: #f60;
     padding: 1px 8px;
