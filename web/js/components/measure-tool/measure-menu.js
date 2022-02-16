@@ -46,6 +46,7 @@ const OPTIONS_ARRAY = [
     iconName: 'trash',
     id: 'clear-measurements-button',
     key: 'measure:clear',
+    hidden: true,
   },
   DOWNLOAD_GEOJSON,
   // DOWNLOAD_SHAPEFILE,
@@ -88,6 +89,8 @@ class MeasureMenu extends Component {
     const listSize = isTouchDevice ? 'large' : 'small';
     // DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
     DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
+    const getRemoveOptionIndex = OPTIONS_ARRAY.findIndex((item) => item.text === 'Remove Measurements');
+    OPTIONS_ARRAY[getRemoveOptionIndex].hidden = !measurementsInProj;
     return (
       <>
         <Form>
