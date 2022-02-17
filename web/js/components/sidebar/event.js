@@ -65,7 +65,7 @@ function Event (props) {
             const date = util.toISOStringDate(geometry.date);
             function magnitudeOutput() {
               const magnitudeUnit = geometry.magnitudeUnit ? geometry.magnitudeUnit : null;
-              const magnitudeValue = geometry.magnitudeValue ? geometry.magnitudeValue : null;
+              const magnitudeValue = geometry.magnitudeValue ? geometry.magnitudeValue.toLocaleString() : null;
               if (!magnitudeUnit && !magnitudeValue) return;
               const magnitudeDisplay = magnitudeUnit === 'kts' ? 'Wind Speed: ' : 'Surface Area: ';
               return `${magnitudeDisplay} ${magnitudeValue} ${magnitudeUnit}`;

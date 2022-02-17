@@ -23,7 +23,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   const superscriptUnit = document.createElement('sup');
   superscriptUnit.append('2');
   const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
-  magnitudeContent.append(magnitudeValue);
+  magnitudeContent.append(magnitudeValue.toLocaleString());
   magnitudeContent.append(formattedMagnitudeUnit);
   if (formattedMagnitudeUnit === ' NM') magnitudeContent.append(superscriptUnit);
 
