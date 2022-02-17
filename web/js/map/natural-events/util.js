@@ -16,9 +16,17 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
   const { properties, geometry } = clusterPoint;
-  const { magnitudeUnit, magnitudeValue } = geometry;
   const content = document.createTextNode(formatDisplayDate(properties.date));
-  const magnitudeContent = document.createTextNode(`${magnitudeValue} ${magnitudeUnit}`);
+
+  const { magnitudeValue, magnitudeUnit } = geometry;
+  const magnitudeContent = document.createElement('div');
+  const superscriptUnit = document.createElement('sup');
+  superscriptUnit.append('2');
+  const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
+  magnitudeContent.append(magnitudeValue);
+  magnitudeContent.append(formattedMagnitudeUnit);
+  if (formattedMagnitudeUnit === ' NM') magnitudeContent.append(superscriptUnit);
+
   const { date } = properties;
   const eventID = properties.event_id;
   let { coordinates } = clusterPoint.geometry;
