@@ -94,7 +94,7 @@
 .map-item-list li.item p.magnitude {
   display: inline-block;
   margin-left: 5px;
-  padding: 0px;
+  padding: 0;
 }
 
 .map-item-list li.item p a {
