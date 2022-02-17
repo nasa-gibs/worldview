@@ -245,10 +245,10 @@
   top: -30px;
   left: -40px;
   padding: 4px;
-  background-color: rgb(40 40 40 / 90%);
+  background-color: $wv-transparent-black;
   border-radius: 3px;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   font-size: 12px;
   color: #ccc;
   z-index: 900;

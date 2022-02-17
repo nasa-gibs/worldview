@@ -10,9 +10,9 @@ button:focus {
 
 .timeline-inner {
   position: absolute;
-  border: thin solid #333;
+  border: $wv-dark-menu-border;
   background: $wv-transparent-black;
-  border-radius: 5px;
+  border-radius: $wv-menu-border-radius;
   display: flex;
   flex-flow: row nowrap;
   margin-left: 10px;
@@ -85,7 +85,7 @@ button:focus {
     font-size: 24px;
     background: transparent;
     border: 0;
-    font-family: "Roboto Mono", monospace;
+    font-family: $wv-monospace-font;
     line-height: 1.2em;
     vertical-align: baseline;
     box-sizing: border-box;
@@ -131,7 +131,7 @@ button:focus {
   }
 
   & .input-time-divider {
-    font-family: "Roboto Mono", monospace;
+    font-family: $wv-monospace-font;
     color: #fff;
     font-size: 24px;
     width: 13px;
@@ -139,7 +139,7 @@ button:focus {
   }
 
   & .input-time-zmark {
-    font-family: "Roboto Mono", monospace;
+    font-family: $wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
@@ -338,7 +338,7 @@ button:focus {
 
 .axis-grid-text {
   font-size: 18px;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   pointer-events: none;
   user-select: none;
 }
@@ -362,7 +362,7 @@ button:focus {
 
 .zoom-level-display-text {
   color: #fff;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   text-align: center;
   font-size: 12px;
   line-height: 1.2em;
@@ -433,7 +433,7 @@ button:focus {
   opacity: 1;
   font-size: 16px;
   background: transparent;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -449,7 +449,7 @@ button:focus {
   font-size: 16px;
   background: transparent;
   border: 0;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -483,7 +483,7 @@ button:focus {
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
-  background-color: rgb(40 40 40 / 90%);
+  background-color: $wv-transparent-black;
   border-radius: 3px;
 }
 
@@ -531,7 +531,7 @@ button:focus {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   margin-top: -2px;
 }
 
@@ -554,7 +554,7 @@ button:focus {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
@@ -574,9 +574,9 @@ button:focus {
   height: 64px;
   width: 20px;
   cursor: pointer;
-  border-left: thin solid #1a1a1a;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-left: $wv-dark-menu-border;
+  border-top-right-radius: $wv-menu-border-radius;
+  border-bottom-right-radius: $wv-menu-border-radius;
 }
 
 #timeline-hide:hover,
@@ -622,7 +622,7 @@ button:focus {
   cursor: pointer;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  background-color: rgb(40 40 40 / 65%);
+  background-color: $wv-transparent-black;
   border: thin solid #fff;
   border-bottom: none;
   overflow: hidden;
@@ -734,13 +734,13 @@ button:focus {
   white-space: nowrap;
   cursor: pointer;
   height: 44px;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
 }
 
 .datepicker-modal {
   & div,
   li {
-    font-family: "Roboto Mono", monospace;
+    font-family: $wv-monospace-font;
   }
 
   & .datepicker-header,

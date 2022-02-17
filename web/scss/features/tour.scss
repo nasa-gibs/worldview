@@ -807,7 +807,7 @@
     right: 55px;
 
     .modal-dialog {
-      box-shadow: 2px 2px 16px rgb(0 0 0 / 45%);
+      box-shadow: $wv-modal-shadow;
 
       .modal-content {
         border-radius: 8px;

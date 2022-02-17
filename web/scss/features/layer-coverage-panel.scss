@@ -1,6 +1,6 @@
 .timeline-layer-coverage-container {
   position: absolute;
-  background: rgb(40 40 40 / 100%);
+  background: rgb(40 40 40);
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }
@@ -169,8 +169,11 @@
   flex: 1 1 0;
 
   & section {
-    box-shadow: 2px 3px 6px 0 #000;
+    background: #222;
+    border: 1px solid #333;
+    box-shadow: $wv-modal-shadow;
     padding: 5px;
+    margin: 3px;
   }
 }
 

@@ -71,17 +71,17 @@
 
     & .layers-all-header > h3 {
       color: #fff;
-      text-shadow: 1px 1px 0 rgb(0 0 0 / 100%);
+      text-shadow: 1px 1px 0 #000;
     }
 
     & .layers-all-header > h4 {
       color: #eee;
-      text-shadow: 1px 1px 0 rgb(0 0 0 / 100%);
+      text-shadow: 1px 1px 0 #000;
     }
 
     & .layers-all-header > h5 {
       color: #bbb;
-      text-shadow: 1px 1px 0 rgb(0 0 0 / 100%);
+      text-shadow: 1px 1px 0 #000;
     }
   }
 }
@@ -610,7 +610,7 @@
   & .filter-tooltip {
     & .display-date {
       font-size: 14px;
-      font-family: monospace;
+      font-family: $wv-monospace-font;
       margin: 5px;
     }
   }

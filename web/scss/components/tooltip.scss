@@ -73,7 +73,7 @@
   color: #fff;
   border: thin solid #666;
   font-size: 17px;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   border-radius: 5px;
   height: 25px;
   line-height: 23px;
@@ -95,7 +95,7 @@
   position: relative;
   bottom: 1px;
   font-size: 14px;
-  font-family: "Lucida Console", monospace;
+  font-family: $wv-monospace-font;
   font-weight: 300;
 }
 
@@ -104,13 +104,13 @@
   position: relative;
   font-weight: 500;
   font-size: 16px;
-  font-family: "Roboto Mono", monospace;
+  font-family: $wv-monospace-font;
   background: #000;
   border-radius: 4px;
   color: #fff;
   padding: 5px 8px;
   white-space: nowrap;
-  box-shadow: 3px 3px 6px rgb(0 0 0 / 75%);
+  box-shadow: $wv-tooltip-shadow;
   border: 1px solid rgb(255 255 255 / 50%);
 
   &.tooltip-active {

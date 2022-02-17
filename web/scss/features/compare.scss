@@ -121,8 +121,8 @@
 
 .ab-spy-span {
   position: absolute;
-  background: rgb(40 40 40 / 80%);
-  color: rgb(255 255 255 / 90%);
+  background: $wv-transparent-black;
+  color: #fff;
   display: block;
   white-space: nowrap;
   font-size: 14px;

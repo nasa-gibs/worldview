@@ -1,8 +1,6 @@
 /* universal/default modal styles */
 .modal-dialog {
-  border: 1px solid #555;
-  border-radius: 6px;
-  box-shadow: 2px 2px 16px rgb(0 0 0 / 75%);
+  @include wv-modal-dialog;
 
   h1 {
     font-size: 22px;
@@ -45,8 +43,7 @@
 
   .modal-body {
     background-color: #222;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
+    border-radius: $wv-menu-border-radius;
 
     & .modal-footer {
       padding-bottom: 0;
@@ -108,6 +105,8 @@
 .modal-dialog .modal-content {
   background: #282828;
   color: #eee;
+
+  @include wv-modal-content;
 }
 
 .modal-body pre {
