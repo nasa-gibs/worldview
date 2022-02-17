@@ -19,7 +19,7 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements,
+    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive,
   } = props;
   const [getMap, setMap] = useState(map);
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
@@ -27,6 +27,7 @@ function RightClickMenu(props) {
   const handleClick = () => (show ? setShow(false) : null);
 
   function handleContextEvent(event, olMap) {
+    if (measurementIsActive) return;
     event.originalEvent.preventDefault();
     const coord = olMap.getCoordinateFromPixel(event.pixel);
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
@@ -126,7 +127,7 @@ function mapStateToProps(state) {
   const {
     map, proj, measure, locationSearch, config,
   } = state;
-  const { unitOfMeasure, allMeasurements } = measure;
+  const { unitOfMeasure, allMeasurements, isActive } = measure;
   const { crs } = proj.selected;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
   return {
@@ -134,6 +135,7 @@ function mapStateToProps(state) {
     crs,
     unitOfMeasure,
     allMeasurements,
+    measurementIsActive: isActive,
     coordinates,
     isCoordinateSearchActive,
     config,
@@ -152,6 +154,7 @@ RightClickMenu.propTypes = {
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
   allMeasurements: PropTypes.object,
+  measurementIsActive: PropTypes.bool,
 };
 
 export default connect(
