@@ -20,12 +20,14 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
 
   const { magnitudeValue, magnitudeUnit } = geometry;
   const magnitudeContent = document.createElement('div');
-  const superscriptUnit = document.createElement('sup');
-  superscriptUnit.append('2');
-  const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
-  magnitudeContent.append(magnitudeValue.toLocaleString());
-  magnitudeContent.append(formattedMagnitudeUnit);
-  if (formattedMagnitudeUnit === ' NM') magnitudeContent.append(superscriptUnit);
+  if (magnitudeUnit && magnitudeValue) {
+    const superscriptUnit = document.createElement('sup');
+    superscriptUnit.append('2');
+    const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
+    magnitudeContent.append(magnitudeValue.toLocaleString());
+    magnitudeContent.append(formattedMagnitudeUnit);
+    if (formattedMagnitudeUnit === ' NM') magnitudeContent.append(superscriptUnit);
+  }
 
   const { date } = properties;
   const eventID = properties.event_id;
