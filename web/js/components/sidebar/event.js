@@ -63,6 +63,13 @@ function Event (props) {
         >
           {event.geometry.map((geometry, index) => {
             const date = util.toISOStringDate(geometry.date);
+            function magnitudeOutput() {
+              const magnitudeUnit = geometry.magnitudeUnit ? geometry.magnitudeUnit : null;
+              const magnitudeValue = geometry.magnitudeValue ? geometry.magnitudeValue.toLocaleString() : null;
+              if (!magnitudeUnit && !magnitudeValue) return;
+              const magnitudeDisplay = magnitudeUnit === 'kts' ? 'Wind Speed: ' : 'Surface Area: ';
+              return `${magnitudeDisplay} ${magnitudeValue} ${magnitudeUnit}`;
+            }
             return (
               <li key={`${event.id}-${date}`} className="dates">
                 <a
@@ -78,6 +85,9 @@ function Event (props) {
                 >
                   {formatDisplayDate(date)}
                 </a>
+                <p className="magnitude">
+                  {magnitudeOutput()}
+                </p>
               </li>
             );
           })}

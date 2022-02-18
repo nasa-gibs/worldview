@@ -45,7 +45,7 @@ const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after se
  * @param  {String} date
  * @return {Object} geoJSON point
  */
-export const clusterPointToGeoJSON = (id, coordinates, date) => ({
+export const clusterPointToGeoJSON = (id, coordinates, date, { magnitudeUnit, magnitudeValue }) => ({
   type: 'Feature',
   properties: {
     id: `${id}-${date}`,
@@ -55,6 +55,8 @@ export const clusterPointToGeoJSON = (id, coordinates, date) => ({
   geometry: {
     type: 'Point',
     coordinates,
+    magnitudeUnit,
+    magnitudeValue,
   },
 });
 
@@ -108,15 +110,16 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
         id,
         coordinates,
         date,
+        geom,
       );
       afterSelected = true;
     } else if (!afterSelected) {
       geoJSONPointsBeforeSelected.push(
-        clusterPointToGeoJSON(id, coordinates, date),
+        clusterPointToGeoJSON(id, coordinates, date, geom),
       );
     } else {
       geoJSONPointsAfterSelected.push(
-        clusterPointToGeoJSON(id, coordinates, date),
+        clusterPointToGeoJSON(id, coordinates, date, geom),
       );
     }
   });
