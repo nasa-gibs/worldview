@@ -32,12 +32,14 @@ RUN cd /usr/src && \
     pip install --upgrade pip && \
     pip --version
 RUN mkdir -p /usr/local/stow
-RUN cd /usr/local/stow && \
-    curl -O https://nodejs.org/download/release/v14.16.0/node-v14.16.0-linux-x64.tar.xz && \
-    tar xf node-v14.16.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node/node-v14.16.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node-v14.16.0-linux-x64/{LICENSE,*.md} && \
-    stow -S node-v14.16.0-linux-x64
+RUN arch=$(uname -a | awk '{ print $13 }') && \
+    if [ $arch = "x86_64" ] ; then arch=$(echo "${arch//86_}") ; else arch=$(echo "arm64") ; fi && \
+    cd /usr/local/stow && \
+    curl -O https://nodejs.org/download/release/v14.16.0/node-v14.16.0-linux-$arch.tar.xz && \
+    tar -xf node-v14.16.0-linux-$arch.tar.xz && \
+    rm -f /usr/local/stow/node/node-v14.16.0-linux-$arch.tar.xz && \
+    rm -f /usr/local/stow/node-v14.16.0-linux-$arch/{LICENSE,*.md} && \
+    stow -S node-v14.16.0-linux-$arch
 
 WORKDIR /build
 # Only what is needed to run the development server and run the Selenium tests
