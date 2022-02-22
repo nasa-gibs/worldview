@@ -103,17 +103,18 @@ class App extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
-    // We listen to the resize event
     window.addEventListener('resize', this.setVhCSSProperty);
+    window.addEventListener('orientationchange', this.setVhCSSProperty);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('resize', this.setVhCSSProperty);
+    window.removeEventListener('orientationchange', this.setVhCSSProperty);
   }
 
   // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   setVhCSSProperty = () => {
-    // We execute the same script as before
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
