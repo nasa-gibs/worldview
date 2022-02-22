@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108": {
+      "id": "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108",
+      "title": "Ground Elevation Standard Deviation (L3, v2, 2019 APR - 2021 AUG)",
+      "subtitle": "ISS / GEDI",
+      "description": "gedi/GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108",
+      "tags": "international space station iss",
+      "group": "overlays",
+      "layergroup": "Terrain Elevation",
+      "wrapX": true
+    }
+  }
+}
