@@ -382,6 +382,7 @@ export const coverageDateFormatter = (dateType, date, period) => {
 };
 
 export const formatDisplayDate = (date, subdaily) => {
+  if (!date) return;
   const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
   const dateString = moment.utc(date).format(format);
   return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;

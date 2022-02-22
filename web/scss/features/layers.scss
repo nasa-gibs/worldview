@@ -319,12 +319,11 @@
 
 .layer-date-start .monospace,
 .layer-date-end .monospace {
+  @include wv-date-chip;
+
   font-size: 14px;
   font-weight: 500;
-  background: #444;
-  text-shadow: 1px 1px 0 #000;
   padding: 1px 4px;
-  border-radius: 4px;
   margin: 0 4px;
 }
 

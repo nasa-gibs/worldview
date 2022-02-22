@@ -267,3 +267,7 @@
 .distraction-free-active .wv-map-scale-metric {
   display: none;
 }
+
+.dateline-text text {
+  @include wv-date-chip;
+}

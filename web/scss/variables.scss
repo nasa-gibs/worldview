@@ -52,3 +52,12 @@ $wv-dark-menu-border: 1px solid #555;
     color: $wv-white-font;
   }
 }
+
+@mixin wv-date-chip {
+  font-family: $wv-monospace-font;
+  background: #555;
+  color: #eee;
+  text-shadow: 1px 1px 0 #111;
+  border: 1px solid #000;
+  border-radius: 4px;
+}

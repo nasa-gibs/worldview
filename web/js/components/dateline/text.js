@@ -11,7 +11,7 @@ const textStyles = {
   color: 'white',
   textY: 14,
   fill: 'rgba(40,40,40,0.75)',
-  textWidth: 80,
+  textWidth: 88,
   textHeight: 20,
   recRadius: 3,
 };
@@ -66,13 +66,13 @@ class LineText extends React.Component {
   }
 
   render() {
-    const { active } = this.props;
+    const { active, isCompareActive } = this.props;
     const {
       textWidth, recRadius, fill, textY, color, width, textOpacity, textHeight, rectOpacity,
     } = textStyles;
     const { dateLeft, dateRight } = this.getDateText();
-    const leftTextWidth = Math.round(util.getTextWidth(dateLeft, '13px Open Sans') * 100) / 100 || textWidth;
-    const rightTextWidth = Math.round(util.getTextWidth(dateRight, '13px Open Sans') * 100) / 100 || textWidth;
+    const leftTextWidth = isCompareActive ? 60 : textWidth;
+    const rightTextWidth = isCompareActive ? 60 : textWidth;
     const svgStyle = {
       position: 'absolute',
       transform: `translateX(${-(leftTextWidth + 25)}px)`,

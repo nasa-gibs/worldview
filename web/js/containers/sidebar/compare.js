@@ -21,6 +21,8 @@ const CompareCase = (props) => {
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
+  const FormattedDate = ({ date }) => (<span className="monospace">{date}</span>);
+  FormattedDate.propTypes = { date: PropTypes.string };
   return (
     <div className={isActive ? '' : 'hidden '}>
       <div className={outerClass}>
@@ -36,7 +38,8 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` A: ${dateA}`}
+                {' A: '}
+                <FormattedDate date={dateA} />
               </NavLink>
             </NavItem>
             <NavItem>
@@ -49,7 +52,8 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` B: ${dateB}`}
+                {' B: '}
+                <FormattedDate date={dateB} />
               </NavLink>
             </NavItem>
           </Nav>

@@ -110,7 +110,7 @@ export default class Spy {
   addSpy(map, state) {
     const insideText = getDateText(state);
     label = document.createElement('span');
-    label.className = 'ab-spy-span inside-label';
+    label.className = 'ab-spy-span inside-label monospace';
     label.style.display = 'none';
     label.appendChild(document.createTextNode(insideText));
 

@@ -54,10 +54,21 @@ class CoverageItemList extends Component {
   * @param {String} background color
   * @returns {DOM Element} header
   */
-  getHeaderDOMEl = (layer, visible, dateRange, layerItemBackground) => {
+  getHeaderDOMEl = (layer, visible, layerItemBackground) => {
     const titleColor = visible ? '#000' : '#999';
     const textColor = visible ? '#222' : '#999';
-    const { subtitle, title } = layer;
+    const {
+      subtitle, title, startDate, endDate,
+    } = layer;
+    const formattedStartDate = startDate && formatDisplayDate(new Date(startDate));
+    const formattedEndDate = endDate && formatDisplayDate(new Date(endDate));
+    const FormattedDate = ({ date, alternate }) => {
+      const style = { width: '90px', display: 'inline-block' };
+      return date
+        ? (<span style={{ ...style, textAlign: 'center' }} className="monospace">{`${date}`}</span>)
+        : (<span style={{ ...style, paddingLeft: '2px' }}>{`  ${alternate} `}</span>);
+    };
+
     return (
       <>
         <div className="layer-coverage-item-header">
@@ -85,7 +96,9 @@ class CoverageItemList extends Component {
               color: textColor,
             }}
           >
-            {dateRange}
+            <FormattedDate date={formattedStartDate} alternate="Start" />
+            {' -  '}
+            <FormattedDate date={formattedEndDate} alternate="Present" />
           </div>
         </div>
       </>
@@ -159,35 +172,6 @@ class CoverageItemList extends Component {
       }
     }
     return new Date(rangeDateEnd).toISOString();
-  }
-
-  /**
-  * @desc get formatted, readable date range for header
-  * @param {Object} layer
-  * @returns {String} dateRangeText
-  */
-  getFormattedDateRange = (layer) => {
-    // get start date -or- 'start'
-    const {
-      endDate, startDate,
-    } = layer;
-    let dateRangeStart;
-    if (startDate) {
-      dateRangeStart = formatDisplayDate(new Date(startDate));
-    } else {
-      dateRangeStart = 'Start';
-    }
-
-    // get end date -or- 'present'
-    let dateRangeEnd;
-    if (endDate) {
-      dateRangeEnd = formatDisplayDate(new Date(endDate));
-    } else {
-      dateRangeEnd = 'Present';
-    }
-
-    const dateRangeText = `${dateRangeStart} to ${dateRangeEnd}`;
-    return dateRangeText;
   }
 
   /**
@@ -396,7 +380,6 @@ class CoverageItemList extends Component {
           } = this.getLayerItemStyles(visible, id);
 
           // get date range
-          const dateRange = this.getFormattedDateRange(layer);
           const dateRangeIntervalZeroIndex = dateRanges
             ? Number(dateRanges[0].dateInterval)
             : 1;
@@ -419,7 +402,7 @@ class CoverageItemList extends Component {
               }}
             >
               {/* Layer Header DOM El */
-                this.getHeaderDOMEl(layer, visible, dateRange, layerItemBackground)
+                this.getHeaderDOMEl(layer, visible, layerItemBackground)
               }
               <div
                 className="layer-coverage-line-container"
