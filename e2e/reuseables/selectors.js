@@ -31,7 +31,7 @@ module.exports = {
   animationFrameSlider: '#wv-animation-widget .rc-slider',
 
   // sidebar, layers
-  sidebarContainer: '#productsHolder',
+  sidebarContainer: '#products-holder',
   infoButton: '.wv-layers-info',
   optionsButton: '.wv-layers-options',
   infoDialog: '.layer-info-modal',

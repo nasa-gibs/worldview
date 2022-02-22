@@ -88,9 +88,9 @@ function RightClickMenu(props) {
         />
         <ContextMenu id="context-menu-trigger">
           <MenuItem onClick={() => copyCoordsToClipboard()}>
-            <div id="copy-coordinates-to-clipboard-button">
+            <span id="copy-coordinates-to-clipboard-button">
               {formattedCoordinates}
-            </div>
+            </span>
           </MenuItem>
           <MenuItem onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}>
             Add Place Marker
