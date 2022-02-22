@@ -19,7 +19,7 @@
   "id":"/",
   "background_color": "#212529",
   "display": "fullscreen",
-  "theme_color": "#0b3d91",
+  "theme_color": "#212529",
   "description": "@DESCRIPTION@",
   "screenshots": [
     {
