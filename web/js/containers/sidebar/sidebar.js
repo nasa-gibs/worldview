@@ -255,7 +255,7 @@ class Sidebar extends React.Component {
             />
             )}
             <div
-              id="productsHolder"
+              id="products-holder"
               className="products-holder-case"
               style={{
                 maxHeight,

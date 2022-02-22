@@ -27,7 +27,7 @@
             "spotlightClicks": true,
             "steps": [
               {
-                "target": "#productsHolder",
+                "target": "#products-holder",
                 "content": "To start, let's explore the Layers, Events and Data tabs.",
                 "placement": "right-start"
               },
