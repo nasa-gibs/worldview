@@ -6,6 +6,12 @@
       "src": "images/wv-logo-mobile.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "images/maskable_icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
@@ -13,7 +19,7 @@
   "id":"/",
   "background_color": "#212529",
   "display": "fullscreen",
-  "theme_color": "#0b3d91",
+  "theme_color": "#212529",
   "description": "@DESCRIPTION@",
   "screenshots": [
     {
