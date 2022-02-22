@@ -36,7 +36,7 @@
   }
 }
 
-.map-item-list li.item {
+.map-item-list li.item.event {
   padding: 6px 0;
   width: auto;
   margin: 0;
@@ -44,15 +44,22 @@
   overflow: hidden;
   cursor: pointer;
   background: transparent;
+
+  &.item-selected {
+    background: #eee;
+    padding: 6px;
+
+    h4.title {
+      color: #666;
+    }
+  }
 }
 
 .map-item-list li.item.hidden {
   display: none;
 }
 
-.map-item-list li.item h4 {
-  font-size: 0.85em;
-
+.map-item-list li.item h4.title {
   @media (max-width: 768px) {
     font-size: 1em;
   }
@@ -114,16 +121,20 @@
   }
 }
 
-.wv-eventslist li.item ul li.dates {
+.wv-eventslist li.item ul li.date {
   margin: 4px 0;
 
   a {
     font-size: 14px;
+    font-family: $wv-monospace-font;
     cursor: pointer;
+  }
 
-    &.active {
-      font-weight: 700;
-    }
+  .active {
+    font-size: 14px;
+    font-family: $wv-monospace-font;
+    font-weight: 500;
+    color: #666;
   }
 }
 

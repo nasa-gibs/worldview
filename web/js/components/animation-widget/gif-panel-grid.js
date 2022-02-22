@@ -41,7 +41,7 @@ export default class GifPanelGrid extends React.Component {
         <div className="grid-child label">
           <span>Start Date: </span>
         </div>
-        <div className="grid-child">
+        <div className="grid-child monospace">
           <span>
             {startDate}
             {' '}
@@ -50,7 +50,7 @@ export default class GifPanelGrid extends React.Component {
         <div className="grid-child label">
           <span>End Date: </span>
         </div>
-        <div className="grid-child">
+        <div className="grid-child monospace">
           <span>{endDate}</span>
         </div>
         <div className="grid-child label">

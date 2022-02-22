@@ -16,17 +16,14 @@ export default class DateRanges extends React.Component {
     .slice(0)
     .reverse()
     .map((l) => {
-      let listItemStartDate;
-      let listItemEndDate;
-      if (l.startDate) {
-        listItemStartDate = coverageDateFormatter('START-DATE', l.startDate, layer.period);
-      }
-      if (l.endDate) {
-        listItemEndDate = coverageDateFormatter('END-DATE', l.endDate, layer.period);
-      }
+      const ListItemStartDate = () => coverageDateFormatter('START-DATE', l.startDate, layer.period);
+      const ListItemEndDate = () => coverageDateFormatter('END-DATE', l.endDate, layer.period);
+
       return (
         <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
-          {`${listItemStartDate} - ${listItemEndDate}`}
+          <ListItemStartDate />
+          {' - '}
+          <ListItemEndDate />
         </ListGroupItem>
       );
     })
@@ -56,7 +53,7 @@ export default class DateRanges extends React.Component {
             <p>Date Ranges:</p>
           </div>
           <Scrollbar style={{ maxHeight: 400 }}>
-            <ListGroup className="layer-date-ranges" id="layer-settings-date-range-list">
+            <ListGroup id="layer-settings-date-range-list" className="layer-date-ranges monospace">
               {listItems}
             </ListGroup>
           </Scrollbar>

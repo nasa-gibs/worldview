@@ -74,7 +74,7 @@ function MeasurementLayerRow (props) {
               <div>
                 This layer has no visible content on the selected date:
                 <br />
-                <span style={{ fontFamily: 'monospace' }}>
+                <span className="monospace">
                   <SelectedDate />
                 </span>
               </div>

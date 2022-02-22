@@ -1,3 +1,4 @@
+import React from 'react';
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -352,6 +353,7 @@ export const outOfStepChange = (state, newDate) => {
 };
 
 export const coverageDateFormatter = (dateType, date, period) => {
+  if (!date) return;
   let dateString;
   const parsedDate = parseDate(date);
   switch (period) {
@@ -374,7 +376,9 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
   }
 
-  return dateString;
+  return (
+    <span className="monospace">{dateString}</span>
+  );
 };
 
 export const formatDisplayDate = (date, subdaily) => {
