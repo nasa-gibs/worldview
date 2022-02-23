@@ -38,8 +38,7 @@ export default class Spy {
     const isBInside = isCompareA(state);
     const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
     if (dateA !== this.dateA || dateB !== this.dateB || dateA === dateB) {
-      const insideText = getDateText(state);
-      label.innerText = insideText;
+      label.innerHTML = getDateText(state);
     }
     this.dateA = dateA;
     this.dateB = dateB;
@@ -108,11 +107,11 @@ export default class Spy {
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
   addSpy(map, state) {
-    const insideText = getDateText(state);
     label = document.createElement('span');
-    label.className = 'ab-spy-span inside-label monospace';
+    label.className = 'ab-spy-span inside-label';
     label.style.display = 'none';
-    label.appendChild(document.createTextNode(insideText));
+    // label.insertAdjacentElement('afterbegin', getDateText(state));
+    label.innerHTML = getDateText(state);
 
     this.mapCase.appendChild(label);
     this.mapCase.addEventListener('mousemove', this.updateSpy.bind(this));
@@ -123,6 +122,7 @@ export default class Spy {
     return this.mapCase;
   }
 }
+
 /**
  * Layers need to be inversely clipped so that they can't be seen through
  * the other layergroup in cases where the layergroups layer opacity is < 100%
@@ -133,6 +133,7 @@ const applyReverseLayerListeners = function(layer) {
   layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
+
 /**
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
@@ -142,6 +143,7 @@ const applyLayerListeners = function(layer) {
   layer.on('postrender', restore);
   topLayers.push(layer);
 };
+
 /**
  * Clip everything but the circle
  * @param {Object} event | Event object
@@ -163,6 +165,7 @@ const inverseClip = function(event) {
     ctx.clearRect(0, 0, offset, offset);
   }
 };
+
 /**
  * Clip the circle of a layer so users can see through
  */
@@ -182,10 +185,12 @@ const clip = function(event) {
   }
   ctx.clip();
 };
+
 const restore = function(event) {
   const ctx = event.context;
   ctx.restore();
 };
+
 /**
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
@@ -196,6 +201,7 @@ const removeListenersFromLayers = function(layers) {
     layer.un('postrender', restore);
   });
 };
+
 /**
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
@@ -206,6 +212,7 @@ const removeInverseListenersFromLayers = function(layers) {
     layer.un('postrender', restore);
   });
 };
+
 /**
  * Recursively apply listeners to layers
  * @param {Object} layer | Layer or layer Group obj
@@ -225,14 +232,14 @@ const applyEventsToBaseLayers = function(layer, map, callback) {
 
 const getDateText = function(state) {
   const isBInside = isCompareA(state);
-  let insideText = isBInside ? 'B' : 'A';
   const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
   const isSameDate = dateA === dateB;
+  let innerHtml = isBInside ? 'B' : 'A';
   if (!isSameDate) {
     const dateText = isBInside ? dateB : dateA;
-    insideText += `: ${dateText}`;
+    innerHtml += `: <span class="monospace">${dateText}</span>`;
   }
-  return insideText;
+  return innerHtml;
 };
 
 const isCompareA = (state) => state.compare.isCompareA;

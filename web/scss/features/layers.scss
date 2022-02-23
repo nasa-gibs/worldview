@@ -329,9 +329,15 @@
 
 .source-metadata .layer-description .layer-date-start .monospace,
 .source-metadata .layer-description .layer-date-end .monospace {
-  color: #eee;
-  background: #777;
-  text-shadow: 1px 1px 0 #333;
+  @include wv-date-chip;
+
+  border-color: #555;
+  background-color: #777;
+  font-size: 14px;
+}
+
+.layer-description .layer-description {
+  margin-top: 5px;
 }
 
 .layer-metadata li,

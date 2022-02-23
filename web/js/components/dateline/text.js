@@ -5,13 +5,13 @@ import util from '../../util/util';
 import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 
 const textStyles = {
-  textOpacity: 0.7,
-  rectOpacity: 1,
+  textOpacity: 1,
+  rectOpacity: 0.85,
   width: '300',
   color: 'white',
   textY: 14,
   fill: 'rgba(40,40,40,0.75)',
-  textWidth: 88,
+  textWidth: 94,
   textHeight: 20,
   recRadius: 3,
 };
@@ -68,7 +68,7 @@ class LineText extends React.Component {
   render() {
     const { active, isCompareActive } = this.props;
     const {
-      textWidth, recRadius, fill, textY, color, width, textOpacity, textHeight, rectOpacity,
+      textWidth, recRadius, textY, width, textOpacity, textHeight, rectOpacity,
     } = textStyles;
     const { dateLeft, dateRight } = this.getDateText();
     const leftTextWidth = isCompareActive ? 60 : textWidth;
@@ -92,7 +92,6 @@ class LineText extends React.Component {
         {active && (
           <>
             <rect
-              fill={fill}
               width={leftTextWidth + 10}
               height={textHeight}
               x={0}
@@ -102,14 +101,12 @@ class LineText extends React.Component {
             <text
               y={textY}
               x={6}
-              fill={color}
               width={width}
               opacity={dateLeft ? textOpacity : '0'}
             >
               {dateLeft}
             </text>
             <rect
-              fill={fill}
               width={rightTextWidth + 10}
               height={textHeight}
               x={leftTextWidth + 40}
@@ -119,7 +116,6 @@ class LineText extends React.Component {
             <text
               y={textY}
               x={leftTextWidth + 46}
-              fill={color}
               opacity={dateRight ? textOpacity : '0'}
             >
               {dateRight}

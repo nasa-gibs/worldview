@@ -128,12 +128,17 @@
 .ab-spy-span {
   @include wv-date-chip;
 
+  font-family: $wv-base-font;
   position: absolute;
   display: block;
   white-space: nowrap;
   font-size: 14px;
   padding: 2px;
   margin-left: -4px;
+
+  // .monospace {
+  //   font-family: $wv-monospace-font;
+  // }
 }
 
 .compare-dialog ul {
