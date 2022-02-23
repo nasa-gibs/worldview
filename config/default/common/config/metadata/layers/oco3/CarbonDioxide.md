@@ -1,5 +1,5 @@
-### About Water Vapor
-Almost all of atmospheric moisture is in the form of water vapor. This water vapor drives the development of weather systems on short time scales and influences the climate on longer time scales. Water vapor is Earth’s primary greenhouse gas and traps more heat than carbon dioxide. The movement of water vapor around the globe helps determine the amount of precipitation a region might receive and helps transport heat from the tropics to the poles.
+### About Carbon Dioxide
+Carbon dioxide (CO<sub>2</sub>) is an odorless, colorless gas and is the fourth most abundant component of dry air (after nitrogen, oxygen and argon). CO<sub>2</sub> is an important greenhouse gas that helps trap heat in the atmosphere. As a part of the carbon cycle, CO<sub>2</sub> can be emitted (e.g. from respiration by plants and soils or from wildfires) or absorbed (e.g. from plant photosynthesis or by dissolving into the oceans). Human activities such as the combustion of fossil fuels and biomass burning are sources of CO<sub>2</sub>.
 
 ### About OCO-3
 The Orbiting Carbon Observatory-3 (OCO-3) was deployed to the International Space Station in May, 2019. It is technically a single instrument, almost identical to OCO-2.
