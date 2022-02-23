@@ -115,6 +115,7 @@
 .ab-swipe-line .ab-swipe-span {
   @include wv-date-chip;
 
+  font-family: $wv-base-font;
   position: absolute;
   bottom: 195px;
   padding: 2px 4px;
