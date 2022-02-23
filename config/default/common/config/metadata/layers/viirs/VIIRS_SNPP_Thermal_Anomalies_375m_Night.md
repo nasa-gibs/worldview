@@ -4,4 +4,4 @@ The 375m I-band data complements the MODIS fire detections; they both show good 
 
 The VIIRS Fire and Thermal Anomalies product is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 375 m, imagery resolution is 250 m, and the temporal resolution is twice daily. The VIIRS sensor aboard the Suomi NPP satellite, crosses the equator at approximately 13:30 PM (ascending node) and 1:30 AM (descending node). The thermal anomalies are represented as points (approximate center of a 375 m pixel) in GIBS/Worldview.
 
-References: VNP14IMG_NRT [doi:10.5067/VIIRS/VNP14IMG_NRT.002](http://doi.org/10.5067/VIIRS/VNP14IMG_NRT.002); VNP14 [doi:10.5067/VIIRS/VNP14.001](https://doi.org/10.5067/VIIRS/VNP14.001)
+References: VNP14IMG_NRT [doi:10.5067/VIIRS/VNP14IMG_NRT.002](https://doi.org/10.5067/VIIRS/VNP14IMG_NRT.002); VNP14 [doi:10.5067/VIIRS/VNP14.001](https://doi.org/10.5067/VIIRS/VNP14.001)
