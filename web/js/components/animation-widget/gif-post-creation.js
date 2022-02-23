@@ -88,12 +88,12 @@ export default class GifResults extends Component {
                 <div>
                   <b>Date Range:</b>
                 </div>
-                <div className="monospace">{startDate}</div>
+                <span className="monospace">{startDate}</span>
                 <div> - </div>
-                <div className="monospace">
+                <span className="monospace">
                   {endDate}
                   {' '}
-                </div>
+                </span>
               </div>
               <div>
                 <div>

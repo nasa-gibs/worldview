@@ -41,8 +41,8 @@ export default class GifPanelGrid extends React.Component {
         <div className="grid-child label">
           <span>Start Date: </span>
         </div>
-        <div className="grid-child monospace">
-          <span>
+        <div className="grid-child">
+          <span className="monospace">
             {startDate}
             {' '}
           </span>
@@ -50,8 +50,8 @@ export default class GifPanelGrid extends React.Component {
         <div className="grid-child label">
           <span>End Date: </span>
         </div>
-        <div className="grid-child monospace">
-          <span>{endDate}</span>
+        <div className="grid-child">
+          <span className="monospace">{endDate}</span>
         </div>
         <div className="grid-child label">
           <span>Speed: </span>
