@@ -6,4 +6,4 @@ The MYD21C3 dataset is an 8-day composite LST product that uses an algorithm bas
 
 The MODIS Land Surface Temperature product is available from both Terra (MOD21) and Aqua (MYD21) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is monthly.
 
-References: MYD21C3 [doi:10.5067/MODIS/MYD21C3.061](https://dx.doi.org/10.5067/MODIS/MYD21C3.061)
+References: MYD21C3 [doi:10.5067/MODIS/MYD21C3.061](https://doi.org/10.5067/MODIS/MYD21C3.061)
