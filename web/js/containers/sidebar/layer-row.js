@@ -307,6 +307,8 @@ function LayerRow (props) {
     return baseClasses;
   };
 
+  const getMainLayerClasses = () => (isAnimating ? 'layer-main layer-visible' : 'layer-main');
+
   const visibilityTitle = !isVisible && !isDisabled
     ? 'Show layer'
     : isDisabled
@@ -340,7 +342,7 @@ function LayerRow (props) {
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
-      <div className="layer-main">
+      <div className={getMainLayerClasses()}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
