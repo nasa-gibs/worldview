@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
-import FormattedDate from '../util/formatted-date';
+import MonospaceDate from '../util/formatted-date';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 const percentFormatter = function(v) {
@@ -71,7 +71,7 @@ class OpacitySlider extends React.Component {
         <label className="wv-slider-label left" style={labelStyle}>
           <h4 className="left">
             <span>A</span>
-            <FormattedDate date={dateAText} />
+            <MonospaceDate date={dateAText} />
           </h4>
         </label>
         <div className="input-range ">
@@ -85,7 +85,7 @@ class OpacitySlider extends React.Component {
         <label className="wv-slider-label right" style={labelStyle}>
           <h4 className="right">
             <span>B</span>
-            <FormattedDate date={dateBText} />
+            <MonospaceDate date={dateBText} />
           </h4>
         </label>
       </div>

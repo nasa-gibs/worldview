@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function FormattedDate({ date, children }) {
+export default function MonospaceDate({ date, children }) {
   return (
     <span className="monospace">
       {children}
@@ -9,7 +9,7 @@ export default function FormattedDate({ date, children }) {
     </span>
   );
 }
-FormattedDate.propTypes = {
+MonospaceDate.propTypes = {
   children: PropTypes.object,
   date: PropTypes.string,
 };

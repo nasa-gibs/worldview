@@ -6,7 +6,7 @@ import googleTagManager from 'googleTagManager';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import util from '../../util/util';
 import Button from '../util/button';
-import FormattedDate from '../util/formatted-date';
+import MonospaceDate from '../util/formatted-date';
 
 export default class GifResults extends Component {
   getStyle(imgElWidth, imgElHeight) {
@@ -89,9 +89,9 @@ export default class GifResults extends Component {
                 <div>
                   <b>Date Range:</b>
                 </div>
-                <FormattedDate date={startDate} />
+                <MonospaceDate date={startDate} />
                 <div> - </div>
-                <FormattedDate date={endDate} />
+                <MonospaceDate date={endDate} />
                 {' '}
               </div>
               <div>

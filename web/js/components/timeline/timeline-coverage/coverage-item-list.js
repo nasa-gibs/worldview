@@ -9,6 +9,7 @@ import {
 } from '../../../modules/date/constants';
 import CoverageItemContainer from './coverage-item-container';
 import { formatDisplayDate } from '../../../modules/date/util';
+import MonospaceDate from '../../util/formatted-date';
 
 const { events } = util;
 
@@ -54,7 +55,7 @@ class CoverageItemList extends Component {
   * @param {String} background color
   * @returns {DOM Element} header
   */
-  getHeaderDOMEl = (layer, visible, layerItemBackground) => {
+  getHeaderDOMEl = (layer, visible, layerItemBackground, inactiveLayers) => {
     const titleColor = visible ? '#000' : '#999';
     const textColor = visible ? '#222' : '#999';
     const {
@@ -62,12 +63,12 @@ class CoverageItemList extends Component {
     } = layer;
     const formattedStartDate = startDate && formatDisplayDate(new Date(startDate));
     const formattedEndDate = endDate && formatDisplayDate(new Date(endDate));
-    const FormattedDate = ({ date, alternate }) => {
-      const style = { width: '90px', display: 'inline-block' };
-      return date
-        ? (<span style={{ ...style, textAlign: 'center' }} className="monospace">{`${date}`}</span>)
-        : (<span style={{ ...style, paddingLeft: '2px' }}>{`  ${alternate} `}</span>);
-    };
+    const baseStyle = { width: '110px', display: 'inline-block' };
+    const getStyle = (date) => (
+      date
+        ? { ...baseStyle, textAlign: 'center' }
+        : { ...baseStyle, paddingLeft: '2px' }
+    );
 
     return (
       <>
@@ -94,11 +95,13 @@ class CoverageItemList extends Component {
             style={{
               background: layerItemBackground,
               color: textColor,
+              float: 'left',
+              width: inactiveLayers ? '205px' : '175px',
             }}
           >
-            <FormattedDate date={formattedStartDate} alternate="Start" />
+            <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />
             {' -  '}
-            <FormattedDate date={formattedEndDate} alternate="Present" />
+            <MonospaceDate style={getStyle(formattedEndDate)} date={formattedEndDate || ' Present '} />
           </div>
         </div>
       </>
@@ -338,6 +341,7 @@ class CoverageItemList extends Component {
       positionTransformX,
     } = this.props;
     const emptyLayers = activeLayers.length === 0;
+    const inactiveLayers = activeLayers.some(({ inactive }) => inactive);
     return (
       <div className="layer-coverage-layer-list">
         {/* Empty layer coverage message */
@@ -402,7 +406,7 @@ class CoverageItemList extends Component {
               }}
             >
               {/* Layer Header DOM El */
-                this.getHeaderDOMEl(layer, visible, layerItemBackground)
+                this.getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers)
               }
               <div
                 className="layer-coverage-line-container"

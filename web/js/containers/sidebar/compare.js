@@ -7,7 +7,7 @@ import {
 import LayersContainer from './layers-container';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
-import FormattedDate from '../../components/util/formatted-date';
+import MonospaceDate from '../../components/util/formatted-date';
 
 const tabHeight = 32;
 const CompareCase = (props) => {
@@ -39,7 +39,7 @@ const CompareCase = (props) => {
               >
                 <i className="productsIcon selected icon-layers" />
                 {' A: '}
-                <FormattedDate date={dateA} />
+                <MonospaceDate date={dateA} />
               </NavLink>
             </NavItem>
             <NavItem>
@@ -53,7 +53,7 @@ const CompareCase = (props) => {
               >
                 <i className="productsIcon selected icon-layers" />
                 {' B: '}
-                <FormattedDate date={dateB} />
+                <MonospaceDate date={dateB} />
               </NavLink>
             </NavItem>
           </Nav>
