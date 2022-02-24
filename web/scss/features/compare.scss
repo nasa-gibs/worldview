@@ -10,14 +10,14 @@
   user-select: none;
 
   & .show-date-label {
-    width: 109px;
+    width: 120px;
   }
 
   & .left-label {
     left: -23px;
 
     &.show-date-label {
-      left: -118px;
+      left: -129px;
     }
   }
 
@@ -61,6 +61,8 @@
 }
 
 .ab-slider-case {
+  @include wv-date-chip;
+
   position: absolute;
   margin-left: auto;
   margin-right: auto;
@@ -68,9 +70,6 @@
   right: 0;
   bottom: 195px;
   text-align: center;
-  background: $wv-transparent-black;
-  border-radius: 3px;
-  color: #fff;
   height: 36px;
 }
 
@@ -90,11 +89,19 @@
 
 .ab-slider-case .wv-slider-label h4 {
   font-weight: 400;
+  position: absolute;
+
+  &.left {
+    left: 8px;
+  }
+
+  &.right {
+    right: 8px;
+  }
 }
 
 .ab-slider-case .wv-slider-label span {
   font-size: 15px;
-  font-weight: 700;
   vertical-align: top;
 }
 
@@ -106,30 +113,32 @@
 }
 
 .ab-swipe-line .ab-swipe-span {
+  @include wv-date-chip;
+
+  font-family: $wv-base-font;
   position: absolute;
   bottom: 195px;
-  padding: 2px;
-  background: #fff;
-  color: #000;
+  padding: 2px 4px;
   display: block;
   font-size: 14px;
   margin-top: -7px;
-  border-radius: 3px;
-  border: 1px solid #000;
   cursor: default;
 }
 
 .ab-spy-span {
+  @include wv-date-chip;
+
+  font-family: $wv-base-font;
   position: absolute;
-  background: $wv-transparent-black;
-  color: #fff;
   display: block;
   white-space: nowrap;
   font-size: 14px;
-  border-radius: 3px;
-  border: 1px solid #000;
   padding: 2px;
   margin-left: -4px;
+
+  // .monospace {
+  //   font-family: $wv-monospace-font;
+  // }
 }
 
 .compare-dialog ul {
@@ -150,6 +159,16 @@
 .compare-dialog img {
   display: block;
   max-width: 100%;
+}
+
+.ab-tab {
+  .icon-layers {
+    margin-right: 2px;
+  }
+
+  span {
+    padding-bottom: 2px;
+  }
 }
 
 /* Mobile */

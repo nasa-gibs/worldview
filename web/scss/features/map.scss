@@ -267,3 +267,18 @@
 .distraction-free-active .wv-map-scale-metric {
   display: none;
 }
+
+.dateline-text {
+  rect {
+    fill: #444;
+    stroke: #222;
+    stroke-width: 1px;
+  }
+
+  text {
+    fill: #eee;
+    text-shadow: 1px 1px 0 #111;
+    font-size: 14px;
+    font-family: $wv-monospace-font;
+  }
+}
