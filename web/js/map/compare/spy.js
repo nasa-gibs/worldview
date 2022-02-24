@@ -110,7 +110,6 @@ export default class Spy {
     label = document.createElement('span');
     label.className = 'ab-spy-span inside-label';
     label.style.display = 'none';
-    // label.insertAdjacentElement('afterbegin', getDateText(state));
     label.innerHTML = getDateText(state);
 
     this.mapCase.appendChild(label);

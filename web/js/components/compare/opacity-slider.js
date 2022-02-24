@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
+import FormattedDate from '../util/formatted-date';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 const percentFormatter = function(v) {
@@ -64,7 +65,7 @@ class OpacitySlider extends React.Component {
     const {
       dateAText, dateBText, caseStyle, labelStyle,
     } = this.getDateTextOptions();
-    const FormattedDate = ({ date }) => (<span className="monospace">{date}</span>);
+
     return (
       <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
         <label className="wv-slider-label left" style={labelStyle}>

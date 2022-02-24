@@ -8,6 +8,7 @@ import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
 import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
+import FormattedDate from '../../components/util/formatted-date';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
@@ -376,9 +377,7 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
   }
 
-  return (
-    <span className="monospace">{dateString}</span>
-  );
+  return (<FormattedDate date={dateString} />);
 };
 
 export const formatDisplayDate = (date, subdaily) => {

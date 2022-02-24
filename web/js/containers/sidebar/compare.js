@@ -7,6 +7,7 @@ import {
 import LayersContainer from './layers-container';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import FormattedDate from '../../components/util/formatted-date';
 
 const tabHeight = 32;
 const CompareCase = (props) => {
@@ -21,8 +22,7 @@ const CompareCase = (props) => {
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
-  const FormattedDate = ({ date }) => (<span className="monospace">{date}</span>);
-  FormattedDate.propTypes = { date: PropTypes.string };
+
   return (
     <div className={isActive ? '' : 'hidden '}>
       <div className={outerClass}>

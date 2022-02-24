@@ -7,6 +7,7 @@ import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import EventIcon from './event-icon';
 import { formatDisplayDate } from '../../modules/date/util';
+import FormattedDate from '../util/formatted-date';
 
 function Event (props) {
   const {
@@ -156,7 +157,9 @@ function Event (props) {
         {' '}
         <br />
         {' '}
-        {!isSelected && (<span className="monospace">{dateString}</span>)}
+        {!isSelected && (
+          <FormattedDate date={dateString} />
+        )}
       </h4>
       {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
       {renderDateLists()}

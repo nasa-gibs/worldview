@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FormattedDate from '../util/formatted-date';
 
 /*
  * A table that updates with image
@@ -42,16 +43,14 @@ export default class GifPanelGrid extends React.Component {
           <span>Start Date: </span>
         </div>
         <div className="grid-child">
-          <span className="monospace">
-            {startDate}
-            {' '}
-          </span>
+          <FormattedDate date={startDate} />
+          {' '}
         </div>
         <div className="grid-child label">
           <span>End Date: </span>
         </div>
         <div className="grid-child">
-          <span className="monospace">{endDate}</span>
+          <FormattedDate date={endDate} />
         </div>
         <div className="grid-child label">
           <span>Speed: </span>

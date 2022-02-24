@@ -12,6 +12,7 @@ import {
 import SelectedDate from '../../../selected-date';
 import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
+import FormattedDate from '../../../util/formatted-date';
 
 /*
  * A scrollable list of layers
@@ -74,9 +75,9 @@ function MeasurementLayerRow (props) {
               <div>
                 This layer has no visible content on the selected date:
                 <br />
-                <span className="monospace">
+                <FormattedDate>
                   <SelectedDate />
-                </span>
+                </FormattedDate>
               </div>
             )}
             {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
