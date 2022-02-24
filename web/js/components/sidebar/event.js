@@ -7,7 +7,7 @@ import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import EventIcon from './event-icon';
 import { formatDisplayDate } from '../../modules/date/util';
-import MonospaceDate from '../util/formatted-date';
+import MonospaceDate from '../util/monospace-date';
 
 function Event (props) {
   const {

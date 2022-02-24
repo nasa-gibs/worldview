@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MonospaceDate from '../util/formatted-date';
+import MonospaceDate from '../util/monospace-date';
 
 /*
  * A table that updates with image

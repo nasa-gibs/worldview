@@ -8,7 +8,7 @@ import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
 import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
-import MonospaceDate from '../../components/util/formatted-date';
+import MonospaceDate from '../../components/util/monospace-date';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 

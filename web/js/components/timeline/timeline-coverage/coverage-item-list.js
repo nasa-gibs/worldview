@@ -9,7 +9,7 @@ import {
 } from '../../../modules/date/constants';
 import CoverageItemContainer from './coverage-item-container';
 import { formatDisplayDate } from '../../../modules/date/util';
-import MonospaceDate from '../../util/formatted-date';
+import MonospaceDate from '../../util/monospace-date';
 
 const { events } = util;
 

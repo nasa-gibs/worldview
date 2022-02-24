@@ -7,7 +7,7 @@ import {
 import LayersContainer from './layers-container';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
-import MonospaceDate from '../../components/util/formatted-date';
+import MonospaceDate from '../../components/util/monospace-date';
 
 const tabHeight = 32;
 const CompareCase = (props) => {

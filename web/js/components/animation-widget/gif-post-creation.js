@@ -6,7 +6,7 @@ import googleTagManager from 'googleTagManager';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import util from '../../util/util';
 import Button from '../util/button';
-import MonospaceDate from '../util/formatted-date';
+import MonospaceDate from '../util/monospace-date';
 
 export default class GifResults extends Component {
   getStyle(imgElWidth, imgElHeight) {
