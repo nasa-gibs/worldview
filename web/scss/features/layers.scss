@@ -317,6 +317,34 @@
   margin-bottom: 15px;
 }
 
+.layer-date-start .monospace,
+.layer-date-end .monospace {
+  @include wv-date-chip;
+
+  font-size: 14px;
+  font-weight: 500;
+  padding: 1px 4px;
+  margin: 0 4px;
+}
+
+.source-metadata .layer-description .layer-date-start .monospace,
+.source-metadata .layer-description .layer-date-end .monospace {
+  @include wv-date-chip;
+
+  border-color: #555;
+  background-color: #777;
+  font-size: 14px;
+}
+
+.layers-all-layer .source-metadata .layer-description .layer-date-ranges span.monospace {
+  font-family: $wv-monospace-font;
+  font-size: 14px;
+}
+
+.layer-description .layer-description {
+  margin-top: 5px;
+}
+
 .layer-metadata li,
 .source-metadata li {
   line-height: 16px;

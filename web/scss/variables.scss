@@ -19,7 +19,7 @@ $wv-menu-font-size: 16px;
 $wv-menu-border-radius: 6px;
 $wv-dark-menu-border: 1px solid #555;
 
-/* Mixin */
+/* Mixins */
 @mixin wv-modal-dialog {
   border-radius: $wv-menu-border-radius;
   box-shadow: $wv-modal-shadow;
@@ -51,4 +51,13 @@ $wv-dark-menu-border: 1px solid #555;
     background-color: $wv-transparent-black;
     color: $wv-white-font;
   }
+}
+
+@mixin wv-date-chip {
+  font-family: $wv-monospace-font;
+  background: #555;
+  color: #eee;
+  text-shadow: 1px 1px 0 #111;
+  border: 1px solid #000;
+  border-radius: 4px;
 }

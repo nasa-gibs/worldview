@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
+import MonospaceDate from '../util/monospace-date';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 const percentFormatter = function(v) {
@@ -50,7 +51,7 @@ class OpacitySlider extends React.Component {
       dateBText += `: ${dateB}`;
     }
     const labelStyle = isSameDate ? {} : { width: '105px', paddingLeft: '3px' };
-    const caseStyle = { width: isSameDate ? '178px' : '356px' };
+    const caseStyle = { width: isSameDate ? '178px' : '420px' };
     return {
       dateAText,
       dateBText,
@@ -64,12 +65,13 @@ class OpacitySlider extends React.Component {
     const {
       dateAText, dateBText, caseStyle, labelStyle,
     } = this.getDateTextOptions();
+
     return (
       <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
         <label className="wv-slider-label left" style={labelStyle}>
-          <h4>
+          <h4 className="left">
             <span>A</span>
-            {dateAText}
+            <MonospaceDate date={dateAText} />
           </h4>
         </label>
         <div className="input-range ">
@@ -81,9 +83,9 @@ class OpacitySlider extends React.Component {
           />
         </div>
         <label className="wv-slider-label right" style={labelStyle}>
-          <h4>
+          <h4 className="right">
             <span>B</span>
-            {dateBText}
+            <MonospaceDate date={dateBText} />
           </h4>
         </label>
       </div>

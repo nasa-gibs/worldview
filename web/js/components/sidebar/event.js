@@ -7,6 +7,7 @@ import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import EventIcon from './event-icon';
 import { formatDisplayDate } from '../../modules/date/util';
+import MonospaceDate from '../util/monospace-date';
 
 function Event (props) {
   const {
@@ -19,8 +20,8 @@ function Event (props) {
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
-    ? 'item-selected selectorItem item'
-    : 'selectorItem item';
+    ? 'item-selected event item'
+    : 'event item';
 
   const elRef = useRef();
   useLayoutEffect(() => {
@@ -71,20 +72,28 @@ function Event (props) {
               return `${magnitudeDisplay} ${magnitudeValue} ${magnitudeUnit}`;
             }
             return (
-              <li key={`${event.id}-${date}`} className="dates">
-                <a
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEventSelect(date);
-                  }}
-                  className={
-                    selectedDate === date
-                      ? 'date item-selected active'
-                      : 'date item-selected '
-                  }
-                >
-                  {formatDisplayDate(date)}
-                </a>
+              <li key={`${event.id}-${date}`} className="date">
+
+                {selectedDate === date ? (
+                  <span
+                    className="active"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {formatDisplayDate(date)}
+                  </span>
+                )
+                  : (
+                    <a
+                      className="'date item-selected"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEventSelect(date);
+                      }}
+                    >
+                      {formatDisplayDate(date)}
+                    </a>
+                  )}
+
                 <p className="magnitude">
                   {magnitudeOutput()}
                 </p>
@@ -100,8 +109,6 @@ function Event (props) {
    * Return reference list for an event
    */
   function renderReferenceList() {
-    if (!isSelected) return;
-
     const references = Array.isArray(event.sources)
       ? event.sources
       : [event.sources];
@@ -145,10 +152,16 @@ function Event (props) {
       <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
       <h4
         className="title"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: `${event.title}<br />${dateString}` }}
-      />
-      <p className="subtitle">{renderReferenceList()}</p>
+      >
+        {event.title}
+        {' '}
+        <br />
+        {' '}
+        {!isSelected && (
+          <MonospaceDate date={dateString} />
+        )}
+      </h4>
+      {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
       {renderDateLists()}
     </li>
   );
