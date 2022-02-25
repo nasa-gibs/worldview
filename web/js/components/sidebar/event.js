@@ -57,18 +57,13 @@ function Event (props) {
    * @param {Object} geometry | Geometry object containing magnitude data
    * @returns Magnitude data output
    */
-  function magnitudeOutput({ magnitudeUnit = null, magnitudeValue = null }) {
-    const unit = magnitudeUnit || null;
-    let value = magnitudeValue ? magnitudeValue.toLocaleString() : null;
-    if (!unit && !value) return;
-
-    const formattedunit = unit === 'kts' ? ' kts' : ' NM';
-    value = value.toLocaleString();
+  function magnitudeOutput({ magnitudeUnit, magnitudeValue }) {
+    if (!magnitudeUnit || !magnitudeValue) return;
+    const formattedunit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
     return (
       <p className="magnitude">
-
         {formattedunit === ' NM' ? 'Surface Area: ' : 'Wind Speed: '}
-        {value}
+        {magnitudeValue.toLocaleString()}
         {formattedunit}
         {formattedunit === ' NM' && (
           <sup>2</sup>
@@ -90,20 +85,27 @@ function Event (props) {
           {event.geometry.map((geometry, index) => {
             const date = util.toISOStringDate(geometry.date);
             return (
-              <li key={`${event.id}-${date}`} className="dates">
-                <a
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEventSelect(date);
-                  }}
-                  className={
-                    selectedDate === date
-                      ? 'date item-selected active'
-                      : 'date item-selected '
-                  }
-                >
-                  {formatDisplayDate(date)}
-                </a>
+              <li key={`${event.id}-${date}`} className="date">
+
+                {selectedDate === date ? (
+                  <span
+                    className="active"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {formatDisplayDate(date)}
+                  </span>
+                )
+                  : (
+                    <a
+                      className="'date item-selected"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEventSelect(date);
+                      }}
+                    >
+                      {formatDisplayDate(date)}
+                    </a>
+                  )}
                 {magnitudeOutput(geometry)}
               </li>
             );
