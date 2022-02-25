@@ -20,7 +20,8 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
 
   const { magnitudeValue, magnitudeUnit } = geometry;
   const magnitudeContent = document.createElement('div');
-  if (magnitudeUnit && magnitudeValue) {
+  const hasMagnitude = magnitudeUnit && magnitudeValue;
+  if (hasMagnitude) {
     const superscriptUnit = document.createElement('sup');
     superscriptUnit.append('2');
     const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
@@ -46,6 +47,9 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   textEl.appendChild(content);
   textEl.appendChild(magnitudeContent);
   textEl.className = 'track-marker-date';
+  if (!isSelected) {
+    textEl.style.top = hasMagnitude ? '-40px' : '-28px';
+  }
   circleEl.className = `track-marker track-marker-${date}`;
   circleEl.id = `track-marker-${date}`;
   overlayEl.appendChild(circleEl);
