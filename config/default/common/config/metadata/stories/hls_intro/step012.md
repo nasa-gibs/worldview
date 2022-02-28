@@ -1,0 +1,1 @@
+Sediments causing a change in the water color can be seen here off the tip of Fraser Island in Australia. Click on the eye to turn on and off the Sentinel 2A & 2B layer and see how much blurrier it is in the MODIS/Terra image!

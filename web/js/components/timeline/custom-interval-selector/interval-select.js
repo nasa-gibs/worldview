@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  *
  * @class TimeScaleSelect
  */
-class TimeScaleSelect extends PureComponent {
+class IntervalSelect extends PureComponent {
   handleChangeZoomLevel = (e) => {
     const { changeZoomLevel } = this.props;
     const zoomLevel = e.target.value;
@@ -25,22 +25,22 @@ class TimeScaleSelect extends PureComponent {
     } = this.props;
     return (
       <form
-        className="custom-interval-timescale-select-form-container"
+        className="custom-interval-timescale-select-form-container no-drag"
         onSubmit={this.handleSubmit}
       >
         <select
-          className="custom-interval-timescale-select"
+          className="custom-interval-timescale-select no-drag"
           value={zoomLevel}
           onChange={this.handleChangeZoomLevel}
         >
-          <option className="custom-interval-timescale-select-option" value="year">year</option>
-          <option className="custom-interval-timescale-select-option" value="month">month</option>
-          <option className="custom-interval-timescale-select-option" value="day">day</option>
+          <option className="custom-interval-timescale-select-option no-drag" value="year">year</option>
+          <option className="custom-interval-timescale-select-option no-drag" value="month">month</option>
+          <option className="custom-interval-timescale-select-option no-drag" value="day">day</option>
           {hasSubdailyLayers
             ? (
               <>
-                <option className="custom-interval-timescale-select-option" value="hour">hour</option>
-                <option className="custom-interval-timescale-select-option" value="minute">minute</option>
+                <option className="custom-interval-timescale-select-option no-drag" value="hour">hour</option>
+                <option className="custom-interval-timescale-select-option no-drag" value="minute">minute</option>
               </>
             )
             : null}
@@ -50,10 +50,10 @@ class TimeScaleSelect extends PureComponent {
   }
 }
 
-TimeScaleSelect.propTypes = {
+IntervalSelect.propTypes = {
   changeZoomLevel: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   zoomLevel: PropTypes.string,
 };
 
-export default TimeScaleSelect;
+export default IntervalSelect;

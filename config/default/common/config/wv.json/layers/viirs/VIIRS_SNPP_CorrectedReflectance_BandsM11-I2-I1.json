@@ -6,9 +6,7 @@
       "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
       "tags": "false color s-npp snpp 7-2-1",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Corrected Reflectance",
       "group": "baselayers",
       "wrapadjacentdays": true,
       "tracks": [

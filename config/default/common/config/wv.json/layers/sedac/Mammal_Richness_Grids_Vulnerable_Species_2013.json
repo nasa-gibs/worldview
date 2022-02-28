@@ -7,9 +7,7 @@
       "description": "sedac/Mammal_Richness_Grids_Vulnerable_Species_2013",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Mammal Richness",
       "product": "CIESIN_SEDAC_SPECIES_MAM_RICH15",
       "inactive": true,
       "wrapX": true

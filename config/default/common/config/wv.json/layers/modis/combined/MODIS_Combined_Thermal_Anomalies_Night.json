@@ -19,10 +19,7 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "daynight": [
         "night"
       ],
@@ -33,7 +30,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {

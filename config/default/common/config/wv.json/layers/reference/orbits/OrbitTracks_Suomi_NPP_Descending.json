@@ -9,16 +9,11 @@
       "tags": "snpp s-npp tracks night",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
-      "layergroup": [
-        "reference",
-        "reference_orbits"
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
       ],
-      "daynight": [ "night" ],
       "track": "descending",
       "startDate": "2011-10-28",
       "projections": {

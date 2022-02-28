@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Dust_Surface_Mass_Concentration_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Dust",
       "product": "M2TMNXAER",
       "wrapadjacentdays": true
     }

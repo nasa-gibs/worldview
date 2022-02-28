@@ -1,245 +1,205 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get as lodashGet } from 'lodash';
+import {
+  Button,
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
+import EventIcon from '../../components/sidebar/event-icon';
+import EventFilterModalBody from '../../components/sidebar/events-filter';
 import Scrollbars from '../../components/util/scrollbar';
 import {
-  requestEvents,
-  requestCategories,
-  requestSources,
-  selectEvent,
-  deselectEvent,
+  selectEvent as selectEventActionCreator,
+  deselectEvent as deselectEventActionCreator,
 } from '../../modules/natural-events/actions';
-import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { collapseSidebar } from '../../modules/sidebar/actions';
-import { selectDate } from '../../modules/date/actions';
-import getSelectedDate from '../../modules/date/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
+import { toggleCustomContent } from '../../modules/modal/actions';
+import util from '../../util/util';
+import { formatDisplayDate } from '../../modules/date/util';
 
-class Events extends React.Component {
-  constructor(props) {
-    super(props);
-    this.initRequests();
-  }
+function Events(props) {
+  const {
+    eventsData,
+    sources,
+    isLoading,
+    selectEvent,
+    selected,
+    openFilterModal,
+    height,
+    deselectEvent,
+    hasRequestError,
+    isMobile,
+    isEmbedModeActive,
+    showAlert,
+    selectedDate,
+    showDates,
+    selectedStartDate,
+    selectedEndDate,
+    selectedCategories,
+  } = props;
 
-  initRequests() {
-    const {
-      requestSources,
-      requestCategories,
-      requestEvents,
-      apiURL,
-      config,
-    } = this.props;
+  const filterControlHeight = 72;
+  const maxHeight = Math.max(height - filterControlHeight, 166);
+  const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
-    let eventsRequestURL = `${apiURL}/events`;
-    let categoryRequestURL = `${apiURL}/categories`;
-    let sourceRequestURL = `${apiURL}/sources`;
+  const startDate = formatDisplayDate(selectedStartDate);
+  const endDate = formatDisplayDate(selectedEndDate);
 
-    const mockEvents = lodashGet(config, 'parameters.mockEvents');
-    const mockCategories = lodashGet(config, 'parameters.mockCategories');
-    const mockSources = lodashGet(config, 'parameters.mockSources');
+  const errorOrLoadingText = isLoading
+    ? 'Loading ...'
+    : hasRequestError
+      ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
+      : '';
 
-    if (mockEvents) {
-      console.warn(`Using mock events data: ${mockEvents}`);
-      eventsRequestURL = mockEvents === 'true'
-        ? 'mock/events_data.json'
-        : `mock/events_data.json-${mockEvents}`;
-    }
-    if (mockCategories) {
-      console.warn(`Using mock categories data: ${mockCategories}`);
-      categoryRequestURL = `mock/categories_data.json-${mockCategories}`;
-    }
-    if (mockSources) {
-      console.warn(`Using mock categories data: ${mockSources}`);
-      sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-    }
-    requestEvents(eventsRequestURL);
-    requestCategories(categoryRequestURL);
-    requestSources(sourceRequestURL);
-  }
 
-  render() {
-    const {
-      events,
-      isLoading,
-      selectEvent,
-      selected,
-      visibleWithinMapExtent,
-      visibleEvents,
-      sources,
-      height,
-      deselectEvent,
-      hasRequestError,
-      isMobile,
-      showAlert,
-      selectedDate,
-    } = this.props;
-    if (selected.id && !visibleWithinMapExtent[selected.id] && events && events.length) {
-      deselectEvent();
-    }
-    const errorOrLoadingText = isLoading
-      ? 'Loading...'
-      : hasRequestError
-        ? 'There has been an ERROR retrieving events from the EONET events API'
-        : '';
+  const renderFilterControls = () => (
+    <div className="filter-controls">
+      <div className="filter-dates-icons">
+        <div className="filter-dates">
+          {showDates && `${startDate} - ${endDate}`}
+        </div>
+        <div className="filter-icons">
+          {selectedCategories.map(({ title }) => (
+            <EventIcon
+              id="filter-"
+              key={title}
+              category={title}
+              title={title}
+            />
+          ))}
+        </div>
+      </div>
+      <Button
+        id="event-filter-button"
+        className="filter-button"
+        aria-label="Filtered layer search"
+        onClick={openFilterModal}
+        color="primary"
+        size="sm"
+        block
+        disabled={isLoading}
+      >
+        <FontAwesomeIcon icon="filter" />
+      </Button>
+    </div>
+  );
 
-    let scrollBarVerticalTop = 0;
-    if (visibleEvents && selected.id) {
-      // find index for scrollBarVerticalTop calculation on selected event
-      const index = Object.keys(visibleEvents).indexOf(selected.id);
-      // 12 === li total top/bottom padding
-      // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
-      scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
-    }
+  const renderEventList = () => (
+    eventsData && eventsData.length ? (
+      <div className="wv-eventslist sidebar-panel">
+        <ul id="wv-eventscontent" className="content map-item-list">
+          {sources && eventsData.map((event) => (
+            <Event
+              showAlert={showAlert}
+              key={event.id}
+              event={event}
+              selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+              deselectEvent={deselectEvent}
+              isSelected={selected.id === event.id}
+              selectedDate={selectedDate}
+              sources={sources}
+            />
+          ))}
+        </ul>
+      </div>
+    ) : !isLoading && (
+      <h3 className="no-events"> No events meet current criteria</h3>
+    )
+  );
 
-    return (
-      <>
-        <Scrollbars
-          style={{ maxHeight: `${height}px` }}
-          scrollBarVerticalTop={scrollBarVerticalTop}
-        >
-          <div id="wv-events">
-            <span
-              className="events-loading-text"
-              style={
-                isLoading || hasRequestError
-                  ? { display: 'block' }
-                  : { display: 'none' }
-              }
-            >
+  return (
+    <div className="event-container">
+      {renderFilterControls()}
+      <Scrollbars
+        className="event-scroll-list"
+        style={{ maxHeight: `${scrollbarMaxHeight}` }}
+      >
+        <div id="wv-events">
+          {isLoading || hasRequestError ? (
+            <div className="events-loading-text">
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
               {errorOrLoadingText}
-            </span>
-
-            <div
-              className="wv-eventslist sidebar-panel"
-              style={events ? { display: 'block' } : { display: 'none' }}
-            >
-              <ul id="wv-eventscontent" className="content map-item-list">
-                {events && sources
-                  ? events.map((event) => (
-                    <Event
-                      showAlert={showAlert}
-                      key={event.id}
-                      event={event}
-                      selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-                      deselectEvent={deselectEvent}
-                      isSelected={
-                        selected.id === event.id && visibleEvents[event.id]
-                      }
-                      selectedDate={selectedDate}
-                      isVisible={visibleEvents[event.id]}
-                      sources={sources}
-                    />
-                  ))
-                  : ''}
-              </ul>
             </div>
-          </div>
-        </Scrollbars>
-      </>
-    );
-  }
+          ) : renderEventList()}
+        </div>
+      </Scrollbars>
+    </div>
+  );
 }
+
 const mapDispatchToProps = (dispatch) => ({
-  selectEvent: (id, dateStr, isMobile) => {
-    dispatch(selectEvent(id, dateStr));
-    if (isMobile) {
+  selectEvent: (id, dateStr, shouldCollapse) => {
+    dispatch(selectEventActionCreator(id, dateStr));
+    if (shouldCollapse) {
       dispatch(collapseSidebar());
     }
-    if (dateStr) {
-      dispatch(selectDate(new Date(dateStr)));
-    }
   },
-  deselectEvent: (id, date) => {
-    dispatch(deselectEvent());
+  deselectEvent: () => {
+    dispatch(deselectEventActionCreator());
   },
-  requestEvents: (url) => {
-    dispatch(requestEvents(url));
-  },
-  requestSources: (url) => {
-    dispatch(requestSources(url));
-  },
-  requestCategories: (url) => {
-    dispatch(requestCategories(url));
+  openFilterModal: () => {
+    dispatch(toggleCustomContent('events-filter', {
+      headerText: 'Filter Events',
+      backdrop: false,
+      bodyComponent: EventFilterModalBody,
+      footer: true,
+      modalClassName: 'sidebar-modal event-filter-modal',
+      timeout: 150,
+    }));
   },
 });
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const {
-    requestedEvents,
-    requestedEventSources,
-    requestedEventCategories,
-    config,
-    proj,
+    animation,
+    embed,
     browser,
+    events,
   } = state;
-  const { selected, showAll } = state.events;
-  const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
-  const isLoading = requestedEvents.isLoading
-    || requestedEventSources.isLoading
-    || requestedEventCategories.isLoading;
-  const hasRequestError = requestedEvents.error
-    || requestedEventSources.error
-    || requestedEventCategories.error;
-  let visibleEvents = {};
-  const events = lodashGet(requestedEvents, 'response');
-  const sources = lodashGet(requestedEventSources, 'response');
-  const mapExtent = lodashGet(state, 'map.extent');
-  let visibleWithinMapExtent = {};
-  if (events && mapExtent) {
-    visibleWithinMapExtent = getEventsWithinExtent(
-      events,
-      selected,
-      proj.selected.maxExtent,
-      proj.selected,
-      true,
-    );
-    const extent = showAll ? proj.selected.maxExtent : mapExtent;
-    visibleEvents = getEventsWithinExtent(
-      events,
-      selected,
-      extent,
-      proj.selected,
-      showAll,
-    );
-  }
+
+  const {
+    selected, showAll, selectedDates, selectedCategories,
+  } = events;
+  const { isEmbedModeActive } = embed;
 
   return {
-    events,
-    showAll,
-    isLoading,
-    hasRequestError,
-    sources,
-    selected,
-    visibleWithinMapExtent,
-    visibleEvents,
-    apiURL,
-    config,
+    isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
-    selectedDate: getSelectedDate(state).toISOString().split('T')[0],
+    isEmbedModeActive,
+    isAnimatingToEvent: events.isAnimatingToEvent,
+    showAll,
+    showDates: !!(selectedDates.start && selectedDates.end),
+    selected,
+    selectedCategories,
+    selectedStartDate: selectedDates.start,
+    selectedEndDate: selectedDates.end,
+    selectedDate: util.toISOStringDate(getSelectedDate(state)),
   };
-}
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Events);
 
 Events.propTypes = {
-  apiURL: PropTypes.string,
-  config: PropTypes.object,
   deselectEvent: PropTypes.func,
-  events: PropTypes.array,
+  eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  requestCategories: PropTypes.func,
-  requestEvents: PropTypes.func,
-  requestSources: PropTypes.func,
+  isEmbedModeActive: PropTypes.bool,
+  openFilterModal: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
+  showDates: PropTypes.bool,
+  selectedStartDate: PropTypes.string,
+  selectedEndDate: PropTypes.string,
+  selectedCategories: PropTypes.array,
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
-  visibleEvents: PropTypes.object,
-  visibleWithinMapExtent: PropTypes.object,
 };

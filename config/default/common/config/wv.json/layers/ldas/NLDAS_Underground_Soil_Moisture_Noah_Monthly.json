@@ -7,9 +7,7 @@
       "description": "ldas/NLDAS_Underground_Soil_Moisture_Noah_Monthly",
       "tags": "north american land data assimilation system",
       "group": "overlays",
-      "layergroup": [
-        "ldas"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "NLDAS_NOAH0125_M"
     }
   }

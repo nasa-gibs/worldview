@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Cloud_Pressure",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Cloud Pressure",
       "product": "OMCLDRR",
       "tracks": [
         "OrbitTracks_Aura_Ascending"

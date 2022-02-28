@@ -7,9 +7,7 @@
       "description": "sedac/Agricultural_Lands_Croplands_2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Land Cover",
       "product": "CIESIN_SEDAC_AGLANDS_CROP2000",
       "inactive": true,
       "wrapX": true

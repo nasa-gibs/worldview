@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_9km_Night_Daily",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Sea Surface Temperature",
       "product": "MODIS_AQUA_L3_SST_MID-IR_DAILY_9KM_NIGHTTIME_V2014.0",
       "tracks": [
         "OrbitTracks_Aqua_Descending"

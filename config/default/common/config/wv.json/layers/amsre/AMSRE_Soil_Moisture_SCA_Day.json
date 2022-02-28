@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AMSRE_Soil_Moisture_SCA_Day": {
+      "id": "AMSRE_Soil_Moisture_SCA_Day",
+      "title": "Soil Moisture (Single Channel Algorithm, Day)",
+      "subtitle": "Aqua / AMSR-E",
+      "description": "amsre/AMSRE_Soil_Moisture_SCA_Day",
+      "group": "overlays",
+      "tags": "soil moisture sca",
+      "layergroup": "Soil Moisture",
+      "inactive": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

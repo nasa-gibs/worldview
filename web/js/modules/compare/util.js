@@ -1,5 +1,6 @@
 import update from 'immutability-helper';
 import { initialCompareState } from './reducers';
+import { formatDisplayDate } from '../date/util';
 
 export function mapLocationToCompareState(parameters, stateFromLocation) {
   if (parameters.ca !== undefined) {
@@ -13,9 +14,6 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
       stateFromLocation = update(stateFromLocation, {
         compare: { activeString: { $set: 'activeB' } },
       });
-      stateFromLocation = update(stateFromLocation, {
-        compare: { bStatesInitiated: { $set: true } },
-      });
     }
   } else {
     stateFromLocation = update(stateFromLocation, {
@@ -27,11 +25,10 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
 /**
  * Is layer on active side of Map while in swipe mode -
  * No other modes will allow for running-data or vector interactions
- * @param {Object} map | OL map object
  * @param {Array} coords | Coordinates of hover point
  * @param {Object} layerAttributes | Layer Properties
  */
-export function isFromActiveCompareRegion(map, coords, layerAttributes, compareModel, swipeOffset) {
+export function isFromActiveCompareRegion(coords, layerAttributes, compareModel, swipeOffset) {
   if (compareModel && compareModel.active) {
     if (compareModel.mode !== 'swipe') {
       return false;
@@ -46,3 +43,9 @@ export function isFromActiveCompareRegion(map, coords, layerAttributes, compareM
   }
   return true;
 }
+
+export const getFormattedMonthAbbrevDates = function(selected, selectedB) {
+  const dateA = formatDisplayDate(selected);
+  const dateB = formatDisplayDate(selectedB);
+  return { dateA, dateB };
+};

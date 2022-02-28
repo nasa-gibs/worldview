@@ -8,9 +8,7 @@
       "tags": "rain snow",
       "group": "overlays",
       "product": "AIRX2SUP_NIGHT",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Precipitation Estimate",
       "palette": {
         "recommended": [
           "blue_1",

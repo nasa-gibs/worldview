@@ -7,9 +7,7 @@
       "description": "ceres/CERES_EBAF_TOA_CRE_Shortwave_Flux_Monthly",
       "tags": "top of atmosphere, cloud radiative effect, energy balanced and filled",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "TOA Flux",
       "product": "CERES_EBAF-TOA",
       "inactive": true,
       "wrapadjacentdays": true,

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function FilterChips(props) {
   const {
@@ -29,9 +28,9 @@ export default function FilterChips(props) {
           className="filter-chip"
           onClick={() => removeFilter(field, value)}
         >
-          {displayValue}
+          <span dangerouslySetInnerHTML={{ __html: displayValue }} />
           <FontAwesomeIcon
-            icon={faTimes}
+            icon="times"
             fixedWidth
           />
         </div>

@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L4_Gross_Primary_Productivity_8Day",
       "tags": "gpp",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Gross Primary Productivity",
       "product": "MOD17A2H",
       "wrapadjacentdays": true,
       "daynight": [

@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L4_Gross_Primary_Productivity_8Day",
       "tags": "gpp",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Gross Primary Productivity",
       "product": "MYD17A2H",
       "wrapadjacentdays": true,
       "daynight": [

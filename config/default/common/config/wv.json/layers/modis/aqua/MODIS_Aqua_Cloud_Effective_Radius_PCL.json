@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Effective_Radius_PCL",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Cloud Effective Radius",
       "product": "MYD06_L2",
       "wrapadjacentdays": true,
       "tracks": [

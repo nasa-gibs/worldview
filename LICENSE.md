@@ -23,7 +23,7 @@ AND OBLIGATIONS CONTAINED IN THIS AGREEMENT.
 Government Agency: National Aeronautics and Space Administration
 Government Agency Original Software Designation: GSC-17111-1, version 0.6.2
 Government Agency Original Software Title: Worldview Satellite Imagery and Downloading Tool
-User Registration Requested. Please visit: [http://opensource.gsfc.nasa.gov](http://opensource.gsfc.nasa.gov)
+User Registration Requested. Please visit: [https://opensource.gsfc.nasa.gov](https://opensource.gsfc.nasa.gov)
 Government Agency Point of Contact for Original Software: Enidia Santiago-Arce, SRA
 Assistant, (301) 286-8497
 
@@ -163,7 +163,7 @@ Agreement.
 **F.** In an effort to track usage and maintain accurate records of the
 Subject Software, each Recipient, upon receipt of the Subject Software, is
 requested to register with Government Agency by visiting the following website:
-[http://opensource.arc.nasa.gov](http://opensource.arc.nasa.gov). Recipient’s
+[https://opensource.arc.nasa.gov](https://opensource.arc.nasa.gov). Recipient’s
 name and personal information shall be used for statistical purposes only.
 Once a Recipient makes a Modification available, it is requested that the
 Recipient inform Government Agency at the web site provided above how to

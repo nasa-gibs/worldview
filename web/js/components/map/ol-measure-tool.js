@@ -25,10 +25,12 @@ import {
 import {
   transformLineStringArc,
   transformPolygonArc,
-  downloadShapefiles,
   downloadGeoJSON,
 } from '../measure-tool/util';
 import MeasureTooltip from '../measure-tool/measure-tooltip';
+import util from '../../util/util';
+
+const { events } = util;
 
 let tooltipElement;
 let tooltipOverlay;
@@ -62,22 +64,21 @@ function OlMeasureTool (props) {
   }, [projections]);
 
   useEffect(() => {
-    const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
+    // const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {
-      map.ui.events.on('measure-distance', initDistanceMeasurement);
-      map.ui.events.on('measure-area', initAreaMeasurement);
-      map.ui.events.on('measure-clear', clearMeasurements);
-      map.ui.events.on('measure-download-shapefile', dlShapeFiles);
-      map.ui.events.on('measure-download-geojson', dlGeoJSON);
+      events.on('measure:distance', initDistanceMeasurement);
+      events.on('measure:area', initAreaMeasurement);
+      events.on('measure:clear', clearMeasurements);
+      events.on('measure:download-geojson', dlGeoJSON);
     }
     return () => {
       if (map && map.rendered) {
-        map.ui.events.off('measure-distance', initDistanceMeasurement);
-        map.ui.events.off('measure-area', initAreaMeasurement);
-        map.ui.events.off('measure-clear', clearMeasurements);
-        map.ui.events.off('measure-download-geojson', dlGeoJSON);
+        events.off('measure:distance', initDistanceMeasurement);
+        events.off('measure:area', initAreaMeasurement);
+        events.off('measure:clear', clearMeasurements);
+        events.off('measure:download-geojson', dlGeoJSON);
       }
     };
   }, [map, unitOfMeasure]);
@@ -177,12 +178,12 @@ function OlMeasureTool (props) {
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
-    map.ui.events.trigger('enable-click-zoom');
+    events.trigger('map:enable-click-zoom');
   };
 
   const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
-    map.ui.events.trigger('disable-click-zoom');
+    events.trigger('map:disable-click-zoom');
     drawChangeListener = feature.getGeometry().on('change', (e) => {
       const geom = e.target;
       if (geom instanceof OlGeomPolygon) {

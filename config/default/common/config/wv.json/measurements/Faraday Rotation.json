@@ -8,7 +8,7 @@
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
                     "title": "SMAP/Radiometer",
-                    "description": "smap/FaradayRotationAngle",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L1_Passive_Faraday_Rotation_Aft",

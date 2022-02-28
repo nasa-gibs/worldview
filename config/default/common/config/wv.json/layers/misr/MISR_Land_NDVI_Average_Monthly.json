@@ -7,9 +7,7 @@
       "description": "misr/MISR_Land_NDVI_Average_Monthly",
       "tags": "normalized difference vegetation index",
       "group": "overlays",
-      "layergroup": [
-        "misr"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "MIL3MLS",
       "wrapadjacentdays": true,
       "daynight": [

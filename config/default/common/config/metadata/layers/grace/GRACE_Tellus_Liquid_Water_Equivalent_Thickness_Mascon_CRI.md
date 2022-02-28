@@ -1,3 +1,3 @@
-The Liquid Water Equivalent Thickness (Mascon, CRI) layer provides global water storage anomalies relative to a time-mean of monthly mass grids as derived from GRACE. This version employs a Coastal Resolution Improvement (CRI) filter that reduces leakage errors across coastlines. The storage anomalies are given in equivalent water thickness units (cm).
+The Liquid Water Equivalent Thickness (Mascon, CRI) layer provides global water storage anomalies relative to a time-mean of monthly mass grids as derived from GRACE and GRACE-FO. This version employs a Coastal Resolution Improvement (CRI) filter that reduces leakage errors across coastlines. The storage anomalies are given in equivalent water thickness units (cm).
 
-References: [doi: 10.5067/TEMSC-3MJC6](https://doi.org/10.5067/TEMSC-3MJC6)
+References: TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06_V2 [doi:10.5067/TEMSC-3JC62](https://doi.org/10.5067/TEMSC-3JC62)

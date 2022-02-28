@@ -49,9 +49,9 @@ param_dict = {
 # These layers should not be combined with the reference layer
 standalone_layers = [
   'Graticule',
-  'Coastlines',
-  'Reference_Features',
-  'Reference_Labels'
+  'Coastlines_15m',
+  'Reference_Features_15m',
+  'Reference_Labels_15m'
 ]
 dest_img_dir = './web/images/layers/previews/'
 reference_layers = {
@@ -189,16 +189,16 @@ def get_snapshots(layer):
 
 if __name__ == "__main__":
   # Check to see if this feature is enabled in features.json before continuing
-  with open(features_file, 'rt') as features_json:
+  with open(features_file, 'rt', encoding="utf-8") as features_json:
     features_dict = json.load(features_json)
     if features_dict['features']['previewSnapshots'] is False:
       sys.exit();
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
-  with open(overrides_file, 'rt') as overrides_json:
+  with open(overrides_file, 'rt', encoding="utf-8") as overrides_json:
     override_dates_dict = json.load(overrides_json)
 
-  with open(wv_json_file, 'rt') as wv_json:
+  with open(wv_json_file, 'rt', encoding="utf-8") as wv_json:
     wv_json_dict = json.load(wv_json)
     layers = wv_json_dict['layers']
     snapshots_url = wv_json_dict['features']['imageDownload']['url']

@@ -7,9 +7,7 @@
       "description": "smap/SMAP_L2_Passive_Enhanced_Day_Soil_Moisture_Option1",
       "tags": "enhanced",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "SPL2SMP_E",
       "tracks": [
         "OrbitTracks_SMAP_Descending"

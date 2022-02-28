@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_NDSI_Snow_Cover",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Snow Cover",
       "product": "MYD10_L2",
       "wrapadjacentdays": true,
       "tracks": [

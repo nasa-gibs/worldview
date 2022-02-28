@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Nitrogen_Dioxide_Tropo_Column",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Nitrogen Dioxide",
       "product": "OMNO2d",
       "tags": "no2",
       "tracks": [

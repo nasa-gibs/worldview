@@ -1,8 +1,8 @@
 import React from 'react';
 
 const CompareAlertModalBody = () => (
-  <div className="compare-dialog">
-    <p>How to get started?</p>
+  <div className="basic-modal compare-dialog">
+    <h1>How to get started?</h1>
     <ul>
       <li className="compare-dialog-list-item">
         <p>

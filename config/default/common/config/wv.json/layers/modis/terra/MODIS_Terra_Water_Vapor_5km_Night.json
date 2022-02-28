@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Water_Vapor_5km_Night",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Water Vapor",
       "product": "MOD05_L2_NIGHT",
       "tracks": [
         "OrbitTracks_Terra_Ascending"

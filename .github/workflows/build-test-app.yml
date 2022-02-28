@@ -1,0 +1,59 @@
+
+name: CI
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ${{matrix.os}}
+    name: ${{matrix.os}}, Node ${{matrix.node}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macOS-10.15, ubuntu-latest, windows-latest]
+        node: [12, 14]
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{matrix.node}}
+
+      - name: Install NPM Dependencies
+        run: |
+          npm ci
+
+      - name: Linting and Unit testing
+        run: |
+          npm test
+
+      - name: Build the application
+        run: |
+          npm run build:ci
+
+      - name: Run E2E tests - Chrome / MacOS
+        if: ${{ runner.os == 'macOS' }}
+        run: |
+          npm run start &
+          sleep 5
+          npm run e2e:headless:chrome:localStorageDisabled
+          npm run e2e:headless:chrome
+
+      - name: Run E2E tests - Firefox / Windows
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          npm run start &
+          sleep 5
+          npm run e2e:headless:firefox:localStorageDisabled
+          npm run e2e:headless:firefox
+
+

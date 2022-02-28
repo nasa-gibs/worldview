@@ -10,7 +10,7 @@ import { containsCoordinate } from 'ol/extent';
 import stylefunction from 'ol-mapbox-style/dist/stylefunction';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import {
-  getLayers,
+  getAllActiveLayers,
 } from '../layers/selectors';
 
 /**
@@ -85,24 +85,18 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
-  const layerState = state.layers;
-  const activeLayerStr = state.compare.activeString;
   const { selected } = state.vectorStyles;
-  const activeLayers = getLayers(
-    layerState[activeLayerStr],
-    {},
-    state,
-  ).reverse();
+  const activeLayers = [...getAllActiveLayers(state)].reverse();
   let layerGroups;
   let layerGroup;
 
   if (olMap) {
     layerGroups = olMap.getLayers().getArray();
     if (compare && compare.active) {
-      if (layerGroups.length === 2) {
-        layerGroup = layerGroups[0].get('group') === activeLayerStr
+      if (layerGroups.length > 1) {
+        layerGroup = layerGroups[0].get('group') === compare.activeString
           ? layerGroups[0]
-          : layerGroups[1].get('group') === activeLayerStr
+          : layerGroups[1].get('group') === compare.activeString
             ? layerGroups[1]
             : null;
       }
@@ -125,7 +119,11 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-  const layerArray = layer && layer.getLayers ? layer.getLayers().getArray() : [layer];
+  if (!layer) {
+    return null;
+  }
+  const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
+
   lodashEach(layerArray, (layerInLayerGroup) => {
     if (!layerInLayerGroup || layerInLayerGroup.isWMS) return; // WMS breakpoint tile
     layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
@@ -174,12 +172,14 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   });
   return vectorStyleId;
 }
+
 const shouldRenderFeature = (feature, acceptableExtent) => {
   if (!acceptableExtent) return true;
   const midpoint = feature.getFlatCoordinates ? feature.getFlatCoordinates() : feature.getGeometry().getFlatCoordinates();
   if (containsCoordinate(acceptableExtent, midpoint)) return true;
   return false;
 };
+
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
@@ -198,6 +198,7 @@ export function getKey(layerId, groupStr, state) {
   }
   return keys.join(',');
 }
+
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   if (state.vectorStyles.custom[layerId]) {
@@ -245,7 +246,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config, layers, compare } = state;
   const activeGroupStr = options.group ? options.group : compare.activeString;
-  const activeLayers = layers[activeGroupStr];
+  const activeLayers = layers[activeGroupStr].layers;
   const layerName = def.layer || def.id;
   if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
     const { vectorStyles } = config;

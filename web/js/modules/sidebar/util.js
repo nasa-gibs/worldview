@@ -1,5 +1,4 @@
 import update from 'immutability-helper';
-import { assign as lodashAssign, get } from 'lodash';
 
 /**
  * Update sidebar state when location-pop action occurs
@@ -15,27 +14,21 @@ export default function mapLocationToSidebarState(
   state,
   config,
 ) {
+  let activeTab;
   if (parameters.e) {
-    const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'events',
-    });
-    stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState },
-    });
-  } else if (get(stateFromLocation, 'data.active')) {
-    const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'download',
-    });
-    stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState },
-    });
+    activeTab = 'events';
+  } else if (parameters.sh) {
+    activeTab = 'download';
   } else {
-    const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'layers',
-    });
-    stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState },
-    });
+    activeTab = 'layers';
   }
+  stateFromLocation = update(stateFromLocation, {
+    sidebar: {
+      $set: {
+        ...state.sidebar,
+        activeTab,
+      },
+    },
+  });
   return stateFromLocation;
 }

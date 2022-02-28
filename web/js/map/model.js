@@ -3,34 +3,36 @@ import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
-import util from '../util/util';
 
 export default function mapModel(models, config) {
   const self = {};
 
   self.extent = null;
   self.selectedMap = null;
-  self.events = util.events();
   self.ui = null;
   self.rotation = 0;
+
   const init = function() {
     if (!config.projections) {
       return;
     }
 
-    Object.values(config.projections).forEach((proj) => {
-      if (proj.crs && proj.proj4) {
-        self.register(proj.crs, proj.proj4);
+    Object.values(config.projections).forEach((def) => {
+      if (def.crs && def.proj4) {
+        self.register(def);
       }
     });
   };
-  self.register = function(crs, def) {
-    if (def && proj4) {
-      proj4.defs(crs, def);
+
+  self.register = function(def) {
+    if (def && def.proj4) {
+      proj4.defs(def.crs, def.proj4);
       register(proj4);
-      olProj.get(crs).setExtent(def.maxExtent);
+      const olProjInstance = olProj.get(def.crs);
+      olProjInstance.setExtent(def.maxExtent);
     }
   };
+
   /*
    * Emits update event
    *
@@ -43,17 +45,18 @@ export default function mapModel(models, config) {
    */
   self.update = function(extent) {
     self.extent = extent;
-    self.events.trigger('update', extent);
   };
+
   // Give other components access to zoom Level
   self.updateMap = function(map, ui) {
     self.selectedMap = map;
     self.ui = ui;
-    self.events.trigger('update-map');
   };
+
   self.getZoom = function() {
     return self.selectedMap ? self.selectedMap.getView().getZoom() : null;
   };
+
   /*
    * Sets map view from parsed URL
    *

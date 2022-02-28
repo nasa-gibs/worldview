@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_UV_Aerosol_Index",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Aerosol Index",
       "product": "OMUVBd",
       "tags": "ai",
       "tracks": [

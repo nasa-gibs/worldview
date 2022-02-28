@@ -7,9 +7,7 @@
       "description": "amsr2/LPRM_AMSR2_Surface_Soil_Moisture_C1_Band_Night_Daily",
       "tags": "amsr-2",
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "LPRM_AMSR2_A_SOILM3",
       "tracks": [
         "OrbitTracks_GCOM-W1_Descending"

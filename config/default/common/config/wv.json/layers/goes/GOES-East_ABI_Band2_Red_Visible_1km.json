@@ -7,9 +7,7 @@
       "description": "goes/GOES-East_ABI_Band2_Red_Visible_1km",
       "group": "overlays",
       "tags": "geostationary geo",
-      "layergroup": [
-        "goes"
-      ],
+      "layergroup": "Geostationary",
       "product": "",
       "wrapX": true,
       "daynight": [
@@ -21,6 +19,11 @@
           {
             "startDate": "2019-09-01T10:00:00Z",
             "endDate": "2019-09-05T18:00:00Z",
+            "dateInterval": "10"
+          },
+          {
+            "startDate": "2021-09-30T16:00:00Z",
+            "endDate": "2021-09-30T16:00:00Z",
             "dateInterval": "10"
           }
         ]

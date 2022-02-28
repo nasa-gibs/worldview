@@ -8,7 +8,7 @@
                 "Multi-mission/GHRSST": {
                     "id": "multi-mission-ghrsst",
                     "title": "Multi-mission/GHRSST",
-                    "description": "multi-mission/ghrsst/SeaSurfaceTemperatureAnomalies",
+                    "description": "multi-mission/ghrsst/GHRSST",
                     "image": "",
                     "settings": [
                         "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",

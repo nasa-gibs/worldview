@@ -7,9 +7,7 @@
       "description": "mls/MLS_SO2_147hPa_Night",
       "tags": "so2 sulphur",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "product": "ML2SO2",
       "tracks": [
         "OrbitTracks_Aura_Descending"

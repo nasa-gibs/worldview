@@ -7,9 +7,7 @@
       "description": "sedac/NDH_Drought_Hazard_Frequency_Distribution_1980-2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Drought Hazard",
       "product": "CIESIN_CHRR_NDH_DROUGHT_HFD",
       "inactive": true,
       "wrapX": true

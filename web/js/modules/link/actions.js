@@ -7,13 +7,13 @@ export function updatePermalink(queryString) {
     queryString,
   };
 }
-export function requestShortLink(location, type, signal) {
+export function requestShortLink(location, type, options) {
   return (dispatch) => requestAction(
     dispatch,
     REQUEST_SHORT_LINK,
     location,
     type,
     null, // id
-    signal,
+    options,
   );
 }

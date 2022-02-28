@@ -7,9 +7,7 @@
       "description": "amsre/AMSRE_Sea_Ice_Brightness_Temp_89H",
       "group": "overlays",
       "product": "AE_SI6",
-      "layergroup": [
-        "amsre"
-      ],
+      "layergroup": "Sea Ice Brightness Temperature",
       "inactive": true
     }
   }

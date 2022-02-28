@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L2_Sea_Surface_Temp_Night",
       "tags": "sst",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Sea Surface Temperature",
       "product": "",
       "wrapadjacentdays": true,
       "tracks": [

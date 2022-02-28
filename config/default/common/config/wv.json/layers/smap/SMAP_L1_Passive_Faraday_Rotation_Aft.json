@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L1_Passive_Faraday_Rotation_Aft",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Faraday Rotation",
       "product": "SPL1BTB"
     }
   }

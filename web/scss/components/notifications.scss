@@ -1,0 +1,137 @@
+#wv-info-button {
+  position: relative;
+}
+
+#wv-info-button::before {
+  content: attr(data-content) "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #69b6d5;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.45;
+}
+
+#wv-info-button.wv-status-outage::before {
+  background: #ff1a1e;
+}
+
+#wv-info-button.wv-status-alert::before {
+  background: #e5c937;
+}
+
+#wv-info-button.wv-status-message::before {
+  background: #40a9db;
+}
+
+#wv-info-button.wv-status-hide::before {
+  display: none;
+}
+
+.wv-exit-distraction-free-mode-button {
+  opacity: 0.75;
+}
+
+.wv-exit-distraction-free-mode-button:hover {
+  opacity: 1;
+}
+
+.ui-menu-item {
+  position: relative;
+}
+
+.ui-menu-item a::before {
+  content: attr(data-content) "";
+  text-align: center;
+  font-weight: 700;
+  display: block;
+  width: 15px;
+  height: 15px;
+  line-height: 1.25;
+  border-radius: 50%;
+  position: absolute;
+  font-size: 12px;
+  right: 10px;
+  top: 4px;
+  z-index: 33;
+}
+
+.list-group-item .badge {
+  position: absolute;
+  right: 5px;
+}
+
+.outage-notification .badge {
+  background: #ff1a1e;
+}
+
+.alert-notification .badge {
+  background: #e5c937;
+}
+
+.message-notification .badge {
+  background: #40a9db;
+}
+
+.ui-menu-item a.wv-status-hide::before {
+  display: none;
+}
+
+.wv-notify-modal h2 {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  color: #eee;
+  padding: 0.75em 10px;
+}
+
+.wv-notify-modal .outage-notification-item h2 {
+  background: rgb(179 41 43 / 30%);
+}
+
+.wv-notify-modal .alert-notification-item h2 {
+  background: rgb(229 201 55 / 30%);
+}
+
+.wv-notify-modal .message-notification-item h2 {
+  background: rgb(64 169 219 / 30%);
+}
+
+.wv-notify-modal h2 span {
+  font-size: 13px;
+  font-weight: 300;
+  margin-left: 5px;
+  color: #999;
+}
+
+.wv-notify-modal p {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 22px;
+  margin: 10px;
+}
+
+.wv-notify-modal ul {
+  margin: 0;
+  padding: 0;
+}
+
+.wv-notify-modal ul li {
+  list-style-type: none;
+  border-bottom: 1px solid #404040;
+  margin: 0;
+}
+
+.wv-notify-modal ul li div {
+  padding: 0;
+}
+
+.notification_list_modal .modal-body {
+  padding-top: 0;
+}

@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L2_Passive_Day_Soil_Moisture_Option1",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "SPL2SMP",
       "tracks": [
         "OrbitTracks_SMAP_Descending"

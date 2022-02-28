@@ -7,7 +7,6 @@ const CategoryCell = (props) => {
     measurementConfig,
     drawMeasurements,
     hasMeasurementSource,
-    categoryType,
   } = props;
   const bgImage = category.image
     ? `images/layers/categories/${category.image}`
@@ -18,12 +17,17 @@ const CategoryCell = (props) => {
     }
     : {};
 
+  const checkForSources = (measurement) => {
+    if (measurementConfig[measurement]) {
+      return hasMeasurementSource(measurementConfig[measurement]);
+    }
+    throw new Error(`No measurement config entry for "${measurement}".`);
+  };
+
   return (
     <div
       key={category.id}
-      className={
-          `layer-category layer-category${interestCssName(categoryType)}`
-        }
+      className="layer-category layer-category"
       id={category.id}
     >
       <div className="category-background-cover" style={categoryBgImage}>
@@ -39,7 +43,7 @@ const CategoryCell = (props) => {
           </h3>
           <ul>
             {category.measurements
-              .filter((measurement) => hasMeasurementSource(measurementConfig[measurement]))
+              .filter(checkForSources)
               .slice(0, 7)
               .map((measurement, index) => {
                 const current = measurementConfig[measurement];
@@ -98,15 +102,9 @@ const CategoryCell = (props) => {
     </div>
   );
 };
-const interestCssName = function(name) {
-  if (name === 'hazards and disasters') {
-    return 'legacy';
-  }
-  return name;
-};
+
 CategoryCell.propTypes = {
   category: PropTypes.object,
-  categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,

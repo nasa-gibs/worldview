@@ -3,12 +3,10 @@
     "AMSUA_NOAA17_Brightness_Temp_Channel_4": {
       "id": "AMSUA_NOAA17_Brightness_Temp_Channel_4",
       "title": "Brightness Temperature (Channel 04)",
-      "subtitle": "AMSU-A / NOAA-17",
+      "subtitle": "NOAA-17 / AMSU-A",
       "description": "amsua/AMSUA_NOAA17_Brightness_Temp_Channel_4",
       "group": "overlays",
-      "layergroup": [
-        "amsua"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "amsua17sp",
       "tags": "",
       "inactive": true

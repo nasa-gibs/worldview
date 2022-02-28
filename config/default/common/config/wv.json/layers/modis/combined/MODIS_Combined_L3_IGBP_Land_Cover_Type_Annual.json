@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Land Cover",
       "product": "MCD12Q1",
       "wrapadjacentdays": true,
       "inactive": true,

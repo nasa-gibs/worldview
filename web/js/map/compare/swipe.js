@@ -1,14 +1,17 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 
-import { faIconArrowsAltHSVGDomEl } from '../fa-map-icons';
+const { events } = util;
 
 let swipeOffset = null;
 let line = null;
 let bottomLayers = [];
 let topLayers = [];
-let events;
 let mapCase;
 let listenerObj;
 let percentSwipe = null;
@@ -18,27 +21,28 @@ let dragging = false;
 export default class Swipe {
   constructor(
     olMap,
-    isActive,
-    compareEvents,
+    state,
     eventListenerStringObj,
     valueOverride,
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
     percentSwipe = valueOverride / 100;
-    events = compareEvents;
-    this.create();
-    $(window).resize(() => {
+    this.create(state);
+    window.addEventListener('resize', () => {
       if (document.querySelector('.ab-swipe-line')) {
         this.destroy();
-        this.create();
+        this.create(state);
       }
     });
   }
 
-  create() {
-    line = addLineOverlay(this.map);
-    this.update();
+  create(state) {
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    this.dateA = dateA;
+    this.dateB = dateB;
+    line = addLineOverlay(this.map, this.dateA, this.dateB);
+    this.update(state);
   }
 
   getSwipeOffset = () => swipeOffset
@@ -59,15 +63,21 @@ export default class Swipe {
     }
   }
 
-  update(isCompareA, groupName) {
-    const mapLayers = this.map.getLayers().getArray();
-    if (!groupName) {
-      this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
-      this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
-    } else if (groupName === 'active') {
-      this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
+  update(state, groupName) {
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    if (dateA !== this.dateA || dateB !== this.dateB) {
+      this.destroy();
+      this.create(state);
     } else {
-      this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
+      const mapLayers = this.map.getLayers().getArray();
+      if (!groupName) {
+        this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
+        this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
+      } else if (groupName === 'active') {
+        this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
+      } else {
+        this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
+      }
     }
   }
 
@@ -134,27 +144,47 @@ export default class Swipe {
 /**
  * Add Swiper
  * @param {Object} map | OL map object
+ * @param {String} dateA | YYYY-MM-DD
+ * @param {String} dateB | YYYY-MM-DD
  */
-const addLineOverlay = function(map) {
+const addLineOverlay = function(map, dateA, dateB) {
   const lineCaseEl = document.createElement('div');
   const draggerEl = document.createElement('div');
   const draggerCircleEl = document.createElement('div');
   const firstLabel = document.createElement('span');
   const secondLabel = document.createElement('span');
-  const windowWidth = util.browser.dimensions[0];
+  const windowWidth = window.innerWidth;
   mapCase = map.getTargetElement();
   draggerCircleEl.className = 'swipe-dragger-circle';
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
-  firstLabel.appendChild(document.createTextNode('A'));
-  secondLabel.appendChild(document.createTextNode('B'));
+  const isSameDate = dateA === dateB;
+  const dateAText = 'A: ';
+  const dateBText = 'B: ';
+  if (!isSameDate) {
+    firstLabel.className += ' show-date-label';
+    secondLabel.className += ' show-date-label';
+  }
+  const dateElA = document.createElement('span');
+  const dateElB = document.createElement('span');
+  dateElA.className = 'monospace';
+  dateElB.className = 'monospace';
+
+  dateElA.appendChild(document.createTextNode(dateA));
+  dateElB.appendChild(document.createTextNode(dateB));
+
+  firstLabel.appendChild(document.createTextNode(dateAText));
+  firstLabel.appendChild(dateElA);
+
+  secondLabel.appendChild(document.createTextNode(dateBText));
+  secondLabel.appendChild(dateElB);
 
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  draggerCircleEl.insertAdjacentHTML('beforeend', faIconArrowsAltHSVGDomEl);
+  ReactDOM.render(<FontAwesomeIcon icon="arrows-alt-h" />, draggerCircleEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe
@@ -200,9 +230,9 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
-      events.trigger('movestart');
+      events.trigger('compare:movestart');
     }
-    const windowWidth = util.browser.dimensions[0];
+    const windowWidth = window.innerWidth;
     if (listenerObj.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
@@ -225,7 +255,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function end(evt) {
     dragging = false;
     events.trigger(
-      'moveend',
+      'compare:moveend',
       lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
     );
 
@@ -245,7 +275,7 @@ const applyLayerListeners = function(layer) {
   bottomLayers.push(layer);
 };
 /**
- * Layers need to be inversly clipped so that they can't be seen through
+ * Layers need to be inversely clipped so that they can't be seen through
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */

@@ -8,10 +8,7 @@
       "tags": "hotspots vectors",
       "group": "overlays",
       "period": "daily",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "product": "MOD14",
       "type": "vector",
       "vectorStyle": {
@@ -28,7 +25,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {

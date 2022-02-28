@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Facet } from '@elastic/react-search-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCaretDown,
-  faCaretRight,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from 'reactstrap';
 
 function ProductFacet(props) {
@@ -44,11 +39,11 @@ function ProductFacet(props) {
       <FontAwesomeIcon
         id={`${field}-tooltip-target`}
         className="facet-tooltip"
-        icon={faInfoCircle}
+        icon="info-circle"
       />
       <FontAwesomeIcon
         className={`facet-collapse-toggle ${!data.length && 'hidden'}`}
-        icon={!collapsed ? faCaretDown : faCaretRight}
+        icon={!collapsed ? 'caret-down' : 'caret-left'}
         onClick={() => toggleCollapse(field)}
       />
     </>

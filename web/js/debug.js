@@ -1,66 +1,8 @@
 import lodashEach from 'lodash/each';
 import lodashIsNaN from 'lodash/isNaN';
 import lodashParseInt from 'lodash/parseInt';
-import util from './util/util';
 
-export const debug = (function() {
-  const parameters = util.fromQueryString(window.location.search);
-  const self = {};
-
-  const init = function() {
-    if (parameters.loadDelay) {
-      let delay;
-      try {
-        delay = parseInt(parameters.loadDelay, 10);
-        self.loadDelay(delay);
-      } catch (error) {
-        console.warn(`Invalid load delay: ${delay}`);
-      }
-    }
-  };
-
-  const delayedCallback = function(jqXHR, wrap, delay) {
-    return function(fn) {
-      wrap((...args) => {
-        setTimeout(() => {
-          if (fn) {
-            fn.apply(jqXHR, args);
-          }
-        }, delay);
-      });
-      return jqXHR;
-    };
-  };
-
-  self.loadDelay = function(delay) {
-    const { ajax } = $;
-    $.ajax = function(...ajaxArgs) {
-      console.log('delay', delay, ajaxArgs);
-      const jqXHR = ajax.apply($, ajaxArgs);
-
-      const { done } = jqXHR;
-      jqXHR.done = delayedCallback(jqXHR, done, delay);
-      jqXHR.done(() => {
-        console.log('done', ajaxArgs);
-      });
-
-      const { fail } = jqXHR;
-      jqXHR.fail = delayedCallback(jqXHR, fail, delay);
-      jqXHR.fail(() => {
-        console.log('fail', ajaxArgs);
-      });
-
-      const { always } = jqXHR;
-      jqXHR.always = delayedCallback(jqXHR, always, delay);
-
-      return jqXHR;
-    };
-  };
-
-  init();
-  return self;
-}());
-
+// eslint-disable-next-line import/prefer-default-export
 export function debugConfig(config) {
   if (config.parameters.debug === 'tiles') {
     const tileSize = lodashParseInt(config.parameters.tileSize);

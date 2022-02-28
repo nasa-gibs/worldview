@@ -5,11 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
-const postcssNesting = require('postcss-nesting');
 // production optimizations
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
@@ -60,12 +59,6 @@ if (process.env.DEBUG !== undefined) {
 
 const entryPoint = './web/js/main.js';
 const outputFileName = 'wv.js';
-/*
-if (process.env.TESTING_MODE === 'true') {
-  entryPoint = './test/main.js';
-  outputFileName = 'wv-test-bundle.js';
-}
-*/
 
 const babelLoaderExcludes = [
   /\.test\.js$/,
@@ -118,20 +111,13 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          ecma: 5, // dependent on ie11 support
-          compress: true,
-          mangle: false,
-          topLevel: true,
-          safari10: true,
-          output: {
-            comments: false,
-            beautify: false,
-          },
+      new TerserPlugin({
+        terserOptions: {
+          ecma: 5,
+          parallel: true,
+          toplevel: true,
+          extractComments: true,
         },
-        cache: true,
-        parallel: true,
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessor: cssnano,
@@ -162,19 +148,6 @@ module.exports = {
           },
         },
         exclude: babelLoaderExcludes,
-      },
-      {
-        test: require.resolve('jquery'), // expose globally for jQuery plugins
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'jQuery',
-          },
-          {
-            loader: 'expose-loader',
-            options: '$',
-          },
-        ],
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -211,7 +184,6 @@ module.exports = {
                     '> 2%',
                   ],
                 }),
-                postcssNesting(),
               ],
             },
           },

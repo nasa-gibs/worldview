@@ -1,4 +1,3 @@
-import { assign as lodashAssign } from 'lodash';
 import { CHANGE_PROJECTION } from './constants';
 
 export const projectionState = {
@@ -9,10 +8,11 @@ export const projectionState = {
 export default function projectionReducer(state = projectionState, action) {
   switch (action.type) {
     case CHANGE_PROJECTION:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         id: action.id,
         selected: action.selected,
-      });
+      };
     default:
       return state;
   }

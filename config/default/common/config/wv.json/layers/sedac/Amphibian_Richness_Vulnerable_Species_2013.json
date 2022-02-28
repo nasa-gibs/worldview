@@ -7,9 +7,7 @@
       "description": "sedac/Amphibian_Richness_Vulnerable_Species_2013",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Amphibian Richness",
       "product": "CIESIN_SEDAC_SPECIES_AMP_RICH15",
       "inactive": true,
       "wrapX": true

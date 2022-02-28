@@ -20,7 +20,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Precipitation_Rate,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-91.32690967327403,23.259234869248033,-57.57690967327403,39.74751611924803"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Precipitation_Rate,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden)&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-91.32690967327403,23.259234869248033,-57.57690967327403,39.74751611924803"
         },
         {
           "description": "step002.html",
@@ -28,7 +28,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-09-02-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-82.86647987040818,4.465382946172927,-15.366479870408185,37.44194544617292"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden)&t=2018-09-02-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-82.86647987040818,4.465382946172927,-15.366479870408185,37.44194544617292"
         },
         {
           "description": "step003.html",
@@ -36,7 +36,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines&t=2018-09-02-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-113.05825121261012,-7.7039155910611115,-10.61293871261011,58.24920940893889&ab=on&as=2018-09-02T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=8&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m&t=2018-09-02-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-113.05825121261012,-7.7039155910611115,-10.61293871261011,58.24920940893889&ab=on&as=2018-09-02T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=8&al=true"
         },
         {
           "description": "step004.html",
@@ -44,7 +44,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines&t=2018-09-14-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-105.3766105876101,15.639834408938874,-54.1539543376101,48.616396908938874&ab=on&as=2018-09-02T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=8&al=false"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m&t=2018-09-14-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-105.3766105876101,15.639834408938874,-54.1539543376101,48.616396908938874&ab=on&as=2018-09-02T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=8&al=false"
         },
         {
           "description": "step005.html",
@@ -52,7 +52,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines&t=2018-09-14-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-105.3766105876101,15.639834408938874,-54.1539543376101,48.616396908938874&ab=on&as=2018-09-14T00%3A00%3A00Z&ae=2018-09-20T00%3A00%3A00Z&av=2&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m&t=2018-09-14-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-105.3766105876101,15.639834408938874,-54.1539543376101,48.616396908938874&ab=on&as=2018-09-14T00%3A00%3A00Z&ae=2018-09-20T00%3A00%3A00Z&av=2&al=true"
         },
         {
           "description": "step006.html",
@@ -60,7 +60,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels(hidden),Coastlines&t=2018-09-15-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=off&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels_15m(hidden),Coastlines_15m&t=2018-09-15-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=off&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=true"
         },
         {
           "description": "step007.html",
@@ -68,7 +68,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels(hidden),Coastlines&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=on&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=false"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels_15m(hidden),Coastlines_15m&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=on&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=false"
         }
       ]
     }

@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Phase_Infrared_Day",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Cloud Phase",
       "product": "MYD06_L2_DAY",
       "wrapadjacentdays": true,
       "tracks": [

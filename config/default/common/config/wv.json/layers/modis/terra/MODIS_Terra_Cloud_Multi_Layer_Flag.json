@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Multi_Layer_Flag",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Cloud Multi Layer Flag",
       "product": "MOD06_L2",
       "wrapadjacentdays": true,
       "tracks": [

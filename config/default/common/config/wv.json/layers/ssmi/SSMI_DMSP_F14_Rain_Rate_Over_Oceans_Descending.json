@@ -7,9 +7,7 @@
       "description": "ssmi/SSMI_DMSP_F14_Rain_Rate_Over_Oceans_Descending",
       "tags": "precipitation",
       "group": "overlays",
-      "layergroup": [
-        "ssmi"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "rssmif14d",
       "inactive": true
     }

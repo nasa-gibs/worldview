@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Multi_Layer_Flag",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Cloud Multi Layer Flag",
       "product": "MYD06_L2",
       "wrapadjacentdays": true,
       "tracks": [

@@ -1,5 +1,6 @@
 import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 
 let mousePosition = null;
 let spy = null;
@@ -10,30 +11,40 @@ let radius = DEFAULT_RADIUS;
 let label = null;
 
 export default class Spy {
-  constructor(olMap, isBInside) {
+  constructor(olMap, state) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;
-    this.create(isBInside);
+    const isBInside = state.compare.isCompareA;
+    this.isBInside = isBInside;
+    this.create(state);
   }
 
   /**
    * Init spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  create(isBInside) {
-    spy = this.addSpy(this.map, isBInside);
+  create(state) {
+    const isBInside = isCompareA(state);
+    spy = this.addSpy(this.map, state);
     this.isBInside = isBInside;
-    this.update(isBInside);
+    this.update(state);
   }
 
   /**
    * Update spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  update(isBInside) {
+  update(state) {
+    const isBInside = isCompareA(state);
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    if (dateA !== this.dateA || dateB !== this.dateB || dateA === dateB) {
+      label.innerHTML = getDateText(state);
+    }
+    this.dateA = dateA;
+    this.dateB = dateB;
     if (this.isBInside !== isBInside) {
       this.destroy();
-      this.create(isBInside);
+      this.create(state);
     } else {
       const mapLayers = this.map.getLayers().getArray();
       applyEventsToBaseLayers(
@@ -95,12 +106,11 @@ export default class Spy {
    * @param {Object} map | OL Map Object
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  addSpy(map, isBInside) {
-    const insideText = !isBInside ? 'A' : 'B';
+  addSpy(map, state) {
     label = document.createElement('span');
     label.className = 'ab-spy-span inside-label';
     label.style.display = 'none';
-    label.appendChild(document.createTextNode(insideText));
+    label.innerHTML = getDateText(state);
 
     this.mapCase.appendChild(label);
     this.mapCase.addEventListener('mousemove', this.updateSpy.bind(this));
@@ -111,8 +121,9 @@ export default class Spy {
     return this.mapCase;
   }
 }
+
 /**
- * Layers need to be inversly clipped so that they can't be seen through
+ * Layers need to be inversely clipped so that they can't be seen through
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
@@ -121,6 +132,7 @@ const applyReverseLayerListeners = function(layer) {
   layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
+
 /**
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
@@ -130,6 +142,7 @@ const applyLayerListeners = function(layer) {
   layer.on('postrender', restore);
   topLayers.push(layer);
 };
+
 /**
  * Clip everything but the circle
  * @param {Object} event | Event object
@@ -151,6 +164,7 @@ const inverseClip = function(event) {
     ctx.clearRect(0, 0, offset, offset);
   }
 };
+
 /**
  * Clip the circle of a layer so users can see through
  */
@@ -170,10 +184,12 @@ const clip = function(event) {
   }
   ctx.clip();
 };
+
 const restore = function(event) {
   const ctx = event.context;
   ctx.restore();
 };
+
 /**
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
@@ -184,6 +200,7 @@ const removeListenersFromLayers = function(layers) {
     layer.un('postrender', restore);
   });
 };
+
 /**
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
@@ -194,6 +211,7 @@ const removeInverseListenersFromLayers = function(layers) {
     layer.un('postrender', restore);
   });
 };
+
 /**
  * Recursively apply listeners to layers
  * @param {Object} layer | Layer or layer Group obj
@@ -210,3 +228,17 @@ const applyEventsToBaseLayers = function(layer, map, callback) {
     callback(layer);
   }
 };
+
+const getDateText = function(state) {
+  const isBInside = isCompareA(state);
+  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+  const isSameDate = dateA === dateB;
+  let innerHtml = isBInside ? 'B' : 'A';
+  if (!isSameDate) {
+    const dateText = isBInside ? dateB : dateA;
+    innerHtml += `: <span class="monospace">${dateText}</span>`;
+  }
+  return innerHtml;
+};
+
+const isCompareA = (state) => state.compare.isCompareA;

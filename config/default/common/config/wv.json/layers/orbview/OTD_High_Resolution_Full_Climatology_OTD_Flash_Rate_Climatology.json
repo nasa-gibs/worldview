@@ -7,9 +7,7 @@
       "description": "orbview/OTD_High_Resolution_Full_Climatology_OTD_Flash_Rate_Climatology",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "orbview"
-      ],
+      "layergroup": "Lightning",
       "product": "lohrfc",
       "inactive": true,
       "wrapadjacentdays": true

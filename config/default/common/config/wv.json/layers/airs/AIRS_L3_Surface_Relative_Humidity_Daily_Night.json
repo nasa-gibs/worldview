@@ -9,9 +9,7 @@
       "group": "overlays",
       "product": "AIRS3STD",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Relative Humidity",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],

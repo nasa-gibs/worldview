@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import lodashGet from 'lodash/get';
 import Switch from '../../util/switch';
 import Scrollbar from '../../util/scrollbar';
 
-export default function ClassificationToggle (props) {
+
+export default function ClassificationToggle(props) {
   const {
-    legend, toggle, palette, height,
+    legend, toggle, palette, height, toggleAll,
   } = props;
+  const switchLength = legend.colors.length;
+
+  const [isEnableAllSelected, toggleEnableAll] = useState((lodashGet(palette, 'disabled.length') === switchLength) && switchLength);
+
   const { tooltips } = legend;
+
+
   return (
     <div className="layer-classification-toggle settings-component">
-      <h2 className="wv-header">Disable/Enable</h2>
-      <Scrollbar style={{ maxHeight: `${height}px` }}>
+      <div className="classification-switch-header">
+        <h2 className="wv-header">Disable/Enable</h2>
+        <Switch
+          id="header-disable"
+          key="header-disable"
+          label="All"
+          active={!isEnableAllSelected}
+          containerClassAddition="header"
+          toggle={() => {
+            const arrayOfIndices = !isEnableAllSelected ? [...Array(switchLength).keys()] : [];
+            toggleAll(arrayOfIndices);
+            toggleEnableAll(!isEnableAllSelected);
+          }}
+        />
+
+      </div>
+      <Scrollbar className="classification-list" style={{ maxHeight: `${height}px` }}>
         {legend.colors.map((color, index) => {
           const id = legend.id + index;
           const tooltip = tooltips[index];
@@ -37,4 +60,5 @@ ClassificationToggle.propTypes = {
   legend: PropTypes.object,
   palette: PropTypes.object,
   toggle: PropTypes.func,
+  toggleAll: PropTypes.func,
 };

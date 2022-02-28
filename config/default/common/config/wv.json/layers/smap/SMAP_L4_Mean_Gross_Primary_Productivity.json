@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Mean_Gross_Primary_Productivity",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Gross Primary Productivity",
       "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }

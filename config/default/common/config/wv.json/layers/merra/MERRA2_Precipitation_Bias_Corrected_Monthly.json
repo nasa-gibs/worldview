@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Precipitation_Bias_Corrected_Monthly",
       "tags": "rain",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "M2TMNXFLX",
       "wrapadjacentdays": true
     }

@@ -19,16 +19,23 @@ class ShareToolTips extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { tooltipToggleTime, tooltipErrorTime } = this.props;
+    const { activeTab, tooltipToggleTime, tooltipErrorTime } = this.props;
     const toolTipChange = tooltipToggleTime !== prevProps.tooltipToggleTime;
     const tooltipErrorChange = tooltipErrorTime !== prevProps.tooltipErrorTime;
-    if (toolTipChange || tooltipErrorChange) {
+    const activeTabChange = activeTab !== prevProps.activeTab;
+    if (activeTabChange) {
+      this.clearPendingTimeouts();
+      this.updateToolTipState(false, false);
+    } else if (toolTipChange || tooltipErrorChange) {
       this.updateToolTipState(toolTipChange, tooltipErrorChange);
     }
   }
 
   componentWillUnmount() {
-    // clear pending timeouts
+    this.clearPendingTimeouts();
+  }
+
+  clearPendingTimeouts = () => {
     clearTimeout(this.showCopiedToolTipTimeout);
     clearTimeout(this.showErrorTimeout);
   }
@@ -57,16 +64,18 @@ class ShareToolTips extends PureComponent {
     return (
       <>
         <Tooltip
-          placement="left"
+          placement="right"
           isOpen={showErrorTooltip}
-          target="permalink_content"
+          target=".share-body"
+          fade={false}
         >
           Link cannot be shortened at this time.
         </Tooltip>
         <Tooltip
           placement="right"
           isOpen={showCopiedToolTip}
-          target="copy-to-clipboard-button"
+          target=".share-body"
+          fade={false}
         >
           Copied!
         </Tooltip>
@@ -76,6 +85,7 @@ class ShareToolTips extends PureComponent {
 }
 
 ShareToolTips.propTypes = {
+  activeTab: PropTypes.string,
   tooltipErrorTime: PropTypes.number,
   tooltipToggleTime: PropTypes.number,
 };

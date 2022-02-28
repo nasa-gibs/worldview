@@ -1,3 +1,10 @@
-The Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A4 Version 6 Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Reflectance (NBAR) dataset is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution. The view angle effects are removed from the directional reflectances, resulting in a stable and consistent NBAR product. Data are temporally weighted to the ninth day which is reflected in the Julian date in the file name. This NBAR layer is a representation of MODIS reflectance bands 1, 4 and 3.
+The Land Surface Reflectance (L3, Nadir, BRDF-Adjusted (NBAR), Daily) layer is created from the Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A4 Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Land Surface Reflectance (NBAR) dataset which is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution. The view angle effects are removed from the directional reflectances, resulting in a stable and consistent NBAR product. Data are temporally weighted to the ninth day which is reflected in the Julian date in the file name. This NBAR layer is a representation of MODIS reflectance bands 1, 4 and 3.
 
-Reference: [LP DAAC - MCD43A4 Version 6](https://doi.org/10.5067/MODIS/MCD43A4.006)
+References: MCD43A4N NRT [doi:10.5067/MODIS/MCD43A4N.NRT.061](https://doi.org/10.5067/MODIS/MCD43A4N.NRT.061); MCD43A4 [doi:10.5067/MODIS/MCD43A4.061](https://doi.org/10.5067/MODIS/MCD43A4.061)
+
+Users are encouraged to download essential quality information provided in the corresponding MCD43A2 data files when using this product. Users should use the band specific quality flags to isolate the highest quality full inversion results for their own science applications as described in the [User Guide](https://www.umb.edu/spectralmass/terra_aqua_modis/v006). The MCD43A2 contains BRDF/Albedo band quality (inversion information) and days of valid observation within the 16-day period for MODIS bands 1 through 7 along with land water type, snow BRDF albedo, local solar noon, platform, and BRDF/Albedo uncertainty.
+
+MCD43A2N v6 NRT [doi:10.5067/MODIS/MCD43A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD43A2N.NRT.006)<br>
+MCD43A2N v6.1 NRT [doi:10.5067/MODIS/MCD43A2N.NRT.061](https://doi.org/10.5067/MODIS/MCD43A2N.NRT.061)<br>
+MCD43A2 v6 [doi:10.5067/MODIS/MCD43A2.006](https://doi.org/10.5067/MODIS/MCD43A2.006)<br>
+MCD43A2 v6.1 [doi:10.5067/MODIS/MCD43A2.061](https://doi.org/10.5067/MODIS/MCD43A2.061)

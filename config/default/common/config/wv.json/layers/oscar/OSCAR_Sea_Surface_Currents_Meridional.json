@@ -7,9 +7,7 @@
       "description": "oscar/OSCAR_Sea_Surface_Currents_Meridional",
       "tags": "podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "oscar"
-      ],
+      "layergroup": "Sea Surface Currents",
       "product": "OSCAR_L4_OC_third-deg"
     }
   }

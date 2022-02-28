@@ -26,7 +26,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/combined/LeafAreaIndex",
+                    "description": "modis/LeafAreaIndex",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_L4_LAI_4Day",

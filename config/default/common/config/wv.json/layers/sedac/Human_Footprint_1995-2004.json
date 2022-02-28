@@ -7,9 +7,7 @@
       "description": "sedac/Human_Footprint_1995-2004",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Human Footprint",
       "product": "CIESIN_SEDAC_LWP2_HF_GEOG",
       "inactive": true,
       "wrapX": true

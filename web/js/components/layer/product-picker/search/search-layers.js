@@ -29,7 +29,7 @@ function SearchLayers(props) {
           </div>
           { !selectedLayer && smallView ? null : !!results.length && (
             <div className="layer-detail-container layers-all search">
-              <LayerMetadataDetail />
+              <LayerMetadataDetail layer={selectedLayer} />
             </div>
           )}
         </div>
@@ -47,11 +47,12 @@ SearchLayers.propTypes = {
   showMobileFacets: PropTypes.bool,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const { browser, productPicker } = state;
   const { selectedLayer, showMobileFacets } = productPicker;
 
   return {
+    layer: selectedLayer,
     smallView: browser.screenWidth < 1024,
     isMobile: browser.lessThan.medium,
     showMobileFacets,

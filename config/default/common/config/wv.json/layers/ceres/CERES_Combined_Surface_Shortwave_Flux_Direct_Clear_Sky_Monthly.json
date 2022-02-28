@@ -7,9 +7,7 @@
       "description": "ceres/CERES_Combined_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "Surface Flux",
       "product": "CER_SYN1deg-Month_Terra-Aqua-MODIS",
       "inactive": true,
       "wrapadjacentdays": true,

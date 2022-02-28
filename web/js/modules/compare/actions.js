@@ -1,5 +1,5 @@
 import { initSecondLayerGroup } from '../layers/actions';
-import { initSecondDate } from '../date/actions';
+import { initSecondDate, clearPreload } from '../date/actions';
 import {
   CHANGE_STATE,
   TOGGLE_ON_OFF,
@@ -7,9 +7,10 @@ import {
   CHANGE_MODE,
 } from './constants';
 
-export function toggleActiveCompareState(str) {
-  return {
-    type: CHANGE_STATE,
+export function toggleActiveCompareState() {
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({ type: CHANGE_STATE });
   };
 }
 export function toggleCompareOnOff() {

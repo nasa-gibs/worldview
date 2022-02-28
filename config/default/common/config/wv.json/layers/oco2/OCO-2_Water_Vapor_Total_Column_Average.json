@@ -7,11 +7,9 @@
       "description": "oco2/OCO-2_Water_Vapor_Total_Column_Average",
       "tags": "oco2",
       "group": "overlays",
-      "layergroup": [
-        "oco2"
-      ],
-      "product": "OCO2_L2_Lite_FP",
+      "layergroup": "Water Vapor",
       "wrapadjacentdays": true,
+      "inactive": true,
       "tracks": [
         "OrbitTracks_OCO-2_Ascending"
       ],

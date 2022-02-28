@@ -1,0 +1,1 @@
+This image of Hong Kong's Chek Lap Kok Airport shows land reclamation under progress toward the north of the airport to create a new runway and passenger concourse for the airport expansion. Swipe the vertical bar back and forth to compare a Landsat annual composite image from 2000 from the Web Enabled Landsat (WELD) Project and the Sentinel image from HLS on 26 October 2020.

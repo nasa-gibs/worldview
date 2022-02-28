@@ -7,10 +7,7 @@
       "description": "multi-mission/aviso/AVISO_Absolute_Dynamic_Topography",
       "tags": "adt podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_aviso"
-      ],
+      "layergroup": "Absolute Dynamic Topography",
       "product": "AVISO_L4_DYN_TOPO_1DEG_1MO",
       "wrapadjacentdays": true,
       "inactive": true

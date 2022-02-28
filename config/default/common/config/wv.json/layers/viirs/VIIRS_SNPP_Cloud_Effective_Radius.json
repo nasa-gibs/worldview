@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_SNPP_Cloud_Effective_Radius",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Cloud Effective Radius",
       "product": "CLDPROP_L2_VIIRS_SNPP",
       "wrapadjacentdays": true,
       "tracks": [

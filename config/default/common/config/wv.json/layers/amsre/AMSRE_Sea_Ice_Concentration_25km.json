@@ -7,9 +7,7 @@
       "description": "amsre/AMSRE_Sea_Ice_Concentration_25km",
       "group": "overlays",
       "product": "AE_SI25",
-      "layergroup": [
-        "amsre"
-      ],
+      "layergroup": "Sea Ice",
       "inactive": true,
       "palette": {
         "recommended": [

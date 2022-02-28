@@ -7,7 +7,6 @@ import {
 } from 'ol/geom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   getGeographicLibDistance,
   getGeographicLibArea,
@@ -103,11 +102,11 @@ export default function MeasureTooltip(props) {
   };
 
   return (
-    <div className={`tooltip-measure ${activeStaticClass}`}>
+    <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
       <span dangerouslySetInnerHTML={{ __html: getMeasurementValue() }} />
       {!active && (
-        <span className="remove-measurement" onClick={onRemove}>
-          <FontAwesomeIcon icon={faTimes} fixedWidth />
+        <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
+          <FontAwesomeIcon icon="times" fixedWidth />
         </span>
       )}
     </div>

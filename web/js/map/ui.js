@@ -28,17 +28,22 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import MapRotate from './rotation';
-import mapDateLineBuilder from './datelinebuilder';
+import PQueue from 'p-queue/dist';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import mapPrecacheTile from './precachetile';
-import { mapUtilZoomAction, getActiveLayerGroup } from './util';
+import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import granuleFootprint from './granule/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { SELECT_DATE } from '../modules/date/constants';
+import { CHANGE_TAB } from '../modules/sidebar/constants';
+import {
+  CLEAR_MARKER,
+  SET_MARKER,
+  SET_REVERSE_GEOCODE_RESULTS,
+  TOGGLE_DIALOG_VISIBLE,
+} from '../modules/location-search/constants';
+import * as dateConstants from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -47,58 +52,56 @@ import * as vectorStyleConstants from '../modules/vector-styles/constants';
 import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
+  getActiveLayers,
   isRenderable as isRenderableLayer,
+  getMaxZoomLevelLayerCollection,
+  getAllActiveLayers,
 } from '../modules/layers/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
+import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
-  CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
+  RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
-import { getLeadingExtent } from '../modules/map/util';
-
+import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
-import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
+import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
+import { reverseGeocode } from '../modules/location-search/util-api';
+
+const { events } = util;
 
 export default function mapui(models, config, store, ui) {
-  const id = 'wv-map';
-  const selector = `#${id}`;
   const animationDuration = 250;
-  const self = {};
-  let cache;
-  const rotation = new MapRotate(self, models, store);
-  const dateline = mapDateLineBuilder(models, config, store, ui);
-  const precache = mapPrecacheTile(models, config, cache, self);
-  const compareMapUi = self.compareMapUi = mapCompare(config, store);
   const granuleFootprints = {};
-  const dataRunner = self.runningdata = new MapRunningData(
-    models,
-    compareMapUi,
-    store,
-  );
+  const compareMapUi = mapCompare(store);
+  const runningdata = new MapRunningData(compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  cache = self.cache = new Cache(400);
-  self.mapIsbeingDragged = false;
-  self.mapIsbeingZoomed = false;
-  self.proj = {}; // One map for each projection
-  self.selected = null; // The map for the selected projection
-  self.events = util.events();
-  const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    config,
+  const cache = new Cache(400);
+  const layerQueue = new PQueue({ concurrency: 3 });
+  const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
+  const self = {
     cache,
-    store,
-  );
-  self.layerKey = layerBuilder.layerKey;
-  self.createLayer = layerBuilder.createLayer;
-  self.promiseDay = precache.promiseDay;
-  self.selectedVectors = {};
-  self.processingPromise = null;
+    mapIsbeingDragged: false,
+    mapIsbeingZoomed: false,
+    proj: {}, // One map for each projection
+    selected: null, // The map for the selected projection
+    selectedVectors: {},
+    activeMarker: null,
+    runningdata,
+    layerKey,
+    createLayer,
+    processingPromise: null,
+  };
+
   /**
-   * Suscribe to redux store and listen for
+   * Subscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function(action) {
+    const state = store.getState();
     switch (action.type) {
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -134,26 +137,52 @@ export default function mapui(models, config, store, ui) {
           });
           return self.processingPromise;
         }
+        store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
         return addLayer(def);
       }
-      case CLEAR_ROTATE:
-        return rotation.reset(self.selected);
-      case REFRESH_ROTATE:
-        return rotation.setRotation(action.rotation, 500, self.selected);
+      case CLEAR_MARKER:
+        return removeCoordinatesMarker();
+      case SET_MARKER: {
+        return addMarkerAndUpdateStore(true, null, action.isInputSearch);
+      }
+      case TOGGLE_DIALOG_VISIBLE:
+        return addMarkerAndUpdateStore(false);
+      case CLEAR_ROTATE: {
+        self.selected.getView().animate({
+          duration: 500,
+          rotation: 0,
+        });
+        return;
+      }
+      case REFRESH_ROTATE: {
+        self.selected.getView().animate({
+          rotation: action.rotation,
+          duration: 500,
+        });
+        return;
+      }
+      case CHANGE_TAB: {
+        const { sidebar, proj } = state;
+        const { activeTab, previousTab } = sidebar;
+        const dataDownloadTabSwitched = activeTab === 'download' || previousTab === 'download';
+        if (proj.id === 'geographic' && dataDownloadTabSwitched) {
+          return reloadLayers();
+        }
+        return;
+      }
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
-        const extent = lodashGet(action, 'payload.query.map.extent');
-        const rotate = lodashGet(action, 'payload.query.map.rotation') || 0;
+        const extent = lodashGet(state, 'map.extent');
+        const rotate = lodashGet(state, 'map.rotation') || 0;
         updateProjection();
         if (newState.v && !newState.e && extent) {
           flyToNewExtent(extent, rotate);
         }
         return;
       }
+      case layerConstants.REMOVE_GROUP:
       case layerConstants.REMOVE_LAYER:
-        return removeLayer(action);
-      case layerConstants.TOGGLE_LAYER_VISIBILITY:
-        return updateLayerVisibilities();
+        return removeLayer(action.layersToRemove);
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -161,10 +190,15 @@ export default function mapui(models, config, store, ui) {
           return reloadLayers();
         }
         return;
-      case layerConstants.REORDER_LAYER_GROUP:
+      case layerConstants.TOGGLE_OVERLAY_GROUPS:
+        return reloadLayers();
+      case layerConstants.REORDER_LAYERS:
+      case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
-        return reloadLayers();
+        reloadLayers();
+        preloadForCompareMode();
+        return;
       case CHANGE_PROJECTION:
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -180,46 +214,50 @@ export default function mapui(models, config, store, ui) {
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
         const newSelection = action.payload;
-        const state = store.getState();
-        const { compare, layers } = state;
-        const activeLayerStr = compare.activeString;
-        updateVectorSelection(action.payload, self.selectedVectors, layers[activeLayerStr], type, state);
+        updateVectorSelection(
+          action.payload,
+          self.selectedVectors,
+          getActiveLayers(state), type, state,
+        );
         self.selectedVectors = newSelection;
         return;
       }
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
         return onStopAnimation();
-      case SELECT_DATE:
+      case dateConstants.CHANGE_CUSTOM_INTERVAL:
+      case dateConstants.CHANGE_INTERVAL:
+        return preloadNextTiles();
+      case dateConstants.SELECT_DATE:
         if (self.processingPromise) {
           return new Promise((resolve) => {
             resolve(self.processingPromise);
           }).then(() => {
             self.processingPromise = null;
-            return updateDate();
+            return updateDate(action.outOfStep);
           });
         }
-        return updateDate();
+        return updateDate(action.outOfStep);
+      case layerConstants.TOGGLE_LAYER_VISIBILITY:
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
+        updateDate();
+        break;
+      }
+      case dateConstants.ARROW_DOWN:
+        bufferQuickAnimate(action.value);
+        break;
       default:
         break;
     }
   };
+
   const onStopAnimation = function() {
-    const { compare, layers } = store.getState();
-    const activeLayerStr = compare.activeString;
-    const hasActiveVectors = hasVectorLayers(layers[activeLayerStr]);
+    const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
     if (hasActiveVectors) {
       reloadLayers();
     }
   };
-  /*
-   * Sets up map listeners
-   *
-   * @method init
-   * @static
-   *
-   * @returns {void}
-   */
+
   const init = function() {
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
@@ -227,20 +265,119 @@ export default function mapui(models, config, store, ui) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    self.events.on('update-layers', reloadLayers);
-    self.events.on('disable-click-zoom', () => {
+    events.on('map:disable-click-zoom', () => {
       doubleClickZoom.setActive(false);
     });
-    self.events.on('enable-click-zoom', () => {
+    events.on('map:enable-click-zoom', () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    ui.events.on('last-action', subscribeToStore);
+    events.on('redux:action-dispatched', subscribeToStore);
+    events.on('map:reload-layers', reloadLayers);
+    window.addEventListener('orientationchange', () => {
+      updateProjection(true);
+    });
     updateProjection(true);
   };
 
+  /*
+   * Handle reverse geocode and add map marker with results
+   *
+   * @method handleActiveMapMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const handleActiveMapMarker = (start) => {
+    const state = store.getState();
+    const { locationSearch } = state;
+    const { coordinates, reverseGeocodeResults } = locationSearch;
+    if (coordinates && coordinates.length > 0) {
+      if (start) {
+        reverseGeocode(coordinates, config).then((results) => {
+          addMarkerAndUpdateStore(true, results);
+        });
+      } else {
+        addMarkerAndUpdateStore(true, reverseGeocodeResults);
+      }
+    }
+  };
+
+  /*
+   * Remove coordinates marker
+   *
+   * @method removeCoordinatesMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeCoordinatesMarker = () => {
+    if (self.activeMarker) {
+      self.activeMarker.setMap(null);
+      self.selected.removeOverlay(self.activeMarker);
+    }
+  };
+
+  /*
+   * Add map coordinate marker and update store
+   *
+   * @method addMarkerAndUpdateStore
+   * @static
+   *
+   * @param {Object} geocodeResults
+   * @param {Boolean} shouldFlyToCoordinates - if location search via input
+   * @returns {void}
+   */
+  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates) => {
+    const state = store.getState();
+    const { locationSearch, proj, browser } = state;
+    const {
+      coordinates, reverseGeocodeResults,
+    } = locationSearch;
+    const results = geocodeResults || reverseGeocodeResults;
+    const { sources } = config;
+    const clearMarker = () => {
+      store.dispatch({ type: CLEAR_MARKER });
+    };
+
+    // clear previous marker (if present) and get new marker
+    removeCoordinatesMarker();
+    const marker = getCoordinatesMarker(
+      proj,
+      coordinates,
+      results,
+      clearMarker,
+      browser.lessThan.medium,
+      showDialog,
+    );
+
+    // prevent marker if outside of extent
+    if (!marker) {
+      return false;
+    }
+
+    self.activeMarker = marker;
+    self.selected.addOverlay(marker);
+    self.selected.renderSync();
+
+    if (shouldFlyToCoordinates) {
+      // fly to coordinates and render coordinates tooltip on init SET_MARKER
+      const zoom = self.selected.getView().getZoom();
+      const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
+      const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
+      animateCoordinates(self.selected, proj, coordinates, maxZoom);
+    }
+
+    store.dispatch({
+      type: SET_REVERSE_GEOCODE_RESULTS,
+      value: results,
+    });
+  };
+
   const flyToNewExtent = function(extent, rotation) {
+    const state = store.getState();
+    const { proj } = state;
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
     const coordinates = [coordinateX, coordinateY];
@@ -248,7 +385,7 @@ export default function mapui(models, config, store, ui) {
     const zoom = self.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return self.animate.fly(coordinates, zoom, rotation);
+    return fly(self.selected, proj, coordinates, zoom, rotation);
   };
 
   /*
@@ -273,26 +410,21 @@ export default function mapui(models, config, store, ui) {
     const map = self.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-
     const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
-    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
-    reloadLayers(self.selected, {}, start);
-
-    // Update the rotation buttons if polar projection to display correct value
-    if (isProjectionRotatable) {
-      rotation.setResetButton(currentRotation);
-    }
+    store.dispatch({
+      type: UPDATE_MAP_UI,
+      ui: self,
+      rotation: start ? rotationStart : currentRotation,
+    });
+    reloadLayers();
 
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
     showMap(map);
     map.updateSize();
-    if (isProjectionRotatable) {
-      rotation.setResetButton(currentRotation);
-    }
 
     if (self.selected.previousCenter) {
       self.selected.setCenter(self.selected.previousCenter);
@@ -307,7 +439,6 @@ export default function mapui(models, config, store, ui) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
           const extent = view.calculateExtent(map.getSize());
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
@@ -315,9 +446,7 @@ export default function mapui(models, config, store, ui) {
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
-          rotation.setResetButton(rotationStart);
           view.setRotation(rotationStart);
         };
       }
@@ -332,9 +461,11 @@ export default function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
+    handleActiveMapMarker(start);
   }
+
   /*
-   * When page is resised set for mobile or desktop
+   * When page is resized set for mobile or desktop
    *
    * @method onResize
    * @static
@@ -342,19 +473,20 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function onResize() {
+    const state = store.getState();
+    const { browser } = state;
+    const isMobile = browser.lessThan.medium;
     const map = self.selected;
-    if (map.small !== util.browser.small) {
-      if (util.browser.small) {
-        map.removeControl(map.wv.scaleImperial);
-        map.removeControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).hide();
-      } else {
-        map.addControl(map.wv.scaleImperial);
-        map.addControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).show();
-      }
+
+    if (isMobile) {
+      map.removeControl(map.wv.scaleImperial);
+      map.removeControl(map.wv.scaleMetric);
+    } else {
+      map.addControl(map.wv.scaleImperial);
+      map.addControl(map.wv.scaleMetric);
     }
   }
+
   /*
    * Hide Map
    *
@@ -366,8 +498,9 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function hideMap(map) {
-    $(`#${map.getTarget()}`).hide();
+    document.getElementById(`${map.getTarget()}`).style.display = 'none';
   }
+
   /*
    * Show Map
    *
@@ -379,8 +512,9 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function showMap(map) {
-    $(`#${map.getTarget()}`).show();
+    document.getElementById(`${map.getTarget()}`).style.display = 'block';
   }
+
   /*
    * Remove Layers from map
    *
@@ -434,133 +568,93 @@ export default function mapui(models, config, store, ui) {
     };
   };
 
-  /*
-   * Event reload layers invocation
-   *
-   * @method eventReloadLayers
-   * @static
-   *
-   * @returns {void}
-   */
-  self.eventReloadLayers = () => self.reloadLayers();
-
-  /*
-   * get layers from models obj
-   * and add each layer to the map
-   *
+  /**
    * @method reloadLayers
-   * @static
    *
    * @param {object} map - Openlayers Map obj
    * @param {Object} granuleOptions (optional: only used for granule layers)
-    * @param {Boolean} granuleDates - array of granule dates
-    * @param {Boolean} id - layer id
+   *   @param {Boolean} granuleDates - array of granule dates
+   *   @param {Boolean} id - layer id
    * @param {boolean} start - indicate init load
    * @returns {void}
    */
-  const reloadLayers = self.reloadLayers = async(map, granuleOptions, start) => {
+
+  async function reloadLayers(map, granuleOptions, start) {
     map = map || self.selected;
     const state = store.getState();
-    const { layers } = state;
-    const compareState = state.compare;
-    const layerGroupStr = compareState.activeString;
-    const activeLayers = layers[layerGroupStr];
-    if (!config.features.compare || !compareState.active) {
-      if (!compareState.active && compareMapUi.active) {
+    const { compare } = state;
+    if (!config.features.compare || !compare.active) {
+      const compareMapDestroyed = !compare.active && compareMapUi.active;
+      if (compareMapDestroyed) {
         compareMapUi.destroy();
-        clearLayers(map);
       }
-      const defs = getLayers(
-        activeLayers,
-        {
-          reverse: true,
-        },
-        state,
-      );
+      clearLayers(map);
+      const defs = getLayers(state, { reverse: true });
 
       // get all created layers as promises
       const createdLayersFromDefs = defs.map((def) => new Promise((resolve) => {
         const { isGranule } = def;
         // update granule date order and reset
-        const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
+        const granuleLayerParam = isGranule && getGranuleOptions(state, def, compare.activeString, granuleOptions);
         const createdLayer = self.createLayer(def, {}, granuleLayerParam);
         resolve(createdLayer);
       }));
 
       // resolve them with Promise.all to preserve layer order for CMR granule requests
-      await Promise.all(createdLayersFromDefs)
+      await Promise
+        .all(createdLayersFromDefs)
         .then((createdLayers) => {
-          if (!start) {
-            clearLayers(map);
-          }
-          lodashEach(createdLayers, (createdLayer) => {
-            map.addLayer(createdLayer);
-          });
+          if (!start) clearLayers(map);
+          lodashEach(createdLayers, (l) => { map.addLayer(l); });
         })
-        .catch((error) => {
-          throw error;
-        });
+        .catch((error) => { throw error; });
       updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
-      if (
-        compareState
-        && !compareState.isCompareA
-        && compareState.mode === 'spy'
-      ) {
+      if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
 
       const stateArrayGroups = stateArray.map((arr) => new Promise((resolve) => {
-        const compareLayerGroup = getCompareLayerGroup(arr, layers, state, granuleOptions);
+        const compareLayerGroup = getCompareLayerGroup(arr, state, granuleOptions);
         resolve(compareLayerGroup);
       }));
 
       await Promise.all(stateArrayGroups)
         .then((newGroupedLayers) => {
           clearLayers(map);
-          lodashEach(newGroupedLayers, (compareLayerGroup) => {
-            map.addLayer(compareLayerGroup);
-          });
+          lodashEach(newGroupedLayers, (lg) => { map.addLayer(lg); });
         })
-        .catch((error) => {
-          throw error;
-        });
-      compareMapUi.create(map, compareState.mode);
+        .catch((error) => { throw error; });
+      compareMapUi.create(map, compare.mode);
       updateLayerVisibilities();
     }
-  };
+  }
+
 
   /**
    * Create a Layergroup given the date and layerGroups
-   * @param {Array} arr | Array of date/layer group strings
    */
-  async function getCompareLayerGroup(arr, layersState, state, granuleOptions) {
-    // get grouped layers
-    const [layerGroupStr, activeDateStr] = arr;
-    const newGroupedLayers = getLayers(
-      layersState[layerGroupStr],
-      { reverse: true },
-      store.getState(),
-    )
+  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+    const compareSideLayers = getActiveLayers(state, compareActiveString);
+    const layers = getLayers(state, { reverse: true }, compareSideLayers)
       .filter(() => true)
       .map((def) => new Promise((resolve) => {
         const { isGranule } = def;
-        const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
-
-        const createdLayer = self.createLayer(def, {
-          date: state.date[activeDateStr],
-          group: layerGroupStr,
+        const granuleLayerParam = isGranule && getGranuleOptions(state, def, compareActiveString, granuleOptions);
+        const createdLayer = createLayer(def, {
+          date: getSelectedDate(state, compareDateString),
+          group: compareActiveString,
         }, granuleLayerParam);
         resolve(createdLayer);
       }));
 
     // return new layer group
-    return Promise.all(newGroupedLayers)
+    return Promise.all(layers)
       .then((compareLayerGroup) => new OlLayerGroup({
         layers: compareLayerGroup,
-        group: layerGroupStr,
-        date: activeDateStr,
+        date: getSelectedDate(state, compareDateString),
+        group: compareActiveString,
       }))
       .catch((error) => {
         throw error;
@@ -577,27 +671,30 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateLayerVisibilities() {
-    const state = store.getState();
     let renderable;
+    const state = store.getState();
     const layers = self.selected.getLayers();
-    const layersState = state.layers;
-    const activeGroupStr = state.compare.activeString;
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+
     layers.forEach((layer) => {
-      const group = layer.get('group');
+      const compareActiveString = layer.get('group');
       const granule = layer.get('granuleGroup');
+
       // Not in A|B
       if (layer.wv && !granule) {
         renderable = isRenderableLayer(
           layer.wv.id,
-          layersState[activeGroupStr],
-          state.date[activeDateStr],
+          getActiveLayers(state),
+          getSelectedDate(state),
+          null,
           state,
         );
         layer.setVisible(renderable);
         // If in A|B layer-group will have a 'group' string
-      } else if (group || granule) {
+      } else if (compareActiveString || granule) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
+          if (!subLayer.wv) {
+            return;
+          }
           const granuleGroup = subLayer.get('granuleGroup');
           // console.log(granuleGroup);
           if (granuleGroup) {
@@ -606,7 +703,7 @@ export default function mapui(models, config, store, ui) {
               const granuleTileLayerGroup = granuleTileLayer.wv.group;
               renderable = isRenderableLayer(
                 granuleTileLayer.wv.id,
-                layersState[granuleTileLayerGroup],
+                state.layers[granuleTileLayerGroup],
                 state.date[granuleTileLayer.get('date')],
                 state,
               );
@@ -619,13 +716,22 @@ export default function mapui(models, config, store, ui) {
             const subGroup = subLayer.wv.group;
             renderable = isRenderableLayer(
               subLayer.wv.id,
-              layersState[subGroup],
+              state.layers[subGroup],
               state.date[subLayer.get('date')],
               state,
             );
             subLayer.setVisible(renderable);
             // }
           }
+          const compareDateString = layer.get('date');
+          renderable = isRenderableLayer(
+            subLayer.wv.id,
+            getActiveLayers(state, compareActiveString),
+            getSelectedDate(state, compareDateString),
+            null,
+            state,
+          );
+          subLayer.setVisible(renderable);
         });
 
         layer.setVisible(true);
@@ -692,12 +798,9 @@ export default function mapui(models, config, store, ui) {
   function updateOpacity(action) {
     const { id, opacity } = action;
     const state = store.getState();
-    const { layers, compare } = state;
+    const { compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
-    const def = lodashFind(layers[activeStr], {
-      id,
-    });
-
+    const def = lodashFind(getActiveLayers(state), { id });
     const { isGranule } = def;
     if (isGranule) {
       updateGranuleLayerOpacity(def, activeStr, opacity, compare);
@@ -738,11 +841,9 @@ export default function mapui(models, config, store, ui) {
 
   const addLayer = async function(def, date, activeLayers) {
     const state = store.getState();
-    const { compare, layers } = state;
-    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    date = date || state.date[activeDateStr];
-    activeLayers = activeLayers || layers[activeLayerStr];
+    const { compare } = state;
+    date = date || getSelectedDate(state);
+    activeLayers = activeLayers || getActiveLayers(state);
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const mapIndex = lodashFindIndex(reverseLayers, {
       id: def.id,
@@ -753,165 +854,224 @@ export default function mapui(models, config, store, ui) {
     if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
       // Find which map layer-group is the active LayerGroup
       // and add layer to layerGroup in correct location
-      const activelayer = firstLayer.get('group') === activeLayerStr
+      const activelayer = firstLayer.get('group') === compare.activeString
         ? firstLayer
         : mapLayers[1];
-
       const options = {
         date,
-        group: activeLayerStr,
+        group: compare.activeString,
       };
-
       await createLayerWrapper(def, options)
         .then((newLayer) => {
           activelayer.getLayers().insertAt(mapIndex, newLayer);
-          updateLayerVisibilities();
-        }).catch((err) => {
-          throw err;
-        });
+          compareMapUi.create(self.selected, compare.mode);
+        }).catch((err) => { throw err; });
+    } else {
+      await createLayerWrapper(def)
+        .then((newLayer) => {
+          self.selected.getLayers().insertAt(mapIndex, newLayer);
+        }).catch((err) => { throw err; });
     }
-    await createLayerWrapper(def)
-      .then((newLayer) => {
-        self.selected.getLayers().insertAt(mapIndex, newLayer);
-        updateLayerVisibilities();
-      }).catch((err) => {
-        throw err;
-      });
+
+    updateLayerVisibilities();
+    preloadNextTiles();
   };
 
-  /*
-   *Initiates the adding of a layer or Graticule
-   *
-   * @method removeLayer
-   * @static
-   *
-   * @param {object} def - layer Specs
-   *
-   * @returns {void}
-   */
-  function removeLayer(action) {
+
+  function removeLayer(layersToRemove) {
     const state = store.getState();
     const { compare } = state;
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    const { def } = action;
 
-    const layer = findLayer(def, activeLayerStr);
-    if (compare && compare.active) {
-      const layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
-      if (layerGroup) layerGroup.getLayers().remove(layer);
-    } else {
-      self.selected.removeLayer(layer);
-    }
+    layersToRemove.forEach((def) => {
+      const layer = findLayer(def, compare.activeString);
+      if (compare && compare.active) {
+        const layerGroup = getActiveLayerGroup(self.selected, compare.activeString);
+        if (layerGroup) layerGroup.getLayers().remove(layer);
+      } else {
+        self.selected.removeLayer(layer);
+      }
+    });
+
     updateLayerVisibilities();
   }
 
-  /*
-   * Event update date invocation
-   *
-   * @method eventUpdateDate
-   * @static
-   *
-   * @returns {void}
-   */
-  self.eventUpdateDate = () => updateDate();
-
-  /*
-   * Update layers for the correct Date
-   *
-   * @method updateDate
-   * @static
-   *
-   *
-   * @returns {void}
-   */
-  const updateDate = self.updateDate = async () => {
+  function updateVectorStyles (def) {
     const state = store.getState();
-    const { compare, date, layers } = state;
-    const activeLayerStr = compare.activeString;
-    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeLayersCollection = layers[activeLayerStr];
-    const activeLayers = getLayers(
-      activeLayersCollection,
-      {},
-      state,
-    ).reverse();
-    let layerGroups;
-    let layerGroup;
-    if (compare && compare.active) {
-      layerGroups = self.selected.getLayers().getArray();
-      if (layerGroups.length === 2) {
-        layerGroup = layerGroups[0].get('group') === activeLayerStr
+    const activeLayers = getActiveLayers(state);
+    const { vectorStyles } = config;
+    const layerName = def.layer || def.id;
+    let vectorStyleId;
+
+    vectorStyleId = def.vectorStyle.id;
+    if (activeLayers) {
+      activeLayers.forEach((layer) => {
+        if (layer.id === layerName && layer.custom) {
+          vectorStyleId = layer.custom;
+        }
+      });
+    }
+    setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+  }
+
+  function getLayerGroup (state) {
+    const { compare } = state;
+    const { active, activeString } = compare || {};
+    if (active) {
+      const layerGroups = self.selected.getLayers().getArray();
+      if (layerGroups.length > 1) {
+        return layerGroups[0].get('group') === activeString
           ? layerGroups[0]
-          : layerGroups[1].get('group') === activeLayerStr
+          : layerGroups[1].get('group') === activeString
             ? layerGroups[1]
             : null;
       }
     }
-    await lodashEach(activeLayers, async (def) => {
-      const {
-        id, isGranule, layer, period, vectorStyle,
-      } = def;
-      const layerName = layer || id;
+    return self.selected;
+  }
+
+  function updateCompareLayer (def, index, layerCollection) {
+    const state = store.getState();
+    const { compare } = state;
+    const updatedLayer = createLayer(def, {
+      group: compare.activeString,
+      date: getSelectedDate(state),
+    });
+    layerCollection.setAt(index, updatedLayer);
+    compareMapUi.update(compare.activeString);
+  }
+
+  async function updateDate(outOfStepChange) {
+    const state = store.getState();
+    const { compare = {} } = state;
+    const layerGroup = getLayerGroup(state);
+    const mapLayerCollection = layerGroup.getLayers();
+    const layers = mapLayerCollection.getArray();
+    const activeLayers = getAllActiveLayers(state);
+    const visibleLayers = activeLayers.filter(
+      ({ id }) => layers
+        .map(({ wv }) => lodashGet(wv, 'def.id'))
+        .includes(id),
+    ).filter(({ visible }) => visible);
+
+    await visibleLayers.forEach(async (def) => {
+      const { id, period, isGranule } = def;
+      const index = findLayerIndex(def);
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(period)) {
         return;
       }
-
-      if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
-          const index = findLayerIndex(def, layerGroup);
-          const layerValue = self.selected.getLayers().getArray()[index];
-          const updatedLayer = await self.createLayer(def, {
-            group: activeLayerStr,
-            date: date[activeDate],
-            previousLayer: layerValue ? layerValue.wv : null,
-          });
-          layerGroup.getLayers().setAt(
-            index,
-            updatedLayer,
-          );
-          compareMapUi.update(activeLayerStr);
-        }
+      if (compare.active && layers.length) {
+        updateCompareLayer(def, index, mapLayerCollection);
       } else {
-        let granuleLayerParam;
-        if (isGranule) {
-          const granuleState = layers.granuleLayers[activeLayerStr][id];
-          granuleLayerParam = {
-            granuleCount: granuleState ? granuleState.count : 20,
-          };
-        }
-        const index = findLayerIndex(def, self.selected);
+        const { granuleLayers } = state.layers;
+        const index = findLayerIndex(def);
+
         if (index !== undefined && index !== -1) {
-          const layerValue = self.selected.getLayers().getArray()[index];
+          const layerValue = layers[index];
           const layerOptions = !isGranule
             ? { previousLayer: layerValue ? layerValue.wv : null }
             : {};
-          const updatedLayer = await self.createLayer(def, layerOptions, granuleLayerParam);
-          self.selected.getLayers().setAt(index, updatedLayer);
+          const granuleState = isGranule && granuleLayers[compare.activeString][id];
+          const granuleOptions = isGranule ? {
+            granuleCount: granuleState ? granuleState.count : 20,
+          } : {};
+          const updatedLayer = await self.createLayer(def, layerOptions, granuleOptions);
+          mapLayerCollection.setAt(index, updatedLayer);
         }
       }
-      if (config.vectorStyles && vectorStyle && vectorStyle.id) {
-        const { vectorStyles } = config;
-        let vectorStyleId;
-
-        vectorStyleId = vectorStyle.id;
-        if (activeLayersCollection) {
-          activeLayersCollection.forEach((activeLayer) => {
-            const { id, custom } = activeLayer;
-            if (id === layerName && activeLayer.custom) {
-              vectorStyleId = custom;
-            }
-          });
-        }
-        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+      if (config.vectorStyles && lodashGet(def, 'vectorStyle.id')) {
+        updateVectorStyles(def);
       }
-      updateLayerVisibilities();
     });
-  };
+    updateLayerVisibilities();
+    if (!outOfStepChange) {
+      preloadNextTiles();
+    }
+  }
+
+  /**
+   * Preload tiles for the next and previous time interval so they are visible
+   * as soon as the user changes the date. We will usually only end up actually requesting
+   * either previous or next interval tiles since tiles are cached.
+   * (e.g. user adjust from July 1 => July 2, we preload July 3 which is "next"
+   * but no requests get made for "previous", July 1, since those are cached already.
+   */
+  async function preloadNextTiles(date, compareString) {
+    const state = store.getState();
+    const {
+      lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
+    } = state.date;
+    const { activeString } = state.compare;
+    const useActiveString = compareString || activeString;
+    const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(state));
+    const nextDate = getNextDateTime(state, 1, useDate);
+    const prevDate = getNextDateTime(state, -1, useDate);
+    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+
+    // If we've preloaded N dates out, we need to use the latest
+    // preloaded date the next time we call this function or the buffer
+    // won't stay ahead of the 'animation' when holding down timetep arrows
+    if (preloaded && lastArrowDirection) {
+      store.dispatch({
+        type: dateConstants.SET_PRELOAD,
+        preloaded: true,
+        lastPreloadDate: subsequentDate,
+      });
+      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
+      return;
+    }
+
+    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
+
+    if (!date && !arrowDown) {
+      preloadNextTiles(subsequentDate, useActiveString);
+    }
+  }
+
+  function preloadForCompareMode() {
+    const { date, compare } = store.getState();
+    const { selected, selectedB } = date;
+    preloadNextTiles(selected, 'active');
+    if (compare.active) {
+      preloadNextTiles(selectedB, 'activeB');
+    }
+  }
+
+  async function bufferQuickAnimate(arrowDown) {
+    const BUFFER_SIZE = 8;
+    const preloadPromises = [];
+    const state = store.getState();
+    const { preloaded, lastPreloadDate } = state.date;
+    const selectedDate = getSelectedDate(state);
+    const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
+
+    if (currentBuffer >= BUFFER_SIZE) {
+      return;
+    }
+
+    const currentDate = preloaded ? lastPreloadDate : selectedDate;
+    const direction = arrowDown === 'right' ? 1 : -1;
+    let nextDate = getNextDateTime(state, direction, currentDate);
+
+    for (let step = 1; step <= BUFFER_SIZE; step += 1) {
+      preloadPromises.push(promiseImageryForTime(state, nextDate));
+      if (step !== BUFFER_SIZE) {
+        nextDate = getNextDateTime(state, direction, nextDate);
+      }
+    }
+    await Promise.all(preloadPromises);
+
+    store.dispatch({
+      type: dateConstants.SET_PRELOAD,
+      preloaded: true,
+      lastPreloadDate: nextDate,
+    });
+  }
 
   /*
    * Get a layer object from id
    *
-   * @method findlayer
+   * @method findLayer
    * @static
    *
    * @param {object} def - Layer Specs
@@ -919,7 +1079,7 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {object} Layer object
    */
-  function findLayer(def, layerGroupStr) {
+  function findLayer(def, activeCompareState) {
     const layers = self.selected.getLayers().getArray();
     let layer = lodashFind(layers, {
       wv: {
@@ -929,10 +1089,9 @@ export default function mapui(models, config, store, ui) {
 
     if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granuleGroup'))) {
       let olGroupLayer;
-      const layerKey = `${def.id}-${layerGroupStr}`;
+      const layerKey = `${def.id}-${activeCompareState}`;
       lodashEach(layers, (layerGroup) => {
-        if (layerGroup.get('layerId') === layerKey
-          || layerGroup.get('group') === layerGroupStr) {
+        if (layerGroup.get('layerId') === layerKey || layerGroup.get('group') === activeCompareState) {
           olGroupLayer = layerGroup;
         }
       });
@@ -947,60 +1106,30 @@ export default function mapui(models, config, store, ui) {
   }
 
   /*
-   * Return an Index value for a layer in the OpenLayers layer array
-   *
+   * Return an Index value for a layer in the OPenLayers layer array
    * @method findLayerIndex
-   * @static
-   *
    * @param {object} def - Layer Specs
-   *
-   *
+
    * @returns {number} Index of layer in OpenLayers layer array
    */
-  function findLayerIndex(def, layerGroup) {
-    const layerGroupToCheck = layerGroup || self.selected;
-    const layers = layerGroupToCheck.getLayers().getArray();
-    const { id } = def;
+  function findLayerIndex({ id }) {
+    const state = store.getState();
+    const layerGroup = getLayerGroup(state);
+    const layers = layerGroup.getLayers().getArray();
     return lodashFindIndex(layers, {
-      wv: {
-        id,
-      },
+      wv: { id },
     });
   }
 
-  /*
-   * Throttled triggger extent handler
-   *
-   * @method triggerExtent
-   * @static
-   *
-   * @returns {void}
-   */
-  const triggerExtent = lodashThrottle(
-    () => {
-      self.events.trigger('extent');
-    },
-    500,
-    {
-      trailing: true,
-    },
-  );
-
-  /*
-   * Updates the extents of OpenLayers map
-   *
-   * @method updateExtent
-   * @static
-   *
-   * @returns {void}
-   */
-  function updateExtent() {
+  const updateExtent = () => {
     const map = self.selected;
     const view = map.getView();
-    const extent = view.calculateExtent(map.getSize());
-    store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
-    triggerExtent();
-  }
+    const extent = view.calculateExtent();
+    store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
+    if (map.isRendered()) {
+      store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
+    }
+  };
 
   /*
    * Add granule footprint to map
@@ -1028,16 +1157,15 @@ export default function mapui(models, config, store, ui) {
    */
   function createMap(proj, dateSelected) {
     const state = store.getState();
-    const { date, compare } = state;
-    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
-    dateSelected = dateSelected || date[activeDate];
+    dateSelected = dateSelected || getSelectedDate(state);
     const id = `wv-map-${proj.id}`;
-    const $map = $('<div></div>')
-      .attr('id', id)
-      .attr('data-proj', proj.id)
-      .addClass('wv-map')
-      .hide();
-    $(selector).append($map);
+    const mapEl = document.createElement('div');
+    mapEl.setAttribute('id', id);
+    mapEl.setAttribute('data-proj', proj.id);
+    mapEl.classList.add('wv-map');
+    mapEl.style.display = 'none';
+
+    document.getElementById('wv-map').insertAdjacentElement('afterbegin', mapEl);
 
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
@@ -1089,49 +1217,62 @@ export default function mapui(models, config, store, ui) {
       loadTilesWhileInteracting: true,
     });
     map.wv = {
-      small: false,
       scaleMetric,
       scaleImperial,
     };
     map.proj = proj.id;
-    createZoomButtons(map, proj);
     createMousePosSel(map, proj);
+    map.getView().on('change:resolution', () => {
+      events.trigger('map:movestart');
+    });
 
     // This component is inside the map viewport container. Allowing
     // mouse move events to bubble up displays map coordinates--let those
     // be blank when over a component.
-    $('.wv-map-scale-metric').mousemove((e) => e.stopPropagation());
-    $('.wv-map-scale-imperial').mousemove((e) => e.stopPropagation());
+    document.querySelector('.wv-map-scale-metric').addEventListener('mousemove', (e) => e.stopPropagation());
+    document.querySelector('.wv-map-scale-imperial').addEventListener('mousemove', (e) => e.stopPropagation());
 
-    // allow rotation by dragging for polar projections
+    // Allow rotation by dragging for polar projections
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
-      rotation.init(map, proj.id);
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
-    } else if (proj.id === 'geographic') {
-      dateline.init(self, map, dateSelected);
     }
 
+    const onRotate = () => {
+      const radians = map.getView().getRotation();
+      store.dispatch({
+        type: UPDATE_MAP_ROTATION,
+        rotation: radians,
+      });
+      const currentDeg = radians * (180.0 / Math.PI);
+      saveRotation(currentDeg, map.getView());
+      updateExtent();
+    };
+
     // Set event listeners for changes on the map view (when rotated, zoomed, panned)
-    map.getView().on('change:center', lodashDebounce(updateExtent, 300));
-    map.getView().on('change:resolution', lodashDebounce(updateExtent, 300));
-    map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
+    const debouncedUpdateExtent = lodashDebounce(updateExtent, 300);
+    const debouncedOnRotate = lodashDebounce(onRotate, 300);
+
+    map.getView().on('change:center', debouncedUpdateExtent);
+    map.getView().on('change:resolution', debouncedUpdateExtent);
+    map.getView().on('change:rotation', debouncedOnRotate);
+
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      self.events.trigger('drag');
+      events.trigger('map:drag');
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          self.events.trigger('zooming');
+          events.trigger('map:zooming');
           break;
         default:
           break;
       }
     });
     map.on('moveend', (e) => {
-      self.events.trigger('moveend');
+      events.trigger('map:moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
@@ -1139,161 +1280,65 @@ export default function mapui(models, config, store, ui) {
     });
     const onRenderComplete = () => {
       store.dispatch({ type: RENDERED });
-      store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: self.selected.getView().getRotation() });
+      store.dispatch({
+        type: UPDATE_MAP_UI,
+        ui: self,
+        rotation: self.selected.getView().getRotation(),
+      });
+      setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
-      if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
     granuleFootprints[proj.crs] = granuleFootprint(map);
+    window.addEventListener('resize', () => {
+      map.getView().changed();
+    });
     return map;
   }
 
   /*
-   * Creates map zoom buttons
+   * Creates map events based on mouse position
    *
-   * @method createZoomButtons
+   *
+   * @method createMousePosSel
    * @static
    *
    * @param {object} map - OpenLayers Map Object
-   * @param {object} proj - Projection properties
    *
    * @returns {void}
+   *
+   * @todo move this component to another Location
    */
-  function createZoomButtons(map, proj) {
-    const $map = $(`#${map.getTarget()}`);
-
-    const $zoomOut = $('<div></div>')
-      .addClass('wv-map-zoom-out')
-      .addClass('wv-map-zoom');
-    const $outIcon = $(faIconMinusSVGDomEl);
-    $zoomOut.append($outIcon);
-    $map.append($zoomOut);
-    $zoomOut.button({
-      text: false,
-    });
-    $zoomOut.click(() => {
-      mapUtilZoomAction(map, -1);
-    });
-    $zoomOut.mousemove((e) => e.stopPropagation());
-
-    const $zoomIn = $('<div></div>')
-      .addClass('wv-map-zoom-in')
-      .addClass('wv-map-zoom');
-    const $inIcon = $(faIconPlusSVGDomEl);
-    $zoomIn.append($inIcon);
-    $map.append($zoomIn);
-    $zoomIn.button({
-      text: false,
-    });
-    $zoomIn.click(() => {
-      mapUtilZoomAction(map, 1);
-    });
-    $zoomIn.mousemove((e) => e.stopPropagation());
-
-    /*
-     * Debounce for below onZoomChange function
-     *
-     * @funct debouncedZoomChange
-     * @static
-     *
-     * @returns {void}
-     *
-     */
-    const debouncedZoomChange = () => {
-      onZoomChange();
-      self.events.trigger('movestart');
-    };
-
-    /*
-     * Sets zoom buttons as active or inactive based
-     * on the zoom level
-     *
-     * @funct onZoomChange
-     * @static
-     *
-     * @returns {void}
-     */
-    const onZoomChange = function() {
-      const { numZoomLevels } = proj;
-      const zoom = map.getView().getZoom();
-      if (zoom === 0) {
-        $zoomIn.button('enable');
-        $zoomOut.button('disable');
-      } else if (zoom === numZoomLevels) {
-        $zoomIn.button('disable');
-        $zoomOut.button('enable');
-      } else {
-        $zoomIn.button('enable');
-        $zoomOut.button('enable');
-      }
-    };
-    map.getView().on('change:resolution', lodashDebounce(debouncedZoomChange, 30));
-    onZoomChange();
-  }
-
-  function onRotate(val) {
-    rotation.updateRotation(val);
-    updateExtent();
-  }
-
-  /*
-  * Creates map events based on mouse position
-  *
-  * @method createMousePosSel
-  * @static
-  *
-  * @param {object} map - OpenLayers Map Object
-  * @param {object} proj - Projection properties
-  *
-  * @returns {void}
-  * @todo move this component to another Location
-  */
-  function createMousePosSel(map, proj) {
-    let hoverThrottle;
-
-    function onMouseMove(e) {
+  function createMousePosSel(map) {
+    const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
+      const { browser, locationSearch, sidebar } = state;
+      const { isCoordinateSearchActive } = locationSearch;
+      const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
-      if (self.compareMapUi && self.compareMapUi.dragging) return;
-      // if mobile return
-      if (util.browser.small) return;
-      // if measure is active return
+      if (compareMapUi && compareMapUi.dragging) return;
+      if (isMobile) return;
       if (state.measure.isActive) return;
-      // if over coords return
-      if (
-        $(e.relatedTarget).hasClass('map-coord')
-        || $(e.relatedTarget).hasClass('coord-btn')
-      ) {
-        return;
-      }
-      const pixels = map.getEventPixel(e.originalEvent);
+      if (isCoordinateSearchActive) return;
+
+      const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
-      // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged || util.browser.small) {
-        return;
-      }
-      // Don't add data runners if we're on the events or data tabs, or if map is animating
+      if (self.mapIsbeingDragged) return;
+      // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
       const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
-      const isDataTabActive = typeof state.data !== 'undefined' && state.data.active;
       const isMapAnimating = state.animation.isPlaying;
-      if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
+      if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      dataRunner.newPoint(pixels, map);
-    }
-    $(map.getViewport())
-      .mouseout((e) => {
-        if (
-          $(e.relatedTarget).hasClass('map-coord')
-          || $(e.relatedTarget).hasClass('coord-btn')
-        ) {
-          return;
-        }
-        hoverThrottle.cancel();
-        dataRunner.clearAll();
-      })
-      .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
+      runningdata.newPoint(pixels, map);
+    }, 300);
+
+    events.on('map:mousemove', throttledOnMouseMove);
+    events.on('map:mouseout', (e) => {
+      throttledOnMouseMove.cancel();
+      runningdata.clearAll();
+    });
   }
 
   init();

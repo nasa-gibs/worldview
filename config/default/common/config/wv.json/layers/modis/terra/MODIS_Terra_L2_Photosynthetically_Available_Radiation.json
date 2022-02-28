@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L2_Photosynthetically_Available_Radiation",
       "tags": "par",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Photosynthetically Available Radiation",
       "product": "",
       "wrapadjacentdays": true,
       "tracks": [

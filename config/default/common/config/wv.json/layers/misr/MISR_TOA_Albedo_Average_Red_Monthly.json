@@ -7,9 +7,7 @@
       "description": "misr/MISR_TOA_Albedo_Average_Red_Monthly",
       "tags": "top of atmosphere",
       "group": "overlays",
-      "layergroup": [
-        "misr"
-      ],
+      "layergroup": "TOA Albedo",
       "product": "MIL3MAL",
       "wrapadjacentdays": true
     }

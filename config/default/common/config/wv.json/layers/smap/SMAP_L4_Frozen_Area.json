@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Frozen_Area",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Frozen Area",
       "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }

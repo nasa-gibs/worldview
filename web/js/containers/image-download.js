@@ -8,14 +8,16 @@ import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
+  getAlertMessageIfCrossesDateline,
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
 import util from '../util/util';
 import {
-  hasSubDaily as hasSubDailySelector,
   getLayers,
+  subdailyLayersActive,
 } from '../modules/layers/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -74,6 +76,7 @@ class ImageDownloadContainer extends Component {
       date,
       getLayers,
       hasSubdailyLayers,
+      markerCoordinates,
       onPanelChange,
     } = this.props;
     const {
@@ -112,7 +115,9 @@ class ImageDownloadContainer extends Component {
           resolution={newResolution}
           isWorldfile={isWorldfile}
           hasSubdailyLayers={hasSubdailyLayers}
+          markerCoordinates={markerCoordinates}
           date={date}
+          datelineMessage={getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, proj)}
           url={url}
           crs={crs}
           getLayers={getLayers}
@@ -153,9 +158,7 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    layers,
-    compare,
-    date,
+    locationSearch,
     map,
     imageDownload,
   } = state;
@@ -163,9 +166,8 @@ function mapStateToProps(state) {
     isWorldfile, fileType, resolution, boundaries,
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
-  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-  const activeStr = compare.activeString;
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
+  const markerCoordinates = locationSearch.coordinates;
+  const hasSubdailyLayers = subdailyLayersActive(state);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -186,14 +188,14 @@ function mapStateToProps(state) {
     resolution,
     boundaries,
     hasSubdailyLayers,
-    date: date[activeDateStr],
+    markerCoordinates,
+    date: getSelectedDate(state),
     getLayers: () => getLayers(
-      layers[compare.activeString],
+      state,
       {
         reverse: true,
         renderable: true,
       },
-      state,
     ),
   };
 }
@@ -214,9 +216,6 @@ export default connect(
   mapDispatchToProps,
 )(ImageDownloadContainer);
 
-ImageDownloadContainer.defualtProps = {
-  fileType: 'image/jpeg',
-};
 ImageDownloadContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,
@@ -230,6 +229,7 @@ ImageDownloadContainer.propTypes = {
   getLayers: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
+  markerCoordinates: PropTypes.array,
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,

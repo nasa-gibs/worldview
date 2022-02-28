@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Mean_Heterotrophic_Respiration",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Heterotrophic Respiration",
       "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }

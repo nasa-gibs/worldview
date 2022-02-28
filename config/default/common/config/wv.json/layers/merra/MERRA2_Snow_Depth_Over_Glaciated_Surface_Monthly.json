@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Snow_Depth_Over_Glaciated_Surface_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Snow Depth",
       "product": "M2TMNXGLC",
       "wrapadjacentdays": true
     }

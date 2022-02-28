@@ -6,9 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "reference/MODIS_Terra_Data_No_Data",
       "group": "overlays",
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Areas of No Data (mask)",
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Terra_Descending"

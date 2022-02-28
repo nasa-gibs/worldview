@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "OMAEROe",
       "tags": "aod",
       "tracks": [

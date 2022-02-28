@@ -4,17 +4,17 @@
             {
                 "id": "arctic",
                 "name": "Arctic",
-                "style": "faArrowCircleUp"
+                "style": "arrow-circle-up"
             },
             {
                 "id": "geographic",
                 "name": "Geographic",
-                "style": "faCircle"
+                "style": "circle"
             },
             {
                 "id": "antarctic",
                 "name": "Antarctic",
-                "style": "faArrowCircleDown"
+                "style": "arrow-circle-down"
             }
         ]
     }

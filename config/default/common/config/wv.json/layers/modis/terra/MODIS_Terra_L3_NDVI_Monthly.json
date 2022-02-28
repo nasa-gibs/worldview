@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_NDVI_Monthly",
       "group": "overlays",
       "tags": "ndvi normalized difference vegetation index",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "MOD13A3",
       "wrapadjacentdays": true,
       "daynight": [

@@ -27,7 +27,6 @@ const {
   aquaTerraMODISTab,
   aquaTerraModisHeader,
   aquaModisTab,
-  maiacHeader,
   filterButton,
   sourceTabs,
   sourceMetadataCollapsed,
@@ -64,7 +63,7 @@ module.exports = {
     c.click(addLayers);
     c.waitForElementVisible('.categories-dropdown-header', TIME_LIMIT, assertCategories(c));
   },
-  'Clicking a measurement': (c) => {
+  'Clicking a measurement shows choices, indicates unavailability': (c) => {
     c.click(aodAllMeasurement);
     c.waitForElementVisible(aodAllMeasurementContents, TIME_LIMIT, (e) => {
       c.expect.element(sourceMetadataCollapsed).to.be.present;
@@ -72,9 +71,9 @@ module.exports = {
       c.expect.element(aodCheckboxMODIS).to.be.present;
       c.expect.element(aodCheckboxMAIAC).to.be.present;
       // Indicate that MODIS Combined layer has no available coverage
-      c.assert.cssClassPresent(aodCheckboxMODIS, 'unavailable');
+      c.expect.element(`${aodCheckboxMODIS} + svg#availability-info`).to.be.present;
       // Indicate that MAIAC layer has no available coverage
-      c.assert.cssClassPresent(aodCheckboxMAIAC, 'unavailable');
+      c.expect.element(`${aodCheckboxMAIAC} + svg#availability-info`).to.be.present;
       c.expect.elements(sourceTabs).count.to.equal(8);
     });
   },
@@ -92,9 +91,10 @@ module.exports = {
   'Expanding measurement details': (c) => {
     c.click('.ellipsis');
     c.waitForElementVisible(sourceMetadataExpanded, TIME_LIMIT, (e) => {
-      c.assert.containsText(aquaTerraModisHeader, 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
-      c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
-      c.expect.elements('.source-metadata > p').count.to.equal(7);
+      // c.pause(30000);
+      c.assert.containsText(aquaTerraModisHeader, 'About Aerosol Optical Depth (AOD)');
+      // c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
+      // c.expect.elements('.source-metadata > p').count.to.equal(10);
       c.expect.element('.ellipsis.up').to.be.present;
     });
   },
@@ -105,8 +105,8 @@ module.exports = {
   'Switching source tabs': (c) => {
     c.click(aquaModisTab).pause(250);
     c.expect.element(aodCheckbox).to.be.present;
-    c.expect.element('h3#aerosolopticaldepth').to.be.present;
-    c.assert.containsText('h3#aerosolopticaldepth', 'Aerosol Optical Depth');
+    c.expect.element('h3#aboutaerosolopticaldepthaod').to.be.present;
+    c.assert.containsText('h3#aboutaerosolopticaldepthaod', 'About Aerosol Optical Depth (AOD)');
     c.click(aodCheckbox);
   },
   'Back button returns to categories': (c) => {
@@ -157,7 +157,7 @@ module.exports = {
     c.assert.not.cssClassPresent(aodSearchCheckbox, 'checked');
     c.assert.containsText(addToMapButton, 'Add Layer');
     // Add it again
-    c.click(aodSearchCheckbox).pause(200);
+    c.click(aodCheckbox).pause(200);
     c.assert.containsText(addToMapButton, 'Remove Layer');
     c.assert.cssClassPresent(aodSearchCheckbox, 'checked');
   },

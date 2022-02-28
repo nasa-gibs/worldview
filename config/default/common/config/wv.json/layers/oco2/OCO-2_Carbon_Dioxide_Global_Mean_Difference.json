@@ -7,11 +7,9 @@
       "description": "oco2/OCO-2_Carbon_Dioxide_Global_Mean_Difference",
       "tags": "oco2 co2",
       "group": "overlays",
-      "layergroup": [
-        "oco2"
-      ],
-      "product": "OCO2_L2_Lite_FP",
+      "layergroup": "Carbon Dioxide",
       "wrapadjacentdays": true,
+      "inactive": true,
       "tracks": [
         "OrbitTracks_OCO-2_Ascending"
       ],

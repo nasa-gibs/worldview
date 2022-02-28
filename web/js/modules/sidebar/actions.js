@@ -18,7 +18,7 @@ export function changeTab(str) {
     }
   };
 }
-export function toggleSidebarCollapse(str) {
+export function toggleSidebarCollapse() {
   return (dispatch, getState) => {
     const isMobile = getState().browser.lessThan.medium;
     if (isMobile) {
@@ -29,7 +29,7 @@ export function toggleSidebarCollapse(str) {
   };
 }
 
-export function collapseSidebar(str) {
+export function collapseSidebar() {
   return (dispatch, getState) => {
     const isMobile = getState().browser.lessThan.medium;
     if (isMobile) {
@@ -40,7 +40,7 @@ export function collapseSidebar(str) {
   };
 }
 
-export function expandSidebar(str) {
+export function expandSidebar() {
   return (dispatch, getState) => {
     const isMobile = getState().browser.lessThan.medium;
     if (isMobile) {

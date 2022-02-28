@@ -8,9 +8,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Temperature",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],

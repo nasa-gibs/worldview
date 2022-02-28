@@ -1,5 +1,5 @@
 const loadAndSkipTour = require('../../reuseables/skip-tour.js').loadAndSkipTour;
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 10000;
 /**
  * selectors
@@ -11,7 +11,7 @@ module.exports = {
     loadAndSkipTour(client, TIME_LIMIT);
   },
   'Load Layer with continuous palette': function(client) {
-    client.url(client.globals.url + localQuerystrings.continuousDataLayers);
+    client.url(client.globals.url + localQueryStrings.continuousDataLayers);
     client.waitForElementVisible('.wv-palettes-colorbar', TIME_LIMIT);
   },
   'Veryify running data label is correct when mouse hovers data': function(client) {

@@ -2,9 +2,6 @@ import {
   isObject as lodashIsObject,
   each as lodashEach,
 } from 'lodash';
-import Cache from 'cachai';
-import moment from 'moment';
-import wvui from '../ui/ui';
 import browser from './browser';
 import events from './events';
 import load from './load';
@@ -19,20 +16,6 @@ export default (function(self) {
   self.browser = browser;
   self.events = events;
   self.load = load;
-  self.monthStringArray = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
 
   self.repeat = function(value, length) {
     let result = '';
@@ -50,12 +33,7 @@ export default (function(self) {
     }
     return value;
   };
-  self.preventPinch = function(e) {
-    if (e.deltaY && !Number.isInteger(e.deltaY)) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  };
+
   /**
    * Creates an object representation of a query string.
    *
@@ -93,14 +71,9 @@ export default (function(self) {
     }
     return result;
   };
-  self.elapsed = function(message, startTime, parameters) {
-    if (parameters && !parameters.elapsed) return;
-    const t = Date.now() - startTime;
-    console.log(t, message);
-    return t;
-  };
+
   /**
-   * Converts an object to a query string. For exaple, the following
+   * Converts an object to a query string. For example, the following
    * object:
    *
    *     { foo: "a", format: "image/png" }
@@ -120,10 +93,10 @@ export default (function(self) {
    *     "format=image/png"
    * @return {String} converted query string
    */
-  self.toQueryString = function(kvps, exceptions) {
-    exceptions = exceptions || {};
+  self.toQueryString = function(kvps, exceptions = {}) {
     const parts = [];
     lodashEach(kvps, (value, key) => {
+      if (!value) return;
       let part = `${key}=${encodeURIComponent(value)}`;
       lodashEach(exceptions, (exception) => {
         const regexp = new RegExp(exception, 'ig');
@@ -194,6 +167,7 @@ export default (function(self) {
     }
     return date;
   };
+
   self.appendAttributesForURL = function(item) {
     if (lodashIsObject(item)) {
       let part = item.id || '';
@@ -212,73 +186,6 @@ export default (function(self) {
     }
     self.warn(`Is not an object: ${item}`);
     return '';
-  };
-  /**
-   * Parses a UTC ISO 8601 date to a non UTC date
-   *
-   * @method parseDate
-   * @static
-   * @param str {string} Date to parse in the form of YYYY-MM-DDTHH:MM:SSZ`.
-   * @return {Date} converted string as a non UTC date object, throws an exception if
-   * the string is invalid
-   */
-  self.parseDate = function(dateAsString) {
-    const dateTimeArr = dateAsString.split(/T/);
-
-    const yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
-
-    // Parse elements of date and time
-    const year = yyyymmdd[0];
-    const month = yyyymmdd[1] - 1;
-    const day = yyyymmdd[2];
-
-    let hour = 0;
-    let minute = 0;
-    let second = 0;
-    let millisecond = 0;
-
-    // Use default of midnight if time is not specified
-    if (dateTimeArr.length > 1) {
-      const hhmmss = dateTimeArr[1].split(/[:.Z]/);
-      hour = hhmmss[0] || 0;
-      minute = hhmmss[1] || 0;
-      second = hhmmss[2] || 0;
-      millisecond = hhmmss[3] || 0;
-    }
-    const date = new Date(year, month, day, hour, minute, second,
-      millisecond);
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(date.getTime())) {
-      throw new Error(`Invalid date: ${dateAsString}`);
-    }
-    return date;
-  };
-
-  self.coverageDateFormatter = function(dateType, date, period) {
-    let dateString;
-    date = this.parseDate(date);
-
-    switch (period) {
-      case 'subdaily':
-        dateString = `${moment(date).format('DD MMMM YYYY HH:mm')}Z`;
-        break;
-
-      case 'yearly':
-        if (dateType === 'END-DATE') date.setFullYear(date.getFullYear() - 1);
-        dateString = moment(date).format('YYYY');
-        break;
-
-      case 'monthly':
-        if (dateType === 'END-DATE') date.setMonth(date.getMonth() - 1);
-        dateString = moment(date).format('MMMM YYYY');
-        break;
-
-      default:
-        dateString = moment(date).format('DD MMMM YYYY');
-        break;
-    }
-
-    return dateString;
   };
 
   /**
@@ -307,8 +214,9 @@ export default (function(self) {
    * @return {string} ISO string in the form of ``YYYY-MM-DD``.
    */
   self.toISOStringDate = function(date) {
-    return date.toISOString()
-      .split('T')[0];
+    const isString = typeof date === 'string' || date instanceof String;
+    const dateString = isString ? date : date.toISOString();
+    return dateString.split('T')[0];
   };
 
   /**
@@ -321,34 +229,6 @@ export default (function(self) {
    */
   self.toISOStringSeconds = function(date) {
     return `${date.toISOString().split('.')[0]}Z`;
-  };
-
-  /**
-   * Converts a time into an ISO string without seconds.
-   *
-   * @method toISOStringMinutes
-   * @static
-   * @param  {Date} date the date to convert
-   * @return {string} ISO string in the form of `YYYY-MM-DDThh:mmZ`.
-   */
-  self.toISOStringMinutes = function(date) {
-    const parts = date.toISOString().split(':');
-    return `${parts[0]}:${parts[1]}Z`;
-  };
-
-  /**
-   * Converts a time into a HH:MM string
-   *
-   * @method toHourMinutes
-   * @static
-   * @param date {Date} the date to convert
-   * @return {string} ISO string in the form of HH:MM`.
-   */
-  self.toHourMinutes = function(date) {
-    const time = date.toISOString()
-      .split('T')[1];
-    const parts = time.split('.')[0].split(':');
-    return `${parts[0]}:${parts[1]}`;
   };
 
   /**
@@ -367,6 +247,24 @@ export default (function(self) {
     timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes()));
     return timeToReturn;
   };
+
+  /**
+   * Round input time to quarter hour
+   *
+   * @method roundTimeQuarterHour
+   * @static
+   * @param time {Date} date
+   * @return {number} rounded date
+   */
+  self.roundTimeQuarterHour = function(time) {
+    const timeToReturn = new Date(time);
+
+    timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
+    timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+    timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+    return timeToReturn;
+  };
+
   /**
    * Remove spaces and combine value
    *
@@ -410,8 +308,7 @@ export default (function(self) {
       case 'month':
         year = newDate.getUTCFullYear();
         month = newDate.getUTCMonth();
-        maxDay = new Date(year, month + amount + 1, 0)
-          .getUTCDate();
+        maxDay = new Date(year, month + amount + 1, 0).getUTCDate();
         if (maxDay <= date.getUTCDate()) {
           newDate.setUTCDate(maxDay);
         }
@@ -424,35 +321,6 @@ export default (function(self) {
         throw new Error(`[dateAdd] Invalid interval: ${interval}`);
     }
     return newDate;
-  };
-
-  self.getNumberOfDays = function(start, end, interval, increment, maxToCheck) {
-    increment = increment || 1;
-    let i = 1;
-    let currentDate = start;
-    while (currentDate < end) {
-      i += 1;
-      currentDate = self.dateAdd(currentDate, interval, increment);
-      // if checking for a max number limit, break out after reaching it
-      if (maxToCheck && i >= maxToCheck) {
-        return i;
-      }
-    }
-    return i;
-  };
-
-  self.daysInMonth = function(d) {
-    let year;
-    let month;
-    if (d.getUTCFullYear) {
-      year = d.getUTCFullYear();
-      month = d.getUTCMonth();
-    } else {
-      year = d.year;
-      month = d.month;
-    }
-    const lastDay = new Date(Date.UTC(year, month + 1, 0));
-    return lastDay.getUTCDate();
   };
 
   self.daysInYear = function(date) {
@@ -525,169 +393,30 @@ export default (function(self) {
     return val;
   };
 
-  self.roll = function(val, min, max) {
-    if (val < min) {
-      return max - (min - val) + 1;
-    }
-    if (val > max) {
-      return min + (val - max) - 1;
-    }
-    return val;
-  };
-
-  self.minDate = function() {
-    return new Date(Date.UTC(1000, 0, 1, 0, 0));
-  };
-
-  self.maxDate = function() {
-    return new Date(Date.UTC(3000, 11, 30, 23, 59));
-  };
-
-  self.rollRange = function(date, interval, minDate, maxDate) {
-    const year = date.getUTCFullYear();
-    const month = date.getUTCMonth();
-    let first;
-    let last;
-    switch (interval) {
-      case 'minute': {
-        const firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
-        const lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
-        first = new Date(Math.max(firstMinute, minDate))
-          .getUTCMinutes();
-        last = new Date(Math.min(lastMinute, maxDate))
-          .getUTCMinutes();
-        break;
-      }
-      case 'hour': {
-        const firstHour = new Date(Date.UTC(year, month, 1, 0));
-        const lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
-        first = new Date(Math.max(firstHour, minDate))
-          .getUTCHours();
-        last = new Date(Math.min(lastHour, maxDate))
-          .getUTCHours();
-        break;
-      }
-      case 'day': {
-        const firstDay = new Date(Date.UTC(year, month, 1));
-        const lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
-        first = new Date(Math.max(firstDay, minDate))
-          .getUTCDate();
-        last = new Date(Math.min(lastDay, maxDate))
-          .getUTCDate();
-        break;
-      }
-      case 'month': {
-        const firstMonth = new Date(Date.UTC(year, 0, 1));
-        const lastMonth = new Date(Date.UTC(year, 11, 31));
-        first = new Date(Math.max(firstMonth, minDate))
-          .getUTCMonth();
-        last = new Date(Math.min(lastMonth, maxDate))
-          .getUTCMonth();
-        break;
-      }
-      case 'year': {
-        const firstYear = self.minDate();
-        const lastYear = self.maxDate();
-        first = new Date(Math.max(firstYear, minDate))
-          .getUTCFullYear();
-        last = new Date(Math.min(lastYear, maxDate))
-          .getUTCFullYear();
-        break;
-      }
-      default:
-        break;
-    }
-    return {
-      first,
-      last,
-    };
-  };
-
-  self.rollDate = function(date, interval, amount, minDate, maxDate) {
-    minDate = minDate || self.minDate();
-    maxDate = maxDate || self.maxDate();
-    const range = self.rollRange(date, interval, minDate, maxDate);
-    const min = range.first;
-    const max = range.last;
-    const second = date.getUTCSeconds();
-    let minute = date.getUTCMinutes();
-    let hour = date.getUTCHours();
-    let day = date.getUTCDate();
-    let month = date.getUTCMonth();
-    let year = date.getUTCFullYear();
-    switch (interval) {
-      // TODO: change minute and hour hard-coded min & max to be dynamic
-      case 'minute':
-        minute = self.roll(minute + amount, 0, 59);
-        break;
-      case 'hour':
-        hour = self.roll(hour + amount, 0, 23);
-        break;
-      case 'day':
-        day = self.roll(day + amount, min, max);
-        break;
-      case 'month':
-        month = self.roll(month + amount, min, max);
-        break;
-      case 'year':
-        year = self.roll(year + amount, min, max);
-        break;
-      default:
-        throw new Error(`[rollDate] Invalid interval: ${interval}`);
-    }
-    const daysInMonth = self.daysInMonth({
-      year,
-      month,
-    });
-    if (day > daysInMonth) {
-      day = daysInMonth;
-    }
-    let newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
-    newDate = new Date(self.clamp(newDate, minDate, maxDate));
-    return newDate;
-  };
 
   /**
-   * Gets the current time. Use this instead of the Date methods to allow
-   * debugging alternate "now" times.
+   * Gets the current time minus minutesOffset for geostationary layers.
+   * Use this instead of the Date methods to allow debugging alternate "now" times.
    *
    * @method now
    * @static
    * @return {Date} The current time or an overridden value.
    */
-  const now = function() {
-    return new Date();
+  const minutesOffset = 40 * 60000; // 40 minutes
+  self.now = function() {
+    return new Date(new Date().getTime() - minutesOffset);
   };
 
-  self.now = now;
-
   /**
-   * Gets the current day. Use this instead of the Date methods to allow
-   * debugging alternate "now" dates.
+   * Gets now minus one day, minus minutesOffset minutes for geostationary layers.
    *
-   * @method today
+   * @method yesterday
    * @static
    * @return {Date} The current time with the UTC hours, minutes, and seconds
-   * fields set to zero or an overridden value.
    */
-  self.today = function() {
-    return self.now();
-  };
-
-  /**
-   * General error handler.
-   *
-   * This function delegates to
-   * {{#crossLink "wv.ui/error:method"}}wv.ui.error{{/crossLink}}.
-   * For custom error handling, replace this function.
-   *
-   * @method error
-   * @static
-   * @param {string} message Message to display to the end user.
-   * @param {Exception} cause The exception object that caused the error
-   */
-  self.error = function(message, cause) {
-    wvui.error(message, cause);
+  self.yesterday = function() {
+    const nowDate = self.now();
+    return new Date(nowDate.setDate(nowDate.getDate() - 1));
   };
 
   /**
@@ -736,81 +465,28 @@ export default (function(self) {
     // eslint-disable-next-line no-restricted-properties
     return Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
   };
+
   self.fetch = function(url, mimeType) {
-    return new Promise((resolve, reject) => fetch(url)
-      .then((response) => (mimeType === 'application/json'
-        ? response.json()
-        : response.text()))
-      .then((data) => {
-        resolve(data);
-      })
-      .catch((error) => {
-        reject(error);
-      }));
+    return new Promise(
+      (resolve, reject) => fetch(url)
+        .then((response) => (mimeType === 'application/json'
+          ? response.json()
+          : response.text()))
+        .then(resolve)
+        .catch(reject),
+    );
   };
 
-  /**
-   * Submits an AJAX request or retreives the result from the cache.
-   *
-   * @class wv.util.ajaxCache
-   * @constructor
-   * @param {Number} [spec.size] maximum number of items to store in the
-   * cache.
-   * @param {Object} [spec.options] options to pass to jscache on setItem.
-   *
-   */
-  self.ajaxCache = function(spec) {
-    spec = spec || {};
-    const size = spec.size || null;
-    const options = spec.options || {};
-    const cache = new Cache(size);
-
-    return {
-      /**
-       * Submits an AJAX request using jQuery.ajax or retrieves the
-       * results from cache.
-       *
-       * @method submit
-       * @param {Object} parameters Parameters to pass to the jQuery.ajax
-       * call.
-       * @return {jQuery.Deferred} a deferred object that will resolve
-       * when the query returns, or resolves immediately if the results
-       * are cached.
-       */
-      submit(parameters) {
-        let key = `url=${parameters.url}`;
-        if (parameters.data) {
-          key += `&query=${$.param(parameters.data, true)}`;
-        }
-        const results = cache.getItem(key);
-
-        if (results) {
-          return $.Deferred()
-            .resolve(results)
-            .promise();
-        }
-        const promise = $.ajax(parameters);
-        promise.done((results) => {
-          cache.setItem(key, results, options);
-        });
-        return promise;
-      },
-    };
-  };
   self.errorReport = function(errors) {
     // eslint-disable-next-line no-unused-vars
-    let layersRemoved = 0;
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
-      if (error.layerRemoved) {
-        layersRemoved += 1;
-      }
     });
   };
+
   /**
-   * Wraps a function in a try/catch block that invokes wv.util.error
-   * if an exception is thrown.
+   * Wraps a function in a try/catch block that logs error if thrown
    *
    * @param {function} func the function to wrap
    * @return the function wrapped in a try/catch block.
@@ -820,7 +496,7 @@ export default (function(self) {
       try {
         return func.apply(func, args);
       } catch (error) {
-        self.error(error);
+        console.error(error);
       }
     };
   };
@@ -861,31 +537,9 @@ export default (function(self) {
     });
   };
 
-  // FIXME: Should be replaced with $.when
-  self.ajaxJoin = function(calls) {
-    let completed = 0;
-    const result = {};
-    const deferred = $.Deferred();
-
-    $.each(calls, (index, call) => {
-      call.promise.done((data) => {
-        result[call.item] = data;
-        completed += 1;
-        if (completed === calls.length) {
-          deferred.resolve(result);
-        }
-      })
-        .fail((jqXHR, textStatus, errorThrown) => {
-          deferred.reject(jqXHR, textStatus, errorThrown);
-        });
-    });
-
-    return deferred.promise();
-  };
-
   // Converts a string to a form that can be safely used as an identifier.
   //
-  // Currently only converts '.' and ':' to __xx__ where xx is the hex
+  // Currently only converts '.' and ':' and ',' to __xx__ where xx is the hex
   // value of that character. Add more here as needed.
   //
   // When GIBS added the 'Particulate_Matter_Below_2.5micrometers_2001-2010'
@@ -899,7 +553,7 @@ export default (function(self) {
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
-    return str.replace(/[.:]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
+    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
   };
 
   // Converts an encoded identifier back to its original value.
@@ -1104,6 +758,34 @@ export default (function(self) {
       }
     }
     return false;
+  };
+
+  self.decodeHTML = (html) => {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  };
+
+  /**
+   * Load additional scripts sequentially
+   * @param {*} scripts
+   * @param {*} fn
+   */
+  self.loadScripts = (scripts = [], fn) => {
+    const head = document.head || document.getElementsByTagName('head')[0];
+    const loadFile = (index) => {
+      if (scripts.length > index) {
+        const fileref = document.createElement('script');
+        fileref.setAttribute('type', 'text/javascript');
+        fileref.setAttribute('src', scripts[index]);
+        head.appendChild(fileref);
+        // Load next script
+        fileref.onload = () => { loadFile(index + 1); };
+      } else if (fn) {
+        fn();
+      }
+    };
+    loadFile(0);
   };
 
   return self;

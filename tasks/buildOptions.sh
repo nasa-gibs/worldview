@@ -3,12 +3,11 @@
 PROG=$(basename "$0")
 BASE=$(dirname "$0")/..
 
-TASKS_DIR="$BASE/tasks"
 SRC_DIR="$BASE/config/default"
 OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-PYTHON_SCRIPTS_DIR="$TASKS_DIR/python3"
+PYTHON_SCRIPTS_DIR="$BASE/tasks/python3"
 
 
 # If there is an active directory, use instead of defaults
@@ -33,17 +32,6 @@ OPT_SUBDIR="${CONFIG_ENV-release}"
 CONFIG=$(echo $SRC_DIR | sed s_tasks/../__)
 echo "Using $CONFIG ($OPT_SUBDIR)"
 
-# Activate virtual Python environment
-PATH=.python/bin:.python/Scripts:${PATH}
-
-# If $FETCH_GC is set, make request to GIBS GetCapabilities API
-if [ "$FETCH_GC" ] ; then
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
-    exit 0
-fi
-
 # Copy options files to build directory, and various other file operations
 rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
@@ -60,6 +48,23 @@ mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 mkdir -p "$BUILD_DIR/vectorstyles"
 mkdir -p "$BUILD_DIR/vectordata"
+
+# If $FETCH_GC is set, make various API requests
+if [ "$FETCH_GC" ] ; then
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
+    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
+
+    # Get visualization metadata (if configured)
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
+        "$BUILD_DIR/config/wv.json/layerOrder.json" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
+    exit 0
+fi
+
+"$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
+    "$BASE/schemas/layer-config.json"
 
 if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
@@ -115,12 +120,16 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
             "$BUILD_DIR/config/palettes"
 fi
 
-# Run getCollectionData.py to fetch collection metadata
-# Disabled for now
-# if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
-#     "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
-#         "$BUILD_DIR/config/wv.json/collections.json"
-# fi
+# Throw error if no categoryGroupOrder.json file present
+if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
+    echo "categoryGroupOrder.json not found.  Generating..."
+    "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
+        "$SRC_DIR/common/config/wv.json/"
+fi
+
+if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
+    cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+fi
 
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
@@ -136,8 +145,10 @@ for config in $configs; do
     esac
 done
 
+# Run mergeConfigWithWMTS.py to merge layer metadata from WMTS GC with worldview layer configs into wv.json
 "$PYTHON_SCRIPTS_DIR/mergeConfigWithWMTS.py" "$BUILD_DIR/_wmts" \
     "$DEST_DIR/config/wv.json"
+
 # Copy brand files from build to dest
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"

@@ -7,9 +7,7 @@
       "description": "sedac/Last_of_the_Wild_1995-2004",
       "tags": "human sedac wild",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Human Footprint",
       "product": "CIESIN_SEDAC_LWP2_LW_GEOG",
       "inactive": true,
       "wrapX": true

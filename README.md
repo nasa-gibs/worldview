@@ -1,15 +1,15 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
-[![Worldview Screenshot](/web/images/preview.gif)](https://worldview.earthdata.nasa.gov)
+[![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
+[![Build Status](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml/badge.svg?branch=main)](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
 This app from NASA's [EOSDIS](https://earthdata.nasa.gov/) provides the
-capability to interactively browse over 900 global, full-resolution satellite
+capability to interactively browse over 1000 global, full-resolution satellite
 imagery layers on desktop and mobile devices. Many of the imagery layers are
 updated daily and are within three hours of observation - showing the entire Earth as it is
 "right now". This supports time-critical applications such as wildfire
@@ -20,8 +20,8 @@ views of several imagery layers are available for a “full globe” perspective
 
 Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from the
 [Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs). This
-imagery can also be used [with libraries such as Leaflet, Cesium, Google Maps](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage)
-or [custom GDAL scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
+imagery can also be used [with libraries such as Leaflet, Cesium, Google Maps](https://nasa-gibs.github.io/gibs-api-docs/map-library-usage/)
+or [custom GDAL scripts](https://nasa-gibs.github.io/gibs-api-docs/map-library-usage/#gdal).
 We encourage interested developers to fork Worldview or build their own clients
 using GIBS services.
 
@@ -45,7 +45,7 @@ View the [Configuration](doc/configuration.md) section for information on how to
 
 The following are required to install and run Worldview:
 
-- [Node v10 or Later](https://nodejs.org/en/download/)
+- [Node v12.21.0 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v3.7.1 or Later](https://www.python.org/)
 
@@ -72,24 +72,23 @@ See [Developing](doc/developing.md) for more usage details.
 
 ## Updates
 
-To update Worldview, pull down any branch or tag from GitHub. From the `master` branch (default), to update to the latest stable version of Worldview, run `git pull`.
+To update Worldview, pull down any branch or tag from GitHub. From the `main` branch (default), to update to the latest stable version of Worldview, run `git pull`.
 
 **Note:** This project uses [Semantic Versioning](https://semver.org/). Updates to the major version number in [package.json](package.json) indicate a breaking change; _update with caution_.
 
 ## Other Information
 
-- [Configuration](doc/configuration.md)
+- [Configuration](doc/config/configuration.md)
 - [Custom Branding](doc/branding.md)
 - [Optional Features](doc/features.md)
-- [Data Download](doc/data_download.md)
-- [URL Parameters](doc/url_parameters.md)
 - [Developing](doc/developing.md)
 - [Deployment](doc/deployment.md)
 - [Testing](doc/testing.md)
+- [URL Parameters](doc/url_parameters.md)
 - [Uploading](doc/upload.md)
 - [Docker](doc/docker.md)
-- [Release Notes](doc/release_notes.md)
-- [Changelog](CHANGELOG.md)
+- [Data Download (Smart Handoffs)](doc/smart_handoffs.md)
+- [Embedding](doc/embed.md)
 
 ## Contact
 

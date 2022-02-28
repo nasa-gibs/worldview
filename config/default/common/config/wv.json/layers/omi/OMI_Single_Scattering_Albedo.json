@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Single_Scattering_Albedo",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Aerosol Albedo",
       "product": "OMAERUVd",
       "tags": "ultra violet",
       "tracks": [

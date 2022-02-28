@@ -6,10 +6,7 @@
       "subtitle": "ALOS/PALSAR, ENVISAT/ASAR, ERS-1/SAR, ERS-2/SAR, RADARSAT-1/SAR, RADARSAT-2/SAR",
       "description": "multi-mission/merged/MEaSUREs_Ice_Velocity_Antarctica",
       "tags": "",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_merged"
-      ],
+      "layergroup": "Ice Velocity Antarctica",
       "product": "NSIDC-0484",
       "group": "overlays",
       "inactive": true

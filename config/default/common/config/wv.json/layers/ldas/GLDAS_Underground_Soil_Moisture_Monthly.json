@@ -7,9 +7,7 @@
       "description": "ldas/GLDAS_Underground_Soil_Moisture_Monthly",
       "tags": "global land data assimilation system, land surface model",
       "group": "overlays",
-      "layergroup": [
-        "ldas"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "GLDAS_NOAH10_M.2.0",
       "inactive": true,
       "wrapadjacentdays": true

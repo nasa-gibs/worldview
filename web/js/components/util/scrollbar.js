@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { debounce } from 'lodash';
@@ -8,13 +8,10 @@ import { debounce } from 'lodash';
  */
 export default function Scrollbars(props) {
   const ref = useRef();
-  const [scrollTop, updateScrollTop] = useState(0);
   const {
     style,
     className,
-    onScroll,
     children,
-    scrollBarVerticalTop,
   } = props;
 
   /**
@@ -43,41 +40,6 @@ export default function Scrollbars(props) {
     }, 50, { leading: true, trailing: true })();
   });
 
-  /**
-   *  Set scroll top when prop changes
-   */
-  useEffect(() => {
-    if (!ref || !ref.current) {
-      return;
-    }
-    function setScrollTop() {
-      const { contentWrapperEl } = ref.current;
-      if (contentWrapperEl) {
-        updateScrollTop(scrollBarVerticalTop);
-        contentWrapperEl.scrollTop = scrollBarVerticalTop;
-      }
-    }
-    setTimeout(setScrollTop, 100);
-  }, [scrollBarVerticalTop]);
-
-  /**
-   * Handle register/deregister of scroll event listener
-   */
-  useEffect(() => {
-    if (!onScroll) return;
-    const { contentWrapperEl } = ref && ref.current;
-    function scrollListener() {
-      // Avoid calling event listener when we are setting scrollTop manually
-      if (contentWrapperEl.scrollTop !== scrollTop) {
-        onScroll(contentWrapperEl);
-      }
-    }
-    contentWrapperEl.addEventListener('scroll', scrollListener);
-    return function cleanUp() {
-      contentWrapperEl.removeEventListener('scroll', scrollListener);
-    };
-  });
-
   return (
     <SimpleBarReact
       autoHide={false}
@@ -93,11 +55,5 @@ export default function Scrollbars(props) {
 Scrollbars.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  onScroll: PropTypes.func,
-  scrollBarVerticalTop: PropTypes.number,
   style: PropTypes.object,
-};
-
-Scrollbars.defaultProps = {
-  scrollBarVerticalTop: 0,
 };

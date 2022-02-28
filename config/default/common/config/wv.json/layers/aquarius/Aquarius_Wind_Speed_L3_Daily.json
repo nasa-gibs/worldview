@@ -7,9 +7,7 @@
       "description": "aquarius/Aquarius_Wind_Speed_L3_Daily",
       "tags": "podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "aquarius"
-      ],
+      "layergroup": "Wind Speed",
       "product": "AQUARIUS_L3_WIND_SPEED_SMI_DAILY_V4",
       "inactive": true
     }

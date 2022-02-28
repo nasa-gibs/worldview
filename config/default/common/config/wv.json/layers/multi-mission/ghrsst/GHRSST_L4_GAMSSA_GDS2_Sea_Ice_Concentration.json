@@ -7,10 +7,7 @@
       "description": "multi-mission/ghrsst/GHRSST_L4_GAMSSA_GDS2_Sea_Ice_Concentration",
       "tags": "ghrsst podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_ghrsst"
-      ],
+      "layergroup": "Sea Ice",
       "product": "GAMSSA_28km-ABOM-L4-GLOB-v01",
       "wrapadjacentdays": true
     }

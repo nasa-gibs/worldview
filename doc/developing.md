@@ -5,7 +5,7 @@
 
 This project uses `npm` to run build scripts and other tasks. The scripts are a combination of JavaScript, Bash, and Python scripts. Webpack is used as a module bundler.
 
-**`npm run build`**: Main build script cleans previous build directory, gets available imagery metadata via the [GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers), adds the build configuration (options), and builds the Webpack bundle in Development mode. Generates the build in `build/`. If you have a custom configuration subdirectory, pass it to the command with `npm run build -- subdirectory_name`.
+**`npm run build`**: Main build script cleans previous build directory, gets available imagery metadata via the [GIBS `GetCapabilities` API](https://nasa-gibs.github.io/gibs-api-docs/), adds the build configuration (options), and builds the Webpack bundle in Development mode. Generates the build in `build/`. If you have a custom configuration subdirectory, pass it to the command with `npm run build -- subdirectory_name`.
 
 To build the app with an incomplete configuration, prefix the command like this:
 `IGNORE_ERRORS=true npm run build`.
@@ -30,11 +30,9 @@ To build the app with an incomplete configuration, prefix the command like this:
 
 **`npm run analyze`**: Runs Webpack Bundle Analyzer to visualize size of output files with an interactive zoomable treemap. Default analyze interface is served at [http://127.0.0.1:8888/](http://127.0.0.1:8888/).
 
-**`npm run notes`**: Runs [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator) to automatically build release notes. For individual release notes, add release tag argument option, for example `npm run notes tag=v3.3.1`. Will use `docker` by default. To use `ruby`, add `ruby=true`. For example `npm run notes ruby=true`. Will use `master` branch by default. To use specific branch, add `branch=develop`. Combine arguments, for example `npm run notes ruby=true branch=develop`.
-
 **`npm run watch`**: Builds and serves local Development mode Webpack bundle in watch mode using Webpack Dev Server (*Note: It is necessary to wait for the initial build to finish before being able to develop*). JS and CSS bundles are updated automatically when source files change. You must run `npm run build` or `npm run build:config` first to make a request to the GIBS `GetCapabilities` API and build the configuration files.
 **`npm run watch:debug:logger`**: This will activate `redux-logger` which logs the before and after state of each action.
-**`npm run watch:debug:devtools`**: This will activate `redux-devtools` which allows using a browser exetension to debug Redux state.
+**`npm run watch:debug:devtools`**: This will activate `redux-devtools` which allows using a browser extension to debug Redux state.
 
 ## Starting
 

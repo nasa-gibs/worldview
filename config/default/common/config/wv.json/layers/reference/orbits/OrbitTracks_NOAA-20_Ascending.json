@@ -5,21 +5,16 @@
       "title": "NOAA-20 - Orbit Track & Time",
       "subtitle": "NOAA-20 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_NOAA-20_Ascending",
-      "tags": "JPSS-1 tracks day",
+      "tags": "jpss jpss-1 tracks day",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "reference",
-        "reference_orbits"
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
       ],
-      "daynight": [ "day" ],
       "track": "ascending",
       "startDate": "2017-11-19",
       "projections": {

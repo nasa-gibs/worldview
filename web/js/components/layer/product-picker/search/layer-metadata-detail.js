@@ -1,33 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ListGroup, ListGroupItem, Button } from 'reactstrap';
-
+import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMinus,
-  faPlus,
-  faGlobeAmericas,
-} from '@fortawesome/free-solid-svg-icons';
-import util from '../../../../util/util';
-import { dateOverlap } from '../../../../modules/layers/util';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
+import { getActiveLayersMap, makeGetDescription } from '../../../../modules/layers/selectors';
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
+import LayerInfo from '../../info/info';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isDateRangesExpanded: false,
-    };
     this.toggleLayer = this.toggleLayer.bind(this);
   }
 
@@ -42,120 +32,13 @@ class LayerMetadataDetail extends React.Component {
     }
   }
 
-  /**
-   * Toggle switch for the metadata info button and close arrow
-   * @method toggleMetadataButtons
-   * @param {e} event
-   * @return {void}
-   */
-  toggleDateRanges(e) {
-    this.setState((prevState) => ({ isDateRangesExpanded: !prevState.isDateRangesExpanded }));
-  }
-
-  getListItems = (layer) => layer.dateRanges
-    .slice(0)
-    .reverse()
-    .map((l) => {
-      let listItemStartDate;
-      let listItemEndDate;
-      if (l.startDate) {
-        listItemStartDate = util.coverageDateFormatter('START-DATE', l.startDate, layer.period);
-      }
-      if (l.endDate) {
-        listItemEndDate = util.coverageDateFormatter('END-DATE', l.endDate, layer.period);
-      }
-
-      return (
-        <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
-          {`${listItemStartDate} - ${listItemEndDate}`}
-        </ListGroupItem>
-      );
-    });
-
-  /**
-     * Return text with the temporal range based on layer start
-     * and end dates
-     * @param  {object} layer the layer object
-     * @return {string}       Return a string with temporal range information
-     */
-  dateRangeText = (layer) => {
-    let startDate;
-    let startDateId;
-    let endDate;
-    let endDateId;
-
-    if (layer.startDate) {
-      startDateId = `${layer.id}-startDate`;
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
-    }
-    if (layer.endDate) {
-      endDateId = `${layer.id}-endDate`;
-      endDate = util.parseDate(layer.endDate);
-      if (endDate <= util.today() && !layer.inactive) {
-        endDate = 'Present';
-      } else {
-        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
-      }
-    } else {
-      endDate = 'Present';
-    }
-    return `Temporal coverage:
-          <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
-          <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
-  }
-
-  renderLayerDates() {
-    const { layer } = this.props;
-    const { isDateRangesExpanded } = this.state;
-    let listItems;
-    let dateRanges;
-
-    if (layer.dateRanges && layer.dateRanges.length > 1) {
-      dateRanges = dateOverlap(layer.period, layer.dateRanges);
-      if (dateRanges.overlap === false) {
-        listItems = this.getListItems(layer);
-      }
-    }
-
-    return (
-      <>
-        {layer.startDate && (
-          <p className="layer-date-range">
-            <span dangerouslySetInnerHTML={{ __html: this.dateRangeText(layer) }} />
-            {layer.dateRanges
-              && layer.dateRanges.length > 1
-              && dateRanges.overlap === false && (
-              <a
-                id="layer-date-ranges-button"
-                title="View all date ranges"
-                className="layer-date-ranges-button"
-                onClick={(e) => this.toggleDateRanges(e)}
-              >
-                <sup>
-                  {isDateRangesExpanded ? ' *Hide ' : ' *Show '}
-                  Dates
-                </sup>
-              </a>
-            )}
-          </p>
-        )}
-        {isDateRangesExpanded && listItems && (
-          <div className="layer-date-wrap">
-            <p>Date Ranges:</p>
-            <ListGroup className="layer-date-ranges">{listItems}</ListGroup>
-          </div>
-        )}
-      </>
-    );
-  }
-
   renderNoSelection() {
     const { categoryType } = this.props;
     return categoryType === 'recent'
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon={faGlobeAmericas} />
+          <FontAwesomeIcon icon="globe-americas" />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
@@ -164,25 +47,19 @@ class LayerMetadataDetail extends React.Component {
 
   render() {
     const {
-      layer, selectedProjection, isActive, showPreviewImage,
+      layer, selectedProjection, isActive, showPreviewImage, measurementDescriptionPath,
     } = this.props;
     if (!layer) {
       return this.renderNoSelection();
     }
-    const { metadata } = layer;
     const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
-    const btnIconClass = isActive ? faMinus : faPlus;
+    const btnIconClass = isActive ? 'minus' : 'plus';
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
           <RenderSplitLayerTitle layer={layer} />
-          {/* NOTE - NEED TO ADD faChevronDown TO FONT AWESOME IMPORT ABOVE FROM '@fortawesome/free-solid-svg-icons'
-            <Button className="close-details" onClick={() => selectLayer(null)}>
-              <FontAwesomeIcon icon={faChevronDown} />
-            </Button>
-          */}
         </div>
         {showPreviewImage
           && (
@@ -199,8 +76,10 @@ class LayerMetadataDetail extends React.Component {
           </Button>
         </div>
         <div className="source-metadata visible">
-          {this.renderLayerDates()}
-          <div dangerouslySetInnerHTML={{ __html: metadata }} />
+          <LayerInfo
+            layer={layer}
+            measurementDescriptionPath={measurementDescriptionPath}
+          />
         </div>
       </div>
     );
@@ -212,26 +91,32 @@ LayerMetadataDetail.propTypes = {
   categoryType: PropTypes.string,
   isActive: PropTypes.bool,
   layer: PropTypes.object,
+  measurementDescriptionPath: PropTypes.string,
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
   showPreviewImage: PropTypes.bool,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const {
-    productPicker,
-    proj,
-    config,
-  } = state;
-  const { selectedLayer, categoryType } = productPicker;
-  const activeLayers = getActiveLayers(state);
-  const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
-  return {
-    layer: selectedLayer,
-    isActive,
-    categoryType,
-    selectedProjection: proj.id,
-    showPreviewImage: config.features.previewSnapshots,
+const makeMapStateToProps = () => {
+  const getDescriptionPath = makeGetDescription();
+  return (state, ownProps) => {
+    const {
+      productPicker,
+      proj,
+      config,
+    } = state;
+    const { selectedLayer, categoryType } = productPicker;
+    const activeLayers = getActiveLayersMap(state);
+    const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
+    const measurementDescriptionPath = getDescriptionPath(state, ownProps);
+
+    return {
+      isActive,
+      categoryType,
+      measurementDescriptionPath,
+      selectedProjection: proj.id,
+      showPreviewImage: config.features.previewSnapshots,
+    };
   };
 };
 
@@ -248,6 +133,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  makeMapStateToProps,
   mapDispatchToProps,
 )(LayerMetadataDetail);

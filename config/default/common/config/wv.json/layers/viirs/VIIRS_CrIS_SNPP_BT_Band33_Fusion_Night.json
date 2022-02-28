@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night": {
+      "id": "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
+      "title": "Band 33 Fusion Brightness Temperature (Night)",
+      "subtitle": "Suomi NPP / VIIRS+CrIS",
+      "description": "viirs/VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "product": "FSNRAD_L2_VIIRS_CRIS_SNPP",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

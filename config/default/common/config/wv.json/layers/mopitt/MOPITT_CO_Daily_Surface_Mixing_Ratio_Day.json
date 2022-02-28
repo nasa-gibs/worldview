@@ -7,9 +7,7 @@
       "description": "mopitt/MOPITT_CO_Daily_Surface_Mixing_Ratio_Day",
       "tags": "co",
       "group": "overlays",
-      "layergroup": [
-        "mopitt"
-      ],
+      "layergroup": "Carbon Monoxide",
       "product": "MOP03J",
       "tracks": [
         "OrbitTracks_Terra_Descending"

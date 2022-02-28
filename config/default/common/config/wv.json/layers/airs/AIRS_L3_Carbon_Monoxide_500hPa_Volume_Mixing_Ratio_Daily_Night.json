@@ -9,9 +9,7 @@
       "group": "overlays",
       "product": "AIRS3STD",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Carbon Monoxide",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],

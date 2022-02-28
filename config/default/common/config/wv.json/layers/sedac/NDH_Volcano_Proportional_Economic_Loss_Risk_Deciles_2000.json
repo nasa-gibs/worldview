@@ -7,9 +7,7 @@
       "description": "sedac/NDH_Volcano_Proportional_Economic_Loss_Risk_Deciles_2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Volcano Hazard",
       "product": "CIESIN_CHRR_NDH_VOLCANO_PELRD",
       "inactive": true,
       "wrapX": true

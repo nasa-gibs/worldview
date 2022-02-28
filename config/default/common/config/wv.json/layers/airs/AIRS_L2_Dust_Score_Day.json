@@ -8,9 +8,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2SUP",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Dust",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],

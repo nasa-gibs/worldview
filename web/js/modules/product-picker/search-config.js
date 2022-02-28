@@ -4,13 +4,12 @@ import {
   set as lodashSet,
   forEach as lodashForEach,
   toLower as lodashToLower,
-  includes as lodashIncludes,
 } from 'lodash';
-import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
+import { formatDisplayDate } from '../date/util';
 
 let initialLayersArray;
 let configRef;
@@ -107,21 +106,23 @@ function filterSearch (layer, val, terms) {
     return false;
   }
 
-  let filtered = false;
+  let isFilteredOut = false;
   const names = getTitles(configRef, layer.id, projectionRef);
   const title = lodashToLower(names.title);
   const subtitle = lodashToLower(names.subtitle);
   const tags = lodashToLower(names.tags);
   const layerId = lodashToLower(layer.id);
+  const conceptIdsArray = layer.conceptIds || [];
+  const conceptIds = conceptIdsArray.map(({ value = '' }) => value.toLowerCase());
+  const shortNames = conceptIdsArray.map(({ shortName = '' }) => shortName.toLowerCase());
+  const matchItems = [title, subtitle, tags, layerId, conceptIds];
 
   lodashForEach(terms, (term) => {
-    filtered = !lodashIncludes(title, term)
-      && !lodashIncludes(subtitle, term)
-      && !lodashIncludes(tags, term)
-      && !lodashIncludes(layerId, term);
-    if (filtered) return false;
+    isFilteredOut = matchItems.every((item) => !item.includes(term))
+      && shortNames.every((name) => name.indexOf(term) < 0);
+    if (isFilteredOut) return false;
   });
-  return filtered;
+  return isFilteredOut;
 }
 
 /**
@@ -133,8 +134,8 @@ function filterSearch (layer, val, terms) {
  */
 function updateCoverageFilter (filters, selectedDate) {
   if (!filters || !filters.length) return;
-  const formattedDate = moment.utc(selectedDate).format('YYYY MMM DD');
-  const oldValueMatch = (value) => !value.contains(formattedDate) && !value.contains('Always');
+  const formattedDate = formatDisplayDate(selectedDate);
+  const oldValueMatch = (value) => !value.includes(formattedDate) && !value.includes('Always');
 
   filters.forEach((f) => {
     if (f.field !== 'coverage') return;
@@ -185,7 +186,6 @@ export default function initSearch(state) {
   });
 
   return {
-    // debug: true,
     alwaysSearchOnInitialLoad: true,
     trackUrlState: false,
     initialState: {

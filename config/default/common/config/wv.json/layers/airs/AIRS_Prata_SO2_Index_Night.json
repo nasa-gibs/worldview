@@ -8,9 +8,7 @@
       "tags": "so2 sulphur",
       "group": "overlays",
       "product": "AIRIBRAD_NIGHT",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "palette": {
         "recommended": [
           "orange_1",

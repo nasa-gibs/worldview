@@ -9,14 +9,8 @@
       "group": "overlays",
       "tags": "wdpa pa national park protected areas",
       "format": "image/png",
-      "tileSize": [
-        512,
-        512
-      ],
       "type": "wms",
-      "layergroup": [
-        "wdpa"
-      ],
+      "layergroup": "Reference",
       "wrapX": true,
       "projections": {
         "geographic": {

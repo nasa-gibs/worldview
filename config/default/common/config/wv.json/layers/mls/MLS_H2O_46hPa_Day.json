@@ -7,9 +7,7 @@
       "description": "mls/MLS_H2O_46hPa_Day",
       "tags": "h2o",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Water Vapor",
       "product": "ML2H2O",
       "tracks": [
         "OrbitTracks_Aura_Ascending"

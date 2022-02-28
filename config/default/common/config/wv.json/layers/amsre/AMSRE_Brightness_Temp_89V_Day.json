@@ -7,9 +7,7 @@
       "description": "amsre/AMSRE_Brightness_Temp_89V_Day",
       "group": "overlays",
       "product": "AE_L2A_DAY",
-      "layergroup": [
-        "amsre"
-      ],
+      "layergroup": "Brightness Temperature",
       "inactive": true,
       "tracks": [
         "OrbitTracks_Aqua_Ascending"

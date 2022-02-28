@@ -7,9 +7,7 @@
       "description": "mls/MLS_HNO3_46hPa_Night",
       "tags": "hno3",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Nitric Acid",
       "product": "ML2HNO3",
       "tracks": [
         "OrbitTracks_Aura_Descending"

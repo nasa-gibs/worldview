@@ -52,10 +52,11 @@ export function stateToParams(initialState, currentState, location) {
     let isDefault = false;
     // check if the date is the same as the one in initial value
     if (type === 'date') {
+      const prevHasParams = Object.keys(prev).length > 0;
       if (initialValue && currentItemState) {
         const initialValueMS = initialValue.getTime();
         const currentItemStateMS = currentItemState.getTime();
-        isDefault = initialValueMS === currentItemStateMS;
+        isDefault = !prevHasParams && initialValueMS === currentItemStateMS;
       }
     } else {
       // if an empty object, make currentItemState undefined
@@ -80,6 +81,7 @@ export function stateToParams(initialState, currentState, location) {
       const itemState = options.serialize(
         currentItemState,
         options.serializeNeedsGlobalState ? currentState : undefined,
+        options.serializeNeedsPrev ? prev : undefined,
       );
       // short circuit if specialized serializer returns specifically undefined
       if (typeof itemState === 'undefined') {

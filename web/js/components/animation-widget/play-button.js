@@ -1,24 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { UncontrolledTooltip } from 'reactstrap';
 
 /*
  * @class PlayButton
  * @extends React.Component
  */
-const PlayButton = (props) => {
-  const { playing, pause, play } = props;
+const PlayButton = ({
+  playing, pause, play, isDisabled, isMobile,
+}) => {
+  const buttonId = 'play-button';
+  const labelText = isDisabled
+    ? 'Too many animation frames. Reduce time range or increase increment size.'
+    : playing
+      ? 'Pause animation' : 'Play animation';
+  const onClick = isDisabled ? () => {} : playing ? pause : play;
+
   return (
     <a
-      title={playing ? 'Pause video' : 'Play video'}
-      className="wv-anim-play-case wv-icon-case"
-      onClick={playing ? pause : play}
+      id={buttonId}
+      aria-label={labelText}
+      className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
+      onClick={onClick}
     >
+      {!isMobile && (
+        <UncontrolledTooltip
+          target={buttonId}
+          placement="top"
+        >
+          {labelText}
+        </UncontrolledTooltip>
+      )}
       {playing
-        ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
-        : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
+        ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
+        : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
     </a>
   );
 };
@@ -27,6 +43,8 @@ PlayButton.propTypes = {
   pause: PropTypes.func,
   play: PropTypes.func,
   playing: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 export default PlayButton;

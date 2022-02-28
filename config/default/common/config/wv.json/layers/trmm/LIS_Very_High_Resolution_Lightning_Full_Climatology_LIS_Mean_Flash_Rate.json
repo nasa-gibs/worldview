@@ -7,9 +7,7 @@
       "description": "trmm/LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "trmm"
-      ],
+      "layergroup": "Lightning",
       "product": "lisvhrfc",
       "inactive": true,
       "wrapadjacentdays": true

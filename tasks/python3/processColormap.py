@@ -26,7 +26,7 @@ if len(args) != 3:
 config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 skips = config.get("skipPalettes", [])
 
@@ -139,7 +139,7 @@ def read_file(file):
     if id in skips:
         sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, file), "Skipping")
         return
-    with open(file) as fp:
+    with open(file, "r", encoding="utf-8") as fp:
         xml = fp.read()
     return (id, xml)
 
@@ -172,7 +172,7 @@ def process_file(id, xml):
     json_options["separators"] = (',', ': ')
 
     output_file = os.path.join(output_dir, id + ".json")
-    with open(output_file, "w") as fp:
+    with open(output_file, "w", encoding="utf-8") as fp:
         json.dump(data, fp, **json_options)
 
 # Main
@@ -194,8 +194,7 @@ if __name__ == "__main__":
             except Exception as e:
                 sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
                 error_count += 1
-
-print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
+    print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
 if error_count > 0:
     sys.exit(1)

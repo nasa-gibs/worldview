@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_L4_LAI_4Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Leaf Area Index",
       "product": "MCD15A3H",
       "wrapadjacentdays": true,
       "daynight": [

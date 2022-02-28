@@ -1,174 +1,192 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import {
   openCustomContent,
 } from '../modules/modal/actions';
-import toggleDistractionFreeMode from '../modules/ui/actions';
+import toggleDistractionFreeModeAction from '../modules/ui/actions';
 import AboutPage from '../components/about/about-page';
-import IconList from '../components/util/list';
+import IconList from '../components/util/icon-list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
 import initFeedback from '../modules/feedback/actions';
-import { startTour, endTour } from '../modules/tour/actions';
+import {
+  startTour as startTourAction,
+  endTour as endTourAction,
+} from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import Notifications from './notifications';
+import GlobalSettings from '../components/global-settings/global-settings';
 
-class InfoList extends Component {
-  getNotificationListItem(obj) {
-    const { notifications, notificationClick } = this.props;
-    const { number, type, object } = notifications;
+function InfoList (props) {
+  const {
+    sendFeedback,
+    feedbackIsInitiated,
+    globalSettingsClick,
+    aboutClick,
+    config,
+    startTour,
+    isDistractionFreeModeActive,
+    isTourActive,
+    isMobile,
+    toggleDistractionFreeMode,
+    notifications,
+    notificationClick,
+  } = props;
 
+  function getNotificationListItem() {
+    const { numberUnseen, type, object } = notifications;
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
       iconName: type === 'message'
-        ? 'faGift'
+        ? 'gift'
         : type === 'outage'
-          ? 'faExclamationCircle'
-          : 'faBolt',
+          ? 'exclamation-circle'
+          : ['fas', 'bolt'],
       id: 'notifications_info_item',
-      badge: number,
+      badge: numberUnseen,
       className: type ? `${type}-notification` : '',
       onClick: () => {
-        notificationClick(object, number);
+        notificationClick(object, numberUnseen);
       },
     };
   }
 
-  getListArray() {
-    const {
-      sendFeedback,
-      feedbackIsInitiated,
-      aboutClick,
-      notifications,
-      config,
-      startTour,
-      isDistractionFreeModeActive,
-      isTourActive,
-      isMobile,
-      toggleDistractionFreeMode,
-    } = this.props;
-    const distractionFreeObj = {
+  function getExploreWorldviewObj() {
+    return {
+      text: 'Explore @NAME@',
+      iconClass: 'ui-icon',
+      iconName: 'truck',
+      id: 'start_tour_info_item',
+      onClick: () => {
+        startTour(isTourActive);
+        googleTagManager.pushEvent({
+          event: 'tour_start_button',
+        });
+      },
+    };
+  }
+
+  function getDistractionFreeObj() {
+    return {
       text: isDistractionFreeModeActive ? 'Exit Distraction Free' : 'Distraction Free',
       iconClass: 'ui-icon',
-      iconName: 'faEye',
+      iconName: ['far', 'eye'],
       id: 'distraction_free_info_item',
       onClick: () => {
         toggleDistractionFreeMode();
       },
     };
-    if (!isDistractionFreeModeActive) {
-      const feedbackAction = isMobile
-        ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
-        : {
-          onClick: () => {
-            sendFeedback(feedbackIsInitiated);
-          },
-        };
-      const arr = [
-        {
-          text: 'Send feedback',
-          iconClass: 'ui-icon',
-          iconName: 'faEnvelope',
-          id: 'send_feedback_info_item',
-          ...feedbackAction,
-        },
-        {
-          text: 'Source Code',
-          iconClass: 'ui-icon',
-          iconName: 'faCode',
-          id: 'source_code_info_item',
-          href: 'https://github.com/nasa-gibs/worldview',
-        },
-        {
-          text: 'What\'s new',
-          iconClass: 'ui-icon',
-          iconName: 'faFlag',
-          id: 'whats_new_info_item',
-          href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS',
-        },
-        {
-          text: 'About',
-          iconClass: 'ui-icon',
-          iconName: 'faFile',
-          id: 'about_info_item',
-          onClick: () => {
-            aboutClick();
-          },
-        },
-      ];
+  }
 
-      // limit explore and distraction free for larger device displays
-      if (window.innerWidth >= 740
+  function getListArray() {
+    if (isDistractionFreeModeActive) {
+      return [getDistractionFreeObj()];
+    }
+
+    const feedbackAction = isMobile
+      ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
+      : {
+        onClick: () => {
+          sendFeedback(feedbackIsInitiated, isMobile);
+        },
+      };
+    const arr = [
+      {
+        text: 'Send feedback',
+        iconClass: 'ui-icon',
+        iconName: 'envelope',
+        id: 'send_feedback_info_item',
+        ...feedbackAction,
+      },
+      {
+        text: 'Settings',
+        iconClass: 'ui-icon',
+        iconName: 'cog',
+        id: 'settings_info_item',
+        onClick: () => {
+          globalSettingsClick();
+        },
+      },
+      {
+        text: 'About',
+        iconClass: 'ui-icon',
+        iconName: 'file',
+        id: 'about_info_item',
+        onClick: () => {
+          aboutClick();
+        },
+      },
+      {
+        text: 'Source Code',
+        iconClass: 'ui-icon',
+        iconName: 'code',
+        id: 'source_code_info_item',
+        href: 'https://github.com/nasa-gibs/worldview',
+      },
+    ];
+
+    // limit explore for larger device displays
+    if (window.innerWidth >= 740
         && window.innerHeight >= 615) {
-        if (
-          config.features.tour
+      if (
+        config.features.tour
           && config.stories
           && config.storyOrder) {
-          const exploreWorlviewObj = {
-            text: 'Explore Worldview',
-            iconClass: 'ui-icon',
-            iconName: 'faTruck',
-            id: 'start_tour_info_item',
-            onClick: () => {
-              startTour(isTourActive);
-              googleTagManager.pushEvent({
-                event: 'tour_start_button',
-              });
-            },
-          };
-          arr.splice(1, 0, exploreWorlviewObj);
-        }
-        arr.push(distractionFreeObj);
+        arr.splice(1, 0, getExploreWorldviewObj());
       }
-      if (notifications.isActive) {
-        const obj = this.getNotificationListItem();
-        arr.splice(4, 0, obj);
-      }
-      return arr;
     }
-    return [distractionFreeObj];
+    if (notifications.isActive && notifications.number > 0) {
+      arr.splice(2, 0, getNotificationListItem());
+    }
+    arr.push(getDistractionFreeObj());
+    return arr;
   }
 
-  render() {
-    const infoArray = this.getListArray();
-    return <IconList list={infoArray} size="small" />;
-  }
+  return (
+    <IconList
+      list={getListArray()}
+      size={isMobile ? 'large' : 'small'}
+    />
+  );
 }
 
 function mapStateToProps(state) {
-  const { isInitiated } = state.feedback;
+  const {
+    ui, feedback, tour, notifications, config, models, browser,
+  } = state;
+  const { isDistractionFreeModeActive } = ui;
 
   return {
-    feedbackIsInitiated: isInitiated,
-    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
-    isTourActive: state.tour.active,
-    notifications: state.notifications,
-    config: state.config,
-    models: state.models,
-    isMobile: state.browser.lessThan.medium,
+    feedbackIsInitiated: feedback.isInitiated,
+    isDistractionFreeModeActive,
+    isTourActive: tour.active,
+    notifications,
+    config,
+    models,
+    isMobile: browser.lessThan.medium,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
-    dispatch(toggleDistractionFreeMode());
+    dispatch(toggleDistractionFreeModeAction());
   },
-  sendFeedback: (isInitiated) => {
-    onClickFeedback(isInitiated);
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
     if (!isInitiated) {
       dispatch(initFeedback());
     }
   },
-  notificationClick: (obj, num) => {
+  notificationClick: (obj, numberUnseen) => {
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
         bodyComponent: Notifications,
         onClose: () => {
-          if (num > 0) {
+          if (numberUnseen > 0) {
             dispatch(notificationsSeen());
             addToLocalStorage(obj);
           }
@@ -178,13 +196,24 @@ const mapDispatchToProps = (dispatch) => ({
   },
   startTour: (isTourActive) => {
     if (isTourActive) {
-      dispatch(endTour());
+      dispatch(endTourAction());
       setTimeout(() => {
-        dispatch(startTour());
+        dispatch(startTourAction());
       }, 100);
     } else {
-      dispatch(startTour());
+      dispatch(startTourAction());
     }
+  },
+  globalSettingsClick: () => {
+    dispatch(
+      openCustomContent('GLOBAL_SETTINGS_MODAL', {
+        headerText: 'Global Settings',
+        backdrop: false,
+        bodyComponent: GlobalSettings,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
   },
   aboutClick: () => {
     // Create new functionality here that renders the about page
@@ -193,7 +222,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('ABOUT_MODAL', {
         headerText: 'About',
         bodyComponent: AboutPage,
-        wrapClassName: 'about-page',
+        wrapClassName: 'about-page-modal',
       }),
     );
   },
@@ -206,6 +235,7 @@ export default connect(
 
 InfoList.propTypes = {
   aboutClick: PropTypes.func,
+  globalSettingsClick: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,

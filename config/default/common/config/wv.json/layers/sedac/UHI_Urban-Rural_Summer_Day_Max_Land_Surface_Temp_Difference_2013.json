@@ -7,9 +7,7 @@
       "description": "sedac/UHI_Urban-Rural_Summer_Day_Max_Land_Surface_Temp_Difference_2013",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Land Surface Temperature",
       "product": "CIESIN_SEDAC_SDEI_UHI2013",
       "inactive": true,
       "wrapX": true,

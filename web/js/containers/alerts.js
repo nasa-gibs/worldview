@@ -5,11 +5,17 @@ import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
-import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
+import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
+import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
-const { DISMISSED_COMPARE_ALERT, DISMISSED_EVENT_VIS_ALERT } = safeLocalStorage.keys;
+const {
+  DISMISSED_COMPARE_ALERT,
+  DISMISSED_DISTRACTION_FREE_ALERT,
+  DISMISSED_EVENT_VIS_ALERT,
+} = safeLocalStorage.keys;
+
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +23,29 @@ class DismissableAlerts extends React.Component {
     this.state = {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
+      hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
+      distractionFreeModeInitLoad: false,
     };
+  }
+
+  componentDidMount() {
+    const { isDistractionFreeModeActive } = this.props;
+    if (isDistractionFreeModeActive) {
+      this.toggleDistractionFreeModeInitLoad(true);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isDistractionFreeModeActive } = this.props;
+    const { distractionFreeModeInitLoad } = this.state;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
+      this.toggleDistractionFreeModeInitLoad(false);
+    }
+  }
+
+  toggleDistractionFreeModeInitLoad(isActive) {
+    this.setState({ distractionFreeModeInitLoad: isActive });
   }
 
   /**
@@ -34,14 +62,48 @@ class DismissableAlerts extends React.Component {
 
   render() {
     const {
-      isEventsActive, isCompareActive, isVectorAlertPresent, dismissVectorAlert, openAlertModal, isSmall,
+      dismissVectorZoomAlert,
+      dismissVectorExceededAlert,
+      hasSubdailyLayers,
+      isCompareActive,
+      isDistractionFreeModeActive,
+      isEmbedModeActive,
+      isEventsActive,
+      isSmall,
+      isMobile,
+      isAnimationActive,
+      isVectorZoomAlertPresent,
+      isVectorExceededAlertPresent,
+      openAlertModal,
     } = this.props;
-    const { hasDismissedEvents, hasDismissedCompare } = this.state;
+    const {
+      hasDismissedEvents,
+      hasDismissedCompare,
+      hasDismissedDistractionFree,
+      distractionFreeModeInitLoad,
+    } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    if (isSmall || !HAS_LOCAL_STORAGE) return null;
-    return (
-      <>
-        {!hasDismissedEvents && isEventsActive ? (
+    const hasFailCondition = !HAS_LOCAL_STORAGE
+    || isEmbedModeActive
+    || distractionFreeModeInitLoad;
+    if (hasFailCondition) return null;
+
+    const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
+    const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
+    const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
+
+    return isDistractionFreeModeActive
+      ? !hasDismissedDistractionFree && (
+      <AlertUtil
+        id="distraction-free-mode-active-alert"
+        isOpen
+        noPortal
+        onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
+        message="You are now in distraction free mode. Click the eye button to exit."
+      />
+      ) : (
+        <>
+          {showEventsAlert && (
           <AlertUtil
             id="event-alert"
             isOpen
@@ -50,8 +112,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
-        ) : null}
-        {!hasDismissedCompare && isCompareActive ? (
+          )}
+          {showCompareAlert && (
           <AlertUtil
             isOpen
             noPortal
@@ -59,38 +121,64 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
-        ) : null}
-        {isVectorAlertPresent ? (
+          )}
+          {isVectorZoomAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
             onClick={() => openAlertModal(vectorModalProps)}
-            onDismiss={dismissVectorAlert}
+            onDismiss={dismissVectorZoomAlert}
             message="Vector features may not be clickable at all zoom levels."
           />
-        ) : null}
-      </>
-    );
+          )}
+          {isVectorExceededAlertPresent && (
+          <AlertUtil
+            isOpen
+            noPortal
+            onDismiss={dismissVectorExceededAlert}
+            message="Too many results at selected point. Zoom in map to see more individual points."
+          />
+          )}
+          {showAnimationAlert && (
+            <AlertUtil
+              isOpen
+              noPortal
+              icon="info-circle"
+              message="Some animations may use a large amount of data (>100MB)"
+              onDismiss={() => {}}
+            />
+          )}
+
+        </>
+      );
   }
 }
 const mapDispatchToProps = (dispatch) => ({
   openAlertModal: ({ id, props }) => {
     dispatch(openCustomContent(id, props));
   },
-  dismissVectorAlert: () => dispatch({ type: DISABLE_VECTOR_ALERT }),
+  dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
+  dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
 });
 const mapStateToProps = (state) => {
   const {
-    browser, events, sidebar, compare, layers, alerts,
+    browser, embed, events, sidebar, compare, alerts, ui, animation,
   } = state;
-  const { activeString } = compare;
-  const { isVectorAlertActive } = alerts;
+  const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
+  const activeLayers = getActiveLayers(state);
+  const hasActiveVectorLayers = hasVectorLayers(activeLayers);
 
   return {
-    isSmall: browser.lessThan.small,
-    isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isCompareActive: compare.active,
-    isVectorAlertPresent: hasVectorLayers(layers[activeString]) && isVectorAlertActive,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isEmbedModeActive: embed.isEmbedModeActive,
+    isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
+    isSmall: browser.lessThan.small,
+    isMobile: browser.lessThan.medium,
+    isAnimationActive: animation.isActive,
+    isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
+    isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,
+    hasSubdailyLayers: subdailyLayersActive(state),
   };
 };
 export default connect(
@@ -99,10 +187,17 @@ export default connect(
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {
-  isEventsActive: PropTypes.bool,
+  dismissVectorZoomAlert: PropTypes.func,
+  dismissVectorExceededAlert: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
+  isAnimationActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
-  openAlertModal: PropTypes.func,
+  isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
+  isEventsActive: PropTypes.bool,
   isSmall: PropTypes.bool,
-  isVectorAlertPresent: PropTypes.bool,
-  dismissVectorAlert: PropTypes.func,
+  isMobile: PropTypes.bool,
+  isVectorZoomAlertPresent: PropTypes.bool,
+  isVectorExceededAlertPresent: PropTypes.bool,
+  openAlertModal: PropTypes.func,
 };

@@ -4,4 +4,4 @@ The LPRM is based on a forward radiative transfer model to retrieve surface soil
 
 Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, nighttime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Level 2 product, LPRM_AMSR2_SOILM2_V001).
 
-References: [doi:10.5067/M5DTR2QUYLS2](https://doi.org/10.5067/M5DTR2QUYLS2)
+References: LPRM_AMSR2_A_SOILM3 [doi:10.5067/M5DTR2QUYLS2](https://doi.org/10.5067/M5DTR2QUYLS2)

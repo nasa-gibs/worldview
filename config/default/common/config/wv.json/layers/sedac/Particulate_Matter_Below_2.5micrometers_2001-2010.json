@@ -7,9 +7,7 @@
       "description": "sedac/Particulate_Matter_Below_25micrometers_2001-2010",
       "tags": "human sedac pm2.5",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Particulate Matter",
       "product": "CIESIN_SEDAC_SDEI_PM25_MMSAOD",
       "inactive": true,
       "wrapX": true

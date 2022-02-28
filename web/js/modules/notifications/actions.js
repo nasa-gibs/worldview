@@ -1,12 +1,11 @@
 import { requestAction } from '../core/actions';
-
 import {
   REQUEST_NOTIFICATIONS,
   SET_NOTIFICATIONS,
   NOTIFICATIONS_SEEN,
 } from './constants';
 
-export function requestNotifications(location, type) {
+export function requestNotifications(location) {
   return (dispatch) => requestAction(dispatch, REQUEST_NOTIFICATIONS, location);
 }
 export function setNotifications(array) {

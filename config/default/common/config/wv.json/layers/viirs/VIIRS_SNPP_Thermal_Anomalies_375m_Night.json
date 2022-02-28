@@ -6,9 +6,7 @@
       "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_Night",
       "tags": "hotspots s-npp snpp vectors",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "product": [
         "VNP14IMG_NRT_NIGHT",
         "VNP14IMGTDL_NRT"
@@ -40,7 +38,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {

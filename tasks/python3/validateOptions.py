@@ -31,9 +31,9 @@ warning_count = 0
 remove_count = 0
 
 main_config_file = os.path.join(config_dir, "wv.json")
-with open(main_config_file) as fp:
+with open(main_config_file, "r", encoding="utf-8") as fp:
     wv = json.load(fp)
-with open(options_file) as fp:
+with open(options_file, "r", encoding="utf-8") as fp:
     opt = json.load(fp)
 
 tolerant = opt.get("tolerant", False)
@@ -71,11 +71,7 @@ start_date = datetime.max
 
 for layer_id in list(wv["layers"].keys()):
     layer = wv["layers"][layer_id]
-    # Sometimes we pull a layer id from the ICD appendices for layers that
-    # don't exist in WV configs yet.  If we find this kind of entry, remove it.
-    if (layer.get("conceptId") is not None and layer.get('id') is None):
-        remove_layer(wv, layer_id)
-        continue
+
     if layer_id != layer.get('id'):
         error("[%s] layer id does not match id of %s" % (layer_id, layer.get('id')))
     if layer_id not in wv["layerOrder"]:
@@ -143,7 +139,7 @@ for layer_id in list(wv["layers"].keys()):
     if layer.get("futureTime"):
         if "endDate" in layer:
            del layer["endDate"]
-    if layer.get("inactive", False) or layer.get("futureLayer", False):
+    if layer.get("inactive", False) or layer.get("futureTime", False):
         pass
     else:
         if "endDate" in layer:
@@ -197,7 +193,7 @@ json_options = {}
 json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
-with open(main_config_file, "w") as fp:
+with open(main_config_file, "w", encoding="utf-8") as fp:
     json.dump(wv, fp)
 
 if error_count > 0:

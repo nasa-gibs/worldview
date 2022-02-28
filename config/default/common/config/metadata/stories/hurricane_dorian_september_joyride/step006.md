@@ -1,0 +1,1 @@
+The hurricane also affected the United States - Florida, Georgia, South Carolina and North Carolina, where it weakened into Category 1 hurricane on 6 September near Cape Hatteras. This animation shows the daily progression of the storm from 1 September to 5 September 2019 where the animation interval have been set to 24 hour increments.

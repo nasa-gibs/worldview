@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavItem, NavLink } from 'reactstrap';
+import HoverTooltip from '../../util/hover-tooltip';
 
 const CustomNavItem = (props) => {
   const {
     isMobile,
     shouldHideInMobile,
     isDisabled,
-    title,
+    label,
     className,
     onTabClick,
     id,
     iconClassName,
     text,
   } = props;
+  const tabId = `${id}-sidebar-tab`;
   return (
     <NavItem
       style={
@@ -24,13 +26,19 @@ const CustomNavItem = (props) => {
     >
       <NavLink
         disabled={isDisabled}
-        title={title}
+        aria-label={label}
         className={className}
-        id={`${id}-sidebar-tab`}
+        id={tabId}
         onClick={() => onTabClick(id)}
       >
         <i className={`productsIcon selected ${iconClassName}`} />
         {text}
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText={label}
+          target={tabId}
+          placement="top"
+        />
       </NavLink>
     </NavItem>
   );
@@ -45,7 +53,7 @@ CustomNavItem.propTypes = {
   onTabClick: PropTypes.func,
   shouldHideInMobile: PropTypes.bool,
   text: PropTypes.string,
-  title: PropTypes.string,
+  label: PropTypes.string,
 };
 
 export default CustomNavItem;

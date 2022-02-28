@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import MonospaceDate from '../util/monospace-date';
 
 /*
  * A table that updates with image
@@ -18,7 +17,7 @@ export default class GifPanelGrid extends React.Component {
     if (!valid) {
       return (
         <div id="gif-size" className="gif-size gif-size-invalid grid-child">
-          <FontAwesomeIcon icon={faTimes} fixedWidth />
+          <FontAwesomeIcon icon="times" fixedWidth />
           <span>{`${maxGifSize} MB ~${roundedSize} MB`}</span>
         </div>
       );
@@ -44,16 +43,14 @@ export default class GifPanelGrid extends React.Component {
           <span>Start Date: </span>
         </div>
         <div className="grid-child">
-          <span>
-            {startDate}
-            {' '}
-          </span>
+          <MonospaceDate date={startDate} />
+          {' '}
         </div>
         <div className="grid-child label">
           <span>End Date: </span>
         </div>
         <div className="grid-child">
-          <span>{endDate}</span>
+          <MonospaceDate date={endDate} />
         </div>
         <div className="grid-child label">
           <span>Speed: </span>

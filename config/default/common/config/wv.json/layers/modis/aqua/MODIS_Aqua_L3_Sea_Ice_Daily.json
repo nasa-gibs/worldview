@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_Sea_Ice_Daily",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Sea Ice",
       "product": "MYD29P1D",
       "wrapadjacentdays": true,
       "tracks": [

@@ -82,7 +82,7 @@ class DeltaInput extends PureComponent {
     } = this.state;
     return (
       <input
-        className="custom-interval-delta-input"
+        className="custom-interval-delta-input no-drag"
         type="text"
         style={valid ? {} : { borderColor: '#ff0000' }}
         min="1"

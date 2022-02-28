@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Snow_Mass",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Snow Mass",
       "product": "SPL4SMGP",
       "wrapadjacentdays": true
     }

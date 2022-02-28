@@ -1,23 +1,28 @@
 import {
   get as lodashGet,
-  cloneDeep as lodashCloneDeep,
   eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
-  remove as lodashRemove,
-  findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
   isArray,
+  isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
 import * as OlExtent from 'ol/extent';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
-import { addLayer, resetLayers } from './selectors';
+import {
+  addLayer,
+  resetLayers,
+  getLayers,
+  getFutureLayerEndDate,
+  getActiveLayersMap,
+} from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
+import { parseDate } from '../date/util';
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -59,7 +64,7 @@ export function nearestInterval(def, date) {
    * @param  {object} def       A layer definition
    * @param  {object} date      A date to compare against the array of dates
    * @param  {array} dateArray  An array of dates
-   * @return {object}           The date object with normalized timeszone.
+   * @return {object}           The date object with normalized timezone.
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
@@ -577,7 +582,6 @@ const getSubdailyDateRange = ({
   }
   let minMinuteDate;
   if (rangeLimitsProvided) {
-  // eslint-disable-next-line no-nested-ternary
     minMinuteDate = hourBeforeStartDateLimit < minDate
       ? hourBeforeStartDateLimit
       : hourBeforeStartDateLimit > minMinuteDateMinusIntervalOffset
@@ -633,7 +637,7 @@ const getSubdailyDateRange = ({
 /**
    * Return an array of dates based on the dateRange the current date falls in.
    *
-   * @method datesinDateRangesDataPanel
+   * @method datesInDateRanges
    * @param  {Object} def            A layer object
    * @param  {Object} date           A date object for currently selected date
    * @param  {Object} startDateLimit A date object used as start date of timeline range for available data
@@ -641,14 +645,16 @@ const getSubdailyDateRange = ({
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                 An array of dates with normalized timezones
    */
-export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
+export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
     dateRanges,
+    futureTime,
     period,
     inactive,
   } = def;
-  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let dateArray = [];
+  if (!dateRanges) { return dateArray; }
+  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let currentDate = new Date(date);
 
   let inputStartDate;
@@ -662,8 +668,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
     inputStartDateTime = inputStartDate.getTime();
     inputEndDateTime = inputEndDate.getTime();
   } else {
-    singleDateRangeAndInterval = dateRanges
-    && dateRanges.length === 1
+    singleDateRangeAndInterval = dateRanges.length === 1
     && dateRanges[0].dateInterval === '1';
   }
 
@@ -711,7 +716,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
     }
 
-    // DATA PANEL SPECIFIC
+    // LAYER COVERAGE PANEL SPECIFIC
     if (rangeLimitsProvided) {
       // handle single date coverage by adding date to date array
       if (startDate === endDate) {
@@ -730,7 +735,11 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
       // set maxDate to current date if layer coverage is ongoing
       if (index === dateRanges.length - 1 && !inactive) {
-        maxDate = new Date(appNow);
+        if (futureTime) {
+          maxDate = new Date(endDate);
+        } else {
+          maxDate = new Date(appNow);
+        }
       }
     }
 
@@ -776,8 +785,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
   return dateArray;
 }
 
-export function serializeLayers(currentLayers, state, groupName) {
-  const layers = currentLayers;
+export function serializeLayers(layers, state, groupName) {
   const palettes = state.palettes[groupName];
 
   return layers.map((def, i) => {
@@ -833,26 +841,31 @@ export function serializeLayers(currentLayers, state, groupName) {
   });
 }
 
-export function toggleVisibility(id, layers) {
-  const index = lodashFindIndex(layers, {
-    id,
-  });
-  if (index === -1) {
-    throw new Error(`Invalid layer ID: ${id}`);
-  }
-  const visibility = !layers[index].visible;
+export function serializeGroupOverlays (groupOverlays, state, activeString) {
+  const { config, parameters, compare } = state;
+  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
+  const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
+  const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
+  const layerGroupParam = activeString === 'active' ? parameters.lg : parameters.lg1;
 
-  return update(layers, { [index]: { visible: { $set: visibility } } });
-}
-
-export function removeLayer(id, layers) {
-  const index = lodashFindIndex(layers, {
-    id,
-  });
-  if (index === -1) {
-    throw new Error(`Invalid layer ID: ${id}`);
+  // Old permalink; disable groups
+  if (!!layersParam && !layerGroupParam) {
+    return false;
   }
-  return update(layers, { $splice: [[index, 1]] });
+  // If any change is made to layers, include group param
+  if (layersChanged) {
+    return groupOverlays;
+  }
+  // If app was loaded without layer parameters, only include param if grouping disabled
+  if (!layersParam && layerGroupParam === undefined && !compare.active) {
+    return !groupOverlays ? groupOverlays : undefined;
+  }
+  // No need to include param when it's set to the default(true) and no layer params are present
+  if (!layersParam && groupOverlays) {
+    return undefined;
+  }
+  return groupOverlays;
 }
 
 // this function takes an array of date ranges in this format:
@@ -861,9 +874,9 @@ export function removeLayer(id, layers) {
 export function dateOverlap(period, dateRanges) {
   const sortedRanges = dateRanges.sort((previous, current) => {
     // get the start date from previous and current
-    let previousTime = util.parseDate(previous.startDate);
+    let previousTime = parseDate(previous.startDate);
     previousTime = previousTime.getTime();
-    let currentTime = util.parseDate(current.startDate);
+    let currentTime = parseDate(current.startDate);
     currentTime = currentTime.getTime();
 
     // if the previous is earlier than the current
@@ -889,7 +902,7 @@ export function dateOverlap(period, dateRanges) {
       const previous = arr[idx - 1];
 
       // check for any overlap
-      let previousEnd = util.parseDate(previous.endDate);
+      let previousEnd = parseDate(previous.endDate);
       // Add dateInterval
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
@@ -914,7 +927,7 @@ export function dateOverlap(period, dateRanges) {
       }
       previousEnd = previousEnd.getTime();
 
-      let currentStart = util.parseDate(current.startDate);
+      let currentStart = parseDate(current.startDate);
       currentStart = currentStart.getTime();
 
       const overlap = previousEnd >= currentStart;
@@ -1039,6 +1052,7 @@ export function layersParse12(stateObj, config) {
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
 }
+
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
   lodashEach(state, (obj) => {
@@ -1153,36 +1167,7 @@ const createLayerArrayFromState = function(state, config) {
   });
   return layerArray;
 };
-export function validate(errors, config) {
-  const error = function(layerId, cause) {
-    errors.push({
-      message: `Invalid layer: ${layerId}`,
-      cause,
-      layerRemoved: true,
-    });
-    delete config.layers[layerId];
-    lodashRemove(config.layerOrder.baselayers, (e) => e === layerId);
-    lodashRemove(config.layerOrder.overlays, (e) => e === layerId);
-  };
 
-  const layers = lodashCloneDeep(config.layers);
-  lodashEach(layers, (layer) => {
-    if (!layer.group) {
-      error(layer.id, 'No group defined');
-      return;
-    }
-    if (!layer.projections) {
-      error(layer.id, 'No projections defined');
-    }
-  });
-
-  const orders = lodashCloneDeep(config.layerOrder);
-  lodashEach(orders, (layerId) => {
-    if (!config.layers[layerId]) {
-      error(layerId, 'No configuration');
-    }
-  });
-}
 export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
@@ -1190,17 +1175,93 @@ export function mapLocationToLayerState(
   config,
 ) {
   let newStateFromLocation = stateFromLocation;
+  const { layers } = stateFromLocation;
+  const { active, activeB } = layers;
+
+  // No B group layers param but compare active param is present
   if (!parameters.l1 && parameters.ca !== undefined) {
-    newStateFromLocation = update(stateFromLocation, {
-      layers: { activeB: { $set: stateFromLocation.layers.active } },
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          groupOverlays: { $set: false },
+          layers: { $set: active.layers },
+          overlayGroups: { $set: [] },
+        },
+      },
     });
   }
+
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    newStateFromLocation = update(stateFromLocation, {
+    const parsedLayers = layersParse11(parameters.products, config);
+    newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(parameters.products, config),
+          overlayGroups: {
+            $set: getOverlayGroups(parsedLayers),
+          },
+          layers: { $set: parsedLayers },
+        },
+      },
+    });
+  }
+
+  // If loading via permalink without group param, GROUPS DISABLED
+  if (parameters.l && parameters.lg === undefined) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
+          layers: { $set: active.layers },
+        },
+      },
+    });
+  }
+
+  if (parameters.l1 && parameters.lg1 === undefined) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
+          layers: { $set: activeB.layers },
+        },
+      },
+    });
+  }
+
+  if (active && active.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.active;
+    const populateGroups = groupOverlays && !overlayGroups;
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
+          },
+        },
+      },
+    });
+  }
+
+  if (activeB && activeB.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.activeB;
+    const populateGroups = groupOverlays && !overlayGroups;
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
+          },
         },
       },
     });
@@ -1239,11 +1300,11 @@ export const hasVectorLayers = (activeLayers) => {
  *
  * @return {Boolean}
  */
-export const isVectorLayerClickable = (layer, mapRes, projId) => {
+export const isVectorLayerClickable = (layer, mapRes, projId, isMobile) => {
   if (!mapRes) return false;
-  const resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
-
+  let resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
   if (resolutionBreakPoint) {
+    if (isMobile) resolutionBreakPoint /= 2;
     return mapRes < resolutionBreakPoint;
   }
   return true;
@@ -1258,14 +1319,14 @@ export const isVectorLayerClickable = (layer, mapRes, projId) => {
  *
  * @return {Boolean}
  */
-export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId) => {
+export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId, isMobile) => {
   if (!mapRes) return false;
   let isNonClickableVectorLayer = false;
   const len = activeLayers.length;
   for (let i = 0; i < len; i += 1) {
     const def = activeLayers[i];
     if (def.type === 'vector' && def.visible) {
-      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId);
+      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId, isMobile);
       if (isNonClickableVectorLayer) break;
     }
   }
@@ -1292,12 +1353,14 @@ export function adjustStartDates(layers) {
     }
     const { rollingWindow, historicalRanges } = availability;
 
-    if (dateRanges.length) {
+    if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
       firstDateRange.startDate = adjustDate(rollingWindow);
+    } else {
+      console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
 
-    if (historicalRanges && historicalRanges.length) {
+    if (Array.isArray(historicalRanges) && historicalRanges.length) {
       layer.startDate = historicalRanges[0].startDate;
       historicalRanges.reverse().forEach((range) => {
         layer.dateRanges.unshift(range);
@@ -1349,3 +1412,188 @@ export const getCacheOptions = (period, date, state) => {
     expirationAbsolute: new Date(now + tenMin),
   };
 };
+
+/**
+ * For active, multi-interval layers with on going coverage,
+ * date ranges are modified and added for layer config
+ *
+ * @method adjustActiveDateRanges
+ * @param  {Array} layers array
+ * @param  {Object} appNow - pageLoadTime date
+ * @returns {Array} array of layers
+ */
+export function adjustActiveDateRanges(layers, appNow) {
+  const appNowYear = appNow.getUTCFullYear();
+  const applyDateRangeAdjustment = (layer) => {
+    const { dateRanges } = layer;
+    const { inactive, period } = layer;
+    const failConditions = inactive
+      || !dateRanges
+      || period === 'subdaily';
+    if (failConditions) {
+      return;
+    }
+
+    const dateRangesModified = [...dateRanges];
+    for (let i = 0; i < dateRangesModified.length; i += 1) {
+      const dateRange = dateRangesModified[i];
+      const {
+        endDate,
+        startDate,
+        dateInterval,
+      } = dateRange;
+
+      const dateIntervalNum = Number(dateInterval);
+      if (i === dateRangesModified.length - 1 && dateIntervalNum > 1) {
+        // create/add dynamic dates to iterated dateRange
+        const start = new Date(startDate);
+        const startDateYear = start.getUTCFullYear();
+
+        // splice in modifiedDateRange to set endDate to appNow
+        if (startDateYear === appNowYear) {
+          const modifiedDateRange = {
+            startDate,
+            endDate: util.toISOStringSeconds(appNow),
+            dateInterval,
+          };
+          dateRangesModified.splice(i, 1, modifiedDateRange);
+        }
+
+        // check to see if dateRangesModified needs to be spliced or appended
+        if (startDateYear < appNowYear) {
+          const dynamicStartYear = start.getUTCFullYear() + 1;
+          const dynamicStartDate = new Date(start.setUTCFullYear(dynamicStartYear));
+
+          const end = new Date(endDate);
+          const endDateYear = end.getUTCFullYear();
+          const dynamicEndYear = end.getUTCFullYear() + 1;
+          let dynamicEndDate = new Date(end.setUTCFullYear(dynamicEndYear));
+
+          // don't extend endDate past appNow
+          dynamicEndDate = dynamicEndDate < appNow
+            ? dynamicEndDate
+            : appNow;
+
+          // extend endDate till end of year if before appNow year
+          // ex: app build date 11/2020 and it's 04/2021 now, this will extend to end of 12/2020
+          if (endDateYear < appNowYear) {
+            let endOfYearDate = new Date('2021-12-31T00:00:00.000Z');
+            endOfYearDate = new Date(endOfYearDate.setUTCFullYear(endDateYear));
+            const modifiedDateRange = {
+              startDate,
+              endDate: util.toISOStringSeconds(endOfYearDate),
+              dateInterval,
+            };
+            dateRangesModified.splice(i, 1, modifiedDateRange);
+          }
+
+          // add date range to modified layer dateRanges
+          if (dynamicStartDate < appNow) {
+            const dynamicDateRange = {
+              startDate: util.toISOStringSeconds(dynamicStartDate),
+              endDate: util.toISOStringSeconds(dynamicEndDate),
+              dateInterval,
+            };
+            dateRangesModified.push(dynamicDateRange);
+          }
+        }
+      }
+    }
+    layer.dateRanges = dateRangesModified;
+  };
+
+  return Object.values(layers).forEach(applyDateRangeAdjustment);
+}
+
+/**
+ * Change end dates for future layers to add 'futureTime' (ex: '3D')
+ * Adjust def.endDate and, if applicable, the last endDate in dateRange object
+ *
+ * @method adjustEndDates
+ * @param  {Array} layers array
+ * @returns {Array} array of layers
+ */
+export function adjustEndDates(layers) {
+  const applyDateAdjustment = (layer) => {
+    const { futureTime, dateRanges } = layer;
+    if (!futureTime) {
+      return;
+    }
+
+    const futureEndDate = getFutureLayerEndDate(layer);
+    layer.endDate = util.toISOStringSeconds(futureEndDate);
+
+    if (dateRanges.length) {
+      const lastDateRange = dateRanges[dateRanges.length - 1];
+      lastDateRange.endDate = util.toISOStringSeconds(futureEndDate);
+    }
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
+}
+
+/**
+ * Add mockFutureTime value to target layer object futureTime key
+ *
+ * @method mockFutureTimeLayerOptions
+ * @param  {Array} layers array
+ * @param  {String} mockFutureLayerParameters 'targetLayerId, mockFutureTime'
+ * @returns {Void}
+ */
+export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
+  const urlParameters = mockFutureLayerParameters.split(',');
+  const [targetLayerId, mockFutureTime] = urlParameters;
+
+  if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
+    layers[targetLayerId].futureTime = mockFutureTime;
+  }
+}
+
+export function getOverlayGroups(layers, prevGroups = []) {
+  const allGroupsMap = {};
+  layers.forEach(({ id, group, layergroup }) => {
+    if (group !== 'overlays') {
+      return;
+    }
+    if (allGroupsMap[layergroup]) {
+      allGroupsMap[layergroup].push(id);
+    } else {
+      allGroupsMap[layergroup] = [id];
+    }
+  });
+  return Object.keys(allGroupsMap).map((groupName) => {
+    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
+    return {
+      groupName,
+      layers: allGroupsMap[groupName],
+      collapsed: prevGroup ? prevGroup.collapsed : false,
+    };
+  });
+}
+
+export function getLayersFromGroups (state, groups) {
+  const baselayers = getLayers(state, { group: 'baselayers' });
+  const activeLayersMap = getActiveLayersMap(state);
+  return groups
+    ? groups.flatMap((g) => g.layers)
+      .map((id) => activeLayersMap[id])
+      .concat(baselayers)
+    : [];
+}
+
+export function adjustMeasurementsValidUnitConversion(config) {
+  const { measurements, layers } = config;
+  const applyDisableUnitConversionCheck = (layer) => {
+    const { layergroup } = layer;
+    if (!layergroup || !measurements[layergroup]) {
+      return;
+    }
+
+    const { disableUnitConversion } = measurements[layergroup];
+    if (disableUnitConversion) {
+      layer.disableUnitConversion = true;
+    }
+  };
+
+  return Object.values(layers).forEach(applyDisableUnitConversionCheck);
+}

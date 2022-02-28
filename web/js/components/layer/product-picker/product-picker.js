@@ -18,6 +18,9 @@ import SearchLayers from './search/search-layers';
 import {
   saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
+import util from '../../../util/util';
+
+const { events } = util;
 
 /*
  * A scrollable list of layers
@@ -34,7 +37,12 @@ class ProductPicker extends React.Component {
 
   componentDidMount() {
     const modalElement = document.getElementById('layer_picker_component');
-    this.setState({ modalElement }, this.setModalClass);
+    this.setState({ modalElement }, () => {
+      setTimeout(() => {
+        events.trigger('joyride:increment');
+      }, 200);
+      this.setModalClass();
+    });
   }
 
   componentDidUpdate(prevProps) {

@@ -7,9 +7,7 @@
       "description": "omps/OMPS_Ozone_Total_Column",
       "tags": "O3",
       "group": "overlays",
-      "layergroup": [
-        "omps"
-      ],
+      "layergroup": "Ozone",
       "product": "NMTO3",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"

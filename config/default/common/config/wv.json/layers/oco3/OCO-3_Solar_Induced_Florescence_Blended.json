@@ -7,11 +7,13 @@
       "description": "oco3/OCO-3_Solar_Induced_Florescence_Blended",
       "tags": "oco3",
       "group": "overlays",
-      "layergroup": [
-        "oco3"
-      ],
-      "product": "OCO3_L2_Lite_SIF",
+      "layergroup": "Solar Induced Chlorophyll Fluorescence",
       "wrapadjacentdays": true,
+      "inactive": true,
+      "tracks": [
+        "OrbitTracks_ISS_Ascending",
+        "OrbitTracks_ISS_Descending"
+      ],
       "daynight": [
         "day"
       ]

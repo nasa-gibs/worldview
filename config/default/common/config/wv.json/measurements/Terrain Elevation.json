@@ -1,0 +1,45 @@
+{
+    "measurements": {
+        "Terrain Elevation": {
+            "id": "terrain-elevation",
+            "title": "Terrain Elevation",
+            "subtitle": "ISS/GEDI, Terra/ASTER, Space Shuttle Endeavour/STS-99",
+            "sources": {
+                "ISS/GEDI": {
+                    "id": "iss-gedi",
+                    "title": "ISS/GEDI",
+                    "description": "gedi/LandSurfaceMetrics",
+                    "image": "",
+                    "settings": [
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202010",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202010",
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202104",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202104",
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202108",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108"
+                    ]
+                },
+                "Terra/ASTER": {
+                    "id": "terra-aster",
+                    "title": "Terra/ASTER",
+                    "description": "aster/GDEM",
+                    "image": "",
+                    "settings": [
+                        "ASTER_GDEM_Color_Index",
+                        "ASTER_GDEM_Color_Shaded_Relief",
+                        "ASTER_GDEM_Greyscale_Shaded_Relief"
+                    ]
+                },
+                "Space Shuttle Endeavour/STS-99": {
+                    "id": "space-shuttle-endeavour-sts-99",
+                    "title": "Space Shuttle Endeavour/STS-99",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "SRTM_Color_Index"
+                    ]
+                }
+            }
+        }
+    }
+}

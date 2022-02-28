@@ -19,14 +19,20 @@ export default {
   enabled,
   keys: {
     RECENT_LAYERS: 'recentLayers',
+    LOCATION_SEARCH_COLLAPSED: 'locationSearchState',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
+    DISMISSED_DISTRACTION_FREE_ALERT: 'dismissedDistractionFreeAlert',
+    GLOBAL_TEMPERATURE_UNIT: 'globalTemperatureUnit',
     HIDE_TOUR: 'hideTour',
+    HIDE_EDS_WARNING: 'hideEDS',
     SIDEBAR_COLLAPSED: 'sidebarState',
     COORDINATE_FORMAT: 'coordinateFormat',
     NOTIFICATION_OUTAGE: 'outage',
     NOTIFICATION_ALERT: 'alert',
     NOTIFICATION_MSG: 'message',
+    GROUP_OVERLAYS: 'groupOverlays',
+    ALWAYS_SHOW_DATELINES: 'alwaysShowDatelines',
   },
   getItem(key) {
     return enabled && localStorage.getItem(key);

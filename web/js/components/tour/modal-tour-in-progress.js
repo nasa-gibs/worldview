@@ -18,7 +18,6 @@ class ModalInProgress extends React.Component {
       description,
       modalInProgress,
       endTour,
-      showTourAlert,
       currentStep,
       totalSteps,
       decreaseStep,
@@ -30,7 +29,6 @@ class ModalInProgress extends React.Component {
         <Modal
           isOpen={modalInProgress}
           toggle={endTour}
-          onClosed={showTourAlert}
           wrapClassName="tour tour-in-progress"
           className={
             `${className} ${currentStory.type}`
@@ -71,7 +69,6 @@ ModalInProgress.propTypes = {
   endTour: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
   modalInProgress: PropTypes.bool.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
   totalSteps: PropTypes.number.isRequired,
   className: PropTypes.string,
   description: PropTypes.string,

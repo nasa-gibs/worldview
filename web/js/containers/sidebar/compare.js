@@ -4,28 +4,25 @@ import { connect } from 'react-redux';
 import {
   Nav, NavItem, NavLink, TabContent, TabPane,
 } from 'reactstrap';
-import Layers from './layers';
-import { getLayers } from '../../modules/layers/selectors';
-import { toggleActiveCompareState } from '../../modules/compare/actions';
-import util from '../../util/util';
-
+import LayersContainer from './layers-container';
+import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import MonospaceDate from '../../components/util/monospace-date';
 
 const tabHeight = 32;
 const CompareCase = (props) => {
   const {
     isActive,
-    dateStringA,
-    dateStringB,
+    dateA,
+    dateB,
     toggleActiveCompareState,
     isCompareA,
     height,
-    layersA,
-    layersB,
-    checkerBoardPattern,
   } = props;
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
+
   return (
     <div className={isActive ? '' : 'hidden '}>
       <div className={outerClass}>
@@ -41,7 +38,8 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` A: ${dateStringA}`}
+                {' A: '}
+                <MonospaceDate date={dateA} />
               </NavLink>
             </NavItem>
             <NavItem>
@@ -54,27 +52,24 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` B: ${dateStringB}`}
+                {' B: '}
+                <MonospaceDate date={dateB} />
               </NavLink>
             </NavItem>
           </Nav>
           <TabContent activeTab={isCompareA ? '1' : '2'}>
             <TabPane tabId="1">
-              <Layers
+              <LayersContainer
                 isActive={isCompareA}
-                activeOverlays={layersA}
-                layerGroupName="active"
+                compareState="active"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
             <TabPane tabId="2">
-              <Layers
+              <LayersContainer
                 isActive={!isCompareA}
-                activeOverlays={layersB}
-                layerGroupName="activeB"
+                compareState="activeB"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
           </TabContent>
@@ -86,36 +81,32 @@ const CompareCase = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({
   toggleActiveCompareState: () => {
-    dispatch(toggleActiveCompareState());
+    dispatch(toggleActiveCompareStateAction());
   },
 });
-function mapStateToProps(state, ownProps) {
-  const {
-    layers, compare, date,
-  } = state;
 
+const mapStateToProps = (state) => {
+  const { compare } = state;
+  const { isCompareA, active } = compare;
+  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
 
   return {
-    isCompareA: compare.isCompareA,
-    layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
-    layersB: getLayers(layers.activeB, { group: 'all', proj: 'all' }, state),
-    dateStringA: util.toISOStringDate(date.selected),
-    dateStringB: util.toISOStringDate(date.selectedB),
-    isActive: compare.active,
-    height: ownProps.height,
+    isCompareA,
+    dateA,
+    dateB,
+    isActive: active,
   };
-}
+};
+
 CompareCase.propTypes = {
-  checkerBoardPattern: PropTypes.object,
-  dateStringA: PropTypes.string,
-  dateStringB: PropTypes.string,
+  dateA: PropTypes.string,
+  dateB: PropTypes.string,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareA: PropTypes.bool,
-  layersA: PropTypes.object,
-  layersB: PropTypes.object,
   toggleActiveCompareState: PropTypes.func,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

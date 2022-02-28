@@ -1,4 +1,3 @@
-import { assign as lodashAssign } from 'lodash';
 import util from '../../util/util';
 import {
   OPEN_ANIMATION,
@@ -26,79 +25,93 @@ export const defaultState = {
   boundaries: undefined,
 };
 export function getInitialState(config) {
-  return lodashAssign({}, defaultState, {
+  return {
+    ...defaultState,
     startDate: util.dateAdd(config.initialDate, 'day', -7),
     endDate: config.initialDate,
-  });
+  };
 }
 
 export function animationReducer(state = defaultState, action) {
   switch (action.type) {
     case OPEN_ANIMATION:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isActive: true,
         gifActive: false,
-      });
+      };
     case EXIT_ANIMATION:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isActive: false,
         gifActive: false,
         isPlaying: false,
-      });
+      };
     case PLAY_ANIMATION:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isPlaying: true,
         gifActive: false,
-      });
+      };
     case STOP_ANIMATION:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isPlaying: false,
-      });
+      };
     case UPDATE_FRAME_RATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         speed: action.value,
-      });
+      };
     case UPDATE_START_AND_END_DATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         startDate: action.startDate,
         endDate: action.endDate,
         isPlaying: false,
-      });
+      };
     case UPDATE_START_DATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         startDate: action.value,
         isPlaying: false,
-      });
+      };
     case UPDATE_END_DATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         endDate: action.value,
         isPlaying: false,
-      });
+      };
     case UPDATE_CROP_BOUNDS:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         boundaries: action.value,
-      });
+      };
     case TOGGLE_LOOPING:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         loop: !state.loop,
-      });
+      };
     case TOGGLE_GIF:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         gifActive: !state.gifActive,
         isPlaying: false,
-      });
+      };
     case KEY_PRESS_ACTION:
       if (action.keyCode === 32 && state.isActive) {
-        return lodashAssign({}, state, {
+        return {
+          ...state,
           isPlaying: !state.isPlaying,
-        });
+        };
       }
       if (action.keyCode === 27) {
-        return lodashAssign({}, state, {
+        return {
+          ...state,
           isActive: false,
           gifActive: false,
           isPlaying: false,
-        });
+        };
       }
       return state;
 

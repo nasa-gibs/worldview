@@ -1,148 +1,117 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
+import {
+  UncontrolledTooltip,
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../components/util/button';
-import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import {
-  getSelectionCounts,
-  getDataSelectionSize,
-} from '../../modules/data/selectors';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
-import { toggleListAll } from '../../modules/natural-events/actions';
-import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
-class FooterContent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.toggleListAll = this.toggleListAll.bind(this);
-  }
+const FooterContent = React.forwardRef((props, ref) => {
+  const {
+    isCompareActive,
+    compareMode,
+    isMobile,
+    isPlaying,
+    activeTab,
+    changeCompareMode,
+    addLayers,
+    toggleCompare,
+    compareFeature,
+    eventsData,
+  } = props;
+  const compareBtnText = !isCompareActive
+    ? `Start Comparison${isMobile ? ' Mode' : ''}`
+    : `Exit Comparison${isMobile ? ' Mode' : ''}`;
 
-  toggleListAll() {
-    const {
-      toggleListAll,
-      showAll,
-    } = this.props;
-    toggleListAll();
-    if (showAll) {
-      googleTagManager.pushEvent({
-        event: 'natural_events_current_view_only',
-      });
-    } else {
-      googleTagManager.pushEvent({
-        event: 'natural_events_show_all',
-      });
-    }
-  }
+  const onClickAddLayers = (e) => {
+    e.stopPropagation();
+    addLayers(isPlaying);
+    googleTagManager.pushEvent({ event: 'add_layers' });
+  };
 
-  render() {
-    const {
-      isCompareActive,
-      compareMode,
-      isMobile,
-      activeTab,
-      onGetData,
-      changeCompareMode,
-      addLayers,
-      toggleCompare,
-      counts,
-      dataSelectionSize,
-      compareFeature,
-      showAll,
-    } = this.props;
-    if (isCompareActive && isMobile) {
-      toggleCompare();
-    }
-    if (activeTab === 'layers') {
-      return (
-        <>
-          <ModeSelection
-            isActive={isCompareActive}
-            selected={compareMode}
-            onclick={changeCompareMode}
-          />
-          <div className="product-buttons">
-            <Button
-              text="+ Add Layers"
-              id="layers-add"
-              className="layers-add red"
-              onClick={(e) => {
-                e.stopPropagation();
-                addLayers();
-                googleTagManager.pushEvent({
-                  event: 'add_layers',
-                });
-              }}
-            />
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleCompare();
-                googleTagManager.pushEvent({
-                  event: 'comparison_mode',
-                });
-              }}
-              className="compare-toggle-button"
-              id="compare-toggle-button"
-              style={isMobile || !compareFeature ? { display: 'none' } : null}
-              text={!isCompareActive ? 'Start Comparison' : 'Exit Comparison'}
-            />
-          </div>
-        </>
-      );
-    } if (activeTab === 'events') {
-      return (
-        <div className="events-footer-case">
-          <Checkbox
-            className="red"
-            id="events-footer-checkbox"
-            label="Only show events in current view"
-            onCheck={this.toggleListAll}
-            text="List All"
-            checked={!showAll}
-          />
-        </div>
-      );
-    }
-    const countArray = Object.values(counts);
-    const noDataSelected = countArray.length === 0
-      ? true
-      : countArray.reduce((a, b) => a + b, 0) === 0;
-    return (
-      <div className="data-download-footer-case">
+  const onClickToggleCompare = (e) => {
+    e.stopPropagation();
+    toggleCompare();
+    googleTagManager.pushEvent({ event: 'comparison_mode' });
+  };
+
+  const renderLayersFooter = () => (
+    <>
+      <ModeSelection
+        isActive={isCompareActive}
+        isMobile={isMobile}
+        selected={compareMode}
+        onclick={changeCompareMode}
+      />
+      <div className="product-buttons">
         <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onGetData();
-            googleTagManager.pushEvent({
-              event: 'data_download_button',
-            });
-          }}
-          className={
-              noDataSelected
-                ? 'wv-data-download-button black no-pointer-events'
-                : 'wv-data-download-button red'
-            }
+          id="layers-add"
+          aria-label="Add layers"
+          className="layers-add red"
+          text="+ Add Layers"
+          onClick={onClickAddLayers}
+        />
+        <Button
           id="compare-toggle-button"
-          text={
-              dataSelectionSize
-                ? `Download Data (${
-                  Math.round(dataSelectionSize * 100) / 100
-                } MB)`
-                : noDataSelected
-                  ? 'No Data Selected'
-                  : 'Download Selected Data'
-            }
+          aria-label={compareBtnText}
+          className="compare-toggle-button"
+          style={!compareFeature ? { display: 'none' } : null}
+          onClick={onClickToggleCompare}
+          text={compareBtnText}
         />
       </div>
+    </>
+  );
+
+  const renderEventsFooter = () => {
+    const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
+    const numEvents = eventsData ? eventsData.length : 0;
+    return (
+      <div className="event-count">
+        {eventsData && eventLimitReach ? (
+          <>
+            <span>
+              {`Showing the first ${numEvents} events`}
+            </span>
+            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+            <UncontrolledTooltip
+              placement="right"
+              target="filter-info-icon"
+            >
+              <div>
+                More than
+                {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+                events match the current filter criteria. Narrow your search by date, event type and/or map view.
+              </div>
+            </UncontrolledTooltip>
+          </>
+        ) : (
+          <span>
+            {`Showing ${numEvents} events`}
+          </span>
+        )}
+      </div>
     );
-  }
-}
+  };
+
+
+  return (
+    <footer ref={ref}>
+      {activeTab === 'layers' && renderLayersFooter()}
+      {activeTab === 'events' && renderEventsFooter()}
+    </footer>
+  );
+});
+
 const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
     dispatch(toggleCompareOnOff());
@@ -150,14 +119,10 @@ const mapDispatchToProps = (dispatch) => ({
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
   },
-  onGetData: () => {
-    dispatch({ type: DATA_GET_DATA_CLICK });
-  },
-  toggleListAll: () => {
-    dispatch(toggleListAll());
-  },
-  addLayers: () => {
-    dispatch(stopAnimationAction());
+  addLayers: (isPlaying) => {
+    if (isPlaying) {
+      dispatch(stopAnimationAction());
+    }
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
@@ -169,35 +134,29 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
 });
-function mapStateToProps(state, ownProps) {
-  const { activeTab } = ownProps;
+
+const mapStateToProps = (state) => {
   const {
-    requestedEvents, config, layers, data, compare, browser,
+    animation, config, compare, browser,
   } = state;
-  const { showAll } = state.events;
-  const { selectedGranules } = data;
-  const events = lodashGet(requestedEvents, 'response');
-  const { activeString } = compare;
-  const activeLayers = layers[activeString];
-  const counts = getSelectionCounts(activeLayers, selectedGranules);
-  const dataSelectionSize = getDataSelectionSize(selectedGranules);
+  const { isPlaying } = animation;
+  const eventsData = getFilteredEvents(state);
 
   return {
-    showAll,
-    activeTab,
-    events,
-    counts,
     isMobile: browser.lessThan.medium,
-    dataSelectionSize,
+    isPlaying,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,
-    toggleListAll,
+    eventsData,
   };
-}
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
+  null,
+  { forwardRef: true },
 )(FooterContent);
 
 FooterContent.propTypes = {
@@ -206,12 +165,9 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
-  counts: PropTypes.object,
-  dataSelectionSize: PropTypes.number,
+  eventsData: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  onGetData: PropTypes.func,
-  showAll: PropTypes.bool,
+  isPlaying: PropTypes.bool,
   toggleCompare: PropTypes.func,
-  toggleListAll: PropTypes.func,
 };

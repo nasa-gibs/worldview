@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Emult_Average",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Vegetation Light Use Efficiency",
       "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }

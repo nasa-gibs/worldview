@@ -7,9 +7,7 @@
       "description": "aquarius/Aquarius_Sea_Surface_Salinity_L3_Daily",
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "aquarius"
-      ],
+      "layergroup": "Sea Surface Salinity",
       "product": "AQUARIUS_L3_SSS_SMI_DAILY_V5",
       "inactive": true
     }

@@ -1,0 +1,27 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Floods": {
+                "title": "Floods",
+                "id": "floods",
+                "image": "floods.jpg",
+                "description": "",
+                "measurements": [
+                    "Flood",
+                    "Flood Hazard",
+                    "Corrected Reflectance",
+                    "Land Surface Reflectance",
+                    "Precipitation Estimate",
+					"Precipitation Rate",
+                    "Human Impacts",
+                    "Land Cover",
+                    "Forests, Mangrove",
+					"Soil Moisture",
+                    "Snow Cover",
+                    "Snow Water Equivalent",
+                    "Water Bodies"
+                ]
+            }
+        }
+    }
+}

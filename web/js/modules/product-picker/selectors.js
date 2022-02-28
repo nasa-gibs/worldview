@@ -4,13 +4,8 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './format-config';
-import getSelectedDate from '../date/selectors';
-
-const decodeHtml = (html) => {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
-};
+import { getSelectedDate } from '../date/selectors';
+import util from '../../util/util';
 
 // State selectors
 const getConfig = ({ config }) => config;
@@ -31,7 +26,7 @@ export const getLayersForProjection = createSelector(
         if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
         // Decode HTML entities in the subtitle
         if (layer.subtitle && layer.subtitle.includes('&')) {
-          layer.subtitle = decodeHtml(layer.subtitle);
+          layer.subtitle = util.decodeHTML(layer.subtitle);
         }
         return layer;
       });
@@ -39,20 +34,31 @@ export const getLayersForProjection = createSelector(
   },
 );
 
-export const getMeasurementSource = createSelector(
-  [getConfig, getProductPicker],
-  (config, { selectedMeasurement, selectedMeasurementSourceIndex }) => {
+export const getSourcesForProjection = createSelector(
+  [getConfig, getProjection, getProductPicker],
+  (config, projection, { selectedMeasurement }) => {
     const measurements = Object.values(config.measurements);
     const currentMeasurement = measurements.find(({ id }) => id === selectedMeasurement);
     const sources = currentMeasurement && Object.values(currentMeasurement.sources);
-    const sortedSources = sources && sources.sort((a, b) => a.title.localeCompare(b.title));
-    return sortedSources && sortedSources[selectedMeasurementSourceIndex];
+    const trackGroup = currentMeasurement && currentMeasurement.id === 'orbital-track';
+    const sourcesForProj = sources && sources.filter(
+      (source) => source.settings.some((layerId) => {
+        const { projections, layergroup } = config.layers[layerId];
+        const isOrbitTrack = layergroup === 'Orbital Track';
+        const inProj = !!projections[projection];
+        return trackGroup ? inProj : !isOrbitTrack && inProj;
+      }),
+    );
+    return sourcesForProj && sourcesForProj.sort((a, b) => a.title.localeCompare(b.title));
   },
 );
 
 export const getCategoryConfig = createSelector(
   [getConfig, getCategoryType],
-  ({ categories }, categoryType) => (categoryType === 'measurements'
-    ? categories['hazards and disasters']
-    : categories[categoryType]),
+  ({ categories, categoryGroupOrder }, categoryType) => {
+    const [firstTab] = categoryGroupOrder;
+    return categoryType === 'measurements'
+      ? categories[firstTab]
+      : categories[categoryType];
+  },
 );

@@ -6,9 +6,7 @@
       "subtitle": "Aura / MLS",
       "description": "mls/MLS_Temperature_46hPa_Night",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Temperature",
       "product": "ML2T",
       "tracks": [
         "OrbitTracks_Aura_Descending"

@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "",
       "wrapadjacentdays": true,
       "daynight": [

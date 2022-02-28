@@ -1,1 +1,3 @@
-References: [OCO3\_L2\_Lite\_FP: OCO-3 Level 2 bias-corrected XCO2 and other select fields from the full-physics retrieval aggregated as daily files, Retrospective processing VEarlyR](https://disc.gsfc.nasa.gov/datasets/OCO3_L2_Lite_FP_EarlyR/summary)
+The OCO-3 Carbon Dioxide (Difference from Global Mean) is a layer that combines OCO-3 XCO<sub>2</sub> (column-averaged dry-air mole fraction) and an estimated daily global trend XCO<sub>2</sub> value.
+
+References: OCO3_L2_Lite_FP [doi:10.5067/8QR1N7IV81RD](https://doi.org/10.5067/8QR1N7IV81RD)

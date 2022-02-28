@@ -1,1 +1,5 @@
+The Flash Radiance (Level 2, Standard) layer displays the radiance of lightning flashes measured in &mu;J/sr/m<sup>2</sup>/&mu;m as recorded by the Lightning Imaging Sensor (LIS) on the Tropical Rainfall Measuring Mission (TRMM) satellite.
 
+The Lightning Imaging Sensor (LIS) Science Data was collected by the LIS instrument on the Tropical Rainfall Measuring Mission (TRMM) satellite used to detect the distribution and variability of total lightning occurring in the Earth’s tropical and subtropical regions. This data can be used for severe storm detection and analysis, as well as for lightning-atmosphere interaction studies. The LIS instrument makes measurements during both day and night with high detection efficiency.
+
+References: lislip [doi:10.5067/LIS/LIS/DATA201](https://doi.org/10.5067/LIS/LIS/DATA201)

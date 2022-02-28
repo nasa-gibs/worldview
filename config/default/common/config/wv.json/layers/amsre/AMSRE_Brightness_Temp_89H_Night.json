@@ -7,9 +7,7 @@
       "description": "amsre/AMSRE_Brightness_Temp_89H_Night",
       "group": "overlays",
       "product": "AE_L2A_NIGHT",
-      "layergroup": [
-        "amsre"
-      ],
+      "layergroup": "Brightness Temperature",
       "inactive": true,
       "tracks": [
         "OrbitTracks_Aqua_Descending"

@@ -7,9 +7,7 @@
       "description": "mopitt/MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day",
       "tags": "co",
       "group": "overlays",
-      "layergroup": [
-        "mopitt"
-      ],
+      "layergroup": "Carbon Monoxide",
       "product": "MOP03JM",
       "wrapadjacentdays": true,
       "inactive": true,

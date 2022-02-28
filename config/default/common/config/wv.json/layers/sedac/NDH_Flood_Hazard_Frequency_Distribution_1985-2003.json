@@ -7,9 +7,7 @@
       "description": "sedac/NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Flood Hazard",
       "product": "CIESIN_CHRR_NDH_FLOOD_HFD",
       "inactive": true,
       "wrapX": true

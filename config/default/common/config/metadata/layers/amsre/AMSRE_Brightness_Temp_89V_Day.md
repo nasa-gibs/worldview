@@ -2,6 +2,6 @@ The Advanced Microwave Scanning Radiometer - Earth Observing System (AMSR-E) "Br
 
 On board NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, oceanic, and atmospheric variables used to investigate global water and energy cycles. The imagery resolution is 2 km and sensor resolution is 5.4 km. The temporal resolution was daily.
 
-References: [AMSR-E/Aqua L2A Global Swath Spatially-Resampled Brightness Temperatures](https://nsidc.org/data/ae_l2a)
-
 Data fields: `89.0V_Res.5B_TB_(not-resampled)`
+
+References: AE_L2A [doi:10.5067/YL62FUZLAJUT](https://doi.org/10.5067/YL62FUZLAJUT)

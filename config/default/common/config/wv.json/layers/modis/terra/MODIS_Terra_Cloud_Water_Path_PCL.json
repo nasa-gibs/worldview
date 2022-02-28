@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Water_Path_PCL",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Cloud Water Path",
       "product": "MOD06_L2",
       "wrapadjacentdays": true,
       "tracks": [

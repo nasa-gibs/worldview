@@ -18,12 +18,14 @@ class ModeSelection extends React.Component {
   }
 
   render() {
-    const { isActive, selected, onclick } = this.props;
+    const {
+      isActive, isMobile, selected, onclick,
+    } = this.props;
     return (
       <div
         id="wv-ab-mode-selection-case"
         className="wv-ab-mode-selection-case"
-        style={{ display: isActive ? 'block' : 'none' }}
+        style={{ display: isActive && !isMobile ? 'block' : 'none' }}
       >
         <h3>COMPARE MODE:</h3>
         <ButtonGroup size="sm">
@@ -58,6 +60,7 @@ class ModeSelection extends React.Component {
 }
 ModeSelection.propTypes = {
   isActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   onclick: PropTypes.func,
   selected: PropTypes.string,
 };

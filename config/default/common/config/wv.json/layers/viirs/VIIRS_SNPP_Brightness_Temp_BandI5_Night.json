@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_SNPP_Brightness_Temp_BandI5_Night",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "VNP02IMG_NRT",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Descending"

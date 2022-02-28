@@ -7,9 +7,7 @@
       "description": "trmm/LIS_High_Resolution_Full_Climatology_LIS_Scaled_Flashes",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "trmm"
-      ],
+      "layergroup": "Lightning",
       "product": "lohrfc",
       "inactive": true,
       "wrapadjacentdays": true

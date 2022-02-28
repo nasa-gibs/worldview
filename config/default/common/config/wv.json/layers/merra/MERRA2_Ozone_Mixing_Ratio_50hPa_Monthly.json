@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Ozone",
       "product": "M2IMNPANA",
       "wrapadjacentdays": true
     }

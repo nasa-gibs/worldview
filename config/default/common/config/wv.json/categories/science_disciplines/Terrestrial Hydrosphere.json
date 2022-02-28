@@ -1,0 +1,26 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Terrestrial Hydrosphere": {
+                "title": "Terrestrial Hydrosphere",
+                "id": "terrestrial-hydrosphere",
+                "image": "terrestrial-hydrosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Flood",
+                    "Flood Hazard",
+                    "Freeze/Thaw",
+                    "Frozen Area",
+                    "Reservoirs",
+                    "Sea Ice",
+                    "Snow Cover",
+                    "Snow Depth",
+                    "Snow Mass",
+                    "Snow Water Equivalent",
+                    "Soil Moisture",
+                    "Water Bodies"
+                ]
+            }
+        }
+    }
+}

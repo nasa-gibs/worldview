@@ -7,10 +7,7 @@
       "description": "reference/blue_marble/BlueMarble_ShadedRelief_Bathymetry",
       "tags": "bm bmng",
       "group": "baselayers",
-      "layergroup": [
-        "reference",
-        "reference_bluemarble"
-      ],
+      "layergroup": "Blue Marble",
       "wrapX": true,
       "daynight": [
         "day"

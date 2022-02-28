@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day",
       "tags": "",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Isotropic Kernel Parameters",
       "product": "",
       "daynight": [
         "day"

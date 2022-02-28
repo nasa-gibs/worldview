@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Surface_Wind_Speed_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Wind Speed",
       "product": "M2IMNXLFO",
       "wrapadjacentdays": true
     }

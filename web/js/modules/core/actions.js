@@ -4,12 +4,10 @@ export function requestAction(
   url,
   mimeType,
   id,
-  signal,
-  TIMEOUT_AMOUNT,
+  options,
 ) {
-  // let didTimeOut = false;
   dispatch(startRequest(actionName, id));
-  return new Promise((resolve, reject) => fetch(url, { signal })
+  return new Promise((resolve, reject) => fetch(url, options)
     .then((response) => (mimeType === 'application/json'
       ? response.json()
       : response.text()
@@ -23,6 +21,7 @@ export function requestAction(
       reject(error);
     }));
 }
+
 export function startRequest(actionName, id) {
   return {
     type: `${actionName}_START`,
@@ -37,12 +36,7 @@ export function fetchSuccess(actionName, response, id) {
     ...!!id && { id },
   };
 }
-// export function fetchTimeout(actionName, error, id) {
-//   return {
-//     type: `${actionName}_TIMEOUT`,
-//     id: id
-//   };
-// }
+
 export function fetchFailure(actionName, error, id) {
   return {
     type: `${actionName}_FAILURE`,
