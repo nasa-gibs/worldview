@@ -4,7 +4,6 @@ import {
   throttle as lodashThrottle,
   each as lodashEach,
 } from 'lodash';
-import loadingIndicator from '../../ui/indicator';
 import {
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_DATES,
@@ -77,7 +76,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const initCMRRequestIndicator = () => {
     self.indicatorId = setTimeout(() => {
       clearTimeout(self.indicatorId);
-      loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
+      // loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
     }, 2000);
   };
 
@@ -91,7 +90,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const destroyCMRRequestIndicator = () => {
     clearTimeout(self.indicatorId);
     setTimeout(() => {
-      loadingIndicator.hide();
+      // loadingIndicator.hide();
     }, 2000);
   };
 
