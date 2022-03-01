@@ -159,16 +159,25 @@ const addLineOverlay = function(map, dateA, dateB) {
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
   const isSameDate = dateA === dateB;
-  let dateAText = 'A';
-  let dateBText = 'B';
+  const dateAText = 'A: ';
+  const dateBText = 'B: ';
   if (!isSameDate) {
     firstLabel.className += ' show-date-label';
     secondLabel.className += ' show-date-label';
-    dateAText += `: ${dateA}`;
-    dateBText += `: ${dateB}`;
   }
+  const dateElA = document.createElement('span');
+  const dateElB = document.createElement('span');
+  dateElA.className = 'monospace';
+  dateElB.className = 'monospace';
+
+  dateElA.appendChild(document.createTextNode(dateA));
+  dateElB.appendChild(document.createTextNode(dateB));
+
   firstLabel.appendChild(document.createTextNode(dateAText));
+  firstLabel.appendChild(dateElA);
+
   secondLabel.appendChild(document.createTextNode(dateBText));
+  secondLabel.appendChild(dateElB);
 
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';

@@ -8,8 +8,8 @@
       "tags": "oco2 co2",
       "group": "overlays",
       "layergroup": "Carbon Dioxide",
-      "product": "OCO2_L2_Lite_FP",
       "wrapadjacentdays": true,
+      "inactive": true,
       "tracks": [
         "OrbitTracks_OCO-2_Ascending"
       ],

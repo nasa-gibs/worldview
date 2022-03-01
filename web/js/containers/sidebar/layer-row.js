@@ -321,22 +321,24 @@ function LayerRow (props) {
 
   const renderLayerRow = () => (
     <>
-      <a
-        id={`hide${encodedLayerId}`}
-        className={getVisibilityToggleClass()}
-        aria-label={visibilityTitle}
-        onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
-      >
-        {!isAnimating && (
+      {!isEmbedModeActive && (
+        <a
+          id={`hide${encodedLayerId}`}
+          className={getVisibilityToggleClass()}
+          aria-label={visibilityTitle}
+          onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
+        >
+          {!isAnimating && (
           <UncontrolledTooltip
             placement="right"
             target={`hide${encodedLayerId}`}
           >
             {visibilityTitle}
           </UncontrolledTooltip>
-        )}
-        <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
-      </a>
+          )}
+          <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
+        </a>
+      )}
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 

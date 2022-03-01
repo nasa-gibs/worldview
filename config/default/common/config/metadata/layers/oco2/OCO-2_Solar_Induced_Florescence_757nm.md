@@ -4,4 +4,4 @@ One of the OCO-2 channels, the O<sub>2</sub> A-band, contains multiple Fraunhofe
 
 References: OCO2_L2_Lite_SIF [doi:10.5067/XO2LBBNPO010](https://doi.org/10.5067/XO2LBBNPO010)
 
-Frankenberg et al. Prospects for chlorophyll fluorescence remote sensing from the Orbiting Carbon Observatory-2, Remote Sensing of Environment, Vol 147, 5 May. 2014, Pgs 1-12, [doi: 10.1016/j.rse.2014.02.007](https://doi.org/10.1016/j.rse.2014.02.007)
+Frankenberg et al. Prospects for chlorophyll fluorescence remote sensing from the Orbiting Carbon Observatory-2, Remote Sensing of Environment, Vol 147, 5 May. 2014, Pgs 1-12, [doi:10.1016/j.rse.2014.02.007](https://doi.org/10.1016/j.rse.2014.02.007)

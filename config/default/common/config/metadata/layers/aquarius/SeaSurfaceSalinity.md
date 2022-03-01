@@ -5,4 +5,4 @@ Salinity is a key measurement in oceanographic investigations, serving as a trac
 Aquarius was a NASA pathfinder mission providing routine, global remotely sensed sea surface salinity measurements from space over the ocean for the period 25 August, 2011 through 7 June, 2015. It was a collaborative mission between NASA and CONAE, the Argentinean space agency.
 
 References:
-Lee, T., G. Lagerloef, M.M. Gierach, H.-Y. Kao, S. Yueh, and K. Dohan (2012), Aquarius reveals salinity structure of tropical instability waves, Geophys. Res. Lett., 39, L12610, [doi: 10.1029/2012GL052232](https://doi.org/10.1029/2012GL052232).
+Lee, T., G. Lagerloef, M.M. Gierach, H.-Y. Kao, S. Yueh, and K. Dohan (2012), Aquarius reveals salinity structure of tropical instability waves, Geophys. Res. Lett., 39, L12610, [doi:10.1029/2012GL052232](https://doi.org/10.1029/2012GL052232).

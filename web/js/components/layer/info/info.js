@@ -51,30 +51,34 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
   };
 
   const needDateRanges = getDateOverlapDateRanges();
+  const isRange = startDate && endDate;
+  const FormattedStartDate = () => coverageDateFormatter('START-DATE', startDate, period);
+  const FormattedEndDate = () => coverageDateFormatter('END-DATE', endDate, period);
 
   return (
     <div id="layer-description" className="layer-description">
-      {startDate || endDate ? (
+      {(startDate || endDate) && (
         <div id="layer-date-range" className="layer-date-range">
           <span id={`${id}-startDate`} className="layer-date-start">
-            {startDate
-              ? `Temporal coverage: ${
-                coverageDateFormatter('START-DATE', startDate, period)}`
-              : ''}
+            {startDate && (
+              <>
+                Temporal Coverage:
+                {' '}
+                <FormattedStartDate />
+              </>
+            )}
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
-            {startDate && endDate
-              ? ` - ${
-                coverageDateFormatter('END-DATE', endDate, period)}`
-              : startDate
-                ? ' - Present'
-                : ''}
+            {isRange ? (
+              <>
+                -
+                <FormattedEndDate />
+              </>
+            ) : startDate && ' - Present'}
           </span>
-          {needDateRanges
-              && <DateRanges layer={layer} />}
+          {needDateRanges && <DateRanges layer={layer} />}
         </div>
-      )
-        : ''}
+      )}
       {layerMetadata ? (
         <div
           id="layer-metadata"

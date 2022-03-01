@@ -1,0 +1,214 @@
+.ab-swipe-line {
+  height: 100%;
+  padding: 0 2px;
+  position: absolute;
+  top: 0;
+  width: 1px;
+  background: #fff;
+  cursor: move;
+  cursor: grab;
+  user-select: none;
+
+  & .show-date-label {
+    width: 120px;
+  }
+
+  & .left-label {
+    left: -23px;
+
+    &.show-date-label {
+      left: -129px;
+    }
+  }
+
+  & .right-label {
+    left: 13px;
+  }
+}
+
+.ab-swipe-line:active {
+  cursor: grabbing;
+}
+
+.ab-swipe-dragger {
+  position: absolute;
+  bottom: 210px;
+  width: 65px;
+  height: 65px;
+  margin-top: -45px;
+  border-radius: 50%;
+  left: -30px;
+  text-align: center;
+}
+
+.ab-swipe-dragger .swipe-dragger-circle {
+  width: 45px;
+  height: 45px;
+  left: -25px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  margin: 10px;
+}
+
+.ab-swipe-dragger:hover {
+  transform: scale(1.2);
+}
+
+.ab-swipe-dragger svg.svg-inline--fa {
+  font-size: 26px;
+  margin-top: 11px;
+}
+
+.ab-slider-case {
+  @include wv-date-chip;
+
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 195px;
+  text-align: center;
+  height: 36px;
+}
+
+.ab-slider-case .input-range {
+  width: 110px;
+  display: inline-block;
+  margin: 6px 14px;
+}
+
+.ab-slider-case .wv-slider-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ab-slider-case .wv-slider-label h4 {
+  font-weight: 400;
+  position: absolute;
+
+  &.left {
+    left: 8px;
+  }
+
+  &.right {
+    right: 8px;
+  }
+}
+
+.ab-slider-case .wv-slider-label span {
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.ab-slider-case .input-range__slider {
+  height: 20px;
+  width: 20px;
+  margin-top: -12px;
+  margin-left: -10px;
+}
+
+.ab-swipe-line .ab-swipe-span {
+  @include wv-date-chip;
+
+  font-family: $wv-base-font;
+  position: absolute;
+  bottom: 195px;
+  padding: 2px 4px;
+  display: block;
+  font-size: 14px;
+  margin-top: -7px;
+  cursor: default;
+}
+
+.ab-spy-span {
+  @include wv-date-chip;
+
+  font-family: $wv-base-font;
+  position: absolute;
+  display: block;
+  white-space: nowrap;
+  font-size: 14px;
+  padding: 2px;
+  margin-left: -4px;
+
+  // .monospace {
+  //   font-family: $wv-monospace-font;
+  // }
+}
+
+.compare-dialog ul {
+  display: flex;
+}
+
+.compare-dialog .compare-dialog-list-item {
+  flex: 0 32%;
+  margin: 0 auto;
+  list-style: none;
+}
+
+.compare-dialog p {
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.compare-dialog img {
+  display: block;
+  max-width: 100%;
+}
+
+.ab-tab {
+  .icon-layers {
+    margin-right: 2px;
+  }
+
+  span {
+    padding-bottom: 2px;
+  }
+}
+
+/* Mobile */
+.comparison-mobile-select-toggle {
+  border-radius: 5px;
+  height: 44px;
+  border: thin solid #333;
+  background-color: $wv-transparent-black;
+  position: absolute;
+  bottom: 65px;
+  left: 10px;
+  display: flex;
+  overflow: hidden;
+}
+
+.compare-toggle-selected-btn {
+  cursor: pointer;
+  user-select: none;
+  font-size: 25px;
+  padding: 13.5px;
+  color: #fff;
+  border: thin solid transparent;
+
+  &:first-child {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &:hover:not(.compare-btn-selected) {
+    border-color: #fff;
+  }
+}
+
+.compare-btn-selected {
+  color: #495057;
+  background-color: #fff;
+  border-color: #fff;
+}

@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
-const postcssNesting = require('postcss-nesting');
 // production optimizations
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -60,12 +59,6 @@ if (process.env.DEBUG !== undefined) {
 
 const entryPoint = './web/js/main.js';
 const outputFileName = 'wv.js';
-/*
-if (process.env.TESTING_MODE === 'true') {
-  entryPoint = './test/main.js';
-  outputFileName = 'wv-test-bundle.js';
-}
-*/
 
 const babelLoaderExcludes = [
   /\.test\.js$/,
@@ -191,7 +184,6 @@ module.exports = {
                     '> 2%',
                   ],
                 }),
-                postcssNesting(),
               ],
             },
           },
