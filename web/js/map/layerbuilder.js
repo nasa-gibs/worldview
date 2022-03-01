@@ -86,28 +86,32 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const getGraticule = (proj) => new OlGraticule({
-    lonLabelStyle: new OlText({
-      font: '12px Calibri,sans-serif',
-      textBaseline: 'top',
-      fill: new OlFill({
-        color: 'rgba(0,0,0,1)',
+  const getGraticule = (proj) => {
+    const graticule = new OlGraticule({
+      lonLabelStyle: new OlText({
+        font: '12px Calibri,sans-serif',
+        textBaseline: 'top',
+        fill: new OlFill({
+          color: 'rgba(0,0,0,1)',
+        }),
+        stroke: new OlStroke({
+          color: 'rgba(255,255,255,1)',
+          width: 3,
+        }),
       }),
-      stroke: new OlStroke({
-        color: 'rgba(255,255,255,1)',
-        width: 3,
+      // the style to use for the lines, optional.
+      strokeStyle: new OlStroke({
+        color: 'rgb(255, 255, 255)',
+        width: 2,
+        lineDash: [0.5, 4],
       }),
-    }),
-    // the style to use for the lines, optional.
-    strokeStyle: new OlStroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2,
-      lineDash: [0.5, 4],
-    }),
-    extent: proj.maxExtent,
-    lonLabelPosition: 1,
-    showLabels: true,
-  });
+      extent: proj.maxExtent,
+      lonLabelPosition: 1,
+      showLabels: true,
+    });
+    graticule.isVector = true;
+    return graticule;
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -173,7 +177,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
       if (!isGranule) {
-        switch (type) {
+        switch (def.type) {
           case 'wmts':
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
@@ -183,8 +187,6 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
-
-          // TODO why is graticule layer type 'variable'?
           case 'graticule':
             layer = getGraticule(proj);
             break;
