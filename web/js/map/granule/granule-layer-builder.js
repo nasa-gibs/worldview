@@ -32,63 +32,39 @@ const CMR_AJAX_OPTIONS = {
 const CMR_QUERY_PREFIX = `${CMR_AJAX_OPTIONS.url}granules.json?shortName=`;
 
 export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
-  const self = {};
-  self.init = function() {
-    self.proj = null;
-    self.granuleLayers = {};
-    self.CMRDateRanges = {
-      active: {},
-      activeB: {},
-    };
-    self.CMRDataStore = {};
-    self.throttleDispathCMRErrorDialog = lodashThrottle(
-      dispathCMRErrorDialog.bind(this),
-      CMR_AJAX_OPTIONS.timeout,
-      { leading: true, trailing: false },
-    );
-    self.indicatorId = 0;
+  const CMRDateRanges = {
+    active: {},
+    activeB: {},
   };
+  const CMRDataStore = {};
+  const granuleLayers = {};
+  let indicatorId = 0;
+  let currentProj;
 
-  /**
-   * Display error dialog in the event of no CMR data returned during valid date range
-   *
-   * @method dispathCMRErrorDialog
-   * @static
-   * @param {string} title
-   * @returns {void}
-  */
-  const dispathCMRErrorDialog = (title) => {
+  const throttleDispathCMRErrorDialog = lodashThrottle(
+    dispathCMRErrorDialog.bind(this),
+    CMR_AJAX_OPTIONS.timeout,
+    { leading: true, trailing: false },
+  );
+
+  function dispathCMRErrorDialog (title) {
     store.dispatch({
       type: OPEN_BASIC,
       key: '__BASIC_MODAL__CMR_REQUEST_ERROR',
       headerText: `${title} is unavailable at this time.`,
       bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
     });
-  };
+  }
 
-  /**
-   * Initialize timeout countdown (2 seconds) and then show ui indicator for CMR request
-   *
-   * @method initCMRRequestIndicator
-   * @static
-   * @returns {void}
-  */
-  const initCMRRequestIndicator = () => {
-    self.indicatorId = setTimeout(() => {
-      clearTimeout(self.indicatorId);
+  const showLoading = () => {
+    indicatorId = setTimeout(() => {
+      clearTimeout(indicatorId);
       // loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
     }, 2000);
   };
 
-  /**
-   * Clear timeout for CMR request indicator and hide ui indicator
-   *
-   * @method dispathCMRErrorDialog
-   * @static
-   * @returns {void}
-  */
-  const destroyCMRRequestIndicator = () => {
-    clearTimeout(self.indicatorId);
+  const hideLoading = () => {
+    clearTimeout(indicatorId);
     setTimeout(() => {
       // loadingIndicator.hide();
     }, 2000);
@@ -105,11 +81,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   */
   const addGranuleCMRDateData = (data, id, projection) => {
     // init id object if first time loading cmr data
-    if (!self.CMRDataStore[id]) {
-      self.CMRDataStore[id] = {};
+    if (!CMRDataStore[id]) {
+      CMRDataStore[id] = {};
     }
     const line = new OlGeomLineString([]);
     const maxDistance = projection === 'geographic' ? 270 : Number.POSITIVE_INFINITY;
+
     lodashEach(Object.values(data.feed.entry), (entry) => {
       const date = `${entry.time_start.split('.')[0]}Z`;
       const polygons = entry.polygons[0][0].split(' ');
@@ -159,7 +136,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
           return coord;
         });
       }
-      self.CMRDataStore[id][date] = {
+      CMRDataStore[id][date] = {
         date,
         polygons: polygonReorder,
         dayNight,
@@ -181,7 +158,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       * @param {string} granuleDate - UTC date string
       * @param {array} polygon - CMR granule polygon geometry
   */
-  self.getQueriedGranuleDates = (def, date, activeKey, projection, testTimeoutCMR) => {
+  const getQueriedGranuleDates = async (def, date, activeKey, projection, testTimeoutCMR) => {
     const {
       endDate, startDate, id, title, visible,
     } = def;
@@ -190,10 +167,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
     const queryDateRange = `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`;
-    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=2000`;
+    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=500`;
 
     // update range/extend range checks and new dates (if applicable)
-    const CMRDateStoreForLayer = self.CMRDateRanges[activeKey][id];
+    const CMRDateStoreForLayer = CMRDateRanges[activeKey][id];
     const {
       canExtendRange,
       needRangeUpdate,
@@ -206,50 +183,38 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       endQueryDate,
     );
 
-    // make cmr request with -6 days back through +1 day forward
     // if layer id and query date range not previously requested, then fetch, process, and add to CMR query object
     if (!CMRDateStoreForLayer || (CMRDateStoreForLayer && needRangeUpdate)) {
       // update local CMR date object for layer
       let startDateRange = startQueryDate;
       let endDateRange = endQueryDate;
       if (!CMRDateStoreForLayer) {
-        self.CMRDateRanges[activeKey][id] = {};
+        CMRDateRanges[activeKey][id] = {};
       } else if (canExtendRange) {
         startDateRange = rangeStart;
         endDateRange = rangeEnd;
       }
-      self.CMRDateRanges[activeKey][id].startDate = new Date(startDateRange);
-      self.CMRDateRanges[activeKey][id].endDate = new Date(endDateRange);
+      CMRDateRanges[activeKey][id].startDate = new Date(startDateRange);
+      CMRDateRanges[activeKey][id].endDate = new Date(endDateRange);
 
-      // show indicator message and spinner after two seconds
-      initCMRRequestIndicator();
-      return fetch(query, CMR_AJAX_OPTIONS)
-        .then((response) => response.json())
-        .then((response) => new Promise((resolve) => setTimeout(() => resolve(response), testTimeoutCMR || 0)))
-        .then((data) => {
-          // destroy spinner
-          destroyCMRRequestIndicator();
-          // handle valid, empty response due to CMR issues
-          if (data.feed.entry.length === 0) {
-            const dateWithinRange = isWithinDateRange(date, startDate, endDate);
-            // only show modal error if layer not set to hidden and outside of selected date range
-            if (visible && dateWithinRange) {
-              // throttled to 30 seconds (based on CMR_AJAX_OPTIONS.timeout)
-              self.throttleDispathCMRErrorDialog(title);
-            }
-            return [];
-          }
-          addGranuleCMRDateData(data, layerId, projection);
-          return processGranuleDateObjects(layerId, date, startQueryDate);
-        })
-        .catch((error) => {
-          // destroy spinner
-          destroyCMRRequestIndicator();
-          throw error;
-        });
+      showLoading();
+      const response = await fetch(query, CMR_AJAX_OPTIONS);
+      const data = await response.json();
+      hideLoading();
+
+      if (data.feed.entry.length === 0) {
+        const dateWithinRange = isWithinDateRange(date, startDate, endDate);
+        // only show modal error if layer not set to hidden and outside of selected date range
+        if (visible && dateWithinRange) {
+          throttleDispathCMRErrorDialog(title);
+        }
+        return [];
+      }
+      addGranuleCMRDateData(data, layerId, projection);
+      return processGranuleDateObjects(layerId, date, startQueryDate);
     }
     // user previously queried CMR granule dates
-    return new Promise((resolve) => { resolve(processGranuleDateObjects(layerId, date, startQueryDate)); });
+    return processGranuleDateObjects(layerId, date, startQueryDate);
   };
 
   /**
@@ -267,7 +232,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const selected = `${new Date(date).toISOString().split('.')[0]}Z`;
     const queryStart = `${new Date(startQueryDate).toISOString().split('.')[0]}Z`;
 
-    const granuleDates = self.CMRDataStore[layerId];
+    const granuleDates = CMRDataStore[layerId];
     const granuleDateKeys = granuleDates
       ? Object.keys(granuleDates)
       : [];
@@ -308,39 +273,31 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
   */
-  const createGranuleDatesLayer = (granuleDates, def, state, attributes) => {
+  const createGranuleDatesLayer = async (granuleDates, def, state, attributes) => {
     const { period, id } = def;
     const { group, proj } = attributes;
-    const granuleLayers = granuleDates.map((granuleDate) => {
+
+    const layerPromises = granuleDates.map(async (granuleDate) => {
       const { date, polygons } = granuleDate;
       const granuleISOKey = `${id}:${proj}:${date}::${group}`;
-
-      // return cached layer if available
-      const layerCache = cache.getItem(granuleISOKey);
-      if (layerCache) {
-        return layerCache;
+      let layer = cache.getItem(granuleISOKey);
+      if (layer) {
+        return layer;
       }
-
-      self.granuleLayers[id][group].dates[date] = granuleISOKey;
+      granuleLayers[id][group].dates[date] = granuleISOKey;
       const granuleISODate = new Date(date);
       const dateOption = { date: granuleISODate, polygons };
-      const layerPromise = new Promise((resolve) => {
-        const createdLayer = createLayerWMTS(def, dateOption, null, state, { polygons });
-        // update attributes
-        attributes.key = granuleISOKey;
-        attributes.date = granuleISODate;
-        createdLayer.wv = attributes;
+      layer = await createLayerWMTS(def, dateOption, null, state, { polygons });
+      attributes.key = granuleISOKey;
+      attributes.date = granuleISODate;
+      layer.wv = attributes;
+      cache.setItem(granuleISOKey, layer, getCacheOptions(period, granuleISODate));
+      layer.setVisible(false);
+      return layer;
+    });
 
-        // save to cache and push
-        cache.setItem(granuleISOKey, createdLayer, getCacheOptions(period, granuleISODate));
-        createdLayer.setVisible(false);
-        resolve(createdLayer);
-      });
-      return layerPromise;
-    });
-    return new Promise((resolve) => {
-      Promise.all(granuleLayers).then((layers) => resolve(layers));
-    });
+    const layers = await Promise.all(layerPromises);
+    return layers;
   };
 
   /**
@@ -361,11 +318,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const granuleDates = getDateArrayFromObject(granulesObject);
 
     // init group/projection specific granule day storage
-    if (self.granuleLayers[id] === undefined || proj !== self.proj) {
+    if (granuleLayers[id] === undefined || proj !== currentProj) {
       const activeGranuleDates = isActive ? granuleDates : [];
       const activeBGranuleDates = !isActive ? granuleDates : [];
 
-      self.granuleLayers[id] = {
+      granuleLayers[id] = {
         active: {
           sortedDates: activeGranuleDates,
           dates: {},
@@ -377,11 +334,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       };
     } else {
       // add unique set of sorted dates to granule layer store
-      const dateArray = [...new Set(self.granuleLayers[id][group].sortedDates)];
+      const dateArray = [...new Set(granuleLayers[id][group].sortedDates)];
       lodashEach(granuleDates, (date) => {
         dateArray.splice(getIndexForSortedInsert(dateArray, date), 0, date);
       });
-      self.granuleLayers[id][group].sortedDates = dateArray;
+      granuleLayers[id][group].sortedDates = dateArray;
     }
   };
 
@@ -395,7 +352,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer projection
    * @returns {Void}
   */
-  self.getGranuleLayer = (def, attributes, granuleAttributes) => {
+  const getGranuleLayer = async (def, attributes, granuleAttributes) => {
     const {
       endDate, id, subtitle, startDate,
     } = def;
@@ -411,7 +368,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       processGranuleLayer(def, filteredGranules, attributes);
     }
 
-    let layer = createGranuleDatesLayer(filteredGranules, def, state, attributes);
+    let layer = await createGranuleDatesLayer(filteredGranules, def, state, attributes);
     // use updated layers or get array of granule dates from filteredGranules
     const filteredGranuleCollection = updatedGranules || getDateArrayFromObject(filteredGranules);
     const mostRecentGranuleDate = filteredGranuleCollection[filteredGranuleCollection.length - 1];
@@ -421,7 +378,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const layerGroupEntries = [];
     lodashEach(filteredGranuleCollection, (date) => {
     // check for layer in granuleCache
-      const layerCacheKey = self.granuleLayers[id][group].dates[date];
+      const layerCacheKey = granuleLayers[id][group].dates[date];
       const layerCache = cache.getItem(layerCacheKey);
       if (layerCache) {
         layerGroupEntries.push(layerCache);
@@ -464,7 +421,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (isLayerBeingUpdated) {
       const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[group];
       const activeGeometry = layers.granuleGeometry[group];
-
       const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
         ? granuleGeometry
         : activeGeometry;
@@ -489,14 +445,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         },
       ));
     }
-    self.proj = proj;
+    currentProj = proj;
     return layer;
   };
 
   /**
    * Granule layer request process
    *
-   * @method createGranuleLayerProcess
+   * @method createGranuleLayer
    * @static
    * @param {object} granuleOptions
    * @param {object} state
@@ -505,13 +461,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} date
    * @returns {object} granuleAttributes
    */
-  self.createGranuleLayerProcess = (
-    granuleOptions,
-    state,
-    def,
-    activeKey,
-    date,
-  ) => {
+  const createGranuleLayer = async (granuleOptions, state, def, activeKey, date) => {
     const {
       config: { parameters: { timeoutCMR: testTimeoutCMR } },
       proj: { selected: { id: projection } },
@@ -537,21 +487,19 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     // get granule dates waiting for CMR query and filtering (if necessary)
-    return new Promise((resolve) => {
-      resolve(self.getQueriedGranuleDates(def, date, activeKey, projection, testTimeoutCMR));
-    }).then((availableGranuleDates) => {
-      const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
-      const filteredGranuleDates = self.filterGranuleDates(
-        availableGranuleDates,
-        dayNightFilter,
-        granuleCount,
-      );
-      return filteredGranuleDates;
-    }).then((filteredGranuleDates) => ({
+    const availableGranuleDates = await getQueriedGranuleDates(def, date, activeKey, projection, testTimeoutCMR);
+
+    const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
+    const filteredGranuleDates = await filterGranuleDates(
+      availableGranuleDates,
+      dayNightFilter,
+      granuleCount,
+    );
+    return {
       filteredGranules: filteredGranuleDates,
       granuleCount,
       updatedGranules,
-    }));
+    };
   };
 
   /**
@@ -564,7 +512,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {number} granuleCount - number of granules to add to collection
    * @returns {array} collection of granule objects with filtered granuleDates
   */
-  self.filterGranuleDates = (granuleDates, filterTarget, granuleCount) => {
+  const filterGranuleDates = (granuleDates, filterTarget, granuleCount) => {
     // granuleDates is full array of granule date objects
     const dates = [];
     for (let i = granuleDates.length - 1; i >= 0 && dates.length < granuleCount; i -= 1) {
@@ -577,7 +525,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     return dates;
   };
 
-
-  self.init();
-  return self;
+  return {
+    createGranuleLayer,
+    getGranuleLayer,
+  };
 }

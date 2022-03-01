@@ -11,8 +11,8 @@ import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
-import GranuleLayerDateList from './granule-list';
-import GranuleCountSlider from './granule-count';
+import GranuleLayerDateList from './granule-date-list';
+import GranuleCountSlider from './granule-count-slider';
 
 import {
   palettesTranslate,
@@ -286,8 +286,9 @@ class LayerSettings extends React.Component {
   /**
    * Render Granule count slider and granule date list settings (if granule layer)
    */
-  renderGranuleSettings = (layer) => {
+  renderGranuleSettings = () => {
     const {
+      layer,
       granuleOptions,
       screenHeight,
       resetGranuleLayerDates,
@@ -343,7 +344,7 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
-        {this.renderGranuleSettings(layer)}
+        {this.renderGranuleSettings()}
         {renderCustomizations}
         {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </>

@@ -36,7 +36,7 @@ const getListStyle = (needsScrollBar) => ({
   width: needsScrollBar ? '262px' : '100%',
 });
 
-class GranuleLayerDateList extends PureComponent {
+class GranuleDateList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -304,7 +304,7 @@ class GranuleLayerDateList extends PureComponent {
   }
 }
 
-GranuleLayerDateList.propTypes = {
+GranuleDateList.propTypes = {
   def: PropTypes.object,
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
@@ -315,4 +315,4 @@ GranuleLayerDateList.propTypes = {
   updateGranuleLayerDates: PropTypes.func,
 };
 
-export default GranuleLayerDateList;
+export default GranuleDateList;

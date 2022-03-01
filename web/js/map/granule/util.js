@@ -67,7 +67,7 @@ export const getCMRQueryDates = (selectedDate) => {
 
   const zeroedDate = util.clearTimeUTC(date);
 
-  const dayBeforeDate = util.dateAdd(zeroedDate, 'day', -6);
+  const dayBeforeDate = util.dateAdd(zeroedDate, 'day', -1);
   const dayAfterDate = util.dateAdd(zeroedDate, 'day', 1);
   const twoDayAfterDate = util.dateAdd(zeroedDate, 'day', 2);
 

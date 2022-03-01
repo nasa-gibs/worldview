@@ -40,11 +40,9 @@ import {
 } from '../modules/layers/util';
 
 export default function mapLayerBuilder(config, cache, store) {
-  const self = {};
-
-  self.init = function() {
-    self.granuleBuilder = granuleLayerBuilder(cache, store, createLayerWMTS);
-  };
+  const {
+    createGranuleLayer, getGranuleLayer,
+  } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -197,28 +195,11 @@ export default function mapLayerBuilder(config, cache, store) {
         cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       } else {
-        return getGranuleLayer(def, attributes, granuleAttributes, opacity);
+        layer = await getGranuleLayer(def, attributes, granuleAttributes);
       }
     }
-    layer.setOpacity(def.opacity || 1.0);
+    layer.setOpacity(opacity || 1.0);
     return layer;
-  };
-
-  /**
-   * Get granule layer invocation
-   *
-   * @method getGranuleLayer
-   * @static
-   * @param {object} def - Layer Specs
-   * @param {object} attributes - Layer options
-   * @param {object} granuleAttributes - granule options
-   * @param {number} opacity
-   * @returns {object} OpenLayers layer
-   */
-  const getGranuleLayer = async function (def, attributes, granuleAttributes, opacity) {
-    const granuleLayer = await self.granuleBuilder.getGranuleLayer(def, attributes, granuleAttributes);
-    granuleLayer.setOpacity(opacity || 1.0);
-    return granuleLayer;
   };
 
   /**
@@ -233,7 +214,7 @@ export default function mapLayerBuilder(config, cache, store) {
    *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = async (def, options = {}, granuleOptions) => {
+  const createLayer = async (def, options = {}, granuleOptions) => {
     const state = store.getState();
     const { proj, compare } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -259,12 +240,12 @@ export default function mapLayerBuilder(config, cache, store) {
       nextDate,
       previousDate,
     };
-    const key = self.layerKey(def, options, state);
+    const key = layerKey(def, options, state);
 
     const { isGranule } = def;
     let granuleAttributes;
     if (isGranule) {
-      granuleAttributes = await self.granuleBuilder.createGranuleLayerProcess(
+      granuleAttributes = await createGranuleLayer(
         granuleOptions,
         state,
         def,
@@ -353,14 +334,6 @@ export default function mapLayerBuilder(config, cache, store) {
       nextLayerDate = next;
     }
 
-    // if (def.period === 'subdaily') {
-    //   date = nearestInterval(def, date);
-    // } else if (previousDateFromRange) {
-    //   date = util.clearTimeUTC(previousDateFromRange);
-    // } else {
-    //   date = util.clearTimeUTC(date);
-    // }
-
     if (def.period === 'subdaily') {
       closestDate = nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
@@ -382,7 +355,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {boolean} precache
    * @returns {object} layer key Object
    */
-  self.layerKey = function(def, options, state) {
+  const layerKey = (def, options, state) => {
     const { compare } = state;
     let date;
     const layerId = def.id;
@@ -471,7 +444,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  const createLayerWMTS = function(def, options, day, state, attributes) {
+  function createLayerWMTS (def, options, day, state, attributes) {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
@@ -547,7 +520,7 @@ export default function mapLayerBuilder(config, cache, store) {
       className: def.id,
       source: new OlSourceWMTS(sourceOptions),
     });
-  };
+  }
 
   /**
     *
@@ -748,6 +721,8 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  self.init();
-  return self;
+  return {
+    layerKey,
+    createLayer,
+  };
 }
