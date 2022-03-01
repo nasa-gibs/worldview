@@ -185,6 +185,9 @@
         },
         "disableSmartHandoff": {
           "type": "boolean"
+        },
+        "isGranule": {
+          "type": "boolean"
         }
       },
       "allOf": [
