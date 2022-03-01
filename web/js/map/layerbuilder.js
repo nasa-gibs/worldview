@@ -124,14 +124,14 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayerWrapper = (
+  const createLayerWrapper = async (
     state,
     def,
     key,
     options,
     dateOptions,
     granuleAttributes,
-  ) => new Promise((resolve) => {
+  ) => {
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;
     const {
@@ -155,7 +155,6 @@ export default function mapLayerBuilder(config, cache, store) {
     let layer = cache.getItem(key);
 
     if (!layer || isGranule) {
-      // layer is not in the cache
       if (!date) date = options.date || getSelectedDate(state);
       const cacheOptions = getCacheOptions(period, date);
       const attributes = {
@@ -186,6 +185,8 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
+
+          // TODO why is graticule layer type 'variable'?
           case 'graticule':
             layer = getGraticule(proj);
             break;
@@ -196,12 +197,12 @@ export default function mapLayerBuilder(config, cache, store) {
         cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       } else {
-        resolve(getGranuleLayer(def, attributes, granuleAttributes, opacity).then((granuleLayer) => granuleLayer));
+        return getGranuleLayer(def, attributes, granuleAttributes, opacity);
       }
     }
     layer.setOpacity(def.opacity || 1.0);
     return layer;
-  });
+  };
 
   /**
    * Get granule layer invocation
@@ -232,11 +233,9 @@ export default function mapLayerBuilder(config, cache, store) {
    *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = (def, options = {}, granuleOptions) => {
+  self.createLayer = async (def, options = {}, granuleOptions) => {
     const state = store.getState();
     const { proj, compare } = state;
-
-    // determine selected A/B
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     let group;
     if (options.group) {
@@ -246,12 +245,11 @@ export default function mapLayerBuilder(config, cache, store) {
       options.group = group;
     }
 
-    // get dates
     const {
       closestDate,
       nextDate,
       previousDate,
-    } = self.getRequestDates(def, options);
+    } = getRequestDates(def, options);
     const date = closestDate;
     if (date) {
       options.date = date;
@@ -261,37 +259,31 @@ export default function mapLayerBuilder(config, cache, store) {
       nextDate,
       previousDate,
     };
-
-    // layer cache key
     const key = self.layerKey(def, options, state);
-    const { isGranule } = def;
-    // promise based CMR request process chain for granules
 
-    const createLayerPromise = isGranule
-      ? self.granuleBuilder.createGranuleLayerProcess(
+    const { isGranule } = def;
+    let granuleAttributes;
+    if (isGranule) {
+      granuleAttributes = await self.granuleBuilder.createGranuleLayerProcess(
         granuleOptions,
         state,
         def,
         group,
         date,
         proj.selected,
-      )
-      // instantly resolve non granule layers
-      : new Promise((resolve) => { resolve({}); });
+      );
+    }
 
-    return createLayerPromise
-      .then((granuleAttributes) => createLayerWrapper(
-        state,
-        def,
-        key,
-        options,
-        dateOptions,
-        granuleAttributes,
-      ))
-      .then((layer) => layer)
-      .catch((error) => {
-        throw error;
-      });
+    const layer = await createLayerWrapper(
+      state,
+      def,
+      key,
+      options,
+      dateOptions,
+      granuleAttributes,
+    );
+
+    return layer;
   };
 
   /**
@@ -501,8 +493,8 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && wrapadjacentdays && !isSubdaily) {
       layerDate = util.dateAdd(layerDate, 'day', day);
     }
-    const { tileMatrices, resolutions, tileSize } = matrixSet;
-    const { origin, extent } = calcExtentsFromLimits(matrixSet, matrixSetLimits, day, proj.selected);
+    const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
 
     // Conditionally set extent for granule tile here with polygon array
@@ -756,5 +748,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  self.init();
   return self;
 }

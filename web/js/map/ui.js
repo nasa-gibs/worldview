@@ -579,10 +579,11 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
 
-  async function reloadLayers(map, granuleOptions, start) {
+  async function reloadLayers(map, granuleOptions) {
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
+
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
       if (compareMapDestroyed) {
@@ -590,45 +591,26 @@ export default function mapui(models, config, store, ui) {
       }
       clearLayers(map);
       const defs = getLayers(state, { reverse: true });
-
-      // get all created layers as promises
-      const createdLayersFromDefs = defs.map((def) => new Promise((resolve) => {
+      const layerPromises = defs.map((def) => {
         const { isGranule } = def;
-        // update granule date order and reset
         const granuleLayerParam = isGranule && getGranuleOptions(state, def, compare.activeString, granuleOptions);
-        const createdLayer = self.createLayer(def, {}, granuleLayerParam);
-        resolve(createdLayer);
-      }));
-
-      // resolve them with Promise.all to preserve layer order for CMR granule requests
-      await Promise
-        .all(createdLayersFromDefs)
-        .then((createdLayers) => {
-          if (!start) clearLayers(map);
-          lodashEach(createdLayers, (l) => { map.addLayer(l); });
-        })
-        .catch((error) => { throw error; });
+        return createLayer(def, {}, granuleLayerParam);
+      });
+      const createdLayers = await Promise.all(layerPromises);
+      lodashEach(createdLayers, (l) => { map.addLayer(l); });
       updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-
-      const stateArrayGroups = stateArray.map((arr) => new Promise((resolve) => {
-        const compareLayerGroup = getCompareLayerGroup(arr, state, granuleOptions);
-        resolve(compareLayerGroup);
-      }));
-
-      await Promise.all(stateArrayGroups)
-        .then((newGroupedLayers) => {
-          clearLayers(map);
-          lodashEach(newGroupedLayers, (lg) => { map.addLayer(lg); });
-        })
-        .catch((error) => { throw error; });
+      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, state, granuleOptions));
+      const newGroupedLayers = await Promise.all(stateArrayGroups);
+      clearLayers(map);
+      lodashEach(newGroupedLayers, (lg) => { map.addLayer(lg); });
       compareMapUi.create(map, compare.mode);
-      updateLayerVisibilities();
     }
+    updateLayerVisibilities();
   }
 
 
@@ -705,6 +687,7 @@ export default function mapui(models, config, store, ui) {
                 granuleTileLayer.wv.id,
                 state.layers[granuleTileLayerGroup],
                 state.date[granuleTileLayer.get('date')],
+                null,
                 state,
               );
               granuleTileLayer.setVisible(renderable);
@@ -718,6 +701,7 @@ export default function mapui(models, config, store, ui) {
               subLayer.wv.id,
               state.layers[subGroup],
               state.date[subLayer.get('date')],
+              null,
               state,
             );
             subLayer.setVisible(renderable);
@@ -823,8 +807,7 @@ export default function mapui(models, config, store, ui) {
    * @returns {object} createdLayer
    */
   const createLayerWrapper = async (def, options = {}) => {
-    const createdLayer = await self.createLayer(def, options)
-      .then((layer) => layer);
+    const createdLayer = await createLayer(def, options);
     return createdLayer;
   };
 
@@ -845,15 +828,11 @@ export default function mapui(models, config, store, ui) {
     date = date || getSelectedDate(state);
     activeLayers = activeLayers || getActiveLayers(state);
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
-    const mapIndex = lodashFindIndex(reverseLayers, {
-      id: def.id,
-    });
+    const index = lodashFindIndex(reverseLayers, { id: def.id });
     const mapLayers = self.selected.getLayers().getArray();
     const firstLayer = mapLayers[0];
 
     if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
-      // Find which map layer-group is the active LayerGroup
-      // and add layer to layerGroup in correct location
       const activelayer = firstLayer.get('group') === compare.activeString
         ? firstLayer
         : mapLayers[1];
@@ -861,16 +840,12 @@ export default function mapui(models, config, store, ui) {
         date,
         group: compare.activeString,
       };
-      await createLayerWrapper(def, options)
-        .then((newLayer) => {
-          activelayer.getLayers().insertAt(mapIndex, newLayer);
-          compareMapUi.create(self.selected, compare.mode);
-        }).catch((err) => { throw err; });
+      const newLayer = await createLayerWrapper(def, options);
+      activelayer.getLayers().insertAt(index, newLayer);
+      compareMapUi.create(self.selected, compare.mode);
     } else {
-      await createLayerWrapper(def)
-        .then((newLayer) => {
-          self.selected.getLayers().insertAt(mapIndex, newLayer);
-        }).catch((err) => { throw err; });
+      const newLayer = await createLayerWrapper(def);
+      self.selected.getLayers().insertAt(index, newLayer);
     }
 
     updateLayerVisibilities();
@@ -929,10 +904,10 @@ export default function mapui(models, config, store, ui) {
     return self.selected;
   }
 
-  function updateCompareLayer (def, index, layerCollection) {
+  async function updateCompareLayer (def, index, layerCollection) {
     const state = store.getState();
     const { compare } = state;
-    const updatedLayer = createLayer(def, {
+    const updatedLayer = await createLayer(def, {
       group: compare.activeString,
       date: getSelectedDate(state),
     });
@@ -953,14 +928,14 @@ export default function mapui(models, config, store, ui) {
         .includes(id),
     ).filter(({ visible }) => visible);
 
-    await visibleLayers.forEach(async (def) => {
+    const layerPromises = visibleLayers.map(async (def) => {
       const { id, period, isGranule } = def;
       const index = findLayerIndex(def);
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(period)) {
         return;
       }
       if (compare.active && layers.length) {
-        updateCompareLayer(def, index, mapLayerCollection);
+        await updateCompareLayer(def, index, mapLayerCollection);
       } else {
         const { granuleLayers } = state.layers;
         const index = findLayerIndex(def);
@@ -982,6 +957,7 @@ export default function mapui(models, config, store, ui) {
         updateVectorStyles(def);
       }
     });
+    await Promise.all(layerPromises);
     updateLayerVisibilities();
     if (!outOfStepChange) {
       preloadNextTiles();

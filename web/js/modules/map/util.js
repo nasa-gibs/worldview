@@ -286,10 +286,10 @@ export async function promiseImageryForTime(state, date, activeString) {
     cache, selected, createLayer, layerKey,
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
-  await Promise.all(layers.map((layer) => {
+  await Promise.all(layers.map(async (layer) => {
     const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
-    const layerGroup = cache.getItem(key) || createLayer(layer, options);
+    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
   }));
   selected.getView().changed();

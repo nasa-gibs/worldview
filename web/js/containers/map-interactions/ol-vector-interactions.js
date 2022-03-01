@@ -270,7 +270,8 @@ function mapStateToProps(state) {
     granuleSatelliteInstrumentGroup,
   } = layers;
   const { maxExtent } = config.projections[proj.id];
-  const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && layer.isGranule && layer.subtitle === granuleSatelliteInstrumentGroup[activeString]);
+
+  const isActiveGranuleVisible = layers[activeString].layers.filter((layer) => layer.visible && layer.isGranule && layer.subtitle === granuleSatelliteInstrumentGroup[activeString]);
   if (isActiveGranuleVisible.length && granuleLayers[activeString]) {
     granuleSatelliteInstrument = granuleSatelliteInstrumentGroup[activeString];
     granuleCMRGeometry = granuleGeometry[activeString];
