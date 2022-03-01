@@ -24,7 +24,6 @@ import {
   ADD_LAYERS_FOR_EVENT,
   UPDATE_GRANULE_LAYER_OPTIONS,
   RESET_GRANULE_LAYER_OPTIONS,
-  TOGGLE_HOVERED_GRANULE,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
@@ -324,23 +323,8 @@ export function resetGranuleLayerDates(id) {
     });
   };
 }
-export function toggleHoveredGranule(satelliteInstrumentGroup, granuleDate) {
-  return (dispatch, getState) => {
-    const { compare } = getState();
-    const { activeString } = compare;
-    const hoveredGranule = granuleDate
-      ? {
-        granuleDate,
-        activeString,
-        hoveredSatelliteInstrumentGroup: satelliteInstrumentGroup,
-      }
-      : null;
-    dispatch({
-      type: TOGGLE_HOVERED_GRANULE,
-      hoveredGranule,
-    });
-  };
-}
+
+
 export function changeGranuleSatelliteInstrumentGroup(id, satelliteInstrumentGroup) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();

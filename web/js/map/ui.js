@@ -117,18 +117,6 @@ export default function mapui(models, config, store, ui) {
         };
         return reloadLayers(self.selected, granuleOptions);
       }
-      case layerConstants.TOGGLE_HOVERED_GRANULE: {
-        const state = store.getState();
-        let geometry;
-        let date;
-        const { hoveredGranule } = action;
-        if (hoveredGranule) {
-          const { activeString, granuleDate } = hoveredGranule;
-          geometry = state.layers.granuleGeometry[activeString][granuleDate];
-          date = granuleDate;
-        }
-        return granuleFootprintDraw(geometry, date);
-      }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         if (def.isGranule) {
@@ -251,6 +239,17 @@ export default function mapui(models, config, store, ui) {
     }
   };
 
+  const onGranuleHover = (instrument, date) => {
+    const state = store.getState();
+    const { activeString } = state.compare;
+    const { granuleGeometry } = state.layers;
+    let geometry;
+    if (instrument && date) {
+      geometry = granuleGeometry[activeString][date];
+    }
+    return granuleFootprintDraw(geometry, date);
+  };
+
   const onStopAnimation = function() {
     const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
     if (hasActiveVectors) {
@@ -275,6 +274,7 @@ export default function mapui(models, config, store, ui) {
     });
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('map:reload-layers', reloadLayers);
+    events.on('granule-hovered', onGranuleHover);
     window.addEventListener('orientationchange', () => {
       updateProjection(true);
     });

@@ -18,7 +18,6 @@ import {
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_OPTIONS,
   UPDATE_GRANULE_LAYER_DATES,
-  TOGGLE_HOVERED_GRANULE,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
@@ -52,7 +51,6 @@ export const initialState = {
   activeB: { ...groupState },
   layerConfig: {},
   startingLayers: [],
-  hoveredGranule: null,
   granuleSatelliteInstrumentGroup: {
     active: '',
     activeB: '',
@@ -311,12 +309,6 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
-
-    case TOGGLE_HOVERED_GRANULE:
-      return {
-        ...state,
-        hoveredGranule: action.hoveredGranule,
-      };
 
     case CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP:
       return update(state, {

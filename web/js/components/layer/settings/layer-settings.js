@@ -44,7 +44,6 @@ import {
 import {
   updateGranuleLayerDates,
   resetGranuleLayerDates,
-  toggleHoveredGranule,
   setOpacity,
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
@@ -292,7 +291,6 @@ class LayerSettings extends React.Component {
       granuleOptions,
       screenHeight,
       resetGranuleLayerDates,
-      toggleHoveredGranule,
       updateGranuleLayerDates,
     } = this.props;
     const { count, dates, satelliteInstrumentGroup } = granuleOptions;
@@ -313,7 +311,6 @@ class LayerSettings extends React.Component {
             updateGranuleLayerDates={updateGranuleLayerDates}
             resetGranuleLayerDates={resetGranuleLayerDates}
             satelliteInstrumentGroup={satelliteInstrumentGroup}
-            toggleHoveredGranule={toggleHoveredGranule}
           />
         </>
       ) : null;
@@ -429,9 +426,6 @@ const mapDispatchToProps = (dispatch) => ({
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
   },
-  toggleHoveredGranule: (satelliteInstrument, granuleDate) => {
-    dispatch(toggleHoveredGranule(satelliteInstrument, granuleDate));
-  },
 });
 
 export default connect(
@@ -466,7 +460,6 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
-  toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,

@@ -18,7 +18,6 @@ import { getActiveLayers } from '../../modules/layers/selectors';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
-import { toggleHoveredGranule } from '../../modules/layers/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
@@ -61,10 +60,8 @@ export class VectorInteractions extends React.Component {
       activeString,
       compareState,
       granuleSatelliteInstrument,
-      hoveredGranule,
       maxExtent,
       swipeOffset,
-      toggleHoveredGranule,
     } = this.props;
 
     let toggledGranuleFootprint;
@@ -74,9 +71,7 @@ export class VectorInteractions extends React.Component {
     if (active) {
       const isOnActiveCompareSide = isFromActiveCompareRegion(map, pixels, { group: activeString }, compareState, swipeOffset);
       if (!isOnActiveCompareSide) {
-        if (hoveredGranule) {
-          toggleHoveredGranule(granuleSatelliteInstrument, null);
-        }
+        events.trigger('granule-hovered', granuleSatelliteInstrument);
         return false;
       }
     }
@@ -103,34 +98,21 @@ export class VectorInteractions extends React.Component {
       const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, [coord[0], coord[1]], maxExtent);
       if (isValidPolygon) {
         toggledGranuleFootprint = true;
-        // prevent multiple calls if same hovered granule
-        if (hoveredGranule) {
-          const { granuleDate, hoveredSatelliteInstrumentGroup } = hoveredGranule;
-          const granuleAlreadyHovered = granuleSatelliteInstrument === hoveredSatelliteInstrumentGroup
-              && granuleDate === date
-              && activeString === hoveredGranule.activeString;
-          if (granuleAlreadyHovered) {
-            return true;
-          }
-        }
-        // toggle to show with map/ui
-        toggleHoveredGranule(granuleSatelliteInstrument, date);
+        events.trigger('granule-hovered', granuleSatelliteInstrument, date);
       }
     }
 
-    if (hoveredGranule && !toggledGranuleFootprint) {
-      toggleHoveredGranule(granuleSatelliteInstrument, null);
+    if (!toggledGranuleFootprint) {
+      events.trigger('granule-hovered', granuleSatelliteInstrument, null);
     }
     return true;
   }
 
   mouseOut() {
     const {
-      granuleSatelliteInstrument, hoveredGranule, toggleHoveredGranule,
+      granuleSatelliteInstrument,
     } = this.props;
-    if (hoveredGranule) {
-      toggleHoveredGranule(granuleSatelliteInstrument, null);
-    }
+    events.trigger('granule-hovered', granuleSatelliteInstrument);
   }
 
   mouseMove(event, map, crs) {
@@ -264,7 +246,6 @@ function mapStateToProps(state) {
   let granuleCMRGeometry;
   let granuleSatelliteInstrument;
   const {
-    hoveredGranule,
     granuleLayers,
     granuleGeometry,
     granuleSatelliteInstrumentGroup,
@@ -295,7 +276,6 @@ function mapStateToProps(state) {
     isMobile: browser.lessThan.medium,
     granuleCMRGeometry,
     granuleSatelliteInstrument,
-    hoveredGranule,
     swipeOffset,
     proj,
     maxExtent,
@@ -354,9 +334,6 @@ const mapDispatchToProps = (dispatch) => ({
         },
       }));
   },
-  toggleHoveredGranule: (id, granuleDate) => {
-    dispatch(toggleHoveredGranule(id, granuleDate));
-  },
 });
 
 VectorInteractions.propTypes = {
@@ -373,7 +350,6 @@ VectorInteractions.propTypes = {
   compareState: PropTypes.object,
   granuleCMRGeometry: PropTypes.object,
   granuleSatelliteInstrument: PropTypes.string,
-  hoveredGranule: PropTypes.object,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,
@@ -387,7 +363,6 @@ VectorInteractions.propTypes = {
   maxExtent: PropTypes.array,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
-  toggleHoveredGranule: PropTypes.func,
 };
 
 export default connect(

@@ -6,6 +6,9 @@ import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import Scrollbar from '../../util/scrollbar';
+import util from '../../../util/util';
+
+const { events } = util;
 
 const gridConstant = 8;
 
@@ -151,8 +154,8 @@ class GranuleDateList extends PureComponent {
 
   // handle mouse over item
   handleMouseOverItem = (granuleDate) => {
-    const { satelliteInstrumentGroup, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(satelliteInstrumentGroup, granuleDate);
+    const { satelliteInstrumentGroup } = this.props;
+    events.trigger('granule-hovered', satelliteInstrumentGroup, granuleDate);
     this.setState({
       hoveredItem: granuleDate,
     });
@@ -160,8 +163,8 @@ class GranuleDateList extends PureComponent {
 
   // handle mouse leave item
   handleMouseLeaveItem = () => {
-    const { satelliteInstrumentGroup, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(satelliteInstrumentGroup, null);
+    const { satelliteInstrumentGroup } = this.props;
+    events.trigger('granule-hovered', satelliteInstrumentGroup, null);
     this.setState({
       hoveredItem: null,
     });
