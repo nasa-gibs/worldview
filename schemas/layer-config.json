@@ -185,9 +185,6 @@
         },
         "disableSmartHandoff": {
           "type": "boolean"
-        },
-        "isGranule": {
-          "type": "boolean"
         }
       },
       "allOf": [
@@ -238,7 +235,8 @@
         "wms",
         "wmts",
         "vector",
-        "variable"
+        "variable",
+        "granule"
       ]
     },
     "format": {

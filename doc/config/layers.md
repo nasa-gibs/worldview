@@ -173,7 +173,7 @@ Granule layers will require specific configuration options within the `config/wv
         "viirs"
       ],
       "inactive": true,
-      "isGranule": true,
+      "type": "granule",
       "period": "subdaily",
       "tracks": [
         "OrbitTracks_NOAA-20_Ascending"
@@ -185,7 +185,7 @@ Granule layers will require specific configuration options within the `config/wv
 
 Note:
 ```json
-  "isGranule": true,
+  "type": "granule",
   "period": "subdaily",
   "subtitle": "NOAA-20 / VIIRS", (used to match satellite/instrument)
 ```

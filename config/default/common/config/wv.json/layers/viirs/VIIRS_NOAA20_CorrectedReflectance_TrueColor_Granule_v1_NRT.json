@@ -9,7 +9,7 @@
           "group":    "overlays",
           "layergroup": "Granules",
           "inactive": true,
-          "isGranule": true,
+          "type": "granule",
           "period": "subdaily",
           "tracks": [
             "OrbitTracks_NOAA-20_Ascending"
