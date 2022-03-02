@@ -23,6 +23,7 @@ import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
+import LoadingIndicator from './components/animation-widget/loading-indicator';
 import './font-awesome-library';
 
 // actions
@@ -127,7 +128,10 @@ class App extends React.Component {
       isEmbedModeActive,
       isMobile,
       isTourActive,
+      isLoading,
       locationKey,
+      loadingTitle,
+      loadingMsg,
       modalId,
       parameters,
     } = this.props;
@@ -135,6 +139,7 @@ class App extends React.Component {
     return (
       <div className={appClass} id="wv-content" data-role="content">
         {!isMobile && !isEmbedModeActive && <LocationSearch />}
+        {isLoading && <LoadingIndicator title={loadingTitle} bodyMsg={loadingMsg} />}
         <Toolbar />
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -163,6 +168,7 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { title, msg, isLoading } = state.loading;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -172,7 +178,10 @@ function mapStateToProps(state) {
     tour: state.tour,
     config: state.config,
     parameters: state.parameters,
+    isLoading,
     locationKey: state.location.key,
+    loadingTitle: title,
+    loadingMsg: msg,
     modalId: state.modal.id,
   };
 }
@@ -193,9 +202,12 @@ export default connect(
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
+  loadingTitle: PropTypes.string,
+  loadingMsg: PropTypes.string,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   parameters: PropTypes.object,

@@ -8,7 +8,11 @@ import {
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_DATES,
 } from '../../modules/layers/constants';
-import { OPEN_BASIC } from '../../modules/modal/constants';
+import {
+  startLoading,
+  stopLoading,
+} from '../../modules/loading/actions';
+import { openBasicContent } from '../../modules/modal/actions';
 import {
   getCacheOptions,
 } from '../../modules/layers/util';
@@ -38,7 +42,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
   const CMRDataStore = {};
   const granuleLayers = {};
-  let indicatorId = 0;
   let currentProj;
 
   const throttleDispathCMRErrorDialog = lodashThrottle(
@@ -48,26 +51,17 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   );
 
   function dispathCMRErrorDialog (title) {
-    store.dispatch({
-      type: OPEN_BASIC,
-      key: '__BASIC_MODAL__CMR_REQUEST_ERROR',
-      headerText: `${title} is unavailable at this time.`,
-      bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
-    });
+    const bodyText = 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.';
+    const modalHeader = `${title} is unavailable at this time.`;
+    store.dispatch(openBasicContent(modalHeader, bodyText));
   }
 
   const showLoading = () => {
-    indicatorId = setTimeout(() => {
-      clearTimeout(indicatorId);
-      // loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
-    }, 2000);
+    store.dispatch(startLoading('Loading', 'Retrieving granule metadata'));
   };
 
   const hideLoading = () => {
-    clearTimeout(indicatorId);
-    setTimeout(() => {
-      // loadingIndicator.hide();
-    }, 2000);
+    store.dispatch(stopLoading());
   };
 
   /**

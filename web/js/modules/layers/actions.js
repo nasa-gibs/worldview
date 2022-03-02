@@ -310,7 +310,7 @@ export function updateGranuleLayerDates(dates, id, count) {
       geometry,
       granuleGeometry: newGranuleGeometry,
     });
-  };
+  };a
 }
 export function resetGranuleLayerDates(id) {
   return (dispatch, getState) => {
