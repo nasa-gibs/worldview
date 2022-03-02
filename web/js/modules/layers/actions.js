@@ -278,6 +278,7 @@ export function hideLayers(layers) {
     });
   };
 }
+
 export function showLayers(layers) {
   return (dispatch) => {
     layers.forEach((obj) => {
@@ -285,6 +286,7 @@ export function showLayers(layers) {
     });
   };
 }
+
 export function updateGranuleLayerDates(dates, id, count) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
@@ -310,8 +312,9 @@ export function updateGranuleLayerDates(dates, id, count) {
       geometry,
       granuleGeometry: newGranuleGeometry,
     });
-  };a
+  };
 }
+
 export function resetGranuleLayerDates(id) {
   return (dispatch, getState) => {
     const { compare } = getState();
@@ -323,7 +326,6 @@ export function resetGranuleLayerDates(id) {
     });
   };
 }
-
 
 export function changeGranuleSatelliteInstrumentGroup(id, satelliteInstrumentGroup) {
   return (dispatch, getState) => {

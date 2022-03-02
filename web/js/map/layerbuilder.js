@@ -41,7 +41,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const {
-    createGranuleLayer, getGranuleLayer,
+    getGranuleAttributes, getGranuleLayer,
   } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
   /**
@@ -115,10 +115,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
   /**
    * Create a new OpenLayers Layer
-   *
-   * @method createLayerWrapper
-   * @static
-   * @param {object} state
    * @param {object} def
    * @param {object} key
    * @param {object} options
@@ -127,18 +123,17 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
   const createLayerWrapper = async (
-    state,
     def,
     key,
     options,
     dateOptions,
     granuleAttributes,
   ) => {
+    const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;
     const {
       breakPointLayer,
-      isGranule,
       id,
       opacity,
       period,
@@ -147,14 +142,10 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapadjacentdays,
       wrapX,
     } = def;
-    const {
-      nextDate,
-      previousDate,
-    } = dateOptions;
-    let {
-      date,
-    } = dateOptions;
+    const { nextDate, previousDate } = dateOptions;
+    let { date } = dateOptions;
     let layer = cache.getItem(key);
+    const isGranule = type === 'granule';
 
     if (!layer || isGranule) {
       if (!date) date = options.date || getSelectedDate(state);
@@ -216,17 +207,10 @@ export default function mapLayerBuilder(config, cache, store) {
    *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, options = {}, granuleOptions) => {
+  const createLayer = async (def, options = {}) => {
     const state = store.getState();
-    const { proj, compare } = state;
-    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    let group;
-    if (options.group) {
-      group = options.group;
-    } else {
-      group = activeDateStr === 'selectedB' ? 'activeB' : 'active';
-      options.group = group;
-    }
+    const { compare: { activeString } } = state;
+    options.group = options.group || activeString;
 
     const {
       closestDate,
@@ -237,34 +221,11 @@ export default function mapLayerBuilder(config, cache, store) {
     if (date) {
       options.date = date;
     }
-    const dateOptions = {
-      date,
-      nextDate,
-      previousDate,
-    };
+    const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
 
-    const { isGranule } = def;
-    let granuleAttributes;
-    if (isGranule) {
-      granuleAttributes = await createGranuleLayer(
-        granuleOptions,
-        state,
-        def,
-        group,
-        date,
-        proj.selected,
-      );
-    }
-
-    const layer = await createLayerWrapper(
-      state,
-      def,
-      key,
-      options,
-      dateOptions,
-      granuleAttributes,
-    );
+    const granuleAttributes = def.type === 'granule' && await getGranuleAttributes(options, def, date);
+    const layer = await createLayerWrapper(def, key, options, dateOptions, granuleAttributes);
 
     return layer;
   };

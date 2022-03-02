@@ -119,7 +119,7 @@ export default function mapui(models, config, store, ui) {
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
-        if (def.isGranule) {
+        if (def.type === 'granule') {
           self.processingPromise = new Promise((resolve) => {
             resolve(addLayer(def));
           });
@@ -548,9 +548,9 @@ export default function mapui(models, config, store, ui) {
    * @param {Object} options
    * @returns {Object}
    */
-  const getGranuleOptions = (state, def, layerGroupStr, options) => {
+  const getGranuleOptions = (state, { id, count, type }, layerGroupStr, options) => {
+    if (type !== 'granule') return {};
     const { layers } = state;
-    const { count, id } = def;
     const reset = options && options.reset === id;
     const granuleState = layers.granuleLayers[layerGroupStr][id];
     let granuleDates;
@@ -592,9 +592,8 @@ export default function mapui(models, config, store, ui) {
       clearLayers(map);
       const defs = getLayers(state, { reverse: true });
       const layerPromises = defs.map((def) => {
-        const { isGranule } = def;
-        const granuleLayerParam = isGranule && getGranuleOptions(state, def, compare.activeString, granuleOptions);
-        return createLayer(def, {}, granuleLayerParam);
+        const options = getGranuleOptions(state, def, compare.activeString, granuleOptions);
+        return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);
       lodashEach(createdLayers, (l) => { map.addLayer(l); });
@@ -622,12 +621,12 @@ export default function mapui(models, config, store, ui) {
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
       .filter(() => true)
       .map((def) => new Promise((resolve) => {
-        const { isGranule } = def;
-        const granuleLayerParam = isGranule && getGranuleOptions(state, def, compareActiveString, granuleOptions);
-        const createdLayer = createLayer(def, {
+        const options = {
+          ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
           date: getSelectedDate(state, compareDateString),
           group: compareActiveString,
-        }, granuleLayerParam);
+        };
+        const createdLayer = createLayer(def, options);
         resolve(createdLayer);
       }));
 
@@ -767,16 +766,10 @@ export default function mapui(models, config, store, ui) {
     });
   };
 
-  /*
+  /**
    * Sets new opacity to layer
-   *
-   * @method updateOpacity
-   * @static
-   *
    * @param {object} def - layer Specs
-   *
    * @param {number} value - number value
-   *
    * @returns {void}
    */
   function updateOpacity(action) {
@@ -785,8 +778,7 @@ export default function mapui(models, config, store, ui) {
     const { compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(getActiveLayers(state), { id });
-    const { isGranule } = def;
-    if (isGranule) {
+    if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeStr, opacity, compare);
     } else {
       const layer = findLayer(def, activeStr);
@@ -795,33 +787,11 @@ export default function mapui(models, config, store, ui) {
     updateLayerVisibilities();
   }
 
-  /*
-   * Wrapper for createLayer building needing resolution
-   *
-   * @method createLayerWrapper
-   * @static
-   *
-   * @param {object} def - layer Specs
-   * @param {object} options - date/active options
-   *
-   * @returns {object} createdLayer
-   */
-  const createLayerWrapper = async (def, options = {}) => {
-    const createdLayer = await createLayer(def, options);
-    return createdLayer;
-  };
-
-  /*
+  /**
    * Initiates the adding of a layer or Graticule
-   *
-   * @method addLayer
-   * @static
-   *
    * @param {object} def - layer Specs
-   *
    * @returns {void}
    */
-
   const addLayer = async function(def, date, activeLayers) {
     const state = store.getState();
     const { compare } = state;
@@ -840,11 +810,11 @@ export default function mapui(models, config, store, ui) {
         date,
         group: compare.activeString,
       };
-      const newLayer = await createLayerWrapper(def, options);
+      const newLayer = await createLayer(def, options);
       activelayer.getLayers().insertAt(index, newLayer);
       compareMapUi.create(self.selected, compare.mode);
     } else {
-      const newLayer = await createLayerWrapper(def);
+      const newLayer = await createLayer(def);
       self.selected.getLayers().insertAt(index, newLayer);
     }
 
@@ -907,10 +877,11 @@ export default function mapui(models, config, store, ui) {
   async function updateCompareLayer (def, index, layerCollection) {
     const state = store.getState();
     const { compare } = state;
-    const updatedLayer = await createLayer(def, {
+    const options = {
       group: compare.activeString,
       date: getSelectedDate(state),
-    });
+    };
+    const updatedLayer = await createLayer(def, options);
     layerCollection.setAt(index, updatedLayer);
     compareMapUi.update(compare.activeString);
   }
@@ -929,7 +900,7 @@ export default function mapui(models, config, store, ui) {
     ).filter(({ visible }) => visible);
 
     const layerPromises = visibleLayers.map(async (def) => {
-      const { id, period, isGranule } = def;
+      const { id, period, type } = def;
       const index = findLayerIndex(def);
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(period)) {
         return;
@@ -942,14 +913,11 @@ export default function mapui(models, config, store, ui) {
 
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
-          const layerOptions = !isGranule
+          const layerOptions = type === 'granule'
             ? { previousLayer: layerValue ? layerValue.wv : null }
-            : {};
-          const granuleState = isGranule && granuleLayers[compare.activeString][id];
-          const granuleOptions = isGranule ? {
-            granuleCount: granuleState ? granuleState.count : 20,
-          } : {};
-          const updatedLayer = await self.createLayer(def, layerOptions, granuleOptions);
+            : { granuleCount: lodashGet(granuleLayers, `[compare.activeString][${id}].count`) };
+
+          const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
       }

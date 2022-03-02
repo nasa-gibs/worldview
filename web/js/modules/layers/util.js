@@ -827,7 +827,7 @@ export function serializeLayers(layers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
-    } else if (def.isGranule) {
+    } else if (def.type === 'granule') {
       const granuleLayer = state.layers.granuleLayers[groupName][def.id];
       if (granuleLayer) {
         const { count } = granuleLayer;

@@ -38,6 +38,11 @@ export const getActiveLayers = (state, activeString) => {
   return layers[activeString || compare.activeString].layers;
 };
 
+export const getActiveGranuleLayers = (state, activeString) => {
+  const { compare, layers: { granuleLayers } } = state;
+  return granuleLayers[activeString || compare.activeString];
+};
+
 /**
  * Return an array of overlay groups for the currently active compare state
  * that are available for the currently active projection

@@ -1,3 +1,4 @@
+import OlGeomLineString from 'ol/geom/LineString';
 import util from '../../util/util';
 
 /**
@@ -181,3 +182,63 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
     rangeEnd,
   };
 };
+
+
+export const getGranuleDateData = (entry, date, projection) => {
+  const line = new OlGeomLineString([]);
+  const maxDistance = projection === 'geographic' ? 270 : Number.POSITIVE_INFINITY;
+  const polygons = entry.polygons[0][0].split(' ');
+  const dayNight = entry.day_night_flag;
+
+  // build the array of arrays polygon
+  let polygonReorder = [];
+  for (let i = 0; i < polygons.length; i += 2) {
+    const coordPair = [];
+    coordPair.unshift(polygons[i]);
+    coordPair.unshift(polygons[i + 1]);
+    polygonReorder.push(coordPair);
+  }
+
+  // add coordinates that exceeed max distance to table for revision
+  const coordOverMaxDistance = {};
+  const firstCoords = polygonReorder[0];
+  for (let j = 0; j < polygonReorder.length; j += 1) {
+    // get current long coord in pair and measure against first coord to get length
+    const currentCoords = polygonReorder[j];
+    line.setCoordinates([firstCoords, currentCoords]);
+    const lineLength = line.getLength();
+
+    // if length is over max distance (geographic restriction only) add to table
+    if (lineLength > maxDistance) {
+      const longCoord = currentCoords[0];
+      if (coordOverMaxDistance[longCoord]) {
+        coordOverMaxDistance[longCoord] += 1;
+      } else {
+        coordOverMaxDistance[longCoord] = 1;
+      }
+    }
+  }
+
+  // check if long coord exceeded max and revise coord +/- 360 to handle meridian crossing
+  const coordinatesRevised = Object.keys(coordOverMaxDistance).length >= 1;
+  if (coordinatesRevised) {
+    polygonReorder = polygonReorder.map((coord) => {
+      const ind0 = coord[0];
+      if (coordOverMaxDistance[ind0] && coordOverMaxDistance[ind0] >= 1) {
+        const numInd0 = Number(ind0);
+        const revise = numInd0 > 0
+          ? numInd0 - 360
+          : numInd0 + 360;
+        coord[0] = revise.toString();
+      }
+      return coord;
+    });
+  }
+
+  return {
+    date,
+    polygons: polygonReorder,
+    dayNight,
+  };
+};
+
