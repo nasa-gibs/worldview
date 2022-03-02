@@ -65,6 +65,12 @@ function registerMapMouseHandlers(maps) {
     map.on('contextmenu', (event) => {
       events.trigger('map:contextmenu', event, map, crs);
     });
+    element.addEventListener('touchstart', (event) => {
+      events.trigger('map:touchstart', event, map, crs);
+    });
+    element.addEventListener('touchend', (event) => {
+      events.trigger('map:touchend', event, map, crs);
+    });
     element.addEventListener('click', (event) => {
       events.trigger('map:click', event, map, crs);
     });

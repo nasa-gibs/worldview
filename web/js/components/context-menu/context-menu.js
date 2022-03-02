@@ -18,17 +18,23 @@ function RightClickMenu(props) {
   const [pixelCoords, setPixelCoords] = useState({ pixel: [0, 0] });
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
+  const [isHoldPress, setIsHoldPress] = useState(false);
   const {
     map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive,
   } = props;
   const [getMap, setMap] = useState(map);
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
 
-  const handleClick = () => (show ? setShow(false) : null);
+  const handleClick = (event) => {
+    if (isHoldPress) return;
+    return show ? setShow(false) : null;
+  };
 
   function handleContextEvent(event, olMap) {
     if (measurementIsActive) return;
-    event.originalEvent.preventDefault();
+    const incomingEvent = event.type === 'contextmenu' ? event.originalEvent : event;
+    incomingEvent.preventDefault();
+
     const coord = olMap.getCoordinateFromPixel(event.pixel);
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     setPixelCoords({ pixel: event.pixel });
@@ -68,13 +74,38 @@ function RightClickMenu(props) {
     };
   };
 
+  let longPressTimer = null;
+
+  function setTimer(incomingEvent, incomingOlMap) {
+    longPressTimer = setTimeout(() => {
+      setIsHoldPress(true);
+      handleContextEvent(incomingEvent, incomingOlMap);
+    }, 1000);
+    return longPressTimer;
+  }
+
+  function executeTimer(event, olMap) {
+    event.pixel = [event.touches[0].clientX, event.touches[0].clientY];
+    setTimer(event, olMap);
+  }
+
+  function clearTimer() {
+    clearTimeout(longPressTimer);
+  }
+
   useEffect(() => {
     if (isCoordinateSearchActive) return;
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
+
+    events.on('map:touchstart', executeTimer);
+    events.on('map:touchend', clearTimer);
+
     return () => {
       events.off('map:singleclick', handleClick);
       events.off('map:contextmenu', handleContextEvent);
+      events.off('map:touchstart', executeTimer);
+      events.off('map:touchend', clearTimer);
     };
   });
 
