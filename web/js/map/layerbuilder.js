@@ -40,9 +40,7 @@ import {
 } from '../modules/layers/util';
 
 export default function mapLayerBuilder(config, cache, store) {
-  const {
-    getGranuleAttributes, getGranuleLayer,
-  } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -122,13 +120,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayerWrapper = async (
-    def,
-    key,
-    options,
-    dateOptions,
-    granuleAttributes,
-  ) => {
+  const createLayerWrapper = async (def, key, options, dateOptions) => {
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;
@@ -188,7 +180,7 @@ export default function mapLayerBuilder(config, cache, store) {
         cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       } else {
-        layer = await getGranuleLayer(def, attributes, granuleAttributes);
+        layer = await getGranuleLayer(def, attributes, options);
       }
     }
     layer.setOpacity(opacity || 1.0);
@@ -223,9 +215,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
-
-    const granuleAttributes = def.type === 'granule' && await getGranuleAttributes(options, def, date);
-    const layer = await createLayerWrapper(def, key, options, dateOptions, granuleAttributes);
+    const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     return layer;
   };

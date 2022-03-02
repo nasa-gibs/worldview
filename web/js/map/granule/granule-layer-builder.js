@@ -277,18 +277,20 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer projection
    * @returns {Void}
   */
-  const getGranuleLayer = async (def, attributes, granuleAttributes) => {
+  const getGranuleLayer = async (def, attributes, options) => {
     const {
       endDate, id, subtitle, startDate,
     } = def;
     const state = store.getState();
     const { layers } = state;
     const { proj, group } = attributes;
+    const granuleAttributes = await getGranuleAttributes(def, options);
     const {
       granuleCount,
       filteredGranules,
       updatedGranules,
     } = granuleAttributes;
+
     if (!updatedGranules) {
       processGranuleLayer(def, filteredGranules, attributes);
     }
@@ -386,7 +388,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} date
    * @returns {object} granuleAttributes
    */
-  const getGranuleAttributes = async (options, def, date) => {
+  const getGranuleAttributes = async (def, options) => {
     const state = store.getState();
     let updatedGranules = false;
     let granuleCount = 20;
@@ -407,14 +409,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     // get granule dates waiting for CMR query and filtering (if necessary)
-    const availableGranuleDates = await getQueriedGranuleDates(def, date);
-
+    const availableGranuleDates = await getQueriedGranuleDates(def, options.date);
     const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
-    const filteredGranuleDates = await filterGranuleDates(
-      availableGranuleDates,
-      dayNightFilter,
-      granuleCount,
-    );
+    const filteredGranuleDates = filterGranuleDates(availableGranuleDates, dayNightFilter, granuleCount);
     return {
       filteredGranules: filteredGranuleDates,
       granuleCount,
@@ -446,7 +443,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   return {
-    getGranuleAttributes,
     getGranuleLayer,
   };
 }
