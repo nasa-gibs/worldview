@@ -155,7 +155,11 @@ export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
   ({ layers, measurements }, layerId) => {
     if (!layerId) return;
-    const { layergroup } = layers[layerId];
+    if (!layers[layerId]) {
+      console.error('No reference for layer found: ', layerId);
+      return;
+    }
+    const { layergroup = '' } = layers[layerId];
     if (layergroup === 'Orbital Track') {
       return;
     }
