@@ -676,9 +676,11 @@
 .granule-date-item {
   color: #444;
   background-color: #ccc;
+  display: inline-block;
+  width: 100%;
 
   .granule-date {
-    position: absolute;
+    position: relative;
     left: 6px;
     display: inline-block;
     padding: 8px 4px;
@@ -686,9 +688,7 @@
   }
 
   .granule-date-buttons {
-    position: absolute;
-    right: 10px;
-    display: inline-block;
+    float: right;
   }
 
   .granule-date-item-up-button,

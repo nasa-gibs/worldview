@@ -1,14 +1,16 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button } from 'reactstrap';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
-import Scrollbar from '../../util/scrollbar';
 import util from '../../../util/util';
 
 const { events } = util;
+
+const itemHeight = 30;
+const itemMargin = 2;
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -19,19 +21,28 @@ const reorder = (list, startIndex, endIndex) => {
 
 const getItemStyle = (isDragging, isHover, isLastMovedItem, draggableStyle) => ({
   userSelect: 'none',
-  height: 30,
-  margin: '0 0 2px 0',
+  height: itemHeight,
+  marginBottom: itemMargin,
   outline: isLastMovedItem ? '1px solid #007BFF' : 'none',
   border: isHover ? '1px solid #eee' : '1px solid #666',
   ...draggableStyle,
 });
 
-const getListStyle = (needsScrollBar) => ({
-  background: 'transparent',
-  marginTop: '2px',
-  padding: '2px',
-  width: needsScrollBar ? '260px' : '264px',
-});
+const getListStyle = (needsScrollBar, items, screenHeight) => {
+  const height = items.length * (itemHeight + itemMargin) + 15;
+  const maxHeight = screenHeight - 490;
+
+  return {
+    background: 'transparent',
+    marginTop: '2px',
+    padding: '2px',
+    width: '265px',
+    height,
+    maxHeight,
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+  };
+};
 
 class GranuleDateList extends PureComponent {
   constructor(props) {
@@ -167,19 +178,74 @@ class GranuleDateList extends PureComponent {
     }
   }
 
-  render() {
+  renderDraggableGranule = (date, index) => {
     const {
       items,
-      sorted,
       hoveredItem,
       lastMovedItem,
     } = this.state;
-    const { def, screenHeight } = this.props;
+    const renderDownBtn = () => index < items.length - 1 && (
+      <button
+        type="button"
+        className="granule-date-item-down-button"
+        onClick={(e) => this.moveDown(e, index, date)}
+      >
+        <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
+      </button>
+    );
+    const renderUpBtn = () => index > 0 && (
+      <button
+        type="button"
+        className="granule-date-item-up-button"
+        onClick={(e) => this.moveUp(e, index, date)}
+      >
+        <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
+      </button>
+    );
+
+    return (
+      <Draggable
+        key={date}
+        draggableId={date}
+        index={index}
+        direction="vertical"
+      >
+        {(provided, snapshot) => (
+          <div
+            className="granule-date-item"
+            onMouseEnter={() => this.handleMouseOverItem(date)}
+            onMouseLeave={() => this.handleMouseLeaveItem()}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={getItemStyle(
+              snapshot.isDragging,
+              hoveredItem === date,
+              lastMovedItem === date,
+              provided.draggableProps.style,
+            )}
+          >
+            <div className="granule-date monospace">
+              {date}
+            </div>
+            <div className="granule-date-buttons">
+              {renderDownBtn()}
+              {renderUpBtn()}
+            </div>
+          </div>
+        )}
+      </Draggable>
+    );
+  }
+
+  render() {
+    const { items, sorted } = this.state;
+    const { screenHeight, def } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
     const granuleDateLength = items.length;
     const needsScrollBar = granuleDateLength > maxNumItemsNoScrollNeeded;
-    const scrollBarMaxHeight = `${screenHeight - 490}px`;
     const droppableId = `droppable-granule-date-list-${def.id}`;
+
     return (
       <div className="layer-granule-date-draggable-list" style={{ paddingLeft: '4px', marginBottom: '14px' }}>
         <h2 className="wv-header">
@@ -199,69 +265,26 @@ class GranuleDateList extends PureComponent {
         </h2>
         {items.length > 0
           ? (
-            <Scrollbar style={{ maxHeight: scrollBarMaxHeight }} needsScrollBar={needsScrollBar}>
-              <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId={droppableId}>
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={getListStyle(needsScrollBar)}
-                    >
-                      {items.map((item, index) => (
-                        <Draggable key={item} draggableId={item} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              className="granule-date-item"
-                              onMouseEnter={() => this.handleMouseOverItem(item)}
-                              onMouseLeave={() => this.handleMouseLeaveItem()}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getItemStyle(
-                                snapshot.isDragging,
-                                hoveredItem === item,
-                                lastMovedItem === item,
-                                provided.draggableProps.style,
-                              )}
-                            >
-                              <div className="granule-date monospace">
-                                {item}
-                              </div>
-                              <div className="granule-date-buttons">
-                                {index < items.length - 1
-                                  ? (
-                                    <button
-                                      type="button"
-                                      className="granule-date-item-down-button"
-                                      onClick={(e) => this.moveDown(e, index, item)}
-                                    >
-                                      <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
-                                    </button>
-                                  )
-                                  : null}
-                                {index > 0
-                                  ? (
-                                    <button
-                                      type="button"
-                                      className="granule-date-item-up-button"
-                                      onClick={(e) => this.moveUp(e, index, item)}
-                                    >
-                                      <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
-                                    </button>
-                                  )
-                                  : null}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </Scrollbar>
+
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Droppable
+                droppableId={droppableId}
+                direction="vertical"
+                type="granule"
+              >
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    style={getListStyle(needsScrollBar, items, screenHeight)}
+                    {...provided.droppableProps}
+                  >
+                    {items.map(this.renderDraggableGranule)}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
           )
           : (
             <>
