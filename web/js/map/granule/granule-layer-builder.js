@@ -26,9 +26,11 @@ import {
   isWithinDateRange,
   getGranuleDateData,
 } from './util';
+import util from '../../util/util';
 
+const CMR_BASE_GRANULE_URL = 'https://cmr.earthdata.nasa.gov/search/granules.json';
 const CMR_AJAX_OPTIONS = {
-  url: 'https://cmr.earthdata.nasa.gov/search/',
+  url: CMR_BASE_GRANULE_URL,
   headers: {
     'Client-Id': 'Worldview',
   },
@@ -36,7 +38,6 @@ const CMR_AJAX_OPTIONS = {
   dataType: 'json',
   timeout: 30 * 1000,
 };
-const CMR_QUERY_PREFIX = `${CMR_AJAX_OPTIONS.url}granules.json?shortName=`;
 const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
 
 export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
@@ -100,13 +101,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const {
       endDate, startDate, id, title, visible,
     } = def;
-
-    // TODO: USE GRANULE LAYER ID
-    const layerId = 'VJ102MOD';
-
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
-    const queryDateRange = `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`;
-    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=2000`;
+
+    const shortName = 'VJ102MOD'; // USE GRANULE LAYER ID
+    const params = {
+      shortName,
+      temporal: `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`,
+      pageSize: 2000,
+    };
+
+    const query = `${CMR_BASE_GRANULE_URL + util.toQueryString(params)}`;
 
     // update range/extend range checks and new dates (if applicable)
     const CMRDateStoreForLayer = CMRDateRanges[activeString][id];
@@ -144,11 +148,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         }
         return [];
       }
-      addGranuleCMRDateData(data, layerId);
-      return getGranules(layerId, date, startQueryDate);
+      addGranuleCMRDateData(data, shortName);
+      return getGranules(shortName, date, startQueryDate);
     }
     // user previously queried CMR granule dates
-    return getGranules(layerId, date, startQueryDate);
+    return getGranules(shortName, date, startQueryDate);
   };
 
   /**
