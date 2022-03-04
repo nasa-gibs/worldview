@@ -674,22 +674,40 @@
 }
 
 .granule-date-item {
-  flex-wrap: wrap;
-}
+  color: #444;
+  background-color: #ccc;
 
-.granule-date-item-up-button,
-.granule-date-item-down-button,
-.granule-date-item-top-button {
-  padding: 3px;
-  background: #555;
-  color: #eee;
-}
+  .granule-date {
+    position: absolute;
+    left: 6px;
+    display: inline-block;
+    padding: 8px 4px;
+    font-size: 14px;
+  }
 
-.granule-date-item-up-button:hover,
-.granule-date-item-down-button:hover,
-.granule-date-item-top-button:hover {
-  background: #eee;
-  color: #555;
+  .granule-date-buttons {
+    position: absolute;
+    right: 10px;
+    display: inline-block;
+  }
+
+  .granule-date-item-up-button,
+  .granule-date-item-down-button,
+  .granule-date-item-top-button {
+    padding: 4px;
+    background-color: transparent;
+    color: #444;
+    border: none;
+    height: 28px;
+    margin: 0 1px;
+  }
+
+  .granule-date-item-up-button:hover,
+  .granule-date-item-down-button:hover,
+  .granule-date-item-top-button:hover {
+    background: #eee;
+    color: #333;
+  }
 }
 
 @media (min-width: 1024px) {

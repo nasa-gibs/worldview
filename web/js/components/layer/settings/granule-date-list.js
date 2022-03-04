@@ -10,8 +10,6 @@ import util from '../../../util/util';
 
 const { events } = util;
 
-const gridConstant = 8;
-
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -20,23 +18,19 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 const getItemStyle = (isDragging, isHover, isLastMovedItem, draggableStyle) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
   userSelect: 'none',
-  paddingLeft: gridConstant / 2,
-  height: gridConstant * 3,
-  margin: `0 0 ${gridConstant}px 0`,
-  background: isDragging ? '#00457B' : isHover ? '#0087f1' : 'grey',
-  outline: isLastMovedItem ? '4px solid #007BFF' : 'none',
+  height: 30,
+  margin: '0 0 2px 0',
+  outline: isLastMovedItem ? '1px solid #007BFF' : 'none',
+  border: isHover ? '1px solid #eee' : '1px solid #666',
   ...draggableStyle,
 });
 
 const getListStyle = (needsScrollBar) => ({
-  background: '#CCCCCC',
+  background: 'transparent',
   marginTop: '2px',
-  padding: gridConstant,
-  width: needsScrollBar ? '262px' : '100%',
+  padding: '2px',
+  width: needsScrollBar ? '260px' : '264px',
 });
 
 class GranuleDateList extends PureComponent {
@@ -79,20 +73,6 @@ class GranuleDateList extends PureComponent {
     updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: result.draggableId, // granule date
-    });
-  }
-
-  // move granule item to top of list
-  moveToTop = (e, sourceIndex, granuleDate) => {
-    e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def } = this.props;
-    const reorderedItems = this.reorderItems(
-      sourceIndex,
-      0,
-    );
-    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
-    this.setState({
-      lastMovedItem: granuleDate,
     });
   }
 
@@ -245,10 +225,10 @@ class GranuleDateList extends PureComponent {
                                 provided.draggableProps.style,
                               )}
                             >
-                              <div>
+                              <div className="granule-date monospace">
                                 {item}
                               </div>
-                              <div>
+                              <div className="granule-date-buttons">
                                 {index < items.length - 1
                                   ? (
                                     <button
@@ -268,17 +248,6 @@ class GranuleDateList extends PureComponent {
                                       onClick={(e) => this.moveUp(e, index, item)}
                                     >
                                       <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
-                                    </button>
-                                  )
-                                  : null}
-                                {index > 0
-                                  ? (
-                                    <button
-                                      type="button"
-                                      className="granule-date-item-top-button"
-                                      onClick={(e) => this.moveToTop(e, index, item)}
-                                    >
-                                      TOP
                                     </button>
                                   )
                                   : null}
