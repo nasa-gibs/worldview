@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
+import lodashDebounce from 'lodash/debounce';
+import { DEFAULT_NUM_GRANULES } from '../../../modules/layers/constants';
 
 class GranuleCountSlider extends React.Component {
   constructor(props) {
@@ -8,15 +10,21 @@ class GranuleCountSlider extends React.Component {
     this.state = {
       value: props.count,
     };
+    this.onChange = this.onChange.bind(this);
+    this.debounceOnchange = lodashDebounce(this.onChange, 300);
   }
 
-  render() {
+  onChange(val) {
     const {
       def,
       updateGranuleLayerDates,
       granuleDates,
-      count,
     } = this.props;
+    updateGranuleLayerDates(granuleDates, def.id, val);
+  }
+
+  render() {
+    const { count } = this.props;
     const { value } = this.state;
     return (
       <div className="layer-granule-count-select settings-component">
@@ -26,8 +34,8 @@ class GranuleCountSlider extends React.Component {
           max={50}
           defaultValue={count}
           onChange={(val) => {
-            updateGranuleLayerDates(granuleDates, def.id, val);
             this.setState({ value: val });
+            this.debounceOnchange(val);
           }}
         />
         <div className="wv-label wv-label-granule-count">
@@ -38,7 +46,7 @@ class GranuleCountSlider extends React.Component {
   }
 }
 GranuleCountSlider.defaultProps = {
-  count: 20,
+  count: DEFAULT_NUM_GRANULES,
 };
 GranuleCountSlider.propTypes = {
   granuleDates: PropTypes.array,

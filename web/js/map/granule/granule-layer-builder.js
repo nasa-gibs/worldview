@@ -5,6 +5,7 @@ import {
   each as lodashEach,
 } from 'lodash';
 import {
+  DEFAULT_NUM_GRANULES,
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_DATES,
 } from '../../modules/layers/constants';
@@ -105,7 +106,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
     const queryDateRange = `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`;
-    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=500`;
+    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=2000`;
 
     // update range/extend range checks and new dates (if applicable)
     const CMRDateStoreForLayer = CMRDateRanges[activeString][id];
@@ -198,6 +199,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const granuleISODate = new Date(date);
       const dateOption = { date: granuleISODate, polygons };
       layer = await createLayerWMTS(def, dateOption, null, store.getState(), { polygons });
+      console.debug('create: ', granuleISOKey);
       attributes.key = granuleISOKey;
       attributes.date = granuleISODate;
       layer.wv = attributes;
@@ -278,6 +280,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     let layer = await createGranuleDatesLayer(filteredGranules, def, attributes);
+    console.log(layer);
     // use updated layers or get array of granule dates from filteredGranules
     const filteredGranuleCollection = updatedGranules || getDateArrayFromObject(filteredGranules);
     const mostRecentGranuleDate = filteredGranuleCollection[filteredGranuleCollection.length - 1];
@@ -375,11 +378,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const getGranuleAttributes = async (def, options) => {
     const state = store.getState();
     let updatedGranules = false;
-    let granuleCount = 20;
+    let granuleCount = DEFAULT_NUM_GRANULES;
 
     if (options) {
       const { granuleCount, granuleDates } = options;
-      const count = granuleCount || 20;
+      const count = granuleCount || DEFAULT_NUM_GRANULES;
       if (granuleDates && granuleDates.length) {
         updatedGranules = granuleDates.length !== count ? false : granuleDates.reverse();
       }

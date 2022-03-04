@@ -580,6 +580,7 @@ export default function mapui(models, config, store, ui) {
    */
 
   async function reloadLayers(map, granuleOptions) {
+    console.debug('reloadLayers');
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
@@ -652,6 +653,8 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateLayerVisibilities() {
+    console.debug('updateVisibilities');
+
     let renderable;
     const state = store.getState();
     const layers = self.selected.getLayers();
@@ -887,6 +890,7 @@ export default function mapui(models, config, store, ui) {
   }
 
   async function updateDate(outOfStepChange) {
+    console.debug('updateDate');
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getLayerGroup(state);
