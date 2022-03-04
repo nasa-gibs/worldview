@@ -84,7 +84,7 @@ function RightClickMenu(props) {
     return longPressTimer;
   }
 
-  function executeTimer(event, olMap) {
+  function handleTouchStart(event, olMap) {
     event.pixel = [event.touches[0].clientX, event.touches[0].clientY];
     setTimer(event, olMap);
   }
@@ -93,18 +93,23 @@ function RightClickMenu(props) {
     clearTimeout(longPressTimer);
   }
 
+  function handleDrag() {
+    setShow(false);
+  }
+
   useEffect(() => {
     if (isCoordinateSearchActive) return;
     events.on('map:singleclick', handleClick);
     events.on('map:contextmenu', handleContextEvent);
 
-    events.on('map:touchstart', executeTimer);
+    events.on('map:touchstart', handleTouchStart);
     events.on('map:touchend', clearTimer);
+    events.on('map:drag', handleDrag);
 
     return () => {
       events.off('map:singleclick', handleClick);
       events.off('map:contextmenu', handleContextEvent);
-      events.off('map:touchstart', executeTimer);
+      events.off('map:touchstart', handleTouchStart);
       events.off('map:touchend', clearTimer);
     };
   });
