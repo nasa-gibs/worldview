@@ -294,11 +294,9 @@ export default function mapui(models, config, store, ui) {
       store.dispatch({ type: CLEAR_MARKER });
     };
 
-    // clear previous marker (if present) and get new marker
-    removeCoordinatesMarker();
     const marker = getCoordinatesMarker(
       proj,
-      coordinates,
+      coordinates[coordinates.length - 1],
       results,
       clearMarker,
       browser.lessThan.medium,
