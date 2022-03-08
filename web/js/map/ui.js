@@ -737,15 +737,16 @@ export default function mapui(models, config, store, ui) {
     ).filter(({ visible }) => visible);
 
     visibleLayers.forEach((def) => {
+      const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
+        .includes(def.period);
       const index = findLayerIndex(def);
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-        return;
-      }
+
       if (compare.active && layers.length) {
         updateCompareLayer(def, index, mapLayerCollection);
-      } else {
+      } else if (temporalLayer) {
         mapLayerCollection.setAt(index, createLayer(def));
       }
+
       if (config.vectorStyles && lodashGet(def, 'vectorStyle.id')) {
         updateVectorStyles(def);
       }
