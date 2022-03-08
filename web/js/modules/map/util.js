@@ -277,6 +277,8 @@ function promiseLayerGroup(layerGroup, map) {
 }
 
 /**
+ * Trigger tile requests for all active and visible layers on a given date.
+ * This can be used to pre-cache all layers at given datetimes.
  * @method promiseImageryForTime
  * @return {object} Promise
  */
@@ -287,7 +289,9 @@ export async function promiseImageryForTime(state, date, activeString) {
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
-    // if (layer.type === 'granule') return Promise.resolve();
+    if (layer.type === 'granule') {
+      return Promise.resolve();
+    }
     const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
     const layerGroup = cache.getItem(key) || await createLayer(layer, options);
