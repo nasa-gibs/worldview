@@ -536,12 +536,8 @@ export default function mapui(models, config, store, ui) {
     cache.clear();
   };
 
-  /*
-   * get granule options for layerBuilding
-   *
-   * @method getGranuleOptions
-   * @static
-   *
+  /**
+   * Get granule options for layerBuilding
    * @param {object} state
    * @param {Object} def
    * @param {String} layerGroupStr
@@ -580,7 +576,6 @@ export default function mapui(models, config, store, ui) {
    */
 
   async function reloadLayers(map, granuleOptions) {
-    console.debug('reloadLayers');
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
@@ -604,10 +599,10 @@ export default function mapui(models, config, store, ui) {
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, state, granuleOptions));
-      const newGroupedLayers = await Promise.all(stateArrayGroups);
       clearLayers(map);
-      lodashEach(newGroupedLayers, (lg) => { map.addLayer(lg); });
+      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, state, granuleOptions));
+      const compareLayerGroups = await Promise.all(stateArrayGroups);
+      compareLayerGroups.forEach((layerGroup) => map.addLayer(layerGroup));
       compareMapUi.create(map, compare.mode);
     }
     updateLayerVisibilities();
@@ -620,27 +615,21 @@ export default function mapui(models, config, store, ui) {
   async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
     const compareSideLayers = getActiveLayers(state, compareActiveString);
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
-      .filter(() => true)
-      .map((def) => new Promise((resolve) => {
+      .map(async (def) => {
         const options = {
           ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
           date: getSelectedDate(state, compareDateString),
           group: compareActiveString,
         };
-        const createdLayer = createLayer(def, options);
-        resolve(createdLayer);
-      }));
-
-    // return new layer group
-    return Promise.all(layers)
-      .then((compareLayerGroup) => new OlLayerGroup({
-        layers: compareLayerGroup,
-        date: getSelectedDate(state, compareDateString),
-        group: compareActiveString,
-      }))
-      .catch((error) => {
-        throw error;
+        return createLayer(def, options);
       });
+    const compareLayerGroup = await Promise.all(layers);
+
+    return new OlLayerGroup({
+      layers: compareLayerGroup,
+      date: getSelectedDate(state, compareDateString),
+      group: compareActiveString,
+    });
   }
 
   /*
@@ -653,71 +642,41 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateLayerVisibilities() {
-    console.debug('updateVisibilities');
-
-    let renderable;
     const state = store.getState();
-    const layers = self.selected.getLayers();
+    const layerGroup = self.selected.getLayers();
 
-    layers.forEach((layer) => {
+    const setRenderable = (layer, parentCompareGroup) => {
+      const { id, group } = layer.wv;
+      const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
+      const date = getSelectedDate(state, dateGroup);
+      const layers = getActiveLayers(state, parentCompareGroup || group);
+      const renderable = isRenderableLayer(id, layers, date, null, state);
+      layer.setVisible(renderable);
+    };
+
+    layerGroup.forEach((layer) => {
       const compareActiveString = layer.get('group');
       const granule = layer.get('granuleGroup');
 
       // Not in A|B
       if (layer.wv && !granule) {
-        renderable = isRenderableLayer(
-          layer.wv.id,
-          getActiveLayers(state),
-          getSelectedDate(state),
-          null,
-          state,
-        );
-        layer.setVisible(renderable);
-        // If in A|B layer-group will have a 'group' string
+        setRenderable(layer);
+
+      // If in A|B layer-group will have a 'group' string
       } else if (compareActiveString || granule) {
-        lodashEach(layer.getLayers().getArray(), (subLayer) => {
+        const compareGrouplayers = layer.getLayers().getArray();
+
+        compareGrouplayers.forEach((subLayer) => {
           if (!subLayer.wv) {
             return;
           }
-          const granuleGroup = subLayer.get('granuleGroup');
-          // console.log(granuleGroup);
-          if (granuleGroup) {
-            // TileLayers within granule LayerGroup
-            lodashEach(subLayer.getLayers().getArray(), (granuleTileLayer) => {
-              const granuleTileLayerGroup = granuleTileLayer.wv.group;
-              renderable = isRenderableLayer(
-                granuleTileLayer.wv.id,
-                state.layers[granuleTileLayerGroup],
-                state.date[granuleTileLayer.get('date')],
-                null,
-                state,
-              );
-              granuleTileLayer.setVisible(renderable);
-            });
+          // TileLayers within granule LayerGroup
+          if (subLayer.get('granuleGroup')) {
+            const granuleLayers = subLayer.getLayers().getArray();
+            granuleLayers.forEach((l) => setRenderable(l));
             subLayer.setVisible(true);
-          } else {
-            // console.log(subLayer.wv);
-            // if (subLayer.wv) {
-            const subGroup = subLayer.wv.group;
-            renderable = isRenderableLayer(
-              subLayer.wv.id,
-              state.layers[subGroup],
-              state.date[subLayer.get('date')],
-              null,
-              state,
-            );
-            subLayer.setVisible(renderable);
-            // }
           }
-          const compareDateString = layer.get('date');
-          renderable = isRenderableLayer(
-            subLayer.wv.id,
-            getActiveLayers(state, compareActiveString),
-            getSelectedDate(state, compareDateString),
-            null,
-            state,
-          );
-          subLayer.setVisible(renderable);
+          setRenderable(subLayer, compareActiveString);
         });
 
         layer.setVisible(true);
@@ -890,7 +849,6 @@ export default function mapui(models, config, store, ui) {
   }
 
   async function updateDate(outOfStepChange) {
-    console.debug('updateDate');
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getLayerGroup(state);
