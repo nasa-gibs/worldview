@@ -5,9 +5,10 @@ import util from '../../util/util';
 import { getCoordinatesMetadata } from './ol-coordinates-marker-util';
 
 export default function LocationMarker ({
-  reverseGeocodeResults, clearMarker, coordinates, isMobile, dialogVisible = true,
+  reverseGeocodeResults, removeMarker, coordinatesObject, isMobile, dialogVisible = true,
 }) {
-  const [longitude, latitude] = coordinates;
+  const coordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+  const [latitude, longitude] = coordinates;
   const tooltipId = util.encodeId(`coordinates-map-marker_${latitude},${longitude}`);
   const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
   const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
@@ -18,7 +19,7 @@ export default function LocationMarker ({
       {showDialog && (
         <CoordinatesDialog
           coordinatesMetadata={coordinatesMetadata}
-          clearCoordinates={clearMarker}
+          clearCoordinates={removeMarker}
           removeCoordinatesDialog={() => setShowDialog(false)}
           isMobile={isMobile}
           tooltipId={tooltipId}
@@ -38,7 +39,7 @@ export default function LocationMarker ({
 LocationMarker.propTypes = {
   reverseGeocodeResults: PropTypes.object,
   isMobile: PropTypes.bool,
-  coordinates: PropTypes.array,
-  clearMarker: PropTypes.func,
+  coordinatesObject: PropTypes.object,
+  removeMarker: PropTypes.func,
   dialogVisible: PropTypes.bool,
 };

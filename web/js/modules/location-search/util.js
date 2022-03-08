@@ -52,8 +52,10 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(proj, coordinates, results, clearMarker, isMobile, dialogVisible) {
+export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
   const { crs } = proj.selected;
+  const coordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+  const { id } = coordinatesObject;
 
   // only add marker within current map extent
   const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
@@ -69,14 +71,14 @@ export function getCoordinatesMarker(proj, coordinates, results, clearMarker, is
 
   const pinProps = {
     reverseGeocodeResults: results,
-    coordinates,
-    clearMarker,
+    coordinatesObject,
+    removeMarker,
     isMobile,
     dialogVisible,
   };
 
   // create Ol vector layer map pin
-  const marker = createPin(transformedCoords, pinProps);
+  const marker = createPin(transformedCoords, pinProps, id);
   return marker;
 }
 
@@ -86,7 +88,7 @@ export function getCoordinatesMarker(proj, coordinates, results, clearMarker, is
  * @param {Array} transformedCoordinates
  * @param {Object} reverseGeocodeResults
  */
-const createPin = function(coordinates, pinProps) {
+const createPin = function(coordinates, pinProps, id) {
   const overlayEl = document.createElement('div');
   ReactDOM.render(
     React.createElement(LocationMarker, pinProps),
@@ -97,7 +99,7 @@ const createPin = function(coordinates, pinProps) {
     position: coordinates,
     positioning: 'bottom-center',
     stopEvent: false,
-    id: 'coordinates-map-pin',
+    id,
   });
 
   return markerPin;

@@ -1,6 +1,7 @@
 import {
-  CLEAR_MARKER,
+  CLEAR_MARKERS,
   CLEAR_SUGGESTIONS,
+  UPDATE_MARKERS,
   SET_MARKER,
   SET_SUGGESTION,
   TOGGLE_DIALOG_VISIBLE,
@@ -82,10 +83,16 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       });
     }
 
+    const coordinatesObject = {
+      id: Date.now(),
+      latitude: coordinates[0],
+      longitude: coordinates[1],
+    };
+
     dispatch({
       type: SET_MARKER,
       reverseGeocodeResults,
-      coordinates,
+      coordinatesObject,
       isCoordinatesDialogOpen: true,
       isInputSearch,
     });
@@ -98,7 +105,41 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
 export function clearCoordinates() {
   return (dispatch) => {
     dispatch({
-      type: CLEAR_MARKER,
+      type: CLEAR_MARKERS,
+    });
+  };
+}
+
+/**
+ * Remove marker and dialog (if open)
+ * @param {Object} coordinatesObject
+ */
+export function removeMarker(coordinatesObject) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      coordinates,
+    } = state;
+    dispatch({
+      type: UPDATE_MARKERS,
+      coordinates: [...coordinates].filter((coordinate) => coordinatesObject.id !== coordinate.id),
+    });
+  };
+}
+
+/**
+ * Add OpenLayers ol_uid value to marker's coordinates object
+ * @param {Object} coordinatesObject
+ */
+export function updateMarkerId(coordinatesObject) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      coordinates,
+    } = state;
+    dispatch({
+      type: UPDATE_MARKERS,
+      coordinates: [...coordinates, coordinatesObject],
     });
   };
 }
