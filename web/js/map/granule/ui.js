@@ -26,16 +26,17 @@ export default function granuleFootprint(map) {
     source: vectorSource,
     style: [
       new OlStyle({
+        fill: new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }),
         stroke: new OlStyleStroke({
           color: 'rgb(0, 123, 255, 0.65)',
-          width: 5,
+          width: 3,
         }),
         text: new OlText({
           textAlign: 'center',
           text,
-          font: '18px sans-serif',
+          font: '18px monospace',
           fill: new OlStyleFill({ color: 'white' }),
-          stroke: new OlStyleStroke({ color: 'black', width: 1 }),
+          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
           overflow: true,
         }),
       }),
@@ -65,18 +66,19 @@ export default function granuleFootprint(map) {
     if (self.currentGranule[date]) {
       return;
     }
-
-    if (!self.currentGranule[date]) {
+    const clearGranule = () => {
       self.currentGranule = {};
       map.removeLayer(self.vectorLayer);
       vectorSource.clear();
+    };
+    if (!self.currentGranule[date]) {
+      clearGranule();
     }
     if (!granuleGeometry || !date) {
-      self.currentGranule = {};
-      map.removeLayer(self.vectorLayer);
-      vectorSource.clear();
+      clearGranule();
       return;
     }
+
     self.currentGranule[date] = true;
 
     const res = [].concat(...granuleGeometry);
@@ -91,9 +93,8 @@ export default function granuleFootprint(map) {
     }
 
     // create polygon footprint
-    const polygonFootprint = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({
-      geometry: polygonFootprint,
+      geometry: new OlGeomPolygon([points]),
     });
 
     // add the feature vector to the layer vector

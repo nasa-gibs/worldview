@@ -54,7 +54,7 @@ export class VectorInteractions extends React.Component {
   *
   * @return {Boolean} to indicate if valid for parent mouseMove function
   */
-  handleGranuleHover = (granuleCMRGeometry, map, crs, pixels, coord) => {
+  handleGranuleHover = (granuleCMRGeometry, crs, pixels, coord) => {
     const {
       active,
       activeString,
@@ -69,9 +69,9 @@ export class VectorInteractions extends React.Component {
     const gcmr = Object.keys(granuleCMRGeometry).reverse().map((key) => ({ [key]: granuleCMRGeometry[key] }));
     // only allow hover footprints on selected side of A/B comparison
     if (active) {
-      const isOnActiveCompareSide = isFromActiveCompareRegion(map, pixels, { group: activeString }, compareState, swipeOffset);
+      const isOnActiveCompareSide = isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset);
       if (!isOnActiveCompareSide) {
-        events.trigger('granule-hovered', granuleSatelliteInstrument);
+        events.trigger('granule-hovered', null);
         return false;
       }
     }
@@ -128,7 +128,7 @@ export class VectorInteractions extends React.Component {
 
     // handle granule footprint hover, will break out with false return if on wrong compare A/B side
     if (granuleCMRGeometry) {
-      const isValidGranule = this.handleGranuleHover(granuleCMRGeometry, map, crs, pixels, coord);
+      const isValidGranule = this.handleGranuleHover(granuleCMRGeometry, crs, pixels, coord);
       if (!isValidGranule) {
         return;
       }
@@ -146,7 +146,7 @@ export class VectorInteractions extends React.Component {
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
+        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
