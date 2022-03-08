@@ -487,8 +487,9 @@ const getParameters = function(config, parameters) {
         parse: (coordinates) => coordinates,
         serialize: (coordinates, state) => {
           const { map, proj } = state;
+          const coordinateValues = [coordinates.latitude, coordinates.longitude];
           if (map.ui.selected) {
-            const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
+            const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
             if (!coordinatesWithinExtent) {
               return;
             }

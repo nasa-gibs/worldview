@@ -3,7 +3,7 @@ import {
   locationSearchState,
 } from './reducers';
 import {
-  CLEAR_MARKER,
+  CLEAR_MARKERS,
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
@@ -100,13 +100,13 @@ describe('locationSearch', () => {
     },
   );
   test(
-    `${CLEAR_MARKER
+    `${CLEAR_MARKERS
     } resets cooridnates and geocode results`
       + 'should return new state',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
-          type: CLEAR_MARKER,
+          type: CLEAR_MARKERS,
         }),
       ).toEqual({
         ...locationSearchState,
