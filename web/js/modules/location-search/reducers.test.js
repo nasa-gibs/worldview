@@ -22,7 +22,7 @@ const suggestion = [{
   magicKey: 'test1234=',
   text: 'New York, NY, USA',
 }];
-const coordinates = [72, 40];
+const coordinatesObject = { id: 1234, latitude: 72, longitude: 40 };
 
 describe('locationSearch', () => {
   test('locationSearch should return the initial state', () => {
@@ -86,14 +86,14 @@ describe('locationSearch', () => {
       expect(
         locationSearchReducer(locationSearchState, {
           type: SET_MARKER,
-          coordinates,
+          coordinatesObject,
           reverseGeocodeResults,
           isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
-        coordinates,
+        coordinates: [...locationSearchState.coordinates, coordinatesObject],
         reverseGeocodeResults,
         isCoordinatesDialogOpen: true,
       });
