@@ -1010,10 +1010,14 @@ export default function mapui(models, config, store, ui) {
     map.getView().on('change:resolution', debouncedUpdateExtent);
     map.getView().on('change:rotation', debouncedOnRotate);
 
-    map.on('pointerdrag', () => {
+    const debouncedOnDrag = lodashDebounce((event) => {
       self.mapIsbeingDragged = true;
-      events.trigger('map:drag');
-    });
+      if (event.originalEvent.buttons === 1) {
+        events.trigger('map:drag', event);
+      }
+    }, 500, { leading: true });
+
+    map.on('pointerdrag', debouncedOnDrag);
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
