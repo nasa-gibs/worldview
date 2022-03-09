@@ -108,14 +108,14 @@ export default function mapui(models, config, store, ui) {
           id: action.id,
           reset: null,
         };
-        return reloadLayers(self.selected, granuleOptions);
+        return reloadLayers(granuleOptions);
       }
       case layerConstants.RESET_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
           id: action.id,
           reset: action.id,
         };
-        return reloadLayers(self.selected, granuleOptions);
+        return reloadLayers(granuleOptions);
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -575,8 +575,9 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
 
-  async function reloadLayers(map, granuleOptions) {
-    map = map || self.selected;
+  async function reloadLayers(granuleOptions) {
+    console.log('reloadLayers');
+    const map = self.selected;
     const state = store.getState();
     const { compare } = state;
 
@@ -849,6 +850,7 @@ export default function mapui(models, config, store, ui) {
   }
 
   async function updateDate(outOfStepChange) {
+    console.log('updateDate');
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getLayerGroup(state);

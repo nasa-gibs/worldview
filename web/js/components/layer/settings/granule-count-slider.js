@@ -17,10 +17,10 @@ class GranuleCountSlider extends React.Component {
   onChange(val) {
     const {
       def,
-      updateGranuleLayerDates,
+      updateGranuleLayerOptions,
       granuleDates,
     } = this.props;
-    updateGranuleLayerDates(granuleDates, def.id, val);
+    updateGranuleLayerOptions(granuleDates, def.id, val);
   }
 
   render() {
@@ -52,7 +52,7 @@ GranuleCountSlider.propTypes = {
   granuleDates: PropTypes.array,
   def: PropTypes.object,
   count: PropTypes.number,
-  updateGranuleLayerDates: PropTypes.func,
+  updateGranuleLayerOptions: PropTypes.func,
 };
 
 export default GranuleCountSlider;

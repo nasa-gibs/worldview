@@ -42,7 +42,7 @@ import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
 import {
-  updateGranuleLayerDates,
+  updateGranuleLayerOptions,
   resetGranuleLayerDates,
   setOpacity,
 } from '../../../modules/layers/actions';
@@ -291,7 +291,7 @@ class LayerSettings extends React.Component {
       granuleOptions,
       screenHeight,
       resetGranuleLayerDates,
-      updateGranuleLayerDates,
+      updateGranuleLayerOptions,
     } = this.props;
     const { count, dates, satelliteInstrumentGroup } = granuleOptions;
     return dates
@@ -300,7 +300,7 @@ class LayerSettings extends React.Component {
           <GranuleCountSlider
             count={count}
             granuleDates={dates}
-            updateGranuleLayerDates={updateGranuleLayerDates}
+            updateGranuleLayerOptions={updateGranuleLayerOptions}
             def={layer}
           />
           <GranuleLayerDateList
@@ -308,7 +308,7 @@ class LayerSettings extends React.Component {
             screenHeight={screenHeight}
             granuleDates={dates}
             granuleCount={count}
-            updateGranuleLayerDates={updateGranuleLayerDates}
+            updateGranuleLayerOptions={updateGranuleLayerOptions}
             resetGranuleLayerDates={resetGranuleLayerDates}
             satelliteInstrumentGroup={satelliteInstrumentGroup}
           />
@@ -420,8 +420,8 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerDates: (dates, id, count) => {
-    dispatch(updateGranuleLayerDates(dates, id, count));
+  updateGranuleLayerOptions: (dates, id, count) => {
+    dispatch(updateGranuleLayerOptions(dates, id, count));
   },
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
@@ -460,7 +460,7 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
-  updateGranuleLayerDates: PropTypes.func,
+  updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

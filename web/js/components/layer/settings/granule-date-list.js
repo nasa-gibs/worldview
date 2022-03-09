@@ -72,7 +72,7 @@ class GranuleDateList extends PureComponent {
 
   // handle update on complete granule item drag
   onDragEnd = (result) => {
-    const { updateGranuleLayerDates, granuleCount, def } = this.props;
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     // dropped granule outside the list
     if (!result.destination) {
       return;
@@ -81,7 +81,7 @@ class GranuleDateList extends PureComponent {
       result.source.index,
       result.destination.index,
     );
-    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: result.draggableId, // granule date
     });
@@ -90,12 +90,12 @@ class GranuleDateList extends PureComponent {
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def } = this.props;
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex - 1,
     );
-    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: granuleDate,
     });
@@ -104,12 +104,12 @@ class GranuleDateList extends PureComponent {
   // move granule item to top of list
   moveDown = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def } = this.props;
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex + 1,
     );
-    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: granuleDate,
     });
@@ -307,7 +307,7 @@ GranuleDateList.propTypes = {
   satelliteInstrumentGroup: PropTypes.string,
   screenHeight: PropTypes.number,
   toggleHoveredGranule: PropTypes.func,
-  updateGranuleLayerDates: PropTypes.func,
+  updateGranuleLayerOptions: PropTypes.func,
 };
 
 export default GranuleDateList;

@@ -22,7 +22,9 @@ import {
   REMOVE_GROUP,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_OPTIONS,
+  UPDATE_GRANULE_LAYER_GEOMETRY,
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
@@ -287,11 +289,39 @@ export function showLayers(layers) {
   };
 }
 
-export function updateGranuleLayerDates(dates, id, count) {
+export function addGranuleLayerDates(id, dates, geometry, satelliteInstrumentGroup) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+
+    dispatch({
+      type: ADD_GRANULE_LAYER_DATES,
+      id,
+      activeKey: activeString,
+      dates,
+      geometry,
+      satelliteInstrumentGroup,
+    });
+  };
+}
+
+export function updateGranuleLayerOptions(dates, id, count) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+
+    dispatch({
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id,
+      activeKey: activeString,
+      dates,
+      count,
+    });
+  };
+}
+
+export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
     const { activeString } = compare;
-    const { geometry } = layers.granuleLayers[activeString][id];
 
     const layerDef = layers.layerConfig[id];
     const satelliteInstrumentGroup = `${layerDef.subtitle}`;
@@ -301,16 +331,15 @@ export function updateGranuleLayerDates(dates, id, count) {
     // determine if active satellite instrument, then update global geometry,
     // else use current global geometry
     const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
-      ? geometry
+      ? granuleGeometry
       : activeGeometry;
+
     dispatch({
-      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      type: UPDATE_GRANULE_LAYER_GEOMETRY,
       id,
       activeKey: activeString,
-      dates,
-      count,
-      geometry,
       granuleGeometry: newGranuleGeometry,
+      dates,
     });
   };
 }

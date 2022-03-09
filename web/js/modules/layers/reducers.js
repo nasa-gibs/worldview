@@ -17,7 +17,7 @@ import {
   ADD_LAYERS_FOR_EVENT,
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_OPTIONS,
-  UPDATE_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_LAYER_GEOMETRY,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
@@ -250,65 +250,71 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    case ADD_GRANULE_LAYER_DATES:
+    case ADD_GRANULE_LAYER_DATES: {
+      const {
+        id, activeKey, dates, geometry, satelliteInstrumentGroup,
+      } = action;
       return update(state, {
         granuleLayers: {
-          [action.activeKey]: {
+          [activeKey]: {
             $merge: {
-              [action.id]: {
-                dates: action.dates,
-                count: action.count,
-                geometry: action.geometry,
+              [id]: {
+                dates,
+                count: dates.length,
+                geometry,
               },
             },
           },
         },
         granuleSatelliteInstrumentGroup: {
-          [action.activeKey]: {
-            $set: action.satelliteInstrumentGroup,
+          [activeKey]: {
+            $set: satelliteInstrumentGroup,
           },
         },
         granuleGeometry: {
-          [action.activeKey]: {
-            $set: action.geometry,
+          [activeKey]: {
+            $set: geometry,
           },
         },
       });
+    }
 
-    case UPDATE_GRANULE_LAYER_OPTIONS:
+    case UPDATE_GRANULE_LAYER_OPTIONS: {
+      const {
+        id, activeKey, count,
+      } = action;
       return update(state, {
         granuleLayers: {
-          [action.activeKey]: {
-            $merge: {
-              [action.id]: {
-                dates: action.dates,
-                count: action.count,
-                geometry: action.geometry,
+          [activeKey]: {
+            [id]: { $merge: { count } },
+          },
+        },
+      });
+    }
+
+    case UPDATE_GRANULE_LAYER_GEOMETRY: {
+      const {
+        id, activeKey, dates, granuleGeometry,
+      } = action;
+
+      return update(state, {
+        granuleLayers: {
+          [activeKey]: {
+            [id]: {
+              $merge: {
+                dates,
+                geometry: granuleGeometry,
               },
             },
           },
         },
-      });
-
-    case UPDATE_GRANULE_LAYER_DATES:
-      return update(state, {
-        granuleLayers: {
-          [action.activeKey]: {
-            $merge: {
-              [action.id]: {
-                dates: action.dates,
-                count: action.count,
-                geometry: action.geometry,
-              },
-            },
-          },
-        },
         granuleGeometry: {
-          [action.activeKey]: {
-            $set: action.granuleGeometry,
+          [activeKey]: {
+            $set: granuleGeometry,
           },
         },
       });
+    }
 
     case CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP:
       return update(state, {

@@ -6,9 +6,8 @@ import {
 } from 'lodash';
 import {
   DEFAULT_NUM_GRANULES,
-  ADD_GRANULE_LAYER_DATES,
-  UPDATE_GRANULE_LAYER_DATES,
 } from '../../modules/layers/constants';
+import { updateGranuleLayerGeometry, addGranuleLayerDates } from '../../modules/layers/actions';
 import { getActiveGranuleLayers } from '../../modules/layers/selectors';
 import {
   startLoading,
@@ -274,7 +273,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { proj, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
     const {
-      granuleCount,
       filteredGranules,
       updatedGranules,
     } = granuleAttributes;
@@ -282,31 +280,29 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (!updatedGranules) {
       processGranuleLayer(def, filteredGranules, attributes);
     }
-
     let layer = await createGranuleDatesLayer(filteredGranules, def, attributes);
-    console.log(layer);
+
     // use updated layers or get array of granule dates from filteredGranules
     const filteredGranuleCollection = updatedGranules || getDateArrayFromObject(filteredGranules);
     const mostRecentGranuleDate = filteredGranuleCollection[filteredGranuleCollection.length - 1];
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate).getTime() > new Date(endDate).getTime();
-
     const includedDates = [];
-    const layerGroupEntries = [];
+    const granuleTileLayers = [];
 
     lodashEach(filteredGranuleCollection, (date) => {
       const layerCacheKey = granuleLayers[id][group].dates[date];
       const layerCache = cache.getItem(layerCacheKey);
       if (layerCache) {
-        layerGroupEntries.push(layerCache);
+        granuleTileLayers.push(layerCache);
       } else {
-        layerGroupEntries.push(layer);
+        granuleTileLayers.push(layer);
       }
       includedDates.unshift(date);
     });
 
     // create new layergroup with granules
     layer = new OlLayerGroup({
-      layers: layerGroupEntries,
+      layers: granuleTileLayers,
     });
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
@@ -322,46 +318,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }, {});
 
     const returnedDates = isMostRecentDateOutOfRange ? [] : includedDates;
-    const satelliteInstrumentGroup = `${subtitle}`;
     const isLayerBeingUpdated = !!layers.granuleLayers[group][id];
 
-    console.log(isLayerBeingUpdated, returnedDates[0]);
-
-    // shared granule store object values
-    const granuleStoreObject = {
-      id,
-      dates: returnedDates,
-      activeKey: group,
-      count: granuleCount,
-      geometry: granuleGeometry,
-    };
-    // add vs update - conditional granule store type OR condtional params
     if (isLayerBeingUpdated) {
-      const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[group];
-      const activeGeometry = layers.granuleGeometry[group];
-      const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
-        ? granuleGeometry
-        : activeGeometry;
-
-      // granule layer updated
-      store.dispatch(Object.assign(
-        granuleStoreObject,
-        {
-          type: UPDATE_GRANULE_LAYER_DATES,
-          granuleGeometry: newGranuleGeometry,
-        },
-      ));
+      store.dispatch(updateGranuleLayerGeometry(id, returnedDates, granuleGeometry));
     } else {
-      // granule layer added/initialized
-      // Note: a newly added granule layer will default to be the selected granule
-      // satellite instrument group with geometry updated
-      store.dispatch(Object.assign(
-        granuleStoreObject,
-        {
-          type: ADD_GRANULE_LAYER_DATES,
-          satelliteInstrumentGroup,
-        },
-      ));
+      store.dispatch(addGranuleLayerDates(id, returnedDates, granuleGeometry, `${subtitle}`));
     }
     currentProj = proj;
     return layer;
@@ -382,11 +344,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const getGranuleAttributes = async (def, options) => {
     const state = store.getState();
     let updatedGranules = false;
-    let granuleCount = DEFAULT_NUM_GRANULES;
+    let count = DEFAULT_NUM_GRANULES;
 
     if (options) {
       const { granuleCount, granuleDates } = options;
-      const count = granuleCount || DEFAULT_NUM_GRANULES;
+      count = granuleCount || DEFAULT_NUM_GRANULES;
       if (granuleDates && granuleDates.length) {
         updatedGranules = granuleDates.length !== count ? false : granuleDates.reverse();
       }
@@ -395,16 +357,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (!updatedGranules) {
       const granuleState = getActiveGranuleLayers(state)[def.id];
       if (granuleState) {
-        granuleCount = granuleState.count;
+        count = granuleState.count;
       }
     }
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranuleDates = await getQueriedGranuleDates(def, options.date);
-    const filteredGranuleDates = filterGranuleDates(availableGranuleDates, granuleCount);
+    const filteredGranuleDates = filterGranuleDates(availableGranuleDates, count);
     return {
       filteredGranules: filteredGranuleDates,
-      granuleCount,
+      count,
       updatedGranules,
     };
   };
