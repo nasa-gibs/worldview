@@ -43,12 +43,12 @@ class CoordinatesDialog extends Component {
   }
 
   // close dialog and remove map marker
-  clearCoordinates = () => {
-    const { clearCoordinates } = this.props;
+  removeMarker = () => {
+    const { removeMarker } = this.props;
     this.setState({
       showTooltips: false,
     });
-    clearCoordinates();
+    removeMarker();
   }
 
   // minimize dialog (destroy component)
@@ -84,7 +84,7 @@ class CoordinatesDialog extends Component {
         <span
           id={closeButtonId}
           className={`close-tooltip ${closeButtonId}`}
-          onTouchEnd={this.clearCoordinates}
+          onTouchEnd={this.removeMarker}
         >
           {tooltipVisibilityCondition
           && (
@@ -97,7 +97,7 @@ class CoordinatesDialog extends Component {
               {closeButtonLabelText}
             </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon onClick={this.clearCoordinates} icon="times" fixedWidth />
+          <FontAwesomeIcon onClick={this.removeMarker} icon="times" fixedWidth />
         </span>
         <span
           id={minimizeButtonId}
@@ -184,7 +184,7 @@ class CoordinatesDialog extends Component {
 
 export default CoordinatesDialog;
 CoordinatesDialog.propTypes = {
-  clearCoordinates: PropTypes.func,
+  removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
   coordinatesMetadata: PropTypes.object,
   isMobile: PropTypes.bool,

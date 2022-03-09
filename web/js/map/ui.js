@@ -35,7 +35,7 @@ import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
   CLEAR_MARKERS,
-  UPDATE_MARKERS,
+  REMOVE_MARKER,
   SET_MARKER,
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
@@ -105,8 +105,8 @@ export default function mapui(models, config, store, ui) {
       }
       case CLEAR_MARKERS:
         return removeAllCoordinatesMarkers();
-      case UPDATE_MARKERS:
-        return removeCoordinatesMarker(action.coordinates.id);
+      case REMOVE_MARKER:
+        return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
         return addMarkerAndUpdateStore(true, null, action.isInputSearch);
       }
@@ -270,9 +270,9 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const removeCoordinatesMarker = (markerId) => {
+  const removeCoordinatesMarker = (coordinatesObject) => {
     const map = self.selected;
-    self.activeMarker = map.getOverlayById(markerId);
+    self.activeMarker = map.getOverlayById(coordinatesObject.id);
     if (self.activeMarker) {
       self.activeMarker.setMap(null);
       self.selected.removeOverlay(self.activeMarker);
@@ -316,7 +316,7 @@ export default function mapui(models, config, store, ui) {
     const { sources } = config;
     const removeMarker = () => {
       store.dispatch({
-        type: UPDATE_MARKERS,
+        type: REMOVE_MARKER,
         coordinates: coordinatesObject,
       });
     };

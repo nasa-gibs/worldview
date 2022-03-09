@@ -1,7 +1,7 @@
 import {
   CLEAR_MARKERS,
   CLEAR_SUGGESTIONS,
-  UPDATE_MARKERS,
+  REMOVE_MARKER,
   REQUEST_SUGGEST_PLACE_FAILURE,
   REQUEST_SUGGEST_PLACE_SUCCESS,
   SET_REVERSE_GEOCODE_RESULTS,
@@ -49,7 +49,7 @@ export function locationSearchReducer(state = locationSearchState, action) {
     case SET_MARKER:
       return {
         ...state,
-        coordinates: [...state.coordinates, action.coordinatesObject],
+        coordinates: action.coordinates,
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
         isCoordinatesDialogOpen: action.isCoordinatesDialogOpen,
@@ -61,10 +61,10 @@ export function locationSearchReducer(state = locationSearchState, action) {
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
       };
-    case UPDATE_MARKERS:
+    case REMOVE_MARKER:
       return {
         ...state,
-        coordinates: [...state.coordinates, action.coordinatesObject],
+        coordinates: state.coordinates.filter((coordinate) => action.coordinates.id !== coordinate.id),
       };
     case SET_SUGGESTION:
       return {

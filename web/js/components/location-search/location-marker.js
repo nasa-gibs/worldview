@@ -19,7 +19,7 @@ export default function LocationMarker ({
       {showDialog && (
         <CoordinatesDialog
           coordinatesMetadata={coordinatesMetadata}
-          clearCoordinates={removeMarker}
+          removeMarker={removeMarker}
           removeCoordinatesDialog={() => setShowDialog(false)}
           isMobile={isMobile}
           tooltipId={tooltipId}

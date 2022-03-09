@@ -85,8 +85,8 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
 /**
  * Create Ol vector layer map pin
  * @param {Array} coordinates
- * @param {Array} transformedCoordinates
- * @param {Object} reverseGeocodeResults
+ * @param {Object} pinProps
+ * @param {Number} id
  */
 const createPin = function(coordinates, pinProps, id) {
   const overlayEl = document.createElement('div');
