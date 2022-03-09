@@ -158,26 +158,27 @@ const addLineOverlay = function(map, dateA, dateB) {
   draggerCircleEl.className = 'swipe-dragger-circle';
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
-  const isSameDate = dateA === dateB;
-  const dateAText = 'A: ';
-  const dateBText = 'B: ';
-  if (!isSameDate) {
-    firstLabel.className += ' show-date-label';
-    secondLabel.className += ' show-date-label';
-  }
+
   const dateElA = document.createElement('span');
   const dateElB = document.createElement('span');
   dateElA.className = 'monospace';
   dateElB.className = 'monospace';
 
-  dateElA.appendChild(document.createTextNode(dateA));
-  dateElB.appendChild(document.createTextNode(dateB));
-
+  const isSameDate = dateA === dateB;
+  const dateAText = 'A';
+  const dateBText = 'B';
   firstLabel.appendChild(document.createTextNode(dateAText));
-  firstLabel.appendChild(dateElA);
-
   secondLabel.appendChild(document.createTextNode(dateBText));
-  secondLabel.appendChild(dateElB);
+
+  if (!isSameDate) {
+    firstLabel.className += ' show-date-label';
+    secondLabel.className += ' show-date-label';
+    dateElA.appendChild(document.createTextNode(`: ${dateA}`));
+    dateElB.appendChild(document.createTextNode(`: ${dateB}`));
+
+    firstLabel.appendChild(dateElA);
+    secondLabel.appendChild(dateElB);
+  }
 
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
@@ -265,6 +266,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   window.addEventListener(listenerObj.move, move);
   window.addEventListener(listenerObj.end, end);
 };
+
 /**
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
@@ -274,6 +276,7 @@ const applyLayerListeners = function(layer) {
   layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
+
 /**
  * Layers need to be inversely clipped so that they can't be seen through
  * the other layergroup in cases where the layergroups layer opacity is < 100%
