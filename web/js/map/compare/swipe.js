@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
-import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import { getCompareDates } from '../../modules/compare/selectors';
 
 const { events } = util;
 
@@ -21,28 +21,28 @@ let dragging = false;
 export default class Swipe {
   constructor(
     olMap,
-    state,
+    store,
     eventListenerStringObj,
     valueOverride,
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
     percentSwipe = valueOverride / 100;
-    this.create(state);
+    this.create(store);
     window.addEventListener('resize', () => {
       if (document.querySelector('.ab-swipe-line')) {
-        this.destroy();
-        this.create(state);
+        this.update(store);
       }
     });
   }
 
-  create(state) {
-    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+  create(store) {
+    const state = store.getState();
+    const { dateA, dateB } = getCompareDates(state);
     this.dateA = dateA;
     this.dateB = dateB;
     line = addLineOverlay(this.map, this.dateA, this.dateB);
-    this.update(state);
+    this.update(store);
   }
 
   getSwipeOffset = () => swipeOffset
@@ -63,11 +63,12 @@ export default class Swipe {
     }
   }
 
-  update(state, groupName) {
-    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+  update(store, groupName) {
+    const state = store.getState();
+    const { dateA, dateB } = getCompareDates(state);
     if (dateA !== this.dateA || dateB !== this.dateB) {
       this.destroy();
-      this.create(state);
+      this.create(store);
     } else {
       const mapLayers = this.map.getLayers().getArray();
       if (!groupName) {
