@@ -38,7 +38,7 @@ import { getInitialEventsState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToEmbedState } from './modules/embed/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
-import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
+import { mapLocationToLocationSearchState, serializeCoordinatesWrapper } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
 import {
@@ -481,21 +481,11 @@ const getParameters = function(config, parameters) {
     s: {
       stateKey: 'locationSearch.coordinates',
       initialState: [],
-      type: 'string',
+      type: 'array',
       options: {
         serializeNeedsGlobalState: true,
         parse: (coordinates) => coordinates,
-        serialize: (coordinates, state) => {
-          const { map, proj } = state;
-          const coordinateValues = [coordinates.latitude, coordinates.longitude];
-          if (map.ui.selected) {
-            const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
-            if (!coordinatesWithinExtent) {
-              return;
-            }
-          }
-          return coordinates;
-        },
+        serialize: serializeCoordinatesWrapper,
       },
     },
     t: {

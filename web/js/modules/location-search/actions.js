@@ -85,7 +85,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
     }
 
     const coordinatesObject = {
-      id: Date.now(),
+      id: Math.floor(Math.random() * (coordinates[0] + coordinates[1])),
       latitude: coordinates[0],
       longitude: coordinates[1],
     };

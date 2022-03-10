@@ -117,15 +117,22 @@ export function mapLocationToLocationSearchState(
   state,
 ) {
   const { s } = parameters;
-  const validCoordinates = s
-    ? s.split(',')
-      .map((coord) => Number(coord))
-      .filter((coord) => !lodashIsNaN(parseFloat(coord)))
-    : [];
-  const isValid = validCoordinates.length === 2;
-  const coordinates = isValid
-    ? validCoordinates
-    : [];
+  const coordinatesArray = s ? s.split('+') : [];
+  const isValid = coordinatesArray.length >= 1;
+  const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
+    const formattedCoordinates = coordinate
+      ? coordinate.split(',')
+        .map((coord) => Number(coord))
+        .filter((coord) => !lodashIsNaN(parseFloat(coord)))
+      : [];
+
+    const validatedCoordinates = isValid && {
+      id: Math.floor(Math.random() * (formattedCoordinates[0] + formattedCoordinates[1])),
+      latitude: formattedCoordinates[0],
+      longitude: formattedCoordinates[1],
+    };
+    return validatedCoordinates;
+  });
 
   const isMobile = state.browser.lessThan.medium;
   const localStorageCollapseState = getLocalStorageCollapseState();
@@ -133,13 +140,30 @@ export function mapLocationToLocationSearchState(
 
   stateFromLocation = update(stateFromLocation, {
     locationSearch: {
-      coordinates: { $set: coordinates },
+      coordinates: { $set: validatedCoordinatesArray },
       isExpanded: { $set: isExpanded },
       isCoordinatesDialogOpen: { $set: isValid },
     },
   });
-
   return stateFromLocation;
+}
+
+export function serializeCoordinatesWrapper(coordinates, state) {
+  const { map, proj } = state;
+  const serializeCoordinates = (coordinate) => {
+    const coordinateValues = [coordinate.latitude, coordinate.longitude];
+    if (map.ui.selected) {
+      const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
+      if (!coordinatesWithinExtent) {
+        return;
+      }
+    }
+    return coordinateValues;
+  };
+
+  const serializeCoordinatesArray = (coordinatesArray) => coordinatesArray.map((coordinate) => serializeCoordinates(coordinate));
+  const coordinatesURL = Array.isArray(coordinates) ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
+  return coordinatesURL.join('+');
 }
 
 /**

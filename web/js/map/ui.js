@@ -251,10 +251,12 @@ export default function mapui(models, config, store, ui) {
     const { coordinates, reverseGeocodeResults } = locationSearch;
     if (coordinates && coordinates.length > 0) {
       if (start) {
-        const coordinatesObject = coordinates[coordinates.length - 1];
-        const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
-        reverseGeocode(latestCoordinates, config).then((results) => {
-          addMarkerAndUpdateStore(true, results);
+        // const coordinatesObject = coordinates[coordinates.length - 1];
+        coordinates.forEach((coordinatesObject) => {
+          const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+          reverseGeocode(latestCoordinates, config).then((results) => {
+            addMarkerAndUpdateStore(true, results);
+          });
         });
       } else {
         addMarkerAndUpdateStore(true, reverseGeocodeResults);
@@ -310,9 +312,11 @@ export default function mapui(models, config, store, ui) {
     const {
       coordinates, reverseGeocodeResults,
     } = locationSearch;
-    const coordinatesObject = coordinates[coordinates.length - 1];
-    const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
     const results = geocodeResults || reverseGeocodeResults;
+    if (!results) return;
+    const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
+    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
+
     const { sources } = config;
     const removeMarker = () => {
       store.dispatch({
