@@ -31,7 +31,8 @@ export default class Swipe {
     this.create(store);
     window.addEventListener('resize', () => {
       if (document.querySelector('.ab-swipe-line')) {
-        this.update(store);
+        this.destroy();
+        this.create(store);
       }
     });
   }
