@@ -86,14 +86,14 @@ describe('locationSearch', () => {
       expect(
         locationSearchReducer(locationSearchState, {
           type: SET_MARKER,
-          coordinatesObject,
+          coordinates: [coordinatesObject],
           reverseGeocodeResults,
           isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
-        coordinates: [...locationSearchState.coordinates, coordinatesObject],
+        coordinates: [coordinatesObject],
         reverseGeocodeResults,
         isCoordinatesDialogOpen: true,
       });
