@@ -2,20 +2,6 @@ import OlGeomLineString from 'ol/geom/LineString';
 import util from '../../util/util';
 
 /**
- * Helper to reduce granules object to array of date strings
- *
- * @method getDateArrayFromObject
- * @static
- * @param {object} granulesObject
- * @returns {array} array of granule date strings
- */
-export const getDateArrayFromObject = (granulesObject) => granulesObject.reduce((dates, granuleObject) => {
-  const { date } = granuleObject;
-  dates.push(date);
-  return dates;
-}, []);
-
-/**
  * Helper to find index for date string to add to sorted array of date strings
  *
  * @method getIndexForSortedInsert

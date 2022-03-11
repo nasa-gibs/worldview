@@ -18,7 +18,6 @@ import {
   getCacheOptions,
 } from '../../modules/layers/util';
 import {
-  getDateArrayFromObject,
   getCMRQueryDates,
   getIndexForSortedInsert,
   getCMRQueryDateUpdateOptions,
@@ -222,12 +221,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer projection
    * @returns {Void}
   */
-  const processGranuleLayer = (def, granulesObject, attributes) => {
+  const processGranuleLayer = (def, granuleDates, attributes) => {
     const { proj, group } = attributes;
     const { id } = def;
     const isActive = group === 'active';
-    // reduce granulesObject object to get an array of date strings
-    const granuleDates = getDateArrayFromObject(granulesObject);
 
     // init group/projection specific granule day storage
     if (granuleLayers[id] === undefined || proj !== currentProj) {
@@ -247,10 +244,47 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     } else {
       // add unique set of sorted dates to granule layer store
       const dateArray = [...new Set(granuleLayers[id][group].sortedDates)];
-      lodashEach(granuleDates, (date) => {
+      granuleDates.forEach((date) => {
         dateArray.splice(getIndexForSortedInsert(dateArray, date), 0, date);
       });
       granuleLayers[id][group].sortedDates = dateArray;
+    }
+  };
+
+  /**
+   *
+   * @param {*} def
+   * @param {*} group
+   * @param {*} includedDates
+   * @param {*} filteredGranules
+   * @param {*} filteredGranuleCollection
+   */
+  const updateGranuleState = (layer) => {
+    const state = store.getState();
+    const {
+      id, def, filteredGranules, reorderedGranules, granuleDates,
+    } = layer.wv;
+    const { endDate, subtitle, startDate } = def;
+    const activeGranuleLayers = getActiveGranuleLayers(state);
+
+    const mostRecentGranuleDate = granuleDates[0];
+    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
+
+    // create geometry object with date:polygons key/value pair filtering out granules outside date range
+    const granuleGeometries = filteredGranules.reduce((dates, granuleObject) => {
+      const { date, polygons } = granuleObject;
+      if (!isMostRecentDateOutOfRange && isWithinDateRange(new Date(date), startDate, endDate)) {
+        dates[date] = polygons;
+      }
+      return dates;
+    }, {});
+
+    const isLayerBeingUpdated = !!activeGranuleLayers[id];
+    if (isLayerBeingUpdated) {
+      store.dispatch(updateGranuleLayerGeometry(id, updatedDates, granuleGeometries));
+    } else {
+      store.dispatch(addGranuleLayerDates(id, granuleDates, granuleGeometries, `${subtitle}`));
     }
   };
 
@@ -265,67 +299,32 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {Void}
   */
   const getGranuleLayer = async (def, attributes, options) => {
-    const {
-      endDate, id, subtitle, startDate,
-    } = def;
-    const state = store.getState();
-    const { layers } = state;
+    const { id } = def;
     const { proj, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
-    const {
-      filteredGranules,
-      updatedGranules,
-    } = granuleAttributes;
+    const { filteredGranules, reorderedGranules, granuleDates } = granuleAttributes;
 
-    if (!updatedGranules) {
-      processGranuleLayer(def, filteredGranules, attributes);
+    if (!reorderedGranules) {
+      processGranuleLayer(def, granuleDates, attributes);
     }
     let layer = await createGranuleDatesLayer(filteredGranules, def, attributes);
 
-    // use updated layers or get array of granule dates from filteredGranules
-    const filteredGranuleCollection = updatedGranules || getDateArrayFromObject(filteredGranules);
-    const mostRecentGranuleDate = filteredGranuleCollection[filteredGranuleCollection.length - 1];
-    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate).getTime() > new Date(endDate).getTime();
-    const includedDates = [];
-    const granuleTileLayers = [];
+    const granuleTileLayers = (reorderedGranules || granuleDates)
+      .map((date) => {
+        const key = granuleLayers[id][group].dates[date];
+        const cachedLayer = cache.getItem(key);
+        return cachedLayer || layer;
+      });
 
-    lodashEach(filteredGranuleCollection, (date) => {
-      const layerCacheKey = granuleLayers[id][group].dates[date];
-      const layerCache = cache.getItem(layerCacheKey);
-      if (layerCache) {
-        granuleTileLayers.push(layerCache);
-      } else {
-        granuleTileLayers.push(layer);
-      }
-      includedDates.unshift(date);
-    });
-
-    // create new layergroup with granules
     layer = new OlLayerGroup({
       layers: granuleTileLayers,
     });
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
-    layer.wv = Object.assign(attributes, granuleAttributes);
-
-    // create geometry object with date:polygons key/value pair filtering out granules outside date range
-    const granuleGeometry = filteredGranules.reduce((dates, granuleObject) => {
-      const { date, polygons } = granuleObject;
-      if (!isMostRecentDateOutOfRange && isWithinDateRange(new Date(date), startDate, endDate)) {
-        dates[date] = polygons;
-      }
-      return dates;
-    }, {});
-
-    const returnedDates = isMostRecentDateOutOfRange ? [] : includedDates;
-    const isLayerBeingUpdated = !!layers.granuleLayers[group][id];
-
-    if (isLayerBeingUpdated) {
-      store.dispatch(updateGranuleLayerGeometry(id, returnedDates, granuleGeometry));
-    } else {
-      store.dispatch(addGranuleLayerDates(id, returnedDates, granuleGeometry, `${subtitle}`));
-    }
+    layer.wv = { ...attributes, ...granuleAttributes };
     currentProj = proj;
+    updateGranuleState(layer);
+
     return layer;
   };
 
@@ -343,18 +342,18 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    */
   const getGranuleAttributes = async (def, options) => {
     const state = store.getState();
-    let updatedGranules = false;
+    let reorderedGranules = false;
     let count = DEFAULT_NUM_GRANULES;
 
     if (options) {
       const { granuleCount, granuleDates } = options;
       count = granuleCount || DEFAULT_NUM_GRANULES;
       if (granuleDates && granuleDates.length) {
-        updatedGranules = granuleDates.length !== count ? false : granuleDates.reverse();
+        reorderedGranules = granuleDates.length !== count ? false : granuleDates;
       }
     }
 
-    if (!updatedGranules) {
+    if (!reorderedGranules) {
       const granuleState = getActiveGranuleLayers(state)[def.id];
       if (granuleState) {
         count = granuleState.count;
@@ -363,11 +362,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranuleDates = await getQueriedGranuleDates(def, options.date);
-    const filteredGranuleDates = filterGranuleDates(availableGranuleDates, count);
+    const filteredGranules = filterGranules(availableGranuleDates, count);
     return {
-      filteredGranules: filteredGranuleDates,
       count,
-      updatedGranules,
+      granuleDates: filteredGranules.map(({ date }) => date),
+      filteredGranules,
+      reorderedGranules,
     };
   };
 
@@ -377,7 +377,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {number} granuleCount - number of granules to add to collection
    * @returns {array} collection of granule objects with filtered granuleDates
   */
-  const filterGranuleDates = (granuleDates, granuleCount) => {
+  const filterGranules = (granuleDates, granuleCount) => {
     const dates = [];
     for (let i = granuleDates.length - 1; i >= 0 && dates.length < granuleCount; i -= 1) {
       const item = granuleDates[i];

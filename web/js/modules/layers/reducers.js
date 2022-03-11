@@ -281,12 +281,14 @@ export function layerReducer(state = initialState, action) {
 
     case UPDATE_GRANULE_LAYER_OPTIONS: {
       const {
-        id, activeKey, count,
+        id, activeKey, count, dates,
       } = action;
       return update(state, {
         granuleLayers: {
           [activeKey]: {
-            [id]: { $merge: { count } },
+            [id]: {
+              $merge: { count, dates },
+            },
           },
         },
       });
