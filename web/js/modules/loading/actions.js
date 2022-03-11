@@ -1,15 +1,24 @@
 import { LOADING_START, LOADING_STOP } from './constants';
 
-export function startLoading(title, msg) {
-  return {
-    type: LOADING_START,
-    title,
-    msg,
+export function startLoading(key, msg) {
+  return (dispatch, getState) => {
+    const { animation } = getState();
+    if (animation.isPlaying) return;
+    dispatch({
+      type: LOADING_START,
+      key,
+      msg,
+    });
   };
 }
 
-export function stopLoading() {
-  return {
-    type: LOADING_STOP,
+export function stopLoading(key) {
+  return (dispatch, getState) => {
+    const { animation } = getState();
+    if (animation.isPlaying) return;
+    dispatch({
+      type: LOADING_STOP,
+      key,
+    });
   };
 }

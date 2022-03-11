@@ -68,6 +68,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
+import { startLoading, stopLoading } from '../modules/loading/actions';
 
 const { events } = util;
 
@@ -95,6 +96,11 @@ export default function mapui(models, config, store, ui) {
     createLayer,
     processingPromise: null,
   };
+
+  layerQueue.on('idle', () => {
+    store.dispatch(stopLoading('tile-preload'));
+  });
+
 
   /**
    * Subscribe to redux store and listen for
@@ -850,7 +856,6 @@ export default function mapui(models, config, store, ui) {
   }
 
   async function updateDate(outOfStepChange) {
-    console.log('updateDate');
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getLayerGroup(state);
@@ -914,6 +919,8 @@ export default function mapui(models, config, store, ui) {
     const nextDate = getNextDateTime(state, 1, useDate);
     const prevDate = getNextDateTime(state, -1, useDate);
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+
+    store.dispatch(startLoading('tile-preload'));
 
     // If we've preloaded N dates out, we need to use the latest
     // preloaded date the next time we call this function or the buffer

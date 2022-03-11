@@ -38,9 +38,24 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
+import { startLoading, stopLoading } from '../modules/loading/actions';
+
+let loadingCounter = 0;
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  const tileLoadStart = () => {
+    if (loadingCounter === 0) {
+      store.dispatch(startLoading('layer-tiles'));
+    }
+    loadingCounter += 1;
+  };
+  const tileLoadEnd = () => {
+    loadingCounter -= 1;
+    if (loadingCounter === 0) {
+      store.dispatch(stopLoading('layer-tiles'));
+    }
+  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -467,11 +482,14 @@ export default function mapLayerBuilder(config, cache, store) {
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
+    const tileSource = new OlSourceWMTS(sourceOptions);
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
     return new OlLayerTile({
       extent: tileLayerExtent,
       preload: 0,
       className: def.id,
-      source: new OlSourceWMTS(sourceOptions),
+      source: tileSource,
     });
   }
 
@@ -538,7 +556,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-    const sourceOptions = new SourceVectorTile({
+    const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
       day,
@@ -554,9 +572,11 @@ export default function mapLayerBuilder(config, cache, store) {
         sizes: matrixSet.tileMatrices,
       }),
     });
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
     const layer = new LayerVectorTile({
       extent: layerExtent,
-      source: sourceOptions,
+      source: tileSource,
       renderMode: 'image',
       className: def.id,
       vector: true,
@@ -663,12 +683,16 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+    const tileSource = new OlSourceTileWMS(sourceOptions);
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
+
     const layer = new OlLayerTile({
       preload: 0,
       className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
-      source: new OlSourceTileWMS(sourceOptions),
+      source: tileSource,
     });
     layer.isWMS = true;
     return layer;

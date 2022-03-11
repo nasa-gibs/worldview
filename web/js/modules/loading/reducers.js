@@ -1,27 +1,45 @@
 import { LOADING_START, LOADING_STOP } from './constants';
 
+
 export const initialState = {
-  title: '',
   msg: '',
   isLoading: false,
 };
 
 export function loadingReducer (state = initialState, action) {
-  const { title, msg } = action;
+  const { type, key, msg } = action;
 
-  switch (action.type) {
-    case LOADING_START:
+  const isLoading = (loadingMap) => {
+    const keys = Object.keys(loadingMap);
+    return keys.some((k) => loadingMap[k]);
+  };
+
+  switch (type) {
+    case LOADING_START: {
+      const newLoadingMap = {
+        ...state.loadingMap,
+        [key]: true,
+      };
       return {
         ...state,
         isLoading: true,
-        title,
         msg,
+        loadingMap: newLoadingMap,
       };
-    case LOADING_STOP:
+    }
+
+    case LOADING_STOP: {
+      const newLoadingMap = {
+        ...state.loadingMap,
+        [key]: false,
+      };
       return {
         ...state,
-        isLoading: false,
+        isLoading: isLoading(newLoadingMap),
+        loadingMap: newLoadingMap,
       };
+    }
+
     default:
       return state;
   }

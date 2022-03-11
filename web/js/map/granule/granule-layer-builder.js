@@ -60,11 +60,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   }
 
   const showLoading = () => {
-    store.dispatch(startLoading('Loading', 'Retrieving granule metadata'));
+    store.dispatch(startLoading('granule-metadata'));
   };
 
   const hideLoading = () => {
-    store.dispatch(stopLoading());
+    store.dispatch(stopLoading('granule-metadata'));
   };
 
   /**
