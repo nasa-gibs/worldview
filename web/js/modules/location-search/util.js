@@ -135,7 +135,6 @@ export function mapLocationToLocationSearchState(
     locationSearch: {
       coordinates: { $set: coordinates },
       isExpanded: { $set: isExpanded },
-      isCoordinatesDialogOpen: { $set: isValid },
     },
   });
 

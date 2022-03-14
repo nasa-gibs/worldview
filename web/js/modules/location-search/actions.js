@@ -79,7 +79,6 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       return dispatch({
         type: SET_MARKER,
         coordinates: [],
-        isCoordinatesDialogOpen: false,
       });
     }
 
@@ -93,7 +92,6 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       type: SET_MARKER,
       reverseGeocodeResults,
       coordinatesObject,
-      isCoordinatesDialogOpen: true,
       isInputSearch,
     });
   };

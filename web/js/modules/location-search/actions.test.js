@@ -2,14 +2,12 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
   clearSuggestions,
-  toggleDialogVisible,
   toggleShowLocationSearch,
   toggleReverseGeocodeActive,
   setSuggestion,
 } from './actions';
 import {
   TOGGLE_REVERSE_GEOCODE,
-  TOGGLE_DIALOG_VISIBLE,
   TOGGLE_SHOW_LOCATION_SEARCH,
   CLEAR_SUGGESTIONS,
   SET_SUGGESTION,
@@ -48,20 +46,6 @@ describe('Location Search actions', () => {
       value: true,
     };
     expect(toggleReverseGeocodeActive(true)).toEqual(expectedAction);
-  });
-  test(`toggleDialogVisible action returns ${TOGGLE_DIALOG_VISIBLE} as type and ${
-    true} as value`, () => {
-    const expectedAction = {
-      type: TOGGLE_DIALOG_VISIBLE,
-      value: true,
-    };
-    const store = mockStore({
-      locationSearch: {
-        isCoordinatesDialogOpen: false,
-      },
-    });
-    store.dispatch(toggleDialogVisible(true));
-    expect(store.getActions()[0]).toEqual(expectedAction);
   });
   test(`setSuggestion action returns ${SET_SUGGESTION} as type and ${suggestion} as value`, () => {
     const expectedAction = {
