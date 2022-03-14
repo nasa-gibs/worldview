@@ -144,6 +144,8 @@ MeasurementMetadataDetail.propTypes = {
   isMobile: PropTypes.bool,
   layers: PropTypes.array,
   source: PropTypes.object,
+  showPreviewImage: PropTypes.bool,
+  selectedProjection: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
