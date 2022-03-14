@@ -69,12 +69,14 @@ class CoordinatesDialog extends Component {
   // render minimize and remove dialog button controls
   renderDialogButtonControls = () => {
     const {
-      isMobile,
+      isMobile, tooltipId,
     } = this.props;
     const { showTooltips } = this.state;
 
-    const closeButtonId = 'close-coordinates-tooltip';
-    const minimizeButtonId = 'minimize-coordinates-tooltip';
+    const closeButtonClassName = 'close-coordinates-tooltip';
+    const closeButtonId = `${closeButtonClassName}${tooltipId}`;
+    const minimizeButtonClassName = 'minimize-coordinates-tooltip';
+    const minimizeButtonId = `${minimizeButtonClassName}${tooltipId}`;
     const closeButtonLabelText = 'Remove map marker';
     const minimizeButtonLabelText = 'Minimize coordinates tooltip';
 
@@ -83,8 +85,8 @@ class CoordinatesDialog extends Component {
       <>
         <span
           id={closeButtonId}
-          className={`close-tooltip ${closeButtonId}`}
-          onTouchEnd={this.removeMarker}
+          className={`close-tooltip ${closeButtonClassName}`}
+          onTouchEnd={this.clearCoordinates}
         >
           {tooltipVisibilityCondition
           && (
@@ -101,7 +103,7 @@ class CoordinatesDialog extends Component {
         </span>
         <span
           id={minimizeButtonId}
-          className={`minimize-tooltip ${minimizeButtonId}`}
+          className={`minimize-tooltip ${minimizeButtonClassName}`}
           onTouchEnd={this.minimizeDialog}
         >
           {tooltipVisibilityCondition

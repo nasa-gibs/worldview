@@ -63,10 +63,8 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
   return (dispatch, getState) => {
     const state = getState();
     const {
-      proj, locationSearch,
+      proj,
     } = state;
-
-    const stateCoordinates = locationSearch.coordinates;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -80,7 +78,6 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       return dispatch({
         type: SET_MARKER,
         coordinates: [],
-        isCoordinatesDialogOpen: false,
       });
     }
 
@@ -93,8 +90,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
     dispatch({
       type: SET_MARKER,
       reverseGeocodeResults,
-      coordinates: [...stateCoordinates, coordinatesObject],
-      isCoordinatesDialogOpen: true,
+      coordinatesObject,
       isInputSearch,
     });
   };

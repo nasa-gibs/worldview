@@ -7,7 +7,6 @@ import {
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
-  TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
@@ -63,22 +62,6 @@ describe('locationSearch', () => {
     },
   );
   test(
-    `${TOGGLE_DIALOG_VISIBLE
-    } sets coordinate dialog visiblity and `
-      + 'should return new state',
-    () => {
-      expect(
-        locationSearchReducer(locationSearchState, {
-          type: TOGGLE_DIALOG_VISIBLE,
-          value: true,
-        }),
-      ).toEqual({
-        ...locationSearchState,
-        isCoordinatesDialogOpen: true,
-      });
-    },
-  );
-  test(
     `${SET_MARKER
     } updates coordinates, reverseGeocodeResults `
     + 'and sets isCoordinateSearchActive to false and should return new state',
@@ -88,14 +71,12 @@ describe('locationSearch', () => {
           type: SET_MARKER,
           coordinates: [coordinatesObject],
           reverseGeocodeResults,
-          isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
         coordinates: [coordinatesObject],
         reverseGeocodeResults,
-        isCoordinatesDialogOpen: true,
       });
     },
   );
@@ -112,7 +93,6 @@ describe('locationSearch', () => {
         ...locationSearchState,
         coordinates: [],
         reverseGeocodeResults: null,
-        isCoordinatesDialogOpen: false,
       });
     },
   );
