@@ -14,12 +14,15 @@ import {
   hasNonClickableVectorLayer,
   areCoordinatesAndPolygonExtentValid,
 } from '../../modules/layers/util';
-import { getActiveLayers } from '../../modules/layers/selectors';
+import {
+  getActiveLayers, getGranulePlatform, getActiveGranuleFootPrints,
+} from '../../modules/layers/selectors';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
+
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 
@@ -59,7 +62,7 @@ export class VectorInteractions extends React.Component {
       active,
       activeString,
       compareState,
-      granuleSatelliteInstrument,
+      granulePlatform,
       maxExtent,
       swipeOffset,
     } = this.props;
@@ -98,21 +101,21 @@ export class VectorInteractions extends React.Component {
       const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, [coord[0], coord[1]], maxExtent);
       if (isValidPolygon) {
         toggledGranuleFootprint = true;
-        events.trigger('granule-hovered', granuleSatelliteInstrument, date);
+        events.trigger('granule-hovered', granulePlatform, date);
       }
     }
 
     if (!toggledGranuleFootprint) {
-      events.trigger('granule-hovered', granuleSatelliteInstrument, null);
+      events.trigger('granule-hovered', granulePlatform, null);
     }
     return true;
   }
 
   mouseOut() {
     const {
-      granuleSatelliteInstrument,
+      granulePlatform,
     } = this.props;
-    events.trigger('granule-hovered', granuleSatelliteInstrument);
+    events.trigger('granule-hovered', granulePlatform);
   }
 
   mouseMove(event, map, crs) {
@@ -215,7 +218,6 @@ function mapStateToProps(state) {
     browser,
     compare,
     config,
-    layers,
     map,
     measure,
     modal,
@@ -243,24 +245,10 @@ function mapStateToProps(state) {
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
 
-  let granuleCMRGeometry;
-  let granuleSatelliteInstrument;
-  const {
-    granuleLayers,
-    granuleGeometry,
-    granuleSatelliteInstrumentGroup,
-  } = layers;
-  const { maxExtent } = config.projections[proj.id];
+  const granuleCMRGeometry = getActiveGranuleFootPrints(state);
+  const granulePlatform = getGranulePlatform(state);
 
-  const isActiveGranuleVisible = layers[activeString].layers.filter((layer) => {
-    const { visible, type, subtitle } = layer;
-    const isGranule = type === 'granule';
-    return visible && isGranule && subtitle === granuleSatelliteInstrumentGroup[activeString];
-  });
-  if (isActiveGranuleVisible.length && granuleLayers[activeString]) {
-    granuleSatelliteInstrument = granuleSatelliteInstrumentGroup[activeString];
-    granuleCMRGeometry = granuleGeometry[activeString];
-  }
+  const { maxExtent } = config.projections[proj.id];
 
   return {
     activeLayers,
@@ -279,7 +267,7 @@ function mapStateToProps(state) {
     isPlaying,
     isMobile: browser.lessThan.medium,
     granuleCMRGeometry,
-    granuleSatelliteInstrument,
+    granulePlatform,
     swipeOffset,
     proj,
     maxExtent,
@@ -353,7 +341,7 @@ VectorInteractions.propTypes = {
   activeString: PropTypes.string,
   compareState: PropTypes.object,
   granuleCMRGeometry: PropTypes.object,
-  granuleSatelliteInstrument: PropTypes.string,
+  granulePlatform: PropTypes.string,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,

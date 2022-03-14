@@ -138,6 +138,7 @@ const reducers = {
   vectorStyles: vectorStyleReducer,
 };
 const appReducer = combineReducers(reducers);
+
 /**
  * Top level reducer function w/ option to reset state
  */

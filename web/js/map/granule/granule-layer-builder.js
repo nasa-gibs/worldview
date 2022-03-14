@@ -8,7 +8,7 @@ import {
   DEFAULT_NUM_GRANULES,
 } from '../../modules/layers/constants';
 import { updateGranuleLayerGeometry, addGranuleLayerDates } from '../../modules/layers/actions';
-import { getActiveGranuleLayers } from '../../modules/layers/selectors';
+import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
   stopLoading,
@@ -201,7 +201,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const granuleISODate = new Date(date);
       const dateOption = { date: granuleISODate, polygons };
       layer = await createLayerWMTS(def, dateOption, null, store.getState(), { polygons });
-      console.debug('create: ', granuleISOKey);
       attributes.key = granuleISOKey;
       attributes.date = granuleISODate;
       layer.wv = attributes;
@@ -265,7 +264,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       id, def, filteredGranules, reorderedGranules, granuleDates,
     } = layer.wv;
     const { endDate, subtitle, startDate } = def;
-    const activeGranuleLayers = getActiveGranuleLayers(state);
+
 
     const mostRecentGranuleDate = granuleDates[0];
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
@@ -280,8 +279,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       return dates;
     }, {});
 
-    const isLayerBeingUpdated = !!activeGranuleLayers[id];
-    if (isLayerBeingUpdated) {
+    const existingLayer = getGranuleLayer(state, id);
+    if (existingLayer) {
       store.dispatch(updateGranuleLayerGeometry(id, updatedDates, granuleGeometries));
     } else {
       store.dispatch(addGranuleLayerDates(id, granuleDates, granuleGeometries, `${subtitle}`));
@@ -291,14 +290,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   /**
    *
    *
-   * @method getGranuleLayer
+   * @method createGranuleLayer
    * @static
    * @param {object} def - Layer specs
    * @param {array} granuleDates - objects with granule date string and polygons
    * @param {object} attributes - Layer projection
    * @returns {Void}
   */
-  const getGranuleLayer = async (def, attributes, options) => {
+  const createGranuleLayer = async (def, attributes, options) => {
     const { id } = def;
     const { proj, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
@@ -354,7 +353,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     if (!reorderedGranules) {
-      const granuleState = getActiveGranuleLayers(state)[def.id];
+      const granuleState = getGranuleLayer(state, def.id);
       if (granuleState) {
         count = granuleState.count;
       }
@@ -390,6 +389,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   return {
-    getGranuleLayer,
+    getGranuleLayer: createGranuleLayer,
   };
 }

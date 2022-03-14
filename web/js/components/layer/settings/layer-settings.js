@@ -26,6 +26,10 @@ import {
   isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
 import {
+  getGranuleLayer,
+  getGranulePlatform,
+} from '../../../modules/layers/selectors';
+import {
   setThresholdRangeAndSquash,
   setCustomPalette,
   clearCustomPalette,
@@ -293,15 +297,15 @@ class LayerSettings extends React.Component {
       resetGranuleLayerDates,
       updateGranuleLayerOptions,
     } = this.props;
-    const { count, dates, satelliteInstrumentGroup } = granuleOptions;
+    const { count, dates, granulePlatform } = granuleOptions;
     return dates
       ? (
         <>
           <GranuleCountSlider
+            def={layer}
             count={count}
             granuleDates={dates}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
-            def={layer}
           />
           <GranuleLayerDateList
             def={layer}
@@ -310,7 +314,7 @@ class LayerSettings extends React.Component {
             granuleCount={count}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
             resetGranuleLayerDates={resetGranuleLayerDates}
-            satelliteInstrumentGroup={satelliteInstrumentGroup}
+            granulePlatform={granulePlatform}
           />
         </>
       ) : null;
@@ -351,19 +355,19 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser, layers, settings,
+    config, palettes, compare, browser, settings,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
   const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
-  const { granuleLayers, granuleSatelliteInstrumentGroup } = layers;
-  const granuleState = granuleLayers[groupName][ownProps.layer.id];
+
+  const granuleState = getGranuleLayer(state, ownProps.layer.id);
   const granuleOptions = {};
   if (granuleState) {
     const { dates, count } = granuleState;
     granuleOptions.dates = dates;
     granuleOptions.count = count || 20;
-    granuleOptions.satelliteInstrumentGroup = granuleSatelliteInstrumentGroup[groupName];
+    granuleOptions.granulePlatform = getGranulePlatform(state);
   }
 
   return {

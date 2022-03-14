@@ -44,6 +44,9 @@ const groupState = {
   layers: [],
   overlayGroups: [],
   prevLayers: [],
+  granuleFootprints: {},
+  granuleLayers: {},
+  granulePlatform: '',
 };
 
 export const initialState = {
@@ -51,25 +54,17 @@ export const initialState = {
   activeB: { ...groupState },
   layerConfig: {},
   startingLayers: [],
-  granuleSatelliteInstrumentGroup: {
-    active: '',
-    activeB: '',
-  },
-  granuleGeometry: {},
-  granuleLayers: {
-    active: {},
-    activeB: {},
-  },
+  granuleFootprints: {},
 };
 
 export function getInitialState(config) {
   const { layers: layerConfig, defaults } = config;
   const startingLayers = resetLayers(defaults.startingLayers, layerConfig);
   const groupsALocalStorage = safeLocalStorage.getItem(GROUP_OVERLAYS) !== 'disabled';
-  return {
+  const updatedState = {
     ...initialState,
     active: {
-      ...groupState,
+      ...initialState.active,
       groupOverlays: groupsALocalStorage,
       layers: startingLayers,
       overlayGroups: getOverlayGroups(startingLayers),
@@ -77,6 +72,7 @@ export function getInitialState(config) {
     layerConfig,
     startingLayers: defaults.startingLayers,
   };
+  return updatedState;
 }
 
 export function layerReducer(state = initialState, action) {
@@ -94,15 +90,28 @@ export function layerReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
-    case REMOVE_LAYER:
-    case REMOVE_GROUP:
     case REORDER_LAYERS:
     case TOGGLE_OVERLAY_GROUP_VISIBILITY:
       return update(state, {
         [compareState]: {
-          layers: { $set: action.layers },
-          overlayGroups: { $set: getOverlayGroups(action.layers, getPrevOverlayGroups()) },
-          prevLayers: { $set: [] },
+          $merge: {
+            layers: action.layers,
+            overlayGroups: getOverlayGroups(action.layers, getPrevOverlayGroups()),
+            prevLayers: [],
+          },
+        },
+      });
+
+    case REMOVE_LAYER:
+    case REMOVE_GROUP:
+      return update(state, {
+        [compareState]: {
+          $merge: {
+            layers: action.layers,
+            overlayGroups: getOverlayGroups(action.layers, getPrevOverlayGroups()),
+            prevLayers: [],
+            granuleLayers: action.granuleLayers,
+          },
         },
       });
 
@@ -117,15 +126,16 @@ export function layerReducer(state = initialState, action) {
       });
 
     case TOGGLE_OVERLAY_GROUPS:
-      return {
-        ...state,
+      return update(state, {
         [compareState]: {
-          groupOverlays: action.groupOverlays,
-          layers: action.layers,
-          overlayGroups: action.overlayGroups,
-          prevLayers: action.prevLayers,
+          $merge: {
+            groupOverlays: action.groupOverlays,
+            layers: action.layers,
+            overlayGroups: action.overlayGroups,
+            prevLayers: action.prevLayers,
+          },
         },
-      };
+      });
 
     case TOGGLE_COLLAPSE_OVERLAY_GROUP:
       return update(state, {
@@ -252,27 +262,24 @@ export function layerReducer(state = initialState, action) {
 
     case ADD_GRANULE_LAYER_DATES: {
       const {
-        id, activeKey, dates, geometry, satelliteInstrumentGroup,
+        id, activeKey, dates, geometry, granulePlatform,
       } = action;
+
       return update(state, {
-        granuleLayers: {
-          [activeKey]: {
+        [activeKey]: {
+          granuleLayers: {
             $merge: {
               [id]: {
                 dates,
                 count: dates.length,
-                geometry,
+                granuleFootprints: geometry,
               },
             },
           },
-        },
-        granuleSatelliteInstrumentGroup: {
-          [activeKey]: {
-            $set: satelliteInstrumentGroup,
+          granulePlatform: {
+            $set: granulePlatform,
           },
-        },
-        granuleGeometry: {
-          [activeKey]: {
+          granuleFootprints: {
             $set: geometry,
           },
         },
@@ -283,9 +290,10 @@ export function layerReducer(state = initialState, action) {
       const {
         id, activeKey, count, dates,
       } = action;
+
       return update(state, {
-        granuleLayers: {
-          [activeKey]: {
+        [activeKey]: {
+          granuleLayers: {
             [id]: {
               $merge: { count, dates },
             },
@@ -300,18 +308,16 @@ export function layerReducer(state = initialState, action) {
       } = action;
 
       return update(state, {
-        granuleLayers: {
-          [activeKey]: {
+        [activeKey]: {
+          granuleLayers: {
             [id]: {
               $merge: {
                 dates,
-                geometry: granuleGeometry,
+                granuleFootprints: granuleGeometry,
               },
             },
           },
-        },
-        granuleGeometry: {
-          [activeKey]: {
+          granuleFootprints: {
             $set: granuleGeometry,
           },
         },
@@ -320,13 +326,11 @@ export function layerReducer(state = initialState, action) {
 
     case CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP:
       return update(state, {
-        granuleSatelliteInstrumentGroup: {
-          [action.activeKey]: {
-            $set: action.satelliteInstrumentGroup,
+        [action.activeKey]: {
+          granulePlatform: {
+            $set: action.granulePlatform,
           },
-        },
-        granuleGeometry: {
-          [action.activeKey]: {
+          granuleFootprints: {
             $set: action.geometry,
           },
         },

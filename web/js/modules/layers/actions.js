@@ -7,6 +7,8 @@ import {
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
+  getGranuleLayer,
+  getActiveGranuleLayers,
 } from './selectors';
 import {
   RESET_LAYERS,
@@ -170,9 +172,11 @@ export function reorderOverlayGroups(layers, overlayGroups) {
 
 export function removeLayer(id) {
   return (dispatch, getState) => {
-    const { compare } = getState();
+    const state = getState();
+    const { compare } = state;
     const { activeString } = compare;
-    const activeLayers = getActiveLayersSelector(getState());
+    const activeLayers = getActiveLayersSelector(state);
+    const granuleLayers = getActiveGranuleLayers(state);
     const index = lodashFindIndex(activeLayers, { id });
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
@@ -183,15 +187,18 @@ export function removeLayer(id) {
       activeString,
       layersToRemove: [def],
       layers: update(activeLayers, { $splice: [[index, 1]] }),
+      granuleLayers: update(granuleLayers, { $unset: [id] }),
     });
   };
 }
 
 export function removeGroup(ids) {
   return (dispatch, getState) => {
-    const { compare } = getState();
+    const state = getState();
+    const { compare } = state();
     const { activeString } = compare;
-    const activeLayers = getActiveLayersSelector(getState());
+    const activeLayers = getActiveLayersSelector(state);
+    const granuleLayers = getActiveGranuleLayers(state);
     const layersToRemove = activeLayers.filter((l) => ids.includes(l.id));
     const newLayers = activeLayers.filter((l) => !ids.includes(l.id));
 
@@ -200,6 +207,7 @@ export function removeGroup(ids) {
       activeString,
       layersToRemove,
       layers: newLayers,
+      granuleLayers: update(granuleLayers, { $unset: [ids] }),
     });
   };
 }
@@ -289,7 +297,7 @@ export function showLayers(layers) {
   };
 }
 
-export function addGranuleLayerDates(id, dates, geometry, satelliteInstrumentGroup) {
+export function addGranuleLayerDates(id, dates, geometry, granulePlatform) {
   return (dispatch, getState) => {
     const { compare: { activeString } } = getState();
 
@@ -299,7 +307,7 @@ export function addGranuleLayerDates(id, dates, geometry, satelliteInstrumentGro
       activeKey: activeString,
       dates,
       geometry,
-      satelliteInstrumentGroup,
+      granulePlatform,
     });
   };
 }
@@ -324,13 +332,13 @@ export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
     const { activeString } = compare;
 
     const layerDef = layers.layerConfig[id];
-    const satelliteInstrumentGroup = `${layerDef.subtitle}`;
-    const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[activeString];
-    const activeGeometry = layers.granuleGeometry[activeString];
+    const granulePlatform = `${layerDef.subtitle}`;
+    const activeSatelliteInstrumentGroup = layers[activeString].granulePlatform;
+    const activeGeometry = layers.granuleFootprints;
 
     // determine if active satellite instrument, then update global geometry,
     // else use current global geometry
-    const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
+    const newGranuleGeometry = activeSatelliteInstrumentGroup === granulePlatform
       ? granuleGeometry
       : activeGeometry;
 
@@ -356,17 +364,16 @@ export function resetGranuleLayerDates(id) {
   };
 }
 
-export function changeGranuleSatelliteInstrumentGroup(id, satelliteInstrumentGroup) {
+export function changeGranuleSatelliteInstrumentGroup(id, granulePlatform) {
   return (dispatch, getState) => {
-    const { layers, compare } = getState();
+    const { compare } = getState();
     const { activeString } = compare;
-    const { granuleLayers } = layers;
-    const granuleGeometry = granuleLayers[activeString][id].geometry;
+    const { geometry } = getGranuleLayer(getState(), id);
 
     dispatch({
       type: CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
-      satelliteInstrumentGroup,
-      geometry: granuleGeometry,
+      granulePlatform,
+      geometry,
       activeKey: activeString,
     });
   };

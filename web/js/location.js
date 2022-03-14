@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import update from 'immutability-helper';
+
 // legacy crutches
 import {
   serializeDate,

@@ -145,8 +145,8 @@ class GranuleDateList extends PureComponent {
 
   // handle mouse over item
   handleMouseOverItem = (granuleDate) => {
-    const { satelliteInstrumentGroup } = this.props;
-    events.trigger('granule-hovered', satelliteInstrumentGroup, granuleDate);
+    const { granulePlatform } = this.props;
+    events.trigger('granule-hovered', granulePlatform, granuleDate);
     this.setState({
       hoveredItem: granuleDate,
     });
@@ -154,8 +154,8 @@ class GranuleDateList extends PureComponent {
 
   // handle mouse leave item
   handleMouseLeaveItem = () => {
-    const { satelliteInstrumentGroup } = this.props;
-    events.trigger('granule-hovered', satelliteInstrumentGroup, null);
+    const { granulePlatform } = this.props;
+    events.trigger('granule-hovered', granulePlatform, null);
     this.setState({
       hoveredItem: null,
     });
@@ -304,7 +304,7 @@ GranuleDateList.propTypes = {
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
   resetGranuleLayerDates: PropTypes.func,
-  satelliteInstrumentGroup: PropTypes.string,
+  granulePlatform: PropTypes.string,
   screenHeight: PropTypes.number,
   toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,

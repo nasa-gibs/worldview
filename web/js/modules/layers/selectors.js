@@ -39,8 +39,40 @@ export const getActiveLayers = (state, activeString) => {
 };
 
 export const getActiveGranuleLayers = (state, activeString) => {
-  const { compare, layers: { granuleLayers } } = state;
-  return granuleLayers[activeString || compare.activeString];
+  const { compare, layers } = state;
+  const { granuleLayers } = layers[activeString || compare.activeString] || {};
+  return granuleLayers;
+};
+
+export const getGranuleLayer = (state, id, activeString) => {
+  const granuleLayers = getActiveGranuleLayers(state, activeString);
+  return granuleLayers ? granuleLayers[id] : false;
+};
+
+export const getGranuleCount = (state, id) => {
+  const layer = getGranuleLayer(state, id);
+  return layer ? layer.count : 0;
+};
+
+export const getActiveGranuleFootPrints = (state) => {
+  const { layers, compare: { activeString } } = state;
+  const granuleLayers = getActiveGranuleLayers(state);
+  const { granuleFootprints } = layers[activeString];
+  const granulePlatform = getGranulePlatform(state);
+
+  const isActiveGranuleVisible = getActiveLayers(state).filter((layer) => {
+    const { visible, type, subtitle } = layer;
+    const isGranule = type === 'granule';
+    return visible && isGranule && subtitle === granulePlatform;
+  });
+
+  return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
+};
+
+export const getGranulePlatform = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granulePlatform } = layers[activeString || compare.activeString];
+  return granulePlatform;
 };
 
 /**

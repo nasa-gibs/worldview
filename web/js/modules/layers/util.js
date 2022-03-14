@@ -18,6 +18,7 @@ import {
   getLayers,
   getFutureLayerEndDate,
   getActiveLayersMap,
+  getGranuleLayer,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
@@ -828,7 +829,7 @@ export function serializeLayers(layers, state, groupName) {
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
     } else if (def.type === 'granule') {
-      const granuleLayer = state.layers.granuleLayers[groupName][def.id];
+      const granuleLayer = getGranuleLayer(state, def.id);
       if (granuleLayer) {
         const { count } = granuleLayer;
         item.attributes = count !== 20
@@ -1266,8 +1267,23 @@ export function mapLocationToLayerState(
       },
     });
   }
+
+  // TODO how do we properly combine initial state with location state
+  newStateFromLocation.layers.active = {
+    ...newStateFromLocation.layers.active,
+    granuleLayers: {},
+    granulePlatform: '',
+  };
+
+  newStateFromLocation.layers.activeB = {
+    ...newStateFromLocation.layers.activeB,
+    granuleLayers: {},
+    granulePlatform: '',
+  };
+
   return newStateFromLocation;
 }
+
 /**
  * Determine if active layers have a visible
  * vector layer

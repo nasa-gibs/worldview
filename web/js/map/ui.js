@@ -56,6 +56,9 @@ import {
   isRenderable as isRenderableLayer,
   getMaxZoomLevelLayerCollection,
   getAllActiveLayers,
+  getGranuleCount,
+  getGranuleLayer,
+  getActiveGranuleFootprints,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
@@ -247,11 +250,9 @@ export default function mapui(models, config, store, ui) {
 
   const onGranuleHover = (instrument, date) => {
     const state = store.getState();
-    const { activeString } = state.compare;
-    const { granuleGeometry } = state.layers;
     let geometry;
     if (instrument && date) {
-      geometry = granuleGeometry[activeString][date];
+      geometry = getActiveGranuleFootprints(state)[date];
     }
     return granuleFootprintDraw(geometry, date);
   };
@@ -550,11 +551,12 @@ export default function mapui(models, config, store, ui) {
    * @param {Object} options
    * @returns {Object}
    */
-  const getGranuleOptions = (state, { id, count, type }, layerGroupStr, options) => {
+  const getGranuleOptions = (state, { id, count, type }, activeString, options) => {
     if (type !== 'granule') return {};
-    const { layers } = state;
     const reset = options && options.reset === id;
-    const granuleState = layers.granuleLayers[layerGroupStr][id];
+
+    // TODO update
+    const granuleState = getGranuleLayer(state, id, activeString);
     let granuleDates;
     let granuleCount;
     let geometry;
@@ -877,14 +879,13 @@ export default function mapui(models, config, store, ui) {
       if (compare.active && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else {
-        const { granuleLayers } = state.layers;
         const index = findLayerIndex(def);
 
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { previousLayer: layerValue ? layerValue.wv : null }
-            : { granuleCount: lodashGet(granuleLayers, `[compare.activeString][${id}].count`) };
+            : { granuleCount: getGranuleCount(state, id) };
 
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
