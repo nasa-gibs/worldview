@@ -11,7 +11,7 @@ import {
   applyMiddleware,
   compose as defaultCompose,
 } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { calculateResponsiveState, responsiveStoreEnhancer } from 'redux-responsive';
 import {
   createReduxLocationActions,
