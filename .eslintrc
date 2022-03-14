@@ -80,7 +80,6 @@
           For rules set to "off": consider setting to "warn" to identify non-compliance in new code
           For rules set to "warn": consider removing to throw errors on existing and future code
         */
-
         // Base rule overrides
         "no-nested-ternary": "off", // 58 errors
         "no-shadow": "warn", // 136 errors
@@ -102,10 +101,8 @@
             "variables": false
           }
         ],
-
         // Import rules overrides
         "import/no-cycle": "warn",
-
         // Accesibility rules overrides
         "jsx-a11y/no-noninteractive-tabindex": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
@@ -118,10 +115,10 @@
         "jsx-a11y/tabindex-no-positive": "off",
         "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/click-events-have-key-events": "off",
-
         // React rules overrides
         "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
+        "react/jsx-no-bind": "warn",
         "react/sort-comp": [
           "error",
           {
