@@ -88,7 +88,14 @@ export default function MapRunningData(compareUi, store) {
           paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
         };
       }
+    }, {
+      // Don't include granules for perfomance reasons
+      layerFilter: (layer) => {
+        const type = lodashGet(layer, 'wv.def.type');
+        return !(type === 'granule' && !layer.get('granuleGroup'));
+      },
     });
+
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
       events.trigger('map:running-data', dataObj);

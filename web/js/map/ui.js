@@ -58,7 +58,7 @@ import {
   getAllActiveLayers,
   getGranuleCount,
   getGranuleLayer,
-  getActiveGranuleFootprints,
+  getActiveGranuleFootPrints,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
@@ -252,7 +252,7 @@ export default function mapui(models, config, store, ui) {
     const state = store.getState();
     let geometry;
     if (instrument && date) {
-      geometry = getActiveGranuleFootprints(state)[date];
+      geometry = getActiveGranuleFootPrints(state)[date];
     }
     return granuleFootprintDraw(geometry, date);
   };
@@ -584,7 +584,6 @@ export default function mapui(models, config, store, ui) {
    */
 
   async function reloadLayers(granuleOptions) {
-    console.log('reloadLayers');
     const map = self.selected;
     const state = store.getState();
     const { compare } = state;
