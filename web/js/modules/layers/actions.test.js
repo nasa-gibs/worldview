@@ -23,7 +23,11 @@ function getState(layers) {
             collapsed: false,
           },
         ],
+        granuleFootprints: {},
+        granuleLayers: {},
+        granulePlatform: '',
       },
+      granuleFootprints: {},
     },
     compare: {
       activeString: 'active',
@@ -64,6 +68,7 @@ describe('Layer actions', () => {
       activeString: 'active',
       layersToRemove: [def],
       layers: responseLayers,
+      granuleLayers: {},
     };
     expect(actionResponse).toEqual(expectedPayload);
   });
@@ -83,6 +88,7 @@ describe('Layer actions', () => {
       activeString: 'active',
       layersToRemove: [layers[0], layers[1]],
       layers: [layers[2], layers[3]],
+      granuleLayers: {},
     };
     expect(actionResponse).toEqual(expectedPayload);
   });

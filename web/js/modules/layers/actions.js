@@ -195,7 +195,7 @@ export function removeLayer(id) {
 export function removeGroup(ids) {
   return (dispatch, getState) => {
     const state = getState();
-    const { compare } = state();
+    const { compare } = state;
     const { activeString } = compare;
     const activeLayers = getActiveLayersSelector(state);
     const granuleLayers = getActiveGranuleLayers(state);

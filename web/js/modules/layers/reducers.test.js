@@ -90,6 +90,28 @@ describe('layer Reducer tests', () => {
     });
   });
 
+  test('Common actions update active layer array and groups', () => {
+    const actions = [
+      REMOVE_LAYER,
+      REMOVE_GROUP,
+    ];
+    actions.forEach((ACTION) => {
+      const expectedState = update(initialState, {
+        active: {
+          layers: { $push: [newLayer] },
+          overlayGroups: { $push: [newGroup] },
+          granuleLayers: {},
+        },
+      });
+      const resultState = layerReducer(initialState, {
+        type: ACTION,
+        activeString: 'active',
+        layers: [...initialLayers, newLayer],
+      });
+      expect(resultState).toEqual(expectedState);
+    });
+  });
+
   test('ADD_LAYERS_FOR_EVENT sets new groups, layers, and clears prevLayeers', () => {
     const response = layerReducer(initialState, {
       type: ADD_LAYERS_FOR_EVENT,
