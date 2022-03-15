@@ -54,8 +54,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   );
 
   function dispathCMRErrorDialog (title) {
-    const bodyText = 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.';
-    const modalHeader = `${title} is unavailable at this time.`;
+    const bodyText = `The Common Metadata Repository(CMR) service that
+                      provides metadata for this granule layer, ${title}, is currently unavailable.
+                      Please try again later.`;
+    const modalHeader = 'Granules unavailable at this time.';
     store.dispatch(openBasicContent(modalHeader, bodyText));
   }
 
@@ -78,7 +80,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (!CMRDataStore[id]) {
       CMRDataStore[id] = {};
     }
-    lodashEach(Object.values(data.feed.entry), (entry) => {
+    lodashEach(Object.values(data), (entry) => {
       const date = `${entry.time_start.split('.')[0]}Z`;
       CMRDataStore[id][date] = getGranuleDateData(entry, date, projection);
     });
@@ -134,18 +136,28 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       CMRDateRanges[activeString][id].endDate = new Date(endDateRange);
 
       showLoading();
-      const response = await fetch(query, CMR_AJAX_OPTIONS);
-      const data = await response.json();
-      hideLoading();
+      let data;
+      try {
+        const response = await fetch(query, CMR_AJAX_OPTIONS);
+        data = await response.json();
+        data = data.feed.entry;
 
-      if (data.feed.entry.length === 0) {
-        const dateWithinRange = isWithinDateRange(date, startDate, endDate);
-        // only show modal error if layer not set to hidden and outside of selected date range
-        if (visible && dateWithinRange) {
-          throttleDispathCMRErrorDialog(title);
+        if (data.length === 0) {
+          const dateWithinRange = isWithinDateRange(date, startDate, endDate);
+          // only show modal error if layer not set to hidden and outside of selected date range
+          if (visible && dateWithinRange) {
+            throttleDispathCMRErrorDialog(title);
+          }
+          return [];
         }
+      } catch (e) {
+        console.error(e);
+        throttleDispathCMRErrorDialog(title);
         return [];
+      } finally {
+        hideLoading();
       }
+
       addGranuleCMRDateData(data, shortName);
       return getGranules(shortName, date, startQueryDate);
     }
