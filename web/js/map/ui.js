@@ -870,27 +870,26 @@ export default function mapui(models, config, store, ui) {
     ).filter(({ visible }) => visible);
 
     const layerPromises = visibleLayers.map(async (def) => {
-      const { id, period, type } = def;
+      const { id, type } = def;
+      const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
+        .includes(def.period);
       const index = findLayerIndex(def);
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(period)) {
-        return;
-      }
+      const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
+
       if (compare.active && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
-      } else {
+      } else if (temporalLayer) {
         const index = findLayerIndex(def);
-
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { previousLayer: layerValue ? layerValue.wv : null }
             : { granuleCount: getGranuleCount(state, id) };
-
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
       }
-      if (config.vectorStyles && lodashGet(def, 'vectorStyle.id')) {
+      if (hasVectorStyles && temporalLayer) {
         updateVectorStyles(def);
       }
     });
