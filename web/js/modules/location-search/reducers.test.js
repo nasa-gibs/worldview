@@ -69,7 +69,7 @@ describe('locationSearch', () => {
       expect(
         locationSearchReducer(locationSearchState, {
           type: SET_MARKER,
-          coordinates: [coordinatesObject],
+          coordinates: coordinatesObject,
           reverseGeocodeResults,
         }),
       ).toEqual({
