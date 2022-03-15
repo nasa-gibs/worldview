@@ -13,6 +13,7 @@ import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
+import safeLocalStorage from '../../../util/local-storage';
 
 import {
   palettesTranslate,
@@ -57,10 +58,17 @@ class LayerSettings extends React.Component {
     super(props);
     this.state = {
       activeIndex: 0,
+      allowGranuleReorder: false,
     };
     this.canvas = document.createElement('canvas');
     this.canvas.width = 120;
     this.canvas.height = 10;
+  }
+
+  componentDidMount() {
+    const { ALLOW_GRANULE_REORDER } = safeLocalStorage.keys;
+    const allowGranuleReorder = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
+    this.setState({ allowGranuleReorder });
   }
 
   /**
@@ -297,6 +305,7 @@ class LayerSettings extends React.Component {
       resetGranuleLayerDates,
       updateGranuleLayerOptions,
     } = this.props;
+    const { allowGranuleReorder } = this.state;
     const { count, dates, granulePlatform } = granuleOptions;
     return dates
       ? (
@@ -307,15 +316,17 @@ class LayerSettings extends React.Component {
             granuleDates={dates}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
           />
-          <GranuleLayerDateList
-            def={layer}
-            screenHeight={screenHeight}
-            granuleDates={dates}
-            granuleCount={count}
-            updateGranuleLayerOptions={updateGranuleLayerOptions}
-            resetGranuleLayerDates={resetGranuleLayerDates}
-            granulePlatform={granulePlatform}
-          />
+          {allowGranuleReorder && (
+            <GranuleLayerDateList
+              def={layer}
+              screenHeight={screenHeight}
+              granuleDates={dates}
+              granuleCount={count}
+              updateGranuleLayerOptions={updateGranuleLayerOptions}
+              resetGranuleLayerDates={resetGranuleLayerDates}
+              granulePlatform={granulePlatform}
+            />
+          )}
         </>
       ) : null;
   }
