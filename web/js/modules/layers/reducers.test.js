@@ -69,8 +69,6 @@ describe('layer Reducer tests', () => {
     const actions = [
       RESET_LAYERS,
       ADD_LAYER,
-      REMOVE_LAYER,
-      REMOVE_GROUP,
       REORDER_LAYERS,
       TOGGLE_OVERLAY_GROUP_VISIBILITY,
     ];
@@ -90,7 +88,7 @@ describe('layer Reducer tests', () => {
     });
   });
 
-  test('Common actions update active layer array and groups', () => {
+  test('Remove layer and group', () => {
     const actions = [
       REMOVE_LAYER,
       REMOVE_GROUP,
@@ -100,13 +98,13 @@ describe('layer Reducer tests', () => {
         active: {
           layers: { $push: [newLayer] },
           overlayGroups: { $push: [newGroup] },
-          granuleLayers: {},
         },
       });
       const resultState = layerReducer(initialState, {
         type: ACTION,
         activeString: 'active',
         layers: [...initialLayers, newLayer],
+        granuleLayers: {},
       });
       expect(resultState).toEqual(expectedState);
     });
