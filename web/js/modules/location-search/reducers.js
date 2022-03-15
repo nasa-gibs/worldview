@@ -42,7 +42,7 @@ export function locationSearchReducer(state = locationSearchState, action) {
     case SET_MARKER:
       return {
         ...state,
-        coordinates: action.coordinates,
+        coordinates: [...state.coordinates, action.coordinates],
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
       };

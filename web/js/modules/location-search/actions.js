@@ -89,9 +89,9 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
 
     dispatch({
       type: SET_MARKER,
+      coordinates: coordinatesObject,
       reverseGeocodeResults,
-      coordinatesObject,
-      isInputSearch,
+      isCoordinatesSearchActive: isInputSearch,
     });
   };
 }
