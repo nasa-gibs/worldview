@@ -63,8 +63,9 @@ import {
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
-import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
+import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
+
 
 const { events } = util;
 
@@ -108,7 +109,7 @@ export default function mapui(models, config, store, ui) {
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isInputSearch);
+        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isInputSearch, action.coordinates);
       }
       case TOGGLE_DIALOG_VISIBLE:
         return addMarkerAndUpdateStore(false);
@@ -245,22 +246,20 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const handleActiveMapMarker = (start) => {
+  const handleActiveMapMarker = () => {
     const state = store.getState();
-    const { locationSearch } = state;
-    const { coordinates, reverseGeocodeResults } = locationSearch;
+    const { locationSearch, proj } = state;
+    const { coordinates } = locationSearch;
     if (coordinates && coordinates.length > 0) {
-      if (start) {
-        // const coordinatesObject = coordinates[coordinates.length - 1];
-        coordinates.forEach((coordinatesObject) => {
-          const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
-          reverseGeocode(latestCoordinates, config).then((results) => {
-            addMarkerAndUpdateStore(true, results);
-          });
+      coordinates.forEach((coordinatesObject) => {
+        const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+        const areCoordinatesWithinExtentBool = areCoordinatesWithinExtent(proj, latestCoordinates);
+        if (!areCoordinatesWithinExtentBool) return;
+
+        reverseGeocode(latestCoordinates, config).then((results) => {
+          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
         });
-      } else {
-        addMarkerAndUpdateStore(true, reverseGeocodeResults);
-      }
+      });
     }
   };
 
@@ -306,15 +305,13 @@ export default function mapui(models, config, store, ui) {
    * @param {Boolean} shouldFlyToCoordinates - if location search via input
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates) => {
+  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
     const state = store.getState();
-    const { locationSearch, proj, browser } = state;
-    const {
-      coordinates, reverseGeocodeResults,
-    } = locationSearch;
-    const results = geocodeResults || reverseGeocodeResults;
+    const { proj, browser } = state;
+    const results = geocodeResults;
     if (!results) return;
-    const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
+    // const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
+    // const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
     const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
 
     const { sources } = config;
