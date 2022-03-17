@@ -310,8 +310,6 @@ export default function mapui(models, config, store, ui) {
     const { proj, browser } = state;
     const results = geocodeResults;
     if (!results) return;
-    // const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
-    // const coordinatesObject = coordinates.find((element) => element.latitude === results.location.x && element.longitude === results.location.y);
     const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
 
     const { sources } = config;
