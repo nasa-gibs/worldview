@@ -109,7 +109,7 @@ export default function mapui(models, config, store, ui) {
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isInputSearch, action.coordinates);
+        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
       }
       case TOGGLE_DIALOG_VISIBLE:
         return addMarkerAndUpdateStore(false);
