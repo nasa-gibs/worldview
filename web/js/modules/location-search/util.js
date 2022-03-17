@@ -120,16 +120,16 @@ export function mapLocationToLocationSearchState(
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
   const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
-    const formattedCoordinates = coordinate
+    const [latitude, longitude] = coordinate
       ? coordinate.split(',')
         .map((coord) => Number(coord))
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
       : [];
 
     const validatedCoordinates = isValid && {
-      id: Math.floor(Math.random() * (formattedCoordinates[0] + formattedCoordinates[1])),
-      latitude: formattedCoordinates[0],
-      longitude: formattedCoordinates[1],
+      id: Math.floor(Math.random() * (latitude + longitude)),
+      latitude,
+      longitude,
     };
     return validatedCoordinates;
   });
