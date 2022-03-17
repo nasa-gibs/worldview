@@ -1,6 +1,6 @@
 import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
-import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import { getCompareDates } from '../../modules/compare/selectors';
 
 let mousePosition = null;
 let spy = null;
@@ -11,32 +11,35 @@ let radius = DEFAULT_RADIUS;
 let label = null;
 
 export default class Spy {
-  constructor(olMap, state) {
+  constructor(olMap, store) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;
+    const state = store.getState();
     const isBInside = state.compare.isCompareA;
     this.isBInside = isBInside;
-    this.create(state);
+    this.create(store);
   }
 
   /**
    * Init spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  create(state) {
+  create(store) {
+    const state = store.getState();
     const isBInside = isCompareA(state);
     spy = this.addSpy(this.map, state);
     this.isBInside = isBInside;
-    this.update(state);
+    this.update(store);
   }
 
   /**
    * Update spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  update(state) {
+  update(store) {
+    const state = store.getState();
     const isBInside = isCompareA(state);
-    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+    const { dateA, dateB } = getCompareDates(state);
     if (dateA !== this.dateA || dateB !== this.dateB || dateA === dateB) {
       label.innerHTML = getDateText(state);
     }
@@ -44,7 +47,7 @@ export default class Spy {
     this.dateB = dateB;
     if (this.isBInside !== isBInside) {
       this.destroy();
-      this.create(state);
+      this.create(store);
     } else {
       const mapLayers = this.map.getLayers().getArray();
       applyEventsToBaseLayers(
@@ -231,7 +234,7 @@ const applyEventsToBaseLayers = function(layer, map, callback) {
 
 const getDateText = function(state) {
   const isBInside = isCompareA(state);
-  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+  const { dateA, dateB } = getCompareDates(state);
   const isSameDate = dateA === dateB;
   let innerHtml = isBInside ? 'B' : 'A';
   if (!isSameDate) {
