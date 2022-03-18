@@ -5,6 +5,7 @@ module.exports = {
       {
         useBuiltIns: 'entry',
         corejs: '2.0',
+        loose: true,
 
       }],
     [
