@@ -34,7 +34,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
-  CLEAR_MARKER,
+  REMOVE_MARKER,
   SET_MARKER,
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
@@ -62,8 +62,9 @@ import {
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
-import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
+import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
+
 
 const { events } = util;
 
@@ -102,10 +103,10 @@ export default function mapui(models, config, store, ui) {
         store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
         return addLayer(def);
       }
-      case CLEAR_MARKER:
-        return removeCoordinatesMarker();
+      case REMOVE_MARKER:
+        return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
-        return addMarkerAndUpdateStore(true, null, action.isInputSearch);
+        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
       }
       case TOGGLE_DIALOG_VISIBLE:
         return addMarkerAndUpdateStore(false);
@@ -242,18 +243,20 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const handleActiveMapMarker = (start) => {
+  const handleActiveMapMarker = () => {
     const state = store.getState();
-    const { locationSearch } = state;
-    const { coordinates, reverseGeocodeResults } = locationSearch;
+    const { locationSearch, proj } = state;
+    const { coordinates } = locationSearch;
     if (coordinates && coordinates.length > 0) {
-      if (start) {
-        reverseGeocode(coordinates, config).then((results) => {
-          addMarkerAndUpdateStore(true, results);
+      coordinates.forEach((coordinatesObject) => {
+        const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+        const areCoordinatesWithinExtentBool = areCoordinatesWithinExtent(proj, latestCoordinates);
+        if (!areCoordinatesWithinExtentBool) return;
+
+        reverseGeocode(latestCoordinates, config).then((results) => {
+          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
         });
-      } else {
-        addMarkerAndUpdateStore(true, reverseGeocodeResults);
-      }
+      });
     }
   };
 
@@ -265,7 +268,9 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const removeCoordinatesMarker = () => {
+  const removeCoordinatesMarker = (coordinatesObject) => {
+    const map = self.selected;
+    self.activeMarker = map.getOverlayById(coordinatesObject.id);
     if (self.activeMarker) {
       self.activeMarker.setMap(null);
       self.selected.removeOverlay(self.activeMarker);
@@ -282,25 +287,26 @@ export default function mapui(models, config, store, ui) {
    * @param {Boolean} shouldFlyToCoordinates - if location search via input
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates) => {
+  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
     const state = store.getState();
-    const { locationSearch, proj, browser } = state;
-    const {
-      coordinates, reverseGeocodeResults,
-    } = locationSearch;
-    const results = geocodeResults || reverseGeocodeResults;
+    const { proj, browser } = state;
+    const results = geocodeResults;
+    if (!results) return;
+    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
+
     const { sources } = config;
-    const clearMarker = () => {
-      store.dispatch({ type: CLEAR_MARKER });
+    const removeMarker = () => {
+      store.dispatch({
+        type: REMOVE_MARKER,
+        coordinates: coordinatesObject,
+      });
     };
 
-    // clear previous marker (if present) and get new marker
-    removeCoordinatesMarker();
     const marker = getCoordinatesMarker(
       proj,
-      coordinates,
+      coordinatesObject,
       results,
-      clearMarker,
+      removeMarker,
       browser.lessThan.medium,
       showDialog,
     );
@@ -319,7 +325,7 @@ export default function mapui(models, config, store, ui) {
       const zoom = self.selected.getView().getZoom();
       const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-      animateCoordinates(self.selected, proj, coordinates, maxZoom);
+      animateCoordinates(self.selected, proj, latestCoordinates, maxZoom);
     }
 
     store.dispatch({

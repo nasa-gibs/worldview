@@ -1,5 +1,4 @@
 import {
-  CLEAR_MARKER,
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
@@ -78,27 +77,20 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       return dispatch({
         type: SET_MARKER,
         coordinates: [],
-        isCoordinatesDialogOpen: false,
       });
     }
 
+    const coordinatesObject = {
+      id: Math.floor(Math.random() * (coordinates[0] + coordinates[1])),
+      latitude: coordinates[0],
+      longitude: coordinates[1],
+    };
+
     dispatch({
       type: SET_MARKER,
+      coordinates: coordinatesObject,
       reverseGeocodeResults,
-      coordinates,
-      isCoordinatesDialogOpen: true,
-      isInputSearch,
-    });
-  };
-}
-
-/**
- * Clear coordinates including marker and dialog (if open)
- */
-export function clearCoordinates() {
-  return (dispatch) => {
-    dispatch({
-      type: CLEAR_MARKER,
+      isCoordinatesSearchActive: isInputSearch,
     });
   };
 }

@@ -1,12 +1,11 @@
 import {
-  CLEAR_MARKER,
   CLEAR_SUGGESTIONS,
+  REMOVE_MARKER,
   REQUEST_SUGGEST_PLACE_FAILURE,
   REQUEST_SUGGEST_PLACE_SUCCESS,
   SET_REVERSE_GEOCODE_RESULTS,
   SET_MARKER,
   SET_SUGGESTION,
-  TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
@@ -16,7 +15,6 @@ const localStorageCollapseState = getLocalStorageCollapseState();
 export const locationSearchState = {
   coordinates: [],
   isCoordinateSearchActive: false,
-  isCoordinatesDialogOpen: false,
   isExpanded: !localStorageCollapseState,
   reverseGeocodeResults: null,
   suggestions: [],
@@ -25,11 +23,6 @@ export const locationSearchState = {
 
 export function locationSearchReducer(state = locationSearchState, action) {
   switch (action.type) {
-    case TOGGLE_DIALOG_VISIBLE:
-      return {
-        ...state,
-        isCoordinatesDialogOpen: action.value,
-      };
     case TOGGLE_SHOW_LOCATION_SEARCH:
       return {
         ...state,
@@ -48,17 +41,14 @@ export function locationSearchReducer(state = locationSearchState, action) {
     case SET_MARKER:
       return {
         ...state,
-        coordinates: action.coordinates,
+        coordinates: [...state.coordinates, action.coordinates],
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
-        isCoordinatesDialogOpen: action.isCoordinatesDialogOpen,
       };
-    case CLEAR_MARKER:
+    case REMOVE_MARKER:
       return {
         ...state,
-        coordinates: [],
-        reverseGeocodeResults: null,
-        isCoordinatesDialogOpen: false,
+        coordinates: state.coordinates.filter((coordinate) => action.coordinates.id !== coordinate.id),
       };
     case SET_SUGGESTION:
       return {
