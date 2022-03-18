@@ -1,5 +1,4 @@
 import {
-  CLEAR_MARKERS,
   CLEAR_SUGGESTIONS,
   REMOVE_MARKER,
   REQUEST_SUGGEST_PLACE_FAILURE,
@@ -45,12 +44,6 @@ export function locationSearchReducer(state = locationSearchState, action) {
         coordinates: [...state.coordinates, action.coordinates],
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
-      };
-    case CLEAR_MARKERS:
-      return {
-        ...state,
-        coordinates: [],
-        reverseGeocodeResults: null,
       };
     case REMOVE_MARKER:
       return {

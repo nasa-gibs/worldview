@@ -72,13 +72,12 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   const pinProps = {
     reverseGeocodeResults: results,
     coordinatesObject,
-    removeMarker,
     isMobile,
     dialogVisible,
   };
 
   // create Ol vector layer map pin
-  const marker = createPin(transformedCoords, pinProps, id);
+  const marker = createPin(transformedCoords, pinProps, id, removeMarker);
   return marker;
 }
 
@@ -88,10 +87,14 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
  * @param {Object} pinProps
  * @param {Number} id
  */
-const createPin = function(coordinates, pinProps, id) {
+const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
+  const removeMarker = () => {
+    ReactDOM.unmountComponentAtNode(overlayEl);
+    removeMarkerPin();
+  };
   ReactDOM.render(
-    React.createElement(LocationMarker, pinProps),
+    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
     overlayEl,
   );
   const markerPin = new OlOverlay({

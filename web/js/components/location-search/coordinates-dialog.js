@@ -86,7 +86,7 @@ class CoordinatesDialog extends Component {
         <span
           id={closeButtonId}
           className={`close-tooltip ${closeButtonClassName}`}
-          onTouchEnd={this.clearCoordinates}
+          onTouchEnd={this.removeMarker}
         >
           {tooltipVisibilityCondition
           && (

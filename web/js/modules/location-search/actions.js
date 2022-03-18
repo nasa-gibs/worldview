@@ -1,5 +1,4 @@
 import {
-  CLEAR_MARKERS,
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
@@ -92,17 +91,6 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       coordinates: coordinatesObject,
       reverseGeocodeResults,
       isCoordinatesSearchActive: isInputSearch,
-    });
-  };
-}
-
-/**
- * Clear coordinates including marker and dialog (if open)
- */
-export function clearCoordinates() {
-  return (dispatch) => {
-    dispatch({
-      type: CLEAR_MARKERS,
     });
   };
 }

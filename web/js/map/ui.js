@@ -34,7 +34,6 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
-  CLEAR_MARKERS,
   REMOVE_MARKER,
   SET_MARKER,
   SET_REVERSE_GEOCODE_RESULTS,
@@ -104,8 +103,6 @@ export default function mapui(models, config, store, ui) {
         store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
         return addLayer(def);
       }
-      case CLEAR_MARKERS:
-        return removeAllCoordinatesMarkers();
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
@@ -274,21 +271,6 @@ export default function mapui(models, config, store, ui) {
   const removeCoordinatesMarker = (coordinatesObject) => {
     const map = self.selected;
     self.activeMarker = map.getOverlayById(coordinatesObject.id);
-    if (self.activeMarker) {
-      self.activeMarker.setMap(null);
-      self.selected.removeOverlay(self.activeMarker);
-    }
-  };
-
-  /*
-   * Remove all coordinates markers
-   *
-   * @method removeCoordinatesMarker
-   * @static
-   *
-   * @returns {void}
-   */
-  const removeAllCoordinatesMarkers = () => {
     if (self.activeMarker) {
       self.activeMarker.setMap(null);
       self.selected.removeOverlay(self.activeMarker);
