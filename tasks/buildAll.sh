@@ -12,11 +12,16 @@ npm config set user 0
 npm config set unsafe-perm true
 export npm_config_unsafe_perm=true
 
-npm install --production=false
-
-npm run dist
+npm install --production=false --ignore-scripts
+# npm run python
+./tasks/pythonInstall.sh linux
+# npm run dist:container
+pipenv run npm run dist:bamboo
+node ./tasks/dist.js
+# build RPM
 node rpm/buildRPM.js
 
 # This is where bamboo expects to find artifacts
 mv ~/rpmbuild build/rpm
+
 
