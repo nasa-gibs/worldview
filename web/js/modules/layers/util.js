@@ -1,6 +1,5 @@
 import {
   get as lodashGet,
-  eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   isNaN as lodashIsNaN,
@@ -14,6 +13,7 @@ import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
   addLayer,
+  getStartingLayers,
   resetLayers,
   getLayers,
   getFutureLayerEndDate,
@@ -843,8 +843,8 @@ export function serializeLayers(layers, state, groupName) {
 }
 
 export function serializeGroupOverlays (groupOverlays, state, activeString) {
-  const { config, parameters, compare } = state;
-  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const { parameters, compare } = state;
+  const startingLayers = getStartingLayers(state);
   const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
   const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
   const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
@@ -1050,121 +1050,129 @@ export function layersParse12(stateObj, config) {
     console.warn(`Error Parsing layers: ${e}`);
     // eslint-disable-next-line no-console
     console.log('reverting to default layers');
-    return resetLayers(config.defaults.startingLayers, config.layers);
+    return resetLayers(config);
   }
 }
 
-const createLayerArrayFromState = function(state, config) {
-  let layerArray = [];
-  lodashEach(state, (obj) => {
-    if (!lodashIsUndefined(state)) {
-      lodashEachRight(state, (layerDef) => {
-        let hidden = false;
-        let opacity = 1.0;
-        let max;
-        let min;
-        let squash;
-        let custom;
-        let disabled;
-        let count;
-        if (!config.layers[layerDef.id]) {
-          // eslint-disable-next-line no-console
-          console.warn(`No such layer: ${layerDef.id}`);
+const getLayerSpec = (attributes) => {
+  let hidden = false;
+  let opacity = 1.0;
+  let max;
+  let min;
+  let squash;
+  let custom;
+  let disabled;
+  let count;
+
+  lodashEach(attributes, (attr) => {
+    if (attr.id === 'hidden') {
+      hidden = true;
+    }
+    if (attr.id === 'opacity') {
+      opacity = util.clamp(parseFloat(attr.value), 0, 1);
+      // eslint-disable-next-line no-restricted-globals
+      if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+    }
+    if (attr.id === 'disabled') {
+      const values = util.toArray(attr.value.split(';'));
+      disabled = values;
+    }
+    if (attr.id === 'max' && typeof attr.value === 'string') {
+      const maxArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          maxArray.push(undefined);
           return;
         }
-        lodashEach(layerDef.attributes, (attr) => {
-          if (attr.id === 'hidden') {
-            hidden = true;
-          }
-          if (attr.id === 'opacity') {
-            opacity = util.clamp(parseFloat(attr.value), 0, 1);
-            // eslint-disable-next-line no-restricted-globals
-            if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
-          }
-          if (attr.id === 'disabled') {
-            const values = util.toArray(attr.value.split(';'));
-            disabled = values;
-          }
-          if (attr.id === 'max' && typeof attr.value === 'string') {
-            const maxArray = [];
-            const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, (value, index) => {
-              if (value === '') {
-                maxArray.push(undefined);
-                return;
-              }
-              const maxValue = parseFloat(value);
-              if (lodashIsNaN(maxValue)) {
-                // eslint-disable-next-line no-console
-                console.warn(`Invalid max value: ${value}`);
-              } else {
-                maxArray.push(maxValue);
-              }
-            });
-            max = maxArray.length ? maxArray : undefined;
-          }
-          if (attr.id === 'min' && typeof attr.value === 'string') {
-            const minArray = [];
-            const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, (value, index) => {
-              if (value === '') {
-                minArray.push(undefined);
-                return;
-              }
-              const minValue = parseFloat(value);
-              if (lodashIsNaN(minValue)) {
-                // eslint-disable-next-line no-console
-                console.warn(`Invalid min value: ${value}`);
-              } else {
-                minArray.push(minValue);
-              }
-            });
-            min = minArray.length ? minArray : undefined;
-          }
-          if (attr.id === 'squash') {
-            if (attr.value === true) {
-              squash = [true];
-            } else if (typeof attr.value === 'string') {
-              const squashArray = [];
-              const values = util.toArray(attr.value.split(';'));
-              lodashEach(values, (value) => {
-                squashArray.push(value === 'true');
-              });
-              squash = squashArray.length ? squashArray : undefined;
-            }
-          }
-          if (attr.id === 'palette') {
-            const values = util.toArray(attr.value.split(';'));
-            custom = values;
-          }
-          if (attr.id === 'style') {
-            const values = util.toArray(attr.value.split(';'));
-            custom = values;
-          }
-          // granule specific count (defaults to 20 if no param)
-          if (attr.id === 'count') {
-            count = Number(attr.value);
-          }
-        });
-        layerArray = addLayer(
-          layerDef.id,
-          {
-            hidden,
-            opacity,
-            count,
-            // only include palette attributes if Array.length condition
-            // is true: https://stackoverflow.com/a/40560953/4589331
-            ...isArray(custom) && { custom },
-            ...isArray(min) && { min },
-            ...isArray(squash) && { squash },
-            ...isArray(max) && { max },
-            ...isArray(disabled) && { disabled },
-          },
-          layerArray,
-          config.layers,
-        );
+        const maxValue = parseFloat(value);
+        if (lodashIsNaN(maxValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid max value: ${value}`);
+        } else {
+          maxArray.push(maxValue);
+        }
       });
+      max = maxArray.length ? maxArray : undefined;
     }
+    if (attr.id === 'min' && typeof attr.value === 'string') {
+      const minArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          minArray.push(undefined);
+          return;
+        }
+        const minValue = parseFloat(value);
+        if (lodashIsNaN(minValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid min value: ${value}`);
+        } else {
+          minArray.push(minValue);
+        }
+      });
+      min = minArray.length ? minArray : undefined;
+    }
+    if (attr.id === 'squash') {
+      if (attr.value === true) {
+        squash = [true];
+      } else if (typeof attr.value === 'string') {
+        const squashArray = [];
+        const values = util.toArray(attr.value.split(';'));
+        lodashEach(values, (value) => {
+          squashArray.push(value === 'true');
+        });
+        squash = squashArray.length ? squashArray : undefined;
+      }
+    }
+    if (attr.id === 'palette') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    if (attr.id === 'style') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    // granule specific count (defaults to 20 if no param)
+    if (attr.id === 'count') {
+      count = Number(attr.value);
+    }
+  });
+
+  return {
+    hidden,
+    opacity,
+    count,
+    // only include palette attributes if Array.length condition
+    // is true: https://stackoverflow.com/a/40560953/4589331
+    ...isArray(custom) && { custom },
+    ...isArray(min) && { min },
+    ...isArray(squash) && { squash },
+    ...isArray(max) && { max },
+    ...isArray(disabled) && { disabled },
+  };
+};
+
+const createLayerArrayFromState = function(layers, config) {
+  let layerArray = [];
+  if (lodashIsUndefined(layers)) {
+    return layerArray;
+  }
+  const projection = lodashGet(config, 'parameters.p') || 'geographic';
+  layers.reverse().forEach((layerDef) => {
+    if (!config.layers[layerDef.id]) {
+      // eslint-disable-next-line no-console
+      console.warn(`No such layer: ${layerDef.id}`);
+      return;
+    }
+    layerArray = addLayer(
+      layerDef.id,
+      getLayerSpec(layerDef.attributes),
+      layerArray,
+      config.layers,
+      null,
+      projection,
+    );
   });
   return layerArray;
 };

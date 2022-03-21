@@ -4,7 +4,6 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -59,7 +58,7 @@ export const initialState = {
 
 export function getInitialState(config) {
   const { layers: layerConfig, defaults } = config;
-  const startingLayers = resetLayers(defaults.startingLayers, layerConfig);
+  const startingLayers = resetLayers(config);
   const groupsALocalStorage = safeLocalStorage.getItem(GROUP_OVERLAYS) !== 'disabled';
   const updatedState = {
     ...initialState,
@@ -88,7 +87,6 @@ export function layerReducer(state = initialState, action) {
   );
 
   switch (action.type) {
-    case RESET_LAYERS:
     case ADD_LAYER:
     case REORDER_LAYERS:
     case TOGGLE_OVERLAY_GROUP_VISIBILITY:
