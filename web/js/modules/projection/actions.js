@@ -1,5 +1,6 @@
 import { CHANGE_PROJECTION } from './constants';
 import { onProjectionSwitch } from '../product-picker/actions';
+import { updateDatesOnProjChange } from '../layers/actions';
 import { stop } from '../animation/actions';
 
 export default function changeProjection(id) {
@@ -15,6 +16,7 @@ export default function changeProjection(id) {
       id,
       selected: proj,
     });
+    dispatch(updateDatesOnProjChange(id));
     dispatch(onProjectionSwitch(id));
     if (isPlaying) {
       dispatch(stop());
