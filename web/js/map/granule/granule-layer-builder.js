@@ -275,27 +275,37 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const {
       id, def, filteredGranules, reorderedGranules, granuleDates,
     } = layer.wv;
-    const { endDate, subtitle, startDate } = def;
-
+    const {
+      endDate, subtitle, startDate, dateRanges,
+    } = def;
 
     const mostRecentGranuleDate = granuleDates[0];
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
     const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
 
     // create geometry object with date:polygons key/value pair filtering out granules outside date range
-    const granuleGeometries = filteredGranules.reduce((dates, granuleObject) => {
-      const { date, polygons } = granuleObject;
-      if (!isMostRecentDateOutOfRange && isWithinDateRange(new Date(date), startDate, endDate)) {
-        dates[date] = polygons;
+    const granuleFootprints = filteredGranules.reduce((dates, { date, polygons }) => {
+      const granuleDate = new Date(date);
+
+      if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
+        // Only include granules that have imagery in this proj (determined by layer dateRanges)
+        const hasImagery = dateRanges.some((range) => {
+          const start = range.startDate;
+          const end = range.endDate;
+          return isWithinDateRange(granuleDate, start, end);
+        });
+        if (hasImagery) {
+          dates[date] = polygons;
+        }
       }
       return dates;
     }, {});
 
     const existingLayer = getGranuleLayer(state, id);
     if (existingLayer) {
-      store.dispatch(updateGranuleLayerGeometry(id, updatedDates, granuleGeometries));
+      store.dispatch(updateGranuleLayerGeometry(id, updatedDates, granuleFootprints));
     } else {
-      store.dispatch(addGranuleLayerDates(id, granuleDates, granuleGeometries, `${subtitle}`));
+      store.dispatch(addGranuleLayerDates(id, granuleDates, granuleFootprints, `${subtitle}`));
     }
   };
 
