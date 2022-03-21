@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1]
+- Updated to 3.17.0 upstream version
+- Added SOTO by Worldview About page
+
 ## [0.2.0]
 - Update to 3.13.3 upstream version
 - Added SOTO by worldview branding
