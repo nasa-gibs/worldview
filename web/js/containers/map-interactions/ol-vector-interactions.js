@@ -49,7 +49,7 @@ export class VectorInteractions extends React.Component {
   /**
   * Handle mouse over granule geometry and trigger action to show granule date footprint
   *
-  * @param {Object} granuleCMRGeometry
+  * @param {Object} granuleFootprints
   * @param {Object} map
   * @param {String} crs
   * @param {Array} pixels
@@ -57,19 +57,23 @@ export class VectorInteractions extends React.Component {
   *
   * @return {Boolean} to indicate if valid for parent mouseMove function
   */
-  handleGranuleHover = (granuleCMRGeometry, crs, pixels, coord) => {
+  handleGranuleHover = (crs, pixels, coord) => {
     const {
-      active,
-      activeString,
       compareState,
       granulePlatform,
+      granuleFootprints,
       maxExtent,
       swipeOffset,
     } = this.props;
+    const { active, activeString } = compareState;
 
     let toggledGranuleFootprint;
     // reverse granule geometry so most recent granules are on top
-    const gcmr = Object.keys(granuleCMRGeometry).reverse().map((key) => ({ [key]: granuleCMRGeometry[key] }));
+    const footprints = Object
+      .keys(granuleFootprints)
+      .reverse()
+      .map((key) => ({ [key]: granuleFootprints[key] }));
+
     // only allow hover footprints on selected side of A/B comparison
     if (active) {
       const isOnActiveCompareSide = isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset);
@@ -80,12 +84,10 @@ export class VectorInteractions extends React.Component {
     }
 
     const polygon = new OlGeomPolygon([]);
-    for (let i = 0; i < gcmr.length; i += 1) {
-      const granObj = gcmr[i];
-      const date = Object.keys(granObj)[0];
-      const geom = Object.values(granObj)[0];
+    for (let i = 0; i < footprints.length; i += 1) {
+      const date = Object.keys(footprints[i])[0];
+      const geom = Object.values(footprints[i])[0];
 
-      // string coord to num and transform is polar projections
       const geomVertices = geom.map((xy) => {
         const coordNums = [parseFloat(xy[0]), parseFloat(xy[1])];
         // transform for non geographic projections
@@ -120,7 +122,7 @@ export class VectorInteractions extends React.Component {
 
   mouseMove(event, map, crs) {
     const {
-      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj, granuleCMRGeometry,
+      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj, granuleFootprints,
     } = this.props;
 
     if (measureIsActive || isCoordinateSearchActive) {
@@ -130,8 +132,8 @@ export class VectorInteractions extends React.Component {
     const coord = map.getCoordinateFromPixel(pixels);
 
     // handle granule footprint hover, will break out with false return if on wrong compare A/B side
-    if (granuleCMRGeometry) {
-      const isValidGranule = this.handleGranuleHover(granuleCMRGeometry, crs, pixels, coord);
+    if (granuleFootprints) {
+      const isValidGranule = this.handleGranuleHover(crs, pixels, coord);
       if (!isValidGranule) {
         return;
       }
@@ -230,7 +232,6 @@ function mapStateToProps(state) {
   } = state;
   const {
     active,
-    activeString,
     mode,
     value,
   } = compare;
@@ -245,15 +246,13 @@ function mapStateToProps(state) {
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
 
-  const granuleCMRGeometry = getActiveGranuleFootPrints(state);
+  const granuleFootprints = getActiveGranuleFootPrints(state);
   const granulePlatform = getGranulePlatform(state);
 
   const { maxExtent } = config.projections[proj.id];
 
   return {
     activeLayers,
-    active,
-    activeString,
     browser,
     isCoordinateSearchActive,
     compareState: compare,
@@ -266,7 +265,7 @@ function mapStateToProps(state) {
     measureIsActive: measure.isActive,
     isPlaying,
     isMobile: browser.lessThan.medium,
-    granuleCMRGeometry,
+    granuleFootprints,
     granulePlatform,
     swipeOffset,
     proj,
@@ -337,10 +336,8 @@ VectorInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
-  active: PropTypes.bool,
-  activeString: PropTypes.string,
   compareState: PropTypes.object,
-  granuleCMRGeometry: PropTypes.object,
+  granuleFootprints: PropTypes.object,
   granulePlatform: PropTypes.string,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
