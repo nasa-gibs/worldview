@@ -25,19 +25,19 @@ const versionCompare = (v1, v2) => {
 
   return true;
 };
-
-const [minVersion] = pkg.engines.node.split(' ');
+const packageNode = pkg.engines.node;
+const packageNodeArray = pkg.engines.node.split(' ');
+const [minVersion] = packageNodeArray;
 const nodeVersion = process.version;
 const requiredVersionSub = minVersion.substr(2, minVersion.length);
 const nodeVersionSub = nodeVersion.substr(1, nodeVersion.length);
 
-const satisfiyMinVersion = versionCompare(nodeVersionSub, requiredVersionSub);
+const satisfyMinVersion = packageNodeArray.length > 1 ? versionCompare(nodeVersionSub, requiredVersionSub) : pkg.engines.node === nodeVersionSub;
 
-if (!satisfiyMinVersion) {
-  const requiredVersionText = pkg.engines.node;
+if (!satisfyMinVersion) {
   console.log('\x1b[31m', '\x1b[1m'); // Added styling to warn
-  console.log('WARN', '\x1b[0m', 'The suggested version of node for the installation of Worldview is', '\x1b[32m', '\x1b[1m', requiredVersionText, '\x1b[0m', ' you are using', '\x1b[32m', '\x1b[1m', nodeVersion);
-  console.log('\x1b[0m', 'If you have difficulties installing Worldview, please try using the install again using a compatible node version', '\x1b[32m', '\x1b[1m', requiredVersionText, '\x1b[0m');
+  console.log('WARN', '\x1b[0m', 'The suggested version(s) of node for the installation of Worldview is', '\x1b[32m', '\x1b[1m', packageNode, '\x1b[0m', ' you are using', '\x1b[32m', '\x1b[1m', nodeVersion);
+  console.log('\x1b[0m', 'If you have difficulties installing Worldview, please try using the install again using the compatible node version(s)', '\x1b[32m', '\x1b[1m', packageNode, '\x1b[0m');
 } else {
   console.log('\x1b[0mPreinstall conditions satisfied. Installing...', '\x1b[0m');
 }
