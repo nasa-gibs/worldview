@@ -20,6 +20,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
+  UPDATE_ON_PROJ_CHANGE,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -96,6 +97,20 @@ export function layerReducer(state = initialState, action) {
             layers: action.layers,
             overlayGroups: getOverlayGroups(action.layers, getPrevOverlayGroups()),
             prevLayers: [],
+          },
+        },
+      });
+
+    case UPDATE_ON_PROJ_CHANGE:
+      return update(state, {
+        active: {
+          $merge: {
+            layers: action.layersA,
+          },
+        },
+        activeB: {
+          $merge: {
+            layers: action.layersB,
           },
         },
       });

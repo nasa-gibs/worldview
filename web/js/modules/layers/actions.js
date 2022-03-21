@@ -1,9 +1,11 @@
-import { findIndex as lodashFindIndex } from 'lodash';
+import {
+  findIndex as lodashFindIndex,
+  get as lodashGet,
+} from 'lodash';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
   addLayer as addLayerSelector,
-
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
@@ -28,6 +30,7 @@ import {
   UPDATE_GRANULE_LAYER_GEOMETRY,
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+  UPDATE_ON_PROJ_CHANGE,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -98,7 +101,7 @@ export function toggleOverlayGroups() {
   };
 }
 
-export function addLayer(id, spec = {}) {
+export function addLayer(id) {
   googleTagManager.pushEvent({
     event: 'layer_added',
     layers: { id },
@@ -114,7 +117,7 @@ export function addLayer(id, spec = {}) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      spec,
+      {},
       activeLayers,
       layers.layerConfig,
       overlays.length || 0,
@@ -128,6 +131,33 @@ export function addLayer(id, spec = {}) {
       id,
       activeString: compare.activeString,
       layers: newLayers,
+    });
+  };
+}
+
+/**
+ * Layers may have different start, end, and date ranges based on projection.
+ * Here we update them if necessary when the projection changes.
+ *
+ * @param {*} proj
+ * @returns
+ */
+export function updateDatesOnProjChange(proj) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const getUpdatedLayers = (activeString) => {
+      const activeLayers = getActiveLayersSelector(state, activeString);
+      return activeLayers.map((l) => {
+        l.startDate = lodashGet(l, `projections[${proj}].startDate`) || l.startDate;
+        l.endDate = lodashGet(l, `projections[${proj}].endDate`) || l.endDate;
+        l.dateRanges = lodashGet(l, `projections[${proj}].dateRanges`) || l.dateRanges;
+        return l;
+      });
+    };
+    dispatch({
+      type: UPDATE_ON_PROJ_CHANGE,
+      layersA: getUpdatedLayers('active'),
+      layersB: getUpdatedLayers('activeB'),
     });
   };
 }
