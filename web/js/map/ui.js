@@ -258,10 +258,19 @@ export default function mapui(models, config, store, ui) {
     return granuleFootprintDraw(geometry, date);
   };
 
+  /**
+   * During animation we swap Vector tiles for WMS for better performance.
+   * Once animation completes, we need to call reloadLayers to reload and replace
+   * the WMS tiles with Vector tiles
+   */
   const onStopAnimation = function() {
-    const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
+    const state = store.getState();
+    const hasActiveVectors = hasVectorLayers(getActiveLayers(state));
     if (hasActiveVectors) {
-      reloadLayers();
+      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
+      // try to modify map layers asynchronously so we need to set a timeout to allow
+      // the updateDate() function to complete before trying to call reloadLayers() here
+      setTimeout(reloadLayers, 100);
     }
   };
 
@@ -538,13 +547,13 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const clearLayers = function(map) {
-    const activeLayers = map
+  const clearLayers = function() {
+    const activeLayers = self.selected
       .getLayers()
       .getArray()
       .slice(0);
     lodashEach(activeLayers, (mapLayer) => {
-      map.removeLayer(mapLayer);
+      self.selected.removeLayer(mapLayer);
     });
     cache.clear();
   };
@@ -599,7 +608,7 @@ export default function mapui(models, config, store, ui) {
       if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
-      clearLayers(map);
+      clearLayers();
       const defs = getLayers(state, { reverse: true });
       const layerPromises = defs.map((def) => {
         const options = getGranuleOptions(state, def, compare.activeString, granuleOptions);
@@ -613,7 +622,7 @@ export default function mapui(models, config, store, ui) {
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-      clearLayers(map);
+      clearLayers();
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, state, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
       compareLayerGroups.forEach((layerGroup) => map.addLayer(layerGroup));
@@ -889,8 +898,8 @@ export default function mapui(models, config, store, ui) {
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
-            ? { previousLayer: layerValue ? layerValue.wv : null }
-            : { granuleCount: getGranuleCount(state, id) };
+            ? { granuleCount: getGranuleCount(state, id) }
+            : { previousLayer: layerValue ? layerValue.wv : null };
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
