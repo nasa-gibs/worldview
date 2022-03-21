@@ -3,7 +3,7 @@ import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
   addLayer as addLayerSelector,
-  resetLayers as resetLayersSelector,
+
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
@@ -11,7 +11,6 @@ import {
   getActiveGranuleLayers,
 } from './selectors';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -34,20 +33,6 @@ import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
 import safeLocalStorage from '../../util/local-storage';
 
-export function resetLayers(activeString) {
-  return (dispatch, getState) => {
-    const { config } = getState();
-    const newLayers = resetLayersSelector(
-      config.defaults.startingLayers,
-      config.layers,
-    );
-    dispatch({
-      type: RESET_LAYERS,
-      activeString,
-      layers: newLayers,
-    });
-  };
-}
 
 export function initSecondLayerGroup() {
   return {
