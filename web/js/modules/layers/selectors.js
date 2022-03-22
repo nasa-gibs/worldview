@@ -605,8 +605,8 @@ export function activateLayersForEventCategory(state, category) {
         newLayers,
         layerConfig,
         overlays.length,
-        null,
         projection,
+        null,
       );
     }
   });
