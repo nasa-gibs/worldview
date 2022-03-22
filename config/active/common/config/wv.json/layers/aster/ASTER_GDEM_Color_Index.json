@@ -10,7 +10,7 @@
       "type": "wmts",
       "layergroup": "Terrain Elevation",
       "product": "ASTGTM",
-      "wrapadjacentdays": true
+      "wrapX": true
     }
   }
 }

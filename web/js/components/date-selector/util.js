@@ -1,19 +1,5 @@
 import util from '../../util/util';
-
-export const monthStringArray = [
-  'JAN',
-  'FEB',
-  'MAR',
-  'APR',
-  'MAY',
-  'JUN',
-  'JUL',
-  'AUG',
-  'SEP',
-  'OCT',
-  'NOV',
-  'DEC',
-];
+import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 
 /**
  *
@@ -47,7 +33,7 @@ export const monthValidation = (value, dateParam, validate) => {
     }
     return null;
   }
-  const realMonth = util.stringInArray(monthStringArray, value);
+  const realMonth = util.stringInArray(MONTH_STRING_ARRAY, value);
   if (realMonth !== false) {
     const day = date.getUTCDate();
     const zeroDay = new Date(date.setUTCDate(1));

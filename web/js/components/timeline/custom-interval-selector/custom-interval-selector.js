@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DeltaInput from './delta-input';
 import IntervalSelect from './interval-select';
 import {
-  timeScaleFromNumberKey,
-  timeScaleToNumberKey,
+  TIME_SCALE_FROM_NUMBER,
+  TIME_SCALE_TO_NUMBER,
 } from '../../../modules/date/constants';
 import {
   toggleCustomModal,
@@ -42,11 +42,11 @@ class CustomIntervalSelector extends PureComponent {
 
     if (subdailyRemoved && subdailyInterval) {
       changeCustomInterval();
-      selectInterval(1, timeScaleToNumberKey.day, false);
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
     }
 
     if (subdailyAdded && !customSelected) {
-      changeCustomInterval(10, timeScaleToNumberKey.minute);
+      changeCustomInterval(10, TIME_SCALE_TO_NUMBER.minute);
     }
   }
 
@@ -61,7 +61,7 @@ class CustomIntervalSelector extends PureComponent {
 
   changeZoomLevel = (zoomLevel) => {
     const { changeCustomInterval, customDelta } = this.props;
-    changeCustomInterval(customDelta, timeScaleToNumberKey[zoomLevel]);
+    changeCustomInterval(customDelta, TIME_SCALE_TO_NUMBER[zoomLevel]);
   }
 
   handleKeyPress= (e) => {
@@ -94,7 +94,7 @@ class CustomIntervalSelector extends PureComponent {
           />
           <IntervalSelect
             hasSubdailyLayers={hasSubdailyLayers}
-            zoomLevel={timeScaleFromNumberKey[customInterval]}
+            zoomLevel={TIME_SCALE_FROM_NUMBER[customInterval]}
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>

@@ -2,6 +2,9 @@ The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily glo
 
 Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
 
+#### Current Issues
+Far west tiles (Hawaii, Alaska):  Due to issues with processing imagery around the international dateline for this product, far west tiles will sometimes appear with data at the start of the day, long before Terra or Aqua have observed for the day. Users are advised to disregard such data, until the Corrected Reflectance layers confirm current-day observations have been processed.
+
 #### Limitations
 Common situations in which the flood product may be unable to accurately identify flood include:
 
@@ -15,9 +18,13 @@ Common situations in which the flood product may be unable to accurately identif
 Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevB.pdf) for included tiles).
 
 #### Sensor/Image Resolution
-Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
+Nominal equatorial resolution is ~232 m per pixel, with resolution increasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
 
 #### Frequency
 One product per day, per tile. During the day, data products are updated as NRT MOD09 data are received (an initial product may be updated if additional intersecting swath data is later received).
+
+To help estimate if the final flood product (for the day) is available in Worldview for a given area of interest, users can check if both the Terra and Aqua Corrected Reflectance layers are displaying for the area. If they are, the flood product has likely also been updated (or will be within an hour).
+
+Flood products displayed in Worldview are updated every 30 minutes, approximately on the hour and at 30 minutes past the hour.
 
 References: MCDWD_L3_NRT [doi:10.5067/MODIS/MCDWD_L3_NRT.061](https://doi.org/10.5067/MODIS/MCDWD_L3_NRT.061)

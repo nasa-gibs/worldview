@@ -18,3 +18,17 @@
 .rc-slider-tooltip-inner {
   min-width: 40px;
 }
+
+.rc-slider-disabled {
+  background: transparent;
+  cursor: default;
+  .rc-slider-handle {
+    background: #999;
+  }
+  .rc-slider-rail {
+    background: #666;
+  }
+  .rc-slider-track {
+    background: #666;
+  }
+}

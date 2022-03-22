@@ -8,8 +8,7 @@
       "tags": "",
       "layergroup": "Precipitation Rate",
       "product": "rss1tpwnv7r01",
-      "group": "overlays",
-      "wrapadjacentdays": true
+      "group": "overlays"
     }
   }
 }

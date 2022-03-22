@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import HoverTooltip from '../../util/hover-tooltip';
-import PreloadSpinner from '../../animation-widget/preload-spinner';
+import LoadingIndicator from '../../animation-widget/loading-indicator';
 import {
   setArrowDown as setArrowDownAction,
   setArrowUp as setArrowUpAction,
@@ -111,7 +111,7 @@ class DateChangeArrows extends PureComponent {
     return (
       <div>
         {arrowDown && !tilesPreloaded && (
-          <PreloadSpinner
+          <LoadingIndicator
             title="Loading ..."
             bodyMsg="Keep holding to animate the map!"
           />

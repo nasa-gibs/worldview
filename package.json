@@ -1,7 +1,7 @@
 {
   "name": "@gov.nasa.jpl.podaac/worldview",
-  "version": "0.2.0",
-  "upstream-version": "3.13.3",
+  "version": "0.2.1-rc.1",
+  "upstream-version": "3.17.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -99,7 +99,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^95.0.0",
+    "chromedriver": "^97.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^7.0.2",
     "css-hot-loader": "^1.4.1",
@@ -194,6 +194,7 @@
     "node-dir": "^0.1.17",
     "ol": "6.4.x",
     "ol-mapbox-style": "6.1.x",
+    "p-queue": "^7.1.0",
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
     "prop-types": "^15.7.2",

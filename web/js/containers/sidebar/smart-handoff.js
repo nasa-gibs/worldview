@@ -24,6 +24,7 @@ import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
 import selectCollection from '../../modules/smart-handoff/actions';
+import { formatDisplayDate } from '../../modules/date/util';
 
 const STD_NRT_MAP = {
   STD: 'Standard',
@@ -388,11 +389,14 @@ class SmartHandoff extends Component {
 
               {layer.conceptIds.filter(({ value }) => validatedConceptIds[value]).map((collection) => {
                 const {
-                  type, value, version,
+                  type, value, version, quality,
                 } = collection;
                 const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
                 const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
                 const labelId = `${inputId}-label`;
+                const label = STD_NRT_MAP[type]
+                   + (version ? ` - v${version}` : '')
+                   + (quality ? ' (Quality)' : '');
 
                 return (
                   <div className="collection-choice" key={inputId}>
@@ -404,7 +408,7 @@ class SmartHandoff extends Component {
                       onChange={() => selectCollection(collection.value, layer.id)}
                     />
                     <label id={labelId} htmlFor={inputId}>
-                      {STD_NRT_MAP[type] + (version ? ` - v${version}` : '')}
+                      {label}
                       <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" />
                     </label>
 
@@ -614,7 +618,7 @@ const mapStateToProps = (state) => {
 
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
-  const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
+  const displayDate = formatDisplayDate(selectedDate); // 2020 JAN 01
   const filterForSmartHandoff = (layer) => {
     const {
       id, projections, disableSmartHandoff, conceptIds,
@@ -651,7 +655,7 @@ const mapDispatchToProps = (dispatch) => ({
     });
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
-        headerText: 'Leaving Worldview',
+        headerText: 'Leaving @NAME@',
         bodyComponent: SmartHandoffModal,
         desktopOnly: true,
         bodyComponentProps: {
