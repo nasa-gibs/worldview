@@ -2,7 +2,6 @@ import update from 'immutability-helper';
 import { layerReducer, getInitialState } from './reducers';
 import fixtures from '../../fixtures';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -67,7 +66,6 @@ describe('layer Reducer tests', () => {
 
   test('Common actions update active layer array and groups', () => {
     const actions = [
-      RESET_LAYERS,
       ADD_LAYER,
       REORDER_LAYERS,
       TOGGLE_OVERLAY_GROUP_VISIBILITY,
