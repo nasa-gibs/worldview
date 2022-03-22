@@ -33,7 +33,7 @@ RUN cd /usr/src && \
     pip --version
 RUN mkdir -p /usr/local/stow
 RUN cd /usr/local/stow && \
-    curl -O https://nodejs.org/download/release/v16.14.0/node-v16.14.2-linux-x64.tar.xz && \
+    curl -O https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz && \
     tar xf node-v16.14.2-linux-x64.tar.xz && \
     rm -f /usr/local/stow/node/node-v16.14.2-linux-x64.tar.xz && \
     rm -f /usr/local/stow/node-v16.14.2-linux-x64/{LICENSE,*.md} && \
