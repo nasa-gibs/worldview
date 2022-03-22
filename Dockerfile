@@ -33,11 +33,11 @@ RUN cd /usr/src && \
     pip --version
 RUN mkdir -p /usr/local/stow
 RUN cd /usr/local/stow && \
-    curl -O https://nodejs.org/download/release/v16.14.0/node-v16.14.0-linux-x64.tar.xz && \
-    tar xf node-v16.14.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node/node-v16.14.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node-v16.14.0-linux-x64/{LICENSE,*.md} && \
-    stow -S node-v16.14.0-linux-x64
+    curl -O https://nodejs.org/download/release/v16.14.0/node-v16.14.2-linux-x64.tar.xz && \
+    tar xf node-v16.14.2-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node/node-v16.14.2-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node-v16.14.2-linux-x64/{LICENSE,*.md} && \
+    stow -S node-v16.14.2-linux-x64
 
 WORKDIR /build
 # Only what is needed to run the development server and run the Selenium tests
