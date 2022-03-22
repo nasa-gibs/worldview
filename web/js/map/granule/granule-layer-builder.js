@@ -289,11 +289,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
       if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
         // Only include granules that have imagery in this proj (determined by layer dateRanges)
-        const hasImagery = dateRanges.some((range) => {
-          const start = range.startDate;
-          const end = range.endDate;
-          return isWithinDateRange(granuleDate, start, end);
-        });
+        const hasImagery = dateRanges.some(
+          ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
+        );
         if (hasImagery) {
           dates[date] = polygons;
         }
@@ -383,7 +381,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranuleDates = await getQueriedGranuleDates(def, options.date);
-    const filteredGranules = filterGranules(availableGranuleDates, count);
+    const filteredGranules = filterGranules(def.dateRanges, availableGranuleDates, count);
     return {
       count,
       granuleDates: filteredGranules.map(({ date }) => date),
@@ -398,12 +396,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {number} granuleCount - number of granules to add to collection
    * @returns {array} collection of granule objects with filtered granuleDates
   */
-  const filterGranules = (granuleDates, granuleCount) => {
+  const filterGranules = (dateRanges, granuleDates, granuleCount) => {
     const dates = [];
     for (let i = granuleDates.length - 1; i >= 0 && dates.length < granuleCount; i -= 1) {
       const item = granuleDates[i];
-      const { dayNight } = item;
-      if (dayNight === dayNightFilter) {
+      const { dayNight, date } = item;
+      const granuleDate = new Date(date);
+      const hasImagery = dateRanges.some(
+        ({ startDate, endDate }) => isWithinDateRange(granuleDate, startDate, endDate),
+      );
+      if (dayNight === dayNightFilter && hasImagery) {
         dates.unshift(item);
       }
     }
