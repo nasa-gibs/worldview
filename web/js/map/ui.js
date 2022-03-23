@@ -290,7 +290,6 @@ export default function mapui(models, config, store, ui) {
       }, 100);
     });
     events.on('redux:action-dispatched', subscribeToStore);
-    events.on('map:reload-layers', reloadLayers);
     events.on('granule-hovered', onGranuleHover);
     window.addEventListener('orientationchange', () => {
       updateProjection(true);
