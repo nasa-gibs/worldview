@@ -7,7 +7,7 @@ import {
 import {
   DEFAULT_NUM_GRANULES,
 } from '../../modules/layers/constants';
-import { updateGranuleLayerGeometry, addGranuleLayerDates } from '../../modules/layers/actions';
+import { updateGranuleLayerState } from '../../modules/layers/actions';
 import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
@@ -223,51 +223,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
   /**
    *
-   * @param {*} def
-   * @param {*} group
-   * @param {*} includedDates
-   * @param {*} filteredGranules
-   * @param {*} filteredGranuleCollection
-   */
-  const updateGranuleState = (layer) => {
-    const state = store.getState();
-    const {
-      id, def, filteredGranules, reorderedGranules, granuleDates,
-    } = layer.wv;
-    const {
-      endDate, subtitle, startDate, dateRanges,
-    } = def;
-
-    const mostRecentGranuleDate = granuleDates[0];
-    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
-
-    // create geometry object with date:polygons key/value pair filtering out granules outside date range
-    const granuleFootprints = filteredGranules.reduce((dates, { date, polygons }) => {
-      const granuleDate = new Date(date);
-
-      if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
-        // Only include granules that have imagery in this proj (determined by layer dateRanges)
-        const hasImagery = dateRanges.some(
-          ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
-        );
-        if (hasImagery) {
-          dates[date] = polygons;
-        }
-      }
-      return dates;
-    }, {});
-
-    const existingLayer = getGranuleLayer(state, id);
-    if (existingLayer) {
-      store.dispatch(updateGranuleLayerGeometry(id, updatedDates, granuleFootprints));
-    } else {
-      store.dispatch(addGranuleLayerDates(id, granuleDates, granuleFootprints, `${subtitle}`));
-    }
-  };
-
-  /**
-   *
    *
    * @method createGranuleLayer
    * @static
@@ -287,7 +242,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
     layer.wv = { ...attributes, ...granuleAttributes };
-    updateGranuleState(layer);
+    store.dispatch(updateGranuleLayerState(layer));
 
     return layer;
   };

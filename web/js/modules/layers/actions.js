@@ -35,7 +35,7 @@ import {
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
 import safeLocalStorage from '../../util/local-storage';
-
+import { getGranuleFootprints } from '../../map/granule/util';
 
 export function initSecondLayerGroup() {
   return {
@@ -312,40 +312,31 @@ export function showLayers(layers) {
   };
 }
 
-export function addGranuleLayerDates(id, dates, geometry, granulePlatform) {
+export function updateGranuleLayerState(layer) {
   return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
+    const state = getState();
+    const {
+      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
+    } = layer.wv;
 
-    dispatch({
-      type: ADD_GRANULE_LAYER_DATES,
-      id,
-      activeKey: activeString,
-      dates,
-      geometry,
-      granulePlatform,
-    });
+    const mostRecentGranuleDate = granuleDates[0];
+    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
+    const granuleFootprints = getGranuleFootprints(layer);
+    const existingLayer = getGranuleLayer(state, id);
+
+    if (existingLayer) {
+      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
+    }
+    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
   };
 }
 
-export function updateGranuleLayerOptions(dates, id, count) {
-  return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
-
-    dispatch({
-      type: UPDATE_GRANULE_LAYER_OPTIONS,
-      id,
-      activeKey: activeString,
-      dates,
-      count,
-    });
-  };
-}
-
-export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
+function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
     const { activeString } = compare;
-
+    const { id, count } = layer.wv;
     const layerDef = layers.layerConfig[id];
     const granulePlatform = `${layerDef.subtitle}`;
     const activeSatelliteInstrumentGroup = layers[activeString].granulePlatform;
@@ -361,8 +352,40 @@ export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
       type: UPDATE_GRANULE_LAYER_GEOMETRY,
       id,
       activeKey: activeString,
-      granuleGeometry: newGranuleGeometry,
+      granuleFootprints: newGranuleGeometry,
       dates,
+      count,
+    });
+  };
+}
+
+function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+    const { id, granuleDates, count } = layer.wv;
+
+    dispatch({
+      type: ADD_GRANULE_LAYER_DATES,
+      id,
+      activeKey: activeString,
+      dates: granuleDates,
+      granuleFootprints,
+      granulePlatform,
+      count,
+    });
+  };
+}
+
+export function updateGranuleLayerOptions(dates, id, count) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+
+    dispatch({
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id,
+      activeKey: activeString,
+      dates,
+      count,
     });
   };
 }
