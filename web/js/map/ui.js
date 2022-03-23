@@ -865,6 +865,7 @@ export default function mapui(models, config, store, ui) {
     const options = {
       group: compare.activeString,
       date: getSelectedDate(state),
+      ...getGranuleOptions(state, def, compare.activeString),
     };
     const updatedLayer = await createLayer(def, options);
     layerCollection.setAt(index, updatedLayer);
@@ -900,6 +901,7 @@ export default function mapui(models, config, store, ui) {
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(state, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
+
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }

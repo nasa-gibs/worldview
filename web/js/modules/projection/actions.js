@@ -11,15 +11,15 @@ export default function changeProjection(id) {
     if (!proj) {
       throw new Error(`Invalid projection: ${id}`);
     }
-    dispatch({
-      type: CHANGE_PROJECTION,
-      id,
-      selected: proj,
-    });
     dispatch(updateDatesOnProjChange(id));
     dispatch(onProjectionSwitch(id));
     if (isPlaying) {
       dispatch(stop());
     }
+    dispatch({
+      type: CHANGE_PROJECTION,
+      id,
+      selected: proj,
+    });
   };
 }
