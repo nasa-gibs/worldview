@@ -53,7 +53,7 @@ export const getGranuleLayer = (state, id, activeString) => {
 
 export const getGranuleCount = (state, id) => {
   const layer = getGranuleLayer(state, id);
-  return layer ? layer.count : 0;
+  return layer ? layer.count : 20;
 };
 
 export const getActiveGranuleFootPrints = (state) => {

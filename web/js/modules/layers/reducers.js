@@ -75,6 +75,7 @@ export function getInitialState(config) {
   return updatedState;
 }
 
+
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getPrevOverlayGroups = () => state[compareState].overlayGroups;
@@ -275,7 +276,7 @@ export function layerReducer(state = initialState, action) {
 
     case ADD_GRANULE_LAYER_DATES: {
       const {
-        id, activeKey, dates, geometry, granulePlatform,
+        id, activeKey, dates, granuleFootprints, granulePlatform, count,
       } = action;
 
       return update(state, {
@@ -284,8 +285,8 @@ export function layerReducer(state = initialState, action) {
             $merge: {
               [id]: {
                 dates,
-                count: dates.length,
-                granuleFootprints: geometry,
+                count,
+                granuleFootprints,
               },
             },
           },
@@ -293,7 +294,7 @@ export function layerReducer(state = initialState, action) {
             $set: granulePlatform,
           },
           granuleFootprints: {
-            $set: geometry,
+            $set: granuleFootprints,
           },
         },
       });
@@ -317,7 +318,7 @@ export function layerReducer(state = initialState, action) {
 
     case UPDATE_GRANULE_LAYER_GEOMETRY: {
       const {
-        id, activeKey, dates, granuleGeometry,
+        id, activeKey, dates, granuleFootprints, count,
       } = action;
 
       return update(state, {
@@ -326,12 +327,13 @@ export function layerReducer(state = initialState, action) {
             [id]: {
               $merge: {
                 dates,
-                granuleFootprints: granuleGeometry,
+                granuleFootprints,
+                count,
               },
             },
           },
           granuleFootprints: {
-            $set: granuleGeometry,
+            $set: granuleFootprints,
           },
         },
       });

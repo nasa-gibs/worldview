@@ -37,6 +37,32 @@ export const isWithinDateRange = (date, startDate, endDate) => (startDate && end
   ? date.getTime() <= new Date(endDate).getTime() && date.getTime() >= new Date(startDate).getTime()
   : false);
 
+export const getGranuleFootprints = (layer) => {
+  const {
+    def, filteredGranules, granuleDates,
+  } = layer.wv;
+  const { endDate, startDate, dateRanges } = def;
+
+  const mostRecentGranuleDate = granuleDates[0];
+  const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+
+  // create geometry object with date:polygons key/value pair filtering out granules outside date range
+  return filteredGranules.reduce((dates, { date, polygons }) => {
+    const granuleDate = new Date(date);
+
+    if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
+      // Only include granules that have imagery in this proj (determined by layer dateRanges)
+      const hasImagery = dateRanges.some(
+        ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
+      );
+      if (hasImagery) {
+        dates[date] = polygons;
+      }
+    }
+    return dates;
+  }, {});
+};
+
 /**
  * Get CMR query dates for building query string and child processes
  *
