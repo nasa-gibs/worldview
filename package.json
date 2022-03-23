@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "16.14.0"
+    "node": "16.14.2"
   },
   "husky": {
     "hooks": {
@@ -41,6 +41,7 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
     "dist": "pipenv run run-s clean getcapabilities build:config build:prod && node ./tasks/dist.js",
+    "dist:bamboo": "run-s clean getcapabilities build:config build:prod && node ./tasks/dist.js",
     "dist:dev": "pipenv run run-s clean getcapabilities build:config build:dev && node ./tasks/dist.js",
     "distclean": "npm run clean && node ./tasks/distclean.js",
     "docker:ci": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-ci.sh ; npm run docker:stop",
