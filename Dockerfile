@@ -31,23 +31,21 @@ RUN cd /usr/src && \
     python3 -m ensurepip && \
     pip install --upgrade pip && \
     pip --version
-RUN mkdir -p /usr/local/stow
-ENV NVM_DIR=/root/.nvm
+RUN mkdir -p /usr/local/nvm
+ENV NVM_DIR=/usr/local/nvm
 ENV NODE_VERSION=16.14.2
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
     nvm use v${NODE_VERSION} && \
     nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
-RUN node --version && \
-    npm --version
+ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
 WORKDIR /build
 # Only what is needed to run the development server and run the Selenium tests
 RUN mkdir -p /build/node_modules && \
-    npm --unsafe-perm install \
+    npm install \
     chromedriver \
     express \
     geckodriver \
