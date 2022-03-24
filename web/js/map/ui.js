@@ -85,7 +85,7 @@ export default function mapui(models, config, store, ui) {
     proj: {}, // One map for each projection
     selected: null, // The map for the selected projection
     selectedVectors: {},
-    activeMarker: null,
+    markers: [],
     runningdata,
     layerKey,
     createLayer,
@@ -235,6 +235,40 @@ export default function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
+
+
+  /*
+   * Remove coordinates marker from all projections
+   *
+   * @method removeCoordinatesMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeCoordinatesMarker = (coordinatesObject) => {
+    self.markers.forEach((marker) => {
+      if (marker.id === coordinatesObject.id) {
+        marker.setMap(null);
+        self.selected.removeOverlay(marker);
+      }
+    });
+  };
+
+  /*
+   * Remove all coordinates markers
+   *
+   * @method removeAllCoordinatesMarkers
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeAllCoordinatesMarkers = () => {
+    self.markers.forEach((marker) => {
+      marker.setMap(null);
+      self.selected.removeOverlay(marker);
+    });
+  };
+
   /*
    * Handle reverse geocode and add map marker with results
    *
@@ -247,6 +281,7 @@ export default function mapui(models, config, store, ui) {
     const state = store.getState();
     const { locationSearch, proj } = state;
     const { coordinates } = locationSearch;
+    removeAllCoordinatesMarkers();
     if (coordinates && coordinates.length > 0) {
       coordinates.forEach((coordinatesObject) => {
         const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
@@ -259,24 +294,6 @@ export default function mapui(models, config, store, ui) {
       });
     }
   };
-
-  /*
-   * Remove coordinates marker
-   *
-   * @method removeCoordinatesMarker
-   * @static
-   *
-   * @returns {void}
-   */
-  const removeCoordinatesMarker = (coordinatesObject) => {
-    const map = self.selected;
-    self.activeMarker = map.getOverlayById(coordinatesObject.id);
-    if (self.activeMarker) {
-      self.activeMarker.setMap(null);
-      self.selected.removeOverlay(self.activeMarker);
-    }
-  };
-
   /*
    * Add map coordinate marker and update store
    *
@@ -316,7 +333,7 @@ export default function mapui(models, config, store, ui) {
       return false;
     }
 
-    self.activeMarker = marker;
+    self.markers.push(marker);
     self.selected.addOverlay(marker);
     self.selected.renderSync();
 
