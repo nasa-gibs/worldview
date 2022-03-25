@@ -175,7 +175,7 @@
   margin-left: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .wv-palettes-colorbar {
     width: 100%;
     max-width: 100%;

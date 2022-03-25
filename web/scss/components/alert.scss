@@ -72,7 +72,7 @@
   margin-top: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .wv-alert {
     min-height: 50px;
     font-size: 12px;

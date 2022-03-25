@@ -39,13 +39,13 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .wv-measure-button {
-    bottom: 10px;
+    bottom: 20px;
   }
 
   .modal-dialog.measure-tool-modal {
-    bottom: 55px;
+    bottom: 60px;
     margin: 0;
   }
 }

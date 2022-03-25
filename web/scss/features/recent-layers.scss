@@ -53,7 +53,7 @@ button.recent-layer-delete {
   top: 8px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: $desktop-min-width) {
   .recent-layers-header {
     width: 50%;
   }

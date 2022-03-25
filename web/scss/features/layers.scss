@@ -673,7 +673,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: $desktop-min-width) {
   .search-layers-container {
     & div.layer-list-detail-container {
       flex-direction: row;
@@ -692,7 +692,7 @@
 }
 
 /* Need at least 1024px to fit three category boxes inline */
-@media (max-width: 1023px) {
+@media (max-width: $tablet-max-width) {
   .custom-layer-dialog.category-width {
     width: 658px;
 
@@ -717,7 +717,7 @@
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .category-width .layer-modal-content {
     height: calc(var(--vh, 1vh) * 100 - 135px);
   }
@@ -740,7 +740,7 @@
 }
 
 /* Mobile Styles Begin Here */
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .category-width .layer-modal-content {
     padding: 0;
     height: calc(var(--vh, 1vh) * 100 - 40px);

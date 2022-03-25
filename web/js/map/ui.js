@@ -233,7 +233,7 @@ export default function mapui(models, config, store, ui) {
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('map:reload-layers', reloadLayers);
     window.addEventListener('orientationchange', () => {
-      updateProjection(true);
+      setTimeout(() => { updateProjection(true); }, 200);
     });
     updateProjection(true);
   };

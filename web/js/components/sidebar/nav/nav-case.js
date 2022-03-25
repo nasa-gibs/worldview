@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav, UncontrolledTooltip } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomNavItem from './nav-item';
-
 
 const tabClasses = 'sidebar-tab';
 
@@ -87,16 +87,16 @@ function NavCase (props) {
       />
       {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
-      <div className="toggleIconHolder">
-        <UncontrolledTooltip placement="right" target="accordion-toggler-button">
-          Hide sidebar
-        </UncontrolledTooltip>
-        <a
+
+      <div id="toggleIconHolder" className="sidebar-collapse" onClick={toggleSidebar}>
+        <FontAwesomeIcon
           id="accordion-toggler-button"
-          className="accordionToggler atcollapse arrow"
-          onClick={toggleSidebar}
+          icon="caret-up"
           aria-label="Hide sidebar"
         />
+        <UncontrolledTooltip placement="right" target="toggleIconHolder">
+          Hide sidebar
+        </UncontrolledTooltip>
       </div>
     </Nav>
   );
