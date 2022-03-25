@@ -20,7 +20,7 @@
 
   min-height: 166px;
 
-  @media (max-width: 768px) {
+  @media (max-width: $mobile-max-width) {
     height: calc(var(--vh, 1vh) * 100 - 85px);
   }
 
@@ -30,7 +30,7 @@
     background: #222;
     min-height: 260px;
 
-    @media (max-width: 768px) {
+    @media (max-width: $mobile-max-width) {
       min-height: calc(var(--vh, 1vh) * 100 - $wv-mobile-event-list-offset);
     }
   }
@@ -60,7 +60,7 @@
 }
 
 .map-item-list li.item h4.title {
-  @media (max-width: 768px) {
+  @media (max-width: $mobile-max-width) {
     font-size: 1em;
   }
 

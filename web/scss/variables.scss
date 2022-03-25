@@ -27,6 +27,10 @@ $wv-sidebar-event-footer-height: 35px;
 $wv-mobile-event-list-offset: $wv-mob-sb-tabs-height + $wv-sidebar-event-filter-height + $wv-sidebar-event-footer-height;
 
 /* Responsive Breakpoints */
+$mobile-max-width: 768px;
+$tablet-min-width: 769px;
+$tablet-max-width: 1023px;
+$desktop-min-width: 1024px;
 
 /* Mixins */
 @mixin wv-modal-dialog {

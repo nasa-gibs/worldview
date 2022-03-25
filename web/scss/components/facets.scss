@@ -95,7 +95,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .facet-container {
     max-width: 100%;
     display: flex;

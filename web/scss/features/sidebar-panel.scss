@@ -38,7 +38,7 @@
       color: rgb(40 40 40);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: $mobile-max-width) {
       height: 45px;
       width: 56px;
       background-image: none;
@@ -92,7 +92,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $mobile-max-width) {
     height: 48px;
     width: 45px;
 
@@ -585,7 +585,7 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;

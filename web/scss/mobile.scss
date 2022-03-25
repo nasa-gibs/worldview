@@ -1,4 +1,4 @@
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: $mobile-max-width) {
   div.olControlScaleLineCustom {
     bottom: 10px;
   }

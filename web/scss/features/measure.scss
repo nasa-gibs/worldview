@@ -39,7 +39,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .wv-measure-button {
     bottom: 20px;
   }

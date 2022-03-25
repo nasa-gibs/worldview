@@ -100,7 +100,7 @@
   border-bottom-right-radius: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .wv-zoom-buttons {
     display: none;
   }
