@@ -68,7 +68,7 @@
   display: block;
   width: 36px;
   padding: 12px;
-  height: 37px;
+  height: 38px;
 }
 
 .wv-map-zoom-in {
@@ -95,7 +95,7 @@
 }
 
 .wv-map-rotate-right {
-  top: 91px;
+  top: 90px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -109,9 +109,9 @@
     top: 96px;
   }
 
-  .wv-map-rotate-left svg.svg-inline--fa,
-  .wv-map-rotate-right svg.svg-inline--fa {
-    width: 47px;
+  .wv-map-rotate-left,
+  .wv-map-rotate-right {
+    width: 49px;
     padding: 8px;
   }
 
