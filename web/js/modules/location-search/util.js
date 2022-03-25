@@ -154,19 +154,18 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
   const serializeCoordinates = (coordinate) => {
     const coordinateValues = [coordinate.latitude, coordinate.longitude];
-    if (!map.ui.selected) return null;
+    if (!map.ui.selected) return;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
-    if (!coordinatesWithinExtent) return null;
+    if (!coordinatesWithinExtent) return;
     return coordinateValues;
   };
 
   const serializeCoordinatesArray = (coordinatesArray) => coordinatesArray
     .map((coordinate) => serializeCoordinates(coordinate))
-    .filter((coordinate) => coordinate !== null);
+    .filter((coordinate) => coordinate);
   const coordinatesURL = Array.isArray(coordinates) ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
-    const result = coordinatesURL.length === 1 ? coordinatesURL : coordinatesURL.join('+');
-    return result;
+    return coordinatesURL.join('+');
   }
 }
 
