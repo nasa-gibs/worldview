@@ -1,85 +1,107 @@
-.toggleButtonHolder {
+.sidebar-expand {
   position: relative;
-}
 
-.accordionToggler {
-  overflow: hidden;
-  z-index: 1;
-  height: 28px;
-  width: 28px;
-  background: none no-repeat scroll left;
+  a {
+    float: left;
+    left: 10px;
+    position: absolute;
+    top: 67px;
+    height: 30px;
+    padding-top: 8px;
+    background: $wv-transparent-black;
+    border-radius: 0;
+    box-sizing: border-box;
+    width: 286px;
+    margin: 0;
+    border: 1px solid #333;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+    z-index: 1;
 
-  & .layer-count {
-    margin-left: 5px;
+    & .layer-count {
+      margin: 0 5px;
+    }
+
+    .expand-icon {
+      height: 25px;
+      width: 25px;
+      float: right;
+      margin-right: 5px;
+      position: relative;
+      top: -7px;
+    }
+
+    &:hover {
+      background-color: #ccc;
+      color: rgb(40 40 40);
+    }
+
+    @media (max-width: 768px) {
+      height: 45px;
+      width: 56px;
+      background-image: none;
+      border-radius: 5px;
+      top: 58px;
+
+      & svg.svg-inline--fa {
+        font-size: 33px;
+        position: absolute;
+        left: 10px;
+        top: 5px;
+        color: #fff;
+      }
+
+      & span.layer-count {
+        color: #fff;
+        position: relative;
+        top: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        background: #333;
+        border-radius: 50%;
+        padding: 0 5px;
+        text-align: center;
+        margin: 8px;
+      }
+    }
   }
 }
 
-.toggleIconHolder {
+.sidebar-collapse {
   position: absolute;
-  right: 6px;
+  right: 2px;
   height: 30px;
   width: 30px;
   border: 1px solid transparent;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-
-.atcollapse {
-  position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -3px;
-  border-radius: 0;
-  box-sizing: border-box;
-  border-right: 0;
-}
-
-.toggleIconHolder:hover {
-  background: rgb(220 220 220 / 100%);
-}
-
-.toggleIconHolder:hover .atcollapse {
-  background-position: -206px -63px;
-}
-
-a.staticLayers:not([href]):not([tabindex]) {
-  float: left;
-  left: 10px;
-  position: absolute;
-  top: 67px;
-  height: auto;
-  background: $wv-transparent-black;
-  border-radius: 0;
-  box-sizing: border-box;
-  width: 286px;
-  margin: 0;
-  border: 1px solid #333;
   cursor: pointer;
-  padding: 7px 0;
-  text-align: center;
-  color: #fff;
-}
 
-a.staticLayers:not([href]):not([tabindex]):hover {
-  background-color: #ccc;
-  color: rgb(40 40 40);
-}
+  svg {
+    height: 22px;
+    width: 22px;
+    padding: 3px;
+    color: #fff;
+  }
 
-a.staticLayers::after {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  background: url("../images/icon-sprite.svg") -180px -10px;
-  display: block;
-  right: 10px;
-  top: 6px;
-}
+  &:hover {
+    background: #ccc;
 
-a.staticLayers:hover::after {
-  background-position: -180px -70px;
-}
+    svg {
+      color: #333;
+    }
+  }
 
-a.atexpand {
-  background: url("../images/icon-sprite.svg") -175px 0;
+  @media (max-width: 768px) {
+    height: 48px;
+    width: 45px;
+
+    svg {
+      height: 35px;
+      width: 35px;
+      color: #fff;
+    }
+  }
 }
 
 .sidebar-panel {
@@ -564,6 +586,17 @@ li.item.productsitem.inmotion,
 }
 
 @media (max-width: 768px) {
+  .toggleIconHolder {
+    height: 50px;
+    width: 50px;
+
+    svg {
+      width: 45px;
+      height: 45px;
+      color: #fff;
+    }
+  }
+
   .sidebar-panel li.item {
     h4 {
       font-size: 16px;

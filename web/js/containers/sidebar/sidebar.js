@@ -102,7 +102,7 @@ class Sidebar extends React.Component {
     const { subComponentHeight } = this.state;
     const { isMobile, screenHeight } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
-    const tabHeight = 32;
+    const tabHeight = isMobile ? 80 : 32;
     let newHeight;
     if (!isMobile) {
       const iconHeight = 53;
@@ -155,7 +155,7 @@ class Sidebar extends React.Component {
     } if (!isCompareMode) {
       return (
         <LayersContainer
-          height={subComponentHeight - 48}
+          height={subComponentHeight - 68}
           isActive={activeTab === 'layers'}
           compareState={activeString}
         />

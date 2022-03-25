@@ -111,7 +111,7 @@ function LayersContainer (props) {
     </DragDropContext>
   );
 
-  const mobileHeightCoeff = isCompareActive ? -30 : 20;
+  const mobileHeightCoeff = isCompareActive ? -30 : 0;
   let minHeight = '100px';
   let maxHeight = isMobile
     ? height + mobileHeightCoeff

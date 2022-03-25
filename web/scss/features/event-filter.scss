@@ -3,6 +3,7 @@
   padding: 5px;
   max-width: 290px;
   margin: 0 auto;
+  height: $wv-sidebar-event-filter-height;
 
   .filter-dates-icons {
     display: inline-block;
@@ -84,7 +85,7 @@
   padding: 10px 0;
   width: 100%;
   margin: 0 auto;
-  min-height: 35px;
+  min-height: $wv-sidebar-event-footer-height;
   font-size: 15px;
 
   svg {

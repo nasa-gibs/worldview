@@ -724,7 +724,7 @@ button:focus {
   user-select: none;
   position: absolute;
   left: 10px;
-  bottom: 10px;
+  bottom: 20px;
   background: $wv-transparent-black;
   color: #fff;
   border: thin solid #333;
@@ -749,6 +749,10 @@ button:focus {
     font-size: 18px;
   }
 
+  .datepicker-navbar-btn {
+    height: 55px;
+  }
+
   .datepicker .datepicker-navbar-btn:hover {
     background: #ccc;
     color: #333;
@@ -759,7 +763,7 @@ button:focus {
 #timeline-header .mobile-date-change-arrows-btn {
   position: absolute;
   left: 120px;
-  bottom: 10px;
+  bottom: 20px;
   background: $wv-transparent-black;
   border: thin solid #333;
   border-radius: 5px;

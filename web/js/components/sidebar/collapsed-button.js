@@ -16,18 +16,18 @@ class CollapsedButton extends PureComponent {
     return (
       <div
         id="productsHoldertoggleButtonHolder"
-        className="toggleButtonHolder"
+        className="sidebar-expand"
       >
         <a
           id={buttonId}
           aria-label={labelText}
-          className="accordionToggler dateHolder staticLayers"
+          className="accordionToggler staticLayers"
           onClick={onclick}
         >
           <UncontrolledTooltip placement="right" target={buttonId}>
             {labelText}
           </UncontrolledTooltip>
-          <FontAwesomeIcon icon="layer-group" />
+          <FontAwesomeIcon className="layer-icon" icon="layer-group" />
           {isMobile
             ? (
               <span className="layer-count mobile">
@@ -39,6 +39,7 @@ class CollapsedButton extends PureComponent {
                 {`${numberOfLayers.toString()} Layers`}
               </span>
             )}
+          {!isMobile && <FontAwesomeIcon className="expand-icon" icon="caret-down" />}
         </a>
       </div>
     );

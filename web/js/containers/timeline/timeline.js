@@ -872,10 +872,10 @@ class Timeline extends React.Component {
 
     // default positioning
     let mobileLeft = 190;
-    let mobileBottom = 10;
+    let mobileBottom = 20;
     if (isEmbedModeActive) {
       mobileLeft = 145;
-      mobileBottom = 10;
+      mobileBottom = 20;
     }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
@@ -888,10 +888,10 @@ class Timeline extends React.Component {
       }
     } else if (isScreenWidthLessThan484) {
       mobileLeft = isCompareModeActive ? 112 : 10;
-      mobileBottom = 65;
+      mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 50;
+        mobileBottom = 60;
       }
     }
 
