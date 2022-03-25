@@ -319,7 +319,7 @@ footer .compare-toggle-button {
   }
 }
 
-@media (max-width: 739px) {
+@media (max-width: $mobile-max-width) {
   .layer-group-case .layer-group-header {
     min-height: 32px;
     margin-top: 10px;
