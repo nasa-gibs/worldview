@@ -124,7 +124,7 @@ class LocationSearchModal extends Component {
       this.setExtentAlert(true);
       this.setInputAlertIcon(true);
     } else {
-      const [latitude, longitude] = coordinatesPending;
+      const [longitude, latitude] = coordinatesPending;
       reverseGeocode([longitude, latitude]).then((results) => {
         setPlaceMarker([longitude, latitude], results);
       });
@@ -188,10 +188,10 @@ class LocationSearchModal extends Component {
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
       this.debounceGetSuggestions.cancel();
-      const { latitude, longitude } = coordinatesInputValue;
+      const { longitude, latitude } = coordinatesInputValue;
       this.clearAlerts();
       clearSuggestions();
-      updatePendingCoordinates([latitude, longitude]);
+      updatePendingCoordinates([longitude, latitude]);
     } else if (!value) {
       // clear on empty input
       this.debounceGetSuggestions.cancel();
