@@ -85,7 +85,7 @@ export default function mapui(models, config, store, ui) {
     proj: {}, // One map for each projection
     selected: null, // The map for the selected projection
     selectedVectors: {},
-    activeMarker: null,
+    markers: [],
     runningdata,
     layerKey,
     createLayer,
@@ -106,6 +106,9 @@ export default function mapui(models, config, store, ui) {
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
+        if (action.flyToExistingMarker) {
+          return flyToMarker(action.coordinates);
+        }
         return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
       }
       case TOGGLE_DIALOG_VISIBLE:
@@ -235,6 +238,40 @@ export default function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
+
+
+  /*
+   * Remove coordinates marker from all projections
+   *
+   * @method removeCoordinatesMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeCoordinatesMarker = (coordinatesObject) => {
+    self.markers.forEach((marker) => {
+      if (marker.id === coordinatesObject.id) {
+        marker.setMap(null);
+        self.selected.removeOverlay(marker);
+      }
+    });
+  };
+
+  /*
+   * Remove all coordinates markers
+   *
+   * @method removeAllCoordinatesMarkers
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeAllCoordinatesMarkers = () => {
+    self.markers.forEach((marker) => {
+      marker.setMap(null);
+      self.selected.removeOverlay(marker);
+    });
+  };
+
   /*
    * Handle reverse geocode and add map marker with results
    *
@@ -247,6 +284,7 @@ export default function mapui(models, config, store, ui) {
     const state = store.getState();
     const { locationSearch, proj } = state;
     const { coordinates } = locationSearch;
+    removeAllCoordinatesMarkers();
     if (coordinates && coordinates.length > 0) {
       coordinates.forEach((coordinatesObject) => {
         const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
@@ -260,21 +298,15 @@ export default function mapui(models, config, store, ui) {
     }
   };
 
-  /*
-   * Remove coordinates marker
-   *
-   * @method removeCoordinatesMarker
-   * @static
-   *
-   * @returns {void}
-   */
-  const removeCoordinatesMarker = (coordinatesObject) => {
-    const map = self.selected;
-    self.activeMarker = map.getOverlayById(coordinatesObject.id);
-    if (self.activeMarker) {
-      self.activeMarker.setMap(null);
-      self.selected.removeOverlay(self.activeMarker);
-    }
+  const flyToMarker = (coordinatesObject) => {
+    const state = store.getState();
+    const { proj } = state;
+    const { sources } = config;
+    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
+    const zoom = self.selected.getView().getZoom();
+    const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
+    const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
+    animateCoordinates(self.selected, proj, latestCoordinates, maxZoom);
   };
 
   /*
@@ -292,9 +324,7 @@ export default function mapui(models, config, store, ui) {
     const { proj, browser } = state;
     const results = geocodeResults;
     if (!results) return;
-    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
 
-    const { sources } = config;
     const removeMarker = () => {
       store.dispatch({
         type: REMOVE_MARKER,
@@ -316,16 +346,12 @@ export default function mapui(models, config, store, ui) {
       return false;
     }
 
-    self.activeMarker = marker;
+    self.markers.push(marker);
     self.selected.addOverlay(marker);
     self.selected.renderSync();
 
     if (shouldFlyToCoordinates) {
-      // fly to coordinates and render coordinates tooltip on init SET_MARKER
-      const zoom = self.selected.getView().getZoom();
-      const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
-      const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-      animateCoordinates(self.selected, proj, latestCoordinates, maxZoom);
+      flyToMarker(coordinatesObject);
     }
 
     store.dispatch({
