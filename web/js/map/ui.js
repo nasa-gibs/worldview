@@ -106,6 +106,9 @@ export default function mapui(models, config, store, ui) {
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
       case SET_MARKER: {
+        if (action.flyToExistingMarker) {
+          return flyToMarker(action.coordinates);
+        }
         return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
       }
       case TOGGLE_DIALOG_VISIBLE:
@@ -294,6 +297,18 @@ export default function mapui(models, config, store, ui) {
       });
     }
   };
+
+  const flyToMarker = (coordinatesObject) => {
+    const state = store.getState();
+    const { proj } = state;
+    const { sources } = config;
+    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
+    const zoom = self.selected.getView().getZoom();
+    const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
+    const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
+    animateCoordinates(self.selected, proj, latestCoordinates, maxZoom);
+  };
+
   /*
    * Add map coordinate marker and update store
    *
@@ -309,9 +324,7 @@ export default function mapui(models, config, store, ui) {
     const { proj, browser } = state;
     const results = geocodeResults;
     if (!results) return;
-    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
 
-    const { sources } = config;
     const removeMarker = () => {
       store.dispatch({
         type: REMOVE_MARKER,
@@ -338,11 +351,7 @@ export default function mapui(models, config, store, ui) {
     self.selected.renderSync();
 
     if (shouldFlyToCoordinates) {
-      // fly to coordinates and render coordinates tooltip on init SET_MARKER
-      const zoom = self.selected.getView().getZoom();
-      const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
-      const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-      animateCoordinates(self.selected, proj, latestCoordinates, maxZoom);
+      flyToMarker(coordinatesObject);
     }
 
     store.dispatch({

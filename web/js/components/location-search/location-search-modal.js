@@ -125,8 +125,8 @@ class LocationSearchModal extends Component {
       this.setInputAlertIcon(true);
     } else {
       const [latitude, longitude] = coordinatesPending;
-      reverseGeocode([latitude, longitude]).then((results) => {
-        setPlaceMarker([latitude, longitude], results);
+      reverseGeocode([longitude, latitude]).then((results) => {
+        setPlaceMarker([longitude, latitude], results);
       });
       this.clearAlerts();
       updateValue('');
