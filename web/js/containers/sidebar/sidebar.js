@@ -249,11 +249,12 @@ class Sidebar extends React.Component {
           {this.renderSidebarLogo()}
           <>
             {!isDistractionFreeModeActive && isCollapsed && (
-            <CollapsedButton
-              isMobile={isMobile}
-              onclick={this.toggleSidebar}
-              numberOfLayers={numberOfLayers}
-            />
+              <CollapsedButton
+                isMobile={isMobile}
+                isEmbed={isEmbedModeActive}
+                onclick={this.toggleSidebar}
+                numberOfLayers={numberOfLayers}
+              />
             )}
             <div
               id="products-holder"
