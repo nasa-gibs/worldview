@@ -47,7 +47,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import embedReducers from './embed/reducers';
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
-import { smartHandoffReducer } from './smart-handoff/reducer';
+import { smartHandoffReducer, getInitialState as getSmartHandoffInitialState } from './smart-handoff/reducer';
 import { getInitialState as getInitialSettingsState, settingsReducer } from './settings/reducer';
 import { loadingReducer } from './loading/reducers';
 
@@ -88,6 +88,7 @@ export function getInitialState(models, config, parameters) {
     settings: getInitialSettingsState(),
     requestedEvents: eventRequestResponse(),
     requestedEventSources: eventRequestResponse(),
+    smartHandoffs: getSmartHandoffInitialState(config),
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),

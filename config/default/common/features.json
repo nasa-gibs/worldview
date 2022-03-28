@@ -1,6 +1,5 @@
 {
     "features": {
-        "smartHandoffs": true,
         "animation": true,
         "urlShortening": true,
         "customPalettes": true,
@@ -8,6 +7,7 @@
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,
+        "googleTagManager": true,
         "vismetadata": {
             "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
             "daacMap": {
@@ -30,7 +30,15 @@
                 "MOPITT": "MOPITT SIPS"
             }
         },
-        "googleTagManager": true,
+        "cmr": {
+            "url": "https://cmr.earthdata.nasa.gov/search/"
+        },
+        "smartHandoffs": [
+            {
+                "serviceName": "Earthdata Search",
+                "id": "TL1200416293-ESDIS"
+            }
+        ],
         "notification": {
             "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
             "releases": "https://github.com/nasa-gibs/worldview/releases"
