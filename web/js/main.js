@@ -205,6 +205,10 @@ window.onload = () => {
         };
         render(config, parameters, legacyState);
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
     }).catch((error) => console.error(error));
 };
 

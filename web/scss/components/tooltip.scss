@@ -205,7 +205,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .tooltip-custom-black {
     &.tooltip-coordinates-container {
       max-width: 320px;

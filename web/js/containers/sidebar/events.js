@@ -41,7 +41,7 @@ function Events(props) {
     selectedCategories,
   } = props;
 
-  const filterControlHeight = 72;
+  const filterControlHeight = 115;
   const maxHeight = Math.max(height - filterControlHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
