@@ -24,6 +24,11 @@ import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
 import selectCollection from '../../modules/smart-handoff/actions';
+import {
+  getConceptUrl as getConceptUrlSelector,
+  getCollectionsUrl as getCollectionsUrlSelector,
+  getGranulesUrl as getGranulesUrlSelector,
+} from '../../modules/smart-handoff/selectors';
 import { formatDisplayDate } from '../../modules/date/util';
 
 const STD_NRT_MAP = {
@@ -114,8 +119,7 @@ class SmartHandoff extends Component {
 
   async validateConceptIds() {
     const { validatedConceptIds } = this.state;
-    const { availableLayers } = this.props;
-    const baseUrl = 'https://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
+    const { availableLayers, getCollectionsUrl } = this.props;
     const conceptIdRequest = async (url) => {
       const granulesResponse = await fetch(url, { timeout: 5000 });
       const result = await granulesResponse.json();
@@ -131,7 +135,8 @@ class SmartHandoff extends Component {
     await Promise.all(allConceptIds.map(
       async (id) => {
         if (validatedConceptIds[id] !== undefined) return;
-        const response = await conceptIdRequest(baseUrl + id);
+        const requestUrl = getCollectionsUrl(id);
+        const response = await conceptIdRequest(requestUrl);
         validatedConceptIds[id] = !!response.length;
       },
     ));
@@ -345,7 +350,7 @@ class SmartHandoff extends Component {
    }
 
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
-    const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+    const { getConceptUrl } = this.props;
     return (
       <UncontrolledTooltip
         className="zot-tooltip"
@@ -358,7 +363,7 @@ class SmartHandoff extends Component {
       >
         <div>{title}</div>
         <div>
-          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Collection Details </a>
+          <a href={getConceptUrl(value)} target="_blank" rel="noreferrer"> View Collection Details </a>
         </div>
       </UncontrolledTooltip>
     );
@@ -520,6 +525,7 @@ class SmartHandoff extends Component {
   render() {
     const {
       displayDate,
+      getGranulesUrl,
       isActive,
       showNotAvailableModal,
       selectedLayer,
@@ -567,6 +573,7 @@ class SmartHandoff extends Component {
               selectedLayer={selectedLayer}
               selectedCollection={selectedCollection}
               showGranuleHelpModal={showGranuleHelpModal}
+              getGranulesUrl={getGranulesUrl}
             />
           )}
           <Button
@@ -581,13 +588,13 @@ class SmartHandoff extends Component {
   }
 }
 
-/**
- * Handle type-checking of defined properties
- */
 SmartHandoff.propTypes = {
   isActive: PropTypes.bool,
   availableLayers: PropTypes.array,
   displayDate: PropTypes.string,
+  getConceptUrl: PropTypes.func,
+  getCollectionsUrl: PropTypes.func,
+  getGranulesUrl: PropTypes.func,
   map: PropTypes.object.isRequired,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
@@ -635,6 +642,9 @@ const mapStateToProps = (state) => {
   return {
     availableLayers,
     displayDate,
+    getConceptUrl: getConceptUrlSelector(state),
+    getCollectionsUrl: getCollectionsUrlSelector(state),
+    getGranulesUrl: getGranulesUrlSelector(state),
     map,
     proj: proj.selected,
     screenHeight,
