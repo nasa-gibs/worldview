@@ -38,7 +38,7 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
-import { startLoading, stopLoading } from '../modules/loading/actions';
+import { startLoading, stopLoading, LOADING_TILES } from '../modules/loading/actions';
 
 let loadingCounter = 0;
 
@@ -46,14 +46,14 @@ export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
   const tileLoadStart = () => {
     if (loadingCounter === 0) {
-      store.dispatch(startLoading('layer-tiles'));
+      store.dispatch(startLoading(LOADING_TILES));
     }
     loadingCounter += 1;
   };
   const tileLoadEnd = () => {
     loadingCounter -= 1;
     if (loadingCounter === 0) {
-      store.dispatch(stopLoading('layer-tiles'));
+      store.dispatch(stopLoading(LOADING_TILES));
     }
   };
 

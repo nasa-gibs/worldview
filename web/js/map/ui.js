@@ -71,7 +71,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
-import { startLoading, stopLoading } from '../modules/loading/actions';
+import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
 
 
 const { events } = util;
@@ -102,7 +102,7 @@ export default function mapui(models, config, store, ui) {
   };
 
   layerQueue.on('idle', () => {
-    store.dispatch(stopLoading('tile-preload'));
+    store.dispatch(stopLoading(PRELOAD_TILES));
   });
 
 
@@ -936,7 +936,7 @@ export default function mapui(models, config, store, ui) {
     const prevDate = getNextDateTime(state, -1, useDate);
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
 
-    store.dispatch(startLoading('tile-preload'));
+    store.dispatch(startLoading(PRELOAD_TILES));
 
     // If we've preloaded N dates out, we need to use the latest
     // preloaded date the next time we call this function or the buffer

@@ -1,5 +1,9 @@
 import { LOADING_START, LOADING_STOP } from './constants';
 
+export const LOADING_GRANULES = 'LOADING/GRANULES';
+export const PRELOAD_TILES = 'LOADING/TILE_PRELOAD';
+export const LOADING_TILES = 'LOADING/LAYER_TILES';
+
 export function startLoading(key, msg) {
   return (dispatch, getState) => {
     const { animation } = getState();
