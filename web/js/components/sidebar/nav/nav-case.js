@@ -90,7 +90,7 @@ function NavCase (props) {
 
       <div id="toggleIconHolder" className="sidebar-collapse" onClick={toggleSidebar}>
         <FontAwesomeIcon
-          id="accordion-toggler-button"
+          className="collapse-icon"
           icon="caret-up"
           aria-label="Hide sidebar"
         />
