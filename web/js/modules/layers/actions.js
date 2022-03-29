@@ -1,9 +1,11 @@
-import { findIndex as lodashFindIndex } from 'lodash';
+import {
+  findIndex as lodashFindIndex,
+  get as lodashGet,
+} from 'lodash';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
   addLayer as addLayerSelector,
-  resetLayers as resetLayersSelector,
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
@@ -11,7 +13,6 @@ import {
   getActiveGranuleLayers,
 } from './selectors';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -29,25 +30,12 @@ import {
   UPDATE_GRANULE_LAYER_GEOMETRY,
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+  UPDATE_ON_PROJ_CHANGE,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
 import safeLocalStorage from '../../util/local-storage';
-
-export function resetLayers(activeString) {
-  return (dispatch, getState) => {
-    const { config } = getState();
-    const newLayers = resetLayersSelector(
-      config.defaults.startingLayers,
-      config.layers,
-    );
-    dispatch({
-      type: RESET_LAYERS,
-      activeString,
-      layers: newLayers,
-    });
-  };
-}
+import { getGranuleFootprints } from '../../map/granule/util';
 
 export function initSecondLayerGroup() {
   return {
@@ -113,7 +101,7 @@ export function toggleOverlayGroups() {
   };
 }
 
-export function addLayer(id, spec = {}) {
+export function addLayer(id) {
   googleTagManager.pushEvent({
     event: 'layer_added',
     layers: { id },
@@ -129,7 +117,7 @@ export function addLayer(id, spec = {}) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      spec,
+      {},
       activeLayers,
       layers.layerConfig,
       overlays.length || 0,
@@ -143,6 +131,33 @@ export function addLayer(id, spec = {}) {
       id,
       activeString: compare.activeString,
       layers: newLayers,
+    });
+  };
+}
+
+/**
+ * Layers may have different start, end, and date ranges based on projection.
+ * Here we update them if necessary when the projection changes.
+ *
+ * @param {*} proj
+ * @returns
+ */
+export function updateDatesOnProjChange(proj) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const getUpdatedLayers = (activeString) => {
+      const activeLayers = getActiveLayersSelector(state, activeString);
+      return activeLayers.map((l) => {
+        l.startDate = lodashGet(l, `projections[${proj}].startDate`) || l.startDate;
+        l.endDate = lodashGet(l, `projections[${proj}].endDate`) || l.endDate;
+        l.dateRanges = lodashGet(l, `projections[${proj}].dateRanges`) || l.dateRanges;
+        return l;
+      });
+    };
+    dispatch({
+      type: UPDATE_ON_PROJ_CHANGE,
+      layersA: getUpdatedLayers('active'),
+      layersB: getUpdatedLayers('activeB'),
     });
   };
 }
@@ -297,40 +312,31 @@ export function showLayers(layers) {
   };
 }
 
-export function addGranuleLayerDates(id, dates, geometry, granulePlatform) {
+export function updateGranuleLayerState(layer) {
   return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
+    const state = getState();
+    const {
+      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
+    } = layer.wv;
 
-    dispatch({
-      type: ADD_GRANULE_LAYER_DATES,
-      id,
-      activeKey: activeString,
-      dates,
-      geometry,
-      granulePlatform,
-    });
+    const mostRecentGranuleDate = granuleDates[0];
+    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
+    const granuleFootprints = getGranuleFootprints(layer);
+    const existingLayer = getGranuleLayer(state, id);
+
+    if (existingLayer) {
+      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
+    }
+    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
   };
 }
 
-export function updateGranuleLayerOptions(dates, id, count) {
-  return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
-
-    dispatch({
-      type: UPDATE_GRANULE_LAYER_OPTIONS,
-      id,
-      activeKey: activeString,
-      dates,
-      count,
-    });
-  };
-}
-
-export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
+function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
     const { activeString } = compare;
-
+    const { id, count } = layer.wv;
     const layerDef = layers.layerConfig[id];
     const granulePlatform = `${layerDef.subtitle}`;
     const activeSatelliteInstrumentGroup = layers[activeString].granulePlatform;
@@ -346,8 +352,40 @@ export function updateGranuleLayerGeometry(id, dates, granuleGeometry) {
       type: UPDATE_GRANULE_LAYER_GEOMETRY,
       id,
       activeKey: activeString,
-      granuleGeometry: newGranuleGeometry,
+      granuleFootprints: newGranuleGeometry,
       dates,
+      count,
+    });
+  };
+}
+
+function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+    const { id, granuleDates, count } = layer.wv;
+
+    dispatch({
+      type: ADD_GRANULE_LAYER_DATES,
+      id,
+      activeKey: activeString,
+      dates: granuleDates,
+      granuleFootprints,
+      granulePlatform,
+      count,
+    });
+  };
+}
+
+export function updateGranuleLayerOptions(dates, id, count) {
+  return (dispatch, getState) => {
+    const { compare: { activeString } } = getState();
+
+    dispatch({
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id,
+      activeKey: activeString,
+      dates,
+      count,
     });
   };
 }
