@@ -35,8 +35,8 @@
         },
         "smartHandoffs": [
             {
-                "serviceName": "Earthdata Search",
-                "id": "TL1200416293-ESDIS"
+                "toolName": "EARTHDATA_SEARCH",
+                "conceptId": "TL2243339890-ESDIS"
             }
         ],
         "notification": {

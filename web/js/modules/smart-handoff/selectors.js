@@ -1,4 +1,5 @@
 
+import { getActiveLayers, memoizedAvailable } from '../layers/selectors';
 import util from '../../util/util';
 
 const getBaseCmrUrl = ({ config: { features: { cmr } } }) => cmr.url;
@@ -36,5 +37,23 @@ export const getCollectionsUrl = (state) => {
 // e.g. https://cmr.earthdata.nasa.gov/search/concepts/C2208779826-LANCEMODIS.html
 export const getConceptUrl = (state) => {
   const baseUrl = getBaseCmrUrl(state);
-  return (id) => `${baseUrl}concepts/${id}.html`;
+  return (id) => `${baseUrl}concepts/${id}`;
+};
+
+/**
+ * Get array of layers from state that are available and have the necessary metadata for a handoff
+ * @param {*} state
+ * @returns
+ */
+export const getValidLayersForHandoffs = (state) => {
+  const { proj } = state;
+  const filterForSmartHandoff = (layer) => {
+    const {
+      id, projections, disableSmartHandoff, conceptIds,
+    } = layer;
+    const isAvailable = memoizedAvailable(state)(id);
+    const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
+    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+  };
+  return getActiveLayers(state).filter(filterForSmartHandoff);
 };

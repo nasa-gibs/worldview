@@ -156,8 +156,9 @@ function SmartHandoffModal({
 
 function mapStateToProps(state, ownProps) {
   const { selectedCollection: { value } } = ownProps;
+  const url = value && getConceptUrl(state)(value);
   return {
-    cmrSearchDetailURL: getConceptUrl(state)(value),
+    cmrSearchDetailURL: url,
   };
 }
 
