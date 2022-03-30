@@ -76,7 +76,7 @@ import { startLoading, stopLoading } from '../modules/loading/actions';
 
 const { events } = util;
 
-export default function mapui(models, config, store, ui) {
+export default function mapui(models, config, store) {
   const animationDuration = 250;
   const granuleFootprints = {};
   const compareMapUi = mapCompare(store);
@@ -104,7 +104,6 @@ export default function mapui(models, config, store, ui) {
   layerQueue.on('idle', () => {
     store.dispatch(stopLoading('tile-preload'));
   });
-
 
   /**
    * Subscribe to redux store and listen for
@@ -175,7 +174,7 @@ export default function mapui(models, config, store, ui) {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
         const rotate = lodashGet(state, 'map.rotation') || 0;
-        updateProjection();
+        setTimeout(updateProjection, 200);
         if (newState.v && !newState.e && extent) {
           flyToNewExtent(extent, rotate);
         }
@@ -206,7 +205,7 @@ export default function mapui(models, config, store, ui) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
-        return reloadLayers();
+        return setTimeout(reloadLayers, 100);
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
