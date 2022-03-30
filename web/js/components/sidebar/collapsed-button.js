@@ -17,7 +17,6 @@ class CollapsedButton extends PureComponent {
 
     return (
       <div
-        id="productsHoldertoggleButtonHolder"
         className={classes}
       >
         <a
