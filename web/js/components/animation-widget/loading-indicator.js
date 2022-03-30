@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Modal, ModalBody, ModalHeader, Progress,
 } from 'reactstrap';
-import Spinner from 'react-loader';
 
 export default function LoadingIndicator(props) {
   const {
@@ -11,10 +10,9 @@ export default function LoadingIndicator(props) {
   } = props;
 
   const msgStyle = {
-    minHeight: 30, marginBottom: 50, fontSize: 14, textAlign: 'center',
+    minHeight: 30, margin: '30px 0', fontSize: 14, textAlign: 'center',
   };
   const barStyle = { margin: 12 };
-  const spinnerStyle = { minHeight: 50 };
   const progressValue = ((loadedItems / totalItems) * 100).toFixed(0);
 
   const renderProgressBar = () => (
@@ -24,12 +22,6 @@ export default function LoadingIndicator(props) {
         striped
         value={progressValue}
       />
-    </div>
-  );
-
-  const renderSpinner = () => (
-    <div style={spinnerStyle}>
-      <Spinner color="#fff" loaded={false} />
     </div>
   );
 
@@ -46,7 +38,7 @@ export default function LoadingIndicator(props) {
         {bodyMsg && (
           <div style={msgStyle}>{bodyMsg}</div>
         )}
-        {totalItems ? renderProgressBar() : renderSpinner()}
+        {totalItems && renderProgressBar()}
       </ModalBody>
     </Modal>
   );

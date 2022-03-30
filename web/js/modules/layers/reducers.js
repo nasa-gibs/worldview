@@ -4,7 +4,6 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -15,8 +14,13 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  ADD_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_LAYER_OPTIONS,
+  UPDATE_GRANULE_LAYER_GEOMETRY,
+  CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
+  UPDATE_ON_PROJ_CHANGE,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -40,6 +44,9 @@ const groupState = {
   layers: [],
   overlayGroups: [],
   prevLayers: [],
+  granuleFootprints: {},
+  granuleLayers: {},
+  granulePlatform: '',
 };
 
 export const initialState = {
@@ -47,16 +54,17 @@ export const initialState = {
   activeB: { ...groupState },
   layerConfig: {},
   startingLayers: [],
+  granuleFootprints: {},
 };
 
 export function getInitialState(config) {
   const { layers: layerConfig, defaults } = config;
-  const startingLayers = resetLayers(defaults.startingLayers, layerConfig);
+  const startingLayers = resetLayers(config);
   const groupsALocalStorage = safeLocalStorage.getItem(GROUP_OVERLAYS) !== 'disabled';
-  return {
+  const updatedState = {
     ...initialState,
     active: {
-      ...groupState,
+      ...initialState.active,
       groupOverlays: groupsALocalStorage,
       layers: startingLayers,
       overlayGroups: getOverlayGroups(startingLayers),
@@ -64,7 +72,9 @@ export function getInitialState(config) {
     layerConfig,
     startingLayers: defaults.startingLayers,
   };
+  return updatedState;
 }
+
 
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
@@ -79,17 +89,43 @@ export function layerReducer(state = initialState, action) {
   );
 
   switch (action.type) {
-    case RESET_LAYERS:
     case ADD_LAYER:
-    case REMOVE_LAYER:
-    case REMOVE_GROUP:
     case REORDER_LAYERS:
     case TOGGLE_OVERLAY_GROUP_VISIBILITY:
       return update(state, {
         [compareState]: {
-          layers: { $set: action.layers },
-          overlayGroups: { $set: getOverlayGroups(action.layers, getPrevOverlayGroups()) },
-          prevLayers: { $set: [] },
+          $merge: {
+            layers: action.layers,
+            overlayGroups: getOverlayGroups(action.layers, getPrevOverlayGroups()),
+            prevLayers: [],
+          },
+        },
+      });
+
+    case UPDATE_ON_PROJ_CHANGE:
+      return update(state, {
+        active: {
+          $merge: {
+            layers: action.layersA,
+          },
+        },
+        activeB: {
+          $merge: {
+            layers: action.layersB,
+          },
+        },
+      });
+
+    case REMOVE_LAYER:
+    case REMOVE_GROUP:
+      return update(state, {
+        [compareState]: {
+          $merge: {
+            layers: action.layers,
+            overlayGroups: getOverlayGroups(action.layers, getPrevOverlayGroups()),
+            prevLayers: [],
+            granuleLayers: action.granuleLayers,
+          },
         },
       });
 
@@ -104,15 +140,16 @@ export function layerReducer(state = initialState, action) {
       });
 
     case TOGGLE_OVERLAY_GROUPS:
-      return {
-        ...state,
+      return update(state, {
         [compareState]: {
-          groupOverlays: action.groupOverlays,
-          layers: action.layers,
-          overlayGroups: action.overlayGroups,
-          prevLayers: action.prevLayers,
+          $merge: {
+            groupOverlays: action.groupOverlays,
+            layers: action.layers,
+            overlayGroups: action.overlayGroups,
+            prevLayers: action.prevLayers,
+          },
         },
-      };
+      });
 
     case TOGGLE_COLLAPSE_OVERLAY_GROUP:
       return update(state, {
@@ -142,6 +179,17 @@ export function layerReducer(state = initialState, action) {
             },
           },
           prevLayers: { $set: [] },
+        },
+      });
+
+    case UPDATE_OPACITY:
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              opacity: { $set: action.opacity },
+            },
+          },
         },
       });
 
@@ -226,13 +274,79 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    case UPDATE_OPACITY:
+    case ADD_GRANULE_LAYER_DATES: {
+      const {
+        id, activeKey, dates, granuleFootprints, granulePlatform, count,
+      } = action;
+
       return update(state, {
-        [compareState]: {
-          layers: {
-            [getLayerIndex()]: {
-              opacity: { $set: action.opacity },
+        [activeKey]: {
+          granuleLayers: {
+            $merge: {
+              [id]: {
+                dates,
+                count,
+                granuleFootprints,
+              },
             },
+          },
+          granulePlatform: {
+            $set: granulePlatform,
+          },
+          granuleFootprints: {
+            $set: granuleFootprints,
+          },
+        },
+      });
+    }
+
+    case UPDATE_GRANULE_LAYER_OPTIONS: {
+      const {
+        id, activeKey, count, dates,
+      } = action;
+
+      return update(state, {
+        [activeKey]: {
+          granuleLayers: {
+            [id]: {
+              $merge: { count, dates },
+            },
+          },
+        },
+      });
+    }
+
+    case UPDATE_GRANULE_LAYER_GEOMETRY: {
+      const {
+        id, activeKey, dates, granuleFootprints, count,
+      } = action;
+
+      return update(state, {
+        [activeKey]: {
+          granuleLayers: {
+            [id]: {
+              $merge: {
+                dates,
+                granuleFootprints,
+                count,
+              },
+            },
+          },
+          granuleFootprints: {
+            $set: granuleFootprints,
+          },
+        },
+      });
+    }
+
+    case CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP:
+      return update(state, {
+        [action.activeKey]: {
+          granulePlatform: {
+            $set: action.granulePlatform,
+          },
+          granuleFootprints: {
+            $set: action.geometry,
           },
         },
       });

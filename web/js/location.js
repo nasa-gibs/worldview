@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import update from 'immutability-helper';
+
 // legacy crutches
 import {
   serializeDate,
@@ -145,7 +146,7 @@ const getParameters = function(config, parameters) {
   const now = config.pageLoadTime;
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   const { initialDate } = config;
-  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const startingLayers = resetLayers(config);
   const eventsReducerState = getInitialEventsState(config);
   return {
     p: {

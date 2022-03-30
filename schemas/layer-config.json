@@ -235,7 +235,8 @@
         "wms",
         "wmts",
         "vector",
-        "variable"
+        "variable",
+        "granule"
       ]
     },
     "format": {

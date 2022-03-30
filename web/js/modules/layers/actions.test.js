@@ -2,7 +2,9 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fixtures from '../../fixtures';
 import { addLayer, getLayers } from './selectors';
-import * as LAYER_ACTIONS from './actions';
+import {
+  removeLayer, removeGroup, toggleOverlayGroups, updateDatesOnProjChange,
+} from './actions';
 import * as LAYER_CONSTANTS from './constants';
 
 const mockStore = configureMockStore([thunk]);
@@ -23,20 +25,28 @@ function getState(layers) {
             collapsed: false,
           },
         ],
+        granuleFootprints: {},
+        granuleLayers: {},
+        granulePlatform: '',
       },
+      activeB: {
+        layers,
+      },
+      granuleFootprints: {},
     },
     compare: {
       activeString: 'active',
     },
   };
 }
-function addMockLayer(layerId, layerArray) {
+function addMockLayer(layerId, layerArray, proj) {
   return addLayer(
     layerId,
     {},
     layerArray,
     config.layers,
     getLayers(getState(layerArray), { group: 'all' }, layerArray).overlays.length,
+    proj,
   );
 }
 
@@ -55,7 +65,7 @@ describe('Layer actions', () => {
 
   test('REMOVE_LAYER action removes layer by id', () => {
     const def = layers[0];
-    store.dispatch(LAYER_ACTIONS.removeLayer('aqua-aod'));
+    store.dispatch(removeLayer('aqua-aod'));
     const actionResponse = store.getActions()[0];
     const responseLayers = [layers[1], layers[2], layers[3]];
 
@@ -64,31 +74,33 @@ describe('Layer actions', () => {
       activeString: 'active',
       layersToRemove: [def],
       layers: responseLayers,
+      granuleLayers: {},
     };
     expect(actionResponse).toEqual(expectedPayload);
   });
 
   test('REMOVE_LAYER does nothing on non-existent id', () => {
-    store.dispatch(LAYER_ACTIONS.removeLayer('INVALID TEST LAYER ID'));
+    store.dispatch(removeLayer('INVALID TEST LAYER ID'));
     const actionResponse = store.getActions()[0];
     const expectedPayload = undefined;
     expect(actionResponse).toEqual(expectedPayload);
   });
 
   test('REMOVE_GROUP removes each layer in group', () => {
-    store.dispatch(LAYER_ACTIONS.removeGroup(['terra-aod', 'aqua-aod']));
+    store.dispatch(removeGroup(['terra-aod', 'aqua-aod']));
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
       type: LAYER_CONSTANTS.REMOVE_GROUP,
       activeString: 'active',
       layersToRemove: [layers[0], layers[1]],
       layers: [layers[2], layers[3]],
+      granuleLayers: {},
     };
     expect(actionResponse).toEqual(expectedPayload);
   });
 
   test('TOGGLE_OVERLAY_GROUPS when grouped, toggling ungroups layers', () => {
-    store.dispatch(LAYER_ACTIONS.toggleOverlayGroups());
+    store.dispatch(toggleOverlayGroups());
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
       type: LAYER_CONSTANTS.TOGGLE_OVERLAY_GROUPS,
@@ -98,5 +110,20 @@ describe('Layer actions', () => {
       overlayGroups: [],
     };
     expect(actionResponse).toEqual(expectedPayload);
+  });
+
+  test('UPDATE_ON_PROJ_CHANGE updates layer dates based on projection', () => {
+    layers = addMockLayer('granule-cr', layers, 'geographic');
+    store = mockStore(getState(layers));
+    store.dispatch(updateDatesOnProjChange('arctic'));
+    const actionResponse = store.getActions()[0];
+    const { startDate, endDate, dateRanges: [firstRange, secondRange] } = actionResponse.layersA[0];
+
+    expect(startDate).toEqual('2019-07-21T00:36:00Z');
+    expect(endDate).toEqual('2019-09-24T22:30:00Z');
+    expect(firstRange.startDate).toEqual('2019-07-21T00:36:00Z');
+    expect(firstRange.endDate).toEqual('2019-07-21T00:54:00Z');
+    expect(secondRange.startDate).toEqual('2019-07-21T02:18:00Z');
+    expect(secondRange.endDate).toEqual('2019-07-21T02:36:00Z');
   });
 });

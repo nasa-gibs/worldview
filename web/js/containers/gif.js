@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Spinner from 'react-loader';
+import {
+  Progress, Modal, ModalBody, ModalHeader, Spinner,
+} from 'reactstrap';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
-import {
-  Progress, Modal, ModalBody, ModalHeader,
-} from 'reactstrap';
+
 import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
@@ -336,6 +336,12 @@ class GIF extends Component {
       boundaries,
     } = this.state;
 
+    const spinnerStyle = {
+      margin: '20px 0',
+      position: 'relative',
+      left: '45%',
+    };
+
     if (isDownloading) {
       const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
@@ -346,11 +352,13 @@ class GIF extends Component {
         >
           <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
-            <div style={{ minHeight: 50 }}>
-              <Spinner color="#fff" loaded={progress > 0}>
-                <Progress value={progress} />
-              </Spinner>
-            </div>
+            {progress > 0
+              ? <Progress value={progress} />
+              : (
+                <div style={spinnerStyle}>
+                  <Spinner color="#fff" />
+                </div>
+              )}
           </ModalBody>
         </Modal>
       );

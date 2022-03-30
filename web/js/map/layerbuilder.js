@@ -1,4 +1,5 @@
 /* eslint-disable import/no-duplicates */
+/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -9,6 +10,8 @@ import OlStroke from 'ol/style/Stroke';
 import OlText from 'ol/style/Text';
 import OlFill from 'ol/style/Fill';
 import OlGraticule from 'ol/layer/Graticule';
+import * as olProj from 'ol/proj';
+import { Polygon as OlGeomPolygon } from 'ol/geom';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -18,6 +21,7 @@ import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
+import granuleLayerBuilder from './granule/granule-layer-builder';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
@@ -34,9 +38,24 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
+import { startLoading, stopLoading } from '../modules/loading/actions';
+
+let loadingCounter = 0;
 
 export default function mapLayerBuilder(config, cache, store) {
-  const self = {};
+  const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  const tileLoadStart = () => {
+    if (loadingCounter === 0) {
+      store.dispatch(startLoading('layer-tiles'));
+    }
+    loadingCounter += 1;
+  };
+  const tileLoadEnd = () => {
+    loadingCounter -= 1;
+    if (loadingCounter === 0) {
+      store.dispatch(stopLoading('layer-tiles'));
+    }
+  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -80,28 +99,108 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const getGraticule = (proj) => new OlGraticule({
-    lonLabelStyle: new OlText({
-      font: '12px Calibri,sans-serif',
-      textBaseline: 'top',
-      fill: new OlFill({
-        color: 'rgba(0,0,0,1)',
+  const getGraticule = (proj) => {
+    const graticule = new OlGraticule({
+      lonLabelStyle: new OlText({
+        font: '12px Calibri,sans-serif',
+        textBaseline: 'top',
+        fill: new OlFill({
+          color: 'rgba(0,0,0,1)',
+        }),
+        stroke: new OlStroke({
+          color: 'rgba(255,255,255,1)',
+          width: 3,
+        }),
       }),
-      stroke: new OlStroke({
-        color: 'rgba(255,255,255,1)',
-        width: 3,
+      // the style to use for the lines, optional.
+      strokeStyle: new OlStroke({
+        color: 'rgb(255, 255, 255)',
+        width: 2,
+        lineDash: [0.5, 4],
       }),
-    }),
-    // the style to use for the lines, optional.
-    strokeStyle: new OlStroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2,
-      lineDash: [0.5, 4],
-    }),
-    extent: proj.maxExtent,
-    lonLabelPosition: 1,
-    showLabels: true,
-  });
+      extent: proj.maxExtent,
+      lonLabelPosition: 1,
+      showLabels: true,
+    });
+    graticule.isVector = true;
+    return graticule;
+  };
+
+  /**
+   * Create a new OpenLayers Layer
+   * @param {object} def
+   * @param {object} key
+   * @param {object} options
+   * @param {object} dateOptions
+   * @param {object} granuleAttributes
+   * @returns {object} Openlayers TileLayer or LayerGroup
+   */
+  const createLayerWrapper = async (def, key, options, dateOptions) => {
+    const state = store.getState();
+    const { sidebar: { activeTab } } = state;
+    const proj = state.proj.selected;
+    const {
+      breakPointLayer,
+      id,
+      opacity,
+      period,
+      projections,
+      type,
+      wrapadjacentdays,
+      wrapX,
+    } = def;
+    const { nextDate, previousDate } = dateOptions;
+    let { date } = dateOptions;
+    let layer = cache.getItem(key);
+    const isGranule = type === 'granule';
+
+    if (!layer || isGranule) {
+      if (!date) date = options.date || getSelectedDate(state);
+      const cacheOptions = getCacheOptions(period, date);
+      const attributes = {
+        id,
+        key,
+        date,
+        proj: proj.id,
+        def,
+        group: options.group,
+        nextDate,
+        previousDate,
+      };
+      def = lodashCloneDeep(def);
+      lodashMerge(def, projections[proj.id]);
+      if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
+
+      const isDataDownloadTabActive = activeTab === 'download';
+      const wrapDefined = wrapadjacentdays === true || wrapX;
+      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
+      if (!isGranule) {
+        switch (def.type) {
+          case 'wmts':
+            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            break;
+          case 'vector':
+            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            break;
+          case 'wms':
+            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            break;
+          case 'graticule':
+            layer = getGraticule(proj);
+            break;
+          default:
+            throw new Error(`Unknown layer type: ${type}`);
+        }
+        layer.wv = attributes;
+        cache.setItem(key, layer, cacheOptions);
+        layer.setVisible(false);
+      } else {
+        layer = await getGranuleLayer(def, attributes, options);
+      }
+    }
+    layer.setOpacity(opacity || 1.0);
+    return layer;
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -110,63 +209,28 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
+   * @param {object} granuleLayerParam (optional: only used for granule layers)
+   *    * @param {array} granuleDates - Reordered granule times
+   *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = function(def, options = {}) {
+  const createLayer = async (def, options = {}) => {
     const state = store.getState();
-    const { sidebar: { activeTab } } = state;
-    const { group } = options;
-    const { closestDate, nextDate, previousDate } = getRequestDates(def, options);
-    let date = closestDate;
+    const { compare: { activeString } } = state;
+    options.group = options.group || activeString;
+
+    const {
+      closestDate,
+      nextDate,
+      previousDate,
+    } = getRequestDates(def, options);
+    const date = closestDate;
     if (date) {
       options.date = date;
     }
-    const proj = state.proj.selected;
-    const key = self.layerKey(def, options, state);
-    let layer = cache.getItem(key);
-
-    if (!layer) {
-      // layer is not in the cache
-      if (!date) date = options.date || getSelectedDate(state);
-      const cacheOptions = getCacheOptions(def.period, date);
-      const attributes = {
-        id: def.id,
-        key,
-        date,
-        proj: proj.id,
-        def,
-        group,
-        nextDate,
-        previousDate,
-      };
-      def = lodashCloneDeep(def);
-      lodashMerge(def, def.projections[proj.id]);
-      if (def.breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
-
-      const isDataDownloadTabActive = activeTab === 'download';
-      const wrapDefined = def.wrapadjacentdays === true || def.wrapX;
-      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
-      switch (def.type) {
-        case 'wmts':
-          layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-          break;
-        case 'vector':
-          layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-          break;
-        case 'wms':
-          layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-          break;
-        case 'graticule':
-          layer = getGraticule(proj);
-          break;
-        default:
-          throw new Error(`Unknown layer type: ${def.type}`);
-      }
-      layer.wv = attributes;
-      cache.setItem(key, layer, cacheOptions);
-      layer.setVisible(false);
-    }
-    layer.setOpacity(def.opacity || 1.0);
+    const dateOptions = { date, nextDate, previousDate };
+    const key = layerKey(def, options, state);
+    const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     return layer;
   };
@@ -259,7 +323,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {boolean} precache
    * @returns {object} layer key Object
    */
-  self.layerKey = function(def, options, state) {
+  const layerKey = (def, options, state) => {
     const { compare } = state;
     let date;
     const layerId = def.id;
@@ -343,62 +407,91 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
+   * @param {number/null} day
+   * @param {object} state
+   * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  const createLayerWMTS = function(def, options, day, state) {
-    const proj = state.proj.selected;
-    const source = config.sources[def.source];
-    const isSubdaily = def.period === 'subdaily';
+  function createLayerWMTS (def, options, day, state, attributes) {
+    const { proj } = state;
+    const {
+      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
+    } = def;
+    const configSource = config.sources[source];
+    const isSubdaily = period === 'subdaily';
     if (!source) {
-      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+      throw new Error(`${id}: Invalid source: ${source}`);
     }
-    const matrixSet = source.matrixSets[def.matrixSet];
-    if (!matrixSet) {
-      throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
+    const configMatrixSet = configSource.matrixSets[matrixSet];
+    if (!configMatrixSet) {
+      throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
     }
-    let date = options.date || getSelectedDate(state);
-    if (isSubdaily && !date) {
-      date = getRequestDates(def, options).closestDate;
-      date = new Date(date.getTime());
+    let layerDate = options.date || getSelectedDate(state);
+    if (isSubdaily && !layerDate) {
+      layerDate = getRequestDates(def, options).closestDate;
+      layerDate = new Date(layerDate.getTime());
     }
-    if (day && def.wrapadjacentdays && !isSubdaily) {
-      date = util.dateAdd(date, 'day', day);
+    if (day && wrapadjacentdays && !isSubdaily) {
+      layerDate = util.dateAdd(layerDate, 'day', day);
     }
-    const { tileMatrices, resolutions, tileSize } = matrixSet;
-    const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+
+    // Conditionally set extent for granule tile here with polygon array
+    let tileLayerExtent = extent;
+    if (attributes.polygons) {
+      const res = [].concat(...attributes.polygons);
+      const points = [];
+      // iterate the new array and push a coordinate pair into a new array
+      for (let i = 0; i < res[0].length; i += 2) {
+        const coord1 = parseFloat(res[i]);
+        const coord2 = parseFloat(res[i + 1]);
+        if (coord1 && coord2) {
+          points.push(olProj.transform([coord1, coord2], 'EPSG:4326', proj.selected.crs));
+        }
+      }
+      const polygonFootprint = new OlGeomPolygon([points]);
+      const polygonExtent = polygonFootprint.getExtent();
+      tileLayerExtent = Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
+    }
+
     const tileGridOptions = {
       origin,
       extent,
       sizes,
       resolutions,
-      matrixIds: def.matrixIds || resolutions.map((set, index) => index),
+      matrixIds: matrixIds || resolutions.map((set, index) => index),
       tileSize: tileSize[0],
     };
-    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+
+    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceOptions = {
-      url: source.url + urlParameters,
-      layer: def.layer || def.id,
+      url: configSource.url + urlParameters,
+      layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
-      format: def.format,
+      format,
       transition: 0,
-      matrixSet: matrixSet.id,
+      matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
-      style: typeof def.style === 'undefined' ? 'default' : def.style,
+      style: typeof style === 'undefined' ? 'default' : style,
     };
-    if (isPaletteActive(def.id, options.group, state)) {
-      const lookup = getPaletteLookup(def.id, options.group, state);
+    if (isPaletteActive(id, options.group, state)) {
+      const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
+    const tileSource = new OlSourceWMTS(sourceOptions);
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
     return new OlLayerTile({
+      extent: tileLayerExtent,
       preload: 0,
       className: def.id,
-      extent,
-      source: new OlSourceWMTS(sourceOptions),
+      source: tileSource,
     });
-  };
+  }
 
   /**
     *
@@ -463,7 +556,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-    const sourceOptions = new SourceVectorTile({
+    const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
       day,
@@ -479,9 +572,11 @@ export default function mapLayerBuilder(config, cache, store) {
         sizes: matrixSet.tileMatrices,
       }),
     });
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
     const layer = new LayerVectorTile({
       extent: layerExtent,
-      source: sourceOptions,
+      source: tileSource,
       renderMode: 'image',
       className: def.id,
       vector: true,
@@ -515,7 +610,7 @@ export default function mapLayerBuilder(config, cache, store) {
   /**
    * Create a new WMS Layer
    *
-   * @method createLayerWMTS
+   * @method createLayerWMS
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
@@ -588,16 +683,23 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+    const tileSource = new OlSourceTileWMS(sourceOptions);
+    tileSource.on('tileloadstart', tileLoadStart);
+    tileSource.on('tileloadend', tileLoadEnd);
+
     const layer = new OlLayerTile({
       preload: 0,
       className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
-      source: new OlSourceTileWMS(sourceOptions),
+      source: tileSource,
     });
     layer.isWMS = true;
     return layer;
   };
 
-  return self;
+  return {
+    layerKey,
+    createLayer,
+  };
 }
