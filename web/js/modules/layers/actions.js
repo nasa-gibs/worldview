@@ -328,6 +328,7 @@ export function updateGranuleLayerState(layer) {
     if (existingLayer) {
       dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
     }
+    console.debug(granuleFootprints);
     dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
   };
 }

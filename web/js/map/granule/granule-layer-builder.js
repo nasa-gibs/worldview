@@ -70,7 +70,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * Add granule cmr data to granule cmr object with date as key
    * @param {data} CMR data
    * @param {id} layer id
-   * @returns {Void}
   */
   const addGranuleCMRDateData = (data, id) => {
     const { proj: { selected: { id: projection } } } = store.getState();
@@ -86,15 +85,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   /**
    * Query CMR to get dates filtered by day_night_flag
    * @param {object} def - Layer specs
-   * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
-   * @param {string} activeKey
-   * @param {string} projection
-   * @returns {array} collection of granule objects with filtered granuleDates to select from
-      * @param {string} granuleDate - UTC date string
-      * @param {array} polygon - CMR granule polygon geometry
+   * @param {object} date - current selected date (Note: may not return this date, but this date will be the max returned)
   */
-  const getQueriedGranuleDates = async (def, date) => {
-    const { compare: { activeString } } = store.getState();
+  const getQueriedGranuleDates = async (def, date, activeString) => {
     const {
       endDate, startDate, id, title, visible,
     } = def;
@@ -191,7 +184,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * Create collection of granule TileLayers from range of granule times
    * @param {array} granueDates - array of dates (already sorted)
    * @param {object} def - Layer specs
-   * @param {object} state - App state
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
   */
@@ -222,14 +214,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
-   *
-   *
    * @method createGranuleLayer
-   * @static
    * @param {object} def - Layer specs
-   * @param {array} granuleDates - objects with granule date string and polygons
-   * @param {object} attributes - Layer projection
-   * @returns {Void}
+   * @param {object} attributes
+   * @param {object} options
+   * @returns {object} - Granule layer
   */
   const createGranuleLayer = async (def, attributes, options) => {
     const { id } = def;
@@ -280,7 +269,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     // get granule dates waiting for CMR query and filtering (if necessary)
-    const availableGranuleDates = await getQueriedGranuleDates(def, options.date);
+    const availableGranuleDates = await getQueriedGranuleDates(def, options.date, options.group);
     const filteredGranules = filterGranules(def.dateRanges, availableGranuleDates, count);
     return {
       count,
