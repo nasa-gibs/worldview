@@ -673,6 +673,43 @@
   }
 }
 
+.granule-date-item {
+  color: #444;
+  background-color: #ccc;
+  display: inline-block;
+  width: 100%;
+
+  .granule-date {
+    position: relative;
+    left: 6px;
+    display: inline-block;
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+
+  .granule-date-buttons {
+    float: right;
+  }
+
+  .granule-date-item-up-button,
+  .granule-date-item-down-button,
+  .granule-date-item-top-button {
+    padding: 4px;
+    background-color: transparent;
+    color: #444;
+    border: none;
+    height: 28px;
+    margin: 0 1px;
+  }
+
+  .granule-date-item-up-button:hover,
+  .granule-date-item-down-button:hover,
+  .granule-date-item-top-button:hover {
+    background: #eee;
+    color: #333;
+  }
+}
+
 @media (min-width: $desktop-min-width) {
   .search-layers-container {
     & div.layer-list-detail-container {

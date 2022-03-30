@@ -292,19 +292,3 @@ export function mapToPolys(geom) {
   }
   return [geom];
 }
-
-/* FIXME OL3
-wv.map.mock = function() {
-
-    return {
-        setDay: function() {},
-        setOpacity: function() {},
-        setVisibility: function() {},
-        setZIndex: function() {},
-        dispose: function() {},
-        setLookup: function() {},
-        clearLookup: function() {}
-    };
-
-};
-*/

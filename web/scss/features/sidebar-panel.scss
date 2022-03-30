@@ -320,9 +320,9 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-/* **********************************
- * Vector layer pointer icon ********
- ************************************/
+/* ***********************************
+ * Vector layer pointer icon *
+ *************************************/
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;
@@ -372,6 +372,27 @@ li.item.productsitem.inmotion,
 
 /************************************
  * End -- vector layer pointer icon *
+ ************************************/
+
+/* ***********************************
+ * Granule active footprint toggle *
+ *************************************/
+.productsitem .layer-main .layer-granule-footprint-toggle {
+  position: absolute;
+  right: 4px;
+  top: 38px;
+}
+
+.layer-granule-footprint-toggle .react-switch-case {
+  width: 30px;
+}
+
+.layer-hidden .layer-granule-footprint-toggle {
+  opacity: 0.6;
+}
+
+/************************************
+ * End -- Granule active footprint toggle *
  ************************************/
 
 .productsitem a.wv-layers-info,
