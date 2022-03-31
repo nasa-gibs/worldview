@@ -80,7 +80,7 @@ function RightClickMenu(props) {
 
   if (show) {
     return (
-      <div>
+      <div id="context-menu">
         <CopyClipboardTooltip
           tooltipToggleTime={toolTipToggleTime}
           clearCopyToClipboardTooltip={() => {}}
