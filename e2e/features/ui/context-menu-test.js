@@ -46,6 +46,9 @@ module.exports = {
   },
 
   'Copying coordinates from context menu triggers "Copied to Clipboard" tooltip': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return;
+    }
     c.click(contextMenuCopy);
     c.waitForElementVisible('.tooltip-inner');
     c.assert.containsText('.tooltip-inner', 'Copied to clipboard!');
@@ -59,7 +62,7 @@ module.exports = {
     c.moveToElement(contextMenuAddMarker, 10, 10);
     c.mouseButtonClick('left');
     c.waitForElementVisible('#marker-pin');
-    c.expect.element('.coordinates-map-marker_-41__2E__1015__2C__31__2E__8636').to.be.visible;
+    c.expect.element('#marker-pin').to.be.visible;
   },
 
   'Creating a distance measurement after clicking "Measure Distance" in context menu': (c) => {
