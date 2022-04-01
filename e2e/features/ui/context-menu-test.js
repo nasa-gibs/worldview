@@ -3,6 +3,7 @@ const selectors = require('../../reuseables/selectors.js');
 
 const {
   contextMenu,
+  contextMenuCopy,
   contextMenuAddMarker,
   contextMenuDistance,
   contextMenuArea,
@@ -44,13 +45,21 @@ module.exports = {
     c.expect.element(contextMenu).to.be.present;
   },
 
+  'Copying coordinates from context menu triggers "Copied to Clipboard" tooltip': (c) => {
+    c.click(contextMenuCopy);
+    c.waitForElementVisible('.tooltip-inner');
+    c.assert.containsText('.tooltip-inner', 'Copied to clipboard!');
+  },
+
   'Adding a marker after clicking "Add Place Marker" in context menu': (c) => {
     if (c.options.desiredCapabilities.browserName === 'firefox') {
       return;
     }
+    openContextMenu(c, 500, 200);
     c.moveToElement(contextMenuAddMarker, 10, 10);
     c.mouseButtonClick('left');
     c.waitForElementVisible('#marker-pin');
+    c.expect.element('.coordinates-map-marker_-41__2E__1015__2C__31__2E__8636').to.be.visible;
   },
 
   'Creating a distance measurement after clicking "Measure Distance" in context menu': (c) => {
