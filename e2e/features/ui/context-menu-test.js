@@ -18,7 +18,6 @@ function openContextMenu(c, startX, startY) {
   c.moveToElement('#wv-map-geographic', startX, startY);
   c.mouseButtonClick('right');
   c.waitForElementVisible(contextMenu);
-  c.pause();
 }
 
 function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
