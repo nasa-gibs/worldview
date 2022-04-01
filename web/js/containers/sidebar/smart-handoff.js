@@ -274,11 +274,12 @@ class SmartHandoff extends Component {
 
     const continueToEDS = () => {
       const options = {
-        proj: proj.id,
+        projection: proj.crs,
+        conceptId: selectedCollection.value,
+        currentExtent,
         includeDates,
         selectedDate,
         selectedCollection,
-        currentExtent,
         showBoundingBox,
       };
       return openEarthDataSearch(availableTools, options);
