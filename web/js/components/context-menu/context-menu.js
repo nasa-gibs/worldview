@@ -87,30 +87,46 @@ function RightClickMenu(props) {
           placement="top"
         />
         <ContextMenu id="context-menu-trigger">
-          <MenuItem onClick={() => copyCoordsToClipboard()}>
+          <MenuItem
+            onClick={() => copyCoordsToClipboard()}
+            attributes={{ id: 'context-menu-copy' }}
+          >
             <span id="copy-coordinates-to-clipboard-button">
               {formattedCoordinates}
             </span>
           </MenuItem>
-          <MenuItem onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}>
+          <MenuItem
+            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
+            attributes={{ id: 'context-menu-add-marker' }}
+          >
             Add Place Marker
           </MenuItem>
           <MenuItem divider />
-          <MenuItem onClick={() => handleMeasurementMenu('distance')}>
+          <MenuItem
+            onClick={() => handleMeasurementMenu('distance')}
+            attributes={{ id: 'context-menu-measure-distance' }}
+          >
             Measure Distance
           </MenuItem>
-          <MenuItem onClick={() => handleMeasurementMenu('area')}>
+          <MenuItem
+            onClick={() => handleMeasurementMenu('area')}
+            attributes={{ id: 'context-menu-measure-area' }}
+          >
             Measure Area
           </MenuItem>
           {measurementsInProj
           && (
           <MenuItem
             onClick={() => handleMeasurementMenu('clear')}
+            attributes={{ id: 'context-menu-clear-measurements' }}
           >
             Remove Measurements
           </MenuItem>
           )}
-          <MenuItem onClick={() => handleMeasurementMenu('units')}>
+          <MenuItem
+            onClick={() => handleMeasurementMenu('units')}
+            attributes={{ id: 'context-menu-change-units' }}
+          >
             Change Units to
             {' '}
             {oppositeUnitOfMeasure().oppositeUnit}
