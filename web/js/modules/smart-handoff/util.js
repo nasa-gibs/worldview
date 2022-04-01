@@ -1,6 +1,7 @@
 
 import { get } from 'lodash';
 import googleTagManager from 'googleTagManager';
+import { parseTemplate } from 'url-template';
 import { TOOLS_EARTHDATA_SEARCH } from './constants';
 import util from '../../util/util';
 
@@ -32,36 +33,29 @@ export default function openEarthDataSearch(tools, options) {
   const { action } = tools.find(({ name }) => name === TOOLS_EARTHDATA_SEARCH) || {};
   if (!action) return;
   const {
-    proj, includeDates, selectedDate, selectedCollection, currentExtent, showBoundingBox,
+    projection, conceptId, includeDates, selectedDate, currentExtent, showBoundingBox,
   } = options;
-  const { value } = selectedCollection;
+  const urlTemplate = parseTemplate(action.Target.UrlTemplate);
 
-
-  const PROJ_CODES = {
-    arctic: '90!0!0!0!0!0',
-    geographic: '0.0!-180.0!0!1!0!0,2',
-    antarctic: '-90!180!0!2!0!0',
-  };
-  const { southWest, northEast } = currentExtent;
+  // const { southWest, northEast } = currentExtent;
   const params = {
-    q: value,
-    p: value,
-    m: PROJ_CODES[proj],
-    'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,
+    q: conceptId,
+    p: conceptId,
+    projection,
+    // 'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,
   };
 
-  if (includeDates) {
-    const startDate = `${selectedDate}T00:00:00.000Z`;
-    const endDate = `${selectedDate}T23:59:59.999Z`;
-    params['[qt]'] = `${startDate},${endDate}`;
-  }
+  // if (includeDates) {
+  //   const startDate = `${selectedDate}T00:00:00.000Z`;
+  //   const endDate = `${selectedDate}T23:59:59.999Z`;
+  //   params['[qt]'] = `${startDate},${endDate}`;
+  // }
 
-  console.log(action);
-  const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules${util.toQueryString(params)}`;
+  const earthDataSearchURL = urlTemplate.expand(params);
 
   window.open(earthDataSearchURL, '_blank');
   googleTagManager.pushEvent({
     event: 'smart_handoffs_open_eds_data_query',
-    selected_collection: value,
+    selected_collection: conceptId,
   });
 }

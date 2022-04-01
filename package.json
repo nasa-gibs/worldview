@@ -222,6 +222,7 @@
     "shp-write": "^0.3.2",
     "simplebar-react": "^2.1.0",
     "supercluster": "7.0.0",
+    "url-template": "^3.0.0",
     "what-input": "^5.2.7"
   },
   "browserslist": [
