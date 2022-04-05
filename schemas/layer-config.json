@@ -41,6 +41,9 @@
         "disableSnapshot": {
           "type": "boolean"
         },
+        "sourceOverride": {
+          "type": "string"
+        },
         "group": {
           "type": "string",
           "enum": [
