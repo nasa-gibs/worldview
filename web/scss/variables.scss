@@ -20,6 +20,19 @@ $wv-date-text-shadow: 1px 1px 0 #111;
 $wv-menu-border-radius: 6px;
 $wv-dark-menu-border: 1px solid #555;
 
+/* Sidbar Heights */
+$wv-mob-sb-tabs-height: 50px;
+$wv-sidebar-event-filter-height: 65px;
+$wv-sidebar-event-footer-height: 35px;
+/* stylelint-disable-next-line max-line-length */
+$wv-mobile-event-list-offset: $wv-mob-sb-tabs-height + $wv-sidebar-event-filter-height + $wv-sidebar-event-footer-height;
+
+/* Responsive Breakpoints */
+$mobile-max-width: 768px;
+$tablet-min-width: 769px;
+$tablet-max-width: 1023px;
+$desktop-min-width: 1024px;
+
 /* Mixins */
 @mixin wv-modal-dialog {
   border-radius: $wv-menu-border-radius;

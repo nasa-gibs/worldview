@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.21.0",
+  "version": "3.22.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -41,7 +41,6 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
     "dist": "pipenv run run-s clean getcapabilities build:config build:prod && node ./tasks/dist.js",
-    "dist:bamboo": "run-s clean getcapabilities build:config build:prod && node ./tasks/dist.js",
     "dist:dev": "pipenv run run-s clean getcapabilities build:config build:dev && node ./tasks/dist.js",
     "distclean": "npm run clean && node ./tasks/distclean.js",
     "docker:ci": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-ci.sh ; npm run docker:stop",

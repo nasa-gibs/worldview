@@ -2,7 +2,7 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 // encoded id; originally coordinates-map-marker_38.8904,-77.032
-const testMarkerEncodedID = '.coordinates-map-marker_38__2E__8904__2C__-77__2E__032';
+const testMarkerEncodedID = '.coordinates-map-marker_-77__2E__032__2C__38__2E__8904';
 const TIME_LIMIT = 10000;
 
 const {

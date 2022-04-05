@@ -63,6 +63,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
     const state = getState();
     const {
       proj,
+      locationSearch,
     } = state;
 
     if (reverseGeocodeResults) {
@@ -73,10 +74,22 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
     }
 
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
+    const stateCoordinates = locationSearch.coordinates;
+    const markerAlreadyExists = stateCoordinates.find((stateCoordinate) => stateCoordinate.latitude === coordinates[0] && stateCoordinate.longitude === coordinates[1]);
     if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,
         coordinates: [],
+      });
+    }
+
+    if (markerAlreadyExists) {
+      return dispatch({
+        type: SET_MARKER,
+        coordinates: markerAlreadyExists,
+        reverseGeocodeResults,
+        isCoordinatesSearchActive: isInputSearch,
+        flyToExistingMarker: true,
       });
     }
 
