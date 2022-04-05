@@ -88,7 +88,6 @@ class SmartHandoff extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      isActive,
       availableLayers,
       proj,
       map,
@@ -116,9 +115,8 @@ class SmartHandoff extends Component {
     }
 
     if (proj.id === 'geographic') {
-      const tabChange = isActive && !prevProps.isActive;
       const extentChange = !lodashEqual(map.extent, prevProps.map.extent);
-      if (tabChange || extentChange) {
+      if (extentChange) {
         this.checkMapExtentValid();
       }
     }
@@ -553,9 +551,6 @@ class SmartHandoff extends Component {
       showBoundingBox, selectionOutsideExtents, showZoomedIntoDatelineAlert, currentExtent,
     } = this.state;
 
-    // Determine if download 'smart-handoff' tab is activated by user
-    // if (!isActive) return null;
-
     // Determine if the download button is enabled
     const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
@@ -705,7 +700,6 @@ export default connect(
 )(SmartHandoff);
 
 SmartHandoff.propTypes = {
-  isActive: PropTypes.bool,
   availableLayers: PropTypes.array,
   availableTools: PropTypes.array,
   displayDate: PropTypes.string,
