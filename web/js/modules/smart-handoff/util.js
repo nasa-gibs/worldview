@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { parseTemplate } from 'url-template';
 import { TOOLS_EARTHDATA_SEARCH } from './constants';
-import util from '../../util/util';
 
 export function parseSmartHandoff(state) {
   const [layerId, conceptId] = state.split(',');
@@ -37,23 +36,22 @@ export default function openEarthDataSearch(tools, options) {
   } = options;
   const urlTemplate = parseTemplate(action.Target.UrlTemplate);
 
-  // const { southWest, northEast } = currentExtent;
+  const { southWest, northEast } = currentExtent;
   const params = {
     q: conceptId,
     p: conceptId,
     projection,
-    // 'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,
+    sb: showBoundingBox ? `${southWest},${northEast}` : undefined,
   };
 
-  // if (includeDates) {
-  //   const startDate = `${selectedDate}T00:00:00.000Z`;
-  //   const endDate = `${selectedDate}T23:59:59.999Z`;
-  //   params['[qt]'] = `${startDate},${endDate}`;
-  // }
+  if (includeDates) {
+    const startDate = `${selectedDate}T00:00:00.000Z`;
+    const endDate = `${selectedDate}T23:59:59.999Z`;
+    params.qt = `${startDate},${endDate}`;
+  }
 
-  const earthDataSearchURL = urlTemplate.expand(params);
+  window.open(urlTemplate.expand(params), '_blank');
 
-  window.open(earthDataSearchURL, '_blank');
   googleTagManager.pushEvent({
     event: 'smart_handoffs_open_eds_data_query',
     selected_collection: conceptId,
