@@ -17,22 +17,30 @@ export function selectCollection(conceptId, layerId) {
 
 export function fetchAvailableTools() {
   return async (dispatch, getState) => {
-    const state = getState();
-    const { smartHandoffs } = state.config.features;
-    const availableTools = await Promise.all(smartHandoffs.map(async (tool) => {
-      const url = getConceptUrl(state)(tool.conceptId);
-      const response = await fetch(url, { timeout: 5000 });
-      const result = await response.json();
-      return {
-        name: tool.toolName,
-        action: result.PotentialAction,
-      };
-    }));
-
-    dispatch({
-      type: SET_AVAILABLE_TOOLS,
-      availableTools,
-    });
+    let availableTools = [];
+    let requestFailed = false;
+    try {
+      const state = getState();
+      const { smartHandoffs } = state.config.features;
+      availableTools = await Promise.all(smartHandoffs.map(async (tool) => {
+        const url = getConceptUrl(state)(tool.conceptId);
+        const response = await fetch(url, { timeout: 5000 });
+        const result = await response.json();
+        return {
+          name: tool.toolName,
+          action: result.PotentialAction,
+        };
+      }));
+    } catch (e) {
+      console.error(e);
+      requestFailed = true;
+    } finally {
+      dispatch({
+        type: SET_AVAILABLE_TOOLS,
+        availableTools,
+        requestFailed,
+      });
+    }
   };
 }
 
@@ -40,39 +48,47 @@ export function validateLayersConceptIds (layers) {
   return async (dispatch, getState) => {
     const state = getState();
     const { smartHandoffs: { validatedConceptIds } } = state;
+    let validatedLayers = [];
+    let requestFailed = false;
 
-    const conceptIdRequest = async (url) => {
-      const granulesResponse = await fetch(url, { timeout: 5000 });
-      const result = await granulesResponse.json();
-      return lodashGet(result, 'feed.entry', []);
-    };
-    const allConceptIds = layers.reduce((prev, curr) => {
-      (curr.conceptIds || []).forEach(({ value }) => {
-        if (value) prev.push(value);
+    try {
+      const conceptIdRequest = async (url) => {
+        const granulesResponse = await fetch(url, { timeout: 5000 });
+        const result = await granulesResponse.json();
+        return lodashGet(result, 'feed.entry', []);
+      };
+      const allConceptIds = layers.reduce((prev, curr) => {
+        (curr.conceptIds || []).forEach(({ value }) => {
+          if (value) prev.push(value);
+        });
+        return prev;
+      }, []);
+
+      await Promise.all(allConceptIds.map(
+        async (id) => {
+          if (validatedConceptIds[id] !== undefined) return;
+          const requestUrl = getCollectionsUrl(state)(id);
+          const response = await conceptIdRequest(requestUrl);
+          validatedConceptIds[id] = !!response.length;
+        },
+      ));
+
+      validatedLayers = layers.reduce((prev, curr) => {
+        const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
+        if (validIdsArray.length) prev.push(curr);
+        return prev;
+      }, []);
+    } catch (e) {
+      console.error(e);
+      requestFailed = true;
+    } finally {
+      dispatch({
+        type: SET_VALID_LAYERS_CONCEPTIDS,
+        validatedLayers,
+        validatedConceptIds,
+        requestFailed,
       });
-      return prev;
-    }, []);
-
-    await Promise.all(allConceptIds.map(
-      async (id) => {
-        if (validatedConceptIds[id] !== undefined) return;
-        const requestUrl = getCollectionsUrl(state)(id);
-        const response = await conceptIdRequest(requestUrl);
-        validatedConceptIds[id] = !!response.length;
-      },
-    ));
-
-    const validatedLayers = layers.reduce((prev, curr) => {
-      const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
-      if (validIdsArray.length) prev.push(curr);
-      return prev;
-    }, []);
-
-    dispatch({
-      type: SET_VALID_LAYERS_CONCEPTIDS,
-      validatedLayers,
-      validatedConceptIds,
-    });
+    }
   };
 }
 
