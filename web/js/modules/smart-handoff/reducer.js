@@ -10,6 +10,9 @@ export const initialState = {
   availableTools: [],
   validatedLayers: [],
   validatedConceptIds: {},
+  isLoadingTools: true,
+  isValidatingCollections: true,
+  requestFailed: false,
 };
 
 export function getInitialState(config) {
@@ -31,12 +34,16 @@ export function smartHandoffReducer(state = initialState, action) {
       return {
         ...state,
         availableTools: action.availableTools,
+        isLoadingTools: false,
+        requestFailed: action.requestFailed,
       };
     case SET_VALID_LAYERS_CONCEPTIDS:
       return {
         ...state,
         validatedLayers: action.validatedLayers,
         validatedConceptIds: action.validatedConceptIds,
+        isValidatingCollections: false,
+        requestFailed: action.requestFailed,
       };
     default:
       return state;

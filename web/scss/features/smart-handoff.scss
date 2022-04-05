@@ -2,28 +2,33 @@
 .smart-handoff-side-panel {
   margin: 5px;
   color: #bbb;
-}
+  min-height: 300px;
 
-.smart-handoff-side-panel h1 {
-  margin: 15px 5px;
-  font-size: 13px;
-  line-height: 18px;
-  text-align: center;
-}
+  &.error {
+    margin: 40px 5px 20px;
+  }
 
-.smart-handoff-side-panel hr {
-  margin-top: 10px;
-  border-bottom: 1px solid #555;
-}
+  h1 {
+    margin: 15px 5px;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+  }
 
-.smart-handoff-side-panel h2 {
-  margin-top: 18px;
-  color: #eee;
-  text-align: center;
-}
+  hr {
+    margin-top: 10px;
+    border-bottom: 1px solid #555;
+  }
 
-.smart-handoff-side-panel p {
-  margin-top: 10px;
+  h2 {
+    margin-top: 18px;
+    color: #eee;
+    text-align: center;
+  }
+
+  p {
+    margin-top: 10px;
+  }
 }
 
 .smart-handoff-product-list {

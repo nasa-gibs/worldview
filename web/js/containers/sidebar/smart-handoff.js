@@ -7,7 +7,7 @@ import { isEqual as lodashEqual } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Spinner, UncontrolledTooltip } from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
@@ -489,18 +489,47 @@ class SmartHandoff extends Component {
    * Render "no layers to download" message
    */
   renderNoLayersToDownload = () => {
-    const { showNotAvailableModal } = this.props;
+    const { showNotAvailableModal, requestFailed } = this.props;
+
     return (
-      <div className="smart-handoff-side-panel">
-        <h1>
-          None of your current layers are available for download.
-        </h1>
-        <hr />
-        <h2>
-          <a className="help-link" onClick={showNotAvailableModal}>
-            Why are my layers not available?
-          </a>
-        </h2>
+      <div className="smart-handoff-side-panel error">
+        {requestFailed
+          ? (
+            <>
+              <h1>CMR could not be reached.  Downloads not possible at this time</h1>
+            </>
+          )
+          : (
+            <>
+              <h1>
+                None of your current layers are available for download.
+              </h1>
+              <hr />
+              <h2>
+                <a className="help-link" onClick={showNotAvailableModal}>
+                  Why are my layers not available?
+                </a>
+              </h2>
+            </>
+          )}
+      </div>
+    );
+  }
+
+  renderLoadingSpinner = () => {
+    const containerStyle = {
+      padding: '30px 107px',
+    };
+
+    const spinnerStyle = {
+      height: '5rem',
+      width: '5rem',
+      margin: '40px auto',
+    };
+
+    return (
+      <div style={containerStyle}>
+        <Spinner style={spinnerStyle} color="light" size="lg" />
       </div>
     );
   }
@@ -512,7 +541,7 @@ class SmartHandoff extends Component {
     const {
       displayDate,
       getGranulesUrl,
-      isActive,
+      isLoading,
       showNotAvailableModal,
       selectedLayer,
       selectedCollection,
@@ -525,15 +554,20 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
-    if (!isActive) return null;
+    // if (!isActive) return null;
 
     // Determine if the download button is enabled
     const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
+    if (isLoading) {
+      return this.renderLoadingSpinner();
+    }
+
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
+
     return (
       <>
         {this.renderSelectionWarning()}
@@ -580,7 +614,7 @@ const mapStateToProps = (state) => {
     browser, map, proj, smartHandoffs,
   } = state;
   const {
-    conceptId, layerId, availableTools, validatedConceptIds, validatedLayers,
+    conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
   } = smartHandoffs;
   const { screenWidth, screenHeight } = browser;
 
@@ -589,14 +623,17 @@ const mapStateToProps = (state) => {
   const availableLayers = getValidLayersForHandoffs(state);
   const selectedLayer = availableLayers.find(({ id }) => id === layerId);
   const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
+  const isLoading = isLoadingTools || isValidatingCollections;
 
   return {
     availableLayers,
     displayDate: formatDisplayDate(selectedDate), // 2020 JAN 01
     getConceptUrl: getConceptUrlSelector(state),
     getGranulesUrl: getGranulesUrlSelector(state),
+    isLoading,
     map,
     proj: proj.selected,
+    requestFailed,
     screenHeight,
     screenWidth,
     selectedDate: selectedDateFormatted,
@@ -672,11 +709,13 @@ SmartHandoff.propTypes = {
   availableLayers: PropTypes.array,
   availableTools: PropTypes.array,
   displayDate: PropTypes.string,
+  isLoading: PropTypes.bool,
   getConceptUrl: PropTypes.func,
   getGranulesUrl: PropTypes.func,
   map: PropTypes.object.isRequired,
   proj: PropTypes.object,
   fetchAvailableTools: PropTypes.func,
+  requestFailed: PropTypes.bool,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   selectCollection: PropTypes.func,
@@ -687,6 +726,6 @@ SmartHandoff.propTypes = {
   showGranuleHelpModal: PropTypes.func,
   showNotAvailableModal: PropTypes.func,
   validatedLayers: PropTypes.array,
-  validatedConceptIds: PropTypes.array,
+  validatedConceptIds: PropTypes.object,
   validateLayersConceptIds: PropTypes.func,
 };
