@@ -327,6 +327,17 @@
   margin: 0 4px;
 }
 
+.source-metadata .layer-description .layer-metadata {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #333;
+  }
+}
+
 .source-metadata .layer-description .layer-date-start .monospace,
 .source-metadata .layer-description .layer-date-end .monospace {
   @include wv-date-chip;
