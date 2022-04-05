@@ -466,8 +466,9 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
+    const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
-      url: configSource.url + urlParameters,
+      url: sourceURL + urlParameters,
       layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
