@@ -17,7 +17,7 @@
     "no-storage"
   ],
   "extends": "airbnb",
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "settings": {
     "react": {
       "version": "detect"
