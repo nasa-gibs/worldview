@@ -92,7 +92,7 @@
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.3.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "browserstack-capabilities": "^0.7.0",
