@@ -4,6 +4,50 @@ import googleTagManager from 'googleTagManager';
 import { parseTemplate } from 'url-template';
 import { TOOLS_EARTHDATA_SEARCH } from './constants';
 
+function getHandoffParams (queryInput, options) {
+  const {
+    projection, conceptId, includeDates, selectedDate, currentExtent, showBoundingBox,
+  } = options;
+
+  const getParam = ({ ValueType, ValueName }) => {
+    if (ValueType === 'temporalRange') {
+      if (includeDates) {
+        const startDate = `${selectedDate}T00:00:00.000Z`;
+        const endDate = `${selectedDate}T23:59:59.999Z`;
+        return {
+          [ValueName]: `${startDate},${endDate}`,
+        };
+      }
+    }
+    if (ValueType === 'https://schema.org/box') {
+      const { southWest, northEast } = currentExtent;
+      return {
+        [ValueName]: showBoundingBox ? `${southWest},${northEast}` : undefined,
+      };
+    }
+    if (ValueType === 'https://spatialreference.org/ref/epsg/') {
+      return {
+        [ValueName]: projection,
+      };
+    }
+    if (ValueType === 'conceptId') {
+      return {
+        [ValueName]: conceptId,
+      };
+    }
+    if (ValueType === 'edscTextQuery') {
+      return {
+        [ValueName]: conceptId,
+      };
+    }
+  };
+
+  return queryInput.reduce((params, input) => ({
+    ...params,
+    ...getParam(input),
+  }), {});
+}
+
 export function parseSmartHandoff(state) {
   const [layerId, conceptId] = state.split(',');
   return {
@@ -31,29 +75,15 @@ export function serializeSmartHandoff(currentItemState, state) {
 export default function openEarthDataSearch(tools, options) {
   const { action } = tools.find(({ name }) => name === TOOLS_EARTHDATA_SEARCH) || {};
   if (!action) return;
-  const {
-    projection, conceptId, includeDates, selectedDate, currentExtent, showBoundingBox,
-  } = options;
-  const urlTemplate = parseTemplate(action.Target.UrlTemplate);
 
-  const { southWest, northEast } = currentExtent;
-  const params = {
-    q: conceptId,
-    p: conceptId,
-    projection,
-    sb: showBoundingBox ? `${southWest},${northEast}` : undefined,
-  };
-
-  if (includeDates) {
-    const startDate = `${selectedDate}T00:00:00.000Z`;
-    const endDate = `${selectedDate}T23:59:59.999Z`;
-    params.qt = `${startDate},${endDate}`;
-  }
+  const { Target, QueryInput } = action;
+  const urlTemplate = parseTemplate(Target.UrlTemplate);
+  const params = getHandoffParams(QueryInput, options);
 
   window.open(urlTemplate.expand(params), '_blank');
 
   googleTagManager.pushEvent({
     event: 'smart_handoffs_open_eds_data_query',
-    selected_collection: conceptId,
+    selected_collection: options.conceptId,
   });
 }
