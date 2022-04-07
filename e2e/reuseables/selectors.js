@@ -191,4 +191,12 @@ module.exports = {
   tooltipCoordinatesMinimizeButton: '.minimize-coordinates-tooltip',
   tooltipCoordinatesCloseButton: '.close-coordinates-tooltip',
   coordinatesMapMarker: '.coordinates-map-marker',
+
+  // Context Menu
+  contextMenu: '#context-menu',
+  contextMenuCopy: '#copy-coordinates-to-clipboard-button',
+  contextMenuAddMarker: '#context-menu-add-marker',
+  contextMenuDistance: '#context-menu-measure-distance',
+  contextMenuArea: '#context-menu-measure-area',
+  contentMenuChangeUnits: '#context-menu-change-units',
 };
