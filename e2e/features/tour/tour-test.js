@@ -37,7 +37,7 @@ module.exports = {
       [],
       function({ value }) {
         if (!value) {
-          c.waitForElementVisible(infoToolbarButton, 1000);
+          c.waitForElementVisible(infoToolbarButton, 2000);
           c.click(infoToolbarButton);
           c.waitForElementVisible('#start_tour_info_item', 1000);
           c.click('#start_tour_info_item');
