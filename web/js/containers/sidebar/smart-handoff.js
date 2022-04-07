@@ -494,7 +494,7 @@ class SmartHandoff extends Component {
         {requestFailed
           ? (
             <>
-              <h1>CMR could not be reached.  Downloads not possible at this time</h1>
+              <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
             </>
           )
           : (
