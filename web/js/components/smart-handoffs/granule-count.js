@@ -58,28 +58,32 @@ export default function GranuleCount (props) {
 
     const granulesRequestUrl = getGranulesUrl(params);
 
-    if (southWest && northEast) {
-      const updatedParams = {
-        ...params,
-        bbox: `${southWest},${northEast}`,
-      };
-      const bboxRequestUrl = getGranulesUrl(updatedParams);
-      const selectedEntries = await requestGranules(bboxRequestUrl);
-      newSelectedGranules = selectedEntries.length;
-      newGranuleDownloadSize = getDownloadSize(selectedEntries);
+    try {
+      if (southWest && northEast) {
+        const updatedParams = {
+          ...params,
+          bbox: `${southWest},${northEast}`,
+        };
+        const bboxRequestUrl = getGranulesUrl(updatedParams);
+        const selectedEntries = await requestGranules(bboxRequestUrl);
+        newSelectedGranules = selectedEntries.length;
+        newGranuleDownloadSize = getDownloadSize(selectedEntries);
+      }
+      const totalEntries = await requestGranules(granulesRequestUrl);
+      newTotalGranules = totalEntries.length;
+      if (newGranuleDownloadSize === 0) {
+        newGranuleDownloadSize = getDownloadSize(totalEntries);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setState({
+        isLoading: false,
+        totalGranules: newTotalGranules,
+        selectedGranules: newSelectedGranules,
+        granuleDownloadSize: newGranuleDownloadSize,
+      });
     }
-
-    const totalEntries = await requestGranules(granulesRequestUrl);
-    newTotalGranules = totalEntries.length;
-    if (newGranuleDownloadSize === 0) {
-      newGranuleDownloadSize = getDownloadSize(totalEntries);
-    }
-    setState({
-      isLoading: false,
-      totalGranules: newTotalGranules,
-      selectedGranules: newSelectedGranules,
-      granuleDownloadSize: newGranuleDownloadSize,
-    });
   };
 
   /** Trigger granule request when extent, collection, or date changes */
