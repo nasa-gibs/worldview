@@ -50,7 +50,7 @@ module.exports = {
       return;
     }
     c.click(contextMenuCopy);
-    c.waitForElementVisible('.tooltip-inner');
+    c.waitForElementVisible('.tooltip-inner', 6000);
     c.assert.containsText('.tooltip-inner', 'Copied to clipboard!');
   },
 
