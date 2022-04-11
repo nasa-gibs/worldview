@@ -12,29 +12,18 @@ import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
   stopLoading,
+  LOADING_GRANULES,
 } from '../../modules/loading/actions';
 import { openBasicContent } from '../../modules/modal/actions';
-import {
-  getCacheOptions,
-} from '../../modules/layers/util';
+import { getCacheOptions } from '../../modules/layers/util';
+import { getGranulesUrl as getGranulesUrlSelector } from '../../modules/smart-handoff/selectors';
 import {
   getCMRQueryDates,
   getCMRQueryDateUpdateOptions,
   isWithinDateRange,
   getGranuleDateData,
 } from './util';
-import util from '../../util/util';
 
-const CMR_BASE_GRANULE_URL = 'https://cmr.earthdata.nasa.gov/search/granules.json';
-const CMR_AJAX_OPTIONS = {
-  url: CMR_BASE_GRANULE_URL,
-  headers: {
-    'Client-Id': 'Worldview',
-  },
-  traditional: true,
-  dataType: 'json',
-  timeout: 30 * 1000,
-};
 const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
 
 export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
@@ -43,6 +32,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     activeB: {},
   };
   const CMRDataStore = {};
+
+  const getGranuleUrl = getGranulesUrlSelector(store.getState());
+  const baseGranuleUrl = getGranuleUrl();
+  const CMR_AJAX_OPTIONS = {
+    url: baseGranuleUrl,
+    headers: { 'Client-Id': 'Worldview' },
+    traditional: true,
+    dataType: 'json',
+    timeout: 30 * 1000,
+  };
 
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
@@ -59,11 +58,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   }
 
   const showLoading = () => {
-    store.dispatch(startLoading('granule-metadata'));
+    store.dispatch(startLoading(LOADING_GRANULES));
   };
 
   const hideLoading = () => {
-    store.dispatch(stopLoading('granule-metadata'));
+    store.dispatch(stopLoading(LOADING_GRANULES));
   };
 
   /**
@@ -92,15 +91,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       endDate, startDate, id, title, visible,
     } = def;
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
+    const getGranulesUrl = getGranulesUrlSelector(store.getState());
 
     const shortName = 'VJ102MOD'; // USE GRANULE LAYER ID
     const params = {
       shortName,
-      temporal: `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`,
+      startDate: startQueryDate.toISOString(),
+      endDate: endQueryDate.toISOString(),
       pageSize: 2000,
     };
-
-    const query = `${CMR_BASE_GRANULE_URL + util.toQueryString(params)}`;
 
     // update range/extend range checks and new dates (if applicable)
     const CMRDateStoreForLayer = CMRDateRanges[activeString][id];
@@ -128,7 +127,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       showLoading();
       let data;
       try {
-        const response = await fetch(query, CMR_AJAX_OPTIONS);
+        const response = await fetch(getGranulesUrl(params), CMR_AJAX_OPTIONS);
         data = await response.json();
         data = data.feed.entry;
 

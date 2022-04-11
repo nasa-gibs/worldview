@@ -280,25 +280,25 @@ class Sidebar extends React.Component {
                     <TabPane tabId="layers">
                       {this.getProductsToRender(activeTab, isCompareMode)}
                     </TabPane>
-                    <TabPane tabId="events">
-                      {naturalEvents && activeTab === 'events' && (
-                      <Events
-                        height={subComponentHeight}
-                        isLoading={isLoadingEvents}
-                        hasRequestError={hasEventRequestError}
-                        eventsData={eventsData}
-                        sources={eventsSources}
-                      />
-                      )}
-                    </TabPane>
-                    <TabPane tabId="download">
-                      {smartHandoffs && (
-                      <SmartHandoff
-                        isActive={activeTab === 'download'}
-                        tabTypes={tabTypes}
-                      />
-                      )}
-                    </TabPane>
+                    {naturalEvents && activeTab === 'events' && (
+                      <TabPane tabId="events">
+                        <Events
+                          height={subComponentHeight}
+                          isLoading={isLoadingEvents}
+                          hasRequestError={hasEventRequestError}
+                          eventsData={eventsData}
+                          sources={eventsSources}
+                        />
+                      </TabPane>
+                    )}
+                    {smartHandoffs && activeTab === 'download' && (
+                      <TabPane tabId="download">
+                        <SmartHandoff
+                          isActive={activeTab === 'download'}
+                          tabTypes={tabTypes}
+                        />
+                      </TabPane>
+                    )}
 
                     <FooterContent
                       ref={(el) => { this.footerElement = el; }}
