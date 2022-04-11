@@ -13,7 +13,8 @@
           "period": "subdaily",
           "tracks": [
             "OrbitTracks_NOAA-20_Ascending"
-          ]
+          ],
+          "wrapadjacentdays": true
       }
   }
 }
