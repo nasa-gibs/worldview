@@ -10,8 +10,7 @@ import OlStroke from 'ol/style/Stroke';
 import OlText from 'ol/style/Text';
 import OlFill from 'ol/style/Fill';
 import OlGraticule from 'ol/layer/Graticule';
-import * as olProj from 'ol/proj';
-import { Polygon as OlGeomPolygon } from 'ol/geom';
+
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -22,6 +21,7 @@ import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
+import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
@@ -412,7 +412,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  function createLayerWMTS (def, options, day, state, attributes) {
+  function createLayerWMTS (def, options, day, state, { polygons }) {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
@@ -426,6 +426,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!configMatrixSet) {
       throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
     }
+
     let layerDate = options.date || getSelectedDate(state);
     if (isSubdaily && !layerDate) {
       layerDate = getRequestDates(def, options).closestDate;
@@ -439,22 +440,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
 
     // Conditionally set extent for granule tile here with polygon array
-    let tileLayerExtent = extent;
-    if (attributes.polygons) {
-      const res = [].concat(...attributes.polygons);
-      const points = [];
-      // iterate the new array and push a coordinate pair into a new array
-      for (let i = 0; i < res[0].length; i += 2) {
-        const coord1 = parseFloat(res[i]);
-        const coord2 = parseFloat(res[i + 1]);
-        if (coord1 && coord2) {
-          points.push(olProj.transform([coord1, coord2], 'EPSG:4326', proj.selected.crs));
-        }
-      }
-      const polygonFootprint = new OlGeomPolygon([points]);
-      const polygonExtent = polygonFootprint.getExtent();
-      tileLayerExtent = Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
-    }
+    const tileLayerExtent = polygons ? getGranuleTileLayerExtent(polygons, extent, proj) : extent;
 
     const tileGridOptions = {
       origin,

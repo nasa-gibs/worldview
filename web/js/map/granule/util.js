@@ -1,5 +1,30 @@
 import OlGeomLineString from 'ol/geom/LineString';
+import * as olProj from 'ol/proj';
+import { Polygon as OlGeomPolygon } from 'ol/geom';
 import util from '../../util/util';
+
+/**
+ *
+ * @param {*} polygons
+ * @param {*} extent
+ * @param {*} proj
+ * @returns
+ */
+export const getGranuleTileLayerExtent = (polygons, extent, proj) => {
+  const res = [].concat(...polygons);
+  const points = [];
+  // iterate the new array and push a coordinate pair into a new array
+  for (let i = 0; i < res[0].length; i += 2) {
+    const coord1 = parseFloat(res[i]);
+    const coord2 = parseFloat(res[i + 1]);
+    if (coord1 && coord2) {
+      points.push(olProj.transform([coord1, coord2], 'EPSG:4326', proj.selected.crs));
+    }
+  }
+  const polygonFootprint = new OlGeomPolygon([points]);
+  const polygonExtent = polygonFootprint.getExtent();
+  return Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
+};
 
 /**
  * Helper to find index for date string to add to sorted array of date strings
@@ -194,7 +219,6 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
     rangeEnd,
   };
 };
-
 
 export const getGranuleDateData = (entry, date, projection) => {
   const line = new OlGeomLineString([]);
