@@ -191,7 +191,7 @@ if __name__ == "__main__":
   # Check to see if this feature is enabled in features.json before continuing
   with open(features_file, 'rt', encoding="utf-8") as features_json:
     features_dict = json.load(features_json)
-    if features_dict['features']['previewSnapshots'] is False:
+    if features_dict['features'].get('previewSnapshots', False) is False:
       sys.exit();
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
@@ -202,7 +202,7 @@ if __name__ == "__main__":
     wv_json_dict = json.load(wv_json)
     layers = wv_json_dict['layers']
     snapshots_url = wv_json_dict['features']['imageDownload']['url']
-    fetch_snapshots = wv_json_dict['features']['previewSnapshots']
+    fetch_snapshots = features_dict['features'].get('previewSnapshots', False)
     if not fetch_snapshots:
       print("%s: Layer preview fetching disabled.  Exiting." % prog)
       sys.exit()
