@@ -8,7 +8,7 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
-import * as OlExtent from 'ol/extent';
+
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
@@ -1396,29 +1396,6 @@ export function adjustStartDates(layers) {
 
   return Object.values(layers).forEach(applyDateAdjustment);
 }
-
-/**
- * Check if coordinates and polygon extent are within and not exceeding max extent
- *
- * @param {Object} polygon
- * @param {Array} coords
- * @param {Array} maxExtent
- *
- * @return {Boolean}
- */
-export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
-  // check if cursor coordinates within granule footprint
-  const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
-  // check is polygon footprint is within max extent, will allow partial corners within max extent
-  const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
-  // check if polygon is larger than maxExtent - helpful to catch most large polar granules
-  const polygonExtent = polygon.getExtent();
-  const isPolygonLargerThanMaxExtent = OlExtent.containsExtent(polygonExtent, maxExtent);
-
-  return areCoordsWithinPolygon
-    && doesPolygonIntersectMaxExtent
-    && !isPolygonLargerThanMaxExtent;
-};
 
 /**
  * For subdaily layers, if the layer date is within 30 minutes of current

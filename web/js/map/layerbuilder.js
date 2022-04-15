@@ -409,16 +409,17 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @param {number/null} day
    * @param {object} state
-   * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  function createLayerWMTS (def, options, day, state, { polygons }) {
+  function createLayerWMTS (def, options, day, state) {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
     } = def;
     const configSource = config.sources[source];
+    const { date, polygon } = options;
     const isSubdaily = period === 'subdaily';
+
     if (!source) {
       throw new Error(`${id}: Invalid source: ${source}`);
     }
@@ -427,7 +428,7 @@ export default function mapLayerBuilder(config, cache, store) {
       throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
     }
 
-    let layerDate = options.date || getSelectedDate(state);
+    let layerDate = date || getSelectedDate(state);
     if (isSubdaily && !layerDate) {
       layerDate = getRequestDates(def, options).closestDate;
       layerDate = new Date(layerDate.getTime());
@@ -435,12 +436,10 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && wrapadjacentdays && !isSubdaily) {
       layerDate = util.dateAdd(layerDate, 'day', day);
     }
+
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
-
-    // Conditionally set extent for granule tile here with polygon array
-    const tileLayerExtent = polygons ? getGranuleTileLayerExtent(polygons, extent, proj) : extent;
 
     const tileGridOptions = {
       origin,
@@ -472,8 +471,9 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     tileSource.on('tileloadstart', tileLoadStart);
     tileSource.on('tileloadend', tileLoadEnd);
+
     return new OlLayerTile({
-      extent: tileLayerExtent,
+      extent: polygon ? getGranuleTileLayerExtent(polygon, extent) : extent,
       preload: 0,
       className: def.id,
       source: tileSource,
