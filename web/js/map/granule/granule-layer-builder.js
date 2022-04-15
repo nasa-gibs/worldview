@@ -16,6 +16,7 @@ import {
   getCMRQueryDateUpdateOptions,
   isWithinDateRange,
   transformGranuleData,
+  datelineShiftGranules,
 } from './util';
 import util from '../../util/util';
 
@@ -180,19 +181,19 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
   */
-  const createGranuleTileLayers = async (granuleDates, def, attributes) => {
+  const createGranuleTileLayers = async (granules, def, attributes) => {
     const { period, id } = def;
     const { group, proj } = attributes;
 
-    const layerPromises = granuleDates.map(async (granuleDate) => {
-      const { date, polygons: polygon } = granuleDate;
-      const granuleISOKey = `${id}:${proj}:${date}::${group}`;
+    const layerPromises = granules.map(async (granule) => {
+      const { date, polygon, shifted } = granule;
+      const granuleISOKey = `${id}:${proj}:${date}::${group}:${shifted}`;
       let tileLayer = cache.getItem(granuleISOKey);
       if (tileLayer) {
         return tileLayer;
       }
       const granuleISODate = new Date(date);
-      const options = { date: granuleISODate, polygon };
+      const options = { date: granuleISODate, polygon, shifted };
 
       tileLayer = await createLayerWMTS(def, options, null, store.getState());
 
@@ -216,18 +217,23 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {object} - Granule layer
   */
   const createGranuleLayer = async (def, attributes, options) => {
+    const { proj: { selected: { crs } } } = store.getState();
     const { id } = def;
-    const { group } = attributes;
+    const { date, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
     const { filteredGranules } = granuleAttributes;
 
-    const tileLayers = await createGranuleTileLayers(filteredGranules, def, attributes);
-
+    const granules = datelineShiftGranules(filteredGranules, date, crs);
+    const tileLayers = await createGranuleTileLayers(granules, def, attributes);
     const layer = new OlLayerGroup({ layers: tileLayers });
 
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
-    layer.wv = { ...attributes, ...granuleAttributes };
+    layer.wv = {
+      ...attributes,
+      ...granuleAttributes,
+      filteredGranules: granules,
+    };
     store.dispatch(updateGranuleLayerState(layer));
 
     return layer;

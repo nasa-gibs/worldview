@@ -25,6 +25,7 @@ import { changeCursor as changeCursorActionCreator } from '../../modules/map/act
 
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
+import { FULL_MAP_EXTENT } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -62,7 +63,6 @@ export class VectorInteractions extends React.Component {
       compareState,
       granulePlatform,
       granuleFootprints,
-      maxExtent,
       swipeOffset,
     } = this.props;
     const { active, activeString } = compareState;
@@ -89,7 +89,7 @@ export class VectorInteractions extends React.Component {
       const [date] = Object.keys(footprint);
       const [points] = Object.values(footprint);
       polygon.setCoordinates([points]);
-      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, maxExtent);
+      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, FULL_MAP_EXTENT);
       if (isValidPolygon) {
         toggledGranuleFootprint = true;
         events.trigger('granule-hovered', granulePlatform, date);
@@ -338,7 +338,6 @@ VectorInteractions.propTypes = {
   isCoordinateSearchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
-  maxExtent: PropTypes.array,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
 };

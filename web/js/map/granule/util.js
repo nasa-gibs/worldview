@@ -14,11 +14,38 @@ import * as OlExtent from 'ol/extent';
 import util from '../../util/util';
 
 /**
+ * Shift granules to hande dateline cross.  Granules are shifted if:
+ *  - granule date is same as app date and lat < 0
+ *  - granule is from previous day
  *
- * @param {*} polygons
- * @param {*} extent
- * @param {*} proj
+ * @param {*} granules
+ * @param {*} currentDate
  * @returns
+ */
+export const datelineShiftGranules = (granules, currentDate, crs) => {
+  const currentDayDate = new Date(currentDate).getUTCDate();
+  const datelineShiftNeeded = () => {
+    if (crs !== 'EPSG:4326') return false;
+    const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
+    const someCross = granules.some(({ polygon }) => polygon.some(([lon]) => lon > 180 || lon < -180));
+    return someCross && !sameDays;
+  };
+
+  return !datelineShiftNeeded() ? granules : granules.map((granule) => {
+    const { date, polygon } = granule;
+    const sameDay = currentDayDate === new Date(date).getUTCDate();
+    const westSide = polygon.some(([lon]) => lon < 0);
+    const shifted = !sameDay || (sameDay && westSide);
+    return {
+      date,
+      polygon: shifted ? polygon.map(([lon, lat]) => [lon + 360, lat]) : polygon,
+      shifted,
+    };
+  });
+};
+
+/**
+ * Determine map extent for a single granule tile
  */
 export const getGranuleTileLayerExtent = (polygon, extent) => {
   const polygonFootprint = new OlGeomPolygon([polygon]);
@@ -82,7 +109,6 @@ export const getGranuleFootprints = (layer) => {
   // create geometry object with date:polygons key/value pair filtering out granules outside date range
   return filteredGranules.reduce((dates, { date, polygon }) => {
     const granuleDate = new Date(date);
-
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       // Only include granules that have imagery in this proj (determined by layer dateRanges)
       const hasImagery = dateRanges.some(
@@ -277,7 +303,6 @@ export const transformGranuleData = (entry, date, crs) => {
  * @return {Boolean}
  */
 export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
-  // check if cursor coordinates within granule footprint
   const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
   // check is polygon footprint is within max extent, will allow partial corners within max extent
   const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
@@ -291,6 +316,7 @@ export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) 
 };
 
 /**
+ * Exposes methods to create vector layer for a granule polygon and add to the map
  *
  * @param {*} map
  * @returns
