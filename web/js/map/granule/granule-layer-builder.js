@@ -17,6 +17,7 @@ import {
   isWithinDateRange,
   transformGranuleData,
   datelineShiftGranules,
+  transformGranulesForProj,
 } from './util';
 import util from '../../util/util';
 
@@ -187,7 +188,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     const layerPromises = granules.map(async (granule) => {
       const { date, polygon, shifted } = granule;
-      const granuleISOKey = `${id}:${proj}:${date}::${group}:${shifted}`;
+      const granuleISOKey = `${id}:${proj}:${date}::${group}:${shifted ? 'shifted' : ''}`;
       let tileLayer = cache.getItem(granuleISOKey);
       if (tileLayer) {
         return tileLayer;
@@ -223,7 +224,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const granuleAttributes = await getGranuleAttributes(def, options);
     const { filteredGranules } = granuleAttributes;
 
-    const granules = datelineShiftGranules(filteredGranules, date, crs);
+    const transformedGranules = transformGranulesForProj(filteredGranules, crs);
+    const granules = datelineShiftGranules(transformedGranules, date, crs);
     const tileLayers = await createGranuleTileLayers(granules, def, attributes);
     const layer = new OlLayerGroup({ layers: tileLayers });
 

@@ -293,6 +293,14 @@ export const transformGranuleData = (entry, date, crs) => {
   };
 };
 
+export const transformGranulesForProj = (granules, crs) => granules.map((granule) => {
+  const transformedPolygon = granule.polygon.map((coords) => transform(coords, 'EPSG:4326', crs));
+  return {
+    ...granule,
+    polygon: transformedPolygon,
+  };
+});
+
 /**
  * Check if coordinates and polygon extent are within and not exceeding max extent
  *
