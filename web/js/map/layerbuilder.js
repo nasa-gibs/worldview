@@ -476,6 +476,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     tileSource.on('tileloadstart', tileLoadStart);
     tileSource.on('tileloadend', tileLoadEnd);
+    tileSource.on('tileloaderror', tileLoadEnd);
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
@@ -568,6 +569,7 @@ export default function mapLayerBuilder(config, cache, store) {
     });
     tileSource.on('tileloadstart', tileLoadStart);
     tileSource.on('tileloadend', tileLoadEnd);
+    tileSource.on('tileloaderror', tileLoadEnd);
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -680,6 +682,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceTileWMS(sourceOptions);
     tileSource.on('tileloadstart', tileLoadStart);
     tileSource.on('tileloadend', tileLoadEnd);
+    tileSource.on('tileloaderror', tileLoadEnd);
 
     const layer = new OlLayerTile({
       preload: 0,
