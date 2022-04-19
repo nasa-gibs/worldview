@@ -90,10 +90,10 @@ export const isWithinDateRange = (date, startDate, endDate) => (startDate && end
   : false);
 
 /**
-   *
-   * @param {*} layer
-   * @returns
-   */
+ *
+ * @param {*} layer
+ * @returns
+ */
 export const getGranuleFootprints = (layer) => {
   const {
     def, filteredGranules, granuleDates,
@@ -102,9 +102,6 @@ export const getGranuleFootprints = (layer) => {
 
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-
-  // TODO also shift laterally if necessary
-  // NOTE polygon coords are in ["lon", "lat"] format
 
   // create geometry object with date:polygons key/value pair filtering out granules outside date range
   return filteredGranules.reduce((dates, { date, polygon }) => {
@@ -283,7 +280,7 @@ export const transformGranuleData = (entry, date, crs) => {
     if (line.getLength() > maxDistance) {
       newLon = lon > 0 ? lon - 360 : lon + 360;
     }
-    return transform([newLon, lat], 'EPSG:4326', crs);
+    return [newLon, lat];
   });
 
   return {

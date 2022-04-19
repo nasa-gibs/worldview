@@ -64,6 +64,7 @@ export class VectorInteractions extends React.Component {
       granulePlatform,
       granuleFootprints,
       swipeOffset,
+      visibleExtent,
     } = this.props;
     const { active, activeString } = compareState;
     const polygon = new OlGeomPolygon([]);
@@ -89,7 +90,7 @@ export class VectorInteractions extends React.Component {
       const [date] = Object.keys(footprint);
       const [points] = Object.values(footprint);
       polygon.setCoordinates([points]);
-      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, FULL_MAP_EXTENT);
+      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
       if (isValidPolygon) {
         toggledGranuleFootprint = true;
         events.trigger('granule-hovered', granulePlatform, date);
@@ -239,6 +240,7 @@ function mapStateToProps(state) {
   const granulePlatform = getGranulePlatform(state);
 
   const { maxExtent } = config.projections[proj.id];
+  const visibleExtent = proj.selected.crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
 
   return {
     activeLayers,
@@ -258,7 +260,7 @@ function mapStateToProps(state) {
     granulePlatform,
     swipeOffset,
     proj,
-    maxExtent,
+    visibleExtent,
     modalState: modal,
   };
 }
@@ -320,6 +322,7 @@ VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
+  visibleExtent: PropTypes.array,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,

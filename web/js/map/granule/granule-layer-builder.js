@@ -8,6 +8,7 @@ import {
   stopLoading,
   LOADING_GRANULES,
 } from '../../modules/loading/actions';
+import { FULL_MAP_EXTENT } from '../../modules/map/constants';
 import { openBasicContent } from '../../modules/modal/actions';
 import { getCacheOptions } from '../../modules/layers/util';
 import { getGranulesUrl as getGranulesUrlSelector } from '../../modules/smart-handoff/selectors';
@@ -194,8 +195,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         return tileLayer;
       }
       const granuleISODate = new Date(date);
-      const options = { date: granuleISODate, polygon, shifted };
-
+      const options = {
+        date: granuleISODate,
+        polygon,
+        shifted,
+      };
       tileLayer = await createLayerWMTS(def, options, null, store.getState());
 
       attributes.key = granuleISOKey;
@@ -218,16 +222,18 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {object} - Granule layer
   */
   const createGranuleLayer = async (def, attributes, options) => {
-    const { proj: { selected: { crs } } } = store.getState();
+    const { proj: { selected: { crs, maxExtent } } } = store.getState();
     const { id } = def;
     const { date, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
     const { filteredGranules } = granuleAttributes;
 
-    const transformedGranules = transformGranulesForProj(filteredGranules, crs);
-    const granules = datelineShiftGranules(transformedGranules, date, crs);
+    const granules = datelineShiftGranules(filteredGranules, date, crs);
     const tileLayers = await createGranuleTileLayers(granules, def, attributes);
-    const layer = new OlLayerGroup({ layers: tileLayers });
+    const layer = new OlLayerGroup({
+      layers: tileLayers,
+      extent: crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent,
+    });
 
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
@@ -255,6 +261,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    */
   const getGranuleAttributes = async (def, options) => {
     const state = store.getState();
+    const { proj: { selected: { crs } } } = state;
     let reorderedGranules = false;
     let count = DEFAULT_NUM_GRANULES;
 
@@ -274,8 +281,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     // get granule dates waiting for CMR query and filtering (if necessary)
-    const availableGranuleDates = await getQueriedGranuleDates(def, options.date, options.group);
-    const filteredGranules = filterGranules(def.dateRanges, availableGranuleDates, count);
+    const availableGranules = await getQueriedGranuleDates(def, options.date, options.group);
+    const filteredGranules = transformGranulesForProj(
+      filterGranules(def.dateRanges, availableGranules, count),
+      crs,
+    );
+
     return {
       count,
       granuleDates: filteredGranules.map(({ date }) => date),
