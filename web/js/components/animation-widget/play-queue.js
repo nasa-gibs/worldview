@@ -138,13 +138,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  // Filter outliers (e.g. layers that have already been loaded)
-  getFetchTimes = () => this.fetchTimes.filter((time) => time >= MIN_REQUEST_TIME);
-
-  getAverageFetchTime = () => {
-    const filteredTimes = this.getFetchTimes();
-    return filteredTimes.length && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
-  }
+  getAverageFetchTime = () => this.fetchTimes.length && this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
 
   calcBufferSize() {
     // NOTE: for some reason playback takes about 1.5 times as long as it is calculated to be
@@ -187,7 +181,7 @@ class PlayQueue extends React.Component {
     if (currentBufferSize < this.defaultBufferSize) {
       return false;
     }
-    if (this.getFetchTimes().length < this.defaultBufferSize) {
+    if (this.fetchTimes.length < this.defaultBufferSize) {
       this.checkQueue();
       return false;
     }
@@ -282,7 +276,6 @@ class PlayQueue extends React.Component {
     const nextDateStr = toString(nextDate);
     const dateInRange = nextDate <= endDate && nextDate >= startDate;
     const shouldQueue = !this.inQueueObject[nextDateStr] && !this.bufferObject[nextDateStr];
-
     if (shouldQueue && dateInRange) {
       this.addDate(nextDate);
     }
@@ -304,7 +297,9 @@ class PlayQueue extends React.Component {
     await this.queue.add(async () => {
       const startTime = Date.now();
       await promiseImageryForTime(date);
-      this.fetchTimes.push(Date.now() - startTime);
+      const elapsedTime = Date.now() - startTime;
+      const fetchTime = elapsedTime >= MIN_REQUEST_TIME ? elapsedTime : MIN_REQUEST_TIME;
+      this.fetchTimes.push(fetchTime);
       this.setState({ loadedItems: loadedItems += 1 });
       return strDate;
     });
@@ -312,9 +307,9 @@ class PlayQueue extends React.Component {
     if (!this.mounted) return;
     this.bufferObject[strDate] = strDate;
     delete this.inQueueObject[strDate];
-    const bufferLength = this.bufferArray.length;
+    const currentBufferSize = util.objectLength(this.bufferObject);
 
-    if (!initialLoad || this.canPreloadAll || bufferLength >= this.defaultBufferSize) {
+    if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.defaultBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();
     }
