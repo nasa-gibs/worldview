@@ -185,7 +185,7 @@ export function mapIsPolygonValid(polygon, maxDistance) {
  * @static
  *
  * @param polygon {object} GeoJSON poylgon geometry Object
- *
+
  * @param adjustSign {number} a value of 1 or -1
  *
  * @return {obj} Adjusted GeoJSON poylgon geometry Object

@@ -33,7 +33,7 @@ import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
-import granuleFootprint from './granule/ui';
+import { granuleFootprint } from './granule/util';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { CHANGE_TAB } from '../modules/sidebar/constants';
@@ -253,11 +253,12 @@ export default function mapui(models, config, store) {
 
   const onGranuleHover = (instrument, date) => {
     const state = store.getState();
+    const proj = self.selected.getView().getProjection().getCode();
     let geometry;
     if (instrument && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    return granuleFootprintDraw(geometry, date);
+    return granuleFootprints[proj].drawFootprint(geometry, date);
   };
 
   /**
@@ -1084,19 +1085,6 @@ export default function mapui(models, config, store) {
     if (map.isRendered()) {
       store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
     }
-  };
-
-  /*
-   * Add granule footprint to map
-   *
-   * @method granuleFootprintDraw
-   * @static
-   *
-   * @returns {void}
-   */
-  const granuleFootprintDraw = (granuleGeometry, date) => {
-    const proj = self.selected.getView().getProjection().getCode();
-    granuleFootprints[proj].drawFootprint(granuleGeometry, date, proj);
   };
 
   /*

@@ -19,7 +19,6 @@ export const getDaysInYear = (date) => {
 // return string in ISO format "2018-03-16T06:17:30Z"
 export const getISODateFormatted = (date) => `${new Date(date).toISOString().split('.')[0]}Z`;
 
-
 // display date as '2000 OCT 28' for default or '2000 OCT 28 20:28Z' for subdaily
 export const getDisplayDate = (date, isSubdaily) => {
   const displayDate = formatDisplayDate(new Date(date), isSubdaily);
