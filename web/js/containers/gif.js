@@ -47,9 +47,7 @@ class GIF extends Component {
     } = this.getModalOffsets(boundaries);
     this.state = {
       isDownloaded: false,
-      isDownloadError: false,
       showDates: true,
-      isValidSelection: true,
       progress: 0,
       downloadedObject: {},
       offsetLeft,
@@ -243,7 +241,6 @@ class GIF extends Component {
   onGifComplete(obj, width, height) {
     if (obj.error) {
       this.setState({
-        isDownloadError: true,
         isDownloading: false,
         progress: 0,
         downloadedObject: {},
