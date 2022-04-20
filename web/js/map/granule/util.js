@@ -1,5 +1,57 @@
+import OlFeature from 'ol/Feature';
+import { Vector as OlVectorLayer } from 'ol/layer';
+import { Vector as OlVectorSource } from 'ol/source';
+import {
+  Fill as OlStyleFill,
+  Stroke as OlStyleStroke,
+  Style as OlStyle,
+  Text as OlText,
+} from 'ol/style';
 import OlGeomLineString from 'ol/geom/LineString';
+import { transform } from 'ol/proj';
+import { Polygon as OlGeomPolygon } from 'ol/geom';
+import * as OlExtent from 'ol/extent';
 import util from '../../util/util';
+
+/**
+ * Shift granules to hande dateline cross.  Granules are shifted if:
+ *  - granule date is same as app date and lat < 0
+ *  - granule is from previous day
+ *
+ * @param {*} granules
+ * @param {*} currentDate
+ * @returns
+ */
+export const datelineShiftGranules = (granules, currentDate, crs) => {
+  const currentDayDate = new Date(currentDate).getUTCDate();
+  const datelineShiftNeeded = () => {
+    if (crs !== 'EPSG:4326') return false;
+    const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
+    const someCross = granules.some(({ polygon }) => polygon.some(([lon]) => lon > 180 || lon < -180));
+    return someCross && !sameDays;
+  };
+
+  return !datelineShiftNeeded() ? granules : granules.map((granule) => {
+    const { date, polygon } = granule;
+    const sameDay = currentDayDate === new Date(date).getUTCDate();
+    const westSide = polygon.some(([lon]) => lon < 0);
+    const shifted = !sameDay || (sameDay && westSide);
+    return {
+      date,
+      polygon: shifted ? polygon.map(([lon, lat]) => [lon + 360, lat]) : polygon,
+      shifted,
+    };
+  });
+};
+
+/**
+ * Determine map extent for a single granule tile
+ */
+export const getGranuleTileLayerExtent = (polygon, extent) => {
+  const polygonFootprint = new OlGeomPolygon([polygon]);
+  const polygonExtent = polygonFootprint.getExtent();
+  return Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
+};
 
 /**
  * Helper to find index for date string to add to sorted array of date strings
@@ -37,6 +89,11 @@ export const isWithinDateRange = (date, startDate, endDate) => (startDate && end
   ? date.getTime() <= new Date(endDate).getTime() && date.getTime() >= new Date(startDate).getTime()
   : false);
 
+/**
+ *
+ * @param {*} layer
+ * @returns
+ */
 export const getGranuleFootprints = (layer) => {
   const {
     def, filteredGranules, granuleDates,
@@ -47,16 +104,15 @@ export const getGranuleFootprints = (layer) => {
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
 
   // create geometry object with date:polygons key/value pair filtering out granules outside date range
-  return filteredGranules.reduce((dates, { date, polygons }) => {
+  return filteredGranules.reduce((dates, { date, polygon }) => {
     const granuleDate = new Date(date);
-
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       // Only include granules that have imagery in this proj (determined by layer dateRanges)
       const hasImagery = dateRanges.some(
         ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
       );
       if (hasImagery) {
-        dates[date] = polygons;
+        dates[date] = polygon;
       }
     }
     return dates;
@@ -195,62 +251,137 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
   };
 };
 
-
-export const getGranuleDateData = (entry, date, projection) => {
+/**
+ * Transform granule data from CMR response
+ *
+ * @param {*} entry
+ * @param {*} date
+ * @param {*} projection
+ * @returns
+ */
+export const transformGranuleData = (entry, date, crs) => {
   const line = new OlGeomLineString([]);
-  const maxDistance = projection === 'geographic' ? 270 : Number.POSITIVE_INFINITY;
-  const polygons = entry.polygons[0][0].split(' ');
+  const maxDistance = crs === 'EPSG:4326' ? 270 : Number.POSITIVE_INFINITY;
+  const points = entry.polygons[0][0].split(' ');
   const dayNight = entry.day_night_flag;
+  const polygonCoords = [];
 
-  // build the array of arrays polygon
-  let polygonReorder = [];
-  for (let i = 0; i < polygons.length; i += 2) {
-    const coordPair = [];
-    coordPair.unshift(polygons[i]);
-    coordPair.unshift(polygons[i + 1]);
-    polygonReorder.push(coordPair);
+  for (let i = 0; i < points.length; i += 2) {
+    const lat = Number(points[i]);
+    const lon = Number(points[i + 1]);
+    polygonCoords.push([lon, lat]);
   }
 
-  // add coordinates that exceeed max distance to table for revision
-  const coordOverMaxDistance = {};
-  const firstCoords = polygonReorder[0];
-  for (let j = 0; j < polygonReorder.length; j += 1) {
-    // get current long coord in pair and measure against first coord to get length
-    const currentCoords = polygonReorder[j];
-    line.setCoordinates([firstCoords, currentCoords]);
-    const lineLength = line.getLength();
-
-    // if length is over max distance (geographic restriction only) add to table
-    if (lineLength > maxDistance) {
-      const longCoord = currentCoords[0];
-      if (coordOverMaxDistance[longCoord]) {
-        coordOverMaxDistance[longCoord] += 1;
-      } else {
-        coordOverMaxDistance[longCoord] = 1;
-      }
+  const firstCoords = polygonCoords[0];
+  const polygon = polygonCoords.map(([lon, lat]) => {
+    let newLon = lon;
+    line.setCoordinates([firstCoords, [lon, lat]]);
+    // Modify coords if length exceeded
+    if (line.getLength() > maxDistance) {
+      newLon = lon > 0 ? lon - 360 : lon + 360;
     }
-  }
-
-  // check if long coord exceeded max and revise coord +/- 360 to handle meridian crossing
-  const coordinatesRevised = Object.keys(coordOverMaxDistance).length >= 1;
-  if (coordinatesRevised) {
-    polygonReorder = polygonReorder.map((coord) => {
-      const ind0 = coord[0];
-      if (coordOverMaxDistance[ind0] && coordOverMaxDistance[ind0] >= 1) {
-        const numInd0 = Number(ind0);
-        const revise = numInd0 > 0
-          ? numInd0 - 360
-          : numInd0 + 360;
-        coord[0] = revise.toString();
-      }
-      return coord;
-    });
-  }
+    return [newLon, lat];
+  });
 
   return {
     date,
-    polygons: polygonReorder,
+    polygon,
     dayNight,
   };
 };
 
+export const transformGranulesForProj = (granules, crs) => granules.map((granule) => {
+  const transformedPolygon = granule.polygon.map((coords) => transform(coords, 'EPSG:4326', crs));
+  return {
+    ...granule,
+    polygon: transformedPolygon,
+  };
+});
+
+/**
+ * Check if coordinates and polygon extent are within and not exceeding max extent
+ *
+ * @param {Object} polygon
+ * @param {Array} coords
+ * @param {Array} maxExtent
+ *
+ * @return {Boolean}
+ */
+export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
+  const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
+  // check is polygon footprint is within max extent, will allow partial corners within max extent
+  const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
+  // check if polygon is larger than maxExtent - helpful to catch most large polar granules
+  const polygonExtent = polygon.getExtent();
+  const isPolygonLargerThanMaxExtent = OlExtent.containsExtent(polygonExtent, maxExtent);
+
+  return areCoordsWithinPolygon
+    && doesPolygonIntersectMaxExtent
+    && !isPolygonLargerThanMaxExtent;
+};
+
+/**
+ * Exposes methods to create vector layer for a granule polygon and add to the map
+ *
+ * @param {*} map
+ * @returns
+ */
+export const granuleFootprint = (map) => {
+  let currentGranule = {};
+  let vectorLayer = {};
+  const vectorSource = new OlVectorSource({
+    wrapX: false,
+    useSpatialIndex: false,
+  });
+
+  const getVectorLayer = (text) => new OlVectorLayer({
+    className: 'granule-map-footprint',
+    source: vectorSource,
+    style: [
+      new OlStyle({
+        fill: new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }),
+        stroke: new OlStyleStroke({
+          color: 'rgb(0, 123, 255, 0.65)',
+          width: 3,
+        }),
+        text: new OlText({
+          textAlign: 'center',
+          text,
+          font: '18px monospace',
+          fill: new OlStyleFill({ color: 'white' }),
+          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+          overflow: true,
+        }),
+      }),
+    ],
+  });
+
+  const drawFootprint = (granuleGeometry, date) => {
+    if (currentGranule[date]) {
+      return;
+    }
+    const clearGranule = () => {
+      currentGranule = {};
+      map.removeLayer(vectorLayer);
+      vectorSource.clear();
+    };
+    if (!currentGranule[date]) {
+      clearGranule();
+    }
+    if (!granuleGeometry || !date) {
+      clearGranule();
+      return;
+    }
+    currentGranule[date] = true;
+    const geometry = new OlGeomPolygon([granuleGeometry]);
+    const featureFootprint = new OlFeature({ geometry });
+    vectorSource.addFeature(featureFootprint);
+    const newVectorLayer = getVectorLayer(date);
+    vectorLayer = newVectorLayer;
+    map.addLayer(vectorLayer);
+  };
+
+  return {
+    drawFootprint,
+  };
+};

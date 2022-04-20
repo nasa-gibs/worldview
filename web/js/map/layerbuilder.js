@@ -10,8 +10,7 @@ import OlStroke from 'ol/style/Stroke';
 import OlText from 'ol/style/Text';
 import OlFill from 'ol/style/Fill';
 import OlGraticule from 'ol/layer/Graticule';
-import * as olProj from 'ol/proj';
-import { Polygon as OlGeomPolygon } from 'ol/geom';
+
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -22,6 +21,7 @@ import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
+import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
@@ -39,6 +39,10 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 import { startLoading, stopLoading, LOADING_TILES } from '../modules/loading/actions';
+
+import {
+  LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
+} from '../modules/map/constants';
 
 let loadingCounter = 0;
 
@@ -352,17 +356,17 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} proj - current projection
    */
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
-    let extent; let
-      origin;
+    let extent;
+    let origin;
 
     switch (day) {
       case 1:
-        extent = [-250, -90, -180, 90];
-        origin = [-540, 90];
+        extent = LEFT_WING_EXTENT;
+        origin = LEFT_WING_ORIGIN;
         break;
       case -1:
-        extent = [180, -90, 250, 90];
-        origin = [180, 90];
+        extent = RIGHT_WING_EXTENT;
+        origin = RIGHT_WING_ORIGIN;
         break;
       default:
         extent = proj.maxExtent;
@@ -409,16 +413,17 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @param {number/null} day
    * @param {object} state
-   * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  function createLayerWMTS (def, options, day, state, attributes) {
+  function createLayerWMTS (def, options, day, state) {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
     } = def;
     const configSource = config.sources[source];
+    const { date, polygon, shifted } = options;
     const isSubdaily = period === 'subdaily';
+
     if (!source) {
       throw new Error(`${id}: Invalid source: ${source}`);
     }
@@ -426,7 +431,8 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!configMatrixSet) {
       throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
     }
-    let layerDate = options.date || getSelectedDate(state);
+
+    let layerDate = date || getSelectedDate(state);
     if (isSubdaily && !layerDate) {
       layerDate = getRequestDates(def, options).closestDate;
       layerDate = new Date(layerDate.getTime());
@@ -434,31 +440,15 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && wrapadjacentdays && !isSubdaily) {
       layerDate = util.dateAdd(layerDate, 'day', day);
     }
+
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
 
-    // Conditionally set extent for granule tile here with polygon array
-    let tileLayerExtent = extent;
-    if (attributes.polygons) {
-      const res = [].concat(...attributes.polygons);
-      const points = [];
-      // iterate the new array and push a coordinate pair into a new array
-      for (let i = 0; i < res[0].length; i += 2) {
-        const coord1 = parseFloat(res[i]);
-        const coord2 = parseFloat(res[i + 1]);
-        if (coord1 && coord2) {
-          points.push(olProj.transform([coord1, coord2], 'EPSG:4326', proj.selected.crs));
-        }
-      }
-      const polygonFootprint = new OlGeomPolygon([points]);
-      const polygonExtent = polygonFootprint.getExtent();
-      tileLayerExtent = Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
-    }
-
+    // Also need to shift this if granule is shifted
     const tileGridOptions = {
-      origin,
-      extent,
+      origin: shifted ? RIGHT_WING_ORIGIN : origin,
+      extent: shifted ? RIGHT_WING_EXTENT : extent,
       sizes,
       resolutions,
       matrixIds: matrixIds || resolutions.map((set, index) => index),
@@ -486,8 +476,11 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     tileSource.on('tileloadstart', tileLoadStart);
     tileSource.on('tileloadend', tileLoadEnd);
+
+    const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
+
     return new OlLayerTile({
-      extent: tileLayerExtent,
+      extent: polygon ? granuleExtent : extent,
       preload: 0,
       className: def.id,
       source: tileSource,
@@ -534,13 +527,13 @@ export default function mapLayerBuilder(config, cache, store) {
 
     if (day) {
       if (day === 1) {
-        layerExtent = [-250, -90, -180, 90];
-        start = [-180, 90];
+        layerExtent = LEFT_WING_EXTENT;
+        start = CENTER_MAP_ORIGIN;
         gridExtent = [110, -90, 180, 90];
       } else {
         gridExtent = [-180, -90, -110, 90];
-        layerExtent = [180, -90, 250, 90];
-        start = [-180, 90];
+        layerExtent = RIGHT_WING_EXTENT;
+        start = CENTER_MAP_ORIGIN;
       }
     }
 
@@ -640,11 +633,11 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     if (day) {
       if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
+        extent = LEFT_WING_EXTENT;
+        start = LEFT_WING_ORIGIN;
       } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
+        extent = RIGHT_WING_EXTENT;
+        start = RIGHT_WING_ORIGIN;
       }
     }
     const parameters = {

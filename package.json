@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.22.0",
+  "version": "3.23.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -184,6 +184,7 @@
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
     "immutability-helper": "^3.0.1",
+    "jsdom-worker": "^0.2.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.2",
     "moment-locales-webpack-plugin": "^1.1.2",
@@ -233,7 +234,8 @@
   ],
   "jest": {
     "setupFiles": [
-      "jest-canvas-mock"
+      "jest-canvas-mock",
+      "jsdom-worker"
     ],
     "moduleDirectories": [
       "node_modules"

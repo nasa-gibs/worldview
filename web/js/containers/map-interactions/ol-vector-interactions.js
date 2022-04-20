@@ -12,8 +12,8 @@ import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import {
   hasNonClickableVectorLayer,
-  areCoordinatesAndPolygonExtentValid,
 } from '../../modules/layers/util';
+import { areCoordinatesAndPolygonExtentValid } from '../../map/granule/util';
 import {
   getActiveLayers, getGranulePlatform, getActiveGranuleFootPrints,
 } from '../../modules/layers/selectors';
@@ -25,6 +25,7 @@ import { changeCursor as changeCursorActionCreator } from '../../modules/map/act
 
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
+import { FULL_MAP_EXTENT } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -57,17 +58,18 @@ export class VectorInteractions extends React.Component {
   *
   * @return {Boolean} to indicate if valid for parent mouseMove function
   */
-  handleGranuleHover = (crs, pixels, coord) => {
+  handleGranuleHover = (crs, pixels, mouseCoords) => {
     const {
       compareState,
       granulePlatform,
       granuleFootprints,
-      maxExtent,
       swipeOffset,
+      visibleExtent,
     } = this.props;
     const { active, activeString } = compareState;
-
+    const polygon = new OlGeomPolygon([]);
     let toggledGranuleFootprint;
+
     // reverse granule geometry so most recent granules are on top
     const footprints = Object
       .keys(granuleFootprints)
@@ -83,29 +85,17 @@ export class VectorInteractions extends React.Component {
       }
     }
 
-    const polygon = new OlGeomPolygon([]);
-    for (let i = 0; i < footprints.length; i += 1) {
-      const date = Object.keys(footprints[i])[0];
-      const geom = Object.values(footprints[i])[0];
-
-      const geomVertices = geom.map((xy) => {
-        const coordNums = [parseFloat(xy[0]), parseFloat(xy[1])];
-        // transform for non geographic projections
-        if (crs !== 'EPSG:4326') {
-          return transform(coordNums, 'EPSG:4326', crs);
-        }
-        return coordNums;
-      });
-
-      // update geom polygon for precise coordinate intersect inclusion check
-      polygon.setCoordinates([geomVertices]);
-      // check if coordinates and polygon extent are within and not exceeding max extent
-      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, [coord[0], coord[1]], maxExtent);
+    // check if coordinates and polygon extent are within and not exceeding max extent
+    footprints.forEach((footprint) => {
+      const [date] = Object.keys(footprint);
+      const [points] = Object.values(footprint);
+      polygon.setCoordinates([points]);
+      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
       if (isValidPolygon) {
         toggledGranuleFootprint = true;
         events.trigger('granule-hovered', granulePlatform, date);
       }
-    }
+    });
 
     if (!toggledGranuleFootprint) {
       events.trigger('granule-hovered', granulePlatform, null);
@@ -250,6 +240,7 @@ function mapStateToProps(state) {
   const granulePlatform = getGranulePlatform(state);
 
   const { maxExtent } = config.projections[proj.id];
+  const visibleExtent = proj.selected.crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
 
   return {
     activeLayers,
@@ -269,7 +260,7 @@ function mapStateToProps(state) {
     granulePlatform,
     swipeOffset,
     proj,
-    maxExtent,
+    visibleExtent,
     modalState: modal,
   };
 }
@@ -331,6 +322,7 @@ VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
+  visibleExtent: PropTypes.array,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
@@ -349,7 +341,6 @@ VectorInteractions.propTypes = {
   isCoordinateSearchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
-  maxExtent: PropTypes.array,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
 };
