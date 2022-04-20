@@ -20,16 +20,16 @@ import { formatDisplayDate } from '../date/util';
  *
  */
 export default function getImageArray(
-  gifComponentState,
-  gifComponentProps,
+  options,
   dimensions,
   state,
 ) {
   const {
     animation, proj, map, date, locationSearch,
   } = state;
-  const { startDate, endDate, url } = gifComponentProps;
-  const { boundaries, showDates } = gifComponentState;
+  const {
+    boundaries, showDates, startDate, endDate, url,
+  } = options;
   const {
     customInterval, interval, customDelta, delta, customSelected,
   } = date;
