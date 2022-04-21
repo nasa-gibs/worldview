@@ -10,6 +10,7 @@
       "layergroup": "Radiance",
       "product": "MIL3MRD",
       "wrapadjacentdays": true,
+      "inactive": true,
       "daynight": [
         "day"
       ]
