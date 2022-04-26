@@ -28,8 +28,9 @@ const brand = require('../build/worldview/brand/brand.json');
 const applyTo = [
   'build/worldview/index.html',
   'build/worldview/build/wv.js',
-  'build/worldview/build/wv.css.map',
+  'build/worldview/brand/about/*.html',
   'build/worldview/pages/*.html',
+  'build/worldview/manifest.webmanifest',
 ];
 
 // Build date shown in the About box

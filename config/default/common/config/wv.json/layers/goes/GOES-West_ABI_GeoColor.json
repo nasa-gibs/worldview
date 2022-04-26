@@ -21,6 +21,11 @@
             "startDate": "2021-07-21T00:30:00Z",
             "endDate": "2019-08-05T22:30:00Z",
             "dateInterval": "10"
+          },
+          {
+            "startDate": "2021-12-19T00:00:00Z",
+            "endDate": "2022-01-16T23:50:00Z",
+            "dateInterval": "10"
           }
         ]
       }

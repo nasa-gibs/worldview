@@ -5,7 +5,7 @@ import { Range as RangeInput } from 'rc-slider';
 import Checkbox from '../../util/checkbox';
 import {
   checkTemperatureUnitConversion, convertPaletteValue,
-} from '../../../modules/global-unit/util';
+} from '../../../modules/settings/util';
 
 class ThresholdSelect extends React.Component {
   constructor(props) {

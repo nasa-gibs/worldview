@@ -1,0 +1,5 @@
+### About Carbon Dioxide
+Carbon dioxide (CO<sub>2</sub>) is an odorless, colorless gas and is the fourth most abundant component of dry air (after nitrogen, oxygen and argon). CO<sub>2</sub> is an important greenhouse gas that helps trap heat in the atmosphere. As a part of the carbon cycle, CO<sub>2</sub> can be emitted (e.g. from respiration by plants and soils or from wildfires) or absorbed (e.g. from plant photosynthesis or by dissolving into the oceans). Human activities such as the combustion of fossil fuels and biomass burning are sources of CO<sub>2</sub>.
+
+### About OCO-2
+The Orbiting Carbon Observatory-2 (OCO-2) is a three-channel imaging grating spectrometer that collects cloud-free XCO<sub>2</sub> observations continuously over the globe by measuring reflected sunlight in the near-infrared. OCO-2 makes eight simultaneous, adjacent measurements, each with a spatial resolution of 2.25 km x 1.29 km. These measurements are then mapped onto a 500 m<sup>2</sup> grid. The repeat cycle for OCO-2 is every 16 days.

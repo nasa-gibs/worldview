@@ -55,19 +55,9 @@ test('does not add duplicate layer', () => {
 });
 
 test('resets to default layers', () => {
-  const layers = resetLayers(
-    [
-      {
-        id: 'terra-cr',
-      },
-      {
-        id: 'terra-aod',
-      },
-    ],
-    config.layers,
-  );
+  const layers = resetLayers(config);
   const layerList = getLayers(getState(layers), {}).map((x) => x.id);
-  expect(layerList).toEqual(['terra-cr', 'terra-aod']);
+  expect(layerList).toEqual(['aqua-cr', 'terra-cr', 'terra-aod']);
 });
 
 test('gets layers in reverse', () => {

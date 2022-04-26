@@ -56,6 +56,7 @@ class CoverageItemContainer extends Component {
   */
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
+
     const multiDateToDisplay = dateRanges.reduce((multiCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
@@ -71,9 +72,12 @@ class CoverageItemContainer extends Component {
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
         // allow overwriting of subsequent date ranges
-        if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
+        if (dateIntTime >= startDateTime && dateIntTime < endDateTime) {
           const dateIntFormatted = dateIntStartDate.toISOString();
-          multiCoverageDates[dateIntFormatted] = { date: dateIntFormatted, interval: rangeInterval };
+          multiCoverageDates[dateIntFormatted] = {
+            date: dateIntFormatted,
+            interval: rangeInterval,
+          };
         }
       });
       return multiCoverageDates;

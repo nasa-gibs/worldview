@@ -185,7 +185,7 @@ export function mapIsPolygonValid(polygon, maxDistance) {
  * @static
  *
  * @param polygon {object} GeoJSON poylgon geometry Object
- *
+
  * @param adjustSign {number} a value of 1 or -1
  *
  * @return {obj} Adjusted GeoJSON poylgon geometry Object
@@ -292,19 +292,3 @@ export function mapToPolys(geom) {
   }
   return [geom];
 }
-
-/* FIXME OL3
-wv.map.mock = function() {
-
-    return {
-        setDay: function() {},
-        setOpacity: function() {},
-        setVisibility: function() {},
-        setZIndex: function() {},
-        dispose: function() {},
-        setLookup: function() {},
-        clearLookup: function() {}
-    };
-
-};
-*/

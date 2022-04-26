@@ -4,4 +4,4 @@ The OCO-2 Total Column Water Vapor is an ancillary product of the retrieval algo
 
 References: OCO2_L2_Lite_FP [doi:10.5067/E4E140XDMPO2](https://doi.org/10.5067/E4E140XDMPO2)
 
-Nelson, R. R., et al.: High accuracy measurements of total column water vapor from the Orbiting Carbon Observatory-2, Geophysical Research Letters, 43, [doi: 10.1002/2016GL071200](https://doi.org/10.1002/2016GL071200),
+Nelson, R. R., et al.: High accuracy measurements of total column water vapor from the Orbiting Carbon Observatory-2, Geophysical Research Letters, 43, [doi:10.1002/2016GL071200](https://doi.org/10.1002/2016GL071200),

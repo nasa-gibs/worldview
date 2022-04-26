@@ -15,8 +15,21 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
-  const { properties } = clusterPoint;
+  const { properties, geometry } = clusterPoint;
   const content = document.createTextNode(formatDisplayDate(properties.date));
+
+  const { magnitudeValue, magnitudeUnit } = geometry;
+  const magnitudeContent = document.createElement('div');
+  const hasMagnitude = magnitudeUnit && magnitudeValue;
+  if (hasMagnitude) {
+    const superscriptUnit = document.createElement('sup');
+    superscriptUnit.append('2');
+    const formattedMagnitudeUnit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
+    magnitudeContent.append(magnitudeValue.toLocaleString());
+    magnitudeContent.append(formattedMagnitudeUnit);
+    if (formattedMagnitudeUnit === ' NM') magnitudeContent.append(superscriptUnit);
+  }
+
   const { date } = properties;
   const eventID = properties.event_id;
   let { coordinates } = clusterPoint.geometry;
@@ -32,7 +45,11 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
     callback(eventID, date);
   };
   textEl.appendChild(content);
+  textEl.appendChild(magnitudeContent);
   textEl.className = 'track-marker-date';
+  if (!isSelected) {
+    textEl.style.top = hasMagnitude ? '-40px' : '-28px';
+  }
   circleEl.className = `track-marker track-marker-${date}`;
   circleEl.id = `track-marker-${date}`;
   overlayEl.appendChild(circleEl);

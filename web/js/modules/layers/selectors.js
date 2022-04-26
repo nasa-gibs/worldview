@@ -21,6 +21,8 @@ const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
+export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
+
 /**
  * Is overlay grouping currently enabled?
  */
@@ -36,6 +38,43 @@ export const getActiveLayers = (state, activeString) => {
     return getActiveLayersEmbed(state, activeString);
   }
   return layers[activeString || compare.activeString].layers;
+};
+
+export const getActiveGranuleLayers = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granuleLayers } = layers[activeString || compare.activeString] || {};
+  return granuleLayers;
+};
+
+export const getGranuleLayer = (state, id, activeString) => {
+  const granuleLayers = getActiveGranuleLayers(state, activeString);
+  return granuleLayers ? granuleLayers[id] : false;
+};
+
+export const getGranuleCount = (state, id) => {
+  const layer = getGranuleLayer(state, id);
+  return layer ? layer.count : 20;
+};
+
+export const getActiveGranuleFootPrints = (state) => {
+  const { layers, compare: { activeString } } = state;
+  const granuleLayers = getActiveGranuleLayers(state);
+  const { granuleFootprints } = layers[activeString];
+  const granulePlatform = getGranulePlatform(state);
+
+  const isActiveGranuleVisible = getActiveLayers(state).filter((layer) => {
+    const { visible, type, subtitle } = layer;
+    const isGranule = type === 'granule';
+    return visible && isGranule && subtitle === granulePlatform;
+  });
+
+  return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
+};
+
+export const getGranulePlatform = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granulePlatform } = layers[activeString || compare.activeString];
+  return granulePlatform;
 };
 
 /**
@@ -239,6 +278,12 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
+  def.count = spec.count || undefined;
+
+  def.startDate = lodashGet(def, `projections[${projection}].startDate`) || def.startDate;
+  def.endDate = lodashGet(def, `projections[${projection}].endDate`) || def.endDate;
+  def.dateRanges = lodashGet(def, `projections[${projection}].dateRanges`) || def.dateRanges;
+
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
   } else if (!lodashIsUndefined(spec.hidden)) {
@@ -268,11 +313,12 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
  * @param {*} startingLayers
  * @param {*} layerConfig
  */
-export function resetLayers(startingLayers, layerConfig) {
+export function resetLayers(config) {
+  const { defaults: { startingLayers, projection }, layers: layerConfig } = config;
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, start, layers, layerConfig);
+      layers = addLayer(start.id, start, layers, layerConfig, null, projection);
     });
   }
   return layers;
@@ -525,9 +571,12 @@ export function isRenderable(id, layers, date, bLayers, state) {
 }
 
 export function activateLayersForEventCategory(state, category) {
-  const projection = state.proj.id;
-  const { layers } = state.config.naturalEvents;
-  const { layerConfig } = state.layers;
+  const {
+    config: { naturalEvents: { layers } },
+    layers: { layerConfig },
+    proj: { id: projection },
+  } = state;
+
   const categoryLayers = layers[projection][category];
 
   let newLayers = getActiveLayers(state);
@@ -556,6 +605,8 @@ export function activateLayersForEventCategory(state, category) {
         newLayers,
         layerConfig,
         overlays.length,
+        projection,
+        null,
       );
     }
   });

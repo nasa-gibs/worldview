@@ -288,7 +288,7 @@ class TimelineLayerCoveragePanel extends Component {
         onMouseDown={this.stopPropagation}
         onClick={() => onInfoClick()}
       >
-        <FontAwesomeIcon icon="info" className="layer-coverage-info-button-icon" />
+        <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" />
       </a>
     );
   }

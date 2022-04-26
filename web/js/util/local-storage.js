@@ -32,6 +32,8 @@ export default {
     NOTIFICATION_ALERT: 'alert',
     NOTIFICATION_MSG: 'message',
     GROUP_OVERLAYS: 'groupOverlays',
+    ALWAYS_SHOW_DATELINES: 'alwaysShowDatelines',
+    ALLOW_GRANULE_REORDER: 'allowGranuleReorder',
   },
   getItem(key) {
     return enabled && localStorage.getItem(key);

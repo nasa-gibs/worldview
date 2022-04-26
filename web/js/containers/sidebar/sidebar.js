@@ -100,19 +100,20 @@ class Sidebar extends React.Component {
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
-    const { isMobile, screenHeight } = this.props;
+    const { isMobile, screenHeight, isCompareMode } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
-    const tabHeight = 32;
+    const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
+    const groupCheckboxHeight = 35;
     let newHeight;
     if (!isMobile) {
       const iconHeight = 53;
       const topOffset = 10;
       const basePadding = 130;
       newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + basePadding + footerHeight)
+        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight)
         - 10;
     } else {
-      newHeight = screenHeight - (tabHeight + footerHeight);
+      newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight);
     }
     // Issue #1415: This was checking for subComponentHeight !== newHeight.
     // Sometimes it would get stuck in a loop in which the newHeight
@@ -155,7 +156,7 @@ class Sidebar extends React.Component {
     } if (!isCompareMode) {
       return (
         <LayersContainer
-          height={subComponentHeight - 48}
+          height={subComponentHeight}
           isActive={activeTab === 'layers'}
           compareState={activeString}
         />
@@ -248,14 +249,15 @@ class Sidebar extends React.Component {
           {this.renderSidebarLogo()}
           <>
             {!isDistractionFreeModeActive && isCollapsed && (
-            <CollapsedButton
-              isMobile={isMobile}
-              onclick={this.toggleSidebar}
-              numberOfLayers={numberOfLayers}
-            />
+              <CollapsedButton
+                isMobile={isMobile}
+                isEmbed={isEmbedModeActive}
+                onclick={this.toggleSidebar}
+                numberOfLayers={numberOfLayers}
+              />
             )}
             <div
-              id="productsHolder"
+              id="products-holder"
               className="products-holder-case"
               style={{
                 maxHeight,
@@ -278,25 +280,25 @@ class Sidebar extends React.Component {
                     <TabPane tabId="layers">
                       {this.getProductsToRender(activeTab, isCompareMode)}
                     </TabPane>
-                    <TabPane tabId="events">
-                      {naturalEvents && activeTab === 'events' && (
-                      <Events
-                        height={subComponentHeight}
-                        isLoading={isLoadingEvents}
-                        hasRequestError={hasEventRequestError}
-                        eventsData={eventsData}
-                        sources={eventsSources}
-                      />
-                      )}
-                    </TabPane>
-                    <TabPane tabId="download">
-                      {smartHandoffs && (
-                      <SmartHandoff
-                        isActive={activeTab === 'download'}
-                        tabTypes={tabTypes}
-                      />
-                      )}
-                    </TabPane>
+                    {naturalEvents && activeTab === 'events' && (
+                      <TabPane tabId="events">
+                        <Events
+                          height={subComponentHeight}
+                          isLoading={isLoadingEvents}
+                          hasRequestError={hasEventRequestError}
+                          eventsData={eventsData}
+                          sources={eventsSources}
+                        />
+                      </TabPane>
+                    )}
+                    {smartHandoffs && activeTab === 'download' && (
+                      <TabPane tabId="download">
+                        <SmartHandoff
+                          isActive={activeTab === 'download'}
+                          tabTypes={tabTypes}
+                        />
+                      </TabPane>
+                    )}
 
                     <FooterContent
                       ref={(el) => { this.footerElement = el; }}

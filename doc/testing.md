@@ -6,7 +6,7 @@ Run the entire test suite using `npm test`.
 ## Linting
 
 To check code against the project's style guides, use `npm run lint`.
-Use `npm run lint:css` or `npm run lint:js` to check CSS or JS files separately.
+Use `npm run lint:scss` or `npm run lint:js` to check SCSS or JS files separately.
 
 ## Unit Tests
 

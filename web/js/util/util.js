@@ -228,7 +228,9 @@ export default (function(self) {
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
   self.toISOStringSeconds = function(date) {
-    return `${date.toISOString().split('.')[0]}Z`;
+    const isString = typeof date === 'string' || date instanceof String;
+    const dateString = isString ? date : date.toISOString();
+    return `${dateString.split('.')[0]}Z`;
   };
 
   /**

@@ -2,4 +2,4 @@ The DMSP-F8 Wind Speed Over Oceans layer indicates the wind speed in meters per 
 
 The F08 spacecraft is flown by the DMSP on two operational polar orbiting platforms and had an orbit that was near-circular, sun-synchronous, and near-polar with an altitude of about 860 ± 25 kilometers. The SSM/I sensor consisted of 7 separate total-power radiometers measuring the intensity of radiation coming from its Earth-viewing reflector operating at four different frequencies: 19.35, 22.235, 37, and 85.5 gigahertz.
 
-References: rssmif08d [doi:10.5067/MEASURES/DMSP-F8/SSMI/DATA301](http://dx.doi.org/10.5067/MEASURES/DMSP-F8/SSMI/DATA301)
+References: rssmif08d [doi:10.5067/MEASURES/DMSP-F8/SSMI/DATA301](https://doi.org/10.5067/MEASURES/DMSP-F8/SSMI/DATA301)

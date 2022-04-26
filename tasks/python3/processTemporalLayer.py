@@ -14,10 +14,14 @@ def determine_end_date(key, date):
 # This method takes a layer and a temporal
 # value and tranlates it to start and end dates
 def process_temporal(wv_layer, value):
+    dateFormat = "%Y-%m-%d"
+    timeFormat = "%H:%M:%S"
+    dateTimeFormat = "%Y-%m-%d %H:%M:%S"
     try:
         ranges = to_list(value)
         if "T" in ranges[0]:
             wv_layer["period"] = "subdaily"
+
         else:
             if ranges[0].endswith("Y"):
                 wv_layer["period"] = "yearly"
@@ -28,41 +32,43 @@ def process_temporal(wv_layer, value):
         start_date = datetime.max
         end_date = datetime.min
         date_range_start, date_range_end, range_interval = [], [], []
+
         for range in ranges:
-            times = range.split('/')
+            start, end, interval = range.split('/')
             if wv_layer["period"] == "daily" \
             or wv_layer["period"] == "monthly" \
             or wv_layer["period"] == "yearly":
-                start_date = min(start_date,
-                    datetime.strptime(times[0], "%Y-%m-%d"))
-                end_date = max(end_date,
-                    datetime.strptime(times[1], "%Y-%m-%d"))
+                start_date = min(start_date, datetime.strptime(start, dateFormat))
+                end_date = max(end_date, datetime.strptime(end, dateFormat))
                 if start_date:
-                    startDateParse = datetime.strptime(times[0], "%Y-%m-%d")
-                    date_range_start.append(startDateParse.strftime("%Y-%m-%d") + "T" + startDateParse.strftime("%H:%M:%S") + "Z")
+                    startDateParse = datetime.strptime(start, dateFormat)
+                    date_range_start.append(startDateParse.strftime(dateFormat) + "T" + startDateParse.strftime(timeFormat) + "Z")
                 if end_date:
-                    endDateParse = datetime.strptime(times[1], "%Y-%m-%d")
-                    date_range_end.append(endDateParse.strftime("%Y-%m-%d") + "T" + endDateParse.strftime("%H:%M:%S") + "Z")
-                if times[2] != "P1D":
-                    end_date = determine_end_date(times[2], end_date)
-                range_interval.append(re.search(r'\d+', times[2]).group())
+                    endDateParse = datetime.strptime(end, dateFormat)
+                    date_range_end.append(endDateParse.strftime(dateFormat) + "T" + endDateParse.strftime(timeFormat) + "Z")
+                if interval != "P1D":
+                    end_date = determine_end_date(interval, end_date)
+                range_interval.append(re.search(r'\d+', interval).group())
+
+            # Subdaily Layers
             else:
-                startTime = times[0].replace('T', ' ').replace('Z', '')
-                endTime = times[1].replace('T', ' ').replace('Z', '')
-                start_date = min(start_date,
-                    datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S"))
-                end_date = max(end_date,
-                    datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S"))
+                startTime = start.replace('T', ' ').replace('Z', '')
+                endTime = end.replace('T', ' ').replace('Z', '')
+                start_date = min(start_date, datetime.strptime(startTime, dateTimeFormat))
+                end_date = max(end_date, datetime.strptime(endTime, dateTimeFormat))
+
                 if start_date:
-                    startTimeParse = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
-                    date_range_start.append(startTimeParse.strftime("%Y-%m-%d") + "T" + startTimeParse.strftime("%H:%M:%S") + "Z")
+                    startTimeParse = datetime.strptime(startTime, dateTimeFormat)
+                    date_range_start.append(startTimeParse.strftime(dateFormat) + "T" + startTimeParse.strftime(timeFormat) + "Z")
                 if end_date:
-                    endTimeParse = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
-                    date_range_end.append(endTimeParse.strftime("%Y-%m-%d") + "T" + endTimeParse.strftime("%H:%M:%S") + "Z")
-                range_interval.append(re.search(r'\d+', times[2]).group())
-            wv_layer["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
+                    endTimeParse = datetime.strptime(endTime, dateTimeFormat)
+                    date_range_end.append(endTimeParse.strftime(dateFormat) + "T" + endTimeParse.strftime(timeFormat) + "Z")
+
+                range_interval.append(re.search(r'\d+', interval).group())
+
+            wv_layer["startDate"] = start_date.strftime(dateFormat) + "T" + start_date.strftime(timeFormat) + "Z"
             if end_date != datetime.min:
-                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z"
+                wv_layer["endDate"] = end_date.strftime(dateFormat) + "T" + end_date.strftime(timeFormat) + "Z"
             if date_range_start and date_range_end:
                 wv_layer["dateRanges"] = [{"startDate": s, "endDate": e, "dateInterval": i} for s, e, i in zip(date_range_start, date_range_end, range_interval)]
     except ValueError:

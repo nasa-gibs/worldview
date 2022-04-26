@@ -11,6 +11,10 @@ import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+import GranuleLayerDateList from './granule-date-list';
+import GranuleCountSlider from './granule-count-slider';
+import safeLocalStorage from '../../../util/local-storage';
+
 import {
   palettesTranslate,
 } from '../../../modules/palettes/util';
@@ -22,6 +26,10 @@ import {
   getPaletteLegend,
   isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
+import {
+  getGranuleLayer,
+  getGranulePlatform,
+} from '../../../modules/layers/selectors';
 import {
   setThresholdRangeAndSquash,
   setCustomPalette,
@@ -38,7 +46,11 @@ import {
 import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
-import { setOpacity } from '../../../modules/layers/actions';
+import {
+  updateGranuleLayerOptions,
+  resetGranuleLayerDates,
+  setOpacity,
+} from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
 
 class LayerSettings extends React.Component {
@@ -46,10 +58,17 @@ class LayerSettings extends React.Component {
     super(props);
     this.state = {
       activeIndex: 0,
+      allowGranuleReorder: false,
     };
     this.canvas = document.createElement('canvas');
     this.canvas.width = 120;
     this.canvas.height = 10;
+  }
+
+  componentDidMount() {
+    const { ALLOW_GRANULE_REORDER } = safeLocalStorage.keys;
+    const allowGranuleReorder = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
+    this.setState({ allowGranuleReorder });
   }
 
   /**
@@ -275,6 +294,43 @@ class LayerSettings extends React.Component {
     );
   }
 
+  /**
+   * Render Granule count slider and granule date list settings (if granule layer)
+   */
+  renderGranuleSettings = () => {
+    const {
+      layer,
+      granuleOptions,
+      screenHeight,
+      resetGranuleLayerDates,
+      updateGranuleLayerOptions,
+    } = this.props;
+    const { allowGranuleReorder } = this.state;
+    const { count, dates, granulePlatform } = granuleOptions;
+    return dates
+      ? (
+        <>
+          <GranuleCountSlider
+            def={layer}
+            count={count}
+            granuleDates={dates}
+            updateGranuleLayerOptions={updateGranuleLayerOptions}
+          />
+          {allowGranuleReorder && (
+            <GranuleLayerDateList
+              def={layer}
+              screenHeight={screenHeight}
+              granuleDates={dates}
+              granuleCount={count}
+              updateGranuleLayerOptions={updateGranuleLayerOptions}
+              resetGranuleLayerDates={resetGranuleLayerDates}
+              granulePlatform={granulePlatform}
+            />
+          )}
+        </>
+      ) : null;
+  }
+
   render() {
     let renderCustomizations;
     const {
@@ -300,6 +356,7 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
+        {this.renderGranuleSettings()}
         {renderCustomizations}
         {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </>
@@ -309,13 +366,24 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser, globalUnit,
+    config, palettes, compare, browser, settings,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
+  const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
+
+  const granuleState = getGranuleLayer(state, ownProps.layer.id);
+  const granuleOptions = {};
+  if (granuleState) {
+    const { dates, count } = granuleState;
+    granuleOptions.dates = dates;
+    granuleOptions.count = count || 20;
+    granuleOptions.granulePlatform = getGranulePlatform(state);
+  }
+
   return {
     paletteOrder: config.paletteOrder,
+    granuleOptions,
     groupName,
     screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -367,6 +435,12 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
+  updateGranuleLayerOptions: (dates, id, count) => {
+    dispatch(updateGranuleLayerOptions(dates, id, count));
+  },
+  resetGranuleLayerDates: (id) => {
+    dispatch(resetGranuleLayerDates(id));
+  },
 });
 
 export default connect(
@@ -387,18 +461,21 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
+  granuleOptions: PropTypes.object,
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
+  updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

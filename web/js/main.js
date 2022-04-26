@@ -11,7 +11,7 @@ import {
   applyMiddleware,
   compose as defaultCompose,
 } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { calculateResponsiveState, responsiveStoreEnhancer } from 'redux-responsive';
 import {
   createReduxLocationActions,
@@ -205,6 +205,10 @@ window.onload = () => {
         };
         render(config, parameters, legacyState);
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
     }).catch((error) => console.error(error));
 };
 

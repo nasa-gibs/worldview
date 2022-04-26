@@ -57,7 +57,7 @@ json_options["separators"] = (',', ': ')
 class SkipException(Exception):
     pass
 
-def process_layer(gc_layer, wv_layers):
+def process_layer(gc_layer, wv_layers, entry):
     ident = gc_layer["ows:Identifier"]
     if ident in skip:
         print("%s: skipping" % ident)
@@ -69,25 +69,48 @@ def process_layer(gc_layer, wv_layers):
     wv_layer["type"] = "wmts"
     wv_layer["format"] = gc_layer["Format"]
 
+    temporalForProjection = {}
+
     # Extract start and end dates
     if "Dimension" in gc_layer:
         dimension = gc_layer["Dimension"]
         if dimension["ows:Identifier"] == "Time":
             try:
                 wv_layer = process_temporal(wv_layer, dimension["Value"])
+
+                # TODO we need a better way to identify granule layers
+                if ('Granule' in ident):
+                    temporalForProjection = {}
+                    temporalForProjection[entry["projection"]] = {
+                        "startDate": wv_layer["startDate"],
+                        "endDate": wv_layer["endDate"],
+                        "dateRanges": wv_layer["dateRanges"],
+                    }
+
             except Exception as e:
                 print(traceback.format_exc())
                 sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, ident, "Error processing time values."))
+
     # Extract matrix set
     matrixSetLink = gc_layer["TileMatrixSetLink"]
     matrixSet = matrixSetLink["TileMatrixSet"]
 
-    wv_layer["projections"] = {
-        entry["projection"]: {
-            "source": entry["source"],
-            "matrixSet": matrixSet,
-        }
+    projectionInfo = {
+        "source": entry["source"],
+        "matrixSet": matrixSet,
     }
+
+    wv_layer["projections"] = {}
+    if temporalForProjection.get(entry["projection"], None) is not None:
+        wv_layer["projections"][entry["projection"]] = {
+            **projectionInfo,
+            **temporalForProjection.get(entry["projection"], {})
+        }
+        wv_layer.pop("dateRanges")
+        wv_layer.pop("startDate")
+        wv_layer.pop("endDate")
+    else:
+        wv_layer["projections"][entry["projection"]] = { **projectionInfo }
 
     if "TileMatrixSetLimits" in matrixSetLink and matrixSetLink["TileMatrixSetLimits"] is not None:
         matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
@@ -188,7 +211,7 @@ def process_entry(entry):
         ident = gc_layer["ows:Identifier"]
         try:
             layer_count += 1
-            process_layer(gc_layer, wv_layers)
+            process_layer(gc_layer, wv_layers, entry)
         except SkipException as se:
             warning_count += 1
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, ident))
@@ -201,7 +224,7 @@ def process_entry(entry):
             ident = gc_layer["ows:Identifier"]
             try:
                 layer_count += 1
-                process_layer(gc_layer, wv_layers)
+                process_layer(gc_layer, wv_layers, entry)
             except SkipException as se:
                 warning_count += 1
                 sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))

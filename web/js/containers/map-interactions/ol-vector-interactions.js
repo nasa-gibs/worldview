@@ -7,17 +7,25 @@ import {
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Polygon as OlGeomPolygon } from 'ol/geom';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
-import { hasNonClickableVectorLayer } from '../../modules/layers/util';
-import { getActiveLayers } from '../../modules/layers/selectors';
+import {
+  hasNonClickableVectorLayer,
+} from '../../modules/layers/util';
+import { areCoordinatesAndPolygonExtentValid } from '../../map/granule/util';
+import {
+  getActiveLayers, getGranulePlatform, getActiveGranuleFootPrints,
+} from '../../modules/layers/selectors';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
+
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
+import { FULL_MAP_EXTENT } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -25,6 +33,7 @@ export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
+    this.mouseOut = lodashDebounce(this.mouseOut.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
   }
 
@@ -38,9 +47,72 @@ export class VectorInteractions extends React.Component {
     events.off('map:singleclick', this.singleClick);
   }
 
+  /**
+  * Handle mouse over granule geometry and trigger action to show granule date footprint
+  *
+  * @param {Object} granuleFootprints
+  * @param {Object} map
+  * @param {String} crs
+  * @param {Array} pixels
+  * @param {Array} coord
+  *
+  * @return {Boolean} to indicate if valid for parent mouseMove function
+  */
+  handleGranuleHover = (crs, pixels, mouseCoords) => {
+    const {
+      compareState,
+      granulePlatform,
+      granuleFootprints,
+      swipeOffset,
+      visibleExtent,
+    } = this.props;
+    const { active, activeString } = compareState;
+    const polygon = new OlGeomPolygon([]);
+    let toggledGranuleFootprint;
+
+    // reverse granule geometry so most recent granules are on top
+    const footprints = Object
+      .keys(granuleFootprints)
+      .reverse()
+      .map((key) => ({ [key]: granuleFootprints[key] }));
+
+    // only allow hover footprints on selected side of A/B comparison
+    if (active) {
+      const isOnActiveCompareSide = isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset);
+      if (!isOnActiveCompareSide) {
+        events.trigger('granule-hovered', null);
+        return false;
+      }
+    }
+
+    // check if coordinates and polygon extent are within and not exceeding max extent
+    footprints.forEach((footprint) => {
+      const [date] = Object.keys(footprint);
+      const [points] = Object.values(footprint);
+      polygon.setCoordinates([points]);
+      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
+      if (isValidPolygon) {
+        toggledGranuleFootprint = true;
+        events.trigger('granule-hovered', granulePlatform, date);
+      }
+    });
+
+    if (!toggledGranuleFootprint) {
+      events.trigger('granule-hovered', granulePlatform, null);
+    }
+    return true;
+  }
+
+  mouseOut() {
+    const {
+      granulePlatform,
+    } = this.props;
+    events.trigger('granule-hovered', granulePlatform);
+  }
+
   mouseMove(event, map, crs) {
     const {
-      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj,
+      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj, granuleFootprints,
     } = this.props;
 
     if (measureIsActive || isCoordinateSearchActive) {
@@ -48,6 +120,14 @@ export class VectorInteractions extends React.Component {
     }
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
+
+    // handle granule footprint hover, will break out with false return if on wrong compare A/B side
+    if (granuleFootprints) {
+      const isValidGranule = this.handleGranuleHover(crs, pixels, coord);
+      if (!isValidGranule) {
+        return;
+      }
+    }
 
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
@@ -61,7 +141,7 @@ export class VectorInteractions extends React.Component {
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
+        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
@@ -126,21 +206,45 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    alerts, modal, map, measure, vectorStyles, browser, compare, locationSearch, proj, ui, embed,
+    animation,
+    browser,
+    compare,
+    config,
+    map,
+    measure,
+    modal,
+    proj,
+    ui,
+    vectorStyles,
+    alerts,
+    locationSearch,
+    embed,
   } = state;
-  let swipeOffset;
+  const {
+    active,
+    mode,
+    value,
+  } = compare;
+  const { isPlaying } = animation;
   const activeLayers = getActiveLayers(state);
-  if (compare.active && compare.mode === 'swipe') {
-    const percentOffset = state.compare.value || 50;
-    swipeOffset = browser.screenWidth * (percentOffset / 100);
-  }
   const { isCoordinateSearchActive } = locationSearch;
   const { isVectorExceededAlertPresent } = alerts;
-  const isMobile = browser.lessThan.medium;
+
+  let swipeOffset;
+  if (active && mode === 'swipe') {
+    const percentOffset = value || 50;
+    swipeOffset = browser.screenWidth * (percentOffset / 100);
+  }
+
+  const granuleFootprints = getActiveGranuleFootPrints(state);
+  const granulePlatform = getGranulePlatform(state);
+
+  const { maxExtent } = config.projections[proj.id];
+  const visibleExtent = proj.selected.crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
+
   return {
     activeLayers,
     browser,
-    isMobile,
     isCoordinateSearchActive,
     compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
@@ -150,9 +254,14 @@ function mapStateToProps(state) {
     isShowingClick: map.isClickable,
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
-    modalState: modal,
-    proj,
+    isPlaying,
+    isMobile: browser.lessThan.medium,
+    granuleFootprints,
+    granulePlatform,
     swipeOffset,
+    proj,
+    visibleExtent,
+    modalState: modal,
   };
 }
 
@@ -213,17 +322,20 @@ VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
+  visibleExtent: PropTypes.array,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
+  compareState: PropTypes.object,
+  granuleFootprints: PropTypes.object,
+  granulePlatform: PropTypes.string,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,
   activeLayers: PropTypes.array,
   browser: PropTypes.object,
-  compareState: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,

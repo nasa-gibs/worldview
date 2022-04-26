@@ -2,4 +2,4 @@ The Sea Ice Concentration (L4, MUR25) layer is a Group for High Resolution Sea S
 
 This dataset is funded by the [NASA MEaSUREs program](https://earthdata.nasa.gov/esds/competitive-programs/measures), and created by a team led by Dr. Toshio M. Chin from JPL. It adheres to the GHRSST Data Processing Specification (GDS) version 2 format specifications.
 
-References: 	MUR25-JPL-L4-GLOB-v04.2 [doi:10.5067/GHM25-4FJ42](https://doi.org/10.5067/GHM25-4FJ42)
+References: MUR25-JPL-L4-GLOB-v04.2 [doi:10.5067/GHM25-4FJ42](https://doi.org/10.5067/GHM25-4FJ42)
