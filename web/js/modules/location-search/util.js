@@ -54,8 +54,8 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  */
 export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
   const { crs } = proj.selected;
-  const coordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
-  const { id } = coordinatesObject;
+  const { id, longitude, latitude } = coordinatesObject;
+  const coordinates = [longitude, latitude];
 
   // only add marker within current map extent
   const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
@@ -123,14 +123,14 @@ export function mapLocationToLocationSearchState(
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
   const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
-    const [latitude, longitude] = coordinate
+    const [longitude, latitude] = coordinate
       ? coordinate.split(',')
         .map((coord) => Number(coord))
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
       : [];
 
     const validatedCoordinates = isValid && {
-      id: Math.floor(Math.random() * (latitude + longitude)),
+      id: Math.floor(longitude + latitude),
       latitude,
       longitude,
     };
@@ -152,8 +152,8 @@ export function mapLocationToLocationSearchState(
 
 export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
-  const serializeCoordinates = (coordinate) => {
-    const coordinateValues = [coordinate.latitude, coordinate.longitude];
+  const serializeCoordinates = ({ longitude, latitude }) => {
+    const coordinateValues = [longitude, latitude];
     if (!map.ui.selected) return;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
     if (!coordinatesWithinExtent) return;

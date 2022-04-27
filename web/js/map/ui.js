@@ -349,7 +349,8 @@ export default function mapui(models, config, store) {
     removeAllCoordinatesMarkers();
     if (coordinates && coordinates.length > 0) {
       coordinates.forEach((coordinatesObject) => {
-        const latestCoordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
+        const { longitude, latitude } = coordinatesObject;
+        const latestCoordinates = [longitude, latitude];
         const areCoordinatesWithinExtentBool = areCoordinatesWithinExtent(proj, latestCoordinates);
         if (!areCoordinatesWithinExtentBool) return;
 
@@ -364,7 +365,8 @@ export default function mapui(models, config, store) {
     const state = store.getState();
     const { proj } = state;
     const { sources } = config;
-    const latestCoordinates = coordinatesObject && [coordinatesObject.latitude, coordinatesObject.longitude];
+    const { longitude, latitude } = coordinatesObject;
+    const latestCoordinates = coordinatesObject && [longitude, latitude];
     const zoom = self.selected.getView().getZoom();
     const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);

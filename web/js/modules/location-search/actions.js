@@ -58,13 +58,14 @@ export function toggleReverseGeocodeActive(isActive) {
  * @param {Object} reverseGeocodeResults
  * @param {Boolean} isInputSearch
  */
-export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch) {
+export function setPlaceMarker(newCoordinates, reverseGeocodeResults, isInputSearch) {
   return (dispatch, getState) => {
     const state = getState();
     const {
       proj,
-      locationSearch,
+      locationSearch: { coordinates },
     } = state;
+    const [longitude, latitude] = newCoordinates;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -73,9 +74,9 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
-    const stateCoordinates = locationSearch.coordinates;
-    const markerAlreadyExists = stateCoordinates.find((stateCoordinate) => stateCoordinate.latitude === coordinates[0] && stateCoordinate.longitude === coordinates[1]);
+    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, newCoordinates);
+    const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
+
     if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,
@@ -93,15 +94,13 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       });
     }
 
-    const coordinatesObject = {
-      id: Math.floor(Math.random() * (coordinates[0] + coordinates[1])),
-      latitude: coordinates[0],
-      longitude: coordinates[1],
-    };
-
     dispatch({
       type: SET_MARKER,
-      coordinates: coordinatesObject,
+      coordinates: {
+        id: Math.floor(longitude + latitude),
+        longitude,
+        latitude,
+      },
       reverseGeocodeResults,
       isCoordinatesSearchActive: isInputSearch,
     });
