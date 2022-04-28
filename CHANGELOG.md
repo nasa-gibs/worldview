@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2]
+- Updated to 3.23.0 upstream version (PODAAC-4467)
+- Removed worldview Dockerfile to pass Snyk (PODAAC-4495)
+
 ## [0.2.1]
 - Updated to 3.17.0 upstream version
 - Added SOTO by Worldview About page
