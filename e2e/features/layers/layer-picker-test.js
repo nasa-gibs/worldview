@@ -258,7 +258,7 @@ module.exports = {
     });
   },
   'Collapsed sidebar shows updated layer count': (c) => {
-    c.click('.toggleIconHolder');
+    c.click('#toggleIconHolder');
     c.assert.containsText('.layer-count', '9 Layers');
     c.click(collapsedLayerButton);
   },

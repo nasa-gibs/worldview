@@ -1,0 +1,39 @@
+.list-group-item {
+  background: #282828;
+  color: #eee;
+  text-align: left;
+}
+
+.list-group-item.active {
+  background: #888;
+  border-color: #888;
+}
+
+.list-group-item:hover {
+  background: #eee;
+  color: #282828;
+}
+
+.list-group-item svg.svg-inline--fa {
+  margin-right: 6px;
+  height: 1em;
+}
+
+button.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item.small-item {
+  padding: 5px;
+}
+
+.list-group-item.large-item {
+  font-size: 14px;
+
+  svg.svg-inline--fa {
+    margin-right: 12px;
+    height: 1.25em;
+    position: relative;
+    top: 2px;
+  }
+}

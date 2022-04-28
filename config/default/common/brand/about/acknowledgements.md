@@ -71,7 +71,7 @@
 <p>Please also note that Worldview provides the “best available” layer information to users; this often means
         providing a “best” layer that prioritizes the composition of imagery products as follows: 1) Latest Version
         Standard Product; 2) Latest Version NRT; 3) Previous Version Standard Product; 4) Previous Version NRT. <a
-                href="https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers#GIBSAPIforDevelopers-%22BestAvailable%22Layers"
+                href="https://nasa-gibs.github.io/gibs-api-docs/access-advanced-topics/#best-available-layers"
                 target="_blank" rel="noopener noreferrer">Learn more about “Best Available” Layers from GIBS</a>.</p>
 <p>Other layers and information are provided by:</p>
 <ul>

@@ -2,7 +2,7 @@
   "layers": {
     "GEDI_ISS_L3_Laser_Footprint_Count_201904-202010": {
       "id": "GEDI_ISS_L3_Laser_Footprint_Count_201904-202010",
-      "title": "Valid Laser Footprint Count (L3, v2, 2019 APR to 2020 OCT)",
+      "title": "Valid Laser Footprint Count (L3, v2, 2019 APR - 2020 OCT)",
       "subtitle": "ISS / GEDI",
       "description": "gedi/GEDI_ISS_L3_Laser_Footprint_Count_201904-202010",
       "tags": "international space station iss lidar",

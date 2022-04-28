@@ -1,0 +1,100 @@
+{
+  "stories": {
+    "black_marble_night_lights": {
+      "id": "black_marble_night_lights",
+      "type": "default",
+      "title": "Night Lights from NASA's Black Marble",
+      "description": "NASA's Black Marble provides daily insights into nocturnal lights around the world.",
+      "backgroundImage": "blackmarble_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "NASA Black Marble",
+          "link": "https://blackmarble.gsfc.nasa.gov/"
+        },
+        {
+          "title": "Earthdata - Nighttime Lights Backgrounder",
+          "link": "https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights"
+        },
+        {
+          "title": "Earthdata - New Black Marble Nighttime Blue/Yellow Composite Product Makes Detecting Power Outages Easier",
+          "link": "https://earthdata.nasa.gov/learn/articles/black-marble-blue-yellow-composite"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-171.79472851633733,-62.40013458682887,141.49453201669456,81.68029096039362&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance,VIIRS_SNPP_DayNightBand_AtSensor_M15(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-02-06-T00%3A00%3A00Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-171.79472851633733,-62.40013458682887,141.49453201669456,81.68029096039362&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance,VIIRS_SNPP_DayNightBand_AtSensor_M15(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-01-17-T00%3A00%3A00Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=92.05391532234509,7.868542749973387,107.76861333118791,15.416894883434406&l=Reference_Labels_15m,Coastlines_15m(opacity=0.59),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance,VIIRS_SNPP_DayNightBand_AtSensor_M15(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-01-30-T20%3A11%3A27Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-99.46163064210312,27.522740072778575,-91.32410995301613,31.625768471880264&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.52),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(palette=cb_safe_1),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m(opacity=0.47),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(palette=cb_safe_1),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=50&tr=black_marble_night_lights&t=2021-02-07-T17%3A19%3A37Z&t1=2021-02-16-T14%3A18%3A55Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=113.74243427807457,20.16799730961522,163.0970915102187,45.05316417905118&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden,opacity=0.45),VIIRS_SNPP_DayNightBand_AtSensor_M15,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=black_marble_night_lights&t=2021-09-30-T00%3A00%3A00Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-103.26660280595232,55.141202405685604,-82.92902888784928,65.39563327511655&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),VIIRS_SNPP_DayNightBand_AtSensor_M15,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=black_marble_night_lights&t=2022-02-04-T00%3A08%3A14Z"
+        },
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-105.16366179488708,46.112889698260446,-99.1013087311693,49.1695955102866&l=VIIRS_SNPP_Thermal_Anomalies_375m_Night,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_DayNightBand_AtSensor_M15,MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=black_marble_night_lights&t=2022-01-12-T00%3A37%3A21Z"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-124.59515876575291,33.318832308507176,-113.23561774920613,38.260351723462016&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night,VIIRS_SNPP_DayNightBand_AtSensor_M15,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor&lg=true&t=2021-09-23-T00%3A00%3A00Z"
+        }
+      ]
+    }
+  }
+}

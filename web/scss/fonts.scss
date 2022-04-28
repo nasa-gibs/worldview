@@ -1,0 +1,23 @@
+@font-face { /* Open Sans Regular */
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/OpenSans/Regular/OpenSans-Regular.eot");
+  src: local("Open Sans"), local("OpenSans-Regular"), url("../fonts/OpenSans/Regular/OpenSans-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/Regular/OpenSans-Regular.woff") format("woff"), url("../fonts/OpenSans/Regular/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face { /* Open Sans Bold */
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/OpenSans/Bold/OpenSans-Bold.eot");
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url("../fonts/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/Bold/OpenSans-Bold.woff") format("woff"), url("../fonts/OpenSans/Bold/OpenSans-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Droid Sans Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/DroidSansMono/DroidSansMono.ttf");
+  src: local("Droid Sans Mono"), local("DroidSansMono-Regular"), url("../fonts/DroidSansMono/DroidSansMono.ttf") format("truetype");
+}

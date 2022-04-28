@@ -16,6 +16,7 @@ const {
   sidebarContainer,
   unitOfMeasureToggle,
   downloadGeojsonBtn,
+  // downloadShapefileBtn,
 } = localSelectors;
 
 function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
@@ -106,6 +107,7 @@ module.exports = {
     }
     c.click(measureBtn);
     c.waitForElementVisible(downloadGeojsonBtn);
+    // c.waitForElementVisible(downloadShapefileBtn);
     c.click('.modal');
   },
   'Switching to arctic projection, no measurements show': (c) => {
@@ -121,6 +123,7 @@ module.exports = {
     }
     c.click(measureBtn);
     c.expect.element(downloadGeojsonBtn).to.not.be.present;
+    // c.expect.element(downloadShapefileBtn).to.not.be.present;
     c.click('.modal');
   },
   'Creating measurements in arctic projection causes tooltips to show': (c) => {

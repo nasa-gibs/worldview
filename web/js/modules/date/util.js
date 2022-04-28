@@ -1,3 +1,4 @@
+import React from 'react';
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -7,6 +8,7 @@ import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
 import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
+import MonospaceDate from '../../components/util/monospace-date';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
@@ -352,6 +354,7 @@ export const outOfStepChange = (state, newDate) => {
 };
 
 export const coverageDateFormatter = (dateType, date, period) => {
+  if (!date) return;
   let dateString;
   const parsedDate = parseDate(date);
   switch (period) {
@@ -374,10 +377,11 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
   }
 
-  return dateString;
+  return (<MonospaceDate date={dateString} />);
 };
 
 export const formatDisplayDate = (date, subdaily) => {
+  if (!date) return;
   const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
   const dateString = moment.utc(date).format(format);
   return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;

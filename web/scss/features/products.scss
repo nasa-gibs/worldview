@@ -1,0 +1,124 @@
+#products-holder .ui-tabs-panel {
+  padding: 0 0 37px;
+  position: relative;
+}
+
+#products-holder-tabs {
+  padding: 0;
+  background: none;
+  border: 0;
+  border-bottom: 3px #00457b solid;
+}
+
+#products-holder-tabs .ui-state-default {
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#products-holder-tabs .ui-state-active a {
+  color: #fff;
+  background-color: #00457b;
+}
+
+#products-holder-tabs .ui-tabs-anchor {
+  padding: 0.5em 0.7em;
+  float: none;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.ui-tabs-nav li.layerPicker {
+  display: inline-block;
+  float: none;
+}
+
+.ui-tabs-nav li a {
+  color: #fff;
+  font-size: 1em;
+  font-weight: 400;
+  border: none;
+  padding: 0.5em 0;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  display: block;
+}
+
+#products-holder-tabs .ui-state-default a {
+  color: #fff;
+}
+
+#products-holder-tabs .ui-state-default:hover a {
+  background-color: #ccc;
+  color: #000;
+}
+
+#products-holder-tabs .ui-state-default:hover i {
+  color: #000;
+}
+
+#products-holder-tabs .ui-state-active .ui-tabs-anchor {
+  cursor: default;
+}
+
+#products-holder-tabs .ui-state-active a:hover {
+  background-color: #00457b;
+  color: #fff;
+}
+
+.productsIcon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+  background: url("../images/icon-sprite.svg") transparent 0 -10px;
+  margin: 0 8px 0 0;
+}
+
+.ab-tab.active .productsIcon {
+  background-position: 0 20px;
+}
+
+/***********************************  Icons  ***********************************/
+.icon-layers {
+  background-position: 0 -10px;
+}
+
+.tab:hover .icon-layers {
+  background-position: 0 20px;
+}
+
+.icon-download {
+  background-position: -30px -10px;
+}
+
+.tab:hover .icon-download {
+  background-position: -30px 20px;
+}
+
+.icon-download-alt {
+  background-position: -60px -10px;
+}
+
+.icon-add {
+  background-position: -90px -10px;
+}
+
+.tab:hover .icon-add {
+  background-position: -90px 20px;
+}
+
+.icon-add-alt {
+  background-position: -120px -10px;
+}
+
+.icon-events {
+  background-position: -150px -10px;
+}
+
+.tab:hover .icon-events {
+  background-position: -150px 20px;
+}

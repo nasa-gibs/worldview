@@ -32,20 +32,23 @@ class CoordinatesDialog extends Component {
       });
 
       // Prevent keyboard overlay in iOS
-      setTimeout(() => {
-        document.getElementById('location-search-autocomplete').blur();
-      }, 50);
+      const searchElement = document.getElementById('location-search-autocomplete');
+      if (searchElement) {
+        setTimeout(() => {
+          searchElement.blur();
+        }, 50);
+      }
     };
     copy(coords, options);
   }
 
   // close dialog and remove map marker
-  clearCoordinates = () => {
-    const { clearCoordinates } = this.props;
+  removeMarker = () => {
+    const { removeMarker } = this.props;
     this.setState({
       showTooltips: false,
     });
-    clearCoordinates();
+    removeMarker();
   }
 
   // minimize dialog (destroy component)
@@ -66,12 +69,14 @@ class CoordinatesDialog extends Component {
   // render minimize and remove dialog button controls
   renderDialogButtonControls = () => {
     const {
-      isMobile,
+      isMobile, tooltipId,
     } = this.props;
     const { showTooltips } = this.state;
 
-    const closeButtonId = 'close-coordinates-tooltip';
-    const minimizeButtonId = 'minimize-coordinates-tooltip';
+    const closeButtonClassName = 'close-coordinates-tooltip';
+    const closeButtonId = `${closeButtonClassName}${tooltipId}`;
+    const minimizeButtonClassName = 'minimize-coordinates-tooltip';
+    const minimizeButtonId = `${minimizeButtonClassName}${tooltipId}`;
     const closeButtonLabelText = 'Remove map marker';
     const minimizeButtonLabelText = 'Minimize coordinates tooltip';
 
@@ -80,8 +85,8 @@ class CoordinatesDialog extends Component {
       <>
         <span
           id={closeButtonId}
-          className={`close-tooltip ${closeButtonId}`}
-          onTouchEnd={this.clearCoordinates}
+          className={`close-tooltip ${closeButtonClassName}`}
+          onTouchEnd={this.removeMarker}
         >
           {tooltipVisibilityCondition
           && (
@@ -94,11 +99,11 @@ class CoordinatesDialog extends Component {
               {closeButtonLabelText}
             </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon onClick={this.clearCoordinates} icon="times" fixedWidth />
+          <FontAwesomeIcon onClick={this.removeMarker} icon="times" fixedWidth />
         </span>
         <span
           id={minimizeButtonId}
-          className={`minimize-tooltip ${minimizeButtonId}`}
+          className={`minimize-tooltip ${minimizeButtonClassName}`}
           onTouchEnd={this.minimizeDialog}
         >
           {tooltipVisibilityCondition
@@ -167,6 +172,7 @@ class CoordinatesDialog extends Component {
         <CopyClipboardTooltip
           tooltipToggleTime={tooltipToggleTime}
           clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
+          placement="bottom"
         />
         )}
         <div className="tooltip-coordinates-title">{title}</div>
@@ -180,7 +186,7 @@ class CoordinatesDialog extends Component {
 
 export default CoordinatesDialog;
 CoordinatesDialog.propTypes = {
-  clearCoordinates: PropTypes.func,
+  removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
   coordinatesMetadata: PropTypes.object,
   isMobile: PropTypes.bool,

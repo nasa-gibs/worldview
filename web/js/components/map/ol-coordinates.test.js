@@ -19,7 +19,7 @@ beforeEach(() => {
     getCoordinateFromPixel: () => [0, 0],
   };
   act(() => {
-    render(<OlCoordinates />, container);
+    render(<OlCoordinates show />, container);
   });
 });
 

@@ -8,8 +8,8 @@
       "tags": "oco2",
       "group": "overlays",
       "layergroup": "Solar Induced Chlorophyll Fluorescence",
-      "product": "OCO2_L2_Lite_SIF",
       "wrapadjacentdays": true,
+      "inactive": true,
       "tracks": [
         "OrbitTracks_OCO-2_Ascending"
       ],

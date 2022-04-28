@@ -20,8 +20,6 @@ import EventMarkers from './event-markers';
 
 import { fly } from '../util';
 
-const { events } = util;
-
 const zoomLevelReference = {
   Wildfires: 8,
   Volcanoes: 6,
@@ -125,11 +123,6 @@ class NaturalEvents extends React.Component {
       if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForEventCategory(event.categories[0].title);
       }
-      // hack to update layers
-      if (isIdChange) {
-        events.trigger('map:reload-layers');
-      }
-
       selectEventFinished();
     });
   }

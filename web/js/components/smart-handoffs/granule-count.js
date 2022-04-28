@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import PropTypes from 'prop-types';
-import util from '../../util/util';
-
-const granulesBaseUrl = 'https://cmr.earthdata.nasa.gov/search/granules.json';
 
 export default function GranuleCount (props) {
   const {
     currentExtent,
+    getGranulesUrl,
     displayDate,
     showGranuleHelpModal,
     selectedLayer,
@@ -50,35 +48,42 @@ export default function GranuleCount (props) {
     let newGranuleDownloadSize = 0;
     const { dateRanges } = selectedLayer;
     const params = {
-      collection_concept_id: selectedCollection.value,
+      conceptId: selectedCollection.value,
       pageSize: 500,
     };
     if (dateRanges) {
-      const startDate = `${selectedDate}T00:00:00.000Z`;
-      const endDate = `${selectedDate}T23:59:59.999Z`;
-      params.temporal = `${startDate},${endDate}`;
+      params.startDate = `${selectedDate}T00:00:00.000Z`;
+      params.endDate = `${selectedDate}T23:59:59.999Z`;
     }
 
-    const granulesRequestUrl = granulesBaseUrl + util.toQueryString(params);
+    const granulesRequestUrl = getGranulesUrl(params);
 
-    if (southWest && northEast) {
-      const bboxRequestUrl = `${granulesRequestUrl}&bounding_box=${southWest},${northEast}`;
-      const selectedEntries = await requestGranules(bboxRequestUrl);
-      newSelectedGranules = selectedEntries.length;
-      newGranuleDownloadSize = getDownloadSize(selectedEntries);
+    try {
+      if (southWest && northEast) {
+        const updatedParams = {
+          ...params,
+          bbox: `${southWest},${northEast}`,
+        };
+        const bboxRequestUrl = getGranulesUrl(updatedParams);
+        const selectedEntries = await requestGranules(bboxRequestUrl);
+        newSelectedGranules = selectedEntries.length;
+        newGranuleDownloadSize = getDownloadSize(selectedEntries);
+      }
+      const totalEntries = await requestGranules(granulesRequestUrl);
+      newTotalGranules = totalEntries.length;
+      if (newGranuleDownloadSize === 0) {
+        newGranuleDownloadSize = getDownloadSize(totalEntries);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setState({
+        isLoading: false,
+        totalGranules: newTotalGranules,
+        selectedGranules: newSelectedGranules,
+        granuleDownloadSize: newGranuleDownloadSize,
+      });
     }
-
-    const totalEntries = await requestGranules(granulesRequestUrl);
-    newTotalGranules = totalEntries.length;
-    if (newGranuleDownloadSize === 0) {
-      newGranuleDownloadSize = getDownloadSize(totalEntries);
-    }
-    setState({
-      isLoading: false,
-      totalGranules: newTotalGranules,
-      selectedGranules: newSelectedGranules,
-      granuleDownloadSize: newGranuleDownloadSize,
-    });
   };
 
   /** Trigger granule request when extent, collection, or date changes */
@@ -147,6 +152,7 @@ export default function GranuleCount (props) {
 }
 
 GranuleCount.propTypes = {
+  getGranulesUrl: PropTypes.func,
   currentExtent: PropTypes.object,
   displayDate: PropTypes.string,
   selectedLayer: PropTypes.object,
