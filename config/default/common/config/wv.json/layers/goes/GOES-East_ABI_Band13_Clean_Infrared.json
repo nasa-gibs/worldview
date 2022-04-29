@@ -18,11 +18,11 @@
         "night"
       ],
       "availability": {
-        "rollingWindow": 30,
+        "rollingWindow": 90,
         "historicalRanges": [
           {
             "startDate": "2019-09-01T10:00:00Z",
-            "endDate": "2019-09-05T18:00:00Z",
+            "endDate": "2019-09-05T17:40:00Z",
             "dateInterval": "10"
           },
           {
