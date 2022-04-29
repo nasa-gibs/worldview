@@ -1,0 +1,1 @@
+In addition to being able to see anthropogenic light sources from space, this swirling streak of light over the Hudson Bay is actually an aurora borealis/northern lights event on 4 February 2022. Read NASA's Earth Observatory article, [Brilliant Borealis](https://earthobservatory.nasa.gov/images/149435/brilliant-borealis) to learn more.

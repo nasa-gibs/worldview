@@ -1,0 +1,37 @@
+/* https://stackoverflow.com/a/4407335 */
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  user-select: none; /* Safari */
+}
+
+/* https://stackoverflow.com/a/35362074/4589331 */
+.checkerbox-bg {
+  background-image:
+    linear-gradient(45deg, rgb(200 200 200) 25%, transparent 25%),
+    linear-gradient(-45deg, rgb(200 200 200) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgb(200 200 200) 75%),
+    linear-gradient(-45deg, transparent 75%, rgb(200 200 200) 75%);
+  background-size: 4px 4px;
+  background-color: #fff;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}
+
+/* Clearfix classes */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+span.monospace,
+div.monospace {
+  font-family: $wv-monospace-font;
+}

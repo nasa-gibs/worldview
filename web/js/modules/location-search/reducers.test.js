@@ -3,11 +3,9 @@ import {
   locationSearchState,
 } from './reducers';
 import {
-  CLEAR_MARKER,
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
-  TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
@@ -22,7 +20,7 @@ const suggestion = [{
   magicKey: 'test1234=',
   text: 'New York, NY, USA',
 }];
-const coordinates = [72, 40];
+const coordinatesObject = { id: 1234, latitude: 72, longitude: 40 };
 
 describe('locationSearch', () => {
   test('locationSearch should return the initial state', () => {
@@ -63,22 +61,6 @@ describe('locationSearch', () => {
     },
   );
   test(
-    `${TOGGLE_DIALOG_VISIBLE
-    } sets coordinate dialog visiblity and `
-      + 'should return new state',
-    () => {
-      expect(
-        locationSearchReducer(locationSearchState, {
-          type: TOGGLE_DIALOG_VISIBLE,
-          value: true,
-        }),
-      ).toEqual({
-        ...locationSearchState,
-        isCoordinatesDialogOpen: true,
-      });
-    },
-  );
-  test(
     `${SET_MARKER
     } updates coordinates, reverseGeocodeResults `
     + 'and sets isCoordinateSearchActive to false and should return new state',
@@ -86,33 +68,14 @@ describe('locationSearch', () => {
       expect(
         locationSearchReducer(locationSearchState, {
           type: SET_MARKER,
-          coordinates,
+          coordinates: coordinatesObject,
           reverseGeocodeResults,
-          isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
-        coordinates,
+        coordinates: [coordinatesObject],
         reverseGeocodeResults,
-        isCoordinatesDialogOpen: true,
-      });
-    },
-  );
-  test(
-    `${CLEAR_MARKER
-    } resets cooridnates and geocode results`
-      + 'should return new state',
-    () => {
-      expect(
-        locationSearchReducer(locationSearchState, {
-          type: CLEAR_MARKER,
-        }),
-      ).toEqual({
-        ...locationSearchState,
-        coordinates: [],
-        reverseGeocodeResults: null,
-        isCoordinatesDialogOpen: false,
       });
     },
   );

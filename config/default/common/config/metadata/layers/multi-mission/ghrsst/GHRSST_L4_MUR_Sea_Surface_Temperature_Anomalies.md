@@ -2,5 +2,5 @@ The Sea Surface Temperature Anomalies (L4, MUR) layer is created from the GHRSST
 
 The imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: 	MUR-JPL-L4-GLOB-v4.1 [doi:10.5067/GHGMR-4FJ04](https://doi.org/10.5067/GHGMR-4FJ04))
+References: MUR-JPL-L4-GLOB-v4.1 [doi:10.5067/GHGMR-4FJ04](https://doi.org/10.5067/GHGMR-4FJ04)
 

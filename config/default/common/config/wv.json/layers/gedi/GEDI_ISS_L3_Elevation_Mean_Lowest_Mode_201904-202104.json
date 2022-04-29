@@ -2,7 +2,7 @@
   "layers": {
     "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202104": {
       "id": "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202104",
-      "title": "Ground Elevation Mean (L3, v2, 2019 APR to 2021 APR)",
+      "title": "Ground Elevation Mean (L3, v2, 2019 APR - 2021 APR)",
       "subtitle": "ISS / GEDI",
       "description": "gedi/GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202104",
       "tags": "international space station iss",

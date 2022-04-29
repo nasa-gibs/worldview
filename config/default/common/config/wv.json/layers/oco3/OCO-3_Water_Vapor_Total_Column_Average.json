@@ -8,8 +8,8 @@
       "tags": "oco3",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "product": "OCO3_L2_Lite_FP",
       "wrapadjacentdays": true,
+      "inactive": true,
       "tracks": [
         "OrbitTracks_ISS_Ascending",
         "OrbitTracks_ISS_Descending"

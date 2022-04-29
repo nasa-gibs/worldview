@@ -22,7 +22,7 @@ export default function mapCompare(store) {
   const self = {};
   let comparison = null;
   let mode = 'swipe';
-  let proj = '';
+  let selectedProj = '';
 
   self.swipe = Swipe;
   self.opacity = Opacity;
@@ -47,9 +47,8 @@ export default function mapCompare(store) {
   };
 
   self.update = function (group) {
-    const state = store.getState();
     if (comparison) {
-      comparison.update(state, group);
+      comparison.update(store, group);
     }
   };
 
@@ -60,31 +59,35 @@ export default function mapCompare(store) {
    */
   self.create = function (map, compareMode) {
     const state = store.getState();
+    const { proj, compare } = state;
 
-    if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
-      comparison.update(state);
+    if (compareMode === mode && comparison
+        && selectedProj === proj.selected
+        && self.value === compare.value) {
+      comparison.update(store);
     } else if (comparison) {
       mode = compareMode;
       self.destroy();
       comparison = new self[compareMode](
         map,
-        state,
+        store,
         self.EventTypeObject,
-        state.compare.value || null,
+        compare.value || null,
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
       comparison = new self[compareMode](
         map,
-        state,
+        store,
         self.EventTypeObject,
-        state.compare.value || null,
+        compare.value || null,
       ); // e.g. new self.swipe()
     }
     self.value = state.compare.value || 50;
     self.active = true;
-    proj = state.proj.selected;
+    selectedProj = proj.selected;
   };
+
   /**
    * Return offset value (for running-data use)
    */
@@ -94,6 +97,7 @@ export default function mapCompare(store) {
     }
     return null;
   };
+
   /**
    * Destroy instance in full and nullify vars
    */

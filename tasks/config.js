@@ -12,11 +12,8 @@ const converter = new showdown.Converter({
   // don't require escaping underscores in the middle of a word
   literalMidWordUnderscores: true,
 });
-
 const configFiles = glob.sync('build/options/config/metadata/**/*.md');
-const storyFiles = glob.sync('build/options/stories/**/*.md');
 const aboutFiles = glob.sync('build/options/brand/about/*.md');
-
 function convertMDtoHTML(mdFiles) {
   for (const mdFile of mdFiles) {
     const dest = mdFile.replace(/\.md$/, '.html');
@@ -25,10 +22,12 @@ function convertMDtoHTML(mdFiles) {
     fs.writeFileSync(dest, html);
   }
 }
-
 convertMDtoHTML(configFiles);
-convertMDtoHTML(storyFiles);
 convertMDtoHTML(aboutFiles);
+
+// Remove the markdown files from the build since they've been converted to HTML
+shell.rm('-rf', 'build/options/config/metadata/**/*.md');
+shell.rm('-rf', 'build/options/brand/about/*.md');
 
 console.log('Copying options to web directory');
 shell.cp('-r', 'build/options/config', 'web');

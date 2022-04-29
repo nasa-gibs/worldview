@@ -155,9 +155,9 @@ function LayerRow (props) {
     }
 
     if (layerStartDate && layerEndDate) {
-      return (<> Data available between &#13; {layerStartDate} - {layerEndDate} </>);
+      return (<> Data available between <br /> {layerStartDate} - {layerEndDate} </>);
     } if (layerStartDate) {
-      return (<> Data available between &#13; {layerStartDate} - Present </>);
+      return (<> Data available between <br /> {layerStartDate} - Present </>);
     }
     return 'No data on selected date for this layer';
   };
@@ -321,22 +321,24 @@ function LayerRow (props) {
 
   const renderLayerRow = () => (
     <>
-      <a
-        id={`hide${encodedLayerId}`}
-        className={getVisibilityToggleClass()}
-        aria-label={visibilityTitle}
-        onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
-      >
-        {!isAnimating && (
+      {!isEmbedModeActive && (
+        <a
+          id={`hide${encodedLayerId}`}
+          className={getVisibilityToggleClass()}
+          aria-label={visibilityTitle}
+          onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
+        >
+          {!isAnimating && (
           <UncontrolledTooltip
             placement="right"
             target={`hide${encodedLayerId}`}
           >
             {visibilityTitle}
           </UncontrolledTooltip>
-        )}
-        <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
-      </a>
+          )}
+          <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
+        </a>
+      )}
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
@@ -406,11 +408,11 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui, globalUnit, animation,
+      browser, palettes, config, embed, map, compare, proj, ui, settings, animation,
     } = state;
     const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
-    const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : globalUnit.globalTemperatureUnit;
+    const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
     const hasPalette = !lodashIsEmpty(layer.palette);
     const renderedPalettes = palettes.rendered;
     const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);

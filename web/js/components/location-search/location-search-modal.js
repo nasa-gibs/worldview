@@ -188,7 +188,7 @@ class LocationSearchModal extends Component {
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
       this.debounceGetSuggestions.cancel();
-      const { latitude, longitude } = coordinatesInputValue;
+      const { longitude, latitude } = coordinatesInputValue;
       this.clearAlerts();
       clearSuggestions();
       updatePendingCoordinates([longitude, latitude]);

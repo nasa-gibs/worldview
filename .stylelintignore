@@ -8,5 +8,5 @@ lib/*
 options/*
 reports/*
 test/*
-web/*
 !web/css
+web/scss/overrides/*

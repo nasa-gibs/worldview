@@ -19,6 +19,9 @@ export default class AlertUtil extends React.Component {
         props.onDismiss();
       }, props.timeout);
     }
+    this.state = {
+      isOpen: props.isOpen,
+    };
   }
 
   componentDidMount() {
@@ -31,16 +34,24 @@ export default class AlertUtil extends React.Component {
     }
   }
 
+  closeAlert() {
+    const { onDismiss } = this.props;
+    this.setState({ isOpen: false });
+    if (onDismiss) {
+      onDismiss();
+    }
+  }
+
   renderAlert() {
     const {
       id,
       title,
       message,
       icon,
-      isOpen,
       onDismiss,
       onClick,
     } = this.props;
+    const { isOpen } = this.state;
 
     return (
       <Alert
@@ -64,7 +75,11 @@ export default class AlertUtil extends React.Component {
           </div>
         </div>
         {onDismiss && (
-          <div id={`${id}-close`} className="close-alert" onClick={onDismiss}>
+          <div
+            id={`${id}-close`}
+            className="close-alert"
+            onClick={() => this.closeAlert()}
+          >
             <FontAwesomeIcon icon="times" className="exit" size="1x" />
           </div>
         )}

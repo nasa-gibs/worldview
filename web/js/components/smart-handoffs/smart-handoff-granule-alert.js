@@ -13,7 +13,7 @@ const GranuleAlertModalBody = () => (
       <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/near-real-time-versus-standard-products" target="_blank" rel="noopener noreferrer">Near Real-Time (NRT)</a>
       {' '}
       and then &quot;backfilled&quot; by the corresponding Standard (STD) product when it is available. @NAME@ displays them on a
-      <a href="https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers#GIBSAPIforDevelopers-%22BestAvailable%22Layers" target="_blank" rel="noopener noreferrer"> &quot;Best Available&quot; </a>
+      <a href="https://nasa-gibs.github.io/gibs-api-docs/access-advanced-topics/#best-available-layers" target="_blank" rel="noopener noreferrer"> &quot;Best Available&quot; </a>
       basis, showing Standard-quality imagery if it is available, NRT otherwise.
     </p>
     <p>

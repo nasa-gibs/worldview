@@ -28,16 +28,17 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
  * @param {Array} coords | Coordinates of hover point
  * @param {Object} layerAttributes | Layer Properties
  */
-export function isFromActiveCompareRegion(coords, layerAttributes, compareModel, swipeOffset) {
-  if (compareModel && compareModel.active) {
-    if (compareModel.mode !== 'swipe') {
+export function isFromActiveCompareRegion(coords, group, compare = {}, swipeOffset) {
+  const { active, mode, isCompareA } = compare;
+  if (active) {
+    if (mode !== 'swipe') {
       return false;
     }
-    if (compareModel.isCompareA) {
-      if (coords[0] > swipeOffset || layerAttributes.group !== 'active') {
+    if (isCompareA) {
+      if (coords[0] > swipeOffset || group !== 'active') {
         return false;
       }
-    } else if (coords[0] < swipeOffset || layerAttributes.group !== 'activeB') {
+    } else if (coords[0] < swipeOffset || group !== 'activeB') {
       return false;
     }
   }

@@ -39,3 +39,8 @@ config/active/release/layer-metadata
 /coverage
 
 .idea
+.bash_history
+.cache/
+.config/
+.local/
+.npm/

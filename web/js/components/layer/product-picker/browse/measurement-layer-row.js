@@ -12,6 +12,7 @@ import {
 import SelectedDate from '../../../selected-date';
 import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
+import MonospaceDate from '../../../util/monospace-date';
 
 /*
  * A scrollable list of layers
@@ -73,10 +74,10 @@ function MeasurementLayerRow (props) {
             {layerIsUnavailable && (
               <div>
                 This layer has no visible content on the selected date:
-                <br />
-                <span style={{ fontFamily: 'monospace' }}>
+                {' '}
+                <MonospaceDate>
                   <SelectedDate />
-                </span>
+                </MonospaceDate>
               </div>
             )}
             {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
