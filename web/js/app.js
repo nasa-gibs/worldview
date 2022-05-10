@@ -23,6 +23,7 @@ import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
+import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
 // actions
@@ -135,6 +136,7 @@ class App extends React.Component {
     return (
       <div className={appClass} id="wv-content" data-role="content">
         {!isMobile && !isEmbedModeActive && <LocationSearch />}
+        <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">

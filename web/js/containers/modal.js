@@ -227,16 +227,15 @@ class ModalContainer extends Component {
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent
-                      ? (
-                        <BodyComponent
-                          {...bodyComponentProps}
-                          parentId={id}
-                          screenHeight={screenHeight}
-                          closeModal={toggleFunction}
-                        />
-                      )
-                      : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
+                    {BodyComponent ? (
+                      <BodyComponent
+                        {...bodyComponentProps}
+                        parentId={id}
+                        screenHeight={screenHeight}
+                        closeModal={toggleFunction}
+                      />
+                    )
+                      : isTemplateModal ? this.getTemplateBody() : (<p>{bodyText}</p>) || ''}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
                 </DetectOuterClick>

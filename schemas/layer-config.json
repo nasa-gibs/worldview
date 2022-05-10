@@ -41,6 +41,9 @@
         "disableSnapshot": {
           "type": "boolean"
         },
+        "sourceOverride": {
+          "type": "string"
+        },
         "group": {
           "type": "string",
           "enum": [
@@ -241,7 +244,8 @@
         "wms",
         "wmts",
         "vector",
-        "variable"
+        "variable",
+        "granule"
       ]
     },
     "format": {

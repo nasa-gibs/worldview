@@ -173,7 +173,7 @@ module.exports = {
     c.expect.element('#active-MODIS_Aqua_Aerosol').to.be.present;
   },
   'Collapse sidebar and confirm layer count updated': (c) => {
-    c.click('.toggleIconHolder').pause(200);
+    c.click('#toggleIconHolder').pause(200);
     c.expect.element(layerCount).to.be.present;
     c.assert.containsText(layerCount, '8');
   },

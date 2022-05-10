@@ -327,6 +327,17 @@
   margin: 0 4px;
 }
 
+.source-metadata .layer-description .layer-metadata {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #333;
+  }
+}
+
 .source-metadata .layer-description .layer-date-start .monospace,
 .source-metadata .layer-description .layer-date-end .monospace {
   @include wv-date-chip;
@@ -673,7 +684,44 @@
   }
 }
 
-@media (min-width: 1024px) {
+.granule-date-item {
+  color: #444;
+  background-color: #ccc;
+  display: inline-block;
+  width: 100%;
+
+  .granule-date {
+    position: relative;
+    left: 6px;
+    display: inline-block;
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+
+  .granule-date-buttons {
+    float: right;
+  }
+
+  .granule-date-item-up-button,
+  .granule-date-item-down-button,
+  .granule-date-item-top-button {
+    padding: 4px;
+    background-color: transparent;
+    color: #444;
+    border: none;
+    height: 28px;
+    margin: 0 1px;
+  }
+
+  .granule-date-item-up-button:hover,
+  .granule-date-item-down-button:hover,
+  .granule-date-item-top-button:hover {
+    background: #eee;
+    color: #333;
+  }
+}
+
+@media (min-width: $desktop-min-width) {
   .search-layers-container {
     & div.layer-list-detail-container {
       flex-direction: row;
@@ -692,7 +740,7 @@
 }
 
 /* Need at least 1024px to fit three category boxes inline */
-@media (max-width: 1023px) {
+@media (max-width: $tablet-max-width) {
   .custom-layer-dialog.category-width {
     width: 658px;
 
@@ -717,7 +765,7 @@
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .category-width .layer-modal-content {
     height: calc(var(--vh, 1vh) * 100 - 135px);
   }
@@ -740,7 +788,7 @@
 }
 
 /* Mobile Styles Begin Here */
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
   .category-width .layer-modal-content {
     padding: 0;
     height: calc(var(--vh, 1vh) * 100 - 40px);

@@ -39,12 +39,11 @@ export default function MapRunningData(compareUi, store) {
    */
   self.newPoint = function(pixels, map) {
     const state = store.getState();
-    const { proj } = state;
-
+    const { proj, compare } = state;
     const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
     let swipeOffset;
-    if (compareUi && state.compare.active) {
+    if (compareUi && compare.active) {
       swipeOffset = Math.floor(compareUi.getOffset());
     }
 
@@ -54,8 +53,7 @@ export default function MapRunningData(compareUi, store) {
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
       const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixels));
-
-      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset) || featureOutsideExtent) return;
+      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv.group, compare, swipeOffset) || featureOutsideExtent) return;
 
       const hasPalette = !lodashIsEmpty(def.palette);
       if (!hasPalette) return;
@@ -84,15 +82,22 @@ export default function MapRunningData(compareUi, store) {
 
     map.forEachLayerAtPixel(pixels, (layer, data) => {
       if (!layer.wv) return;
-      const { def } = layer.wv;
-      if (!isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
+      const { def, group } = layer.wv;
+      if (!isFromActiveCompareRegion(pixels, group, compare, swipeOffset)) return;
       if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
         activeLayerObj[def.id] = {
           paletteLegends: getPalette(def.id, undefined, undefined, state),
           paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
         };
       }
+    }, {
+      // Don't include granules for perfomance reasons
+      layerFilter: (layer) => {
+        const type = lodashGet(layer, 'wv.def.type');
+        return !(type === 'granule' && !layer.get('granuleGroup'));
+      },
     });
+
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
       events.trigger('map:running-data', dataObj);

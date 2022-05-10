@@ -3,7 +3,7 @@
   z-index: 100;
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .wv-animation-widget-wrapper {
     bottom: 88px;
 
@@ -19,7 +19,7 @@
   bottom: 0;
 
   &.minimized {
-    bottom: 10px;
+    bottom: 20px;
     left: 188px;
 
     &.landscape {
@@ -32,7 +32,7 @@
     left: 165px;
 
     &.landscape {
-      bottom: 10px;
+      bottom: 20px;
       left: 420px;
     }
   }
@@ -182,7 +182,7 @@
     }
 
     /* No hover styles on mobile */
-    @media (min-width: 769px) {
+    @media (min-width: $tablet-min-width) {
       &:hover {
         color: #999;
         cursor: pointer;
@@ -203,7 +203,7 @@ a .wv-animation-widget-icon {
   left: 50%;
   top: 50%;
 
-  @media (min-width: 769px) {
+  @media (min-width: $tablet-min-width) {
     &:hover {
       color: #fff;
       opacity: 0.5;

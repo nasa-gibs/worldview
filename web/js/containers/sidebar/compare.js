@@ -6,10 +6,9 @@ import {
 } from 'reactstrap';
 import LayersContainer from './layers-container';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
-import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import { getCompareDates } from '../../modules/compare/selectors';
 import MonospaceDate from '../../components/util/monospace-date';
 
-const tabHeight = 32;
 const CompareCase = (props) => {
   const {
     isActive,
@@ -62,14 +61,14 @@ const CompareCase = (props) => {
               <LayersContainer
                 isActive={isCompareA}
                 compareState="active"
-                height={height - tabHeight}
+                height={height}
               />
             </TabPane>
             <TabPane tabId="2">
               <LayersContainer
                 isActive={!isCompareA}
                 compareState="activeB"
-                height={height - tabHeight}
+                height={height}
               />
             </TabPane>
           </TabContent>
@@ -88,7 +87,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   const { compare } = state;
   const { isCompareA, active } = compare;
-  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
+  const { dateA, dateB } = getCompareDates(state);
 
   return {
     isCompareA,

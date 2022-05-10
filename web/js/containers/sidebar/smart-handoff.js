@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
-import { get as lodashGet, isEqual as lodashEqual } from 'lodash';
+import { isEqual as lodashEqual } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Spinner, UncontrolledTooltip } from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
@@ -19,11 +19,20 @@ import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff
 import GranuleCount from '../../components/smart-handoffs/granule-count';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
-import { memoizedAvailable as availableSelector, getActiveLayers } from '../../modules/layers/selectors';
+import {
+  getValidLayersForHandoffs,
+  getConceptUrl as getConceptUrlSelector,
+  getGranulesUrl as getGranulesUrlSelector,
+} from '../../modules/smart-handoff/selectors';
 import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
-import openEarthDataSearch from '../../components/smart-handoffs/util';
-import selectCollection from '../../modules/smart-handoff/actions';
+import openEarthDataSearch from '../../modules/smart-handoff/util';
+import {
+  selectCollection as selectCollectionAction,
+  fetchAvailableTools as fetchAvailableToolsAction,
+  validateLayersConceptIds as validateLayersConceptIdsAction,
+} from '../../modules/smart-handoff/actions';
+
 import { formatDisplayDate } from '../../modules/date/util';
 
 const STD_NRT_MAP = {
@@ -52,13 +61,11 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
+      currentExtent: {},
+      coordinates: {},
       showBoundingBox: false,
       showZoomedIntoDatelineAlert: false,
       selectionOutsideExtents: false,
-      currentExtent: {},
-      coordinates: {},
-      validatedLayers: [],
-      validatedConceptIds: {},
     };
 
     this.baseState = this.state;
@@ -69,8 +76,11 @@ class SmartHandoff extends Component {
   }
 
   componentDidMount() {
-    const { proj } = this.props;
-    this.validateConceptIds();
+    const {
+      proj, availableLayers, validateLayersConceptIds, fetchAvailableTools,
+    } = this.props;
+    fetchAvailableTools();
+    validateLayersConceptIds(availableLayers);
     if (proj.id === 'geographic') {
       this.checkMapExtentValid();
     }
@@ -78,19 +88,20 @@ class SmartHandoff extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      isActive,
       availableLayers,
       proj,
       map,
       selectedLayer,
       selectedCollection,
+      validateLayersConceptIds,
     } = this.props;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
     const isLayerStillActive = availableLayers.find(({ id }) => selectedLayer && selectedLayer.id);
+    const layerChange = !lodashEqual(availableLayers, prevProps.availableLayers);
 
-    if (!lodashEqual(availableLayers, prevProps.availableLayers)) {
-      this.validateConceptIds();
+    if (layerChange) {
+      validateLayersConceptIds(availableLayers);
     }
     if (selectedCollection && !isLayerStillActive) {
       this.setState(this.baseState);
@@ -104,45 +115,11 @@ class SmartHandoff extends Component {
     }
 
     if (proj.id === 'geographic') {
-      const tabChange = isActive && !prevProps.isActive;
       const extentChange = !lodashEqual(map.extent, prevProps.map.extent);
-      if (tabChange || extentChange) {
+      if (extentChange) {
         this.checkMapExtentValid();
       }
     }
-  }
-
-  async validateConceptIds() {
-    const { validatedConceptIds } = this.state;
-    const { availableLayers } = this.props;
-    const baseUrl = 'https://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
-    const conceptIdRequest = async (url) => {
-      const granulesResponse = await fetch(url, { timeout: 5000 });
-      const result = await granulesResponse.json();
-      return lodashGet(result, 'feed.entry', []);
-    };
-    const allConceptIds = availableLayers.reduce((prev, curr) => {
-      (curr.conceptIds || []).forEach(({ value }) => {
-        if (value) prev.push(value);
-      });
-      return prev;
-    }, []);
-
-    await Promise.all(allConceptIds.map(
-      async (id) => {
-        if (validatedConceptIds[id] !== undefined) return;
-        const response = await conceptIdRequest(baseUrl + id);
-        validatedConceptIds[id] = !!response.length;
-      },
-    ));
-
-    const validatedLayers = availableLayers.reduce((prev, curr) => {
-      const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
-      if (validIdsArray.length) prev.push(curr);
-      return prev;
-    }, []);
-
-    this.setState({ validatedLayers, validatedConceptIds });
   }
 
   /**
@@ -274,6 +251,7 @@ class SmartHandoff extends Component {
    */
   onClickDownload() {
     const {
+      availableTools,
       displayDate,
       proj,
       selectedDate,
@@ -292,9 +270,18 @@ class SmartHandoff extends Component {
     const { dateRanges } = selectedLayer;
     const includeDates = dateRanges && dateRanges.length;
 
-    const continueToEDS = () => openEarthDataSearch(
-      proj.id, includeDates, selectedDate, selectedCollection, currentExtent, showBoundingBox,
-    );
+    const continueToEDS = () => {
+      const options = {
+        projection: proj.crs,
+        conceptId: selectedCollection.value,
+        currentExtent,
+        includeDates,
+        selectedDate,
+        selectedCollection,
+        showBoundingBox,
+      };
+      return openEarthDataSearch(availableTools, options);
+    };
 
     if (!hideModal) {
       showWarningModal(displayDate, selectedLayer, selectedCollection, continueToEDS);
@@ -345,8 +332,9 @@ class SmartHandoff extends Component {
    }
 
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
-    const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
-    return (
+    const { getConceptUrl } = this.props;
+    const url = value && `${getConceptUrl(value)}.html`;
+    return url && (
       <UncontrolledTooltip
         className="zot-tooltip"
         boundariesElement="window"
@@ -358,7 +346,7 @@ class SmartHandoff extends Component {
       >
         <div>{title}</div>
         <div>
-          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Collection Details </a>
+          <a href={url} target="_blank" rel="noreferrer"> View Collection Details </a>
         </div>
       </UncontrolledTooltip>
     );
@@ -372,8 +360,9 @@ class SmartHandoff extends Component {
       selectCollection,
       selectedCollection,
       selectedLayer,
+      validatedConceptIds,
+      validatedLayers,
     } = this.props;
-    const { validatedLayers, validatedConceptIds } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
@@ -498,18 +487,47 @@ class SmartHandoff extends Component {
    * Render "no layers to download" message
    */
   renderNoLayersToDownload = () => {
-    const { showNotAvailableModal } = this.props;
+    const { showNotAvailableModal, requestFailed } = this.props;
+
     return (
-      <div className="smart-handoff-side-panel">
-        <h1>
-          None of your current layers are available for download.
-        </h1>
-        <hr />
-        <h2>
-          <a className="help-link" onClick={showNotAvailableModal}>
-            Why are my layers not available?
-          </a>
-        </h2>
+      <div className="smart-handoff-side-panel error">
+        {requestFailed
+          ? (
+            <>
+              <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
+            </>
+          )
+          : (
+            <>
+              <h1>
+                None of your current layers are available for download.
+              </h1>
+              <hr />
+              <h2>
+                <a className="help-link" onClick={showNotAvailableModal}>
+                  Why are my layers not available?
+                </a>
+              </h2>
+            </>
+          )}
+      </div>
+    );
+  }
+
+  renderLoadingSpinner = () => {
+    const containerStyle = {
+      padding: '30px 107px',
+    };
+
+    const spinnerStyle = {
+      height: '5rem',
+      width: '5rem',
+      margin: '40px auto',
+    };
+
+    return (
+      <div style={containerStyle}>
+        <Spinner style={spinnerStyle} color="light" size="lg" />
       </div>
     );
   }
@@ -520,27 +538,31 @@ class SmartHandoff extends Component {
   render() {
     const {
       displayDate,
-      isActive,
+      getGranulesUrl,
+      isLoading,
       showNotAvailableModal,
       selectedLayer,
       selectedCollection,
       selectedDate,
       showGranuleHelpModal,
+      validatedLayers,
     } = this.props;
     const {
-      showBoundingBox, selectionOutsideExtents, showZoomedIntoDatelineAlert, currentExtent, validatedLayers,
+      showBoundingBox, selectionOutsideExtents, showZoomedIntoDatelineAlert, currentExtent,
     } = this.state;
-
-    // Determine if download 'smart-handoff' tab is activated by user
-    if (!isActive) return null;
 
     // Determine if the download button is enabled
     const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
+    if (isLoading) {
+      return this.renderLoadingSpinner();
+    }
+
     if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
+
     return (
       <>
         {this.renderSelectionWarning()}
@@ -567,6 +589,7 @@ class SmartHandoff extends Component {
               selectedLayer={selectedLayer}
               selectedCollection={selectedCollection}
               showGranuleHelpModal={showGranuleHelpModal}
+              getGranulesUrl={getGranulesUrl}
             />
           )}
           <Button
@@ -581,73 +604,51 @@ class SmartHandoff extends Component {
   }
 }
 
-/**
- * Handle type-checking of defined properties
- */
-SmartHandoff.propTypes = {
-  isActive: PropTypes.bool,
-  availableLayers: PropTypes.array,
-  displayDate: PropTypes.string,
-  map: PropTypes.object.isRequired,
-  proj: PropTypes.object,
-  screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
-  selectCollection: PropTypes.func,
-  selectedDate: PropTypes.string,
-  selectedLayer: PropTypes.object,
-  selectedCollection: PropTypes.object,
-  showWarningModal: PropTypes.func,
-  showGranuleHelpModal: PropTypes.func,
-  showNotAvailableModal: PropTypes.func,
-};
-
 const mapStateToProps = (state) => {
   const {
-    browser,
-    map,
-    proj,
-    smartHandoffs,
+    browser, map, proj, smartHandoffs,
   } = state;
-
-  const { conceptId, layerId } = smartHandoffs;
-
   const {
-    screenWidth,
-    screenHeight,
-  } = browser;
+    conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
+  } = smartHandoffs;
+  const { screenWidth, screenHeight } = browser;
 
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
-  const displayDate = formatDisplayDate(selectedDate); // 2020 JAN 01
-  const filterForSmartHandoff = (layer) => {
-    const {
-      id, projections, disableSmartHandoff, conceptIds,
-    } = layer;
-    const isAvailable = availableSelector(state)(id);
-    const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
-    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
-  };
-  const availableLayers = getActiveLayers(state).filter(filterForSmartHandoff);
-
+  const availableLayers = getValidLayersForHandoffs(state);
   const selectedLayer = availableLayers.find(({ id }) => id === layerId);
   const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
+  const isLoading = isLoadingTools || isValidatingCollections;
 
   return {
     availableLayers,
-    displayDate,
+    displayDate: formatDisplayDate(selectedDate), // 2020 JAN 01
+    getConceptUrl: getConceptUrlSelector(state),
+    getGranulesUrl: getGranulesUrlSelector(state),
+    isLoading,
     map,
     proj: proj.selected,
+    requestFailed,
     screenHeight,
     screenWidth,
     selectedDate: selectedDateFormatted,
     selectedLayer,
     selectedCollection,
+    availableTools,
+    validatedConceptIds,
+    validatedLayers,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   selectCollection: (conceptId, layerId) => {
-    dispatch(selectCollection(conceptId, layerId));
+    dispatch(selectCollectionAction(conceptId, layerId));
+  },
+  fetchAvailableTools: () => {
+    dispatch(fetchAvailableToolsAction());
+  },
+  validateLayersConceptIds: (layers) => {
+    dispatch(validateLayersConceptIdsAction(layers));
   },
   showWarningModal: (displayDate, selectedLayer, selectedCollection, continueToEDS) => {
     googleTagManager.pushEvent({
@@ -697,3 +698,28 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(SmartHandoff);
+
+SmartHandoff.propTypes = {
+  availableLayers: PropTypes.array,
+  availableTools: PropTypes.array,
+  displayDate: PropTypes.string,
+  isLoading: PropTypes.bool,
+  getConceptUrl: PropTypes.func,
+  getGranulesUrl: PropTypes.func,
+  map: PropTypes.object.isRequired,
+  proj: PropTypes.object,
+  fetchAvailableTools: PropTypes.func,
+  requestFailed: PropTypes.bool,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  selectCollection: PropTypes.func,
+  selectedDate: PropTypes.string,
+  selectedLayer: PropTypes.object,
+  selectedCollection: PropTypes.object,
+  showWarningModal: PropTypes.func,
+  showGranuleHelpModal: PropTypes.func,
+  showNotAvailableModal: PropTypes.func,
+  validatedLayers: PropTypes.array,
+  validatedConceptIds: PropTypes.object,
+  validateLayersConceptIds: PropTypes.func,
+};

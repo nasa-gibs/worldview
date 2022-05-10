@@ -10,14 +10,14 @@
   user-select: none;
 
   & .show-date-label {
-    width: 120px;
+    width: 130px;
   }
 
   & .left-label {
-    left: -23px;
+    left: -28px;
 
     &.show-date-label {
-      left: -129px;
+      left: -140px;
     }
   }
 
@@ -135,10 +135,6 @@
   font-size: 14px;
   padding: 2px;
   margin-left: -4px;
-
-  // .monospace {
-  //   font-family: $wv-monospace-font;
-  // }
 }
 
 .compare-dialog ul {
@@ -178,7 +174,7 @@
   border: thin solid #333;
   background-color: $wv-transparent-black;
   position: absolute;
-  bottom: 65px;
+  bottom: 75px;
   left: 10px;
   display: flex;
   overflow: hidden;

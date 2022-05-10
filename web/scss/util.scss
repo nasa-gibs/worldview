@@ -31,6 +31,7 @@
   cursor: crosshair;
 }
 
-span.monospace {
+span.monospace,
+div.monospace {
   font-family: $wv-monospace-font;
 }

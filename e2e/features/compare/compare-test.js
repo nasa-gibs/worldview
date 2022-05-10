@@ -13,8 +13,8 @@ const {
 
 const ModisTrueColorLayerA = '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
 const ModisTrueColorLayerB = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
-const toggleButton = '.toggleIconHolder .accordionToggler';
-const collapsedToggleButton = '#productsHoldertoggleButtonHolder .accordionToggler';
+const toggleButton = '#toggleIconHolder';
+const collapsedToggleButton = '#accordion-toggler-button';
 const tooltipSelector = '.tooltip-inner';
 
 const TIME_LIMIT = 10000;
@@ -111,7 +111,7 @@ module.exports = {
       c.pause(100);
       c.expect.element(collapsedToggleButton).to.be.present;
       c.waitForElementNotPresent(toggleButton, TIME_LIMIT);
-      c.useCss().assert.containsText(collapsedToggleButton, '6');
+      c.useCss().assert.containsText(`${collapsedToggleButton} .layer-count`, '6');
       c.click(collapsedToggleButton);
       c.pause(100);
       c.waitForElementVisible('#activeB-Reference_Features_15m', TIME_LIMIT);

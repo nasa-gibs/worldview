@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import OlOverlay from 'ol/Overlay';
 import util from '../../util/util';
-import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
+import { getCompareDates } from '../../modules/compare/selectors';
 
 const textStyles = {
   textOpacity: 1,
@@ -58,7 +58,7 @@ class LineText extends React.Component {
       selected: util.dateAdd(date, 'day', 1),
       selectedB: date,
     };
-    const { dateA, dateB } = memoizedDateMonthAbbrev({ date: dateState })();
+    const { dateA, dateB } = getCompareDates({ date: dateState });
     return {
       dateLeft: dateA,
       dateRight: dateB,

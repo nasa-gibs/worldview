@@ -7,6 +7,15 @@ export const FITTED_TO_LEADING_EXTENT = 'MAP/FITTED_TO_LEADING_EXTENT';
 export const CHANGE_CURSOR = 'MAP/CHANGE_CURSOR';
 export const REFRESH_ROTATE = 'MAP/REFRESH_ROTATE';
 
+export const LEFT_WING_EXTENT = [-250, -90, -180, 90];
+export const CENTER_MAP_EXTENT = [180, -90, -180, 90];
+export const RIGHT_WING_EXTENT = [180, -90, 250, 90];
+export const FULL_MAP_EXTENT = [-250, -90, 250, 90];
+
+export const LEFT_WING_ORIGIN = [-540, 90];
+export const RIGHT_WING_ORIGIN = [180, 90];
+export const CENTER_MAP_ORIGIN = [-180, 90];
+
 export const RESOLUTION_FOR_LARGE_WMS_TILES = [
   0.3515625,
   0.17578125,

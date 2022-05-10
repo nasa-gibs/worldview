@@ -280,6 +280,60 @@ fixtures.config = function() {
           antarctic: {},
         },
       },
+      'granule-cr': {
+        id: 'granule-cr',
+        group: 'overlays',
+        projections: {
+          geographic: {
+            startDate: '2019-09-23T00:12:00Z',
+            endDate: '2019-09-24T23:54:00Z',
+            dateRanges: [
+              {
+                startDate: '2019-09-23T00:12:00Z',
+                endDate: '2019-09-23T00:24:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T02:06:00Z',
+                endDate: '2019-09-23T02:06:00Z',
+                dateInterval: '6',
+              },
+            ],
+          },
+          arctic: {
+            startDate: '2019-07-21T00:36:00Z',
+            endDate: '2019-09-24T22:30:00Z',
+            dateRanges: [
+              {
+                startDate: '2019-07-21T00:36:00Z',
+                endDate: '2019-07-21T00:54:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-07-21T02:18:00Z',
+                endDate: '2019-07-21T02:36:00Z',
+                dateInterval: '6',
+              },
+            ],
+          },
+          antarctic: {
+            startDate: '2019-07-12T01:18:00Z',
+            endDate: '2019-09-24T23:36:00Z',
+            dateRanges: [
+              {
+                startDate: '2019-07-12T01:18:00Z',
+                endDate: '2019-07-12T01:24:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-07-12T03:00:00Z',
+                endDate: '2019-07-12T03:06:00Z',
+                dateInterval: '6',
+              },
+            ],
+          },
+        },
+      },
       AMSRE_Brightness_Temp_89H_Night: {
         id: 'AMSRE_Brightness_Temp_89H_Night',
         title: 'Brightness Temperature (89H GHz B Scan, Night)',

@@ -1,5 +1,4 @@
 import {
-  CLEAR_MARKER,
   CLEAR_SUGGESTIONS,
   SET_MARKER,
   SET_SUGGESTION,
@@ -59,12 +58,14 @@ export function toggleReverseGeocodeActive(isActive) {
  * @param {Object} reverseGeocodeResults
  * @param {Boolean} isInputSearch
  */
-export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch) {
+export function setPlaceMarker(newCoordinates, reverseGeocodeResults, isInputSearch) {
   return (dispatch, getState) => {
     const state = getState();
     const {
       proj,
+      locationSearch: { coordinates },
     } = state;
+    const [longitude, latitude] = newCoordinates;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -73,32 +74,35 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
+    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, newCoordinates);
+    const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
+
     if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,
         coordinates: [],
-        isCoordinatesDialogOpen: false,
+      });
+    }
+
+    if (markerAlreadyExists) {
+      return dispatch({
+        type: SET_MARKER,
+        coordinates: markerAlreadyExists,
+        reverseGeocodeResults,
+        isCoordinatesSearchActive: isInputSearch,
+        flyToExistingMarker: true,
       });
     }
 
     dispatch({
       type: SET_MARKER,
+      coordinates: {
+        id: Math.floor(longitude + latitude),
+        longitude,
+        latitude,
+      },
       reverseGeocodeResults,
-      coordinates,
-      isCoordinatesDialogOpen: true,
-      isInputSearch,
-    });
-  };
-}
-
-/**
- * Clear coordinates including marker and dialog (if open)
- */
-export function clearCoordinates() {
-  return (dispatch) => {
-    dispatch({
-      type: CLEAR_MARKER,
+      isCoordinatesSearchActive: isInputSearch,
     });
   };
 }
