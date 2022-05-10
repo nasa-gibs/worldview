@@ -34,7 +34,10 @@ class PlayQueue extends React.Component {
       loadedItems: 0,
     };
     this.fetchTimes = [0];
-    this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
+    this.queue = new PQueue({
+      concurrency: CONCURRENT_REQUESTS,
+      timeout: 3000,
+    });
     this.inQueueObject = {};
     this.bufferObject = {};
     this.bufferArray = [];
@@ -47,7 +50,7 @@ class PlayQueue extends React.Component {
   componentDidMount() {
     this.mounted = true;
     this.queue.on('completed', (dateStr) => {
-      console.debug(dateStr, Date.now(), this.queue.size);
+      console.debug(dateStr, this.queue.size);
     });
     this.playingDate = this.getStartDate();
     this.checkQueue();
