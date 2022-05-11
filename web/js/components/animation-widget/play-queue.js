@@ -12,6 +12,8 @@ const CONCURRENT_REQUESTS = 3;
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
 
+
+
 /**
  * A component that handles buffering datetimes for animation frames.  Only mounted while playback
  * is active, unmounts when playback stops.
@@ -41,10 +43,10 @@ class PlayQueue extends React.Component {
     this.inQueueObject = {};
     this.bufferObject = {};
     this.bufferArray = [];
-    this.playInterval = 0;
     this.defaultBufferSize = numberOfFrames < 10 ? numberOfFrames : 10;
     this.minBufferLength = null;
     this.canPreloadAll = numberOfFrames <= this.defaultBufferSize;
+    this.abortController = null;
   }
 
   componentDidMount() {
@@ -62,8 +64,8 @@ class PlayQueue extends React.Component {
     this.mounted = false;
     this.clearCache();
     this.queue.clear();
-    if (this.playInterval) {
-      clearInterval(this.playInterval);
+    if (this.abortController) {
+      this.abortController.abort();
     }
   }
 
@@ -331,9 +333,26 @@ class PlayQueue extends React.Component {
   }
 
   stopPlaying() {
-    clearInterval(this.playInterval);
+    this.abortController.abort();
     this.setState({ isAnimating: false });
     console.debug('Stopped', Date.now());
+  }
+
+  animationInterval(ms, callback) {
+    const start = document.timeline.currentTime;
+    const frame = (time) => {
+      if (this.abortController.signal.aborted) return;
+      callback(time);
+      scheduleFrame(time);
+    };
+    const scheduleFrame = (time) => {
+      const elapsed = time - start;
+      const roundedElapsed = Math.round(elapsed / ms) * ms;
+      const targetNext = start + roundedElapsed + ms;
+      const delay = targetNext - performance.now();
+      setTimeout(() => requestAnimationFrame(frame), delay);
+    };
+    scheduleFrame(start);
   }
 
   /**
@@ -346,10 +365,11 @@ class PlayQueue extends React.Component {
     let currentDateStr = this.playingDate;
     let nextDate;
     let nextDateStr;
+    this.abortController = new AbortController();
 
     const player = () => {
       if (!this.mounted) {
-        return clearInterval(this.playInterval);
+        return this.abortController.abort();
       }
       const currentDate = toDate(currentDateStr);
       nextDate = this.nextDate(currentDate);
@@ -366,7 +386,7 @@ class PlayQueue extends React.Component {
 
       // End of animation range
       if (nextDate > endDate) {
-        clearInterval(this.playInterval);
+        this.abortController.abort();
         this.checkShouldLoop();
         return;
       }
@@ -381,9 +401,8 @@ class PlayQueue extends React.Component {
         this.stopPlaying();
       }
       this.checkQueue();
-      this.playInterval = setTimeout(player, 1000 / speed);
     };
-    this.playInterval = setTimeout(player, speed);
+    this.animationInterval(1000 / speed, player);
   }
 
   getPlaybackPosition() {
@@ -395,7 +414,6 @@ class PlayQueue extends React.Component {
     const currentDateStr = toString(currentDate);
     const position = this.frameDates.indexOf(currentDateStr) + 1;
     const percentage = (position / this.frameDates.length) * 100;
-    console.log(percentage);
     return percentage;
   }
 
