@@ -222,7 +222,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {object} - Granule layer
   */
   const createGranuleLayer = async (def, attributes, options) => {
-    const { proj: { selected: { crs, maxExtent } } } = store.getState();
+    const {
+      animation: { isPlaying },
+      proj: { selected: { crs, maxExtent } },
+    } = store.getState();
     const { id } = def;
     const { date, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
@@ -242,7 +245,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       ...granuleAttributes,
       filteredGranules: granules,
     };
-    store.dispatch(updateGranuleLayerState(layer));
+
+    // Don't update during animation due to the performance hit
+    if (!isPlaying) {
+      store.dispatch(updateGranuleLayerState(layer));
+    }
 
     return layer;
   };
