@@ -968,7 +968,7 @@
 		"Coastlines_15m",
 		"Reference_Features_15m",
 		"Reference_Labels_15m",
-		"Graticule",
+		"Graticule_15m",
 		"HLS_MGRS_Granule_Grid",
 		"MODIS_Water_Mask",
 		"MODIS_Terra_Data_No_Data",
