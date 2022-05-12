@@ -68,7 +68,6 @@ import {
 } from '../modules/map/constants';
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
-import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
 import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
@@ -264,12 +263,16 @@ export default function mapui(models, config, store) {
   /**
    * During animation we swap Vector tiles for WMS for better performance.
    * Once animation completes, we need to call reloadLayers to reload and replace
-   * the WMS tiles with Vector tiles
+   * the WMS tiles with Vector tiles.
+   *
+   * We also disable granule layer state updates due to performance reasons and so
+   * need to trigger a layer state update once animation fisnishes.
    */
   const onStopAnimation = function() {
     const state = store.getState();
-    const hasActiveVectors = hasVectorLayers(getActiveLayers(state));
-    if (hasActiveVectors) {
+    const activeLayers = getActiveLayers(state);
+    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
+    if (needsRefresh) {
       // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
       // try to modify map layers asynchronously so we need to set a timeout to allow
       // the updateDate() function to complete before trying to call reloadLayers() here
