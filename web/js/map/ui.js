@@ -173,10 +173,13 @@ export default function mapui(models, config, store) {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
         const rotate = lodashGet(state, 'map.rotation') || 0;
-        setTimeout(updateProjection, 200);
-        if (newState.v && !newState.e && extent) {
-          flyToNewExtent(extent, rotate);
-        }
+        setTimeout(() => {
+          updateProjection();
+          if (newState.v && !newState.e && extent) {
+            flyToNewExtent(extent, rotate);
+          }
+        }, 200);
+
         return;
       }
       case layerConstants.REMOVE_GROUP:
