@@ -12,17 +12,23 @@ const CONCURRENT_REQUESTS = 3;
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
 
-
+// Get the initiall buffer size, using a larger buffer for higher speeds
+const getInitialBufferSize = (numberOfFrames, speed) => {
+  const defaultSize = 10;
+  const buffer = defaultSize + (speed * 1.5);
+  return numberOfFrames < buffer ? numberOfFrames : buffer;
+};
 
 /**
  * A component that handles buffering datetimes for animation frames.  Only mounted while playback
  * is active, unmounts when playback stops.
  *
  * The buffering logic is as follows:
- * - Make at least 10 requests (assuming there are >= 10 frames) to determine the avg fetch time for a frame
+ * - n = 10 + speed (frames per sec)
+ * - Make at least n requests (assuming there are >= n frames) to determine the avg fetch time for a frame
  * - While making initial requests, if any return too quickly (e.g. they were cached), keep making
- *   requests until at least 10 "real" requests can be made to determine average fetch time
- * - Based on how long it took to load the first 10, calculate how many additional frames
+ *   requests until at least n "real" requests can be made to determine average fetch time
+ * - Based on how long it took to load the first n, calculate how many additional frames
  *   need to be pre-loaded, based on avg fetch time and playback speed, in order for playback to begin
  *   without having to stop to buffer.
  *
@@ -30,12 +36,12 @@ const toDate = (dateString) => util.parseDateUTC(dateString);
 class PlayQueue extends React.Component {
   constructor(props) {
     super(props);
-    const { numberOfFrames } = props;
+    const { numberOfFrames, speed } = props;
     this.state = {
       isAnimating: false,
       loadedItems: 0,
     };
-    this.fetchTimes = [0];
+    this.fetchTimes = [];
     this.queue = new PQueue({
       concurrency: CONCURRENT_REQUESTS,
       timeout: 3000,
@@ -43,16 +49,16 @@ class PlayQueue extends React.Component {
     this.inQueueObject = {};
     this.bufferObject = {};
     this.bufferArray = [];
-    this.defaultBufferSize = numberOfFrames < 10 ? numberOfFrames : 10;
+    this.initialBufferSize = getInitialBufferSize(numberOfFrames, speed);
     this.minBufferLength = null;
-    this.canPreloadAll = numberOfFrames <= this.defaultBufferSize;
+    this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
     this.abortController = null;
   }
 
   componentDidMount() {
     this.mounted = true;
     this.queue.on('completed', (dateStr) => {
-      console.debug(dateStr, this.queue.size);
+      console.debug(dateStr, this.queue.size, this.queue.pending);
     });
     this.playingDate = this.getStartDate();
     this.checkQueue();
@@ -102,7 +108,7 @@ class PlayQueue extends React.Component {
     const { isLoopActive, startDate, endDate } = this.props;
     let currentDate = toDate(this.playingDate);
     const currentBufferSize = util.objectLength(this.bufferObject);
-    const queueLength = currentBufferSize || this.defaultBufferSize;
+    const queueLength = currentBufferSize || this.initialBufferSize;
 
     let i = 1;
     while (i < queueLength) {
@@ -134,7 +140,7 @@ class PlayQueue extends React.Component {
       togglePlaying();
       return;
     }
-    for (let i = 0; i < this.defaultBufferSize; i += 1) {
+    for (let i = 0; i < this.initialBufferSize; i += 1) {
       this.addDate(currentDate, true);
       currentDate = this.getNextBufferDate();
       if (toString(currentDate) === lastInQueue) {
@@ -143,34 +149,34 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.length && this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
+  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
 
   calcBufferSize() {
-    // NOTE: for some reason playback takes about 1.5 times as long as it is calculated to be
-    // (likely due to setTimeout being unreliable) which means we often buffer a little more than needed
-    let bufferSize = 0;
     const { numberOfFrames, speed } = this.props;
+    let bufferSize = 0;
+    const msPerSec = 1000;
     const avgFetchTime = this.getAverageFetchTime();
-    const remainingFrames = numberOfFrames - this.defaultBufferSize;
-    const remainingPlayTime = (remainingFrames / speed) * 1000;
-    const remainingLoadTime = (avgFetchTime * remainingFrames) / CONCURRENT_REQUESTS;
-    const totalPlayTime = (numberOfFrames / speed) * 1000;
+    const remainingFrames = numberOfFrames - this.initialBufferSize;
+    const remainingLoadTime = avgFetchTime * remainingFrames;
+    const remainingPlayTime = (remainingFrames / speed) * msPerSec;
+    const totalPlayTime = (numberOfFrames / speed) * msPerSec;
     const timeToBufferEnd = totalPlayTime - remainingPlayTime;
     const framesLoadedDuringInitialBufferPlayback = timeToBufferEnd / avgFetchTime;
-    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.defaultBufferSize;
+    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.initialBufferSize;
 
     if (!canKeepUp && remainingLoadTime >= remainingPlayTime) {
       const preloadTime = remainingLoadTime - remainingPlayTime;
-      bufferSize = Math.ceil(preloadTime / 1000);
+      bufferSize = Math.ceil(preloadTime / msPerSec);
     }
 
-    const totalLoadTime = ((avgFetchTime * numberOfFrames) / 1000 / CONCURRENT_REQUESTS).toFixed(2);
+    const totalLoadTime = ((avgFetchTime * numberOfFrames) / msPerSec / CONCURRENT_REQUESTS).toFixed(2);
+    console.log(this.fetchTimes);
     console.debug('Total frames: ', numberOfFrames);
-    console.debug('Avg fetch time: ', (avgFetchTime / 1000).toFixed(2));
-    console.debug('Play time (t/r): ', (totalPlayTime / 1000).toFixed(2), (remainingPlayTime / 1000).toFixed(2));
-    console.debug('Load time (t/r): ', totalLoadTime, (remainingLoadTime / 1000).toFixed(2));
+    console.debug('Avg fetch time: ', (avgFetchTime / msPerSec).toFixed(2));
+    console.debug('Play time (t/r): ', (totalPlayTime / msPerSec).toFixed(2), (remainingPlayTime / msPerSec).toFixed(2));
+    console.debug('Load time (t/r): ', totalLoadTime, (remainingLoadTime / msPerSec).toFixed(2));
 
-    const totalBuffer = bufferSize + this.defaultBufferSize;
+    const totalBuffer = bufferSize + this.initialBufferSize;
     if (totalBuffer >= numberOfFrames) {
       return numberOfFrames;
     }
@@ -183,10 +189,10 @@ class PlayQueue extends React.Component {
     if (currentBufferSize === numberOfFrames) {
       return true;
     }
-    if (currentBufferSize < this.defaultBufferSize) {
+    if (currentBufferSize < this.initialBufferSize) {
       return false;
     }
-    if (this.fetchTimes.length < this.defaultBufferSize) {
+    if (this.fetchTimes.length < this.initialBufferSize) {
       this.checkQueue();
       return false;
     }
@@ -314,7 +320,7 @@ class PlayQueue extends React.Component {
     delete this.inQueueObject[strDate];
     const currentBufferSize = util.objectLength(this.bufferObject);
 
-    if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.defaultBufferSize) {
+    if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();
     }
@@ -335,7 +341,7 @@ class PlayQueue extends React.Component {
   stopPlaying() {
     this.abortController.abort();
     this.setState({ isAnimating: false });
-    console.debug('Stopped', Date.now());
+    console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {
