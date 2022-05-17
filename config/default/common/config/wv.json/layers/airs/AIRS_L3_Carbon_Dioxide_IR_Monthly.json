@@ -9,7 +9,6 @@
       "group": "overlays",
       "product": "AIRS3C2M",
       "inactive": true,
-      "wrapadjacentdays": true,
       "layergroup": "Carbon Dioxide"
     }
   }

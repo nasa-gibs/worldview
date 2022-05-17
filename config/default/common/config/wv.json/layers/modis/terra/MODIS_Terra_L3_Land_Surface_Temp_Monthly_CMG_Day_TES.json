@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "MOD21C3",
-      "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Terra_Descending"
       ],
