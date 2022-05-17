@@ -70,12 +70,6 @@ export class VectorInteractions extends React.Component {
     const polygon = new OlGeomPolygon([]);
     let toggledGranuleFootprint;
 
-    // reverse granule geometry so most recent granules are on top
-    const footprints = Object
-      .keys(granuleFootprints)
-      .reverse()
-      .map((key) => ({ [key]: granuleFootprints[key] }));
-
     // only allow hover footprints on selected side of A/B comparison
     if (active) {
       const isOnActiveCompareSide = isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset);
@@ -86,16 +80,19 @@ export class VectorInteractions extends React.Component {
     }
 
     // check if coordinates and polygon extent are within and not exceeding max extent
-    footprints.forEach((footprint) => {
-      const [date] = Object.keys(footprint);
-      const [points] = Object.values(footprint);
-      polygon.setCoordinates([points]);
-      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
-      if (isValidPolygon) {
-        toggledGranuleFootprint = true;
-        events.trigger('granule-hovered', granulePlatform, date);
-      }
-    });
+    Object
+      .keys(granuleFootprints)
+      .map((key) => ({ [key]: granuleFootprints[key] }))
+      .forEach((footprint) => {
+        const [date] = Object.keys(footprint);
+        const [points] = Object.values(footprint);
+        polygon.setCoordinates([points]);
+        const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
+        if (isValidPolygon) {
+          toggledGranuleFootprint = true;
+          events.trigger('granule-hovered', granulePlatform, date);
+        }
+      });
 
     if (!toggledGranuleFootprint) {
       events.trigger('granule-hovered', granulePlatform, null);
