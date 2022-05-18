@@ -8,8 +8,7 @@
       "tags": "top of atmosphere",
       "group": "overlays",
       "layergroup": "TOA Albedo",
-      "product": "MIL3MAL",
-      "wrapadjacentdays": true
+      "product": "MIL3MAL"
     }
   }
 }

@@ -9,8 +9,7 @@
       "group": "overlays",
       "layergroup": "Precipitation Rate",
       "product": "GLDAS_NOAH10_M.2.0",
-      "inactive": true,
-      "wrapadjacentdays": true
+      "inactive": true
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "sulfur dioxide sulphur dioxide so2",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
-      "product": "M2TMNXAER",
-      "wrapadjacentdays": true
+      "product": "M2TMNXAER"
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Temperature",
-      "product": "M2TMNXSLV",
-      "wrapadjacentdays": true
+      "product": "M2TMNXSLV"
     }
   }
 }

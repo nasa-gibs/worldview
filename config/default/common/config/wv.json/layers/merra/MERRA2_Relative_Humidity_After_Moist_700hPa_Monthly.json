@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Relative Humidity",
-      "product": "M2TMNPCLD",
-      "wrapadjacentdays": true
+      "product": "M2TMNPCLD"
     }
   }
 }
