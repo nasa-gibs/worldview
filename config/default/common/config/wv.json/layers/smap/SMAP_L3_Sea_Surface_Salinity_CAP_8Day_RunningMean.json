@@ -7,8 +7,7 @@
       "description": "smap/SMAP_L3_Sea_Surface_Salinity_CAP_8Day_RunningMean",
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": "Sea Surface Salinity",
-      "wrapadjacentdays": true
+      "layergroup": "Sea Surface Salinity"
     }
   }
 }

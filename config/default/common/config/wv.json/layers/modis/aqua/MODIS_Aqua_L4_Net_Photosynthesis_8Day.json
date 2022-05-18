@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Photosynthesis, Net",
       "product": "MYD17A2H",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

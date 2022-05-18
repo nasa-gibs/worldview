@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Gross Primary Productivity",
       "product": "MOD17A2H",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]
