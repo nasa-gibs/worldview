@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "FPAR",
       "product": "MCD15A2H",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

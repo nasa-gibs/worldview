@@ -8,8 +8,7 @@
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Salinity",
-      "product": "SMAP_RSS_L3_SSS_SMI_8DAY-RUNNINGMEAN_V4",
-      "wrapadjacentdays": true
+      "product": "SMAP_RSS_L3_SSS_SMI_8DAY-RUNNINGMEAN_V4"
     }
   }
 }

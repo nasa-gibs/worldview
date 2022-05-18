@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Snow Extent",
       "product": "MYD10A2",
-      "wrapadjacentdays": true,
       "daynight": [
         "day",
         "night"
