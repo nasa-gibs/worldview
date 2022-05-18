@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "M2TMNXLND",
-      "wrapadjacentdays": true
+      "product": "M2TMNXLND"
     }
   }
 }

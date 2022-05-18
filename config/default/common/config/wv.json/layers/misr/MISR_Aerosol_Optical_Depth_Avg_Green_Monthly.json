@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "MIL3MAE",
-      "wrapadjacentdays": true
+      "product": "MIL3MAE"
     }
   }
 }
