@@ -1223,7 +1223,6 @@ export default function mapui(models, config, store) {
       }
     });
     map.on('moveend', (e) => {
-      events.trigger('map:moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
@@ -1261,28 +1260,27 @@ export default function mapui(models, config, store) {
    * @todo move this component to another Location
    */
   function createMousePosSel(map) {
-    const throttledOnMouseMove = lodashThrottle((e) => {
+    const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
       const state = store.getState();
-      const { browser, locationSearch, sidebar } = state;
+      const {
+        events, browser, locationSearch, sidebar, animation, measure,
+      } = state;
       const { isCoordinateSearchActive } = locationSearch;
       const isMobile = browser.lessThan.medium;
+      const coords = map.getCoordinateFromPixel(pixel);
+      const isEventsTabActive = typeof events !== 'undefined' && events.active;
+      const isMapAnimating = animation.isPlaying;
+
       if (self.mapIsbeingZoomed) return;
+      if (self.mapIsbeingDragged) return;
       if (compareMapUi && compareMapUi.dragging) return;
       if (isMobile) return;
-      if (state.measure.isActive) return;
+      if (measure.isActive) return;
       if (isCoordinateSearchActive) return;
-
-      const pixels = map.getEventPixel(e);
-      const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
-
-      if (self.mapIsbeingDragged) return;
-      // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
-      const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
-      const isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      runningdata.newPoint(pixels, map);
+      runningdata.newPoint(pixel, map);
     }, 300);
 
     events.on('map:mousemove', throttledOnMouseMove);

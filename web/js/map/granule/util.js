@@ -334,27 +334,30 @@ export const granuleFootprint = (map) => {
     useSpatialIndex: false,
   });
 
-  const getVectorLayer = (text) => new OlVectorLayer({
-    className: 'granule-map-footprint',
-    source: vectorSource,
-    style: [
-      new OlStyle({
-        fill: new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }),
-        stroke: new OlStyleStroke({
-          color: 'rgb(0, 123, 255, 0.65)',
-          width: 3,
+  const getVectorLayer = (text, showFill) => {
+    const fill = showFill ? new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }) : null;
+    return new OlVectorLayer({
+      className: 'granule-map-footprint',
+      source: vectorSource,
+      style: [
+        new OlStyle({
+          fill,
+          stroke: new OlStyleStroke({
+            color: 'rgb(0, 123, 255, 0.65)',
+            width: 3,
+          }),
+          text: new OlText({
+            textAlign: 'center',
+            text,
+            font: '18px monospace',
+            fill: new OlStyleFill({ color: 'white' }),
+            stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+            overflow: true,
+          }),
         }),
-        text: new OlText({
-          textAlign: 'center',
-          text,
-          font: '18px monospace',
-          fill: new OlStyleFill({ color: 'white' }),
-          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
-          overflow: true,
-        }),
-      }),
-    ],
-  });
+      ],
+    });
+  };
 
   const drawFootprint = (granuleGeometry, date) => {
     if (currentGranule[date]) {
@@ -376,7 +379,8 @@ export const granuleFootprint = (map) => {
     const geometry = new OlGeomPolygon([granuleGeometry]);
     const featureFootprint = new OlFeature({ geometry });
     vectorSource.addFeature(featureFootprint);
-    const newVectorLayer = getVectorLayer(date);
+    const showFill = map.getView().getZoom() < 3;
+    const newVectorLayer = getVectorLayer(date, showFill);
     vectorLayer = newVectorLayer;
     map.addLayer(vectorLayer);
   };

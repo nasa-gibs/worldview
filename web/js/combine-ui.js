@@ -49,24 +49,19 @@ export default function combineUi(models, config, store) {
 function registerMapMouseHandlers(maps) {
   Object.values(maps).forEach((map) => {
     const element = map.getTargetElement();
-    const crs = map
-      .getView()
-      .getProjection()
-      .getCode();
-    element.addEventListener('mousemove', (event) => {
-      events.trigger('map:mousemove', event, map, crs);
+    const crs = map.getView().getProjection().getCode();
+
+    element.addEventListener('mouseleave', (event) => {
+      events.trigger('map:mouseout', event);
     });
-    element.addEventListener('mouseout', (event) => {
-      events.trigger('map:mouseout', event, map, crs);
+    map.on('pointermove', (event) => {
+      events.trigger('map:mousemove', event, map, crs);
     });
     map.on('singleclick', (event) => {
       events.trigger('map:singleclick', event, map, crs);
     });
     map.on('contextmenu', (event) => {
       events.trigger('map:contextmenu', event, map, crs);
-    });
-    element.addEventListener('click', (event) => {
-      events.trigger('map:click', event, map, crs);
     });
   });
 }

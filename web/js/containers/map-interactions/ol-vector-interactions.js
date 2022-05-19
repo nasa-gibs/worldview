@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  debounce as lodashDebounce,
+  throttle as lodashThrottle,
   get as lodashGet,
   includes as lodashIncludes,
   groupBy as lodashGroupBy,
@@ -32,18 +32,23 @@ const { events } = util;
 export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
-    this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
-    this.mouseOut = lodashDebounce(this.mouseOut.bind(this), 8);
+    const options = { leading: true, trailing: true };
+    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
+    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
     this.singleClick = this.singleClick.bind(this);
   }
 
   componentDidMount() {
     events.on('map:mousemove', this.mouseMove);
+    // events.on('map:moveend', this.mouseMove);
+    events.on('map:mouseout', this.mouseOut);
     events.on('map:singleclick', this.singleClick);
   }
 
   componentWillUnmount() {
     events.off('map:mousemove', this.mouseMove);
+    // events.off('map:moveend', this.mouseMove);
+    events.off('map:mouseout', this.mouseOut);
     events.off('map:singleclick', this.singleClick);
   }
 
@@ -58,7 +63,7 @@ export class VectorInteractions extends React.Component {
   *
   * @return {Boolean} to indicate if valid for parent mouseMove function
   */
-  handleGranuleHover = (crs, pixels, mouseCoords) => {
+  handleGranuleHover = (pixels, mouseCoords) => {
     const {
       compareState,
       granulePlatform,
@@ -100,27 +105,24 @@ export class VectorInteractions extends React.Component {
     return true;
   }
 
-  mouseOut() {
-    const {
-      granulePlatform,
-    } = this.props;
-    events.trigger('granule-hovered', granulePlatform);
+  mouseOut = () => {
+    this.mouseMove.cancel();
+    events.trigger('granule-hovered', null);
   }
 
-  mouseMove(event, map, crs) {
+  mouseMove({ pixel }, map, crs) {
     const {
       isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj, granuleFootprints,
     } = this.props;
 
-    if (measureIsActive || isCoordinateSearchActive) {
+    if (measureIsActive || isCoordinateSearchActive || !pixel) {
       return;
     }
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
+    const coord = map.getCoordinateFromPixel(pixel);
 
     // handle granule footprint hover, will break out with false return if on wrong compare A/B side
     if (granuleFootprints) {
-      const isValidGranule = this.handleGranuleHover(crs, pixels, coord);
+      const isValidGranule = this.handleGranuleHover(pixel, coord);
       if (!isValidGranule) {
         return;
       }
@@ -130,15 +132,15 @@ export class VectorInteractions extends React.Component {
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
-    const hasFeatures = map.hasFeatureAtPixel(pixels);
+    const hasFeatures = map.hasFeatureAtPixel(pixel);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+      map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         const def = lodashGet(layer, 'wv.def');
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
+        if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
