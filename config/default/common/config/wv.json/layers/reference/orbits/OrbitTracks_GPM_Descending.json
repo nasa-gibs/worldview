@@ -10,7 +10,6 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
-      "startDate": "2014-02-27",
       "palette": {
         "id": "OrbitTracks_GPM_Descending",
         "immutable": true

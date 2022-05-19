@@ -14,7 +14,6 @@
         "night"
       ],
       "track": "ascending",
-      "startDate": "2015-06-24",
       "palette": {
         "id": "OrbitTracks_Sentinel-2A_Ascending",
         "immutable": true

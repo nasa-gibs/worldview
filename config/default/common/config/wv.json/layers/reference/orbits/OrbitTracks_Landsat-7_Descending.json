@@ -14,7 +14,6 @@
         "day"
       ],
       "track": "descending",
-      "startDate": "1999-04-15",
       "palette": {
         "id": "OrbitTracks_Landsat-7_Descending",
         "immutable": true

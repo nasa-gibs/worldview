@@ -14,7 +14,6 @@
         "day"
       ],
       "track": "descending",
-      "startDate": "2016-04-25",
       "palette": {
         "id": "OrbitTracks_Sentinel-1B_Descending",
         "immutable": true
