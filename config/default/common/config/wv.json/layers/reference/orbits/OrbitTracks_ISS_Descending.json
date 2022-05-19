@@ -11,7 +11,6 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
-      "startDate": "1998-11-20",
       "palette": {
         "id": "OrbitTracks_ISS_Descending",
         "immutable": true

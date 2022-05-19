@@ -11,7 +11,6 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
-      "startDate": "2018-09-15",
       "palette": {
         "id": "OrbitTracks_ICESAT-2_Descending",
         "immutable": true

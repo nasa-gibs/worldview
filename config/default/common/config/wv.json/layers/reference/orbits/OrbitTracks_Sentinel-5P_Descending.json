@@ -14,7 +14,6 @@
         "night"
       ],
       "track": "descending",
-      "startDate": "2017-10-14",
       "palette": {
         "id": "OrbitTracks_Sentinel-5P_Descending",
         "immutable": true

@@ -14,7 +14,6 @@
         "day"
       ],
       "track": "descending",
-      "startDate": "2013-02-11",
       "palette": {
         "id": "OrbitTracks_Landsat-8_Descending",
         "immutable": true

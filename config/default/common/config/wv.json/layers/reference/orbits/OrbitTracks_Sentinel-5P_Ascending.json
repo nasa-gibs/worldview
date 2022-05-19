@@ -15,7 +15,6 @@
         "day"
       ],
       "track": "ascending",
-      "startDate": "2017-10-14",
       "palette": {
         "id": "OrbitTracks_Sentinel-5P_Ascending",
         "immutable": true
