@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Vegetation Indices",
       "product": "MIL3MLS",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

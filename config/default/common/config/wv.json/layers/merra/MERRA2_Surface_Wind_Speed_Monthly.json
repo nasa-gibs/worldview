@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Wind Speed",
-      "product": "M2IMNXLFO",
-      "wrapadjacentdays": true
+      "product": "M2IMNXLFO"
     }
   }
 }

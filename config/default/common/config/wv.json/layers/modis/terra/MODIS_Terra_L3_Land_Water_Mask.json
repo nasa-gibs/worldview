@@ -9,7 +9,6 @@
       "layergroup": "Water Bodies",
       "product": "MOD44W",
       "inactive": true,
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

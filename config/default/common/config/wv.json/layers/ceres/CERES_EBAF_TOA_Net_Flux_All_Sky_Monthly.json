@@ -10,7 +10,6 @@
       "layergroup": "TOA Flux",
       "product": "CERES_EBAF-TOA",
       "inactive": true,
-      "wrapadjacentdays": true,
       "daynight": [
         "day",
         "night"

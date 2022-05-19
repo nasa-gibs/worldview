@@ -9,8 +9,7 @@
       "group": "overlays",
       "layergroup": "Sea Surface Salinity",
       "product": "AQUARIUS_L3_SSS_SMI_7DAY-RUNNINGMEAN_V5",
-      "inactive": true,
-      "wrapadjacentdays": true
+      "inactive": true
     }
   }
 }

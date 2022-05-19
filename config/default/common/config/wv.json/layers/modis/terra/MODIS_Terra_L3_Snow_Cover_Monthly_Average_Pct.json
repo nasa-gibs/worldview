@@ -8,7 +8,6 @@
       "group": "overlays",
       "layergroup": "Snow Cover",
       "product": "MOD10CM",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

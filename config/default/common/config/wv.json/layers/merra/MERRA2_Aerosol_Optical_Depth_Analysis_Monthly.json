@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "M2IMNXGAS",
-      "wrapadjacentdays": true
+      "product": "M2IMNXGAS"
     }
   }
 }
