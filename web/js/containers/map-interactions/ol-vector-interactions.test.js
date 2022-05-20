@@ -48,6 +48,7 @@ beforeEach(() => {
 
 test('if there is a feature at pixel dispatch changeCursor action', () => {
   map.hasFeatureAtPixel = () => true;
+  map.forEachFeatureAtPixel = () => {};
   events.trigger('map:mousemove', {}, map, 'EPSG:3413');
   doAsync(() => expect(changeCursor.mock.calls.length).toBe(1));
 });
