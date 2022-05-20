@@ -253,14 +253,24 @@ export default function mapui(models, config, store) {
     }
   };
 
-  const onGranuleHover = (instrument, date) => {
+  const onGranuleHover = (platform, date, update) => {
     const state = store.getState();
     const proj = self.selected.getView().getProjection().getCode();
     let geometry;
-    if (instrument && date) {
+    if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    return granuleFootprints[proj].drawFootprint(geometry, date);
+    granuleFootprints[proj].addFootprint(geometry, date);
+  };
+
+  const onGranuleHoverUpdate = (platform, date) => {
+    const state = store.getState();
+    const proj = self.selected.getView().getProjection().getCode();
+    let geometry;
+    if (platform && date) {
+      geometry = getActiveGranuleFootPrints(state)[date];
+    }
+    granuleFootprints[proj].updateFootprint(geometry, date);
   };
 
   /**
@@ -300,6 +310,7 @@ export default function mapui(models, config, store) {
     });
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('granule-hovered', onGranuleHover);
+    events.on('granule-hover-update', onGranuleHoverUpdate);
     window.addEventListener('orientationchange', () => {
       setTimeout(() => { updateProjection(true); }, 200);
     });

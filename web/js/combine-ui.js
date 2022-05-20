@@ -54,6 +54,9 @@ function registerMapMouseHandlers(maps) {
     element.addEventListener('mouseleave', (event) => {
       events.trigger('map:mouseout', event);
     });
+    map.on('moveend', (event) => {
+      events.trigger('map:moveend', event, map, crs);
+    });
     map.on('pointermove', (event) => {
       events.trigger('map:mousemove', event, map, crs);
     });
