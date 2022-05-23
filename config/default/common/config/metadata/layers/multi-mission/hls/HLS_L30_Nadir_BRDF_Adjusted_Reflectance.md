@@ -2,4 +2,4 @@ The Reflectance (Nadir BRDF Adjusted) imagery layer from Landsat 8 and 9/OLI is 
 
 The Reflectance (Nadir BRDF Adjusted) imagery layer from Landsat 8 and 9/OLI product (L30) is available through the HLS project from the Operational Land Imager (OLI) aboard the Landsat 8 and 9 satellites. The sensor resolution is 30 m, imagery resolution is 30 m, and the temporal resolution is daily with a 16 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Sentinel 2A and Sentinel 2B imagery layer available.
 
-References: HLSL30 v002 [doi:10.5067/HLS/HLSL30.002](https://doi.org/doi:10.5067/HLS/HLSL30.002)
+References: HLSL30 v002 [doi:10.5067/HLS/HLSL30.002](https://doi.org/10.5067/HLS/HLSL30.002)
