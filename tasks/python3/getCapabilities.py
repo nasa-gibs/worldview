@@ -132,7 +132,8 @@ async def gather_process(type, typeStr, client, dir, ext):
 
 async def main():
     if "wv-options-fetch" in config:
-        async with httpx.AsyncClient() as client:
+        limits = httpx.Limits(max_keepalive_connections=10, max_connections=10)
+        async with httpx.AsyncClient(limits=limits) as client:
             await asyncio.gather(*[process_remote(client, entry) for entry in config["wv-options-fetch"]])
             if colormaps:
                 await gather_process(colormaps, 'colormaps', client, colormaps_dir, '.xml')
