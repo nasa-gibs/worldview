@@ -10,7 +10,6 @@
       "layergroup": "Vegetation Indices",
       "product": "",
       "inactive": true,
-      "wrapX": true,
       "daynight": [
         "day"
       ]

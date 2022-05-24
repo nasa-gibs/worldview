@@ -9,7 +9,7 @@
       "group": "overlays",
       "layergroup": "Terrain Elevation",
       "product": "SRTMGL1",
-      "wrapadjacentdays": true
+      "wrapX": true
     }
   }
 }

@@ -9,8 +9,7 @@
       "layergroup": "Wind Speed",
       "product": "CCMP_MEASURES_ATLAS_L4_OW_L3_5A_MONTHLY_WIND_VECTORS_FLK",
       "group": "overlays",
-      "inactive": true,
-      "wrapadjacentdays": true
+      "inactive": true
     }
   }
 }

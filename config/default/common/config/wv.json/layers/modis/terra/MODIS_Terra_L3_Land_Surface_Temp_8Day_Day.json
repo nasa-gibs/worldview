@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "MOD11A2",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

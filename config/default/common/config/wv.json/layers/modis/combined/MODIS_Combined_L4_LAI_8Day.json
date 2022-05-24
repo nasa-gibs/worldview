@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Leaf Area Index",
       "product": "MCD15A2H",
-      "wrapadjacentdays": true,
       "daynight": [
         "day"
       ]

@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "M2TMNXFLX",
-      "wrapadjacentdays": true
+      "product": "M2TMNXFLX"
     }
   }
 }

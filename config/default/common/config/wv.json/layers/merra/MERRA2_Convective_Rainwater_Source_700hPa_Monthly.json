@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Convective Rainwater Source",
-      "product": "M2TMNPMST",
-      "wrapadjacentdays": true
+      "product": "M2TMNPMST"
     }
   }
 }

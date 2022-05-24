@@ -6,6 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Chlorophyll_A",
       "group": "overlays",
+      "inactive": true,
       "tracks": [
         "OrbitTracks_Terra_Descending"
       ],

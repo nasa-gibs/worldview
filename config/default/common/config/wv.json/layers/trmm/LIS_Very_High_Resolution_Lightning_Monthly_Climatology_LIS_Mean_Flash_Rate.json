@@ -9,8 +9,7 @@
       "group": "overlays",
       "layergroup": "Lightning",
       "product": "lisvhrmc",
-      "inactive": true,
-      "wrapadjacentdays": true
+      "inactive": true
     }
   }
 }
