@@ -728,13 +728,15 @@ button:focus {
   background: $wv-transparent-black;
   color: #fff;
   border: thin solid #333;
-  font-size: 23px;
-  padding: 14px 8px;
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
-  height: 44px;
-  font-family: $wv-monospace-font;
+  & .mobile-date-picker-select-btn-text {
+    height: 44px;
+    font-family: $wv-monospace-font;
+    font-size: 23px;
+    padding: 14px 8px;
+  }
 }
 
 .datepicker-modal {
