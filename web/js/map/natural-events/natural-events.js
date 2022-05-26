@@ -120,9 +120,9 @@ class NaturalEvents extends React.Component {
 
     this.setState({ prevSelectedEvent: { id, date } });
 
+    selectDate(useDate);
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
       if (!isInitialLoad) {
-        selectDate(useDate);
         if (categoryChange) {
           activateLayersForEventCategory(event.categories[0].title);
         }
