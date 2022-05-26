@@ -6,6 +6,7 @@ import * as olProj from 'ol/proj';
 import {
   getDefaultEventDate,
   validateGeometryCoords,
+  toEventDateString,
 } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
@@ -23,6 +24,20 @@ import { fly } from '../util';
 const zoomLevelReference = {
   Wildfires: 8,
   Volcanoes: 6,
+};
+
+/* For Wildfires that didn't happen today, move the timeline forward a day
+* to improve the chance that the fire is visible.
+* NOTE: If the fire happened yesterday and the imagery isn't yet available
+* for today, this may not help.
+*/
+const getUseDate = (event, date) => {
+  const today = toEventDateString(util.now());
+  const yesterday = toEventDateString(util.yesterday());
+  const recentDate = date === today || date === yesterday;
+  const isWildfireEvent = event.categories[0].title === 'Wildfires';
+  const parsedDate = util.parseDateUTC(date);
+  return isWildfireEvent && !recentDate ? util.dateAdd(parsedDate, 'day', 1) : parsedDate;
 };
 
 class NaturalEvents extends React.Component {
@@ -76,12 +91,12 @@ class NaturalEvents extends React.Component {
   getZoomPromise = function(
     event,
     date,
-    isIdChange,
+    isSameEventID,
     isInitialLoad,
   ) {
     return isInitialLoad
       ? new Promise((resolve, reject) => { resolve(); })
-      : this.zoomToEvent(event, date, isIdChange);
+      : this.zoomToEvent(event, date, isSameEventID);
   };
 
   selectEvent(id, date, isInitialLoad) {
@@ -96,32 +111,21 @@ class NaturalEvents extends React.Component {
     const prevCategory = prevEvent ? prevEvent.categories[0].title : false;
     const event = eventsData.find((e) => e.id === id);
     const category = event && event.categories[0].title;
-    const isSameCategory = category === prevCategory;
+    const categoryChange = category !== prevCategory;
     if (!event) {
       return;
     }
     const eventDate = date || getDefaultEventDate(event);
-    const dateFormat = (d) => d.toISOString().split('T')[0];
+    const useDate = getUseDate(event, date);
 
     this.setState({ prevSelectedEvent: { id, date } });
 
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
-      /* For Wildfires that didn't happen today, move the timeline forward a day
-       * to improve the chance that the fire is visible.
-       * NOTE: If the fire happened yesterday and the imagery isn't yet available
-       * for today, this may not help.
-       */
-      if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
-        const today = dateFormat(util.now());
-        const yesterday = dateFormat(util.yesterday());
-        if (date !== today || date !== yesterday) {
-          selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1));
+      if (!isInitialLoad) {
+        selectDate(useDate);
+        if (categoryChange) {
+          activateLayersForEventCategory(event.categories[0].title);
         }
-      } else if (!isInitialLoad) {
-        selectDate(util.parseDateUTC(date));
-      }
-      if (isIdChange && !isSameCategory && !isInitialLoad) {
-        activateLayersForEventCategory(event.categories[0].title);
       }
       selectEventFinished();
     });
