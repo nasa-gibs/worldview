@@ -196,9 +196,8 @@ export default function mapui(models, config, store) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
-        return setTimeout(reloadLayers, 100);
       case layerConstants.ADD_LAYERS_FOR_EVENT:
-        return setTimeout(reloadLayers, 1500);
+        return setTimeout(reloadLayers, 100);
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
@@ -627,7 +626,6 @@ export default function mapui(models, config, store) {
     const state = store.getState();
     const { compare } = state;
 
-    console.log('map - reloadLayers');
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
       if (compareMapDestroyed) {
@@ -691,8 +689,6 @@ export default function mapui(models, config, store) {
   function updateLayerVisibilities() {
     const state = store.getState();
     const layerGroup = self.selected.getLayers();
-
-    console.log('map - updateLayerVisibilities');
 
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
@@ -910,8 +906,6 @@ export default function mapui(models, config, store) {
         .map(({ wv }) => lodashGet(wv, 'def.id'))
         .includes(id),
     ).filter(({ visible }) => visible);
-
-    console.log('map - updateDate');
 
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
