@@ -36,7 +36,6 @@ import mapCompare from './compare/compare';
 import { granuleFootprint } from './granule/util';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
   REMOVE_MARKER,
   SET_MARKER,
@@ -160,15 +159,6 @@ export default function mapui(models, config, store) {
         });
         return;
       }
-      case CHANGE_TAB: {
-        const { sidebar, proj } = state;
-        const { activeTab, previousTab } = sidebar;
-        const dataDownloadTabSwitched = activeTab === 'download' || previousTab === 'download';
-        if (proj.id === 'geographic' && dataDownloadTabSwitched) {
-          return reloadLayers();
-        }
-        return;
-      }
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
@@ -179,7 +169,6 @@ export default function mapui(models, config, store) {
             flyToNewExtent(extent, rotate);
           }
         }, 200);
-
         return;
       }
       case layerConstants.REMOVE_GROUP:
@@ -207,6 +196,7 @@ export default function mapui(models, config, store) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
+      case layerConstants.ADD_LAYERS_FOR_EVENT:
         return setTimeout(reloadLayers, 100);
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
@@ -242,7 +232,7 @@ export default function mapui(models, config, store) {
         return updateDate(action.outOfStep);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
-        updateDate();
+        updateLayerVisibilities();
         break;
       }
       case dateConstants.ARROW_DOWN:
@@ -636,6 +626,7 @@ export default function mapui(models, config, store) {
     const state = store.getState();
     const { compare } = state;
 
+    console.log('map - reloadLayers');
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
       if (compareMapDestroyed) {
@@ -649,7 +640,6 @@ export default function mapui(models, config, store) {
       });
       const createdLayers = await Promise.all(layerPromises);
       lodashEach(createdLayers, (l) => { map.addLayer(l); });
-      updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -700,6 +690,8 @@ export default function mapui(models, config, store) {
   function updateLayerVisibilities() {
     const state = store.getState();
     const layerGroup = self.selected.getLayers();
+
+    console.log('map - updateLayerVisibilities');
 
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
@@ -917,6 +909,8 @@ export default function mapui(models, config, store) {
         .map(({ wv }) => lodashGet(wv, 'def.id'))
         .includes(id),
     ).filter(({ visible }) => visible);
+
+    console.log('map - updateDate');
 
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
