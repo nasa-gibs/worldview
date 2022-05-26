@@ -6,4 +6,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 Data field: `surfacePrecipitation`
 
-References: AE_Rain [doi:10.5067/AMSR-E/AE_RAIN.003](https://doi.org/10.5067/AMSR-E/AE_RAIN.003)
+References: [doi:10.5067/IR85TKB5BLM3](https://doi.org/10.5067/IR85TKB5BLM3)
