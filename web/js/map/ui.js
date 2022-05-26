@@ -196,8 +196,9 @@ export default function mapui(models, config, store) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
-      case layerConstants.ADD_LAYERS_FOR_EVENT:
         return setTimeout(reloadLayers, 100);
+      case layerConstants.ADD_LAYERS_FOR_EVENT:
+        return setTimeout(reloadLayers, 1500);
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
