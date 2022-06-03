@@ -9,6 +9,7 @@ import {
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
+import LatLongSelect from './lat-long-inputs';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -160,7 +161,7 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
+      getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
     } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
@@ -191,6 +192,11 @@ export default class ImageResSelection extends React.Component {
           </div>
           {filetypeSelect}
           {worldfileSelect}
+          <LatLongSelect
+            viewExtent={viewExtent}
+            geoLatLong={geoLatLong}
+            onLatLongChange={onLatLongChange}
+          />
           <ResTable
             width={width}
             height={height}
@@ -234,5 +240,8 @@ ImageResSelection.propTypes = {
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
+  viewExtent: PropTypes.array,
   worldFileOptions: PropTypes.bool,
+  geoLatLong: PropTypes.array,
+  onLatLongChange: PropTypes.func,
 };

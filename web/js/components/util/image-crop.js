@@ -25,6 +25,23 @@ export default class Crop extends React.Component {
     };
   }
 
+  static getDerivedStateFromProps(props, currentState) {
+    const {
+      x, y, height, width,
+    } = currentState;
+    if (x !== props.x || y !== props.y || height !== props.height || width !== props.width) {
+      return {
+        crop: {
+          x: props.x,
+          y: props.y,
+          width: props.width,
+          height: props.height,
+        },
+      };
+    }
+    return null;
+  }
+
   renderCoords() {
     const { coordinates, topRightStyle, bottomLeftStyle } = this.props;
     if (bottomLeftStyle.width < 50) {
@@ -85,6 +102,7 @@ export default class Crop extends React.Component {
             }
           }}
           onChange={(crop) => {
+            console.log(crop);
             this.setState({ crop });
             if (crop.width && crop.height) {
               onChange(crop);
