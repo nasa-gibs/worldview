@@ -313,6 +313,15 @@ export function imageUtilGetCoordsFromPixelValues(pixels, map) {
   ];
 }
 
+export function imageUtilGetPixelValuesFromCoords(geoLatLongArray, map) {
+  const [geolonlat1, geolonlat2] = geoLatLongArray;
+  return [
+    map.getPixelFromCoordinate([Math.floor(geolonlat1[0]), Math.floor(geolonlat1[1])]),
+    map.getPixelFromCoordinate([Math.floor(geolonlat2[0]), Math.floor(geolonlat2[1])]),
+  ];
+}
+
+
 /**
  * Given a bounding box as an array of a lower left coordinate pair
  * and an upper right coordinate pair, return the BBOX parameter value
