@@ -168,7 +168,7 @@ export function getDefaultEventDate({ geometry, categories }) {
   const today = toEventDateString(util.now());
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
-    [date] = toEventDateString(new Date(geometry[1].date));
+    [date] = geometry[1].date.split('T');
   }
   return date;
 }
