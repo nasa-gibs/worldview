@@ -102,10 +102,12 @@ export default class Crop extends React.Component {
             }
           }}
           onChange={(crop) => {
-            console.log(crop);
             this.setState({ crop });
             if (crop.width && crop.height) {
               onChange(crop);
+            }
+            if (!crop.width || !crop.height) {
+              onClose();
             }
           }}
         />
