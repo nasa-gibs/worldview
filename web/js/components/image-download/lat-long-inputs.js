@@ -19,10 +19,10 @@ const Input = ({
    * send new value to parent
    * @param {Object} e Event Object
    */
-  const onKeyUp = (e) => {
+  const onKeyDown = (e) => {
     const { keyCode } = e;
-    const entered = keyCode === 13;
-    const tabbed = keyCode === 9;
+    const entered = Number(keyCode) === 13;
+    const tabbed = Number(keyCode) === 9;
     if (entered || tabbed) {
       const newArray = lodashClone(BoundingBoxArray);
       newArray[index] = Number(inputValue);
@@ -41,7 +41,7 @@ const Input = ({
       <label htmlFor={`latlong-input-${index}`} className="wv-image-label-lat-lon w-100">{title}</label>
       <input
         type="number"
-        onKeyUp={onKeyUp}
+        onKeyDown={onKeyDown}
         name="min-latitude"
         id={`latlong-input-${index}`}
         className="input input-lat-long w-100"
@@ -59,7 +59,7 @@ const Input = ({
 const LatLongSelect = (props) => {
   const { onLatLongChange, geoLatLong, viewExtent } = props;
   const BoundingBoxArray = [geoLatLong[0][0], geoLatLong[0][1], geoLatLong[1][0], geoLatLong[1][1]];
-  const [showCoordinates, setShowCoordinates] = useState(true);
+  const [showCoordinates, setShowCoordinates] = useState(false);
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
   return (
     <div className="wv-image-input-case">
@@ -71,22 +71,22 @@ const LatLongSelect = (props) => {
         <>
           <div className="row">
             <div className="col-12">
-              <p className="wv-image-input-subtitle">Bottom Left</p>
-              <div className="field-group field-group-bounding-box-bottom-left">
+              <h4 className="wv-image-input-subtitle">Top Right</h4>
+              <div className="field-group field-group-bounding-box-top-right">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4)} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Latitude" />
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[1].toFixed(4)} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={1} title="min Longitude" />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Longitude " />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[3].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={3} title="max Latitude" />
                 </div>
               </div>
             </div>
           </div>
           <div className="row">
             <div className="col-12">
-              <h4 className="wv-image-input-subtitle">Top Right</h4>
-              <div className="field-group field-group-bounding-box-top-right">
+              <p className="wv-image-input-subtitle">Bottom Left</p>
+              <div className="field-group field-group-bounding-box-bottom-left">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4)} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Latitude" />
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[3].toFixed(4)} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={3} title="max Longitude" />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Longitude" />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[1].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={1} title="min Latitude" />
                 </div>
               </div>
             </div>
@@ -111,6 +111,6 @@ Input.propTypes = {
   index: number,
   title: string,
   BoundingBoxArray: array,
-  inputNumber: number,
+  inputNumber: string,
   viewExtent: array,
 };
