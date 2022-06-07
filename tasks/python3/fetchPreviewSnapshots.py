@@ -48,7 +48,7 @@ param_dict = {
 }
 # These layers should not be combined with the reference layer
 standalone_layers = [
-  'Graticule',
+  'Graticule_15m',
   'Coastlines_15m',
   'Reference_Features_15m',
   'Reference_Labels_15m'

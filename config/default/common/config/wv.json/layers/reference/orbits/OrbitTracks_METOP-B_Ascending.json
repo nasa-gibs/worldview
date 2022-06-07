@@ -6,31 +6,51 @@
       "subtitle": "MetOp-B / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-B_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
         "day"
       ],
       "track": "ascending",
-      "startDate": "2018-12-01",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_METOP-B_Ascending",
         "immutable": true
       },
-      "tags": "tracks day"
+      "tags": "tracks day vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_METOP-B_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_METOP-B_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_METOP-B_Ascending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_METOP-B_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
     }
   }
 }

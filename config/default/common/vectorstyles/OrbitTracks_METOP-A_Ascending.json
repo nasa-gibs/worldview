@@ -1,0 +1,196 @@
+{
+  "version": 8,
+  "name": "Orbit Tracks",
+  "sources": {
+    "OrbitTracks_METOP-A_Ascending": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_METOP-A_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "OrbitTracks_METOP-A_Ascending",
+      "source": "OrbitTracks_METOP-A_Ascending",
+      "source-layer": "OrbitTracks_METOP-A_Ascending",
+      "source-description": "Default",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(178, 144, 193)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "OrbitTracks_METOP-A_Ascending",
+      "source": "OrbitTracks_METOP-A_Ascending",
+      "source-layer": "OrbitTracks_METOP-A_Ascending",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                10
+              ],
+              0
+            ],
+            0,
+            1.5
+          ],
+          1,
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                10
+              ],
+              0
+            ],
+            0,
+            2.5
+          ],
+          3,
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                5
+              ],
+              0
+            ],
+            0,
+            3.5
+          ],
+          5,
+          5
+        ],
+        "circle-color": "rgb(178, 144, 193)",
+        "circle-opacity": 1
+      }
+    },
+    {
+      "id": "OrbitTracks_METOP-A_Ascending",
+      "source": "OrbitTracks_METOP-A_Ascending",
+      "source-layer": "OrbitTracks_METOP-A_Ascending",
+      "source-description": "Default",
+      "type": "symbol",
+      "layout": {
+        "text-field": [
+          "match",
+          [
+            "geometry-type"
+          ],
+          "Point",
+          [
+            "get",
+            "label"
+          ],
+          ""
+        ],
+        "text-font": [
+          "Open Sans Bold",
+          "Arial Unicode MS Bold"
+        ],
+        "text-size": [
+          "step",
+          [
+            "zoom"
+          ],
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                10
+              ],
+              0
+            ],
+            0,
+            10
+          ],
+          1,
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                10
+              ],
+              0
+            ],
+            0,
+            10
+          ],
+          3,
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                5
+              ],
+              0
+            ],
+            0,
+            12
+          ],
+          5,
+          16
+        ],
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-radial-offset": 1,
+        "text-variable-anchor": [
+          "right",
+          "left"
+        ]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1,
+        "text-opacity": 1
+      }
+    }
+  ]
+}

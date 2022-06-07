@@ -54,6 +54,12 @@
         "layergroup": {
           "type": "string"
         },
+        "clickDisabledFeatures": {
+          "type": "array"
+        },
+        "modalShouldFollowClicks": {
+          "type": "boolean"
+        },
         "product": {
           "anyOf": [
             {
@@ -181,6 +187,10 @@
         },
         "track": {
           "description": "TODO should be removed for vis metadata replacement!",
+          "type": "string"
+        },
+        "associatedLayers": {
+          "description": "ID of an associated layers (e.g. a corresponding granule layer)",
           "type": "string"
         },
         "layer": {

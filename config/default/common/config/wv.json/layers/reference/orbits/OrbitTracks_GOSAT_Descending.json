@@ -6,31 +6,52 @@
       "subtitle": "GOSAT / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GOSAT_Descending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
+      "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "daynight": [
         "day"
       ],
       "track": "descending",
-      "startDate": "2009-01-23",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_GOSAT_Descending",
         "immutable": true
       },
-      "tags": "tracks night"
+      "tags": "tracks night vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_GOSAT_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_GOSAT_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_GOSAT_Descending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_GOSAT_Descending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
     }
   }
 }

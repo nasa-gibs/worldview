@@ -60,17 +60,7 @@ export function adjustCircleRadius(style) {
     }),
   });
 }
-export function getOrbitPointStyles(feature, styleArray) {
-  return styleArray.map((style) => {
-    const type = feature.getType();
-    switch (type) {
-      case 'Point':
-        return adjustCircleRadius(style);
-      default:
-        return style;
-    }
-  });
-}
+
 export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
@@ -107,6 +97,7 @@ export function offsetLineStringStyle(feature, styleArray) {
     return style;
   });
 }
+
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
@@ -218,7 +209,9 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const metaArray = [];
   const selected = {};
   let exceededLengthLimit = false;
+  let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
+  let modalShouldFollowClicks = false;
   const featureOptions = isMobile ? { hitTolerance: 5 } : {};
   // max displayed results of features at pixel
   const desktopLimit = 12;
@@ -226,6 +219,11 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
+    const featureId = feature.getId();
+    if (featureId === 'coordinates-map-marker') {
+      isCoordinatesMarker = true;
+      return;
+    }
     if (lengthCheck(metaArray)) {
       exceededLengthLimit = true;
       return true;
@@ -254,7 +252,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
       if (selected[layerId].includes(uniqueIdentifier)) return;
-
+      if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {
         legend: properties,
         features,
@@ -270,7 +268,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
   }, featureOptions);
   return {
-    selected, metaArray, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,
   };
 }
 /**
@@ -296,13 +294,15 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
   const {
-    selected, metaArray, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,
   } = getModalContentsAtPixel(mapProps, config, compare, isMobile);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
+    isCoordinatesMarker,
+    modalShouldFollowClicks,
     exceededLengthLimit,
   };
 }

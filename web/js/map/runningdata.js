@@ -3,6 +3,7 @@ import {
   isEmpty as lodashIsEmpty,
   isEqual as lodashIsEqual,
 } from 'lodash';
+import * as olExtent from 'ol/extent';
 import util from '../util/util';
 import { getPalette } from '../modules/palettes/selectors';
 import {
@@ -51,7 +52,8 @@ export default function MapRunningData(compareUi, store) {
       if (!def) return;
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv.group, compare, swipeOffset)) return;
+      const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixels));
+      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv.group, compare, swipeOffset) || featureOutsideExtent) return;
 
       const hasPalette = !lodashIsEmpty(def.palette);
       if (!hasPalette) return;

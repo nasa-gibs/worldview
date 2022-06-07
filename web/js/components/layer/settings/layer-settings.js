@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
-import OrbitTracks from './orbit-tracks-toggle';
+import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
@@ -339,6 +339,8 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
     } = this.props;
+    const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
+    const hasTracks = layer.tracks && layer.tracks.length;
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
@@ -358,7 +360,7 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
+        {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>
     );
   }

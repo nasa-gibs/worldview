@@ -152,19 +152,23 @@ export function getEventsRequestURL (state) {
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }
 
+export const toEventDateString = (d) => d.toISOString().split('T')[0];
+
 /**
  *
  * @param {*} event
  */
-export function getDefaultEventDate(event) {
-  const preDate = event.geometry[0] && event.geometry[0].date;
-  let date = new Date(preDate).toISOString().split('T')[0];
-  if (event.geometry.length < 2) return date;
-  const category = event.categories.title || event.categories[0].title;
-  const today = util.now().toISOString().split('T')[0];
+export function getDefaultEventDate({ geometry, categories }) {
+  const preDate = geometry[0] && geometry[0].date;
+  let date = toEventDateString(new Date(preDate));
+  if (geometry.length < 2) {
+    return date;
+  }
+  const category = categories.title || categories[0].title;
+  const today = toEventDateString(util.now());
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
-    [date] = new Date(event.geometry[1].date).toISOString().split('T');
+    [date] = geometry[1].date.split('T');
   }
   return date;
 }

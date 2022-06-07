@@ -29,8 +29,9 @@ export default class OlCoordinates extends React.Component {
       format: null,
       width: null,
     };
-    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 8);
-    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 8);
+    const options = { leading: true, trailing: true };
+    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
+    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
     this.changeFormat = this.changeFormat.bind(this);
     this.setInitFormat = this.setInitFormat.bind(this);
   }
@@ -46,9 +47,8 @@ export default class OlCoordinates extends React.Component {
     events.off('map:mouseout', this.mouseOut);
   }
 
-  mouseMove(event, map, crs) {
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
+  mouseMove({ pixel }, map, crs) {
+    const coord = map.getCoordinateFromPixel(pixel);
     if (!coord) {
       this.clearCoord();
       return;

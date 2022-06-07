@@ -6,22 +6,34 @@
       "subtitle": "CYGNSS / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_CYGNSS_Descending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
-      "startDate": "2018-12-01",
-      "projections": {
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_CYGNSS_Descending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_CYGNSS_Descending"
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_CYGNSS_Descending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
+      }
     }
   }
 }
