@@ -47,6 +47,10 @@
   font-size: 10px;
   bottom: 0;
   width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
 }
 
 .wv-palettes-max,
@@ -55,16 +59,6 @@
   position: absolute;
 }
 
-.wv-palettes-max,
-.wv-palettes-min,
-.wv-palettes-title,
-.wv-running-category-label,
-.wv-running-label {
-  white-space: nowrap;
-  overflow: hidden;
-  display: inline-block;
-  text-overflow: ellipsis;
-}
 .wv-running-category-label {
   max-width: 197px;
 }
