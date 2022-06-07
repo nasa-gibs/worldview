@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  debounce as lodashDebounce,
+  throttle as lodashThrottle,
   get as lodashGet,
   includes as lodashIncludes,
   groupBy as lodashGroupBy,
@@ -33,33 +33,43 @@ const { events } = util;
 export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
-    this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
-    this.mouseOut = lodashDebounce(this.mouseOut.bind(this), 8);
+    this.state = {
+      granuleDate: null,
+      granulePlatform: null,
+    };
+    const options = { leading: true, trailing: true };
+    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
+    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
+    this.moveEnd = this.moveEnd.bind(this);
     this.singleClick = this.singleClick.bind(this);
   }
 
   componentDidMount() {
+    events.on('map:moveend', this.moveEnd);
     events.on('map:mousemove', this.mouseMove);
+    events.on('map:mouseout', this.mouseOut);
     events.on('map:singleclick', this.singleClick);
   }
 
   componentWillUnmount() {
+    events.off('map:moveend', this.moveEnd);
     events.off('map:mousemove', this.mouseMove);
+    events.off('map:mouseout', this.mouseOut);
     events.off('map:singleclick', this.singleClick);
+  }
+
+  clearGranuleFootprint() {
+    this.setState({ granuleDate: null, granulePlatform: null });
+    events.trigger('granule-hovered', null);
   }
 
   /**
   * Handle mouse over granule geometry and trigger action to show granule date footprint
   *
-  * @param {Object} granuleFootprints
-  * @param {Object} map
-  * @param {String} crs
   * @param {Array} pixels
   * @param {Array} coord
-  *
-  * @return {Boolean} to indicate if valid for parent mouseMove function
   */
-  handleGranuleHover = (crs, pixels, mouseCoords) => {
+  handleGranuleHover = (pixels, mouseCoords) => {
     const {
       compareState,
       granulePlatform,
@@ -67,90 +77,89 @@ export class VectorInteractions extends React.Component {
       swipeOffset,
       visibleExtent,
     } = this.props;
-    const { active, activeString } = compareState;
+    const { active: compareActive, activeString } = compareState;
     const polygon = new OlGeomPolygon([]);
     let toggledGranuleFootprint;
 
     // only allow hover footprints on selected side of A/B comparison
-    if (active) {
-      const isOnActiveCompareSide = isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset);
-      if (!isOnActiveCompareSide) {
-        events.trigger('granule-hovered', null);
-        return false;
-      }
+    if (compareActive && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
+      return;
     }
 
     // check if coordinates and polygon extent are within and not exceeding max extent
     Object
       .keys(granuleFootprints)
-      .map((key) => ({ [key]: granuleFootprints[key] }))
-      .forEach((footprint) => {
-        const [date] = Object.keys(footprint);
-        const [points] = Object.values(footprint);
+      .forEach((date) => {
+        const points = granuleFootprints[date];
         polygon.setCoordinates([points]);
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
           events.trigger('granule-hovered', granulePlatform, date);
+          this.setState({ granulePlatform, granuleDate: date });
         }
       });
 
     if (!toggledGranuleFootprint) {
-      events.trigger('granule-hovered', granulePlatform, null);
+      this.clearGranuleFootprint();
     }
-    return true;
   }
 
-  mouseOut() {
+  handleCursorChange(pixel, map, lon, lat) {
     const {
-      granulePlatform,
+      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
     } = this.props;
-    events.trigger('granule-hovered', granulePlatform);
-  }
+    const hasFeatures = map.hasFeatureAtPixel(pixel);
 
-  mouseMove(event, map, crs) {
-    const {
-      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj, granuleFootprints,
-    } = this.props;
-
-    if (measureIsActive || isCoordinateSearchActive) {
-      return;
-    }
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
-
-    // handle granule footprint hover, will break out with false return if on wrong compare A/B side
-    if (granuleFootprints) {
-      const isValidGranule = this.handleGranuleHover(crs, pixels, coord);
-      if (!isValidGranule) {
-        return;
-      }
-    }
-
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
-      return;
-    }
-    const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+      map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         const def = lodashGet(layer, 'wv.def');
         const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixels));
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType()) || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
+        if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
       if (isActiveLayer) {
         changeCursor(true);
-        return true;
       }
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
+  }
+
+  moveEnd() {
+    const { granuleDate, granulePlatform } = this.state;
+    if (granuleDate && granulePlatform) {
+      events.trigger('granule-hover-update', granulePlatform, granuleDate);
+    }
+  }
+
+  mouseOut = () => {
+    this.mouseMove.cancel();
+    events.trigger('granule-hovered', null);
+  }
+
+  mouseMove({ pixel }, map, crs) {
+    const {
+      isCoordinateSearchActive, measureIsActive, granuleFootprints,
+    } = this.props;
+    const coord = map.getCoordinateFromPixel(pixel);
+    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
+
+    if (measureIsActive || isCoordinateSearchActive) {
+      return;
+    }
+    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
+      return;
+    }
+    if (granuleFootprints) {
+      this.handleGranuleHover(pixel, coord);
+    }
+    this.handleCursorChange(pixel, map, lon, lat);
   }
 
   singleClick(e, map) {

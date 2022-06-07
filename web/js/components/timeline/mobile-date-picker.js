@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';
 import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
-import HoverTooltip from '../util/hover-tooltip';
 
 // https://www.npmjs.com/package/react-mobile-datepicker
 // configs for date order, caption, and date step
@@ -152,7 +151,6 @@ class MobileDatePicker extends Component {
     const {
       date,
       hasSubdailyLayers,
-      isMobile,
     } = this.props;
     const displayDate = getDisplayDate(date, hasSubdailyLayers);
 
@@ -163,13 +161,9 @@ class MobileDatePicker extends Component {
             className="mobile-date-picker-select-btn"
             onClick={this.handleClickDateButton}
           >
-            <HoverTooltip
-              isMobile={isMobile}
-              labelText="Select the date"
-              placement="top"
-              target=".mobile-date-picker-select-btn"
-            />
-            {displayDate}
+            <div className="mobile-date-picker-select-btn-text">
+              <span>{displayDate}</span>
+            </div>
           </div>
           <DatePicker
             dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
@@ -196,7 +190,6 @@ MobileDatePicker.propTypes = {
   date: PropTypes.object,
   endDateLimit: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
-  isMobile: PropTypes.bool,
   onDateChange: PropTypes.func,
   startDateLimit: PropTypes.string,
 };

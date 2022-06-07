@@ -334,54 +334,69 @@ export const granuleFootprint = (map) => {
     useSpatialIndex: false,
   });
 
-  const getVectorLayer = (text) => new OlVectorLayer({
-    className: 'granule-map-footprint',
-    source: vectorSource,
-    style: [
-      new OlStyle({
-        fill: new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }),
-        stroke: new OlStyleStroke({
-          color: 'rgb(0, 123, 255, 0.65)',
-          width: 3,
+  const getVectorLayer = (text, showFill) => {
+    const fill = showFill ? new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }) : null;
+    return new OlVectorLayer({
+      className: 'granule-map-footprint',
+      source: vectorSource,
+      style: [
+        new OlStyle({
+          fill,
+          stroke: new OlStyleStroke({
+            color: 'rgb(0, 123, 255, 0.65)',
+            width: 3,
+          }),
+          text: new OlText({
+            textAlign: 'center',
+            text,
+            font: '18px monospace',
+            fill: new OlStyleFill({ color: 'white' }),
+            stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+            overflow: true,
+          }),
         }),
-        text: new OlText({
-          textAlign: 'center',
-          text,
-          font: '18px monospace',
-          fill: new OlStyleFill({ color: 'white' }),
-          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
-          overflow: true,
-        }),
-      }),
-    ],
-  });
+      ],
+    });
+  };
 
-  const drawFootprint = (granuleGeometry, date) => {
-    if (currentGranule[date]) {
-      return;
-    }
-    const clearGranule = () => {
-      currentGranule = {};
-      map.removeLayer(vectorLayer);
-      vectorSource.clear();
-    };
-    if (!currentGranule[date]) {
-      clearGranule();
-    }
-    if (!granuleGeometry || !date) {
-      clearGranule();
-      return;
-    }
-    currentGranule[date] = true;
-    const geometry = new OlGeomPolygon([granuleGeometry]);
+  const removeFootprint = () => {
+    currentGranule = {};
+    map.removeLayer(vectorLayer);
+    vectorSource.clear();
+  };
+
+  const drawFootprint = (points, date) => {
+    const geometry = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({ geometry });
+    const showFill = map.getView().getZoom() < 3;
+    const newVectorLayer = getVectorLayer(date, showFill);
     vectorSource.addFeature(featureFootprint);
-    const newVectorLayer = getVectorLayer(date);
     vectorLayer = newVectorLayer;
     map.addLayer(vectorLayer);
   };
 
+  const addFootprint = (points, date) => {
+    if (currentGranule[date]) {
+      return;
+    }
+    if (!points || !date) {
+      removeFootprint();
+      return;
+    }
+    if (!currentGranule[date]) {
+      removeFootprint();
+    }
+    currentGranule[date] = true;
+    drawFootprint(points, date);
+  };
+
+  const updateFootprint = (points, date) => {
+    removeFootprint();
+    drawFootprint(points, date);
+  };
+
   return {
-    drawFootprint,
+    addFootprint,
+    updateFootprint,
   };
 };

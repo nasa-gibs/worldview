@@ -36,7 +36,6 @@ import mapCompare from './compare/compare';
 import { granuleFootprint } from './granule/util';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { CHANGE_TAB } from '../modules/sidebar/constants';
 import {
   REMOVE_MARKER,
   SET_MARKER,
@@ -160,15 +159,6 @@ export default function mapui(models, config, store) {
         });
         return;
       }
-      case CHANGE_TAB: {
-        const { sidebar, proj } = state;
-        const { activeTab, previousTab } = sidebar;
-        const dataDownloadTabSwitched = activeTab === 'download' || previousTab === 'download';
-        if (proj.id === 'geographic' && dataDownloadTabSwitched) {
-          return reloadLayers();
-        }
-        return;
-      }
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
@@ -179,7 +169,6 @@ export default function mapui(models, config, store) {
             flyToNewExtent(extent, rotate);
           }
         }, 200);
-
         return;
       }
       case layerConstants.REMOVE_GROUP:
@@ -207,6 +196,7 @@ export default function mapui(models, config, store) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
+      case layerConstants.ADD_LAYERS_FOR_EVENT:
         return setTimeout(reloadLayers, 100);
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
@@ -242,7 +232,7 @@ export default function mapui(models, config, store) {
         return updateDate(action.outOfStep);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
-        updateDate();
+        updateLayerVisibilities();
         break;
       }
       case dateConstants.ARROW_DOWN:
@@ -253,14 +243,24 @@ export default function mapui(models, config, store) {
     }
   };
 
-  const onGranuleHover = (instrument, date) => {
+  const onGranuleHover = (platform, date, update) => {
     const state = store.getState();
     const proj = self.selected.getView().getProjection().getCode();
     let geometry;
-    if (instrument && date) {
+    if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    return granuleFootprints[proj].drawFootprint(geometry, date);
+    granuleFootprints[proj].addFootprint(geometry, date);
+  };
+
+  const onGranuleHoverUpdate = (platform, date) => {
+    const state = store.getState();
+    const proj = self.selected.getView().getProjection().getCode();
+    let geometry;
+    if (platform && date) {
+      geometry = getActiveGranuleFootPrints(state)[date];
+    }
+    granuleFootprints[proj].updateFootprint(geometry, date);
   };
 
   /**
@@ -300,6 +300,7 @@ export default function mapui(models, config, store) {
     });
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('granule-hovered', onGranuleHover);
+    events.on('granule-hover-update', onGranuleHoverUpdate);
     window.addEventListener('orientationchange', () => {
       setTimeout(() => { updateProjection(true); }, 200);
     });
@@ -649,7 +650,6 @@ export default function mapui(models, config, store) {
       });
       const createdLayers = await Promise.all(layerPromises);
       lodashEach(createdLayers, (l) => { map.addLayer(l); });
-      updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -1223,7 +1223,6 @@ export default function mapui(models, config, store) {
       }
     });
     map.on('moveend', (e) => {
-      events.trigger('map:moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
@@ -1261,28 +1260,27 @@ export default function mapui(models, config, store) {
    * @todo move this component to another Location
    */
   function createMousePosSel(map) {
-    const throttledOnMouseMove = lodashThrottle((e) => {
+    const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
       const state = store.getState();
-      const { browser, locationSearch, sidebar } = state;
+      const {
+        events, browser, locationSearch, sidebar, animation, measure,
+      } = state;
       const { isCoordinateSearchActive } = locationSearch;
       const isMobile = browser.lessThan.medium;
+      const coords = map.getCoordinateFromPixel(pixel);
+      const isEventsTabActive = typeof events !== 'undefined' && events.active;
+      const isMapAnimating = animation.isPlaying;
+
       if (self.mapIsbeingZoomed) return;
+      if (self.mapIsbeingDragged) return;
       if (compareMapUi && compareMapUi.dragging) return;
       if (isMobile) return;
-      if (state.measure.isActive) return;
+      if (measure.isActive) return;
       if (isCoordinateSearchActive) return;
-
-      const pixels = map.getEventPixel(e);
-      const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
-
-      if (self.mapIsbeingDragged) return;
-      // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
-      const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
-      const isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      runningdata.newPoint(pixels, map);
+      runningdata.newPoint(pixel, map);
     }, 300);
 
     events.on('map:mousemove', throttledOnMouseMove);

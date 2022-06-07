@@ -60,8 +60,6 @@
                       "settings": [
                           "AMSRE_Surface_Precipitation_Rate_Day",
                           "AMSRE_Surface_Precipitation_Rate_Night",
-                          "AMSRE_Surface_Rain_Rate_Day",
-                          "AMSRE_Surface_Rain_Rate_Night",
                           "OrbitTracks_Aqua_Ascending",
                           "OrbitTracks_Aqua_Descending"
                       ]
@@ -177,7 +175,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/Precipitation",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Precipitation_Bias_Corrected_Monthly",
