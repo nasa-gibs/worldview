@@ -9,18 +9,28 @@ import {
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import { getActiveLayersMap } from '../../../modules/layers/selectors';
 
-const OrbitTracksToggle = (props) => {
+const AssociatedLayersToggle = (props) => {
   const {
-    trackLayers,
+    associatedLayers,
     addLayer,
     removeLayer,
     activeLayers,
   } = props;
 
+  const getTitle = (layer) => {
+    const [splitTitle] = layer.title.split('(');
+    if (layer.type === 'granule') {
+      return `Granule - ${splitTitle}`;
+    } if (layer.track) {
+      return `Orbit Track - ${getOrbitTrackTitle(layer)}`;
+    }
+    return `Daily Composite - ${splitTitle}`;
+  };
+
   return (
     <div className="layer-orbit-tracks settings-component">
-      <h2 className="wv-header"> Orbit Tracks </h2>
-      { trackLayers.map((layer) => {
+      <h2 className="wv-header"> Associated Layers </h2>
+      { associatedLayers.map((layer) => {
         const { id } = layer;
         const isEnabled = !!activeLayers[id];
         const onCheck = () => (isEnabled ? removeLayer(id) : addLayer(id));
@@ -28,10 +38,10 @@ const OrbitTracksToggle = (props) => {
           <Checkbox
             id={id}
             key={id}
-            title="Enable/disable orbit tracks for this layer"
+            title="Enable/disable this layer"
             checked={isEnabled}
             onCheck={onCheck}
-            label={getOrbitTrackTitle(layer)}
+            label={getTitle(layer)}
           />
         );
       }) }
@@ -40,10 +50,13 @@ const OrbitTracksToggle = (props) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { config } = state;
-  const { tracks } = ownProps.layer;
+  const { config: { layers } } = state;
+  const { tracks = [], associatedLayers = [] } = ownProps.layer;
+  const showLayers = associatedLayers
+    .map((id) => layers[id])
+    .concat(tracks.map((id) => layers[id]));
   return {
-    trackLayers: tracks.map((trackName) => config.layers[trackName]),
+    associatedLayers: showLayers,
     activeLayers: getActiveLayersMap(state),
   };
 };
@@ -60,11 +73,11 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OrbitTracksToggle);
+)(AssociatedLayersToggle);
 
-OrbitTracksToggle.propTypes = {
+AssociatedLayersToggle.propTypes = {
   activeLayers: PropTypes.object,
   addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
-  trackLayers: PropTypes.array,
+  associatedLayers: PropTypes.array,
 };
