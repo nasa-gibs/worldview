@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
-import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
+import { debounce as lodashDebounce } from 'lodash';
 import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
