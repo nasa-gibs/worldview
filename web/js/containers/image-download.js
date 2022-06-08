@@ -36,20 +36,25 @@ class ImageDownloadContainer extends Component {
     super(props);
     const { onBoundaryChange, screenHeight, screenWidth } = props;
 
-    const x = screenWidth / 2 - 100;
-    const y = screenHeight / 2 - 100;
-    const x2 = screenWidth / 2 + 100;
-    const y2 = screenHeight / 2 + 100;
-    const bottomLeftLatLong = lodashGet(props, 'boundaries.bottomLeftLatLong') || this.getLatLongFromPixelValue(x, y2);
-    const topRightLatLong = lodashGet(props, 'boundaries.topRightLatLong') || this.getLatLongFromPixelValue(x2, y);
+    const boundaries = props.boundaries || {
+      x: screenWidth / 2 - 100,
+      y: screenHeight / 2 - 100,
+      x2: screenWidth / 2 + 100,
+      y2: screenHeight / 2 + 100,
+    };
+    const {
+      x, y, y2, x2,
+    } = boundaries;
+    const bottomLeftLatLong = this.getLatLongFromPixelValue(x, y2);
+    const topRightLatLong = this.getLatLongFromPixelValue(x2, y);
 
     this.state = {
       fileType: props.fileType,
       resolution: props.resolution,
       isWorldfile: props.isWorldfile,
-      bottomLeftLatLong: lodashGet(props, 'boundaries.bottomLeftLatLong') || this.getLatLongFromPixelValue(x, y2),
-      topRightLatLong: lodashGet(props, 'boundaries.topRightLatLong') || this.getLatLongFromPixelValue(x2, y),
-      boundaries: this.getBoundaries(bottomLeftLatLong, topRightLatLong),
+      bottomLeftLatLong,
+      topRightLatLong,
+      boundaries,
     };
     this.debounceBoundaryStateUpdate = lodashDebounce(onBoundaryChange, 200);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
@@ -128,7 +133,7 @@ class ImageDownloadContainer extends Component {
     const bottomLeftLatLong = this.getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
     const topRightLatLong = this.getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
     this.setState({ bottomLeftLatLong, topRightLatLong, boundaries: newBoundaries });
-    this.debounceBoundaryStateUpdate({ bottomLeftLatLong, topRightLatLong });
+    this.debounceBoundaryStateUpdate(newBoundaries);
   }
 
   render() {
@@ -296,4 +301,5 @@ ImageDownloadContainer.propTypes = {
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  boundaries: PropTypes.object,
 };
