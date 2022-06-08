@@ -74,8 +74,8 @@ const LatLongSelect = (props) => {
               <h4 className="wv-image-input-subtitle">Top Right</h4>
               <div className="field-group field-group-bounding-box-top-right">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Longitude " />
                   <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[3].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={3} title="max Latitude" />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Longitude " />
                 </div>
               </div>
             </div>
@@ -85,8 +85,8 @@ const LatLongSelect = (props) => {
               <p className="wv-image-input-subtitle">Bottom Left</p>
               <div className="field-group field-group-bounding-box-bottom-left">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Longitude" />
                   <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[1].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={1} title="min Latitude" />
+                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Longitude" />
                 </div>
               </div>
             </div>
