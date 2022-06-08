@@ -110,7 +110,7 @@ class ImageDownloadContainer extends Component {
     const topRightLatLong = [coordsArray[2], coordsArray[3]];
     const boundaries = this.getBoundaries(bottomLeftLatLong, topRightLatLong);
     this.setState({ bottomLeftLatLong, topRightLatLong, boundaries });
-    this.debounceBoundaryStateUpdate({ bottomLeftLatLong, topRightLatLong });
+    this.debounceBoundaryStateUpdate(boundaries);
   }
 
   /**
