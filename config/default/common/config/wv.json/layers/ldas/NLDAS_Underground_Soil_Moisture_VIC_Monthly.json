@@ -8,7 +8,8 @@
       "tags": "north american land data assimilation system",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "NLDAS_VIC0125_M"
+      "product": "NLDAS_VIC0125_M",
+      "inactive": "true"
     }
   }
 }
