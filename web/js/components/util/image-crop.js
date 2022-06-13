@@ -58,13 +58,8 @@ const Crop = (props) => {
     height,
   });
   const [loading, setLoaded] = useState(true);
-  useEffect(() => {
-    if (loading) {
-      setTimeout(() => setLoaded(false), 300);
-    }
-  });
   const onFinishDrag = (cropBoundaries) => {
-    if (loading) return;
+    if (loading) return setLoaded(false); // Hack -- prevent event from triggering onload
     // https://github.com/DominicTobias/react-image-crop/issues/397
     const changed = cropBoundaries.width && cropBoundaries.width > 0 && cropBoundaries.height && cropBoundaries.height > 0
         && some(pick(cropBoundaries, 'x', 'y', 'width', 'height'),
