@@ -232,7 +232,7 @@ export default function mapui(models, config, store) {
         return updateDate(action.outOfStep);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
-        updateLayerVisibilities();
+        updateDate();
         break;
       }
       case dateConstants.ARROW_DOWN:
