@@ -74,7 +74,6 @@ class ImageDownloadContainer extends Component {
     const { crs } = proj.selected;
     const geoCoordinate = olProj.transform(coordinate, crs, 'EPSG:4326');
 
-    geoCoordinate[0] = Math.abs(geoCoordinate[0]) > 180 ? util.normalizeWrappedLongitude(geoCoordinate[0]) : geoCoordinate[0];
     return geoCoordinate;
   }
 
@@ -170,6 +169,8 @@ class ImageDownloadContainer extends Component {
         proj.selected.resolutions,
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
+    const normalizedBottomLeftLatLong = [util.normalizeWrappedLongitude(bottomLeftLatLong[0]), bottomLeftLatLong[1]];
+    const normalizedTopRightLatLong = [util.normalizeWrappedLongitude(topRightLatLong[0]), topRightLatLong[1]];
 
     return (
       <ErrorBoundary>
@@ -191,7 +192,7 @@ class ImageDownloadContainer extends Component {
           getLayers={getLayers}
           onPanelChange={onPanelChange}
           onLatLongChange={this.onLatLongChange}
-          geoLatLong={[bottomLeftLatLong, topRightLatLong]}
+          geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
         />
         <Crop
           x={x}
@@ -213,8 +214,8 @@ class ImageDownloadContainer extends Component {
             width: x2 - x,
           }}
           coordinates={{
-            bottomLeft: util.formatCoordinate(bottomLeftLatLong),
-            topRight: util.formatCoordinate(topRightLatLong),
+            bottomLeft: util.formatCoordinate(normalizedBottomLeftLatLong),
+            topRight: util.formatCoordinate(normalizedTopRightLatLong),
           }}
           showCoordinates
         />
