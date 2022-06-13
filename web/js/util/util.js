@@ -638,6 +638,7 @@ export default (function(self) {
    * @return normalized longitude value
    */
   self.normalizeWrappedLongitude = function(longitude) {
+    if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
     return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
