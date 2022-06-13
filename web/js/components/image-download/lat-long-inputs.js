@@ -32,7 +32,7 @@ const Input = ({
       } else {
         setInputValue(BoundingBoxArray[index].toFixed(4));
         setInputInvalid(true);
-        setTimeout(() => setInputInvalid(false), 2000);
+        setTimeout(() => setInputInvalid(false), 4000);
       }
     }
   };
@@ -51,7 +51,7 @@ const Input = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      {isInvalid && (<span className="red">invalid input</span>)}
+      {isInvalid && (<span className="red-font invalid">Invalid Input</span>)}
     </div>
   );
 };

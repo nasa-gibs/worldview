@@ -170,6 +170,7 @@ class ImageDownloadContainer extends Component {
         proj.selected.resolutions,
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
+
     return (
       <ErrorBoundary>
         <Panel
