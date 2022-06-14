@@ -10,6 +10,7 @@ import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
 import LatLongSelect from './lat-long-inputs';
+import GlobalSelectCheckbox from './global-select';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -193,6 +194,11 @@ export default class ImageResSelection extends React.Component {
           {filetypeSelect}
           {worldfileSelect}
           <LatLongSelect
+            viewExtent={viewExtent}
+            geoLatLong={geoLatLong}
+            onLatLongChange={onLatLongChange}
+          />
+          <GlobalSelectCheckbox
             viewExtent={viewExtent}
             geoLatLong={geoLatLong}
             onLatLongChange={onLatLongChange}
