@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Cropper from 'react-image-crop';
 import { Portal } from 'react-portal';
@@ -58,6 +58,15 @@ const Crop = (props) => {
     height,
   });
   const [loading, setLoaded] = useState(true);
+
+  useEffect(() => {
+    setCrop({
+      x,
+      y,
+      width,
+      height,
+    });
+  }, [x, y, width, height]);
   const onFinishDrag = (cropBoundaries) => {
     if (loading) return setLoaded(false); // Hack -- prevent event from triggering onload
     // https://github.com/DominicTobias/react-image-crop/issues/397
