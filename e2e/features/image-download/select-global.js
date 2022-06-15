@@ -4,7 +4,6 @@ const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
