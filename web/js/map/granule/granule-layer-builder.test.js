@@ -7,12 +7,15 @@ import granuleLayerBuilder from './granule-layer-builder';
 import { LOADING_START, LOADING_STOP } from '../../modules/loading/constants';
 import { LOADING_GRANULES } from '../../modules/loading/actions';
 import { ADD_GRANULE_LAYER_DATES } from '../../modules/layers/constants';
+import { OPEN_BASIC } from '../../modules/modal/constants';
+
 
 const mockBaseCmrApi = 'mock.cmr.api/';
 const queryString = '?shortName=VJ102MOD&temporal=2019-09-23T00%3A00%3A00.000Z%2C2019-09-25T00%3A00%3A00.000Z&pageSize=2000';
 const cmrGranules = require('../../../mock/cmr_granules.json');
 
-fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules);
+fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules)
+  .mock('*', 404);
 
 const mockStore = configureMockStore([thunk]);
 const config = fixtures.config();
@@ -73,6 +76,24 @@ describe('granule layer builder', () => {
     expect(thirdAction.dates).toEqual(expectedDates);
     expect(Object.keys(thirdAction.granuleFootprints)).toEqual(expectedDates);
     expect(thirdAction.count).toEqual(thirdAction.dates.length);
+  });
+
+  it('dispatches modal open action when CMR unreachable', async () => {
+    const options = {
+      group: 'active',
+      date: new Date(Date.UTC('2016', '08', '24', '08', '54', '00')),
+    };
+    const attributes = {
+      ...options,
+      def: granuleLayerDef,
+    };
+    await createGranuleLayer(granuleLayerDef, attributes, options);
+    const [firstAction, secondAction] = store.getActions();
+
+    expect(firstAction.type).toEqual(LOADING_START);
+    expect(firstAction.key).toEqual(LOADING_GRANULES);
+    // CMR unreachable modal opened
+    expect(secondAction.type).toEqual(OPEN_BASIC);
   });
 
   it('sets expected layer properties', async () => {

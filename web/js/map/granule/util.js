@@ -89,31 +89,19 @@ export const isWithinDateRange = (date, startDate, endDate) => (startDate && end
   ? date.getTime() <= new Date(endDate).getTime() && date.getTime() >= new Date(startDate).getTime()
   : false);
 
-/**
- *
- * @param {*} layer
- * @returns
- */
+
 export const getGranuleFootprints = (layer) => {
   const {
     def, filteredGranules, granuleDates,
   } = layer.wv;
-  const { endDate, startDate, dateRanges } = def;
-
+  const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
 
-  // create geometry object with date:polygons key/value pair filtering out granules outside date range
   return filteredGranules.reduce((dates, { date, polygon }) => {
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
-      // Only include granules that have imagery in this proj (determined by layer dateRanges)
-      const hasImagery = dateRanges.some(
-        ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
-      );
-      if (hasImagery) {
-        dates[date] = polygon;
-      }
+      dates[date] = polygon;
     }
     return dates;
   }, {});
@@ -131,6 +119,7 @@ export const getGranuleFootprints = (layer) => {
   */
 export const getCMRQueryDates = (selectedDate) => {
   // check if selectedDate is before or after 12 to determine date request range
+  const current = new Date();
   const date = new Date(selectedDate);
   const isDateAfterNoon = date.getUTCHours() > 12;
 
@@ -141,14 +130,10 @@ export const getCMRQueryDates = (selectedDate) => {
   const twoDayAfterDate = util.dateAdd(zeroedDate, 'day', 2);
 
   const startQueryDate = dayBeforeDate;
-  let endQueryDate = isDateAfterNoon
-    ? twoDayAfterDate
-    : dayAfterDate;
+  let endQueryDate = isDateAfterNoon ? twoDayAfterDate : dayAfterDate;
 
   // set current date if on leading edge of time coverage
-  endQueryDate = endQueryDate > new Date()
-    ? new Date()
-    : endQueryDate;
+  endQueryDate = endQueryDate > current ? current : endQueryDate;
 
   return {
     startQueryDate,
@@ -307,7 +292,9 @@ export const transformGranulesForProj = (granules, crs) => granules.map((granule
  *
  * @return {Boolean}
  */
-export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
+export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) => {
+  const polygon = new OlGeomPolygon([points]);
+
   const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
   // check is polygon footprint is within max extent, will allow partial corners within max extent
   const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
