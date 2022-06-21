@@ -46,8 +46,6 @@ fi
 
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
-mkdir -p "$BUILD_DIR/vectorstyles"
-mkdir -p "$BUILD_DIR/vectordata"
 
 # If $FETCH_GC is set, make various API requests
 if [ "$FETCH_GC" ] ; then
@@ -76,36 +74,19 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
         "$BUILD_DIR/_wmts"
 fi
 
-# # Run copyVectorStyles.py and move vectorstyles where we want them
-if [ -e "$BUILD_DIR/vectorstyles" ] ; then
-    mkdir -p "$BUILD_DIR"/config/vectorstyles
-    if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
-        cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"/vectorstyles/gc
-    fi
-    "$PYTHON_SCRIPTS_DIR/copyVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/vectorstyles" \
-        "$BUILD_DIR/config/vectorstyles"
-fi
-
-# Run processVectorStyles.py and move vectordata where we want them
-if [ -e "$BUILD_DIR/vectorstyles" ] ; then
+# Run processVectorStyles.py and move vectorstyles where we want them
+if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
-    if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
-        cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"
-    fi
     "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/config/vectorstyles" \
+        "$BUILD_DIR/gc/vectorstyles" \
         "$BUILD_DIR/config/wv.json/vectorstyles"
 fi
 
 # Run processVectorData.py and move vectordata where we want them
-if [ -e "$BUILD_DIR/vectordata" ] ; then
+if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
     mkdir -p "$BUILD_DIR"/config/wv.json/vectordata
-    if [ -d "$BUILD_DIR"/gc/vectordata ] ; then
-        cp -r "$BUILD_DIR"/gc/vectordata "$BUILD_DIR"
-    fi
     "$PYTHON_SCRIPTS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/vectordata" \
+        "$BUILD_DIR/gc/vectordata" \
         "$BUILD_DIR/config/wv.json/vectordata"
 fi
 
@@ -156,7 +137,7 @@ cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 # Validate the options build
 "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
 
-# Fetch preview imagese from WV Snapshots for any layers which they are missing
+# Fetch preview images from WV Snapshots for any layers which they are missing
 "$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
     "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
