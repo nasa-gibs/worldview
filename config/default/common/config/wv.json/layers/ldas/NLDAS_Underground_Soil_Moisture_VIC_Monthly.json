@@ -9,7 +9,7 @@
       "group": "overlays",
       "layergroup": "Soil Moisture",
       "product": "NLDAS_VIC0125_M",
-      "inactive": "true"
+      "inactive": true
     }
   }
 }
