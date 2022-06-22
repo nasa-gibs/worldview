@@ -698,5 +698,6 @@ export default function mapLayerBuilder(config, cache, store) {
   return {
     layerKey,
     createLayer,
+    createLayerWMTS,
   };
 }
