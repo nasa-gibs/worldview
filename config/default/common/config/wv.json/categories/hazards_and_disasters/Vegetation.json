@@ -7,6 +7,7 @@
                 "image": "vegetation.jpg",
                 "description": "",
                 "measurements": [
+                    "Aboveground Biomass",
                     "Corrected Reflectance",
                     "Canopy Characteristics",
                     "Forests, Mangrove",

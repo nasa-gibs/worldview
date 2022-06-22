@@ -8,7 +8,6 @@ import {
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
-import { Polygon as OlGeomPolygon } from 'ol/geom';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import {
@@ -78,7 +77,7 @@ export class VectorInteractions extends React.Component {
       visibleExtent,
     } = this.props;
     const { active: compareActive, activeString } = compareState;
-    const polygon = new OlGeomPolygon([]);
+
     let toggledGranuleFootprint;
 
     // only allow hover footprints on selected side of A/B comparison
@@ -91,8 +90,7 @@ export class VectorInteractions extends React.Component {
       .keys(granuleFootprints)
       .forEach((date) => {
         const points = granuleFootprints[date];
-        polygon.setCoordinates([points]);
-        const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, mouseCoords, visibleExtent);
+        const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
           events.trigger('granule-hovered', granulePlatform, date);
@@ -115,7 +113,9 @@ export class VectorInteractions extends React.Component {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         const def = lodashGet(layer, 'wv.def');
-        const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixel));
+        const layerExtent = layer.get('extent');
+        const pixelCoords = map.getCoordinateFromPixel(pixel);
+        const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType()) || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
