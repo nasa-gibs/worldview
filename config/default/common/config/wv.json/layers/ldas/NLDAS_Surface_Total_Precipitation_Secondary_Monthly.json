@@ -9,7 +9,7 @@
       "group": "overlays",
       "layergroup": "Precipitation Rate",
       "product": "NLDAS_FORB0125_M",
-      "inactive": "true"
+      "inactive": true
     }
   }
 }
