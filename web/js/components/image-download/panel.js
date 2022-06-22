@@ -162,7 +162,7 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
+      getLayers, viewExtent, projection, crs, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
     } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
@@ -197,11 +197,13 @@ export default class ImageResSelection extends React.Component {
             viewExtent={viewExtent}
             geoLatLong={geoLatLong}
             onLatLongChange={onLatLongChange}
+            crs={crs}
           />
           <GlobalSelectCheckbox
             viewExtent={viewExtent}
             geoLatLong={geoLatLong}
             onLatLongChange={onLatLongChange}
+            proj={projection.id}
           />
           <ResTable
             width={width}
@@ -229,6 +231,7 @@ ImageResSelection.defaultProps = {
   worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
+  crs: PropTypes.string,
   date: PropTypes.object,
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,

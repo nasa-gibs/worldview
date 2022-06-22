@@ -105,6 +105,16 @@
   }
 }
 
+.wv-image .wv-checkbox.disabled {
+  opacity: 0.6;
+}
+
+.wv-image .wv-checkbox.disabled,
+.wv-checkbox.disabled .image-gb-checkbox,
+.wv-checkbox.disabled label {
+  cursor: not-allowed;
+}
+
 .wv-image-input-title {
   font-size: 13px;
   padding: 5px 0;

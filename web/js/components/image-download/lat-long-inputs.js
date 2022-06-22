@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as olProj from 'ol/proj';
 import {
   clone as lodashClone,
 } from 'lodash';
@@ -6,14 +7,39 @@ import * as olExtent from 'ol/extent';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
+const isValidExtent = (extent) => {
+  if (extent.length !== 4) return false;
+  if (extent.some((number) => Number.isNaN(number))) return false;
+  return true;
+};
 const Input = ({
-  index, title, BoundingBoxArray, onLatLongChange, inputNumber, viewExtent,
+  index, title, BoundingBoxArray, onLatLongChange, inputNumber, viewExtent, crs,
 }) => {
   const [inputValue, setInputValue] = useState(inputNumber);
   const [isInvalid, setInputInvalid] = useState(false);
   useEffect(() => {
     setInputValue(inputNumber);
   }, [inputNumber]);
+
+  const update = () => {
+    const newInputValue = Number(inputValue);
+    const newArray = lodashClone(BoundingBoxArray);
+    newArray[index] = newInputValue;
+    const geoCoordinate1 = olProj.transform([newArray[0], newArray[1]], 'EPSG:4326', crs);
+    const geoCoordinate2 = olProj.transform([newArray[2], newArray[3]], 'EPSG:4326', crs);
+    const crsCorrectedBox = geoCoordinate1.concat(geoCoordinate2);
+    const { containsExtent } = olExtent;
+
+    if (containsExtent(viewExtent, crsCorrectedBox) && isValidExtent(newArray) && !Number.isNaN(newInputValue)) {
+      onLatLongChange(newArray);
+      setInputInvalid(false);
+    } else {
+      setInputValue(BoundingBoxArray[index].toFixed(4));
+      setInputInvalid(true);
+      setTimeout(() => setInputInvalid(false), 4000);
+    }
+  };
   /**
    * onKeyUp determine if the input if valid and
    * send new value to parent
@@ -24,23 +50,14 @@ const Input = ({
     const entered = Number(keyCode) === 13;
     const tabbed = Number(keyCode) === 9;
     if (entered || tabbed) {
-      const newArray = lodashClone(BoundingBoxArray);
-      newArray[index] = Number(inputValue);
-      const { isEmpty, containsExtent } = olExtent;
-      if (containsExtent(viewExtent, newArray) && !isEmpty(newArray)) {
-        onLatLongChange(newArray);
-      } else {
-        setInputValue(BoundingBoxArray[index].toFixed(4));
-        setInputInvalid(true);
-        setTimeout(() => setInputInvalid(false), 4000);
-      }
+      update();
     }
   };
   return (
     <div className="field col-12 col-sm-6">
       <label htmlFor={`latlong-input-${index}`} className="wv-image-label-lat-lon w-100">{title}</label>
       <input
-        type="number"
+        type="text"
         onKeyDown={onKeyDown}
         name="min-latitude"
         id={`latlong-input-${index}`}
@@ -49,15 +66,18 @@ const Input = ({
         min="-180"
         max="180"
         value={inputValue}
+        onBlur={update}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      {isInvalid && (<span className="red-font invalid">Invalid Input</span>)}
+      {isInvalid && (<span className="red-font invalid">Not Visible</span>)}
     </div>
   );
 };
 
 const LatLongSelect = (props) => {
-  const { onLatLongChange, geoLatLong, viewExtent } = props;
+  const {
+    onLatLongChange, geoLatLong, viewExtent, crs,
+  } = props;
   const BoundingBoxArray = [geoLatLong[0][0], geoLatLong[0][1], geoLatLong[1][0], geoLatLong[1][1]];
   const [showCoordinates, setShowCoordinates] = useState(false);
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
@@ -74,8 +94,8 @@ const LatLongSelect = (props) => {
               <h4 className="wv-image-input-subtitle">Top Right</h4>
               <div className="field-group field-group-bounding-box-top-right">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[3].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={3} title="max Latitude" />
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Longitude " />
+                  <Input crs={crs} viewExtent={viewExtent} inputNumber={BoundingBoxArray[3].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={3} title="max Latitude" />
+                  <Input crs={crs} viewExtent={viewExtent} inputNumber={BoundingBoxArray[2].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={2} title="max Longitude " />
                 </div>
               </div>
             </div>
@@ -85,8 +105,8 @@ const LatLongSelect = (props) => {
               <p className="wv-image-input-subtitle">Bottom Left</p>
               <div className="field-group field-group-bounding-box-bottom-left">
                 <div className="row">
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[1].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={1} title="min Latitude" />
-                  <Input viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Longitude" />
+                  <Input crs={crs} viewExtent={viewExtent} inputNumber={BoundingBoxArray[1].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={1} title="min Latitude" />
+                  <Input crs={crs} viewExtent={viewExtent} inputNumber={BoundingBoxArray[0].toFixed(4).toString()} BoundingBoxArray={BoundingBoxArray} onLatLongChange={onLatLongChange} index={0} title="min Longitude" />
                 </div>
               </div>
             </div>
@@ -105,6 +125,7 @@ LatLongSelect.propTypes = {
   onLatLongChange: func,
   geoLatLong: array,
   viewExtent: array,
+  crs: string,
 };
 Input.propTypes = {
   onLatLongChange: func,
@@ -113,4 +134,5 @@ Input.propTypes = {
   BoundingBoxArray: array,
   inputNumber: string,
   viewExtent: array,
+  crs: string,
 };
