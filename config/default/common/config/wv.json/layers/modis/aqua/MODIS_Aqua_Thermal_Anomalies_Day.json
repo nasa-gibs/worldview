@@ -24,9 +24,6 @@
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],
-      "daynight": [
-        "day"
-      ],
       "transition": true,
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_Day",

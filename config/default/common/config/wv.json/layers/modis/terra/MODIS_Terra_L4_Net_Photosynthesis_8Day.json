@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L4_Net_Photosynthesis_8Day",
       "group": "overlays",
       "layergroup": "Photosynthesis, Net",
-      "product": "MOD17A2H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MOD17A2H"
     }
   }
 }

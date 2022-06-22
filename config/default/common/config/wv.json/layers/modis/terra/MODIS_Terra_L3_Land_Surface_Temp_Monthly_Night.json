@@ -11,9 +11,6 @@
       "product": "MOD11C3",
       "tracks": [
         "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

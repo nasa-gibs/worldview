@@ -9,11 +9,7 @@
       "group": "overlays",
       "layergroup": "Surface Flux",
       "product": "CERES_EBAF-Surface",
-      "inactive": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "inactive": true
     }
   }
 }

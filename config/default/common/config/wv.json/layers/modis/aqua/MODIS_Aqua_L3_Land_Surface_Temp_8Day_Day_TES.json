@@ -11,9 +11,6 @@
       "product": "MYD21A2",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

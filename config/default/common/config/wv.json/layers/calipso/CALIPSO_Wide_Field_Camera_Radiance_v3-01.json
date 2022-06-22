@@ -11,9 +11,6 @@
       "inactive": true,
       "tracks": [
         "OrbitTracks_Calipso_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

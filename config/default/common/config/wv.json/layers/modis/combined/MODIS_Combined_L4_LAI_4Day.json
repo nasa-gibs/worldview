@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Leaf Area Index",
-      "product": "MCD15A3H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MCD15A3H"
     }
   }
 }

@@ -9,10 +9,7 @@
       "layergroup": "Earth at Night",
       "group": "overlays",
       "inactive": true,
-      "wrapX": true,
-      "daynight": [
-        "night"
-      ]
+      "wrapX": true
     }
   }
 }

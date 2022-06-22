@@ -8,11 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Snow Extent",
-      "product": "MYD10A2",
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "product": "MYD10A2"
     }
   }
 }

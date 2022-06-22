@@ -11,9 +11,6 @@
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_SMAP_Descending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

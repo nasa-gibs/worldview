@@ -8,10 +8,7 @@
       "tags": "gpp",
       "group": "overlays",
       "layergroup": "Gross Primary Productivity",
-      "product": "MOD17A2H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MOD17A2H"
     }
   }
 }

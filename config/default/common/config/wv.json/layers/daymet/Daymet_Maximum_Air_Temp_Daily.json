@@ -9,11 +9,7 @@
       "layergroup": "Temperature",
       "product": "Daymet_V3_CFMosaics_1328",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

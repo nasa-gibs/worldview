@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Albedo",
       "product": "MCD43A3",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

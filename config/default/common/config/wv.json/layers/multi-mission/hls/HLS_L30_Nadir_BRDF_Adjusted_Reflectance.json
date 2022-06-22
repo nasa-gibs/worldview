@@ -11,9 +11,6 @@
       "product": "HLSL30",
       "tracks": [
         "OrbitTracks_Landsat-8_Descending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

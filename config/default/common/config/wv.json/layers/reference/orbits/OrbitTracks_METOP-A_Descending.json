@@ -9,9 +9,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_METOP-A_Descending",

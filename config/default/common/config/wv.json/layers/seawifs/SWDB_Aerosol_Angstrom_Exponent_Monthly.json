@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "SWDB_L3M05",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

@@ -8,10 +8,7 @@
       "tags": "lst",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MOD11A2",
-      "daynight": [
-        "night"
-      ]
+      "product": "MOD11A2"
     }
   }
 }

@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Photosynthesis, Net",
-      "product": "MYD17A2H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MYD17A2H"
     }
   }
 }

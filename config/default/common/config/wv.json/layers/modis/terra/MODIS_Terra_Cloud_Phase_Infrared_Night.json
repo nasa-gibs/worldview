@@ -10,9 +10,6 @@
       "product": "MOD06_L2_NIGHT",
       "tracks": [
         "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

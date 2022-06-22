@@ -8,10 +8,7 @@
       "tags": "bm bmng",
       "group": "baselayers",
       "layergroup": "Blue Marble",
-      "wrapX": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapX": true
     }
   }
 }

@@ -11,9 +11,6 @@
       "product": "AU_Land",
       "tracks": [
         "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

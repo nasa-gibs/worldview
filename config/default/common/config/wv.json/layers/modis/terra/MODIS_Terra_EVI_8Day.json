@@ -8,12 +8,9 @@
       "group": "overlays",
       "layergroup": "Vegetation Indices",
       "product": "MOD13Q4N",
-      "daynight": [
-        "day"
-      ],
-       "availability": {
+      "availability": {
         "rollingWindow": 20
-     }
+      }
     }
   }
 }

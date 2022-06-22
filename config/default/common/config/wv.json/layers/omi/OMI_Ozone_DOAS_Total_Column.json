@@ -11,9 +11,6 @@
       "tags": "Differential Absorption Spectroscopy",
       "tracks": [
         "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

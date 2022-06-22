@@ -34,10 +34,6 @@
           }
         }
       },
-      "daynight": [
-        "day",
-        "night"
-      ],
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true

@@ -11,9 +11,6 @@
       "product": "MOD11_L2_NIGHT",
       "tracks": [
         "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

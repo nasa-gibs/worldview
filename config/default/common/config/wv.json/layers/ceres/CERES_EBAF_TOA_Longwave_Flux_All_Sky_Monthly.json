@@ -9,11 +9,7 @@
       "group": "overlays",
       "layergroup": "TOA Flux",
       "product": "CERES_EBAF-TOA",
-      "inactive": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "inactive": true
     }
   }
 }

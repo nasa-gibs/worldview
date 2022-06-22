@@ -9,10 +9,7 @@
       "group": "baselayers",
       "layergroup": "Reflectance",
       "product": "",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

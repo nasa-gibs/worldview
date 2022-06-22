@@ -10,9 +10,6 @@
       "layergroup": "Land Surface Temperature",
       "tracks": [
         "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

@@ -10,9 +10,6 @@
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

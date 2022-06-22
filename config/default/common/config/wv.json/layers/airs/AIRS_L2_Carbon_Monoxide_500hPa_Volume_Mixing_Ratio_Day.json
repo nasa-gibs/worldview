@@ -11,9 +11,6 @@
       "layergroup": "Carbon Monoxide",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

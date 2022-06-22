@@ -12,10 +12,6 @@
       "tracks": [
         "OrbitTracks_Terra_Ascending",
         "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "night",
-        "day"
       ]
     }
   }

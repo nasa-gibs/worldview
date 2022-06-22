@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Radiance",
       "product": "MIL3MRD",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

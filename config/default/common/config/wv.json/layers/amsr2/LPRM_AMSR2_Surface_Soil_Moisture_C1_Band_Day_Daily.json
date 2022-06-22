@@ -11,9 +11,6 @@
       "product": "LPRM_AMSR2_D_SOILM3",
       "tracks": [
         "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

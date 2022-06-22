@@ -22,10 +22,6 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "daynight": [
-        "day",
-        "night"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_All",
         "type": "wms",

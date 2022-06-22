@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_EVI_Monthly",
       "group": "overlays",
       "layergroup": "Vegetation Indices",
-      "product": "MYD13A3",
-      "daynight": [
-        "day"
-      ]
+      "product": "MYD13A3"
     }
   }
 }

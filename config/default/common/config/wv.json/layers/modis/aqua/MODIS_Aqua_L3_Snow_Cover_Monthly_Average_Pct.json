@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Snow Cover",
-      "product": "MYD10CM",
-      "daynight": [
-        "day"
-      ]
+      "product": "MYD10CM"
     }
   }
 }

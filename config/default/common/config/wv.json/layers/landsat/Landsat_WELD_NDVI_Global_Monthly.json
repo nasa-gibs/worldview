@@ -9,10 +9,7 @@
       "group": "baselayers",
       "layergroup": "Vegetation Indices",
       "product": "",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

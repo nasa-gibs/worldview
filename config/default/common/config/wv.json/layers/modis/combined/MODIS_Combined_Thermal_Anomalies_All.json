@@ -36,11 +36,7 @@
             "resolutionBreakPoint": 2048
           }
         }
-      },
-      "daynight": [
-        "day",
-        "night"
-      ]
+      }
     }
   }
 }

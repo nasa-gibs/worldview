@@ -12,9 +12,6 @@
       "layergroup": "Methane",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

@@ -11,9 +11,6 @@
       "product": "SPL3FTP_E",
       "tracks": [
         "OrbitTracks_SMAP_Descending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

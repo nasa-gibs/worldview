@@ -11,9 +11,6 @@
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
-      "daynight": [
-        "day"
-      ],
       "track": "ascending",
       "palette": {
         "id": "OrbitTracks_Sentinel-5P_Ascending",

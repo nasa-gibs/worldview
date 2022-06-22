@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Carbon Monoxide",
       "product": "MOP03JM",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

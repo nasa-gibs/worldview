@@ -10,9 +10,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_NOAA-20_Descending",

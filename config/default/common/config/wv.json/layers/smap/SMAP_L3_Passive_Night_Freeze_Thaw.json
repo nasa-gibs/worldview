@@ -10,9 +10,6 @@
       "product": "SPL3FTP",
       "tracks": [
         "OrbitTracks_SMAP_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

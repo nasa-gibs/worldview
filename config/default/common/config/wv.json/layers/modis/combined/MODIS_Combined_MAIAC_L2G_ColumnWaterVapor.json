@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Water Vapor",
       "product": "",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

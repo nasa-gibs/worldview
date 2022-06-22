@@ -17,9 +17,6 @@
           "source": "GIBS:geographic"
         }
       },
-      "daynight": [
-        "day"
-      ],
       "disableSmartHandoff": true
     }
   }

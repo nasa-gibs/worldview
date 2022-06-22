@@ -11,9 +11,6 @@
       "product": "NMTO3",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

@@ -11,9 +11,6 @@
       "product": "MOP03J",
       "tracks": [
         "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

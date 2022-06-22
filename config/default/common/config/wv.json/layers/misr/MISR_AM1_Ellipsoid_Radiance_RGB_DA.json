@@ -11,9 +11,6 @@
       "product": "MI1B2_ELLIPSOID_DA",
       "tracks": [
         "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

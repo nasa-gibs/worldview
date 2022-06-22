@@ -11,9 +11,6 @@
       "product": "AU_Rain_NRT_R01",
       "tracks": [
         "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

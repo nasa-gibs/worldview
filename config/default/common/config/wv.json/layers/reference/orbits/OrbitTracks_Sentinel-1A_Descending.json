@@ -10,9 +10,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "day"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_Sentinel-1A_Descending",

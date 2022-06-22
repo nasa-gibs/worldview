@@ -9,9 +9,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "day"
-      ],
       "track": "ascending",
       "palette": {
         "id": "OrbitTracks_SAOCOM1-A_Ascending",

@@ -12,9 +12,6 @@
       "inactive": true,
       "tracks": [
         "OrbitTracks_OCO-2_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

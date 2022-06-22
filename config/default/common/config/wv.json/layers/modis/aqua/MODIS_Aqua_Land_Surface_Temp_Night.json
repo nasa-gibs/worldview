@@ -11,9 +11,6 @@
       "product": "MYD11_L2_NIGHT",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

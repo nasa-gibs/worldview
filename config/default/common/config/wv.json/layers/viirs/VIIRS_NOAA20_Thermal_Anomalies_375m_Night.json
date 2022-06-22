@@ -23,9 +23,6 @@
       "tracks": [
         "OrbitTracks_NOAA-20_Descending"
       ],
-      "daynight": [
-        "night"
-      ],
       "breakPointLayer": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
         "type": "wms",

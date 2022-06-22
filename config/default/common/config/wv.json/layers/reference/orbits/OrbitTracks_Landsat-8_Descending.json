@@ -10,9 +10,6 @@
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
-      "daynight": [
-        "day"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_Landsat-8_Descending",

@@ -10,9 +10,6 @@
       "layergroup": "Geostationary",
       "product": "",
       "wrapX": true,
-      "daynight": [
-        "day"
-      ],
       "availability": {
         "rollingWindow": 90,
         "historicalRanges": [

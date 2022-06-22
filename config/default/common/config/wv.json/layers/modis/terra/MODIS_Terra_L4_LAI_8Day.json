@@ -8,10 +8,7 @@
       "tags": "lai",
       "group": "overlays",
       "layergroup": "Leaf Area Index",
-      "product": "MOD15A2H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MOD15A2H"
     }
   }
 }

@@ -11,9 +11,6 @@
       "product": "FSNRAD_L2_VIIRS_CRIS_NOAA20",
       "tracks": [
         "OrbitTracks_NOAA-20_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

@@ -11,9 +11,6 @@
       "tags": "aod",
       "tracks": [
         "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

@@ -11,9 +11,6 @@
       "product": "VNP02IMG_NRT",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

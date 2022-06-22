@@ -12,9 +12,6 @@
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],
-      "daynight": [
-        "day"
-      ],
       "disableSmartHandoff": true
     }
   }

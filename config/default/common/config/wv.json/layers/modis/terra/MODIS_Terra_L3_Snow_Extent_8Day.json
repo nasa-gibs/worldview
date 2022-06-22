@@ -7,11 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_Snow_Extent_8Day",
       "group": "overlays",
       "layergroup": "Snow Extent",
-      "product": "MOD10A2",
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "product": "MOD10A2"
     }
   }
 }

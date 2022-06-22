@@ -11,9 +11,6 @@
       "layergroup": "Temperature",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

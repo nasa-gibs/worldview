@@ -10,10 +10,7 @@
       "layergroup": "Land Surface Temperature",
       "product": "CIESIN_SEDAC_SDEI_LST2013",
       "inactive": true,
-      "wrapX": true,
-      "daynight": [
-        "night"
-      ]
+      "wrapX": true
     }
   }
 }

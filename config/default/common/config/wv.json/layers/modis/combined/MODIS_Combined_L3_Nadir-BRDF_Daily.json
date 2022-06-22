@@ -9,10 +9,7 @@
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MCD43A4",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

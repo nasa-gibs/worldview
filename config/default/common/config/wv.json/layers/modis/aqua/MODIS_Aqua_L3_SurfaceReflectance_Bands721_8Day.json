@@ -8,10 +8,7 @@
       "tags": "lsr m11-i2-i1 721 false color",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
-      "product": "MYD09A1",
-      "daynight": [
-        "day"
-      ]
+      "product": "MYD09A1"
     }
   }
 }

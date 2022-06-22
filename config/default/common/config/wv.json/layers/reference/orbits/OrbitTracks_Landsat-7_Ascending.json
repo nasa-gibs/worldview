@@ -9,9 +9,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "ascending",
       "palette": {
         "id": "OrbitTracks_Landsat-7_Ascending",

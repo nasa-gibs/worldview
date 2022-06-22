@@ -11,9 +11,6 @@
       "layergroup": "Cloud Top Height",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

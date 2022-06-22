@@ -16,10 +16,7 @@
         "geographic": {
           "source": "GIBS:geographic"
         }
-      },
-      "daynight": [
-        "day"
-      ]
+      }
     }
   }
 }

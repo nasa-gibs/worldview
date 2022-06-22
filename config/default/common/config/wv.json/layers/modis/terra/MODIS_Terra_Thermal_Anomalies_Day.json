@@ -25,9 +25,6 @@
       "tracks": [
         "OrbitTracks_Terra_Descending"
       ],
-      "daynight": [
-        "day"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Terra_Thermal_Anomalies_Day",
         "type": "wms",

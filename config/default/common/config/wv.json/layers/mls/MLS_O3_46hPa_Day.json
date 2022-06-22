@@ -11,9 +11,6 @@
       "product": "ML2O3",
       "tracks": [
         "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
       ]
     }
   }

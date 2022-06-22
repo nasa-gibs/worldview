@@ -10,9 +10,6 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_GOSAT-2_Descending",

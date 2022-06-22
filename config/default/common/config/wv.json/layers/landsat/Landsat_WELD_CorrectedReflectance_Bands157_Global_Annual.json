@@ -9,10 +9,7 @@
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
       "product": "",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

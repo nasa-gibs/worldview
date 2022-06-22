@@ -13,10 +13,6 @@
         "immutable": true
       },
       "wrapX": true,
-      "daynight": [
-        "day",
-        "night"
-      ],
       "availability": {
         "rollingWindow": 90,
         "historicalRanges": [

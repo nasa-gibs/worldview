@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Vegetation Indices",
-      "product": "MYD13A3",
-      "daynight": [
-        "day"
-      ]
+      "product": "MYD13A3"
     }
   }
 }

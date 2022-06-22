@@ -10,9 +10,6 @@
       "product": "SPL2SMP",
       "tracks": [
         "OrbitTracks_SMAP_Ascending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

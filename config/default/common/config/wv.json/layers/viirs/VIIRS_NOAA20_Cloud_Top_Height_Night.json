@@ -10,9 +10,6 @@
       "layergroup": "Cloud Top Height",
       "tracks": [
         "OrbitTracks_NOAA-20_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

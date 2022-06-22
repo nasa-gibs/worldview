@@ -8,10 +8,7 @@
       "tags": "normalized difference vegetation index",
       "group": "overlays",
       "layergroup": "Vegetation Indices",
-      "product": "MIL3MLS",
-      "daynight": [
-        "day"
-      ]
+      "product": "MIL3MLS"
     }
   }
 }

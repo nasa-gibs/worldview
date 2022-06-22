@@ -8,10 +8,7 @@
       "tags": "fpar",
       "group": "overlays",
       "layergroup": "FPAR",
-      "product": "MCD15A3H",
-      "daynight": [
-        "day"
-      ]
+      "product": "MCD15A3H"
     }
   }
 }

@@ -11,9 +11,6 @@
       "product": "FSNRAD_L2_VIIRS_CRIS_SNPP",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
       ]
     }
   }

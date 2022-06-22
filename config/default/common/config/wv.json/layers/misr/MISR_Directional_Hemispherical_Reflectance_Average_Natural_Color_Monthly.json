@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "DHR Reflectance",
       "product": "MIL3MLS",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }
