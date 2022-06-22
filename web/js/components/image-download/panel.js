@@ -195,7 +195,7 @@ export default class ImageResSelection extends React.Component {
           {worldfileSelect}
           <LatLongSelect
             viewExtent={viewExtent}
-            geoLatLong={geoLatLong}
+            geoLatLong={crs === 'geographic' ? lonlats : geoLatLong}
             onLatLongChange={onLatLongChange}
             crs={crs}
           />

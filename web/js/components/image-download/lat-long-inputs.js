@@ -70,8 +70,6 @@ const Input = ({
         id={`latlong-input-${index}`}
         className="input input-lat-long w-100"
         required
-        min="-180"
-        max="180"
         value={inputValue}
         onBlur={update}
         onChange={(e) => setInputValue(e.target.value)}
