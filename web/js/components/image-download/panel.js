@@ -162,8 +162,9 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, viewExtent, projection, crs, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
+      getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
     } = this.props;
+    const { crs } = projection.selected;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
     const { height } = dimensions;
@@ -195,7 +196,7 @@ export default class ImageResSelection extends React.Component {
           {worldfileSelect}
           <LatLongSelect
             viewExtent={viewExtent}
-            geoLatLong={crs === 'geographic' ? lonlats : geoLatLong}
+            geoLatLong={projection.id === 'geographic' ? lonlats : geoLatLong}
             onLatLongChange={onLatLongChange}
             crs={crs}
           />
@@ -231,7 +232,6 @@ ImageResSelection.defaultProps = {
   worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
-  crs: PropTypes.string,
   date: PropTypes.object,
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,

@@ -187,7 +187,6 @@ class ImageDownloadContainer extends Component {
           date={date}
           datelineMessage={getAlertMessageIfCrossesDateline(date, bottomLeftLatLong, topRightLatLong, proj)}
           url={url}
-          crs={crs}
           viewExtent={viewExtent}
           getLayers={getLayers}
           onPanelChange={onPanelChange}
