@@ -23,18 +23,25 @@ const Input = ({
   }, [inputNumber]);
 
   const update = () => {
-    const newInputValue = Number(inputValue);
-    const newArray = lodashClone(BoundingBoxArray);
-    newArray[index] = newInputValue;
-    const geoCoordinate1 = olProj.transform([newArray[0], newArray[1]], 'EPSG:4326', crs);
-    const geoCoordinate2 = olProj.transform([newArray[2], newArray[3]], 'EPSG:4326', crs);
-    const crsCorrectedBox = geoCoordinate1.concat(geoCoordinate2);
-    const { containsExtent } = olExtent;
+    try {
+      const newInputValue = Number(inputValue);
+      const newArray = lodashClone(BoundingBoxArray);
+      newArray[index] = newInputValue;
+      const geoCoordinate1 = olProj.transform([newArray[0], newArray[1]], 'EPSG:4326', crs);
+      const geoCoordinate2 = olProj.transform([newArray[2], newArray[3]], 'EPSG:4326', crs);
+      const crsCorrectedBox = geoCoordinate1.concat(geoCoordinate2);
+      const { containsExtent } = olExtent;
 
-    if (containsExtent(viewExtent, crsCorrectedBox) && isValidExtent(newArray) && !Number.isNaN(newInputValue)) {
-      onLatLongChange(newArray);
-      setInputInvalid(false);
-    } else {
+      if (containsExtent(viewExtent, crsCorrectedBox) && isValidExtent(newArray) && !Number.isNaN(newInputValue)) {
+        onLatLongChange(newArray);
+        setInputInvalid(false);
+      } else {
+        setInputValue(BoundingBoxArray[index].toFixed(4));
+        setInputInvalid(true);
+        setTimeout(() => setInputInvalid(false), 4000);
+      }
+    } catch (e) {
+      console.warn(e);
       setInputValue(BoundingBoxArray[index].toFixed(4));
       setInputInvalid(true);
       setTimeout(() => setInputInvalid(false), 4000);
