@@ -121,6 +121,7 @@ DateLines.propTypes = {
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,
+  hideText: PropTypes.bool,
 };
 
 export default connect(
