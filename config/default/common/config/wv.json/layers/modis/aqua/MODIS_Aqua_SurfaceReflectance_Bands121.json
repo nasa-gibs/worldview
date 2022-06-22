@@ -9,10 +9,7 @@
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MYD09GQ",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

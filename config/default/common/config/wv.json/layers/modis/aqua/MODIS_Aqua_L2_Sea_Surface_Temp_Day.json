@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Sea Surface Temperature",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Brightness Temperature",
       "product": "FSNRAD_L2_VIIRS_CRIS_NOAA20",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

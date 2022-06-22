@@ -8,10 +8,7 @@
       "tags": "jpss jpss-1",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "",
-      "tracks": [
-        "OrbitTracks_NOAA-20_Descending"
-      ]
+      "product": ""
     }
   }
 }

@@ -10,11 +10,7 @@
       "layergroup": "Lightning",
       "product": "",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_ISS_Ascending",
-        "OrbitTracks_ISS_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

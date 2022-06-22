@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "product": "OMNO2d",
-      "tags": "no2",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ]
+      "tags": "no2"
     }
   }
 }

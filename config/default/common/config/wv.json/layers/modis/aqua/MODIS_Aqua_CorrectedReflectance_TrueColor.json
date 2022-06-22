@@ -9,9 +9,6 @@
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
       "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"

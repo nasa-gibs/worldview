@@ -8,10 +8,7 @@
       "tags": "lst",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

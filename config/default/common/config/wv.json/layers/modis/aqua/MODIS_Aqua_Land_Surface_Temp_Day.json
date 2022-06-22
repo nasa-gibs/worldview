@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "MYD11_L2_DAY",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

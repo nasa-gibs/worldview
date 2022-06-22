@@ -8,10 +8,7 @@
       "tags": "lst",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MYD11_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ]
+      "product": "MYD11_L2_NIGHT"
     }
   }
 }

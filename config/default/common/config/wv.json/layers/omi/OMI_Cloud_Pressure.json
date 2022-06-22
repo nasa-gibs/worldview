@@ -8,9 +8,6 @@
       "group": "overlays",
       "layergroup": "Cloud Pressure",
       "product": "OMCLDRR",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
       "palette": {
         "recommended": [
           "blue_4"

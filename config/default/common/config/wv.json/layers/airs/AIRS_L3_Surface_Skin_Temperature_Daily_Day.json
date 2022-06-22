@@ -9,10 +9,7 @@
       "group": "overlays",
       "product": "AIRS3STD",
       "wrapadjacentdays": true,
-      "layergroup": "Temperature",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "layergroup": "Temperature"
     }
   }
 }

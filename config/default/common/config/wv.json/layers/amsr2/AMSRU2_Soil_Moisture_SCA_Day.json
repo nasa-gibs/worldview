@@ -8,10 +8,7 @@
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "AU_Land",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Ascending"
-      ]
+      "product": "AU_Land"
     }
   }
 }

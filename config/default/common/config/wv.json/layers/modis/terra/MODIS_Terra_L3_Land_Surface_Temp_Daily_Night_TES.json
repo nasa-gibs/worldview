@@ -8,10 +8,7 @@
       "tags": "lst TES",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MOD21A1",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ]
+      "product": "MOD21A1"
     }
   }
 }

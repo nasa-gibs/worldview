@@ -8,10 +8,7 @@
       "tags": "so2 sulphur",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
-      "product": "ML2SO2",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ]
+      "product": "ML2SO2"
     }
   }
 }

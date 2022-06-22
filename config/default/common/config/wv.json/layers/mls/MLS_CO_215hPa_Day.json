@@ -8,10 +8,7 @@
       "tags": "co",
       "group": "overlays",
       "layergroup": "Carbon Monoxide",
-      "product": "ML2CO",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ]
+      "product": "ML2CO"
     }
   }
 }

@@ -7,10 +7,7 @@
       "description": "mls/MLS_Temperature_46hPa_Day",
       "group": "overlays",
       "layergroup": "Temperature",
-      "product": "ML2T",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ]
+      "product": "ML2T"
     }
   }
 }

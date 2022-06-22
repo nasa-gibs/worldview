@@ -9,9 +9,6 @@
       "layergroup": "Sea Ice",
       "product": "MOD29",
       "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"

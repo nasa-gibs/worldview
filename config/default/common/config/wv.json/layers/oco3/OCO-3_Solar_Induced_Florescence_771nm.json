@@ -9,11 +9,7 @@
       "group": "overlays",
       "layergroup": "Solar Induced Chlorophyll Fluorescence",
       "wrapadjacentdays": true,
-      "inactive": true,
-      "tracks": [
-        "OrbitTracks_ISS_Ascending",
-        "OrbitTracks_ISS_Descending"
-      ]
+      "inactive": true
     }
   }
 }

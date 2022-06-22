@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "MOD04_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -7,7 +7,7 @@ const removeKeys = [
   // 'title',
   // 'subtitle',
   'daynight',
-  // 'tracks',
+  'tracks',
 ];
 
 const errCallback = (err) => {

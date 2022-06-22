@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
       "product": "MOD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

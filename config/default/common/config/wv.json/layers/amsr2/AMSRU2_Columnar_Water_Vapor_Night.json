@@ -8,10 +8,7 @@
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "product": "AU_Rain_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ]
+      "product": "AU_Rain_NRT_R01"
     }
   }
 }

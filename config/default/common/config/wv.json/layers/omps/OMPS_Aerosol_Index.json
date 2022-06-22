@@ -9,10 +9,7 @@
       "group": "overlays",
       "wrapadjacentdays": true,
       "layergroup": "Aerosol Index",
-      "product": "OMPS_NPP_NMMIEAI_L2",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "product": "OMPS_NPP_NMMIEAI_L2"
     }
   }
 }

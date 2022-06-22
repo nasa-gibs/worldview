@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Ozone",
       "product": "OMTO3e",
-      "tags": "Total Ozone Mapping Spectrometer",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ]
+      "tags": "Total Ozone Mapping Spectrometer"
     }
   }
 }

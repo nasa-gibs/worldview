@@ -8,10 +8,7 @@
       "tags": "lst TES",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MYD21A1",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ]
+      "product": "MYD21A1"
     }
   }
 }

@@ -8,10 +8,7 @@
       "tags": "jpss jpss-1",
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

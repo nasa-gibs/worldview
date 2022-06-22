@@ -8,10 +8,7 @@
       "tags": "cirrus",
       "group": "overlays",
       "layergroup": "Cirrus Reflectance",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

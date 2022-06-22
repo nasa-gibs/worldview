@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
       "product": "CLDPROP_L2_VIIRS_SNPP",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

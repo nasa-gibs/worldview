@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Snow Cover",
       "product": "MOD10A1",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

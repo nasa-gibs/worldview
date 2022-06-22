@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Aerosol Type",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

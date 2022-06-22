@@ -51,10 +51,10 @@ const AssociatedLayersToggle = (props) => {
 
 const mapStateToProps = (state, ownProps) => {
   const { config: { layers } } = state;
-  const { tracks = [], associatedLayers = [] } = ownProps.layer;
+  const { orbitTracks = [], associatedLayers = [] } = ownProps.layer;
   const showLayers = associatedLayers
     .map((id) => layers[id])
-    .concat(tracks.map((id) => layers[id]));
+    .concat(orbitTracks.map((id) => layers[id]));
   return {
     associatedLayers: showLayers,
     activeLayers: getActiveLayersMap(state),

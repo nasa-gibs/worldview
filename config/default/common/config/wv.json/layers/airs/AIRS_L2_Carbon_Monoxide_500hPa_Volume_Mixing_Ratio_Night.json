@@ -8,10 +8,7 @@
       "tags": "CO",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": "Carbon Monoxide",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ]
+      "layergroup": "Carbon Monoxide"
     }
   }
 }

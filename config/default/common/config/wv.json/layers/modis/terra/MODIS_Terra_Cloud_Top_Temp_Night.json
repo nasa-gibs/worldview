@@ -8,9 +8,6 @@
       "group": "overlays",
       "layergroup": "Cloud Top Temperature",
       "product": "MOD06_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
       "palette": {
         "recommended": [
           "purple_2",

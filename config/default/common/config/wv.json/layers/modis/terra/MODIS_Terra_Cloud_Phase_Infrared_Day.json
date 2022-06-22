@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Cloud Phase",
       "product": "MOD06_L2_DAY",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

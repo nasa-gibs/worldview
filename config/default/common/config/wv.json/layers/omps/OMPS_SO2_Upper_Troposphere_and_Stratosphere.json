@@ -9,10 +9,7 @@
       "group": "overlays",
       "wrapadjacentdays": true,
       "layergroup": "Sulfur Dioxide",
-      "product": "NMSO2-PCA-L2",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "product": "NMSO2-PCA-L2"
     }
   }
 }

@@ -7,10 +7,7 @@
       "description": "amsre/AMSRE_Columnar_Water_Vapor_Day",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "inactive": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "inactive": true
     }
   }
 }

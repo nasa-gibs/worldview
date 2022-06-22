@@ -7,10 +7,7 @@
       "description": "viirs/VIIRS_NOAA20_Clear_Sky_Confidence_Night",
       "tags": "cloud mask jpss jpss-1",
       "group": "overlays",
-      "layergroup": "Clear Sky Confidence",
-      "tracks": [
-        "OrbitTracks_NOAA-20_Descending"
-      ]
+      "layergroup": "Clear Sky Confidence"
     }
   }
 }

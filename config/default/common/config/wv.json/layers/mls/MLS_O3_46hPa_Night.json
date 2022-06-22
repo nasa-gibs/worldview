@@ -8,10 +8,7 @@
       "tags": "o3",
       "group": "overlays",
       "layergroup": "Ozone",
-      "product": "ML2O3",
-      "tracks": [
-        "OrbitTracks_Aura_Descending"
-      ]
+      "product": "ML2O3"
     }
   }
 }

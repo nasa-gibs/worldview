@@ -22,9 +22,6 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Terra_Thermal_Anomalies_Day",
         "type": "wms",

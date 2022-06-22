@@ -19,9 +19,6 @@
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ],
       "transition": true,
       "breakPointLayer": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",

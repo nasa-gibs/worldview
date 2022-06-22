@@ -25,9 +25,6 @@
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
       "breakPointLayer": {
         "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
         "type": "wms",

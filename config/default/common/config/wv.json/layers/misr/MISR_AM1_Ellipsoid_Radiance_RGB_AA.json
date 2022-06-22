@@ -8,10 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Radiance",
-      "product": "MI1B2_ELLIPSOID_AA",
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "product": "MI1B2_ELLIPSOID_AA"
     }
   }
 }

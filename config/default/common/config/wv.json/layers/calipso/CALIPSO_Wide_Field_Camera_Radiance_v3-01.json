@@ -8,10 +8,7 @@
       "group": "overlays",
       "layergroup": "Radiance",
       "product": "",
-      "inactive": true,
-      "tracks": [
-        "OrbitTracks_Calipso_Ascending"
-      ]
+      "inactive": true
     }
   }
 }

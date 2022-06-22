@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Chlorophyll A",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

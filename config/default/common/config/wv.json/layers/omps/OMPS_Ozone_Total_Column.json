@@ -8,10 +8,7 @@
       "tags": "O3",
       "group": "overlays",
       "layergroup": "Ozone",
-      "product": "NMTO3",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ]
+      "product": "NMTO3"
     }
   }
 }

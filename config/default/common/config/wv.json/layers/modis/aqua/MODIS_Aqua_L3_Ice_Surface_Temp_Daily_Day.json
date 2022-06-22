@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Ice Surface Temperature",
       "product": "MYD29P1D",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

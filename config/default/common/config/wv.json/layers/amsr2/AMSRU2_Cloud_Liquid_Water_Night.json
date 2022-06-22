@@ -8,10 +8,7 @@
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Cloud Liquid Water",
-      "product": "",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ]
+      "product": ""
     }
   }
 }

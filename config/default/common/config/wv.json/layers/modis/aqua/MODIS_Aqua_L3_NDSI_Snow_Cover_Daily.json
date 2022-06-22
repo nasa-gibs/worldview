@@ -9,10 +9,7 @@
       "group": "overlays",
       "layergroup": "Snow Cover",
       "product": "MYD10A1",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -7,10 +7,7 @@
       "description": "reference/MODIS_Terra_Data_No_Data",
       "group": "overlays",
       "layergroup": "Areas of No Data (mask)",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }
