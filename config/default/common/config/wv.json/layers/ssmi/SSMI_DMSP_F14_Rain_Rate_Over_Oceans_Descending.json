@@ -8,8 +8,7 @@
       "tags": "precipitation",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "rssmif14d",
-      "inactive": true
+      "product": "rssmif14d"
     }
   }
 }

@@ -456,24 +456,28 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     if (!def) {
       return;
     }
-    if (def.startDate) {
+    const {
+      startDate, endDate, ongoing, futureTime,
+    } = def;
+
+    if (startDate) {
       range = true;
-      const start = util.parseDateUTC(def.startDate).getTime();
+      const start = util.parseDateUTC(startDate).getTime();
       min = Math.min(min, start);
     }
 
     // For now, we assume that any layer with an end date is
     // an ongoing product unless it is marked as inactive.
-    if (def.futureTime && def.endDate) {
+    if (futureTime && endDate) {
       range = true;
-      max = util.parseDateUTC(def.endDate).getTime();
+      max = util.parseDateUTC(endDate).getTime();
       maxDates.push(new Date(max));
-    } else if (def.inactive && def.endDate) {
+    } else if (!ongoing && endDate) {
       range = true;
-      const end = util.parseDateUTC(def.endDate).getTime();
+      const end = util.parseDateUTC(endDate).getTime();
       max = Math.max(max, end);
       maxDates.push(new Date(max));
-    } else if (def.endDate) {
+    } else if (endDate) {
       range = true;
       max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
@@ -482,11 +486,11 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     // If there is a start date but no end date, this is a
     // product that is currently being created each day, set
     // the max day to today.
-    if (def.futureTime && !def.endDate) {
+    if (futureTime && !endDate) {
       // Calculate endDate + parsed futureTime from layer JSON
       max = getFutureLayerEndDate(def);
       maxDates.push(new Date(max));
-    } else if (def.startDate && !def.endDate) {
+    } else if (startDate && !endDate) {
       max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
     }

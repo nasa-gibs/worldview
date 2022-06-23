@@ -8,8 +8,7 @@
       "tags": "north american land data assimilation system rain",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "NLDAS_FORB0125_M",
-      "inactive": true
+      "product": "NLDAS_FORB0125_M"
     }
   }
 }

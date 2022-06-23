@@ -7,8 +7,7 @@
       "description": "amsre/AMSRE_Soil_Moisture_SCA_Day",
       "group": "overlays",
       "tags": "soil moisture sca",
-      "layergroup": "Soil Moisture",
-      "inactive": true
+      "layergroup": "Soil Moisture"
     }
   }
 }

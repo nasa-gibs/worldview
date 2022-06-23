@@ -8,8 +8,7 @@
       "tags": "",
       "layergroup": "Ice Velocity Greenland",
       "product": "NSIDC-0478",
-      "group": "overlays",
-      "inactive": true
+      "group": "overlays"
     }
   }
 }

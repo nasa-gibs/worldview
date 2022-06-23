@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Land Cover",
-      "product": "MCD12Q1",
-      "inactive": true
+      "product": "MCD12Q1"
     }
   }
 }

@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Volcano Hazard",
       "product": "CIESIN_CHRR_NDH_VOLCANO_MRD",
-      "inactive": true,
       "wrapX": true
     }
   }

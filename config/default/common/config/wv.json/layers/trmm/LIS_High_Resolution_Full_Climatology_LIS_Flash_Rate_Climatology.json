@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Lightning",
-      "product": "lohrfc",
-      "inactive": true
+      "product": "lohrfc"
     }
   }
 }

@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Drought Hazard",
       "product": "CIESIN_CHRR_NDH_DROUGHT_HFD",
-      "inactive": true,
       "wrapX": true
     }
   }

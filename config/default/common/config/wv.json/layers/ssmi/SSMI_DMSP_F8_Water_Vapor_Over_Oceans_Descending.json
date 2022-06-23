@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "product": "rssmif08d",
-      "inactive": true
+      "product": "rssmif08d"
     }
   }
 }

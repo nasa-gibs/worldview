@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_GRUMPv1_EXT",
-      "inactive": true,
       "wrapX": true
     }
   }

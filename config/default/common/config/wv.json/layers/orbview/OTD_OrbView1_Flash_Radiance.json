@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Lightning",
       "product": "otdlip",
-      "inactive": true,
       "wrapadjacentdays": true
     }
   }

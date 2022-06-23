@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Flood Hazard",
       "product": "CIESIN_CHRR_NDH_FLOOD_MRD",
-      "inactive": true,
       "wrapX": true
     }
   }

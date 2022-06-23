@@ -8,7 +8,6 @@
       "group": "overlays",
       "product": "AE_SI25",
       "layergroup": "Sea Ice",
-      "inactive": true,
       "palette": {
         "recommended": [
           "blue_4",

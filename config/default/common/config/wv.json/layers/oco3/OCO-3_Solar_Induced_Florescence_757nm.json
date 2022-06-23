@@ -8,8 +8,7 @@
       "tags": "oco3",
       "group": "overlays",
       "layergroup": "Solar Induced Chlorophyll Fluorescence",
-      "wrapadjacentdays": true,
-      "inactive": true
+      "wrapadjacentdays": true
     }
   }
 }

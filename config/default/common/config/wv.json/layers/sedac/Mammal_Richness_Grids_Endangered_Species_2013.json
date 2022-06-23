@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Mammal Richness",
       "product": "CIESIN_SEDAC_SPECIES_MAM_RICH15",
-      "inactive": true,
       "wrapX": true
     }
   }

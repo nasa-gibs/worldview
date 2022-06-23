@@ -8,8 +8,7 @@
       "tags": "corrected, Nadir BRDF Adjusted Reflectance, Bi-directional Reflectance Distribution Function",
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
-      "product": "",
-      "inactive": true
+      "product": ""
     }
   }
 }

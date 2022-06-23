@@ -8,8 +8,7 @@
       "tags": "oco3 co2",
       "group": "overlays",
       "layergroup": "Carbon Dioxide",
-      "wrapadjacentdays": true,
-      "inactive": true
+      "wrapadjacentdays": true
     }
   }
 }

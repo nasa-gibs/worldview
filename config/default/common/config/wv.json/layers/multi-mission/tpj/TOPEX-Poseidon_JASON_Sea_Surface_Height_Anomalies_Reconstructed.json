@@ -8,8 +8,7 @@
       "tags": "ssha podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Height Anomalies",
-      "product": "RECON_SEA_LEVEL_OST_L4_V1",
-      "inactive": true
+      "product": "RECON_SEA_LEVEL_OST_L4_V1"
     }
   }
 }

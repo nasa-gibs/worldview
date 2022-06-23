@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Lightning",
       "product": "lislip",
-      "inactive": true,
       "wrapadjacentdays": true
     }
   }

@@ -8,8 +8,7 @@
       "tags": "ssc podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Currents",
-      "product": "ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST_DAILY",
-      "inactive": true
+      "product": "ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST_DAILY"
     }
   }
 }

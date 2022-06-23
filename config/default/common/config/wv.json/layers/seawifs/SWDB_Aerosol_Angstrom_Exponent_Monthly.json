@@ -8,8 +8,7 @@
       "tags": "swdb",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "SWDB_L3M05",
-      "inactive": true
+      "product": "SWDB_L3M05"
     }
   }
 }

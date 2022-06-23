@@ -8,8 +8,7 @@
       "tags": "rain",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "GPM_2AGPROFTRMMTMI_CLIM",
-      "inactive": true
+      "product": "GPM_2AGPROFTRMMTMI_CLIM"
     }
   }
 }

@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_LULC_PUEXPANS_2030",
-      "inactive": true,
       "wrapX": true
     }
   }

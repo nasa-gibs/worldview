@@ -7,8 +7,7 @@
       "description": "amsre/AMSRE_Soil_Moisture_NPD_Day",
       "group": "overlays",
       "tags": "soil moisture npd",
-      "layergroup": "Soil Moisture",
-      "inactive": true
+      "layergroup": "Soil Moisture"
     }
   }
 }

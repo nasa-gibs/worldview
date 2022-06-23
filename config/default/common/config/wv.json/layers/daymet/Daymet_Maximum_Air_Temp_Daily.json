@@ -8,7 +8,6 @@
       "group": "overlays",
       "layergroup": "Temperature",
       "product": "Daymet_V3_CFMosaics_1328",
-      "inactive": true,
       "wrapadjacentdays": true
     }
   }

@@ -8,8 +8,7 @@
       "tags": "top of atmosphere, cloud radiative effect, energy balanced and filled",
       "group": "overlays",
       "layergroup": "TOA Flux",
-      "product": "CERES_EBAF-TOA",
-      "inactive": true
+      "product": "CERES_EBAF-TOA"
     }
   }
 }

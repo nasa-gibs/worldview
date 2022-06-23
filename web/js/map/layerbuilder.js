@@ -266,9 +266,9 @@ export default function mapLayerBuilder(config, cache, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
-      const { dateRanges, inactive, period } = def;
+      const { dateRanges, ongoing, period } = def;
       let dateRange;
-      if (inactive) {
+      if (!ongoing) {
         dateRange = datesInDateRanges(def, closestDate);
       } else {
         let endDateLimit;

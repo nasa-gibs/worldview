@@ -10,7 +10,6 @@
       "group": "overlays",
       "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
-      "inactive": true,
       "palette": {
         "id": "GRUMP_Settlements",
         "immutable": true

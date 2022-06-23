@@ -6,6 +6,7 @@ const removeKeys = [
   // 'id',
   // 'title',
   // 'subtitle',
+  'inactive',
   'daynight',
   'tracks',
 ];

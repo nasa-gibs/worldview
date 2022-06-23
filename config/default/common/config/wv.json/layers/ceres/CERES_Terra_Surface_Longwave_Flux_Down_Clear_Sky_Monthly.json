@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Surface Flux",
-      "product": "CER_SYN1deg-Month_Terra-MODIS",
-      "inactive": true
+      "product": "CER_SYN1deg-Month_Terra-MODIS"
     }
   }
 }

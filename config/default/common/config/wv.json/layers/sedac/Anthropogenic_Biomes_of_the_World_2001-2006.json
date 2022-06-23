@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Land Cover",
       "product": "CIESIN_SEDAC_ANTHROMES_v1",
-      "inactive": true,
       "wrapX": true
     }
   }

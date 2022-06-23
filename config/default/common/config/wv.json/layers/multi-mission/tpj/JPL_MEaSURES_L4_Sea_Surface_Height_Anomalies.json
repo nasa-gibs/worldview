@@ -8,8 +8,7 @@
       "tags": "ssha podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Height Anomalies",
-      "product": "SEA_SURFACE_HEIGHT_ALT_GRIDS_L4_2SATS_5DAY_6THDEG_V_JPL1812",
-      "inactive": true
+      "product": "SEA_SURFACE_HEIGHT_ALT_GRIDS_L4_2SATS_5DAY_6THDEG_V_JPL1812"
     }
   }
 }

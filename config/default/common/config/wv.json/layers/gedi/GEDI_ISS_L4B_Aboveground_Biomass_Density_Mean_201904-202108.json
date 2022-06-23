@@ -8,8 +8,7 @@
       "tags": "international space station iss mean aboveground biomass density",
       "group": "overlays",
       "layergroup": "Aboveground Biomass",
-      "wrapX": true,
-      "inactive": true
+      "wrapX": true
     }
   }
 }

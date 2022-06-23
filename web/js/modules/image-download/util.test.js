@@ -126,7 +126,7 @@ const mockLayerDefsSubdaily = [
     layergroup: [
       'GOES',
     ],
-    inactive: true,
+    ongoing: false,
     visible: true,
     opacity: 1,
   },

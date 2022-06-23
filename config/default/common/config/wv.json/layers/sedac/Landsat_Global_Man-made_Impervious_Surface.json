@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_ULANDSAT_GMIS_V1",
-      "inactive": true,
       "wrapX": true
     }
   }

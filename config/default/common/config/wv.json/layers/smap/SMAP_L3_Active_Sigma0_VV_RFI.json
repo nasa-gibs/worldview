@@ -7,7 +7,6 @@
       "description": "smap/SMAP_L3_Active_Sigma0_VV_RFI",
       "group": "overlays",
       "layergroup": "Sigma0",
-      "inactive": true,
       "wrapadjacentdays": true
     }
   }

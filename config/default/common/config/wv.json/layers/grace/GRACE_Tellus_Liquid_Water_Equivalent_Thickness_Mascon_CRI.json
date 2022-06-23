@@ -8,8 +8,7 @@
       "tags": "lwet podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Liquid Water Equivalent",
-      "product": "TELLUS_GRACE_MASCON_CRI_GRID_RL06_V1",
-      "inactive": true
+      "product": "TELLUS_GRACE_MASCON_CRI_GRID_RL06_V1"
     }
   }
 }

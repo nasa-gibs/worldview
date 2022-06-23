@@ -8,8 +8,7 @@
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Salinity",
-      "product": "AQUARIUS_L3_SSS_SMI_SEASONAL-CLIMATOLOGY_V5",
-      "inactive": true
+      "product": "AQUARIUS_L3_SSS_SMI_SEASONAL-CLIMATOLOGY_V5"
     }
   }
 }

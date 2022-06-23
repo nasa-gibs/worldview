@@ -6,8 +6,7 @@
       "subtitle": "Aqua / AMSR-E",
       "description": "amsre/AMSRE_Columnar_Water_Vapor_Day",
       "group": "overlays",
-      "layergroup": "Water Vapor",
-      "inactive": true
+      "layergroup": "Water Vapor"
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "international space station iss lidar",
       "group": "overlays",
       "layergroup": "Lidar",
-      "wrapX": true,
-      "inactive": true
+      "wrapX": true
     }
   }
 }

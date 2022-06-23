@@ -8,8 +8,7 @@
       "tags": "international space station iss",
       "group": "overlays",
       "layergroup": "Canopy Characteristics",
-      "wrapX": true,
-      "inactive": true
+      "wrapX": true
     }
   }
 }

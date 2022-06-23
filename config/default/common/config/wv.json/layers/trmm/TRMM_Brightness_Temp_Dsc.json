@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "GPM_1CTRMMTMI",
-      "inactive": true
+      "product": "GPM_1CTRMMTMI"
     }
   }
 }

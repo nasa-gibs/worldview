@@ -8,8 +8,7 @@
       "group": "overlays",
       "layergroup": "Soil Moisture",
       "product": "SPL3SMAP",
-      "wrapadjacentdays": true,
-      "inactive": true
+      "wrapadjacentdays": true
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "adt podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Absolute Dynamic Topography",
-      "product": "AVISO_L4_DYN_TOPO_1DEG_1MO",
-      "inactive": true
+      "product": "AVISO_L4_DYN_TOPO_1DEG_1MO"
     }
   }
 }

@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Particulate Matter",
       "product": "CIESIN_SEDAC_SDEI_PM25_MMSAOD",
-      "inactive": true,
       "wrapX": true
     }
   }

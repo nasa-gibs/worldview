@@ -8,8 +8,7 @@
       "tags": "oco3",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "wrapadjacentdays": true,
-      "inactive": true
+      "wrapadjacentdays": true
     }
   }
 }

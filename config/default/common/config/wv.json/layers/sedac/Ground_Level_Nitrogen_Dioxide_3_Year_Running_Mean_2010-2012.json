@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "product": "CIESIN_SEDAC_SDEI_NO2",
-      "inactive": true,
       "wrapX": true
     }
   }

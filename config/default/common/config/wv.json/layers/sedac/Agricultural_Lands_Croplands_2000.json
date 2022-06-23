@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Land Cover",
       "product": "CIESIN_SEDAC_AGLANDS_CROP2000",
-      "inactive": true,
       "wrapX": true
     }
   }

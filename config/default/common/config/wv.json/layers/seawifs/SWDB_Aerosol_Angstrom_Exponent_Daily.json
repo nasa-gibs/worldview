@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "SWDB_L305",
-      "inactive": true,
       "wrapadjacentdays": true
     }
   }

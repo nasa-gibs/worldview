@@ -9,7 +9,6 @@
       "group": "overlays",
       "layergroup": "Forests, Mangrove",
       "product": "CIESIN_SEDAC_LULC_MANGROVES_2000",
-      "inactive": true,
       "wrapX": true
     }
   }

@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Wind Speed",
-      "product": "rssmif13d",
-      "inactive": true
+      "product": "rssmif13d"
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "DHR Reflectance",
-      "product": "MIL3MLS",
-      "inactive": true
+      "product": "MIL3MLS"
     }
   }
 }

@@ -8,8 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Radiance",
-      "product": "MIL3MRD",
-      "inactive": true
+      "product": "MIL3MRD"
     }
   }
 }
