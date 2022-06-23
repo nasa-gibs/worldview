@@ -213,8 +213,8 @@ class ImageDownloadContainer extends Component {
             width: x2 - x,
           }}
           coordinates={{
-            bottomLeft: util.formatCoordinate(normalizedBottomLeftLatLong),
-            topRight: util.formatCoordinate(normalizedTopRightLatLong),
+            bottomLeft: util.formatCoordinate(bottomLeftLatLong),
+            topRight: util.formatCoordinate(topRightLatLong),
           }}
           showCoordinates
         />

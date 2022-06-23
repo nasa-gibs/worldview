@@ -27,12 +27,13 @@ const Input = ({
       const newInputValue = Number(inputValue);
       const newArray = lodashClone(BoundingBoxArray);
       newArray[index] = newInputValue;
-      const geoCoordinate1 = olProj.transform([newArray[0], newArray[1]], 'EPSG:4326', crs);
-      const geoCoordinate2 = olProj.transform([newArray[2], newArray[3]], 'EPSG:4326', crs);
-      const crsCorrectedBox = geoCoordinate1.concat(geoCoordinate2);
-      const { containsExtent } = olExtent;
+      const crsCorrectedExtent = olProj.transformExtent(newArray, 'EPSG:4326', crs);
+      const { containsExtent, isEmpty } = olExtent;
 
-      if (containsExtent(viewExtent, crsCorrectedBox) && isValidExtent(newArray) && !Number.isNaN(newInputValue)) {
+      if (containsExtent(viewExtent, crsCorrectedExtent)
+      && isValidExtent(newArray)
+      && !isEmpty(crsCorrectedExtent)
+      && !Number.isNaN(newInputValue)) {
         onLatLongChange(newArray);
         setInputInvalid(false);
       } else {
