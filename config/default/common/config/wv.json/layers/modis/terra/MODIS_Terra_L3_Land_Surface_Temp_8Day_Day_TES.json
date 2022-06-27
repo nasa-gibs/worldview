@@ -8,10 +8,6 @@
       "tags": "lst TES",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MOD21A2",
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "daynight": [
         "day"
       ]
