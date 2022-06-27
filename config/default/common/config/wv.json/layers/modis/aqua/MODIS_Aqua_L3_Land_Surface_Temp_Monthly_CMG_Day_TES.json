@@ -8,7 +8,9 @@
       "tags": "lst TES",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MYD21C3"
+      "daynight": [
+        "day"
+      ]
     }
   }
 }
