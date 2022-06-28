@@ -5,10 +5,7 @@
       "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_8Day_Day_TES",
       "tags": "lst TES",
       "group": "overlays",
-      "layergroup": "Land Surface Temperature",
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Land Surface Temperature"
     }
   }
 }

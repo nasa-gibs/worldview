@@ -5,10 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_Monthly_CMG_Night_TES",
       "tags": "lst TES",
       "group": "overlays",
-      "layergroup": "Land Surface Temperature",
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Land Surface Temperature"
     }
   }
 }
