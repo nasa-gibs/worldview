@@ -292,6 +292,7 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     ? resolution / POLAR_ESTIMATION_CONSTANT
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
+
 export function imageUtilGetConversionFactor(proj) {
   if (proj === 'geographic') return POLAR_ESTIMATION_CONSTANT;
   return GEO_ESTIMATION_CONSTANT;
@@ -299,28 +300,28 @@ export function imageUtilGetConversionFactor(proj) {
 
 /*
  * Retrieves coordinates from pixel
- *
- * @method getCoords
- * @private
- *
  * @returns {array} array of coords
- *
  */
 export function imageUtilGetCoordsFromPixelValues(pixels, map) {
+  const {
+    x, y, x2, y2,
+  } = pixels;
   return [
-    map.getCoordinateFromPixel([Math.floor(pixels.x), Math.floor(pixels.y2)]),
-    map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)]),
+    map.getCoordinateFromPixel([Math.floor(x), Math.floor(y2)]),
+    map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y)]),
   ];
 }
 
-export function imageUtilGetPixelValuesFromCoords(geoLatLongArray, map) {
-  const [geolonlat1, geolonlat2] = geoLatLongArray;
-  return [
-    map.getPixelFromCoordinate([Math.floor(geolonlat1[0]), Math.floor(geolonlat1[1])]),
-    map.getPixelFromCoordinate([Math.floor(geolonlat2[0]), Math.floor(geolonlat2[1])]),
-  ];
+export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
+  const [x, y2] = map.getPixelFromCoordinate([bottomLeft[0], bottomLeft[1]]);
+  const [x2, y] = map.getPixelFromCoordinate([topRight[0], topRight[1]]);
+  return {
+    x: Math.round(x),
+    y: Math.round(y),
+    x2: Math.round(x2),
+    y2: Math.round(y2),
+  };
 }
-
 
 /**
  * Given a bounding box as an array of a lower left coordinate pair

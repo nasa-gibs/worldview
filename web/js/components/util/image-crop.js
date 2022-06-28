@@ -67,10 +67,13 @@ const Crop = (props) => {
       height,
     });
   }, [x, y, width, height]);
+
   const onFinishDrag = (cropBoundaries) => {
+    const { width: cWidth, height: cHeight } = cropBoundaries;
     if (loading) return setLoaded(false); // Hack -- prevent event from triggering onload
+
     // https://github.com/DominicTobias/react-image-crop/issues/397
-    const changed = cropBoundaries.width && cropBoundaries.width > 0 && cropBoundaries.height && cropBoundaries.height > 0
+    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
         && some(pick(cropBoundaries, 'x', 'y', 'width', 'height'),
           (value, key) => value !== prevCrop.current[key]);
     if (changed) {
@@ -79,6 +82,7 @@ const Crop = (props) => {
       onClose();
     }
   };
+
   const onDrag = (cropBoundaries) => {
     if (loading) return;
     setCrop(cropBoundaries);
@@ -87,15 +91,22 @@ const Crop = (props) => {
     }
   };
   const prevCrop = useRef(crop);
+
   return (
     <Portal node={document && document.getElementById('wv-content')}>
-      {showCoordinates && <RenderCoordinates coordinates={coordinates} topRightStyle={topRightStyle} bottomLeftStyle={bottomLeftStyle} /> }
+      {showCoordinates && (
+        <RenderCoordinates
+          coordinates={coordinates}
+          topRightStyle={topRightStyle}
+          bottomLeftStyle={bottomLeftStyle}
+        />
+      )}
+
       <Cropper
         crop={crop}
         src={TRANSPARENT_GIF}
         style={{
-          background:
-              crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
+          background: crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
           zIndex,
         }}
         imageStyle={{
@@ -110,6 +121,7 @@ const Crop = (props) => {
   );
 };
 export default Crop;
+
 Crop.defaultProps = {
   height: 10,
   maxHeight: window.innerWidth,
@@ -121,11 +133,13 @@ Crop.defaultProps = {
   y: 10,
   zIndex: 3,
 };
+
 RenderCoordinates.propTypes = {
   coordinates: PropTypes.object,
   topRightStyle: PropTypes.object,
   bottomLeftStyle: PropTypes.object,
 };
+
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

@@ -631,6 +631,7 @@ export default (function(self) {
     return `${coord[1].toFixed(4)}°, ${
       coord[0].toFixed(4)}°`;
   };
+
   /**
    * map openlayers provided longitude value to be between -180 && 180
    *
@@ -643,6 +644,7 @@ export default (function(self) {
     const remainder = longitude % 360;
     return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
   };
+
   // Allows simple printf functionality with strings
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"

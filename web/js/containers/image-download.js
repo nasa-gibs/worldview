@@ -72,9 +72,9 @@ class ImageDownloadContainer extends Component {
     const { proj, map } = this.props;
     const coordinate = map.ui.selected.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
     const { crs } = proj.selected;
-    const geoCoordinate = olProj.transform(coordinate, crs, 'EPSG:4326');
+    const [x, y] = olProj.transform(coordinate, crs, 'EPSG:4326');
 
-    return geoCoordinate;
+    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
   }
 
   /**
@@ -89,11 +89,12 @@ class ImageDownloadContainer extends Component {
     const { crs } = proj.selected;
     const lonLatBottomLeft = olProj.transform(lonLat1, 'EPSG:4326', crs);
     const lonLatTopRight = olProj.transform(lonLat2, 'EPSG:4326', crs);
+    const {
+      x, y, x2, y2,
+    } = imageUtilGetPixelValuesFromCoords(lonLatBottomLeft, lonLatTopRight, map.ui.selected);
 
-
-    const pixels = imageUtilGetPixelValuesFromCoords([lonLatBottomLeft, lonLatTopRight], map.ui.selected);
     return {
-      x: pixels[0][0], y: pixels[1][1], x2: pixels[1][0], y2: pixels[0][1],
+      x, y, x2, y2,
     };
   }
 
