@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Aqua_Land_Surface_Temp_Day_TES": {
       "id": "MODIS_Aqua_Land_Surface_Temp_Day_TES",
-      "title": "Land Surface Temperature (Day)",
-      "subtitle": "Aqua / MODIS / ASTER",
       "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Day_TES",
       "tags": "lst",
       "group": "overlays",

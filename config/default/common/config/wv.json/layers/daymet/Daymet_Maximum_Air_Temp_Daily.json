@@ -2,8 +2,6 @@
   "layers": {
     "Daymet_Maximum_Air_Temp_Daily": {
       "id": "Daymet_Maximum_Air_Temp_Daily",
-      "title": "Maximum Air Temperature (Daily)",
-      "subtitle": "Daymet",
       "description": "daymet/Daymet_Maximum_Air_Temp_Daily",
       "group": "overlays",
       "layergroup": "Temperature",

@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_Cloud_Top_Pressure_Day": {
       "id": "MODIS_Terra_Cloud_Top_Pressure_Day",
-      "title": "Cloud Top Pressure (Day)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Day",
       "group": "overlays",
       "layergroup": "Cloud Pressure",

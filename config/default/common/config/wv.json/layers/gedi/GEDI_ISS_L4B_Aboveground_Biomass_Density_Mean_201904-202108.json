@@ -2,8 +2,6 @@
   "layers": {
     "GEDI_ISS_L4B_Aboveground_Biomass_Density_Mean_201904-202108": {
       "id": "GEDI_ISS_L4B_Aboveground_Biomass_Density_Mean_201904-202108",
-      "title": "Aboveground Biomass (L4B, v2, 2019 APR - 2021 AUG)",
-      "subtitle": "ISS / GEDI",
       "description": "gedi/GEDI_ISS_L4B_Aboveground_Biomass_Density_Mean_201904-202108",
       "tags": "international space station iss mean aboveground biomass density",
       "group": "overlays",

@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_Land_Surface_Temp_Night_TES": {
       "id": "MODIS_Terra_Land_Surface_Temp_Night_TES",
-      "title": "Land Surface Temperature (Night)",
-      "subtitle": "Terra / MODIS / ASTER",
       "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Night_TES",
       "tags": "lst",
       "group": "overlays",

@@ -2,8 +2,6 @@
   "layers": {
     "VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09": {
       "id": "VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09",
-      "title": "Apparent Reflectance (VNP02MOD, Band M09)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09",
       "tags": "cirrus",
       "group": "overlays",

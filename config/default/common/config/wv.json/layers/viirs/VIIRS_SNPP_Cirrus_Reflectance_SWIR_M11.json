@@ -2,8 +2,6 @@
   "layers": {
     "VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11": {
       "id": "VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11",
-      "title": "Cirrus Reflectance (SWIR, Band M11)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11",
       "tags": "",
       "group": "overlays",

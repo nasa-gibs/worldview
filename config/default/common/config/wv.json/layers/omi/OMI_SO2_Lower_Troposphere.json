@@ -2,8 +2,6 @@
   "layers": {
     "OMI_SO2_Lower_Troposphere": {
       "id": "OMI_SO2_Lower_Troposphere",
-      "title": "Sulfur Dioxide (Lower Troposphere)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_SO2_Lower_Troposphere",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",

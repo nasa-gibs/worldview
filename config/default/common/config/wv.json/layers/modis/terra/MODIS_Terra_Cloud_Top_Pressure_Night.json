@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_Cloud_Top_Pressure_Night": {
       "id": "MODIS_Terra_Cloud_Top_Pressure_Night",
-      "title": "Cloud Top Pressure (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Night",
       "group": "overlays",
       "layergroup": "Cloud Pressure",

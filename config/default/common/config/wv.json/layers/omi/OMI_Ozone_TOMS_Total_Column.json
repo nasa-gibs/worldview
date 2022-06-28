@@ -2,8 +2,6 @@
   "layers": {
     "OMI_Ozone_TOMS_Total_Column": {
       "id": "OMI_Ozone_TOMS_Total_Column",
-      "title": "Ozone (TOMS-Like)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_Ozone_TOMS_Total_Column",
       "group": "overlays",
       "layergroup": "Ozone",

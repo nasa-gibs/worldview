@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_AOD_Deep_Blue_Land": {
       "id": "MODIS_Terra_AOD_Deep_Blue_Land",
-      "title": "Deep Blue Aerosol Optical Depth (Land)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_AOD_Deep_Blue_Land",
       "tags": "aod",
       "group": "overlays",

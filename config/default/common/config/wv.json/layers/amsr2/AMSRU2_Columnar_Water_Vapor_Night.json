@@ -2,8 +2,6 @@
   "layers": {
     "AMSRU2_Columnar_Water_Vapor_Night": {
       "id": "AMSRU2_Columnar_Water_Vapor_Night",
-      "title": "Columnar Water Vapor (Night)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Columnar_Water_Vapor_Night",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",

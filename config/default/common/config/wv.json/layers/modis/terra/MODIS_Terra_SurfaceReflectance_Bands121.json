@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_SurfaceReflectance_Bands121": {
       "id": "MODIS_Terra_SurfaceReflectance_Bands121",
-      "title": "Land Surface Reflectance (Bands 1-2-1)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands121",
       "tags": "lsr 121 false color mod09",
       "group": "baselayers",

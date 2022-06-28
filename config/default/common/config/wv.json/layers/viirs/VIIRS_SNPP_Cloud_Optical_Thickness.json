@@ -2,8 +2,6 @@
   "layers": {
     "VIIRS_SNPP_Cloud_Optical_Thickness": {
       "id": "VIIRS_SNPP_Cloud_Optical_Thickness",
-      "title": "Cloud Optical Thickness",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Cloud_Optical_Thickness",
       "tags": "",
       "group": "overlays",

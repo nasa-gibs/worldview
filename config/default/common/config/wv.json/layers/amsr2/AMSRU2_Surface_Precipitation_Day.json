@@ -2,8 +2,6 @@
   "layers": {
     "AMSRU2_Surface_Precipitation_Day": {
       "id": "AMSRU2_Surface_Precipitation_Day",
-      "title": "Surface Precipitation (Day)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Surface_Precipitation_Day",
       "tags": "amsru2 amsr-u2 rain",
       "group": "overlays",

@@ -2,8 +2,6 @@
   "layers": {
     "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202108": {
       "id": "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202108",
-      "title": "Canopy Height Standard Deviation (L3, v2, 2019 APR - 2021 AUG)",
-      "subtitle": "ISS / GEDI",
       "description": "gedi/GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202108",
       "tags": "international space station iss",
       "group": "overlays",

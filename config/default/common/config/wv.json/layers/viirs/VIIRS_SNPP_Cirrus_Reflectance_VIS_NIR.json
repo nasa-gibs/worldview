@@ -2,8 +2,6 @@
   "layers": {
     "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR": {
       "id": "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
-      "title": "Cirrus Reflectance (Visible & NIR)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
       "tags": "",
       "group": "overlays",

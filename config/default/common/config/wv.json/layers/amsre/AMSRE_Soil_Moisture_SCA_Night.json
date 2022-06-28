@@ -2,8 +2,6 @@
   "layers": {
     "AMSRE_Soil_Moisture_SCA_Night": {
       "id": "AMSRE_Soil_Moisture_SCA_Night",
-      "title": "Soil Moisture (Single Channel Algorithm, Night)",
-      "subtitle": "Aqua / AMSR-E",
       "description": "amsre/AMSRE_Soil_Moisture_SCA_Night",
       "group": "overlays",
       "tags": "soil moisture sca",

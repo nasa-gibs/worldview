@@ -2,8 +2,6 @@
   "layers": {
     "CERES_Terra_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly": {
       "id": "CERES_Terra_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
-      "title": "Direct Shortwave Surface Flux (Monthly, Clear-Sky)",
-      "subtitle": "Terra / CERES",
       "description": "ceres/CERES_Terra_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
       "tags": "",
       "group": "overlays",

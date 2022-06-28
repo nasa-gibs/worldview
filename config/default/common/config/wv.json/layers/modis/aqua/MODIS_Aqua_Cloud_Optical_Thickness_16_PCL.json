@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Aqua_Cloud_Optical_Thickness_16_PCL": {
       "id": "MODIS_Aqua_Cloud_Optical_Thickness_16_PCL",
-      "title": "Cloud Optical Thickness (1.6 microns, PCL)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Optical_Thickness_16_PCL",
       "group": "overlays",
       "layergroup": "Cloud Optical Thickness",

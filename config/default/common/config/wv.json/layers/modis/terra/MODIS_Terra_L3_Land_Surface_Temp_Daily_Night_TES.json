@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_L3_Land_Surface_Temp_Daily_Night_TES": {
       "id": "MODIS_Terra_L3_Land_Surface_Temp_Daily_Night_TES",
-      "title": "Land Surface Temperature (L3, Daily, Night)",
-      "subtitle": "Terra / MODIS / ASTER",
       "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Daily_Night_TES",
       "tags": "lst TES",
       "group": "overlays",

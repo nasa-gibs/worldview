@@ -2,8 +2,6 @@
   "layers": {
     "MODIS_Terra_Thermal_Anomalies_Night": {
       "id": "MODIS_Terra_Thermal_Anomalies_Night",
-      "title": "Fires and Thermal Anomalies (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Thermal_Anomalies_All",
       "tags": "hotspots vectors",
       "group": "overlays",

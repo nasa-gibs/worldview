@@ -4,8 +4,8 @@ const dir = require('node-dir');
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
 const removeKeys = [
   // 'id',
-  // 'title',
-  // 'subtitle',
+  'title',
+  'subtitle',
   'inactive',
   'daynight',
   'tracks',

@@ -2,8 +2,6 @@
   "layers": {
     "AMSRE_Columnar_Water_Vapor_Day": {
       "id": "AMSRE_Columnar_Water_Vapor_Day",
-      "title": "Columnar Water Vapor (Day)",
-      "subtitle": "Aqua / AMSR-E",
       "description": "amsre/AMSRE_Columnar_Water_Vapor_Day",
       "group": "overlays",
       "layergroup": "Water Vapor"

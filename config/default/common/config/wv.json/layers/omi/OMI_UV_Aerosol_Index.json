@@ -2,8 +2,6 @@
   "layers": {
     "OMI_UV_Aerosol_Index": {
       "id": "OMI_UV_Aerosol_Index",
-      "title": "UV Aerosol Index",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_UV_Aerosol_Index",
       "group": "overlays",
       "layergroup": "Aerosol Index",
