@@ -1,9 +1,7 @@
-const { zoomIn, zoomOut } = require('../../reuseables/zoom');
 const { bookmark } = require('../../reuseables/bookmark');
 const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
-  closeImageDownloadPanel,
 } = require('../../reuseables/image-download');
 
 const startParams = [
@@ -26,23 +24,18 @@ module.exports = {
     c.expect.element(globalSelectInput).to.be.present;
     c.expect.element(globalSelectInput).to.not.be.selected;
   },
-
   'Verify that checking checkbox updates bounding-box labels': function(c) {
     c.expect.element('#wv-image-top').text.to.not.contain('180.0000');
     c.click(globalSelectInput);
     c.expect.element('#wv-image-top').text.to.contain('180.0000');
+    c.expect.element('#wv-image-bottom').text.to.contain('180.0000');
+    c.pause(500);
   },
-  'Verify that checkbox is gone after zoom and bounding box is no longer around globe': function(c) {
-    closeImageDownloadPanel(c);
-    zoomIn(c);
-    openImageDownloadPanel(c);
-    c.expect.element(globalSelectInput).to.not.be.present;
+  'Verify that unchecking checkbox updates bounding-box to previous': function(c) {
+    c.click(globalSelectInput);
     c.expect.element('#wv-image-top').text.to.not.contain('180.0000');
-  },
-  'Verify that checkbox is back after zooming back out': function(c) {
-    closeImageDownloadPanel(c);
-    zoomOut(c);
-    openImageDownloadPanel(c);
-    c.expect.element(globalSelectInput).to.be.present;
+    c.expect.element('#wv-image-top').text.to.contain('35.1563');
+    c.expect.element('#wv-image-bottom').text.to.contain('35.1563');
+    c.pause(2000);
   },
 };

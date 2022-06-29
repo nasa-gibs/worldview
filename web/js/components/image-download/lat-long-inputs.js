@@ -3,7 +3,7 @@ import * as olProj from 'ol/proj';
 import {
   clone as lodashClone,
 } from 'lodash';
-import * as olExtent from 'ol/extent';
+import { containsExtent, isEmpty } from 'ol/extent';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,6 +19,7 @@ const Input = ({
 }) => {
   const [inputValue, setInputValue] = useState(inputNumber);
   const [isInvalid, setInputInvalid] = useState(false);
+
   useEffect(() => {
     setInputValue(inputNumber);
   }, [inputNumber]);
@@ -29,7 +30,6 @@ const Input = ({
       const newArray = lodashClone(boundingBoxArray);
       newArray[index] = newInputValue;
       const crsCorrectedExtent = olProj.transformExtent(newArray, 'EPSG:4326', crs);
-      const { containsExtent, isEmpty } = olExtent;
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
       && isValidExtent(newArray)

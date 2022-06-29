@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { isEqual } from 'lodash';
 import Checkbox from '../util/checkbox';
 
 const GLOBAL_LAT_LONG_EXTENT = [-180, -90, 180, 90];
 
 const GlobalSelectCheckbox = (props) => {
   const {
-    onLatLongChange, viewExtent, geoLatLong, proj,
+    onLatLongChange, geoLatLong, proj, map,
   } = props;
-  const BoundingBoxArray = [geoLatLong[0][0], geoLatLong[0][1], geoLatLong[1][0], geoLatLong[1][1]];
-  const onCheck = () => onLatLongChange(GLOBAL_LAT_LONG_EXTENT);
-  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue !== BoundingBoxArray[index]);
-  // If full extent is not visible don't show checkbox
-  const globalIsNotInView = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => (index < 2 ? latLongValue < viewExtent[index] : latLongValue > viewExtent[index]));
-  const title = globalIsNotInView ? 'Zoom out in order to select full globe' : 'Select Entire Globe';
+
+  const boundingBoxArray = [...geoLatLong[0], ...geoLatLong[1]];
+  const globalSelected = isEqual(boundingBoxArray, GLOBAL_LAT_LONG_EXTENT);
+  const [prevExtent, setPrevExtent] = useState(globalSelected ? [-40, -40, 40, 40] : boundingBoxArray);
+  const onCheck = () => {
+    const useExtent = globalSelected ? prevExtent : GLOBAL_LAT_LONG_EXTENT;
+    setPrevExtent(boundingBoxArray);
+    map.getView().setCenter([0, 0]);
+    map.getView().setZoom(0);
+    setTimeout(() => {
+      onLatLongChange(useExtent);
+    }, 50);
+  };
+
+  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue !== boundingBoxArray[index]);
   if (proj !== 'geographic') return null;
 
   return (
@@ -23,8 +33,6 @@ const GlobalSelectCheckbox = (props) => {
         checked={!globalIsNotSelected}
         id="image-global-cb"
         label="Select Entire Globe"
-        disabled={globalIsNotInView}
-        title={title}
         classNames="image-gb-checkbox"
         tooltipPlacement="top"
       />
@@ -33,9 +41,9 @@ const GlobalSelectCheckbox = (props) => {
 };
 GlobalSelectCheckbox.propTypes = {
   onLatLongChange: PropTypes.func,
-  viewExtent: PropTypes.array,
   geoLatLong: PropTypes.array,
   proj: PropTypes.string,
+  map: PropTypes.object,
 };
 
 export default GlobalSelectCheckbox;

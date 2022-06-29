@@ -30,7 +30,7 @@ const RESOLUTION_KEY = {
  * @class resolutionSelection
  * @extends React.Component
  */
-export default class ImageResSelection extends React.Component {
+export default class ImageDownloadPanel extends React.Component {
   constructor(props) {
     super(props);
 
@@ -162,7 +162,7 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
+      map, getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
     } = this.props;
     const { crs } = projection.selected;
     const { resolution, debugUrl } = this.state;
@@ -205,6 +205,7 @@ export default class ImageResSelection extends React.Component {
             geoLatLong={geoLatLong}
             onLatLongChange={onLatLongChange}
             proj={projection.id}
+            map={map}
           />
           <ResTable
             width={width}
@@ -221,7 +222,7 @@ export default class ImageResSelection extends React.Component {
   }
 }
 
-ImageResSelection.defaultProps = {
+ImageDownloadPanel.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
@@ -231,7 +232,8 @@ ImageResSelection.defaultProps = {
   secondLabel: 'Format',
   worldFileOptions: true,
 };
-ImageResSelection.propTypes = {
+
+ImageDownloadPanel.propTypes = {
   date: PropTypes.object,
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
@@ -241,6 +243,7 @@ ImageResSelection.propTypes = {
   getLayers: PropTypes.func,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
+  map: PropTypes.object,
   maxImageSize: PropTypes.string,
   markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
