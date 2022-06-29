@@ -2,6 +2,7 @@
   "layers": {
     "Land_Water_Map": {
       "id": "Land_Water_Map",
+      "title": "Land / Water Map",
       "description": "reference/Land_Water_Map",
       "tags": "borders",
       "group": "baselayers",
