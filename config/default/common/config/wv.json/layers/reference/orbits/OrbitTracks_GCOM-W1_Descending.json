@@ -2,16 +2,11 @@
   "layers": {
     "OrbitTracks_GCOM-W1_Descending": {
       "id": "OrbitTracks_GCOM-W1_Descending",
-      "title": "GCOM-W1 - Orbit Track & Time",
-      "subtitle": "GCOM-W1 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GCOM-W1_Descending",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_GCOM-W1_Descending",

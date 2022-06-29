@@ -2,17 +2,12 @@
   "layers": {
     "OrbitTracks_Suomi_NPP_Descending": {
       "id": "OrbitTracks_Suomi_NPP_Descending",
-      "title": "Suomi NPP - Orbit Track & Time",
-      "subtitle": "Suomi NPP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Suomi_NPP_Descending",
       "group": "overlays",
       "tags": "snpp s-npp tracks night vector",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_Suomi_NPP_Descending",

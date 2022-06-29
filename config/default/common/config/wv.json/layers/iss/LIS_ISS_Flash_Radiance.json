@@ -2,19 +2,12 @@
   "layers": {
     "LIS_ISS_Flash_Radiance": {
       "id": "LIS_ISS_Flash_Radiance",
-      "title": "ISS LIS Flash Radiance (Level 2)",
-      "subtitle": "ISS / LIS",
       "description": "iss/LIS_ISS_Flash_Radiance",
       "tags": "lightning international space station iss",
       "group": "overlays",
       "layergroup": "Lightning",
       "product": "",
-      "inactive": true,
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_ISS_Ascending",
-        "OrbitTracks_ISS_Descending"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -483,7 +483,7 @@ fixtures.config = function() {
           arctic: {},
           antarctic: {},
         },
-        inactive: true,
+        ongoing: false,
       },
       MODIS_Combined_L4_LAI_4Day: {
         id: 'MODIS_Combined_L4_LAI_4Day',
@@ -493,6 +493,7 @@ fixtures.config = function() {
         group: 'overlays',
         product: 'MCD15A3H',
         layergroup: 'Leaf Area Index',
+        ongoing: true,
         dateRanges: [
           {
             startDate: '2018-01-01T00:00:00Z',
@@ -559,7 +560,7 @@ fixtures.config = function() {
         tags: 'vector vectors',
         group: 'overlays',
         layergroup: 'Orbital Track',
-        inactive: true,
+        ongoing: false,
         vectorStyle: {
           id: 'OrbitTracks_Aqua_Ascending',
         },

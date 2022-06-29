@@ -651,7 +651,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
     dateRanges,
     futureTime,
     period,
-    inactive,
+    ongoing,
   } = def;
   let dateArray = [];
   if (!dateRanges) { return dateArray; }
@@ -735,7 +735,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         currentDateTime = currentDate.getTime();
       }
       // set maxDate to current date if layer coverage is ongoing
-      if (index === dateRanges.length - 1 && !inactive) {
+      if (index === dateRanges.length - 1 && ongoing) {
         if (futureTime) {
           maxDate = new Date(endDate);
         } else {
@@ -1427,8 +1427,8 @@ export function adjustActiveDateRanges(layers, appNow) {
   const appNowYear = appNow.getUTCFullYear();
   const applyDateRangeAdjustment = (layer) => {
     const { dateRanges } = layer;
-    const { inactive, period } = layer;
-    const failConditions = inactive
+    const { ongoing, period } = layer;
+    const failConditions = !ongoing
       || !dateRanges
       || period === 'subdaily';
     if (failConditions) {

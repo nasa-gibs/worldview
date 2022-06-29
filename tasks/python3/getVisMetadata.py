@@ -16,7 +16,17 @@ input_file = args[1]
 output_file = args[2]
 
 # NOTE:  Only using these properties at this time
-use_keys = ['conceptIds', 'dataCenter']
+use_keys = [
+  'conceptIds',
+  'dataCenter',
+  'daynight',
+  'orbitTracks',
+  'orbitDirection',
+  'ongoing',
+  'layerPeriod',
+  'title',
+  'subtitle'
+]
 layer_metadata = {}
 daacMap = {}
 
