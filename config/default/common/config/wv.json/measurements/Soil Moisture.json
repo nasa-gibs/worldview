@@ -8,7 +8,7 @@
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
-                    "description": "amsre/SoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRE_Soil_Moisture_NPD_Day",
