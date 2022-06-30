@@ -48,6 +48,7 @@ module.exports = {
     changeInput(c, input.minLat, '-40');
     changeInput(c, input.minLon, '-20');
 
+    c.waitForElementVisible('#wv-image-top', TIME_LIMIT);
     c.assert.containsText('#wv-image-top', '-14.0000');
     c.assert.containsText('#wv-image-top', '14.0000');
     c.assert.containsText('#wv-image-bottom', '-40.0000');
