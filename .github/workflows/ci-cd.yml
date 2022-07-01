@@ -49,6 +49,12 @@ jobs:
         run: |
           npm ci
 
+      # Since we run this script as part of npm ci, must run manually if node modules are cached
+      - name: Install Python Dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit == 'true'
+        run: |
+          ./tasks/pythonInstall.sh
+
       - name: Linting and Unit testing
         run: |
           npm test
