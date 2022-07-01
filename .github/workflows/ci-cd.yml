@@ -30,7 +30,22 @@ jobs:
           node-version: ${{matrix.node}}
           cache: 'npm'
 
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
       - name: Install NPM Dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
           npm ci
 
