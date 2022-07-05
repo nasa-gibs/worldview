@@ -44,7 +44,7 @@ jobs:
         if: ${{ runner.os == 'macOS' }}
         run: |
           npm run start &
-          sleep 5
+          sleep 10
           npm run e2e:headless:chrome:localStorageDisabled
           npm run e2e:headless:chrome
 
@@ -52,7 +52,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: |
           npm run start &
-          sleep 5
+          sleep 10
           npm run e2e:headless:firefox:localStorageDisabled
           npm run e2e:headless:firefox
 
