@@ -340,7 +340,7 @@ class LayerSettings extends React.Component {
       palettedAllowed,
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
-    const hasTracks = layer.tracks && layer.tracks.length;
+    const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette

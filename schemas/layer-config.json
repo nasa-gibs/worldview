@@ -82,22 +82,6 @@
         "format": {
           "$ref": "#/definitions/format"
         },
-        "tracks": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "daynight": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "day",
-              "night"
-            ]
-          }
-        },
         "period": {
           "type": "string",
           "enum": [
@@ -181,12 +165,8 @@
             }
           }
         },
-        "inactive": {
-          "type": "boolean",
-          "description": "TODO should be removed for vis metadata replacement!"
-        },
         "track": {
-          "description": "TODO should be removed for vis metadata replacement!",
+          "description": "An orbit track layer's orbit direction",
           "type": "string"
         },
         "associatedLayers": {

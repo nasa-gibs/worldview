@@ -8,7 +8,7 @@
                   "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
-                    "description": "smap/PercentFrozenArea",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "SMAP_L4_Frozen_Area"

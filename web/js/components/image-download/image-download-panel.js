@@ -9,6 +9,8 @@ import {
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
+import LatLongSelect from './lat-long-inputs';
+import GlobalSelectCheckbox from './global-select';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -28,7 +30,7 @@ const RESOLUTION_KEY = {
  * @class resolutionSelection
  * @extends React.Component
  */
-export default class ImageResSelection extends React.Component {
+export default class ImageDownloadPanel extends React.Component {
   constructor(props) {
     super(props);
 
@@ -160,8 +162,9 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
+      map, getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
     } = this.props;
+    const { crs } = projection.selected;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
     const { height } = dimensions;
@@ -191,6 +194,19 @@ export default class ImageResSelection extends React.Component {
           </div>
           {filetypeSelect}
           {worldfileSelect}
+          <LatLongSelect
+            viewExtent={viewExtent}
+            geoLatLong={projection.id === 'geographic' ? lonlats : geoLatLong}
+            onLatLongChange={onLatLongChange}
+            crs={crs}
+          />
+          <GlobalSelectCheckbox
+            viewExtent={viewExtent}
+            geoLatLong={geoLatLong}
+            onLatLongChange={onLatLongChange}
+            proj={projection.id}
+            map={map}
+          />
           <ResTable
             width={width}
             height={height}
@@ -206,7 +222,7 @@ export default class ImageResSelection extends React.Component {
   }
 }
 
-ImageResSelection.defaultProps = {
+ImageDownloadPanel.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
@@ -216,7 +232,8 @@ ImageResSelection.defaultProps = {
   secondLabel: 'Format',
   worldFileOptions: true,
 };
-ImageResSelection.propTypes = {
+
+ImageDownloadPanel.propTypes = {
   date: PropTypes.object,
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
@@ -226,6 +243,7 @@ ImageResSelection.propTypes = {
   getLayers: PropTypes.func,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
+  map: PropTypes.object,
   maxImageSize: PropTypes.string,
   markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
@@ -234,5 +252,8 @@ ImageResSelection.propTypes = {
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
+  viewExtent: PropTypes.array,
   worldFileOptions: PropTypes.bool,
+  geoLatLong: PropTypes.array,
+  onLatLongChange: PropTypes.func,
 };

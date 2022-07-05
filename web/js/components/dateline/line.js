@@ -82,6 +82,7 @@ class Line extends React.Component {
       map,
       height,
       textCoords,
+      hideText,
     } = this.props;
     const { hovered, textActive } = this.state;
 
@@ -130,7 +131,7 @@ class Line extends React.Component {
           />
         </svg>
         <LineText
-          active={alwaysShow || textActive}
+          active={!hideText && (alwaysShow || textActive)}
           map={map}
           date={date}
           x={lineX}
@@ -156,6 +157,7 @@ Line.propTypes = {
   style: PropTypes.object,
   setTextCoords: PropTypes.func,
   textCoords: PropTypes.array,
+  hideText: PropTypes.bool,
 };
 
 export default Line;

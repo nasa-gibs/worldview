@@ -2,17 +2,12 @@
   "layers": {
     "OrbitTracks_Sentinel-5P_Descending": {
       "id": "OrbitTracks_Sentinel-5P_Descending",
-      "title": "Sentinel-5P - Orbit Track & Time",
-      "subtitle": "Sentinel-5P / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-5P_Descending",
       "tags": "tracks night vector",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_Sentinel-5P_Descending",
