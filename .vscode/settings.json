@@ -1,12 +1,41 @@
 {
   "files.trimTrailingWhitespace": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.exclude": {
+    "**./node_modules": true
+},
   "[javascript]": {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   },
   "[json]": {
     "editor.tabSize": 2
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
+  "json.validate.enable": true,
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "config/default/common/config/wv.json/layers/**/*.json",
+        "config/active/common/config/wv.json/layers/**/*.json"
+      ],
+      "url": "./schemas/layer-config.json"
+    }
+  ],
+  "eslint.lintTask.enable": true,
+  "eslint.format.enable": true,
+  "stylelint.configFile": ".stylelintrc",
+  "stylelint.snippet": [
+      "css",
+      "less",
+      "postcss",
+      "scss"
+  ],
+  "stylelint.validate": [
+      "css",
+      "less",
+      "postcss",
+      "scss"
+  ],
 }
