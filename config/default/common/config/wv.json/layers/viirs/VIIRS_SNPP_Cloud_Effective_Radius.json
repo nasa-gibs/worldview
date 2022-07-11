@@ -6,7 +6,6 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
-      "product": "CLDPROP_L2_VIIRS_SNPP",
       "wrapadjacentdays": true
     }
   }

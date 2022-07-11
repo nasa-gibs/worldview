@@ -5,7 +5,6 @@
       "description": "omi/OMI_Aerosol_Optical_Depth",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "OMAERUVd",
       "tags": "aod",
       "palette": {
         "recommended": [

@@ -5,8 +5,7 @@
       "description": "misr/MISR_Radiance_Average_Natural_Color_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Radiance",
-      "product": "MIL3MRD"
+      "layergroup": "Radiance"
     }
   }
 }

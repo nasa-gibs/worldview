@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Convective_Rainwater_Source_700hPa_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Convective Rainwater Source",
-      "product": "M2TMNPMST"
+      "layergroup": "Convective Rainwater Source"
     }
   }
 }

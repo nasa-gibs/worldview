@@ -5,7 +5,6 @@
       "description": "omi/OMI_Aerosol_Index",
       "group": "overlays",
       "layergroup": "Aerosol Index",
-      "product": "OMAERUV",
       "tags": "ai",
       "palette": {
         "recommended": [

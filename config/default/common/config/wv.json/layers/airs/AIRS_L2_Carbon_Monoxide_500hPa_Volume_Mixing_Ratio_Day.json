@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
       "tags": "CO",
       "group": "overlays",
-      "product": "AIRS2RET",
       "layergroup": "Carbon Monoxide"
     }
   }

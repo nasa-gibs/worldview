@@ -5,8 +5,7 @@
       "description": "ols/OLS_DMSP_F12_Digital_Derived_Lightning",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Lightning",
-      "product": "olsdig12"
+      "layergroup": "Lightning"
     }
   }
 }

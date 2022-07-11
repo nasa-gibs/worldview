@@ -5,7 +5,6 @@
       "description": "airs/AIRS_Precipitation_Day",
       "tags": "rain snow",
       "group": "overlays",
-      "product": "AIRX2SUP_DAY",
       "layergroup": "Precipitation Estimate",
       "palette": {
         "recommended": [

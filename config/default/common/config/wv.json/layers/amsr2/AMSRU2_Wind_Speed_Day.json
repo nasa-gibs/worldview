@@ -5,8 +5,7 @@
       "description": "amsr2/AMSRU2_Wind_Speed_Day",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Wind Speed",
-      "product": ""
+      "layergroup": "Wind Speed"
     }
   }
 }

@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Dust",
-      "product": "M2TMNXADG"
+      "layergroup": "Dust"
     }
   }
 }

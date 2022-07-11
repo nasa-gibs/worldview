@@ -6,7 +6,6 @@
       "tags": "lsr 143 true color mod09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
-      "product": "MOD09GA",
       "wrapadjacentdays": true
     }
   }

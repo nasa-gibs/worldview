@@ -5,8 +5,7 @@
       "description": "amsr2/AMSRU2_Surface_Precipitation_Night",
       "tags": "amsru2 amsr-u2 rain",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "AU_Rain_NRT_R01"
+      "layergroup": "Precipitation Rate"
     }
   }
 }

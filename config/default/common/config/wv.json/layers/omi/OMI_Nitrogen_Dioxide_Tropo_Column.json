@@ -5,7 +5,6 @@
       "description": "omi/OMI_Nitrogen_Dioxide_Tropo_Column",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
-      "product": "OMNO2d",
       "tags": "no2"
     }
   }

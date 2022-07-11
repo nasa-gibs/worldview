@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_Total_Cloud_Fraction_Day",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS2RET",
       "layergroup": "Cloud Fraction"
     }
   }

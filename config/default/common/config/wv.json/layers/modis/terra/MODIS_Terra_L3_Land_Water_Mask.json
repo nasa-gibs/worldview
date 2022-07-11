@@ -4,8 +4,7 @@
       "id": "MODIS_Terra_L3_Land_Water_Mask",
       "description": "modis/terra/MODIS_Terra_L3_Land_Water_Mask",
       "group": "overlays",
-      "layergroup": "Water Bodies",
-      "product": "MOD44W"
+      "layergroup": "Water Bodies"
     }
   }
 }

@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Aerosol_Optical_Depth_Analysis_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Aerosol Optical Depth",
-      "product": "M2IMNXGAS"
+      "layergroup": "Aerosol Optical Depth"
     }
   }
 }

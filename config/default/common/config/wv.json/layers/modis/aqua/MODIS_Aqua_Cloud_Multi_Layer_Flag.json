@@ -5,7 +5,6 @@
       "description": "modis/aqua/MODIS_Aqua_Cloud_Multi_Layer_Flag",
       "group": "overlays",
       "layergroup": "Cloud Multi Layer Flag",
-      "product": "MYD06_L2",
       "wrapadjacentdays": true
     }
   }

@@ -5,10 +5,6 @@
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_Night",
       "tags": "hotspots s-npp snpp vectors",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": [
-        "VNP14IMG_NRT_NIGHT",
-        "VNP14IMGTDL_NRT"
-      ],
       "period": "daily",
       "group": "overlays",
       "type": "vector",

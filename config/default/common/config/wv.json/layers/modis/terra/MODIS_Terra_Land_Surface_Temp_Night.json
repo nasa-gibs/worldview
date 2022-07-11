@@ -5,8 +5,7 @@
       "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Night",
       "tags": "lst",
       "group": "overlays",
-      "layergroup": "Land Surface Temperature",
-      "product": "MOD11_L2_NIGHT"
+      "layergroup": "Land Surface Temperature"
     }
   }
 }

@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Surface_Albedo_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Surface Albedo",
-      "product": "M2TMNXRAD"
+      "layergroup": "Surface Albedo"
     }
   }
 }

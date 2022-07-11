@@ -5,8 +5,7 @@
       "description": "mls/MLS_H2O_46hPa_Day",
       "tags": "h2o",
       "group": "overlays",
-      "layergroup": "Water Vapor",
-      "product": "ML2H2O"
+      "layergroup": "Water Vapor"
     }
   }
 }

@@ -6,7 +6,6 @@
       "tags": "jpss jpss-1",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "",
       "wrapadjacentdays": true
     }
   }

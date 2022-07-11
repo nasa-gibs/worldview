@@ -7,7 +7,6 @@
       "group": "overlays",
       "type": "wmts",
       "layergroup": "Terrain Elevation",
-      "product": "ASTGTM",
       "wrapX": true
     }
   }

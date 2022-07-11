@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L3_Carbon_Dioxide_IR_Monthly",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS3C2M",
       "layergroup": "Carbon Dioxide"
     }
   }

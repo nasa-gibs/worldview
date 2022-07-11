@@ -6,7 +6,6 @@
       "tags": "aod",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "MOD04_3K",
       "wrapadjacentdays": true,
       "projections": {
         "geographic": {

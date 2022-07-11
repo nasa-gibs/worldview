@@ -6,7 +6,6 @@
       "tags": "sst ghrsst podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Temperature",
-      "product": "GAMSSA_28km-ABOM-L4-GLOB-v01",
       "wrapadjacentdays": true
     }
   }

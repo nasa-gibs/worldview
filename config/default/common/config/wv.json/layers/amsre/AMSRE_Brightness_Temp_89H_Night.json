@@ -4,7 +4,6 @@
       "id": "AMSRE_Brightness_Temp_89H_Night",
       "description": "amsre/AMSRE_Brightness_Temp_89H_Night",
       "group": "overlays",
-      "product": "AE_L2A_NIGHT",
       "layergroup": "Brightness Temperature"
     }
   }

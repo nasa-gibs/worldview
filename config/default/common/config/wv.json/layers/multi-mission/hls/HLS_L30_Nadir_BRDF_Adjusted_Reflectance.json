@@ -5,8 +5,7 @@
       "description": "multi-mission/hls/HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
       "tags": "corrected surface landsat oli sentinel msi s30",
       "group": "overlays",
-      "layergroup": "Land Surface Reflectance",
-      "product": "HLSL30"
+      "layergroup": "Land Surface Reflectance"
     }
   }
 }

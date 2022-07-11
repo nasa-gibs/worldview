@@ -4,8 +4,7 @@
       "id": "SMAP_L2_Passive_Night_Soil_Moisture_Option3",
       "description": "smap/SMAP_L2_Passive_Night_Soil_Moisture_Option3",
       "group": "overlays",
-      "layergroup": "Soil Moisture",
-      "product": "SPL2SMP"
+      "layergroup": "Soil Moisture"
     }
   }
 }

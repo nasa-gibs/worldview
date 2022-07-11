@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Socioeconomic",
-      "product": "CIESIN_SEDAC_LULC_PUEXPANS_2030",
       "wrapX": true
     }
   }

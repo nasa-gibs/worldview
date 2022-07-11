@@ -5,7 +5,6 @@
       "description": "ssmi/MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
       "group": "overlays",
       "layergroup": "Freeze/Thaw",
-      "product": "NSIDC-0477",
       "palette": {
         "immutable": true
       }

@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_Surface_Relative_Humidity_Night",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS2RET",
       "layergroup": "Relative Humidity"
     }
   }

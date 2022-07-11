@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Snowfall_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "M2TMNXFLX"
+      "layergroup": "Precipitation Rate"
     }
   }
 }

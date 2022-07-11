@@ -4,8 +4,7 @@
       "id": "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
       "description": "modis/terra/MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
       "group": "overlays",
-      "layergroup": "Snow Cover",
-      "product": "MOD10CM"
+      "layergroup": "Snow Cover"
     }
   }
 }

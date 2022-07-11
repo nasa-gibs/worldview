@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Cyclone Hazard",
-      "product": "CIESIN_CHRR_NDH_CYCLONE_HFD",
       "wrapX": true
     }
   }

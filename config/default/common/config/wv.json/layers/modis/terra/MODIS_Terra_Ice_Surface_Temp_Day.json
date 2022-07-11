@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Ice_Surface_Temp_Day",
       "group": "overlays",
       "layergroup": "Ice Surface Temperature",
-      "product": "MOD29",
       "wrapadjacentdays": true
     }
   }

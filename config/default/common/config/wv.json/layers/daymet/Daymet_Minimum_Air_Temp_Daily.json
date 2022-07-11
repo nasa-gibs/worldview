@@ -5,7 +5,6 @@
       "description": "daymet/Daymet_Minimum_Air_Temp_Daily",
       "group": "overlays",
       "layergroup": "Temperature",
-      "product": "Daymet_V3_CFMosaics_1328",
       "wrapadjacentdays": true
     }
   }

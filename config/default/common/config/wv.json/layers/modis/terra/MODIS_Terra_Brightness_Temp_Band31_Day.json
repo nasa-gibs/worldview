@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Brightness_Temp_Band31_Day",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "MOD021KM_DAY",
       "wrapadjacentdays": true,
       "projections": {
         "geographic": {

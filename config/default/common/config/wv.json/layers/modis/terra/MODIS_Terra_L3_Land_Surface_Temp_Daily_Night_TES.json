@@ -5,8 +5,7 @@
       "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Daily_Night_TES",
       "tags": "lst TES",
       "group": "overlays",
-      "layergroup": "Land Surface Temperature",
-      "product": "MOD21A1"
+      "layergroup": "Land Surface Temperature"
     }
   }
 }

@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L4_Soil_Temperature_Layer_1",
       "group": "overlays",
       "layergroup": "Soil Temperature",
-      "product": "SPL4SMAU",
       "wrapadjacentdays": true
     }
   }

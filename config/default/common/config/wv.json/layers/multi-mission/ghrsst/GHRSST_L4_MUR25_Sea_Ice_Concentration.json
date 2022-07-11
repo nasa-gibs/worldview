@@ -6,7 +6,6 @@
       "tags": "ghrsst podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Ice",
-      "product": "MUR25-JPL-L4-GLOB-v04.2",
       "wrapadjacentdays": true
     }
   }
