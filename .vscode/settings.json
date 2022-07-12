@@ -5,7 +5,7 @@
   },
   "files.exclude": {
     "**./node_modules": true
-},
+  },
   "[javascript]": {
     "editor.tabSize": 2,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
