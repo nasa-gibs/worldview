@@ -188,16 +188,6 @@
         "modalShouldFollowClicks": {
           "type": "boolean"
         },
-        "product": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array"
-            }
-          ]
-        },
         "palette": {
           "$ref": "#/definitions/palette"
         },
@@ -331,7 +321,7 @@
           }
         },
         {
-          "description": "",
+          "description": "WMS layers require format property",
           "if": {
             "properties": {
               "type": {
