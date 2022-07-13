@@ -23,9 +23,6 @@ const getLayerId = (state, { layer }) => layer && layer.id;
 
 export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
 
-/**
- * Is overlay grouping currently enabled?
- */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
 /**
