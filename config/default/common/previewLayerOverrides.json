@@ -16,6 +16,9 @@
   "GOES-West_ABI_Band2_Red_Visible_1km": "2020-01-02T21:00:00Z",
   "GOES-West_ABI_Band13_Clean_Infrared": "2020-01-02T21:00:00Z",
 
+  "GMI_Precipitation_Rate_Asc": "2020-01-02T00:00:00Z",
+  "GMI_Precipitation_Rate_Dsc": "2020-01-02T00:00:00Z",
+
   "Himawari_AHI_Air_Mass": "2020-01-02T03:00:00Z",
   "Himawari_AHI_Band3_Red_Visible_1km": "2020-01-02T03:00:00Z",
   "Himawari_AHI_Band13_Clean_Infrared": "2020-01-02T03:00:00Z",

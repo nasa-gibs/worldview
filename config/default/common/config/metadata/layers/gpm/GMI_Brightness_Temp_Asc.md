@@ -2,4 +2,4 @@ The Global Precipitation Measurement (GPM) Microwave Imager (GMI) Brightness Tem
 
 The GPM Microwave Imager (GMI) is an instrument on the satellite known as the Global Precipitation Measurement (GPM) Core Observatory. The parent data product for the Brightness Temperature layer is the 1CGMI data product, which is also known as "Level 1C Common Calibrated Brightness Temperatures" or as "GPM_1CGPMGMI". The imagery resolution is 2 km and sensor resolution is approximately 4 km at the equator, and the footprints of the GMI channels vary from approximately 26 km to 6 km across. The temporal resolution is daily.
 
-References: GPM_1CGPMGMI [doi:10.5067/GPM/GMI/GPM/1C/05](https://doi.org/10.5067/GPM/GMI/GPM/1C/05); [GMI](https://gpm.nasa.gov/gpm/flight-project/gmi); [Precipitation Measurement Missions](https://pps.gsfc.nasa.gov)
+References: GPM_1CGPMGMI [doi:10.5067/GPM/GMI/GPM/1C/07](https://doi.org/10.5067/GPM/GMI/GPM/1C/07); [GMI](https://gpm.nasa.gov/gpm/flight-project/gmi); [Precipitation Measurement Missions](https://pps.gsfc.nasa.gov)
