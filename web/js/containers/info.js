@@ -23,6 +23,7 @@ import GlobalSettings from '../components/global-settings/global-settings';
 function InfoList (props) {
   const {
     sendFeedback,
+    feedbackEnabled,
     feedbackIsInitiated,
     globalSettingsClick,
     aboutClick,
@@ -94,14 +95,16 @@ function InfoList (props) {
           sendFeedback(feedbackIsInitiated, isMobile);
         },
       };
+
+    const feedbackEntry = {
+      text: 'Send feedback',
+      iconClass: 'ui-icon',
+      iconName: 'envelope',
+      id: 'send_feedback_info_item',
+      ...feedbackAction,
+    };
+
     const arr = [
-      {
-        text: 'Send feedback',
-        iconClass: 'ui-icon',
-        iconName: 'envelope',
-        id: 'send_feedback_info_item',
-        ...feedbackAction,
-      },
       {
         text: 'Settings',
         iconClass: 'ui-icon',
@@ -128,6 +131,10 @@ function InfoList (props) {
         href: 'https://github.com/nasa-gibs/worldview',
       },
     ];
+
+    if (feedbackEnabled) {
+      arr.push(feedbackEntry);
+    }
 
     // limit explore for larger device displays
     if (window.innerWidth >= 740
@@ -159,8 +166,10 @@ function mapStateToProps(state) {
     ui, feedback, tour, notifications, config, models, browser,
   } = state;
   const { isDistractionFreeModeActive } = ui;
+  const { features: { feedback: feedbackEnabled } } = config;
 
   return {
+    feedbackEnabled,
     feedbackIsInitiated: feedback.isInitiated,
     isDistractionFreeModeActive,
     isTourActive: tour.active,
@@ -237,6 +246,7 @@ InfoList.propTypes = {
   aboutClick: PropTypes.func,
   globalSettingsClick: PropTypes.func,
   config: PropTypes.object,
+  feedbackEnabled: PropTypes.bool,
   feedbackIsInitiated: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
