@@ -221,7 +221,7 @@ class ShareLinkContainer extends Component {
   )
 
   renderLinkTab = () => {
-    const { shortLink } = this.props;
+    const { shortLink, urlShortening } = this.props;
     const {
       activeTab,
       isShort,
@@ -243,13 +243,15 @@ class ShareLinkContainer extends Component {
               Copy URL to share link.
             </p>
             {' '}
-            <Checkbox
-              label="Shorten link"
-              id="wv-link-shorten"
-              onCheck={this.onToggleShorten}
-              checked={isShort}
-              disabled={!shortLink.isLoading}
-            />
+            {urlShortening && (
+              <Checkbox
+                label="Shorten link"
+                id="wv-link-shorten"
+                onCheck={this.onToggleShorten}
+                checked={isShort}
+                disabled={!shortLink.isLoading}
+              />
+            )}
           </>
         )}
       </TabPane>
@@ -338,9 +340,12 @@ function mapStateToProps(state) {
     browser, config, shortLink, sidebar, tour,
   } = state;
 
+  const { features: { urlShortening } } = config;
   const isMobile = browser.lessThan.medium;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
+
   return {
+    urlShortening,
     embedDisableNavLink,
     isMobile,
     shortLink,
@@ -369,4 +374,5 @@ ShareLinkContainer.propTypes = {
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
+  urlShortening: PropTypes.bool,
 };
