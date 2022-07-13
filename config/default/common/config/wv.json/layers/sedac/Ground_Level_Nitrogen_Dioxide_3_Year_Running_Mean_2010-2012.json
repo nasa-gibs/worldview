@@ -6,7 +6,6 @@
       "tags": "human sedac NO2",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
-      "product": "CIESIN_SEDAC_SDEI_NO2",
       "wrapX": true
     }
   }

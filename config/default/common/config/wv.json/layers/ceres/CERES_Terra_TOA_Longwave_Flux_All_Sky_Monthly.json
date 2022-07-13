@@ -5,8 +5,7 @@
       "description": "ceres/CERES_Terra_TOA_Longwave_Flux_All_Sky_Monthly",
       "tags": "top of atmosphere",
       "group": "overlays",
-      "layergroup": "TOA Flux",
-      "product": "CER_SYN1deg-Month_Terra-MODIS"
+      "layergroup": "TOA Flux"
     }
   }
 }

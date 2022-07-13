@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Incident_Shortwave_Over_Land_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Radiation",
-      "product": "M2TMNXLFO"
+      "layergroup": "Radiation"
     }
   }
 }

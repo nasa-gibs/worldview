@@ -6,8 +6,7 @@
       "tags": "ai PyroCb flammagenitus",
       "group": "overlays",
       "wrapadjacentdays": true,
-      "layergroup": "Aerosol Index",
-      "product": "OMPS_NPP_NMMIEAI_L2"
+      "layergroup": "Aerosol Index"
     }
   }
 }

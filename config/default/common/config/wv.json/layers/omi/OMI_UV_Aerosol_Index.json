@@ -5,7 +5,6 @@
       "description": "omi/OMI_UV_Aerosol_Index",
       "group": "overlays",
       "layergroup": "Aerosol Index",
-      "product": "OMUVBd",
       "tags": "ai"
     }
   }

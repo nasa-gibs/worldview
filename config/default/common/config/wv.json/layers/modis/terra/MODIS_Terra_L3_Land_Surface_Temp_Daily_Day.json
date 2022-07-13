@@ -6,7 +6,6 @@
       "tags": "lst",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
-      "product": "MOD11A1",
       "wrapadjacentdays": true
     }
   }

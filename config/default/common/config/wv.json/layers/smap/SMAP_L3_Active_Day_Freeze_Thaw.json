@@ -4,8 +4,7 @@
       "id": "SMAP_L3_Active_Day_Freeze_Thaw",
       "description": "smap/SMAP_L3_Active_Day_Freeze_Thaw",
       "group": "overlays",
-      "layergroup": "Freeze/Thaw",
-      "product": "SPL3FTA"
+      "layergroup": "Freeze/Thaw"
     }
   }
 }

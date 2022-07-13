@@ -6,7 +6,6 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Sea Ice",
-      "product": "MYD29P1D",
       "wrapadjacentdays": true
     }
   }

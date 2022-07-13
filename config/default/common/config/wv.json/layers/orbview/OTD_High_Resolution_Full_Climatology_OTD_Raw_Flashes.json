@@ -5,8 +5,7 @@
       "description": "orbview/OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Lightning",
-      "product": "lohrfc"
+      "layergroup": "Lightning"
     }
   }
 }

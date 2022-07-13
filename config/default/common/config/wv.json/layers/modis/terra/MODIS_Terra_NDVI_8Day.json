@@ -6,7 +6,6 @@
       "group": "overlays",
       "tags": "ndvi normalized difference vegetation index",
       "layergroup": "Vegetation Indices",
-      "product": "MOD13Q4N",
       "availability": {
         "rollingWindow": 20
       }

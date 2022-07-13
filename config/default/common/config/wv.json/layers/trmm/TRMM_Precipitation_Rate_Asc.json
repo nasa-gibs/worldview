@@ -5,8 +5,7 @@
       "description": "trmm/TRMM_Precipitation_Rate_Asc",
       "tags": "rain",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "GPM_2AGPROFTRMMTMI_CLIM"
+      "layergroup": "Precipitation Rate"
     }
   }
 }

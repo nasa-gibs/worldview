@@ -6,7 +6,6 @@
       "tags": "human sedac population",
       "group": "overlays",
       "layergroup": "Population Density",
-      "product": "CIESIN_SEDAC_GPWv4_APDENS_WPP_2015",
       "wrapX": true
     }
   }

@@ -6,7 +6,6 @@
       "group": "overlays",
       "tags": "enhanced",
       "layergroup": "Soil Moisture",
-      "product": "SPL3SMP_E",
       "wrapadjacentdays": true
     }
   }

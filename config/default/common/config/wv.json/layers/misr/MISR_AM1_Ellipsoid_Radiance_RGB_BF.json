@@ -5,8 +5,7 @@
       "description": "misr/MISR_AM1_Ellipsoid_Radiance_RGB_BF",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Radiance",
-      "product": "MI1B2_ELLIPSOID_BF"
+      "layergroup": "Radiance"
     }
   }
 }

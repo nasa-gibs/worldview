@@ -5,8 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_4km_Night_Monthly",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
-      "layergroup": "Sea Surface Temperature",
-      "product": "MODIS_AQUA_L3_SST_MID-IR_MONTHLY_4KM_NIGHTTIME_V2014.0"
+      "layergroup": "Sea Surface Temperature"
     }
   }
 }

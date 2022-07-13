@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_EVI_8Day",
       "group": "overlays",
       "layergroup": "Vegetation Indices",
-      "product": "MOD13Q4N",
       "availability": {
         "rollingWindow": 20
       }

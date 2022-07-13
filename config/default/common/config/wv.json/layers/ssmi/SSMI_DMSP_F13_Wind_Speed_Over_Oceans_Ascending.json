@@ -5,8 +5,7 @@
       "description": "ssmi/SSMI_DMSP_F13_Wind_Speed_Over_Oceans_Ascending",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Wind Speed",
-      "product": "rssmif13d"
+      "layergroup": "Wind Speed"
     }
   }
 }

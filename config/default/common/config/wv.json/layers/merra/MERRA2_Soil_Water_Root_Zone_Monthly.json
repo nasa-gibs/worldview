@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Soil_Water_Root_Zone_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Soil Moisture",
-      "product": "M2TMNXLND"
+      "layergroup": "Soil Moisture"
     }
   }
 }

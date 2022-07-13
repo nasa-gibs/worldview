@@ -5,7 +5,6 @@
       "description": "modis/aqua/MODIS_Aqua_Sea_Ice",
       "group": "overlays",
       "layergroup": "Sea Ice",
-      "product": "MYD29",
       "wrapadjacentdays": true
     }
   }

@@ -4,8 +4,7 @@
       "id": "MLS_Temperature_46hPa_Day",
       "description": "mls/MLS_Temperature_46hPa_Day",
       "group": "overlays",
-      "layergroup": "Temperature",
-      "product": "ML2T"
+      "layergroup": "Temperature"
     }
   }
 }

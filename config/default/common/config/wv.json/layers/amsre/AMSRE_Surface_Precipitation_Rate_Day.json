@@ -5,7 +5,6 @@
       "description": "amsre/AMSRE_Surface_Precipitation_Rate_Day",
       "tags": "rain snow",
       "group": "overlays",
-      "product": "AE_Rain",
       "layergroup": "Precipitation Rate"
     }
   }

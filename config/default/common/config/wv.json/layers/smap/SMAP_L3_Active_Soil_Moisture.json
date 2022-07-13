@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L3_Active_Soil_Moisture",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "SPL3SMA",
       "wrapadjacentdays": true
     }
   }

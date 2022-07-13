@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L4_Snow_Mass",
       "group": "overlays",
       "layergroup": "Snow Mass",
-      "product": "SPL4SMGP",
       "wrapadjacentdays": true
     }
   }

@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_L3_Sea_Ice_Daily",
       "group": "overlays",
       "layergroup": "Sea Ice",
-      "product": "MOD29P1D",
       "wrapadjacentdays": true
     }
   }

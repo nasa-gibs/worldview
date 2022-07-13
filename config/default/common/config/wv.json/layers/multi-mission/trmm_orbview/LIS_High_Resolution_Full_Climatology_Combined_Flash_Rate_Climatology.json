@@ -5,8 +5,7 @@
       "description": "multi-mission/trmm_orbview/LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Lightning",
-      "product": "lohrfc"
+      "layergroup": "Lightning"
     }
   }
 }

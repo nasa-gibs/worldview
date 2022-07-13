@@ -5,8 +5,7 @@
       "description": "trmm/TRMM_Brightness_Temp_Dsc",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Brightness Temperature",
-      "product": "GPM_1CTRMMTMI"
+      "layergroup": "Brightness Temperature"
     }
   }
 }

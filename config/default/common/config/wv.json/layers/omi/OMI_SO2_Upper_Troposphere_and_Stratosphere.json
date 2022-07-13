@@ -5,7 +5,6 @@
       "description": "omi/OMI_SO2_Upper_Troposphere_and_Stratosphere",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
-      "product": "OMSO2",
       "tags": "so2 sulphur dioxide",
       "palette": {
         "recommended": [

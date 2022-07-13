@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L4_Uncertainty_Mean_Net_Ecosystem_Exchange",
       "group": "overlays",
       "layergroup": "Net Ecosystem CO2 Exchange",
-      "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }
   }

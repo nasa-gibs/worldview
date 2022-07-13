@@ -5,8 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_Snow_Extent_8Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Snow Extent",
-      "product": "MYD10A2"
+      "layergroup": "Snow Extent"
     }
   }
 }

@@ -8,7 +8,6 @@
       "type": "vector",
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": "MYD14",
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {

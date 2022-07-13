@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS3STD",
       "wrapadjacentdays": true,
       "layergroup": "Carbon Monoxide"
     }

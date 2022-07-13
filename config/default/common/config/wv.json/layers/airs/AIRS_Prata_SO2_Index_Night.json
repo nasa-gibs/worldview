@@ -5,7 +5,6 @@
       "description": "airs/AIRS_Prata_SO2_Index_Night",
       "tags": "so2 sulphur",
       "group": "overlays",
-      "product": "AIRIBRAD_NIGHT",
       "layergroup": "Sulfur Dioxide",
       "palette": {
         "recommended": [

@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Socioeconomic",
-      "product": "CIESIN_SEDAC_LECZ_URPLAEv2",
       "wrapX": true
     }
   }

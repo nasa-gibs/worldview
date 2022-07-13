@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L3_Passive_Brightness_Temp_V",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "SPL3SMP",
       "wrapadjacentdays": true
     }
   }

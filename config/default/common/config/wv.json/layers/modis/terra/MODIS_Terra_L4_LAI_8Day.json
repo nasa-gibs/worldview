@@ -5,8 +5,7 @@
       "description": "modis/terra/MODIS_Terra_L4_LAI_8Day",
       "tags": "lai",
       "group": "overlays",
-      "layergroup": "Leaf Area Index",
-      "product": "MOD15A2H"
+      "layergroup": "Leaf Area Index"
     }
   }
 }

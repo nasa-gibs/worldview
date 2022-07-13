@@ -6,7 +6,6 @@
       "tags": "human sedac wild",
       "group": "overlays",
       "layergroup": "Human Footprint",
-      "product": "CIESIN_SEDAC_LWP2_LW_GEOG",
       "wrapX": true
     }
   }

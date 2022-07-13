@@ -7,7 +7,6 @@
       "group": "overlays",
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": "MOD14",
       "type": "vector",
       "transition": true,
       "vectorStyle": {

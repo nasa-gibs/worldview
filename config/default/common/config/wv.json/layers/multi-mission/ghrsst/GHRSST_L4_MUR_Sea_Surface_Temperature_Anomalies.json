@@ -5,7 +5,6 @@
       "description": "multi-mission/ghrsst/GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
       "tags": "sst ghrsst podaac PO.DAAC",
       "layergroup": "Sea Surface Temperature Anomalies",
-      "product": "MUR-JPL-L4-GLOB-v4.1",
       "group": "overlays",
       "wrapadjacentdays": true
     }
