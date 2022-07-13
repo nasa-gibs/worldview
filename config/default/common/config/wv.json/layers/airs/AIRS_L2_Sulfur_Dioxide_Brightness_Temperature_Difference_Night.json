@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
       "tags": "SO2 Bt sulphur dioxide",
       "group": "overlays",
-      "product": "AIRS2SUP",
       "layergroup": "Sulfur Dioxide"
     }
   }

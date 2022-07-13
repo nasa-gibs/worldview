@@ -4,8 +4,7 @@
       "id": "SMAP_L1_Passive_Faraday_Rotation_Fore",
       "description": "smap/SMAP_L1_Passive_Faraday_Rotation_Fore",
       "group": "overlays",
-      "layergroup": "Faraday Rotation",
-      "product": "SPL1BTB"
+      "layergroup": "Faraday Rotation"
     }
   }
 }

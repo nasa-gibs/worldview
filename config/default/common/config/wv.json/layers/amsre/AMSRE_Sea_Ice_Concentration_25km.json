@@ -4,7 +4,6 @@
       "id": "AMSRE_Sea_Ice_Concentration_25km",
       "description": "amsre/AMSRE_Sea_Ice_Concentration_25km",
       "group": "overlays",
-      "product": "AE_SI25",
       "layergroup": "Sea Ice",
       "palette": {
         "recommended": [

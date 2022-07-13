@@ -6,7 +6,6 @@
       "tags": "military grid reference system harmonized landsat sentinel-2",
       "group": "overlays",
       "layergroup": "Reference",
-      "product": "",
       "type": "vector",
       "wrapX": true,
       "disableSnapshot": true

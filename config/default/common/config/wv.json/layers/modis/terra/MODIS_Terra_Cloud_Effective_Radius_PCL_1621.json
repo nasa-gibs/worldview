@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Effective_Radius_PCL_1621",
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
-      "product": "MOD06_L2",
       "wrapadjacentdays": true
     }
   }

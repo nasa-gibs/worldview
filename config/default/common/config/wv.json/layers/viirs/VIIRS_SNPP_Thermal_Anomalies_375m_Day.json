@@ -6,10 +6,6 @@
       "tags": "hotspots s-npp snpp vectors",
       "group": "overlays",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": [
-        "VNP14IMG_NRT_DAY",
-        "VNP14IMGTDL_NRT"
-      ],
       "period": "daily",
       "type": "vector",
       "vectorStyle": {

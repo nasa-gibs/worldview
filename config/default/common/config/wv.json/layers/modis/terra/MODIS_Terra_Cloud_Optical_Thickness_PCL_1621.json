@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
       "group": "overlays",
       "layergroup": "Cloud Optical Thickness",
-      "product": "MOD06_L2",
       "wrapadjacentdays": true
     }
   }

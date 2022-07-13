@@ -5,8 +5,7 @@
       "description": "mls/MLS_CO_215hPa_Day",
       "tags": "co",
       "group": "overlays",
-      "layergroup": "Carbon Monoxide",
-      "product": "ML2CO"
+      "layergroup": "Carbon Monoxide"
     }
   }
 }

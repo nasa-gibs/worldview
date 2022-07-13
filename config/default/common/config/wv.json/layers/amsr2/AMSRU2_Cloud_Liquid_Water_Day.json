@@ -5,8 +5,7 @@
       "description": "amsr2/AMSRU2_Cloud_Liquid_Water_Day",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Cloud Liquid Water",
-      "product": ""
+      "layergroup": "Cloud Liquid Water"
     }
   }
 }

@@ -2,8 +2,6 @@
   "layers": {
     "Reference_Features_15m": {
       "id": "Reference_Features_15m",
-      "title": "Coastlines / Borders / Roads",
-      "subtitle": "&copy; OpenStreetMap contributors, Natural Earth",
       "description": "reference/Reference_Features_15m",
       "tags": "osm reference, country, countries, state, province",
       "group": "overlays",

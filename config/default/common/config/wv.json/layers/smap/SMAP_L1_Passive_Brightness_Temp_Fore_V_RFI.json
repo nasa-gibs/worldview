@@ -4,8 +4,7 @@
       "id": "SMAP_L1_Passive_Brightness_Temp_Fore_V_RFI",
       "description": "smap/SMAP_L1_Passive_Brightness_Temp_Fore_V_RFI",
       "group": "overlays",
-      "layergroup": "Brightness Temperature",
-      "product": "SPL1CTB"
+      "layergroup": "Brightness Temperature"
     }
   }
 }

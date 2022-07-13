@@ -6,7 +6,6 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Clear Sky Confidence",
-      "product": "CLDMSK_L2_VIIRS_SNPP_NRT",
       "wrapadjacentdays": true
     }
   }

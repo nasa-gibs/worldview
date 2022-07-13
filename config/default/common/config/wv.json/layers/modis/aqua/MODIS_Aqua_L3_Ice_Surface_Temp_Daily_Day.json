@@ -6,7 +6,6 @@
       "tags": "ist",
       "group": "overlays",
       "layergroup": "Ice Surface Temperature",
-      "product": "MYD29P1D",
       "wrapadjacentdays": true
     }
   }

@@ -5,7 +5,6 @@
       "description": "multi-mission/merged/RSS_Merged_Wind_Climatology_Monthly",
       "tags": "",
       "layergroup": "Wind Speed",
-      "product": "rss1windnv7r01",
       "group": "overlays"
     }
   }

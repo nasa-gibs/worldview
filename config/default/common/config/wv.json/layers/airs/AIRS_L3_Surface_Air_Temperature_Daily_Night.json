@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L3_Surface_Air_Temperature_Daily_Night",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS3STD",
       "wrapadjacentdays": true,
       "layergroup": "Temperature"
     }

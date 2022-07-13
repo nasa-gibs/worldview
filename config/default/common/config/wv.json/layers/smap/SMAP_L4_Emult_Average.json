@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L4_Emult_Average",
       "group": "overlays",
       "layergroup": "Vegetation Light Use Efficiency",
-      "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }
   }

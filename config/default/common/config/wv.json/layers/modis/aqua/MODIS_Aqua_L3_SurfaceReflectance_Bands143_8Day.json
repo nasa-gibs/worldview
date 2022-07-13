@@ -5,8 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_SurfaceReflectance_Bands143_8Day",
       "tags": "lsr 143 true color",
       "group": "baselayers",
-      "layergroup": "Land Surface Reflectance",
-      "product": "MYD09A1"
+      "layergroup": "Land Surface Reflectance"
     }
   }
 }

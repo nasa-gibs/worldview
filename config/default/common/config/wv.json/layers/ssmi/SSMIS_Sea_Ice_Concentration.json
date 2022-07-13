@@ -5,8 +5,7 @@
       "description": "ssmi/SSMIS_Sea_Ice_Concentration",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Sea Ice",
-      "product": "NSIDC-0051-0081"
+      "layergroup": "Sea Ice"
     }
   }
 }

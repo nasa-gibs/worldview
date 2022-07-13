@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Amphibian Richness",
-      "product": "CIESIN_SEDAC_SPECIES_AMP_RICH15",
       "wrapX": true
     }
   }

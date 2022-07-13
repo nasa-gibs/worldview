@@ -5,8 +5,7 @@
       "description": "viirs/VIIRS_NOAA20_Brightness_Temp_BandI5_Night",
       "tags": "jpss jpss-1",
       "group": "overlays",
-      "layergroup": "Brightness Temperature",
-      "product": ""
+      "layergroup": "Brightness Temperature"
     }
   }
 }

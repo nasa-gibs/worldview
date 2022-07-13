@@ -6,7 +6,6 @@
       "tags": "par",
       "group": "overlays",
       "layergroup": "Photosynthetically Available Radiation",
-      "product": "",
       "wrapadjacentdays": true
     }
   }

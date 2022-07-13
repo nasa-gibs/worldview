@@ -6,7 +6,6 @@
       "group": "overlays",
       "tags": "geostationary geo",
       "layergroup": "Geostationary",
-      "product": "",
       "palette": {
         "immutable": true
       },

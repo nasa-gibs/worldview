@@ -6,7 +6,6 @@
       "tags": "lsr 121 false color myd09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
-      "product": "MYD09GQ",
       "wrapadjacentdays": true
     }
   }

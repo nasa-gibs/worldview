@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_Air_Temperature_250hPa_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Temperature",
-      "product": "M2IMNPASM"
+      "layergroup": "Temperature"
     }
   }
 }

@@ -5,7 +5,6 @@
       "description": "multi-mission/merged/MEaSUREs_Sea_Ice_Snow_Extent",
       "tags": "",
       "layergroup": "Sea Ice",
-      "product": "NSIDC-0534",
       "group": "overlays"
     }
   }

@@ -5,8 +5,7 @@
       "description": "ssmi/SSMIS_Sea_Ice_Concentration_Snow_Extent",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Sea Ice",
-      "product": "NISE"
+      "layergroup": "Sea Ice"
     }
   }
 }

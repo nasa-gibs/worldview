@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_L3_NDSI_Snow_Cover_Daily",
       "group": "overlays",
       "layergroup": "Snow Cover",
-      "product": "MOD10A1",
       "wrapadjacentdays": true
     }
   }

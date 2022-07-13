@@ -5,7 +5,6 @@
       "description": "omi/OMI_Ozone_TOMS_Total_Column",
       "group": "overlays",
       "layergroup": "Ozone",
-      "product": "OMTO3e",
       "tags": "Total Ozone Mapping Spectrometer"
     }
   }

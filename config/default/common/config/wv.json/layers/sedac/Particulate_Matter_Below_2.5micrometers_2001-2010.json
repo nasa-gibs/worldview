@@ -6,7 +6,6 @@
       "tags": "human sedac pm2.5",
       "group": "overlays",
       "layergroup": "Particulate Matter",
-      "product": "CIESIN_SEDAC_SDEI_PM25_MMSAOD",
       "wrapX": true
     }
   }

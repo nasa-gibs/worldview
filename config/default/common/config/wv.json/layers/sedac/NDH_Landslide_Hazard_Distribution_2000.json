@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Landslide Hazard",
-      "product": "CIESIN_CHRR_NDH_LSLIDE_HD",
       "wrapX": true
     }
   }

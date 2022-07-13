@@ -5,7 +5,6 @@
       "description": "airs/AIRS_Prata_SO2_Index_Day",
       "tags": "so2 sulphur",
       "group": "overlays",
-      "product": "AIRIBRAD_DAY",
       "layergroup": "Sulfur Dioxide",
       "palette": {
         "recommended": [

@@ -5,8 +5,7 @@
       "description": "mopitt/MOPITT_CO_Daily_Total_Column_L2",
       "tags": "co",
       "group": "overlays",
-      "layergroup": "Carbon Monoxide",
-      "product": "MOP02R_NRT"
+      "layergroup": "Carbon Monoxide"
     }
   }
 }

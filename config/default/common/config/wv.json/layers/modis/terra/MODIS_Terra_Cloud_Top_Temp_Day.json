@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Temp_Day",
       "group": "overlays",
       "layergroup": "Cloud Top Temperature",
-      "product": "MOD06_L2_DAY",
       "wrapadjacentdays": true,
       "palette": {
         "recommended": [

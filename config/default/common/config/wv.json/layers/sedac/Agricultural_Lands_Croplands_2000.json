@@ -6,7 +6,6 @@
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Land Cover",
-      "product": "CIESIN_SEDAC_AGLANDS_CROP2000",
       "wrapX": true
     }
   }

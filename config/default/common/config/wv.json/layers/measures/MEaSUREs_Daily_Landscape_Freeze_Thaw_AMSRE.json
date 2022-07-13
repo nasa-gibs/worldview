@@ -5,7 +5,6 @@
       "description": "amsre/MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE",
       "group": "overlays",
       "layergroup": "Freeze/Thaw",
-      "product": "NSIDC-0477",
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"

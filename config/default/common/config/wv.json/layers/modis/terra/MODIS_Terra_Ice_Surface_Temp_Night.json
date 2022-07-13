@@ -4,8 +4,7 @@
       "id": "MODIS_Terra_Ice_Surface_Temp_Night",
       "description": "modis/terra/MODIS_Terra_Ice_Surface_Temp_Night",
       "group": "overlays",
-      "layergroup": "Ice Surface Temperature",
-      "product": "MOD29"
+      "layergroup": "Ice Surface Temperature"
     }
   }
 }

@@ -5,8 +5,7 @@
       "description": "mls/MLS_N2O_46hPa_Day",
       "tags": "n2o",
       "group": "overlays",
-      "layergroup": "Nitrous Oxide",
-      "product": "ML2N2O"
+      "layergroup": "Nitrous Oxide"
     }
   }
 }

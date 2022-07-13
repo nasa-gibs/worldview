@@ -5,7 +5,6 @@
       "description": "amsua/AMSUA_NOAA16_Brightness_Temp_Channel_2",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "amsua16sp",
       "tags": ""
     }
   }

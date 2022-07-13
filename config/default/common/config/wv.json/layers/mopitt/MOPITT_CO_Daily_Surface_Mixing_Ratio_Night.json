@@ -5,8 +5,7 @@
       "description": "mopitt/MOPITT_CO_Daily_Surface_Mixing_Ratio_Night",
       "tags": "co",
       "group": "overlays",
-      "layergroup": "Carbon Monoxide",
-      "product": "MOP03J"
+      "layergroup": "Carbon Monoxide"
     }
   }
 }

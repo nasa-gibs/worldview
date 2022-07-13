@@ -5,8 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Snow Cover",
-      "product": "MYD10CM"
+      "layergroup": "Snow Cover"
     }
   }
 }

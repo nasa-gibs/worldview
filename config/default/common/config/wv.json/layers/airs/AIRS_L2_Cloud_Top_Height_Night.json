@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_Cloud_Top_Height_Night",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS2RET",
       "layergroup": "Cloud Top Height"
     }
   }

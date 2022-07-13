@@ -6,7 +6,6 @@
       "tags": "sst ghrsst podaac PO.DAAC",
       "group": "overlays",
       "layergroup": "Sea Surface Temperature",
-      "product": "AVHRR_OI-NCEI-L4-GLOB-v2.0",
       "wrapadjacentdays": true
     }
   }
