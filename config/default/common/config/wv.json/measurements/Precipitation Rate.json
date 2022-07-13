@@ -20,6 +20,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
+                        "GMI_Precipitation_Rate_Asc",
+                        "GMI_Precipitation_Rate_Dsc",
                         "GMI_Rain_Rate_Asc",
                         "GMI_Rain_Rate_Dsc",
                         "GMI_Snow_Rate_Asc",
