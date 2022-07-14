@@ -47,6 +47,9 @@
   "OrbitTracks_Landsat-8_Ascending": "2019-02-14T00:00:00Z",
   "OrbitTracks_Landsat-8_Descending": "2019-02-14T00:00:00Z",
 
+  "OrbitTracks_Landsat-9_Ascending": "2022-02-14T00:00:00Z",
+  "OrbitTracks_Landsat-9_Descending": "2022-02-14T00:00:00Z",
+
   "OrbitTracks_SMAP_Ascending": "2019-02-14T00:00:00Z",
   "OrbitTracks_SMAP_Descending": "2019-02-14T00:00:00Z",
 
