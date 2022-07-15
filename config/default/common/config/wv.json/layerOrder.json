@@ -1006,6 +1006,8 @@
 		"OrbitTracks_Landsat-7_Descending",
 		"OrbitTracks_Landsat-8_Ascending",
 		"OrbitTracks_Landsat-8_Descending",
+		"OrbitTracks_Landsat-9_Ascending",
+		"OrbitTracks_Landsat-9_Descending",
 		"OrbitTracks_METOP-A_Ascending",
 		"OrbitTracks_METOP-A_Descending",
 		"OrbitTracks_METOP-B_Ascending",
@@ -1033,7 +1035,9 @@
 		"OrbitTracks_Suomi_NPP_Ascending",
 		"OrbitTracks_Suomi_NPP_Descending",
 		"OrbitTracks_Terra_Descending",
-		"OrbitTracks_Terra_Ascending"
+		"OrbitTracks_Terra_Ascending",
+		"OrbitTracks_TRMM_Ascending",
+		"OrbitTracks_TRMM_Descending"
 	],
 	"layerOrderExceptions": [
 		"SCAR_Land_Mask",
