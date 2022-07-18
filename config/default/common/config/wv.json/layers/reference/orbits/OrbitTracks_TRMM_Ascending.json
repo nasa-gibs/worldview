@@ -1,0 +1,51 @@
+{
+  "layers": {
+    "OrbitTracks_TRMM_Ascending": {
+      "id": "OrbitTracks_TRMM_Ascending",
+      "description": "reference/orbits/OrbitTracks_TRMM_Ascending",
+      "group": "overlays",
+      "type": "vector",
+      "period": "daily",
+      "layergroup": "Orbital Track",
+      "track": "ascending",
+      "palette": {
+        "id": "OrbitTracks_TRMM_Ascending",
+        "immutable": true
+      },
+      "tags": "tracks vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_TRMM_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_TRMM_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_TRMM_Ascending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_TRMM_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
+    }
+  }
+}

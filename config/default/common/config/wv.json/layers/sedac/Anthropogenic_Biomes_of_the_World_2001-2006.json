@@ -6,7 +6,6 @@
       "tags": "human sedac biosphere anthrome",
       "group": "overlays",
       "layergroup": "Land Cover",
-      "product": "CIESIN_SEDAC_ANTHROMES_v1",
       "wrapX": true
     }
   }

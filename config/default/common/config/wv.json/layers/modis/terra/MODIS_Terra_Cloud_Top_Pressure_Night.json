@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Night",
       "group": "overlays",
       "layergroup": "Cloud Pressure",
-      "product": "MOD06_L2_NIGHT",
       "palette": {
         "recommended": [
           "blue_4"

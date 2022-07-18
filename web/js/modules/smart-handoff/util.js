@@ -2,18 +2,48 @@
 import { get } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { parseTemplate } from 'url-template';
+import moment from 'moment';
+
 import { TOOLS_EARTHDATA_SEARCH } from './constants';
+
+/**
+ * Get startDate and endDate used for granule count query and handoff to EDS
+ *
+ * @param {*} layer
+ * @param {*} selectedDate
+ * @param {*} granuleLayers
+ * @returns
+ */
+export const getStartEndDates = (layer, selectedDate, granuleLayers) => {
+  const { type, id } = layer;
+  let startDate;
+  let endDate;
+
+  if (type === 'granule' && Object.keys(granuleLayers).length > 0) {
+    const granuleDates = granuleLayers[id] && granuleLayers[id].dates;
+    const start = granuleDates[0];
+    const end = granuleDates[granuleDates.length - 1];
+    startDate = `${moment.utc(start).format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
+    endDate = `${moment.utc(end).format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
+  } else {
+    startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
+    endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
+  }
+
+  return {
+    startDate,
+    endDate,
+  };
+};
 
 function getHandoffParams (queryInput, options) {
   const {
-    projection, conceptId, includeDates, selectedDate, currentExtent, showBoundingBox,
+    projection, conceptId, startDate, endDate, currentExtent, showBoundingBox,
   } = options;
 
   const getParam = ({ ValueType, ValueName }) => {
     if (ValueType === 'temporalRange') {
-      if (includeDates) {
-        const startDate = `${selectedDate}T00:00:00.000Z`;
-        const endDate = `${selectedDate}T23:59:59.999Z`;
+      if (startDate && endDate) {
         return {
           [ValueName]: `${startDate},${endDate}`,
         };
@@ -55,6 +85,7 @@ export function parseSmartHandoff(state) {
     conceptId,
   };
 }
+
 export function serializeSmartHandoff(currentItemState, state) {
   const activeTab = get(state, 'sidebar.activeTab');
   const { layerId, conceptId } = currentItemState;

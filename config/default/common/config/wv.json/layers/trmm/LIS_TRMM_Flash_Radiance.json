@@ -6,7 +6,6 @@
       "tags": "lightning",
       "group": "overlays",
       "layergroup": "Lightning",
-      "product": "lislip",
       "wrapadjacentdays": true
     }
   }

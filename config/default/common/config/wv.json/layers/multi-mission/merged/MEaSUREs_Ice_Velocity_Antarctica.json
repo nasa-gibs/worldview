@@ -5,7 +5,6 @@
       "description": "multi-mission/merged/MEaSUREs_Ice_Velocity_Antarctica",
       "tags": "",
       "layergroup": "Ice Velocity Antarctica",
-      "product": "NSIDC-0484",
       "group": "overlays"
     }
   }

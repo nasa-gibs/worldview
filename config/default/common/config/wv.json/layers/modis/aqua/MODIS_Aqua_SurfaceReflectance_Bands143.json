@@ -6,7 +6,6 @@
       "tags": "lsr true color myd09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
-      "product": "MYD09GA",
       "wrapadjacentdays": true
     }
   }

@@ -5,8 +5,7 @@
       "description": "merra/MERRA2_ISCCP_Cloud_Albedo_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Cloud Albedo",
-      "product": "M2TMNXCSP"
+      "layergroup": "Cloud Albedo"
     }
   }
 }

@@ -5,7 +5,6 @@
       "description": "smap/SMAP_L4_Mean_Gross_Primary_Productivity",
       "group": "overlays",
       "layergroup": "Gross Primary Productivity",
-      "product": "SPL4CMDL",
       "wrapadjacentdays": true
     }
   }

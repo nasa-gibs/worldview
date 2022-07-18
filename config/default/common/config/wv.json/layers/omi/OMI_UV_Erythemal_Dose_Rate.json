@@ -5,7 +5,6 @@
       "description": "omi/OMI_UV_Erythemal_Dose_Rate",
       "group": "overlays",
       "layergroup": "Radiation",
-      "product": "OMUVBd",
       "tags": "ultra violet"
     }
   }

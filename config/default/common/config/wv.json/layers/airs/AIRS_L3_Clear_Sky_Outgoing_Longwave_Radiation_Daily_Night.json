@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS3STD",
       "wrapadjacentdays": true,
       "layergroup": "Outgoing Radiation"
     }

@@ -4,8 +4,7 @@
       "id": "GMI_Brightness_Temp_Dsc",
       "description": "gpm/GMI_Brightness_Temp_Dsc",
       "group": "overlays",
-      "layergroup": "Brightness Temperature",
-      "product": "GPM_1CGPMGMI"
+      "layergroup": "Brightness Temperature"
     }
   }
 }

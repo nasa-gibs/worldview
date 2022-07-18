@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Height_Day",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
-      "product": "MOD06_L2_DAY",
       "wrapadjacentdays": true
     }
   }

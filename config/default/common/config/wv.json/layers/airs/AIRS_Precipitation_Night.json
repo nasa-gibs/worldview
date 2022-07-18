@@ -5,7 +5,6 @@
       "description": "airs/AIRS_Precipitation_Night",
       "tags": "rain snow",
       "group": "overlays",
-      "product": "AIRX2SUP_NIGHT",
       "layergroup": "Precipitation Estimate",
       "palette": {
         "recommended": [

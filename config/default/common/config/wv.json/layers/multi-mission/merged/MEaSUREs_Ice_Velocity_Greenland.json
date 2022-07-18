@@ -5,7 +5,6 @@
       "description": "multi-mission/merged/MEaSUREs_Ice_Velocity_Greenland",
       "tags": "",
       "layergroup": "Ice Velocity Greenland",
-      "product": "NSIDC-0478",
       "group": "overlays"
     }
   }

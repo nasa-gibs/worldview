@@ -5,8 +5,7 @@
       "description": "amsr2/AMSRU2_Soil_Moisture_NPD_Day",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Soil Moisture",
-      "product": "AU_Land"
+      "layergroup": "Soil Moisture"
     }
   }
 }

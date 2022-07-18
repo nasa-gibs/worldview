@@ -5,7 +5,6 @@
       "description": "multi-mission/imerg/IMERG_Precipitation_Rate",
       "tags": "precipitation",
       "layergroup": "Precipitation Rate",
-      "product": "GPM_3IMERGDF",
       "group": "overlays"
     }
   }

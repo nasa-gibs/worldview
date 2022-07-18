@@ -6,7 +6,6 @@
       "tags": "lsr 143 true color",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
-      "product": "MYD09GA",
       "wrapadjacentdays": true
     }
   }

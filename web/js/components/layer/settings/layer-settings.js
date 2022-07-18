@@ -113,6 +113,7 @@ class LayerSettings extends React.Component {
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
+
       if (legend.type === 'classification' && legend.colors.length > 1) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
@@ -177,10 +178,10 @@ class LayerSettings extends React.Component {
       navElements.push(navItemEl);
     });
     return (
-      <>
+      <div className="double-palette">
         <Nav tabs>{navElements}</Nav>
         <TabContent activeTab={activeIndex}>{paneElements}</TabContent>
-      </>
+      </div>
     );
   }
 

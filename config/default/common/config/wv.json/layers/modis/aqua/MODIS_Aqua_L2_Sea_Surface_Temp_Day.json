@@ -6,7 +6,6 @@
       "tags": "sst",
       "group": "overlays",
       "layergroup": "Sea Surface Temperature",
-      "product": "",
       "wrapadjacentdays": true
     }
   }

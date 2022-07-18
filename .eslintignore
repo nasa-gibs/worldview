@@ -12,3 +12,4 @@ web/build/*
 test/*
 /tasks/temp/*
 web/js/lib/*
+e2e/reports/*

@@ -6,7 +6,6 @@
       "tags": "aod",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
-      "product": "MCDAODHD",
       "wrapadjacentdays": true,
       "palette": {
         "recommended": [

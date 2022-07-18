@@ -6,7 +6,6 @@
       "tags": "srtm gdem dem terrain",
       "group": "overlays",
       "layergroup": "Terrain Elevation",
-      "product": "SRTMGL1",
       "wrapX": true
     }
   }

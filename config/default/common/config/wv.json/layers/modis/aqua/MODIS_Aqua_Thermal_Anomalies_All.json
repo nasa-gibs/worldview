@@ -15,7 +15,6 @@
       "transition": true,
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": "MYD14",
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true

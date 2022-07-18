@@ -6,8 +6,7 @@
       "tags": "SO2, sulphur",
       "group": "overlays",
       "wrapadjacentdays": true,
-      "layergroup": "Sulfur Dioxide",
-      "product": "NMSO2-PCA-L2"
+      "layergroup": "Sulfur Dioxide"
     }
   }
 }

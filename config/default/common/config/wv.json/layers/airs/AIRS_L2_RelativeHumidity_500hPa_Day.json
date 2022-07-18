@@ -5,7 +5,6 @@
       "description": "airs/AIRS_L2_RelativeHumidity_500hPa_Day",
       "tags": "",
       "group": "overlays",
-      "product": "AIRS2RET",
       "layergroup": "Relative Humidity"
     }
   }

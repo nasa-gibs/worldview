@@ -5,8 +5,7 @@
       "description": "gpm/GMI_Snow_Rate_Dsc",
       "tags": "precipitation",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "GPM_2AGPROFGPMGMI"
+      "layergroup": "Precipitation Rate"
     }
   }
 }

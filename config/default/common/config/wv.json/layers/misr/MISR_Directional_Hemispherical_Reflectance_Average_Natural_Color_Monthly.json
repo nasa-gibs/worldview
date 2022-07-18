@@ -5,8 +5,7 @@
       "description": "misr/MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "DHR Reflectance",
-      "product": "MIL3MLS"
+      "layergroup": "DHR Reflectance"
     }
   }
 }

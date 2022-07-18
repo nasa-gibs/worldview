@@ -5,8 +5,7 @@
       "description": "aquarius/Aquarius_Soil_Moisture_Weekly",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Soil Moisture",
-      "product": "AQ3_WKSM"
+      "layergroup": "Soil Moisture"
     }
   }
 }

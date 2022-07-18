@@ -5,7 +5,6 @@
       "description": "omi/OMI_Ozone_DOAS_Total_Column",
       "group": "overlays",
       "layergroup": "Ozone",
-      "product": "OMDOAO3e",
       "tags": "Differential Absorption Spectroscopy"
     }
   }

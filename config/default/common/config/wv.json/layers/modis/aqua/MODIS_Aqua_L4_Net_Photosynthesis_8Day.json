@@ -5,8 +5,7 @@
       "description": "modis/aqua/MODIS_Aqua_L4_Net_Photosynthesis_8Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Photosynthesis, Net",
-      "product": "MYD17A2H"
+      "layergroup": "Photosynthesis, Net"
     }
   }
 }

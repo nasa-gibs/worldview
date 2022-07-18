@@ -5,7 +5,6 @@
       "description": "modis/aqua/MODIS_Aqua_Cloud_Fraction_Day",
       "group": "overlays",
       "layergroup": "Cloud Fraction",
-      "product": "MYD06_L2_DAY",
       "wrapadjacentdays": true
     }
   }

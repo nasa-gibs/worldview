@@ -4,7 +4,6 @@
       "id": "AMSRE_Snow_Depth_Over_Ice",
       "description": "amsre/AMSRE_Snow_Depth_Over_Ice",
       "group": "overlays",
-      "product": "AE_SI12",
       "layergroup": "Snow Depth",
       "palette": {
         "recommended": [
