@@ -443,7 +443,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
-    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
