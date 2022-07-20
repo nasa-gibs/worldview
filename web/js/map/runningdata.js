@@ -88,9 +88,11 @@ export default function MapRunningData(compareUi, store) {
       const { wv: { def: { id } } } = layer;
       const data = layer.getData(pixel);
       if (!data) return;
+      const [red, green, blue, alpha] = data;
+      const hexColor = util.rgbaToHex(red, green, blue, alpha);
       activeLayerObj[id] = {
         paletteLegends: getPalette(id, undefined, undefined, state),
-        paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
+        paletteHex: hexColor,
       };
     });
 

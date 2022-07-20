@@ -1266,6 +1266,7 @@ export default function mapui(models, config, store) {
       const isEventsTabActive = typeof events !== 'undefined' && events.active;
       const isMapAnimating = animation.isPlaying;
 
+      if (map.proj !== state.map.ui.selected.proj) return;
       if (self.mapIsbeingZoomed) return;
       if (self.mapIsbeingDragged) return;
       if (compareMapUi && compareMapUi.dragging) return;

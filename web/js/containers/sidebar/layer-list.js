@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -125,7 +125,6 @@ function LayerList(props) {
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
-        runningObject={runningDataObj[id]}
       />
     );
   };

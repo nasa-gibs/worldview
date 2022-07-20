@@ -74,7 +74,6 @@ function LayerRow (props) {
     isInProjection,
     tracksForLayer,
     isVectorLayer,
-    runningObject,
     measurementDescriptionPath,
     isAnimating,
   } = props;
@@ -92,6 +91,14 @@ function LayerRow (props) {
   const [showButtons, toggleShowButtons] = useState(isMobile);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+  const [runningDataObj, setRunningDataObj] = useState({});
+
+  useEffect(() => {
+    events.on('map:running-data', setRunningDataObj);
+    return () => {
+      events.off('map:running-data', setRunningDataObj);
+    };
+  }, []);
 
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
@@ -102,10 +109,11 @@ function LayerRow (props) {
 
   const getPaletteLegend = () => {
     if (!lodashIsEmpty(renderedPalette)) {
+      const runningDataForLayer = runningDataObj[layer.id];
       const isRunningData = compare.active
-        ? compare.activeString === compareState && !!runningObject
-        : !!runningObject;
-      const colorHex = isRunningData ? runningObject.paletteHex : null;
+        ? compare.activeString === compareState && !!runningDataForLayer
+        : !!runningDataForLayer;
+      const colorHex = isRunningData ? runningDataForLayer.paletteHex : null;
       let width = zot ? 220 : 231;
       if (isEmbedModeActive) {
         width = 201;
@@ -257,7 +265,7 @@ function LayerRow (props) {
       <div
         id={layerVectorBtnId}
         aria-label={title}
-        className={runningObject ? `${classNames} running` : classNames}
+        className={runningDataObj ? `${classNames} running` : classNames}
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
@@ -547,7 +555,6 @@ LayerRow.propTypes = {
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
-  runningObject: PropTypes.object,
   toggleVisibility: PropTypes.func,
   hasClickableFeature: PropTypes.bool,
   tracksForLayer: PropTypes.array,
