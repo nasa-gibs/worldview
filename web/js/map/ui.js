@@ -1249,18 +1249,10 @@ export default function mapui(models, config, store) {
     return map;
   }
 
-  /*
+  /**
    * Creates map events based on mouse position
-   *
-   *
-   * @method createMousePosSel
-   * @static
-   *
    * @param {object} map - OpenLayers Map Object
-   *
    * @returns {void}
-   *
-   * @todo move this component to another Location
    */
   function createMousePosSel(map) {
     const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
