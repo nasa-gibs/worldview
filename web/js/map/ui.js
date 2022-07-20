@@ -70,7 +70,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { getNormalizedCoordinate } from '../components/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
-import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
+import { startLoading, stopLoading, MAP_LOADING } from '../modules/loading/actions';
 import {
   MAP_DISABLE_CLICK_ZOOM,
   MAP_ENABLE_CLICK_ZOOM,
@@ -110,10 +110,6 @@ export default function mapui(models, config, store) {
     createLayer,
     processingPromise: null,
   };
-
-  layerQueue.on('idle', () => {
-    store.dispatch(stopLoading(PRELOAD_TILES));
-  });
 
   /**
    * Subscribe to redux store and listen for
@@ -971,8 +967,6 @@ export default function mapui(models, config, store) {
     const prevDate = getNextDateTime(state, -1, useDate);
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
 
-    store.dispatch(startLoading(PRELOAD_TILES));
-
     // If we've preloaded N dates out, we need to use the latest
     // preloaded date the next time we call this function or the buffer
     // won't stay ahead of the 'animation' when holding down timetep arrows
@@ -1241,6 +1235,13 @@ export default function mapui(models, config, store) {
       setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
     };
+
+    map.on('loadstart', () => {
+      store.dispatch(startLoading(MAP_LOADING));
+    });
+    map.on('loadend', () => {
+      store.dispatch(stopLoading(MAP_LOADING));
+    });
     map.on('rendercomplete', onRenderComplete);
     granuleFootprints[proj.crs] = granuleFootprint(map);
     window.addEventListener('resize', () => {

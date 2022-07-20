@@ -38,28 +38,15 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
-import { startLoading, stopLoading, LOADING_TILES } from '../modules/loading/actions';
 
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
-let loadingCounter = 0;
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const tileLoadStart = () => {
-    if (loadingCounter === 0) {
-      store.dispatch(startLoading(LOADING_TILES));
-    }
-    loadingCounter += 1;
-  };
-  const tileLoadEnd = () => {
-    loadingCounter -= 1;
-    if (loadingCounter === 0) {
-      store.dispatch(stopLoading(LOADING_TILES));
-    }
-  };
+
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -474,10 +461,6 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
-
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({
@@ -567,9 +550,7 @@ export default function mapLayerBuilder(config, cache, store) {
         sizes: matrixSet.tileMatrices,
       }),
     });
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
+
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -680,9 +661,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const tileSource = new OlSourceTileWMS(sourceOptions);
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
 
     const layer = new OlLayerTile({
       preload: 0,
