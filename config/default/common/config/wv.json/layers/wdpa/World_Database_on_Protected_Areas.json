@@ -3,6 +3,8 @@
     "World_Database_on_Protected_Areas": {
       "id": "World_Database_on_Protected_Areas",
       "layer": "0,1",
+      "title": "Protected Areas",
+      "subtitle": "UNEP-WCMC and IUCN",
       "description": "wdpa/World_Database_on_Protected_Areas",
       "group": "overlays",
       "tags": "wdpa pa national park protected areas",
