@@ -8,7 +8,6 @@ import {
 } from './constants';
 import { requestAction } from '../core/actions';
 import {
-  areCoordinatesWithinExtent,
   setLocalStorageCollapseState,
 } from './util';
 import {
@@ -62,7 +61,6 @@ export function setPlaceMarker(newCoordinates, reverseGeocodeResults, isInputSea
   return (dispatch, getState) => {
     const state = getState();
     const {
-      proj,
       locationSearch: { coordinates },
     } = state;
     const [longitude, latitude] = newCoordinates;
@@ -74,15 +72,7 @@ export function setPlaceMarker(newCoordinates, reverseGeocodeResults, isInputSea
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, newCoordinates);
     const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
-
-    if (!coordinatesWithinExtent) {
-      return dispatch({
-        type: SET_MARKER,
-        coordinates: [],
-      });
-    }
 
     if (markerAlreadyExists) {
       return dispatch({

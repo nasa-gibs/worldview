@@ -57,12 +57,6 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   const { id, longitude, latitude } = coordinatesObject;
   const coordinates = [longitude, latitude];
 
-  // only add marker within current map extent
-  const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
-  if (!coordinatesWithinExtent) {
-    return false;
-  }
-
   // transform coordinates if not CRS EPSG:4326
   let transformedCoords = coordinates;
   if (proj !== 'geographic') {

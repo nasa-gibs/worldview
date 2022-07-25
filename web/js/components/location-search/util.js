@@ -23,11 +23,8 @@ export function isValidCoordinates(position) {
 export const getCoordinateFixedPrecision = (coordinate) => Number(coordinate.toFixed(4));
 
 /**
- * getFormattedCoordinates
- *
  * @param {String} latitude
  * @param {String} longitude
- *
  * @returns {Array} formattedCoordinates
  */
 export const getFormattedCoordinates = (latitude, longitude) => {

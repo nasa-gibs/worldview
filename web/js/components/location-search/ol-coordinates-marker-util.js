@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { getFormattedCoordinates } from './util';
-
+import util from '../../util/util';
 /**
  * getCoordinatesDialogTitle
  *
@@ -31,20 +31,18 @@ const getCoordinatesDialogTitle = (geocodeProperties) => {
 };
 
 /**
- * getCoordinatesMetadata for tooltip display
- *
  * @param {Object} geocodeProperties
- *
  * @returns {Object} coordinatesMetadata
  */
 export const getCoordinatesMetadata = (geocodeProperties) => {
   const { latitude, longitude, reverseGeocodeResults } = geocodeProperties;
-
-  // get formatted coordinates
-  const [formattedLatitude, formattedLongitude] = getFormattedCoordinates(latitude, longitude);
-
-  // build title based on available parameters
-  const title = getCoordinatesDialogTitle(reverseGeocodeResults, formattedLatitude, formattedLongitude);
+  const normalizedLongitude = util.normalizeWrappedLongitude(longitude);
+  const [formattedLatitude, formattedLongitude] = getFormattedCoordinates(latitude, normalizedLongitude);
+  const title = getCoordinatesDialogTitle(
+    reverseGeocodeResults,
+    formattedLatitude,
+    formattedLongitude,
+  );
   const coordinates = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
 
   return {

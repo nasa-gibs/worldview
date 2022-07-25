@@ -68,17 +68,18 @@ export class CoordinatesMarker extends Component {
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     const latitude = getCoordinateFixedPrecision(lat);
     const longitude = getCoordinateFixedPrecision(lon);
+    const normalizedLongitude = util.normalizeWrappedLongitude(longitude);
 
     // show alert warning and exit mode if outside current map extent
     const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
-    const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
+    const withinExtent = areCoordinatesWithinExtent(proj, [normalizedLongitude, latitude]);
     if (!validNums || !withinExtent) {
       this.setState({ showExtentAlert: true });
       toggleReverseGeocodeActive(false);
       return;
     }
     // get available reverse geocoding for coordinates and fly to point
-    reverseGeocode([longitude, latitude], config).then((results) => {
+    reverseGeocode([normalizedLongitude, latitude], config).then((results) => {
       setPlaceMarker([longitude, latitude], results);
     });
     this.setState({ showExtentAlert: false });
