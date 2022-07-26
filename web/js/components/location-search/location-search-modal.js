@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
 import HoverTooltip from '../util/hover-tooltip';
-import { getCoordinateFixedPrecision, isValidCoordinates } from './util';
+import { isValidCoordinates } from './util';
 import {
   clearSuggestions,
   getSuggestions,
@@ -158,17 +158,14 @@ class LocationSearchModal extends Component {
         const firstCandidate = result.candidates[0];
         const { location, attributes } = firstCandidate;
         const addressAttributes = { address: attributes };
-
         const { x, y } = location;
-        const parsedX = getCoordinateFixedPrecision(x);
-        const parsedY = getCoordinateFixedPrecision(y);
 
-        const coordinatesWithinExtent = isCoordinatePairWithinExtent([parsedX, parsedY]);
+        const coordinatesWithinExtent = isCoordinatePairWithinExtent([x, y]);
         if (!coordinatesWithinExtent) {
           this.setExtentAlert(true);
           this.setInputAlertIcon(true);
         } else {
-          setPlaceMarker([parsedX, parsedY], addressAttributes);
+          setPlaceMarker([x, y], addressAttributes);
         }
       }
     }).catch((error) => console.error(error));

@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
 import OlOverlay from 'ol/Overlay';
-import { containsXY } from 'ol/extent';
+import { containsCoordinate } from 'ol/extent';
+import { transform } from 'ol/proj';
 import LocationMarker from '../../components/location-search/location-marker';
-import { coordinatesCRSTransform } from '../projection/util';
 import safeLocalStorage from '../../util/local-storage';
 import { fly } from '../../map/util';
+import { FULL_MAP_EXTENT } from '../map/constants';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -23,7 +24,7 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
-    [x, y] = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    [x, y] = transform(coordinates, 'EPSG:4326', crs);
   }
   fly(map, proj, [x, y], zoom);
 }
@@ -36,13 +37,9 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
  */
 export function areCoordinatesWithinExtent(proj, coordinates) {
   const { maxExtent, crs } = proj.selected;
-  let [x, y] = coordinates;
-  if (crs !== 'EPSG:4326') {
-    const transformedXY = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
-    [x, y] = transformedXY;
-  }
-  const coordinatesWithinExtent = containsXY(maxExtent, x, y);
-  return coordinatesWithinExtent;
+  const extent = crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
+  const coord = crs === 'EPSG:4326' ? coordinates : transform(coordinates, 'EPSG:4326', crs);
+  return containsCoordinate(extent, coord);
 }
 
 /**
@@ -60,7 +57,7 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   // transform coordinates if not CRS EPSG:4326
   let transformedCoords = coordinates;
   if (proj !== 'geographic') {
-    transformedCoords = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    transformedCoords = transform(coordinates, 'EPSG:4326', crs);
   }
 
   const pinProps = {

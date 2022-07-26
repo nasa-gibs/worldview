@@ -125,8 +125,7 @@ class CoordinatesDialog extends Component {
 
   // render copy to clipboard button
   renderCopyToClipboardButton = () => {
-    const { coordinatesMetadata, isMobile } = this.props;
-    const { coordinates } = coordinatesMetadata;
+    const { coordinates, isMobile } = this.props;
     const { isCopyToClipboardTooltipVisible, showTooltips } = this.state;
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
@@ -155,16 +154,14 @@ class CoordinatesDialog extends Component {
 
   render() {
     const {
-      coordinatesMetadata, tooltipId,
+      tooltipId,
+      coordinates,
+      title,
     } = this.props;
     const {
       showTooltips,
       tooltipToggleTime,
     } = this.state;
-    const {
-      coordinates,
-      title,
-    } = coordinatesMetadata;
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
@@ -188,7 +185,8 @@ export default CoordinatesDialog;
 CoordinatesDialog.propTypes = {
   removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
-  coordinatesMetadata: PropTypes.object,
+  title: PropTypes.string,
+  coordinates: PropTypes.string,
   isMobile: PropTypes.bool,
   tooltipId: PropTypes.string,
 };

@@ -6,12 +6,12 @@ import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 import copy from 'copy-to-clipboard';
 import { transform } from 'ol/proj';
-import { containsCoordinate } from 'ol/extent';
+
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
-import { getFormattedCoordinates } from '../location-search/util';
-import { FULL_MAP_EXTENT } from '../../modules/map/constants';
+import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
 const { events } = util;
 
@@ -26,18 +26,17 @@ function RightClickMenu(props) {
   const { crs } = proj.selected;
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
   const handleClick = () => (show ? setShow(false) : null);
-  const extent = crs === 'EPSG:4326' ? FULL_MAP_EXTENT : proj.selected.maxExtent;
 
   function handleContextEvent(event) {
     if (measurementIsActive) return;
     event.originalEvent.preventDefault();
     const coord = map.getCoordinateFromPixel(event.pixel);
+    const tCoord = transform(coord, crs, 'EPSG:4326');
+    const [lon, lat] = getNormalizedCoordinate(tCoord);
 
-    if (containsCoordinate(extent, coord)) {
-      const coords = transform(coord, crs, 'EPSG:4326');
-      const lat = coords[1];
-      const lon = util.normalizeWrappedLongitude(coords[0]);
-      setFormattedCoordinates(getFormattedCoordinates(lat, lon).join(','));
+    if (areCoordinatesWithinExtent(proj, [lon, lat])) {
+      const fCoord = getFormattedCoordinates([lat, lon]);
+      setFormattedCoordinates(fCoord);
       setPixelCoords({ pixel: event.pixel });
       setShow(true);
     } else {
