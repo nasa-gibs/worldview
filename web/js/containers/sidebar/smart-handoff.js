@@ -580,7 +580,7 @@ class SmartHandoff extends Component {
           <hr />
           {this.renderLayerChoices()}
           <hr />
-          {this.renderCropBox()}
+          {!selectedCollection ?  undefined : this.renderCropBox()}
           {isValidDownload && (
             <GranuleCount
               displayDate={displayDate}
@@ -596,7 +596,7 @@ class SmartHandoff extends Component {
             onClick={this.onClickDownload}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
-            valid={!!isValidDownload}
+            valid={!!isValidDownload && !!selectedCollection}
           />
         </div>
       </>
