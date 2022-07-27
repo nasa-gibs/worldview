@@ -580,7 +580,7 @@ class SmartHandoff extends Component {
           <hr />
           {this.renderLayerChoices()}
           <hr />
-          {!selectedCollection ?  undefined : this.renderCropBox()}
+          {!selectedCollection ? undefined : this.renderCropBox()}
           {isValidDownload && (
             <GranuleCount
               displayDate={displayDate}
