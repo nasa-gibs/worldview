@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CoordinatesDialog from './coordinates-dialog';
 import util from '../../util/util';
-import { getFormattedCoordinates } from './util';
 
 const getDialogTitle = (geocodeProperties) => {
   const { address, error } = geocodeProperties;
@@ -31,7 +30,7 @@ export default function LocationMarker ({
 }) {
   const { longitude, latitude } = coordinatesObject;
   const tooltipId = util.encodeId(`coordinates-map-marker_${longitude},${latitude}`);
-  const coordinates = getFormattedCoordinates([latitude, longitude]);
+  const coordinates = [latitude, longitude];
   const title = getDialogTitle(reverseGeocodeResults);
   const [showDialog, setShowDialog] = useState(dialogVisible);
 

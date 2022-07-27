@@ -5,6 +5,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
+import { getFormattedCoordinates } from './util';
 
 class CoordinatesDialog extends Component {
   constructor(props) {
@@ -131,12 +132,14 @@ class CoordinatesDialog extends Component {
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
     const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
+    const formattedCoords = getFormattedCoordinates(coordinates);
+
     return (
       <div
         id={buttonId}
         className={buttonId}
-        onClick={() => this.copyToClipboard(coordinates)}
-        onTouchEnd={() => this.copyToClipboard(coordinates)}
+        onClick={() => this.copyToClipboard(formattedCoords)}
+        onTouchEnd={() => this.copyToClipboard(formattedCoords)}
       >
         {tooltipVisibilityCondition && (
           <UncontrolledTooltip
@@ -163,17 +166,19 @@ class CoordinatesDialog extends Component {
       tooltipToggleTime,
     } = this.state;
 
+    const formattedCoords = getFormattedCoordinates(coordinates);
+
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
         {showTooltips && (
-        <CopyClipboardTooltip
-          tooltipToggleTime={tooltipToggleTime}
-          clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
-          placement="bottom"
-        />
+          <CopyClipboardTooltip
+            tooltipToggleTime={tooltipToggleTime}
+            clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
+            placement="bottom"
+          />
         )}
         <div className="tooltip-coordinates-title">{title}</div>
-        <div className="tooltip-coordinates">{coordinates}</div>
+        <div className="tooltip-coordinates">{formattedCoords}</div>
         {this.renderDialogButtonControls()}
         {this.renderCopyToClipboardButton()}
       </div>
