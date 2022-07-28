@@ -20,7 +20,7 @@
 
   &.minimized {
     bottom: 20px;
-    left: 188px;
+    left: 320px;
 
     &.landscape {
       left: 323px;
@@ -40,7 +40,7 @@
   .wv-animation-widget.minimized {
     background: transparent;
     height: 44px;
-    width: 114px;
+    width: 103px;
 
     .wv-icon-case {
       border: 2px solid #333;
@@ -48,6 +48,12 @@
       height: 42px;
       width: 112px;
     }
+  }
+}
+
+@media (max-width: 483px){
+  .wv-animation-widget-wrapper.mobile.minimized {
+    left: 200px;
   }
 }
 
