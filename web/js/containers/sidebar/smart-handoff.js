@@ -422,7 +422,7 @@ class SmartHandoff extends Component {
       screenHeight,
       screenWidth,
       selectedLayer,
-      selectedCollection
+      selectedCollection,
     } = this.props;
 
     const {
