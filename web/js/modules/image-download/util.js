@@ -2,10 +2,10 @@ import {
   each as lodashEach,
   get as lodashGet,
 } from 'lodash';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
-import { coordinatesCRSTransform } from '../projection/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -141,7 +141,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   // handle adding coordinates marker
   if (markerCoordinates.length > 0) {
     const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
-      const mCoord = coordinatesCRSTransform([lon, lat], 'EPSG:4326', crs);
+      const mCoord = transform([lon, lat], 'EPSG:4326', crs);
       // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
       return validCoords.concat([mCoord[0], mCoord[1]]);
     }, []);
@@ -292,6 +292,7 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     ? resolution / POLAR_ESTIMATION_CONSTANT
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
+
 export function imageUtilGetConversionFactor(proj) {
   if (proj === 'geographic') return POLAR_ESTIMATION_CONSTANT;
   return GEO_ESTIMATION_CONSTANT;
@@ -299,18 +300,27 @@ export function imageUtilGetConversionFactor(proj) {
 
 /*
  * Retrieves coordinates from pixel
- *
- * @method getCoords
- * @private
- *
  * @returns {array} array of coords
- *
  */
 export function imageUtilGetCoordsFromPixelValues(pixels, map) {
+  const {
+    x, y, x2, y2,
+  } = pixels;
   return [
-    map.getCoordinateFromPixel([Math.floor(pixels.x), Math.floor(pixels.y2)]),
-    map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)]),
+    map.getCoordinateFromPixel([Math.floor(x), Math.floor(y2)]),
+    map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y)]),
   ];
+}
+
+export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
+  const [x, y2] = map.getPixelFromCoordinate([bottomLeft[0], bottomLeft[1]]);
+  const [x2, y] = map.getPixelFromCoordinate([topRight[0], topRight[1]]);
+  return {
+    x: Math.round(x),
+    y: Math.round(y),
+    x2: Math.round(x2),
+    y2: Math.round(y2),
+  };
 }
 
 /**

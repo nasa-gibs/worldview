@@ -8,8 +8,9 @@ export default function GranuleCount (props) {
     currentExtent,
     getGranulesUrl,
     displayDate,
+    startDate,
+    endDate,
     showGranuleHelpModal,
-    selectedLayer,
     selectedCollection,
     selectedDate,
   } = props;
@@ -46,14 +47,15 @@ export default function GranuleCount (props) {
     let newTotalGranules = 0;
     let newSelectedGranules;
     let newGranuleDownloadSize = 0;
-    const { dateRanges } = selectedLayer;
+
     const params = {
       conceptId: selectedCollection.value,
       pageSize: 500,
     };
-    if (dateRanges) {
-      params.startDate = `${selectedDate}T00:00:00.000Z`;
-      params.endDate = `${selectedDate}T23:59:59.999Z`;
+
+    if (startDate && endDate) {
+      params.startDate = startDate;
+      params.endDate = endDate;
     }
 
     const granulesRequestUrl = getGranulesUrl(params);
@@ -155,7 +157,8 @@ GranuleCount.propTypes = {
   getGranulesUrl: PropTypes.func,
   currentExtent: PropTypes.object,
   displayDate: PropTypes.string,
-  selectedLayer: PropTypes.object,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
   selectedDate: PropTypes.string,
   selectedCollection: PropTypes.object,
   showGranuleHelpModal: PropTypes.func,

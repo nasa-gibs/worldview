@@ -12,9 +12,19 @@ export default function RenderSplitLayerTitle(props) {
   const { title, subtitle } = layer;
   const layerIsOrbitTrack = layer.layergroup === 'Orbital Track';
   const layerTitle = !layerIsOrbitTrack ? title : `${title} (${getOrbitTrackTitle(layer)})`;
-  const splitIdx = layerTitle.indexOf('(');
-  const attrs = layerTitle.slice(splitIdx);
-  const titleName = layerTitle.slice(0, splitIdx - 1);
+  let splitIdx;
+  let attrs;
+  let titleName;
+
+  try {
+    splitIdx = layerTitle.indexOf('(');
+    attrs = layerTitle.slice(splitIdx);
+    titleName = layerTitle.slice(0, splitIdx - 1);
+  } catch (e) {
+    console.error('Could not split title for ', layer.id);
+    console.error(e);
+  }
+
   return splitIdx < 0
     ? (
       <>

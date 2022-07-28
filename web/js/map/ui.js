@@ -39,9 +39,9 @@ import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import {
   REMOVE_MARKER,
   SET_MARKER,
-  SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
 } from '../modules/location-search/constants';
+import { setGeocodeResults, removeMarker } from '../modules/location-search/actions';
 import * as dateConstants from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -68,9 +68,9 @@ import {
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
+import { getNormalizedCoordinate } from '../components/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
 import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
-
 
 const { events } = util;
 
@@ -354,14 +354,13 @@ export default function mapui(models, config, store) {
     const { locationSearch, proj } = state;
     const { coordinates } = locationSearch;
     removeAllCoordinatesMarkers();
+
     if (coordinates && coordinates.length > 0) {
       coordinates.forEach((coordinatesObject) => {
         const { longitude, latitude } = coordinatesObject;
-        const latestCoordinates = [longitude, latitude];
-        const areCoordinatesWithinExtentBool = areCoordinatesWithinExtent(proj, latestCoordinates);
-        if (!areCoordinatesWithinExtentBool) return;
-
-        reverseGeocode(latestCoordinates, config).then((results) => {
+        const coord = [longitude, latitude];
+        if (!areCoordinatesWithinExtent(proj, coord)) return;
+        reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
           addMarkerAndUpdateStore(true, results, null, coordinatesObject);
         });
       });
@@ -396,18 +395,12 @@ export default function mapui(models, config, store) {
     const results = geocodeResults;
     if (!results) return;
 
-    const removeMarker = () => {
-      store.dispatch({
-        type: REMOVE_MARKER,
-        coordinates: coordinatesObject,
-      });
-    };
-
+    const remove = () => store.dispatch(removeMarker(coordinatesObject));
     const marker = getCoordinatesMarker(
       proj,
       coordinatesObject,
       results,
-      removeMarker,
+      remove,
       browser.lessThan.medium,
       showDialog,
     );
@@ -425,10 +418,7 @@ export default function mapui(models, config, store) {
       flyToMarker(coordinatesObject);
     }
 
-    store.dispatch({
-      type: SET_REVERSE_GEOCODE_RESULTS,
-      value: results,
-    });
+    store.dispatch(setGeocodeResults(geocodeResults));
   };
 
   const flyToNewExtent = function(extent, rotation) {

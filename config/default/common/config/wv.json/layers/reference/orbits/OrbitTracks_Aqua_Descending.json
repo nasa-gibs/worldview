@@ -2,16 +2,11 @@
   "layers": {
     "OrbitTracks_Aqua_Descending": {
       "id": "OrbitTracks_Aqua_Descending",
-      "title": "Aqua - Orbit Track & Time",
-      "subtitle": "Aqua / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Aqua_Descending",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "descending",
       "palette": {
         "id": "OrbitTracks_Aqua_Descending",

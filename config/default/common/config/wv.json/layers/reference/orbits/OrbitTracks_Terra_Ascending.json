@@ -2,16 +2,11 @@
   "layers": {
     "OrbitTracks_Terra_Ascending": {
       "id": "OrbitTracks_Terra_Ascending",
-      "title": "Terra - Orbit Track & Time",
-      "subtitle": "Terra / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Terra_Ascending",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "ascending",
       "palette": {
         "id": "OrbitTracks_Terra_Ascending",

@@ -188,7 +188,7 @@ class CoverageItemList extends Component {
       appNow,
       backDate,
     } = this.props;
-    const { endDate, futureTime, inactive } = layer;
+    const { endDate, futureTime, ongoing } = layer;
 
     let endDateLimit = new Date(backDate);
     const layerEndDate = new Date(endDate);
@@ -198,7 +198,7 @@ class CoverageItemList extends Component {
       endDateLimit = appNowDate;
     }
     // if last date of multiple ranges check for endDate over appNow date
-    if (!inactive && isLastInRange) {
+    if (ongoing && isLastInRange) {
       if (futureTime && endDate) {
         if (endDateLimit > layerEndDate) {
           endDateLimit = layerEndDate;
@@ -226,7 +226,7 @@ class CoverageItemList extends Component {
       frontDate,
     } = this.props;
     const {
-      futureTime, period, id, inactive,
+      futureTime, period, id, ongoing,
     } = def;
     const { dateInterval, startDate, endDate } = range;
 
@@ -249,7 +249,7 @@ class CoverageItemList extends Component {
 
     // rangeEnd for last time coverage section of active layers can't be greater than appNow
     const appNowDate = new Date(appNow);
-    if (!inactive && isLastInRange) {
+    if (ongoing && isLastInRange) {
       if (futureTime) {
         rangeEnd = new Date(endDate);
       } else {
@@ -341,7 +341,7 @@ class CoverageItemList extends Component {
       positionTransformX,
     } = this.props;
     const emptyLayers = activeLayers.length === 0;
-    const inactiveLayers = activeLayers.some(({ inactive }) => inactive);
+    const inactiveLayers = activeLayers.some(({ ongoing }) => !ongoing);
     return (
       <div className="layer-coverage-layer-list">
         {/* Empty layer coverage message */

@@ -2,19 +2,10 @@
   "layers": {
     "AMSRU2_Surface_Precipitation_Night": {
       "id": "AMSRU2_Surface_Precipitation_Night",
-      "title": "Surface Precipitation (Night)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Surface_Precipitation_Night",
       "tags": "amsru2 amsr-u2 rain",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "AU_Rain_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Precipitation Rate"
     }
   }
 }
