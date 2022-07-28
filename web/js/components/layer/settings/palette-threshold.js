@@ -7,7 +7,7 @@ import {
   checkTemperatureUnitConversion, convertPaletteValue,
 } from '../../../modules/settings/util';
 
-class ThresholdSelect extends React.Component {
+class PaletteThreshold extends React.Component {
   constructor(props) {
     super(props);
     const { start, end, squashed } = props;
@@ -54,6 +54,8 @@ class ThresholdSelect extends React.Component {
     const newEnd = Math.ceil(Number(thresholdArray[1]));
     const startRef = legend.refs[newStart];
     const endRef = legend.refs[newEnd];
+
+    // Update local state on every range-selector change but debounce threshold model update
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
@@ -70,12 +72,15 @@ class ThresholdSelect extends React.Component {
     } else {
       return;
     }
-    // Update local state on every range-selector change but debounce threshold model update
+
+    const { entries: { refs } } = palette;
+    const min = parseFloat(refs.indexOf(startRef));
+    const max = parseFloat(refs.lastIndexOf(endRef));
 
     this.debounceSetRange(
       layerId,
-      parseFloat(palette.entries.refs.indexOf(startRef)),
-      parseFloat(palette.entries.refs.indexOf(endRef)),
+      min,
+      max,
       squashed,
       index,
       groupName,
@@ -145,7 +150,7 @@ class ThresholdSelect extends React.Component {
     );
   }
 }
-ThresholdSelect.propTypes = {
+PaletteThreshold.propTypes = {
   end: PropTypes.number,
   groupName: PropTypes.string,
   index: PropTypes.number,
@@ -160,4 +165,4 @@ ThresholdSelect.propTypes = {
   start: PropTypes.number,
 };
 
-export default ThresholdSelect;
+export default PaletteThreshold;

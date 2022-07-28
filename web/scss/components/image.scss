@@ -93,3 +93,52 @@
 .wv-image-top {
   text-align: right;
 }
+
+.wv-image-input-case {
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 50%);
+  margin: 5px 0;
+  padding: 5px;
+
+  & .invalid {
+    font-weight: bold;
+  }
+}
+
+.wv-image .wv-checkbox.disabled {
+  opacity: 0.6;
+}
+
+.wv-image .wv-checkbox.disabled,
+.wv-checkbox.disabled .image-gb-checkbox,
+.wv-checkbox.disabled label {
+  cursor: not-allowed;
+}
+
+.wv-image-input-title {
+  font-size: 13px;
+  padding: 5px 0;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    font-weight: 900;
+  }
+}
+
+.wv-image-input-subtitle {
+  font-size: 12px;
+  padding: 5px 0;
+  font-weight: semi-bold;
+}
+
+.wv-image-label-lat-lon {
+  font-size: 12px;
+}
+
+.wv-image-collapse-latlong {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 5px;
+}

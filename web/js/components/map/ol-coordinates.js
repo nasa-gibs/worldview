@@ -7,6 +7,7 @@ import { transform } from 'ol/proj';
 import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
+import { getNormalizedCoordinate } from '../location-search/util';
 
 const { events } = util;
 const getContainerWidth = (format) => {
@@ -62,8 +63,7 @@ export default class OlCoordinates extends React.Component {
     }
     if (Math.abs(lon) > 180) {
       if (crs === 'EPSG:4326' && Math.abs(lon) < 250) {
-        lon = util.normalizeWrappedLongitude(lon);
-        pcoord = [lon, lat];
+        pcoord = getNormalizedCoordinate([lon, lat]);
       } else {
         this.clearCoord();
         return;

@@ -112,6 +112,7 @@ export class VectorInteractions extends React.Component {
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
+        if (!layer) return;
         const def = lodashGet(layer, 'wv.def');
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);

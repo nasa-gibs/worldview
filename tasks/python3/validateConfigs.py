@@ -3,9 +3,9 @@
 from jsonschema import Draft7Validator
 from optparse import OptionParser
 import os
-import re
 import json
 import glob
+import sys
 
 
 prog = os.path.basename(__file__)
@@ -31,15 +31,17 @@ for file_path in files:
   split_path = file_path.split('/')
   name_index = len(split_path) - 1
   file_name = split_path[name_index]
+
   if len(errors):
     invalidJsonFiles.append(file_name)
+    print('%s: ERROR: %s' % (prog, file_name))
 
   for err in errors:
-    print('%s: ERROR: %s' % (prog, file_name))
-    print('%s: %s' % (prog, err.message))
+    print('%s:     - %s' % (prog, err.message))
 
 if len(invalidJsonFiles) > 0:
   print('%s: FAILED: %s layer configs failed validation.' % (prog, len(invalidJsonFiles)))
+  sys.exit(1)
 else:
   print('%s: PASSED: All layer configs passed validation!' % (prog))
 

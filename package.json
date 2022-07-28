@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.27.0",
+  "version": "3.29.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "16.15.0"
+    "node": "16.16.0"
   },
   "husky": {
     "hooks": {
@@ -187,7 +187,7 @@
     "immutability-helper": "^3.0.1",
     "jsdom-worker": "^0.2.1",
     "lodash": "^4.17.21",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "moment-locales-webpack-plugin": "^1.1.2",
     "node-dir": "^0.1.17",
     "ol": "6.4.x",
@@ -203,7 +203,7 @@
     "react-contextmenu": "^2.14.0",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
-    "react-image-crop": "^8.5.0",
+    "react-image-crop": "^9.1.1",
     "react-infinite-scroller": "^1.2.4",
     "react-joyride": "^2.3.0",
     "react-masonry-component": "^6.2.1",

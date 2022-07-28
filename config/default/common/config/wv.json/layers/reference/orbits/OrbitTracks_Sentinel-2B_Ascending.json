@@ -2,17 +2,12 @@
   "layers": {
     "OrbitTracks_Sentinel-2B_Ascending": {
       "id": "OrbitTracks_Sentinel-2B_Ascending",
-      "title": "Sentinel-2B - Orbit Track & Time",
-      "subtitle": "Sentinel-2B / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-2B_Ascending",
       "tags": "tracks night vector",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "night"
-      ],
       "track": "ascending",
       "palette": {
         "id": "OrbitTracks_Sentinel-2B_Ascending",

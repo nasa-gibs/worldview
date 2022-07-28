@@ -3,7 +3,6 @@
     "Graticule_15m": {
       "id": "Graticule_15m",
       "tags": "lat lon lat-lon",
-      "title": "Latitude-Longitude Lines",
       "description": "reference/Graticule_15m",
       "group": "overlays",
       "format": "image/png",

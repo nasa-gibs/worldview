@@ -16,30 +16,30 @@ export function isValidCoordinates(position) {
 }
 
 /**
- * Get fixed precision coordinate number
- * @param {String} coordinate
- * @returns {Number} parsed coordinate with fixed precision
+ * * Normalize coordinates to be within the [-180, 180] range
+ * @param {*} coordindates
+ * @returns
  */
-export const getCoordinateFixedPrecision = (coordinate) => Number(coordinate.toFixed(4));
+export function getNormalizedCoordinate([lon, lat]) {
+  if (Math.abs(lon) < 180) {
+    return [lon, lat];
+  }
+  const isNegative = lon < 0;
+  const remainder = lon % 360;
+  const longitude = isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+  return [longitude, lat];
+}
 
 /**
- * getFormattedCoordinates
+ * Trucate to 4 decimal places, normalize, and format based on user preference
  *
- * @param {String} latitude
- * @param {String} longitude
- *
- * @returns {Array} formattedCoordinates
+ * @param {Array} coordinates
+ * @returns {Array}
  */
-export const getFormattedCoordinates = (latitude, longitude) => {
-  const parsedLatitude = getCoordinateFixedPrecision(latitude);
-  const parsedLongitude = getCoordinateFixedPrecision(longitude);
-
-  // format coordinates based on localStorage preference
+export const getFormattedCoordinates = ([latitude, longitude]) => {
+  const [lon, lat] = getNormalizedCoordinate([longitude, latitude]);
+  const fixedLat = Number(Number(lat).toFixed(4));
+  const fixedLon = Number(Number(lon).toFixed(4));
   const format = util.getCoordinateFormat();
-  const coordinates = util.formatCoordinate(
-    [parsedLongitude, parsedLatitude],
-    format,
-  );
-  const formattedCoordinates = coordinates.split(',');
-  return formattedCoordinates;
+  return util.formatCoordinate([fixedLon, fixedLat], format);
 };
