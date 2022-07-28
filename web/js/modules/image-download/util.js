@@ -2,10 +2,10 @@ import {
   each as lodashEach,
   get as lodashGet,
 } from 'lodash';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
-import { coordinatesCRSTransform } from '../projection/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -141,7 +141,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   // handle adding coordinates marker
   if (markerCoordinates.length > 0) {
     const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
-      const mCoord = coordinatesCRSTransform([lon, lat], 'EPSG:4326', crs);
+      const mCoord = transform([lon, lat], 'EPSG:4326', crs);
       // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
       return validCoords.concat([mCoord[0], mCoord[1]]);
     }, []);
