@@ -422,6 +422,7 @@ class SmartHandoff extends Component {
       screenHeight,
       screenWidth,
       selectedLayer,
+      selectedCollection
     } = this.props;
 
     const {
@@ -434,7 +435,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return selectedLayer && proj.id === 'geographic' && (
+    return selectedCollection && selectedLayer && proj.id === 'geographic' && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -580,7 +581,7 @@ class SmartHandoff extends Component {
           <hr />
           {this.renderLayerChoices()}
           <hr />
-          {!selectedCollection ? undefined : this.renderCropBox()}
+          {this.renderCropBox()}
           {isValidDownload && (
             <GranuleCount
               displayDate={displayDate}
