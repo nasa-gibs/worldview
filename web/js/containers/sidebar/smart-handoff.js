@@ -429,6 +429,7 @@ class SmartHandoff extends Component {
       screenHeight,
       screenWidth,
       selectedLayer,
+      selectedCollection,
     } = this.props;
 
     const {
@@ -441,7 +442,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return selectedLayer && proj.id === 'geographic' && (
+    return selectedCollection && selectedLayer && proj.id === 'geographic' && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -608,7 +609,7 @@ class SmartHandoff extends Component {
             onClick={this.onClickDownload}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
-            valid={!!isValidDownload}
+            valid={!!isValidDownload && !!selectedCollection}
           />
         </div>
       </>
