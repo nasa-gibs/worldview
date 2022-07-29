@@ -1,10 +1,11 @@
 import {
   CHANGE_TEMPERATURE_UNIT,
   CHANGE_DATELINE_VISIBILITY,
+  CHANGE_COORDINATE_FORMAT
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
 
-const { GLOBAL_TEMPERATURE_UNIT, ALWAYS_SHOW_DATELINES } = safeLocalStorage.keys;
+const { GLOBAL_TEMPERATURE_UNIT, ALWAYS_SHOW_DATELINES, COORDINATE_FORMAT } = safeLocalStorage.keys;
 
 export function changeTemperatureUnit(value) {
   if (!value) {
@@ -27,5 +28,17 @@ export function changeDatelineVisibility(value) {
   return {
     type: CHANGE_DATELINE_VISIBILITY,
     value,
+  };
+}
+
+export function changeCoordinateFormat(value) {
+  if (!value) {
+    safeLocalStorage.removeItem(COORDINATE_FORMAT);
+  } else {
+    safeLocalStorage.setItem(COORDINATE_FORMAT, value);
+  }
+  return {
+    type: CHANGE_COORDINATE_FORMAT,
+    value
   };
 }
