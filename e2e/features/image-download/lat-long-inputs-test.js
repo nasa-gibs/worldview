@@ -29,6 +29,9 @@ module.exports = {
 
   after(client) {
     client.end();
+
+    // test
+    // test test test
   },
 
   'Check that image download inputs are hidden on initial load': function(c) {
