@@ -8,6 +8,8 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
+import { connect } from 'react-redux';
+import { changeCoordinateFormat } from '../../modules/settings/actions';
 
 const { events } = util;
 const getContainerWidth = (format) => {
