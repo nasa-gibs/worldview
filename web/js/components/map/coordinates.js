@@ -66,3 +66,5 @@ Coordinates.propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
 };
+
+

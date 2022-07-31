@@ -21,7 +21,7 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-export default class OlCoordinates extends React.Component {
+class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +37,7 @@ export default class OlCoordinates extends React.Component {
     this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
     this.changeFormat = this.changeFormat.bind(this);
     this.setInitFormat = this.setInitFormat.bind(this);
+
   }
 
   componentDidMount() {
@@ -106,6 +107,7 @@ export default class OlCoordinates extends React.Component {
 
   changeFormat(format) {
     util.setCoordinateFormat(format);
+    // changeCoordinateFormatPls(format);
     const width = getContainerWidth(format);
     this.setState({
       format,
@@ -117,7 +119,7 @@ export default class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show } = this.props;
+    const { show, changeCoordinateFormatPls } = this.props;
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         {hasMouse && show && (
@@ -128,6 +130,7 @@ export default class OlCoordinates extends React.Component {
               longitude={longitude}
               crs={crs}
               onFormatChange={this.changeFormat}
+              changeCoordinateFormatPls={changeCoordinateFormatPls}
             />
             {latitude && latitude && (
               <UncontrolledTooltip placement="bottom" target="ol-coords-case">
@@ -140,6 +143,30 @@ export default class OlCoordinates extends React.Component {
     );
   }
 }
+
+
+
+function mapStateToProps(state) {
+  console.log('dadaboodadad')
+  const { settings } = state;
+  const { coordinateFormat } = settings;
+  return {
+    coordinateFormat
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  changeCoordinateFormatPls: (value) => {
+  dispatch(changeCoordinateFormat(value))
+  }
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OlCoordinates)
+
+
 
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
