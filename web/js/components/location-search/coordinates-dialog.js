@@ -6,6 +6,7 @@ import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 import { getFormattedCoordinates } from './util';
+import { connect } from 'react-redux';
 
 class CoordinatesDialog extends Component {
   constructor(props) {
@@ -187,6 +188,8 @@ class CoordinatesDialog extends Component {
 }
 
 export default CoordinatesDialog;
+// export default connect()(CoordinatesDialog);
+
 CoordinatesDialog.propTypes = {
   removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
