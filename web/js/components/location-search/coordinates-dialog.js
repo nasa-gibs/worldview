@@ -6,6 +6,9 @@ import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 import { getFormattedCoordinates } from './util';
+import util from '../../util/util';
+
+const { events } = util;
 
 class CoordinatesDialog extends Component {
   constructor(props) {
@@ -14,6 +17,7 @@ class CoordinatesDialog extends Component {
       tooltipToggleTime: 0,
       showTooltips: false,
       isCopyToClipboardTooltipVisible: false,
+      updateCoords: false
     };
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
@@ -22,7 +26,12 @@ class CoordinatesDialog extends Component {
     setTimeout(() => {
       this.setState({ showTooltips: true });
     }, 200);
+    events.on('location-search:coordinate-format', this.updateCoordinateFormat);
   }
+
+  updateCoordinateFormat = () => {
+    this.setState({updateCoords: true})
+  };
 
   copyToClipboard(coords) {
     const options = window.clipboardData ? {} : { format: 'text/plain' };

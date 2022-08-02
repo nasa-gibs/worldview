@@ -109,6 +109,8 @@ class OlCoordinates extends React.Component {
     util.setCoordinateFormat(format);
     const { changeCoordinateFormatAction } = this.props;
     changeCoordinateFormatAction(format);
+    //event
+    events.trigger('location-search:coordinate-format');
     const width = getContainerWidth(format);
     this.setState({
       format,
@@ -120,7 +122,7 @@ class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show, changeCoordinateFormatPls } = this.props;
+    const { show } = this.props;
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         {hasMouse && show && (
@@ -131,7 +133,6 @@ class OlCoordinates extends React.Component {
               longitude={longitude}
               crs={crs}
               onFormatChange={this.changeFormat}
-              changeCoordinateFormatPls={changeCoordinateFormatPls}
             />
             {latitude && latitude && (
               <UncontrolledTooltip placement="bottom" target="ol-coords-case">
@@ -144,8 +145,6 @@ class OlCoordinates extends React.Component {
     );
   }
 }
-
-
 
 function mapStateToProps(state) {
   const { settings } = state;
@@ -165,8 +164,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(OlCoordinates)
-
-
 
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
