@@ -9,8 +9,6 @@ import LocationMarker from '../../components/location-search/location-marker';
 import safeLocalStorage from '../../util/local-storage';
 import { fly } from '../../map/util';
 import { FULL_MAP_EXTENT } from '../map/constants';
-import { Provider } from 'react-redux';
-import { connect } from 'react-redux';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -90,7 +88,6 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
     React.createElement(LocationMarker, { ...pinProps, removeMarker }),
     overlayEl,
   );
-  
   const markerPin = new OlOverlay({
     element: overlayEl,
     position: coordinates,
@@ -101,9 +98,6 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
 
   return markerPin;
 };
-
-export default connect()(LocationMarker);
-
 
 /**
  *

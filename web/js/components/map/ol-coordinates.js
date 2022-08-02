@@ -107,7 +107,8 @@ class OlCoordinates extends React.Component {
 
   changeFormat(format) {
     util.setCoordinateFormat(format);
-    // changeCoordinateFormatPls(format);
+    const { changeCoordinateFormatAction } = this.props;
+    changeCoordinateFormatAction(format);
     const width = getContainerWidth(format);
     this.setState({
       format,
@@ -147,7 +148,6 @@ class OlCoordinates extends React.Component {
 
 
 function mapStateToProps(state) {
-  console.log('dadaboodadad')
   const { settings } = state;
   const { coordinateFormat } = settings;
   return {
@@ -156,7 +156,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  changeCoordinateFormatPls: (value) => {
+  changeCoordinateFormatAction: (value) => {
   dispatch(changeCoordinateFormat(value))
   }
 })
