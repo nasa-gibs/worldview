@@ -109,13 +109,13 @@ class OlCoordinates extends React.Component {
     util.setCoordinateFormat(format);
     const { changeCoordinateFormatAction } = this.props;
     changeCoordinateFormatAction(format);
-    //event
-    events.trigger('location-search:coordinate-format');
+    
     const width = getContainerWidth(format);
     this.setState({
       format,
       width,
     });
+    events.trigger('location-search:coordinate-format');
   }
 
   render() {
