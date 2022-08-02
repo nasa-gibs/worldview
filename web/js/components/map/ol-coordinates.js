@@ -115,7 +115,7 @@ class OlCoordinates extends React.Component {
       format,
       width,
     });
-    // events.trigger('location-search:coordinate-format');
+    events.trigger('location-search:coordinate-format');
   }
 
   render() {
