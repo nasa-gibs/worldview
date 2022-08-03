@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
 function LoadingIndicator({ msg, isLoading }) {
-  const mediaQuery = window.matchMedia("(max-width: 530px)");
+  const mediaQuery = window.matchMedia('(max-width: 530px)');
 
   const spinnerStyle = {
     position: 'absolute',
@@ -27,14 +27,14 @@ function LoadingIndicator({ msg, isLoading }) {
         {msg}
       </div>
     );
-  } else {
-    return isLoading && (
-      <div style={spinnerStyle}>
-        <Spinner color="light" size="sm" />
-        {msg}
-      </div>
-    );
   }
+
+  return isLoading && (
+    <div style={spinnerStyle}>
+      <Spinner color="light" size="sm" />
+      {msg}
+    </div>
+  );
 }
 LoadingIndicator.propTypes = {
   msg: PropTypes.string,
