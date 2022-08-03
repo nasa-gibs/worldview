@@ -30,7 +30,7 @@ export const settingsReducer = (state = initialState, action) => {
         ...state,
         alwaysShowDatelines: action.value,
       };
-    };
+    }
     case CHANGE_COORDINATE_FORMAT: {
       return {
         ...state,

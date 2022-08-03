@@ -17,7 +17,7 @@ class CoordinatesDialog extends Component {
       tooltipToggleTime: 0,
       showTooltips: false,
       isCopyToClipboardTooltipVisible: false,
-      updateCoords: false
+      updateCoords: true,
     };
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
@@ -30,7 +30,7 @@ class CoordinatesDialog extends Component {
   }
 
   updateCoordinateFormat = () => {
-    this.setState({updateCoords: true})
+    this.setState({ updateCoords: true });
   };
 
   copyToClipboard(coords) {
@@ -173,6 +173,7 @@ class CoordinatesDialog extends Component {
     const {
       showTooltips,
       tooltipToggleTime,
+      updateCoords,
     } = this.state;
 
     const formattedCoords = getFormattedCoordinates(coordinates);
@@ -183,6 +184,7 @@ class CoordinatesDialog extends Component {
           <CopyClipboardTooltip
             tooltipToggleTime={tooltipToggleTime}
             clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
+            updateCoords={updateCoords}
             placement="bottom"
           />
         )}

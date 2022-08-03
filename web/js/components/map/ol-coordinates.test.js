@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import util from '../../util/util';
-import OlCoordinates from './ol-coordinates';
+import { OlCoordinates } from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 
 const { events } = util;

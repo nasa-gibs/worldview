@@ -1,7 +1,7 @@
 import {
   CHANGE_TEMPERATURE_UNIT,
   CHANGE_DATELINE_VISIBILITY,
-  CHANGE_COORDINATE_FORMAT
+  CHANGE_COORDINATE_FORMAT,
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
 
@@ -39,6 +39,6 @@ export function changeCoordinateFormat(value) {
   }
   return {
     type: CHANGE_COORDINATE_FORMAT,
-    value
+    value,
   };
 }

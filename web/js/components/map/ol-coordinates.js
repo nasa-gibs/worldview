@@ -5,10 +5,10 @@ import {
 } from 'lodash';
 import { transform } from 'ol/proj';
 import { UncontrolledTooltip } from 'reactstrap';
+import { connect } from 'react-redux';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
-import { connect } from 'react-redux';
 import { changeCoordinateFormat } from '../../modules/settings/actions';
 
 const { events } = util;
@@ -21,7 +21,7 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-class OlCoordinates extends React.Component {
+export class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +37,6 @@ class OlCoordinates extends React.Component {
     this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
     this.changeFormat = this.changeFormat.bind(this);
     this.setInitFormat = this.setInitFormat.bind(this);
-
   }
 
   componentDidMount() {
@@ -107,15 +106,13 @@ class OlCoordinates extends React.Component {
 
   changeFormat(format) {
     util.setCoordinateFormat(format);
-    const { changeCoordinateFormatAction } = this.props;
-    changeCoordinateFormatAction(format);
-    
+    changeCoordinateFormat(format);
+    events.trigger('location-search:coordinate-format');
     const width = getContainerWidth(format);
     this.setState({
       format,
       width,
     });
-    events.trigger('location-search:coordinate-format');
   }
 
   render() {
@@ -150,20 +147,20 @@ function mapStateToProps(state) {
   const { settings } = state;
   const { coordinateFormat } = settings;
   return {
-    coordinateFormat
-  }
+    coordinateFormat,
+  };
 }
 
 const mapDispatchToProps = (dispatch) => ({
   changeCoordinateFormatAction: (value) => {
-  dispatch(changeCoordinateFormat(value))
-  }
-})
+    dispatch(changeCoordinateFormat(value));
+  },
+});
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OlCoordinates)
+)(OlCoordinates);
 
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
