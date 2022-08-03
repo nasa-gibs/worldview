@@ -4,23 +4,23 @@ import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
 function LoadingIndicator({ msg, isLoading }) {
-  const mediaQuery = window.matchMedia( "(max-width: 530px)" );
+  const mediaQuery = window.matchMedia("(max-width: 530px)");
 
   const spinnerStyle = {
     position: 'absolute',
     top: 10,
     left: 300,
     zIndex: 999,
-  }
+  };
 
   const mobileSpinnerStyle = {
     position: 'absolute',
     top: 10,
     left: 130,
     zIndex: 999,
-  }
+  };
 
-  if(mediaQuery.matches) {
+  if (mediaQuery.matches) {
     return isLoading && (
       <div style={mobileSpinnerStyle}>
         <Spinner color="light" size="sm" />
