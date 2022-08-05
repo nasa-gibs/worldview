@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 import {
   throttle as lodashThrottle,
 } from 'lodash';
 import { transform } from 'ol/proj';
 import { UncontrolledTooltip } from 'reactstrap';
-import { connect } from 'react-redux';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
@@ -21,7 +22,7 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-export class OlCoordinates extends React.Component {
+class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -104,9 +105,11 @@ export class OlCoordinates extends React.Component {
     });
   }
 
-  changeFormat(format) {
-    util.setCoordinateFormat(format);
+  changeFormat = (format) => {
+    const { changeCoordinateFormat } = this.props;
+    console.log(this.props)
     changeCoordinateFormat(format);
+    util.setCoordinateFormat(format);
     events.trigger('location-search:coordinate-format');
     const width = getContainerWidth(format);
     this.setState({
@@ -119,7 +122,7 @@ export class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show } = this.props;
+    const { show, changeCoordinateFormat } = this.props;
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         {hasMouse && show && (
@@ -143,7 +146,7 @@ export class OlCoordinates extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { settings } = state;
   const { coordinateFormat } = settings;
   return {
@@ -152,16 +155,17 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  changeCoordinateFormatAction: (value) => {
+  changeCoordinateFormat: (value) => {
     dispatch(changeCoordinateFormat(value));
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(OlCoordinates);
-
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
+  changeCoordinateFormat: PropTypes.func.isRequired,
 };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OlCoordinates);
