@@ -235,7 +235,7 @@ class ShareLinkContainer extends Component {
         : this.getPermalink();
 
     const url = window.location.href;
-    const showShortenUrlCbx = url.length < 2049 ? true : false;
+    const showShortenUrlCbx = url.length < 2049;
 
     return (
       <TabPane tabId="link" className="share-tab-link">
@@ -246,7 +246,7 @@ class ShareLinkContainer extends Component {
               Copy URL to share link.
             </p>
             {' '}
-            {urlShortening & showShortenUrlCbx ? (
+            {urlShortening && showShortenUrlCbx ? (
               <Checkbox
                 label="Shorten link"
                 id="wv-link-shorten"
