@@ -13,8 +13,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
     //trigger event to update coordinates dialog when coordinateFormat state changes
     //coordinates dialog cannot communicate with Redux right now
     useEffect(() => {
-        console.log("changing format from coordinate format buttons")
-        events.trigger('location-search:coordinate-format');
+        events.trigger('location-search:ol-coordinate-format');
     }, [coordinateFormat])
 
     return (

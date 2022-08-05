@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 import {
   throttle as lodashThrottle,
@@ -32,6 +31,7 @@ class OlCoordinates extends React.Component {
       crs: null,
       format: null,
       width: null,
+      updateCoordinateFormat: false,
     };
     const options = { leading: true, trailing: true };
     this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
@@ -49,6 +49,13 @@ class OlCoordinates extends React.Component {
   componentWillUnmount() {
     events.off('map:mousemove', this.mouseMove);
     events.off('map:mouseout', this.mouseOut);
+  }
+
+  //listening to state changes from the settings menu
+  componentDidUpdate(prevProps) {
+    if (prevProps.coordinateFormat !== this.props.coordinateFormat) {
+      this.changeFormat(this.props.coordinateFormat)
+    }
   }
 
   mouseMove({ pixel }, map, crs) {
@@ -107,7 +114,6 @@ class OlCoordinates extends React.Component {
 
   changeFormat = (format) => {
     const { changeCoordinateFormat } = this.props;
-    console.log(this.props)
     changeCoordinateFormat(format);
     util.setCoordinateFormat(format);
     events.trigger('location-search:coordinate-format');
@@ -122,7 +128,8 @@ class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show, changeCoordinateFormat } = this.props;
+    const { show } = this.props;
+
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         {hasMouse && show && (

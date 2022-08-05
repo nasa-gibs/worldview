@@ -11,11 +11,23 @@ export const initialState = {
 
 export function getInitialState() {
   const alwaysShowDatelines = Boolean(safeLocalStorage.getItem(ALWAYS_SHOW_DATELINES));
+  const initialCoordinateFormat = safeLocalStorage.getItem(COORDINATE_FORMAT);
+  const defaultCoordinateFormat = 'latlon-dd'
+
+  if(initialCoordinateFormat === null){
+    return {
+      globalTemperatureUnit: safeLocalStorage.getItem(GLOBAL_TEMPERATURE_UNIT),
+      alwaysShowDatelines,
+      coordinateFormat: defaultCoordinateFormat,
+    };
+  }
+
   return {
     globalTemperatureUnit: safeLocalStorage.getItem(GLOBAL_TEMPERATURE_UNIT),
     alwaysShowDatelines,
     coordinateFormat: safeLocalStorage.getItem(COORDINATE_FORMAT),
   };
+
 }
 
 export const settingsReducer = (state = initialState, action) => {
