@@ -39,7 +39,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
                     active={coordinateFormat === format}
                     onClick={() => changeCoordinateFormat(format)}
                     >
-                        {format}
+                        {format.toUpperCase()}
                     </Button>
                 ))}
             </ButtonGroup>
