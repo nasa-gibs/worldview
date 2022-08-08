@@ -21,7 +21,7 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-export class OlCoordinates extends React.Component {
+class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -169,7 +169,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
-  changeCoordinateFormat: PropTypes.func.isRequired,
+  changeCoordinateFormat: PropTypes.func,
   coordinateFormat: PropTypes.string,
 };
 
