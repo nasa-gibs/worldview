@@ -20,17 +20,8 @@ function LoadingIndicator({ msg, isLoading }) {
     zIndex: 999,
   };
 
-  if (mediaQuery.matches) {
-    return isLoading && (
-      <div style={mobileSpinnerStyle}>
-        <Spinner color="light" size="sm" />
-        {msg}
-      </div>
-    );
-  }
-
   return isLoading && (
-    <div style={spinnerStyle}>
+    <div style={mediaQuery.matches ? mobileSpinnerStyle : spinnerStyle}>
       <Spinner color="light" size="sm" />
       {msg}
     </div>
