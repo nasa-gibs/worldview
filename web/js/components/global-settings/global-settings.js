@@ -31,7 +31,7 @@ function GlobalSettings(props) {
           globalTemperatureUnit={globalTemperatureUnit}
         />
 
-        <CoordinateFormatButtons 
+        <CoordinateFormatButtons
           changeCoordinateFormat={changeCoordinateFormatAction}
           coordinateFormat={coordinateFormat}
         />
@@ -66,7 +66,6 @@ function GlobalSettings(props) {
               On Hover
             </Button>
           </ButtonGroup>
-          
         </div>
       </div>
     </>
@@ -75,7 +74,7 @@ function GlobalSettings(props) {
 
 function mapStateToProps(state) {
   const { settings } = state;
-  const { globalTemperatureUnit, alwaysShowDatelines, coordinateFormat, } = settings;
+  const { globalTemperatureUnit, alwaysShowDatelines, coordinateFormat } = settings;
   return {
     globalTemperatureUnit,
     alwaysShowDatelines,

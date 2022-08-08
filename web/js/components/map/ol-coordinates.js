@@ -31,7 +31,6 @@ export class OlCoordinates extends React.Component {
       crs: null,
       format: null,
       width: null,
-      updateCoordinateFormat: false,
     };
     const options = { leading: true, trailing: true };
     this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
@@ -46,16 +45,17 @@ export class OlCoordinates extends React.Component {
     this.setInitFormat();
   }
 
+  // listening to state changes from the settings menu
+  componentDidUpdate(prevProps) {
+    const { coordinateFormat } = this.props;
+    if (prevProps.coordinateFormat !== coordinateFormat) {
+      this.changeFormat(coordinateFormat);
+    }
+  }
+
   componentWillUnmount() {
     events.off('map:mousemove', this.mouseMove);
     events.off('map:mouseout', this.mouseOut);
-  }
-
-  //listening to state changes from the settings menu
-  componentDidUpdate(prevProps) {
-    if (prevProps.coordinateFormat !== this.props.coordinateFormat) {
-      this.changeFormat(this.props.coordinateFormat)
-    }
   }
 
   mouseMove({ pixel }, map, crs) {
@@ -170,9 +170,10 @@ const mapDispatchToProps = (dispatch) => ({
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
   changeCoordinateFormat: PropTypes.func.isRequired,
+  coordinateFormat: PropTypes.string,
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(OlCoordinates);
