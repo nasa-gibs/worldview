@@ -16,7 +16,7 @@ updated daily and are within three hours of observation - showing the entire Ear
 management, air quality measurements, and flood monitoring. Some satellite
 imagery layers span almost 30 years, providing a long term view of our dynamic
 planet. The underlying data is available for download, and Arctic and Antarctic
-views of several imagery layers are available for a “full globe” perspective.
+views of several imagery layers are available for a “full globe” perspective. Geostationary imagery layers are also now available. These are provided in ten minute increments for the last 90 days. These full disk hemispheric views allow for almost real-time viewing of changes occurring around most of the world.
 
 Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from the
 [Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs). This
@@ -39,7 +39,7 @@ cd worldview
 npm ci
 ```
 
-View the [Configuration](doc/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
+View the [Configuration](doc/config/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
 
@@ -97,7 +97,7 @@ Contact us via GitHub or by sending an email to
 
 ## Contribute
 
-We welcome your contributions! Feel free to [open an issue](https://github.com/nasa-gibs/worldview/issues/new) or [submit a PR](https://github.com/nasa-gibs/worldview/compare).
+We welcome your contributions! Feel free to [open an issue](https://github.com/nasa-gibs/worldview/issues/new/choose) or [submit a PR](https://github.com/nasa-gibs/worldview/compare).
 
 Please review [CONTRIBUTING.md](.github/CONTRIBUTING.md) for contribution guidelines before getting started.
 
