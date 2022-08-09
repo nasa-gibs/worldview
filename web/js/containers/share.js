@@ -13,7 +13,6 @@ import {
   Button,
   Nav, NavItem, NavLink,
   TabContent, TabPane,
-  UncontrolledTooltip
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
@@ -254,7 +253,7 @@ class ShareLinkContainer extends Component {
                 onCheck={!preventShorten ? this.onToggleShorten : null}
                 checked={isShort}
                 disabled={!shortLink.isLoading && preventShorten}
-                title='Link cannot be shortened at this time'
+                title="Link cannot be shortened at this time"
               />
             )}
           </>
