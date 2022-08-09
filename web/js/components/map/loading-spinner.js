@@ -16,7 +16,7 @@ function LoadingIndicator({ msg, isLoading }) {
   const mobileSpinnerStyle = {
     position: 'absolute',
     top: 10,
-    left: 130,
+    left: 80,
     zIndex: 999,
   };
 
