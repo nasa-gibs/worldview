@@ -13,6 +13,7 @@ import {
   Button,
   Nav, NavItem, NavLink,
   TabContent, TabPane,
+  UncontrolledTooltip
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
@@ -235,7 +236,7 @@ class ShareLinkContainer extends Component {
         : this.getPermalink();
 
     const url = window.location.href;
-    const showShortenUrlCbx = url.length < 2049;
+    const preventShorten = url.length > 2048;
 
     return (
       <TabPane tabId="link" className="share-tab-link">
@@ -246,13 +247,14 @@ class ShareLinkContainer extends Component {
               Copy URL to share link.
             </p>
             {' '}
-            {urlShortening && showShortenUrlCbx && (
+            {urlShortening && (
               <Checkbox
                 label="Shorten link"
                 id="wv-link-shorten"
-                onCheck={this.onToggleShorten}
+                onCheck={!preventShorten ? this.onToggleShorten : null}
                 checked={isShort}
-                disabled={!shortLink.isLoading}
+                disabled={!shortLink.isLoading && preventShorten}
+                title='Link cannot be shortened at this time'
               />
             )}
           </>
