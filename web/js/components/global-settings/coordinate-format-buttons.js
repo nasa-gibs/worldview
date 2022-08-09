@@ -1,18 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HoverTooltip from '../util/hover-tooltip';
 import { COORDINATE_FORMATS } from '../../modules/settings/constants';
-import util from '../../util/util';
-
-const { events } = util;
 
 function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) {
-  useEffect(() => {
-    events.trigger('location-search:ol-coordinate-format');
-  }, [coordinateFormat]);
-
   return (
     <div className="settings-component">
       <h3 className="wv-header">

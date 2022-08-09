@@ -4,6 +4,9 @@ import {
   CHANGE_COORDINATE_FORMAT,
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
+import util from '../../util/util';
+
+const { events } = util;
 
 const { GLOBAL_TEMPERATURE_UNIT, ALWAYS_SHOW_DATELINES, COORDINATE_FORMAT } = safeLocalStorage.keys;
 
@@ -32,11 +35,8 @@ export function changeDatelineVisibility(value) {
 }
 
 export function changeCoordinateFormat(value) {
-  if (!value) {
-    safeLocalStorage.removeItem(COORDINATE_FORMAT);
-  } else {
-    safeLocalStorage.setItem(COORDINATE_FORMAT, value);
-  }
+  safeLocalStorage.setItem(COORDINATE_FORMAT, value);
+  events.trigger('location-search:coordinate-format');
   return {
     type: CHANGE_COORDINATE_FORMAT,
     value,
