@@ -61,7 +61,7 @@ our style guides automatically:
 
 All of the unit tests for this project need to pass before your submission will
 be accepted. If you add new functionality, please consider adding tests for that
-functionality as well. See [Testing](/doc/testing.md) for more information about
+functionality as well. See [Testing](../doc/testing.md) for more information about
 testing.
 
 ### Commits
