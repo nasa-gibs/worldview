@@ -80,20 +80,13 @@ class PlayQueue extends React.Component {
    */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
-    console.log("determining frame dates: start/end dates")
-    console.log(startDate, endDate)
     let frameDate = startDate;
     this.frameDates = [];
     this.frameDates.push(toString(frameDate));
-    console.log("determining frame dates: frame dates-while loop")
     while (frameDate < endDate) {
       frameDate = this.nextDate(frameDate);
-      console.log(frameDate);
       this.frameDates.push(toString(frameDate));
     }
-    console.log("determining frame dates: end")
-    const popped = this.frameDates.pop()
-    console.log(this.frameDates)
   }
 
   /**
