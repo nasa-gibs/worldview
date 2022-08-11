@@ -6,10 +6,12 @@ import HoverTooltip from '../util/hover-tooltip';
 import { COORDINATE_FORMATS } from '../../modules/settings/constants';
 
 function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) {
+  const coordinateMenuOptions = ['DD', 'DDM', 'DMS'];
+
   return (
     <div className="settings-component">
       <h3 className="wv-header">
-        Coordinate Format
+        Coordinate Format (latitude, longitude)
         {' '}
         <span><FontAwesomeIcon id="coordinate-format-buttons-info-icon" icon="info-circle" /></span>
         <HoverTooltip
@@ -20,7 +22,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
         />
       </h3>
       <ButtonGroup>
-        {COORDINATE_FORMATS.map((format) => (
+        {COORDINATE_FORMATS.map((format, i) => (
           <Button
             key={`${format}-button`}
             aria-label={`Set ${format} Format`}
@@ -30,7 +32,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
             onClick={() => changeCoordinateFormat(format)}
             id={`${format}-btn`}
           >
-            {format.toUpperCase()}
+            {coordinateMenuOptions[i]}
           </Button>
         ))}
       </ButtonGroup>
