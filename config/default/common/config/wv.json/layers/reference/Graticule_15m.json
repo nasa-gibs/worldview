@@ -7,7 +7,7 @@
       "group": "overlays",
       "format": "image/png",
       "noTransition": true,
-      "type": "variable",
+      
       "layergroup": "Latitude-Longitude Lines",
       "projections": {
         "arctic": {
