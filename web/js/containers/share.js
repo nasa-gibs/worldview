@@ -234,6 +234,11 @@ class ShareLinkContainer extends Component {
         ? shortLink.response.link
         : this.getPermalink();
 
+    const url = window.location.href;
+    const preventShorten = url.length > 2048;
+    const isDisabled = shortLink.isLoading || preventShorten;
+    const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
+
     return (
       <TabPane tabId="link" className="share-tab-link">
         {activeTab === 'link' && (
@@ -247,9 +252,10 @@ class ShareLinkContainer extends Component {
               <Checkbox
                 label="Shorten link"
                 id="wv-link-shorten"
-                onCheck={this.onToggleShorten}
+                onCheck={!preventShorten ? this.onToggleShorten : null}
                 checked={isShort}
-                disabled={!shortLink.isLoading}
+                disabled={isDisabled}
+                title={tooltipText}
               />
             )}
           </>
