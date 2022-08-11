@@ -6,14 +6,19 @@ import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 import { getFormattedCoordinates } from './util';
+import util from '../../util/util';
+
+const { events } = util;
 
 class CoordinatesDialog extends Component {
   constructor(props) {
     super(props);
+    const { coordinates } = this.props;
     this.state = {
       tooltipToggleTime: 0,
       showTooltips: false,
       isCopyToClipboardTooltipVisible: false,
+      formattedCoordinates: getFormattedCoordinates(coordinates),
     };
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
@@ -22,7 +27,17 @@ class CoordinatesDialog extends Component {
     setTimeout(() => {
       this.setState({ showTooltips: true });
     }, 200);
+    events.on('location-search:coordinate-format', this.updateCoordinateFormat);
   }
+
+  componentWillUnmount() {
+    events.off('location-search:coordinate-format', this.updateCoordinateFormat);
+  }
+
+  updateCoordinateFormat = () => {
+    const { coordinates } = this.props;
+    this.setState({ formattedCoordinates: getFormattedCoordinates(coordinates) });
+  };
 
   copyToClipboard(coords) {
     const options = window.clipboardData ? {} : { format: 'text/plain' };
@@ -126,20 +141,19 @@ class CoordinatesDialog extends Component {
 
   // render copy to clipboard button
   renderCopyToClipboardButton = () => {
-    const { coordinates, isMobile } = this.props;
-    const { isCopyToClipboardTooltipVisible, showTooltips } = this.state;
+    const { isMobile } = this.props;
+    const { isCopyToClipboardTooltipVisible, showTooltips, formattedCoordinates } = this.state;
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
     const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
-    const formattedCoords = getFormattedCoordinates(coordinates);
 
     return (
       <div
         id={buttonId}
         className={buttonId}
-        onClick={() => this.copyToClipboard(formattedCoords)}
-        onTouchEnd={() => this.copyToClipboard(formattedCoords)}
+        onClick={() => this.copyToClipboard(formattedCoordinates)}
+        onTouchEnd={() => this.copyToClipboard(formattedCoordinates)}
       >
         {tooltipVisibilityCondition && (
           <UncontrolledTooltip
@@ -158,15 +172,13 @@ class CoordinatesDialog extends Component {
   render() {
     const {
       tooltipId,
-      coordinates,
       title,
     } = this.props;
     const {
       showTooltips,
       tooltipToggleTime,
+      formattedCoordinates,
     } = this.state;
-
-    const formattedCoords = getFormattedCoordinates(coordinates);
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
@@ -178,7 +190,7 @@ class CoordinatesDialog extends Component {
           />
         )}
         <div className="tooltip-coordinates-title">{title}</div>
-        <div className="tooltip-coordinates">{formattedCoords}</div>
+        <div className="tooltip-coordinates">{formattedCoordinates}</div>
         {this.renderDialogButtonControls()}
         {this.renderCopyToClipboardButton()}
       </div>
