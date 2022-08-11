@@ -28,6 +28,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
             className="setting-button"
             active={coordinateFormat === format}
             onClick={() => changeCoordinateFormat(format)}
+            id={`${format}-btn`}
           >
             {format.toUpperCase()}
           </Button>
