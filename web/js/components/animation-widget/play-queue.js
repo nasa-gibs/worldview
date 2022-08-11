@@ -247,6 +247,10 @@ class PlayQueue extends React.Component {
       return;
     }
     const nextInQueue = toString(this.getNextBufferDate());
+    console.log(this.bufferObject[nextInQueue], "buffer object");
+    console.log(this.inQueueObject[nextInQueue], "inQueue object");
+    console.log(this.canPreloadAll, "can preload");
+    console.log('--------------------------')
     if (
       !this.bufferObject[nextInQueue]
       && !this.inQueueObject[nextInQueue]
