@@ -62,4 +62,11 @@ export default [
     show: 30,
     hideZeroCount: true,
   },
+  {
+    field: 'type',
+    label: 'Imagery Type',
+    filterType: 'any',
+    tooltip: 'Layer imagery type',
+    hideZeroCount: true,
+  },
 ];
