@@ -39,10 +39,15 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
 export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
   let i = 1;
   let currentDate = start;
+  let nextDate = util.dateAdd(start, interval, delta);
+  if (nextDate > end) {
+    i = 1;
+    return i;
+  }
   while (currentDate < end) {
     i += 1;
     currentDate = util.dateAdd(currentDate, interval, delta);
-    let nextDate = util.dateAdd(currentDate, interval, delta);
+    nextDate = util.dateAdd(currentDate, interval, delta);
     // checking to see if next date is after end date to prevent creation of extra frame
     if (nextDate > end) {
       return i;

@@ -93,14 +93,8 @@ class PlayQueue extends React.Component {
    * Determines whether to start at current date or the selected start date
    */
   getStartDate() {
-    const { endDate, startDate, snappedCurrentDate } = this.props;
-    const nextDate = this.nextDate(snappedCurrentDate);
-    console.log("------getStartDate()------")
-    console.log(endDate, "endDate")
-    console.log(startDate, "startDate")
-    console.log(snappedCurrentDate, "snappedCurrentDate")
-    console.log(nextDate, 'nextDate')
-    console.log("--------------------------")
+    const { startDate } = this.props;
+    // const nextDate = this.nextDate(snappedCurrentDate);
     // if (snappedCurrentDate > startDate && nextDate < endDate) {
     //   console.log("returning nextDate")
     //   return toString(nextDate);
@@ -193,8 +187,6 @@ class PlayQueue extends React.Component {
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
-    console.log(numberOfFrames, 'number of frames')
-    console.log(currentBufferSize, 'current buffer size')
     if (currentBufferSize === numberOfFrames) {
       return true;
     }
@@ -226,7 +218,6 @@ class PlayQueue extends React.Component {
       return this.play();
     }
     this.checkQueue();
-    console.log(this.bufferArray)
   };
 
   checkShouldLoop() {
@@ -253,7 +244,6 @@ class PlayQueue extends React.Component {
   checkQueue() {
     if (!this.bufferArray[0] && !this.inQueueObject[this.playingDate]) {
       const currentDate = toDate(this.playingDate);
-      console.log(currentDate, "current date in checkQueue")
       this.initialPreload(currentDate);
       return;
     }
@@ -480,7 +470,6 @@ PlayQueue.propTypes = {
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
-  snappedCurrentDate: PropTypes.object,
 };
 
 export default PlayQueue;
