@@ -5,6 +5,8 @@ import util from '../../util/util';
 import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 
+jest.mock('react-redux', () => ({ connect: () => (OlCoordinates) => OlCoordinates }));
+
 const { events } = util;
 let container;
 let map;

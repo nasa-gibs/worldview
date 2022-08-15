@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   throttle as lodashThrottle,
@@ -8,6 +9,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
+import { changeCoordinateFormat } from '../../modules/settings/actions';
 
 const { events } = util;
 const getContainerWidth = (format) => {
@@ -19,7 +21,7 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-export default class OlCoordinates extends React.Component {
+class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +43,14 @@ export default class OlCoordinates extends React.Component {
     events.on('map:mousemove', this.mouseMove);
     events.on('map:mouseout', this.mouseOut);
     this.setInitFormat();
+  }
+
+  // listening to state changes from the settings menu
+  componentDidUpdate(prevProps) {
+    const { coordinateFormat } = this.props;
+    if (prevProps.coordinateFormat !== coordinateFormat) {
+      this.changeFormat(coordinateFormat);
+    }
   }
 
   componentWillUnmount() {
@@ -102,7 +112,9 @@ export default class OlCoordinates extends React.Component {
     });
   }
 
-  changeFormat(format) {
+  changeFormat = (format) => {
+    const { changeCoordinateFormat } = this.props;
+    changeCoordinateFormat(format);
     util.setCoordinateFormat(format);
     const width = getContainerWidth(format);
     this.setState({
@@ -116,6 +128,7 @@ export default class OlCoordinates extends React.Component {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
     const { show } = this.props;
+
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         {hasMouse && show && (
@@ -139,6 +152,27 @@ export default class OlCoordinates extends React.Component {
   }
 }
 
+function mapStateToProps (state) {
+  const { settings } = state;
+  const { coordinateFormat } = settings;
+  return {
+    coordinateFormat,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  changeCoordinateFormat: (value) => {
+    dispatch(changeCoordinateFormat(value));
+  },
+});
+
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
+  changeCoordinateFormat: PropTypes.func,
+  coordinateFormat: PropTypes.string,
 };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OlCoordinates);

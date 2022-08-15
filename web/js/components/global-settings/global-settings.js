@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, ButtonGroup } from 'reactstrap';
 import HoverTooltip from '../util/hover-tooltip';
 import TemperatureUnitButtons from './temperature-unit-buttons';
+import CoordinateFormatButtons from './coordinate-format-buttons';
 import {
   changeTemperatureUnit,
   changeDatelineVisibility,
+  changeCoordinateFormat,
 } from '../../modules/settings/actions';
 
 function GlobalSettings(props) {
@@ -16,6 +18,8 @@ function GlobalSettings(props) {
     toggleAlwaysShowDatelines,
     changeTemperatureUnitAction,
     globalTemperatureUnit,
+    changeCoordinateFormatAction,
+    coordinateFormat,
   } = props;
 
   return (
@@ -25,6 +29,11 @@ function GlobalSettings(props) {
         <TemperatureUnitButtons
           changeTemperatureUnit={changeTemperatureUnitAction}
           globalTemperatureUnit={globalTemperatureUnit}
+        />
+
+        <CoordinateFormatButtons
+          changeCoordinateFormat={changeCoordinateFormatAction}
+          coordinateFormat={coordinateFormat}
         />
 
         <div className="settings-component">
@@ -65,10 +74,11 @@ function GlobalSettings(props) {
 
 function mapStateToProps(state) {
   const { settings } = state;
-  const { globalTemperatureUnit, alwaysShowDatelines } = settings;
+  const { globalTemperatureUnit, alwaysShowDatelines, coordinateFormat } = settings;
   return {
     globalTemperatureUnit,
     alwaysShowDatelines,
+    coordinateFormat,
   };
 }
 
@@ -78,6 +88,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   toggleAlwaysShowDatelines: (value) => {
     dispatch(changeDatelineVisibility(value));
+  },
+  changeCoordinateFormatAction: (value) => {
+    dispatch(changeCoordinateFormat(value));
   },
 });
 
@@ -91,4 +104,6 @@ GlobalSettings.propTypes = {
   toggleAlwaysShowDatelines: PropTypes.func,
   changeTemperatureUnitAction: PropTypes.func,
   globalTemperatureUnit: PropTypes.string,
+  changeCoordinateFormatAction: PropTypes.func,
+  coordinateFormat: PropTypes.string,
 };
