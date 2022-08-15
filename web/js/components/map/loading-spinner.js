@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
-function LoadingIndicator({ msg, isLoading }) {
-  const mediaQuery = window.matchMedia('(max-width: 530px)');
-
+function LoadingIndicator({ msg, isLoading, isMobile }) {
   const spinnerStyle = {
     position: 'absolute',
     top: 10,
@@ -21,7 +19,7 @@ function LoadingIndicator({ msg, isLoading }) {
   };
 
   return isLoading && (
-    <div style={mediaQuery.matches ? mobileSpinnerStyle : spinnerStyle}>
+    <div style={isMobile ? mobileSpinnerStyle : spinnerStyle}>
       <Spinner color="light" size="sm" />
       {msg}
     </div>
@@ -30,13 +28,16 @@ function LoadingIndicator({ msg, isLoading }) {
 LoadingIndicator.propTypes = {
   msg: PropTypes.string,
   isLoading: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
-  const { msg, isLoading } = state.loading;
+  const { browser, loading } = state;
+  const { msg, isLoading } = loading;
   return {
-    msg,
     isLoading,
+    isMobile: browser.lessThan.medium,
+    msg,
   };
 };
 export default connect(mapStateToProps)(LoadingIndicator);
