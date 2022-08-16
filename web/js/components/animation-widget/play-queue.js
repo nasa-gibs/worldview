@@ -470,6 +470,7 @@ PlayQueue.propTypes = {
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
+  snappedCurrentDate: PropTypes.object,
 };
 
 export default PlayQueue;
