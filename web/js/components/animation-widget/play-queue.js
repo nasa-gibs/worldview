@@ -93,12 +93,12 @@ class PlayQueue extends React.Component {
    * Determines whether to start at current date or the selected start date
    */
   getStartDate() {
-    const { startDate } = this.props;
-    // const nextDate = this.nextDate(snappedCurrentDate);
-    // if (snappedCurrentDate > startDate && nextDate < endDate) {
-    //   console.log("returning nextDate")
-    //   return toString(nextDate);
-    // }
+    const { startDate, endDate, snappedCurrentDate } = this.props;
+    const nextDate = this.nextDate(snappedCurrentDate);
+    const nextDateAfterSnapped = this.nextDate(nextDate);
+    if (snappedCurrentDate > startDate && nextDate < endDate && nextDateAfterSnapped < endDate) {
+      return toString(nextDate);
+    }
     return toString(startDate);
   }
 
