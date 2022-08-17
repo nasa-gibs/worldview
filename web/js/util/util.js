@@ -295,7 +295,7 @@ export default (function(self) {
 
   self.dateAdd = function(date, interval, amount) {
     let month; let maxDay; let
-      year;
+      year; let dateDifference;
     const newDate = new Date(date);
     switch (interval) {
       case 'minute':
@@ -311,6 +311,11 @@ export default (function(self) {
         year = newDate.getUTCFullYear();
         month = newDate.getUTCMonth();
         maxDay = new Date(year, month + amount + 1, 0).getUTCDate();
+        dateDifference = date.getUTCDate() - maxDay;
+        if (dateDifference > 1) {
+          newDate.setUTCMonth(month + 1);
+          break;
+        }
         if (maxDay <= date.getUTCDate()) {
           newDate.setUTCDate(maxDay);
         }
