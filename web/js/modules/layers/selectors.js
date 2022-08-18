@@ -37,6 +37,22 @@ export const getActiveLayers = (state, activeString) => {
   return layers[activeString || compare.activeString].layers;
 };
 
+export const getActiveLayerGroup = (state) => {
+  const { compare, map } = state;
+  const { active, activeString } = compare || {};
+  if (active) {
+    const layerGroups = map.ui.selected.getLayers().getArray();
+    if (layerGroups.length > 1) {
+      return layerGroups[0].get('group') === activeString
+        ? layerGroups[0]
+        : layerGroups[1].get('group') === activeString
+          ? layerGroups[1]
+          : null;
+    }
+  }
+  return map.ui.selected;
+};
+
 export const getActiveGranuleLayers = (state, activeString) => {
   const { compare, layers } = state;
   const { granuleLayers } = layers[activeString || compare.activeString] || {};
