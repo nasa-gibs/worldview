@@ -554,9 +554,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
-      renderMode: 'image',
+      renderMode: 'vector',
       className: def.id,
-      vector: true,
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
@@ -565,6 +564,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
+
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -573,7 +573,9 @@ export default function mapLayerBuilder(config, cache, store) {
       });
       wmsLayer.wv = attributes;
       return layerGroup;
-    } if (breakPointResolution && animationIsPlaying) {
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
