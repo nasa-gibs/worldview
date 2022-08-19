@@ -27,7 +27,7 @@ import util from '../../util/util';
 import { FULL_MAP_EXTENT } from '../../modules/map/constants';
 import {
   GRANULE_HOVERED,
-  GRANULE_HOVERED_UPDATE,
+  GRANULE_HOVER_UPDATE,
   MAP_SINGLE_CLICK,
   MAP_MOUSE_MOVE,
   MAP_MOUSE_OUT,
@@ -142,7 +142,7 @@ export class VectorInteractions extends React.Component {
   moveEnd() {
     const { granuleDate, granulePlatform } = this.state;
     if (granuleDate && granulePlatform) {
-      events.trigger(GRANULE_HOVERED_UPDATE, granulePlatform, granuleDate);
+      events.trigger(GRANULE_HOVER_UPDATE, granulePlatform, granuleDate);
     }
   }
 
