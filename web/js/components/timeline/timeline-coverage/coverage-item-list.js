@@ -10,7 +10,7 @@ import {
 import CoverageItemContainer from './coverage-item-container';
 import { formatDisplayDate } from '../../../modules/date/util';
 import MonospaceDate from '../../util/monospace-date';
-import {SIDEBAR_LAYER_HOVER} from '../../../util/constants';
+import { SIDEBAR_LAYER_HOVER } from '../../../util/constants';
 
 const { events } = util;
 

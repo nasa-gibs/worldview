@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 import { getFormattedCoordinates } from './util';
 import util from '../../util/util';
-// LOCATION_SEARCH_COORDINATE_FORMAT
 import { LOCATION_SEARCH_COORDINATE_FORMAT } from '../../util/constants';
+
 const { events } = util;
 
 class CoordinatesDialog extends Component {

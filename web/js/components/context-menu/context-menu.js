@@ -77,7 +77,6 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     if (isCoordinateSearchActive) return;
     events.on(MAP_SINGLE_CLICK, handleClick);
     events.on(MAP_CONTEXT_MENU, handleContextEvent);
