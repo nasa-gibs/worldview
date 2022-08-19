@@ -468,6 +468,14 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
+    abt: {
+      stateKey: 'modalAbout.isOpen',
+      initialState: false,
+      options: {
+        serialize: (boo) => (boo ? 'on' : undefined),
+        parse: (str) => str === 'on',
+      },
+    },
     sh: {
       stateKey: 'smartHandoffs',
       initialState: '',

@@ -1099,14 +1099,15 @@ export default function mapui(models, config, store) {
   function createMap(proj, dateSelected) {
     const state = store.getState();
     dateSelected = dateSelected || getSelectedDate(state);
-    const id = `wv-map-${proj.id}`;
+    const mapContainerEl = document.getElementById('wv-map');
     const mapEl = document.createElement('div');
+    const id = `wv-map-${proj.id}`;
+
     mapEl.setAttribute('id', id);
     mapEl.setAttribute('data-proj', proj.id);
     mapEl.classList.add('wv-map');
     mapEl.style.display = 'none';
-
-    document.getElementById('wv-map').insertAdjacentElement('afterbegin', mapEl);
+    mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
 
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
@@ -1280,6 +1281,9 @@ export default function mapui(models, config, store) {
     });
   }
 
-  init();
+  if (document.getElementById('app')) {
+    init();
+  }
+
   return self;
 }

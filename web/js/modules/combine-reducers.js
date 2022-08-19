@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { createResponsiveStateReducer } from 'redux-responsive';
 import { assign as lodashAssign } from 'lodash';
-import { modalReducer, modalAboutPage } from './modal/reducers';
+import { modalReducer, modalAboutReducer } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
 import { locationSearchReducer } from './location-search/reducers';
@@ -120,7 +120,7 @@ const reducers = {
   map: mapReducer,
   measure: measureReducer,
   modal: modalReducer,
-  modalAboutPage,
+  modalAbout: modalAboutReducer,
   models: defaultReducer,
   notifications: notificationsReducer,
   notificationsRequest,
