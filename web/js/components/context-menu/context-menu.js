@@ -12,6 +12,7 @@ import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
 import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { MAP_SINGLE_CLICK, MAP_CONTEXT_MENU } from '../../util/constants';
 
 const { events } = util;
 
@@ -76,12 +77,13 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
+    console.log('useEffect');
     if (isCoordinateSearchActive) return;
-    events.on('map:singleclick', handleClick);
-    events.on('map:contextmenu', handleContextEvent);
+    events.on(MAP_SINGLE_CLICK, handleClick);
+    events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
-      events.off('map:singleclick', handleClick);
-      events.off('map:contextmenu', handleContextEvent);
+      events.off(MAP_SINGLE_CLICK, handleClick);
+      events.off(MAP_CONTEXT_MENU, handleContextEvent);
     };
   });
 

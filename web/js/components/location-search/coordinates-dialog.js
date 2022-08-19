@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 import { getFormattedCoordinates } from './util';
 import util from '../../util/util';
-
+// LOCATION_SEARCH_COORDINATE_FORMAT
+import { LOCATION_SEARCH_COORDINATE_FORMAT } from '../../util/constants';
 const { events } = util;
 
 class CoordinatesDialog extends Component {
@@ -27,11 +28,11 @@ class CoordinatesDialog extends Component {
     setTimeout(() => {
       this.setState({ showTooltips: true });
     }, 200);
-    events.on('location-search:coordinate-format', this.updateCoordinateFormat);
+    events.on(LOCATION_SEARCH_COORDINATE_FORMAT, this.updateCoordinateFormat);
   }
 
   componentWillUnmount() {
-    events.off('location-search:coordinate-format', this.updateCoordinateFormat);
+    events.off(LOCATION_SEARCH_COORDINATE_FORMAT, this.updateCoordinateFormat);
   }
 
   updateCoordinateFormat = () => {
