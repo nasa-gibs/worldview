@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import {
   openCustomContent,
+  toggleAboutModal,
 } from '../modules/modal/actions';
 import toggleDistractionFreeModeAction from '../modules/ui/actions';
-import AboutPage from '../components/about/about-page';
+import AboutModal from '../components/about/about';
 import IconList from '../components/util/icon-list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
@@ -32,6 +33,7 @@ function InfoList (props) {
     isDistractionFreeModeActive,
     isTourActive,
     isMobile,
+    openAboutModal,
     toggleDistractionFreeMode,
     notifications,
     notificationClick,
@@ -121,6 +123,7 @@ function InfoList (props) {
         id: 'about_info_item',
         onClick: () => {
           aboutClick();
+          openAboutModal();
         },
       },
       {
@@ -225,13 +228,17 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   aboutClick: () => {
-    // Create new functionality here that renders the about page
-    // inside a modal window.
+    dispatch(toggleAboutModal(true));
+  },
+  openAboutModal: () => {
     dispatch(
       openCustomContent('ABOUT_MODAL', {
         headerText: 'About',
-        bodyComponent: AboutPage,
+        bodyComponent: AboutModal,
         wrapClassName: 'about-page-modal',
+        onClose: () => {
+          dispatch(toggleAboutModal(false));
+        },
       }),
     );
   },
@@ -253,6 +260,7 @@ InfoList.propTypes = {
   isTourActive: PropTypes.bool,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
+  openAboutModal: PropTypes.func,
   sendFeedback: PropTypes.func,
   startTour: PropTypes.func,
   toggleDistractionFreeMode: PropTypes.func,
