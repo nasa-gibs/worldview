@@ -2,6 +2,7 @@ import {
   forEach as lodashForEach,
   map as lodashMap,
   get as lodashGet,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import { available } from '../layers/selectors';
 import util from '../../util/util';
@@ -60,7 +61,7 @@ function setCategoryFacetProps (layers, measurements, categories) {
   });
 }
 
-function formatFacetProps({ layers, measurements, categories }) {
+function setMeasurementCategoryProps(layers, { measurements, categories }) {
   setMeasurementSourceFacetProps(layers, measurements);
   setCategoryFacetProps(layers, measurements, categories);
   return layers;
@@ -93,7 +94,8 @@ function setTypeProp(layer) {
  * @param {*} config
  */
 export default function buildLayerFacetProps(config, selectedDate) {
-  const layers = formatFacetProps(config);
+  let layers = lodashCloneDeep(config.layers);
+  layers = setMeasurementCategoryProps(layers, config);
 
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
