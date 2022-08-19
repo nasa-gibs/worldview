@@ -19,7 +19,7 @@ import {
   saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
 import util from '../../../util/util';
-import JOYRIDE_INCREMENT from '../../../util/constants';
+import { JOYRIDE_INCREMENT } from '../../../util/constants';
 
 const { events } = util;
 
