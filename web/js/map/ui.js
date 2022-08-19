@@ -77,8 +77,11 @@ import {
   REDUX_ACTION_DISPATCHED,
   GRANULE_HOVERED,
   GRANULE_HOVER_UPDATE,
+  MAP_DRAG,
   MAP_MOUSE_MOVE,
   MAP_MOUSE_OUT,
+  MAP_MOVE_START,
+  MAP_ZOOMING,
 } from '../util/constants';
 
 const { events } = util;
@@ -1173,7 +1176,7 @@ export default function mapui(models, config, store) {
     map.proj = proj.id;
     createMousePosSel(map, proj);
     map.getView().on('change:resolution', () => {
-      events.trigger('map:movestart');
+      events.trigger(MAP_MOVE_START);
     });
 
     // This component is inside the map viewport container. Allowing
@@ -1209,13 +1212,13 @@ export default function mapui(models, config, store) {
 
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      events.trigger('map:drag');
+      events.trigger(MAP_DRAG);
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          events.trigger('map:zooming');
+          events.trigger(MAP_ZOOMING);
           break;
         default:
           break;

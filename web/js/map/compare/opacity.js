@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
 import { getCompareDates } from '../../modules/compare/selectors';
 import util from '../../util/util';
+import { COMPARE_MOVE_END } from '../../util/constants';
 
 const { events } = util;
 
@@ -77,6 +78,6 @@ export default class Opacity {
     const convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
-    events.trigger('compare:moveend', value);
+    events.trigger(COMPARE_MOVE_END, value);
   }
 }

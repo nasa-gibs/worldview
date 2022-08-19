@@ -100,7 +100,7 @@ export class VectorInteractions extends React.Component {
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
-          events.trigger('granule-hovered', granulePlatform, date);
+          events.trigger(GRANULE_HOVERED, granulePlatform, date);
           this.setState({ granulePlatform, granuleDate: date });
         }
       });

@@ -15,6 +15,7 @@ import RenderSplitLayerTitle from '../renderSplitTitle';
 import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 import util from '../../../../util/util';
+import JOYRIDE_INCREMENT from '../../../../util/constants';
 
 const { events } = util;
 
@@ -44,7 +45,7 @@ class SearchLayerRow extends React.Component {
   onRowClick() {
     this.toggleShowMetadata();
     setTimeout(() => {
-      events.trigger('joyride:increment');
+      events.trigger(JOYRIDE_INCREMENT);
     });
   }
 
