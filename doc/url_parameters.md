@@ -37,6 +37,7 @@
 | `df` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, distraction free mode will be activated. Distraction free mode is disabled by default and can be toggled from the Information toolbar menu. |
 | `em` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, embed mode will be activated. Embed mode is disabled by default. |
 | `tr` | string | *`tour_id`* | The id of the tour story to load. Stories will load from step 1. |
+| `abt` | string | *`on`* | Indicates whether the about modal is open or not. Allows for permalinks that have the about page open |
 
 \* *1 = yearly, 2 = monthly, 3 = daily, 4 = hourly, and 5 = minutely. The subdaily zoom levels (4 & 5) will only be available when subdaily layers are active.*
 
