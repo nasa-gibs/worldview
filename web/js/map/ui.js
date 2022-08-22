@@ -71,6 +71,18 @@ import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } 
 import { getNormalizedCoordinate } from '../components/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
 import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
+import {
+  MAP_DISABLE_CLICK_ZOOM,
+  MAP_ENABLE_CLICK_ZOOM,
+  REDUX_ACTION_DISPATCHED,
+  GRANULE_HOVERED,
+  GRANULE_HOVER_UPDATE,
+  MAP_DRAG,
+  MAP_MOUSE_MOVE,
+  MAP_MOUSE_OUT,
+  MAP_MOVE_START,
+  MAP_ZOOMING,
+} from '../util/constants';
 
 const { events } = util;
 
@@ -290,17 +302,17 @@ export default function mapui(models, config, store) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    events.on('map:disable-click-zoom', () => {
+    events.on(MAP_DISABLE_CLICK_ZOOM, () => {
       doubleClickZoom.setActive(false);
     });
-    events.on('map:enable-click-zoom', () => {
+    events.on(MAP_ENABLE_CLICK_ZOOM, () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    events.on('redux:action-dispatched', subscribeToStore);
-    events.on('granule-hovered', onGranuleHover);
-    events.on('granule-hover-update', onGranuleHoverUpdate);
+    events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+    events.on(GRANULE_HOVERED, onGranuleHover);
+    events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
     window.addEventListener('orientationchange', () => {
       setTimeout(() => { updateProjection(true); }, 200);
     });
@@ -1165,7 +1177,7 @@ export default function mapui(models, config, store) {
     map.proj = proj.id;
     createMousePosSel(map, proj);
     map.getView().on('change:resolution', () => {
-      events.trigger('map:movestart');
+      events.trigger(MAP_MOVE_START);
     });
 
     // This component is inside the map viewport container. Allowing
@@ -1201,13 +1213,13 @@ export default function mapui(models, config, store) {
 
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      events.trigger('map:drag');
+      events.trigger(MAP_DRAG);
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          events.trigger('map:zooming');
+          events.trigger(MAP_ZOOMING);
           break;
         default:
           break;
@@ -1274,8 +1286,8 @@ export default function mapui(models, config, store) {
       runningdata.newPoint(pixel, map);
     }, 300);
 
-    events.on('map:mousemove', throttledOnMouseMove);
-    events.on('map:mouseout', (e) => {
+    events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
+    events.on(MAP_MOUSE_OUT, (e) => {
       throttledOnMouseMove.cancel();
       runningdata.clearAll();
     });

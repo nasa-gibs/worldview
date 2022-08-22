@@ -12,6 +12,7 @@ import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
 import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { CONTEXT_MENU_LOCATION, MAP_SINGLE_CLICK, MAP_CONTEXT_MENU } from '../../util/constants';
 
 const { events } = util;
 
@@ -62,7 +63,7 @@ function RightClickMenu(props) {
   }
 
   function addPlaceMarkerHandler(coords, olMap, crs) {
-    events.trigger('context-menu:location', coords, olMap, crs);
+    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crs);
     setShow(false);
   }
 
@@ -77,11 +78,11 @@ function RightClickMenu(props) {
 
   useEffect(() => {
     if (isCoordinateSearchActive) return;
-    events.on('map:singleclick', handleClick);
-    events.on('map:contextmenu', handleContextEvent);
+    events.on(MAP_SINGLE_CLICK, handleClick);
+    events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
-      events.off('map:singleclick', handleClick);
-      events.off('map:contextmenu', handleContextEvent);
+      events.off(MAP_SINGLE_CLICK, handleClick);
+      events.off(MAP_CONTEXT_MENU, handleContextEvent);
     };
   });
 

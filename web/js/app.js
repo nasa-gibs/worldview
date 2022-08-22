@@ -7,6 +7,7 @@ import whatInput from 'what-input';
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
+import { STARTUP } from './util/constants';
 // eslint-disable-next-line import/no-named-as-default
 import MapInteractions from './containers/map-interactions/map-interactions';
 // Toolbar
@@ -116,7 +117,7 @@ class App extends React.Component {
         self.props.screenResize(window);
       });
       self.props.screenResize(window);
-      events.trigger('startup');
+      events.trigger(STARTUP);
       self.setVhCSSProperty();
     };
     util.wrap(main)();

@@ -5,6 +5,7 @@ import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
 import { getCompareDates } from '../../modules/compare/selectors';
+import { COMPARE_MOVE_START } from '../../util/constants';
 
 const { events } = util;
 
@@ -233,7 +234,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
-      events.trigger('compare:movestart');
+      events.trigger(COMPARE_MOVE_START);
     }
     const windowWidth = window.innerWidth;
     if (listenerObj.type === 'default') evt.preventDefault();

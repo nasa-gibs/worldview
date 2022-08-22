@@ -22,6 +22,7 @@ import {
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import util from '../../util/util';
+import { MAP_RUNNING_DATA } from '../../util/constants';
 
 const { events } = util;
 
@@ -62,9 +63,9 @@ function LayerList(props) {
   const [runningDataObj, setRunningDataObj] = useState({});
 
   useEffect(() => {
-    events.on('map:running-data', setRunningDataObj);
+    events.on(MAP_RUNNING_DATA, setRunningDataObj);
     return () => {
-      events.off('map:running-data', setRunningDataObj);
+      events.off(MAP_RUNNING_DATA, setRunningDataObj);
     };
   }, []);
 

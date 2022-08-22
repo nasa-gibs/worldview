@@ -9,6 +9,7 @@ import { getPalette } from '../modules/palettes/selectors';
 import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
+import { MAP_RUNNING_DATA } from '../util/constants';
 
 const { events } = util;
 
@@ -21,7 +22,7 @@ export default function MapRunningData(compareUi, store) {
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
-      events.trigger('map:running-data', dataObj);
+      events.trigger(MAP_RUNNING_DATA, dataObj);
     }
   };
   /*
@@ -100,7 +101,7 @@ export default function MapRunningData(compareUi, store) {
 
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
-      events.trigger('map:running-data', dataObj);
+      events.trigger(MAP_RUNNING_DATA, dataObj);
     }
   };
   return self;

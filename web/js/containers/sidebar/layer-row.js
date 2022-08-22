@@ -31,6 +31,7 @@ import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
+import { SIDEBAR_LAYER_HOVER } from '../../util/constants';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -270,13 +271,13 @@ function LayerRow (props) {
 
   const mouseOver = () => {
     if (isMobile) return;
-    events.trigger('sidebar:layer-hover', layer.id, true);
+    events.trigger(SIDEBAR_LAYER_HOVER, layer.id, true);
     toggleShowButtons(true);
   };
 
   const mouseLeave = () => {
     if (isMobile) return;
-    events.trigger('sidebar:layer-hover', layer.id, false);
+    events.trigger(SIDEBAR_LAYER_HOVER, layer.id, false);
     toggleShowButtons(false);
   };
 

@@ -5,6 +5,7 @@ import {
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
 import util from '../../util/util';
+import { LOCATION_SEARCH_COORDINATE_FORMAT } from '../../util/constants';
 
 const { events } = util;
 
@@ -36,7 +37,7 @@ export function changeDatelineVisibility(value) {
 
 export function changeCoordinateFormat(value) {
   safeLocalStorage.setItem(COORDINATE_FORMAT, value);
-  events.trigger('location-search:coordinate-format');
+  events.trigger(LOCATION_SEARCH_COORDINATE_FORMAT);
   return {
     type: CHANGE_COORDINATE_FORMAT,
     value,
