@@ -31,7 +31,7 @@ import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
-import { SIDEBAR_LAYER_HOVER } from '../../util/constants';
+import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -94,9 +94,9 @@ function LayerRow (props) {
   const [runningDataObj, setRunningDataObj] = useState({});
 
   useEffect(() => {
-    events.on('map:running-data', setRunningDataObj);
+    events.on(MAP_RUNNING_DATA, setRunningDataObj);
     return () => {
-      events.off('map:running-data', setRunningDataObj);
+      events.off(MAP_RUNNING_DATA, setRunningDataObj);
     };
   }, []);
 

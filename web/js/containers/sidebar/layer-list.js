@@ -21,10 +21,6 @@ import {
   removeLayer as removeLayerAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
-import util from '../../util/util';
-import { MAP_RUNNING_DATA } from '../../util/constants';
-
-const { events } = util;
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -60,14 +56,6 @@ function LayerList(props) {
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
-  const [runningDataObj, setRunningDataObj] = useState({});
-
-  useEffect(() => {
-    events.on(MAP_RUNNING_DATA, setRunningDataObj);
-    return () => {
-      events.off(MAP_RUNNING_DATA, setRunningDataObj);
-    };
-  }, []);
 
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
