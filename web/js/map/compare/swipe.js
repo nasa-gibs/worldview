@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
+import lodashEach from 'lodash/each';
+
 import util from '../../util/util';
 import { getCompareDates } from '../../modules/compare/selectors';
 import { COMPARE_MOVE_START } from '../../util/constants';
@@ -11,13 +12,27 @@ const { events } = util;
 
 let swipeOffset = null;
 let line = null;
-let bottomLayers = [];
-let topLayers = [];
+let layersSideA = [];
+let layersSideB = [];
 let mapCase;
 let listenerObj;
 let percentSwipe = null;
 const SWIPE_PADDING = 30;
 let dragging = false;
+
+const restore = function(event) {
+  const ctx = event.context;
+  ctx.restore();
+};
+
+const applyListenersA = function(layer) {
+  layer.on('prerender', this.clipA);
+  layer.on('postrender', restore);
+};
+const applyListenersB = function(layer) {
+  layer.on('prerender', this.clipB);
+  layer.on('postrender', restore);
+};
 
 export default class Swipe {
   constructor(
@@ -43,59 +58,55 @@ export default class Swipe {
     const { dateA, dateB } = getCompareDates(state);
     this.dateA = dateA;
     this.dateB = dateB;
-    line = addLineOverlay(this.map, this.dateA, this.dateB);
+    line = addLineOverlay(this.map, this.dateA, this.dateB, this.updateExtents);
     this.update(store);
   }
 
-  getSwipeOffset = () => swipeOffset
-
-  /**
-   * Recursively apply listeners to layers
-   * @param {Object} layer | Layer or layer Group obj
-   * @param {Function} callback | Function that will apply event listeners to layer
-   */
-  applyEventsToBaseLayers(layer, callback) {
-    const layers = layer.get('layers');
-    if (layers) {
-      lodashEach(layers.getArray(), (layer) => {
-        this.applyEventsToBaseLayers(layer, callback);
-      });
-    } else {
-      callback.call(this, layer);
-    }
+  destroy = () => {
+    mapCase.removeChild(line);
+    lodashEach(layersSideA, (layer) => {
+      layer.un('prerender', this.clipA);
+      layer.un('postrender', restore);
+    });
+    lodashEach(layersSideB, (layer) => {
+      layer.un('prerender', this.clipB);
+      layer.un('postrender', restore);
+    });
+    layersSideA = [];
+    layersSideB = [];
   }
 
-  update(store, groupName) {
+  getSwipeOffset = () => swipeOffset;
+
+  update(store) {
     const state = store.getState();
     const { dateA, dateB } = getCompareDates(state);
+
     if (dateA !== this.dateA || dateB !== this.dateB) {
       this.destroy();
       this.create(store);
     } else {
-      const mapLayers = this.map.getLayers().getArray();
-      if (!groupName) {
-        this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
-        this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
-      } else if (groupName === 'active') {
-        this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
-      } else {
-        this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
-      }
+      const layerGroups = this.map.getLayers().getArray();
+      layersSideA = layerGroups[0].getLayersArray();
+      layersSideB = layerGroups[1].getLayersArray();
+      layersSideA.forEach((l) => {
+        this.applyEventListeners(l, applyListenersA);
+      });
+      layersSideB.forEach((l) => {
+        this.applyEventListeners(l, applyListenersB);
+      });
     }
   }
 
-  /**
-   * Clip the top layer at the right xOffset
-   * @param {Object} event | OL Precompose event object
-   */
-  clip = (event) => {
-    const ctx = event.context;
-    const viewportWidth = event.frameState.size[0];
-    const width = ctx.canvas.width * (swipeOffset / viewportWidth);
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
-    ctx.clip();
+  applyEventListeners(layer, callback) {
+    const layers = layer.get('layers');
+    if (layers) {
+      lodashEach(layers.getArray(), (l) => {
+        this.applyEventListeners(l, callback);
+      });
+    } else {
+      callback.call(this, layer);
+    }
   }
 
   /**
@@ -103,7 +114,7 @@ export default class Swipe {
    * Layer group is transparent
    * @param {Object} event | OL Precompose event object
    */
-  reverseClip = (event) => {
+  clipA = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
@@ -113,34 +124,18 @@ export default class Swipe {
     ctx.clip();
   }
 
-  destroy() {
-    mapCase.removeChild(line);
-    this.removeListenersFromLayers(topLayers);
-    this.removeListenersFromBottomLayers(bottomLayers);
-    topLayers = [];
-    bottomLayers = [];
-  }
-
   /**
-   * Remove all listeners from layer group
-   * @param {Array} layers | Layer group
+   * Clip the top layer at the right xOffset
+   * @param {Object} event | OL Precompose event object
    */
-  removeListenersFromBottomLayers(layers) {
-    lodashEach(layers, (layer) => {
-      layer.un('prerender', this.reverseClip);
-      layer.un('postrender', restore);
-    });
-  }
-
-  /**
-   * Remove all listeners from layer group
-   * @param {Array} layers | Layer group
-   */
-  removeListenersFromLayers(layers) {
-    lodashEach(layers, (layer) => {
-      layer.un('prerender', this.clip);
-      layer.un('postrender', restore);
-    });
+  clipB = (event) => {
+    const ctx = event.context;
+    const viewportWidth = event.frameState.size[0];
+    const width = ctx.canvas.width * (swipeOffset / viewportWidth);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
+    ctx.clip();
   }
 }
 
@@ -253,45 +248,19 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
         : swipeOffset;
     percentSwipe = swipeOffset / windowWidth;
     lineCaseEl.style.transform = `translateX( ${swipeOffset}px)`;
-
     map.render();
   }
+
   function end(evt) {
     dragging = false;
     events.trigger(
       'compare:moveend',
       lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
     );
-
     window.removeEventListener(listenerObj.move, move);
     window.removeEventListener(listenerObj.end, end);
   }
+
   window.addEventListener(listenerObj.move, move);
   window.addEventListener(listenerObj.end, end);
-};
-
-/**
- * Add listeners for layer clipping
- * @param {Object} layer | Ol Layer object
- */
-const applyLayerListeners = function(layer) {
-  layer.on('prerender', this.clip);
-  layer.on('postrender', restore);
-  bottomLayers.push(layer);
-};
-
-/**
- * Layers need to be inversely clipped so that they can't be seen through
- * the other layergroup in cases where the layergroups layer opacity is < 100%
- * @param {Object} layer | Ol Layer object
- */
-const applyReverseLayerListeners = function(layer) {
-  layer.on('prerender', this.reverseClip);
-  layer.on('postrender', restore);
-  topLayers.push(layer);
-};
-
-const restore = function(event) {
-  const ctx = event.context;
-  ctx.restore();
 };
