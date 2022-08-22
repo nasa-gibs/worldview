@@ -14,60 +14,53 @@ import { MAP_RUNNING_DATA } from '../util/constants';
 const { events } = util;
 
 export default function MapRunningData(compareUi, store) {
-  const self = this;
   let dataObj = {};
-  /**
-   * Clear running data value
-   */
-  self.clearAll = function() {
+
+  function clearAll() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
       events.trigger(MAP_RUNNING_DATA, dataObj);
     }
-  };
-  /*
-   * Compare old and new arrays to determine which Layers need to be
-   * removed
-   *
-   * @method LayersToRemove
-   *
-   * @param {Array} pixels - Array of pixels values
-   *
-   * @param {Object} map - OpenLayers Map Object
-   *
-   * @return {Void}
-   *
-   */
-  self.newPoint = function(pixels, map) {
+  }
+
+  function newPoint(pixel, map) {
     const state = store.getState();
     const { proj, compare } = state;
     const activeLayerObj = {};
-    const [lon, lat] = map.getCoordinateFromPixel(pixels);
+    const [lon, lat] = map.getCoordinateFromPixel(pixel);
     let swipeOffset;
     if (compareUi && compare.active) {
       swipeOffset = Math.floor(compareUi.getOffset());
     }
 
-    map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    // Determine if we should do anything with this vector layer
+    const shouldNotProcessVectorLayer = (layer) => {
       const def = lodashGet(layer, 'wv.def');
       if (!def) return;
-      const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
+      const { wrapX, wrapadjacentdays } = def;
+      const isWrapped = proj.id === 'geographic' && (wrapadjacentdays || wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-      const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixels));
-      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv.group, compare, swipeOffset) || featureOutsideExtent) return;
-
+      const coords = map.getCoordinateFromPixel(pixel);
+      const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), coords);
+      const inCompareRegion = isFromActiveCompareRegion(pixel, layer.wv.group, compare, swipeOffset);
       const hasPalette = !lodashIsEmpty(def.palette);
-      if (!hasPalette) return;
-      const identifier = def.palette.styleProperty;
-      const layerId = def.id;
-      const paletteLegends = getPalette(layerId, undefined, undefined, state);
+      return !isRenderedFeature || !inCompareRegion || featureOutsideExtent || !hasPalette;
+    };
+
+    // Running data for vector layers
+    map.forEachFeatureAtPixel(pixel, (feature, layer) => {
+      if (shouldNotProcessVectorLayer(layer)) return;
+
+      const { id, palette } = layer.wv.def;
+      const identifier = palette.styleProperty;
+      const paletteLegends = getPalette(id, undefined, undefined, state);
       const { legend } = paletteLegends;
+      let color;
 
       if (!identifier && legend.colors.length > 1) return;
-      let color;
       if (identifier) {
         const properties = feature.getProperties();
-        const value = properties[identifier] || def.palette.unclassified;
+        const value = properties[identifier] || palette.unclassified;
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
         const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
@@ -75,34 +68,42 @@ export default function MapRunningData(compareUi, store) {
       } else if (legend.colors.length === 1) {
         [color] = legend.colors;
       }
-      activeLayerObj[layerId] = {
+      activeLayerObj[id] = {
         paletteLegends,
         paletteHex: color,
       };
     });
 
-    map.forEachLayerAtPixel(pixels, (layer, data) => {
-      if (!layer.wv) return;
-      const { def, group } = layer.wv;
-      if (!isFromActiveCompareRegion(pixels, group, compare, swipeOffset)) return;
-      if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
-        activeLayerObj[def.id] = {
-          paletteLegends: getPalette(def.id, undefined, undefined, state),
-          paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
-        };
-      }
-    }, {
-      // Don't include granules for perfomance reasons
-      layerFilter: (layer) => {
-        const type = lodashGet(layer, 'wv.def.type');
-        return !(type === 'granule' && !layer.get('granuleGroup'));
-      },
+    // Determine if we should do anything with this raster layer
+    const shouldNotProcessRasterLayer = (layer) => {
+      const type = lodashGet(layer, 'wv.def.type');
+      const isGranule = type === 'granule' && !layer.get('granuleGroup');
+      const hasPalette = !!lodashGet(layer, 'wv.def.palette');
+      return isGranule || layer.isVector || !hasPalette;
+    };
+
+    // Running data for raster layers
+    map.getAllLayers().forEach((layer) => {
+      if (shouldNotProcessRasterLayer(layer)) return;
+      const { wv: { def: { id } } } = layer;
+      const data = layer.getData(pixel);
+      if (!data) return;
+      const [red, green, blue, alpha] = data;
+      const hexColor = util.rgbaToHex(red, green, blue, alpha);
+      activeLayerObj[id] = {
+        paletteLegends: getPalette(id, undefined, undefined, state),
+        paletteHex: hexColor,
+      };
     });
 
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
       events.trigger(MAP_RUNNING_DATA, dataObj);
     }
+  }
+
+  return {
+    clearAll,
+    newPoint,
   };
-  return self;
 }
