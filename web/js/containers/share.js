@@ -23,18 +23,9 @@ import HoverTooltip from '../components/util/hover-tooltip';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
 
-const getShortenRequestString = (mock, permalink) => {
-  const mockStr = mock || '';
-  if (/localhost/.test(window.location.href)) {
-    return 'mock/short_link.json';
-  }
-  return (
-    `service/link/shorten.cgi${
-      mockStr
-    }?url=${
-      encodeURIComponent(permalink)}`
-  );
-};
+
+
+
 
 const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
 
@@ -50,6 +41,8 @@ class ShareLinkContainer extends Component {
       queryString: history.location.search || '',
     };
   }
+
+
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { shortLink } = nextProps;
@@ -82,11 +75,22 @@ class ShareLinkContainer extends Component {
     if (this.unlisten) this.unlisten();
   }
 
-  getShortLink = () => {
-    const { requestShortLinkAction, mock } = this.props;
+  getShortenRequestString(permalink) {
+    const { urlShortener } = this.props;
+    if (/localhost/.test(window.location.href)) {
+      const mockPermaLink = 'https://worldview.earthdata.nasa.gov/?t=2020-08-31-T17%3A05%3A22Z&l=Reference_Labels(hidden),Reference_Features(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor';
+
+      return `${urlShortener.url}?url=${mockPermaLink}`;
+    }
+    return `${urlShortener.url}?url=${permalink}`;
+  }
+
+  getShortLink = async () => {
+    const { requestShortLinkAction } = this.props;
     const link = this.getPermalink();
-    const location = getShortenRequestString(mock, link);
-    return requestShortLinkAction(location);
+    const location = this.getShortenRequestString(link);
+    const shortenedUrl = await requestShortLinkAction(location);
+    return shortenedUrl;
   }
 
   onToggleShorten = () => {
@@ -346,12 +350,13 @@ function mapStateToProps(state) {
     browser, config, shortLink, sidebar, tour,
   } = state;
 
-  const { features: { urlShortening } } = config;
+  const { features: { urlShortening, urlShortener } } = config;
   const isMobile = browser.lessThan.medium;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
 
   return {
     urlShortening,
+    urlShortener,
     embedDisableNavLink,
     isMobile,
     shortLink,
@@ -381,4 +386,5 @@ ShareLinkContainer.propTypes = {
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
   urlShortening: PropTypes.bool,
+  urlShortener: PropTypes.object,
 };
