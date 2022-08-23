@@ -37,6 +37,7 @@ import {
   MAP_DISABLE_CLICK_ZOOM,
   MAP_ENABLE_CLICK_ZOOM,
 } from '../../util/constants';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
 const { events } = util;
 
@@ -57,7 +58,7 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj
   } = props;
 
   useEffect(() => {
@@ -229,6 +230,11 @@ function OlMeasureTool (props) {
       source,
       type,
       style: drawStyles,
+      condition: function(e) {
+        const pixel = [e.originalEvent.x, e.originalEvent.y];
+        const coord = olMap.getCoordinateFromPixel(pixel);
+        return areCoordinatesWithinExtent(proj, coord);
+      }
     });
     olMap.addInteraction(draw);
     if (!vectorLayers[crs]) {
@@ -333,6 +339,7 @@ const mapStateToProps = (state) => {
     crs,
     unitOfMeasure,
     projections,
+    proj,
   };
 };
 
