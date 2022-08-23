@@ -10,7 +10,7 @@ import {
 } from 'lodash';
 import Promise from 'bluebird';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { openCustomContent, onToggle } from '../modules/modal/actions';
+import { openCustomContent, onToggle, toggleAboutModal } from '../modules/modal/actions';
 import toggleDistractionFreeMode from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
@@ -35,6 +35,7 @@ import { toggleShowLocationSearch, toggleDialogVisible } from '../modules/locati
 import { isLocationSearchFeatureEnabled } from '../modules/location-search/util';
 import { getAllActiveLayers } from '../modules/layers/selectors';
 import { hasNonDownloadableVisibleLayer, getNonDownloadableLayerWarning, getNonDownloadableLayers } from '../modules/image-download/util';
+import AboutModal from '../components/about/about';
 
 
 Promise.config({ cancellation: true });
@@ -92,6 +93,13 @@ class toolbarContainer extends Component {
     super(props);
     this.requestNotifications();
     this.openImageDownload = this.openImageDownload.bind(this);
+  }
+
+  componentDidMount() {
+    const { isAboutOpen, openAboutModal } = this.props;
+    if (isAboutOpen) {
+      openAboutModal();
+    }
   }
 
   getPromise(bool, type, action, title) {
@@ -365,7 +373,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, sidebar, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events, proj,
+    animation, sidebar, browser, notifications, palettes, compare, map, measure, modal, modalAbout, ui, locationSearch, events, proj,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -401,6 +409,7 @@ const mapStateToProps = (state) => {
     isCompareActive,
     isLocationSearchExpanded,
     isMobile,
+    isAboutOpen: modalAbout.isOpen,
     shouldBeCollapsed,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
@@ -447,6 +456,18 @@ const mapDispatchToProps = (dispatch) => ({
       key,
       customParams,
     ));
+  },
+  openAboutModal: () => {
+    dispatch(
+      openCustomContent('ABOUT_MODAL', {
+        headerText: 'About',
+        bodyComponent: AboutModal,
+        wrapClassName: 'about-page-modal',
+        onClose: () => {
+          dispatch(toggleAboutModal(false));
+        },
+      }),
+    );
   },
   notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
     const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
@@ -498,6 +519,7 @@ toolbarContainer.propTypes = {
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
+  isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
@@ -508,6 +530,7 @@ toolbarContainer.propTypes = {
   notificationType: PropTypes.string,
   notify: PropTypes.func,
   openModal: PropTypes.func,
+  openAboutModal: PropTypes.func,
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
   rotation: PropTypes.number,

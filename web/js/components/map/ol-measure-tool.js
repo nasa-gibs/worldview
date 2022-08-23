@@ -29,6 +29,14 @@ import {
 } from '../measure-tool/util';
 import MeasureTooltip from '../measure-tool/measure-tooltip';
 import util from '../../util/util';
+import {
+  MEASURE_DISTANCE,
+  MEASURE_AREA,
+  MEASURE_CLEAR,
+  MEASURE_DOWNLOAD_GEOJSON,
+  MAP_DISABLE_CLICK_ZOOM,
+  MAP_ENABLE_CLICK_ZOOM,
+} from '../../util/constants';
 
 const { events } = util;
 
@@ -68,17 +76,17 @@ function OlMeasureTool (props) {
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {
-      events.on('measure:distance', initDistanceMeasurement);
-      events.on('measure:area', initAreaMeasurement);
-      events.on('measure:clear', clearMeasurements);
-      events.on('measure:download-geojson', dlGeoJSON);
+      events.on(MEASURE_DISTANCE, initDistanceMeasurement);
+      events.on(MEASURE_AREA, initAreaMeasurement);
+      events.on(MEASURE_CLEAR, clearMeasurements);
+      events.on(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
     }
     return () => {
       if (map && map.rendered) {
-        events.off('measure:distance', initDistanceMeasurement);
-        events.off('measure:area', initAreaMeasurement);
-        events.off('measure:clear', clearMeasurements);
-        events.off('measure:download-geojson', dlGeoJSON);
+        events.off(MEASURE_DISTANCE, initDistanceMeasurement);
+        events.off(MEASURE_AREA, initAreaMeasurement);
+        events.off(MEASURE_CLEAR, clearMeasurements);
+        events.off(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
       }
     };
   }, [map, unitOfMeasure]);
@@ -178,12 +186,12 @@ function OlMeasureTool (props) {
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
-    events.trigger('map:enable-click-zoom');
+    events.trigger(MAP_ENABLE_CLICK_ZOOM);
   };
 
   const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
-    events.trigger('map:disable-click-zoom');
+    events.trigger(MAP_DISABLE_CLICK_ZOOM);
     drawChangeListener = feature.getGeometry().on('change', (e) => {
       const geom = e.target;
       if (geom instanceof OlGeomPolygon) {

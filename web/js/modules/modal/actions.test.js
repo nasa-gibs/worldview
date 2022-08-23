@@ -95,34 +95,34 @@ describe('Template fetching', () => {
       },
     });
     const expectedActions = [
-      { type: constants.ABOUT_PAGE_REQUEST_START },
+      { type: constants.TEMPLATE_REQUEST_START },
       {
-        type: constants.ABOUT_PAGE_REQUEST_SUCCESS,
+        type: constants.TEMPLATE_REQUEST_SUCCESS,
         response: constants.ABOUT_MOCK_RESPONSE,
       },
     ];
     const store = mockStore({ modal: {} });
     return store
-      .dispatch(requestTemplate(constants.ABOUT_PAGE_REQUEST, loc, 'text/html'))
+      .dispatch(requestTemplate(constants.TEMPLATE_REQUEST, loc, 'text/html'))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
-  test(`creates ${constants.ABOUT_PAGE_REQUEST_FAILURE} Action`, () => {
+  test(`creates ${constants.TEMPLATE_REQUEST_FAILURE} Action`, () => {
     const loc = 'mock/';
     fetchMock.mock(loc, {
       throws: ERROR_MESSAGE,
     });
     const expectedActions = [
-      { type: constants.ABOUT_PAGE_REQUEST_START },
+      { type: constants.TEMPLATE_REQUEST_START },
       {
-        type: constants.ABOUT_PAGE_REQUEST_FAILURE,
+        type: constants.TEMPLATE_REQUEST_FAILURE,
         error: ERROR_MESSAGE,
       },
     ];
     const store = mockStore({ modal: {} });
     return store
-      .dispatch(requestTemplate(constants.ABOUT_PAGE_REQUEST, loc, 'text/html'))
+      .dispatch(requestTemplate(constants.TEMPLATE_REQUEST, loc, 'text/html'))
       .catch(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

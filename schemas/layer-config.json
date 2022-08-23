@@ -94,6 +94,7 @@
             "FPAR",
             "Flood",
             "Faraday Rotation",
+            "Granules",
             "Precipitation Rate - Featured",
             "Sea Surface Temperature - Featured",
             "Fires and Thermal Anomalies",
@@ -346,7 +347,6 @@
         "wms",
         "wmts",
         "vector",
-        "variable",
         "granule"
       ]
     },

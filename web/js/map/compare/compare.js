@@ -3,6 +3,7 @@ import Opacity from './opacity';
 import Spy from './spy';
 import util from '../../util/util';
 import { setValue } from '../../modules/compare/actions';
+import { COMPARE_MOVE_START, COMPARE_MOVE_END } from '../../util/constants';
 
 const { events } = util;
 
@@ -36,10 +37,10 @@ export default function mapCompare(store) {
     : MOUSE_EVENT;
 
   const init = function () {
-    events.on('compare:movestart', () => {
+    events.on(COMPARE_MOVE_START, () => {
       self.dragging = true;
     });
-    events.on('compare:moveend', (value) => {
+    events.on(COMPARE_MOVE_END, (value) => {
       self.dragging = false;
       self.value = value;
       store.dispatch(setValue(value));

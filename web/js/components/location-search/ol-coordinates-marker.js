@@ -1,7 +1,4 @@
 import { connect } from 'react-redux';
-import {
-  isNaN as lodashIsNaN,
-} from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
@@ -9,10 +6,11 @@ import Alert from '../util/alert';
 import {
   setPlaceMarker, toggleReverseGeocodeActive,
 } from '../../modules/location-search/actions';
+import { getNormalizedCoordinate } from './util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import { reverseGeocode } from '../../modules/location-search/util-api';
-import { getCoordinateFixedPrecision } from './util';
 import util from '../../util/util';
+import { MAP_SINGLE_CLICK, MAP_CONTEXT_MENU, CONTEXT_MENU_LOCATION } from '../../util/constants';
 
 const { events } = util;
 
@@ -27,22 +25,22 @@ export class CoordinatesMarker extends Component {
   }
 
   componentDidMount() {
-    events.on('context-menu:location', this.singleClick);
+    events.on(CONTEXT_MENU_LOCATION, this.singleClick);
   }
 
   componentDidUpdate(prevProps) {
     const { isCoordinateSearchActive } = this.props;
     if (isCoordinateSearchActive) {
-      events.on('map:singleclick', this.singleClick);
-      events.on('map:contextmenu', this.rightClick);
+      events.on(MAP_SINGLE_CLICK, this.singleClick);
+      events.on(MAP_CONTEXT_MENU, this.rightClick);
     } else if (prevProps.isCoordinateSearchActive && !isCoordinateSearchActive) {
-      events.off('map:singleclick', this.singleClick);
-      events.off('map:contextmenu', this.rightClick);
+      events.off(MAP_SINGLE_CLICK, this.singleClick);
+      events.off(MAP_CONTEXT_MENU, this.rightClick);
     }
   }
 
   componentWillUnmount() {
-    events.off('context-menu:location', this.singleClick);
+    events.off(CONTEXT_MENU_LOCATION, this.singleClick);
   }
 
   rightClick(e) {
@@ -59,27 +57,21 @@ export class CoordinatesMarker extends Component {
       config,
       proj,
       setPlaceMarker,
-      toggleReverseGeocodeActive,
     } = this.props;
 
     // handle reverse geocoding mouse click
     const pixels = e.pixel;
     const coord = map.getCoordinateFromPixel(pixels);
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    const latitude = getCoordinateFixedPrecision(lat);
-    const longitude = getCoordinateFixedPrecision(lon);
+    const tCoord = transform(coord, crs, 'EPSG:4326');
+    const [lon, lat] = getNormalizedCoordinate(tCoord);
 
-    // show alert warning and exit mode if outside current map extent
-    const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
-    const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
-    if (!validNums || !withinExtent) {
+    if (!areCoordinatesWithinExtent(proj, [lon, lat])) {
       this.setState({ showExtentAlert: true });
-      toggleReverseGeocodeActive(false);
       return;
     }
-    // get available reverse geocoding for coordinates and fly to point
-    reverseGeocode([longitude, latitude], config).then((results) => {
-      setPlaceMarker([longitude, latitude], results);
+
+    reverseGeocode([lon, lat], config).then((results) => {
+      setPlaceMarker(tCoord, results);
     });
     this.setState({ showExtentAlert: false });
   }
@@ -140,9 +132,9 @@ const mapDispatchToProps = (dispatch) => ({
 CoordinatesMarker.propTypes = {
   config: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
-  proj: PropTypes.object,
   setPlaceMarker: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
+  proj: PropTypes.object,
 };
 export default connect(
   mapStateToProps,

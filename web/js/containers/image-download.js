@@ -28,6 +28,7 @@ import {
   onPanelChange,
   updateBoundaries,
 } from '../modules/image-download/actions';
+import { getNormalizedCoordinate } from '../components/location-search/util';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 
@@ -170,8 +171,8 @@ class ImageDownloadContainer extends Component {
         proj.selected.resolutions,
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
-    const normalizedBottomLeftLatLong = [util.normalizeWrappedLongitude(bottomLeftLatLong[0]), bottomLeftLatLong[1]];
-    const normalizedTopRightLatLong = [util.normalizeWrappedLongitude(topRightLatLong[0]), topRightLatLong[1]];
+    const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
+    const normalizedTopRightLatLong = getNormalizedCoordinate(topRightLatLong);
 
     return (
       <ErrorBoundary>

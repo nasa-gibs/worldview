@@ -2,6 +2,7 @@ import {
   forEach as lodashForEach,
   map as lodashMap,
   get as lodashGet,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import { available } from '../layers/selectors';
 import util from '../../util/util';
@@ -60,7 +61,7 @@ function setCategoryFacetProps (layers, measurements, categories) {
   });
 }
 
-function formatFacetProps({ layers, measurements, categories }) {
+function setMeasurementCategoryProps(layers, { measurements, categories }) {
   setMeasurementSourceFacetProps(layers, measurements);
   setCategoryFacetProps(layers, measurements, categories);
   return layers;
@@ -78,16 +79,28 @@ function setCoverageFacetProp(layer, selectedDate) {
   }
 }
 
+function setTypeProp(layer) {
+  const { type } = layer;
+  const rasterTypes = ['wms', 'wmts'];
+  if (rasterTypes.includes(type)) {
+    layer.type = 'Raster';
+  }
+  layer.type = capitalizeFirstLetter(layer.type);
+  return layer;
+}
+
 /**
  * Derive and format facet props from config
  * @param {*} config
  */
 export default function buildLayerFacetProps(config, selectedDate) {
-  const layers = formatFacetProps(config);
+  let layers = lodashCloneDeep(config.layers);
+  layers = setMeasurementCategoryProps(layers, config);
 
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
     setLayerProp(layer, 'sources', layer.subtitle);
+    setTypeProp(layer);
     if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {
         layer.daynight = [layer.daynight];

@@ -22,10 +22,17 @@ import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 import { FULL_MAP_EXTENT } from '../../modules/map/constants';
+import {
+  GRANULE_HOVERED,
+  GRANULE_HOVER_UPDATE,
+  MAP_SINGLE_CLICK,
+  MAP_MOUSE_MOVE,
+  MAP_MOUSE_OUT,
+  MAP_MOVE_END,
+} from '../../util/constants';
 
 const { events } = util;
 
@@ -44,22 +51,22 @@ export class VectorInteractions extends React.Component {
   }
 
   componentDidMount() {
-    events.on('map:moveend', this.moveEnd);
-    events.on('map:mousemove', this.mouseMove);
-    events.on('map:mouseout', this.mouseOut);
-    events.on('map:singleclick', this.singleClick);
+    events.on(MAP_MOVE_END, this.moveEnd);
+    events.on(MAP_MOUSE_MOVE, this.mouseMove);
+    events.on(MAP_MOUSE_OUT, this.mouseOut);
+    events.on(MAP_SINGLE_CLICK, this.singleClick);
   }
 
   componentWillUnmount() {
-    events.off('map:moveend', this.moveEnd);
-    events.off('map:mousemove', this.mouseMove);
-    events.off('map:mouseout', this.mouseOut);
-    events.off('map:singleclick', this.singleClick);
+    events.off(MAP_MOVE_END, this.moveEnd);
+    events.off(MAP_MOUSE_MOVE, this.mouseMove);
+    events.off(MAP_MOUSE_OUT, this.mouseOut);
+    events.off(MAP_SINGLE_CLICK, this.singleClick);
   }
 
   clearGranuleFootprint() {
     this.setState({ granuleDate: null, granulePlatform: null });
-    events.trigger('granule-hovered', null);
+    events.trigger(GRANULE_HOVERED, null);
   }
 
   /**
@@ -93,7 +100,7 @@ export class VectorInteractions extends React.Component {
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
-          events.trigger('granule-hovered', granulePlatform, date);
+          events.trigger(GRANULE_HOVERED, granulePlatform, date);
           this.setState({ granulePlatform, granuleDate: date });
         }
       });
@@ -135,13 +142,13 @@ export class VectorInteractions extends React.Component {
   moveEnd() {
     const { granuleDate, granulePlatform } = this.state;
     if (granuleDate && granulePlatform) {
-      events.trigger('granule-hover-update', granulePlatform, granuleDate);
+      events.trigger(GRANULE_HOVER_UPDATE, granulePlatform, granuleDate);
     }
   }
 
   mouseOut = () => {
     this.mouseMove.cancel();
-    events.trigger('granule-hovered', null);
+    events.trigger(GRANULE_HOVERED, null);
   }
 
   mouseMove({ pixel }, map, crs) {

@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.29.0",
+  "version": "3.30.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -98,7 +98,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^102.0.0",
+    "chromedriver": "^104.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^7.0.2",
     "css-hot-loader": "^1.4.1",
@@ -190,8 +190,8 @@
     "moment": "^2.29.4",
     "moment-locales-webpack-plugin": "^1.1.2",
     "node-dir": "^0.1.17",
-    "ol": "6.4.x",
-    "ol-mapbox-style": "6.1.x",
+    "ol": "7.0.0",
+    "ol-mapbox-style": "9.1.0",
     "p-queue": "^7.1.0",
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
@@ -245,7 +245,7 @@
       "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ol|ol-mapbox-style|@mapbox)/)"
+      "node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox)/)"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/build/"

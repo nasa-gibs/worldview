@@ -5,14 +5,21 @@ import { UncontrolledTooltip } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
+import { getFormattedCoordinates } from './util';
+import util from '../../util/util';
+import { LOCATION_SEARCH_COORDINATE_FORMAT } from '../../util/constants';
+
+const { events } = util;
 
 class CoordinatesDialog extends Component {
   constructor(props) {
     super(props);
+    const { coordinates } = this.props;
     this.state = {
       tooltipToggleTime: 0,
       showTooltips: false,
       isCopyToClipboardTooltipVisible: false,
+      formattedCoordinates: getFormattedCoordinates(coordinates),
     };
     this.copyToClipboard = this.copyToClipboard.bind(this);
   }
@@ -21,7 +28,17 @@ class CoordinatesDialog extends Component {
     setTimeout(() => {
       this.setState({ showTooltips: true });
     }, 200);
+    events.on(LOCATION_SEARCH_COORDINATE_FORMAT, this.updateCoordinateFormat);
   }
+
+  componentWillUnmount() {
+    events.off(LOCATION_SEARCH_COORDINATE_FORMAT, this.updateCoordinateFormat);
+  }
+
+  updateCoordinateFormat = () => {
+    const { coordinates } = this.props;
+    this.setState({ formattedCoordinates: getFormattedCoordinates(coordinates) });
+  };
 
   copyToClipboard(coords) {
     const options = window.clipboardData ? {} : { format: 'text/plain' };
@@ -125,19 +142,19 @@ class CoordinatesDialog extends Component {
 
   // render copy to clipboard button
   renderCopyToClipboardButton = () => {
-    const { coordinatesMetadata, isMobile } = this.props;
-    const { coordinates } = coordinatesMetadata;
-    const { isCopyToClipboardTooltipVisible, showTooltips } = this.state;
+    const { isMobile } = this.props;
+    const { isCopyToClipboardTooltipVisible, showTooltips, formattedCoordinates } = this.state;
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
     const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
+
     return (
       <div
         id={buttonId}
         className={buttonId}
-        onClick={() => this.copyToClipboard(coordinates)}
-        onTouchEnd={() => this.copyToClipboard(coordinates)}
+        onClick={() => this.copyToClipboard(formattedCoordinates)}
+        onTouchEnd={() => this.copyToClipboard(formattedCoordinates)}
       >
         {tooltipVisibilityCondition && (
           <UncontrolledTooltip
@@ -155,28 +172,26 @@ class CoordinatesDialog extends Component {
 
   render() {
     const {
-      coordinatesMetadata, tooltipId,
+      tooltipId,
+      title,
     } = this.props;
     const {
       showTooltips,
       tooltipToggleTime,
+      formattedCoordinates,
     } = this.state;
-    const {
-      coordinates,
-      title,
-    } = coordinatesMetadata;
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
         {showTooltips && (
-        <CopyClipboardTooltip
-          tooltipToggleTime={tooltipToggleTime}
-          clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
-          placement="bottom"
-        />
+          <CopyClipboardTooltip
+            tooltipToggleTime={tooltipToggleTime}
+            clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
+            placement="bottom"
+          />
         )}
         <div className="tooltip-coordinates-title">{title}</div>
-        <div className="tooltip-coordinates">{coordinates}</div>
+        <div className="tooltip-coordinates">{formattedCoordinates}</div>
         {this.renderDialogButtonControls()}
         {this.renderCopyToClipboardButton()}
       </div>
@@ -188,7 +203,8 @@ export default CoordinatesDialog;
 CoordinatesDialog.propTypes = {
   removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
-  coordinatesMetadata: PropTypes.object,
+  title: PropTypes.string,
+  coordinates: PropTypes.string,
   isMobile: PropTypes.bool,
   tooltipId: PropTypes.string,
 };
