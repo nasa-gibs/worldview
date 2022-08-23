@@ -36,7 +36,7 @@ export default function MapRunningData(compareUi, store) {
     // Determine if we should do anything with this vector layer
     const shouldNotProcessVectorLayer = (layer) => {
       const def = lodashGet(layer, 'wv.def');
-      if (!def) return;
+      if (!def) return true;
       const { wrapX, wrapadjacentdays } = def;
       const isWrapped = proj.id === 'geographic' && (wrapadjacentdays || wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
