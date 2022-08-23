@@ -2,6 +2,9 @@
     "features": {
         "animation": true,
         "urlShortening": true,
+        "urlShortener": {
+            "url": "https://0helamlip2.execute-api.us-west-2.amazonaws.com/gitc-prod/"
+          },
         "customPalettes": true,
         "compare": true,
         "tour": true,
