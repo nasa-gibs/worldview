@@ -21,7 +21,7 @@ const TIME_LIMIT = 10000;
 module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
 
   // load SWIPE and verify that it is active
@@ -32,6 +32,7 @@ module.exports = {
 
   // load SWIPE and verify mobile compare A|B toggle buttons are visible
   'Mobile comparison A|B toggle buttons are visible and only A is selected by default': (c) => {
+    c.pause(10000)
     c.waitForElementVisible(compareMobileSelectToggle, TIME_LIMIT);
     c.assert.cssClassPresent(aMobileCompareButton, 'compare-btn-selected');
     c.assert.not.cssClassPresent(bMobileCompareButton, 'compare-btn-selected');

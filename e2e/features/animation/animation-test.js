@@ -63,7 +63,7 @@ module.exports = {
       TIME_LIMIT,
       (el) => {
         c.getValue('#day-animation-widget-start', (result) => {
-          const startDay = result.value;
+          const startDay = result;
           c
             .useCss()
             .moveToElement(
@@ -76,7 +76,7 @@ module.exports = {
             .mouseButtonUp(0)
             .pause(2000);
           c.getValue('#day-animation-widget-start', (result) => {
-            const newDay = result.value;
+            const newDay = result;
             c.assert.notEqual(startDay, newDay);
           });
         });

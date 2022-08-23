@@ -103,7 +103,7 @@ module.exports = {
     c
       .click(dateSelectorDayInput)
       .setValue(dateSelectorDayInput, [31, c.Keys.ENTER]);
-    c.assert.cssClassPresent(dateSelectorDayInput, 'invalid-input');
+    c.assert.hasClass(dateSelectorDayInput, 'invalid-input');
   },
 
   // verify user can change year on invalid date to a valid one and remove invalid-input class

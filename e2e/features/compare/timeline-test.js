@@ -24,14 +24,15 @@ module.exports = {
   'Dragging active dragger updates date': function(client) {
     client.assert.attributeContains(dateSelectorDayInput, 'value', '17');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'AUG');
-
     client
       .useCss()
-      .moveToElement(draggerA, 15, 15)
+      .moveToElement(draggerA, 0, 0)
+      .click(draggerA)
       .mouseButtonDown(0)
+      .pause(500)
       .moveToElement(draggerB, 100, 30)
       .mouseButtonUp(0)
-      .pause(2000);
+      .pause(500);
     client.getValue(dateSelectorDayInput, (dayResult) => {
       client.getValue(dateSelectorMonthInput, function(monthResult) {
         const result = monthResult.value.concat(dayResult.value);
