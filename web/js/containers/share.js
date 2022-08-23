@@ -23,12 +23,7 @@ import HoverTooltip from '../components/util/hover-tooltip';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
 
-
-
-
-
 const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
-
 class ShareLinkContainer extends Component {
   constructor(props) {
     super(props);
@@ -41,8 +36,6 @@ class ShareLinkContainer extends Component {
       queryString: history.location.search || '',
     };
   }
-
-
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { shortLink } = nextProps;
@@ -78,7 +71,8 @@ class ShareLinkContainer extends Component {
   getShortenRequestString(permalink) {
     const { urlShortener } = this.props;
     if (/localhost/.test(window.location.href)) {
-      const mockPermaLink = 'https://worldview.earthdata.nasa.gov/?t=2020-08-31-T17%3A05%3A22Z&l=Reference_Labels(hidden),Reference_Features(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor';
+      // const mockPermaLink = 'https://worldview.earthdata.nasa.gov/?t=2020-08-31-T17%3A05%3A22Z&l=Reference_Labels(hidden),Reference_Features(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor';
+      const mockPermaLink = `https://worldview.earthdata.nasa.gov/${encodeURIComponent(window.location.search)}`;
 
       return `${urlShortener.url}?url=${mockPermaLink}`;
     }
@@ -381,7 +375,6 @@ export default connect(
 ShareLinkContainer.propTypes = {
   embedDisableNavLink: PropTypes.bool,
   isMobile: PropTypes.bool,
-  mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
