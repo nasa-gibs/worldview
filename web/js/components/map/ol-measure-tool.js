@@ -38,6 +38,7 @@ import {
   MAP_ENABLE_CLICK_ZOOM,
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { transform } from 'ol/proj';
 
 const { events } = util;
 
@@ -233,7 +234,8 @@ function OlMeasureTool (props) {
       condition: function(e) {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
         const coord = olMap.getCoordinateFromPixel(pixel);
-        return areCoordinatesWithinExtent(proj, coord);
+        const tCoord = transform(coord, crs, 'EPSG:4326');
+        return areCoordinatesWithinExtent(proj, tCoord);
       }
     });
     olMap.addInteraction(draw);
