@@ -16,7 +16,9 @@
                         "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202104",
                         "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202104",
                         "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202108",
-                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202108"
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202108",
+                        "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202201",
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202201"
                     ]
                 }
             }
