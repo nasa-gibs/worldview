@@ -47,7 +47,7 @@ module.exports = {
   before: (c) => {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
     c.url(`${c.globals.url}?t=2013-05-15`);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
   'Initial state indicates layer count': (c) => {
     c.waitForElementVisible(collapsedLayerButton, TIME_LIMIT, (e) => {
