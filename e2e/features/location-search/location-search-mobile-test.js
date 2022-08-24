@@ -11,7 +11,7 @@ const {
 module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
     c.pause(300);
   },
   'Location Search mobile dialog is not visible by default': (c) => {
