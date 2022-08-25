@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Updated Send Feedback service URL (PODAAC-4470)
+- Updated Send Feedback service URL (PODAAC-4470) 
 
 ## [0.2.2]
 - Updated to 3.23.0 upstream version (PODAAC-4467)
