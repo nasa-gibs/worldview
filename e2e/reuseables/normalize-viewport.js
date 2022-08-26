@@ -1,6 +1,6 @@
 module.exports = {
   normalizeViewport(client, width, height) {
-    client.windowSize('current', width, height);
+    client.setWindowSize('current', width, height);
     client
       .execute(
         (width, height) => ({
@@ -12,7 +12,7 @@ module.exports = {
           const padding = result.value;
           const newHeight = padding.height ? height + padding.height : height;
           const newWidth = padding.width ? width + padding.width : width;
-          client.windowSize('current', newWidth, newHeight);
+          client.setWindowSize('current', newWidth, newHeight);
         },
       );
   },
