@@ -32,7 +32,7 @@ module.exports = {
 
   // load SWIPE and verify mobile compare A|B toggle buttons are visible
   'Mobile comparison A|B toggle buttons are visible and only A is selected by default': (c) => {
-    c.pause(10000)
+    c.pause(10000);
     c.waitForElementVisible(compareMobileSelectToggle, TIME_LIMIT);
     c.assert.cssClassPresent(aMobileCompareButton, 'compare-btn-selected');
     c.assert.not.cssClassPresent(bMobileCompareButton, 'compare-btn-selected');

@@ -103,7 +103,7 @@ module.exports = {
     c
       .click(dateSelectorDayInput)
       .sendKeys(dateSelectorDayInput, [31, c.Keys.ENTER])
-      .pause(500)
+      .pause(500);
     c.assert.hasClass(dateSelectorDayInput, 'invalid-input');
   },
 

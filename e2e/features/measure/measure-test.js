@@ -26,22 +26,22 @@ function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
   c.pause(200);
   c.waitForElementVisible('#measurement-alert', TIME_LIMIT);
   c.perform(function() {
-    const actions = this.actions({async: true});
+    const actions = this.actions({ async: true });
 
     return actions
       .move({
         origin: 'viewport',
         x: startX,
-        y: startY
+        y: startY,
       })
       .click()
       .move({
         origin: 'pointer',
         x: endX,
-        y: endY
+        y: endY,
       })
-      .doubleClick()
-  })
+      .doubleClick();
+  });
 }
 
 module.exports = {
@@ -71,15 +71,15 @@ module.exports = {
       return;
     }
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       return actions
         .move({
           origin: 'viewport',
           x: 200,
-          y: 110
+          y: 110,
         })
         .contextClick();
-    })
+    });
     c.pause(300);
     c.expect.element('#measurement-alert').to.not.be.present;
     c.expect.element(sidebarContainer)
@@ -92,7 +92,7 @@ module.exports = {
     createDistanceMeasurement(c, [400, 200], [450, 300]);
     createDistanceMeasurement(c, [350, 250], [350, 220]);
     c.waitForElementVisible(geoMeasurementTooltip, TIME_LIMIT);
-    c.pause(500)
+    c.pause(500);
     c.expect.elements(geoMeasurementTooltip).count.to.equal(2);
   },
   'Creating a area measurement causes a tooltip to show': (c) => {
@@ -100,28 +100,28 @@ module.exports = {
       return;
     }
     c.useCss().click(measureBtn);
-    c.pause(500)
+    c.pause(500);
     c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       c.useCss().click(measureAreaBtn);
       c.perform(function() {
-        const actions = this.actions({async: true});
+        const actions = this.actions({ async: true });
 
         return actions
           .move({
             origin: 'viewport',
             x: 375,
-            y: 225
+            y: 225,
           })
           .click()
           .move({
             origin: 'pointer',
             x: 400,
-            y: 275
+            y: 275,
           })
           .click()
           .move({
             x: 450,
-            y: 300
+            y: 300,
           })
           .doubleClick();
       });
@@ -134,7 +134,7 @@ module.exports = {
       return;
     }
     c.click(measureBtn);
-    c.pause(500)
+    c.pause(500);
     c.waitForElementVisible(downloadGeojsonBtn);
     // c.waitForElementVisible(downloadShapefileBtn);
     c.click('.modal');

@@ -46,7 +46,7 @@ module.exports = {
   },
   'date.mob.range.3: Date label should show 2012 MAR 15 after year drag': (c) => {
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
       return actions
         .pause(300)
@@ -59,25 +59,25 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
-        .release()
-    })
+        .release();
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2012 MAR 15');
   },
   'date.mob.range.4: Date in header should be 2012 JAN 15 after month drag': (c) => {
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
       return actions
         .pause(300)
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -85,7 +85,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -93,7 +93,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -101,18 +101,18 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
-        .release()
-    })
+        .release();
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2012 JAN 15');
   },
   'date.mob.range.5: Date in header should be 2012 JAN 19 after day drag': (c) => {
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
 
       return actions
@@ -120,7 +120,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 300,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -128,7 +128,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: -40
+          y: -40,
         })
         .pause(300)
         .release()
@@ -136,7 +136,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 300,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -144,7 +144,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: -40
+          y: -40,
         })
         .pause(300)
         .release()
@@ -152,7 +152,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 300,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -160,7 +160,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: -40
+          y: -40,
         })
         .pause(300)
         .release()
@@ -168,7 +168,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 300,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -176,12 +176,12 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: -40
+          y: -40,
         })
         .pause(300)
         .release()
-        .pause(300)
-    })
+        .pause(300);
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2012 JAN 19');
@@ -214,16 +214,16 @@ module.exports = {
     });
   },
   'date.mob.nav.3: Date in header should be 2013 FEB 20 after year drag': (c) => {
-    c.pause(500)
+    c.pause(500);
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
       return actions
         .pause(300)
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -231,7 +231,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -239,7 +239,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -247,7 +247,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -255,7 +255,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -263,7 +263,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -271,7 +271,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -279,7 +279,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -287,7 +287,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -295,18 +295,18 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
-        .release()
-    })
+        .release();
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2013 FEB 20');
   },
   'date.mob.nav.4: Date label should show 2014 FEB 20 after year drag': (c) => {
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
       return actions
         .pause(300)
@@ -319,25 +319,25 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: -40
+          y: -40,
         })
         .pause(300)
-        .release()
-    })
+        .release();
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2014 FEB 20');
   },
   'date.mob.nav.5: Date in header should be 2013 DEC 20 after year drag': (c) => {
     c.perform(function() {
-      const actions = this.actions({async: true});
+      const actions = this.actions({ async: true });
       const wheel = c.findElement('.datepicker-wheel');
       return actions
         .pause(300)
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -345,7 +345,7 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
         .release()
@@ -353,7 +353,7 @@ module.exports = {
         .move({
           origin: wheel,
           x: 100,
-          y: 0
+          y: 0,
         })
         .pause(300)
         .press()
@@ -361,11 +361,11 @@ module.exports = {
         .move({
           origin: 'pointer',
           x: 0,
-          y: 40
+          y: 40,
         })
         .pause(300)
-        .release()
-    })
+        .release();
+    });
     c.pause(300);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2013 DEC 20');

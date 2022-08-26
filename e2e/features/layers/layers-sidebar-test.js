@@ -197,11 +197,30 @@ module.exports = {
   'Re-ordering groups, then disabling groups keeps individual layer order': (c) => {
     c.url(c.globals.url + twoGroupsQueryString);
     c.waitForElementVisible(aodGroup, TIME_LIMIT);
-    c.moveToElement(aodGroupHeader, 0, 0);
-    c.mouseButtonDown(0).pause(200);
-    c.moveTo(null, 50, 0).pause(200);
-    c.moveTo(null, -50, -150).pause(200);
-    c.mouseButtonUp(0).pause(1000);
+    c.perform(function() {
+      const actions = this.actions({ async: true });
+      const layerGroupHeader = c.findElement('#active-Aerosol_Optical_Depth .layer-group-header');
+      return actions
+        .pause(300)
+        .click(layerGroupHeader)
+        .pause(300)
+        .press()
+        .pause(300)
+        .move({
+          origin: 'pointer',
+          x: 50,
+          y: 0,
+        })
+        .pause(300)
+        .move({
+          origin: 'pointer',
+          x: -50,
+          y: -150,
+        })
+        .pause(300)
+        .release()
+        .pause(300);
+    });
     c.click(groupCheckbox).pause(200);
     checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
   },
