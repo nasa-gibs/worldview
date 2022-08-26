@@ -182,7 +182,7 @@ module.exports = {
         .release()
         .pause(300);
     });
-    c.pause(300);
+    c.pause(800);
     c.useCss();
     c.assert.containsText(datepickerHeader, '2012 JAN 19');
   },
