@@ -15,14 +15,16 @@ const tooltipClose = '.react-joyride__tooltip > button';
 
 module.exports = {
   before(c) {
-    // normalizeViewport(c, 1000, 850);
+    normalizeViewport(c, 1000, 850);
     c.url(`${c.globals.url}?tr=hurricane_dorian_september_joyride&mockTour=true`);
   },
   'Verify that all tour loads properly, Joyride beacon shows after progressing to Step 2': (c) => {
     c.pause(1500)
     c.useCss().waitForElementVisible('.tour-in-progress .step-total', TIME_LIMIT);
     c.click(tourNext);
-    c.waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
+    c.click('#wv-map')
+    c.pause(500);
+    c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
   },
   'Clicking beacon shows the floater tooltip': (c) => {
     if (c.options.desiredCapabilities.browserName !== 'firefox') { // intermittently fails on Chrome
