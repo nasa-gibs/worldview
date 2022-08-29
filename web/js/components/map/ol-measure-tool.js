@@ -60,7 +60,7 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj, geometry
   } = props;
 
   useEffect(() => {
@@ -178,6 +178,8 @@ function OlMeasureTool (props) {
         crs={crs}
         unitOfMeasure={unitOfMeasure}
         onRemove={removeFeature}
+        olMap={olMap}
+        proj={proj}
       />
     ), overlay.getElement());
   };
@@ -202,7 +204,6 @@ function OlMeasureTool (props) {
       } else if (geom instanceof OlLineString) {
         tooltipCoord = geom.getLastCoordinate();
       }
-      console.log(`renderTooltip Y: ${tooltipCoord[0]} | X: ${tooltipCoord[1]}`);
       renderTooltip(feature, tooltipOverlay);
       tooltipOverlay.setPosition(tooltipCoord);
     });

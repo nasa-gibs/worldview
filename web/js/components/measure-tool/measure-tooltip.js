@@ -5,6 +5,8 @@ import {
   LineString as OlLineString,
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
+import { transform } from 'ol/proj';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -27,6 +29,8 @@ export default function MeasureTooltip(props) {
     unitOfMeasure,
     geometry,
     onRemove,
+    olMap,
+    proj,
   } = props;
 
   const activeStaticClass = active
@@ -101,14 +105,25 @@ export default function MeasureTooltip(props) {
     }
   };
 
-  let pointerCoordinates = getMeasurementValue();
-  let coordinatesAreValid = pointerCoordinates.indexOf('NaN') < 0;
-  console.log(`coordinatesAreValid: ${coordinatesAreValid}`);
+  const checkGeographicCoordValidity = (val) => {
+    return val.indexOf('NaN') < 0;
+  }
+
+  const checkPolarCoordValidity = (coordinates, crs, proj) => {
+    const yCoord = coordinates[coordinates.length - 2];
+    const xCoord = coordinates[coordinates.length - 1];
+    const XYcoords = [xCoord, yCoord];
+    const tCoord = transform(XYcoords, crs, 'EPSG:4326');
+    return areCoordinatesWithinExtent(proj, tCoord);
+  }
+
+  let tooltipValue = getMeasurementValue();
+  const coordinatesAreValid = crs == 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity(geometry.flatCoordinates, crs, proj);
 
   if (coordinatesAreValid) {
     return (
       <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
-        <span dangerouslySetInnerHTML={{ __html: pointerCoordinates }} />
+        <span dangerouslySetInnerHTML={{ __html: tooltipValue }} />
         {!active && (
           <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
             <FontAwesomeIcon icon="times" fixedWidth />
