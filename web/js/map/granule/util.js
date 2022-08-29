@@ -119,7 +119,7 @@ export const getGranuleFootprints = (layer) => {
   */
 export const getCMRQueryDates = (selectedDate) => {
   // check if selectedDate is before or after 12 to determine date request range
-  const current = new Date();
+  const current = new Date(new Date().setMilliseconds(0));
   const date = new Date(selectedDate);
   const isDateAfterNoon = date.getUTCHours() > 12;
 
