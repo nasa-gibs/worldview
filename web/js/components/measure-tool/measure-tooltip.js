@@ -101,16 +101,24 @@ export default function MeasureTooltip(props) {
     }
   };
 
-  return (
-    <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
-      <span dangerouslySetInnerHTML={{ __html: getMeasurementValue() }} />
-      {!active && (
-        <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
-          <FontAwesomeIcon icon="times" fixedWidth />
-        </span>
-      )}
-    </div>
-  );
+  let pointerCoordinates = getMeasurementValue();
+  let coordinatesAreValid = pointerCoordinates.indexOf('NaN') < 0;
+  console.log(`coordinatesAreValid: ${coordinatesAreValid}`);
+
+  if (coordinatesAreValid) {
+    return (
+      <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
+        <span dangerouslySetInnerHTML={{ __html: pointerCoordinates }} />
+        {!active && (
+          <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
+            <FontAwesomeIcon icon="times" fixedWidth />
+          </span>
+        )}
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
 
 MeasureTooltip.defaultProps = {

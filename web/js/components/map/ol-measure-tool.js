@@ -202,6 +202,7 @@ function OlMeasureTool (props) {
       } else if (geom instanceof OlLineString) {
         tooltipCoord = geom.getLastCoordinate();
       }
+      console.log(`renderTooltip Y: ${tooltipCoord[0]} | X: ${tooltipCoord[1]}`);
       renderTooltip(feature, tooltipOverlay);
       tooltipOverlay.setPosition(tooltipCoord);
     });
