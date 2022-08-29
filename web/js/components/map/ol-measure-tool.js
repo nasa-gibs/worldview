@@ -60,7 +60,7 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj, geometry
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
 
   useEffect(() => {

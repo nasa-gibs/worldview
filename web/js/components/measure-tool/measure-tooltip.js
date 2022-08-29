@@ -6,9 +6,9 @@ import {
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
 import { transform } from 'ol/proj';
-import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import {
   getGeographicLibDistance,
   getGeographicLibArea,
@@ -29,7 +29,6 @@ export default function MeasureTooltip(props) {
     unitOfMeasure,
     geometry,
     onRemove,
-    olMap,
     proj,
   } = props;
 
@@ -105,9 +104,7 @@ export default function MeasureTooltip(props) {
     }
   };
 
-  const checkGeographicCoordValidity = (val) => {
-    return val.indexOf('NaN') < 0;
-  }
+  const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
 
   const checkPolarCoordValidity = (coordinates, crs, proj) => {
     const yCoord = coordinates[coordinates.length - 2];
@@ -115,10 +112,10 @@ export default function MeasureTooltip(props) {
     const XYcoords = [xCoord, yCoord];
     const tCoord = transform(XYcoords, crs, 'EPSG:4326');
     return areCoordinatesWithinExtent(proj, tCoord);
-  }
+  };
 
-  let tooltipValue = getMeasurementValue();
-  const coordinatesAreValid = crs == 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity(geometry.flatCoordinates, crs, proj);
+  const tooltipValue = getMeasurementValue();
+  const coordinatesAreValid = crs === 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity(geometry.flatCoordinates, crs, proj);
 
   if (coordinatesAreValid) {
     return (
@@ -131,9 +128,8 @@ export default function MeasureTooltip(props) {
         )}
       </div>
     );
-  } else {
-    return null;
   }
+  return null;
 }
 
 MeasureTooltip.defaultProps = {
@@ -145,4 +141,5 @@ MeasureTooltip.propTypes = {
   geometry: PropTypes.object,
   onRemove: PropTypes.func,
   unitOfMeasure: PropTypes.string,
+  proj: PropTypes.object,
 };
