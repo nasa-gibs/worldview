@@ -1,6 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQueryStrings = require('../../reuseables/querystrings.js');
+const { c } = require('tar');
 
 const draggerA = '.timeline-dragger.draggerA ';
 const draggerB = '.timeline-dragger.draggerB ';
@@ -27,6 +28,7 @@ module.exports = {
     client
       .useCss()
       .moveToElement(draggerA, 0, 0)
+      .pause(500)
       .click(draggerA)
       .mouseButtonDown(0)
       .pause(500)
