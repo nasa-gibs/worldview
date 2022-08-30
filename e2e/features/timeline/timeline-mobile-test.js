@@ -5,6 +5,8 @@ const nextDayArrowContainer = '#right-arrow-group';
 const datepickerHeader = '.datepicker .datepicker-header';
 const TIME_LIMIT = 10000;
 
+const { datePickerWheel } =  require('../../reuseables/selectors.js');
+
 module.exports = {
   before: (c) => {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
@@ -47,12 +49,10 @@ module.exports = {
   'date.mob.range.3: Date label should show 2012 MAR 15 after year drag': (c) => {
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
       return actions
         .pause(300)
-        .move({
-          origin: wheel,
-        })
+        .move({ origin: wheel })
         .pause(300)
         .press()
         .pause(300)
@@ -71,7 +71,7 @@ module.exports = {
   'date.mob.range.4: Date in header should be 2012 JAN 15 after month drag': (c) => {
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
       return actions
         .pause(300)
         .move({
@@ -113,7 +113,7 @@ module.exports = {
   'date.mob.range.5: Date in header should be 2012 JAN 19 after day drag': (c) => {
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
 
       return actions
         .pause(300)
@@ -217,7 +217,7 @@ module.exports = {
     c.pause(500);
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
       return actions
         .pause(300)
         .move({
@@ -307,7 +307,7 @@ module.exports = {
   'date.mob.nav.4: Date label should show 2014 FEB 20 after year drag': (c) => {
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
       return actions
         .pause(300)
         .move({
@@ -331,7 +331,7 @@ module.exports = {
   'date.mob.nav.5: Date in header should be 2013 DEC 20 after year drag': (c) => {
     c.perform(function() {
       const actions = this.actions({ async: true });
-      const wheel = c.findElement('.datepicker-wheel');
+      const wheel = c.findElement(datePickerWheel);
       return actions
         .pause(300)
         .move({

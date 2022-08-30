@@ -94,6 +94,7 @@ module.exports = {
   monthUp: '.input-wrapper-month > div.date-arrows.date-arrow-up',
   yearDown: '.input-wrapper-year > div.date-arrows.date-arrow-down',
   yearUp: '.input-wrapper-year > div.date-arrows.date-arrow-up',
+  datePickerWheel: '.datepicker-modal .datepicker-wheel',
 
 
   // layers
