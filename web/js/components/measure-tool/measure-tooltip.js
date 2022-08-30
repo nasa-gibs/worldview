@@ -107,10 +107,10 @@ export default function MeasureTooltip(props) {
   const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
 
   const checkPolarCoordValidity = (coordinates, crs, proj) => {
-    const yCoord = coordinates[coordinates.length - 2];
-    const xCoord = coordinates[coordinates.length - 1];
-    const XYcoords = [xCoord, yCoord];
-    const tCoord = transform(XYcoords, crs, 'EPSG:4326');
+    // Distance & Area measurement coordinates are stored differently, so identify based on geometry type
+    const yCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
+    const xCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
+    const tCoord = transform([xCoord, yCoord], crs, 'EPSG:4326');
     return areCoordinatesWithinExtent(proj, tCoord);
   };
 

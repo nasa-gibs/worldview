@@ -39,7 +39,7 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
   const { maxExtent, crs } = proj.selected;
   const extent = crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
   const coord = crs === 'EPSG:4326' ? coordinates : transform(coordinates, 'EPSG:4326', crs);
-  return containsCoordinate(extent, coord);
+  return containsCoordinate(extent, coord); // expects X then Y!
 }
 
 /**
