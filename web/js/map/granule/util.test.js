@@ -83,7 +83,7 @@ describe('getting CMR query date range', () => {
   });
 
   it('if selected date is now: start one day before, end now', () => {
-    const selectedDate = new Date();
+    const selectedDate = new Date(new Date().setMilliseconds(0));
     const expectedEnd = selectedDate;
     const expectedStart = new Date(selectedDate.getTime());
     expectedStart.setDate(selectedDate.getDate() - 1);
