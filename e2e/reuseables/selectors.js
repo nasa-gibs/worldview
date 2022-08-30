@@ -46,6 +46,7 @@ module.exports = {
   firesRemove: '#close-activeVIIRS_NOAA20_Thermal_Anomalies_375m_All',
   aodGroup: '#active-Aerosol_Optical_Depth',
   aodGroupHeader: '#active-Aerosol_Optical_Depth .layer-group-header',
+  firesGroupHeader: '#active-Fires_and_Thermal_Anomalies .layer-group-header',
   overlaysGroup: '#active-overlays',
   overlaysGroupHeader: '#active-overlays .layer-group-header',
   baselayersGroup: '#active-baselayers',
