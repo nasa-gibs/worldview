@@ -17,6 +17,7 @@ module.exports = {
   'A|B is loaded': function(client) {
     client.url(client.globals.url + localQueryStrings.swipeAndAIsActive);
     client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
+    client.setWindowSize(1724, 771)
   },
   'Verify that A|B draggers are visible': function(client) {
     client.expect.element(draggerA).to.be.visible;
@@ -25,16 +26,11 @@ module.exports = {
   'Dragging active dragger updates date': function(client) {
     client.assert.attributeContains(dateSelectorDayInput, 'value', '17');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'AUG');
-    client
-      .useCss()
-      .moveToElement(draggerA, 0, 0)
-      .pause(500)
-      .click(draggerA)
-      .mouseButtonDown(0)
-      .pause(500)
-      .moveToElement(draggerB, 100, 30)
-      .mouseButtonUp(0)
-      .pause(500);
+    client.perform(function() {
+      const actions = this.actions({ async: true });
+      const dragA = client.findElement(draggerA);
+      return actions.dragAndDrop(dragA, { x: 100, y: 0 });
+    });
     client.getValue(dateSelectorDayInput, (dayResult) => {
       client.getValue(dateSelectorMonthInput, function(monthResult) {
         const result = monthResult.value.concat(dayResult.value);
