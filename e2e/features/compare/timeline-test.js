@@ -1,90 +1,148 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQueryStrings = require('../../reuseables/querystrings.js');
-const { c } = require('tar');
 
-const draggerA = '.timeline-dragger.draggerA ';
-const draggerB = '.timeline-dragger.draggerB ';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
-const dateSelectorMonthInput = '#date-selector-main .input-wrapper-month input';
 const TIME_LIMIT = 20000;
 
 module.exports = {
-  before(client) {
-    reuseables.loadAndSkipTour(client, TIME_LIMIT);
+  before: (c) => {
+    reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    c.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
   },
-  // load A|B and verify that it is active
-  'A|B is loaded': function(client) {
-    client.url(client.globals.url + localQueryStrings.swipeAndAIsActive);
-    client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
-    client.setWindowSize(1724, 771)
+
+  // verify timescale dragger is visible
+  'Dragger is visible': (c) => {
+    c.expect.element(localSelectors.dragger).to.be.visible;
   },
-  'Verify that A|B draggers are visible': function(client) {
-    client.expect.element(draggerA).to.be.visible;
-    client.expect.element(draggerB).to.be.visible;
+
+  // verify timescale is expanded by default and can be opened/closed
+  'Timeline is expanded by default and closes/reopen on clicking timeline chevrons': (c) => {
+    c.expect.element('#timeline-footer').to.be.visible;
+    // hide timeline
+    c.click('#timeline-hide')
+      .waitForElementNotPresent('#timeline-footer', TIME_LIMIT);
+    c.expect.element('#timeline-footer').to.not.be.present;
+
+    // expand timeline
+    c.click('#timeline-hide')
+      .waitForElementVisible('#timeline-footer', TIME_LIMIT);
+    c.expect.element('#timeline-footer').to.be.visible;
   },
-  'Dragging active dragger updates date': function(client) {
-    client.assert.attributeContains(dateSelectorDayInput, 'value', '17');
-    client.assert.attributeContains(dateSelectorMonthInput, 'value', 'AUG');
-    client.perform(function() {
-      const actions = this.actions({ async: true });
-      const dragA = client.findElement(draggerA);
-      return actions.dragAndDrop(dragA, { x: 100, y: 0 });
-    });
-    client.getValue(dateSelectorDayInput, (dayResult) => {
-      client.getValue(dateSelectorMonthInput, function(monthResult) {
-        const result = monthResult.value.concat(dayResult.value);
-        this.assert.notEqual('AUG17', result);
-      });
-    });
+
+  // verify default MMM YYYY format is displayed on axis
+  'verify default MMM YYYY format is displayed on axis': (c) => {
+    c.assert.elementPresent('.axis-grid-text-day');
+    c.assert.elementPresent('.axis-grid-text-year');
   },
-  'Clicking inactive dragger updates active state': function(client) {
-    client.assert.cssClassPresent(localSelectors.aTab, 'active');
-    client
-      .useCss()
-      .moveToElement(draggerB, 20, 20)
-      .mouseButtonDown(0)
-      .mouseButtonUp(0);
-    // Reference labels were not active in A but are in B
-    client.waitForElementVisible(
-      '#activeB-Reference_Features_15m',
-      TIME_LIMIT,
-      () => {
-        client.assert.attributeContains(dateSelectorDayInput, 'value', '16');
-      },
-    );
+
+  // verify default 1 day interval
+  'Interval defaults to 1 DAY': (c) => {
+    c.assert.containsText('#current-interval', '1 DAY');
   },
-  'Dragging B dragger updates date in label': function(client) {
-    client.useCss().assert.containsText(localSelectors.bTab, '2018 AUG 16');
-    client
-      .useCss()
-      .moveToElement(draggerB, 20, 20)
-      .mouseButtonDown(0)
-      .moveToElement(draggerA, -100, 0)
-      .mouseButtonUp(0)
-      .pause(2000);
-    client.getText(localSelectors.bTab, function(result) {
-      this.assert.notEqual('B: 2018 AUG 16', result.value);
-    });
+
+  // change to month zoom level
+  'Change to month zoom level and axis changes': (c) => {
+    c.click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    c.assert.elementPresent('.axis-grid-text-month');
+    c.assert.elementNotPresent('.axis-grid-text-day');
+    c.assert.containsText('#current-zoom', 'MONTH');
   },
-  'Deactivate A|B is no longer active': function(client) {
-    client.click(localSelectors.compareButton);
-    client.waitForElementNotPresent(
-      localSelectors.bTab,
-      TIME_LIMIT,
-      () => {
-        client
-          .useCss()
-          .assert.containsText(
-            localSelectors.compareButton,
-            'Start Comparison',
-          );
-        client.expect.element(draggerA).to.not.be.present;
-        client.expect.element(draggerB).to.be.visible;
-      },
-    );
+
+  // change to year zoom level
+  'Change to year zoom level and axis changes': (c) => {
+    c.click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    c.click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    c.assert.elementPresent('.axis-grid-text-year');
+    c.assert.elementNotPresent('.axis-grid-text-month');
+    c.assert.containsText('#current-zoom', 'YEAR');
   },
-  after(client) {
-    client.end();
+
+  // verify interval state restored from permalink
+  'Interval state of HOUR restored from permalink': (c) => {
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.moveToElement('#timeline-interval-btn-container', 0, 0)
+      .waitForElementVisible('#current-interval', TIME_LIMIT);
+    c.assert.containsText('#current-interval', '1 HOUR');
+  },
+
+  // verify subdaily default year, month, day, hour, minute, and custom intervals
+  'Interval subdaily default year, month, day, hour, minute, and custom available': (c) => {
+    c.expect.element('#interval-years').to.be.visible;
+    c.expect.element('#interval-months').to.be.visible;
+    c.expect.element('#interval-days').to.be.visible;
+    c.expect.element('#interval-hours').to.be.visible;
+    c.expect.element('#interval-minutes').to.be.visible;
+    c.expect.element('#interval-custom-static').to.be.visible;
+  },
+
+  // verify custom interval widget panel opens
+  'Custom interval widget opens on selecting custom': (c) => {
+    c.click('#interval-custom-static')
+      .waitForElementVisible('.custom-interval-widget', TIME_LIMIT);
+    c.expect.element('.custom-interval-widget').to.be.visible;
+  },
+
+  // verify changing custom interval changes current interval and how many time units change with date arrows
+  'Select custom interval changes current interval and changes date by current interval': (c) => {
+    c.url(c.globals.url + localQueryStrings.knownDate);
+    c.assert.attributeContains(dateSelectorDayInput, 'value', '22');
+    c.moveToElement('#timeline-interval-btn-container', 0, 0)
+      .pause(100)
+      .click('#interval-custom-static')
+      .pause(100)
+      .click('.custom-interval-delta-input')
+      .setValue('.custom-interval-delta-input', [2, c.Keys.ENTER])
+      .moveToElement('#left-arrow-group', 0, 0)
+      .click('#left-arrow-group');
+
+    c.assert.containsText('#current-interval', '2 DAY');
+    c.assert.attributeContains(dateSelectorDayInput, 'value', '20');
+  },
+
+  // verify default day timescale zoom level
+  'Timescale zoom level defaults to DAY': (c) => {
+    reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    c.assert.containsText('#current-zoom', 'DAY');
+  },
+
+  // verify subdaily default year, month, day, hour, minute, and custom intervals
+  'Timescale zoom subdaily default year, month, day, hour, minute, and custom intervals': (c) => {
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.moveToElement('#current-zoom', 0, 0)
+      .waitForElementVisible('#zoom-years', TIME_LIMIT);
+
+    c.expect.element('#zoom-years').to.be.visible;
+    c.expect.element('#zoom-months').to.be.visible;
+    c.expect.element('#zoom-days').to.be.visible;
+    c.expect.element('#zoom-hours').to.be.visible;
+    c.expect.element('#zoom-minutes').to.be.visible;
+  },
+
+  // verify timescale zoom state restored from permalink
+  'Timescale zoom HOUR restored from permalink': (c) => {
+    c.waitForElementVisible('#current-zoom', TIME_LIMIT);
+    c.assert.containsText('#current-zoom', 'HOUR');
+  },
+
+  // date tooltip date present on load
+  'Date tooltip date present load': (c) => {
+    c.url(`${c.globals.url}?t=2019-02-22`);
+    c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
+      .assert.containsText('.date-tooltip', '2019 FEB 22 (DOY 053)');
+  },
+
+  // date subdaily tooltip date present on load
+  'Date subdaily tooltip date present on load': (c) => {
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
+      .assert.containsText('.date-tooltip', '2019 OCT 04 09:46Z (DOY 277)');
+  },
+
+  after: (c) => {
+    c.end();
   },
 };
