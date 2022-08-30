@@ -106,7 +106,9 @@ export default function MeasureTooltip(props) {
 
   const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
 
-  const checkPolarCoordValidity = (coordinates, crs, proj) => {
+  const checkPolarCoordValidity = () => {
+    const coordinates = geometry.flatCoordinates;
+
     // Distance & Area measurement coordinates are stored differently, so identify based on geometry type
     const yCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
     const xCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
@@ -115,7 +117,7 @@ export default function MeasureTooltip(props) {
   };
 
   const tooltipValue = getMeasurementValue();
-  const coordinatesAreValid = crs === 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity(geometry.flatCoordinates, crs, proj);
+  const coordinatesAreValid = crs === 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
 
   if (coordinatesAreValid) {
     return (
