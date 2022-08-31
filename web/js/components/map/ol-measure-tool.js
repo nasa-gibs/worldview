@@ -18,6 +18,7 @@ import {
   Stroke as OlStyleStroke,
   Style as OlStyle,
 } from 'ol/style';
+import { transform } from 'ol/proj';
 import {
   toggleMeasureActive as toggleMeasureActiveAction,
   updateMeasurements as updateMeasurementsAction,
@@ -37,6 +38,8 @@ import {
   MAP_DISABLE_CLICK_ZOOM,
   MAP_ENABLE_CLICK_ZOOM,
 } from '../../util/constants';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+
 
 const { events } = util;
 
@@ -57,7 +60,7 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
 
   useEffect(() => {
@@ -175,6 +178,8 @@ function OlMeasureTool (props) {
         crs={crs}
         unitOfMeasure={unitOfMeasure}
         onRemove={removeFeature}
+        olMap={olMap}
+        proj={proj}
       />
     ), overlay.getElement());
   };
@@ -229,6 +234,12 @@ function OlMeasureTool (props) {
       source,
       type,
       style: drawStyles,
+      condition(e) {
+        const pixel = [e.originalEvent.x, e.originalEvent.y];
+        const coord = olMap.getCoordinateFromPixel(pixel);
+        const tCoord = transform(coord, crs, 'EPSG:4326');
+        return areCoordinatesWithinExtent(proj, tCoord);
+      },
     });
     olMap.addInteraction(draw);
     if (!vectorLayers[crs]) {
@@ -333,6 +344,7 @@ const mapStateToProps = (state) => {
     crs,
     unitOfMeasure,
     projections,
+    proj,
   };
 };
 
