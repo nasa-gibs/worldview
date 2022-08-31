@@ -19,6 +19,7 @@ module.exports = {
     c.url(`${c.globals.url}?tr=hurricane_dorian_september_joyride&mockTour=true`);
   },
   'Verify that all tour loads properly, Joyride beacon shows after progressing to Step 2': (c) => {
+    c.setWindowSize(1000, 800)
     c.pause(1500)
     c.useCss().waitForElementVisible('.tour-in-progress .step-total', TIME_LIMIT);
     c.click(tourNext);
@@ -30,9 +31,9 @@ module.exports = {
     if (c.options.desiredCapabilities.browserName !== 'firefox') { // intermittently fails on Chrome
       return;
     }
-    c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
-    c.pause(500);
-    c.click(firstBeaconSelector);
+    // c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
+    c.pause(5000);
+    c.click(".react-joyride__beacon");
     c.waitForElementVisible(tooltip, TIME_LIMIT);
   },
   'Closing tooltip advances to next step': (c) => {
