@@ -5,7 +5,7 @@ const nextDayArrowContainer = '#right-arrow-group';
 const datepickerHeader = '.datepicker .datepicker-header';
 const TIME_LIMIT = 10000;
 
-const { datePickerWheel } =  require('../../reuseables/selectors.js');
+const { datePickerWheel } = require('../../reuseables/selectors.js');
 
 module.exports = {
   before: (c) => {

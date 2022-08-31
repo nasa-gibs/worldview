@@ -175,10 +175,9 @@ module.exports = {
   },
 
   'Ungrouped: Removing baselayers/overlays removes the layers but not the header': (c) => {
-
     c.click(groupCheckbox);
-    c.pause(500)
-    c.useCss()
+    c.pause(500);
+    c.useCss();
     c.expect.element('#group-overlays-checkbox-case').to.not.have.attribute('checked');
 
     c.moveToElement(overlaysGroupHeader, 0, 0);
@@ -204,7 +203,7 @@ module.exports = {
     c.perform(function() {
       const actions = this.actions({ async: true });
       const layerGroupHeader = c.findElement(aodGroupHeader);
-      const firesHeader = c.findElement(firesGroupHeader)
+      const firesHeader = c.findElement(firesGroupHeader);
       return actions
         .click(layerGroupHeader)
         .pause(300)
@@ -219,12 +218,12 @@ module.exports = {
         .move({
           origin: firesHeader,
           x: 0,
-          y: 50
+          y: 50,
         })
         .pause(300)
         .release()
         .pause(300);
-        // .dragAndDrop(layerGroupHeader, { x: -50, y: -150})
+      // .dragAndDrop(layerGroupHeader, { x: -50, y: -150})
     });
     c.click(groupCheckbox).pause(200);
     checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
