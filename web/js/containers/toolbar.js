@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
 import {
   get as lodashGet,
-  find as lodashFind,
   cloneDeep as lodashCloneDeep,
   filter as lodashFilter,
 } from 'lodash';
@@ -25,7 +24,7 @@ import {
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
-  showLayers, clearGraticule, hideLayers, refreshGraticule,
+  showLayers, hideLayers,
 } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
@@ -116,21 +115,18 @@ class toolbarContainer extends Component {
       openModal,
       hasCustomPalette,
       isRotated,
-      hasGraticule,
       activePalettes,
       rotation,
       refreshStateAfterImageDownload,
       toggleDialogVisible,
       hasNonDownloadableLayer,
       visibleLayersForProj,
-      proj,
     } = this.props;
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-    await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
       'TOOLBAR_SNAPSHOT',
@@ -138,7 +134,7 @@ class toolbarContainer extends Component {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
           refreshStateAfterImageDownload(
-            hasCustomPalette ? paletteStore : undefined, rotation, hasGraticule, nonDownloadableLayers,
+            hasCustomPalette ? paletteStore : undefined, rotation, nonDownloadableLayers,
           );
         },
       },
@@ -417,12 +413,6 @@ const mapStateToProps = (state) => {
     ),
     visibleLayersForProj,
     isRotated: Boolean(map.rotation !== 0),
-    hasGraticule: Boolean(
-      lodashGet(
-        lodashFind(activeLayersForProj, { id: 'Graticule' }) || {},
-        'visible',
-      ),
-    ),
     isDistractionFreeModeActive,
   };
 };
@@ -437,15 +427,12 @@ const mapDispatchToProps = (dispatch) => ({
   toggleShowLocationSearch: () => {
     dispatch(toggleShowLocationSearch());
   },
-  refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule, nonDownloadableLayers) => {
+  refreshStateAfterImageDownload: (activePalettes, rotation, nonDownloadableLayers) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
     if (rotation) {
       dispatch(refreshRotation(rotation));
-    }
-    if (isGraticule) {
-      dispatch(refreshGraticule(isGraticule));
     }
     if (nonDownloadableLayers) {
       dispatch(showLayers(nonDownloadableLayers));
@@ -514,10 +501,8 @@ toolbarContainer.propTypes = {
   hasNonDownloadableLayer: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
   config: PropTypes.object,
-  proj: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
-  hasGraticule: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
