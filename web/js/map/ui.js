@@ -915,13 +915,11 @@ export default function mapui(models, config, store) {
       if (compare.active && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else if (temporalLayer) {
-        const index = findLayerIndex(def);
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(state, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
-
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }

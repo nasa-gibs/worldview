@@ -81,8 +81,8 @@ export const getIndexForSortedInsert = (array, date) => {
  * @method isWithinDateRange
  * @static
  * @param {object} date - date object
- * @param {object} startDate - date object
- * @param {string} endDate - date object
+ * @param {string} startDate - date string
+ * @param {string} endDate - date string
  * @returns {boolean}
  */
 export const isWithinDateRange = (date, startDate, endDate) => (startDate && endDate
