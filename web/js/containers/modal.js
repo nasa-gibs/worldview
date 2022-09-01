@@ -28,8 +28,8 @@ class ModalContainer extends Component {
     super(props);
     this.state = {
       width: props.customProps.width,
-      height: props.customProps.height,
-      offsetLeft: props.customProps.offsetLeft,
+      // height: props.customProps.height,
+      // offsetLeft: props.customProps.offsetLeft,
       offsetTop: props.customProps.offsetTop,
       offsetRight: props.customProps.offsetRight,
     };
@@ -47,13 +47,13 @@ class ModalContainer extends Component {
       screenWidth,
     } = this.props;
     // Populate props from custom obj
+
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       onToggle,
       onClose,
       desktopOnly,
     } = newProps;
-
     const screenHeightChanged = screenHeight !== prevProps.screenHeight;
     const screenWidthChanged = screenWidth !== prevProps.screenWidth;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
@@ -69,22 +69,27 @@ class ModalContainer extends Component {
 
   getStyle() {
     const {
-      isMobile, customProps,
+      isMobile, customProps, screenHeight, screenWidth,
     } = this.props;
     const {
-      offsetLeft, offsetRight, offsetTop, width, height,
+      offsetRight, offsetTop,
     } = this.state;
     const { mobileFullScreen } = customProps;
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile && mobileFullScreen ? 0 : '0.5rem auto';
+    const isPortrait = screenHeight > screenWidth;
+    const modalHeight = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
+    const modalWidth = isPortrait ? screenWidth - (screenWidth * 0.1) : screenWidth / 2;
+    const modalLeft = isPortrait ? '5%' : '25%';
+
     return {
-      left: offsetLeft,
+      left: modalLeft,
       right: offsetRight,
       top,
-      width,
-      height,
-      maxHeight: height,
+      width: modalWidth,
+      height: modalHeight,
+      maxHeight: modalHeight,
       margin,
     };
   }
@@ -94,7 +99,7 @@ class ModalContainer extends Component {
       e.stopPropagation();
     }
     this.setState({
-      width: size.width, height: size.height,
+      width: size.width,
     });
   }
 
@@ -120,8 +125,9 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       screenHeight,
+      screenWidth,
     } = this.props;
-    const { width, height } = this.state;
+    const { width } = this.state;
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
@@ -162,6 +168,8 @@ class ModalContainer extends Component {
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+    const isPortrait = screenHeight > screenWidth;
+    const modalBodyHeight = isPortrait ? screenHeight * 0.8 : screenHeight * 0.75;
 
     return (
       <ErrorBoundary>
@@ -178,7 +186,7 @@ class ModalContainer extends Component {
                     className="resize-box"
                     resizeHandles={['se']}
                     width={width || newProps.width}
-                    height={height || newProps.height}
+                    height={modalBodyHeight}
                     minConstraints={[250, 250]}
                     maxConstraints={[495, screenHeight]}
                     handleSize={[8, 8]}
@@ -209,7 +217,7 @@ class ModalContainer extends Component {
               ? (
                 <CompletelyCustomModal
                   key={`custom_${lowerCaseId}`}
-                  modalHeight={height || newProps.height}
+                  modalHeight={modalBodyHeight}
                   modalWidth={width || newProps.width}
                   {...customProps}
                   toggleWithClose={toggleFunction}
@@ -265,8 +273,10 @@ function mapStateToProps(state) {
     isTemplateModal = true;
   }
   const {
-    screenHeight, screenWidth, lessThan, orientation,
+    lessThan, orientation,
   } = browser;
+  const screenHeight = window.screen.height;
+  const screenWidth = window.screen.width;
   const isMobile = lessThan.medium;
   const { isEmbedModeActive } = embed;
   return {
