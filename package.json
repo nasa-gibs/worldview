@@ -201,6 +201,7 @@
     "react-autocomplete": "^1.8.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-contextmenu": "^2.14.0",
+    "react-device-detect": "^2.2.2",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
     "react-image-crop": "^9.1.1",
