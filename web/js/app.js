@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
 import { isMobileOnly, isTablet} from 'react-device-detect';
-import { UAParser } from 'ua-parser-js';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -36,6 +35,7 @@ import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
+import { setScreenInfo } from './modules/screen-size/actions'
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -92,7 +92,8 @@ class App extends React.Component {
 
     isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
     console.log("screenHeight = ", screenHeight, "screenWidth = ",screenWidth, "isMobileDevice = ",isMobileDevice)
-    console.log("isMobileOnly = ", isMobileOnly, "isTablet = ", isTablet)
+
+    // this.props.screenSize(screenHeight, screenWidth, isMobileDevice)
   }
 
   onload() {
@@ -180,8 +181,8 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { browserSize } = state;
-  // const { screenHeight, screenWidth} = browserSize;
+  const { screenSize } = state;
+  // const { screenHeight, screenWidth, isMobileDevice} = screenSize;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -195,6 +196,7 @@ function mapStateToProps(state) {
     modalId: state.modal.id,
     // screenHeight,
     // screenWidth,
+    // isMobileDevice,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -204,8 +206,8 @@ const mapDispatchToProps = (dispatch) => ({
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
   },
-  screenSize: (width, height) => {
-    dispatch(getScreenSize(window))
+  screenSize: (screenHeight, screenWidth, isMobileDevice) => {
+    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice))
   }
 });
 
