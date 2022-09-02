@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
+import { isMobileOnly, isTablet} from 'react-device-detect';
+import { UAParser } from 'ua-parser-js';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -83,6 +85,16 @@ class App extends React.Component {
     keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
   }
 
+  getScreenInfo = () => {
+    let { screenHeight, screenWidth, isMobileDevice } = this.props;
+    screenHeight = window.innerHeight;
+    screenWidth = window.innerWidth;
+
+    isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
+    console.log("screenHeight = ", screenHeight, "screenWidth = ",screenWidth, "isMobileDevice = ",isMobileDevice)
+    console.log("isMobileOnly = ", isMobileOnly, "isTablet = ", isTablet)
+  }
+
   onload() {
     const self = this;
     const state = self.props.parameters;
@@ -115,8 +127,10 @@ class App extends React.Component {
       }
       window.addEventListener('resize', () => {
         self.props.screenResize(window);
+        self.getScreenInfo();
       });
       self.props.screenResize(window);
+      self.getScreenInfo();
       events.trigger(STARTUP);
       self.setVhCSSProperty();
     };
@@ -166,6 +180,8 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { browserSize } = state;
+  // const { screenHeight, screenWidth} = browserSize;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -177,6 +193,8 @@ function mapStateToProps(state) {
     parameters: state.parameters,
     locationKey: state.location.key,
     modalId: state.modal.id,
+    // screenHeight,
+    // screenWidth,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -186,6 +204,9 @@ const mapDispatchToProps = (dispatch) => ({
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
   },
+  screenSize: (width, height) => {
+    dispatch(getScreenSize(window))
+  }
 });
 
 export default connect(
