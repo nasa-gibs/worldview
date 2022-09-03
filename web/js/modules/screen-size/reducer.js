@@ -5,13 +5,15 @@ export const initialState = {
   screenHeight: '',
   screenWidth: '',
   isMobileDevice: false,
+  orientation: ''
 };
 
 export const getInitialState = () => {
   return {
    screenHeight : window.innerHeight,
    screenWidth : window.innerWidth,
-   isMobile : isMobileOnly || isTablet || window.innerWidth < 768,
+   isMobileDevice : isMobileOnly || isTablet || window.innerWidth < 768,
+   orientation : window.innerHeight > window.innerWidth ? 'portrait' : 'landscape',
     }
   }
 
@@ -20,7 +22,10 @@ export const screenSizeReducer = (state = initialState, action) => {
     case SET_SCREEN_INFO:
       return {
         ...state,
-        screenHeight: action.value,
+        screenHeight: action.screenHeight,
+        screenWidth: action.screenWidth,
+        isMobileDevice: action.isMobileDevice,
+        orientation: action.orientation,
       }
     default:
     return state;

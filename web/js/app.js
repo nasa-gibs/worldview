@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import { isMobileOnly, isTablet} from 'react-device-detect';
+import { isMobileOnly, isTablet, getSelectorsByUserAgent} from 'react-device-detect';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -86,14 +86,12 @@ class App extends React.Component {
   }
 
   getScreenInfo = () => {
-    let { screenHeight, screenWidth, isMobileDevice } = this.props;
-    screenHeight = window.innerHeight;
-    screenWidth = window.innerWidth;
-    isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
-
-    console.log("screenHeight = ", screenHeight, "screenWidth = ",screenWidth, "isMobileDevice = ",isMobileDevice)
-
-    this.props.setScreenInfo(screenHeight)
+    const { setScreenInfo } = this.props;
+    const screenHeight = window.innerHeight;
+    const screenWidth = window.innerWidth;
+    const isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
+    const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
+    setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation);
   }
 
   onload() {
@@ -192,7 +190,6 @@ function mapStateToProps(state) {
     parameters: state.parameters,
     locationKey: state.location.key,
     modalId: state.modal.id,
-    screenHeight: state.screenSize.screenHeight,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -202,8 +199,8 @@ const mapDispatchToProps = (dispatch) => ({
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
   },
-  setScreenInfo: (value) => {
-    dispatch(setScreenInfo(value))
+  setScreenInfo: (screenHeight, screenWidth, isMobileDevice, orientation) => {
+    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation))
   }
 });
 
