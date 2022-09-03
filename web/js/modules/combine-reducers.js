@@ -49,6 +49,7 @@ import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
 import { smartHandoffReducer, getInitialState as getSmartHandoffInitialState } from './smart-handoff/reducer';
 import { getInitialState as getInitialSettingsState, settingsReducer } from './settings/reducer';
+import { getInitialState as getInitialScreenSizeState, screenSizeReducer } from './screen-size/reducer'
 import { loadingReducer } from './loading/reducers';
 
 function lastAction(state = null, action) {
@@ -86,6 +87,7 @@ export function getInitialState(models, config, parameters) {
     layers: getLayersInitialState(config),
     events: getInitialEventsState(config),
     settings: getInitialSettingsState(),
+    screenSize: getInitialScreenSizeState(),
     requestedEvents: eventRequestResponse(),
     requestedEventSources: eventRequestResponse(),
     smartHandoffs: getSmartHandoffInitialState(config),
@@ -130,6 +132,7 @@ const reducers = {
   proj: projectionReducer,
   requestedEvents,
   requestedEventSources,
+  screenSize: screenSizeReducer,
   settings: settingsReducer,
   shortLink,
   sidebar: sidebarReducer,

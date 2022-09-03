@@ -89,11 +89,11 @@ class App extends React.Component {
     let { screenHeight, screenWidth, isMobileDevice } = this.props;
     screenHeight = window.innerHeight;
     screenWidth = window.innerWidth;
-
     isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
+
     console.log("screenHeight = ", screenHeight, "screenWidth = ",screenWidth, "isMobileDevice = ",isMobileDevice)
 
-    // this.props.screenSize(screenHeight, screenWidth, isMobileDevice)
+    this.props.setScreenInfo(screenHeight)
   }
 
   onload() {
@@ -181,8 +181,6 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { screenSize } = state;
-  // const { screenHeight, screenWidth, isMobileDevice} = screenSize;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -194,9 +192,7 @@ function mapStateToProps(state) {
     parameters: state.parameters,
     locationKey: state.location.key,
     modalId: state.modal.id,
-    // screenHeight,
-    // screenWidth,
-    // isMobileDevice,
+    screenHeight: state.screenSize.screenHeight,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -206,8 +202,8 @@ const mapDispatchToProps = (dispatch) => ({
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
   },
-  screenSize: (screenHeight, screenWidth, isMobileDevice) => {
-    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice))
+  setScreenInfo: (value) => {
+    dispatch(setScreenInfo(value))
   }
 });
 
