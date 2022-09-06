@@ -531,8 +531,8 @@ export default function mapui(models, config, store) {
    */
   function onResize() {
     const state = store.getState();
-    const { browser } = state;
-    const isMobile = browser.lessThan.medium;
+    const { screenSize } = state;
+    const isMobile = screenSize.isMobileDevice;
     const map = self.selected;
 
     if (isMobile) {
@@ -1104,6 +1104,7 @@ export default function mapui(models, config, store) {
     mapEl.style.display = 'none';
     mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
 
+
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
@@ -1248,10 +1249,10 @@ export default function mapui(models, config, store) {
     const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
       const state = store.getState();
       const {
-        events, browser, locationSearch, sidebar, animation, measure,
+        events, locationSearch, sidebar, animation, measure, screenSize,
       } = state;
       const { isCoordinateSearchActive } = locationSearch;
-      const isMobile = browser.lessThan.medium;
+      const isMobile = screenSize.isMobileDevice;
       const coords = map.getCoordinateFromPixel(pixel);
       const isEventsTabActive = typeof events !== 'undefined' && events.active;
       const isMapAnimating = animation.isPlaying;
