@@ -7,6 +7,7 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/icon-list';
 import { changeUnits } from '../../modules/measure/actions';
 import util from '../../util/util';
+import { screenSizeReducer } from '../../modules/screen-size/reducer';
 
 const { events } = util;
 
@@ -119,13 +120,13 @@ class MeasureMenu extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    modal, map, measure, proj, browser,
+    modal, map, measure, proj, screenSize,
   } = state;
   const { unitOfMeasure, allMeasurements } = measure;
   const { crs } = proj.selected;
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
   return {
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isTouchDevice: modal.customProps.touchDevice,
     map,
     unitOfMeasure,

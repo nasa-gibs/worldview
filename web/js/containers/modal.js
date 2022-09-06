@@ -248,7 +248,7 @@ class ModalContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { browser, embed, modal } = state;
+  const { embed, modal, screenSize, } = state;
   const {
     bodyText,
     headerText,
@@ -265,9 +265,9 @@ function mapStateToProps(state) {
     isTemplateModal = true;
   }
   const {
-    screenHeight, screenWidth, lessThan, orientation,
-  } = browser;
-  const isMobile = lessThan.medium;
+    screenHeight, screenWidth, orientation, isMobileDevice,
+  } = screenSize;
+  const isMobile = isMobileDevice;
   const { isEmbedModeActive } = embed;
   return {
     bodyTemplate,

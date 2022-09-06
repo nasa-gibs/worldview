@@ -130,7 +130,7 @@ class OlCoordinates extends React.Component {
     } = this.state;
     const { show, isMobile } = this.props;
     const mobileStyle = {
-      display: "none !important"
+      display: "none"
     }
     const desktopStyle = {
       width

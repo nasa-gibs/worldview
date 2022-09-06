@@ -8,11 +8,10 @@ import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
 
-
 const MEASURE_MENU_PROPS = {
   headerText: null,
   type: 'toolbar',
-  modalClassName: 'measure-tool-modal',
+  modalClassName: 'measure-tool-modal measure-mobile',
   backdrop: false,
   bodyComponent: MeasureMenu,
   touchDevice: false,
@@ -61,6 +60,13 @@ class MeasureButton extends React.Component {
     const message = isTouchDevice ? mobileHelpMsg : helpMsg;
     const buttonId = 'wv-measure-button';
     const labelText = 'Measure distances & areas';
+    const mobileMeasureButtonStyle = {
+      bottom: '20px',
+      fontSize: "14.3px",
+      height: "44px",
+      margin: "0 0 0 4px",
+      padding: "5.72px 9.1px"
+    }
 
     return (
       <>
@@ -83,6 +89,7 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
           disabled={isActive}
+          style={ isMobile ? mobileMeasureButtonStyle : null }
         >
           <UncontrolledTooltip
             placement="top"
@@ -101,7 +108,7 @@ class MeasureButton extends React.Component {
 const mapStateToProps = (state) => ({
   isActive: state.measure.isActive,
   isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
-  isMobile: state.browser.lessThan.medium,
+  isMobile: state.screenSize.isMobileDevice,
 });
 const mapDispatchToProps = (dispatch) => ({
   openModal: (key, customParams) => {
