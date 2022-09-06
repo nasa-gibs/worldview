@@ -46,7 +46,6 @@ class ModalContainer extends Component {
       screenHeight,
       screenWidth,
     } = this.props;
-    // Populate props from custom obj
 
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
@@ -74,14 +73,31 @@ class ModalContainer extends Component {
     const {
       offsetRight, offsetTop,
     } = this.state;
+
     const { mobileFullScreen } = customProps;
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile && mobileFullScreen ? 0 : '0.5rem auto';
+
     const isPortrait = screenHeight > screenWidth;
-    const modalHeight = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
-    const modalWidth = isPortrait ? screenWidth - (screenWidth * 0.1) : screenWidth / 2;
-    const modalLeft = isPortrait ? '5%' : '25%';
+    let modalHeight;
+    let modalWidth;
+    let modalLeft;
+
+    // This accomodates vector modals when changing mobile orientation
+    // The customProps values do not update appropriately when switching orientation
+    // isMobile returns true only if in PORTRAIT orientation. Mobile + Landscape returns isMobile=false (?)
+    console.log(`isMobile: ${isMobile}`);
+    if (isMobile && customProps.wrapClassName === 'vector-modal-wrap') {
+      modalHeight = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
+      modalWidth = isPortrait ? screenWidth * 0.9 : screenWidth * .5;
+      modalLeft = isPortrait ? '5%' : (screenWidth - modalWidth) / 2;
+      console.log(`modalLeft: ${modalLeft}`);
+    } else {
+      modalWidth = customProps.width;
+      modalHeight = customProps.height;
+      modalLeft = customProps.offsetLeft;
+    }
 
     return {
       left: modalLeft,
@@ -275,8 +291,8 @@ function mapStateToProps(state) {
   const {
     lessThan, orientation,
   } = browser;
-  const screenHeight = window.screen.height;
-  const screenWidth = window.screen.width;
+  const screenHeight = window.innerHeight;
+  const screenWidth = window.innerWidth;
   const isMobile = lessThan.medium;
   const { isEmbedModeActive } = embed;
   return {
