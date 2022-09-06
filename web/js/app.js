@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import { isMobileOnly, isTablet, getSelectorsByUserAgent} from 'react-device-detect';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -90,6 +90,7 @@ class App extends React.Component {
     const screenHeight = window.innerHeight;
     const screenWidth = window.innerWidth;
     const isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
+    console.log(isMobileDevice)
     const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
     setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation);
   }
@@ -125,6 +126,10 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
+        self.props.screenResize(window);
+        self.getScreenInfo();
+      });
+      window.addEventListener('orientationchange', () => {
         self.props.screenResize(window);
         self.getScreenInfo();
       });
