@@ -137,13 +137,13 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const {
-    animation, config, compare, browser,
+    animation, config, compare, screenSize,
   } = state;
   const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
 
   return {
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isPlaying,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,

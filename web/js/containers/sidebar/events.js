@@ -86,10 +86,10 @@ function Events(props) {
       </Button>
     </div>
   );
-
+  const mobileSidebarPanelStyle = { height: "96%" };
   const renderEventList = () => (
     eventsData && eventsData.length ? (
-      <div className="wv-eventslist sidebar-panel">
+      <div className="wv-eventslist sidebar-panel" style={isMobile ? mobileSidebarPanelStyle : null}>
         <ul id="wv-eventscontent" className="content map-item-list">
           {sources && eventsData.map((event) => (
             <Event
@@ -156,8 +156,8 @@ const mapStateToProps = (state) => {
   const {
     animation,
     embed,
-    browser,
     events,
+    screenSize,
   } = state;
 
   const {
@@ -167,7 +167,7 @@ const mapStateToProps = (state) => {
 
   return {
     isPlaying: animation.isPlaying,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
     showAll,

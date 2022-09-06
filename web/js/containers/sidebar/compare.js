@@ -17,14 +17,16 @@ const CompareCase = (props) => {
     toggleActiveCompareState,
     isCompareA,
     height,
+    isMobile,
   } = props;
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
+  const mobileSidebarPanelStyle = { height: "96%" };
 
   return (
     <div className={isActive ? '' : 'hidden '}>
-      <div className={outerClass}>
+      <div className={outerClass} style={isMobile ? mobileSidebarPanelStyle : null}>
         <div className="ab-tabs-case">
           <Nav tabs>
             <NavItem>
@@ -85,15 +87,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { compare } = state;
+  const { compare, screenSize } = state;
   const { isCompareA, active } = compare;
   const { dateA, dateB } = getCompareDates(state);
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     isCompareA,
     dateA,
     dateB,
     isActive: active,
+    isMobile,
   };
 };
 

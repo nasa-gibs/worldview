@@ -37,6 +37,7 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
+import mobileLogo from '../../../brand/images/wv-logo-mobile.svg'
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -192,12 +193,43 @@ class Sidebar extends React.Component {
       isDistractionFreeModeActive,
       isEmbedModeActive,
       selectedDate,
+      isMobile,
     } = this.props;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
       ? 'Click to Open This @NAME@ Map in a New Tab'
       : 'Click to Reset @NAME@ to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
+    const mobileImgURL = '../../../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@'
+    const desktopImgURL = '../../../brand/images/wv-logo.svg?v=@BUILD_NONCE@'
+
+    const mobileStyle = {
+        background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+        display: 'block',
+        height: '42px',
+        width: '56px',
+        padding: '5px',
+        borderRadius: '5px',
+        border: '1px solid #333',
+        position: 'absolute',
+        zIndex: 1000,
+    };
+
+    const desktopStyle = {
+      background: `url(${desktopImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+      display: 'block',
+      width: '286px',
+      height: '55px',
+      padding: '5px 0',
+      position: 'absolute',
+      top: '10px',
+      left: '10px',
+      border: '1px solid #333',
+      borderBottom: '1px solid transparent',
+      borderTopRightRadius: '5px',
+      borderTopLeftRadius: '5px',
+      boxSizing: 'border-box',
+    }
 
     return (
       <a
@@ -205,6 +237,7 @@ class Sidebar extends React.Component {
         title={WVLogoTitle}
         id="wv-logo"
         className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+        style={isMobile ? mobileStyle : desktopStyle}
         onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
       />
     );
@@ -243,9 +276,34 @@ class Sidebar extends React.Component {
       : isEmbedModeActive
         ? '95vh'
         : `${screenHeight}px`;
+    const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
+    const mobileProductsHolderStyle = {
+      display: "block",
+      cssFloat: "left",
+      left: "0",
+      minWidth: "238px",
+      width: "100%",
+      height: "100%",
+      position: "absolute !important",
+      overflow: "hidden",
+      background: "rgb(38 43 49)",
+      top: "0",
+      zIndex: 1000,
+      maxHeight: `${maxHeight}`,
+      display: `{${displayStyle}}`
+    }
+    const desktopProductsHolderStyle = {
+      maxHeight: `${maxHeight}`,
+      display: `{${displayStyle}}`
+    }
+    const mobileWVSidebarStyle = {
+      position: 'static',
+    }
+
+
     return (
       <ErrorBoundary>
-        <section id="wv-sidebar">
+        <section id="wv-sidebar" style={isMobile && !isEmbedModeActive ? mobileWVSidebarStyle : null}>
           {this.renderSidebarLogo()}
           <>
             {!isDistractionFreeModeActive && isCollapsed && (
@@ -259,10 +317,7 @@ class Sidebar extends React.Component {
             <div
               id="products-holder"
               className="products-holder-case"
-              style={{
-                maxHeight,
-                display: isDistractionFreeModeActive ? 'none' : 'block',
-              }}
+              style={isMobile ? mobileProductsHolderStyle : desktopProductsHolderStyle}
             >
               {!isCollapsed && (
                 <>
@@ -320,7 +375,6 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   const {
     animation,
-    browser,
     compare,
     config,
     embed,
@@ -330,6 +384,7 @@ const mapStateToProps = (state) => {
     map,
     requestedEvents,
     requestedEventSources,
+    screenSize,
     sidebar,
     ui,
   } = state;
@@ -341,7 +396,7 @@ const mapStateToProps = (state) => {
 
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
-  const { screenHeight } = browser;
+  const { screenHeight } = screenSize;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
@@ -353,7 +408,7 @@ const mapStateToProps = (state) => {
   }
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   const selectedMap = map && map.ui && map.ui.selected;

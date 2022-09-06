@@ -188,7 +188,7 @@ function mapStateToProps(state) {
     state,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
-    isMobile: state.browser.lessThan.medium,
+    isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
     tour: state.tour,
     config: state.config,
