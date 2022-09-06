@@ -209,10 +209,12 @@ class Sidebar extends React.Component {
         height: '42px',
         width: '56px',
         padding: '5px',
+        top: '10px',
+        left: '10px',
         borderRadius: '5px',
         border: '1px solid #333',
         position: 'absolute',
-        zIndex: 1000,
+
     };
 
     const desktopStyle = {

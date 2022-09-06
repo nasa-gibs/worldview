@@ -23,9 +23,9 @@
 
   /* EMBED MODE */
   #wv-content:not(.embed-mode) {
-    #wv-sidebar {
-      position: static;
-    }
+    // #wv-sidebar {
+    //   position: static;
+    // }
 
     // #products-holder {
     //   display: block;
@@ -75,16 +75,16 @@
       margin: 1px;
     }
 
-    #wv-image-button {
-      display: none;
-    }
+    // #wv-image-button {
+    //   display: none;
+    // }
 
-    .wv-toolbar-button {
-      font-size: 14.3px;
-      height: 44px;
-      margin: 0 0 0 4px;
-      padding: 5.72px 9.1px;
-    }
+    // .wv-toolbar-button {
+    //   font-size: 14.3px;
+    //   height: 44px;
+    //   margin: 0 0 0 4px;
+    //   padding: 5.72px 9.1px;
+    // }
 
     button#layers-add,
     button#compare-toggle-button {
