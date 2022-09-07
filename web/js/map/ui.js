@@ -1150,6 +1150,7 @@ export default function mapui(models, config, store) {
       ],
       loadTilesWhileAnimating: true,
       loadTilesWhileInteracting: true,
+      maxTilesLoading: 32,
     });
     map.wv = {
       scaleMetric,
