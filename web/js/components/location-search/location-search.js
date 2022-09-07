@@ -67,7 +67,7 @@ class LocationSearch extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     config,
     modal,
     measure,
@@ -81,7 +81,7 @@ const mapStateToProps = (state) => {
     isExpanded,
   } = locationSearch;
   const { isDistractionFreeModeActive } = ui;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const shouldCollapseFromOtherUI = snapshotModalOpen || measure.isActive || gifActive || isDistractionFreeModeActive;

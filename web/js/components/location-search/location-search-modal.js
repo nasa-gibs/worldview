@@ -385,7 +385,7 @@ class LocationSearchModal extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     config,
     lastAction,
     proj,
@@ -398,7 +398,7 @@ const mapStateToProps = (state) => {
     suggestions,
     suggestedPlace,
   } = locationSearch;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const locationSearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_LOCATION_SEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;

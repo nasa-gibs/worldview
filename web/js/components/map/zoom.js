@@ -54,10 +54,10 @@ function Zoom({
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, ui,
+    screenSize, map, proj, ui,
   } = state;
   const activeMap = map.ui.selected;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     map: activeMap,
     zoomLevel: activeMap && activeMap.getView().getZoom(),

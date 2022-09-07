@@ -117,9 +117,9 @@ class Rotation extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, ui,
+    screenSize, map, proj, ui,
   } = state;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     map,
     proj,

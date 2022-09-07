@@ -10,13 +10,13 @@ function SearchLayers(props) {
   const {
     smallView,
     isMobile,
-    browser,
+    screenSize,
     selectedLayer,
     showMobileFacets,
     results,
   } = props;
 
-  const showFacets = browser.greaterThan.small || showMobileFacets;
+  const showFacets = screenSize.screenWidth > 768 || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
@@ -39,7 +39,7 @@ function SearchLayers(props) {
 }
 
 SearchLayers.propTypes = {
-  browser: PropTypes.object,
+  screenWidth: PropTypes.object,
   isMobile: PropTypes.bool,
   results: PropTypes.array,
   selectedLayer: PropTypes.object,
@@ -48,16 +48,16 @@ SearchLayers.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { browser, productPicker } = state;
+  const { screenSize, productPicker } = state;
   const { selectedLayer, showMobileFacets } = productPicker;
 
   return {
     layer: selectedLayer,
-    smallView: browser.screenWidth < 1024,
-    isMobile: browser.lessThan.medium,
+    smallView: screenSize.screenWidth < 1024,
+    isMobile: screenSize.isMobileDevice,
     showMobileFacets,
     selectedLayer,
-    browser,
+    screenSize,
   };
 }
 export default withSearch(

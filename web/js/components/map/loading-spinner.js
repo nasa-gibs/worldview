@@ -32,11 +32,11 @@ LoadingIndicator.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { browser, loading } = state;
+  const { screenSize, loading } = state;
   const { msg, isLoading } = loading;
   return {
     isLoading,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     msg,
   };
 };
