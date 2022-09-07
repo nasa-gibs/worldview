@@ -158,19 +158,24 @@ class SmartHandoff extends Component {
 
     if (!selectedCollection) return;
 
-    const {
+    let newBoundaries = boundaries;
+
+    let {
       x,
       y,
       width,
       height,
-    } = boundaries;
+    } = boundaries
 
-    const newBoundaries = {
-      x,
-      y,
-      x2: x + width,
-      y2: y + height,
-    };
+    if(boundaries.hasOwnProperty('width')){
+
+      newBoundaries = {
+        x,
+        y,
+        x2: x + width,
+        y2: y + height,
+      };
+  }
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
       newBoundaries,
@@ -229,36 +234,6 @@ class SmartHandoff extends Component {
     }
   }
 
-  setInitialExtent(boundaries, setExtent) {
-    const { proj, map, selectedCollection } = this.props;
-
-    const lonlats = imageUtilGetCoordsFromPixelValues(
-      boundaries,
-      map.ui.selected,
-    );
-    const { crs } = proj;
-
-    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const bottomLeft = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const topRight = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-    const [x1, y1] = bottomLeft;
-    const [x2, y2] = topRight;
-
-    const extent = {
-      southWest: `${x1.toFixed(5)},${y1.toFixed(5)}`,
-      northEast: `${x2.toFixed(5)},${y2.toFixed(5)}`,
-    };
-
-    const coordinates = {
-      bottomLeft: util.formatCoordinate([x1, y1]),
-      topRight: util.formatCoordinate([x2, y2]),
-    };
-
-    if (selectedCollection && extent) {
-      this.updateExtent(coordinates, boundaries, setExtent && extent);
-    }
-  }
-
   /**
    * Handle bounding box checkbox toggle
    */
@@ -269,7 +244,7 @@ class SmartHandoff extends Component {
         event: 'smart_handoffs_toggle_true_target_area',
       });
       this.setState({ showBoundingBox: true });
-      this.setInitialExtent(boundaries, true);
+      this.onBoundaryChange(boundaries, true);
     } else {
       this.setState({
         showBoundingBox: false,
