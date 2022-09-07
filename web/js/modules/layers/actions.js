@@ -284,18 +284,6 @@ export function setOpacity(id, opacity) {
   };
 }
 
-export function clearGraticule() {
-  return (dispatch) => {
-    dispatch(toggleVisibility('Graticule', false));
-  };
-}
-
-export function refreshGraticule() {
-  return (dispatch) => {
-    dispatch(toggleVisibility('Graticule', true));
-  };
-}
-
 export function hideLayers(layers) {
   return (dispatch) => {
     layers.forEach((obj) => {
