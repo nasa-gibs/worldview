@@ -93,12 +93,13 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
     const getGranulesUrl = getGranulesUrlSelector(store.getState());
 
-    const shortName = 'VJ102MOD'; // USE GRANULE LAYER ID
+    const shortName = 'VJ102MOD'; // TODO: USE GRANULE LAYER ID
     const params = {
       shortName,
       startDate: startQueryDate.toISOString(),
       endDate: endQueryDate.toISOString(),
-      pageSize: 2000,
+      day_night_flag: dayNightFilter,
+      pageSize: 1000,
     };
 
     // update range/extend range checks and new dates (if applicable)
