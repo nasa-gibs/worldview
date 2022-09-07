@@ -229,7 +229,7 @@ class SmartHandoff extends Component {
     }
   }
 
-  initalBoundary(boundaries, setExtent) {
+  setInitialExtent(boundaries, setExtent) {
     const { proj, map, selectedCollection } = this.props;
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
@@ -269,7 +269,7 @@ class SmartHandoff extends Component {
         event: 'smart_handoffs_toggle_true_target_area',
       });
       this.setState({ showBoundingBox: true });
-      this.initalBoundary(boundaries, true);
+      this.setInitialExtent(boundaries, true);
     } else {
       this.setState({
         showBoundingBox: false,
