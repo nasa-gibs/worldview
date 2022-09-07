@@ -160,22 +160,21 @@ class SmartHandoff extends Component {
 
     let newBoundaries = boundaries;
 
-    let {
+    const {
       x,
       y,
       width,
       height,
-    } = boundaries
+    } = boundaries;
 
-    if(boundaries.hasOwnProperty('width')){
-
+    if (Object.prototype.hasOwnProperty.call(boundaries, 'width')) {
       newBoundaries = {
         x,
         y,
         x2: x + width,
         y2: y + height,
       };
-  }
+    }
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
       newBoundaries,

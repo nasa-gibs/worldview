@@ -41,13 +41,13 @@ function getHandoffParams (queryInput, options) {
     projection, conceptId, startDate, endDate, currentExtent, showBoundingBox,
   } = options;
 
-  for (const property in options) {
-    if(options[property] === undefined){
-      console.error(`${property} is undefined.`)
-    } else if(options[property] === {}){
-      console.error(`${property} is an empty object.`)
+  Object.entries(options).forEach(([key, value]) => {
+    if (value === undefined) {
+      console.error(`${key} is undefined.`);
+    } else if (value === {}) {
+      console.error(`${key} is an empty object.`);
     }
-  }
+  });
 
   const getParam = ({ ValueType, ValueName }) => {
     if (ValueType === 'temporalRange') {
