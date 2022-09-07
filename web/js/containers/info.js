@@ -166,7 +166,7 @@ function InfoList (props) {
 
 function mapStateToProps(state) {
   const {
-    ui, feedback, tour, notifications, config, models, browser,
+    ui, feedback, tour, notifications, config, models, screenSize,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { features: { feedback: feedbackEnabled } } = config;
@@ -179,7 +179,7 @@ function mapStateToProps(state) {
     notifications,
     config,
     models,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
   };
 }
 const mapDispatchToProps = (dispatch) => ({

@@ -7,7 +7,6 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/icon-list';
 import { changeUnits } from '../../modules/measure/actions';
 import util from '../../util/util';
-import { screenSizeReducer } from '../../modules/screen-size/reducer';
 
 const { events } = util;
 
