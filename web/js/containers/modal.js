@@ -26,6 +26,8 @@ const toggleWithClose = (onToggle, onClose, isOpen) => {
 class ModalContainer extends Component {
   constructor(props) {
     super(props);
+    console.log('dealing with props');
+    console.log(props.customProps);
     this.state = {
       width: props.customProps.width,
       // height: props.customProps.height,
@@ -90,7 +92,7 @@ class ModalContainer extends Component {
     console.log(`isMobile: ${isMobile}`);
     if (isMobile && customProps.wrapClassName === 'vector-modal-wrap') {
       modalHeight = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
-      modalWidth = isPortrait ? screenWidth * 0.9 : screenWidth * .5;
+      modalWidth = isPortrait ? screenWidth * 0.9 : screenWidth * 0.5;
       modalLeft = isPortrait ? '5%' : (screenWidth - modalWidth) / 2;
       console.log(`modalLeft: ${modalLeft}`);
     } else {
