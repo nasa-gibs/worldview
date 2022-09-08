@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { createResponsiveStateReducer } from 'redux-responsive';
 import { assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutReducer } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
@@ -56,19 +55,7 @@ function lastAction(state = null, action) {
   return action;
 }
 
-/**
- * Access to page size so various resize listeners are
- * no longer necessary
- */
-const responsiveStateReducer = createResponsiveStateReducer(
-  null,
-  {
-    extraFields: () => ({
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
-    }),
-  },
-);
+
 /**
  * Get initial module states based on config
  * and parameters
@@ -106,7 +93,6 @@ const defaultReducer = (state = {}) => state;
 const reducers = {
   alerts: alertReducer,
   animation: animationReducer,
-  browser: responsiveStateReducer,
   config: defaultReducer,
   compare: compareReducer,
   date: dateReducer,

@@ -6,7 +6,6 @@ import whatInput from 'what-input';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 
 // Utils
-import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
 import { STARTUP } from './util/constants';
 // eslint-disable-next-line import/no-named-as-default
@@ -126,14 +125,11 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
-        self.props.screenResize(window);
         self.getScreenInfo();
       });
       window.addEventListener('orientationchange', () => {
-        self.props.screenResize(window);
         self.getScreenInfo();
       });
-      self.props.screenResize(window);
       self.getScreenInfo();
       events.trigger(STARTUP);
       self.setVhCSSProperty();
@@ -200,9 +196,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
   keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
     dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
-  },
-  screenResize: (width, height) => {
-    dispatch(calculateResponsiveState(window));
   },
   setScreenInfo: (screenHeight, screenWidth, isMobileDevice, orientation) => {
     dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation))

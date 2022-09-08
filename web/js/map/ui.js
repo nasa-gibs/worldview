@@ -26,7 +26,7 @@ import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
-import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
+import { CALCULATE_SCREEN_SIZE } from '../modules/screen-size/constants';
 import Cache from 'cachai';
 import PQueue from 'p-queue/dist';
 import mapLayerBuilder from './layerbuilder';
@@ -210,7 +210,7 @@ export default function mapui(models, config, store) {
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case CALCULATE_RESPONSIVE_STATE:
+      case CALCULATE_SCREEN_SIZE:
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
@@ -402,7 +402,7 @@ export default function mapui(models, config, store) {
    */
   const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
     const state = store.getState();
-    const { proj, browser } = state;
+    const { proj, screenSize } = state;
     const results = geocodeResults;
     if (!results) return;
 
@@ -412,7 +412,7 @@ export default function mapui(models, config, store) {
       coordinatesObject,
       results,
       remove,
-      browser.lessThan.medium,
+      screenSize.isMobileDevice,
       showDialog,
     );
 
