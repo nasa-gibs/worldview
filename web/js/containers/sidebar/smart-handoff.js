@@ -168,8 +168,8 @@ class SmartHandoff extends Component {
     const newBoundaries = {
       x,
       y,
-      x2: x + width,
-      y2: y + height,
+      x2: width ? x + width : boundaries.x2,
+      y2: height ? y + height : boundaries.y2,
     };
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
@@ -233,12 +233,13 @@ class SmartHandoff extends Component {
    * Handle bounding box checkbox toggle
    */
   onCheckboxToggle() {
-    const { showBoundingBox } = this.state;
+    const { showBoundingBox, boundaries } = this.state;
     if (!showBoundingBox) {
       googleTagManager.pushEvent({
         event: 'smart_handoffs_toggle_true_target_area',
       });
       this.setState({ showBoundingBox: true });
+      this.onBoundaryChange(boundaries, true);
     } else {
       this.setState({
         showBoundingBox: false,
