@@ -181,25 +181,26 @@ class toolbarContainer extends Component {
   }
 
   renderShareButton() {
-    const { faSize,
-            openModal,
-            isDistractionFreeModeActive,
-            isMobile,
-            } = this.props;
+    const {
+      faSize,
+      openModal,
+      isDistractionFreeModeActive,
+      isMobile,
+    } = this.props;
     const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
     const mobileWvToolbarButtonStyle = {
-      fontSize: "14.3px",
-      height: "44px",
-      margin: "0 0 0 4px",
-      padding: "5.72px 9.1px"
-    }
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    };
     return !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        style={ isMobile ? mobileWvToolbarButtonStyle : null }
+        style={isMobile ? mobileWvToolbarButtonStyle : null}
         onClick={() => openModal(
           'TOOLBAR_SHARE',
           CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
@@ -227,11 +228,11 @@ class toolbarContainer extends Component {
       CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
     );
     const mobileWvToolbarButtonStyle = {
-      fontSize: "14.3px",
-      height: "44px",
-      margin: "0 0 0 4px",
-      padding: "5.72px 9.1px"
-    }
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    };
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
@@ -239,7 +240,7 @@ class toolbarContainer extends Component {
         aria-label={labelText}
         onClick={onClick}
         disabled={isAnimatingToEvent}
-        style={ isMobile ? mobileWvToolbarButtonStyle : null }
+        style={isMobile ? mobileWvToolbarButtonStyle : null}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} />
@@ -275,11 +276,11 @@ class toolbarContainer extends Component {
 
     const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed) && !isDistractionFreeModeActive;
     const mobileWvToolbarButtonStyle = {
-      fontSize: "14.3px",
-      height: "44px",
-      margin: "0 0 0 4px",
-      padding: "5.72px 9.1px"
-    }
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    };
     return showButton && (
       <div id="location-search-wrapper">
         <Button
@@ -287,7 +288,7 @@ class toolbarContainer extends Component {
           className="wv-toolbar-button"
           aria-label={labelText}
           onClick={handleButtonClick}
-          style={ isMobile ? mobileWvToolbarButtonStyle : null }
+          style={isMobile ? mobileWvToolbarButtonStyle : null}
         >
           {this.renderTooltip(buttonId, labelText)}
           <FontAwesomeIcon icon="search-location" size={faSize} />
@@ -302,7 +303,7 @@ class toolbarContainer extends Component {
       isImageDownloadActive,
       isCompareActive,
       isDistractionFreeModeActive,
-      isMobile
+      isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
     const labelText = isCompareActive
@@ -311,8 +312,8 @@ class toolbarContainer extends Component {
         ? 'You must exit data download mode to use the snapshot feature'
         : 'Take a snapshot';
     const mobileWVImageButtonStyle = {
-      display: 'none'
-    }
+      display: 'none',
+    };
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
@@ -351,11 +352,11 @@ class toolbarContainer extends Component {
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
     const mobileWvToolbarButtonStyle = {
-      fontSize: "14.3px",
-      height: "44px",
-      margin: "0 0 0 4px",
-      padding: "5.72px 9.1px"
-    }
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    };
 
     return !isDistractionFreeModeActive && (
       <Button
@@ -364,7 +365,7 @@ class toolbarContainer extends Component {
         className={`wv-toolbar-button${notificationClass}`}
         onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
         data-content={notificationContentNumber}
-        style={ isMobile ? mobileWvToolbarButtonStyle : null }
+        style={isMobile ? mobileWvToolbarButtonStyle : null}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="info-circle" size={faSize} />
@@ -425,7 +426,7 @@ const mapStateToProps = (state) => {
     proj,
     screenSize,
     sidebar,
-    ui
+    ui,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;

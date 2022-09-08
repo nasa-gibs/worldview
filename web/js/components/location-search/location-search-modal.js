@@ -353,12 +353,12 @@ class LocationSearchModal extends Component {
 
     const locationSearchMobileStyle = {
       position: 'static',
-      width: '100%'
-    }
+      width: '100%',
+    };
 
     const locationSearchInputGroupMobileStyle = {
       width: '100% !important',
-    }
+    };
 
     return (
       <div id="location-search-wrapper" className="location-search-expanded" style={isMobile ? locationSearchMobileStyle : null}>

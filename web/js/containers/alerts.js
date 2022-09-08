@@ -162,7 +162,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, embed, events, sidebar, compare, alerts, ui, animation, screenSize,
+    embed, events, sidebar, compare, alerts, ui, animation, screenSize,
   } = state;
   const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
   const activeLayers = getActiveLayers(state);

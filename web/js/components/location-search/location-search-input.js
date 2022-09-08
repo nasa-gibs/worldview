@@ -227,8 +227,8 @@ class SearchBox extends Component {
       : 'Search for places or enter coordinates';
 
     const mobileStyle = {
-      width: '100%'
-    }
+      width: '100%',
+    };
     return (
       <div
         className="location-search-input-container"

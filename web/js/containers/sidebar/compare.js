@@ -22,7 +22,7 @@ const CompareCase = (props) => {
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
-  const mobileSidebarPanelStyle = { height: "96%" };
+  const mobileSidebarPanelStyle = { height: '96%' };
 
   return (
     <div className={isActive ? '' : 'hidden '}>
@@ -108,6 +108,7 @@ CompareCase.propTypes = {
   isActive: PropTypes.bool,
   isCompareA: PropTypes.bool,
   toggleActiveCompareState: PropTypes.func,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(

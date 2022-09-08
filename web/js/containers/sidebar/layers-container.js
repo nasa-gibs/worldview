@@ -127,7 +127,7 @@ function LayersContainer (props) {
   };
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
-  const mobileSidebarPanelStyle = { height: "96%" };
+  const mobileSidebarPanelStyle = { height: '96%' };
   return isActive && (
     <>
       <div id="layers-scroll-container" style={scrollContainerStyles}>

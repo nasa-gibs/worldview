@@ -31,7 +31,7 @@ import safeLocalStorage from '../../../../util/local-storage';
 
 function BrowseLayers (props) {
   const {
-    screenSize,
+    isMobile,
     categoryTabNames,
     categoryType,
     mode,
@@ -94,7 +94,7 @@ function BrowseLayers (props) {
               <BrowseLayerList />
             </div>
           </div>
-          { !screenSize.isMobileDevice && (
+          { !isMobile && (
           <div className="layer-detail-container layers-all browse">
             <MeasurementMetadataDetail />
           </div>
@@ -201,7 +201,7 @@ function BrowseLayers (props) {
 
   return (
     <>
-      { screenSize.isMobileDevice ? renderMobileDropdown() : renderDesktopTabs() }
+      { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
         isCategoryDisplay
           ? (
@@ -218,6 +218,7 @@ BrowseLayers.propTypes = {
   categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
+  isMobile: PropTypes.bool,
   selectedCategoryName: PropTypes.string,
   mode: PropTypes.string,
   recentLayers: PropTypes.array,
@@ -265,7 +266,7 @@ function mapStateToProps(state) {
     recentLayers,
   } = productPicker;
   return {
-    screenSize,
+    isMobile: screenSize.isMobileDevice,
     mode,
     selectedCategoryName: category && category.title,
     categoryType,

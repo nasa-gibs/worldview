@@ -62,11 +62,11 @@ class MeasureButton extends React.Component {
     const labelText = 'Measure distances & areas';
     const mobileMeasureButtonStyle = {
       bottom: '20px',
-      fontSize: "14.3px",
-      height: "44px",
-      margin: "0 0 0 4px",
-      padding: "5.72px 9.1px"
-    }
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    };
 
     return (
       <>
@@ -89,7 +89,7 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
           disabled={isActive}
-          style={ isMobile ? mobileMeasureButtonStyle : null }
+          style={isMobile ? mobileMeasureButtonStyle : null}
         >
           <UncontrolledTooltip
             placement="top"

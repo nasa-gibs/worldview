@@ -248,7 +248,7 @@ class ModalContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { embed, modal, screenSize, } = state;
+  const { embed, modal, screenSize } = state;
   const {
     bodyText,
     headerText,

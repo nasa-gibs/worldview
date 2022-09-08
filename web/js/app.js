@@ -34,7 +34,7 @@ import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
-import { setScreenInfo } from './modules/screen-size/actions';
+import setScreenInfo from './modules/screen-size/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';

@@ -37,7 +37,6 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
-import mobileLogo from '../../../brand/images/wv-logo-mobile.svg'
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -200,20 +199,20 @@ class Sidebar extends React.Component {
       ? 'Click to Open This @NAME@ Map in a New Tab'
       : 'Click to Reset @NAME@ to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
-    const mobileImgURL = '../../../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@'
-    const desktopImgURL = '../../../brand/images/wv-logo.svg?v=@BUILD_NONCE@'
+    const mobileImgURL = '../../../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
+    const desktopImgURL = '../../../brand/images/wv-logo.svg?v=@BUILD_NONCE@';
 
     const mobileStyle = {
-        background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
-        display: 'block',
-        height: '42px',
-        width: '56px',
-        padding: '5px',
-        top: '10px',
-        left: '10px',
-        borderRadius: '5px',
-        border: '1px solid #333',
-        position: 'absolute',
+      background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+      display: 'block',
+      height: '42px',
+      width: '56px',
+      padding: '5px',
+      top: '10px',
+      left: '10px',
+      borderRadius: '5px',
+      border: '1px solid #333',
+      position: 'absolute',
 
     };
 
@@ -231,7 +230,7 @@ class Sidebar extends React.Component {
       borderTopRightRadius: '5px',
       borderTopLeftRadius: '5px',
       boxSizing: 'border-box',
-    }
+    };
 
     return (
       <a
@@ -280,27 +279,26 @@ class Sidebar extends React.Component {
         : `${screenHeight}px`;
     const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
     const mobileProductsHolderStyle = {
-      display: "block",
-      cssFloat: "left",
-      left: "0",
-      minWidth: "238px",
-      width: "100%",
-      height: "100%",
-      position: "absolute !important",
-      overflow: "hidden",
-      background: "rgb(38 43 49)",
-      top: "0",
+      cssFloat: 'left',
+      left: '0',
+      minWidth: '238px',
+      width: '100%',
+      height: '100%',
+      position: 'absolute !important',
+      overflow: 'hidden',
+      background: 'rgb(38 43 49)',
+      top: '0',
       zIndex: 1000,
       maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}}`
-    }
+      display: `{${displayStyle}}`,
+    };
     const desktopProductsHolderStyle = {
       maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}}`
-    }
+      display: `{${displayStyle}}`,
+    };
     const mobileWVSidebarStyle = {
       position: 'static',
-    }
+    };
 
 
     return (

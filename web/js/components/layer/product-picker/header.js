@@ -275,7 +275,7 @@ const mapStateToProps = (state) => {
     selectedLayer,
     searchConfig,
   } = productPicker;
-  const isMobile = screenSize.isMobile;
+  const isMobile = screenSize.isMobileDevice;
   const layers = getLayersForProjection(state);
 
   return {

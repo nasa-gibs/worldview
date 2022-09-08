@@ -130,14 +130,14 @@ class OlCoordinates extends React.Component {
     } = this.state;
     const { show, isMobile } = this.props;
     const mobileStyle = {
-      display: "none"
-    }
+      display: 'none',
+    };
     const desktopStyle = {
-      width
-    }
+      width,
+    };
 
     return (
-      <div id="ol-coords-case" className="wv-coords-container" style={ isMobile ? mobileStyle : desktopStyle }>
+      <div id="ol-coords-case" className="wv-coords-container" style={isMobile ? mobileStyle : desktopStyle}>
         {hasMouse && show && (
           <>
             <Coordinates
@@ -179,6 +179,7 @@ OlCoordinates.propTypes = {
   show: PropTypes.bool,
   changeCoordinateFormat: PropTypes.func,
   coordinateFormat: PropTypes.string,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(
