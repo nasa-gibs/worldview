@@ -63,28 +63,18 @@
                         "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly"
                     ]
                 },
-                "Daymet": {
-                    "id": "daymet",
-                    "title": "Daymet",
+                "MERRA-2": {
+                    "id": "merra-2",
+                    "title": "MERRA-2",
                     "description": "",
                     "image": "",
                     "settings": [
-                      "Daymet_Maximum_Air_Temp_Daily",
-                      "Daymet_Minimum_Air_Temp_Daily"
+                        "MERRA2_Surface_Skin_Temperature_Monthly",
+                        "MERRA2_2m_Air_Temperature_Monthly",
+                        "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
+                        "MERRA2_Air_Temperature_250hPa_Monthly"
                     ]
-                },
-                    "MERRA-2": {
-                        "id": "merra-2",
-                        "title": "MERRA-2",
-                        "description": "",
-                        "image": "",
-                        "settings": [
-                            "MERRA2_Surface_Skin_Temperature_Monthly",
-                            "MERRA2_2m_Air_Temperature_Monthly",
-                            "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
-                            "MERRA2_Air_Temperature_250hPa_Monthly"
-                        ]
-                      }
+                    }
             }
         }
     }
