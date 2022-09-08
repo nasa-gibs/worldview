@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Short Link button (PODAAC-4468)
 - Updated date to be today-1 to display SST properly on startup
 - Removed old layers no longer in GetCapabilities
+- Security upgrade to pass Snyk (Upgrade moment lib)
 
 ## [0.2.2]
 - Updated to 3.23.0 upstream version (PODAAC-4467)
