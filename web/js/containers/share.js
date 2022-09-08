@@ -243,13 +243,6 @@ class ShareLinkContainer extends Component {
               Copy URL to share link.
             </p>
             {' '}
-            <Checkbox
-              label="Shorten link"
-              id="wv-link-shorten"
-              onCheck={this.onToggleShorten}
-              checked={isShort}
-              disabled={!shortLink.isLoading}
-            />
           </>
         )}
       </TabPane>

@@ -54,6 +54,6 @@
         }
     },
     "scripts": [
-        "https://fbm.earthdata.nasa.gov/for/worldview/feedback.js"
+        "https://fbm.earthdata.nasa.gov/for/SOTO%20by%20Worldview/feedback.js"
     ]
 }
