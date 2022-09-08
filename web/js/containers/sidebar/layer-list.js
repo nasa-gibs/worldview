@@ -216,7 +216,7 @@ LayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    embed, proj, config, map, animation,
+    embed, proj, config, map, animation, screenSize
   } = state;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
@@ -230,7 +230,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     zots,
     isEmbedModeActive,
-    isMobile: state.browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     activeLayers,
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),

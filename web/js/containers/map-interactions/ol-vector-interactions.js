@@ -172,7 +172,7 @@ export class VectorInteractions extends React.Component {
 
   singleClick(e, map) {
     const {
-      browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
+      screenSize, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
       activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
       proj, isEmbedModeActive, isVectorExceededAlertPresent, isMobile,
@@ -199,7 +199,7 @@ export class VectorInteractions extends React.Component {
       if (hasNonClickableVectorLayerType) {
         activateVectorZoomAlert();
       } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
+        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive);
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
         } else if (isVectorExceededAlertPresent) {
@@ -226,7 +226,7 @@ export class VectorInteractions extends React.Component {
 function mapStateToProps(state) {
   const {
     animation,
-    browser,
+    screenSize,
     compare,
     config,
     map,
@@ -252,7 +252,7 @@ function mapStateToProps(state) {
   let swipeOffset;
   if (active && mode === 'swipe') {
     const percentOffset = value || 50;
-    swipeOffset = browser.screenWidth * (percentOffset / 100);
+    swipeOffset = screenSize.screenWidth * (percentOffset / 100);
   }
 
   const granuleFootprints = getActiveGranuleFootPrints(state);
@@ -263,7 +263,7 @@ function mapStateToProps(state) {
 
   return {
     activeLayers,
-    browser,
+    screenSize,
     isCoordinateSearchActive,
     compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
@@ -274,7 +274,7 @@ function mapStateToProps(state) {
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
     isPlaying,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     granuleFootprints,
     granulePlatform,
     swipeOffset,
@@ -302,9 +302,9 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive) => {
-    const { screenHeight, screenWidth } = browser;
-    const isMobile = browser.lessThan.medium;
+  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive) => {
+    const { screenHeight, screenWidth } = screenSize;
+    const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
@@ -354,7 +354,7 @@ VectorInteractions.propTypes = {
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,
   activeLayers: PropTypes.array,
-  browser: PropTypes.object,
+  screenSize: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,

@@ -417,9 +417,9 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui, settings, animation,
+      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation,
     } = state;
-    const isMobile = browser.lessThan.medium;
+    const isMobile = screenSize.isMobile;
     const { isDistractionFreeModeActive } = ui;
     const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
     const hasPalette = !lodashIsEmpty(layer.palette);
