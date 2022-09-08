@@ -390,12 +390,12 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
   const {
     customSelected, interval, customInterval, customDelta,
   } = date;
