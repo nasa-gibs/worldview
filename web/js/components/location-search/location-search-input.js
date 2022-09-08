@@ -225,10 +225,15 @@ class SearchBox extends Component {
     const placeHolderText = isMobile
       ? 'Enter place name or coordinates'
       : 'Search for places or enter coordinates';
+
+    const mobileStyle = {
+      width: '100%'
+    }
     return (
       <div
         className="location-search-input-container"
         onKeyPress={this.handleKeyPress}
+        style={isMobile ? mobileStyle : null}
       >
         <Autocomplete
           ref={(el) => { this.locationSearchInput = el; }}

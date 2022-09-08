@@ -34,7 +34,7 @@ import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
-import { setScreenInfo } from './modules/screen-size/actions'
+import { setScreenInfo } from './modules/screen-size/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -85,13 +85,12 @@ class App extends React.Component {
   }
 
   getScreenInfo = () => {
-    const { setScreenInfo } = this.props;
+    const { setScreenInfoAction } = this.props;
     const screenHeight = window.innerHeight;
     const screenWidth = window.innerWidth;
     const isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
-    console.log(isMobileDevice)
     const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
-    setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation);
+    setScreenInfoAction(screenHeight, screenWidth, isMobileDevice, orientation);
   }
 
   onload() {
@@ -197,9 +196,9 @@ const mapDispatchToProps = (dispatch) => ({
   keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
     dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
   },
-  setScreenInfo: (screenHeight, screenWidth, isMobileDevice, orientation) => {
-    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation))
-  }
+  setScreenInfoAction: (screenHeight, screenWidth, isMobileDevice, orientation) => {
+    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation));
+  },
 });
 
 export default connect(
@@ -213,6 +212,7 @@ App.propTypes = {
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
+  setScreenInfoAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   parameters: PropTypes.object,

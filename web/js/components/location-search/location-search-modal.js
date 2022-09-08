@@ -351,14 +351,23 @@ class LocationSearchModal extends Component {
       showInputAlert,
     } = this.state;
 
+    const locationSearchMobileStyle = {
+      position: 'static',
+      width: '100%'
+    }
+
+    const locationSearchInputGroupMobileStyle = {
+      width: '100% !important',
+    }
+
     return (
-      <div id="location-search-wrapper" className="location-search-expanded">
+      <div id="location-search-wrapper" className="location-search-expanded" style={isMobile ? locationSearchMobileStyle : null}>
         {/* Alerts */}
         {this.renderReverseGeocodeAlert()}
         {this.renderNoSuggestionsAlert()}
         {this.renderExtentAlert()}
         <div className="location-search-component">
-          <InputGroup className="location-search-input-group">
+          <InputGroup className="location-search-input-group" style={isMobile ? locationSearchInputGroupMobileStyle : null}>
             {/* Minimize button not visible in mobile */}
             {!isMobile && this.renderMinimizeButton()}
             <SearchBox
