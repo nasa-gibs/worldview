@@ -290,16 +290,17 @@ class Sidebar extends React.Component {
       top: '0',
       zIndex: 1000,
       maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}}`,
+      display: `{${displayStyle}} !important`,
     };
     const desktopProductsHolderStyle = {
       maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}}`,
+    };
+    const distractionFreeStyle = {
+      display: 'none',
     };
     const mobileWVSidebarStyle = {
       position: 'static',
     };
-
 
     return (
       <ErrorBoundary>
@@ -317,7 +318,7 @@ class Sidebar extends React.Component {
             <div
               id="products-holder"
               className="products-holder-case"
-              style={isMobile ? mobileProductsHolderStyle : desktopProductsHolderStyle}
+              style={isDistractionFreeModeActive ? distractionFreeStyle : isMobile ? mobileProductsHolderStyle : desktopProductsHolderStyle}
             >
               {!isCollapsed && (
                 <>
