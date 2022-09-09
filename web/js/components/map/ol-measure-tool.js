@@ -70,15 +70,12 @@ function OlMeasureTool (props) {
     if (init) {
       const inactiveProjections = getInactiveProjections(olMap.proj);
       // Terminate draw for both *inactive* projections
-      for (const area in inactiveProjections) {
-      // Object.values(inactiveProjections).forEach((area) => {
-        // console.log(inactiveProjections[area]);
-        console.log(map.ui.proj[inactiveProjections[area]]);
-        terminateDraw(map.ui.proj.geographic);
+      Object.values(inactiveProjections).forEach((area) => {
+        terminateDraw(map.ui.proj[area]);
         // map.ui.proj[area].removeOverlay(tooltipOverlay);
-      };
+      });
     }
-  }, [crs]);
+  }, [crs])
 
   useEffect(() => {
     if (!init) {
