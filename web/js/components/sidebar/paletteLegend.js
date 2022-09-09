@@ -248,6 +248,12 @@ class PaletteLegend extends React.Component {
       min = units ? `${min} ${units}` : min;
       max = units ? `${max} ${units}` : max;
     }
+    const mobileColorbarStyle = {
+      width: '100%',
+      maxWidth: '100%',
+      marginRight: '0',
+      marginLeft: '0'
+    }
     return (
       <div
         className={
@@ -264,6 +270,7 @@ class PaletteLegend extends React.Component {
           <canvas
             className="wv-palettes-colorbar"
             id={`${util.encodeId(layer.id)}-${util.encodeId(legend.id)}${index}colorbar`}
+            style={isMobile ? mobileColorbarStyle : null}
             width={width}
             height={24}
             ref={this[`canvas_${index}`]}
