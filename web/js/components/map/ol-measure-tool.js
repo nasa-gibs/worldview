@@ -40,15 +40,16 @@ import {
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
+
 const { events } = util;
 
 let tooltipElement;
 let tooltipOverlay;
 let init = false;
-let draw;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
+let draw;
 
 /**
  * A component to add measurement functionality to the OL map
@@ -57,6 +58,7 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
+
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
@@ -64,15 +66,17 @@ function OlMeasureTool (props) {
   // Listen for changes made to the crs value which indicates a projection change
   useEffect(() => {
     // Don't fire on the initial page load
-    console.log(olMap);
+    // console.log(map);
     if (init) {
       const inactiveProjections = getInactiveProjections(olMap.proj);
       // Terminate draw for both *inactive* projections
-      // for (const area in inactiveProjections) {
-      Object.values(inactiveProjections).forEach((area) => {
-        terminateDraw(map.ui.proj[area]);
+      for (const area in inactiveProjections) {
+      // Object.values(inactiveProjections).forEach((area) => {
+        // console.log(inactiveProjections[area]);
+        console.log(map.ui.proj[inactiveProjections[area]]);
+        terminateDraw(map.ui.proj.geographic);
         // map.ui.proj[area].removeOverlay(tooltipOverlay);
-      });
+      };
     }
   }, [crs]);
 
@@ -201,6 +205,8 @@ function OlMeasureTool (props) {
    * End the current measurement interaction & remove the visual representation from the map
    */
   const terminateDraw = (olMaptoTerminate = olMap) => {
+    console.log('terminateDraw');
+    // console.log(olMaptoTerminate);
     tooltipElement = null;
     toggleMeasureActive(false);
     olMaptoTerminate.removeInteraction(draw);
