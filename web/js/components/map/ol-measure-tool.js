@@ -62,23 +62,14 @@ function OlMeasureTool (props) {
   } = props;
 
   // Listen for changes made to the crs value which indicates a projection change
-  // This listens correctly but FIRES on the new olMap projection(?).
   useEffect(() => {
     // Don't fire on the initial page load
     if (init) {
-      // We don't want to terminate the *current* projection, we need to terminate the *previous* projection
-      // Identify the current proj & terminate draw for the other 2 projections
-      console.log(`crs: ${crs}`);
-      console.log(map)
-      console.log(map.ui.proj.geographic.interactions.array_);
-
-      let inactiveProjections = getInactiveProjections(crs);
-      console.log(JSON.stringify(inactiveProjections));
-
-      terminateDraw(map.ui.proj.geographic);
-
-
-
+      const inactiveProjections = getInactiveProjections(olMap.proj);
+      // Terminate draw for both *inactive* projections
+      for (const area in inactiveProjections) {
+        terminateDraw(map.ui.proj[inactiveProjections[area]]);
+      }
     }
   }, [crs]);
 
@@ -285,7 +276,6 @@ function OlMeasureTool (props) {
     draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
     rightClickListener = olMap.on('contextmenu', (evt) => {
-      console.log('rightClickListener');
       evt.preventDefault();
       terminateDraw();
       olMap.removeOverlay(tooltipOverlay);
@@ -331,14 +321,8 @@ function OlMeasureTool (props) {
     }
   }
 
-  function getInactiveProjections(activeCrs) {
-    let regionFromCrs = {
-      'EPSG:4326': 'geographic',
-      'EPSG:3413': 'arctic',
-      'EPSG:3031': 'antarctic',
-    };
-    delete regionFromCrs[activeCrs];
-    return regionFromCrs;
+  function getInactiveProjections(activeProj) {
+    return ['geographic', 'arctic', 'antarctic'].filter(item => item !== activeProj);
   }
 
   return null;
