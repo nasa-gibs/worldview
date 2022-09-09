@@ -64,12 +64,15 @@ function OlMeasureTool (props) {
   // Listen for changes made to the crs value which indicates a projection change
   useEffect(() => {
     // Don't fire on the initial page load
+    console.log(olMap);
     if (init) {
       const inactiveProjections = getInactiveProjections(olMap.proj);
       // Terminate draw for both *inactive* projections
-      for (const area in inactiveProjections) {
-        terminateDraw(map.ui.proj[inactiveProjections[area]]);
-      }
+      // for (const area in inactiveProjections) {
+      Object.values(inactiveProjections).forEach((area) => {
+        terminateDraw(map.ui.proj[area]);
+        // map.ui.proj[area].removeOverlay(tooltipOverlay);
+      });
     }
   }, [crs]);
 
@@ -322,7 +325,7 @@ function OlMeasureTool (props) {
   }
 
   function getInactiveProjections(activeProj) {
-    return ['geographic', 'arctic', 'antarctic'].filter(item => item !== activeProj);
+    return ['geographic', 'arctic', 'antarctic'].filter((item) => item !== activeProj);
   }
 
   return null;
