@@ -85,16 +85,16 @@ module.exports = {
     c.useCss().click(measureBtn);
     c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       c.useCss().click(measureAreaBtn);
-      c.moveTo(null, -250, 10);
+      c.moveTo(null, -200, -30);
       c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 0, 100);
+      c.pause(300);
+      c.moveTo(null, 0, -40);
       c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 100, 0);
+      c.pause(300);
+      c.moveTo(null, 200, 0);
       c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 0, -100);
+      c.pause(300);
+      c.moveTo(null, 0, -50);
       c.mouseButtonClick(0);
       c.mouseButtonClick(0);
       c.waitForElementVisible(geoMeasurementTooltip, TIME_LIMIT);
