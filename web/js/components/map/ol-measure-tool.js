@@ -40,7 +40,6 @@ import {
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
-
 const { events } = util;
 
 let tooltipElement;
@@ -64,13 +63,22 @@ function OlMeasureTool (props) {
 
   // Listen for changes made to the crs value which indicates a projection change
   // This listens correctly but FIRES on the new olMap projection(?).
-  // This works if you simply change projections.
-  // This fails if you change projections & start a new measurement
   useEffect(() => {
     // Don't fire on the initial page load
     if (init) {
-      terminateDraw();
-      clearMeasurements();
+      // We don't want to terminate the *current* projection, we need to terminate the *previous* projection
+      // Identify the current proj & terminate draw for the other 2 projections
+      console.log(`crs: ${crs}`);
+      console.log(map)
+      console.log(map.ui.proj.geographic.interactions.array_);
+
+      let inactiveProjections = getInactiveProjections(crs);
+      console.log(JSON.stringify(inactiveProjections));
+
+      terminateDraw(map.ui.proj.geographic);
+
+
+
     }
   }, [crs]);
 
@@ -198,10 +206,10 @@ function OlMeasureTool (props) {
   /**
    * End the current measurement interaction & remove the visual representation from the map
    */
-  const terminateDraw = () => {
+  const terminateDraw = (olMaptoTerminate = olMap) => {
     tooltipElement = null;
     toggleMeasureActive(false);
-    olMap.removeInteraction(draw);
+    olMaptoTerminate.removeInteraction(draw);
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
@@ -256,8 +264,6 @@ function OlMeasureTool (props) {
       },
     });
     olMap.addInteraction(draw);
-    console.log('olMap.addInteraction(draw)');
-    console.log(draw);
     if (!vectorLayers[crs]) {
       vectorLayers[crs] = new OlVectorLayer({
         source,
@@ -323,6 +329,16 @@ function OlMeasureTool (props) {
       vectorLayers[crs].setMap(null);
       vectorLayers[crs] = null;
     }
+  }
+
+  function getInactiveProjections(activeCrs) {
+    let regionFromCrs = {
+      'EPSG:4326': 'geographic',
+      'EPSG:3413': 'arctic',
+      'EPSG:3031': 'antarctic',
+    };
+    delete regionFromCrs[activeCrs];
+    return regionFromCrs;
   }
 
   return null;
