@@ -62,15 +62,15 @@ function OlMeasureTool (props) {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
 
-  console.log("OlMeasureTool running");
-
   // Listen for changes made to the crs value which indicates a projection change
   // This listens correctly but FIRES on the new olMap projection(?).
   // This works if you simply change projections.
   // This fails if you change projections & start a new measurement
   useEffect(() => {
+    // Don't fire on the initial page load
     if (init) {
-      terminateDraw(); // Don't fire on the initial page load
+      terminateDraw();
+      clearMeasurements();
     }
   }, [crs]);
 
