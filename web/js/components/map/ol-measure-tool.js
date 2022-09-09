@@ -46,6 +46,7 @@ const { events } = util;
 let tooltipElement;
 let tooltipOverlay;
 let init = false;
+let draw;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
@@ -54,14 +55,24 @@ const sources = {};
  * A component to add measurement functionality to the OL map
  */
 function OlMeasureTool (props) {
-  let draw;
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
-
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
+
+  console.log("OlMeasureTool running");
+
+  // Listen for changes made to the crs value which indicates a projection change
+  // This listens correctly but FIRES on the new olMap projection(?).
+  // This works if you simply change projections.
+  // This fails if you change projections & start a new measurement
+  useEffect(() => {
+    if (init) {
+      terminateDraw(); // Don't fire on the initial page load
+    }
+  }, [crs]);
 
   useEffect(() => {
     if (!init) {
@@ -184,7 +195,10 @@ function OlMeasureTool (props) {
     ), overlay.getElement());
   };
 
-  const terminateDraw = (geom) => {
+  /**
+   * End the current measurement interaction & remove the visual representation from the map
+   */
+  const terminateDraw = () => {
     tooltipElement = null;
     toggleMeasureActive(false);
     olMap.removeInteraction(draw);
@@ -242,6 +256,8 @@ function OlMeasureTool (props) {
       },
     });
     olMap.addInteraction(draw);
+    console.log('olMap.addInteraction(draw)');
+    console.log(draw);
     if (!vectorLayers[crs]) {
       vectorLayers[crs] = new OlVectorLayer({
         source,
@@ -263,6 +279,7 @@ function OlMeasureTool (props) {
     draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
     rightClickListener = olMap.on('contextmenu', (evt) => {
+      console.log('rightClickListener');
       evt.preventDefault();
       terminateDraw();
       olMap.removeOverlay(tooltipOverlay);
