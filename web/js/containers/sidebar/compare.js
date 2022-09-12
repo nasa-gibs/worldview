@@ -22,11 +22,10 @@ const CompareCase = (props) => {
 
   const outerClass = 'layer-container sidebar-panel';
   const tabClasses = 'ab-tab';
-  const mobileSidebarPanelStyle = { height: '96%' };
 
   return (
     <div className={isActive ? '' : 'hidden '}>
-      <div className={outerClass} style={isMobile ? mobileSidebarPanelStyle : null}>
+      <div className={outerClass}>
         <div className="ab-tabs-case">
           <Nav tabs>
             <NavItem>

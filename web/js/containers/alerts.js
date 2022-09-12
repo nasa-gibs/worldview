@@ -173,7 +173,7 @@ const mapStateToProps = (state) => {
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
-    isSmall: screenSize.screenWidth < 768,
+    isSmall: screenSize.screenWidth < screenSize.breakpoints.small,
     isMobile: screenSize.isMobileDevice,
     isAnimationActive: animation.isActive,
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,

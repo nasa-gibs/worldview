@@ -28,7 +28,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import Cache from 'cachai';
 import PQueue from 'p-queue/dist';
-import { CALCULATE_SCREEN_SIZE } from '../modules/screen-size/constants';
+import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import { fly, saveRotation } from './util';
@@ -210,7 +210,7 @@ export default function mapui(models, config, store) {
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case CALCULATE_SCREEN_SIZE:
+      case SET_SCREEN_INFO:
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
