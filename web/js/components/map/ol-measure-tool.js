@@ -40,7 +40,6 @@ import {
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
-
 const { events } = util;
 
 let tooltipElement;
@@ -49,6 +48,7 @@ let init = false;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
+let draw;
 
 /**
  * A component to add measurement functionality to the OL map
@@ -57,13 +57,12 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
-  let draw;
 
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
+  const previousCrs = usePrevious(crs);
 
-  const prevCrs = usePrevious(crs);
   function usePrevious(data) {
     const ref = useRef();
     useEffect(() => {
@@ -72,20 +71,17 @@ function OlMeasureTool (props) {
     return ref.current;
   }
 
-  // Listen for changes made to the crs value which indicates a projection change
+  // Listen for a projection change
   useEffect(() => {
-    // Don't fire on the initial page load
     if (olMap != null) {
-      const inactiveProjections = getInactiveProjections(olMap.proj);
-      console.log(`clearing ${prevCrs}`);
       // Terminate draw for the *previous* projection
-      Object.values(inactiveProjections).forEach((area) => {
-        console.log(area);
-        terminateDraw(map.ui.proj[area]);
-        if (document.getElementsByClassName('tooltip-active').length > 0) {
-          map.ui.proj[area].removeOverlay(tooltipOverlay);
-        }
-      });
+      const geographyToTerminate = getProjectionFromCrs(previousCrs);
+      terminateDraw(map.ui.proj[geographyToTerminate]);
+
+      // Delete stray tooltips
+      if (document.getElementsByClassName('tooltip-active').length > 0) {
+        map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
+      }
     }
   }, [crs]);
 
@@ -337,8 +333,13 @@ function OlMeasureTool (props) {
     }
   }
 
-  function getInactiveProjections(activeProj) {
-    return ['geographic', 'arctic', 'antarctic'].filter((item) => item !== activeProj);
+  function getProjectionFromCrs(crs) {
+    const regionFromCrs = {
+      'EPSG:4326': 'geographic',
+      'EPSG:3413': 'arctic',
+      'EPSG:3031': 'antarctic',
+    };
+    return regionFromCrs[crs];
   }
 
   return null;
