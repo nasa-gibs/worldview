@@ -1,7 +1,7 @@
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import {
   SET_SCREEN_INFO,
 } from './constants';
-import { isMobileOnly, isTablet } from 'react-device-detect';
 
 export default function setScreenInfo() {
   const screenHeight = window.innerHeight;

@@ -252,8 +252,8 @@ class PaletteLegend extends React.Component {
       width: '100%',
       maxWidth: '100%',
       marginRight: '0',
-      marginLeft: '0'
-    }
+      marginLeft: '0',
+    };
     return (
       <div
         className={

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
 } from 'reactstrap';
-import { isMobileOnly, isTablet } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';

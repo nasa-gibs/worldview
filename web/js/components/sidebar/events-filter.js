@@ -25,8 +25,6 @@ function EventFilterModalBody (props) {
     showAll,
     parentId,
     isPolarProj,
-    isMobile,
-    screenHeight,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -179,7 +177,9 @@ EventFilterModalBody.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { events, proj, config, screenSize } = state;
+  const {
+    events, proj, config, screenSize,
+  } = state;
   const {
     selectedCategories, selectedDates, showAll,
   } = events;

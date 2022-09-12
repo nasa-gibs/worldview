@@ -33,7 +33,6 @@ function LayersContainer (props) {
     reorderOverlayGroups,
     toggleCollapse,
     toggleOverlayGroups,
-    isMobile,
   } = props;
 
   const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);

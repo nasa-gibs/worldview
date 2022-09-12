@@ -11,13 +11,13 @@ function SearchLayers(props) {
     smallView,
     isMobile,
     width,
-    screenSize,
+    mediumBreakpoint,
     selectedLayer,
     showMobileFacets,
     results,
   } = props;
 
-  const showFacets = width > screenSize.breakpoints.medium || showMobileFacets;
+  const showFacets = width > mediumBreakpoint || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
@@ -42,6 +42,7 @@ function SearchLayers(props) {
 SearchLayers.propTypes = {
   width: PropTypes.number,
   isMobile: PropTypes.bool,
+  mediumBreakpoint: PropTypes.number,
   results: PropTypes.array,
   selectedLayer: PropTypes.object,
   smallView: PropTypes.bool,
@@ -57,6 +58,7 @@ function mapStateToProps(state) {
     smallView: screenSize.screenWidth < screenSize.breakpoints.small,
     isMobile: screenSize.isMobileDevice,
     width: screenSize.screenWidth,
+    mediumBreakpoint: screenSize.breakpoints.medium,
     showMobileFacets,
     selectedLayer,
     screenSize,

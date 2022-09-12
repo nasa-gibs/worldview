@@ -1,4 +1,3 @@
-import { isMobileOnly, isTablet } from 'react-device-detect';
 import { SET_SCREEN_INFO } from './constants';
 
 export const initialState = {
@@ -15,7 +14,7 @@ export const getInitialState = () => ({
     small: 768,
     medium: 992,
     large: 1200,
-  }
+  },
 });
 
 export const screenSizeReducer = (state = initialState, action) => {

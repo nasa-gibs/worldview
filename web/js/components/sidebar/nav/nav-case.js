@@ -69,13 +69,13 @@ function NavCase (props) {
   );
   const sidebarCollapseMobile = {
     height: '48px',
-    width: '45px'
-  }
+    width: '45px',
+  };
   const collapseIconMobile = {
     height: '40px',
     width: '40px',
-    color: '#fff'
-  }
+    color: '#fff',
+  };
 
   return (
     <Nav tabs className="main-nav">
@@ -97,11 +97,12 @@ function NavCase (props) {
       {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
 
-      <div id="toggleIconHolder"
-           className="sidebar-collapse"
-           onClick={toggleSidebar}
-           style={isMobile ? sidebarCollapseMobile : null}
-           >
+      <div
+        id="toggleIconHolder"
+        className="sidebar-collapse"
+        onClick={toggleSidebar}
+        style={isMobile ? sidebarCollapseMobile : null}
+      >
         <FontAwesomeIcon
           className="collapse-icon"
           icon="caret-up"
