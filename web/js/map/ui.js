@@ -809,7 +809,7 @@ export default function mapui(models, config, store) {
   }
 
   /**
-   * Initiates the adding of a layer or Graticule
+   * Initiates the adding of a layer
    * @param {object} def - layer Specs
    * @returns {void}
    */
