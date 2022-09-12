@@ -10,17 +10,12 @@ export const initialState = {
 };
 
 export const getInitialState = () => ({
-  screenHeight: window.innerHeight,
-  screenWidth: window.innerWidth,
-  isMobileDevice: isMobileOnly || isTablet || window.innerWidth < 768,
-  orientation: window.innerHeight > window.innerWidth ? 'portrait' : 'landscape',
   breakpoints: {
     extraSmall: 480,
     small: 768,
     medium: 992,
     large: 1200,
   }
-
 });
 
 export const screenSizeReducer = (state = initialState, action) => {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
 } from 'reactstrap';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
@@ -126,7 +127,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
-        modalClassName: 'custom-layer-dialog light',
+        modalClassName: isMobileOnly ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light',
         backdrop: true,
         CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',

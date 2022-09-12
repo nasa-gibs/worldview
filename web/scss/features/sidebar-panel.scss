@@ -91,17 +91,6 @@
       color: #333;
     }
   }
-
-  @media (max-width: $mobile-max-width) {
-    height: 48px;
-    width: 45px;
-
-    svg.collapse-icon {
-      height: 40px;
-      width: 40px;
-      color: #fff;
-    }
-  }
 }
 
 .sidebar-panel {
