@@ -66,16 +66,18 @@ function OlMeasureTool (props) {
   // Listen for changes made to the crs value which indicates a projection change
   useEffect(() => {
     // Don't fire on the initial page load
-    // console.log(map);
     if (init) {
       const inactiveProjections = getInactiveProjections(olMap.proj);
+
       // Terminate draw for both *inactive* projections
       Object.values(inactiveProjections).forEach((area) => {
         terminateDraw(map.ui.proj[area]);
-        // map.ui.proj[area].removeOverlay(tooltipOverlay);
+        if (document.getElementsByClassName('tooltip-active').length > 0) {
+          map.ui.proj[area].removeOverlay(tooltipOverlay);
+        }
       });
     }
-  }, [crs])
+  }, [crs]);
 
   useEffect(() => {
     if (!init) {
@@ -202,8 +204,6 @@ function OlMeasureTool (props) {
    * End the current measurement interaction & remove the visual representation from the map
    */
   const terminateDraw = (olMaptoTerminate = olMap) => {
-    console.log('terminateDraw');
-    // console.log(olMaptoTerminate);
     tooltipElement = null;
     toggleMeasureActive(false);
     olMaptoTerminate.removeInteraction(draw);
@@ -211,6 +211,7 @@ function OlMeasureTool (props) {
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
     events.trigger(MAP_ENABLE_CLICK_ZOOM);
+    draw = null;
   };
 
   const drawStartCallback = ({ feature }) => {
