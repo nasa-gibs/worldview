@@ -68,7 +68,7 @@ function OlMeasureTool (props) {
     const ref = useRef();
     useEffect(() => {
       ref.current = data;
-    },[data]);
+    }, [data]);
     return ref.current;
   }
 
