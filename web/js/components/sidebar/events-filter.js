@@ -25,6 +25,8 @@ function EventFilterModalBody (props) {
     showAll,
     parentId,
     isPolarProj,
+    isMobile,
+    screenHeight,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -80,8 +82,13 @@ function EventFilterModalBody (props) {
   const minDate = new Date('2000-01-01');
   const maxDate = util.now();
 
+  const eventsFilterMobileStyle = {
+    width: '100% !important',
+    maxHeight: `${screenHeight}`
+  }
+
   return (
-    <div className="events-filter">
+    <div className="events-filter" style={ isMobile ? eventsFilterMobileStyle : null }>
       <DateRangeSelector
         idSuffix="event-filter"
         startDate={startDate}
@@ -177,7 +184,7 @@ EventFilterModalBody.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { events, proj, config } = state;
+  const { events, proj, config, screenSize } = state;
   const {
     selectedCategories, selectedDates, showAll,
   } = events;
@@ -191,6 +198,8 @@ const mapStateToProps = (state) => {
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
     showAll,
+    isMobile: screenSize.isMobileDevice,
+    screenHeight: screenSize.screenHeight,
   };
 };
 
