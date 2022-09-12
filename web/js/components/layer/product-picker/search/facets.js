@@ -15,7 +15,8 @@ import { getSelectedDate } from '../../../../modules/date/selectors';
 function Facets(props) {
   const {
     isMobile,
-    screenSize,
+    screenWidth,
+    breakpoints,
     facets,
     filters,
     removeFilter,
@@ -26,7 +27,7 @@ function Facets(props) {
     toggleCollapseFacet,
   } = props;
 
-  const showFacets = (screenSize.screenWidth > 768 && results.length) || showMobileFacets;
+  const showFacets = (screenWidth > breakpoints.small && results.length) || showMobileFacets;
 
   return !showFacets ? null : (
     <div className="facet-container">
@@ -67,11 +68,12 @@ function Facets(props) {
 }
 
 Facets.propTypes = {
-  screenSize: PropTypes.object,
   collapsedFacets: PropTypes.object,
   facets: PropTypes.object,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
+  breakpoints: PropTypes.object,
+  screenWidth: PropTypes.number,
   removeFilter: PropTypes.func,
   results: PropTypes.array,
   showMobileFacets: PropTypes.bool,
@@ -96,6 +98,8 @@ function mapStateToProps(state) {
     collapsedFacets,
     selectedDate: getSelectedDate(state),
     isMobile: screenSize.isMobileDevice,
+    screenWidth: screenSize.screenWidth,
+    breakpoints: screenSize.breakpoints,
     showMobileFacets,
     screenSize,
   };

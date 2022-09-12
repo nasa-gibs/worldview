@@ -53,7 +53,7 @@ function mapStateToProps(state) {
 
   return {
     layer: selectedLayer,
-    smallView: screenSize.screenWidth < 1024,
+    smallView: screenSize.screenWidth < screenSize.breakpoints.small,
     isMobile: screenSize.isMobileDevice,
     width: screenSize.screenWidth,
     showMobileFacets,
