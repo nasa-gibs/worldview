@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import { isMobileOnly, isTablet } from 'react-device-detect';
 
 // Utils
 import util from './util/util';
@@ -86,11 +85,7 @@ class App extends React.Component {
 
   getScreenInfo = () => {
     const { setScreenInfoAction } = this.props;
-    const screenHeight = window.innerHeight;
-    const screenWidth = window.innerWidth;
-    const isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
-    const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
-    setScreenInfoAction(screenHeight, screenWidth, isMobileDevice, orientation);
+    setScreenInfoAction();
   }
 
   onload() {
@@ -196,8 +191,8 @@ const mapDispatchToProps = (dispatch) => ({
   keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
     dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
   },
-  setScreenInfoAction: (screenHeight, screenWidth, isMobileDevice, orientation) => {
-    dispatch(setScreenInfo(screenHeight, screenWidth, isMobileDevice, orientation));
+  setScreenInfoAction: () => {
+    dispatch(setScreenInfo());
   },
 });
 
