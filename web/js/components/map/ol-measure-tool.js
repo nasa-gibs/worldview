@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -49,7 +49,6 @@ let init = false;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
-let draw;
 
 /**
  * A component to add measurement functionality to the OL map
@@ -58,19 +57,30 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
+  let draw;
 
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
 
+  const prevCrs = usePrevious(crs);
+  function usePrevious(data) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = data;
+    },[data]);
+    return ref.current;
+  }
+
   // Listen for changes made to the crs value which indicates a projection change
   useEffect(() => {
     // Don't fire on the initial page load
-    if (init) {
+    if (olMap != null) {
       const inactiveProjections = getInactiveProjections(olMap.proj);
-
-      // Terminate draw for both *inactive* projections
+      console.log(`clearing ${prevCrs}`);
+      // Terminate draw for the *previous* projection
       Object.values(inactiveProjections).forEach((area) => {
+        console.log(area);
         terminateDraw(map.ui.proj[area]);
         if (document.getElementsByClassName('tooltip-active').length > 0) {
           map.ui.proj[area].removeOverlay(tooltipOverlay);
@@ -203,15 +213,14 @@ function OlMeasureTool (props) {
   /**
    * End the current measurement interaction & remove the visual representation from the map
    */
-  const terminateDraw = (olMaptoTerminate = olMap) => {
+  const terminateDraw = (olMapToTerminate = olMap) => {
     tooltipElement = null;
     toggleMeasureActive(false);
-    olMaptoTerminate.removeInteraction(draw);
+    olMapToTerminate.removeInteraction(draw);
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
     events.trigger(MAP_ENABLE_CLICK_ZOOM);
-    draw = null;
   };
 
   const drawStartCallback = ({ feature }) => {
