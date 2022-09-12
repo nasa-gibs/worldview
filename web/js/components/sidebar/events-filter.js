@@ -82,13 +82,8 @@ function EventFilterModalBody (props) {
   const minDate = new Date('2000-01-01');
   const maxDate = util.now();
 
-  const eventsFilterMobileStyle = {
-    width: '100% !important',
-    maxHeight: `${screenHeight}`
-  }
-
   return (
-    <div className="events-filter" style={ isMobile ? eventsFilterMobileStyle : null }>
+    <div className="events-filter">
       <DateRangeSelector
         idSuffix="event-filter"
         startDate={startDate}

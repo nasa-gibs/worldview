@@ -6,6 +6,7 @@ import {
   Button,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import Event from '../../components/sidebar/event';
 import EventIcon from '../../components/sidebar/event-icon';
 import EventFilterModalBody from '../../components/sidebar/events-filter';
@@ -146,7 +147,7 @@ const mapDispatchToProps = (dispatch) => ({
       backdrop: false,
       bodyComponent: EventFilterModalBody,
       footer: true,
-      modalClassName: 'sidebar-modal event-filter-modal',
+      modalClassName: isMobileOnly || isTablet ? 'sidebar-modal-mobile event-filter-modal-mobile' : 'sidebar-modal event-filter-modal',
       timeout: 150,
     }));
   },

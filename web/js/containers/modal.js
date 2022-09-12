@@ -77,8 +77,7 @@ class ModalContainer extends Component {
     const { mobileFullScreen } = customProps;
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
-    const margin = isMobile && mobileFullScreen ? 0 : '0.5rem auto';
-    console.log("mobileFullScreen", mobileFullScreen, customProps)
+    const margin = isMobile ? 0 : '0.5rem auto';
     return {
       left: offsetLeft,
       right: offsetRight,
