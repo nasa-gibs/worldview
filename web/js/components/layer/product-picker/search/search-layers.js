@@ -11,12 +11,13 @@ function SearchLayers(props) {
     smallView,
     isMobile,
     width,
+    screenSize,
     selectedLayer,
     showMobileFacets,
     results,
   } = props;
 
-  const showFacets = width > 768 || showMobileFacets;
+  const showFacets = width > screenSize.breakpoints.medium || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
@@ -27,7 +28,7 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          { !selectedLayer && smallView ? null : !!results.length && (
+          {!selectedLayer && smallView ? null : !!results.length && (
             <div className="layer-detail-container layers-all search">
               <LayerMetadataDetail layer={selectedLayer} />
             </div>
@@ -39,7 +40,7 @@ function SearchLayers(props) {
 }
 
 SearchLayers.propTypes = {
-  width: PropTypes.object,
+  width: PropTypes.number,
   isMobile: PropTypes.bool,
   results: PropTypes.array,
   selectedLayer: PropTypes.object,
