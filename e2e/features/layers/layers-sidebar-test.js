@@ -198,6 +198,9 @@ module.exports = {
   },
 
   'Re-ordering groups, then disabling groups keeps individual layer order': (c) => {
+    if (c.options.desiredCapabilities.browserName == 'firefox') {
+      return;
+    }
     c.url(c.globals.url + twoGroupsQueryString);
     c.waitForElementVisible(aodGroup, TIME_LIMIT);
     c.perform(function() {
