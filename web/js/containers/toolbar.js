@@ -189,18 +189,18 @@ class toolbarContainer extends Component {
     } = this.props;
     const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
-    const mobileWvToolbarButtonStyle = {
+    const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
       height: '44px',
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
-    };
+    } : null;
     return !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        style={isMobile ? mobileWvToolbarButtonStyle : null}
+        style={mobileWvToolbarButtonStyle}
         onClick={() => openModal(
           'TOOLBAR_SHARE',
           CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
@@ -227,12 +227,12 @@ class toolbarContainer extends Component {
       'TOOLBAR_PROJECTION',
       CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
     );
-    const mobileWvToolbarButtonStyle = {
+    const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
       height: '44px',
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
-    };
+    } : null;
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
@@ -240,7 +240,7 @@ class toolbarContainer extends Component {
         aria-label={labelText}
         onClick={onClick}
         disabled={isAnimatingToEvent}
-        style={isMobile ? mobileWvToolbarButtonStyle : null}
+        style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} />
@@ -275,12 +275,12 @@ class toolbarContainer extends Component {
       : () => toggleShowLocationSearch();
 
     const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed) && !isDistractionFreeModeActive;
-    const mobileWvToolbarButtonStyle = {
+    const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
       height: '44px',
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
-    };
+    } : null;
     return showButton && (
       <div id="location-search-wrapper">
         <Button
@@ -288,7 +288,7 @@ class toolbarContainer extends Component {
           className="wv-toolbar-button"
           aria-label={labelText}
           onClick={handleButtonClick}
-          style={isMobile ? mobileWvToolbarButtonStyle : null}
+          style={mobileWvToolbarButtonStyle}
         >
           {this.renderTooltip(buttonId, labelText)}
           <FontAwesomeIcon icon="search-location" size={faSize} />
@@ -311,9 +311,9 @@ class toolbarContainer extends Component {
       : !isImageDownloadActive
         ? 'You must exit data download mode to use the snapshot feature'
         : 'Take a snapshot';
-    const mobileWVImageButtonStyle = {
+    const mobileWVImageButtonStyle = isMobile ? {
       display: 'none',
-    };
+    } : null;
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
@@ -328,7 +328,7 @@ class toolbarContainer extends Component {
           disabled={!isImageDownloadActive}
           aria-label={labelText}
           onClick={this.openImageDownload}
-          style={isMobile ? mobileWVImageButtonStyle : null}
+          style={mobileWVImageButtonStyle}
         >
           <FontAwesomeIcon icon="camera" size={faSize} />
         </Button>
@@ -351,12 +351,12 @@ class toolbarContainer extends Component {
       : ' wv-status-hide';
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
-    const mobileWvToolbarButtonStyle = {
+    const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
       height: '44px',
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
-    };
+    } : null;
 
     return !isDistractionFreeModeActive && (
       <Button
@@ -365,7 +365,7 @@ class toolbarContainer extends Component {
         className={`wv-toolbar-button${notificationClass}`}
         onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
         data-content={notificationContentNumber}
-        style={isMobile ? mobileWvToolbarButtonStyle : null}
+        style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="info-circle" size={faSize} />

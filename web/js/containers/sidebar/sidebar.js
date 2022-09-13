@@ -202,7 +202,7 @@ class Sidebar extends React.Component {
     const mobileImgURL = '../../../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
     const desktopImgURL = '../../../brand/images/wv-logo.svg?v=@BUILD_NONCE@';
 
-    const mobileStyle = {
+    const sidebarStyle = isMobile ? {
       background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
       display: 'block',
       height: '42px',
@@ -213,10 +213,8 @@ class Sidebar extends React.Component {
       borderRadius: '5px',
       border: '1px solid #333',
       position: 'absolute',
-
-    };
-
-    const desktopStyle = {
+    } :
+    {
       background: `url(${desktopImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
       display: 'block',
       width: '286px',
@@ -226,7 +224,9 @@ class Sidebar extends React.Component {
       top: '10px',
       left: '10px',
       border: '1px solid #333',
-      borderBottom: '1px solid transparent',
+      borderBottom: 'solid',
+      borderBottomWidth: '1px',
+      borderBottomStyle: 'transparent',
       borderTopRightRadius: '5px',
       borderTopLeftRadius: '5px',
       boxSizing: 'border-box',
@@ -238,7 +238,7 @@ class Sidebar extends React.Component {
         title={WVLogoTitle}
         id="wv-logo"
         className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-        style={isMobile ? mobileStyle : desktopStyle}
+        style={sidebarStyle}
         onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
       />
     );
@@ -278,7 +278,14 @@ class Sidebar extends React.Component {
         ? '95vh'
         : `${screenHeight}px`;
     const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
-    const mobileProductsHolderStyle = {
+
+    const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile ? {
+      position: 'static',
+    }: null;
+
+    const productsHolderStyle = isDistractionFreeModeActive ? {
+      display: 'none',
+    } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
       cssFloat: 'left',
       left: '0',
       minWidth: '238px',
@@ -291,20 +298,13 @@ class Sidebar extends React.Component {
       zIndex: 1000,
       maxHeight: `${maxHeight}`,
       display: `{${displayStyle}} !important`,
-    };
-    const desktopProductsHolderStyle = {
+    } : {
       maxHeight: `${maxHeight}`,
-    };
-    const distractionFreeStyle = {
-      display: 'none',
-    };
-    const mobileWVSidebarStyle = {
-      position: 'static',
-    };
+    }
 
     return (
       <ErrorBoundary>
-        <section id="wv-sidebar" style={isMobile && !isEmbedModeActive ? mobileWVSidebarStyle : null}>
+        <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {this.renderSidebarLogo()}
           <>
             {!isDistractionFreeModeActive && isCollapsed && (
@@ -318,7 +318,7 @@ class Sidebar extends React.Component {
             <div
               id="products-holder"
               className="products-holder-case"
-              style={isDistractionFreeModeActive ? distractionFreeStyle : isMobile ? mobileProductsHolderStyle : desktopProductsHolderStyle}
+              style={productsHolderStyle}
             >
               {!isCollapsed && (
                 <>

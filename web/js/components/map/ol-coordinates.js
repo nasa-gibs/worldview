@@ -129,15 +129,15 @@ class OlCoordinates extends React.Component {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
     const { show, isMobile } = this.props;
-    const mobileStyle = {
+    const coordContainerStyle = isMobile ? {
       display: 'none',
-    };
-    const desktopStyle = {
+    } :
+    {
       width,
     };
 
     return (
-      <div id="ol-coords-case" className="wv-coords-container" style={isMobile ? mobileStyle : desktopStyle}>
+      <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
         {hasMouse && show && (
           <>
             <Coordinates

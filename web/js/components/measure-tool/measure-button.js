@@ -60,13 +60,13 @@ class MeasureButton extends React.Component {
     const message = isTouchDevice ? mobileHelpMsg : helpMsg;
     const buttonId = 'wv-measure-button';
     const labelText = 'Measure distances & areas';
-    const mobileMeasureButtonStyle = {
+    const mobileMeasureButtonStyle = isMobile ? {
       bottom: '20px',
       fontSize: '14.3px',
       height: '44px',
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
-    };
+    } : null;
 
     return (
       <>
@@ -89,7 +89,7 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
           disabled={isActive}
-          style={isMobile ? mobileMeasureButtonStyle : null}
+          style={mobileMeasureButtonStyle}
         >
           <UncontrolledTooltip
             placement="top"
