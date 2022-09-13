@@ -106,7 +106,7 @@ describe('granule layer builder', () => {
       def: granuleLayerDef,
     };
     const granuleLayer = await createGranuleLayer(granuleLayerDef, attributes, options);
-    const filteredDates = granuleLayer.wv.filteredGranules.map(({ date }) => date);
+    const filteredDates = granuleLayer.wv.visibleGranules.map(({ date }) => date);
 
     expect(granuleLayer.get('granuleGroup')).toEqual(true);
     expect(granuleLayer.wv.granuleDates).toEqual(expectedDates);

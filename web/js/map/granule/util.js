@@ -24,14 +24,12 @@ import util from '../../util/util';
  */
 export const datelineShiftGranules = (granules, currentDate, crs) => {
   const currentDayDate = new Date(currentDate).getUTCDate();
-  const datelineShiftNeeded = () => {
+  const datelineShiftNeeded = (() => {
     if (crs !== 'EPSG:4326') return false;
     const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
-    const someCross = granules.some(({ polygon }) => polygon.some(([lon]) => lon > 180 || lon < -180));
-    return someCross && !sameDays;
-  };
-
-  return !datelineShiftNeeded() ? granules : granules.map((granule) => {
+    return !sameDays;
+  })();
+  return !datelineShiftNeeded ? granules : granules.map((granule) => {
     const { date, polygon } = granule;
     const sameDay = currentDayDate === new Date(date).getUTCDate();
     const westSide = polygon.some(([lon]) => lon < 0);
@@ -92,13 +90,13 @@ export const isWithinDateRange = (date, startDate, endDate) => (startDate && end
 
 export const getGranuleFootprints = (layer) => {
   const {
-    def, filteredGranules, granuleDates,
+    def, visibleGranules, granuleDates,
   } = layer.wv;
   const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
 
-  return filteredGranules.reduce((dates, { date, polygon }) => {
+  return visibleGranules.reduce((dates, { date, polygon }) => {
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       dates[date] = polygon;

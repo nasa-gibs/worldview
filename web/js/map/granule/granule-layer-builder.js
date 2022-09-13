@@ -67,17 +67,23 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {data} CMR data
    * @param {id} layer id
   */
-  const addGranuleCMRDateData = (data, id, dateRanges) => {
+  const addGranuleCMRDateData = (data, conceptId, dateRanges) => {
     const { proj: { selected: { crs } } } = store.getState();
-    if (!CMRDataStore[id]) {
-      CMRDataStore[id] = {};
-    }
-    Object.values(data).forEach((entry) => {
+    CMRDataStore[conceptId] = CMRDataStore[conceptId] || [];
+    data.forEach((entry) => {
       const date = toISOStringSeconds(entry.time_start);
       const hasImagery = find(dateRanges, ({ startDate, endDate }) => isWithinDateRange(new Date(date), startDate, endDate));
-      if (hasImagery && entry.day_night_flag === dayNightFilter) {
-        CMRDataStore[id][date] = transformGranuleData(entry, date, crs);
+      const existsForTime = find(CMRDataStore[conceptId], (g) => g.date === date);
+      if (!hasImagery || existsForTime) {
+        return;
       }
+      const transformedGranule = transformGranuleData(entry, date, crs);
+      CMRDataStore[conceptId].push(transformedGranule);
+    });
+    return CMRDataStore[conceptId].sort((a, b) => {
+      const dateA = new Date(a).valueOf();
+      const dateB = new Date(b).valueOf();
+      return dateB - dateA;
     });
   };
 
@@ -93,14 +99,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
     const getGranulesUrl = getGranulesUrlSelector(store.getState());
 
-    const shortName = 'VJ102MOD'; // TODO: USE GRANULE LAYER ID
-    const params = {
-      shortName,
-      startDate: startQueryDate.toISOString(),
-      endDate: endQueryDate.toISOString(),
-      day_night_flag: dayNightFilter,
-      pageSize: 1000,
-    };
+    // TODO: USE GRANULE LAYER conceptId
+    const shortName = 'VJ102MOD';
+    const conceptId = shortName;
 
     // update range/extend range checks and new dates (if applicable)
     const CMRDateStoreForLayer = CMRDateRanges[activeString][id];
@@ -128,6 +129,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       showLoading();
       let data;
       try {
+        const params = {
+          // conceptId,
+          shortName,
+          startDate: startQueryDate.toISOString(),
+          endDate: endQueryDate.toISOString(),
+          dayNight: dayNightFilter,
+          pageSize: 1000,
+        };
         const response = await fetch(getGranulesUrl(params), CMR_AJAX_OPTIONS);
         data = await response.json();
         data = data.feed.entry;
@@ -147,37 +156,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       } finally {
         hideLoading();
       }
-
-      addGranuleCMRDateData(data, shortName, dateRanges);
-      return getGranules(shortName, date, startQueryDate);
+      console.log('requested granules');
+      return addGranuleCMRDateData(data, conceptId, dateRanges);
     }
     // user previously queried CMR granule dates
-    return getGranules(shortName, date, startQueryDate);
-  };
-
-  /**
-   * Process CMR granule data into granule date objects
-   * @param {String} layerId
-   * @param {Object} selectedDate
-   * @param {Object} startQueryDate
-   * @returns {Array} reducedGranuleDates
-  */
-  const getGranules = (layerId, selectedDate, startQueryDate, dateRanges) => {
-    const selected = toISOStringSeconds(selectedDate);
-    const queryStart = toISOStringSeconds(startQueryDate);
-    const granuleDates = CMRDataStore[layerId];
-    const granuleDateKeys = granuleDates ? Object.keys(granuleDates) : [];
-    let hitSelectedDate;
-
-    return granuleDateKeys.reduce((granuleDateObjects, date) => {
-      const reachedStart = date === queryStart || new Date(date) > startQueryDate;
-      if (!reachedStart || hitSelectedDate) {
-        return granuleDateObjects;
-      }
-      hitSelectedDate = date === selected;
-      granuleDateObjects.push({ ...granuleDates[date] });
-      return granuleDateObjects;
-    }, []);
+    return CMRDataStore[conceptId];
   };
 
   /**
@@ -230,8 +213,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { id } = def;
     const { date, group } = attributes;
     const granuleAttributes = await getGranuleAttributes(def, options);
-    const { filteredGranules } = granuleAttributes;
-    const granules = datelineShiftGranules(filteredGranules, date, crs);
+    const { visibleGranules } = granuleAttributes;
+    const granules = datelineShiftGranules(visibleGranules, date, crs);
     const tileLayers = createGranuleTileLayers(granules, def, attributes);
     const layer = new OlLayerGroup({
       layers: tileLayers,
@@ -243,7 +226,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     layer.wv = {
       ...attributes,
       ...granuleAttributes,
-      filteredGranules: granules,
+      visibleGranules: granules,
     };
 
     // Don't update during animation due to the performance hit
@@ -269,13 +252,13 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const filteredGranules = filterGranules(availableGranules, count, date);
-    const transformedGranules = transformGranulesForProj(filteredGranules, crs);
+    const visibleGranules = filterGranules(availableGranules, count, date);
+    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
 
     return {
       count,
       granuleDates: transformedGranules.map((g) => g.date),
-      filteredGranules: transformedGranules,
+      visibleGranules: transformedGranules,
     };
   };
 
