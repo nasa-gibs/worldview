@@ -71,10 +71,9 @@ function OlMeasureTool (props) {
     return ref.current;
   }
 
-  // Listen for a projection change
+  // Monitor for projection change & terminate any incomplete measurement from the previous projection
   useEffect(() => {
     if (olMap != null) {
-      // Terminate draw for the *previous* projection
       const regionFromCrs = {
         'EPSG:4326': 'geographic',
         'EPSG:3413': 'arctic',
@@ -84,7 +83,6 @@ function OlMeasureTool (props) {
       const geographyToTerminate = regionFromCrs[crs];
       terminateDraw(map.ui.proj[geographyToTerminate]);
 
-      // Delete stray tooltips
       if (document.getElementsByClassName('tooltip-active').length > 0) {
         map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
       }
