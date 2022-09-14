@@ -75,7 +75,13 @@ function OlMeasureTool (props) {
   useEffect(() => {
     if (olMap != null) {
       // Terminate draw for the *previous* projection
-      const geographyToTerminate = getProjectionFromCrs(previousCrs);
+      const regionFromCrs = {
+        'EPSG:4326': 'geographic',
+        'EPSG:3413': 'arctic',
+        'EPSG:3031': 'antarctic',
+      };
+
+      const geographyToTerminate = regionFromCrs[crs];
       terminateDraw(map.ui.proj[geographyToTerminate]);
 
       // Delete stray tooltips
@@ -331,15 +337,6 @@ function OlMeasureTool (props) {
       vectorLayers[crs].setMap(null);
       vectorLayers[crs] = null;
     }
-  }
-
-  function getProjectionFromCrs(crs) {
-    const regionFromCrs = {
-      'EPSG:4326': 'geographic',
-      'EPSG:3413': 'arctic',
-      'EPSG:3031': 'antarctic',
-    };
-    return regionFromCrs[crs];
   }
 
   return null;
