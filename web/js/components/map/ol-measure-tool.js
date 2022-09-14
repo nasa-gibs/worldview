@@ -80,7 +80,7 @@ function OlMeasureTool (props) {
         'EPSG:3031': 'antarctic',
       };
 
-      const geographyToTerminate = regionFromCrs[crs];
+      const geographyToTerminate = regionFromCrs[previousCrs];
       terminateDraw(map.ui.proj[geographyToTerminate]);
 
       if (document.getElementsByClassName('tooltip-active').length > 0) {
