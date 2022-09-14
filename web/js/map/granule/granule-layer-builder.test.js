@@ -11,7 +11,7 @@ import { OPEN_BASIC } from '../../modules/modal/constants';
 
 
 const mockBaseCmrApi = 'mock.cmr.api/';
-const queryString = '?shortName=VJ102MOD&temporal=2019-09-23T00%3A00%3A00.000Z%2C2019-09-25T00%3A00%3A00.000Z&pageSize=2000';
+const queryString = '?shortName=VJ102MOD&day_night_flag=DAY&temporal=2019-09-23T00%3A00%3A00.000Z%2C2019-09-25T00%3A00%3A00.000Z&pageSize=1000';
 const cmrGranules = require('../../../mock/cmr_granules.json');
 
 fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules)

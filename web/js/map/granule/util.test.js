@@ -35,14 +35,6 @@ const singleTransformedGranule = {
 };
 
 describe('shifting dateline granules', () => {
-  it('no shift when "next" day but dateline not crossed', async () => {
-    const selectedDate = new Date('2019-09-24T00:06:00.000Z');
-    const crs = 'EPSG:4326';
-    const granules = datelineShiftGranules(mockGranules.one, selectedDate, crs);
-
-    expect(granules).toEqual(mockGranules.one);
-  });
-
   it('no shift when datline is crossed with same day', async () => {
     const selectedDate = new Date('2019-09-24T00:24:00.000Z');
     const crs = 'EPSG:4326';
@@ -51,7 +43,7 @@ describe('shifting dateline granules', () => {
     expect(granules).toEqual(mockGranules.three);
   });
 
-  it('shifts when datline is crossed and granules cross days', async () => {
+  it('shifts when granules cross days', async () => {
     const selectedDate = new Date('2019-09-24T00:12:00.000Z');
     const crs = 'EPSG:4326';
     const shiftedGranules = datelineShiftGranules(mockGranules.two, selectedDate, crs);

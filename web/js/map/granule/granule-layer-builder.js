@@ -156,7 +156,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       } finally {
         hideLoading();
       }
-      console.log('requested granules');
       return addGranuleCMRDateData(data, conceptId, dateRanges);
     }
     // user previously queried CMR granule dates
