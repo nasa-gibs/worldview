@@ -53,14 +53,22 @@ function DateLines(props) {
   };
 
   useEffect(() => {
+    if (!proj.selected.crs === 'EPSG:4326') {
+      setHideLines(true);
+    }
+  }, [proj]);
+
+  useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
       return;
     }
-    map.on('movestart', () => { setHideLines(true); });
+    map.on('movestart', () => {
+      setHideLines(true);
+    });
     map.on('moveend', updatePosition);
     return () => {
-      map.off('movestart', updatePosition);
-      map.off('moveend', updatePosition);
+      map.un('movestart', updatePosition);
+      map.un('moveend', updatePosition);
     };
   }, [mapIsRendered]);
 
@@ -103,13 +111,14 @@ const mapStateToProps = (state) => {
     proj, map, compare, settings, modal,
   } = state;
   const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
+  const isGeographic = proj.selected.crs === 'EPSG:4326';
   return {
     proj,
     map: map.ui.selected,
     date: getSelectedDate(state),
     isCompareActive: compare.active,
     mapIsRendered: map.rendered,
-    hideText: isImageDownload,
+    hideText: isImageDownload || !isGeographic,
     alwaysShow: isImageDownload || settings.alwaysShowDatelines,
   };
 };
