@@ -228,7 +228,7 @@ class SearchBox extends Component {
 
     const mobileStyle = isMobile ? {
       width: '100%',
-    }: null;
+    } : null;
     return (
       <div
         className="location-search-input-container"

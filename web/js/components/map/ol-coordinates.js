@@ -131,10 +131,10 @@ class OlCoordinates extends React.Component {
     const { show, isMobile } = this.props;
     const coordContainerStyle = isMobile ? {
       display: 'none',
-    } :
-    {
-      width,
-    };
+    }
+      : {
+        width,
+      };
 
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>

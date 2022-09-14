@@ -17,7 +17,7 @@ function SearchLayers(props) {
     results,
   } = props;
 
-  const showFacets = width > mediumBreakpoint || showMobileFacets;
+  const showFacets = (width > mediumBreakpoint && !isMobile) || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (

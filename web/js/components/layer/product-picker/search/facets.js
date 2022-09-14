@@ -27,10 +27,12 @@ function Facets(props) {
     toggleCollapseFacet,
   } = props;
 
-  const showFacets = (screenWidth > breakpoints.small && results.length) || showMobileFacets;
+  const showFacets = (!isMobile && results.length) || showMobileFacets;
+
+  const classNames = isMobile || screenWidth < breakpoints.small ? 'facet-container-mobile facet-container' : 'facet-container';
 
   return !showFacets ? null : (
-    <div className="facet-container">
+    <div className={classNames}>
 
       <FilterChips
         filters={filters}

@@ -9,13 +9,13 @@ function LoadingIndicator({ msg, isLoading, isMobile }) {
     top: 10,
     left: 80,
     zIndex: 999,
-  } :
-  {
-    position: 'absolute',
-    top: 10,
-    left: 300,
-    zIndex: 999,
   }
+    : {
+      position: 'absolute',
+      top: 10,
+      left: 300,
+      zIndex: 999,
+    };
 
   return isLoading && (
     <div style={spinnerStyle}>

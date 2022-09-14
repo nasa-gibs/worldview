@@ -213,24 +213,24 @@ class Sidebar extends React.Component {
       borderRadius: '5px',
       border: '1px solid #333',
       position: 'absolute',
-    } :
-    {
-      background: `url(${desktopImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
-      display: 'block',
-      width: '286px',
-      height: '55px',
-      padding: '5px 0',
-      position: 'absolute',
-      top: '10px',
-      left: '10px',
-      border: '1px solid #333',
-      borderBottom: 'solid',
-      borderBottomWidth: '1px',
-      borderBottomStyle: 'transparent',
-      borderTopRightRadius: '5px',
-      borderTopLeftRadius: '5px',
-      boxSizing: 'border-box',
-    };
+    }
+      : {
+        background: `url(${desktopImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+        display: 'block',
+        width: '286px',
+        height: '55px',
+        padding: '5px 0',
+        position: 'absolute',
+        top: '10px',
+        left: '10px',
+        border: '1px solid #333',
+        borderBottom: 'solid',
+        borderBottomWidth: '1px',
+        borderBottomStyle: 'transparent',
+        borderTopRightRadius: '5px',
+        borderTopLeftRadius: '5px',
+        boxSizing: 'border-box',
+      };
 
     return (
       <a
@@ -281,7 +281,7 @@ class Sidebar extends React.Component {
 
     const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile ? {
       position: 'static',
-    }: null;
+    } : null;
 
     const productsHolderStyle = isDistractionFreeModeActive ? {
       display: 'none',
@@ -300,7 +300,7 @@ class Sidebar extends React.Component {
       display: `{${displayStyle}} !important`,
     } : {
       maxHeight: `${maxHeight}`,
-    }
+    };
 
     return (
       <ErrorBoundary>
