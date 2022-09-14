@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -40,7 +40,6 @@ import {
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
-
 const { events } = util;
 
 let tooltipElement;
@@ -49,12 +48,12 @@ let init = false;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
+let draw;
 
 /**
  * A component to add measurement functionality to the OL map
  */
 function OlMeasureTool (props) {
-  let draw;
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
@@ -62,6 +61,33 @@ function OlMeasureTool (props) {
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
+  const previousCrs = usePrevious(crs);
+
+  function usePrevious(data) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = data;
+    }, [data]);
+    return ref.current;
+  }
+
+  // Monitor for projection change & terminate any incomplete measurement from the previous projection
+  useEffect(() => {
+    if (olMap != null) {
+      const regionFromCrs = {
+        'EPSG:4326': 'geographic',
+        'EPSG:3413': 'arctic',
+        'EPSG:3031': 'antarctic',
+      };
+
+      const geographyToTerminate = regionFromCrs[previousCrs];
+      terminateDraw(map.ui.proj[geographyToTerminate]);
+
+      if (document.getElementsByClassName('tooltip-active').length > 0) {
+        map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
+      }
+    }
+  }, [crs]);
 
   useEffect(() => {
     if (!init) {
@@ -184,10 +210,13 @@ function OlMeasureTool (props) {
     ), overlay.getElement());
   };
 
-  const terminateDraw = (geom) => {
+  /**
+   * End the current measurement interaction & remove the visual representation from the map
+   */
+  const terminateDraw = (olMapToTerminate = olMap) => {
     tooltipElement = null;
     toggleMeasureActive(false);
-    olMap.removeInteraction(draw);
+    olMapToTerminate.removeInteraction(draw);
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
