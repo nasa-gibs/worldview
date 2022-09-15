@@ -134,6 +134,28 @@
     }
   }
 
+  @media (orientation: landscape) {
+    .facet-tooltip {
+      top: -4px !important;
+      left: -5px !important;
+    }
+
+    .facet-collapse-toggle {
+      top: -10px !important;
+    }
+  }
+
+  @media (max-width: 836) and (min-width: 769px) {
+    .facet-tooltip {
+      top: -10px !important;
+      left: -5px !important;
+    }
+
+    .facet-collapse-toggle {
+      top: -10px !important;
+    }
+  }
+
   .apply-facets {
     min-height: 50px;
     background: #d54f21;
