@@ -413,7 +413,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
-      transition: 0,
+      transition: 300,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
