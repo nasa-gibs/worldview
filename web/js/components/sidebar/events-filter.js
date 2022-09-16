@@ -25,6 +25,7 @@ function EventFilterModalBody (props) {
     showAll,
     parentId,
     isPolarProj,
+    isMobile,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -80,6 +81,10 @@ function EventFilterModalBody (props) {
   const minDate = new Date('2000-01-01');
   const maxDate = util.now();
 
+  const mobileStyle = isMobile ? {
+    fontSize: '14px'
+  } : null
+
   return (
     <div className="events-filter">
       <DateRangeSelector
@@ -94,7 +99,7 @@ function EventFilterModalBody (props) {
 
       <div className="category-toggles">
         <div className="classification-switch-header">
-          <h2 className="wv-header">Disable/Enable</h2>
+          <h2 className="wv-header" style={mobileStyle}>Disable/Enable</h2>
           <Switch
             id="header-disable"
             label="All"
