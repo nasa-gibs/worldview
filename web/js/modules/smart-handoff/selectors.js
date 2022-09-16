@@ -17,6 +17,7 @@ export const getGranulesUrl = (state) => {
       bounding_box: params.bbox,
       collection_concept_id: params.conceptId,
       shortName: params.shortName,
+      day_night_flag: params.dayNight,
       temporal: getTemporal(),
       pageSize: params.pageSize,
     };
