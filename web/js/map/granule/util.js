@@ -116,22 +116,9 @@ export const getGranuleFootprints = (layer) => {
     * @param {object} endQueryDate - date object
   */
 export const getCMRQueryDates = (selectedDate) => {
-  // check if selectedDate is before or after 12 to determine date request range
-  const current = new Date(new Date().setMilliseconds(0));
   const date = new Date(selectedDate);
-  const isDateAfterNoon = date.getUTCHours() > 12;
-
-  const zeroedDate = util.clearTimeUTC(date);
-
-  const dayBeforeDate = util.dateAdd(zeroedDate, 'day', -1);
-  const dayAfterDate = util.dateAdd(zeroedDate, 'day', 1);
-  const twoDayAfterDate = util.dateAdd(zeroedDate, 'day', 2);
-
-  const startQueryDate = dayBeforeDate;
-  let endQueryDate = isDateAfterNoon ? twoDayAfterDate : dayAfterDate;
-
-  // set current date if on leading edge of time coverage
-  endQueryDate = endQueryDate > current ? current : endQueryDate;
+  const startQueryDate = util.dateAdd(date, 'hour', -8);
+  const endQueryDate = util.dateAdd(date, 'hour', 4);
 
   return {
     startQueryDate,
