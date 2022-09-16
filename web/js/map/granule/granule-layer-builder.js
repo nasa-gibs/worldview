@@ -268,7 +268,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         granules.unshift(item);
       }
     }
-    return granules.reverse();
+    return granules;
   };
 
   return {
