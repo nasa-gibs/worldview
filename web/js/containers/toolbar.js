@@ -375,8 +375,14 @@ class toolbarContainer extends Component {
 
   renderDistractionFreeExitButton() {
     const {
-      faSize, isDistractionFreeModeActive, toggleDistractionFreeModeAction,
+      faSize, isDistractionFreeModeActive, toggleDistractionFreeModeAction, isMobile,
     } = this.props;
+    const mobileButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
     const buttonId = 'wv-exit-distraction-free-mode-button';
     const labelText = 'Exit distraction free mode';
     return isDistractionFreeModeActive && (
@@ -385,6 +391,7 @@ class toolbarContainer extends Component {
         className="wv-toolbar-button wv-exit-distraction-free-mode-button"
         aria-label={labelText}
         onClick={() => toggleDistractionFreeModeAction()}
+        style = {mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
