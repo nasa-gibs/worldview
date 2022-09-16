@@ -289,6 +289,9 @@ export async function promiseImageryForTime(state, date, activeString) {
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
+    if (layer.type === 'granule') {
+      return Promise.resolve();
+    }
     const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
     const layerGroup = cache.getItem(key) || await createLayer(layer, options);
