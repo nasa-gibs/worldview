@@ -82,8 +82,8 @@ function EventFilterModalBody (props) {
   const maxDate = util.now();
 
   const mobileStyle = isMobile ? {
-    fontSize: '14px'
-  } : null
+    fontSize: '14px',
+  } : null;
 
   return (
     <div className="events-filter">
@@ -179,6 +179,7 @@ EventFilterModalBody.propTypes = {
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
   showAll: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

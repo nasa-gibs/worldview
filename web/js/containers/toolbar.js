@@ -391,7 +391,7 @@ class toolbarContainer extends Component {
         className="wv-toolbar-button wv-exit-distraction-free-mode-button"
         aria-label={labelText}
         onClick={() => toggleDistractionFreeModeAction()}
-        style = {mobileButtonStyle}
+        style = { mobileButtonStyle }
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
