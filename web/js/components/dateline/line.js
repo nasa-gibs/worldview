@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import OlOverlay from 'ol/Overlay';
 import util from '../../util/util';
 import LineText from './text';
+import usePrevious from '../../util/customHooks';
 
 const lineStyles = {
   dashArray: '5, 10',
@@ -15,69 +16,104 @@ const lineStyles = {
   },
 };
 
-class Line extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      overlay: '',
-      hovered: false,
-      textActive: props.alwaysShow,
-    };
-    this.nodeRef = React.createRef();
-    this.timerRef = React.createRef();
-  }
+export default function Line (props) {
 
-  componentDidMount() {
-    const { lineX, map } = this.props;
-    const overlay = new OlOverlay({
-      element: this.nodeRef.current,
+  const [overlay, setOverlay] = useState('');
+  const [hovered, setHovered] = useState(false);
+  const [textActive, setTextActive] = useState(props.alwaysShow);
+
+  const nodeRef = useRef();
+  const timerRef = useRef();
+
+  // constructor(props) {
+    // super(props);
+    // this.state = {
+    //   overlay: '',
+    //   hovered: false,
+    //   textActive: props.alwaysShow,
+    // };
+    // this.nodeRef = React.createRef();
+    // this.timerRef = React.createRef();
+  // }
+
+  // componentDidMount() {
+  //   const { lineX, map } = props;
+  //   const overlay = new OlOverlay({
+  //     element: nodeRef.current,
+  //     stopEvent: false,
+  //   });
+  //   overlay.setPosition([lineX, 90]);
+  //   map.addOverlay(overlay);
+  //   // this.setState({ overlay });
+  //   setOverlay({ overlay })
+  // }
+
+  //componentDidMount()
+  useEffect(() => {
+    const { lineX, map } = props;
+    const newOverlay = new OlOverlay({
+      element: nodeRef.current,
       stopEvent: false,
     });
-    overlay.setPosition([lineX, 90]);
-    map.addOverlay(overlay);
-    this.setState({ overlay });
-  }
+    newOverlay.setPosition([lineX, 90]);
+    map.addOverlay(newOverlay);
 
-  componentDidUpdate(prevProps) {
-    const { lineX, lineY, alwaysShow } = this.props;
-    const { overlay } = this.state;
-    overlay.setPosition([lineX, lineY]);
-    if (!alwaysShow && alwaysShow !== prevProps.alwaysShow) {
+    setOverlay(newOverlay)
+    console.log("CDM Overlay", overlay)
+    console.log("newOverlay", newOverlay)
+  }, [])
+
+  const prevAlwaysShow = usePrevious(props.alwaysShow)
+
+  //componentDidUpdate
+  useEffect(() => {
+    console.log("componentDidUpdate")
+    const { lineX, lineY, alwaysShow } = props;
+
+    console.log("CDU overlay",overlay)
+
+    // overlay.setPosition([lineX, lineY]);
+
+    if (!alwaysShow && alwaysShow !== prevAlwaysShow) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ textActive: false });
+      setTextActive(true)
     }
+  })
+
+  // componentDidUpdate(prevProps) {
+  //   const { lineX, lineY, alwaysShow } = props;
+  //   const { overlay } = state;
+  //   overlay.setPosition([lineX, lineY]);
+  //   if (!alwaysShow && alwaysShow !== prevProps.alwaysShow) {
+  //     // eslint-disable-next-line react/no-did-update-set-state
+  //     this.setState({ textActive: false });
+  //   }
+  // }
+
+  const mouseOver = () => {
+    setHovered(true)
   }
 
-  mouseOver = () => {
-    this.setState({
-      hovered: true,
-    });
+  const mouseOut = () => {
+    setHovered(false)
   }
 
-  mouseOut = () => {
-    this.setState({
-      hovered: false,
-    });
-  }
-
-  mouseOverHidden = (e) => {
-    const { map, setTextCoords } = this.props;
+  const mouseOverHidden = (e) => {
+    const { map, setTextCoords } = props;
     const coords = map.getCoordinateFromPixel([e.clientX, e.clientY]);
 
-    this.timerRef.current = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setTextCoords(coords);
-      this.setState({
-        textActive: true,
-      });
+      setTextActive(true)
     }, 500);
   }
 
-  mouseLeaveHidden = () => {
-    clearTimeout(this.timerRef.current);
-    this.setState({ textActive: false });
+  const mouseLeaveHidden = () => {
+    clearTimeout(timerRef.current);
+    setTextActive(false)
   }
 
-  render() {
+  // render() {
     const {
       id,
       alwaysShow,
@@ -89,8 +125,8 @@ class Line extends React.Component {
       height,
       textCoords,
       hideText,
-    } = this.props;
-    const { hovered, textActive } = this.state;
+    } = props;
+    // const { hovered, textActive } = this.state;
 
     const {
       strokeWidth, dashArray, color, svgStyle, width,
@@ -103,13 +139,13 @@ class Line extends React.Component {
       <>
         <svg
           id={id}
-          ref={this.nodeRef}
+          ref={nodeRef}
           className="dateline-case"
           style={svgStyle}
           height={height}
           width={width}
-          onMouseOver={this.mouseOver}
-          onMouseOut={this.mouseOut}
+          onMouseOver={mouseOver}
+          onMouseOut={mouseOut}
         >
           <line
             strokeWidth={strokeWidth}
@@ -123,8 +159,8 @@ class Line extends React.Component {
           />
           <line
             className="dateline-hidden"
-            onMouseOver={this.mouseOverHidden}
-            onMouseLeave={this.mouseLeaveHidden}
+            onMouseOver={mouseOverHidden}
+            onMouseLeave={mouseLeaveHidden}
             style={style}
             opacity="0"
             x1={strokeWidth / 2}
@@ -148,7 +184,7 @@ class Line extends React.Component {
       </>
     );
   }
-}
+
 
 Line.propTypes = {
   alwaysShow: PropTypes.bool,
@@ -165,4 +201,3 @@ Line.propTypes = {
   hideText: PropTypes.bool,
 };
 
-export default Line;
