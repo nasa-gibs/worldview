@@ -64,7 +64,19 @@ class ModalContainer extends Component {
       }
       if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
         console.log(`changing state: screenWidth: ${screenWidth} | screenHeight: ${screenHeight}`);
-        this.onResize(null, { size: { width: screenWidth, height: screenHeight } });
+        // console.log(`width: ${width} | height: ${height}`);
+
+        // const screenHeight = window.innerHeight;
+        // const screenWidth = window.innerWidth;
+        // // This accomodates vector modals when changing mobile orientation
+        // // The customProps values are not re-computed from the requesting code on orientation change
+        // const isPortrait = screenHeight > screenWidth;
+        // if (customProps && isMobile && mobileFullScreen) {
+        //   customProps.height = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
+        //   customProps.width = isPortrait ? screenWidth * 0.9 : screenWidth * 0.5;
+        // }
+
+        this.onResize(null, { size: { width: screenWidth-200, height: screenHeight } });
       }
     }
   }
@@ -77,33 +89,9 @@ class ModalContainer extends Component {
       offsetLeft, offsetRight, offsetTop, width, height,
     } = this.state;
     const { mobileFullScreen } = customProps;
-    console.log(`isMobile: ${isMobile}`);
-    console.log(`mobileFullScreen: ${mobileFullScreen}`);
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile ? 0 : '0.5rem auto';
-
-    /*
-    const isPortrait = screenHeight > screenWidth;
-    let modalHeight;
-    let modalWidth;
-    let modalLeft;
-
-    // This accomodates vector modals when changing mobile orientation
-    // The customProps values do not update appropriately when switching orientation
-    // isMobile returns true only if in PORTRAIT orientation. Mobile + Landscape returns isMobile=false (?)
-    console.log(`isMobile: ${isMobile}`);
-    if (isMobile && customProps.wrapClassName === 'vector-modal-wrap') {
-      modalHeight = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
-      modalWidth = isPortrait ? screenWidth * 0.9 : screenWidth * 0.5;
-      modalLeft = isPortrait ? '5%' : (screenWidth - modalWidth) / 2;
-      console.log(`modalLeft: ${modalLeft}`);
-    } else {
-      modalWidth = customProps.width;
-      modalHeight = customProps.height;
-      modalLeft = customProps.offsetLeft;
-    }
-    */
 
     return {
       left: offsetLeft,
