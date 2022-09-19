@@ -24,6 +24,7 @@ class Line extends React.Component {
       textActive: props.alwaysShow,
     };
     this.nodeRef = React.createRef();
+    this.timerRef = React.createRef();
   }
 
   componentDidMount() {
@@ -61,13 +62,18 @@ class Line extends React.Component {
 
   mouseOverHidden = (e) => {
     const { map, setTextCoords } = this.props;
-    setTextCoords(map.getCoordinateFromPixel([e.clientX, e.clientY]));
-    this.setState({
-      textActive: true,
-    });
+    const coords = map.getCoordinateFromPixel([e.clientX, e.clientY]);
+
+    this.timerRef.current = setTimeout(() => {
+      setTextCoords(coords);
+      this.setState({
+        textActive: true,
+      });
+    }, 500);
   }
 
-  mouseOutHidden = () => {
+  mouseLeaveHidden = () => {
+    clearTimeout(this.timerRef.current);
     this.setState({ textActive: false });
   }
 
@@ -118,8 +124,7 @@ class Line extends React.Component {
           <line
             className="dateline-hidden"
             onMouseOver={this.mouseOverHidden}
-            onMouseMove={this.mouseOverHidden}
-            onMouseOut={this.mouseOutHidden}
+            onMouseLeave={this.mouseLeaveHidden}
             style={style}
             opacity="0"
             x1={strokeWidth / 2}
