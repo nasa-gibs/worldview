@@ -37,6 +37,7 @@ class ModalContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log('modal.js componentDidUpdate');
     const {
       isCustom,
       id,
@@ -62,6 +63,7 @@ class ModalContainer extends Component {
         toggleFunction();
       }
       if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
+        console.log(`changing state: screenWidth: ${screenWidth} | screenHeight: ${screenHeight}`);
         this.onResize(null, { size: { width: screenWidth, height: screenHeight } });
       }
     }
@@ -75,6 +77,8 @@ class ModalContainer extends Component {
       offsetLeft, offsetRight, offsetTop, width, height,
     } = this.state;
     const { mobileFullScreen } = customProps;
+    console.log(`isMobile: ${isMobile}`);
+    console.log(`mobileFullScreen: ${mobileFullScreen}`);
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile ? 0 : '0.5rem auto';
