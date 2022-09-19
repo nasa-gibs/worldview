@@ -15,7 +15,8 @@ import { getSelectedDate } from '../../../../modules/date/selectors';
 function Facets(props) {
   const {
     isMobile,
-    browser,
+    screenWidth,
+    breakpoints,
     facets,
     filters,
     removeFilter,
@@ -26,10 +27,12 @@ function Facets(props) {
     toggleCollapseFacet,
   } = props;
 
-  const showFacets = (browser.greaterThan.small && results.length) || showMobileFacets;
+  const showFacets = (!isMobile && results.length) || showMobileFacets;
+
+  const classNames = isMobile || screenWidth < breakpoints.small ? 'facet-container-mobile facet-container' : 'facet-container';
 
   return !showFacets ? null : (
-    <div className="facet-container">
+    <div className={classNames}>
 
       <FilterChips
         filters={filters}
@@ -67,11 +70,12 @@ function Facets(props) {
 }
 
 Facets.propTypes = {
-  browser: PropTypes.object,
   collapsedFacets: PropTypes.object,
   facets: PropTypes.object,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
+  breakpoints: PropTypes.object,
+  screenWidth: PropTypes.number,
   removeFilter: PropTypes.func,
   results: PropTypes.array,
   showMobileFacets: PropTypes.bool,
@@ -89,15 +93,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state) {
-  const { browser, productPicker } = state;
+  const { screenSize, productPicker } = state;
   const { showMobileFacets, collapsedFacets } = productPicker;
 
   return {
     collapsedFacets,
     selectedDate: getSelectedDate(state),
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
+    screenWidth: screenSize.screenWidth,
+    breakpoints: screenSize.breakpoints,
     showMobileFacets,
-    browser,
+    screenSize,
   };
 }
 export default withSearch(

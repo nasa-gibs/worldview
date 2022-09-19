@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import whatInput from 'what-input';
 
 // Utils
-import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
 import { STARTUP } from './util/constants';
 // eslint-disable-next-line import/no-named-as-default
@@ -34,6 +33,7 @@ import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
+import setScreenInfo from './modules/screen-size/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -83,6 +83,11 @@ class App extends React.Component {
     keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
   }
 
+  getScreenInfo = () => {
+    const { setScreenInfoAction } = this.props;
+    setScreenInfoAction();
+  }
+
   onload() {
     const self = this;
     const state = self.props.parameters;
@@ -114,9 +119,12 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
-        self.props.screenResize(window);
+        self.getScreenInfo();
       });
-      self.props.screenResize(window);
+      window.addEventListener('orientationchange', () => {
+        self.getScreenInfo();
+      });
+      self.getScreenInfo();
       events.trigger(STARTUP);
       self.setVhCSSProperty();
     };
@@ -170,7 +178,7 @@ function mapStateToProps(state) {
     state,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
-    isMobile: state.browser.lessThan.medium,
+    isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
     tour: state.tour,
     config: state.config,
@@ -183,8 +191,8 @@ const mapDispatchToProps = (dispatch) => ({
   keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
     dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
   },
-  screenResize: (width, height) => {
-    dispatch(calculateResponsiveState(window));
+  setScreenInfoAction: () => {
+    dispatch(setScreenInfo());
   },
 });
 
@@ -199,6 +207,7 @@ App.propTypes = {
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
+  setScreenInfoAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   parameters: PropTypes.object,

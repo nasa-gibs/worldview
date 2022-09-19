@@ -20,6 +20,8 @@ const FooterContent = React.forwardRef((props, ref) => {
     isCompareActive,
     compareMode,
     isMobile,
+    breakpoints,
+    screenWidth,
     isPlaying,
     activeTab,
     changeCompareMode,
@@ -34,7 +36,7 @@ const FooterContent = React.forwardRef((props, ref) => {
 
   const onClickAddLayers = (e) => {
     e.stopPropagation();
-    addLayers(isPlaying);
+    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
     googleTagManager.pushEvent({ event: 'add_layers' });
   };
 
@@ -103,7 +105,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     );
   };
 
-
   return (
     <footer ref={ref}>
       {activeTab === 'layers' && renderLayersFooter()}
@@ -112,38 +113,17 @@ const FooterContent = React.forwardRef((props, ref) => {
   );
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleCompare: () => {
-    dispatch(toggleCompareOnOff());
-  },
-  changeCompareMode: (str) => {
-    dispatch(changeMode(str));
-  },
-  addLayers: (isPlaying) => {
-    if (isPlaying) {
-      dispatch(stopAnimationAction());
-    }
-    dispatch(
-      openCustomContent('LAYER_PICKER_COMPONENT', {
-        headerText: null,
-        modalClassName: 'custom-layer-dialog light',
-        backdrop: true,
-        CompletelyCustomModal: SearchUiProvider,
-        wrapClassName: '',
-      }),
-    );
-  },
-});
-
 const mapStateToProps = (state) => {
   const {
-    animation, config, compare, browser,
+    animation, config, compare, screenSize,
   } = state;
   const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
 
   return {
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
+    breakpoints: screenSize.breakpoints,
+    screenWidth: screenSize.screenWidth,
     isPlaying,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
@@ -151,6 +131,30 @@ const mapStateToProps = (state) => {
     eventsData,
   };
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleCompare: () => {
+    dispatch(toggleCompareOnOff());
+  },
+  changeCompareMode: (str) => {
+    dispatch(changeMode(str));
+  },
+  addLayers: (isPlaying, isMobile, breakpoints, screenWidth) => {
+    const modalClassName = isMobile || screenWidth < breakpoints.medium ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
+    if (isPlaying) {
+      dispatch(stopAnimationAction());
+    }
+    dispatch(
+      openCustomContent('LAYER_PICKER_COMPONENT', {
+        headerText: null,
+        modalClassName,
+        backdrop: true,
+        CompletelyCustomModal: SearchUiProvider,
+        wrapClassName: '',
+      }),
+    );
+  },
+});
 
 export default connect(
   mapStateToProps,
@@ -168,6 +172,8 @@ FooterContent.propTypes = {
   eventsData: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  screenWidth: PropTypes.number,
+  breakpoints: PropTypes.object,
   isPlaying: PropTypes.bool,
   toggleCompare: PropTypes.func,
 };

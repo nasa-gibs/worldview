@@ -10,13 +10,14 @@ function SearchLayers(props) {
   const {
     smallView,
     isMobile,
-    browser,
+    width,
+    mediumBreakpoint,
     selectedLayer,
     showMobileFacets,
     results,
   } = props;
 
-  const showFacets = browser.greaterThan.small || showMobileFacets;
+  const showFacets = (width > mediumBreakpoint && !isMobile) || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
@@ -27,7 +28,7 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          { !selectedLayer && smallView ? null : !!results.length && (
+          {!selectedLayer && smallView ? null : !!results.length && (
             <div className="layer-detail-container layers-all search">
               <LayerMetadataDetail layer={selectedLayer} />
             </div>
@@ -39,8 +40,9 @@ function SearchLayers(props) {
 }
 
 SearchLayers.propTypes = {
-  browser: PropTypes.object,
+  width: PropTypes.number,
   isMobile: PropTypes.bool,
+  mediumBreakpoint: PropTypes.number,
   results: PropTypes.array,
   selectedLayer: PropTypes.object,
   smallView: PropTypes.bool,
@@ -48,16 +50,18 @@ SearchLayers.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { browser, productPicker } = state;
+  const { screenSize, productPicker } = state;
   const { selectedLayer, showMobileFacets } = productPicker;
 
   return {
     layer: selectedLayer,
-    smallView: browser.screenWidth < 1024,
-    isMobile: browser.lessThan.medium,
+    smallView: screenSize.screenWidth < screenSize.breakpoints.small,
+    isMobile: screenSize.isMobileDevice,
+    width: screenSize.screenWidth,
+    mediumBreakpoint: screenSize.breakpoints.medium,
     showMobileFacets,
     selectedLayer,
-    browser,
+    screenSize,
   };
 }
 export default withSearch(

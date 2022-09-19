@@ -721,7 +721,7 @@
   }
 }
 
-@media (min-width: $desktop-min-width) {
+@media (min-width: $tablet-min-width) {
   .search-layers-container {
     & div.layer-list-detail-container {
       flex-direction: row;
@@ -729,6 +729,8 @@
   }
 
   .layer-detail-container {
+    height: 100% important;
+
     &.browse .layers-all-layer {
       padding: 10px 15px;
     }
@@ -758,52 +760,42 @@
 
   .layer-detail-container.search {
     flex: 2;
-    height: 65%;
     border-top: 2px solid #d54e21;
     padding: 4px 0 0 2px;
     background-image: linear-gradient(#ccc, #eee 8%);
   }
 }
 
-@media (min-width: $tablet-min-width) {
-  .category-width .layer-modal-content {
-    height: calc(var(--vh, 1vh) * 100 - 135px);
+.custom-layer-dialog-mobile {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  height: 100%;
+
+  & .modal-body {
+    padding: 0 0 0 8px;
   }
 
-  .browse-search-width .layer-modal-content {
-    height: calc(var(--vh, 1vh) * 100 - 155px);
+  &.browse-search-width {
+    width: 95%;
+    max-width: 800px;
   }
 
-  .browse-search-width .search-layers-container {
-    height: calc(var(--vh, 1vh) * 100 - 157px);
-  }
-
-  .browse-search-width .search-layers-container.browse {
-    height: calc(var(--vh, 1vh) * 100 - 195px);
-  }
-
-  .browse-search-width .search-layers-container.recent-layers {
-    height: calc(var(--vh, 1vh) * 100 - 235px);
-  }
-}
-
-/* Mobile Styles Begin Here */
-@media (max-width: $mobile-max-width) {
   .category-width .layer-modal-content {
     padding: 0;
     height: calc(var(--vh, 1vh) * 100 - 40px);
   }
 
-  .browse-search-width .layer-modal-content {
+  .layer-modal-content {
     padding: 0;
     height: calc(var(--vh, 1vh) * 100 - 70px);
   }
 
-  .browse-search-width .search-layers-container.browse {
+  .search-layers-container.browse {
     height: calc(var(--vh, 1vh) * 100 - 122px);
   }
 
-  .browse-search-width .search-layers-container.recent-layers {
+  .search-layers-container.recent-layers {
     height: calc(var(--vh, 1vh) * 100 - 95px);
   }
 
@@ -884,9 +876,10 @@
   }
 
   .layer-detail-container.search {
-    border-top: 5px solid #d54e21;
-    padding-left: 2px;
-    background-image: linear-gradient(#aaa, #ddd 15%);
+    flex: 1;
+    border-top: 2px solid #d54e21;
+    padding: 4px 0 0 2px;
+    background-image: linear-gradient(#ccc, #eee 8%);
   }
 }
 

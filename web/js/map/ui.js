@@ -26,9 +26,9 @@ import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
-import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
 import PQueue from 'p-queue/dist';
+import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import { fly, saveRotation } from './util';
@@ -210,7 +210,7 @@ export default function mapui(models, config, store) {
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case CALCULATE_RESPONSIVE_STATE:
+      case SET_SCREEN_INFO:
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
@@ -402,7 +402,7 @@ export default function mapui(models, config, store) {
    */
   const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
     const state = store.getState();
-    const { proj, browser } = state;
+    const { proj, screenSize } = state;
     const results = geocodeResults;
     if (!results) return;
 
@@ -412,7 +412,7 @@ export default function mapui(models, config, store) {
       coordinatesObject,
       results,
       remove,
-      browser.lessThan.medium,
+      screenSize.isMobileDevice,
       showDialog,
     );
 
@@ -531,8 +531,8 @@ export default function mapui(models, config, store) {
    */
   function onResize() {
     const state = store.getState();
-    const { browser } = state;
-    const isMobile = browser.lessThan.medium;
+    const { screenSize } = state;
+    const isMobile = screenSize.isMobileDevice;
     const map = self.selected;
 
     if (isMobile) {
@@ -1102,6 +1102,7 @@ export default function mapui(models, config, store) {
     mapEl.style.display = 'none';
     mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
 
+
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
@@ -1247,10 +1248,10 @@ export default function mapui(models, config, store) {
     const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
       const state = store.getState();
       const {
-        events, browser, locationSearch, sidebar, animation, measure,
+        events, locationSearch, sidebar, animation, measure, screenSize,
       } = state;
       const { isCoordinateSearchActive } = locationSearch;
-      const isMobile = browser.lessThan.medium;
+      const isMobile = screenSize.isMobileDevice;
       const coords = map.getCoordinateFromPixel(pixel);
       const isEventsTabActive = typeof events !== 'undefined' && events.active;
       const isMapAnimating = animation.isPlaying;

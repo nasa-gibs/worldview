@@ -293,8 +293,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
  */
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const { config, compare } = state;
-  const { screenWidth, screenHeight, lessThan } = state.browser;
-  const isMobile = lessThan.medium;
+  const { screenWidth, screenHeight, isMobileDevice } = state.screenSize;
+  const isMobile = isMobileDevice;
   const x = pixels[0];
   const y = pixels[1];
   const modalOffsetProps = {

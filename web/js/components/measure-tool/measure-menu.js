@@ -119,13 +119,13 @@ class MeasureMenu extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    modal, map, measure, proj, browser,
+    modal, map, measure, proj, screenSize,
   } = state;
   const { unitOfMeasure, allMeasurements } = measure;
   const { crs } = proj.selected;
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
   return {
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isTouchDevice: modal.customProps.touchDevice,
     map,
     unitOfMeasure,
