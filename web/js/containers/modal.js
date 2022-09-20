@@ -47,6 +47,7 @@ class ModalContainer extends Component {
       screenHeight,
       screenWidth,
     } = this.props;
+    console.log(customProps);
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
@@ -63,20 +64,15 @@ class ModalContainer extends Component {
         toggleFunction();
       }
       if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
-        console.log(`changing state: screenWidth: ${screenWidth} | screenHeight: ${screenHeight}`);
-        // console.log(`width: ${width} | height: ${height}`);
+        const isPortrait = screenHeight > screenWidth;
 
-        // const screenHeight = window.innerHeight;
-        // const screenWidth = window.innerWidth;
-        // // This accomodates vector modals when changing mobile orientation
-        // // The customProps values are not re-computed from the requesting code on orientation change
-        // const isPortrait = screenHeight > screenWidth;
-        // if (customProps && isMobile && mobileFullScreen) {
-        //   customProps.height = isPortrait ? screenHeight : (screenHeight - top) * 0.9;
-        //   customProps.width = isPortrait ? screenWidth * 0.9 : screenWidth * 0.5;
-        // }
+        // Values below match the request made in ol-vector-interactions
+        const sizeObj = {
+          width: isPortrait ? screenWidth : 445,
+          height: isPortrait ? screenHeight - 106 : 300,
+        };
 
-        this.onResize(null, { size: { width: screenWidth-200, height: screenHeight } });
+        this.onResize(null, { size: sizeObj });
       }
     }
   }
