@@ -310,7 +310,6 @@ const mapDispatchToProps = (dispatch) => ({
     const mobileTopOffset = 106;
     const modalWidth = isMobile ? screenWidth : 445;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
-    console.log(`modalWidth: ${modalWidth} | modalHeight ${modalHeight}`);
 
     dispatch(openCustomContent(dialogId,
       {
