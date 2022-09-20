@@ -70,7 +70,7 @@ export default function Line (props) {
     timerRef.current = setTimeout(() => {
       setTextCoords(coords);
       toggleTextActive(true);
-    }, 500);
+    }, 300);
   };
 
   const mouseLeaveHidden = () => {
