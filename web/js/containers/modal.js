@@ -46,7 +46,6 @@ class ModalContainer extends Component {
       screenHeight,
       screenWidth,
     } = this.props;
-    // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       onToggle,
@@ -129,10 +128,8 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       screenHeight,
-      // screenWidth,
     } = this.props;
     const { width, height } = this.state;
-    // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       autoFocus,
@@ -172,8 +169,6 @@ class ModalContainer extends Component {
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    // const isPortrait = screenHeight > screenWidth;
-    // const modalBodyHeight = isPortrait ? screenHeight * 0.8 : screenHeight * 0.75;
 
     return (
       <ErrorBoundary>
@@ -279,8 +274,6 @@ function mapStateToProps(state) {
   const {
     screenHeight, screenWidth, orientation, isMobileDevice,
   } = screenSize;
-  // const screenHeight = window.innerHeight;
-  // const screenWidth = window.innerWidth;
   const isMobile = isMobileDevice;
   const { isEmbedModeActive } = embed;
   return {
