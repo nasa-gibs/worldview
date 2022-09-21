@@ -308,6 +308,9 @@ const mapDispatchToProps = (dispatch) => ({
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
+    const modalWidth = isMobile ? screenWidth : 445;
+    const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
+
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -323,8 +326,8 @@ const mapDispatchToProps = (dispatch) => ({
         dialogKey,
         key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
-        width: isMobile ? screenWidth : 445,
-        height: isMobile ? screenHeight - mobileTopOffset : 300,
+        width: modalWidth,
+        height: modalHeight,
         offsetLeft: isMobile ? 0 : offsetLeft,
         offsetTop: isMobile ? 40 : offsetTop,
         timeout: 0,
