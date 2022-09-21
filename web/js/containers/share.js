@@ -279,7 +279,7 @@ class ShareLinkContainer extends Component {
             <p>
               Embed @NAME@ in your website. See our
               {' '}
-              <a className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
+              <a id="share-embed-doc-link" className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
               {' '}
               for a guide.
             </p>
