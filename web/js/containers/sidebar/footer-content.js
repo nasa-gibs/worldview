@@ -6,6 +6,7 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
@@ -139,8 +140,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
   },
-  addLayers: (isPlaying, isMobile, breakpoints, screenWidth) => {
-    const modalClassName = isMobile || screenWidth < breakpoints.small ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
+  addLayers: (isPlaying) => {
+    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
     if (isPlaying) {
       dispatch(stopAnimationAction());
     }
