@@ -37,7 +37,6 @@ class ModalContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('modal.js componentDidUpdate');
     const {
       isCustom,
       id,
@@ -47,7 +46,6 @@ class ModalContainer extends Component {
       screenHeight,
       screenWidth,
     } = this.props;
-    console.log(customProps);
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
