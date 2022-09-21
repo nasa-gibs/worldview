@@ -128,7 +128,7 @@ module.exports = {
         .pause(300)
         .move({
           origin: wheel,
-          x: 300,
+          x: 275,
           y: 0,
         })
         .pause(300)
@@ -144,7 +144,7 @@ module.exports = {
         .pause(300)
         .move({
           origin: wheel,
-          x: 300,
+          x: 275,
           y: 0,
         })
         .pause(300)
@@ -160,7 +160,7 @@ module.exports = {
         .pause(300)
         .move({
           origin: wheel,
-          x: 300,
+          x: 275,
           y: 0,
         })
         .pause(300)
@@ -176,7 +176,7 @@ module.exports = {
         .pause(300)
         .move({
           origin: wheel,
-          x: 300,
+          x: 275,
           y: 0,
         })
         .pause(300)
