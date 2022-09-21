@@ -61,25 +61,6 @@ export function getGeographicResolutionWMS(tileSize) {
   if (!tileSize || !tileSize.length) return RESOLUTION_FOR_LARGE_WMS_TILES;
   return tileSize[0] === 256 ? RESOLUTION_FOR_SMALL_WMS_TILES : RESOLUTION_FOR_LARGE_WMS_TILES;
 }
-/**
- * getActiveLayerGroup
- * @param {Object} map
- * @param {string} layerGroupString
- *
- * @return {Object} group
- */
-export function getActiveLayerGroup(map, layerGroupString) {
-  let group = null;
-  const array = map.getLayers().getArray();
-  for (let i = 0, len = array.length; i < len; i += 1) {
-    const layerGroup = array[i];
-    if (layerGroup.get('group') === layerGroupString) {
-      group = layerGroup;
-      break;
-    }
-  }
-  return group;
-}
 
 /**
  * Create x/y/z vectortile requester url

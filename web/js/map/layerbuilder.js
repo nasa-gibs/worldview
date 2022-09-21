@@ -6,10 +6,6 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
-import OlStroke from 'ol/style/Stroke';
-import OlText from 'ol/style/Text';
-import OlFill from 'ol/style/Fill';
-import OlGraticule from 'ol/layer/Graticule';
 
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
@@ -38,28 +34,15 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
-import { startLoading, stopLoading, LOADING_TILES } from '../modules/loading/actions';
 
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
-let loadingCounter = 0;
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const tileLoadStart = () => {
-    if (loadingCounter === 0) {
-      store.dispatch(startLoading(LOADING_TILES));
-    }
-    loadingCounter += 1;
-  };
-  const tileLoadEnd = () => {
-    loadingCounter -= 1;
-    if (loadingCounter === 0) {
-      store.dispatch(stopLoading(LOADING_TILES));
-    }
-  };
+
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -101,33 +84,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return {
       expirationAbsolute: new Date(now + tenMin),
     };
-  };
-
-  const getGraticule = (proj) => {
-    const graticule = new OlGraticule({
-      lonLabelStyle: new OlText({
-        font: '12px Calibri,sans-serif',
-        textBaseline: 'top',
-        fill: new OlFill({
-          color: 'rgba(0,0,0,1)',
-        }),
-        stroke: new OlStroke({
-          color: 'rgba(255,255,255,1)',
-          width: 3,
-        }),
-      }),
-      // the style to use for the lines, optional.
-      strokeStyle: new OlStroke({
-        color: 'rgb(255, 255, 255)',
-        width: 2,
-        lineDash: [0.5, 4],
-      }),
-      extent: proj.maxExtent,
-      lonLabelPosition: 1,
-      showLabels: true,
-    });
-    graticule.isVector = true;
-    return graticule;
   };
 
   /**
@@ -189,9 +145,6 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
-          case 'graticule':
-            layer = getGraticule(proj);
-            break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
         }
@@ -213,9 +166,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
-   * @param {object} granuleLayerParam (optional: only used for granule layers)
-   *    * @param {array} granuleDates - Reordered granule times
-   *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
   const createLayer = async (def, options = {}) => {
@@ -443,7 +393,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
-    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -463,7 +413,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
-      transition: 0,
+      transition: 300,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
@@ -474,10 +424,6 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
-
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({
@@ -567,15 +513,12 @@ export default function mapLayerBuilder(config, cache, store) {
         sizes: matrixSet.tileMatrices,
       }),
     });
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
+
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
-      renderMode: 'image',
+      renderMode: 'vector',
       className: def.id,
-      vector: true,
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
@@ -584,6 +527,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
+
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -592,7 +536,9 @@ export default function mapLayerBuilder(config, cache, store) {
       });
       wmsLayer.wv = attributes;
       return layerGroup;
-    } if (breakPointResolution && animationIsPlaying) {
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -680,9 +626,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const tileSource = new OlSourceTileWMS(sourceOptions);
-    tileSource.on('tileloadstart', tileLoadStart);
-    tileSource.on('tileloadend', tileLoadEnd);
-    tileSource.on('tileloaderror', tileLoadEnd);
 
     const layer = new OlLayerTile({
       preload: 0,

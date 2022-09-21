@@ -78,13 +78,13 @@ class ProjectionList extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    config, models, proj, browser,
+    config, models, proj, screenSize,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
     ? getInfoArray(projArray)
     : DEFAULT_PROJ_ARRAY;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     models,
     isMobile,

@@ -10,6 +10,7 @@ import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
 import { changeCoordinateFormat } from '../../modules/settings/actions';
+import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 
 const { events } = util;
 const getContainerWidth = (format) => {
@@ -40,8 +41,8 @@ class OlCoordinates extends React.Component {
   }
 
   componentDidMount() {
-    events.on('map:mousemove', this.mouseMove);
-    events.on('map:mouseout', this.mouseOut);
+    events.on(MAP_MOUSE_MOVE, this.mouseMove);
+    events.on(MAP_MOUSE_OUT, this.mouseOut);
     this.setInitFormat();
   }
 
@@ -54,8 +55,8 @@ class OlCoordinates extends React.Component {
   }
 
   componentWillUnmount() {
-    events.off('map:mousemove', this.mouseMove);
-    events.off('map:mouseout', this.mouseOut);
+    events.off(MAP_MOUSE_MOVE, this.mouseMove);
+    events.off(MAP_MOUSE_OUT, this.mouseOut);
   }
 
   mouseMove({ pixel }, map, crs) {
@@ -127,10 +128,16 @@ class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show } = this.props;
+    const { show, isMobile } = this.props;
+    const coordContainerStyle = isMobile ? {
+      display: 'none',
+    }
+      : {
+        width,
+      };
 
     return (
-      <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
+      <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
         {hasMouse && show && (
           <>
             <Coordinates
@@ -153,10 +160,12 @@ class OlCoordinates extends React.Component {
 }
 
 function mapStateToProps (state) {
-  const { settings } = state;
+  const { settings, screenSize } = state;
   const { coordinateFormat } = settings;
+  const isMobile = screenSize.isMobileDevice;
   return {
     coordinateFormat,
+    isMobile,
   };
 }
 
@@ -170,6 +179,7 @@ OlCoordinates.propTypes = {
   show: PropTypes.bool,
   changeCoordinateFormat: PropTypes.func,
   coordinateFormat: PropTypes.string,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(

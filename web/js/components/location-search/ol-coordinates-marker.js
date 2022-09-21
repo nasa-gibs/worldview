@@ -10,6 +10,7 @@ import { getNormalizedCoordinate } from './util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import { reverseGeocode } from '../../modules/location-search/util-api';
 import util from '../../util/util';
+import { MAP_SINGLE_CLICK, MAP_CONTEXT_MENU, CONTEXT_MENU_LOCATION } from '../../util/constants';
 
 const { events } = util;
 
@@ -24,22 +25,22 @@ export class CoordinatesMarker extends Component {
   }
 
   componentDidMount() {
-    events.on('context-menu:location', this.singleClick);
+    events.on(CONTEXT_MENU_LOCATION, this.singleClick);
   }
 
   componentDidUpdate(prevProps) {
     const { isCoordinateSearchActive } = this.props;
     if (isCoordinateSearchActive) {
-      events.on('map:singleclick', this.singleClick);
-      events.on('map:contextmenu', this.rightClick);
+      events.on(MAP_SINGLE_CLICK, this.singleClick);
+      events.on(MAP_CONTEXT_MENU, this.rightClick);
     } else if (prevProps.isCoordinateSearchActive && !isCoordinateSearchActive) {
-      events.off('map:singleclick', this.singleClick);
-      events.off('map:contextmenu', this.rightClick);
+      events.off(MAP_SINGLE_CLICK, this.singleClick);
+      events.off(MAP_CONTEXT_MENU, this.rightClick);
     }
   }
 
   componentWillUnmount() {
-    events.off('context-menu:location', this.singleClick);
+    events.off(CONTEXT_MENU_LOCATION, this.singleClick);
   }
 
   rightClick(e) {
@@ -98,7 +99,7 @@ export class CoordinatesMarker extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser,
+    screenSize,
     config,
     map,
     proj,
@@ -106,7 +107,7 @@ function mapStateToProps(state) {
     locationSearch,
   } = state;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     config,

@@ -12,6 +12,7 @@ import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
 import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { CONTEXT_MENU_LOCATION, MAP_SINGLE_CLICK, MAP_CONTEXT_MENU } from '../../util/constants';
 
 const { events } = util;
 
@@ -21,7 +22,7 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive,
+    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
   } = props;
   const { crs } = proj.selected;
   const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
@@ -62,7 +63,7 @@ function RightClickMenu(props) {
   }
 
   function addPlaceMarkerHandler(coords, olMap, crs) {
-    events.trigger('context-menu:location', coords, olMap, crs);
+    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crs);
     setShow(false);
   }
 
@@ -77,13 +78,15 @@ function RightClickMenu(props) {
 
   useEffect(() => {
     if (isCoordinateSearchActive) return;
-    events.on('map:singleclick', handleClick);
-    events.on('map:contextmenu', handleContextEvent);
+    events.on(MAP_SINGLE_CLICK, handleClick);
+    events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
-      events.off('map:singleclick', handleClick);
-      events.off('map:contextmenu', handleContextEvent);
+      events.off(MAP_SINGLE_CLICK, handleClick);
+      events.off(MAP_CONTEXT_MENU, handleContextEvent);
     };
   });
+
+  const mobileStyle = isMobile && 'react-contextmenu-mobile';
 
   return show && (
     <div id="context-menu">
@@ -96,6 +99,7 @@ function RightClickMenu(props) {
         <MenuItem
           onClick={() => copyCoordsToClipboard()}
           attributes={{ id: 'context-menu-copy' }}
+          className={mobileStyle}
         >
           <span id="copy-coordinates-to-clipboard-button">
             {formattedCoordinates}
@@ -104,6 +108,7 @@ function RightClickMenu(props) {
         <MenuItem
           onClick={() => addPlaceMarkerHandler(pixelCoords, map, crs)}
           attributes={{ id: 'context-menu-add-marker' }}
+          className={mobileStyle}
         >
           Add Place Marker
         </MenuItem>
@@ -111,12 +116,14 @@ function RightClickMenu(props) {
         <MenuItem
           onClick={() => handleMeasurementMenu('distance')}
           attributes={{ id: 'context-menu-measure-distance' }}
+          className={mobileStyle}
         >
           Measure Distance
         </MenuItem>
         <MenuItem
           onClick={() => handleMeasurementMenu('area')}
           attributes={{ id: 'context-menu-measure-area' }}
+          className={mobileStyle}
         >
           Measure Area
         </MenuItem>
@@ -125,6 +132,7 @@ function RightClickMenu(props) {
         <MenuItem
           onClick={() => handleMeasurementMenu('clear')}
           attributes={{ id: 'context-menu-clear-measurements' }}
+          className={mobileStyle}
         >
           Remove Measurements
         </MenuItem>
@@ -132,6 +140,7 @@ function RightClickMenu(props) {
         <MenuItem
           onClick={() => handleMeasurementMenu('units')}
           attributes={{ id: 'context-menu-change-units' }}
+          className={mobileStyle}
         >
           Change Units to
           {' '}
@@ -144,7 +153,7 @@ function RightClickMenu(props) {
 
 function mapStateToProps(state) {
   const {
-    map, proj, measure, locationSearch, config,
+    map, proj, measure, locationSearch, config, screenSize,
   } = state;
   const { unitOfMeasure, allMeasurements, isActive } = measure;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
@@ -157,6 +166,7 @@ function mapStateToProps(state) {
     coordinates,
     isCoordinateSearchActive,
     config,
+    isMobile: screenSize.isMobileDevice,
   };
 }
 
@@ -173,6 +183,7 @@ RightClickMenu.propTypes = {
   isCoordinateSearchActive: PropTypes.bool,
   allMeasurements: PropTypes.object,
   measurementIsActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(

@@ -101,12 +101,12 @@ MeasurementLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { notifications, browser } = state;
+  const { notifications, screenSize } = state;
   const activeLayerMap = getActiveLayersMap(state);
   const { id } = ownProps.layer;
   return {
     isEnabled: !!activeLayerMap[id],
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobile,
     selectedDate: getSelectedDate(state),
     layerNotices: getLayerNoticesForLayer(id, notifications),
   };

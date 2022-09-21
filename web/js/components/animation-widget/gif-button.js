@@ -6,9 +6,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import {
   cloneDeep as lodashCloneDeep,
-  find as lodashFind,
   filter as lodashFilter,
-  get as lodashGet,
 } from 'lodash';
 import GifContainer from '../../containers/gif';
 import {
@@ -18,10 +16,9 @@ import {
 import { clearCustoms, refreshPalettes } from '../../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../../modules/map/actions';
 import {
-  clearGraticule, refreshGraticule, hideLayers, showLayers,
+  hideLayers, showLayers,
 } from '../../modules/layers/actions';
 import {
-  getActiveLayers,
   getAllActiveLayers,
 } from '../../modules/layers/selectors';
 import {
@@ -43,14 +40,12 @@ const GifButton = (props) => {
     onUpdateStartAndEndDate,
     hasCustomPalettes,
     isRotated,
-    hasGraticule,
     rotation,
     activePalettes,
     numberOfFrames,
     refreshStateAfterGif,
     hasNonDownloadableLayer,
     visibleLayersForProj,
-    proj,
     notify,
     isGifActive,
     zeroDates,
@@ -83,7 +78,6 @@ const GifButton = (props) => {
     const paletteStore = lodashCloneDeep(activePalettes);
     await getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
     await getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-    await getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
     await getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await onUpdateStartAndEndDate(startDate, endDate);
     googleTagManager.pushEvent({
@@ -91,7 +85,7 @@ const GifButton = (props) => {
     });
 
     onCloseGif = () => {
-      refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule, nonDownloadableLayers);
+      refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, nonDownloadableLayers);
       toggleGif();
     };
     toggleGif();
@@ -133,16 +127,9 @@ const mapStateToProps = (state) => {
     activeLayersForProj,
     activePalettes,
   );
-  const activeLayers = getActiveLayers(state);
   return {
     activePalettes,
     hasCustomPalettes,
-    hasGraticule: Boolean(
-      lodashGet(
-        lodashFind(activeLayers, { id: 'Graticule' }) || {},
-        'visible',
-      ),
-    ),
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     isGifActive: animation.gifActive,
     isRotated: Boolean(map.rotation !== 0),
@@ -159,15 +146,12 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   },
-  refreshStateAfterGif: (activePalettes, rotation, isGraticule, nonDownloadableLayers) => {
+  refreshStateAfterGif: (activePalettes, rotation, nonDownloadableLayers) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
     if (rotation) {
       dispatch(refreshRotation(rotation));
-    }
-    if (isGraticule) {
-      dispatch(refreshGraticule(isGraticule));
     }
     if (nonDownloadableLayers) {
       dispatch(showLayers(nonDownloadableLayers));
@@ -207,14 +191,12 @@ GifButton.propTypes = {
   activePalettes: PropTypes.object,
   visibleLayersForProj: PropTypes.array,
   hasCustomPalettes: PropTypes.bool,
-  hasGraticule: PropTypes.bool,
   hasNonDownloadableLayer: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isRotated: PropTypes.bool,
   notify: PropTypes.func,
   numberOfFrames: PropTypes.number,
   onUpdateStartAndEndDate: PropTypes.func,
-  proj: PropTypes.object,
   refreshStateAfterGif: PropTypes.func,
   rotation: PropTypes.number,
   toggleGif: PropTypes.func,

@@ -1268,7 +1268,6 @@ class Timeline extends React.Component {
 function mapStateToProps(state) {
   const {
     animation,
-    browser,
     compare,
     config,
     date,
@@ -1278,6 +1277,7 @@ function mapStateToProps(state) {
     map,
     modal,
     proj,
+    screenSize,
     sidebar,
     tour,
     ui,
@@ -1292,12 +1292,12 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { screenWidth } = browser;
+  const { screenWidth } = screenSize;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily

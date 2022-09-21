@@ -492,7 +492,7 @@ function mapStateToProps(state) {
     modal,
     config,
     map,
-    browser,
+    screenSize,
     ui,
     proj,
   } = state;
@@ -563,7 +563,7 @@ function mapStateToProps(state) {
 
   return {
     appNow,
-    screenWidth: browser.screenWidth,
+    screenWidth: screenSize.screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
@@ -574,8 +574,8 @@ function mapStateToProps(state) {
     maxDate,
     isActive: animationIsActive,
     isDistractionFreeModeActive,
-    isMobile: browser.lessThan.medium,
-    isLandscape: browser.orientation === 'landscape',
+    isMobile: screenSize.isMobileDevice,
+    isLandscape: screenSize.orientation === 'landscape',
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,

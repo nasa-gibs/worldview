@@ -351,14 +351,23 @@ class LocationSearchModal extends Component {
       showInputAlert,
     } = this.state;
 
+    const locationSearchMobileStyle = isMobile ? {
+      position: 'static',
+      width: '100%',
+    } : null;
+
+    const locationSearchInputGroupMobileStyle = isMobile ? {
+      width: '100% !important',
+    } : null;
+
     return (
-      <div id="location-search-wrapper" className="location-search-expanded">
+      <div id="location-search-wrapper" className="location-search-expanded" style={locationSearchMobileStyle}>
         {/* Alerts */}
         {this.renderReverseGeocodeAlert()}
         {this.renderNoSuggestionsAlert()}
         {this.renderExtentAlert()}
         <div className="location-search-component">
-          <InputGroup className="location-search-input-group">
+          <InputGroup className="location-search-input-group" style={locationSearchInputGroupMobileStyle}>
             {/* Minimize button not visible in mobile */}
             {!isMobile && this.renderMinimizeButton()}
             <SearchBox
@@ -385,7 +394,7 @@ class LocationSearchModal extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     config,
     lastAction,
     proj,
@@ -398,7 +407,7 @@ const mapStateToProps = (state) => {
     suggestions,
     suggestedPlace,
   } = locationSearch;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const locationSearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_LOCATION_SEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;
