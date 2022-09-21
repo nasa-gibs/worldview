@@ -7,12 +7,10 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 // production optimizations
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const cssnano = require('cssnano');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
-const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
@@ -32,16 +30,11 @@ const pluginSystem = [
 ];
 
 /* Conditional Plugin Management */
-// add hot module replacement
-if (isDevServer) {
+if (devMode) {
   pluginSystem.push(
-    new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
-    new webpack.NamedModulesPlugin(),
     new ReactRefreshWebpackPlugin(),
   );
 }
-
-// conditionally required and add plugin bundle analzyer
 if (process.env.ANALYZE_MODE === 'true') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
@@ -54,11 +47,6 @@ if (process.env.DEBUG !== undefined) {
     new webpack.DefinePlugin({ DEBUG: false }),
   );
 }
-
-// handle testing entry point and output file name
-
-const entryPoint = './web/js/main.js';
-const outputFileName = 'wv.js';
 
 const babelLoaderExcludes = [
   /\.test\.js$/,
@@ -93,20 +81,22 @@ module.exports = {
     modules: false,
     children: false,
   },
-  entry: entryPoint,
+  entry: './web/js/main.js',
   devtool: devMode ? 'cheap-module-source-map' : 'source-map',
   devServer: {
-    contentBase: path.join(__dirname, '/web'),
+    static: {
+      directory: path.join(__dirname, '/web'),
+    },
     compress: true,
-    hot: true,
-    watchContentBase: true, // watch index.html changes
     port: 3000,
     host: '0.0.0.0',
     liveReload: false,
+    hot: true,
+    historyApiFallback: true,
   },
   output: {
-    filename: outputFileName,
-    path: path.join(__dirname, '/web/build'),
+    filename: 'wv.js',
+    path: path.join(__dirname, '/web/build/'),
     pathinfo: false,
   },
   optimization: {
@@ -119,19 +109,7 @@ module.exports = {
           extractComments: true,
         },
       }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: cssnano,
-        cssProcessorOptions: {
-          preset: ['default', {
-            discardComments: {
-              removeAll: true,
-            },
-            map: {
-              inline: false,
-            },
-          }],
-        },
-      }),
+      new CssMinimizerPlugin(),
     ],
   },
   plugins: pluginSystem,
@@ -144,7 +122,7 @@ module.exports = {
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
             cacheDirectory: devMode,
-            plugins: [isDevServer && require.resolve('react-refresh/babel')].filter(Boolean),
+            plugins: [devMode && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
         exclude: babelLoaderExcludes,
