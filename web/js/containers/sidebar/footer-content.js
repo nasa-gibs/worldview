@@ -140,7 +140,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeMode(str));
   },
   addLayers: (isPlaying, isMobile, breakpoints, screenWidth) => {
-    const modalClassName = isMobile || screenWidth < breakpoints.medium ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
+    const modalClassName = isMobile || screenWidth < breakpoints.small ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
     if (isPlaying) {
       dispatch(stopAnimationAction());
     }
