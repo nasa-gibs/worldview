@@ -86,7 +86,6 @@ class ModalContainer extends Component {
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile ? 0 : '0.5rem auto';
-
     return {
       left: offsetLeft,
       right: offsetRight,
@@ -279,8 +278,6 @@ function mapStateToProps(state) {
   const {
     screenHeight, screenWidth, orientation, isMobileDevice,
   } = screenSize;
-  // const screenHeight = window.innerHeight;
-  // const screenWidth = window.innerWidth;
   const isMobile = isMobileDevice;
   const { isEmbedModeActive } = embed;
   return {

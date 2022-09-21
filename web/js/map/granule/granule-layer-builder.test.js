@@ -7,11 +7,9 @@ import granuleLayerBuilder from './granule-layer-builder';
 import { LOADING_START, LOADING_STOP } from '../../modules/loading/constants';
 import { LOADING_GRANULES } from '../../modules/loading/actions';
 import { ADD_GRANULE_LAYER_DATES } from '../../modules/layers/constants';
-import { OPEN_BASIC } from '../../modules/modal/constants';
-
 
 const mockBaseCmrApi = 'mock.cmr.api/';
-const queryString = '?shortName=VJ102MOD&temporal=2019-09-23T00%3A00%3A00.000Z%2C2019-09-25T00%3A00%3A00.000Z&pageSize=2000';
+const queryString = '?shortName=VJ102MOD&day_night_flag=DAY&temporal=2019-09-24T00%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=1000 ';
 const cmrGranules = require('../../../mock/cmr_granules.json');
 
 fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules)
@@ -78,7 +76,7 @@ describe('granule layer builder', () => {
     expect(thirdAction.count).toEqual(thirdAction.dates.length);
   });
 
-  it('dispatches modal open action when CMR unreachable', async () => {
+  it('doesnt query cmr when date falls outside range', async () => {
     const options = {
       group: 'active',
       date: new Date(Date.UTC('2016', '08', '24', '08', '54', '00')),
@@ -88,12 +86,8 @@ describe('granule layer builder', () => {
       def: granuleLayerDef,
     };
     await createGranuleLayer(granuleLayerDef, attributes, options);
-    const [firstAction, secondAction] = store.getActions();
-
-    expect(firstAction.type).toEqual(LOADING_START);
-    expect(firstAction.key).toEqual(LOADING_GRANULES);
-    // CMR unreachable modal opened
-    expect(secondAction.type).toEqual(OPEN_BASIC);
+    const actions = store.getActions();
+    expect(actions.length).toEqual(0);
   });
 
   it('sets expected layer properties', async () => {
@@ -106,7 +100,7 @@ describe('granule layer builder', () => {
       def: granuleLayerDef,
     };
     const granuleLayer = await createGranuleLayer(granuleLayerDef, attributes, options);
-    const filteredDates = granuleLayer.wv.filteredGranules.map(({ date }) => date);
+    const filteredDates = granuleLayer.wv.visibleGranules.map(({ date }) => date);
 
     expect(granuleLayer.get('granuleGroup')).toEqual(true);
     expect(granuleLayer.wv.granuleDates).toEqual(expectedDates);

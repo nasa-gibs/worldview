@@ -809,7 +809,7 @@ export default function mapui(models, config, store) {
   }
 
   /**
-   * Initiates the adding of a layer or Graticule
+   * Initiates the adding of a layer
    * @param {object} def - layer Specs
    * @returns {void}
    */
@@ -915,13 +915,11 @@ export default function mapui(models, config, store) {
       if (compare.active && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else if (temporalLayer) {
-        const index = findLayerIndex(def);
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(state, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
-
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
@@ -1153,6 +1151,7 @@ export default function mapui(models, config, store) {
       ],
       loadTilesWhileAnimating: true,
       loadTilesWhileInteracting: true,
+      maxTilesLoading: 32,
     });
     map.wv = {
       scaleMetric,

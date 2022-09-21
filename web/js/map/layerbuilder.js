@@ -6,10 +6,6 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
-import OlStroke from 'ol/style/Stroke';
-import OlText from 'ol/style/Text';
-import OlFill from 'ol/style/Fill';
-import OlGraticule from 'ol/layer/Graticule';
 
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
@@ -90,33 +86,6 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const getGraticule = (proj) => {
-    const graticule = new OlGraticule({
-      lonLabelStyle: new OlText({
-        font: '12px Calibri,sans-serif',
-        textBaseline: 'top',
-        fill: new OlFill({
-          color: 'rgba(0,0,0,1)',
-        }),
-        stroke: new OlStroke({
-          color: 'rgba(255,255,255,1)',
-          width: 3,
-        }),
-      }),
-      // the style to use for the lines, optional.
-      strokeStyle: new OlStroke({
-        color: 'rgb(255, 255, 255)',
-        width: 2,
-        lineDash: [0.5, 4],
-      }),
-      extent: proj.maxExtent,
-      lonLabelPosition: 1,
-      showLabels: true,
-    });
-    graticule.isVector = true;
-    return graticule;
-  };
-
   /**
    * Create a new OpenLayers Layer
    * @param {object} def
@@ -176,9 +145,6 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
-          case 'graticule':
-            layer = getGraticule(proj);
-            break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
         }
@@ -200,9 +166,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
-   * @param {object} granuleLayerParam (optional: only used for granule layers)
-   *    * @param {array} granuleDates - Reordered granule times
-   *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
   const createLayer = async (def, options = {}) => {
@@ -450,7 +413,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
-      transition: 0,
+      transition: 300,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
