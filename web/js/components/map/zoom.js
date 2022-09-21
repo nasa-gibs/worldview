@@ -12,8 +12,10 @@ function Zoom({
   const zoomOutDisabled = zoomLevel === 0;
   if (!map) return null;
 
+  const zoomButtonClass = isMobile ? 'wv-zoom-buttons-mobile' : 'wv-zoom-buttons';
+
   return !isDistractionFreeModeActive && (
-    <div className="wv-zoom-buttons">
+    <div className={zoomButtonClass}>
       <button
         type="button"
         disabled={zoomInDisabled}
