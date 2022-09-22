@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import util from '../../../util/util';
+import { GRANULE_HOVERED } from '../../../util/constants';
 
 const { events } = util;
 
@@ -146,7 +147,7 @@ class GranuleDateList extends PureComponent {
   // handle mouse over item
   handleMouseOverItem = (granuleDate) => {
     const { granulePlatform } = this.props;
-    events.trigger('granule-hovered', granulePlatform, granuleDate);
+    events.trigger(GRANULE_HOVERED, granulePlatform, granuleDate);
     this.setState({
       hoveredItem: granuleDate,
     });
@@ -155,7 +156,7 @@ class GranuleDateList extends PureComponent {
   // handle mouse leave item
   handleMouseLeaveItem = () => {
     const { granulePlatform } = this.props;
-    events.trigger('granule-hovered', granulePlatform, null);
+    events.trigger(GRANULE_HOVERED, granulePlatform, null);
     this.setState({
       hoveredItem: null,
     });

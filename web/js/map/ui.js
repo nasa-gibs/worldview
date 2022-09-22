@@ -26,12 +26,12 @@ import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
-import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
 import PQueue from 'p-queue/dist';
+import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import { getActiveLayerGroup, fly, saveRotation } from './util';
+import { fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { granuleFootprint } from './granule/util';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -52,6 +52,7 @@ import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
   getActiveLayers,
+  getActiveLayerGroup,
   isRenderable as isRenderableLayer,
   getMaxZoomLevelLayerCollection,
   getAllActiveLayers,
@@ -70,7 +71,19 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { animateCoordinates, getCoordinatesMarker, areCoordinatesWithinExtent } from '../modules/location-search/util';
 import { getNormalizedCoordinate } from '../components/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
-import { startLoading, stopLoading, PRELOAD_TILES } from '../modules/loading/actions';
+import { startLoading, stopLoading, MAP_LOADING } from '../modules/loading/actions';
+import {
+  MAP_DISABLE_CLICK_ZOOM,
+  MAP_ENABLE_CLICK_ZOOM,
+  REDUX_ACTION_DISPATCHED,
+  GRANULE_HOVERED,
+  GRANULE_HOVER_UPDATE,
+  MAP_DRAG,
+  MAP_MOUSE_MOVE,
+  MAP_MOUSE_OUT,
+  MAP_MOVE_START,
+  MAP_ZOOMING,
+} from '../util/constants';
 
 const { events } = util;
 
@@ -98,10 +111,6 @@ export default function mapui(models, config, store) {
     createLayer,
     processingPromise: null,
   };
-
-  layerQueue.on('idle', () => {
-    store.dispatch(stopLoading(PRELOAD_TILES));
-  });
 
   /**
    * Subscribe to redux store and listen for
@@ -201,7 +210,7 @@ export default function mapui(models, config, store) {
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case CALCULATE_RESPONSIVE_STATE:
+      case SET_SCREEN_INFO:
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
@@ -209,7 +218,9 @@ export default function mapui(models, config, store) {
         updateVectorSelection(
           action.payload,
           self.selectedVectors,
-          getActiveLayers(state), type, state,
+          getActiveLayers(state),
+          type,
+          state,
         );
         self.selectedVectors = newSelection;
         return;
@@ -290,17 +301,17 @@ export default function mapui(models, config, store) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    events.on('map:disable-click-zoom', () => {
+    events.on(MAP_DISABLE_CLICK_ZOOM, () => {
       doubleClickZoom.setActive(false);
     });
-    events.on('map:enable-click-zoom', () => {
+    events.on(MAP_ENABLE_CLICK_ZOOM, () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    events.on('redux:action-dispatched', subscribeToStore);
-    events.on('granule-hovered', onGranuleHover);
-    events.on('granule-hover-update', onGranuleHoverUpdate);
+    events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+    events.on(GRANULE_HOVERED, onGranuleHover);
+    events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
     window.addEventListener('orientationchange', () => {
       setTimeout(() => { updateProjection(true); }, 200);
     });
@@ -391,7 +402,7 @@ export default function mapui(models, config, store) {
    */
   const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
     const state = store.getState();
-    const { proj, browser } = state;
+    const { proj, screenSize } = state;
     const results = geocodeResults;
     if (!results) return;
 
@@ -401,7 +412,7 @@ export default function mapui(models, config, store) {
       coordinatesObject,
       results,
       remove,
-      browser.lessThan.medium,
+      screenSize.isMobileDevice,
       showDialog,
     );
 
@@ -520,8 +531,8 @@ export default function mapui(models, config, store) {
    */
   function onResize() {
     const state = store.getState();
-    const { browser } = state;
-    const isMobile = browser.lessThan.medium;
+    const { screenSize } = state;
+    const isMobile = screenSize.isMobileDevice;
     const map = self.selected;
 
     if (isMobile) {
@@ -789,14 +800,16 @@ export default function mapui(models, config, store) {
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeStr, opacity, compare);
     } else {
-      const layer = findLayer(def, activeStr);
-      layer.setOpacity(opacity);
+      const layerGroup = findLayer(def, activeStr);
+      layerGroup.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity);
+      });
     }
     updateLayerVisibilities();
   }
 
   /**
-   * Initiates the adding of a layer or Graticule
+   * Initiates the adding of a layer
    * @param {object} def - layer Specs
    * @returns {void}
    */
@@ -838,7 +851,7 @@ export default function mapui(models, config, store) {
     layersToRemove.forEach((def) => {
       const layer = findLayer(def, compare.activeString);
       if (compare && compare.active) {
-        const layerGroup = getActiveLayerGroup(self.selected, compare.activeString);
+        const layerGroup = getActiveLayerGroup(state);
         if (layerGroup) layerGroup.getLayers().remove(layer);
       } else {
         self.selected.removeLayer(layer);
@@ -866,22 +879,6 @@ export default function mapui(models, config, store) {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
   }
 
-  function getLayerGroup (state) {
-    const { compare } = state;
-    const { active, activeString } = compare || {};
-    if (active) {
-      const layerGroups = self.selected.getLayers().getArray();
-      if (layerGroups.length > 1) {
-        return layerGroups[0].get('group') === activeString
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === activeString
-            ? layerGroups[1]
-            : null;
-      }
-    }
-    return self.selected;
-  }
-
   async function updateCompareLayer (def, index, layerCollection) {
     const state = store.getState();
     const { compare } = state;
@@ -898,7 +895,7 @@ export default function mapui(models, config, store) {
   async function updateDate(outOfStepChange) {
     const state = store.getState();
     const { compare = {} } = state;
-    const layerGroup = getLayerGroup(state);
+    const layerGroup = getActiveLayerGroup(state);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
     const activeLayers = getAllActiveLayers(state);
@@ -918,13 +915,11 @@ export default function mapui(models, config, store) {
       if (compare.active && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else if (temporalLayer) {
-        const index = findLayerIndex(def);
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(state, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
-
           const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
@@ -958,8 +953,6 @@ export default function mapui(models, config, store) {
     const nextDate = getNextDateTime(state, 1, useDate);
     const prevDate = getNextDateTime(state, -1, useDate);
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
-
-    store.dispatch(startLoading(PRELOAD_TILES));
 
     // If we've preloaded N dates out, we need to use the latest
     // preloaded date the next time we call this function or the buffer
@@ -1068,7 +1061,7 @@ export default function mapui(models, config, store) {
    */
   function findLayerIndex({ id }) {
     const state = store.getState();
-    const layerGroup = getLayerGroup(state);
+    const layerGroup = getActiveLayerGroup(state);
     const layers = layerGroup.getLayers().getArray();
     return lodashFindIndex(layers, {
       wv: { id },
@@ -1108,6 +1101,7 @@ export default function mapui(models, config, store) {
     mapEl.classList.add('wv-map');
     mapEl.style.display = 'none';
     mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
+
 
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
@@ -1157,6 +1151,7 @@ export default function mapui(models, config, store) {
       ],
       loadTilesWhileAnimating: true,
       loadTilesWhileInteracting: true,
+      maxTilesLoading: 32,
     });
     map.wv = {
       scaleMetric,
@@ -1165,7 +1160,7 @@ export default function mapui(models, config, store) {
     map.proj = proj.id;
     createMousePosSel(map, proj);
     map.getView().on('change:resolution', () => {
-      events.trigger('map:movestart');
+      events.trigger(MAP_MOVE_START);
     });
 
     // This component is inside the map viewport container. Allowing
@@ -1201,13 +1196,13 @@ export default function mapui(models, config, store) {
 
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      events.trigger('map:drag');
+      events.trigger(MAP_DRAG);
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          events.trigger('map:zooming');
+          events.trigger(MAP_ZOOMING);
           break;
         default:
           break;
@@ -1229,6 +1224,13 @@ export default function mapui(models, config, store) {
       setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
     };
+
+    map.on('loadstart', () => {
+      store.dispatch(startLoading(MAP_LOADING));
+    });
+    map.on('loadend', () => {
+      store.dispatch(stopLoading(MAP_LOADING));
+    });
     map.on('rendercomplete', onRenderComplete);
     granuleFootprints[proj.crs] = granuleFootprint(map);
     window.addEventListener('resize', () => {
@@ -1237,31 +1239,24 @@ export default function mapui(models, config, store) {
     return map;
   }
 
-  /*
+  /**
    * Creates map events based on mouse position
-   *
-   *
-   * @method createMousePosSel
-   * @static
-   *
    * @param {object} map - OpenLayers Map Object
-   *
    * @returns {void}
-   *
-   * @todo move this component to another Location
    */
   function createMousePosSel(map) {
     const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
       const state = store.getState();
       const {
-        events, browser, locationSearch, sidebar, animation, measure,
+        events, locationSearch, sidebar, animation, measure, screenSize,
       } = state;
       const { isCoordinateSearchActive } = locationSearch;
-      const isMobile = browser.lessThan.medium;
+      const isMobile = screenSize.isMobileDevice;
       const coords = map.getCoordinateFromPixel(pixel);
       const isEventsTabActive = typeof events !== 'undefined' && events.active;
       const isMapAnimating = animation.isPlaying;
 
+      if (map.proj !== state.map.ui.selected.proj) return;
       if (self.mapIsbeingZoomed) return;
       if (self.mapIsbeingDragged) return;
       if (compareMapUi && compareMapUi.dragging) return;
@@ -1274,8 +1269,8 @@ export default function mapui(models, config, store) {
       runningdata.newPoint(pixel, map);
     }, 300);
 
-    events.on('map:mousemove', throttledOnMouseMove);
-    events.on('map:mouseout', (e) => {
+    events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
+    events.on(MAP_MOUSE_OUT, (e) => {
       throttledOnMouseMove.cancel();
       runningdata.clearAll();
     });

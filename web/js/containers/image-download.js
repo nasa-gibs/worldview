@@ -230,7 +230,7 @@ function mapStateToProps(state) {
   const {
     config,
     proj,
-    browser,
+    screenSize,
     locationSearch,
     map,
     imageDownload,
@@ -238,7 +238,7 @@ function mapStateToProps(state) {
   const {
     isWorldfile, fileType, resolution, boundaries,
   } = imageDownload;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
   const markerCoordinates = locationSearch.coordinates;
   const hasSubdailyLayers = subdailyLayersActive(state);
   let url = DEFAULT_URL;

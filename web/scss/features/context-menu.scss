@@ -11,6 +11,11 @@
   transition: opacity 250ms ease !important;
 }
 
+.react-contextmenu-mobile {
+  font-size: 14px !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
 .react-contextmenu.react-contextmenu--visible {
   opacity: 1;
   pointer-events: auto;

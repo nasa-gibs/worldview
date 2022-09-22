@@ -79,6 +79,8 @@ module.exports = {
   },
   'Available grid source layer measuremet does not have unavaiable coverage class': (c) => {
     // swith to Aqua/MODIS measurement nav item
+    c.click(aquaTerraMODISTab);
+    c.pause(500);
     c.click(aquaModisTab);
     c.waitForElementVisible(aodTabContentAquaMODIS, TIME_LIMIT, (e) => {
       c.expect.element(aodCheckbox).to.be.present;

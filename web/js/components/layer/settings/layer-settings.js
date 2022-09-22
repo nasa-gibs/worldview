@@ -369,7 +369,7 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser, settings,
+    config, palettes, compare, screenSize, settings,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
@@ -388,7 +388,7 @@ function mapStateToProps(state, ownProps) {
     paletteOrder: config.paletteOrder,
     granuleOptions,
     groupName,
-    screenHeight: browser.screenHeight,
+    screenHeight: screenSize.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),

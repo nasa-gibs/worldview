@@ -46,9 +46,11 @@ export function getMinValue(v) {
 export function getMaxValue(v) {
   return v.length ? v[v.length - 1] : v;
 }
+
 export function isConditional(item) {
   return Array.isArray(item) && item[0] === 'case';
 }
+
 export function adjustCircleRadius(style) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
@@ -88,6 +90,7 @@ export function selectedPolygonStyle(style) {
   fill.setColor(color);
   return style;
 }
+
 export function offsetLineStringStyle(feature, styleArray) {
   return styleArray.map((style) => {
     const text = style.getText();
@@ -112,6 +115,7 @@ export function selectedStyleFunction(feature, styleArray, size) {
     }
   });
 }
+
 export function getConditionalColors(color) {
   const array = Array.from(color);
   array.shift();
@@ -141,6 +145,7 @@ export function getConditionalColors(color) {
   }
   return { colors, labels };
 }
+
 export function getPaletteForStyle(layer, layerstyleLayerObject) {
   const styleLayerObject = layerstyleLayerObject.layers[0];
   const color = styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color'];
@@ -163,12 +168,14 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
     id: `${layer.id}0_legend`,
   }];
 }
+
 export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
   if (acceptableExtent) {
     return lon > acceptableExtent[0] && lon < acceptableExtent[2];
   }
   return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
 }
+
 /**
  * Use modal/screen dimensions and click pixel location
  * to return X & Y offsets for modal
@@ -198,6 +205,7 @@ function getModalOffset(dimensionProps) {
   }
   return { offsetLeft, offsetTop };
 }
+
 /**
  * Get Organized data for each feature at pixel
  * @param {Object} mapProps
@@ -271,6 +279,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,
   };
 }
+
 /**
  * Get organized vector modal contents for clicked
  * map location
@@ -284,8 +293,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
  */
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const { config, compare } = state;
-  const { screenWidth, screenHeight, lessThan } = state.browser;
-  const isMobile = lessThan.medium;
+  const { screenWidth, screenHeight, isMobileDevice } = state.screenSize;
+  const isMobile = isMobileDevice;
   const x = pixels[0];
   const y = pixels[1];
   const modalOffsetProps = {
@@ -306,23 +315,26 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
     exceededLengthLimit,
   };
 }
+
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  const { vectorStyles } = state.config;
+  const { config: { vectorStyles }, map: { ui: { selected } } } = state;
+  const layerGroups = selected.getLayers().getArray();
+  let olLayers = [];
+  layerGroups.forEach((group) => {
+    olLayers = [...olLayers, ...group.getLayers().getArray()];
+  });
+
   for (const [key] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);
+    const olLayer = olLayers.find((layer) => layer.wv.id === key);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    setStyleFunction(
-      def,
-      def.vectorStyle.id,
-      vectorStyles,
-      null,
-      state,
-    );
+    const olLayer = olLayers.find((layer) => layer.wv.id === key);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
   }
 }

@@ -19,6 +19,7 @@ import {
   saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
 import util from '../../../util/util';
+import { JOYRIDE_INCREMENT } from '../../../util/constants';
 
 const { events } = util;
 
@@ -39,7 +40,7 @@ class ProductPicker extends React.Component {
     const modalElement = document.getElementById('layer_picker_component');
     this.setState({ modalElement }, () => {
       setTimeout(() => {
-        events.trigger('joyride:increment');
+        events.trigger(JOYRIDE_INCREMENT);
       }, 200);
       this.setModalClass();
     });
@@ -122,15 +123,15 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     productPicker,
   } = state;
-  const { screenWidth } = browser;
+  const { screenWidth } = screenSize;
   const width = getModalWidth(screenWidth);
   const { mode, category, categoryType } = productPicker;
 
   return {
-    browser,
+    screenSize,
     category,
     categoryType,
     mode,

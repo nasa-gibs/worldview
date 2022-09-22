@@ -343,11 +343,11 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, config, shortLink, sidebar, tour,
+    screenSize, config, shortLink, sidebar, tour,
   } = state;
 
   const { features: { urlShortening } } = config;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
 
   return {

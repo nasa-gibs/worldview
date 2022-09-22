@@ -22,10 +22,17 @@ import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 import { FULL_MAP_EXTENT } from '../../modules/map/constants';
+import {
+  GRANULE_HOVERED,
+  GRANULE_HOVER_UPDATE,
+  MAP_SINGLE_CLICK,
+  MAP_MOUSE_MOVE,
+  MAP_MOUSE_OUT,
+  MAP_MOVE_END,
+} from '../../util/constants';
 
 const { events } = util;
 
@@ -44,22 +51,22 @@ export class VectorInteractions extends React.Component {
   }
 
   componentDidMount() {
-    events.on('map:moveend', this.moveEnd);
-    events.on('map:mousemove', this.mouseMove);
-    events.on('map:mouseout', this.mouseOut);
-    events.on('map:singleclick', this.singleClick);
+    events.on(MAP_MOVE_END, this.moveEnd);
+    events.on(MAP_MOUSE_MOVE, this.mouseMove);
+    events.on(MAP_MOUSE_OUT, this.mouseOut);
+    events.on(MAP_SINGLE_CLICK, this.singleClick);
   }
 
   componentWillUnmount() {
-    events.off('map:moveend', this.moveEnd);
-    events.off('map:mousemove', this.mouseMove);
-    events.off('map:mouseout', this.mouseOut);
-    events.off('map:singleclick', this.singleClick);
+    events.off(MAP_MOVE_END, this.moveEnd);
+    events.off(MAP_MOUSE_MOVE, this.mouseMove);
+    events.off(MAP_MOUSE_OUT, this.mouseOut);
+    events.off(MAP_SINGLE_CLICK, this.singleClick);
   }
 
   clearGranuleFootprint() {
     this.setState({ granuleDate: null, granulePlatform: null });
-    events.trigger('granule-hovered', null);
+    events.trigger(GRANULE_HOVERED, null);
   }
 
   /**
@@ -93,7 +100,7 @@ export class VectorInteractions extends React.Component {
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
-          events.trigger('granule-hovered', granulePlatform, date);
+          events.trigger(GRANULE_HOVERED, granulePlatform, date);
           this.setState({ granulePlatform, granuleDate: date });
         }
       });
@@ -135,13 +142,13 @@ export class VectorInteractions extends React.Component {
   moveEnd() {
     const { granuleDate, granulePlatform } = this.state;
     if (granuleDate && granulePlatform) {
-      events.trigger('granule-hover-update', granulePlatform, granuleDate);
+      events.trigger(GRANULE_HOVER_UPDATE, granulePlatform, granuleDate);
     }
   }
 
   mouseOut = () => {
     this.mouseMove.cancel();
-    events.trigger('granule-hovered', null);
+    events.trigger(GRANULE_HOVERED, null);
   }
 
   mouseMove({ pixel }, map, crs) {
@@ -165,7 +172,7 @@ export class VectorInteractions extends React.Component {
 
   singleClick(e, map) {
     const {
-      browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
+      screenSize, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
       activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
       proj, isEmbedModeActive, isVectorExceededAlertPresent, isMobile,
@@ -192,7 +199,7 @@ export class VectorInteractions extends React.Component {
       if (hasNonClickableVectorLayerType) {
         activateVectorZoomAlert();
       } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
+        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive);
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
         } else if (isVectorExceededAlertPresent) {
@@ -219,7 +226,7 @@ export class VectorInteractions extends React.Component {
 function mapStateToProps(state) {
   const {
     animation,
-    browser,
+    screenSize,
     compare,
     config,
     map,
@@ -245,7 +252,7 @@ function mapStateToProps(state) {
   let swipeOffset;
   if (active && mode === 'swipe') {
     const percentOffset = value || 50;
-    swipeOffset = browser.screenWidth * (percentOffset / 100);
+    swipeOffset = screenSize.screenWidth * (percentOffset / 100);
   }
 
   const granuleFootprints = getActiveGranuleFootPrints(state);
@@ -256,7 +263,7 @@ function mapStateToProps(state) {
 
   return {
     activeLayers,
-    browser,
+    screenSize,
     isCoordinateSearchActive,
     compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
@@ -267,7 +274,7 @@ function mapStateToProps(state) {
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
     isPlaying,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     granuleFootprints,
     granulePlatform,
     swipeOffset,
@@ -295,9 +302,9 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive) => {
-    const { screenHeight, screenWidth } = browser;
-    const isMobile = browser.lessThan.medium;
+  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive) => {
+    const { screenHeight, screenWidth } = screenSize;
+    const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
@@ -347,7 +354,7 @@ VectorInteractions.propTypes = {
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,
   activeLayers: PropTypes.array,
-  browser: PropTypes.object,
+  screenSize: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,

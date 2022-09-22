@@ -74,7 +74,9 @@ function mapStateToProps(state, ownProps) {
     trackLayer,
     compareState,
   } = ownProps;
-  const { palettes, config, ui } = state;
+  const {
+    palettes, config, ui, screenSize,
+  } = state;
   const { isDistractionFreeModeActive } = ui;
   const renderedPalettes = palettes.rendered;
   const hasPalette = !lodashIsEmpty(trackLayer.palette);
@@ -90,7 +92,7 @@ function mapStateToProps(state, ownProps) {
     isCustomPalette,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
-    isMobile: state.browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isDistractionFreeModeActive,
     hasPalette,
     getPalette: (layerId, index) => getPaletteSelector(trackLayer.id, index, compareState, state),

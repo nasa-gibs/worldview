@@ -10,6 +10,7 @@ import {
 import CoverageItemContainer from './coverage-item-container';
 import { formatDisplayDate } from '../../../modules/date/util';
 import MonospaceDate from '../../util/monospace-date';
+import { SIDEBAR_LAYER_HOVER } from '../../../util/constants';
 
 const { events } = util;
 
@@ -36,11 +37,11 @@ class CoverageItemList extends Component {
   }
 
   componentDidMount() {
-    events.on('sidebar:layer-hover', this.layerHoverCallback);
+    events.on(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
   }
 
   componentWillUnmount() {
-    events.off('sidebar:layer-hover', this.layerHoverCallback);
+    events.off(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
   }
 
   layerHoverCallback = (id, active) => {

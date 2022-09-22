@@ -31,6 +31,7 @@ import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
+import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -73,7 +74,6 @@ function LayerRow (props) {
     isInProjection,
     tracksForLayer,
     isVectorLayer,
-    runningObject,
     measurementDescriptionPath,
     isAnimating,
   } = props;
@@ -91,6 +91,14 @@ function LayerRow (props) {
   const [showButtons, toggleShowButtons] = useState(isMobile);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+  const [runningDataObj, setRunningDataObj] = useState({});
+
+  useEffect(() => {
+    events.on(MAP_RUNNING_DATA, setRunningDataObj);
+    return () => {
+      events.off(MAP_RUNNING_DATA, setRunningDataObj);
+    };
+  }, []);
 
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
@@ -101,10 +109,11 @@ function LayerRow (props) {
 
   const getPaletteLegend = () => {
     if (!lodashIsEmpty(renderedPalette)) {
+      const runningDataForLayer = runningDataObj[layer.id];
       const isRunningData = compare.active
-        ? compare.activeString === compareState && !!runningObject
-        : !!runningObject;
-      const colorHex = isRunningData ? runningObject.paletteHex : null;
+        ? compare.activeString === compareState && !!runningDataForLayer
+        : !!runningDataForLayer;
+      const colorHex = isRunningData ? runningDataForLayer.paletteHex : null;
       let width = zot ? 220 : 231;
       if (isEmbedModeActive) {
         width = 201;
@@ -256,7 +265,7 @@ function LayerRow (props) {
       <div
         id={layerVectorBtnId}
         aria-label={title}
-        className={runningObject ? `${classNames} running` : classNames}
+        className={runningDataObj ? `${classNames} running` : classNames}
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
@@ -270,13 +279,13 @@ function LayerRow (props) {
 
   const mouseOver = () => {
     if (isMobile) return;
-    events.trigger('sidebar:layer-hover', layer.id, true);
+    events.trigger(SIDEBAR_LAYER_HOVER, layer.id, true);
     toggleShowButtons(true);
   };
 
   const mouseLeave = () => {
     if (isMobile) return;
-    events.trigger('sidebar:layer-hover', layer.id, false);
+    events.trigger(SIDEBAR_LAYER_HOVER, layer.id, false);
     toggleShowButtons(false);
   };
 
@@ -408,9 +417,9 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui, settings, animation,
+      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation,
     } = state;
-    const isMobile = browser.lessThan.medium;
+    const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
     const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
     const hasPalette = !lodashIsEmpty(layer.palette);
@@ -546,7 +555,6 @@ LayerRow.propTypes = {
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
-  runningObject: PropTypes.object,
   toggleVisibility: PropTypes.func,
   hasClickableFeature: PropTypes.bool,
   tracksForLayer: PropTypes.array,
