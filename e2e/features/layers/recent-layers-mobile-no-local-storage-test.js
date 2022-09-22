@@ -6,7 +6,7 @@ module.exports = {
   '@tags': ['localStorageDisabled'],
   before(c) {
     c.url(`${c.globals.url}?t=2020-07-04`);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
   'Verify that recent layers dropdown choice does not show when local storage is disabled': function(c) {
     c.execute(

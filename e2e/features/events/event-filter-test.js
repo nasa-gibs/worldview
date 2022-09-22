@@ -128,12 +128,12 @@ module.exports = {
   'Changing criteria in modal DOES NOT update summary of criteria in sidebar on CANCEL': (c) => {
     c.url(c.globals.url + wildfiresWithDates);
     openFilterModal(c);
-    c.click(startInput.year).setValue(startInput.year, [2000, c.keys.ENTER]);
-    c.click(startInput.month).setValue(startInput.month, ['APR', c.keys.ENTER]);
-    c.click(startInput.day).setValue(startInput.day, [19, c.keys.ENTER]);
-    c.click(endInput.year).setValue(endInput.year, [2001, c.keys.ENTER]);
-    c.click(endInput.month).setValue(endInput.month, ['NOV', c.keys.ENTER]);
-    c.click(endInput.day).setValue(endInput.day, [11, c.keys.ENTER]);
+    c.click(startInput.year).sendKeys(startInput.year, 2000);
+    c.click(startInput.month).sendKeys(startInput.month, 'APR');
+    c.click(startInput.day).sendKeys(startInput.day, 19);
+    c.click(endInput.year).sendKeys(endInput.year, 2001);
+    c.click(endInput.month).sendKeys(endInput.month, 'NOV');
+    c.click(endInput.day).sendKeys(endInput.day, 11);
     c.click(getSwitchToggle(wildfiresSwitch)); // OFF
     c.pause(250);
     c.click(getSwitchToggle(dustSwitch)); // ON
@@ -163,12 +163,12 @@ module.exports = {
     c.expect.element(mapExtentFilterCheckbox).to.be.selected;
   },
   'Changing criteria in modal DOES update summary of criteria in sidebar on APPLY': (c) => {
-    c.click(startInput.year).setValue(startInput.year, [2000, c.keys.ENTER]);
-    c.click(startInput.month).setValue(startInput.month, ['APR', c.keys.ENTER]);
-    c.click(startInput.day).setValue(startInput.day, [19, c.keys.ENTER]);
-    c.click(endInput.year).setValue(endInput.year, [2001, c.keys.ENTER]);
-    c.click(endInput.month).setValue(endInput.month, ['NOV', c.keys.ENTER]);
-    c.click(endInput.day).setValue(endInput.day, [11, c.keys.ENTER]);
+    c.click(startInput.year).sendKeys(startInput.year, 2000);
+    c.click(startInput.month).sendKeys(startInput.month, 'APR');
+    c.click(startInput.day).sendKeys(startInput.day, 19);
+    c.click(endInput.year).sendKeys(endInput.year, 2001);
+    c.click(endInput.month).sendKeys(endInput.month, 'NOV');
+    c.click(endInput.day).sendKeys(endInput.day, 11);
     c.click(getSwitchToggle(wildfiresSwitch)); // OFF
     c.pause(250);
     c.click(getSwitchToggle(dustSwitch)); // ON
