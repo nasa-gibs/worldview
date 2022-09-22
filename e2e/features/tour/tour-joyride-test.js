@@ -32,7 +32,7 @@ module.exports = {
       return;
     }
     // c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
-    c.pause(300);
+    c.pause(5000);
     c.click('.react-joyride__beacon');
     c.waitForElementVisible(tooltip, TIME_LIMIT);
   },
