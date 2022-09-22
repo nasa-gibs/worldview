@@ -31,7 +31,7 @@ module.exports = {
     c.waitForElementVisible('#active-GRanD_Dams .fa-hand-pointer', TIME_LIMIT, () => {
       c.moveToElement('#wv-map-geographic', 400, 200)
         .click('#wv-map-geographic');
-      c.pause(5000);
+      c.pause(300);
       c.expect.element(globalSelectors.notifyMessage).to.be.present;
       c.assert.containsText(
         globalSelectors.notifyMessage,

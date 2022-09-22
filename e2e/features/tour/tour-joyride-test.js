@@ -20,11 +20,11 @@ module.exports = {
   },
   'Verify that all tour loads properly, Joyride beacon shows after progressing to Step 2': (c) => {
     c.setWindowSize(1000, 800);
-    c.pause(1500);
+    c.pause(300);
     c.useCss().waitForElementVisible('.tour-in-progress .step-total', TIME_LIMIT);
     c.click(tourNext);
     c.click('#wv-map');
-    c.pause(500);
+    c.pause(300);
     c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
   },
   'Clicking beacon shows the floater tooltip': (c) => {
@@ -32,7 +32,7 @@ module.exports = {
       return;
     }
     // c.useCss().waitForElementVisible(firstBeaconSelector, TIME_LIMIT);
-    c.pause(5000);
+    c.pause(300);
     c.click('.react-joyride__beacon');
     c.waitForElementVisible(tooltip, TIME_LIMIT);
   },
