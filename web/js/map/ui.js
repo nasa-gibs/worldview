@@ -27,7 +27,8 @@ import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import Cache from 'cachai';
-import PQueue from 'p-queue/dist';
+// eslint-disable-next-line import/no-unresolved
+import PQueue from 'p-queue';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';

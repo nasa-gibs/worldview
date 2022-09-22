@@ -1,21 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin');
-const postcssPresetEnv = require('postcss-preset-env');
-// production optimizations
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-// environment dev flag
-const devMode = process.env.NODE_ENV !== 'production';
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const devMode = process.env.NODE_ENV !== 'production';
+
 const pluginSystem = [
-  new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     hash: true,
     title: 'Worldview',
@@ -25,7 +20,6 @@ const pluginSystem = [
   new MiniCssExtractPlugin({
     filename: 'wv.css',
   }),
-  new WriteFilePlugin(),
   new MomentLocalesPlugin(),
 ];
 
@@ -66,47 +60,32 @@ if (devMode) {
 }
 
 module.exports = {
-  resolve: {
-    alias: {
-      googleTagManager$: path.resolve(
-        __dirname,
-        './web/js/components/util/google-tag-manager.js',
-      ),
-    },
-  },
   mode: devMode ? 'development' : 'production',
-  stats: {
-    // reduce output text on build - remove for more verbose
-    chunks: false,
-    modules: false,
-    children: false,
-  },
   entry: './web/js/main.js',
-  devtool: devMode ? 'cheap-module-source-map' : 'source-map',
-  devServer: {
-    static: {
-      directory: path.join(__dirname, '/web'),
-    },
-    compress: true,
-    port: 3000,
-    host: '0.0.0.0',
-    liveReload: false,
-    hot: true,
-    historyApiFallback: true,
-  },
   output: {
     filename: 'wv.js',
-    path: path.join(__dirname, '/web/build/'),
+    path: path.resolve(__dirname, 'web/build/'),
+    publicPath: '/',
     pathinfo: false,
+    clean: true,
+  },
+  devtool: devMode ? 'cheap-module-source-map' : 'source-map',
+  devServer: {
+    devMiddleware: {
+      writeToDisk: true,
+    },
+    static: path.join(__dirname, 'web'),
+    compress: true,
+    port: 3000,
+    hot: true,
+    historyApiFallback: true,
   },
   optimization: {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
           ecma: 5,
-          parallel: true,
           toplevel: true,
-          extractComments: true,
         },
       }),
       new CssMinimizerPlugin(),
@@ -131,38 +110,25 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
-            loader: 'css-hot-loader',
-          },
-          {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              sourceMap: true,
-            },
           },
+          'css-hot-loader',
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
             },
           },
           {
-            loader: 'postcss-loader', // Run post css actions
+            loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              ident: 'postcss',
-              plugins: () => [
-                postcssPresetEnv({
-                  browserslist: [
-                    'last 4 versions',
-                    'not ie < 11',
-                    'not edge < 17',
-                    'not IE_Mob 11',
-                    'not dead',
-                    '> 2%',
-                  ],
-                }),
-              ],
+              postcssOptions: {
+                plugins: [
+                  'cssnano',
+                  'autoprefixer',
+                ],
+              },
             },
           },
           {
@@ -221,5 +187,21 @@ module.exports = {
       },
     ],
   },
-  node: { fs: 'empty' },
+  resolve: {
+    alias: {
+      googleTagManager$: path.resolve(
+        __dirname,
+        './web/js/components/util/google-tag-manager.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+    },
+  },
+  stats: {
+    // reduce output text on build - remove for more verbose
+    chunks: false,
+    modules: false,
+    children: false,
+  },
 };

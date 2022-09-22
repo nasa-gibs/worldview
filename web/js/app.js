@@ -101,12 +101,6 @@ class App extends React.Component {
       }
 
       if (Brand.release()) {
-        // Disabled GTM ipAddress - https://www.ipify.org/ API
-        // if (config.features.googleTagManager) {
-        //   if (window.location.href.includes(Brand.BRAND_URL)) {
-        //     googleTagManager.getIpAddress();
-        //   }
-        // }
         // Console build version notifications
         console.info(
           `${Brand.NAME
