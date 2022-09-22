@@ -3,6 +3,7 @@
   max-width: 270px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 
   & .bag-o-chips {
     background: #333;
