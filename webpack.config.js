@@ -1,22 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
-  new HtmlWebpackPlugin({
-    hash: true,
-    title: 'Worldview',
-    filename: 'web/index.html',
-    inject: false,
-  }),
   new MiniCssExtractPlugin({
     filename: 'wv.css',
   }),
@@ -65,7 +58,7 @@ module.exports = {
   output: {
     filename: 'wv.js',
     path: path.resolve(__dirname, 'web/build/'),
-    publicPath: '/',
+    publicPath: '/build/',
     pathinfo: false,
     clean: true,
   },
@@ -140,50 +133,18 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
-        exclude: /(fontawesome-webfont.svg)/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'images/',
-          },
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext][query]',
         },
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: {
-          // handle font-awesome fonts
-          loader: 'url-loader?limit=10000&mimetype=application/font-woff',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext][query]',
         },
-      },
-      {
-        test: /((fontawesome-webfont.svg)|(\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?))/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
-        },
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: !devMode,
-              removeEmptyAttributes: !devMode,
-              sortAttributes: !devMode,
-              sortClassName: !devMode,
-            },
-          },
-        ],
       },
     ],
   },
