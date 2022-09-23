@@ -1,47 +1,27 @@
 const path = require('path');
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin');
-const postcssPresetEnv = require('postcss-preset-env');
-// production optimizations
-const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const cssnano = require('cssnano');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-// environment dev flag
-const devMode = process.env.NODE_ENV !== 'production';
-const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const devMode = process.env.NODE_ENV !== 'production';
+
 const pluginSystem = [
-  new CleanWebpackPlugin(),
-  new HtmlWebpackPlugin({
-    hash: true,
-    title: 'Worldview',
-    filename: 'web/index.html',
-    inject: false,
-  }),
   new MiniCssExtractPlugin({
     filename: 'wv.css',
   }),
-  new WriteFilePlugin(),
   new MomentLocalesPlugin(),
 ];
 
 /* Conditional Plugin Management */
-// add hot module replacement
-if (isDevServer) {
+if (devMode) {
   pluginSystem.push(
-    new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
-    new webpack.NamedModulesPlugin(),
     new ReactRefreshWebpackPlugin(),
   );
 }
-
-// conditionally required and add plugin bundle analzyer
 if (process.env.ANALYZE_MODE === 'true') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
@@ -54,11 +34,6 @@ if (process.env.DEBUG !== undefined) {
     new webpack.DefinePlugin({ DEBUG: false }),
   );
 }
-
-// handle testing entry point and output file name
-
-const entryPoint = './web/js/main.js';
-const outputFileName = 'wv.js';
 
 const babelLoaderExcludes = [
   /\.test\.js$/,
@@ -78,60 +53,35 @@ if (devMode) {
 }
 
 module.exports = {
-  resolve: {
-    alias: {
-      googleTagManager$: path.resolve(
-        __dirname,
-        './web/js/components/util/google-tag-manager.js',
-      ),
-    },
-  },
   mode: devMode ? 'development' : 'production',
-  stats: {
-    // reduce output text on build - remove for more verbose
-    chunks: false,
-    modules: false,
-    children: false,
+  entry: './web/js/main.js',
+  output: {
+    filename: 'wv.js',
+    path: path.resolve(__dirname, 'web/build/'),
+    publicPath: '/build/',
+    pathinfo: false,
+    clean: true,
   },
-  entry: entryPoint,
   devtool: devMode ? 'cheap-module-source-map' : 'source-map',
   devServer: {
-    contentBase: path.join(__dirname, '/web'),
+    devMiddleware: {
+      writeToDisk: true,
+    },
+    static: path.join(__dirname, 'web'),
     compress: true,
-    hot: true,
-    watchContentBase: true, // watch index.html changes
     port: 3000,
-    host: '0.0.0.0',
-    liveReload: false,
-  },
-  output: {
-    filename: outputFileName,
-    path: path.join(__dirname, '/web/build'),
-    pathinfo: false,
+    hot: true,
+    historyApiFallback: true,
   },
   optimization: {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
           ecma: 5,
-          parallel: true,
           toplevel: true,
-          extractComments: true,
         },
       }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: cssnano,
-        cssProcessorOptions: {
-          preset: ['default', {
-            discardComments: {
-              removeAll: true,
-            },
-            map: {
-              inline: false,
-            },
-          }],
-        },
-      }),
+      new CssMinimizerPlugin(),
     ],
   },
   plugins: pluginSystem,
@@ -144,7 +94,7 @@ module.exports = {
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
             cacheDirectory: devMode,
-            plugins: [isDevServer && require.resolve('react-refresh/babel')].filter(Boolean),
+            plugins: [devMode && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
         exclude: babelLoaderExcludes,
@@ -153,38 +103,25 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
-            loader: 'css-hot-loader',
-          },
-          {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              sourceMap: true,
-            },
           },
+          'css-hot-loader',
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
             },
           },
           {
-            loader: 'postcss-loader', // Run post css actions
+            loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              ident: 'postcss',
-              plugins: () => [
-                postcssPresetEnv({
-                  browserslist: [
-                    'last 4 versions',
-                    'not ie < 11',
-                    'not edge < 17',
-                    'not IE_Mob 11',
-                    'not dead',
-                    '> 2%',
-                  ],
-                }),
-              ],
+              postcssOptions: {
+                plugins: [
+                  'cssnano',
+                  'autoprefixer',
+                ],
+              },
             },
           },
           {
@@ -196,52 +133,36 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
-        exclude: /(fontawesome-webfont.svg)/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'images/',
-          },
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext][query]',
         },
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: {
-          // handle font-awesome fonts
-          loader: 'url-loader?limit=10000&mimetype=application/font-woff',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext][query]',
         },
-      },
-      {
-        test: /((fontawesome-webfont.svg)|(\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?))/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
-        },
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: !devMode,
-              removeEmptyAttributes: !devMode,
-              sortAttributes: !devMode,
-              sortClassName: !devMode,
-            },
-          },
-        ],
       },
     ],
   },
-  node: { fs: 'empty' },
+  resolve: {
+    alias: {
+      googleTagManager$: path.resolve(
+        __dirname,
+        './web/js/components/util/google-tag-manager.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+    },
+  },
+  stats: {
+    // reduce output text on build - remove for more verbose
+    chunks: false,
+    modules: false,
+    children: false,
+  },
 };
