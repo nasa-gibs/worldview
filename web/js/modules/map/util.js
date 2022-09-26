@@ -126,19 +126,16 @@ export function mapIsExtentValid(extent) {
  */
 export function getLeadingExtent(loadtime) {
   let curHour = loadtime.getUTCHours();
-  const timeOffset = 8;
-
   // For earlier hours when data is still being filled in, force a far eastern perspective
   if (curHour < 3) {
     curHour = 23;
   } else if (curHour < 9) {
     curHour = 0;
-  } else {
-    curHour -= timeOffset;
   }
 
   // Compute east/west bounds
-  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
+  const timeOffset = 8;
+  const minLon = 20.6015625 + (curHour - timeOffset) * (-200.53125 / 23.0);
   const maxLon = minLon + 159.328125;
 
   const minLat = -46.546875;
