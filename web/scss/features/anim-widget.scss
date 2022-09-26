@@ -357,3 +357,42 @@ a .wv-animation-widget-icon {
   display: inline;
   position: relative;
 }
+
+#wv-animation-widget-case-mobile{
+
+  width: 100%;
+  height: 100%;
+}
+
+.wv-animation-widget-wrapper-mobile {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+
+  & .wv-animation-widget {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+
+    & .wv-minimize {
+      width: 2em;
+      height: 3em;
+      margin-right: 3em;
+    }
+
+    & .wv-close {
+      width: 2em;
+      height: 3em;
+      margin-left: 3em;
+    }
+  }
+
+  & .wv-animation-widget-header {
+    margin-top: 50px;
+    width: 100%;
+    font-size: 22px;
+  }
+
+}
+

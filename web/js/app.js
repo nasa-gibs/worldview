@@ -136,6 +136,7 @@ class App extends React.Component {
       parameters,
     } = this.props;
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
+    const animationID = isMobile ? 'wv-animation-widget-case-mobile' : 'wv-animation-widget-case';
     return (
       <div className={appClass} id="wv-content" data-role="content">
         {!isMobile && !isEmbedModeActive && <LocationSearch />}
@@ -153,7 +154,7 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <Timeline />
-        <div id="wv-animation-widget-case">
+        <div id={animationID}>
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
