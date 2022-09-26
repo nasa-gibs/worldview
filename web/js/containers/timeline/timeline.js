@@ -920,7 +920,16 @@ class Timeline extends React.Component {
 
   renderMobile() {
     const {
-      isMobile, timelineStartDateLimit, timelineEndDateLimit, hasSubdailyLayers, selectedDate,
+      animationDisabled,
+      breakpoints,
+      hasSubdailyLayers,
+      isCompareModeActive,
+      isDataDownload,
+      isMobile,
+      screenWidth,
+      selectedDate,
+      timelineEndDateLimit,
+      timelineStartDateLimit,
     } = this.props;
     return (
       <div id="timeline-header" className="timeline-header-mobile">
@@ -941,6 +950,22 @@ class Timeline extends React.Component {
             {this.renderDateChangeArrows()}
           </div>
         </div>
+        <div>
+          <AnimationButton
+            isMobile={isMobile}
+            breakpoints={breakpoints}
+            screenWidth={screenWidth}
+            clickAnimationButton={this.clickAnimationButton}
+            disabled={animationDisabled}
+            label={
+            isCompareModeActive
+              ? 'Animation feature is deactivated when Compare feature is active'
+              : isDataDownload
+                ? 'Animation feature is deactivated when Data Download feature is active'
+                : ''
+          }
+          />
+        </div>
       </div>
     );
   }
@@ -953,6 +978,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       appNow,
       axisWidth,
+      breakpoints,
       dateA,
       dateB,
       draggerSelected,
@@ -969,6 +995,7 @@ class Timeline extends React.Component {
       isMobile,
       isTourActive,
       parentOffset,
+      screenWidth,
       selectedDate,
       timelineCustomModalOpen,
       timelineEndDateLimit,
@@ -1070,6 +1097,8 @@ class Timeline extends React.Component {
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
                         disabled={animationDisabled}
+                        screenWidth={screenWidth}
+                        breakpoints={breakpoints}
                         label={
                         isCompareModeActive
                           ? 'Animation feature is deactivated when Compare feature is active'
@@ -1298,6 +1327,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
+  const { breakpoints } = screenSize;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily
@@ -1366,6 +1396,7 @@ function mapStateToProps(state) {
     isTourActive: tour.active,
     isMobile,
     screenWidth,
+    breakpoints,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
@@ -1469,6 +1500,7 @@ Timeline.propTypes = {
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
+  breakpoints: PropTypes.object,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customSelected: PropTypes.bool,

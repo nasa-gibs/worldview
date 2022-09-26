@@ -819,3 +819,22 @@ button:focus {
 #timeline-header .button-action-group .now-btn-1:hover svg path {
   fill: #1a1a1a;
 }
+
+.mobile-animate-button {
+  position: absolute;
+  background: $wv-transparent-black;
+  border: thin solid #333;
+  height: 44px;
+  width: 60px;
+  border-radius: 5px;
+}
+
+.animate-button-phone {
+  left: 140px;
+  bottom: 75px;
+}
+
+.animate-button-tablet {
+  left: 440px;
+  bottom: 20px;
+}
