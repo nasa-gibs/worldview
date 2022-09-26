@@ -134,12 +134,16 @@ export function getLeadingExtent(loadtime) {
   }
 
   // Compute east/west bounds
-  const timeOffset = 8;
-  const minLon = 20.6015625 + (curHour - timeOffset) * (-200.53125 / 23.0);
-  const maxLon = minLon + 159.328125;
+  // eastWestOffset > 0 move the default map to the east. eastWestOffset < 0 move the default map to the west.
+  const eastWestOffset = 8;
+  const minLonConst = 20;
+  const maxLongConst = 160;
+  const minLonMultiplier = -200 / 23;
+  const minLon = minLonConst + (curHour - eastWestOffset) * minLonMultiplier;
+  const maxLon = minLon + maxLongConst;
 
-  const minLat = -46.546875;
-  const maxLat = 53.015625;
+  const minLat = -47;
+  const maxLat = 53;
 
   return [minLon, minLat, maxLon, maxLat];
 }
