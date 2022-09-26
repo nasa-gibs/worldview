@@ -64,11 +64,11 @@
                     ],
                     [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Aqua_CorrectedReflectance_Bands721",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
