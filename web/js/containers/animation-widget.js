@@ -345,6 +345,7 @@ class AnimationWidget extends React.Component {
     } = this.props;
     const { speed } = this.state;
     const cancelSelector = '.no-drag, .date-arrows';
+    const mobileDateSelectorStyle = true;
 
     return (
       <div
@@ -414,8 +415,8 @@ class AnimationWidget extends React.Component {
               maxDate={maxDate}
               subDailyMode={subDailyMode}
               isDisabled={isPlaying}
+              mobileStyle={mobileDateSelectorStyle}
             />
-
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
