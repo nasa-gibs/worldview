@@ -39,6 +39,7 @@ import {
   MAP_ENABLE_CLICK_ZOOM,
 } from '../../util/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -75,9 +76,9 @@ function OlMeasureTool (props) {
   useEffect(() => {
     if (olMap != null) {
       const regionFromCrs = {
-        'EPSG:4326': 'geographic',
-        'EPSG:3413': 'arctic',
-        'EPSG:3031': 'antarctic',
+        [CRS.GEOGRAPHIC]: 'geographic',
+        [CRS.ARCTIC]: 'arctic',
+        [CRS.ANTARCTIC]: 'antarctic',
       };
 
       const geographyToTerminate = regionFromCrs[previousCrs];
@@ -266,7 +267,7 @@ function OlMeasureTool (props) {
       condition(e) {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
         const coord = olMap.getCoordinateFromPixel(pixel);
-        const tCoord = transform(coord, crs, 'EPSG:4326');
+        const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
         return areCoordinatesWithinExtent(proj, tCoord);
       },
     });

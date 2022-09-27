@@ -13,6 +13,7 @@ import { changeUnits } from '../../modules/measure/actions';
 import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import { CONTEXT_MENU_LOCATION, MAP_SINGLE_CLICK, MAP_CONTEXT_MENU } from '../../util/constants';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -25,14 +26,14 @@ function RightClickMenu(props) {
     map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
   } = props;
   const { crs } = proj.selected;
-  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
+  const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;
   const handleClick = () => (show ? setShow(false) : null);
 
   function handleContextEvent(event) {
     if (measurementIsActive) return;
     event.originalEvent.preventDefault();
     const coord = map.getCoordinateFromPixel(event.pixel);
-    const tCoord = transform(coord, crs, 'EPSG:4326');
+    const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
     const [lon, lat] = getNormalizedCoordinate(tCoord);
 
     if (areCoordinatesWithinExtent(proj, [lon, lat])) {
@@ -86,7 +87,7 @@ function RightClickMenu(props) {
     };
   });
 
-  const mobileStyle = isMobile && 'react-contextmenu-mobile';
+  const mobileStyle = isMobile ? 'react-contextmenu-mobile' : '';
 
   return show && (
     <div id="context-menu">

@@ -6,6 +6,7 @@ import { transform } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
+import { CRS } from '../map/constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -141,7 +142,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   // handle adding coordinates marker
   if (markerCoordinates.length > 0) {
     const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
-      const mCoord = transform([lon, lat], 'EPSG:4326', crs);
+      const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
       // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
       return validCoords.concat([mCoord[0], mCoord[1]]);
     }, []);
@@ -330,7 +331,7 @@ export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
  * Y,X order, otherwise in X,Y order.
  */
 export function bboxWMS13(lonlats, crs) {
-  if (crs === 'EPSG:4326') {
+  if (crs === CRS.GEOGRAPHIC) {
     return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
       lonlats[1][0]
     }`;

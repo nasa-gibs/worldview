@@ -9,7 +9,7 @@ import {
   stopLoading,
   LOADING_GRANULES,
 } from '../../modules/loading/actions';
-import { FULL_MAP_EXTENT } from '../../modules/map/constants';
+import { FULL_MAP_EXTENT, CRS } from '../../modules/map/constants';
 import { openBasicContent } from '../../modules/modal/actions';
 import { getCacheOptions } from '../../modules/layers/util';
 import { getGranulesUrl as getGranulesUrlSelector } from '../../modules/smart-handoff/selectors';
@@ -208,7 +208,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const granules = datelineShiftGranules(visibleGranules, date, crs);
     const tileLayers = new OlCollection(createGranuleTileLayers(granules, def, attributes));
     granuleLayer.setLayers(tileLayers);
-    granuleLayer.setExtent(crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent);
+    granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);
     granuleLayer.set('granuleGroup', true);
     granuleLayer.set('layerId', `${id}-${group}`);
     granuleLayer.wv = {
