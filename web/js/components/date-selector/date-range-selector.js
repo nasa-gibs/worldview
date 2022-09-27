@@ -4,7 +4,7 @@ import DateSelector from './date-selector';
 
 export default function DateRangeSelector (props) {
   const {
-    startDate, endDate, setDateRange, minDate, maxDate, subDailyMode, idSuffix, isDisabled, mobileStyle,
+    startDate, endDate, setDateRange, minDate, maxDate, subDailyMode, idSuffix, isDisabled,
   } = props;
 
   const setStartDate = (newStart) => {
@@ -18,41 +18,6 @@ export default function DateRangeSelector (props) {
     : 'wv-date-range-selector';
 
   return (
-    mobileStyle ? (
-      <div className={className}>
-        <div className="date-selector-row">
-          <div className="date-selector-col">
-            Start Date:
-          </div>
-          <DateSelector
-            idSuffix={idSuffix}
-            date={startDate}
-            onDateChange={setStartDate}
-            minDate={minDate}
-            maxDate={endDate}
-            subDailyMode={subDailyMode}
-            isDisabled={isDisabled}
-            isStartDate
-          />
-        </div>
-        <div className="date-selector-row">
-          <div className="date-selector-col">
-            End Date:
-          </div>
-          <DateSelector
-            idSuffix={idSuffix}
-            date={endDate}
-            onDateChange={setEndDate}
-            maxDate={maxDate}
-            minDate={startDate}
-            subDailyMode={subDailyMode}
-            isDisabled={isDisabled}
-            isEndDate
-          />
-        </div>
-      </div>
-    )
-      : (
         <div className={className}>
           <DateSelector
             idSuffix={idSuffix}
@@ -77,7 +42,6 @@ export default function DateRangeSelector (props) {
           />
         </div>
       )
-  );
 }
 
 DateRangeSelector.propTypes = {

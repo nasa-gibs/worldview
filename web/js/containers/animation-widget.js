@@ -343,13 +343,9 @@ class AnimationWidget extends React.Component {
       numberOfFrames,
     } = this.props;
     const { speed } = this.state;
-    const cancelSelector = '.no-drag, .date-arrows';
-    const mobileDateSelectorStyle = true;
 
     return (
       <div
-        bounds="body"
-        cancel={cancelSelector}
         handle=".wv-animation-widget-header"
       >
         <div className="wv-animation-widget-wrapper-mobile">
@@ -402,7 +398,6 @@ class AnimationWidget extends React.Component {
                 maxDate={maxDate}
                 subDailyMode={subDailyMode}
                 isDisabled={isPlaying}
-                mobileStyle={mobileDateSelectorStyle}
               />
             </div>
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
