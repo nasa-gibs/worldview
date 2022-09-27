@@ -363,11 +363,46 @@ a .wv-animation-widget-icon {
   z-index: 100;
   width: 100%;
   height: 100%;
+  border: 8px solid $wv-orange;
 
   & .wv-animation-widget {
     margin: 0;
     width: 100%;
     height: 100%;
+
+    & .mobile-animation-widget-container {
+      margin: 0;
+      width: 100%;
+      height: 90%;
+    }
+
+    & .mobile-animation-widget-button-items {
+      width: 75%;
+      margin: auto;
+
+      & .mobile-animation-widget-row {
+        justify-content: space-between;
+      }
+    }
+
+    & .mobile-animation-widget-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      width: 100%;
+
+      span{
+        font-size: 22px;
+        margin-right: 40px;
+      }
+
+      .wv-icon-case {
+        height: 45px;
+        width: 52px;
+      }
+
+    }
 
     & .wv-minimize {
       width: 2em;
@@ -379,6 +414,10 @@ a .wv-animation-widget-icon {
       width: 2em;
       height: 3em;
       margin-left: 3em;
+    }
+
+    & .rc-slider {
+      margin: auto;
     }
 
     & #animation-mobile-datepicker-case {
@@ -395,7 +434,7 @@ a .wv-animation-widget-icon {
       margin-top: 40px;
 
       & .date-selector-col {
-        font-size: 18px;
+        font-size: 22px;
       }
 
       & .wv-date-selector-widget {
@@ -411,16 +450,14 @@ a .wv-animation-widget-icon {
       & .button-input-group {
         font-size: 18px !important;
       }
-
     }
-
-
   }
 
   & .wv-animation-widget-header {
-    margin-top: 50px;
+    margin-top: 70px;
     width: 100%;
-    font-size: 22px;
+    font-size: 30px;
+    color: $wv-orange;
   }
 
 }

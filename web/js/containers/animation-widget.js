@@ -359,64 +359,89 @@ class AnimationWidget extends React.Component {
             className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
           >
             <div className="wv-animation-widget-header">
-              {'Animate Map in '}
-              <TimeScaleIntervalChange
-                timeScaleChangeUnit={interval}
-                hasSubdailyLayers={hasSubdailyLayers}
-                modalType={customModalType.ANIMATION}
+              Map Animation
+            </div>
+
+            <div className="mobile-animation-widget-container">
+              <div className="mobile-animation-widget-button-items">
+                <div className="mobile-animation-widget-row">
+                  <span>
+                    Play Animation:
+                  </span>
+                  <PlayButton
+                    playing={isPlaying}
+                    play={this.onPushPlay}
+                    pause={onPushPause}
+                    isDisabled={playDisabled}
+                  />
+                </div>
+                <div className="mobile-animation-widget-row">
+                  <span>
+                    Loop Animation:
+                  </span>
+                  <LoopButton looping={looping} onLoop={this.onLoop} />
+                </div>
+                <div className="mobile-animation-widget-row">
+                  <span>
+                    Create GIF:
+                  </span>
+                  <GifButton
+                    zeroDates={this.zeroDates}
+                    numberOfFrames={numberOfFrames}
+                  />
+                </div>
+                <div className="mobile-animation-widget-row">
+                  <span>
+                    Increments:
+                  </span>
+                  <TimeScaleIntervalChange
+                    timeScaleChangeUnit={interval}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    modalType={customModalType.ANIMATION}
+                    isDisabled={isPlaying}
+                  />
+
+                  {/* Custom time interval selection */}
+                  <CustomIntervalSelector
+                    modalOpen={animationCustomModalOpen}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                  />
+
+                </div>
+              </div>
+
+
+
+              <div className="mobile-animation-widget-row">
+                <div className="wv-slider-case">
+                  <Slider
+                    className="input-range"
+                    step={0.5}
+                    max={10}
+                    min={0.5}
+                    value={speed}
+                    onChange={(num) => this.setState({ speed: num })}
+                    handle={RangeHandle}
+                    onAfterChange={() => { onSlide(speed); }}
+                    disabled={isPlaying}
+                  />
+                  <span className="wv-slider-label">{sliderLabel}</span>
+                </div>
+              </div>
+
+              {/* From/To Date/Time Selection */}
+              <DateRangeSelector
+                idSuffix="animation-widget"
+                startDate={startDate}
+                endDate={endDate}
+                setDateRange={this.onDateChange}
+                minDate={minDate}
+                maxDate={maxDate}
+                subDailyMode={subDailyMode}
                 isDisabled={isPlaying}
+                mobileStyle={mobileDateSelectorStyle}
               />
-              {' Increments'}
             </div>
-
-            {/* Custom time interval selection */}
-            <CustomIntervalSelector
-              modalOpen={animationCustomModalOpen}
-              hasSubdailyLayers={hasSubdailyLayers}
-            />
-
-            <PlayButton
-              playing={isPlaying}
-              play={this.onPushPlay}
-              pause={onPushPause}
-              isDisabled={playDisabled}
-            />
-            <LoopButton looping={looping} onLoop={this.onLoop} />
-
-            {/* FPS slider */}
-            <div className="wv-slider-case">
-              <Slider
-                className="input-range"
-                step={0.5}
-                max={10}
-                min={0.5}
-                value={speed}
-                onChange={(num) => this.setState({ speed: num })}
-                handle={RangeHandle}
-                onAfterChange={() => { onSlide(speed); }}
-                disabled={isPlaying}
-              />
-              <span className="wv-slider-label">{sliderLabel}</span>
-            </div>
-
-            {/* Create Gif */}
-            <GifButton
-              zeroDates={this.zeroDates}
-              numberOfFrames={numberOfFrames}
-            />
-
-            {/* From/To Date/Time Selection */}
-            <DateRangeSelector
-              idSuffix="animation-widget"
-              startDate={startDate}
-              endDate={endDate}
-              setDateRange={this.onDateChange}
-              minDate={minDate}
-              maxDate={maxDate}
-              subDailyMode={subDailyMode}
-              isDisabled={isPlaying}
-              mobileStyle={mobileDateSelectorStyle}
-            />
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
