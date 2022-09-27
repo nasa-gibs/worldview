@@ -21,6 +21,7 @@ const MobileCustomIntervalSelector = (props) => {
     interval,
     selectInterval,
     customDelta,
+    isMobile,
   } = props;
 
   const changeDelta = (value) => {
@@ -34,8 +35,8 @@ const MobileCustomIntervalSelector = (props) => {
   }
 
   return (
-    <div>
-        <h3 className="custom-interval-widget-header">Custom Interval Selector</h3>
+    <div className="custom-animation-interval-container">
+        <h3 className="custom-animation-interval-header">Interval Selector</h3>
         <div className="custom-interval-widget-controls-container">
           <DeltaInput
             deltaValue={customDelta}
@@ -45,6 +46,8 @@ const MobileCustomIntervalSelector = (props) => {
             hasSubdailyLayers={hasSubdailyLayers}
             zoomLevel={TIME_SCALE_FROM_NUMBER[customInterval]}
             changeZoomLevel={changeZoomLevel}
+            interval={customInterval}
+            isMobile={isMobile}
           />
         </div>
     </div>
@@ -61,7 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { date } = state;
+  const { date, screenSize } = state;
   const {
     interval, customInterval, customDelta, customSelected,
   } = date;
@@ -70,6 +73,7 @@ const mapStateToProps = (state) => {
     customInterval: customInterval || interval,
     customSelected,
     interval,
+    isMobile: screenSize.isMobileDevice,
   };
 };
 

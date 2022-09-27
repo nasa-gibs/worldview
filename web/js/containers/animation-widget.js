@@ -14,7 +14,6 @@ import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
-import MobileTimeScaleIntervalChange from '../components/timeline/timeline-controls/mobile-timescale-interval-change';
 import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
 import MobileCustomIntervalSelector from '../components/timeline/custom-interval-selector/mobile-custom-interval-selector';
 import PlayQueue from '../components/animation-widget/play-queue';
@@ -383,25 +382,11 @@ class AnimationWidget extends React.Component {
                   />
                 </div>
                 <div className="mobile-animation-widget-row">
-                  <span>
-                    Custom Interval:
-                  </span>
                   <MobileCustomIntervalSelector
                     hasSubdailyLayers={hasSubdailyLayers}
                   />
                 </div>
-                <div className="mobile-animation-widget-row">
-                  <span>
-                    Increments:
-                  </span>
-                  <MobileTimeScaleIntervalChange
-                    timeScaleChangeUnit={interval}
-                    hasSubdailyLayers={hasSubdailyLayers}
-                    isDisabled={isPlaying}
-                  />
-                </div>
               </div>
-
               <div className="mobile-animation-widget-row">
                 <div className="wv-slider-case">
                   <Slider

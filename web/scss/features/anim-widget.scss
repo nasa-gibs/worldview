@@ -470,7 +470,7 @@ a .wv-animation-widget-icon {
   }
   & .dropdown-item {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 2px;
   }
   & span {
     text-align: center;
@@ -478,4 +478,15 @@ a .wv-animation-widget-icon {
     width: 100%;
     margin: 0 !important;
   }
+}
+
+
+.custom-animation-interval-container {
+  margin: auto;
+
+  & .custom-animation-interval-header {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
 }
