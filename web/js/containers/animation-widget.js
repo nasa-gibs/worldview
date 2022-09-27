@@ -14,6 +14,7 @@ import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
+import MobileTimeScaleIntervalChange from '../components/timeline/timeline-controls/mobile-timescale-interval-change';
 import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
 import PlayQueue from '../components/animation-widget/play-queue';
 import { promiseImageryForTime } from '../modules/map/util';
@@ -326,7 +327,6 @@ class AnimationWidget extends React.Component {
 
   renderMobileWidget() {
     const {
-      onClose,
       looping,
       isPlaying,
       maxDate,
@@ -366,29 +366,9 @@ class AnimationWidget extends React.Component {
               <div className="mobile-animation-widget-button-items">
                 <div className="mobile-animation-widget-row">
                   <span>
-                    Play Animation:
-                  </span>
-                  <PlayButton
-                    playing={isPlaying}
-                    play={this.onPushPlay}
-                    pause={onPushPause}
-                    isDisabled={playDisabled}
-                  />
-                </div>
-                <div className="mobile-animation-widget-row">
-                  <span>
                     Loop Animation:
                   </span>
                   <LoopButton looping={looping} onLoop={this.onLoop} />
-                </div>
-                <div className="mobile-animation-widget-row">
-                  <span>
-                    Create GIF:
-                  </span>
-                  <GifButton
-                    zeroDates={this.zeroDates}
-                    numberOfFrames={numberOfFrames}
-                  />
                 </div>
                 <div className="mobile-animation-widget-row">
                   <span>
@@ -406,11 +386,18 @@ class AnimationWidget extends React.Component {
                     modalOpen={animationCustomModalOpen}
                     hasSubdailyLayers={hasSubdailyLayers}
                   />
-
+                </div>
+                <div className="mobile-animation-widget-row">
+                  <span>
+                    Increments2:
+                  </span>
+                  <MobileTimeScaleIntervalChange
+                    timeScaleChangeUnit={interval}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    isDisabled={isPlaying}
+                  />
                 </div>
               </div>
-
-
 
               <div className="mobile-animation-widget-row">
                 <div className="wv-slider-case">
@@ -443,8 +430,6 @@ class AnimationWidget extends React.Component {
               />
             </div>
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
-
           </div>
         </div>
       </div>

@@ -407,13 +407,6 @@ a .wv-animation-widget-icon {
     & .wv-minimize {
       width: 2em;
       height: 3em;
-      margin-right: 3em;
-    }
-
-    & .wv-close {
-      width: 2em;
-      height: 3em;
-      margin-left: 3em;
     }
 
     & .rc-slider {
@@ -458,7 +451,30 @@ a .wv-animation-widget-icon {
     width: 100%;
     font-size: 30px;
     color: $wv-orange;
+    border-radius: 4px;
   }
-
 }
 
+
+.mobile-timescale-dropdown {
+  & .dropdown-toggle {
+    font-size: 18px;
+    background-color: #295f92;
+  }
+  & .dropdown-menu {
+    // left: -20px !important;
+    background-color: $wv-solid-black;
+    border: solid 1px $wv-orange;
+
+  }
+  & .dropdown-item {
+    text-align: center;
+    margin-top: 10px;
+  }
+  & span {
+    text-align: center;
+    color: white;
+    width: 100%;
+    margin: 0 !important;
+  }
+}
