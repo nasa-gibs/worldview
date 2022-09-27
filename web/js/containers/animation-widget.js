@@ -338,7 +338,6 @@ class AnimationWidget extends React.Component {
       onPushPause,
       subDailyMode,
       interval,
-      animationCustomModalOpen,
       hasSubdailyLayers,
       playDisabled,
       numberOfFrames,
@@ -369,17 +368,6 @@ class AnimationWidget extends React.Component {
                     Loop Animation:
                   </span>
                   <LoopButton looping={looping} onLoop={this.onLoop} />
-                </div>
-                <div className="mobile-animation-widget-row">
-                  <span>
-                    Increments:
-                  </span>
-                  <TimeScaleIntervalChange
-                    timeScaleChangeUnit={interval}
-                    hasSubdailyLayers={hasSubdailyLayers}
-                    modalType={customModalType.ANIMATION}
-                    isDisabled={isPlaying}
-                  />
                 </div>
                 <div className="mobile-animation-widget-row">
                   <MobileCustomIntervalSelector

@@ -461,9 +461,9 @@ a .wv-animation-widget-icon {
   & .dropdown-toggle {
     font-size: 18px;
     background-color: #295f92;
+    height: 3em;
   }
   & .dropdown-menu {
-    // left: -20px !important;
     background-color: $wv-solid-black;
     border: solid 1px $wv-orange;
 
@@ -488,5 +488,12 @@ a .wv-animation-widget-icon {
     font-size: 22px;
     text-align: center;
     margin-bottom: 10px;
-}
+  }
+
+  & .custom-interval-delta-input {
+    font-size: 18px;
+    height: 3em;
+    background-color: #295f92;
+  }
+
 }

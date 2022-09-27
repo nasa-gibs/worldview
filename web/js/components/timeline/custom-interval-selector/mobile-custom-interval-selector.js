@@ -41,6 +41,7 @@ const MobileCustomIntervalSelector = (props) => {
           <DeltaInput
             deltaValue={customDelta}
             changeDelta={changeDelta}
+            isMobile={isMobile}
           />
           <IntervalSelect
             hasSubdailyLayers={hasSubdailyLayers}
