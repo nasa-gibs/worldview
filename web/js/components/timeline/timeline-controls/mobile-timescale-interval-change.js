@@ -82,6 +82,20 @@ const MobileTimeScaleIntervalChange = (props) => {
               Day
             </span>
           </DropdownItem>
+          {hasSubdailyLayers ? (
+            <>
+            <DropdownItem>
+              <span onClick={() => handleClickInterval('hour')}>
+              Hour
+              </span>
+            </DropdownItem>
+            <DropdownItem>
+              <span onClick={() => handleClickInterval('minute')}>
+              Minute
+              </span>
+            </DropdownItem>
+            </>
+          ) : null}
         </DropdownMenu>
       </Dropdown>
     </div>
