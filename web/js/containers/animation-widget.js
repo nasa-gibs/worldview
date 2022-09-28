@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
+  debounce as lodashDebounce,
+  throttle as lodashThrottle,
   get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
@@ -94,6 +96,8 @@ class AnimationWidget extends React.Component {
       collapsedWidgetPosition: { x: 0, y: 0 },
       userHasMovedWidget: false,
     };
+    this.debounceDateUpdate = lodashDebounce(selectDate, 8);
+
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
@@ -202,6 +206,42 @@ class AnimationWidget extends React.Component {
       onUpdateEndDate(newEndDate);
     }
   }
+
+    // eslint-disable-next-line react/destructuring-assignment
+    onMobileDateChangeStart = (date, draggerSelected = this.props.draggerSelected) => {
+      const { onUpdateStartDate } = this.props;
+      const dateObj = new Date(date);
+      const dateISOFormatted = getISODateFormatted(date);
+      if (draggerSelected === 'selected') { // dragger A
+        this.setState({
+          draggerTimeState: dateISOFormatted,
+        });
+      } else { // dragger B
+        this.setState({
+          draggerTimeStateB: dateISOFormatted,
+        });
+      }
+      this.debounceDateUpdate(dateObj, draggerSelected);
+      onUpdateStartDate(dateObj)
+    }
+
+    // eslint-disable-next-line react/destructuring-assignment
+    onMobileDateChangeEnd = (date, draggerSelected = this.props.draggerSelected) => {
+      const { onUpdateEndDate } = this.props;
+      const dateObj = new Date(date);
+      const dateISOFormatted = getISODateFormatted(date);
+      if (draggerSelected === 'selected') { // dragger A
+        this.setState({
+          draggerTimeState: dateISOFormatted,
+        });
+      } else { // dragger B
+        this.setState({
+          draggerTimeStateB: dateISOFormatted,
+        });
+      }
+      this.debounceDateUpdate(dateObj, draggerSelected);
+      onUpdateEndDate(dateObj)
+    }
 
   onIntervalSelect(timeScale, openModal) {
     let delta;
@@ -400,7 +440,7 @@ class AnimationWidget extends React.Component {
                   date={startDate}
                   startDateLimit={minimumDate}
                   endDateLimit={maximumDate}
-                  onDateChange={this.onDateChange}
+                  onDateChange={this.onMobileDateChangeStart}
                   hasSubdailyLayers={hasSubdailyLayers}
                   isMobile={isMobile}
                   />
@@ -413,7 +453,7 @@ class AnimationWidget extends React.Component {
                   date={endDate}
                   startDateLimit={minimumDate}
                   endDateLimit={maximumDate}
-                  onDateChange={this.onDateChange}
+                  onDateChange={this.onMobileDateChangeEnd}
                   hasSubdailyLayers={hasSubdailyLayers}
                   isMobile={isMobile}
                   />
@@ -625,6 +665,7 @@ function mapStateToProps(state) {
     interval,
     customInterval,
   } = date;
+  const { isCompareA } = compare;
 
   const hasSubdailyLayers = subdailyLayersActive(state);
   const activeLayersForProj = getAllActiveLayers(state);
@@ -683,6 +724,7 @@ function mapStateToProps(state) {
     customSelected,
     startDate,
     endDate,
+    draggerSelected: isCompareA ? 'selected' : 'selectedB',
     snappedCurrentDate,
     currentDate,
     minDate,
