@@ -409,20 +409,21 @@ class AnimationWidget extends React.Component {
           </div>
 
           <div className="mobile-animation-widget-container">
-            <div className="mobile-animation-widget-button-items">
-              <div className="mobile-animation-widget-row">
+
+              <div className="mobile-animation-flex-row">
                 <span>
-                  Loop Animation:
+                  Loop Animation
                 </span>
                 <LoopButton looping={looping} onLoop={this.onLoop} />
               </div>
-              <div className="mobile-animation-widget-row">
+
+              <div className="mobile-animation-flex-row">
                 <MobileCustomIntervalSelector
                   hasSubdailyLayers={hasSubdailyLayers}
                 />
               </div>
-            </div>
-            <div className="mobile-animation-widget-row">
+
+            <div className="mobile-animation-flex-row" id="slider-case-row">
               <div className="wv-slider-case">
                 <Slider
                   className="input-range"
@@ -439,8 +440,8 @@ class AnimationWidget extends React.Component {
               </div>
             </div>
 
-            <div className="mobile-animation-widget-row">
-              <div id="mobile-animation-start-date" className="mobile-animation-datepicker-container">
+            <div className="mobile-animation-block-row">
+              <span>Start Date</span>
                 <MobileDatePicker
                   date={startDate}
                   startDateLimit={minimumDate}
@@ -449,11 +450,10 @@ class AnimationWidget extends React.Component {
                   hasSubdailyLayers={hasSubdailyLayers}
                   isMobile={isMobile}
                 />
-              </div>
             </div>
 
-            <div className="mobile-animation-widget-row">
-              <div id="mobile-animation-end-date" className="mobile-animation-datepicker-container">
+            <div className="mobile-animation-block-row">
+              <span>End Date</span>
                 <MobileDatePicker
                   date={endDate}
                   startDateLimit={minimumDate}
@@ -462,8 +462,8 @@ class AnimationWidget extends React.Component {
                   hasSubdailyLayers={hasSubdailyLayers}
                   isMobile={isMobile}
                 />
-              </div>
             </div>
+
           </div>
           <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
         </div>

@@ -372,19 +372,18 @@ a .wv-animation-widget-icon {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  border: 8px solid $wv-orange;
+  border: 4px solid #555;
 
   & .wv-animation-widget {
     margin: 0;
     width: 100%;
     height: 100%;
+    background: $wv-transparent-black;
 
     & .wv-animation-widget-header {
       margin-top: 2rem;
       width: 100%;
       font-size: 30px;
-      color: $wv-orange;
-      border-radius: 4px;
     }
 
     & .wv-minimize {
@@ -392,36 +391,55 @@ a .wv-animation-widget-icon {
       height: 3em;
     }
 
-    & .rc-slider {
-      margin: auto;
-    }
-
     & .mobile-animation-widget-container {
       margin: 0;
       width: 100%;
       height: 90%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
     & .mobile-animation-widget-button-items {
       width: 75%;
       margin: auto;
+    }
 
-      & .mobile-animation-widget-row {
-        justify-content: space-between;
+    #slider-case-row {
+      grid-column: 1 / -1;
+      width: 100%;
+
+      & .wv-slider-label {
+        text-align: center;
+        margin: auto;
+      }
+
+      & .rc-slider {
+        margin: auto;
       }
     }
 
-    & .mobile-animation-widget-row {
+    & .mobile-animation-block-row {
+      text-align: center;
+      font-size: 22px;
+
+      & .mobile-date-picker-select-btn{
+        position: relative;
+        background-color: #295f92;
+        bottom: -10%;
+        width: 95%;
+      }
+    }
+
+    & .mobile-animation-flex-row {
       display: flex;
       justify-content: center;
       align-items: center;
-      // margin-top: 40px;
-      margin-top: 5%;
       width: 100%;
 
       span{
         font-size: 22px;
-        margin-right: 40px;
+        margin-right: 20px;
         line-height: normal;
       }
 
@@ -430,7 +448,7 @@ a .wv-animation-widget-icon {
         width: 52px;
       }
 
-      .mobile-animation-datepicker-container {
+
         & .mobile-date-picker-select-btn{
           position: relative;
           background-color: #295f92;
@@ -440,10 +458,22 @@ a .wv-animation-widget-icon {
 
           }
         }
-      }
+
 
     }
   }
+}
+
+#mobile-animation-widget-mobile-phone-landscape {
+  & .wv-animation-widget {
+    & .wv-animation-widget-header {
+      margin-top: 1rem;
+      font-size: 24px;
+    }
+    & .rc-slider {
+      width: 400px;
+    }
+}
 }
 
 
