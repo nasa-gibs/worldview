@@ -64,7 +64,7 @@ module.exports = {
     pathinfo: false,
     clean: true,
   },
-  devtool: 'source-map',
+  devtool: devMode && 'source-map',
   devServer: {
     devMiddleware: {
       writeToDisk: true,
