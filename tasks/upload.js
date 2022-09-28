@@ -109,7 +109,11 @@ if (!name) {
 async function upload() {
   console.log(`Uploading to ${host}`);
   try {
-    await ssh.connect({ host, username, privateKey: key });
+    await ssh.connect({
+      host,
+      username,
+      privateKeyPath: key,
+    });
     let cmd = `
       [ -e ${root}/${name}/${worldview} ] &&
       rm -rf ${root}/${name} &&
