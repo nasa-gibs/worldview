@@ -57,6 +57,13 @@
   }
 }
 
+@media (max-width: 483px) {
+  .wv-animation-widget-wrapper.mobile.minimized.subdaily {
+    left: 210px;
+    bottom: 75px;
+  }
+}
+
 .wv-animation-widget .input-range.rc-slider-disabled {
   cursor: default;
 }
