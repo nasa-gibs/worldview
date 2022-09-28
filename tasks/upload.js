@@ -5,7 +5,7 @@ const os = require('os');
 const path = require('path');
 const yargs = require('yargs');
 const shell = require('shelljs');
-const NodeSSH = require('node-ssh');
+const { NodeSSH } = require('node-ssh');
 
 const ssh = new NodeSSH();
 
