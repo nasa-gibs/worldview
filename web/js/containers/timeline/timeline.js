@@ -931,6 +931,7 @@ class Timeline extends React.Component {
       timelineEndDateLimit,
       timelineStartDateLimit,
     } = this.props;
+
     return (
       <div id="timeline-header" className="timeline-header-mobile">
         <MobileDatePicker

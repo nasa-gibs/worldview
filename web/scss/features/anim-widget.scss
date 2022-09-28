@@ -421,6 +421,18 @@ a .wv-animation-widget-icon {
         width: 52px;
       }
 
+      .mobile-animation-datepicker-container {
+        & .mobile-date-picker-select-btn{
+          position: relative;
+          background-color: #295f92;
+
+          & span {
+            margin: 20px;
+
+          }
+        }
+      }
+
     }
   }
 }

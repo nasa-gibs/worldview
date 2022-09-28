@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { getISODateFormatted } from '../components/timeline/date-util'
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import DateRangeSelector from '../components/date-selector/date-range-selector';
@@ -16,6 +16,7 @@ import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
 import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
 import MobileCustomIntervalSelector from '../components/timeline/custom-interval-selector/mobile-custom-interval-selector';
+import MobileDatePicker from '../components/timeline/mobile-date-picker'
 import PlayQueue from '../components/animation-widget/play-queue';
 import { promiseImageryForTime } from '../modules/map/util';
 import {
@@ -190,6 +191,7 @@ class AnimationWidget extends React.Component {
   }
 
   onDateChange([newStartDate, newEndDate]) {
+    console.log([newStartDate, newEndDate])
     const {
       onUpdateStartDate, onUpdateEndDate, startDate, endDate,
     } = this.props;
@@ -341,8 +343,12 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers,
       playDisabled,
       numberOfFrames,
+      isMobile,
     } = this.props;
     const { speed } = this.state;
+
+    let minimumDate = getISODateFormatted(minDate);
+    let maximumDate = getISODateFormatted(maxDate);
 
     return (
       <div
@@ -385,6 +391,32 @@ class AnimationWidget extends React.Component {
                     disabled={isPlaying}
                   />
                   <span className="wv-slider-label">{sliderLabel}</span>
+                </div>
+              </div>
+
+              <div className="mobile-animation-widget-row">
+                <div id="mobile-animation-start-date" className="mobile-animation-datepicker-container">
+                  <MobileDatePicker
+                  date={startDate}
+                  startDateLimit={minimumDate}
+                  endDateLimit={maximumDate}
+                  onDateChange={this.onDateChange}
+                  hasSubdailyLayers={hasSubdailyLayers}
+                  isMobile={isMobile}
+                  />
+                </div>
+              </div>
+
+              <div className="mobile-animation-widget-row">
+                <div id="mobile-animation-end-date" className="mobile-animation-datepicker-container">
+                  <MobileDatePicker
+                  date={endDate}
+                  startDateLimit={minimumDate}
+                  endDateLimit={maximumDate}
+                  onDateChange={this.onDateChange}
+                  hasSubdailyLayers={hasSubdailyLayers}
+                  isMobile={isMobile}
+                  />
                 </div>
               </div>
 
