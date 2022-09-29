@@ -329,6 +329,8 @@ class AnimationWidget extends React.Component {
       isLandscape,
       isMobilePhone,
       isMobileTablet,
+      screenWidth,
+      breakpoints,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -337,12 +339,11 @@ class AnimationWidget extends React.Component {
       + `${hasSubdailyLayers ? 'subdaily ' : ''}`
       + `${isMobile ? 'mobile ' : ''}`
       + `${isLandscape ? 'landscape ' : ''}`;
-
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
-    const widgetIDs = isMobilePhone && isPortrait ? `collapsed-animate-widget-phone-portrait${subdailyID}`
+    const widgetIDs = isMobilePhone && isPortrait || screenWidth < breakpoints.extraSmall ? `collapsed-animate-widget-phone-portrait${subdailyID}`
     : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
-      : isMobileTablet && isPortrait ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
+      : isMobileTablet && isPortrait || screenWidth < breakpoints.small ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
         : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
           : 'collapsed-animate-widget'
 

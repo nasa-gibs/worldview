@@ -21,12 +21,11 @@ const AnimationButton = (props) => {
   const subdailyID = hasSubdailyLayers ? '-subdaily' : ''
   const buttonId = 'animate-button';
   const labelText = label || 'Set up animation';
-  const className = isMobilePhone && isPortrait ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
+  const className = isMobilePhone && isPortrait || !isMobileTablet && screenWidth < breakpoints.extraSmall ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
     : isMobilePhone && isLandscape ? `mobile-animate-button animate-button-phone-landscape${subdailyID}`
-      : isMobileTablet && isPortrait ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
+      : isMobileTablet && isPortrait || !isMobilePhone && screenWidth < breakpoints.small ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
         : isMobileTablet && isLandscape ? `mobile-animate-button animate-button-tablet-landscape${subdailyID}`
-      : ' animate-button'
-
+          : ' animate-button'
 
   return (
     <div
