@@ -397,7 +397,7 @@ a .wv-animation-widget-icon {
 
     & .mobile-animation-widget-container {
       margin: 0;
-      width: 100%;
+      width: 98%;
       height: 90%;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -445,6 +445,7 @@ a .wv-animation-widget-icon {
         font-size: 22px;
         margin-right: 20px;
         line-height: normal;
+        text-align: center;
       }
 
       .wv-icon-case {
@@ -477,9 +478,36 @@ a .wv-animation-widget-icon {
     & .rc-slider {
       width: 400px;
     }
-}
+  }
 }
 
+#mobile-animation-widget-mobile-phone-portrait {
+  height: 60%;
+  bottom: 0px;
+
+  & .wv-animation-widget-header {
+    margin-top: 0.75rem;
+  }
+
+  & .mobile-animation-block-row {
+    grid-column: 1 / -1;
+  }
+
+  & .mobile-animation-flex-row {
+    flex-direction: column;
+    width: 100%;
+
+
+    & #loop-button {
+      margin-top: 15px;
+    }
+
+    & span{
+        text-align: center;
+        margin: 0;
+      }
+}
+}
 
 .mobile-timescale-dropdown {
   & .dropdown-toggle {
@@ -511,6 +539,7 @@ a .wv-animation-widget-icon {
   & .custom-animation-interval-header {
     font-size: 22px;
     text-align: center;
+    line-height: 1.50rem;
     margin-bottom: 10px;
   }
 
