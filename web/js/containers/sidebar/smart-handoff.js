@@ -620,12 +620,12 @@ class SmartHandoff extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, smartHandoffs,
+    screenSize, map, proj, smartHandoffs,
   } = state;
   const {
     conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
   } = smartHandoffs;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
 
   const granuleLayers = getActiveGranuleLayers(state);
   const selectedDate = getSelectedDate(state);

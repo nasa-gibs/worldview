@@ -128,7 +128,7 @@ export function mapLocationToLocationSearchState(
     return validatedCoordinates;
   });
 
-  const isMobile = state.browser.lessThan.medium;
+  const isMobile = state.screenSize.isMobileDevice;
   const localStorageCollapseState = getLocalStorageCollapseState();
   const isExpanded = !isMobile && !localStorageCollapseState;
 

@@ -166,9 +166,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
-   * @param {object} granuleLayerParam (optional: only used for granule layers)
-   *    * @param {array} granuleDates - Reordered granule times
-   *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
   const createLayer = async (def, options = {}) => {
@@ -416,7 +413,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
-      transition: 0,
+      transition: 300,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,

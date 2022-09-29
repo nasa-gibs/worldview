@@ -39,7 +39,9 @@ module.exports = {
   'Select "Cloud Effective Radius" layer and check that it is available for download': (c) => {
     // Go to layers tabs
     c.click(layersTab);
+    c.pause(300);
     c.click(addLayers);
+    c.pause(300);
     c.click(allCategoryHeader);
 
     // Add specified layer to layer list
@@ -47,6 +49,7 @@ module.exports = {
       c.click('#accordion-legacy-all-cloud-effective-radius');
       c.waitForElementVisible('#accordion-legacy-all-cloud-effective-radius .measure-row-contents', TIME_LIMIT, (e) => {
         c.click('#MODIS_Aqua_Cloud_Effective_Radius-checkbox');
+        c.pause(300);
         c.click(layersModalCloseButton);
       });
     });

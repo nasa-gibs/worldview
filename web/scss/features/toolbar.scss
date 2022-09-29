@@ -54,7 +54,7 @@
 .toolbar-list-modal.modal-dialog {
   width: 160px;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: 1200px) {
     width: 180px;
   }
 }

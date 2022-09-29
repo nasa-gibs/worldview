@@ -66,9 +66,9 @@ function Embed (props) {
 }
 
 function mapStateToProps(state) {
-  const { browser, embed } = state;
+  const { screenSize, embed } = state;
   const { isEmbedModeActive } = embed;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     isEmbedModeActive,

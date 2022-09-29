@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { createResponsiveStateReducer } from 'redux-responsive';
 import { assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutReducer } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
@@ -49,25 +48,14 @@ import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
 import { smartHandoffReducer, getInitialState as getSmartHandoffInitialState } from './smart-handoff/reducer';
 import { getInitialState as getInitialSettingsState, settingsReducer } from './settings/reducer';
+import { getInitialState as getInitialScreenSizeState, screenSizeReducer } from './screen-size/reducer';
 import { loadingReducer } from './loading/reducers';
 
 function lastAction(state = null, action) {
   return action;
 }
 
-/**
- * Access to page size so various resize listeners are
- * no longer necessary
- */
-const responsiveStateReducer = createResponsiveStateReducer(
-  null,
-  {
-    extraFields: () => ({
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
-    }),
-  },
-);
+
 /**
  * Get initial module states based on config
  * and parameters
@@ -86,6 +74,7 @@ export function getInitialState(models, config, parameters) {
     layers: getLayersInitialState(config),
     events: getInitialEventsState(config),
     settings: getInitialSettingsState(),
+    screenSize: getInitialScreenSizeState(),
     requestedEvents: eventRequestResponse(),
     requestedEventSources: eventRequestResponse(),
     smartHandoffs: getSmartHandoffInitialState(config),
@@ -104,7 +93,6 @@ const defaultReducer = (state = {}) => state;
 const reducers = {
   alerts: alertReducer,
   animation: animationReducer,
-  browser: responsiveStateReducer,
   config: defaultReducer,
   compare: compareReducer,
   date: dateReducer,
@@ -130,6 +118,7 @@ const reducers = {
   proj: projectionReducer,
   requestedEvents,
   requestedEventSources,
+  screenSize: screenSizeReducer,
   settings: settingsReducer,
   shortLink,
   sidebar: sidebarReducer,

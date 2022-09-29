@@ -123,15 +123,15 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     productPicker,
   } = state;
-  const { screenWidth } = browser;
+  const { screenWidth } = screenSize;
   const width = getModalWidth(screenWidth);
   const { mode, category, categoryType } = productPicker;
 
   return {
-    browser,
+    screenSize,
     category,
     categoryType,
     mode,

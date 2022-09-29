@@ -4,22 +4,21 @@ import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
 function LoadingIndicator({ msg, isLoading, isMobile }) {
-  const spinnerStyle = {
-    position: 'absolute',
-    top: 10,
-    left: 300,
-    zIndex: 999,
-  };
-
-  const mobileSpinnerStyle = {
+  const spinnerStyle = isMobile ? {
     position: 'absolute',
     top: 10,
     left: 80,
     zIndex: 999,
-  };
+  }
+    : {
+      position: 'absolute',
+      top: 10,
+      left: 300,
+      zIndex: 999,
+    };
 
   return isLoading && (
-    <div style={isMobile ? mobileSpinnerStyle : spinnerStyle}>
+    <div style={spinnerStyle}>
       <Spinner color="light" size="sm" />
       {msg}
     </div>
@@ -32,11 +31,11 @@ LoadingIndicator.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { browser, loading } = state;
+  const { screenSize, loading } = state;
   const { msg, isLoading } = loading;
   return {
     isLoading,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     msg,
   };
 };

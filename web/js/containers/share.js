@@ -279,7 +279,7 @@ class ShareLinkContainer extends Component {
             <p>
               Embed @NAME@ in your website. See our
               {' '}
-              <a className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
+              <a id="share-embed-doc-link" className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
               {' '}
               for a guide.
             </p>
@@ -343,11 +343,11 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, config, shortLink, sidebar, tour,
+    screenSize, config, shortLink, sidebar, tour,
   } = state;
 
   const { features: { urlShortening } } = config;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
 
   return {

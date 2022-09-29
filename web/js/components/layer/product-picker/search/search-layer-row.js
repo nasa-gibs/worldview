@@ -189,13 +189,13 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker, browser, notifications } = state;
+  const { productPicker, notifications, screenSize } = state;
   const activeLayerMap = getActiveLayersMap(state);
   const { categoryType, selectedLayer } = productPicker;
   return {
-    scrollIntoView: browser.screenWidth < 1024,
+    scrollIntoView: screenSize.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     layerNotices: getLayerNoticesForLayer(ownProps.layer.id, notifications),
     selectedDate: getSelectedDate(state),
     selectedLayer,

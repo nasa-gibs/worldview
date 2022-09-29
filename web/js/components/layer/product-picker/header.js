@@ -266,7 +266,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { productPicker, browser, proj } = state;
+  const { productPicker, screenSize, proj } = state;
   const {
     mode,
     category,
@@ -275,7 +275,7 @@ const mapStateToProps = (state) => {
     selectedLayer,
     searchConfig,
   } = productPicker;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const layers = getLayersForProjection(state);
 
   return {

@@ -258,7 +258,7 @@ const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar, date, browser,
+    map, proj, events, requestedEvents, sidebar, date, screenSize,
   } = state;
 
   return {
@@ -268,7 +268,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isAnimatingToEvent: events.isAnimatingToEvent,
     eventsData: getFilteredEvents(state),
     eventsDataIsLoading: requestedEvents.isLoading,

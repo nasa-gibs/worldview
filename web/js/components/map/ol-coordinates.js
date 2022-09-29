@@ -128,10 +128,16 @@ class OlCoordinates extends React.Component {
     const {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
-    const { show } = this.props;
+    const { show, isMobile } = this.props;
+    const coordContainerStyle = isMobile ? {
+      display: 'none',
+    }
+      : {
+        width,
+      };
 
     return (
-      <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
+      <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
         {hasMouse && show && (
           <>
             <Coordinates
@@ -154,10 +160,12 @@ class OlCoordinates extends React.Component {
 }
 
 function mapStateToProps (state) {
-  const { settings } = state;
+  const { settings, screenSize } = state;
   const { coordinateFormat } = settings;
+  const isMobile = screenSize.isMobileDevice;
   return {
     coordinateFormat,
+    isMobile,
   };
 }
 
@@ -171,6 +179,7 @@ OlCoordinates.propTypes = {
   show: PropTypes.bool,
   changeCoordinateFormat: PropTypes.func,
   coordinateFormat: PropTypes.string,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(

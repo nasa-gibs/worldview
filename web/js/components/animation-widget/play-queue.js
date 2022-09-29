@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
-import PQueue from 'p-queue/dist';
+// eslint-disable-next-line import/no-unresolved
+import PQueue from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';

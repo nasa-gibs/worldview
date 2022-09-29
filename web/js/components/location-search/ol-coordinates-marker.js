@@ -99,7 +99,7 @@ export class CoordinatesMarker extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser,
+    screenSize,
     config,
     map,
     proj,
@@ -107,7 +107,7 @@ function mapStateToProps(state) {
     locationSearch,
   } = state;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     config,
