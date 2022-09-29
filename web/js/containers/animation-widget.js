@@ -80,6 +80,7 @@ const RangeHandle = (props) => {
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
 const maxFrames = 300;
+const mobileMaxFrames = 50;
 
 class AnimationWidget extends React.Component {
   constructor(props) {
@@ -367,10 +368,7 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate,
       subDailyMode,
-      interval,
       hasSubdailyLayers,
-      playDisabled,
-      numberOfFrames,
       isMobile,
       isMobilePhone,
       isMobileTablet,
@@ -674,16 +672,17 @@ function mapStateToProps(state) {
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
+  const frameLimit = screenSize.isMobileDevice ? mobileMaxFrames : maxFrames;
   const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
-    maxFrames,
+    frameLimit,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
-  if (numberOfFrames < maxFrames) {
+  if (numberOfFrames < frameLimit) {
     snappedCurrentDate = snapToIntervalDelta(
       currentDate,
       startDate,
