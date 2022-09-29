@@ -840,16 +840,31 @@ button:focus {
 }
 
 .animate-button-phone-landscape {
-  left: 140px;
+  left: 320px;
+  bottom: 20px;
+}
+
+.animate-button-phone-landscape-subdaily {
+  left: 420px;
   bottom: 20px;
 }
 
 .animate-button-tablet-portrait {
-  left: 430px;
+  left: 325px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-portrait-subdaily {
+  left: 420px;
   bottom: 20px;
 }
 
 .animate-button-tablet-landscape {
   left: 323px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-landscape-subdaily {
+  left: 420px;
   bottom: 20px;
 }

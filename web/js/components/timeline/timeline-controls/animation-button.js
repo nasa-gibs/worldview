@@ -22,9 +22,9 @@ const AnimationButton = (props) => {
   const buttonId = 'animate-button';
   const labelText = label || 'Set up animation';
   const className = isMobilePhone && isPortrait ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
-    : isMobilePhone && isLandscape ? 'mobile-animate-button animate-button-phone-landscape'
-      : isMobileTablet && isPortrait ? 'mobile-animate-button animate-button-tablet-portrait'
-        : isMobileTablet && isLandscape ? 'mobile-animate-button animate-button-tablet-landscape'
+    : isMobilePhone && isLandscape ? `mobile-animate-button animate-button-phone-landscape${subdailyID}`
+      : isMobileTablet && isPortrait ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
+        : isMobileTablet && isLandscape ? `mobile-animate-button animate-button-tablet-landscape${subdailyID}`
       : ' animate-button'
 
 

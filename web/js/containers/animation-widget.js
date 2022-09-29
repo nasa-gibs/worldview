@@ -341,9 +341,9 @@ class AnimationWidget extends React.Component {
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
     const widgetIDs = isMobilePhone && isPortrait ? `collapsed-animate-widget-phone-portrait${subdailyID}`
-    : isMobilePhone && isLandscape ? 'collapsed-animate-widget-phone-landscape'
-      : isMobileTablet && isPortrait ? 'collapsed-animate-widget-tablet-portrait'
-        : isMobileTablet && isLandscape ? 'collapsed-animate-widget-tablet-landscape'
+    : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
+      : isMobileTablet && isPortrait ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
+        : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
           : 'collapsed-animate-widget'
 
     return !dontShow && (
