@@ -829,12 +829,27 @@ button:focus {
   border-radius: 5px;
 }
 
-.animate-button-phone {
+.animate-button-phone-portrait {
   left: 140px;
   bottom: 75px;
 }
 
-.animate-button-tablet {
+.animate-button-phone-portrait-subdaily {
+  left: 140px;
+  bottom: 75px;
+}
+
+.animate-button-phone-landscape {
+  left: 140px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-portrait {
+  left: 430px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-landscape {
   left: 323px;
   bottom: 20px;
 }

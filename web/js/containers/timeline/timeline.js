@@ -921,11 +921,15 @@ class Timeline extends React.Component {
   renderMobile() {
     const {
       animationDisabled,
-      breakpoints,
       hasSubdailyLayers,
       isCompareModeActive,
       isDataDownload,
       isMobile,
+      isMobilePhone,
+      isMobileTablet,
+      isLandscape,
+      isPortrait,
+      breakpoints,
       screenWidth,
       selectedDate,
       timelineEndDateLimit,
@@ -956,7 +960,12 @@ class Timeline extends React.Component {
             isMobile={isMobile}
             breakpoints={breakpoints}
             screenWidth={screenWidth}
+            isMobilePhone={isMobilePhone}
+            isMobileTablet={isMobileTablet}
+            isLandscape={isLandscape}
+            isPortrait={isPortrait}
             clickAnimationButton={this.clickAnimationButton}
+            hasSubdailyLayers={hasSubdailyLayers}
             disabled={animationDisabled}
             label={
             isCompareModeActive
@@ -1322,13 +1331,12 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { screenWidth } = screenSize;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
-  const { breakpoints } = screenSize;
+  const { breakpoints, screenWidth, isMobilePhone, isMobileTablet, orientation, } = screenSize;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily
@@ -1396,6 +1404,11 @@ function mapStateToProps(state) {
     activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
     isMobile,
+    isMobilePhone,
+    isMobileTablet,
+    orientation,
+    isLandscape: screenSize.orientation === 'landscape',
+    isPortrait: screenSize.orientation === 'portrait',
     screenWidth,
     breakpoints,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',

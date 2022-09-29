@@ -3,6 +3,21 @@
   z-index: 100;
 }
 
+#collapsed-animate-widget-phone-portrait {
+  bottom: 20px;
+  left: 190px;
+}
+
+#collapsed-animate-widget-phone-portrait-subdaily {
+  bottom: 75px;
+  left: 210px;
+}
+
+#collapsed-animate-widget-phone-landscape{
+  bottom: 20px;
+  left: 390px;
+}
+
 @media (min-width: $tablet-min-width) {
   .wv-animation-widget-wrapper {
     bottom: 88px;
@@ -20,7 +35,7 @@
 
   &.minimized {
     bottom: 20px;
-    left: 320px;
+    left: 390px;
 
     &.landscape {
       left: 390px;
@@ -384,15 +399,15 @@ a .wv-animation-widget-icon {
     height: 100%;
     background: $wv-transparent-black;
 
-    & .wv-animation-widget-header {
-      margin-top: 2rem;
-      width: 100%;
-      font-size: 30px;
-    }
-
     & .wv-minimize {
       width: 2em;
       height: 3em;
+    }
+
+    & #loop-button {
+      height: 4em;
+      width: 5em;
+      margin-top: 10px;
     }
 
     & .mobile-animation-widget-container {
@@ -402,11 +417,7 @@ a .wv-animation-widget-icon {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-    }
-
-    & .mobile-animation-widget-button-items {
-      width: 75%;
-      margin: auto;
+      margin-top: 20px;
     }
 
     #slider-case-row {
@@ -425,7 +436,7 @@ a .wv-animation-widget-icon {
 
     & .mobile-animation-block-row {
       text-align: center;
-      font-size: 22px;
+      font-size: 18px;
 
       & .mobile-date-picker-select-btn{
         position: relative;
@@ -440,10 +451,10 @@ a .wv-animation-widget-icon {
       justify-content: center;
       align-items: center;
       width: 100%;
+      flex-direction: column;
 
-      span{
-        font-size: 22px;
-        margin-right: 20px;
+      span {
+        font-size: 18px;
         line-height: normal;
         text-align: center;
       }
@@ -471,10 +482,6 @@ a .wv-animation-widget-icon {
 
 #mobile-animation-widget-mobile-phone-landscape {
   & .wv-animation-widget {
-    & .wv-animation-widget-header {
-      margin-top: 1rem;
-      font-size: 24px;
-    }
     & .rc-slider {
       width: 400px;
     }
@@ -485,8 +492,8 @@ a .wv-animation-widget-icon {
   height: 60%;
   bottom: 0px;
 
-  & .wv-animation-widget-header {
-    margin-top: 0.75rem;
+  & .wv-minimize {
+    top: 1px;
   }
 
   & .mobile-animation-block-row {
@@ -502,12 +509,38 @@ a .wv-animation-widget-icon {
       margin-top: 15px;
     }
 
+    & .wv-slider-case{
+      margin-top: 1.5rem;
+
+      & .rc-slider {
+        width: 300px;
+      }
+    }
+
     & span{
         text-align: center;
         margin: 0;
       }
 }
 }
+
+#mobile-animation-widget-tablet {
+  height: 30%;
+  bottom: 0px;
+
+  & .mobile-animation-widget-container {
+    margin: 0;
+  }
+
+  & .wv-minimize {
+    top: 1px;
+  }
+
+  & .rc-slider {
+    width: 400px;
+  }
+}
+
 
 .mobile-timescale-dropdown {
   & .dropdown-toggle {
@@ -537,7 +570,7 @@ a .wv-animation-widget-icon {
   margin: auto;
 
   & .custom-animation-interval-header {
-    font-size: 22px;
+    font-size: 18px;
     text-align: center;
     line-height: 1.50rem;
     margin-bottom: 10px;

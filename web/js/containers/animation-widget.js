@@ -320,12 +320,15 @@ class AnimationWidget extends React.Component {
   renderCollapsedWidget() {
     const {
       hasSubdailyLayers,
-      isLandscape,
       isMobile,
       isPlaying,
       onClose,
       onPushPause,
       playDisabled,
+      isPortrait,
+      isLandscape,
+      isMobilePhone,
+      isMobileTablet,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -334,6 +337,14 @@ class AnimationWidget extends React.Component {
       + `${hasSubdailyLayers ? 'subdaily ' : ''}`
       + `${isMobile ? 'mobile ' : ''}`
       + `${isLandscape ? 'landscape ' : ''}`;
+
+    const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
+
+    const widgetIDs = isMobilePhone && isPortrait ? `collapsed-animate-widget-phone-portrait${subdailyID}`
+    : isMobilePhone && isLandscape ? 'collapsed-animate-widget-phone-landscape'
+      : isMobileTablet && isPortrait ? 'collapsed-animate-widget-tablet-portrait'
+        : isMobileTablet && isLandscape ? 'collapsed-animate-widget-tablet-landscape'
+          : 'collapsed-animate-widget'
 
     return !dontShow && (
       <Draggable
@@ -346,6 +357,7 @@ class AnimationWidget extends React.Component {
       >
         <div
           className={widgetClasses}
+          id={widgetIDs}
         >
           <div
             id="wv-animation-widget"
@@ -384,16 +396,17 @@ class AnimationWidget extends React.Component {
       numberOfFrames,
       isMobile,
       isMobilePhone,
-      isTablet,
+      isMobileTablet,
       screenWidth,
       breakpoints,
-      orientation,
+      isLandscape,
+      isPortrait,
     } = this.props;
     const { speed } = this.state;
 
-    const mobileID = isMobilePhone && orientation === 'landscape' ? 'mobile-phone-landscape'
-      : isMobilePhone && orientation === 'portrait' ? 'mobile-phone-portrait'
-        : isTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
+    const mobileID = isMobilePhone && isLandscape ? 'mobile-phone-landscape'
+      : isMobilePhone && isPortrait ? 'mobile-phone-portrait'
+        : isMobileTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
 
     const minimumDate = getISODateFormatted(minDate);
     const maximumDate = getISODateFormatted(maxDate);
@@ -404,15 +417,11 @@ class AnimationWidget extends React.Component {
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
-          <div className="wv-animation-widget-header">
-            Map Animation
-          </div>
-
           <div className="mobile-animation-widget-container">
 
               <div className="mobile-animation-flex-row">
                 <span>
-                  Loop Animation
+                  Loop
                 </span>
                 <LoopButton looping={looping} onLoop={this.onLoop} />
               </div>
@@ -709,9 +718,11 @@ function mapStateToProps(state) {
     snappedCurrentDate = currentDate;
   }
 
+  const {isMobilePhone, screenWidth, isMobileTablet, breakpoints } = screenSize;
+
   return {
     appNow,
-    screenWidth: screenSize.screenWidth,
+    screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
@@ -724,12 +735,12 @@ function mapStateToProps(state) {
     isActive: animationIsActive,
     isDistractionFreeModeActive,
     isMobile: screenSize.isMobileDevice,
-    isMobilePhone: screenSize.isMobilePhone,
-    screenWidth: screenSize.screenWidth,
-    isTablet: screenSize.isMobileTablet,
-    orientation: screenSize.orientation,
-    breakpoints: screenSize.breakpoints,
+    isMobilePhone,
+    screenWidth,
+    isMobileTablet,
+    breakpoints,
     isLandscape: screenSize.orientation === 'landscape',
+    isPortrait: screenSize.orientation === 'portrait',
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
