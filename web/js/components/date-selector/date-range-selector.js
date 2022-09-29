@@ -18,30 +18,30 @@ export default function DateRangeSelector (props) {
     : 'wv-date-range-selector';
 
   return (
-        <div className={className}>
-          <DateSelector
-            idSuffix={idSuffix}
-            date={startDate}
-            onDateChange={setStartDate}
-            minDate={minDate}
-            maxDate={endDate}
-            subDailyMode={subDailyMode}
-            isDisabled={isDisabled}
-            isStartDate
-          />
-          <div className="thru-label">to</div>
-          <DateSelector
-            idSuffix={idSuffix}
-            date={endDate}
-            onDateChange={setEndDate}
-            maxDate={maxDate}
-            minDate={startDate}
-            subDailyMode={subDailyMode}
-            isDisabled={isDisabled}
-            isEndDate
-          />
-        </div>
-      )
+    <div className={className}>
+      <DateSelector
+        idSuffix={idSuffix}
+        date={startDate}
+        onDateChange={setStartDate}
+        minDate={minDate}
+        maxDate={endDate}
+        subDailyMode={subDailyMode}
+        isDisabled={isDisabled}
+        isStartDate
+      />
+      <div className="thru-label">to</div>
+      <DateSelector
+        idSuffix={idSuffix}
+        date={endDate}
+        onDateChange={setEndDate}
+        maxDate={maxDate}
+        minDate={startDate}
+        subDailyMode={subDailyMode}
+        isDisabled={isDisabled}
+        isEndDate
+      />
+    </div>
+  );
 }
 
 DateRangeSelector.propTypes = {
@@ -52,6 +52,5 @@ DateRangeSelector.propTypes = {
   setDateRange: PropTypes.func,
   minDate: PropTypes.object,
   maxDate: PropTypes.object,
-  mobileStyle: PropTypes.bool,
   subDailyMode: PropTypes.bool,
 };

@@ -194,7 +194,6 @@ class AnimationWidget extends React.Component {
   }
 
   onDateChange([newStartDate, newEndDate]) {
-    console.log([newStartDate, newEndDate]);
     const {
       onUpdateStartDate, onUpdateEndDate, startDate, endDate,
     } = this.props;
@@ -206,39 +205,17 @@ class AnimationWidget extends React.Component {
     }
   }
 
-    // eslint-disable-next-line react/destructuring-assignment
-    onMobileDateChangeStart = (date, draggerSelected = this.props.draggerSelected) => {
+    onMobileDateChangeStart = (date) => {
       const { onUpdateStartDate } = this.props;
       const dateObj = new Date(date);
-      const dateISOFormatted = getISODateFormatted(date);
-      if (draggerSelected === 'selected') { // dragger A
-        this.setState({
-          draggerTimeState: dateISOFormatted,
-        });
-      } else { // dragger B
-        this.setState({
-          draggerTimeStateB: dateISOFormatted,
-        });
-      }
-      this.debounceDateUpdate(dateObj, draggerSelected);
+      this.debounceDateUpdate(dateObj);
       onUpdateStartDate(dateObj);
     }
 
-    // eslint-disable-next-line react/destructuring-assignment
-    onMobileDateChangeEnd = (date, draggerSelected = this.props.draggerSelected) => {
+    onMobileDateChangeEnd = (date) => {
       const { onUpdateEndDate } = this.props;
       const dateObj = new Date(date);
-      const dateISOFormatted = getISODateFormatted(date);
-      if (draggerSelected === 'selected') { // dragger A
-        this.setState({
-          draggerTimeState: dateISOFormatted,
-        });
-      } else { // dragger B
-        this.setState({
-          draggerTimeStateB: dateISOFormatted,
-        });
-      }
-      this.debounceDateUpdate(dateObj, draggerSelected);
+      this.debounceDateUpdate(dateObj);
       onUpdateEndDate(dateObj);
     }
 
@@ -341,11 +318,11 @@ class AnimationWidget extends React.Component {
       + `${isLandscape ? 'landscape ' : ''}`;
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
-    const widgetIDs = isMobilePhone && isPortrait || screenWidth < breakpoints.extraSmall ? `collapsed-animate-widget-phone-portrait${subdailyID}`
-    : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
-      : isMobileTablet && isPortrait || screenWidth < breakpoints.small ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
-        : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
-          : 'collapsed-animate-widget'
+    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < breakpoints.extraSmall) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
+      : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
+        : (isMobileTablet && isPortrait) || (screenWidth < breakpoints.small) ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
+          : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
+            : 'collapsed-animate-widget';
 
     return !dontShow && (
       <Draggable
@@ -389,7 +366,6 @@ class AnimationWidget extends React.Component {
       sliderLabel,
       startDate,
       endDate,
-      onPushPause,
       subDailyMode,
       interval,
       hasSubdailyLayers,
@@ -420,18 +396,18 @@ class AnimationWidget extends React.Component {
         >
           <div className="mobile-animation-widget-container">
 
-              <div className="mobile-animation-flex-row">
-                <span>
-                  Loop
-                </span>
-                <LoopButton looping={looping} onLoop={this.onLoop} />
-              </div>
+            <div className="mobile-animation-flex-row">
+              <span>
+                Loop
+              </span>
+              <LoopButton looping={looping} onLoop={this.onLoop} />
+            </div>
 
-              <div className="mobile-animation-flex-row">
-                <MobileCustomIntervalSelector
-                  hasSubdailyLayers={hasSubdailyLayers}
-                />
-              </div>
+            <div className="mobile-animation-flex-row">
+              <MobileCustomIntervalSelector
+                hasSubdailyLayers={hasSubdailyLayers}
+              />
+            </div>
 
             <div className="mobile-animation-flex-row" id="slider-case-row">
               <div className="wv-slider-case">
@@ -452,26 +428,26 @@ class AnimationWidget extends React.Component {
 
             <div className="mobile-animation-block-row">
               <span>Start Date</span>
-                <MobileDatePicker
-                  date={startDate}
-                  startDateLimit={minimumDate}
-                  endDateLimit={maximumDate}
-                  onDateChange={this.onMobileDateChangeStart}
-                  hasSubdailyLayers={hasSubdailyLayers}
-                  isMobile={isMobile}
-                />
+              <MobileDatePicker
+                date={startDate}
+                startDateLimit={minimumDate}
+                endDateLimit={maximumDate}
+                onDateChange={this.onMobileDateChangeStart}
+                hasSubdailyLayers={hasSubdailyLayers}
+                isMobile={isMobile}
+              />
             </div>
 
             <div className="mobile-animation-block-row">
               <span>End Date</span>
-                <MobileDatePicker
-                  date={endDate}
-                  startDateLimit={minimumDate}
-                  endDateLimit={maximumDate}
-                  onDateChange={this.onMobileDateChangeEnd}
-                  hasSubdailyLayers={hasSubdailyLayers}
-                  isMobile={isMobile}
-                />
+              <MobileDatePicker
+                date={endDate}
+                startDateLimit={minimumDate}
+                endDateLimit={maximumDate}
+                onDateChange={this.onMobileDateChangeEnd}
+                hasSubdailyLayers={hasSubdailyLayers}
+                isMobile={isMobile}
+              />
             </div>
 
           </div>
@@ -719,7 +695,9 @@ function mapStateToProps(state) {
     snappedCurrentDate = currentDate;
   }
 
-  const {isMobilePhone, screenWidth, isMobileTablet, breakpoints } = screenSize;
+  const {
+    isMobilePhone, screenWidth, isMobileTablet, breakpoints,
+  } = screenSize;
 
   return {
     appNow,
@@ -737,7 +715,6 @@ function mapStateToProps(state) {
     isDistractionFreeModeActive,
     isMobile: screenSize.isMobileDevice,
     isMobilePhone,
-    screenWidth,
     isMobileTablet,
     breakpoints,
     isLandscape: screenSize.orientation === 'landscape',
@@ -811,6 +788,7 @@ RangeHandle.propTypes = {
 AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  breakpoints: PropTypes.object,
   snappedCurrentDate: PropTypes.object,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
@@ -824,7 +802,10 @@ AnimationWidget.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
   isPlaying: PropTypes.bool,
+  isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,

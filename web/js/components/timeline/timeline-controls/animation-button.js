@@ -8,7 +8,6 @@ const AnimationButton = (props) => {
     disabled,
     label,
     clickAnimationButton,
-    isMobile,
     breakpoints,
     screenWidth,
     isLandscape,
@@ -18,14 +17,14 @@ const AnimationButton = (props) => {
     hasSubdailyLayers,
   } = props;
 
-  const subdailyID = hasSubdailyLayers ? '-subdaily' : ''
+  const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
   const buttonId = 'animate-button';
   const labelText = label || 'Set up animation';
-  const className = isMobilePhone && isPortrait || !isMobileTablet && screenWidth < breakpoints.extraSmall ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
+  const className = (isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < breakpoints.extraSmall) ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
     : isMobilePhone && isLandscape ? `mobile-animate-button animate-button-phone-landscape${subdailyID}`
-      : isMobileTablet && isPortrait || !isMobilePhone && screenWidth < breakpoints.small ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
+      : (isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small) ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
         : isMobileTablet && isLandscape ? `mobile-animate-button animate-button-tablet-landscape${subdailyID}`
-          : ' animate-button'
+          : ' animate-button';
 
   return (
     <div
@@ -50,10 +49,13 @@ AnimationButton.propTypes = {
   breakpoints: PropTypes.object,
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
-  isMobile: PropTypes.bool,
   label: PropTypes.string,
   screenWidth: PropTypes.number,
-
+  isLandscape: PropTypes.bool,
+  isPortrait: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
 };
 
 export default React.memo(AnimationButton);

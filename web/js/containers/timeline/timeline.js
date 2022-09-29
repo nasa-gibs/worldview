@@ -1336,7 +1336,13 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
-  const { breakpoints, screenWidth, isMobilePhone, isMobileTablet, orientation, } = screenSize;
+  const {
+    breakpoints,
+    screenWidth,
+    isMobilePhone,
+    isMobileTablet,
+    orientation,
+  } = screenSize;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily
@@ -1534,6 +1540,10 @@ Timeline.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  isLandscape: PropTypes.bool,
+  isPortrait: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,

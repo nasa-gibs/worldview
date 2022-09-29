@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DeltaInput from './delta-input';
@@ -16,10 +16,7 @@ const MobileCustomIntervalSelector = (props) => {
   const {
     changeCustomInterval,
     customInterval,
-    customSelected,
     hasSubdailyLayers,
-    interval,
-    selectInterval,
     customDelta,
     isMobile,
   } = props;
@@ -28,32 +25,32 @@ const MobileCustomIntervalSelector = (props) => {
     if (value >= 0 && value <= 1000) {
       changeCustomInterval(value, customInterval);
     }
-  }
+  };
 
   const changeZoomLevel = (zoomLevel) => {
     changeCustomInterval(customDelta, TIME_SCALE_TO_NUMBER[zoomLevel]);
-  }
+  };
 
   return (
     <div className="custom-animation-interval-container">
-        <h3 className="custom-animation-interval-header">Interval Selector</h3>
-        <div className="custom-interval-widget-controls-container">
-          <DeltaInput
-            deltaValue={customDelta}
-            changeDelta={changeDelta}
-            isMobile={isMobile}
-          />
-          <IntervalSelect
-            hasSubdailyLayers={hasSubdailyLayers}
-            zoomLevel={TIME_SCALE_FROM_NUMBER[customInterval]}
-            changeZoomLevel={changeZoomLevel}
-            interval={customInterval}
-            isMobile={isMobile}
-          />
-        </div>
+      <h3 className="custom-animation-interval-header">Interval Selector</h3>
+      <div className="custom-interval-widget-controls-container">
+        <DeltaInput
+          deltaValue={customDelta}
+          changeDelta={changeDelta}
+          isMobile={isMobile}
+        />
+        <IntervalSelect
+          hasSubdailyLayers={hasSubdailyLayers}
+          zoomLevel={TIME_SCALE_FROM_NUMBER[customInterval]}
+          changeZoomLevel={changeZoomLevel}
+          interval={customInterval}
+          isMobile={isMobile}
+        />
+      </div>
     </div>
-  )
-}
+  );
+};
 
 const mapDispatchToProps = (dispatch) => ({
   changeCustomInterval: (delta, timeScale) => {
@@ -85,12 +82,8 @@ export default connect(
 
 MobileCustomIntervalSelector.propTypes = {
   changeCustomInterval: PropTypes.func,
-  closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
-  customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
-  interval: PropTypes.number,
-  selectInterval: PropTypes.func,
-  modalOpen: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
