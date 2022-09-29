@@ -221,7 +221,7 @@ class ShareLinkContainer extends Component {
   )
 
   renderLinkTab = () => {
-    const { shortLink } = this.props;
+    const { shortLink, urlShortening } = this.props;
     const {
       activeTab,
       isShort,
@@ -234,6 +234,11 @@ class ShareLinkContainer extends Component {
         ? shortLink.response.link
         : this.getPermalink();
 
+    const url = window.location.href;
+    const preventShorten = url.length > 2048;
+    const isDisabled = shortLink.isLoading || preventShorten;
+    const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
+
     return (
       <TabPane tabId="link" className="share-tab-link">
         {activeTab === 'link' && (
@@ -243,13 +248,16 @@ class ShareLinkContainer extends Component {
               Copy URL to share link.
             </p>
             {' '}
-            <Checkbox
-              label="Shorten link"
-              id="wv-link-shorten"
-              onCheck={this.onToggleShorten}
-              checked={isShort}
-              disabled={!shortLink.isLoading}
-            />
+            {urlShortening && (
+              <Checkbox
+                label="Shorten link"
+                id="wv-link-shorten"
+                onCheck={!preventShorten ? this.onToggleShorten : null}
+                checked={isShort}
+                disabled={isDisabled}
+                title={tooltipText}
+              />
+            )}
           </>
         )}
       </TabPane>
@@ -271,7 +279,7 @@ class ShareLinkContainer extends Component {
             <p>
               Embed @NAME@ in your website. See our
               {' '}
-              <a className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
+              <a id="share-embed-doc-link" className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
               {' '}
               for a guide.
             </p>
@@ -335,12 +343,15 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, config, shortLink, sidebar, tour,
+    screenSize, config, shortLink, sidebar, tour,
   } = state;
 
-  const isMobile = browser.lessThan.medium;
+  const { features: { urlShortening } } = config;
+  const isMobile = screenSize.isMobileDevice;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
+
   return {
+    urlShortening,
     embedDisableNavLink,
     isMobile,
     shortLink,
@@ -369,4 +380,5 @@ ShareLinkContainer.propTypes = {
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
+  urlShortening: PropTypes.bool,
 };

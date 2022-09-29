@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav, UncontrolledTooltip } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomNavItem from './nav-item';
-
 
 const tabClasses = 'sidebar-tab';
 
@@ -19,54 +19,63 @@ function NavCase (props) {
   } = props;
 
   const renderDataDownload = () => tabTypes.download && (
-  <CustomNavItem
-    isMobile={isMobile}
-    shouldHideInMobile
-    isDisabled={!!isCompareMode || isDataDisabled}
-    onTabClick={onTabClick}
-    text="Data"
-    id="download"
-    iconClassName="icon-download"
-    disabled={!!isCompareMode}
-    label={
-      isCompareMode
-        ? 'You must exit comparison mode to download data'
-        : 'Data Download'
-    }
-    className={
-      activeTab === 'download'
-        ? `${tabClasses} third-tab active`
-        : isCompareMode
-          ? `${tabClasses} third-tab disabled`
-          : `${tabClasses} third-tab`
-    }
-  />
+    <CustomNavItem
+      isMobile={isMobile}
+      shouldHideInMobile
+      isDisabled={!!isCompareMode || isDataDisabled}
+      onTabClick={onTabClick}
+      text="Data"
+      id="download"
+      iconClassName="icon-download"
+      disabled={!!isCompareMode}
+      label={
+        isCompareMode
+          ? 'You must exit comparison mode to download data'
+          : 'Data Download'
+      }
+      className={
+        activeTab === 'download'
+          ? `${tabClasses} third-tab active`
+          : isCompareMode
+            ? `${tabClasses} third-tab disabled`
+            : `${tabClasses} third-tab`
+      }
+    />
   );
 
   const renderEvents = () => tabTypes.events && (
-  <CustomNavItem
-    id="events"
-    isMobile={isMobile}
-    shouldHideInMobile={false}
-    isDisabled={!!isCompareMode}
-    onTabClick={onTabClick}
-    text="Events"
-    iconClassName="icon-events"
-    disabled={!!isCompareMode}
-    label={
-      isCompareMode
-        ? 'You must exit comparison mode to use the natural events feature'
-        : 'Natural Events'
-    }
-    className={
-      activeTab === 'events'
-        ? `${tabClasses} second-tab active`
-        : isCompareMode
-          ? `${tabClasses} second-tab disabled`
-          : `${tabClasses} second-tab`
-    }
-  />
+    <CustomNavItem
+      id="events"
+      isMobile={isMobile}
+      shouldHideInMobile={false}
+      isDisabled={!!isCompareMode}
+      onTabClick={onTabClick}
+      text="Events"
+      iconClassName="icon-events"
+      disabled={!!isCompareMode}
+      label={
+        isCompareMode
+          ? 'You must exit comparison mode to use the natural events feature'
+          : 'Natural Events'
+      }
+      className={
+        activeTab === 'events'
+          ? `${tabClasses} second-tab active`
+          : isCompareMode
+            ? `${tabClasses} second-tab disabled`
+            : `${tabClasses} second-tab`
+      }
+    />
   );
+  const sidebarCollapseMobile = isMobile ? {
+    height: '48px',
+    width: '45px',
+  } : null;
+  const collapseIconMobile = isMobile ? {
+    height: '40px',
+    width: '40px',
+    color: '#fff',
+  } : null;
 
   return (
     <Nav tabs className="main-nav">
@@ -87,16 +96,22 @@ function NavCase (props) {
       />
       {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
-      <div className="toggleIconHolder">
-        <UncontrolledTooltip placement="right" target="accordion-toggler-button">
+
+      <div
+        id="toggleIconHolder"
+        className="sidebar-collapse"
+        onClick={toggleSidebar}
+        style={sidebarCollapseMobile}
+      >
+        <FontAwesomeIcon
+          className="collapse-icon"
+          icon="caret-up"
+          aria-label="Hide sidebar"
+          style={collapseIconMobile}
+        />
+        <UncontrolledTooltip placement="right" target="toggleIconHolder">
           Hide sidebar
         </UncontrolledTooltip>
-        <a
-          id="accordion-toggler-button"
-          className="accordionToggler atcollapse arrow"
-          onClick={toggleSidebar}
-          aria-label="Hide sidebar"
-        />
       </div>
     </Nav>
   );

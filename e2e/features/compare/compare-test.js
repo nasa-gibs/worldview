@@ -13,8 +13,8 @@ const {
 
 const ModisTrueColorLayerA = '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
 const ModisTrueColorLayerB = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
-const toggleButton = '.toggleIconHolder .accordionToggler';
-const collapsedToggleButton = '#productsHoldertoggleButtonHolder .accordionToggler';
+const toggleButton = '#toggleIconHolder';
+const collapsedToggleButton = '#accordion-toggler-button';
 const tooltipSelector = '.tooltip-inner';
 
 const TIME_LIMIT = 10000;
@@ -31,7 +31,7 @@ module.exports = {
 
   'Animation is disabled when compare mode active': (c) => {
     const disableMessage = 'Animation feature is deactivated when Compare feature is active';
-    c.assert.cssClassPresent(animationButtonCase, 'wv-disabled-button');
+    c.assert.hasClass(animationButtonCase, 'wv-disabled-button');
     c.assert.attributeContains(animationButtonCase, 'aria-label', disableMessage);
     c.moveToElement(animationButtonCase, 5, 5);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
@@ -45,9 +45,9 @@ module.exports = {
 
   'Image download is disabled when compare mode active': (c) => {
     const disableMessage = 'You must exit comparison mode to use the snapshot feature';
-    c.assert.cssClassPresent(snapshotToolbarButton, 'disabled');
+    c.assert.hasClass(snapshotToolbarButton, 'disabled');
     c.assert.attributeContains(snapshotToolbarButton, 'aria-label', disableMessage);
-    c.moveToElement('#snapshot-btn-wrapper svg', 10, 10);
+    c.click('#snapshot-btn-wrapper');
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
       c.assert.containsText(tooltipSelector, disableMessage);
     });
@@ -111,7 +111,7 @@ module.exports = {
       c.pause(100);
       c.expect.element(collapsedToggleButton).to.be.present;
       c.waitForElementNotPresent(toggleButton, TIME_LIMIT);
-      c.useCss().assert.containsText(collapsedToggleButton, '6');
+      c.useCss().assert.containsText(`${collapsedToggleButton} .layer-count`, '6');
       c.click(collapsedToggleButton);
       c.pause(100);
       c.waitForElementVisible('#activeB-Reference_Features_15m', TIME_LIMIT);

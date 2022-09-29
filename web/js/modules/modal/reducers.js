@@ -4,10 +4,10 @@ import {
   OPEN_CUSTOM,
   OPEN_BASIC,
   RENDER_TEMPLATE,
-  ABOUT_PAGE_REQUEST,
+  OPEN_ABOUT,
+  CLOSE_ABOUT,
   CLOSE,
 } from './constants';
-import { requestReducer } from '../core/reducers';
 
 export const modalState = {
   headerText: '',
@@ -23,8 +23,18 @@ export const modalState = {
   customProps: {},
   template: null,
 };
-export function modalAboutPage(state = {}, action) {
-  return requestReducer(ABOUT_PAGE_REQUEST, state, action);
+const aboutModalState = {
+  isOpen: false,
+};
+export function modalAboutReducer(state = aboutModalState, action) {
+  switch (action.type) {
+    case OPEN_ABOUT:
+      return { ...state, isOpen: true };
+    case CLOSE_ABOUT:
+      return { ...state, isOpen: false };
+    default:
+      return state;
+  }
 }
 export function modalReducer(state = modalState, action) {
   switch (action.type) {

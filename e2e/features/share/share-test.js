@@ -64,6 +64,24 @@ module.exports = {
     c.expect.element('#rd-share').to.be.present;
     c.expect.element('#email-share').to.be.present;
   },
+  'Clicking Shorten link works with links less than 2049 characters': (c) => {
+    const shortQueryString = '?l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2022-08-10-T15%3A15%3A05Z';
+    c.url(c.globals.url + shortQueryString);
+    c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
+    c.click(shareToolbarButton);
+    c.waitForElementVisible('#wv-link-shorten-case', TIME_LIMIT);
+    c.click('#wv-link-shorten-case');
+    c.assert.cssClassPresent('#wv-link-shorten-case', 'checked');
+  },
+  'Clicking Shorten link is refused with links greater than 2048 characters': (c) => {
+    const longQueryString = '?l=MODIS_Terra_AOD_Deep_Blue_Combined,MODIS_Terra_AOD_Deep_Blue_Land,MODIS_Terra_Angstrom_Exponent_Ocean,MODIS_Terra_Angstrom_Exponent_Land,MODIS_Terra_Aerosol_Optical_Depth_3km,MODIS_Terra_Aerosol,MISR_Aerosol_Optical_Depth_Avg_Green_Monthly,VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean,VIIRS_SNPP_AOT_Dark_Target_Land_Ocean,VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate,VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate,SWDB_Aerosol_Angstrom_Exponent_Monthly,SWDB_Aerosol_Optical_Thickness_550nm_Monthly,SWDB_Aerosol_Angstrom_Exponent_Daily,SWDB_Aerosol_Optical_Thickness_550nm_Daily,MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly,MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly,OMI_Absorbing_Aerosol_Optical_Thickness_MW_388,OMI_Absorbing_Aerosol_Optical_Depth,OMI_Aerosol_Optical_Depth,MODIS_Aqua_AOD_Deep_Blue_Combined,MODIS_Aqua_AOD_Deep_Blue_Land,MODIS_Aqua_Angstrom_Exponent_Ocean,MODIS_Aqua_Angstrom_Exponent_Land,MODIS_Aqua_Aerosol_Optical_Depth_3km,MODIS_Aqua_Aerosol,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Combined_Value_Added_AOD,MLS_CO_215hPa_Night,MLS_CO_215hPa_Day,AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night,AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Day,AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night,AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day,AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night,AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day,OrbitTracks_Aura_Descending,OrbitTracks_Aura_Ascending,OrbitTracks_Aqua_Ascending,OrbitTracks_Suomi_NPP_Ascending,VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate,Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,MODIS_Combined_L3_Nadir-BRDF_Daily,MODIS_Combined_MAIAC_L2G_BidirectionalReflectance_Bands143,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2022-08-10-T15%3A15%3A05Z';
+    c.url(c.globals.url + longQueryString);
+    c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
+    c.click(shareToolbarButton);
+    c.waitForElementVisible('#wv-link-shorten-case', TIME_LIMIT);
+    c.click('#wv-link-shorten-case');
+    c.assert.not.cssClassPresent('#wv-link-shorten-case', 'checked');
+  },
   after(c) {
     c.end();
   },

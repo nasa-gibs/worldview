@@ -28,7 +28,7 @@ config_dir = args[1]
 
 error_count = 0
 warning_count = 0
-remove_count = 0
+removed_layers = []
 
 main_config_file = os.path.join(config_dir, "wv.json")
 with open(main_config_file, "r", encoding="utf-8") as fp:
@@ -52,8 +52,8 @@ def warn(message):
     warning_count += 1
 
 def remove_layer(wv, layer_id):
-    global remove_count
-    remove_count += 1
+    global removed_layers
+    removed_layers.append(layer_id);
     del wv["layers"][layer_id]
     if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
 
@@ -103,12 +103,6 @@ for layer_id in list(wv["layers"].keys()):
             del layer["palette"]
     if "vectorStyle" in layer and "id" not in layer["vectorStyle"]:
         error("[%s] No vectorStyle definition" % (layer_id))
-    elif "vectorStyle" in layer:
-        vector_style_id = layer["vectorStyle"]["id"]
-        if not os.path.exists(os.path.join(config_dir, "vectorstyles",
-                vector_style_id + ".json")):
-            error("[%s] Unknown vector style: %s" % (layer_id, vector_style_id))
-            del layer["vectorStyle"]
     if "group" not in layer and opt.get("warnOnUnexpectedLayer"):
         error("[%s] Possible unexpected layer, no group defined" % layer_id)
         remove_layer(wv, layer_id)
@@ -139,10 +133,11 @@ for layer_id in list(wv["layers"].keys()):
     if layer.get("futureTime"):
         if "endDate" in layer:
            del layer["endDate"]
-    if layer.get("inactive", False) or layer.get("futureTime", False):
+
+    if layer.get("futureTime", False):
         pass
     else:
-        if "endDate" in layer:
+        if "endDate" in layer and layer.get("ongoing", True):
            del layer["endDate"]
     if "startDate" in layer:
         startTime = layer["startDate"].replace('T', ' ').replace('Z', '')
@@ -153,7 +148,7 @@ for layer_id in list(wv["layers"].keys()):
         start_date = min(start_date, d)
 
 if start_date != datetime.max:
-    wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z";
+    wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:
@@ -186,8 +181,10 @@ for measurement in list(wv["measurements"].values()):
                 error("In measurement %s, source %s, layer not found: %s" %
                     (measurement["id"], source["id"], setting))
 
-print("%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
-        warning_count, remove_count))
+remove_count = len(removed_layers)
+print("%s: %d error(s), %d warning(s), %d removed" % (prog, error_count, warning_count, remove_count))
+if remove_count > 0:
+    print(removed_layers)
 
 json_options = {}
 json_options["indent"] = 2

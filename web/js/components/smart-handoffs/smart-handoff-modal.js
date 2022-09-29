@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import Button from '../util/button';
 import Checkbox from '../util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
+import { getConceptUrl } from '../../modules/smart-handoff/selectors';
 
 const STD_NRT_MAP = {
   STD: 'Standard',
@@ -17,17 +19,14 @@ const STD_NRT_MAP = {
  * layer data and granule files that are available for download.
  */
 function SmartHandoffModal({
-  displayDate, selectedLayer, selectedCollection, continueToEDS,
+  displayDate, selectedLayer, selectedCollection, continueToEDS, cmrSearchDetailURL,
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
   const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
   const [hideModal, setHideModal] = useState(safeLocalStorage.getItem(HIDE_EDS_WARNING) || false);
-  const {
-    value, title, type, version,
-  } = selectedCollection;
+  const { title, type, version } = selectedCollection;
   const { dateRanges } = selectedLayer;
-  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
 
   const onCheck = () => {
     if (!hideModal) {
@@ -155,15 +154,20 @@ function SmartHandoffModal({
   );
 }
 
+function mapStateToProps(state, ownProps) {
+  const { selectedCollection: { value } } = ownProps;
+  const url = value && getConceptUrl(state)(value);
+  return {
+    cmrSearchDetailURL: url,
+  };
+}
 
-/**
- * Handle type-checking of defined properties
- */
 SmartHandoffModal.propTypes = {
   continueToEDS: PropTypes.func,
   displayDate: PropTypes.string,
+  cmrSearchDetailURL: PropTypes.string,
   selectedCollection: PropTypes.object,
   selectedLayer: PropTypes.object,
 };
 
-export default SmartHandoffModal;
+export default connect(mapStateToProps)(SmartHandoffModal);

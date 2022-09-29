@@ -724,17 +724,20 @@ button:focus {
   user-select: none;
   position: absolute;
   left: 10px;
-  bottom: 10px;
+  bottom: 20px;
   background: $wv-transparent-black;
   color: #fff;
   border: thin solid #333;
-  font-size: 23px;
-  padding: 14px 8px;
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
-  height: 44px;
-  font-family: $wv-monospace-font;
+
+  & .mobile-date-picker-select-btn-text {
+    height: 44px;
+    font-family: $wv-monospace-font;
+    font-size: 23px;
+    padding: 14px 8px;
+  }
 }
 
 .datepicker-modal {
@@ -749,6 +752,10 @@ button:focus {
     font-size: 18px;
   }
 
+  .datepicker-navbar-btn {
+    height: 55px;
+  }
+
   .datepicker .datepicker-navbar-btn:hover {
     background: #ccc;
     color: #333;
@@ -759,7 +766,7 @@ button:focus {
 #timeline-header .mobile-date-change-arrows-btn {
   position: absolute;
   left: 120px;
-  bottom: 10px;
+  bottom: 20px;
   background: $wv-transparent-black;
   border: thin solid #333;
   border-radius: 5px;

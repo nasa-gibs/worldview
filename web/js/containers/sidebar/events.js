@@ -6,6 +6,7 @@ import {
   Button,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import Event from '../../components/sidebar/event';
 import EventIcon from '../../components/sidebar/event-icon';
 import EventFilterModalBody from '../../components/sidebar/events-filter';
@@ -41,7 +42,7 @@ function Events(props) {
     selectedCategories,
   } = props;
 
-  const filterControlHeight = 72;
+  const filterControlHeight = 115;
   const maxHeight = Math.max(height - filterControlHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
@@ -86,7 +87,6 @@ function Events(props) {
       </Button>
     </div>
   );
-
   const renderEventList = () => (
     eventsData && eventsData.length ? (
       <div className="wv-eventslist sidebar-panel">
@@ -146,7 +146,7 @@ const mapDispatchToProps = (dispatch) => ({
       backdrop: false,
       bodyComponent: EventFilterModalBody,
       footer: true,
-      modalClassName: 'sidebar-modal event-filter-modal',
+      modalClassName: isMobileOnly || isTablet ? 'sidebar-modal-mobile event-filter-modal-mobile' : 'sidebar-modal event-filter-modal',
       timeout: 150,
     }));
   },
@@ -156,8 +156,8 @@ const mapStateToProps = (state) => {
   const {
     animation,
     embed,
-    browser,
     events,
+    screenSize,
   } = state;
 
   const {
@@ -167,7 +167,7 @@ const mapStateToProps = (state) => {
 
   return {
     isPlaying: animation.isPlaying,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
     showAll,

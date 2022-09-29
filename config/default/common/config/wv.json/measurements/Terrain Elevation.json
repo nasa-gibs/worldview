@@ -11,12 +11,14 @@
                     "description": "gedi/LandSurfaceMetrics",
                     "image": "",
                     "settings": [
-                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202010",
-                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202010",
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202201",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202201",
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202108",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108",
                         "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202104",
                         "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202104",
-                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202108",
-                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202108"
+                        "GEDI_ISS_L3_Elevation_Mean_Lowest_Mode_201904-202010",
+                        "GEDI_ISS_L3_Elevation_StdDev_Lowest_Mode_201904-202010"
                     ]
                 },
                 "Terra/ASTER": {

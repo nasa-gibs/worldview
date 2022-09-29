@@ -1,85 +1,96 @@
-.toggleButtonHolder {
+.sidebar-expand {
   position: relative;
-}
 
-.accordionToggler {
-  overflow: hidden;
-  z-index: 1;
-  height: 28px;
-  width: 28px;
-  background: none no-repeat scroll left;
+  > a {
+    float: left;
+    left: 10px;
+    position: absolute;
+    top: 67px;
+    height: 30px;
+    padding-top: 8px;
+    background: $wv-transparent-black;
+    border-radius: 0;
+    box-sizing: border-box;
+    width: 286px;
+    margin: 0;
+    border: 1px solid #333;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+    z-index: 1;
 
-  & .layer-count {
-    margin-left: 5px;
+    & .layer-count {
+      margin: 0 5px;
+    }
+
+    .expand-icon {
+      height: 25px;
+      width: 25px;
+      float: right;
+      margin-right: 5px;
+      position: relative;
+      top: -7px;
+    }
+
+    &:hover {
+      background-color: #ccc;
+      color: rgb(40 40 40);
+    }
+  }
+
+  &.mobile > a {
+    height: 45px;
+    width: 56px;
+    background-image: none;
+    border-radius: 5px;
+    top: 58px;
+
+    & svg.svg-inline--fa {
+      font-size: 33px;
+      position: absolute;
+      left: 10px;
+      top: 5px;
+      color: #fff;
+    }
+
+    & span.layer-count {
+      color: #fff;
+      position: relative;
+      top: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      background: #333;
+      border-radius: 50%;
+      padding: 0 5px;
+      text-align: center;
+      margin: 8px;
+    }
   }
 }
 
-.toggleIconHolder {
+.sidebar-collapse {
   position: absolute;
-  right: 6px;
+  right: 2px;
   height: 30px;
   width: 30px;
   border: 1px solid transparent;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-
-.atcollapse {
-  position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -3px;
-  border-radius: 0;
-  box-sizing: border-box;
-  border-right: 0;
-}
-
-.toggleIconHolder:hover {
-  background: rgb(220 220 220 / 100%);
-}
-
-.toggleIconHolder:hover .atcollapse {
-  background-position: -206px -63px;
-}
-
-a.staticLayers:not([href]):not([tabindex]) {
-  float: left;
-  left: 10px;
-  position: absolute;
-  top: 67px;
-  height: auto;
-  background: $wv-transparent-black;
-  border-radius: 0;
-  box-sizing: border-box;
-  width: 286px;
-  margin: 0;
-  border: 1px solid #333;
   cursor: pointer;
-  padding: 7px 0;
-  text-align: center;
-  color: #fff;
-}
 
-a.staticLayers:not([href]):not([tabindex]):hover {
-  background-color: #ccc;
-  color: rgb(40 40 40);
-}
+  svg.collapse-icon {
+    height: 22px;
+    width: 22px;
+    padding: 3px;
+    color: #fff;
+  }
 
-a.staticLayers::after {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  background: url("../images/icon-sprite.svg") -180px -10px;
-  display: block;
-  right: 10px;
-  top: 6px;
-}
+  &:hover {
+    background: #ccc;
 
-a.staticLayers:hover::after {
-  background-position: -180px -70px;
-}
-
-a.atexpand {
-  background: url("../images/icon-sprite.svg") -175px 0;
+    svg {
+      color: #333;
+    }
+  }
 }
 
 .sidebar-panel {
@@ -197,7 +208,7 @@ li.item ul.palette li {
 .layer-description .layer-metadata h4,
 .layer-description .layer-metadata h5,
 .layer-description .layer-metadata h6 {
-  color: #ddd;
+  color: #ccc;
   font-weight: 700;
 }
 
@@ -298,9 +309,9 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-/* **********************************
- * Vector layer pointer icon ********
- ************************************/
+/* ***********************************
+ * Vector layer pointer icon *
+ *************************************/
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;
@@ -350,6 +361,27 @@ li.item.productsitem.inmotion,
 
 /************************************
  * End -- vector layer pointer icon *
+ ************************************/
+
+/* ***********************************
+ * Granule active footprint toggle *
+ *************************************/
+.productsitem .layer-main .layer-granule-footprint-toggle {
+  position: absolute;
+  right: 4px;
+  top: 38px;
+}
+
+.layer-granule-footprint-toggle .react-switch-case {
+  width: 30px;
+}
+
+.layer-hidden .layer-granule-footprint-toggle {
+  opacity: 0.6;
+}
+
+/************************************
+ * End -- Granule active footprint toggle *
  ************************************/
 
 .productsitem a.wv-layers-info,
@@ -496,8 +528,15 @@ li.item.productsitem.inmotion,
       background: linear-gradient(90deg, rgb(204 204 204 / 0%) 0%, rgb(204 204 204 / 100%) 30%);
       width: 100px;
 
+      & .layer-group-more-options {
+        top: 10px;
+        position: absolute;
+        right: 0;
+      }
+
       & .button {
         cursor: pointer;
+        vertical-align: bottom;
       }
     }
   }
@@ -563,7 +602,18 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile-max-width) {
+  .toggleIconHolder {
+    height: 50px;
+    width: 50px;
+
+    svg {
+      width: 45px;
+      height: 45px;
+      color: #fff;
+    }
+  }
+
   .sidebar-panel li.item {
     h4 {
       font-size: 16px;

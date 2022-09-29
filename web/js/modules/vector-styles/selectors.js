@@ -7,12 +7,12 @@ import {
 
 import update from 'immutability-helper';
 import { containsCoordinate } from 'ol/extent';
-import stylefunction from 'ol-mapbox-style/dist/stylefunction';
+import { stylefunction } from 'ol-mapbox-style';
 import {
   getMinValue, getMaxValue, selectedStyleFunction,
 } from './util';
 import {
-  getAllActiveLayers,
+  getActiveLayers,
 } from '../layers/selectors';
 
 /**
@@ -81,82 +81,58 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  const { compare, proj } = state;
-  let styleFunction;
+  const map = lodashGet(state, 'map.ui.selected');
+  if (!map) return;
+  const { proj } = state;
+  const { selected } = state.vectorStyles;
+  const { resolutions } = proj.selected;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
-  const olMap = lodashGet(state, 'map.ui.selected');
-  const { selected } = state.vectorStyles;
-  const activeLayers = [...getAllActiveLayers(state)].reverse();
-  let layerGroups;
-  let layerGroup;
 
-  if (olMap) {
-    layerGroups = olMap.getLayers().getArray();
-    if (compare && compare.active) {
-      if (layerGroups.length > 1) {
-        layerGroup = layerGroups[0].get('group') === compare.activeString
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === compare.activeString
-            ? layerGroups[1]
-            : null;
-      }
-    }
-    lodashEach(activeLayers, (def) => {
-      if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
-          lodashEach(layerGroup.getLayers().getArray(), (subLayer) => {
-            if (subLayer.wv && (subLayer.wv.id === layerId)) {
-              layer = subLayer;
-            }
-          });
+  if (!layer || layer.isWMS) {
+    return; // WMS breakpoint tile
+  }
+
+  layer = layer.getLayers
+    ? lodashFind(layer.getLayers().getArray(), 'isVector')
+    : layer;
+
+  const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
+  const selectedFeatures = selected[layerId];
+
+  // Handle selected feature style
+  if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
+    const extentStartX = layer.getExtent()[0];
+    const acceptableExtent = extentStartX === 180
+      ? [-180, -90, -110, 90]
+      : extentStartX === -250
+        ? [110, -90, 180, 90]
+        : null;
+
+    layer.setStyle((feature, resolution) => {
+      const data = state.config.vectorData[def.vectorData.id];
+      const properties = data.mvt_properties;
+      const features = feature.getProperties();
+      const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+      const uniqueIdentifier = features[idKey];
+      if (shouldRenderFeature(feature, acceptableExtent)) {
+        if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+          return selectedStyleFunction(feature, styleFunction(feature, resolution));
         }
-      } else {
-        lodashEach(layerGroups, (subLayer) => {
-          if (subLayer.wv && (subLayer.wv.id === layerId)) {
-            layer = subLayer;
-          }
-        });
+        return styleFunction(feature, resolution);
       }
     });
   }
-  if (!layer) {
-    return null;
-  }
-  const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
-  lodashEach(layerArray, (layerInLayerGroup) => {
-    if (layerInLayerGroup.isWMS) return; // WMS breakpoint tile
-    layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
-    // Apply mapbox-gl styles
-    const extentStartX = layerInLayerGroup.getExtent()[0];
-    const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
-    styleFunction = stylefunction(layerInLayerGroup, glStyle, layerId, olMap, proj.selected.resolutions);
-    if ((glStyle.name !== 'Orbit Tracks')
-      && (selected[layerId] && selected[layerId].length)) {
-      const selectedFeatures = selected[layerId];
 
-      layerInLayerGroup.setStyle((feature, resolution) => {
-        const data = state.config.vectorData[def.vectorData.id];
-        const properties = data.mvt_properties;
-        const features = feature.getProperties();
-        const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-        const uniqueIdentifier = features[idKey];
-        if (shouldRenderFeature(feature, acceptableExtent)) {
-          if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
-            return selectedStyleFunction(feature, styleFunction(feature, resolution));
-          }
-          return styleFunction(feature, resolution);
-        }
-      });
-    }
-  });
   return vectorStyleId;
 }
 
 const shouldRenderFeature = (feature, acceptableExtent) => {
   if (!acceptableExtent) return true;
-  const midpoint = feature.getFlatCoordinates ? feature.getFlatCoordinates() : feature.getGeometry().getFlatCoordinates();
+  const midpoint = feature.getFlatCoordinates
+    ? feature.getFlatCoordinates()
+    : feature.getGeometry().getFlatCoordinates();
   if (containsCoordinate(acceptableExtent, midpoint)) return true;
   return false;
 };
@@ -220,26 +196,22 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} def
  * @param {Object} olVectorLayer
  * @param {Object} state
- * @param {Object} options
- *
- * @return {undefined}
  */
-export const applyStyle = (def, olVectorLayer, state, options) => {
-  const { config, layers, compare } = state;
-  const activeGroupStr = options.group ? options.group : compare.activeString;
-  const activeLayers = layers[activeGroupStr].layers;
+export const applyStyle = (def, olVectorLayer, state) => {
+  const { config } = state;
+  const { vectorStyles } = config;
+  const activeLayers = getActiveLayers(state) || [];
   const layerName = def.layer || def.id;
-  if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-    const { vectorStyles } = config;
-    let vectorStyleId;
-    vectorStyleId = def.vectorStyle.id;
-    if (activeLayers) {
-      activeLayers.forEach((layer) => {
-        if (layer.id === layerName && layer.custom) {
-          vectorStyleId = layer.custom;
-        }
-      });
-    }
-    setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
+  let vectorStyleId = def.vectorStyle.id;
+
+  if (!vectorStyles || !vectorStyleId) {
+    return;
   }
+
+  activeLayers.forEach((layer) => {
+    if (layer.id === layerName && layer.custom) {
+      vectorStyleId = layer.custom;
+    }
+  });
+  setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };

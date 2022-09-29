@@ -3,11 +3,11 @@
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright © 2013 - 2020 United States Government as represented by the
+Copyright © 2013 - 2022 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
-## [NASA OPEN SOURCE AGREEMENT VERSION 1.3](https://ti.arc.nasa.gov/opensource/nosa/)
+## [NASA OPEN SOURCE AGREEMENT VERSION 1.3](https://opensource.gsfc.nasa.gov/nosa.php)
 
 THIS OPEN SOURCE AGREEMENT ("AGREEMENT") DEFINES THE RIGHTS OF USE,
 REPRODUCTION, DISTRIBUTION, MODIFICATION AND REDISTRIBUTION OF CERTAIN
@@ -131,7 +131,7 @@ customarily used for software exchange.
 **B.** Each Recipient must ensure that the following copyright notice appears
 prominently in the Subject Software:
 
-    Copyright © 2012-2018 United States Government
+    Copyright © 2012-2022 United States Government
     as represented by the Administrator of the
     National Aeronautics and Space Administration.
     All Rights Reserved.
@@ -163,7 +163,7 @@ Agreement.
 **F.** In an effort to track usage and maintain accurate records of the
 Subject Software, each Recipient, upon receipt of the Subject Software, is
 requested to register with Government Agency by visiting the following website:
-[https://opensource.arc.nasa.gov](https://opensource.arc.nasa.gov). Recipient’s
+[https://opensource.gsfc.nasa.gov](https://opensource.gsfc.nasa.gov). Recipient’s
 name and personal information shall be used for statistical purposes only.
 Once a Recipient makes a Modification available, it is requested that the
 Recipient inform Government Agency at the web site provided above how to

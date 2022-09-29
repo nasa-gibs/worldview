@@ -23,7 +23,7 @@
 | `efs` | boolean | <i>`true`</i> or <i>`false`</i> | Determines whether to "show all" events that match the date range and category filters or, to also include the current map viewport bounding box in the event API call to limit results to that area.<br><br>Default: `true` (which means show all; no bbox included) |
 | `efd` | string | `yyyy-mm-dd,yyyy-mm-dd` | The event start and end dates to be included in an event API request. Default range is last 120 days from current app load time. |
 | `efc` | string | `id,id,id` | The event category ids for each category to be included in an event API request. |
-| `s` | string | *`coordinates`* | A pair of coordinates using Decimal Degrees format (`DDD.DDDD,DDD.DDDD`) to add a Location Search marker onto the map. *\*Only one marker pair of coordinates can be included in the permalink.* |
+| `s` | string | *`coordinates`* | A pair of coordinates using Decimal Degrees format (`DDD.DDDD,DDD.DDDD`) to add a Location Search marker onto the map. To add more than one Location Search marker, separate coordinate pairs with a plus symbol. (`DDD.DDDD,DDD.DDDD+DDD.DDDD,DDD.DDDD`)|
 | `ab` | boolean | **`on`** | If set to "on", the animation widget will be shown. |
 | `as` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation start day & time.\*\* |
 | `ae` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation end day & time.\*\* |
@@ -37,6 +37,7 @@
 | `df` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, distraction free mode will be activated. Distraction free mode is disabled by default and can be toggled from the Information toolbar menu. |
 | `em` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, embed mode will be activated. Embed mode is disabled by default. |
 | `tr` | string | *`tour_id`* | The id of the tour story to load. Stories will load from step 1. |
+| `abt` | string | *`on`* | Indicates whether the about modal is open or not. Allows for permalinks that have the about page open |
 
 \* *1 = yearly, 2 = monthly, 3 = daily, 4 = hourly, and 5 = minutely. The subdaily zoom levels (4 & 5) will only be available when subdaily layers are active.*
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Spinner from 'react-loader';
+import {
+  Progress, Modal, ModalBody, ModalHeader, Spinner,
+} from 'reactstrap';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
-import {
-  Progress, Modal, ModalBody, ModalHeader,
-} from 'reactstrap';
+
 import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
@@ -47,9 +47,7 @@ class GIF extends Component {
     } = this.getModalOffsets(boundaries);
     this.state = {
       isDownloaded: false,
-      isDownloadError: false,
       showDates: true,
-      isValidSelection: true,
       progress: 0,
       downloadedObject: {},
       offsetLeft,
@@ -93,8 +91,8 @@ class GIF extends Component {
       screenHeight,
       proj,
       onClose,
-      endDate,
-      startDate,
+      endDateStr,
+      startDateStr,
       numberOfFrames,
     } = this.props;
     const { boundaries, showDates } = this.state;
@@ -134,8 +132,8 @@ class GIF extends Component {
             increment={increment}
             projId={proj.id}
             lonlats={lonlats}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={startDateStr}
+            endDate={endDateStr}
             onClick={this.createGIF}
             onCheck={this.toggleShowDates}
             numberOfFrames={numberOfFrames}
@@ -167,8 +165,10 @@ class GIF extends Component {
   }
 
   createGIF(width, height) {
-    const { getImageArray } = this.props;
-    const { boundaries } = this.state;
+    const {
+      getImageArray, startDate, endDate, url,
+    } = this.props;
+    const { boundaries, showDates } = this.state;
     const dimensions = {
       w: boundaries.y2 - boundaries.y,
       h: boundaries.x2 - boundaries.x,
@@ -178,7 +178,14 @@ class GIF extends Component {
     const stampWidthRatio = 4.889;
 
     const build = (stamp, dateStamp, stampHeight) => {
-      const imageArray = getImageArray(this.state, this.props, { width, height });
+      const options = {
+        startDate,
+        endDate,
+        url,
+        boundaries,
+        showDates,
+      };
+      const imageArray = getImageArray(options, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
@@ -234,7 +241,6 @@ class GIF extends Component {
   onGifComplete(obj, width, height) {
     if (obj.error) {
       this.setState({
-        isDownloadError: true,
         isDownloading: false,
         progress: 0,
         downloadedObject: {},
@@ -322,8 +328,8 @@ class GIF extends Component {
     const {
       increment,
       speed,
-      endDate,
-      startDate,
+      endDateStr,
+      startDateStr,
       screenHeight,
       screenWidth,
       onClose,
@@ -336,6 +342,12 @@ class GIF extends Component {
       boundaries,
     } = this.state;
 
+    const spinnerStyle = {
+      margin: '20px 0',
+      position: 'relative',
+      left: '45%',
+    };
+
     if (isDownloading) {
       const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
@@ -346,11 +358,13 @@ class GIF extends Component {
         >
           <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
-            <div style={{ minHeight: 50 }}>
-              <Spinner color="#fff" loaded={progress > 0}>
-                <Progress value={progress} />
-              </Spinner>
-            </div>
+            {progress > 0
+              ? <Progress value={progress} />
+              : (
+                <div style={spinnerStyle}>
+                  <Spinner color="#fff" />
+                </div>
+              )}
           </ModalBody>
         </Modal>
       );
@@ -360,9 +374,9 @@ class GIF extends Component {
         <GifResults
           speed={speed}
           gifObject={downloadedObject}
-          startDate={startDate}
+          startDate={startDateStr}
+          endDate={endDateStr}
           onClose={onClose}
-          endDate={endDate}
           increment={increment}
           boundaries={boundaries}
           screenWidth={screenWidth}
@@ -376,12 +390,12 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
   const {
     customSelected, interval, customInterval, customDelta,
   } = date;
@@ -403,8 +417,10 @@ function mapStateToProps(state) {
     boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
-    startDate: formatDisplayDate(startDate, subdailyLayersActive(state)),
-    endDate: formatDisplayDate(endDate, subdailyLayersActive(state)),
+    startDateStr: formatDisplayDate(startDate, subdailyLayersActive(state)),
+    endDateStr: formatDisplayDate(endDate, subdailyLayersActive(state)),
+    startDate,
+    endDate,
     increment: `${increment} Between Frames`,
     speed,
     map,
@@ -417,9 +433,8 @@ function mapStateToProps(state) {
         : TIME_SCALE_FROM_NUMBER[interval],
       customSelected ? customDelta : 1,
     ),
-    getImageArray: (gifComponentProps, gifComponentState, dimensions) => getImageArray(
-      gifComponentProps,
-      gifComponentState,
+    getImageArray: (options, dimensions) => getImageArray(
+      options,
       dimensions,
       state,
     ),
@@ -438,7 +453,10 @@ export default connect(
 
 GIF.propTypes = {
   boundaries: PropTypes.object,
-  endDate: PropTypes.string,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  startDateStr: PropTypes.string,
+  endDateStr: PropTypes.string,
   getImageArray: PropTypes.func,
   increment: PropTypes.string,
   map: PropTypes.object,
@@ -449,5 +467,5 @@ GIF.propTypes = {
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   speed: PropTypes.number,
-  startDate: PropTypes.string,
+  url: PropTypes.string,
 };

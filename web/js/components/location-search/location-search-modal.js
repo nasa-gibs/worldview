@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
 import HoverTooltip from '../util/hover-tooltip';
-import { getCoordinateFixedPrecision, isValidCoordinates } from './util';
+import { isValidCoordinates } from './util';
 import {
   clearSuggestions,
   getSuggestions,
@@ -158,17 +158,14 @@ class LocationSearchModal extends Component {
         const firstCandidate = result.candidates[0];
         const { location, attributes } = firstCandidate;
         const addressAttributes = { address: attributes };
-
         const { x, y } = location;
-        const parsedX = getCoordinateFixedPrecision(x);
-        const parsedY = getCoordinateFixedPrecision(y);
 
-        const coordinatesWithinExtent = isCoordinatePairWithinExtent([parsedX, parsedY]);
+        const coordinatesWithinExtent = isCoordinatePairWithinExtent([x, y]);
         if (!coordinatesWithinExtent) {
           this.setExtentAlert(true);
           this.setInputAlertIcon(true);
         } else {
-          setPlaceMarker([parsedX, parsedY], addressAttributes);
+          setPlaceMarker([x, y], addressAttributes);
         }
       }
     }).catch((error) => console.error(error));
@@ -188,7 +185,7 @@ class LocationSearchModal extends Component {
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
       this.debounceGetSuggestions.cancel();
-      const { latitude, longitude } = coordinatesInputValue;
+      const { longitude, latitude } = coordinatesInputValue;
       this.clearAlerts();
       clearSuggestions();
       updatePendingCoordinates([longitude, latitude]);
@@ -354,14 +351,23 @@ class LocationSearchModal extends Component {
       showInputAlert,
     } = this.state;
 
+    const locationSearchMobileStyle = isMobile ? {
+      position: 'static',
+      width: '100%',
+    } : null;
+
+    const locationSearchInputGroupMobileStyle = isMobile ? {
+      width: '100% !important',
+    } : null;
+
     return (
-      <div id="location-search-wrapper" className="location-search-expanded">
+      <div id="location-search-wrapper" className="location-search-expanded" style={locationSearchMobileStyle}>
         {/* Alerts */}
         {this.renderReverseGeocodeAlert()}
         {this.renderNoSuggestionsAlert()}
         {this.renderExtentAlert()}
         <div className="location-search-component">
-          <InputGroup className="location-search-input-group">
+          <InputGroup className="location-search-input-group" style={locationSearchInputGroupMobileStyle}>
             {/* Minimize button not visible in mobile */}
             {!isMobile && this.renderMinimizeButton()}
             <SearchBox
@@ -388,7 +394,7 @@ class LocationSearchModal extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser,
+    screenSize,
     config,
     lastAction,
     proj,
@@ -401,7 +407,7 @@ const mapStateToProps = (state) => {
     suggestions,
     suggestedPlace,
   } = locationSearch;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const locationSearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_LOCATION_SEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;

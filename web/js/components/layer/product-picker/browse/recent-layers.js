@@ -75,7 +75,7 @@ RecentLayersList.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { browser, productPicker } = state;
+  const { screenSize, productPicker } = state;
   const {
     selectedLayer,
     showMobileFacets,
@@ -83,9 +83,9 @@ const mapStateToProps = (state) => {
   } = productPicker;
 
   return {
-    browser,
-    smallView: browser.screenWidth < 1024,
-    isMobile: browser.lessThan.medium,
+    screenSize,
+    smallView: window.innerWidth < 1024,
+    isMobile: screenSize.isMobileDevice,
     showMobileFacets,
     selectedLayer,
     recentLayers,

@@ -47,7 +47,7 @@ module.exports = {
           .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
           .waitForElementVisible('.wv-animation-widget-header .timeline-interval .interval-years', 2000)
           .click('.wv-animation-widget-header .timeline-interval #interval-custom-static');
-        c.pause(1000);
+        c.pause(300);
         c.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
         c.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 DAY');
         c.useCss().assert.containsText('#timeline #current-interval', '1 DAY');
@@ -63,7 +63,7 @@ module.exports = {
       TIME_LIMIT,
       (el) => {
         c.getValue('#day-animation-widget-start', (result) => {
-          const startDay = result.value;
+          const startDay = result;
           c
             .useCss()
             .moveToElement(
@@ -76,7 +76,7 @@ module.exports = {
             .mouseButtonUp(0)
             .pause(2000);
           c.getValue('#day-animation-widget-start', (result) => {
-            const newDay = result.value;
+            const newDay = result;
             c.assert.notEqual(startDay, newDay);
           });
         });

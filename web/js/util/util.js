@@ -228,7 +228,9 @@ export default (function(self) {
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
   self.toISOStringSeconds = function(date) {
-    return `${date.toISOString().split('.')[0]}Z`;
+    const isString = typeof date === 'string' || date instanceof String;
+    const dateString = isString ? date : date.toISOString();
+    return `${dateString.split('.')[0]}Z`;
   };
 
   /**
@@ -629,6 +631,7 @@ export default (function(self) {
     return `${coord[1].toFixed(4)}°, ${
       coord[0].toFixed(4)}°`;
   };
+
   /**
    * map openlayers provided longitude value to be between -180 && 180
    *
@@ -636,10 +639,12 @@ export default (function(self) {
    * @return normalized longitude value
    */
   self.normalizeWrappedLongitude = function(longitude) {
+    if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
     return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
   };
+
   // Allows simple printf functionality with strings
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"

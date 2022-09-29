@@ -6,28 +6,28 @@ import { UncontrolledTooltip } from 'reactstrap';
 class CollapsedButton extends PureComponent {
   render() {
     const {
+      isEmbed,
       isMobile,
       numberOfLayers,
       onclick,
     } = this.props;
     const buttonId = 'accordion-toggler-button';
     const labelText = 'Expand sidebar';
+    const classes = `sidebar-expand ${isMobile && !isEmbed ? 'mobile' : ''}`;
 
     return (
       <div
-        id="productsHoldertoggleButtonHolder"
-        className="toggleButtonHolder"
+        className={classes}
       >
         <a
           id={buttonId}
           aria-label={labelText}
-          className="accordionToggler dateHolder staticLayers"
           onClick={onclick}
         >
           <UncontrolledTooltip placement="right" target={buttonId}>
             {labelText}
           </UncontrolledTooltip>
-          <FontAwesomeIcon icon="layer-group" />
+          <FontAwesomeIcon className="layer-icon" icon="layer-group" />
           {isMobile
             ? (
               <span className="layer-count mobile">
@@ -39,12 +39,14 @@ class CollapsedButton extends PureComponent {
                 {`${numberOfLayers.toString()} Layers`}
               </span>
             )}
+          {!isMobile && <FontAwesomeIcon className="expand-icon" icon="caret-down" />}
         </a>
       </div>
     );
   }
 }
 CollapsedButton.propTypes = {
+  isEmbed: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func,

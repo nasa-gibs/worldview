@@ -9,7 +9,6 @@ import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../.
 import { getCompareDates } from '../../modules/compare/selectors';
 import MonospaceDate from '../../components/util/monospace-date';
 
-const tabHeight = 32;
 const CompareCase = (props) => {
   const {
     isActive,
@@ -62,14 +61,14 @@ const CompareCase = (props) => {
               <LayersContainer
                 isActive={isCompareA}
                 compareState="active"
-                height={height - tabHeight}
+                height={height}
               />
             </TabPane>
             <TabPane tabId="2">
               <LayersContainer
                 isActive={!isCompareA}
                 compareState="activeB"
-                height={height - tabHeight}
+                height={height}
               />
             </TabPane>
           </TabContent>
@@ -86,15 +85,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { compare } = state;
+  const { compare, screenSize } = state;
   const { isCompareA, active } = compare;
   const { dateA, dateB } = getCompareDates(state);
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     isCompareA,
     dateA,
     dateB,
     isActive: active,
+    isMobile,
   };
 };
 

@@ -1,6 +1,5 @@
 import {
   get as lodashGet,
-  eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   isNaN as lodashIsNaN,
@@ -9,14 +8,17 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
+
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
   addLayer,
+  getStartingLayers,
   resetLayers,
   getLayers,
   getFutureLayerEndDate,
   getActiveLayersMap,
+  getGranuleLayer,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
@@ -623,7 +625,10 @@ const getSubdailyDateRange = ({
     if (!rangeLimitsProvided) {
       subdailyTime = util.getTimezoneOffsetDate(subdailyTime);
     }
-    if (subdailyTime.getTime() >= minMinuteDateTime) {
+    const lessThanLastDateInCollection = newDateArray.length > 0
+      ? subdailyTime.getTime() > newDateArray[newDateArray.length - 1].getTime()
+      : true;
+    if (subdailyTime.getTime() >= minMinuteDateTime && lessThanLastDateInCollection) {
       newDateArray.push(subdailyTime);
     }
   }
@@ -646,7 +651,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
     dateRanges,
     futureTime,
     period,
-    inactive,
+    ongoing,
   } = def;
   let dateArray = [];
   if (!dateRanges) { return dateArray; }
@@ -730,7 +735,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         currentDateTime = currentDate.getTime();
       }
       // set maxDate to current date if layer coverage is ongoing
-      if (index === dateRanges.length - 1 && !inactive) {
+      if (index === dateRanges.length - 1 && ongoing) {
         if (futureTime) {
           maxDate = new Date(endDate);
         } else {
@@ -823,6 +828,14 @@ export function serializeLayers(layers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
+    } else if (def.type === 'granule') {
+      const granuleLayer = getGranuleLayer(state, def.id);
+      if (granuleLayer) {
+        const { count } = granuleLayer;
+        item.attributes = count !== 20
+          ? item.attributes.concat({ id: 'count', value: count })
+          : item.attributes;
+      }
     }
 
     return util.appendAttributesForURL(item);
@@ -830,8 +843,8 @@ export function serializeLayers(layers, state, groupName) {
 }
 
 export function serializeGroupOverlays (groupOverlays, state, activeString) {
-  const { config, parameters, compare } = state;
-  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const { parameters, compare } = state;
+  const startingLayers = getStartingLayers(state);
   const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
   const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
   const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
@@ -1037,112 +1050,129 @@ export function layersParse12(stateObj, config) {
     console.warn(`Error Parsing layers: ${e}`);
     // eslint-disable-next-line no-console
     console.log('reverting to default layers');
-    return resetLayers(config.defaults.startingLayers, config.layers);
+    return resetLayers(config);
   }
 }
 
-const createLayerArrayFromState = function(state, config) {
-  let layerArray = [];
-  lodashEach(state, (obj) => {
-    if (!lodashIsUndefined(state)) {
-      lodashEachRight(state, (layerDef) => {
-        let hidden = false;
-        let opacity = 1.0;
-        let max; let min; let squash; let custom; let
-          disabled;
-        if (!config.layers[layerDef.id]) {
-          // eslint-disable-next-line no-console
-          console.warn(`No such layer: ${layerDef.id}`);
+const getLayerSpec = (attributes) => {
+  let hidden = false;
+  let opacity = 1.0;
+  let max;
+  let min;
+  let squash;
+  let custom;
+  let disabled;
+  let count;
+
+  lodashEach(attributes, (attr) => {
+    if (attr.id === 'hidden') {
+      hidden = true;
+    }
+    if (attr.id === 'opacity') {
+      opacity = util.clamp(parseFloat(attr.value), 0, 1);
+      // eslint-disable-next-line no-restricted-globals
+      if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+    }
+    if (attr.id === 'disabled') {
+      const values = util.toArray(attr.value.split(';'));
+      disabled = values;
+    }
+    if (attr.id === 'max' && typeof attr.value === 'string') {
+      const maxArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          maxArray.push(undefined);
           return;
         }
-        lodashEach(layerDef.attributes, (attr) => {
-          if (attr.id === 'hidden') {
-            hidden = true;
-          }
-          if (attr.id === 'opacity') {
-            opacity = util.clamp(parseFloat(attr.value), 0, 1);
-            // eslint-disable-next-line no-restricted-globals
-            if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
-          }
-          if (attr.id === 'disabled') {
-            const values = util.toArray(attr.value.split(';'));
-            disabled = values;
-          }
-          if (attr.id === 'max' && typeof attr.value === 'string') {
-            const maxArray = [];
-            const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, (value, index) => {
-              if (value === '') {
-                maxArray.push(undefined);
-                return;
-              }
-              const maxValue = parseFloat(value);
-              if (lodashIsNaN(maxValue)) {
-                // eslint-disable-next-line no-console
-                console.warn(`Invalid max value: ${value}`);
-              } else {
-                maxArray.push(maxValue);
-              }
-            });
-            max = maxArray.length ? maxArray : undefined;
-          }
-          if (attr.id === 'min' && typeof attr.value === 'string') {
-            const minArray = [];
-            const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, (value, index) => {
-              if (value === '') {
-                minArray.push(undefined);
-                return;
-              }
-              const minValue = parseFloat(value);
-              if (lodashIsNaN(minValue)) {
-                // eslint-disable-next-line no-console
-                console.warn(`Invalid min value: ${value}`);
-              } else {
-                minArray.push(minValue);
-              }
-            });
-            min = minArray.length ? minArray : undefined;
-          }
-          if (attr.id === 'squash') {
-            if (attr.value === true) {
-              squash = [true];
-            } else if (typeof attr.value === 'string') {
-              const squashArray = [];
-              const values = util.toArray(attr.value.split(';'));
-              lodashEach(values, (value) => {
-                squashArray.push(value === 'true');
-              });
-              squash = squashArray.length ? squashArray : undefined;
-            }
-          }
-          if (attr.id === 'palette') {
-            const values = util.toArray(attr.value.split(';'));
-            custom = values;
-          }
-          if (attr.id === 'style') {
-            const values = util.toArray(attr.value.split(';'));
-            custom = values;
-          }
-        });
-        layerArray = addLayer(
-          layerDef.id,
-          {
-            hidden,
-            opacity,
-            // only include palette attributes if Array.length condition
-            // is true: https://stackoverflow.com/a/40560953/4589331
-            ...isArray(custom) && { custom },
-            ...isArray(min) && { min },
-            ...isArray(squash) && { squash },
-            ...isArray(max) && { max },
-            ...isArray(disabled) && { disabled },
-          },
-          layerArray,
-          config.layers,
-        );
+        const maxValue = parseFloat(value);
+        if (lodashIsNaN(maxValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid max value: ${value}`);
+        } else {
+          maxArray.push(maxValue);
+        }
       });
+      max = maxArray.length ? maxArray : undefined;
     }
+    if (attr.id === 'min' && typeof attr.value === 'string') {
+      const minArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          minArray.push(undefined);
+          return;
+        }
+        const minValue = parseFloat(value);
+        if (lodashIsNaN(minValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid min value: ${value}`);
+        } else {
+          minArray.push(minValue);
+        }
+      });
+      min = minArray.length ? minArray : undefined;
+    }
+    if (attr.id === 'squash') {
+      if (attr.value === true) {
+        squash = [true];
+      } else if (typeof attr.value === 'string') {
+        const squashArray = [];
+        const values = util.toArray(attr.value.split(';'));
+        lodashEach(values, (value) => {
+          squashArray.push(value === 'true');
+        });
+        squash = squashArray.length ? squashArray : undefined;
+      }
+    }
+    if (attr.id === 'palette') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    if (attr.id === 'style') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    // granule specific count (defaults to 20 if no param)
+    if (attr.id === 'count') {
+      count = Number(attr.value);
+    }
+  });
+
+  return {
+    hidden,
+    opacity,
+    count,
+    // only include palette attributes if Array.length condition
+    // is true: https://stackoverflow.com/a/40560953/4589331
+    ...isArray(custom) && { custom },
+    ...isArray(min) && { min },
+    ...isArray(squash) && { squash },
+    ...isArray(max) && { max },
+    ...isArray(disabled) && { disabled },
+  };
+};
+
+const createLayerArrayFromState = function(layers, config) {
+  let layerArray = [];
+  if (lodashIsUndefined(layers)) {
+    return layerArray;
+  }
+  const projection = lodashGet(config, 'parameters.p') || 'geographic';
+  layers.reverse().forEach((layerDef) => {
+    if (!config.layers[layerDef.id]) {
+      // eslint-disable-next-line no-console
+      console.warn(`No such layer: ${layerDef.id}`);
+      return;
+    }
+    layerArray = addLayer(
+      layerDef.id,
+      getLayerSpec(layerDef.attributes),
+      layerArray,
+      config.layers,
+      null,
+      projection,
+    );
   });
   return layerArray;
 };
@@ -1245,8 +1275,23 @@ export function mapLocationToLayerState(
       },
     });
   }
+
+  // TODO how do we properly combine initial state with location state
+  newStateFromLocation.layers.active = {
+    ...newStateFromLocation.layers.active,
+    granuleLayers: {},
+    granulePlatform: '',
+  };
+
+  newStateFromLocation.layers.activeB = {
+    ...newStateFromLocation.layers.activeB,
+    granuleLayers: {},
+    granulePlatform: '',
+  };
+
   return newStateFromLocation;
 }
+
 /**
  * Determine if active layers have a visible
  * vector layer
@@ -1353,6 +1398,23 @@ export function adjustStartDates(layers) {
 }
 
 /**
+ * For subdaily layers, if the layer date is within 30 minutes of current
+ * time, set expiration to ten minutes from now
+ */
+export const getCacheOptions = (period, date, state) => {
+  const tenMin = 10 * 60000;
+  const thirtyMin = 30 * 60000;
+  const now = new Date().getTime();
+  const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
+  if (period !== 'subdaily' || !recentTime) {
+    return {};
+  }
+  return {
+    expirationAbsolute: new Date(now + tenMin),
+  };
+};
+
+/**
  * For active, multi-interval layers with on going coverage,
  * date ranges are modified and added for layer config
  *
@@ -1365,8 +1427,8 @@ export function adjustActiveDateRanges(layers, appNow) {
   const appNowYear = appNow.getUTCFullYear();
   const applyDateRangeAdjustment = (layer) => {
     const { dateRanges } = layer;
-    const { inactive, period } = layer;
-    const failConditions = inactive
+    const { ongoing, period } = layer;
+    const failConditions = !ongoing
       || !dateRanges
       || period === 'subdaily';
     if (failConditions) {

@@ -26,9 +26,7 @@ function LayersContainer (props) {
     groupOverlays,
     height,
     isActive,
-    isCompareActive,
     isEmbedModeActive,
-    isMobile,
     isAnimating,
     overlayGroups,
     overlays,
@@ -111,11 +109,8 @@ function LayersContainer (props) {
     </DragDropContext>
   );
 
-  const mobileHeightCoeff = isCompareActive ? -30 : 20;
   let minHeight = '100px';
-  let maxHeight = isMobile
-    ? height + mobileHeightCoeff
-    : height;
+  let maxHeight = height;
 
   if (isEmbedModeActive) {
     minHeight = '25px';
@@ -131,7 +126,6 @@ function LayersContainer (props) {
   };
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
-
   return isActive && (
     <>
       <div id="layers-scroll-container" style={scrollContainerStyles}>
@@ -179,11 +173,11 @@ function LayersContainer (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    browser, compare, embed, layers, animation,
+    compare, embed, layers, animation, screenSize,
   } = state;
   const isCompareActive = compare.active;
   const { isEmbedModeActive } = embed;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const { groupOverlays } = layers[compareState];
   const activeLayersMap = getActiveLayersMap(state);
   let { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);

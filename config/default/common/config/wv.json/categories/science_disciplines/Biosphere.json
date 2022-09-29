@@ -7,6 +7,7 @@
                 "image": "biosphere.jpg",
                 "description": "",
                 "measurements": [
+                    "Aboveground Biomass",
                     "Amphibian Richness",
                     "Canopy Characteristics",
                     "Forests, Mangrove",

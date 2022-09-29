@@ -8,6 +8,7 @@ const {
 
 const TIME_LIMIT = 10000;
 
+const smartHandoffContainer = '.smart-handoff-side-panel';
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
 const downloadButton = '.download-btn';
@@ -29,7 +30,7 @@ module.exports = {
 
     // Click Data Download tab to switch to Data with 'No Data Selected'
     c.click(dataTabButton);
-
+    c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT);
     c.expect
       .element('.smart-handoff-side-panel > h1')
       .to.have.text.equal('None of your current layers are available for download.');
@@ -38,7 +39,9 @@ module.exports = {
   'Select "Cloud Effective Radius" layer and check that it is available for download': (c) => {
     // Go to layers tabs
     c.click(layersTab);
+    c.pause(300);
     c.click(addLayers);
+    c.pause(300);
     c.click(allCategoryHeader);
 
     // Add specified layer to layer list
@@ -46,6 +49,7 @@ module.exports = {
       c.click('#accordion-legacy-all-cloud-effective-radius');
       c.waitForElementVisible('#accordion-legacy-all-cloud-effective-radius .measure-row-contents', TIME_LIMIT, (e) => {
         c.click('#MODIS_Aqua_Cloud_Effective_Radius-checkbox');
+        c.pause(300);
         c.click(layersModalCloseButton);
       });
     });
@@ -75,9 +79,8 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.url(c.globals.url + permalinkParams);
     c.expect.element(dataTabButton).to.be.visible;
-    c.expect
-      .element('.granule-count-info')
-      .to.not.have.text.equal('NONE');
+    c.waitForElementVisible('.granule-count-info', TIME_LIMIT);
+    c.expect.element('.granule-count-info').to.not.have.text.equal('NONE');
   },
 
   'Changing collection updates URL': (c) => {
@@ -89,6 +92,7 @@ module.exports = {
   'Layers outside of their coverage date range are hidden from layers available for download': (c) => {
     c.url(c.globals.url + permalinkParams1980);
     c.expect.element(dataTabButton).to.be.visible;
+    c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT);
     c.expect
       .element('.smart-handoff-side-panel > h1')
       .to.have.text.equal('None of your current layers are available for download.');
@@ -96,6 +100,7 @@ module.exports = {
 
   'Map extent entirely across dateline disables download button and displays warning for user to zoom out to see available map': (c) => {
     c.url(c.globals.url + extentCrossedDateline);
+    c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT);
     c.expect.element(downloadButton).to.be.visible;
     c.useCss().assert.cssClassPresent(downloadButton, 'wv-disabled');
     c.waitForElementVisible('#data-download-unavailable-dateline-alert', TIME_LIMIT, () => {
@@ -106,6 +111,7 @@ module.exports = {
 
   'Download via Earthdata Search': (c) => {
     c.url(c.globals.url + permalinkParams);
+    c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT);
     c.click(downloadButton);
     c.expect
       .element('#transferring-to-earthdata-search')

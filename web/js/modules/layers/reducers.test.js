@@ -2,7 +2,6 @@ import update from 'immutability-helper';
 import { layerReducer, getInitialState } from './reducers';
 import fixtures from '../../fixtures';
 import {
-  RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
@@ -67,10 +66,7 @@ describe('layer Reducer tests', () => {
 
   test('Common actions update active layer array and groups', () => {
     const actions = [
-      RESET_LAYERS,
       ADD_LAYER,
-      REMOVE_LAYER,
-      REMOVE_GROUP,
       REORDER_LAYERS,
       TOGGLE_OVERLAY_GROUP_VISIBILITY,
     ];
@@ -85,6 +81,28 @@ describe('layer Reducer tests', () => {
         type: ACTION,
         activeString: 'active',
         layers: [...initialLayers, newLayer],
+      });
+      expect(resultState).toEqual(expectedState);
+    });
+  });
+
+  test('Remove layer and group', () => {
+    const actions = [
+      REMOVE_LAYER,
+      REMOVE_GROUP,
+    ];
+    actions.forEach((ACTION) => {
+      const expectedState = update(initialState, {
+        active: {
+          layers: { $push: [newLayer] },
+          overlayGroups: { $push: [newGroup] },
+        },
+      });
+      const resultState = layerReducer(initialState, {
+        type: ACTION,
+        activeString: 'active',
+        layers: [...initialLayers, newLayer],
+        granuleLayers: {},
       });
       expect(resultState).toEqual(expectedState);
     });

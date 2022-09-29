@@ -872,10 +872,10 @@ class Timeline extends React.Component {
 
     // default positioning
     let mobileLeft = 190;
-    let mobileBottom = 10;
+    let mobileBottom = 20;
     if (isEmbedModeActive) {
       mobileLeft = 145;
-      mobileBottom = 10;
+      mobileBottom = 20;
     }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
@@ -888,10 +888,10 @@ class Timeline extends React.Component {
       }
     } else if (isScreenWidthLessThan484) {
       mobileLeft = isCompareModeActive ? 112 : 10;
-      mobileBottom = 65;
+      mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 50;
+        mobileBottom = 60;
       }
     }
 
@@ -1268,7 +1268,6 @@ class Timeline extends React.Component {
 function mapStateToProps(state) {
   const {
     animation,
-    browser,
     compare,
     config,
     date,
@@ -1278,6 +1277,7 @@ function mapStateToProps(state) {
     map,
     modal,
     proj,
+    screenSize,
     sidebar,
     tour,
     ui,
@@ -1292,12 +1292,12 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { screenWidth } = browser;
+  const { screenWidth } = screenSize;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily

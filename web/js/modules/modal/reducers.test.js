@@ -1,39 +1,8 @@
 import { assign as lodashAssign } from 'lodash';
-import { defaultRequestState } from '../core/reducers';
 import * as constants from './constants';
-import { modalAboutPage, modalReducer, modalState } from './reducers';
+import { modalReducer, modalState } from './reducers';
 import util from '../../util/util';
 
-describe('modalAboutPage request reducer', () => {
-  test('should return the initial state', () => {
-    expect(modalAboutPage([], {})).toEqual(defaultRequestState);
-  });
-  test('Should set isLoading to true on Request Start', () => {
-    expect(
-      modalAboutPage([], {
-        type: constants.ABOUT_PAGE_REQUEST_START,
-      }),
-    ).toEqual({
-      isLoading: true,
-      error: null,
-      response: null,
-      type: null,
-    });
-  });
-  test('Should return response upon request success ', () => {
-    expect(
-      modalAboutPage([], {
-        type: constants.ABOUT_PAGE_REQUEST_SUCCESS,
-        response: constants.MOCK_RESPONSE_BODY,
-      }),
-    ).toEqual({
-      isLoading: false,
-      error: null,
-      response: constants.MOCK_RESPONSE_BODY,
-      type: null,
-    });
-  });
-});
 describe('main modalReducer', () => {
   test('should return the initial state', () => {
     expect(modalReducer(undefined, {})).toEqual(modalState);

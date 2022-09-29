@@ -19,40 +19,36 @@
   }
 }
 
-.about-page-modal .modal-dialog .modal-header .close,
-.tour-start .modal-dialog .modal-header .close,
-.tour-complete .modal-dialog .modal-header .close {
-  font-size: 30px;
-  padding: 12px 14px;
-  color: #ddd;
-  text-shadow: 1px 1px 0 #333;
+.about-page-modal,
+.tour-start,
+.tour-complete {
+  .modal-header {
+    position: relative;
+    background-color: rgb(0 69 123);
+    padding: 6px 8px;
 
-  &:hover {
-    color: #fff;
+    .close {
+      font-size: 30px;
+      padding: 12px 14px;
+      color: #ddd;
+      text-shadow: 1px 1px 0 #333;
+
+      &:hover {
+        color: #fff;
+      }
+    }
   }
-}
 
-.about-page-modal .modal-header,
-.tour-complete .modal-header,
-.tour-start .modal-header {
-  position: relative;
-  background-color: rgb(0 69 123);
-  padding: 6px 8px;
-}
+  .modal-title {
+    color: #fff;
+    font-size: 24px;
+    line-height: 22px;
+    font-weight: 300;
+  }
 
-.about-page-modal .modal-title,
-.tour-start .modal-title,
-.tour-complete .modal-title {
-  color: #fff;
-  font-size: 24px;
-  line-height: 22px;
-  font-weight: 300;
-}
-
-.about-page-modal .modal-body,
-.tour-complete .modal-body,
-.tour-start .modal-body {
-  border-radius: 0;
+  .modal-body {
+    border-radius: 0;
+  }
 }
 
 /* TOUR START */
@@ -763,7 +759,7 @@
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .tour {
     display: block;
   }

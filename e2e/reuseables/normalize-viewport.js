@@ -9,7 +9,7 @@ module.exports = {
         }),
         [width, height],
         (result) => {
-          const padding = result.value;
+          const padding = result;
           const newHeight = padding.height ? height + padding.height : height;
           const newWidth = padding.width ? width + padding.width : width;
           client.windowSize('current', newWidth, newHeight);

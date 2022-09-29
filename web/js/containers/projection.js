@@ -5,8 +5,6 @@ import { get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
-import { stop } from '../modules/animation/actions';
-import { onProjectionSwitch } from '../modules/product-picker/actions';
 import IconList from '../components/util/icon-list';
 
 const DEFAULT_PROJ_ARRAY = [
@@ -51,11 +49,11 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, config, onCloseModal, isPlaying,
+      updateProjection, projection, onCloseModal,
     } = this.props;
 
     if (id !== projection) {
-      updateProjection(id, config, isPlaying);
+      updateProjection(id);
     }
 
     googleTagManager.pushEvent({
@@ -80,30 +78,24 @@ class ProjectionList extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    config, models, animation, proj, browser,
+    config, models, proj, screenSize,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
     ? getInfoArray(projArray)
     : DEFAULT_PROJ_ARRAY;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     models,
-    config,
     isMobile,
-    isPlaying: animation.isPlaying,
     projection: proj.id,
     projectionArray,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateProjection: (id, config, isPlaying) => {
+  updateProjection: (id) => {
     dispatch(changeProjection(id));
-    dispatch(onProjectionSwitch(id));
-    if (isPlaying) {
-      dispatch(stop());
-    }
   },
   onCloseModal: () => {
     dispatch(onToggle());
@@ -116,10 +108,8 @@ export default connect(
 )(ProjectionList);
 
 ProjectionList.propTypes = {
-  config: PropTypes.object,
   onCloseModal: PropTypes.func,
   isMobile: PropTypes.bool,
-  isPlaying: PropTypes.bool,
   projection: PropTypes.string,
   projectionArray: PropTypes.array,
   updateProjection: PropTypes.func,

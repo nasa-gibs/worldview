@@ -2,19 +2,13 @@
   "layers": {
     "Himawari_AHI_Band3_Red_Visible_1km": {
       "id": "Himawari_AHI_Band3_Red_Visible_1km",
-      "title": "Red Visible (0.64 µm, Band 3, 10 minute)",
-      "subtitle": "Himawari-8/AHI",
       "description": "himawari/Himawari_AHI_Band3_Red_Visible_1km",
       "group": "overlays",
       "tags": "geostationary geo",
       "layergroup": "Geostationary",
-      "product": "",
       "wrapX": true,
-      "daynight": [
-        "day"
-      ],
       "availability": {
-        "rollingWindow": 30,
+        "rollingWindow": 90,
         "historicalRanges": [
           {
             "startDate": "2020-01-03",
@@ -24,6 +18,11 @@
           {
             "startDate": "2021-09-30T02:00:00Z",
             "endDate": "2021-09-30T02:00:00Z",
+            "dateInterval": "10"
+          },
+          {
+            "startDate": "2021-12-19T00:00:00Z",
+            "endDate": "2022-01-16T23:50:00Z",
             "dateInterval": "10"
           }
         ]

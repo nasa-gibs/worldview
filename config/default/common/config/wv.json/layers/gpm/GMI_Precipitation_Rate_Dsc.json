@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "GMI_Precipitation_Rate_Dsc": {
+      "id": "GMI_Precipitation_Rate_Dsc",
+      "description": "gpm/GMI_Precipitation_Rate_Dsc",
+      "group": "overlays",
+      "layergroup": "Precipitation Rate"
+    }
+  }
+}

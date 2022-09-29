@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
-import PQueue from 'p-queue/dist';
+// eslint-disable-next-line import/no-unresolved
+import PQueue from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
@@ -12,15 +13,23 @@ const CONCURRENT_REQUESTS = 3;
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
 
+// Get the initiall buffer size, using a larger buffer for higher speeds
+const getInitialBufferSize = (numberOfFrames, speed) => {
+  const defaultSize = 10;
+  const buffer = defaultSize + (speed * 1.5);
+  return numberOfFrames < buffer ? numberOfFrames : buffer;
+};
+
 /**
  * A component that handles buffering datetimes for animation frames.  Only mounted while playback
  * is active, unmounts when playback stops.
  *
  * The buffering logic is as follows:
- * - Make at least 10 requests (assuming there are >= 10 frames) to determine the avg fetch time for a frame
+ * - n = 10 + speed (frames per sec)
+ * - Make at least n requests (assuming there are >= n frames) to determine the avg fetch time for a frame
  * - While making initial requests, if any return too quickly (e.g. they were cached), keep making
- *   requests until at least 10 "real" requests can be made to determine average fetch time
- * - Based on how long it took to load the first 10, calculate how many additional frames
+ *   requests until at least n "real" requests can be made to determine average fetch time
+ * - Based on how long it took to load the first n, calculate how many additional frames
  *   need to be pre-loaded, based on avg fetch time and playback speed, in order for playback to begin
  *   without having to stop to buffer.
  *
@@ -28,26 +37,29 @@ const toDate = (dateString) => util.parseDateUTC(dateString);
 class PlayQueue extends React.Component {
   constructor(props) {
     super(props);
-    const { numberOfFrames } = props;
+    const { numberOfFrames, speed } = props;
     this.state = {
       isAnimating: false,
       loadedItems: 0,
     };
-    this.fetchTimes = [0];
-    this.queue = new PQueue({ concurrency: CONCURRENT_REQUESTS });
+    this.fetchTimes = [];
+    this.queue = new PQueue({
+      concurrency: CONCURRENT_REQUESTS,
+      timeout: 3000,
+    });
     this.inQueueObject = {};
     this.bufferObject = {};
     this.bufferArray = [];
-    this.playInterval = 0;
-    this.defaultBufferSize = numberOfFrames < 10 ? numberOfFrames : 10;
+    this.initialBufferSize = getInitialBufferSize(numberOfFrames, speed);
     this.minBufferLength = null;
-    this.canPreloadAll = numberOfFrames <= this.defaultBufferSize;
+    this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
+    this.abortController = null;
   }
 
   componentDidMount() {
     this.mounted = true;
     this.queue.on('completed', (dateStr) => {
-      console.debug(dateStr, Date.now(), this.queue.size);
+      console.debug(dateStr, this.queue.size, this.queue.pending);
     });
     this.playingDate = this.getStartDate();
     this.checkQueue();
@@ -59,8 +71,8 @@ class PlayQueue extends React.Component {
     this.mounted = false;
     this.clearCache();
     this.queue.clear();
-    if (this.playInterval) {
-      clearInterval(this.playInterval);
+    if (this.abortController) {
+      this.abortController.abort();
     }
   }
 
@@ -82,9 +94,10 @@ class PlayQueue extends React.Component {
    * Determines whether to start at current date or the selected start date
    */
   getStartDate() {
-    const { endDate, startDate, snappedCurrentDate } = this.props;
+    const { startDate, endDate, snappedCurrentDate } = this.props;
     const nextDate = this.nextDate(snappedCurrentDate);
-    if (snappedCurrentDate > startDate && nextDate < endDate) {
+    const nextDateAfterSnapped = this.nextDate(nextDate);
+    if (snappedCurrentDate > startDate && nextDate < endDate && nextDateAfterSnapped < endDate) {
       return toString(nextDate);
     }
     return toString(startDate);
@@ -97,7 +110,7 @@ class PlayQueue extends React.Component {
     const { isLoopActive, startDate, endDate } = this.props;
     let currentDate = toDate(this.playingDate);
     const currentBufferSize = util.objectLength(this.bufferObject);
-    const queueLength = currentBufferSize || this.defaultBufferSize;
+    const queueLength = currentBufferSize || this.initialBufferSize;
 
     let i = 1;
     while (i < queueLength) {
@@ -129,7 +142,7 @@ class PlayQueue extends React.Component {
       togglePlaying();
       return;
     }
-    for (let i = 0; i < this.defaultBufferSize; i += 1) {
+    for (let i = 0; i < this.initialBufferSize; i += 1) {
       this.addDate(currentDate, true);
       currentDate = this.getNextBufferDate();
       if (toString(currentDate) === lastInQueue) {
@@ -138,40 +151,34 @@ class PlayQueue extends React.Component {
     }
   }
 
-  // Filter outliers (e.g. layers that have already been loaded)
-  getFetchTimes = () => this.fetchTimes.filter((time) => time >= MIN_REQUEST_TIME);
-
-  getAverageFetchTime = () => {
-    const filteredTimes = this.getFetchTimes();
-    return filteredTimes.length && filteredTimes.reduce((a, b) => a + b) / filteredTimes.length;
-  }
+  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
 
   calcBufferSize() {
-    // NOTE: for some reason playback takes about 1.5 times as long as it is calculated to be
-    // (likely due to setTimeout being unreliable) which means we often buffer a little more than needed
-    let bufferSize = 0;
     const { numberOfFrames, speed } = this.props;
+    let bufferSize = 0;
+    const msPerSec = 1000;
     const avgFetchTime = this.getAverageFetchTime();
-    const remainingFrames = numberOfFrames - this.defaultBufferSize;
-    const remainingPlayTime = (remainingFrames / speed) * 1000;
-    const remainingLoadTime = (avgFetchTime * remainingFrames) / CONCURRENT_REQUESTS;
-    const totalPlayTime = (numberOfFrames / speed) * 1000;
+    const remainingFrames = numberOfFrames - this.initialBufferSize;
+    const remainingLoadTime = avgFetchTime * remainingFrames;
+    const remainingPlayTime = (remainingFrames / speed) * msPerSec;
+    const totalPlayTime = (numberOfFrames / speed) * msPerSec;
     const timeToBufferEnd = totalPlayTime - remainingPlayTime;
     const framesLoadedDuringInitialBufferPlayback = timeToBufferEnd / avgFetchTime;
-    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.defaultBufferSize;
+    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.initialBufferSize;
 
     if (!canKeepUp && remainingLoadTime >= remainingPlayTime) {
       const preloadTime = remainingLoadTime - remainingPlayTime;
-      bufferSize = Math.ceil(preloadTime / 1000);
+      bufferSize = Math.ceil(preloadTime / msPerSec);
     }
 
-    const totalLoadTime = ((avgFetchTime * numberOfFrames) / 1000 / CONCURRENT_REQUESTS).toFixed(2);
+    const totalLoadTime = ((avgFetchTime * numberOfFrames) / msPerSec / CONCURRENT_REQUESTS).toFixed(2);
+    console.log(this.fetchTimes);
     console.debug('Total frames: ', numberOfFrames);
-    console.debug('Avg fetch time: ', (avgFetchTime / 1000).toFixed(2));
-    console.debug('Play time (t/r): ', (totalPlayTime / 1000).toFixed(2), (remainingPlayTime / 1000).toFixed(2));
-    console.debug('Load time (t/r): ', totalLoadTime, (remainingLoadTime / 1000).toFixed(2));
+    console.debug('Avg fetch time: ', (avgFetchTime / msPerSec).toFixed(2));
+    console.debug('Play time (t/r): ', (totalPlayTime / msPerSec).toFixed(2), (remainingPlayTime / msPerSec).toFixed(2));
+    console.debug('Load time (t/r): ', totalLoadTime, (remainingLoadTime / msPerSec).toFixed(2));
 
-    const totalBuffer = bufferSize + this.defaultBufferSize;
+    const totalBuffer = bufferSize + this.initialBufferSize;
     if (totalBuffer >= numberOfFrames) {
       return numberOfFrames;
     }
@@ -184,10 +191,10 @@ class PlayQueue extends React.Component {
     if (currentBufferSize === numberOfFrames) {
       return true;
     }
-    if (currentBufferSize < this.defaultBufferSize) {
+    if (currentBufferSize < this.initialBufferSize) {
       return false;
     }
-    if (this.getFetchTimes().length < this.defaultBufferSize) {
+    if (this.fetchTimes.length < this.initialBufferSize) {
       this.checkQueue();
       return false;
     }
@@ -282,7 +289,6 @@ class PlayQueue extends React.Component {
     const nextDateStr = toString(nextDate);
     const dateInRange = nextDate <= endDate && nextDate >= startDate;
     const shouldQueue = !this.inQueueObject[nextDateStr] && !this.bufferObject[nextDateStr];
-
     if (shouldQueue && dateInRange) {
       this.addDate(nextDate);
     }
@@ -304,7 +310,9 @@ class PlayQueue extends React.Component {
     await this.queue.add(async () => {
       const startTime = Date.now();
       await promiseImageryForTime(date);
-      this.fetchTimes.push(Date.now() - startTime);
+      const elapsedTime = Date.now() - startTime;
+      const fetchTime = elapsedTime >= MIN_REQUEST_TIME ? elapsedTime : MIN_REQUEST_TIME;
+      this.fetchTimes.push(fetchTime);
       this.setState({ loadedItems: loadedItems += 1 });
       return strDate;
     });
@@ -312,9 +320,9 @@ class PlayQueue extends React.Component {
     if (!this.mounted) return;
     this.bufferObject[strDate] = strDate;
     delete this.inQueueObject[strDate];
-    const bufferLength = this.bufferArray.length;
+    const currentBufferSize = util.objectLength(this.bufferObject);
 
-    if (!initialLoad || this.canPreloadAll || bufferLength >= this.defaultBufferSize) {
+    if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();
     }
@@ -333,9 +341,26 @@ class PlayQueue extends React.Component {
   }
 
   stopPlaying() {
-    clearInterval(this.playInterval);
+    this.abortController.abort();
     this.setState({ isAnimating: false });
-    console.debug('Stopped', Date.now());
+    console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
+  }
+
+  animationInterval(ms, callback) {
+    const start = document.timeline.currentTime;
+    const frame = (time) => {
+      if (this.abortController.signal.aborted) return;
+      callback(time);
+      scheduleFrame(time);
+    };
+    const scheduleFrame = (time) => {
+      const elapsed = time - start;
+      const roundedElapsed = Math.round(elapsed / ms) * ms;
+      const targetNext = start + roundedElapsed + ms;
+      const delay = targetNext - performance.now();
+      setTimeout(() => requestAnimationFrame(frame), delay);
+    };
+    scheduleFrame(start);
   }
 
   /**
@@ -348,10 +373,11 @@ class PlayQueue extends React.Component {
     let currentDateStr = this.playingDate;
     let nextDate;
     let nextDateStr;
+    this.abortController = new AbortController();
 
     const player = () => {
       if (!this.mounted) {
-        return clearInterval(this.playInterval);
+        return this.abortController.abort();
       }
       const currentDate = toDate(currentDateStr);
       nextDate = this.nextDate(currentDate);
@@ -368,7 +394,7 @@ class PlayQueue extends React.Component {
 
       // End of animation range
       if (nextDate > endDate) {
-        clearInterval(this.playInterval);
+        this.abortController.abort();
         this.checkShouldLoop();
         return;
       }
@@ -383,9 +409,8 @@ class PlayQueue extends React.Component {
         this.stopPlaying();
       }
       this.checkQueue();
-      this.playInterval = setTimeout(player, 1000 / speed);
     };
-    this.playInterval = setTimeout(player, speed);
+    this.animationInterval(1000 / speed, player);
   }
 
   getPlaybackPosition() {
@@ -397,7 +422,6 @@ class PlayQueue extends React.Component {
     const currentDateStr = toString(currentDate);
     const position = this.frameDates.indexOf(currentDateStr) + 1;
     const percentage = (position / this.frameDates.length) * 100;
-    console.log(percentage);
     return percentage;
   }
 

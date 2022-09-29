@@ -182,6 +182,7 @@ module.exports = {
   },
   'Finding layer by ID with search': (c) => {
     c.clearValue(layersSearchField);
+    c.pause(1000);
     c.setValue(
       layersSearchField,
       'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly',
@@ -258,7 +259,7 @@ module.exports = {
     });
   },
   'Collapsed sidebar shows updated layer count': (c) => {
-    c.click('.toggleIconHolder');
+    c.click('#toggleIconHolder');
     c.assert.containsText('.layer-count', '9 Layers');
     c.click(collapsedLayerButton);
   },

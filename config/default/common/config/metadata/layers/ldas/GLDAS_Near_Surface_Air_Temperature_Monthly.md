@@ -1,9 +1,9 @@
-This GLDAS Air Temperature parameter is one of the land-surface forcing fields included in the Global Land Data Assimilation System Version 2.0 (GLDAS-2.0) Noah-3.3 Land Surface Model (LSM) monthly 1.0 degree data product. GLDAS-2.0 data use the Princeton Global Meteorological Forcing Dataset, which provides near-surface meteorological data for driving land surface models and other terrestrial modeling systems. The GLDAS monthly data are generated through temporal averaging of the 3-hourly data. The data are in units of Kelvin (K).
+This GLDAS Air Temperature parameter is one of the land-surface forcing fields included in the Global Land Data Assimilation System Version 2.1 (GLDAS-2.1) Noah Land Surface Model (LSM) monthly 0.25 degree data product. GLDAS-2.1 data use the Princeton Global Meteorological Forcing Dataset, which provides near-surface meteorological data for driving land surface models, other terrestrial modeling systems and observation data. The GLDAS monthly data are generated through temporal averaging of the 3-hourly data. The data are in units of Kelvin (K).
 
 The GLDAS Air Temperature is a science variable that indicates the kinetic energy of the air near the surface of the Earth. The data can be used for supporting research and applications related to global water and energy cycle, drought and flood, climate variability, land surface assimilation, etc.
 
-The GLDAS Air Temperature data are in 1.0 degree resolution and the imagery resolution is 2 km, and the temporal resolution is monthly.
+The GLDAS Air Temperature data are in 0.25 degree resolution and the imagery resolution is 2 km, and the temporal resolution is monthly.
 
-References: GLDAS_NOAH10_M [doi:10.5067/QN80TO7ZHFJZ](https://doi.org/10.5067/QN80TO7ZHFJZ)
+References: GLDAS_NOAH025_M [doi:10.5067/SXAVCZFAQLNO](https://doi.org/10.5067/SXAVCZFAQLNO)
 
 Rodell, M., P. R. Houser, U. Jambor, J. Gottschalck, K. Mitchell, C.-J. Meng, K. Arsenault, B. Cosgrove, J. Radakovich, M. Bosilovich, J. K. Entin, J. P. Walker, D. Lohmann, and D. Toll, The Global Land Data Assimilation System, Bull. Amer. Meteor. Soc., 85(3): 381-394, 2004, [doi: 10.1175/BAMS-85-3-381](https://doi.org/10.1175/BAMS-85-3-381).

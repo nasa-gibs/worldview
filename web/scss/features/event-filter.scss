@@ -3,6 +3,7 @@
   padding: 5px;
   max-width: 290px;
   margin: 0 auto;
+  height: $wv-sidebar-event-filter-height;
 
   .filter-dates-icons {
     display: inline-block;
@@ -39,6 +40,30 @@
 
 .event-filter-modal {
   width: 315px;
+}
+
+.event-filter-modal-mobile {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0;
+
+  .modal-body {
+    padding: 5px 1rem;
+  }
+
+  .modal-content {
+    height: 100%;
+  }
+
+  .modal-body .category-toggles {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .modal-body .wv-checkbox {
+    margin-top: 5px;
+  }
 }
 
 .events-filter {
@@ -84,7 +109,7 @@
   padding: 10px 0;
   width: 100%;
   margin: 0 auto;
-  min-height: 35px;
+  min-height: $wv-sidebar-event-footer-height;
   font-size: 15px;
 
   svg {

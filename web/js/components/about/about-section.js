@@ -6,31 +6,31 @@ export default function AboutSection(props) {
 
   const [sectionDescription, setSectionDescription] = useState();
 
-  const fetchHTML = (sectionName, setFn) => {
+  const fetchHTML = () => {
     let controller = new AbortController();
     (async () => {
-      if (!sectionName) {
-        setFn('no section name provided');
+      if (!section) {
+        setSectionDescription('no section name provided');
         return;
       }
       try {
-        const data = await fetch(`brand/about/${sectionName}.html`);
+        const data = await fetch(`brand/about/${section}.html`);
         const dataHTML = await data.text();
         controller = null;
         const setData = data.ok ? dataHTML : '';
-        setFn(setData);
+        setSectionDescription(setData);
       } catch (e) {
         if (!controller.signal.aborted) {
         // eslint-disable-next-line no-console
           console.error(e);
-          setFn('there was an error');
+          setSectionDescription('could not load metadata');
         }
       }
     })();
     return controller ? controller.abort() : null;
   };
 
-  fetchHTML(section, setSectionDescription);
+  fetchHTML();
   return (
     <div dangerouslySetInnerHTML={{ __html: sectionDescription }} />
   );

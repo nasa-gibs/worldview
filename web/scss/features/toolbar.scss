@@ -54,13 +54,13 @@
 .toolbar-list-modal.modal-dialog {
   width: 160px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     width: 180px;
   }
 }
 
 .toolbar-medium-modal {
-  width: 230px;
+  width: 235px;
 
   &.modal-dialog .modal-header {
     padding: 5px 10px 5px 6px;
@@ -161,7 +161,7 @@
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .wv-toolbar-button,
   [data-whatintent="mouse"] .wv-toolbar-button:focus {
     font-size: 20px;

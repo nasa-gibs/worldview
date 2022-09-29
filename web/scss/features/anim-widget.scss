@@ -3,7 +3,7 @@
   z-index: 100;
 }
 
-@media (min-width: 769px) {
+@media (min-width: $tablet-min-width) {
   .wv-animation-widget-wrapper {
     bottom: 88px;
 
@@ -19,8 +19,8 @@
   bottom: 0;
 
   &.minimized {
-    bottom: 10px;
-    left: 188px;
+    bottom: 20px;
+    left: 320px;
 
     &.landscape {
       left: 323px;
@@ -32,7 +32,7 @@
     left: 165px;
 
     &.landscape {
-      bottom: 10px;
+      bottom: 20px;
       left: 420px;
     }
   }
@@ -40,7 +40,7 @@
   .wv-animation-widget.minimized {
     background: transparent;
     height: 44px;
-    width: 114px;
+    width: 103px;
 
     .wv-icon-case {
       border: 2px solid #333;
@@ -48,6 +48,12 @@
       height: 42px;
       width: 112px;
     }
+  }
+}
+
+@media (max-width: 483px) {
+  .wv-animation-widget-wrapper.mobile.minimized {
+    left: 200px;
   }
 }
 
@@ -182,7 +188,7 @@
     }
 
     /* No hover styles on mobile */
-    @media (min-width: 769px) {
+    @media (min-width: $tablet-min-width) {
       &:hover {
         color: #999;
         cursor: pointer;
@@ -203,7 +209,7 @@ a .wv-animation-widget-icon {
   left: 50%;
   top: 50%;
 
-  @media (min-width: 769px) {
+  @media (min-width: $tablet-min-width) {
     &:hover {
       color: #fff;
       opacity: 0.5;

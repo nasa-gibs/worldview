@@ -112,12 +112,6 @@ export function mapIsExtentValid(extent) {
 /*
  * Set default extent according to time of day:
  *
- * at 00:00 UTC, start at far eastern edge of
- * map: "20.6015625,-46.546875,179.9296875,53.015625"
- *
- * at 23:00 UTC, start at far western edge of map:
- * "-179.9296875,-46.546875,-20.6015625,53.015625"
- *
  * @method getLeadingExtent
  * @static
  * @param {Object} Time
@@ -125,21 +119,18 @@ export function mapIsExtentValid(extent) {
  * @returns {object} Extent Array
  */
 export function getLeadingExtent(loadtime) {
-  let curHour = loadtime.getUTCHours();
+  const curHour = loadtime.getUTCHours();
 
-  // For earlier hours when data is still being filled in, force a far eastern perspective
-  if (curHour < 3) {
-    curHour = 23;
-  } else if (curHour < 9) {
-    curHour = 0;
-  }
+  // These values are specifically tuned for the Aqua/MODIS default Corrected Reflectance Layer
+  const eastWestOffset = curHour * 0.6;
+  const minLonConst = 10;
+  const maxLongConst = 170;
+  const minLonMultiplier = -200 / 23;
+  const minLon = minLonConst + (curHour - eastWestOffset) * minLonMultiplier;
+  const maxLon = minLon + maxLongConst;
 
-  // Compute east/west bounds
-  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
-  const maxLon = minLon + 159.328125;
-
-  const minLat = -46.546875;
-  const maxLat = 53.015625;
+  const minLat = -47;
+  const maxLat = 53;
 
   return [minLon, minLat, maxLon, maxLat];
 }
@@ -277,6 +268,8 @@ function promiseLayerGroup(layerGroup, map) {
 }
 
 /**
+ * Trigger tile requests for all active and visible layers on a given date.
+ * This can be used to pre-cache all layers at given datetimes.
  * @method promiseImageryForTime
  * @return {object} Promise
  */
@@ -286,10 +279,13 @@ export async function promiseImageryForTime(state, date, activeString) {
     cache, selected, createLayer, layerKey,
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
-  await Promise.all(layers.map((layer) => {
+  await Promise.all(layers.map(async (layer) => {
+    if (layer.type === 'granule') {
+      return Promise.resolve();
+    }
     const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
-    const layerGroup = cache.getItem(key) || createLayer(layer, options);
+    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
   }));
   selected.getView().changed();

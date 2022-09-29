@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
-import { createResponsiveStateReducer } from 'redux-responsive';
 import { assign as lodashAssign } from 'lodash';
-import { modalReducer, modalAboutPage } from './modal/reducers';
+import { modalReducer, modalAboutReducer } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
 import { locationSearchReducer } from './location-search/reducers';
@@ -47,26 +46,16 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import embedReducers from './embed/reducers';
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
-import { smartHandoffReducer } from './smart-handoff/reducer';
+import { smartHandoffReducer, getInitialState as getSmartHandoffInitialState } from './smart-handoff/reducer';
 import { getInitialState as getInitialSettingsState, settingsReducer } from './settings/reducer';
+import { getInitialState as getInitialScreenSizeState, screenSizeReducer } from './screen-size/reducer';
+import { loadingReducer } from './loading/reducers';
 
 function lastAction(state = null, action) {
   return action;
 }
 
-/**
- * Access to page size so various resize listeners are
- * no longer necessary
- */
-const responsiveStateReducer = createResponsiveStateReducer(
-  null,
-  {
-    extraFields: () => ({
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
-    }),
-  },
-);
+
 /**
  * Get initial module states based on config
  * and parameters
@@ -85,8 +74,10 @@ export function getInitialState(models, config, parameters) {
     layers: getLayersInitialState(config),
     events: getInitialEventsState(config),
     settings: getInitialSettingsState(),
+    screenSize: getInitialScreenSizeState(),
     requestedEvents: eventRequestResponse(),
     requestedEventSources: eventRequestResponse(),
+    smartHandoffs: getSmartHandoffInitialState(config),
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),
@@ -101,41 +92,43 @@ const locationReducer = (state = { key: '' }, action) => {
 const defaultReducer = (state = {}) => state;
 const reducers = {
   alerts: alertReducer,
-  proj: projectionReducer,
-  modal: modalReducer,
-  date: dateReducer,
-  feedback: feedbackReducer,
-  locationSearch: locationSearchReducer,
-  notifications: notificationsReducer,
-  config: defaultReducer,
-  models: defaultReducer,
-  parameters: defaultReducer,
-  browser: responsiveStateReducer,
-  sidebar: sidebarReducer,
-  compare: compareReducer,
-  layers: layerReducer,
-  events: eventsReducer,
-  palettes: paletteReducer,
-  vectorStyles: vectorStyleReducer,
-  tour: tourReducer,
-  map: mapReducer,
   animation: animationReducer,
+  config: defaultReducer,
+  compare: compareReducer,
+  date: dateReducer,
+  embed: embedReducers,
+  events: eventsReducer,
+  feedback: feedbackReducer,
   imageDownload: imageDownloadReducer,
+  lastAction,
+  layers: layerReducer,
+  loading: loadingReducer,
+  location: locationReducer,
+  locationSearch: locationSearchReducer,
+  map: mapReducer,
+  measure: measureReducer,
+  modal: modalReducer,
+  modalAbout: modalAboutReducer,
+  models: defaultReducer,
+  notifications: notificationsReducer,
+  notificationsRequest,
+  palettes: paletteReducer,
+  parameters: defaultReducer,
+  productPicker: productPickerReducer,
+  proj: projectionReducer,
   requestedEvents,
   requestedEventSources,
-  modalAboutPage,
-  shortLink,
-  smartHandoffs: smartHandoffReducer,
-  notificationsRequest,
-  lastAction,
-  location: locationReducer,
-  measure: measureReducer,
-  embed: embedReducers,
-  ui: uiReducers,
-  productPicker: productPickerReducer,
+  screenSize: screenSizeReducer,
   settings: settingsReducer,
+  shortLink,
+  sidebar: sidebarReducer,
+  smartHandoffs: smartHandoffReducer,
+  tour: tourReducer,
+  ui: uiReducers,
+  vectorStyles: vectorStyleReducer,
 };
 const appReducer = combineReducers(reducers);
+
 /**
  * Top level reducer function w/ option to reset state
  */

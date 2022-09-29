@@ -1,6 +1,5 @@
 {
     "features": {
-        "smartHandoffs": true,
         "animation": true,
         "urlShortening": true,
         "customPalettes": true,
@@ -8,6 +7,7 @@
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,
+        "googleTagManager": true,
         "vismetadata": {
             "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
             "daacMap": {
@@ -17,6 +17,7 @@
                 "NSIDC_ECS": "NSIDC DAAC",
                 "LAADS": "LAADS DAAC",
                 "PODAAC": "PO.DAAC",
+                "POCLOUD": "PO.DAAC",
                 "LPDAAC_ECS": "LP DAAC",
                 "SEDAC": "SEDAC",
                 "LARC_ASDC": "ASDC",
@@ -27,10 +28,19 @@
                 "ASIPS": "Atmosphere SIPS",
                 "LPCLOUD":	"LPDAAC",
                 "ORNL_DAAC": "ORNL DAAC",
+                "ORNL_CLOUD": "ORNL DAAC",
                 "MOPITT": "MOPITT SIPS"
             }
         },
-        "googleTagManager": true,
+        "cmr": {
+            "url": "https://cmr.earthdata.nasa.gov/search/"
+        },
+        "smartHandoffs": [
+            {
+                "toolName": "EARTHDATA_SEARCH",
+                "conceptId": "TL2243339890-ESDIS"
+            }
+        ],
         "notification": {
             "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
             "releases": "https://github.com/nasa-gibs/worldview/releases"

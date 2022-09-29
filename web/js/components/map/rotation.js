@@ -57,9 +57,10 @@ class Rotation extends React.Component {
     } = this.props;
     const currentRotation = Number(rotation * (180 / Math.PI)).toFixed();
     const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
+    const rotationButtonClass = isMobile ? 'wv-rotation-buttons-mobile' : 'wv-rotation-buttons';
 
     return !isDistractionFreeModeActive && isPolarProj && (
-      <div className="wv-rotation-buttons">
+      <div className={rotationButtonClass}>
         <button
           type="button"
           className="wv-map-rotate-left wv-map-zoom"
@@ -117,9 +118,9 @@ class Rotation extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, ui,
+    screenSize, map, proj, ui,
   } = state;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     map,
     proj,

@@ -12,8 +12,10 @@ function Zoom({
   const zoomOutDisabled = zoomLevel === 0;
   if (!map) return null;
 
+  const zoomButtonClass = isMobile ? 'wv-zoom-buttons-mobile' : 'wv-zoom-buttons';
+
   return !isDistractionFreeModeActive && (
-    <div className="wv-zoom-buttons">
+    <div className={zoomButtonClass}>
       <button
         type="button"
         disabled={zoomInDisabled}
@@ -54,10 +56,10 @@ function Zoom({
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, ui,
+    screenSize, map, proj, ui,
   } = state;
   const activeMap = map.ui.selected;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   return {
     map: activeMap,
     zoomLevel: activeMap && activeMap.getView().getZoom(),

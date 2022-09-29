@@ -11,8 +11,7 @@ import {
   applyMiddleware,
   compose as defaultCompose,
 } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { calculateResponsiveState, responsiveStoreEnhancer } from 'redux-responsive';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import {
   createReduxLocationActions,
   listenForHistoryChange,
@@ -100,7 +99,6 @@ function render (config, legacyState) {
     getInitialState(models, config, parameters),
     compose(
       applyMiddleware(...middleware),
-      responsiveStoreEnhancer,
     ),
   );
   listenForHistoryChange(store, history);
@@ -136,8 +134,8 @@ window.onload = () => {
         parameters.mockTour = isMockTour;
       }
 
-      const crs = calculateResponsiveState(window);
-      config.initialIsMobile = crs.innerWidth <= 768;
+      const crs = window.innerWidth;
+      config.initialIsMobile = crs <= 768;
 
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || util.now()
@@ -205,6 +203,10 @@ window.onload = () => {
         };
         render(config, parameters, legacyState);
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
     }).catch((error) => console.error(error));
 };
 

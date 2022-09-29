@@ -39,15 +39,9 @@
   }
 }
 
-@media (max-width: 768px) {
-  .wv-measure-button {
-    bottom: 10px;
-  }
-
-  .modal-dialog.measure-tool-modal {
-    bottom: 55px;
-    margin: 0;
-  }
+.modal-dialog.measure-tool-modal.measure-mobile {
+  bottom: 60px;
+  margin: 0;
 }
 
 .measure-unit-toggle {

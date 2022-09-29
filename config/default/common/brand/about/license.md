@@ -6,5 +6,6 @@
         href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">NASA GIBS
         GitHub</a>.</p>
 <hr>
-<p>January 13, 2022 - 19:01 UTC<br> Responsible NASA Official: <a href="mailto:ryan.a.boller@nasa.gov">Ryan
-        Boller</a></p>
+<p>@BUILD_TIMESTAMP@<br> Responsible NASA Official: <a href="mailto:ryan.a.boller@nasa.gov">Ryan
+        Boller</a><br>
+<a href="https://www.nasa.gov/about/highlights/HP_Privacy.html" target="_blank">Web Privacy Policy</a></p>

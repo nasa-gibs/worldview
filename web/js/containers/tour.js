@@ -516,9 +516,9 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const {
-    browser, config, tour, palettes, models, compare, map,
+    screenSize, config, tour, palettes, models, compare, map,
   } = state;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
 
   return {
     config,

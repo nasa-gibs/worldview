@@ -179,11 +179,11 @@
 }
 
 /* Mobile Styling */
-@media only screen and (max-width: 768px) {
-  .location-search-expanded {
-    position: static;
-    width: 100%;
-  }
+@media only screen and (max-width: $mobile-max-width) {
+  // .location-search-expanded {
+  //   position: static;
+  //   width: 100%;
+  // }
 
   .location-search-input-container {
     width: 100%;

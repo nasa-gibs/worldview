@@ -15,6 +15,7 @@ import RenderSplitLayerTitle from '../renderSplitTitle';
 import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 import util from '../../../../util/util';
+import { JOYRIDE_INCREMENT } from '../../../../util/constants';
 
 const { events } = util;
 
@@ -44,7 +45,7 @@ class SearchLayerRow extends React.Component {
   onRowClick() {
     this.toggleShowMetadata();
     setTimeout(() => {
-      events.trigger('joyride:increment');
+      events.trigger(JOYRIDE_INCREMENT);
     });
   }
 
@@ -188,13 +189,13 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker, browser, notifications } = state;
+  const { productPicker, notifications, screenSize } = state;
   const activeLayerMap = getActiveLayersMap(state);
   const { categoryType, selectedLayer } = productPicker;
   return {
-    scrollIntoView: browser.screenWidth < 1024,
+    scrollIntoView: screenSize.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     layerNotices: getLayerNoticesForLayer(ownProps.layer.id, notifications),
     selectedDate: getSelectedDate(state),
     selectedLayer,

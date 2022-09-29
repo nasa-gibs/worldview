@@ -4,4 +4,4 @@ The UTM system divides the Earth’s surface into 60 longitude zones, each 6° o
 
 The MGRS/HLS Grid layer is a reference layer and does not change over time.
 
-References: [Harmonized Landsat Sentinel-2 (HLS) Product User Guide](https://lpdaac.usgs.gov/documents/1118/HLS_User_Guide_V2.pdf)
+References: [Harmonized Landsat Sentinel-2 (HLS) Product User Guide](https://lpdaac.usgs.gov/documents/1326/HLS_User_Guide_V2.pdf)
