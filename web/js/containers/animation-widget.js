@@ -424,7 +424,7 @@ class AnimationWidget extends React.Component {
               </div>
             </div>
 
-            <div className="mobile-animation-block-row">
+            <div className="mobile-animation-block-row" id="mobile-animation-start-date">
               <span>Start Date</span>
               <MobileDatePicker
                 date={startDate}
@@ -436,7 +436,7 @@ class AnimationWidget extends React.Component {
               />
             </div>
 
-            <div className="mobile-animation-block-row">
+            <div className="mobile-animation-block-row" id="mobile-animation-end-date">
               <span>End Date</span>
               <MobileDatePicker
                 date={endDate}
