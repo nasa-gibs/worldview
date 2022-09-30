@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Line from './line';
 import util from '../../util/util';
 import { getSelectedDate } from '../../modules/date/selectors';
+import { CRS } from '../../modules/map/constants';
 
 function DateLines(props) {
   const {
@@ -53,7 +54,7 @@ function DateLines(props) {
   };
 
   useEffect(() => {
-    if (!proj.selected.crs === 'EPSG:4326') {
+    if (!proj.selected.crs === CRS.GEOGRAPHIC) {
       setHideLines(true);
     }
   }, [proj]);
@@ -111,7 +112,7 @@ const mapStateToProps = (state) => {
     proj, map, compare, settings, modal,
   } = state;
   const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
-  const isGeographic = proj.selected.crs === 'EPSG:4326';
+  const isGeographic = proj.selected.crs === CRS.GEOGRAPHIC;
   return {
     proj,
     map: map.ui.selected,

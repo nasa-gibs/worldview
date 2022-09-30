@@ -33,6 +33,7 @@ import {
   fetchAvailableTools as fetchAvailableToolsAction,
   validateLayersConceptIds as validateLayersConceptIdsAction,
 } from '../../modules/smart-handoff/actions';
+import { CRS } from '../../modules/map/constants';
 
 import { formatDisplayDate } from '../../modules/date/util';
 
@@ -179,8 +180,8 @@ class SmartHandoff extends Component {
     const { crs } = proj;
 
     // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const bottomLeft = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const topRight = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const bottomLeft = olProj.transform(lonlats[0], crs, CRS.GEOGRAPHIC);
+    const topRight = olProj.transform(lonlats[1], crs, CRS.GEOGRAPHIC);
     let [x1, y1] = bottomLeft;
     let [x2, y2] = topRight;
 

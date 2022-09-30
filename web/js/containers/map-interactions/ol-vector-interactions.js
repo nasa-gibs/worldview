@@ -24,7 +24,7 @@ import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../..
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
-import { FULL_MAP_EXTENT } from '../../modules/map/constants';
+import { CRS, FULL_MAP_EXTENT } from '../../modules/map/constants';
 import {
   GRANULE_HOVERED,
   GRANULE_HOVER_UPDATE,
@@ -156,7 +156,7 @@ export class VectorInteractions extends React.Component {
       isCoordinateSearchActive, measureIsActive, granuleFootprints,
     } = this.props;
     const coord = map.getCoordinateFromPixel(pixel);
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
+    const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
 
     if (measureIsActive || isCoordinateSearchActive) {
       return;
@@ -259,7 +259,7 @@ function mapStateToProps(state) {
   const granulePlatform = getGranulePlatform(state);
 
   const { maxExtent } = config.projections[proj.id];
-  const visibleExtent = proj.selected.crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
+  const visibleExtent = proj.selected.crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent;
 
   return {
     activeLayers,

@@ -11,6 +11,7 @@ import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
 import { changeCoordinateFormat } from '../../modules/settings/actions';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 const getContainerWidth = (format) => {
@@ -65,7 +66,7 @@ class OlCoordinates extends React.Component {
       this.clearCoord();
       return;
     }
-    let pcoord = transform(coord, crs, 'EPSG:4326');
+    let pcoord = transform(coord, crs, CRS.GEOGRAPHIC);
     // eslint-disable-next-line prefer-const
     let [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
@@ -73,7 +74,7 @@ class OlCoordinates extends React.Component {
       return;
     }
     if (Math.abs(lon) > 180) {
-      if (crs === 'EPSG:4326' && Math.abs(lon) < 250) {
+      if (crs === CRS.GEOGRAPHIC && Math.abs(lon) < 250) {
         pcoord = getNormalizedCoordinate([lon, lat]);
       } else {
         this.clearCoord();

@@ -5,7 +5,7 @@ const os = require('os');
 const path = require('path');
 const yargs = require('yargs');
 const shell = require('shelljs');
-const NodeSSH = require('node-ssh');
+const { NodeSSH } = require('node-ssh');
 
 const ssh = new NodeSSH();
 
@@ -109,7 +109,11 @@ if (!name) {
 async function upload() {
   console.log(`Uploading to ${host}`);
   try {
-    await ssh.connect({ host, username, privateKey: key });
+    await ssh.connect({
+      host,
+      username,
+      privateKeyPath: key,
+    });
     let cmd = `
       [ -e ${root}/${name}/${worldview} ] &&
       rm -rf ${root}/${name} &&

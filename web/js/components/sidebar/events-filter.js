@@ -13,6 +13,7 @@ import {
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
 import DateRangeSelector from '../date-selector/date-range-selector';
+import { CRS } from '../../modules/map/constants';
 
 function EventFilterModalBody (props) {
   const {
@@ -190,7 +191,7 @@ const mapStateToProps = (state) => {
     selectedCategories, selectedDates, showAll,
   } = events;
 
-  const isPolarProj = proj.selected.crs === 'EPSG:3031' || proj.selected.crs === 'EPSG:3413';
+  const isPolarProj = proj.selected.crs === CRS.ANTARCTIC || proj.selected.crs === CRS.ARCTIC;
 
   return {
     isPolarProj,
