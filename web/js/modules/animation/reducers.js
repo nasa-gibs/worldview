@@ -24,7 +24,7 @@ export const defaultState = {
   startDate: undefined,
   endDate: undefined,
   boundaries: undefined,
-  isCollapsed: true,
+  isCollapsed: false,
 };
 export function getInitialState(config) {
   return {

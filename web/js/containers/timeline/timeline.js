@@ -579,6 +579,9 @@ class Timeline extends React.Component {
     if (isAnimationWidgetOpen && isMobile) {
       onToggleAnimationCollapse();
       onPauseAnimation();
+    } else if (isMobile && !isAnimationWidgetOpen) {
+      onToggleAnimationCollapse();
+      openAnimation();
     } else if (isAnimationWidgetOpen) {
       closeAnimation();
     } else {
