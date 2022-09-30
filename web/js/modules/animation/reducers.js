@@ -12,6 +12,7 @@ import {
   UPDATE_CROP_BOUNDS,
   TOGGLE_GIF,
   KEY_PRESS_ACTION,
+  COLLAPSE_ANIMATION,
 } from './constants';
 
 export const defaultState = {
@@ -23,6 +24,7 @@ export const defaultState = {
   startDate: undefined,
   endDate: undefined,
   boundaries: undefined,
+  isCollapsed: true,
 };
 export function getInitialState(config) {
   return {
@@ -97,6 +99,11 @@ export function animationReducer(state = defaultState, action) {
         ...state,
         gifActive: !state.gifActive,
         isPlaying: false,
+      };
+    case COLLAPSE_ANIMATION:
+      return {
+        ...state,
+        isCollapsed: !state.isCollapsed,
       };
     case KEY_PRESS_ACTION:
       if (action.keyCode === 32 && state.isActive) {

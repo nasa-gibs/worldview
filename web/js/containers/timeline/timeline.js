@@ -60,6 +60,8 @@ import {
   changeStartAndEndDate,
   changeStartDate,
   changeEndDate,
+  toggleAnimationCollapse,
+  stop as pauseAnimation,
 } from '../../modules/animation/actions';
 import {
   TIME_SCALE_FROM_NUMBER,
@@ -565,8 +567,19 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   clickAnimationButton = () => {
-    const { closeAnimation, isAnimationWidgetOpen, openAnimation } = this.props;
-    if (isAnimationWidgetOpen) {
+    const {
+      closeAnimation,
+      isAnimationWidgetOpen,
+      openAnimation,
+      isMobile,
+      onPauseAnimation,
+      onToggleAnimationCollapse,
+    } = this.props;
+
+    if (isAnimationWidgetOpen && isMobile) {
+      onToggleAnimationCollapse();
+      onPauseAnimation();
+    } else if (isAnimationWidgetOpen) {
       closeAnimation();
     } else {
       googleTagManager.pushEvent({
@@ -1450,6 +1463,7 @@ function mapStateToProps(state) {
       || compare.active,
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
+    isAnimationCollapsed: animation.isCollapsed,
     isGifActive: animation.gifActive,
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
@@ -1506,6 +1520,13 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   },
+  // unminimize animation widget in mobile
+  onToggleAnimationCollapse: () => {
+    dispatch(toggleAnimationCollapse());
+  },
+  onPauseAnimation: () => {
+    dispatch(pauseAnimation());
+  },
 });
 
 export default connect(
@@ -1548,6 +1569,8 @@ Timeline.propTypes = {
   leftArrowDisabled: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,
   nowOverride: PropTypes.bool,
+  onPauseAnimation: PropTypes.func,
+  onToggleAnimationCollapse: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,

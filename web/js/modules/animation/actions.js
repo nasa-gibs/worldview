@@ -10,6 +10,7 @@ import {
   UPDATE_END_DATE,
   UPDATE_CROP_BOUNDS,
   TOGGLE_GIF,
+  COLLAPSE_ANIMATION,
 } from './constants';
 import util from '../../util/util';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
@@ -99,5 +100,10 @@ export function changeCropBounds(bounds) {
 export function toggleComponentGifActive() {
   return {
     type: TOGGLE_GIF,
+  };
+}
+export function toggleAnimationCollapse() {
+  return {
+    type: COLLAPSE_ANIMATION,
   };
 }

@@ -49,6 +49,7 @@ import {
   changeStartDate,
   changeEndDate,
   changeStartAndEndDate,
+  toggleAnimationCollapse,
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
 
@@ -92,7 +93,6 @@ class AnimationWidget extends React.Component {
         x: (props.screenWidth / 2) - halfWidgetWidth,
         y: -25,
       },
-      collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
       userHasMovedWidget: false,
     };
@@ -111,7 +111,6 @@ class AnimationWidget extends React.Component {
     const { isEmbedModeActive } = this.props;
     if (isEmbedModeActive) {
       this.setState({
-        collapsed: true,
         widgetPosition: {
           x: 10,
           y: 0,
@@ -148,9 +147,8 @@ class AnimationWidget extends React.Component {
   }
 
   toggleCollapse() {
-    this.setState((prevState) => ({
-      collapsed: !prevState.collapsed,
-    }));
+    const { onToggleAnimationCollapse } = this.props;
+    onToggleAnimationCollapse();
   }
 
   /**
@@ -576,8 +574,9 @@ class AnimationWidget extends React.Component {
       delta,
       interval,
       numberOfFrames,
+      isCollapsed,
     } = this.props;
-    const { speed, collapsed } = this.state;
+    const { speed } = this.state;
 
     if (!isActive) {
       return null;
@@ -605,7 +604,7 @@ class AnimationWidget extends React.Component {
         )}
         {!isDistractionFreeModeActive && (
           <>
-            {collapsed ? this.renderCollapsedWidget() : isMobile ? this.renderMobileWidget() : this.renderExpandedWidget()}
+            {isCollapsed ? this.renderCollapsedWidget() : isMobile ? this.renderMobileWidget() : this.renderExpandedWidget()}
           </>
         )}
       </ErrorBoundary>
@@ -628,7 +627,7 @@ function mapStateToProps(state) {
     proj,
   } = state;
   const {
-    startDate, endDate, speed, loop, isPlaying, isActive,
+    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed,
   } = animation;
   const {
     customSelected,
@@ -705,6 +704,7 @@ function mapStateToProps(state) {
     customSelected,
     startDate,
     endDate,
+    isCollapsed,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     snappedCurrentDate,
     currentDate,
@@ -772,6 +772,9 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   },
+  onToggleAnimationCollapse: () => {
+    dispatch(toggleAnimationCollapse());
+  },
 });
 
 export default connect(
@@ -798,6 +801,7 @@ AnimationWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
+  isCollapsed: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
@@ -810,6 +814,7 @@ AnimationWidget.propTypes = {
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,
+  onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
   onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
