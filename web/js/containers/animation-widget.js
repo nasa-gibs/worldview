@@ -427,7 +427,7 @@ class AnimationWidget extends React.Component {
               <MobileDatePicker
                 date={startDate}
                 startDateLimit={minimumDate}
-                endDateLimit={maximumDate}
+                endDateLimit={endDate}
                 onDateChange={this.onMobileDateChangeStart}
                 hasSubdailyLayers={hasSubdailyLayers}
                 isMobile={isMobile}
@@ -438,7 +438,7 @@ class AnimationWidget extends React.Component {
               <span>End Date</span>
               <MobileDatePicker
                 date={endDate}
-                startDateLimit={minimumDate}
+                startDateLimit={startDate}
                 endDateLimit={maximumDate}
                 onDateChange={this.onMobileDateChangeEnd}
                 hasSubdailyLayers={hasSubdailyLayers}
