@@ -165,7 +165,7 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    const { nowOverride } = this.props;
+    const { nowOverride, isMobile, isCollapsed, onToggleAnimationCollapse } = this.props;
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
@@ -177,6 +177,12 @@ class Timeline extends React.Component {
       this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
       this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 10);
     }
+
+    // if (!isMobile && isCollapsed) {
+    //   console.log("testing")
+    //   onToggleAnimationCollapse();
+    // }
+
     this.setInitialState();
   }
 
@@ -580,7 +586,6 @@ class Timeline extends React.Component {
       onToggleAnimationCollapse();
       onPauseAnimation();
     } else if (isMobile && !isAnimationWidgetOpen) {
-      onToggleAnimationCollapse();
       openAnimation();
     } else if (isAnimationWidgetOpen) {
       closeAnimation();

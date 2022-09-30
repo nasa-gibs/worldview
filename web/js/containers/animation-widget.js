@@ -110,9 +110,6 @@ class AnimationWidget extends React.Component {
   componentDidMount() {
     const {
       isEmbedModeActive,
-      isMobile,
-      onToggleAnimationCollapse,
-      isCollapsed,
     } = this.props;
     if (isEmbedModeActive) {
       this.setState({
@@ -121,9 +118,6 @@ class AnimationWidget extends React.Component {
           y: 0,
         },
       });
-    }
-    if (isMobile && !isCollapsed) {
-      onToggleAnimationCollapse();
     }
   }
 
