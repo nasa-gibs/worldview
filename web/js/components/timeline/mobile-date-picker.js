@@ -69,6 +69,7 @@ class MobileDatePicker extends Component {
 
   componentDidUpdate(prevProps) {
     const { date, endDateLimit } = this.props;
+    console.log('endDateLimit from MDP', endDateLimit);
     // update on new endDateLimit or changed date
     if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
       this.setInitDates();

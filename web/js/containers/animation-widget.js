@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
+  debounce as lodashDebounce,
   get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { getISODateFormatted } from '../components/timeline/date-util';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import DateRangeSelector from '../components/date-selector/date-range-selector';
@@ -15,6 +16,8 @@ import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/timescale-interval-change';
 import CustomIntervalSelector from '../components/timeline/custom-interval-selector/custom-interval-selector';
+import MobileCustomIntervalSelector from '../components/timeline/custom-interval-selector/mobile-custom-interval-selector';
+import MobileDatePicker from '../components/timeline/mobile-date-picker';
 import PlayQueue from '../components/animation-widget/play-queue';
 import { promiseImageryForTime } from '../modules/map/util';
 import {
@@ -46,6 +49,7 @@ import {
   changeStartDate,
   changeEndDate,
   changeStartAndEndDate,
+  toggleAnimationCollapse,
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
 
@@ -77,6 +81,7 @@ const RangeHandle = (props) => {
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
 const maxFrames = 300;
+const mobileMaxFrames = 50;
 
 class AnimationWidget extends React.Component {
   constructor(props) {
@@ -88,10 +93,11 @@ class AnimationWidget extends React.Component {
         x: (props.screenWidth / 2) - halfWidgetWidth,
         y: -25,
       },
-      collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
       userHasMovedWidget: false,
     };
+    this.debounceDateUpdate = lodashDebounce(selectDate, 8);
+
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
@@ -102,10 +108,11 @@ class AnimationWidget extends React.Component {
   }
 
   componentDidMount() {
-    const { isEmbedModeActive } = this.props;
+    const {
+      isEmbedModeActive,
+    } = this.props;
     if (isEmbedModeActive) {
       this.setState({
-        collapsed: true,
         widgetPosition: {
           x: 10,
           y: 0,
@@ -142,9 +149,8 @@ class AnimationWidget extends React.Component {
   }
 
   toggleCollapse() {
-    this.setState((prevState) => ({
-      collapsed: !prevState.collapsed,
-    }));
+    const { onToggleAnimationCollapse } = this.props;
+    onToggleAnimationCollapse();
   }
 
   /**
@@ -200,25 +206,39 @@ class AnimationWidget extends React.Component {
     }
   }
 
-  onIntervalSelect(timeScale, openModal) {
-    let delta;
-    const { onIntervalSelect, customInterval, customDelta } = this.props;
-    const customSelected = timeScale === 'custom';
-
-    if (openModal) {
-      this.toggleCustomIntervalModal(openModal);
-      return;
+    onMobileDateChangeStart = (date) => {
+      const { onUpdateStartDate } = this.props;
+      const dateObj = new Date(date);
+      this.debounceDateUpdate(dateObj);
+      onUpdateStartDate(dateObj);
     }
 
-    if (customSelected && customInterval && customDelta) {
-      timeScale = customInterval;
-      delta = customDelta;
-    } else {
-      timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
-      delta = 1;
+    onMobileDateChangeEnd = (date) => {
+      const { onUpdateEndDate } = this.props;
+      const dateObj = new Date(date);
+      this.debounceDateUpdate(dateObj);
+      onUpdateEndDate(dateObj);
     }
-    onIntervalSelect(delta, timeScale, customSelected);
-  }
+
+    onIntervalSelect(timeScale, openModal) {
+      let delta;
+      const { onIntervalSelect, customInterval, customDelta } = this.props;
+      const customSelected = timeScale === 'custom';
+
+      if (openModal) {
+        this.toggleCustomIntervalModal(openModal);
+        return;
+      }
+
+      if (customSelected && customInterval && customDelta) {
+        timeScale = customInterval;
+        delta = customDelta;
+      } else {
+        timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
+        delta = 1;
+      }
+      onIntervalSelect(delta, timeScale, customSelected);
+    }
 
   onPushPlay = () => {
     const {
@@ -278,12 +298,17 @@ class AnimationWidget extends React.Component {
   renderCollapsedWidget() {
     const {
       hasSubdailyLayers,
-      isLandscape,
       isMobile,
       isPlaying,
       onClose,
       onPushPause,
       playDisabled,
+      isPortrait,
+      isLandscape,
+      isMobilePhone,
+      isMobileTablet,
+      screenWidth,
+      breakpoints,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
     const cancelSelector = '.no-drag, svg';
@@ -292,6 +317,13 @@ class AnimationWidget extends React.Component {
       + `${hasSubdailyLayers ? 'subdaily ' : ''}`
       + `${isMobile ? 'mobile ' : ''}`
       + `${isLandscape ? 'landscape ' : ''}`;
+    const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
+
+    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < 670 && hasSubdailyLayers) || (screenWidth < 575 && !hasSubdailyLayers) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
+      : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
+        : (isMobileTablet && isPortrait) || (screenWidth < breakpoints.small) ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
+          : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
+            : 'collapsed-animate-widget';
 
     return !dontShow && (
       <Draggable
@@ -304,6 +336,7 @@ class AnimationWidget extends React.Component {
       >
         <div
           className={widgetClasses}
+          id={widgetIDs}
         >
           <div
             id="wv-animation-widget"
@@ -321,6 +354,107 @@ class AnimationWidget extends React.Component {
           </div>
         </div>
       </Draggable>
+    );
+  }
+
+  renderMobileWidget() {
+    const {
+      looping,
+      isPlaying,
+      maxDate,
+      minDate,
+      onSlide,
+      sliderLabel,
+      startDate,
+      endDate,
+      subDailyMode,
+      hasSubdailyLayers,
+      isMobile,
+      isMobilePhone,
+      isMobileTablet,
+      screenWidth,
+      screenHeight,
+      breakpoints,
+      isLandscape,
+      isPortrait,
+    } = this.props;
+    const { speed } = this.state;
+
+    const mobileID = (isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800) ? 'mobile-phone-landscape'
+      : (isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550) ? 'mobile-phone-portrait'
+        : isMobileTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
+
+    const minimumDate = getISODateFormatted(minDate);
+    const maximumDate = getISODateFormatted(maxDate);
+    const endingDate = getISODateFormatted(endDate);
+    const startingDate = getISODateFormatted(startDate);
+
+    return (
+      <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
+        <div
+          id="wv-animation-widget"
+          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
+        >
+          <div className="mobile-animation-widget-container">
+
+            <div className="mobile-animation-flex-row">
+              <span>
+                Loop
+              </span>
+              <LoopButton looping={looping} onLoop={this.onLoop} />
+            </div>
+
+            <div className="mobile-animation-flex-row">
+              <MobileCustomIntervalSelector
+                hasSubdailyLayers={hasSubdailyLayers}
+              />
+            </div>
+
+            <div className="mobile-animation-flex-row" id="slider-case-row">
+              <div className="wv-slider-case">
+                <Slider
+                  className="input-range"
+                  step={0.5}
+                  max={10}
+                  min={0.5}
+                  value={speed}
+                  onChange={(num) => this.setState({ speed: num })}
+                  handle={RangeHandle}
+                  onAfterChange={() => { onSlide(speed); }}
+                  disabled={isPlaying}
+                />
+                <span className="wv-slider-label">{sliderLabel}</span>
+              </div>
+            </div>
+
+            <div className="mobile-animation-block-row" id="mobile-animation-start-date">
+              <span>Start Date</span>
+              <MobileDatePicker
+                date={startDate}
+                startDateLimit={minimumDate}
+                endDateLimit={endingDate}
+                onDateChange={this.onMobileDateChangeStart}
+                hasSubdailyLayers={hasSubdailyLayers}
+                isMobile={isMobile}
+              />
+            </div>
+
+            <div className="mobile-animation-block-row" id="mobile-animation-end-date">
+              <span>End Date</span>
+              <MobileDatePicker
+                date={endDate}
+                startDateLimit={startingDate}
+                endDateLimit={maximumDate}
+                onDateChange={this.onMobileDateChangeEnd}
+                hasSubdailyLayers={hasSubdailyLayers}
+                isMobile={isMobile}
+              />
+            </div>
+
+          </div>
+          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+        </div>
+      </div>
     );
   }
 
@@ -445,8 +579,9 @@ class AnimationWidget extends React.Component {
       delta,
       interval,
       numberOfFrames,
+      isCollapsed,
     } = this.props;
-    const { speed, collapsed } = this.state;
+    const { speed } = this.state;
 
     if (!isActive) {
       return null;
@@ -474,7 +609,7 @@ class AnimationWidget extends React.Component {
         )}
         {!isDistractionFreeModeActive && (
           <>
-            {collapsed || isMobile ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
+            {isCollapsed ? this.renderCollapsedWidget() : isMobile ? this.renderMobileWidget() : this.renderExpandedWidget()}
           </>
         )}
       </ErrorBoundary>
@@ -497,7 +632,7 @@ function mapStateToProps(state) {
     proj,
   } = state;
   const {
-    startDate, endDate, speed, loop, isPlaying, isActive,
+    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed,
   } = animation;
   const {
     customSelected,
@@ -510,6 +645,7 @@ function mapStateToProps(state) {
     interval,
     customInterval,
   } = date;
+  const { isCompareA } = compare;
 
   const hasSubdailyLayers = subdailyLayersActive(state);
   const activeLayersForProj = getAllActiveLayers(state);
@@ -540,16 +676,17 @@ function mapStateToProps(state) {
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
+  const frameLimit = screenSize.isMobileDevice ? mobileMaxFrames : maxFrames;
   const numberOfFrames = getNumberOfSteps(
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
-    maxFrames,
+    frameLimit,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
-  if (numberOfFrames < maxFrames) {
+  if (numberOfFrames < frameLimit) {
     snappedCurrentDate = snapToIntervalDelta(
       currentDate,
       startDate,
@@ -561,13 +698,18 @@ function mapStateToProps(state) {
     snappedCurrentDate = currentDate;
   }
 
+  const {
+    isMobilePhone, screenWidth, isMobileTablet, breakpoints, screenHeight,
+  } = screenSize;
+
   return {
     appNow,
-    screenWidth: screenSize.screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
     endDate,
+    isCollapsed,
+    draggerSelected: isCompareA ? 'selected' : 'selectedB',
     snappedCurrentDate,
     currentDate,
     minDate,
@@ -575,7 +717,13 @@ function mapStateToProps(state) {
     isActive: animationIsActive,
     isDistractionFreeModeActive,
     isMobile: screenSize.isMobileDevice,
+    isMobilePhone,
+    isMobileTablet,
+    breakpoints,
     isLandscape: screenSize.orientation === 'landscape',
+    isPortrait: screenSize.orientation === 'portrait',
+    screenWidth,
+    screenHeight,
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
@@ -592,7 +740,7 @@ function mapStateToProps(state) {
     proj,
     promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isEmbedModeActive,
-    playDisabled: numberOfFrames >= maxFrames || numberOfFrames === 1,
+    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
   };
 }
 
@@ -630,6 +778,9 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   },
+  onToggleAnimationCollapse: () => {
+    dispatch(toggleAnimationCollapse());
+  },
 });
 
 export default connect(
@@ -645,6 +796,7 @@ RangeHandle.propTypes = {
 AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  breakpoints: PropTypes.object,
   snappedCurrentDate: PropTypes.object,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
@@ -655,15 +807,20 @@ AnimationWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
+  isCollapsed: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
   isPlaying: PropTypes.bool,
+  isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,
+  onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
   onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
@@ -675,6 +832,7 @@ AnimationWidget.propTypes = {
   onUpdateStartDate: PropTypes.func,
   playDisabled: PropTypes.bool,
   promiseImageryForTime: PropTypes.func,
+  screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,

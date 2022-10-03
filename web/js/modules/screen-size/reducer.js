@@ -6,6 +6,8 @@ export const initialState = {
   isMobileDevice: false,
   orientation: '',
   breakpoints: {},
+  isMobilePhone: false,
+  isMobileTablet: false,
 };
 
 export const getInitialState = () => ({
@@ -26,6 +28,8 @@ export const screenSizeReducer = (state = initialState, action) => {
         screenWidth: action.screenWidth,
         isMobileDevice: action.isMobileDevice,
         orientation: action.orientation,
+        isMobilePhone: action.isMobilePhone,
+        isMobileTablet: action.isMobileTablet,
       };
     default:
       return state;

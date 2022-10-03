@@ -8,6 +8,8 @@ export default function setScreenInfo() {
   const screenWidth = window.innerWidth;
   const isMobileDevice = screenWidth < 768 || isMobileOnly || isTablet;
   const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
+  const isMobilePhone = isMobileOnly;
+  const isMobileTablet = isTablet;
 
   return {
     type: SET_SCREEN_INFO,
@@ -15,5 +17,7 @@ export default function setScreenInfo() {
     screenWidth,
     isMobileDevice,
     orientation,
+    isMobilePhone,
+    isMobileTablet,
   };
 }

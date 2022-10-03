@@ -1,38 +1,61 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 
-class AnimationButton extends PureComponent {
-  render() {
-    const className = 'button-action-group animate-button';
-    const { disabled, label, clickAnimationButton } = this.props;
-    const buttonId = 'animate-button';
-    const labelText = label || 'Set up animation';
-    return (
-      <div
-        onClick={clickAnimationButton}
-        className={disabled ? `wv-disabled-button ${className}` : className}
-        aria-label={labelText}
-      >
-        <div id={buttonId}>
-          <UncontrolledTooltip
-            placement="top"
-            target={buttonId}
-          >
-            {labelText}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
-        </div>
+const AnimationButton = (props) => {
+  const {
+    disabled,
+    label,
+    clickAnimationButton,
+    breakpoints,
+    screenWidth,
+    isLandscape,
+    isPortrait,
+    isMobilePhone,
+    isMobileTablet,
+    hasSubdailyLayers,
+  } = props;
+
+  const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
+  const buttonId = 'animate-button';
+  const labelText = label || 'Set up animation';
+  const className = (isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers) ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
+    : isMobilePhone && isLandscape ? `mobile-animate-button animate-button-phone-landscape${subdailyID}`
+      : (isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small) ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
+        : isMobileTablet && isLandscape ? `mobile-animate-button animate-button-tablet-landscape${subdailyID}`
+          : ' animate-button';
+
+  return (
+    <div
+      onClick={clickAnimationButton}
+      className={disabled ? `wv-disabled-button button-action-group ${className}` : `button-action-group ${className}`}
+      aria-label={labelText}
+    >
+      <div id={buttonId}>
+        <UncontrolledTooltip
+          placement="top"
+          target={buttonId}
+        >
+          {labelText}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 AnimationButton.propTypes = {
+  breakpoints: PropTypes.object,
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
   label: PropTypes.string,
+  screenWidth: PropTypes.number,
+  isLandscape: PropTypes.bool,
+  isPortrait: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
 };
 
-export default AnimationButton;
+export default React.memo(AnimationButton);
