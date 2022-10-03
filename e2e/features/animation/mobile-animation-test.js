@@ -18,8 +18,8 @@ module.exports = {
   'Mobile animate button opens widget': (c) => {
     c.useCss().click(mobileAnimateButton);
     c.waitForElementVisible(mobileAnimationWidget, (el) => {
-    c.expect.element('.custom-interval-delta-input').to.have.value.that.equals('1');
-    c.expect.element('.dropdown-toggle').text.to.equal('DAY');
+      c.expect.element('.custom-interval-delta-input').to.have.value.that.equals('1');
+      c.expect.element('.dropdown-toggle').text.to.equal('DAY');
     });
   },
 
@@ -39,7 +39,7 @@ module.exports = {
     c.waitForElementVisible(mobileAnimationWidget, TIME_LIMIT, (el) => {
       c.expect.element('#mobile-animation-start-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 07');
       c.expect.element('#mobile-animation-end-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 17');
-      });
+    });
   },
 
   after(c) {

@@ -417,6 +417,7 @@ a .wv-animation-widget-icon {
   height: 100%;
   box-sizing: border-box;
   border: 4px solid #555;
+  bottom: 0;
 
   & .wv-animation-widget {
     margin: 0;
@@ -448,6 +449,7 @@ a .wv-animation-widget-icon {
     #slider-case-row {
       grid-column: 1 / -1;
       width: 100%;
+      margin-top: 1rem;
 
       & .wv-slider-label {
         text-align: center;
@@ -545,7 +547,7 @@ a .wv-animation-widget-icon {
 }
 
 #mobile-animation-widget-tablet {
-  height: 30%;
+  height: 32%;
   bottom: 0;
 
   & .mobile-animation-widget-container {

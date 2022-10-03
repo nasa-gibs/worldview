@@ -165,7 +165,9 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    const { nowOverride, isMobile, isCollapsed, onToggleAnimationCollapse } = this.props;
+    const {
+      nowOverride,
+    } = this.props;
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
@@ -177,11 +179,6 @@ class Timeline extends React.Component {
       this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
       this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 10);
     }
-
-    // if (!isMobile && isCollapsed) {
-    //   console.log("testing")
-    //   onToggleAnimationCollapse();
-    // }
 
     this.setInitialState();
   }
@@ -889,8 +886,6 @@ class Timeline extends React.Component {
       screenWidth,
     } = this.props;
 
-    const isScreenWidthLessThan484 = screenWidth < 484;
-
     // default positioning
     let mobileLeft = 190;
     let mobileBottom = 20;
@@ -907,7 +902,7 @@ class Timeline extends React.Component {
       if (isEmbedModeActive) {
         mobileLeft = 220;
       }
-    } else if (isScreenWidthLessThan484) {
+    } else if (screenWidth < 575) {
       mobileLeft = isCompareModeActive ? 112 : 10;
       mobileBottom = 75;
       if (isEmbedModeActive) {
@@ -977,6 +972,7 @@ class Timeline extends React.Component {
           </div>
         </div>
         <div>
+          {!isCompareModeActive && (
           <AnimationButton
             isMobile={isMobile}
             breakpoints={breakpoints}
@@ -989,13 +985,16 @@ class Timeline extends React.Component {
             hasSubdailyLayers={hasSubdailyLayers}
             disabled={animationDisabled}
             label={
-            isCompareModeActive
-              ? 'Animation feature is deactivated when Compare feature is active'
-              : isDataDownload
-                ? 'Animation feature is deactivated when Data Download feature is active'
-                : ''
-          }
+isCompareModeActive
+  ? 'Animation feature is deactivated when Compare feature is active'
+  : isDataDownload
+    ? 'Animation feature is deactivated when Data Download feature is active'
+    : ''
+}
           />
+
+          )}
+
         </div>
       </div>
     );

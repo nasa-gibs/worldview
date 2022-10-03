@@ -319,7 +319,7 @@ class AnimationWidget extends React.Component {
       + `${isLandscape ? 'landscape ' : ''}`;
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
-    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < breakpoints.extraSmall) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
+    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < 670 && hasSubdailyLayers) || (screenWidth < 575 && !hasSubdailyLayers) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
       : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
         : (isMobileTablet && isPortrait) || (screenWidth < breakpoints.small) ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
           : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
@@ -373,18 +373,21 @@ class AnimationWidget extends React.Component {
       isMobilePhone,
       isMobileTablet,
       screenWidth,
+      screenHeight,
       breakpoints,
       isLandscape,
       isPortrait,
     } = this.props;
     const { speed } = this.state;
 
-    const mobileID = isMobilePhone && isLandscape ? 'mobile-phone-landscape'
-      : isMobilePhone && isPortrait ? 'mobile-phone-portrait'
+    const mobileID = (isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800) ? 'mobile-phone-landscape'
+      : (isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550) ? 'mobile-phone-portrait'
         : isMobileTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
 
     const minimumDate = getISODateFormatted(minDate);
     const maximumDate = getISODateFormatted(maxDate);
+    const endingDate = getISODateFormatted(endDate);
+    const startingDate = getISODateFormatted(startDate);
 
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
@@ -429,7 +432,7 @@ class AnimationWidget extends React.Component {
               <MobileDatePicker
                 date={startDate}
                 startDateLimit={minimumDate}
-                endDateLimit={endDate}
+                endDateLimit={endingDate}
                 onDateChange={this.onMobileDateChangeStart}
                 hasSubdailyLayers={hasSubdailyLayers}
                 isMobile={isMobile}
@@ -440,7 +443,7 @@ class AnimationWidget extends React.Component {
               <span>End Date</span>
               <MobileDatePicker
                 date={endDate}
-                startDateLimit={startDate}
+                startDateLimit={startingDate}
                 endDateLimit={maximumDate}
                 onDateChange={this.onMobileDateChangeEnd}
                 hasSubdailyLayers={hasSubdailyLayers}
@@ -696,12 +699,11 @@ function mapStateToProps(state) {
   }
 
   const {
-    isMobilePhone, screenWidth, isMobileTablet, breakpoints,
+    isMobilePhone, screenWidth, isMobileTablet, breakpoints, screenHeight,
   } = screenSize;
 
   return {
     appNow,
-    screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
@@ -720,6 +722,8 @@ function mapStateToProps(state) {
     breakpoints,
     isLandscape: screenSize.orientation === 'landscape',
     isPortrait: screenSize.orientation === 'portrait',
+    screenWidth,
+    screenHeight,
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
@@ -736,7 +740,7 @@ function mapStateToProps(state) {
     proj,
     promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isEmbedModeActive,
-    playDisabled: numberOfFrames >= maxFrames || numberOfFrames === 1,
+    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
   };
 }
 
@@ -828,6 +832,7 @@ AnimationWidget.propTypes = {
   onUpdateStartDate: PropTypes.func,
   playDisabled: PropTypes.bool,
   promiseImageryForTime: PropTypes.func,
+  screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
