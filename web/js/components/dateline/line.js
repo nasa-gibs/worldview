@@ -53,7 +53,7 @@ export default function Line (props) {
   useEffect(() => {
     if (overlay !== '') return overlay.setPosition([lineX, lineY]);
     if (!alwaysShow && alwaysShow !== prevAlwaysShow) {
-      toggleTextActive(true);
+      toggleTextActive(false);
     }
   });
 
