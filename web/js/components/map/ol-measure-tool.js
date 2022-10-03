@@ -123,6 +123,8 @@ function OlMeasureTool (props) {
 
   useEffect(recalculateAllMeasurements, [unitOfMeasure]);
 
+  useEffect(recalculateAllMeasurements, [crs]);
+
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)',
   });
