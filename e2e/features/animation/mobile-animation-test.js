@@ -17,7 +17,7 @@ module.exports = {
 
   'Mobile animate button opens widget': (c) => {
     c.useCss().click(mobileAnimateButton);
-    c.waitForElementVisible(mobileAnimationWidget, (el) => {
+    c.waitForElementVisible(mobileAnimationWidget, TIME_LIMIT, (el) => {
       c.expect.element('.custom-interval-delta-input').to.have.value.that.equals('1');
       c.expect.element('.dropdown-toggle').text.to.equal('DAY');
     });
