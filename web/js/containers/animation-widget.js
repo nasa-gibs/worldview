@@ -391,11 +391,18 @@ class AnimationWidget extends React.Component {
 
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
+        <div className="mobile-animation-header">
+        <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+        </div>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
+
+
           <div className="mobile-animation-widget-container">
+
+
 
             <div className="mobile-animation-flex-row">
               <span>
@@ -452,7 +459,7 @@ class AnimationWidget extends React.Component {
             </div>
 
           </div>
-          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+
         </div>
       </div>
     );
