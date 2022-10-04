@@ -2,7 +2,6 @@ const skipTour = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {
-  mobileAnimateButton,
   mobileAnimationWidget,
 } = localSelectors;
 
@@ -16,11 +15,11 @@ module.exports = {
   },
 
   'Mobile animate button opens widget': (c) => {
-    c.useCss().click(mobileAnimateButton);
-    c.waitForElementVisible(mobileAnimationWidget, TIME_LIMIT, (el) => {
-      c.expect.element('.custom-interval-delta-input').to.have.value.that.equals('1');
-      c.expect.element('.dropdown-toggle').text.to.equal('DAY');
-    });
+    c.useCss().click('.mobile-animate-button');
+    c.pause(300);
+    c.waitForElementPresent(mobileAnimationWidget, TIME_LIMIT);
+    c.expect.element('.custom-interval-delta-input').to.have.value.that.equals('1');
+    c.expect.element('.dropdown-toggle').text.to.equal('DAY');
   },
 
   'Minimizing mobile animation widget opens collapsed animation widget': (c) => {
@@ -35,11 +34,11 @@ module.exports = {
   },
 
   'Pressing the animation button brings up the mobile animation widget with the same information': (c) => {
-    c.useCss().click(mobileAnimateButton);
-    c.waitForElementVisible(mobileAnimationWidget, TIME_LIMIT, (el) => {
-      c.expect.element('#mobile-animation-start-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 07');
-      c.expect.element('#mobile-animation-end-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 17');
-    });
+    c.useCss().click('.mobile-animate-button');
+    c.pause(300);
+    c.waitForElementVisible(mobileAnimationWidget, TIME_LIMIT);
+    c.expect.element('#mobile-animation-start-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 07');
+    c.expect.element('#mobile-animation-end-date .mobile-date-picker-select-btn span').text.to.equal('2022 JAN 17');
   },
 
   after(c) {

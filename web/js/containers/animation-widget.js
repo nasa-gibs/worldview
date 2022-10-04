@@ -392,7 +392,7 @@ class AnimationWidget extends React.Component {
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
-        <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
         </div>
         <div
           id="wv-animation-widget"
