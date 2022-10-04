@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import OlOverlay from 'ol/Overlay';
-import util from '../../util/util';
 import LineText from './text';
 import usePrevious from '../../util/customHooks';
 
@@ -30,6 +29,8 @@ export default function Line (props) {
     setTextCoords,
     textCoords,
     hideText,
+    isMobilePhone,
+    isMobileTablet,
   } = props;
 
   const [overlay, setOverlay] = useState('');
@@ -51,37 +52,37 @@ export default function Line (props) {
   }, []);
 
   useEffect(() => {
-    if (overlay !== '') return overlay.setPosition([lineX, lineY]);
     if (!alwaysShow && alwaysShow !== prevAlwaysShow) {
       toggleTextActive(false);
     }
+    if (overlay !== '') return overlay.setPosition([lineX, lineY]);
   });
 
   const mouseOver = () => {
     toggleHovered(true);
+    toggleTextActive(true);
   };
 
   const mouseOut = () => {
     toggleHovered(false);
+    toggleTextActive(false);
   };
 
   const mouseOverHidden = (e) => {
     const coords = map.getCoordinateFromPixel([e.clientX, e.clientY]);
     timerRef.current = setTimeout(() => {
       setTextCoords(coords);
-      toggleTextActive(true);
     }, 300);
   };
 
   const mouseLeaveHidden = () => {
     clearTimeout(timerRef.current);
-    toggleTextActive(false);
   };
 
   const {
     strokeWidth, dashArray, color, svgStyle, width,
   } = lineStyles;
-  const useOpacity = alwaysShow || util.browser.mobileAndTabletDevice || hovered
+  const useOpacity = alwaysShow || isMobilePhone || isMobileTablet || hovered
     ? lineStyles.opacity
     : '0';
 
@@ -135,7 +136,6 @@ export default function Line (props) {
   );
 }
 
-
 Line.propTypes = {
   alwaysShow: PropTypes.bool,
   date: PropTypes.object,
@@ -149,5 +149,7 @@ Line.propTypes = {
   setTextCoords: PropTypes.func,
   textCoords: PropTypes.array,
   hideText: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
 };
 
