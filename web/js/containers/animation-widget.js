@@ -401,7 +401,7 @@ class AnimationWidget extends React.Component {
               <span>
                 Loop
               </span>
-              <LoopButton looping={looping} onLoop={this.onLoop} />
+              <LoopButton looping={looping} onLoop={this.onLoop} isMobile={isMobile} />
             </div>
 
             <div className="mobile-animation-flex-row">

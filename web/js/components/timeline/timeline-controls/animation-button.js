@@ -14,6 +14,7 @@ const AnimationButton = (props) => {
     isPortrait,
     isMobilePhone,
     isMobileTablet,
+    isMobile,
     hasSubdailyLayers,
   } = props;
 
@@ -33,12 +34,19 @@ const AnimationButton = (props) => {
       aria-label={labelText}
     >
       <div id={buttonId}>
-        <UncontrolledTooltip
-          placement="top"
-          target={buttonId}
-        >
-          {labelText}
-        </UncontrolledTooltip>
+        {!isMobile
+          ? (
+            <UncontrolledTooltip
+              placement="top"
+              target={buttonId}
+            >
+              {labelText}
+            </UncontrolledTooltip>
+          )
+          : (
+            <></>
+          )}
+
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
       </div>
     </div>
@@ -55,6 +63,7 @@ AnimationButton.propTypes = {
   isPortrait: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
+  isMobile: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
 };
 

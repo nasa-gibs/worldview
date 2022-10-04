@@ -992,9 +992,7 @@ isCompareModeActive
     : ''
 }
           />
-
           )}
-
         </div>
       </div>
     );

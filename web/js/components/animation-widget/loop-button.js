@@ -8,7 +8,7 @@ import { UncontrolledTooltip } from 'reactstrap';
  * @class LoopButton
  * @extends React.Component
  */
-const LoopButton = ({ looping, onLoop }) => {
+const LoopButton = ({ looping, onLoop, isMobile }) => {
   const labelText = looping ? 'Disable animation loop' : 'Enable animation loop';
   const buttonId = 'loop-button';
   return (
@@ -22,12 +22,17 @@ const LoopButton = ({ looping, onLoop }) => {
           }
       onClick={onLoop}
     >
-      <UncontrolledTooltip
-        placement="top"
-        target={buttonId}
-      >
-        {labelText}
-      </UncontrolledTooltip>
+      {!isMobile ? (
+        <UncontrolledTooltip
+          placement="top"
+          target={buttonId}
+        >
+          {labelText}
+        </UncontrolledTooltip>
+      )
+        : (
+          <></>
+        )}
       <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" />
     </a>
   );
@@ -36,6 +41,7 @@ const LoopButton = ({ looping, onLoop }) => {
 LoopButton.propTypes = {
   looping: PropTypes.bool,
   onLoop: PropTypes.func,
+  isMobile: PropTypes.bool,
 };
 
 export default LoopButton;
