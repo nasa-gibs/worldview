@@ -12,6 +12,7 @@ module.exports = {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
     c.url(`${c.globals.url}'?v=-82.73697802714918,27.137724977419197,-71.17181984959728,52.16591344371096&lg=false&t=2022-01-07-T15%3A27%3A49Z`);
     c.setWindowSize(748, 1024); // iPad Mini dimensions
+    c.pause(1000);
   },
 
   'Mobile animate button opens widget': (c) => {
@@ -29,7 +30,7 @@ module.exports = {
 
   'Playing the animation changes the date of the mobile date picker': (c) => {
     c.useCss().click('#collapsed-animate-widget-tablet-portrait');
-    c.pause(1000);
+    c.pause(3000);
     c.expect.element('.mobile-date-picker-select-btn-text span').text.to.equal('2022 JAN 17');
   },
 
