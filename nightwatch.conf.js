@@ -2,7 +2,7 @@ const seleniumServer = require('selenium-server-standalone-jar');
 const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
 
-const files = './e2e/features/animation';
+const files = './e2e/features';
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
