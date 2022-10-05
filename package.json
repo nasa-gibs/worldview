@@ -100,7 +100,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^106.0.1",
+    "chromedriver": "^105.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
     "css-hot-loader": "^1.4.1",
