@@ -430,7 +430,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return new OlLayerTile({
       extent: polygon ? granuleExtent : extent,
       preload: 0,
-      className: def.id,
       source: tileSource,
     });
   }
@@ -519,7 +518,6 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
-      className: def.id,
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
@@ -630,7 +628,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const layer = new OlLayerTile({
       preload: 0,
-      className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: tileSource,
