@@ -1,6 +1,6 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 
-const TIME_LIMIT = 5000;
+const TIME_LIMIT = 5001;
 
 module.exports = {
   before(c) {
