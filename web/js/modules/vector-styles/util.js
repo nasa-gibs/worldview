@@ -8,7 +8,7 @@ import {
 import {
   Stroke, Style, Fill, Circle,
 } from 'ol/style';
-import { setStyleFunction } from './selectors';
+import { getVectorLayers, setStyleFunction } from './selectors';
 import { isFromActiveCompareRegion } from '../compare/util';
 
 export function getVectorStyleAttributeArray(layer) {
@@ -317,24 +317,20 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
 }
 
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  const { config: { vectorStyles }, map: { ui: { selected } } } = state;
-  const layerGroups = selected.getLayers().getArray();
-  let olLayers = [];
-  layerGroups.forEach((group) => {
-    olLayers = [...olLayers, ...group.getLayers().getArray()];
-  });
+  const { config: { vectorStyles } } = state;
+  const vectorLayers = getVectorLayers(state);
 
   for (const [key] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    const olLayer = olLayers.find((layer) => layer.wv.id === key);
+    const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    const olLayer = olLayers.find((layer) => layer.wv.id === key);
+    const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
   }
 }
