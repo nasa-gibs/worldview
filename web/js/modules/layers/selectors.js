@@ -273,6 +273,7 @@ export const subdailyLayersActive = createSelector(
 
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
+  // console.log("before ",layers)
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
   }
@@ -304,16 +305,51 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   }
   def.opacity = lodashIsUndefined(spec.opacity) ? 1.0 : spec.opacity;
 
+  // groupIdx === number value; returns -1 when adding a new layer while GSL is off
+    // groupIdx finds the index of layers array where matches (something).. it's not relevant when GSL is off
+    // the entire first if statement is just checking if the GSL setting is on..
+  // groupOverlays === boolean value; hits in else1 as false when adding layer while GSL is off
+  // layers === array of objects that have the values of each overlay selected in the sidebar
+  // def === object; it contains the value of the layer that is being added (as it appears in the layers array)
+  // unshift adds an element to beginning of an arry and returns new length of array
+  // layers.unshift(def) is the line that puts the new layer at the beginning of the array when GSL is off
+  // need to make a utility function that loops through the layers array and finds the index of
+    // the last object that has a laygroup of "Reference"
+
+
   // Place new layer in the appropriate array position
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
+
+    const findLastRefLayer = (layers) => {
+      let lastRefIndex = 0;
+      let index = 0;
+
+      layers.forEach(layer => {
+        if(layer.layergroup === 'Reference'){
+         lastRefIndex = index;
+        }
+        index++;
+      })
+      return lastRefIndex + 1;
+    }
+
+    const lastReferenceLayerIndex = findLastRefLayer(layers)
+    console.log(lastReferenceLayerIndex)
+
+
+
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
     } else {
-      layers.unshift(def);
+
+      // layers.unshift(def);
+      layers.splice(lastReferenceLayerIndex, 0, def)
+      // console.log("after ", layers)
     }
   } else {
+    // console.log("else2 ",groupOverlays)
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
     layers.splice(overlaysLength, 0, def);
   }
