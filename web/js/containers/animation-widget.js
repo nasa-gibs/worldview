@@ -319,11 +319,19 @@ class AnimationWidget extends React.Component {
       + `${isLandscape ? 'landscape ' : ''}`;
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
-    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < 670 && hasSubdailyLayers) || (screenWidth < 575 && !hasSubdailyLayers) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
-      : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
-        : (isMobileTablet && isPortrait) || (screenWidth < breakpoints.small) ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
-          : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
-            : 'collapsed-animate-widget';
+    const getWidgetIDs = () => {
+      if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+        return `-phone-portrait${subdailyID}`;
+      } if (isMobilePhone && isLandscape) {
+        return `-phone-landscape${subdailyID}`;
+      } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
+        return `-tablet-portrait${subdailyID}`;
+      } if (isMobileTablet && isLandscape) {
+        return `-tablet-landscape${subdailyID}`;
+      }
+    };
+
+    const widgetIDs = getWidgetIDs();
 
     return !dontShow && (
       <Draggable
@@ -336,7 +344,7 @@ class AnimationWidget extends React.Component {
       >
         <div
           className={widgetClasses}
-          id={widgetIDs}
+          id={`collapsed-animate-widget${widgetIDs}`}
         >
           <div
             id="wv-animation-widget"
@@ -377,32 +385,40 @@ class AnimationWidget extends React.Component {
       breakpoints,
       isLandscape,
       isPortrait,
+      playDisabled,
     } = this.props;
     const { speed } = this.state;
-
-    const mobileID = (isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800) ? 'mobile-phone-landscape'
-      : (isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550) ? 'mobile-phone-portrait'
-        : isMobileTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
 
     const minimumDate = getISODateFormatted(minDate);
     const maximumDate = getISODateFormatted(maxDate);
     const endingDate = getISODateFormatted(endDate);
     const startingDate = getISODateFormatted(startDate);
 
+    const getMobileIDs = () => {
+      if ((isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
+        return 'mobile-phone-landscape';
+      } if ((isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
+        return 'mobile-phone-portrait';
+      } if (isMobileTablet || screenWidth <= breakpoints.small) {
+        return 'tablet';
+      }
+    };
+
+    const mobileID = getMobileIDs();
+
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
-          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+          <div className="mobile-animation-warning-message-container">
+            <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>
+          </div>
+          <FontAwesomeIcon icon="times" className="wv-minimize" onClick={this.toggleCollapse} />
         </div>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
-
-
           <div className="mobile-animation-widget-container">
-
-
 
             <div className="mobile-animation-flex-row">
               <span>
@@ -457,9 +473,7 @@ class AnimationWidget extends React.Component {
                 isMobile={isMobile}
               />
             </div>
-
           </div>
-
         </div>
       </div>
     );

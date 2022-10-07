@@ -22,16 +22,14 @@ const LoopButton = ({ looping, onLoop, isMobile }) => {
           }
       onClick={onLoop}
     >
-      {!isMobile ? (
-        <UncontrolledTooltip
-          placement="top"
-          target={buttonId}
-        >
-          {labelText}
-        </UncontrolledTooltip>
-      )
+      {isMobile ? null
         : (
-          <></>
+          <UncontrolledTooltip
+            placement="top"
+            target={buttonId}
+          >
+            {labelText}
+          </UncontrolledTooltip>
         )}
       <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" />
     </a>

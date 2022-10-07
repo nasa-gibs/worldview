@@ -5,9 +5,9 @@ const TIME_LIMIT = 10000;
 module.exports = {
   before: (c) => {
     c.url(c.globals.url + localQueryStrings.knownDate);
-    c.pause(10000);
+    c.pause(1000);
     c.setWindowSize(375, 667);
-    c.pause(10000);
+    c.pause(1000);
   },
 
   'Mobile animate button opens widget': (c) => {
