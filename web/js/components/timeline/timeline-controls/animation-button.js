@@ -39,7 +39,7 @@ const AnimationButton = (props) => {
   return (
     <div
       onClick={clickAnimationButton}
-      className={disabled ? 'wv-disabled-button button-action-group' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${className}`}
+      className={disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${className}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
