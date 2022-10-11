@@ -6,7 +6,7 @@ import {
 import { containsExtent, isEmpty } from 'ol/extent';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { CRS } from '../../modules/map/constants';
 
 const isValidExtent = (extent) => {
   if (extent.length !== 4) return false;
@@ -29,7 +29,7 @@ const Input = ({
       const newInputValue = Number(inputValue);
       const newArray = lodashClone(boundingBoxArray);
       newArray[index] = newInputValue;
-      const crsCorrectedExtent = olProj.transformExtent(newArray, 'EPSG:4326', crs);
+      const crsCorrectedExtent = olProj.transformExtent(newArray, CRS.GEOGRAPHIC, crs);
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
       && isValidExtent(newArray)

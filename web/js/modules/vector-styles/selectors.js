@@ -16,11 +16,27 @@ import {
 } from '../layers/selectors';
 
 /**
+ * Get OpenLayers layers from state that were created from WV vector
+ * layer definiteions. NOTE: This currently also will include the associate WMS
+ * breakpoint layers as well.
+ *
+ * @param {*} state
+ * @returns
+ */
+export function getVectorLayers(state) {
+  const { map: { ui: { selected } } } = state;
+  const layerGroups = selected.getLayers().getArray();
+  return layerGroups.reduce((prev, layerGroup) => {
+    const isVector = lodashGet(layerGroup, 'wv.def.type') === 'vector';
+    if (!isVector) return prev;
+    const layers = layerGroup.getLayersArray ? layerGroup.getLayersArray() : layerGroup;
+    return [...prev, ...layers];
+  }, []);
+}
+
+/**
  * Gets a single colormap (entries / legend combo)
  *
- *
- * @method get
- * @static
  * @param str {string} The ID of the layer
  * @param number {Number} The index of the colormap for this layer, default 0
  * object.

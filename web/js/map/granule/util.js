@@ -12,6 +12,7 @@ import { transform } from 'ol/proj';
 import { Polygon as OlGeomPolygon } from 'ol/geom';
 import * as OlExtent from 'ol/extent';
 import util from '../../util/util';
+import { CRS } from '../../modules/map/constants';
 
 /**
  * Shift granules to hande dateline cross.  Granules are shifted if:
@@ -25,7 +26,7 @@ import util from '../../util/util';
 export const datelineShiftGranules = (granules, currentDate, crs) => {
   const currentDayDate = new Date(currentDate).getUTCDate();
   const datelineShiftNeeded = (() => {
-    if (crs !== 'EPSG:4326') return false;
+    if (crs !== CRS.GEOGRAPHIC) return false;
     const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
     return !sameDays;
   })();
@@ -231,7 +232,7 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
  */
 export const transformGranuleData = (entry, date, crs) => {
   const line = new OlGeomLineString([]);
-  const maxDistance = crs === 'EPSG:4326' ? 270 : Number.POSITIVE_INFINITY;
+  const maxDistance = crs === CRS.GEOGRAPHIC ? 270 : Number.POSITIVE_INFINITY;
   const points = entry.polygons[0][0].split(' ');
   const dayNight = entry.day_night_flag;
   const polygonCoords = [];
@@ -261,7 +262,7 @@ export const transformGranuleData = (entry, date, crs) => {
 };
 
 export const transformGranulesForProj = (granules, crs) => granules.map((granule) => {
-  const transformedPolygon = granule.polygon.map((coords) => transform(coords, 'EPSG:4326', crs));
+  const transformedPolygon = granule.polygon.map((coords) => transform(coords, CRS.GEOGRAPHIC, crs));
   return {
     ...granule,
     polygon: transformedPolygon,

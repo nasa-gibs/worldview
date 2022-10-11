@@ -15,6 +15,7 @@ import {
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
 } from '../../modules/layers/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { CRS } from '../../modules/map/constants';
 
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
@@ -140,13 +141,13 @@ class NaturalEvents extends React.Component {
 
     // check for polygon geometries and/or perform projection coordinate transform
     let coordinates;
-    const transformCoords = (coords) => olProj.transform(coords, 'EPSG:4326', crs);
+    const transformCoords = (coords) => olProj.transform(coords, CRS.GEOGRAPHIC, crs);
 
     if (geometry.type === 'Polygon') {
       const transformedCoords = geometry.coordinates[0].map(transformCoords);
       coordinates = olExtent.boundingExtent(transformedCoords);
     } else {
-      coordinates = olProj.transform(geometry.coordinates, 'EPSG:4326', crs);
+      coordinates = olProj.transform(geometry.coordinates, CRS.GEOGRAPHIC, crs);
     }
     return fly(map, proj, coordinates, zoom, null);
   };

@@ -8,7 +8,7 @@ import { transform } from 'ol/proj';
 import LocationMarker from '../../components/location-search/location-marker';
 import safeLocalStorage from '../../util/local-storage';
 import { fly } from '../../map/util';
-import { FULL_MAP_EXTENT } from '../map/constants';
+import { FULL_MAP_EXTENT, CRS } from '../map/constants';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -24,7 +24,7 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
-    [x, y] = transform(coordinates, 'EPSG:4326', crs);
+    [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
   fly(map, proj, [x, y], zoom);
 }
@@ -37,8 +37,8 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
  */
 export function areCoordinatesWithinExtent(proj, coordinates) {
   const { maxExtent, crs } = proj.selected;
-  const extent = crs === 'EPSG:4326' ? FULL_MAP_EXTENT : maxExtent;
-  const coord = crs === 'EPSG:4326' ? coordinates : transform(coordinates, 'EPSG:4326', crs);
+  const extent = crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent;
+  const coord = crs === CRS.GEOGRAPHIC ? coordinates : transform(coordinates, CRS.GEOGRAPHIC, crs);
   return containsCoordinate(extent, coord); // expects X then Y!
 }
 
@@ -57,7 +57,7 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   // transform coordinates if not CRS EPSG:4326
   let transformedCoords = coordinates;
   if (proj !== 'geographic') {
-    transformedCoords = transform(coordinates, 'EPSG:4326', crs);
+    transformedCoords = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
 
   const pinProps = {
