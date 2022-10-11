@@ -409,10 +409,12 @@ class AnimationWidget extends React.Component {
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
-          <div className="mobile-animation-warning-message-container">
-            <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>
-          </div>
-          <FontAwesomeIcon icon="times" className="wv-minimize" onClick={this.toggleCollapse} />
+          <span className="close wv-minimize" aria-label="Close" onClick={this.toggleCollapse}>
+            x
+          </span>
+        </div>
+        <div className="mobile-animation-warning-message-container">
+          <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>
         </div>
         <div
           id="wv-animation-widget"
