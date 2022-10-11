@@ -10,10 +10,10 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
+  new MomentLocalesPlugin(),
   new MiniCssExtractPlugin({
     filename: 'wv.css',
   }),
-  new MomentLocalesPlugin(),
 ];
 
 /* Conditional Plugin Management */
@@ -22,9 +22,11 @@ if (devMode) {
     new ReactRefreshWebpackPlugin(),
   );
 }
+
 if (process.env.ANALYZE_MODE === 'true') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
+
 if (process.env.DEBUG !== undefined) {
   pluginSystem.push(
     new webpack.DefinePlugin({ DEBUG: JSON.stringify(process.env.DEBUG) }),
@@ -62,7 +64,7 @@ module.exports = {
     pathinfo: false,
     clean: true,
   },
-  devtool: devMode ? 'cheap-module-source-map' : 'source-map',
+  devtool: devMode && 'source-map',
   devServer: {
     devMiddleware: {
       writeToDisk: true,
@@ -105,17 +107,16 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
           },
-          'css-hot-loader',
           {
             loader: 'css-loader',
             options: {
+              sourceMap: true,
               importLoaders: 1,
             },
           },
           {
             loader: 'postcss-loader',
             options: {
-              sourceMap: true,
               postcssOptions: {
                 plugins: [
                   'cssnano',

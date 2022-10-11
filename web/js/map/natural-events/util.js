@@ -2,6 +2,7 @@ import OlOverlay from 'ol/Overlay';
 import * as olProj from 'ol/proj';
 import { mapUtilZoomAction } from '../util';
 import { formatDisplayDate } from '../../modules/date/util';
+import { CRS } from '../../modules/map/constants';
 
 /**
 * Create event point
@@ -34,7 +35,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   const eventID = properties.event_id;
   let { coordinates } = clusterPoint.geometry;
   if (proj.selected.id !== 'geographic') {
-    coordinates = olProj.transform(coordinates, 'EPSG:4326', proj.selected.crs);
+    coordinates = olProj.transform(coordinates, CRS.GEOGRAPHIC, proj.selected.crs);
   }
   overlayEl.className = isSelected
     ? 'track-marker-case track-marker-case-selected'
@@ -197,7 +198,7 @@ export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) 
   let { coordinates } = cluster.geometry;
   const mapView = map.getView();
   if (proj.selected.id !== 'geographic') {
-    coordinates = olProj.transform(coordinates, 'EPSG:4326', proj.selected.crs);
+    coordinates = olProj.transform(coordinates, CRS.GEOGRAPHIC, proj.selected.crs);
   }
   const sizeClass = number < 10 ? 'small' : number < 20 ? 'medium' : 'large';
 

@@ -29,6 +29,7 @@ import {
   updateBoundaries,
 } from '../modules/image-download/actions';
 import { getNormalizedCoordinate } from '../components/location-search/util';
+import { CRS } from '../modules/map/constants';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 
@@ -73,7 +74,7 @@ class ImageDownloadContainer extends Component {
     const { proj, map } = this.props;
     const coordinate = map.ui.selected.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
     const { crs } = proj.selected;
-    const [x, y] = olProj.transform(coordinate, crs, 'EPSG:4326');
+    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
     return [Number(x.toFixed(4)), Number(y.toFixed(4))];
   }
@@ -88,8 +89,8 @@ class ImageDownloadContainer extends Component {
   getBoundaries(lonLat1, lonLat2) {
     const { map, proj } = this.props;
     const { crs } = proj.selected;
-    const lonLatBottomLeft = olProj.transform(lonLat1, 'EPSG:4326', crs);
-    const lonLatTopRight = olProj.transform(lonLat2, 'EPSG:4326', crs);
+    const lonLatBottomLeft = olProj.transform(lonLat1, CRS.GEOGRAPHIC, crs);
+    const lonLatTopRight = olProj.transform(lonLat2, CRS.GEOGRAPHIC, crs);
     const {
       x, y, x2, y2,
     } = imageUtilGetPixelValuesFromCoords(lonLatBottomLeft, lonLatTopRight, map.ui.selected);
@@ -158,8 +159,8 @@ class ImageDownloadContainer extends Component {
     const {
       x, y, x2, y2,
     } = boundaries;
-    const lonLat1 = olProj.transform(bottomLeftLatLong, 'EPSG:4326', crs);
-    const lonLat2 = olProj.transform(topRightLatLong, 'EPSG:4326', crs);
+    const lonLat1 = olProj.transform(bottomLeftLatLong, CRS.GEOGRAPHIC, crs);
+    const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;

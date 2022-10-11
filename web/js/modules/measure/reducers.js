@@ -3,14 +3,17 @@ import {
   UPDATE_MEASUREMENTS,
   TOGGLE_MEASURE_ACTIVE,
 } from './constants';
+import { CRS } from '../map/constants';
 
 const defaultState = {
   isActive: false,
   unitOfMeasure: 'km',
   allMeasurements: {
-    'EPSG:3413': {},
-    'EPSG:4326': {},
-    'EPSG:3031': {},
+    ...Object.values(CRS)
+      .reduce((prev, key) => ({
+        ...prev,
+        [key]: {},
+      }), {}),
   },
 };
 
@@ -26,15 +29,18 @@ export default function measureReducer(state = defaultState, action) {
         ...state,
         isActive: action.value,
       };
-    case UPDATE_MEASUREMENTS:
+    case UPDATE_MEASUREMENTS: {
+      const newMeasurementObj = {};
+      Object.entries(action.value).forEach(([key, value]) => {
+        newMeasurementObj[key] = value;
+      });
       return {
         ...state,
         allMeasurements: {
-          'EPSG:3413': action.value['EPSG:3413'],
-          'EPSG:4326': action.value['EPSG:4326'],
-          'EPSG:3031': action.value['EPSG:3031'],
+          ...newMeasurementObj,
         },
       };
+    }
     default:
       return state;
   }

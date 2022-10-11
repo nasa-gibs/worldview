@@ -368,11 +368,12 @@ export default function mapLayerBuilder(config, cache, store) {
   function createLayerWMTS (def, options, day, state) {
     const { proj } = state;
     const {
-      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
+      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
     } = def;
     const configSource = config.sources[source];
     const { date, polygon, shifted } = options;
     const isSubdaily = period === 'subdaily';
+    const isGranule = type === 'granule';
 
     if (!source) {
       throw new Error(`${id}: Invalid source: ${source}`);
@@ -413,7 +414,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
-      transition: 300,
+      transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
@@ -429,7 +430,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return new OlLayerTile({
       extent: polygon ? granuleExtent : extent,
       preload: 0,
-      className: def.id,
       source: tileSource,
     });
   }
@@ -518,7 +518,6 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
-      className: def.id,
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
@@ -629,7 +628,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const layer = new OlLayerTile({
       preload: 0,
-      className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: tileSource,

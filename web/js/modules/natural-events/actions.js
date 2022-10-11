@@ -41,12 +41,16 @@ export function requestSources() {
       console.warn(`Using mock sources data: ${mockSources}`);
       sourcesURL = `mock/sources_data.json-${mockSources}`;
     }
-    requestAction(
-      dispatch,
-      REQUEST_SOURCES,
-      sourcesURL,
-      'application/json',
-    );
+    try {
+      requestAction(
+        dispatch,
+        REQUEST_SOURCES,
+        sourcesURL,
+        'application/json',
+      );
+    } catch (e) {
+      console.error(e);
+    }
   };
 }
 
