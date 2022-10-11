@@ -129,7 +129,9 @@ export const getGranuleFootprints = (layer) => {
 };
 
 /**
- * Get CMR query dates for building query string and child processes
+ * Get start/end dates for CMR granule query. We need a broader range
+ * for polar granules since only a few granules from each swath are
+ * visible at the poles.
  *
  * @param {object} selectedDate - date object
  * @returns {object}
@@ -140,8 +142,8 @@ export const getCMRQueryDates = (crs, selectedDate) => {
   const date = new Date(selectedDate);
   if (crs === CRS.GEOGRAPHIC || crs === CRS.WEB_MERCATOR) {
     return {
-      startQueryDate: util.dateAdd(date, 'hour', -18),
-      endQueryDate: util.dateAdd(date, 'hour', 2),
+      startQueryDate: util.dateAdd(date, 'hour', -12),
+      endQueryDate: util.dateAdd(date, 'hour', 4),
     };
   }
   // Polar projections

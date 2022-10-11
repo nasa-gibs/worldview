@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
-import { DEFAULT_NUM_GRANULES } from '../../../modules/layers/constants';
+import { DEFAULT_NUM_GRANULES, MIN_GRANULES, MAX_GRANULES } from '../../../modules/layers/constants';
 
 class GranuleCountSlider extends React.Component {
   constructor(props) {
@@ -30,8 +30,8 @@ class GranuleCountSlider extends React.Component {
       <div className="layer-granule-count-select settings-component">
         <h2 className="wv-header">Granule Count</h2>
         <Slider
-          min={1}
-          max={50}
+          min={MIN_GRANULES}
+          max={MAX_GRANULES}
           defaultValue={count}
           onChange={(val) => {
             this.setState({ value: val });
