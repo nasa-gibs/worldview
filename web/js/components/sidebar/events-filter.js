@@ -32,6 +32,7 @@ function EventFilterModalBody (props) {
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
   const [listAll, setListAll] = useState(showAll);
+  const [showAllTracks, toggleShowAllTracks] = useState(false);
 
   const parsedStartDate = selectedStartDate && new Date(moment(selectedStartDate).valueOf());
   const parsedEndDate = selectedEndDate && new Date(moment(selectedEndDate).valueOf());
@@ -147,6 +148,21 @@ function EventFilterModalBody (props) {
           </UncontrolledTooltip>
         </>
       )}
+
+      <Checkbox
+        id="show-all-tracks-filter"
+        label="Show tracks for all events"
+        onCheck={() => toggleShowAllTracks(!showAllTracks)}
+        checked={showAllTracks}
+      />
+      <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" />
+      <UncontrolledTooltip
+        placement="right"
+        target="bbox-limit-info"
+      >
+        If checked, shows tracks for all of the events listed in the sidebar. If unchecked, tracks will only
+        show for a selected event.
+      </UncontrolledTooltip>
 
       <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>
         <Button

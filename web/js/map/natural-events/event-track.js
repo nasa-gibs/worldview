@@ -27,6 +27,7 @@ class EventTrack extends React.Component {
       trackDetails: {},
     };
 
+    // debounce delays the function call by a set amount of time. in this case 50 milliseconds
     this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 50);
     this.debouncedOnPropertyChange = lodashDebounce(
       this.onPropertyChange.bind(this),
@@ -62,10 +63,12 @@ class EventTrack extends React.Component {
       this.initialize();
     }
 
+    // if an animation isn't playing and any of the props are updated, call the delayed track update
     if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedTrackUpdate();
     }
 
+    // this is only called when you click on an active event to close it without opening another one
     if (eventDeselect) {
       this.removeTrack(map);
     }
@@ -84,6 +87,10 @@ class EventTrack extends React.Component {
     map.once('postrender', () => { this.debouncedTrackUpdate(); });
   }
 
+  // uses data from redux store to find the selected event within the eventsData array
+  // eventsData is an array of objects of all the events that appear in the sidebar
+  // if there is a selected event, the update function is called and passed the selectedEvents data from within the eventsData array
+  // this method is called in the constructor
   updateCurrentTrack() {
     const { selectedEvent, eventsData } = this.props;
     const { id, date } = selectedEvent;
@@ -93,6 +100,9 @@ class EventTrack extends React.Component {
     this.update(event, date);
   }
 
+  // this function listens for events when the map is zoomed in or out or the map is rotated
+  // if there are current trackDetails then we remove the current track by calling the removeTrack funtion
+  // this function is debounced and binded in the constructor and used within the react lifecycle functions
   onPropertyChange = (e) => {
     const { map } = this.props;
     const { trackDetails } = this.state;
@@ -103,11 +113,13 @@ class EventTrack extends React.Component {
     }
   }
 
+  // this is only used in the createAndAddTrack() function within the update function
   addTrack = (map, { track, pointsAndArrows }) => {
     map.addOverlay(track);
     addPointOverlays(map, pointsAndArrows);
   }
 
+  // this function is used in several places to remove tracks
   removeTrack = function(map) {
     const { trackDetails } = this.state;
     const { track, pointsAndArrows } = trackDetails;
@@ -131,7 +143,10 @@ class EventTrack extends React.Component {
     const sameEvent = event && trackDetails.id === event.id;
     const sameDate = trackDetails.selectedDate === date;
 
+    // this method is used within the if else statement below to create and add new tracks for the selected event
+    // $$$ Will likely need to figure out how to use this function to map over all of the events data and create tracks $$$
     const createAndAddTrack = () => {
+      // we pass this method a bunch of parameters including the selected event and it returns the track and points that we set in the newTrackDetails object below
       const {
         track,
         pointsAndArrows,
