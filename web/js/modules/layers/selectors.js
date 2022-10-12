@@ -273,7 +273,6 @@ export const subdailyLayersActive = createSelector(
 
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
-  // console.log("before ",layers)
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
   }
