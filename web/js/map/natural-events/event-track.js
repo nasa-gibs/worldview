@@ -25,6 +25,7 @@ class EventTrack extends React.Component {
 
     this.state = {
       trackDetails: {},
+      allTrackDetails: {},
     };
 
     // debounce delays the function call by a set amount of time. in this case 50 milliseconds
@@ -63,19 +64,23 @@ class EventTrack extends React.Component {
       this.initialize();
     }
 
+    if (showAllTracks && !isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      this.updateAllTracks();
+    }
+
     // if an animation isn't playing and any of the props are updated, call the delayed track update
     if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedTrackUpdate();
     }
+
+
 
     // this is only called when you click on an active event to close it without opening another one
     if (eventDeselect) {
       this.removeTrack(map);
     }
 
-    if (showAllTracks) {
-      this.updateAllTracks();
-    }
+
   }
 
   componentWillUnmount() {
@@ -108,9 +113,13 @@ class EventTrack extends React.Component {
   // this function listens for events when the map is zoomed in or out or the map is rotated
   // if there are current trackDetails then we remove the current track by calling the removeTrack funtion
   // this function is debounced and binded in the constructor and used within the react lifecycle functions
+  // need to make one of these for when showAllTrack === true
   onPropertyChange = (e) => {
-    const { map } = this.props;
+    const { map, showAllTracks } = this.props;
     const { trackDetails } = this.state;
+    if (showAllTracks && (e.key === 'resolution' || e.key === 'rotation')){
+      this.removeAllTracks(map)
+    }
     if (!trackDetails.id) return;
     if (e.key === 'resolution' || e.key === 'rotation') {
       const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
@@ -133,12 +142,26 @@ class EventTrack extends React.Component {
     return {};
   };
 
+  removeAllTracks = (map) => {
+    const { allTrackDetails } = this.state;
+    allTrackDetails.map((trackDetail) => {
+     let pointAndArrows = trackDetail.newTrackDetails.pointsAndArrows;
+     let track = trackDetail.newTrackDetails.track;
+     console.log('pointsAndArrows ',pointAndArrows);
+     console.log('track', track);
+     map.removeOverlay(track);
+     removePointOverlays(map, pointAndArrows)
+    })
+  }
+
   // we have to loop through the eventsData and do something similar to what is happening when updateCurrentTrack() calls this.update(event, date)
   updateAllTracks = () => {
     const {
       proj, map, eventsData,
     } = this.props;
+    const { allTrackDetails } = this.state;
     let newTrackDetails;
+    let allTracksArray = [];
 
     const createAndAddTrack = (singleEvent, eventID, eventDate) => {
       const {
@@ -153,6 +176,7 @@ class EventTrack extends React.Component {
         pointsAndArrows,
         hidden: false,
       };
+      allTracksArray.push({ newTrackDetails })
       this.addTrack(map, newTrackDetails);
     };
 
@@ -163,6 +187,11 @@ class EventTrack extends React.Component {
       const eventDate = singleEvent.geometry[0].date.slice(0, 10);
       return createAndAddTrack(singleEvent, eventID, eventDate);
     });
+
+    this.setState({ allTrackDetails: allTracksArray });
+
+    console.log("allTracksArray", allTracksArray)
+    console.log("allTrackDetails", allTrackDetails)
   }
 
 
