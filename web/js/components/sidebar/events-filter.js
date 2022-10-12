@@ -54,7 +54,7 @@ function EventFilterModalBody (props) {
     const start = startDate && util.toISOStringDate(startDate);
     const end = endDate && util.toISOStringDate(endDate);
     closeModal();
-    setFilter(categories, start, end, listAll);
+    setFilter(categories, start, end, listAll, showAllTracks);
     if (showAll !== listAll) {
       const event = listAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
       googleTagManager.pushEvent({ event });
@@ -222,13 +222,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setFilter: (categories, startDate, endDate, showAll) => {
+  setFilter: (categories, startDate, endDate, showAll, showAllTracks) => {
     dispatch(
       setEventsFilterAction(
         categories,
         startDate,
         endDate,
         showAll,
+        showAllTracks,
       ),
     );
   },
