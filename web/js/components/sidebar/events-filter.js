@@ -197,6 +197,7 @@ EventFilterModalBody.propTypes = {
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
   showAll: PropTypes.bool,
+  showAllTracks: PropTypes.bool,
   isMobile: PropTypes.bool,
 };
 

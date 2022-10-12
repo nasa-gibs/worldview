@@ -74,7 +74,7 @@ class EventTrack extends React.Component {
     }
 
     if (showAllTracks) {
-      console.log("showAllTracks is true from component did update")
+      this.updateAllTracks();
     }
   }
 
@@ -132,6 +132,40 @@ class EventTrack extends React.Component {
     removePointOverlays(map, pointsAndArrows);
     return {};
   };
+
+  // we have to loop through the eventsData and do something similar to what is happening when updateCurrentTrack() calls this.update(event, date)
+  updateAllTracks = () => {
+    const {
+      proj, map, eventsData,
+    } = this.props;
+    let newTrackDetails;
+
+    const createAndAddTrack = (singleEvent, eventID, eventDate) => {
+      const {
+        track,
+        pointsAndArrows,
+      } = getTracksAndPoints(singleEvent, proj, map, eventDate);
+
+      newTrackDetails = {
+        id: eventID,
+        selectedDate: eventDate,
+        track,
+        pointsAndArrows,
+        hidden: false,
+      };
+      this.addTrack(map, newTrackDetails);
+    };
+
+    console.log('eventsData', eventsData);
+
+    eventsData.map((singleEvent) => {
+      const eventID = singleEvent.id;
+      const eventDate = singleEvent.geometry[0].date.slice(0, 10);
+      return createAndAddTrack(singleEvent, eventID, eventDate);
+    });
+  }
+
+
 
   /**
    * Update track
