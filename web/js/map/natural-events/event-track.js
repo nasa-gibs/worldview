@@ -42,7 +42,7 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
+      isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracks,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
@@ -72,6 +72,10 @@ class EventTrack extends React.Component {
     if (eventDeselect) {
       this.removeTrack(map);
     }
+
+    if (showAllTracks) {
+      console.log("showAllTracks is true from component did update")
+    }
   }
 
   componentWillUnmount() {
@@ -89,8 +93,9 @@ class EventTrack extends React.Component {
 
   // uses data from redux store to find the selected event within the eventsData array
   // eventsData is an array of objects of all the events that appear in the sidebar
-  // if there is a selected event, the update function is called and passed the selectedEvents data from within the eventsData array
-  // this method is called in the constructor
+  // if there is a selected event, the update function is called and finds the index associated with the id of the selectedEvent in the eventsData array
+  // this method is called in the constructor and debounced as debouncedTrackUpdate
+  // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
   updateCurrentTrack() {
     const { selectedEvent, eventsData } = this.props;
     const { id, date } = selectedEvent;
@@ -294,6 +299,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
+    showAllTracks: events.showAllTracks,
   };
 };
 
@@ -313,6 +319,7 @@ EventTrack.propTypes = {
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
   selectedDate: PropTypes.object,
+  showAllTracks: PropTypes.bool,
 };
 
 export default connect(
