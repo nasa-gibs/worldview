@@ -3,7 +3,7 @@ import { throttle as lodashThrottle, find } from 'lodash';
 import OlCollection from 'ol/Collection';
 import { DEFAULT_NUM_GRANULES } from '../../modules/layers/constants';
 import { updateGranuleLayerState } from '../../modules/layers/actions';
-import { getGranuleLayer, getStartingLayers } from '../../modules/layers/selectors';
+import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
   stopLoading,
