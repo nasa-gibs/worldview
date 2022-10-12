@@ -106,7 +106,7 @@ describe('Layer actions', () => {
       type: LAYER_CONSTANTS.TOGGLE_OVERLAY_GROUPS,
       activeString: 'active',
       groupOverlays: false,
-      layers: [layers[1], layers[2], layers[0], layers[3] ],
+      layers: [layers[1], layers[2], layers[0], layers[3]],
       overlayGroups: [],
     };
     expect(actionResponse).toEqual(expectedPayload);
@@ -117,7 +117,6 @@ describe('Layer actions', () => {
     store = mockStore(getState(layers));
     store.dispatch(updateDatesOnProjChange('arctic'));
     const actionResponse = store.getActions()[0];
-    console.log(actionResponse)
     const { startDate, endDate, dateRanges: [firstRange, secondRange] } = actionResponse.layersA[1];
 
     expect(startDate).toEqual('2019-07-21T00:36:00Z');
