@@ -82,7 +82,7 @@ async def main(url):
     print('%s: Pulling vis metadata for %s layers... ' % (prog, len(filtered_ids)))
 
   limits = httpx.Limits(max_keepalive_connections=10, max_connections=10)
-  async with httpx.AsyncClient(limits=limits) as client:
+  async with httpx.AsyncClient(limits=limits, timeout=10.0) as client:
     await asyncio.gather(*[get_metadata(client, layer_id, url) for layer_id in filtered_ids])
     await asyncio.gather(*[get_metadata(client, layer_id, url) for layer_id in failed_requests])
 
