@@ -69,16 +69,21 @@ class EventTrack extends React.Component {
       this.initialize();
     }
 
+    // remove all tracks when deselecting option
+    if (!showAllTracks && prevShowAllTracks !== showAllTracks) {
+      this.removeAllTracks(map);
+    }
+
+    // show all tracks when selecting option
     if (showAllTracks && !isPlaying && (prevShowAllTracks !== showAllTracks || selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedUpdateAllTracks();
     }
 
-    // if an animation isn't playing and any of the props are updated, call the delayed track update
-    if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+    // show only selected track if show all tracks is not selected
+    if (!isPlaying && !showAllTracks && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedTrackUpdate();
     }
 
-    // this is only called when you click on an active event to close it without opening another one
     if (eventDeselect) {
       this.removeTrack(map);
     }
@@ -107,8 +112,8 @@ class EventTrack extends React.Component {
     this.update(event, date);
   }
 
-  // this function listens for events when the map is zoomed in or out or the map is rotated
-  // this function is debounced and binded in the constructor and used within the react lifecycle functions
+  // $$ this function listens for events when the map is zoomed in or out or the map is rotated
+  // $$ this function is debounced and binded in the constructor and used within the react lifecycle functions
   onPropertyChange = (e) => {
     const { map, showAllTracks } = this.props;
     const { trackDetails } = this.state;
@@ -122,13 +127,12 @@ class EventTrack extends React.Component {
     }
   }
 
-  // this is only used in the createAndAddTrack() function within the update function
+  // $$ this is only used in the createAndAddTrack() function within the update function
   addTrack = (map, { track, pointsAndArrows }) => {
     map.addOverlay(track);
     addPointOverlays(map, pointsAndArrows);
   }
 
-  // this function is used in several places to remove tracks
   removeTrack = function(map) {
     const { trackDetails } = this.state;
     const { track, pointsAndArrows } = trackDetails;
@@ -139,16 +143,14 @@ class EventTrack extends React.Component {
 
   removeAllTracks = (map) => {
     const { allTrackDetails } = this.state;
-    // console.log('allTrackDetails from removeAllTracks ', allTrackDetails);
     allTrackDetails.forEach((trackDetail) => {
-      const pointAndArrows = trackDetail.newTrackDetails.pointsAndArrows;
+      const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
       map.removeOverlay(track);
-      removePointOverlays(map, pointAndArrows);
+      removePointOverlays(map, pointsAndArrows);
     });
   }
 
-  // we have to loop through the eventsData and do something similar to what is happening when updateCurrentTrack() calls this.update(event, date)
   updateAllTracks = () => {
     const {
       proj, map, eventsData,
@@ -187,9 +189,6 @@ class EventTrack extends React.Component {
     });
 
     this.setState({ allTrackDetails: allTracksArray });
-
-    // console.log('eventsData', eventsData);
-    // console.log('allTrackDetails', allTrackDetails);
   }
 
   /**
@@ -207,10 +206,7 @@ class EventTrack extends React.Component {
     const sameEvent = event && trackDetails.id === event.id;
     const sameDate = trackDetails.selectedDate === date;
 
-    // this method is used within the if else statement below to create and add new tracks for the selected event
-    // $$$ Will likely need to figure out how to use this function to map over all of the events data and create tracks $$$
     const createAndAddTrack = () => {
-      // we pass this method a bunch of parameters including the selected event and it returns the track and points that we set in the newTrackDetails object below
       const {
         track,
         pointsAndArrows,
