@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -18,6 +18,10 @@ import {
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
+import {
+  addLayer as addLayerAction,
+  removeLayer as removeLayerAction,
+} from '../../modules/layers/actions';
 import util from '../../util/util';
 import { formatDisplayDate } from '../../modules/date/util';
 
@@ -40,6 +44,8 @@ function Events(props) {
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
+    addLayer,
+    removeLayer,
   } = props;
 
   const filterControlHeight = 115;
@@ -55,6 +61,13 @@ function Events(props) {
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
 
+  // add blue marble layer when component mounts and remove layer when component unmounts
+  useEffect(() => {
+    addLayer('BlueMarble_NextGeneration');
+    return () => {
+      removeLayer('BlueMarble_NextGeneration');
+    };
+  }, []);
 
   const renderFilterControls = () => (
     <div className="filter-controls">
@@ -150,6 +163,12 @@ const mapDispatchToProps = (dispatch) => ({
       timeout: 150,
     }));
   },
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeLayer: (id) => {
+    dispatch(removeLayerAction(id));
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -185,6 +204,7 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
+  addLayer: PropTypes.func,
   deselectEvent: PropTypes.func,
   eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
@@ -193,6 +213,7 @@ Events.propTypes = {
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   openFilterModal: PropTypes.func,
+  removeLayer: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   showDates: PropTypes.bool,
