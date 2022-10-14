@@ -157,7 +157,7 @@ class EventTrack extends React.Component {
 
   updateAllTracks = () => {
     const {
-      proj, map, eventsData,
+      proj, map, eventsData, selectEvent,
     } = this.props;
     const { allTrackDetails } = this.state;
     let newTrackDetails;
@@ -167,7 +167,7 @@ class EventTrack extends React.Component {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, map, eventDate);
+      } = getTracksAndPoints(singleEvent, proj, map, eventDate, selectEvent);
 
       newTrackDetails = {
         id: eventID,
