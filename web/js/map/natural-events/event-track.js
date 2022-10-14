@@ -93,6 +93,7 @@ class EventTrack extends React.Component {
     const { map } = this.props;
     this.update(null);
     map.getView().un('propertychange', this.debouncedOnPropertyChange);
+    this.removeAllTracks(map);
   }
 
   initialize() {
@@ -100,6 +101,7 @@ class EventTrack extends React.Component {
     if (!map) return;
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
     map.once('postrender', () => { this.debouncedTrackUpdate(); });
+    map.once('postrender', () => { this.debouncedUpdateAllTracks(); });
   }
 
   // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
@@ -116,7 +118,9 @@ class EventTrack extends React.Component {
   // $$ this function is debounced and binded in the constructor and used within the react lifecycle functions
   onPropertyChange = (e) => {
     const { map, showAllTracks } = this.props;
-    const { trackDetails } = this.state;
+    const { trackDetails, allTrackDetails } = this.state;
+
+    if (showAllTracks && !allTrackDetails.length) return;
     if (showAllTracks && (e.key === 'resolution' || e.key === 'rotation')) {
       this.removeAllTracks(map);
     }
