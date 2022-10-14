@@ -9,8 +9,8 @@ import { crossesDateLine, getOverDateLineCoordinates } from '../util';
  *
  * @return {void}
  */
-export const naturalEventsClusterCreateObject = () => new Supercluster({
-  radius: 60, // pixel radius where points are clustered
+export const naturalEventsClusterCreateObject = (showAllTracks) => new Supercluster({
+  radius: showAllTracks ? 0 : 60, // pixel radius where points are clustered
   maxZoom: 12,
   map: (props) => ({ startDate: props.date, endDate: props.date }),
   reduce: (accumulated, properties) => {
@@ -31,11 +31,8 @@ export const naturalEventsClusterCreateObject = () => new Supercluster({
     }
   },
   setPolar: () => ({ radius: 30, maxZoom: 7 }),
-  setGeo: () => ({ radius: 60, maxZoom: 12 }),
+  setGeo: () => ({ radius: 0, maxZoom: 12 }),
 });
-
-const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
-const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
 /**
  * Create a geoJSON point out of a point
@@ -82,7 +79,7 @@ export const getClusterPoints = (superClusterObj, pointArray, zoomLevel, extent)
   return superClusterObj.getClusters(extent, lodashRound(zoomLevel));
 };
 
-export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
+export const getClusters = ({ geometry, id }, proj, selectedDate, map, showAllTracks) => {
   const geoJSONPointsBeforeSelected = [];
   const geoJSONPointsAfterSelected = [];
   let selectedPoint;
@@ -104,6 +101,7 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
       // replace coordinates
       coordinates = getOverDateLineCoordinates(coordinates);
     }
+
     // Cluster in three groups
     if (isSelected) {
       selectedPoint = clusterPointToGeoJSON(
@@ -123,6 +121,9 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
       );
     }
   });
+
+  const firstClusterObj = naturalEventsClusterCreateObject(showAllTracks); // Cluster before selected event
+  const secondClusterObj = naturalEventsClusterCreateObject(showAllTracks); // Cluster after selected event
 
   // set radius and maxZoom of superCluster object for polar vs geographic projections
   if (proj.selected.id !== 'geographic') {

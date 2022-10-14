@@ -157,7 +157,7 @@ class EventTrack extends React.Component {
 
   updateAllTracks = () => {
     const {
-      proj, map, eventsData, selectEvent,
+      proj, map, eventsData, selectEvent, showAllTracks,
     } = this.props;
     const { allTrackDetails } = this.state;
     let newTrackDetails;
@@ -167,7 +167,7 @@ class EventTrack extends React.Component {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, map, eventDate, selectEvent);
+      } = getTracksAndPoints(singleEvent, proj, map, eventDate, selectEvent, showAllTracks);
 
       newTrackDetails = {
         id: eventID,
@@ -299,10 +299,10 @@ const updateSelection = function(newDate) {
  * @param {Function} callback
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback) {
+const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback, showAllTracks) {
   const pointsAndArrows = [];
   const trackSegments = [];
-  const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map);
+  const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
 
   clusters.forEach((clusterPoint, index) => {
     const date = clusterPoint.properties.date || clusterPoint.properties.startDate;
