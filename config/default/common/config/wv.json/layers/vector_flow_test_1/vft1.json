@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "Vector_Flow_Test_1": {
+      "id": "Vector_Flow_Test_1",
+      "description": "Vector Flow Test 1 description",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Wind Speed",
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}
