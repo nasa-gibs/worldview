@@ -16,6 +16,13 @@ export const LEFT_WING_ORIGIN = [-540, 90];
 export const RIGHT_WING_ORIGIN = [180, 90];
 export const CENTER_MAP_ORIGIN = [-180, 90];
 
+export const CRS = {
+  ARCTIC: 'EPSG:3413',
+  ANTARCTIC: 'EPSG:3031',
+  GEOGRAPHIC: 'EPSG:4326',
+  WEB_MERCATOR: 'EPSG:3857',
+};
+
 export const RESOLUTION_FOR_LARGE_WMS_TILES = [
   0.3515625,
   0.17578125,

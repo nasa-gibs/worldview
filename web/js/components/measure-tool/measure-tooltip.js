@@ -13,8 +13,9 @@ import {
   getGeographicLibDistance,
   getGeographicLibArea,
 } from './util';
+import { CRS } from '../../modules/map/constants';
 
-const geographicProj = 'EPSG:4326';
+
 const metersPerKilometer = 1000;
 const ftPerMile = 5280;
 const sqFtPerSqMile = 27878400;
@@ -58,7 +59,7 @@ export default function MeasureTooltip(props) {
    * @return {String} - The formatted distance measurement
    */
   const getFormattedLength = () => {
-    const transformedLine = geometry.clone().transform(crs, geographicProj);
+    const transformedLine = geometry.clone().transform(crs, CRS.GEOGRAPHIC);
     const metricLength = getGeographicLibDistance(transformedLine);
     if (unitOfMeasure === 'km') {
       return metricLength > 100
@@ -77,7 +78,7 @@ export default function MeasureTooltip(props) {
    * @return {String} - The formatted area measurement
    */
   const getFormattedArea = () => {
-    const transformedPoly = geometry.clone().transform(crs, geographicProj);
+    const transformedPoly = geometry.clone().transform(crs, CRS.GEOGRAPHIC);
     const metricArea = getGeographicLibArea(transformedPoly);
     if (unitOfMeasure === 'km') {
       return metricArea > 10000
@@ -112,12 +113,12 @@ export default function MeasureTooltip(props) {
     // Distance & Area measurement coordinates are stored differently, so identify based on geometry type
     const yCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
     const xCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
-    const tCoord = transform([xCoord, yCoord], crs, 'EPSG:4326');
+    const tCoord = transform([xCoord, yCoord], crs, CRS.GEOGRAPHIC);
     return areCoordinatesWithinExtent(proj, tCoord);
   };
 
   const tooltipValue = getMeasurementValue();
-  const coordinatesAreValid = crs === 'EPSG:4326' ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
+  const coordinatesAreValid = crs === CRS.GEOGRAPHIC ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
 
   if (coordinatesAreValid) {
     return (

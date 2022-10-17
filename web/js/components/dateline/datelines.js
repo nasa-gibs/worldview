@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import Line from './line';
 import util from '../../util/util';
 import { getSelectedDate } from '../../modules/date/selectors';
+import { CRS } from '../../modules/map/constants';
 
 function DateLines(props) {
   const {
-    map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText,
+    map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
   if (!mapIsRendered) return null;
@@ -53,7 +54,7 @@ function DateLines(props) {
   };
 
   useEffect(() => {
-    if (!proj.selected.crs === 'EPSG:4326') {
+    if (!proj.selected.crs === CRS.GEOGRAPHIC) {
       setHideLines(true);
     }
   }, [proj]);
@@ -88,6 +89,8 @@ function DateLines(props) {
         date={date}
         textCoords={textCoords}
         setTextCoords={setTextCoords}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
       />
       <Line
         id="dateline-right"
@@ -101,6 +104,8 @@ function DateLines(props) {
         date={util.dateAdd(date, 'day', -1)}
         textCoords={textCoords}
         setTextCoords={setTextCoords}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
       />
     </>
   );
@@ -111,7 +116,8 @@ const mapStateToProps = (state) => {
     proj, map, compare, settings, modal,
   } = state;
   const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
-  const isGeographic = proj.selected.crs === 'EPSG:4326';
+  const isGeographic = proj.selected.crs === CRS.GEOGRAPHIC;
+  const { isMobilePhone, isMobileTablet } = state.screenSize;
   return {
     proj,
     map: map.ui.selected,
@@ -120,6 +126,8 @@ const mapStateToProps = (state) => {
     mapIsRendered: map.rendered,
     hideText: isImageDownload || !isGeographic,
     alwaysShow: isImageDownload || settings.alwaysShowDatelines,
+    isMobilePhone,
+    isMobileTablet,
   };
 };
 
@@ -131,6 +139,8 @@ DateLines.propTypes = {
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,
   hideText: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
 };
 
 export default connect(

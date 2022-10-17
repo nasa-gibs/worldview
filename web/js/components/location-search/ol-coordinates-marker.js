@@ -11,6 +11,7 @@ import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import { reverseGeocode } from '../../modules/location-search/util-api';
 import util from '../../util/util';
 import { MAP_SINGLE_CLICK, MAP_CONTEXT_MENU, CONTEXT_MENU_LOCATION } from '../../util/constants';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -62,7 +63,7 @@ export class CoordinatesMarker extends Component {
     // handle reverse geocoding mouse click
     const pixels = e.pixel;
     const coord = map.getCoordinateFromPixel(pixels);
-    const tCoord = transform(coord, crs, 'EPSG:4326');
+    const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
     const [lon, lat] = getNormalizedCoordinate(tCoord);
 
     if (!areCoordinatesWithinExtent(proj, [lon, lat])) {

@@ -308,10 +308,26 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
+
+    const findLastRefLayer = (layers) => {
+      let lastRefIndex = 0;
+      let index = 0;
+
+      layers.forEach((layer) => {
+        if (layer.layergroup === 'Reference') {
+          lastRefIndex = index;
+        }
+        index += 1;
+      });
+      return lastRefIndex + 1;
+    };
+
+    const lastReferenceLayerIndex = findLastRefLayer(layers);
+
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
     } else {
-      layers.unshift(def);
+      layers.splice(lastReferenceLayerIndex, 0, def);
     }
   } else {
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;

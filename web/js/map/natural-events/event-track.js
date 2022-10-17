@@ -13,7 +13,7 @@ import {
 } from './cluster';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
-
+import { CRS } from '../../modules/map/constants';
 
 import {
   getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
@@ -237,8 +237,8 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback)
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
         const { crs } = proj.selected;
-        prevCoordinates = olProj.transform(prevCoordinates, 'EPSG:4326', crs);
-        nextCoordinates = olProj.transform(nextCoordinates, 'EPSG:4326', crs);
+        prevCoordinates = olProj.transform(prevCoordinates, CRS.GEOGRAPHIC, crs);
+        nextCoordinates = olProj.transform(nextCoordinates, CRS.GEOGRAPHIC, crs);
       }
       const lineSegmentArray = [prevCoordinates, nextCoordinates];
       const arrowOverlay = getArrows(lineSegmentArray, map);

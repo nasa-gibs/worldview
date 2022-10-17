@@ -16,7 +16,7 @@ module.exports = {
   },
 
   'List layers in draw order': function(c) {
-    bookmark(c, startParams.concat(['l=MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,MODIS_Terra_Aerosol']));
+    bookmark(c, startParams.concat(['l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Features_15m']));
     openImageDownloadPanel(c);
     clickDownload(c);
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
@@ -28,7 +28,7 @@ module.exports = {
     openImageDownloadPanel(c);
     clickDownload(c);
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
-      .and.to.contain('LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,MODIS_Terra_Aerosol');
+      .and.to.contain('LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Features_15m');
   },
 
   'Do not include obscured layers': function(c) {
