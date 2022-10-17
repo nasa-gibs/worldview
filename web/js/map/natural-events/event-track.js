@@ -147,12 +147,19 @@ class EventTrack extends React.Component {
 
   removeAllTracks = (map) => {
     const { allTrackDetails } = this.state;
+    const { selectedEvent, showAllTracks } = this.props;
     allTrackDetails.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
       map.removeOverlay(track);
       removePointOverlays(map, pointsAndArrows);
     });
+    // keep current selected track on if user unselected show all tracks with a selected track on
+    if (selectedEvent && !showAllTracks) {
+      this.debouncedTrackUpdate();
+    } else {
+      this.removeTrack(map);
+    }
   }
 
   updateAllTracks = () => {
@@ -359,6 +366,7 @@ const mapStateToProps = (state) => {
     selectedDate: date.selected,
     selectedEvent: events.selected,
     showAllTracks: events.showAllTracks,
+    isActive: events.active,
   };
 };
 
