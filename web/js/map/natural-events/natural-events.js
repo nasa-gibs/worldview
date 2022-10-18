@@ -13,6 +13,7 @@ import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
 import {
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
+  toggleVisibility as toggleVisibilityAction,
 } from '../../modules/layers/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
@@ -51,6 +52,14 @@ class NaturalEvents extends React.Component {
     this.selectEvent = this.selectEvent.bind(this);
   }
 
+  componentDidMount() {
+    const { eventLayers, toggleVisibility } = this.props;
+    if (eventLayers.length) {
+      toggleVisibility(eventLayers[0], true);
+      toggleVisibility('BlueMarble_NextGeneration', false);
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const {
       map,
@@ -75,6 +84,13 @@ class NaturalEvents extends React.Component {
         this.deselectEvent();
       }
     }
+  }
+
+  componentWillUnmount() {
+    const { eventLayers, toggleVisibility } = this.props;
+    eventLayers.forEach((layer) => {
+      toggleVisibility(layer, false);
+    });
   }
 
   zoomIfVisible({ id, date }) {
@@ -164,7 +180,7 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, requestedEvents,
+    map, proj, requestedEvents, layers,
   } = state;
   const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
@@ -175,6 +191,7 @@ const mapStateToProps = (state) => {
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: getFilteredEvents(state),
     selectedEvent: selected,
+    eventLayers: layers.eventLayers,
   };
 };
 
@@ -188,17 +205,22 @@ const mapDispatchToProps = (dispatch) => ({
   selectEventFinished: () => {
     dispatch(selectedAction());
   },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleVisibilityAction(layerIds, visible));
+  },
 });
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  eventLayers: PropTypes.array,
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
+  toggleVisibility: PropTypes.func,
 };
 
 export default connect(

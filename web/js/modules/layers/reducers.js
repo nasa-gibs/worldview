@@ -14,6 +14,7 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  SET_EVENT_LAYERS_ADDED,
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_OPTIONS,
   UPDATE_GRANULE_LAYER_GEOMETRY,
@@ -55,6 +56,7 @@ export const initialState = {
   layerConfig: {},
   startingLayers: [],
   granuleFootprints: {},
+  eventLayers: [],
 };
 
 export function getInitialState(config) {
@@ -138,6 +140,14 @@ export function layerReducer(state = initialState, action) {
           prevLayers: { $set: [] },
         },
       });
+
+    case SET_EVENT_LAYERS_ADDED: {
+      const { eventLayers } = action;
+      return {
+        ...state,
+        eventLayers,
+      };
+    }
 
     case TOGGLE_OVERLAY_GROUPS:
       return update(state, {

@@ -84,24 +84,29 @@ class EventTrack extends React.Component {
       this.debouncedTrackUpdate();
     }
 
-    if (eventDeselect) {
+    // only remove track when deselected if showAllTracks is false
+    if (eventDeselect && !showAllTracks) {
       this.removeTrack(map);
     }
   }
 
   componentWillUnmount() {
-    const { map } = this.props;
+    const { map, showAllTracks } = this.props;
     this.update(null);
     map.getView().un('propertychange', this.debouncedOnPropertyChange);
-    this.removeAllTracks(map);
+    if (showAllTracks) {
+      this.removeAllTracks(map);
+    }
   }
 
   initialize() {
-    const { map } = this.props;
+    const { map, showAllTracks } = this.props;
     if (!map) return;
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
     map.once('postrender', () => { this.debouncedTrackUpdate(); });
-    map.once('postrender', () => { this.debouncedUpdateAllTracks(); });
+    if (showAllTracks) {
+      map.once('postrender', () => { this.debouncedUpdateAllTracks(); });
+    }
   }
 
   // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
@@ -147,26 +152,19 @@ class EventTrack extends React.Component {
 
   removeAllTracks = (map) => {
     const { allTrackDetails } = this.state;
-    const { selectedEvent, showAllTracks } = this.props;
     allTrackDetails.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
       map.removeOverlay(track);
       removePointOverlays(map, pointsAndArrows);
     });
-    // keep current selected track on if user unselected show all tracks with a selected track on
-    if (selectedEvent && !showAllTracks) {
-      this.debouncedTrackUpdate();
-    } else {
-      this.removeTrack(map);
-    }
   }
 
   updateAllTracks = () => {
     const {
       proj, map, eventsData, selectEvent, showAllTracks,
     } = this.props;
-    const { allTrackDetails } = this.state;
+    const { allTrackDetails, trackDetails } = this.state;
     let newTrackDetails;
     const allTracksArray = [];
 
@@ -194,7 +192,7 @@ class EventTrack extends React.Component {
     eventsData.forEach((singleEvent) => {
       const eventID = singleEvent.id;
       const eventDate = singleEvent.geometry[0].date.slice(0, 10);
-      if (singleEvent.geometry.length > 1) {
+      if (singleEvent.geometry.length > 1 && eventID !== trackDetails.id) {
         createAndAddTrack(singleEvent, eventID, eventDate);
       }
     });

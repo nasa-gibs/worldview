@@ -21,6 +21,7 @@ import { toggleCustomContent } from '../../modules/modal/actions';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
+  toggleVisibility as toggleVisibilityAction,
 } from '../../modules/layers/actions';
 import util from '../../util/util';
 import { formatDisplayDate } from '../../modules/date/util';
@@ -38,6 +39,7 @@ function Events(props) {
     hasRequestError,
     isMobile,
     isEmbedModeActive,
+    layers,
     showAlert,
     selectedDate,
     showDates,
@@ -46,6 +48,8 @@ function Events(props) {
     selectedCategories,
     addLayer,
     removeLayer,
+    eventLayers,
+    toggleVisibility,
   } = props;
 
   const filterControlHeight = 115;
@@ -63,9 +67,22 @@ function Events(props) {
 
   // add blue marble layer when component mounts and remove layer when component unmounts
   useEffect(() => {
-    addLayer('BlueMarble_NextGeneration');
+    let blueMarble = false;
+    layers.forEach((layer) => {
+      if (layer.id === 'BlueMarble_NextGeneration') {
+        blueMarble = true;
+      }
+    });
+    if (blueMarble === false) {
+      addLayer('BlueMarble_NextGeneration');
+    } else if (blueMarble === true && selected.date === null) {
+      toggleVisibility('BlueMarble_NextGeneration', true);
+    }
     return () => {
-      removeLayer('BlueMarble_NextGeneration');
+      toggleVisibility('BlueMarble_NextGeneration', false);
+      eventLayers.forEach((layer) => {
+        toggleVisibility(layer, false);
+      });
     };
   }, []);
 
@@ -111,6 +128,9 @@ function Events(props) {
               event={event}
               selectEvent={(id, date) => selectEvent(id, date, isMobile)}
               deselectEvent={deselectEvent}
+              removeLayer={removeLayer}
+              eventLayers={eventLayers}
+              toggleVisibility={toggleVisibility}
               isSelected={selected.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
@@ -169,6 +189,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeLayer: (id) => {
     dispatch(removeLayerAction(id));
   },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleVisibilityAction(layerIds, visible));
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -177,6 +200,7 @@ const mapStateToProps = (state) => {
     embed,
     events,
     screenSize,
+    layers,
   } = state;
 
   const {
@@ -185,10 +209,12 @@ const mapStateToProps = (state) => {
   const { isEmbedModeActive } = embed;
 
   return {
+    eventLayers: layers.eventLayers,
     isPlaying: animation.isPlaying,
     isMobile: screenSize.isMobileDevice,
     isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
+    layers: layers.active.layers,
     showAll,
     showDates: !!(selectedDates.start && selectedDates.end),
     selected,
@@ -206,12 +232,14 @@ export default connect(
 Events.propTypes = {
   addLayer: PropTypes.func,
   deselectEvent: PropTypes.func,
+  eventLayers: PropTypes.array,
   eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  layers: PropTypes.array,
   openFilterModal: PropTypes.func,
   removeLayer: PropTypes.func,
   selected: PropTypes.object,
@@ -223,4 +251,5 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
+  toggleVisibility: PropTypes.func,
 };

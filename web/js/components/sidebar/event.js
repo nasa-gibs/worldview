@@ -17,6 +17,8 @@ function Event (props) {
     selectedDate,
     selectEvent,
     sources,
+    eventLayers,
+    toggleVisibility,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
@@ -39,9 +41,17 @@ function Event (props) {
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
+      eventLayers.forEach((layer) => {
+        toggleVisibility(layer, false);
+      });
+      toggleVisibility('BlueMarble_NextGeneration', true);
       deselectEvent();
     } else {
       const selectedEventDate = date || getDefaultEventDate(event);
+      if (eventLayers.length) {
+        toggleVisibility(eventLayers[0], true);
+        toggleVisibility('BlueMarble_NextGeneration', false);
+      }
       selectEvent(event.id, selectedEventDate);
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
@@ -180,10 +190,12 @@ function Event (props) {
 Event.propTypes = {
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
+  eventLayers: PropTypes.array,
   isSelected: PropTypes.bool,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   sources: PropTypes.array,
+  toggleVisibility: PropTypes.func,
 };
 
 export default Event;
