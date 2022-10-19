@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -39,14 +39,12 @@ function Events(props) {
     hasRequestError,
     isMobile,
     isEmbedModeActive,
-    layers,
     showAlert,
     selectedDate,
     showDates,
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
-    addLayer,
     removeLayer,
     eventLayers,
     toggleVisibility,
@@ -236,7 +234,6 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
-  addLayer: PropTypes.func,
   deselectEvent: PropTypes.func,
   eventLayers: PropTypes.array,
   eventsData: PropTypes.array,
@@ -245,7 +242,6 @@ Events.propTypes = {
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  layers: PropTypes.array,
   openFilterModal: PropTypes.func,
   removeLayer: PropTypes.func,
   selected: PropTypes.object,
