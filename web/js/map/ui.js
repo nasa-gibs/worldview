@@ -281,7 +281,7 @@ export default function mapui(models, config, store) {
    * the WMS tiles with Vector tiles.
    *
    * We also disable granule layer state updates due to performance reasons and so
-   * need to trigger a layer state update once animation fisnishes.
+   * need to trigger a layer state update once animation finishes.
    */
   const onStopAnimation = function() {
     const state = store.getState();
@@ -318,8 +318,6 @@ export default function mapui(models, config, store) {
     });
     updateProjection(true);
   };
-
-
 
   /*
    * Remove coordinates marker from all projections
@@ -1054,7 +1052,7 @@ export default function mapui(models, config, store) {
   }
 
   /*
-   * Return an Index value for a layer in the OPenLayers layer array
+   * Return an Index value for a layer in the OpenLayers layer array
    * @method findLayerIndex
    * @param {object} def - Layer Specs
 

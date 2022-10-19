@@ -87,12 +87,12 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
-   * Create a new OpenLayers Layer
+   * Create a new OpenLayers Layer Wrapper
    * @param {object} def
    * @param {object} key
    * @param {object} options
    * @param {object} dateOptions
-   * @param {object} granuleAttributes
+   * @param {object} granuleAttributes // THIS PARAMETER IS NOT USED!
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
   const createLayerWrapper = async (def, key, options, dateOptions) => {
@@ -274,7 +274,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {Object} def - Layer properties
    * @param {number} options - Layer options
-   * @param {boolean} precache
+   * @param {boolean} precache // This does not align with the parameters of the layerKey function
    * @returns {object} layer key Object
    */
   const layerKey = (def, options, state) => {
@@ -434,13 +434,14 @@ export default function mapLayerBuilder(config, cache, store) {
     });
   }
 
-  /**
+  /** Create a new Vector Layer
     *
     * @param {object} def - Layer Specs
     * @param {object} options - Layer options
     * @param {number} day
     * @param {object} state
     * @param {object} attributes
+    * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, options, day, state, attributes) {
     const { proj, animation } = state;
@@ -555,6 +556,8 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
+   * @param {number} day
+   * @param {object} state
    * @returns {object} OpenLayers WMS layer
    */
   const createLayerWMS = function(def, options, day, state) {
