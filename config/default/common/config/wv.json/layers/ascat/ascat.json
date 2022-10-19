@@ -2,6 +2,8 @@
   "layers": {
     "ascat": {
       "id": "ascat",
+      "title": "ascat title",
+      "subtitle": "ascat subtitle",
       "description": "ascat description",
       "tags": "",
       "group": "overlays",
