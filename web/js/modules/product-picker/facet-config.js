@@ -66,7 +66,7 @@ export default [
     field: 'type',
     label: 'Imagery Type',
     filterType: 'any',
-    tooltip: 'Layer imagery type',
+    tooltip: 'Granule-based rasters cover the spatial footprint of individual data files; mosaics assemble granules into spatially continuous maps. Vectors provide additional attribute information or flow visualizations.',
     hideZeroCount: true,
   },
 ];
