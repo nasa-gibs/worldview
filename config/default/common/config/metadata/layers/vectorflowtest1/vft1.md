@@ -1,3 +1,3 @@
-Vector Flow Test 1 layer is used for development purposes only.
+ascat layer is used for development purposes only.
 
 References: TBD

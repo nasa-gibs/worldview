@@ -1,0 +1,19 @@
+{
+  "measurements": {
+      "ascat": {
+          "id": "ascat",
+          "title": "ascat title",
+          "subtitle": "ascat Testing",
+          "sources": {
+            "tbd": {
+                "id": "ascat",
+                "title": "ascat Title",
+                "description": "",
+                "image": "",
+                "settings": [
+                ]
+            }
+          }
+      }
+  }
+}
