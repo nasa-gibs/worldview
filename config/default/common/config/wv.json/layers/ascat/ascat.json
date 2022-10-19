@@ -8,10 +8,14 @@
       "tags": "",
       "group": "overlays",
       "type": "vector",
-      "layergroup": "Wind Speed",
+      "layergroup": "Vectors",
+      "vectorStyle": {
+        "id": "ascat"
+      },
+      "transition": true,
       "projections": {
         "geographic": {
-          "source": "GIBS:geographic"
+          "source": "GITC:geographic"
         }
       }
     }

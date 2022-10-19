@@ -1,0 +1,34 @@
+{
+  "version": 8,
+  "name": "ascat",
+  "sources": {
+    "ascat": {
+      "type": "vector",
+      "tiles": [
+        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "ascat",
+      "source": "ascat",
+      "source-layer": "ascat",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    }
+  ]
+}
