@@ -66,25 +66,31 @@ function Events(props) {
       : '';
 
   // add blue marble layer when component mounts and remove layer when component unmounts
-  useEffect(() => {
-    let blueMarble = false;
-    layers.forEach((layer) => {
-      if (layer.id === 'BlueMarble_NextGeneration') {
-        blueMarble = true;
-      }
-    });
-    if (blueMarble === false) {
-      addLayer('BlueMarble_NextGeneration');
-    } else if (blueMarble === true && selected.date === null) {
-      toggleVisibility('BlueMarble_NextGeneration', true);
-    }
-    return () => {
-      toggleVisibility('BlueMarble_NextGeneration', false);
-      eventLayers.forEach((layer) => {
-        toggleVisibility(layer, false);
-      });
-    };
-  }, []);
+  // All of this is just for setting bluemarble on mount and unmount of this component
+  // useEffect(() => {
+  //   console.log("DOING STUFF FROM USEEFFECT (EVENTS.JS)")
+  //   // find if bluemarble is already in the active layers
+  //   let blueMarble = false;
+  //   layers.forEach((layer) => {
+  //     if (layer.id === 'BlueMarble_NextGeneration') {
+  //       blueMarble = true;
+  //     }
+  //   });
+  //   // if we don't find blue marble in active layers we add it when mounting
+  //   if (blueMarble === false) {
+  //     addLayer('BlueMarble_NextGeneration');
+  //   // if blue marble is already in active layers and an individual event is not selected we show blue marble on mount
+  //   } else if (blueMarble === true && selected.date === null) {
+  //     toggleVisibility('BlueMarble_NextGeneration', true);
+  //   }
+  //   // toggling bluemarble visibilty to false on unmount
+  //   return () => {
+  //     toggleVisibility('BlueMarble_NextGeneration', false);
+  //     // eventLayers.forEach((layer) => {
+  //     //   toggleVisibility(layer, false);
+  //     // });
+  //   };
+  // }, []);
 
   const renderFilterControls = () => (
     <div className="filter-controls">

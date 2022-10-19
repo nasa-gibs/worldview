@@ -59,16 +59,19 @@ export function activateLayersForEventCategory(category) {
 
     overlayGroups.forEach((group) => { group.collapsed = true; });
 
-    dispatch({
-      type: SET_EVENT_LAYERS_ADDED,
-      eventLayers: newEventLayers,
-    });
+    if (newEventLayers.length) {
+      dispatch({
+        type: SET_EVENT_LAYERS_ADDED,
+        eventLayers: newEventLayers,
+      });
+    }
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
       activeString: state.compare.activeString,
       layers: newLayers,
       overlayGroups,
+      // eventLayers: newEventLayers,
     });
   };
 }

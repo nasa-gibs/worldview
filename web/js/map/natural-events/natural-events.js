@@ -12,6 +12,8 @@ import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
 import {
+  addLayer as addLayerAction,
+  removeLayer as removeLayerAction,
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
   toggleVisibility as toggleVisibilityAction,
 } from '../../modules/layers/actions';
@@ -53,10 +55,20 @@ class NaturalEvents extends React.Component {
   }
 
   componentDidMount() {
-    const { eventLayers, toggleVisibility } = this.props;
-    if (eventLayers.length) {
-      toggleVisibility(eventLayers[0], true);
-      toggleVisibility('BlueMarble_NextGeneration', false);
+    const {
+      toggleVisibility, layers, selectedEvent, addLayer,
+    } = this.props;
+    let blueMarble = false;
+    layers.forEach((layer) => {
+      if (layer.id === 'BlueMarble_NextGeneration') {
+        blueMarble = true;
+      }
+    });
+
+    if (blueMarble === false) {
+      addLayer('BlueMarble_NextGeneration');
+    } else if (blueMarble === true && selectedEvent.date === null) {
+      toggleVisibility('BlueMarble_NextGeneration', true);
     }
   }
 
@@ -87,10 +99,8 @@ class NaturalEvents extends React.Component {
   }
 
   componentWillUnmount() {
-    const { eventLayers, toggleVisibility } = this.props;
-    eventLayers.forEach((layer) => {
-      toggleVisibility(layer, false);
-    });
+    const { toggleVisibility } = this.props;
+    toggleVisibility('BlueMarble_NextGeneration', false);
   }
 
   zoomIfVisible({ id, date }) {
@@ -119,7 +129,7 @@ class NaturalEvents extends React.Component {
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
+      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory, eventLayers, removeLayer,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -141,8 +151,11 @@ class NaturalEvents extends React.Component {
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
       if (!isInitialLoad) {
         if (categoryChange) {
-          activateLayersForEventCategory(event.categories[0].title);
+          eventLayers.forEach((layer) => {
+            removeLayer(layer);
+          });
         }
+        activateLayersForEventCategory(event.categories[0].title);
       }
       selectEventFinished();
     });
@@ -192,6 +205,7 @@ const mapStateToProps = (state) => {
     eventsData: getFilteredEvents(state),
     selectedEvent: selected,
     eventLayers: layers.eventLayers,
+    layers: layers.active.layers,
   };
 };
 
@@ -208,18 +222,27 @@ const mapDispatchToProps = (dispatch) => ({
   toggleVisibility: (layerIds, visible) => {
     dispatch(toggleVisibilityAction(layerIds, visible));
   },
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeLayer: (id) => {
+    dispatch(removeLayerAction(id));
+  },
 });
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
+  addLayer: PropTypes.func,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   eventLayers: PropTypes.array,
+  layers: PropTypes.array,
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
+  removeLayer: PropTypes.func,
   toggleVisibility: PropTypes.func,
 };
 
