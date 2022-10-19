@@ -19,7 +19,7 @@ function Event (props) {
     sources,
     eventLayers,
     toggleVisibility,
-    removeLayer,
+    removeGroup,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
@@ -42,9 +42,7 @@ function Event (props) {
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
-      eventLayers.forEach((layer) => {
-        removeLayer(layer);
-      });
+      removeGroup(eventLayers);
       toggleVisibility('BlueMarble_NextGeneration', true);
       deselectEvent();
     } else {
@@ -190,7 +188,7 @@ Event.propTypes = {
   event: PropTypes.object,
   eventLayers: PropTypes.array,
   isSelected: PropTypes.bool,
-  removeLayer: PropTypes.func,
+  removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   sources: PropTypes.array,

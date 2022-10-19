@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -20,7 +19,7 @@ import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
 import {
   addLayer as addLayerAction,
-  removeLayer as removeLayerAction,
+  removeGroup as removeGroupAction,
   toggleVisibility as toggleVisibilityAction,
 } from '../../modules/layers/actions';
 import util from '../../util/util';
@@ -45,7 +44,7 @@ function Events(props) {
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
-    removeLayer,
+    removeGroup,
     eventLayers,
     toggleVisibility,
   } = props;
@@ -62,33 +61,6 @@ function Events(props) {
     : hasRequestError
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
-
-  // add blue marble layer when component mounts and remove layer when component unmounts
-  // All of this is just for setting bluemarble on mount and unmount of this component
-  // useEffect(() => {
-  //   console.log("DOING STUFF FROM USEEFFECT (EVENTS.JS)")
-  //   // find if bluemarble is already in the active layers
-  //   let blueMarble = false;
-  //   layers.forEach((layer) => {
-  //     if (layer.id === 'BlueMarble_NextGeneration') {
-  //       blueMarble = true;
-  //     }
-  //   });
-  //   // if we don't find blue marble in active layers we add it when mounting
-  //   if (blueMarble === false) {
-  //     addLayer('BlueMarble_NextGeneration');
-  //   // if blue marble is already in active layers and an individual event is not selected we show blue marble on mount
-  //   } else if (blueMarble === true && selected.date === null) {
-  //     toggleVisibility('BlueMarble_NextGeneration', true);
-  //   }
-  //   // toggling bluemarble visibilty to false on unmount
-  //   return () => {
-  //     toggleVisibility('BlueMarble_NextGeneration', false);
-  //     // eventLayers.forEach((layer) => {
-  //     //   toggleVisibility(layer, false);
-  //     // });
-  //   };
-  // }, []);
 
   const renderFilterControls = () => (
     <div className="filter-controls">
@@ -132,7 +104,7 @@ function Events(props) {
               event={event}
               selectEvent={(id, date) => selectEvent(id, date, isMobile)}
               deselectEvent={deselectEvent}
-              removeLayer={removeLayer}
+              removeGroup={removeGroup}
               eventLayers={eventLayers}
               toggleVisibility={toggleVisibility}
               isSelected={selected.id === event.id}
@@ -190,11 +162,11 @@ const mapDispatchToProps = (dispatch) => ({
   addLayer: (id) => {
     dispatch(addLayerAction(id));
   },
-  removeLayer: (id) => {
-    dispatch(removeLayerAction(id));
-  },
   toggleVisibility: (layerIds, visible) => {
     dispatch(toggleVisibilityAction(layerIds, visible));
+  },
+  removeGroup: (ids) => {
+    dispatch(removeGroupAction(ids));
   },
 });
 
@@ -243,7 +215,7 @@ Events.propTypes = {
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   openFilterModal: PropTypes.func,
-  removeLayer: PropTypes.func,
+  removeGroup: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   showDates: PropTypes.bool,

@@ -32,7 +32,6 @@ import {
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_ON_PROJ_CHANGE,
-  SET_EVENT_LAYERS_ADDED,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -45,8 +44,6 @@ export function initSecondLayerGroup() {
   };
 }
 
-// keep track of layers before calling newLayers and overlayGroups and compaare
-// it to the newLayers afterwards and keep any unique ids
 export function activateLayersForEventCategory(category) {
   return (dispatch, getState) => {
     const state = getState();
@@ -56,31 +53,14 @@ export function activateLayersForEventCategory(category) {
     const overlayGroups = getOverlayGroups(newLayers);
 
     const newEventLayers = findEventLayers(originalLayers, newLayers);
-
     overlayGroups.forEach((group) => { group.collapsed = true; });
-
-    if (newEventLayers.length) {
-      dispatch({
-        type: SET_EVENT_LAYERS_ADDED,
-        eventLayers: newEventLayers,
-      });
-    }
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
       activeString: state.compare.activeString,
       layers: newLayers,
       overlayGroups,
-      // eventLayers: newEventLayers,
-    });
-  };
-}
-
-export function setEventLayersAdded(eventLayers) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: SET_EVENT_LAYERS_ADDED,
-      eventLayers,
+      eventLayers: newEventLayers,
     });
   };
 }

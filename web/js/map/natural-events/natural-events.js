@@ -13,7 +13,7 @@ import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
 import {
   addLayer as addLayerAction,
-  removeLayer as removeLayerAction,
+  removeGroup as removeGroupAction,
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
   toggleVisibility as toggleVisibilityAction,
 } from '../../modules/layers/actions';
@@ -129,7 +129,12 @@ class NaturalEvents extends React.Component {
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory, eventLayers, removeLayer,
+      selectDate,
+      selectEventFinished,
+      eventsData,
+      activateLayersForEventCategory,
+      eventLayers,
+      removeGroup,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -151,9 +156,7 @@ class NaturalEvents extends React.Component {
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
       if (!isInitialLoad) {
         if (categoryChange) {
-          eventLayers.forEach((layer) => {
-            removeLayer(layer);
-          });
+          removeGroup(eventLayers);
         }
         activateLayersForEventCategory(event.categories[0].title);
       }
@@ -225,8 +228,8 @@ const mapDispatchToProps = (dispatch) => ({
   addLayer: (id) => {
     dispatch(addLayerAction(id));
   },
-  removeLayer: (id) => {
-    dispatch(removeLayerAction(id));
+  removeGroup: (ids) => {
+    dispatch(removeGroupAction(ids));
   },
 });
 
@@ -242,7 +245,7 @@ NaturalEvents.propTypes = {
   selectDate: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
-  removeLayer: PropTypes.func,
+  removeGroup: PropTypes.func,
   toggleVisibility: PropTypes.func,
 };
 

@@ -39,11 +39,13 @@ describe('layer Reducer tests', () => {
   let initialState;
   let initialLayers;
   let initialGroups;
+  let initialEventLayers;
 
   beforeEach(() => {
     initialState = getInitialState(config);
     initialLayers = initialState.active.layers;
     initialGroups = initialState.active.overlayGroups;
+    initialEventLayers = [];
   });
 
   test('initial state has layers and overlayGroups as expected', () => {
@@ -114,6 +116,7 @@ describe('layer Reducer tests', () => {
       activeString: 'active',
       layers: initialLayers,
       overlayGroups: initialGroups,
+      eventLayers: initialEventLayers,
     });
     expect(response.active.layers).toEqual(initialLayers);
     expect(response.active.overlayGroups).toEqual(initialGroups);
@@ -126,6 +129,7 @@ describe('layer Reducer tests', () => {
       activeString: 'active',
       layers: initialLayers,
       overlayGroups: initialGroups,
+      eventLayers: initialEventLayers,
     });
     expect(response.active.layers).toEqual(initialLayers);
     expect(response.active.overlayGroups).toEqual(initialGroups);
