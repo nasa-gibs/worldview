@@ -10,7 +10,7 @@
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
         },
         "GITC:geographic": {
-            "url": "https://sit.gitc-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
+            "url": "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
         },
         "GIBS:wms": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"

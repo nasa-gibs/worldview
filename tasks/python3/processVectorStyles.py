@@ -25,6 +25,8 @@ config_file = args[0]
 vectordata_input_dir = args[1]
 output_dir = args[2]
 
+print(config_file)
+
 with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 
