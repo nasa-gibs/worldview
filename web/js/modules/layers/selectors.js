@@ -605,12 +605,12 @@ export const findEventLayers = (originalLayers, newLayers) => {
 
 export function activateLayersForEventCategory(state, category) {
   const {
-    config: { naturalEvents: { layers } },
+    config: { naturalEvents: { layers: { projections } } },
     layers: { layerConfig },
     proj: { id: projection },
   } = state;
 
-  const categoryLayers = layers[projection][category];
+  const categoryLayers = projections[projection][category];
 
   let newLayers = getActiveLayers(state);
   if (!categoryLayers) {
