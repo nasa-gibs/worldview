@@ -9,7 +9,7 @@
         "previewSnapshots": true,
         "googleTagManager": true,
         "vismetadata": {
-            "url": "http://localhost:8080/layer-metadata/v1.0/",
+            "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
             "daacMap": {
                 "GES_DISC":	"GES DISC",
                 "LANCEMODIS": "MODAPS SIPS",

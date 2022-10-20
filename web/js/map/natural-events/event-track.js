@@ -63,7 +63,7 @@ class EventTrack extends React.Component {
         this.removeTrack(prevMap);
         removePointOverlays(prevMap, trackDetails.pointsAndArrows);
         if (showAllTracks) {
-          this.removeAllTracks(map);
+          this.removeAllTracks(prevMap);
         }
       }
       this.initialize();
@@ -74,7 +74,7 @@ class EventTrack extends React.Component {
       this.removeAllTracks(map);
     }
 
-    // show all tracks when selecting option
+    // show all tracks when selecting as option
     if (showAllTracks && !isPlaying && (prevShowAllTracks !== showAllTracks || selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedUpdateAllTracks();
     }
@@ -84,7 +84,7 @@ class EventTrack extends React.Component {
       this.debouncedTrackUpdate();
     }
 
-    // only remove track when deselected if showAllTracks is false
+    // only remove selected track when event is deselected
     if (eventDeselect && !showAllTracks) {
       this.removeTrack(map);
     }
@@ -119,8 +119,6 @@ class EventTrack extends React.Component {
     this.update(event, date);
   }
 
-  // $$ this function listens for events when the map is zoomed in or out or the map is rotated
-  // $$ this function is debounced and binded in the constructor and used within the react lifecycle functions
   onPropertyChange = (e) => {
     const { map, showAllTracks } = this.props;
     const { trackDetails, allTrackDetails } = this.state;
@@ -136,7 +134,6 @@ class EventTrack extends React.Component {
     }
   }
 
-  // $$ this is only used in the createAndAddTrack() function within the update function
   addTrack = (map, { track, pointsAndArrows }) => {
     map.addOverlay(track);
     addPointOverlays(map, pointsAndArrows);
