@@ -27,6 +27,7 @@ import { formatDisplayDate } from '../../modules/date/util';
 
 function Events(props) {
   const {
+    defaultEventLayer,
     eventsData,
     sources,
     isLoading,
@@ -110,6 +111,7 @@ function Events(props) {
               isSelected={selected.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
+              defaultEventLayer={defaultEventLayer}
             />
           ))}
         </ul>
@@ -173,6 +175,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   const {
     animation,
+    config,
     embed,
     events,
     screenSize,
@@ -185,6 +188,7 @@ const mapStateToProps = (state) => {
   const { isEmbedModeActive } = embed;
 
   return {
+    defaultEventLayer: config.naturalEvents.layers.default,
     eventLayers: layers.eventLayers,
     isPlaying: animation.isPlaying,
     isMobile: screenSize.isMobileDevice,
@@ -206,6 +210,7 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
+  defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
   eventLayers: PropTypes.array,
   eventsData: PropTypes.array,

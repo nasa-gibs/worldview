@@ -56,19 +56,19 @@ class NaturalEvents extends React.Component {
 
   componentDidMount() {
     const {
-      toggleVisibility, layers, selectedEvent, addLayer,
+      toggleVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
     } = this.props;
-    let blueMarble = false;
+    let defaultLayerPresent = false;
     layers.forEach((layer) => {
-      if (layer.id === 'BlueMarble_NextGeneration') {
-        blueMarble = true;
+      if (layer.id === defaultEventLayer) {
+        defaultLayerPresent = true;
       }
     });
 
-    if (blueMarble === false) {
-      addLayer('BlueMarble_NextGeneration');
-    } else if (blueMarble === true && selectedEvent.date === null) {
-      toggleVisibility('BlueMarble_NextGeneration', true);
+    if (defaultLayerPresent === false) {
+      addLayer(defaultEventLayer);
+    } else if (defaultLayerPresent === true && selectedEvent.date === null) {
+      toggleVisibility(defaultEventLayer, true);
     }
   }
 
@@ -99,8 +99,8 @@ class NaturalEvents extends React.Component {
   }
 
   componentWillUnmount() {
-    const { toggleVisibility } = this.props;
-    toggleVisibility('BlueMarble_NextGeneration', false);
+    const { toggleVisibility, defaultEventLayer } = this.props;
+    toggleVisibility(defaultEventLayer, false);
   }
 
   zoomIfVisible({ id, date }) {
@@ -196,7 +196,7 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, requestedEvents, layers,
+    map, proj, requestedEvents, layers, config,
   } = state;
   const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
@@ -209,6 +209,7 @@ const mapStateToProps = (state) => {
     selectedEvent: selected,
     eventLayers: layers.eventLayers,
     layers: layers.active.layers,
+    defaultEventLayer: config.naturalEvents.layers.default,
   };
 };
 
@@ -236,6 +237,7 @@ const mapDispatchToProps = (dispatch) => ({
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
   addLayer: PropTypes.func,
+  defaultEventLayer: PropTypes.string,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   eventLayers: PropTypes.array,

@@ -11,15 +11,16 @@ import MonospaceDate from '../util/monospace-date';
 
 function Event (props) {
   const {
+    defaultEventLayer,
     deselectEvent,
     event,
+    eventLayers,
     isSelected,
+    removeGroup,
     selectedDate,
     selectEvent,
     sources,
-    eventLayers,
     toggleVisibility,
-    removeGroup,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
@@ -43,11 +44,11 @@ function Event (props) {
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
       removeGroup(eventLayers);
-      toggleVisibility('BlueMarble_NextGeneration', true);
+      toggleVisibility(defaultEventLayer, true);
       deselectEvent();
     } else {
       const selectedEventDate = date || getDefaultEventDate(event);
-      toggleVisibility('BlueMarble_NextGeneration', false);
+      toggleVisibility(defaultEventLayer, false);
       selectEvent(event.id, selectedEventDate);
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
@@ -184,6 +185,7 @@ function Event (props) {
 }
 
 Event.propTypes = {
+  defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
   eventLayers: PropTypes.array,

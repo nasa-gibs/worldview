@@ -52,11 +52,7 @@
             }
         ],
         "layers": {
-            "default": {
-                "Blue Marble": [
-                    "BlueMarble_NextGeneration"
-                ]
-            },
+            "default": "BlueMarble_NextGeneration",
             "arctic": {
                 "Wildfires": [
                     [
