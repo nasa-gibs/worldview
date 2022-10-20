@@ -8,9 +8,6 @@ import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Modal, ModalBody, ModalHeader, ModalFooter,
-} from 'reactstrap';
 import { getISODateFormatted } from '../components/timeline/date-util';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
@@ -416,7 +413,7 @@ class AnimationWidget extends React.Component {
             x
           </span> */}
           <span className="close wv-minimize" aria-label="Close" onClick={this.toggleCollapse}>
-          <FontAwesomeIcon icon="times" id="mobile-close-btn" />
+            <FontAwesomeIcon icon="times" id="mobile-close-btn" />
           </span>
         </div>
         <div className="mobile-animation-warning-message-container">
