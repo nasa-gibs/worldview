@@ -985,12 +985,12 @@ class Timeline extends React.Component {
             hasSubdailyLayers={hasSubdailyLayers}
             disabled={animationDisabled}
             label={
-isCompareModeActive
-  ? 'Animation feature is deactivated when Compare feature is active'
-  : isDataDownload
-    ? 'Animation feature is deactivated when Data Download feature is active'
-    : ''
-}
+                    isCompareModeActive
+                      ? 'Animation feature is deactivated when Compare feature is active'
+                      : isDataDownload
+                        ? 'Animation feature is deactivated when Data Download feature is active'
+                        : ''
+                  }
           />
           )}
         </div>
