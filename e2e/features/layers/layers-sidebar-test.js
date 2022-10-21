@@ -53,10 +53,10 @@ const groupedLayerIdOrder = [
 ];
 const ungroupedReorderdLayerIdOrder = [
   'active-Reference_Features_15m',
-  'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
-  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
+  'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
+  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
 ];
 
 module.exports = {
@@ -226,9 +226,9 @@ module.exports = {
         .pause(300)
         .release()
         .pause(300);
-      // .dragAndDrop(layerGroupHeader, { x: -50, y: -150})
     });
-    c.click(groupCheckbox).pause(200);
+    c.click(groupCheckbox);
+    c.pause(500);
     checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
   },
 
