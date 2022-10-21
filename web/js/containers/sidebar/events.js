@@ -188,7 +188,7 @@ const mapStateToProps = (state) => {
   const { isEmbedModeActive } = embed;
 
   return {
-    defaultEventLayer: config.naturalEvents.layers.default,
+    defaultEventLayer: config.naturalEvents.defaultLayer,
     eventLayers: layers.eventLayers,
     isPlaying: animation.isPlaying,
     isMobile: screenSize.isMobileDevice,

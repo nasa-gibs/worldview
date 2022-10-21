@@ -163,7 +163,7 @@ class EventTrack extends React.Component {
     } = this.props;
     const { allTrackDetails, trackDetails } = this.state;
     let newTrackDetails;
-    const allTracksArray = [];
+    const allTracks = [];
 
     const createAndAddTrack = (singleEvent, eventID, eventDate) => {
       const {
@@ -178,7 +178,7 @@ class EventTrack extends React.Component {
         pointsAndArrows,
         hidden: false,
       };
-      allTracksArray.push({ newTrackDetails });
+      allTracks.push({ newTrackDetails });
       this.addTrack(map, newTrackDetails);
     };
 
@@ -186,15 +186,15 @@ class EventTrack extends React.Component {
       this.removeAllTracks(map);
     }
 
-    eventsData.forEach((singleEvent) => {
-      const eventID = singleEvent.id;
-      const eventDate = singleEvent.geometry[0].date.slice(0, 10);
-      if (singleEvent.geometry.length > 1 && eventID !== trackDetails.id) {
-        createAndAddTrack(singleEvent, eventID, eventDate);
+    eventsData.forEach((event) => {
+      const eventID = event.id;
+      const eventDate = event.geometry[0].date.slice(0, 10);
+      if (event.geometry.length > 1 && eventID !== trackDetails.id) {
+        createAndAddTrack(event, eventID, eventDate);
       }
     });
 
-    this.setState({ allTrackDetails: allTracksArray });
+    this.setState({ allTrackDetails: allTracks });
   }
 
   /**

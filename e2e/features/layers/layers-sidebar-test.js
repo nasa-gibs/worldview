@@ -207,6 +207,7 @@ module.exports = {
       const actions = this.actions({ async: true });
       const layerGroupHeader = c.findElement(aodGroupHeader);
       const firesHeader = c.findElement(firesGroupHeader);
+      c.pause(500);
       return actions
         .click(layerGroupHeader)
         .pause(300)
@@ -226,9 +227,9 @@ module.exports = {
         .pause(300)
         .release()
         .pause(300);
-      // .dragAndDrop(layerGroupHeader, { x: -50, y: -150})
     });
-    c.click(groupCheckbox).pause(200);
+    c.click(groupCheckbox);
+    c.pause(500);
     checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
   },
 

@@ -58,16 +58,10 @@ class NaturalEvents extends React.Component {
     const {
       toggleVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
     } = this.props;
-    let defaultLayerPresent = false;
-    layers.forEach((layer) => {
-      if (layer.id === defaultEventLayer) {
-        defaultLayerPresent = true;
-      }
-    });
-
-    if (defaultLayerPresent === false) {
+    const defaultLayerPresent = layers.some((layer) => layer.id === defaultEventLayer);
+    if (!defaultLayerPresent) {
       addLayer(defaultEventLayer);
-    } else if (defaultLayerPresent === true && selectedEvent.date === null) {
+    } else if (defaultLayerPresent && !selectedEvent.date) {
       toggleVisibility(defaultEventLayer, true);
     }
   }
@@ -209,7 +203,7 @@ const mapStateToProps = (state) => {
     selectedEvent: selected,
     eventLayers: layers.eventLayers,
     layers: layers.active.layers,
-    defaultEventLayer: config.naturalEvents.layers.default,
+    defaultEventLayer: config.naturalEvents.defaultLayer,
   };
 };
 
