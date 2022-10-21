@@ -26,7 +26,8 @@ module.exports = {
 
   'Playing the animation changes the date of the mobile date picker': (c) => {
     c.useCss().click('#collapsed-animate-widget-phone-portrait');
-    c.pause(3000);
+    // this pause is the minimum amount of time needed to load & play the animation on a throttled connection
+    c.pause(20000);
     c.expect.element('.mobile-date-picker-select-btn-text span').text.to.equal('2019 AUG 01');
   },
 

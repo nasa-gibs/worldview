@@ -326,6 +326,8 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
 
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
+    } else if (def.layergroup === 'Reference') {
+      layers.unshift(def);
     } else {
       layers.splice(lastReferenceLayerIndex, 0, def);
     }
