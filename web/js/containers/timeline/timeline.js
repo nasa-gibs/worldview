@@ -60,6 +60,8 @@ import {
   changeStartAndEndDate,
   changeStartDate,
   changeEndDate,
+  toggleAnimationCollapse,
+  stop as pauseAnimation,
 } from '../../modules/animation/actions';
 import {
   TIME_SCALE_FROM_NUMBER,
@@ -163,7 +165,9 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    const { nowOverride } = this.props;
+    const {
+      nowOverride,
+    } = this.props;
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
@@ -175,6 +179,7 @@ class Timeline extends React.Component {
       this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
       this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 10);
     }
+
     this.setInitialState();
   }
 
@@ -565,8 +570,21 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   clickAnimationButton = () => {
-    const { closeAnimation, isAnimationWidgetOpen, openAnimation } = this.props;
-    if (isAnimationWidgetOpen) {
+    const {
+      closeAnimation,
+      isAnimationWidgetOpen,
+      openAnimation,
+      isMobile,
+      onPauseAnimation,
+      onToggleAnimationCollapse,
+    } = this.props;
+
+    if (isAnimationWidgetOpen && isMobile) {
+      onToggleAnimationCollapse();
+      onPauseAnimation();
+    } else if (isMobile && !isAnimationWidgetOpen) {
+      openAnimation();
+    } else if (isAnimationWidgetOpen) {
       closeAnimation();
     } else {
       googleTagManager.pushEvent({
@@ -868,8 +886,6 @@ class Timeline extends React.Component {
       screenWidth,
     } = this.props;
 
-    const isScreenWidthLessThan484 = screenWidth < 484;
-
     // default positioning
     let mobileLeft = 190;
     let mobileBottom = 20;
@@ -886,7 +902,7 @@ class Timeline extends React.Component {
       if (isEmbedModeActive) {
         mobileLeft = 220;
       }
-    } else if (isScreenWidthLessThan484) {
+    } else if (screenWidth < 575) {
       mobileLeft = isCompareModeActive ? 112 : 10;
       mobileBottom = 75;
       if (isEmbedModeActive) {
@@ -920,8 +936,22 @@ class Timeline extends React.Component {
 
   renderMobile() {
     const {
-      isMobile, timelineStartDateLimit, timelineEndDateLimit, hasSubdailyLayers, selectedDate,
+      animationDisabled,
+      hasSubdailyLayers,
+      isCompareModeActive,
+      isDataDownload,
+      isMobile,
+      isMobilePhone,
+      isMobileTablet,
+      isLandscape,
+      isPortrait,
+      breakpoints,
+      screenWidth,
+      selectedDate,
+      timelineEndDateLimit,
+      timelineStartDateLimit,
     } = this.props;
+
     return (
       <div id="timeline-header" className="timeline-header-mobile">
         <MobileDatePicker
@@ -941,6 +971,29 @@ class Timeline extends React.Component {
             {this.renderDateChangeArrows()}
           </div>
         </div>
+        <div>
+          {!isCompareModeActive && (
+          <AnimationButton
+            isMobile={isMobile}
+            breakpoints={breakpoints}
+            screenWidth={screenWidth}
+            isMobilePhone={isMobilePhone}
+            isMobileTablet={isMobileTablet}
+            isLandscape={isLandscape}
+            isPortrait={isPortrait}
+            clickAnimationButton={this.clickAnimationButton}
+            hasSubdailyLayers={hasSubdailyLayers}
+            disabled={animationDisabled}
+            label={
+                    isCompareModeActive
+                      ? 'Animation feature is deactivated when Compare feature is active'
+                      : isDataDownload
+                        ? 'Animation feature is deactivated when Data Download feature is active'
+                        : ''
+                  }
+          />
+          )}
+        </div>
       </div>
     );
   }
@@ -953,6 +1006,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       appNow,
       axisWidth,
+      breakpoints,
       dateA,
       dateB,
       draggerSelected,
@@ -969,6 +1023,7 @@ class Timeline extends React.Component {
       isMobile,
       isTourActive,
       parentOffset,
+      screenWidth,
       selectedDate,
       timelineCustomModalOpen,
       timelineEndDateLimit,
@@ -1070,6 +1125,8 @@ class Timeline extends React.Component {
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
                         disabled={animationDisabled}
+                        screenWidth={screenWidth}
+                        breakpoints={breakpoints}
                         label={
                         isCompareModeActive
                           ? 'Animation feature is deactivated when Compare feature is active'
@@ -1292,12 +1349,18 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { screenWidth } = screenSize;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
+  const {
+    breakpoints,
+    screenWidth,
+    isMobilePhone,
+    isMobileTablet,
+    orientation,
+  } = screenSize;
   const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily
@@ -1365,7 +1428,13 @@ function mapStateToProps(state) {
     activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
     isMobile,
+    isMobilePhone,
+    isMobileTablet,
+    orientation,
+    isLandscape: screenSize.orientation === 'landscape',
+    isPortrait: screenSize.orientation === 'portrait',
     screenWidth,
+    breakpoints,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
@@ -1399,6 +1468,7 @@ function mapStateToProps(state) {
       || compare.active,
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
+    isAnimationCollapsed: animation.isCollapsed,
     isGifActive: animation.gifActive,
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
@@ -1455,6 +1525,13 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   },
+  // unminimize animation widget in mobile
+  onToggleAnimationCollapse: () => {
+    dispatch(toggleAnimationCollapse());
+  },
+  onPauseAnimation: () => {
+    dispatch(pauseAnimation());
+  },
 });
 
 export default connect(
@@ -1469,6 +1546,7 @@ Timeline.propTypes = {
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
+  breakpoints: PropTypes.object,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customSelected: PropTypes.bool,
@@ -1488,10 +1566,16 @@ Timeline.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  isLandscape: PropTypes.bool,
+  isPortrait: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,
   nowOverride: PropTypes.bool,
+  onPauseAnimation: PropTypes.func,
+  onToggleAnimationCollapse: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,

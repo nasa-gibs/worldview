@@ -30,6 +30,10 @@ module.exports = {
   animationIntervalSelector: '#wv-animation-widget #current-interval',
   animationFrameSlider: '#wv-animation-widget .rc-slider',
 
+  // mobile animations
+  mobileAnimateButton: '#animate-button',
+  mobileAnimationWidget: '.wv-animation-widget-wrapper-mobile',
+
   // sidebar, layers
   sidebarContainer: '#products-holder',
   infoButton: '.wv-layers-info',

@@ -153,7 +153,7 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <Timeline />
-        <div id="wv-animation-widget-case">
+        <div>
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
