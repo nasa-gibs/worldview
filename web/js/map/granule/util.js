@@ -131,8 +131,9 @@ export const getGranuleFootprints = (layer) => {
 /**
  * Get start/end dates for CMR granule query. We need a broader range
  * for polar granules since only a few granules from each swath are
- * visible at the poles.
- *
+ * visible at the poles
+ * .
+ * @param {string} crs
  * @param {object} selectedDate - date object
  * @returns {object}
     * @param {object} startQueryDate - date object
@@ -155,9 +156,9 @@ export const getCMRQueryDates = (crs, selectedDate) => {
 
 /**
  * Get the URL parameters for a CMR request for granule browse
- *
- * @param {*} date
- * @param {*} state
+ * @param {*} def - layer definition
+ * @param {*} date - "current" date from which to base the query
+ * @param {*} crs
  * @returns
  */
 export const getParamsForGranuleRequest = (def, date, crs) => {
