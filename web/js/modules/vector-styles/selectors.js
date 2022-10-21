@@ -104,7 +104,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { resolutions } = proj.selected;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
-  const glStyle = vectorStyles[styleId];
+  let glStyle = vectorStyles[styleId];
+
+  // Forcing a valid glStyle if one cannot be found.
+  if (glStyle === undefined) {
+    console.log('Forcing glStyle...');
+    glStyle = vectorStyles.FIRMS_VIIRS_Thermal_Anomalies;
+  }
 
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
