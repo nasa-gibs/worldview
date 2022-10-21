@@ -356,7 +356,7 @@ export const outOfStepChange = (state, newDate) => {
 export const coverageDateFormatter = (dateType, date, period) => {
   if (!date) return;
   let dateString;
-  const parsedDate = parseDate(date);
+  const parsedDate = new Date(date);
   switch (period) {
     case 'subdaily':
       dateString = formatDisplayDate(parsedDate, true);
