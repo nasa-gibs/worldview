@@ -135,8 +135,11 @@ class EventTrack extends React.Component {
   }
 
   addTrack = (map, { track, pointsAndArrows }) => {
-    map.addOverlay(track);
-    addPointOverlays(map, pointsAndArrows);
+    const { isAnimatingToEvent } = this.props;
+    if (!isAnimatingToEvent) {
+      map.addOverlay(track);
+      addPointOverlays(map, pointsAndArrows);
+    }
   }
 
   removeTrack = function(map) {

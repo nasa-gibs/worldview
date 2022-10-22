@@ -588,19 +588,15 @@ export function isRenderable(id, layers, date, bLayers, state) {
 }
 
 export const findEventLayers = (originalLayers, newLayers) => {
-  const originalLayersIDs = originalLayers.map((layer) => layer.id);
+  const uniqueLayers = [];
 
-  const newLayersIDs = newLayers.map((layer) => layer.id);
-
-  const uniqueIDs = [];
-
-  newLayersIDs.forEach((layer) => {
-    if (!originalLayersIDs.includes(layer)) {
-      uniqueIDs.push(layer);
+  newLayers.forEach((newLayer) => {
+    if (!originalLayers.some((originalLayer) => originalLayer.id === newLayer.id)) {
+      uniqueLayers.push(newLayer.id);
     }
   });
 
-  return uniqueIDs;
+  return uniqueLayers;
 };
 
 export function activateLayersForEventCategory(state, category) {
