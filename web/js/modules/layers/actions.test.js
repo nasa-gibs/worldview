@@ -64,10 +64,10 @@ describe('Layer actions', () => {
   });
 
   test('REMOVE_LAYER action removes layer by id', () => {
-    const def = layers[1];
+    const def = layers[0];
     store.dispatch(removeLayer('aqua-aod'));
     const actionResponse = store.getActions()[0];
-    const responseLayers = [layers[0], layers[2], layers[3]];
+    const responseLayers = [layers[1], layers[2], layers[3]];
 
     const expectedPayload = {
       type: LAYER_CONSTANTS.REMOVE_LAYER,
@@ -92,8 +92,8 @@ describe('Layer actions', () => {
     const expectedPayload = {
       type: LAYER_CONSTANTS.REMOVE_GROUP,
       activeString: 'active',
-      layersToRemove: [layers[1], layers[2]],
-      layers: [layers[0], layers[3]],
+      layersToRemove: [layers[0], layers[1]],
+      layers: [layers[2], layers[3]],
       granuleLayers: {},
     };
     expect(actionResponse).toEqual(expectedPayload);
@@ -106,7 +106,7 @@ describe('Layer actions', () => {
       type: LAYER_CONSTANTS.TOGGLE_OVERLAY_GROUPS,
       activeString: 'active',
       groupOverlays: false,
-      layers: [layers[1], layers[2], layers[0], layers[3]],
+      layers,
       overlayGroups: [],
     };
     expect(actionResponse).toEqual(expectedPayload);
@@ -117,7 +117,7 @@ describe('Layer actions', () => {
     store = mockStore(getState(layers));
     store.dispatch(updateDatesOnProjChange('arctic'));
     const actionResponse = store.getActions()[0];
-    const { startDate, endDate, dateRanges: [firstRange, secondRange] } = actionResponse.layersA[1];
+    const { startDate, endDate, dateRanges: [firstRange, secondRange] } = actionResponse.layersA[0];
 
     expect(startDate).toEqual('2019-07-21T00:36:00Z');
     expect(endDate).toEqual('2019-09-24T22:30:00Z');

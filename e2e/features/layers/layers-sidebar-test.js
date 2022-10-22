@@ -52,9 +52,9 @@ const groupedLayerIdOrder = [
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
 ];
 const ungroupedReorderdLayerIdOrder = [
-  'active-Reference_Features_15m',
-  'active-MODIS_Combined_Value_Added_AOD',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
+  'active-MODIS_Combined_Value_Added_AOD',
+  'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
 ];

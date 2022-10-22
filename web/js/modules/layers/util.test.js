@@ -30,37 +30,37 @@ test('Layer parser, retrieves correct number of palette layers from permalink st
 });
 test('Layer parser, gets correct palette layer ID', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.id).toBe('AMSRE_Brightness_Temp_89H_Night');
 });
 test('Layer parser, gets correct custom palette id from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.custom[0]).toBe('red_2');
 });
 test('Layer parser, gets squashed boolean from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.squash[0]).toBe(true);
 });
 test('Layer parser, gets correct min value from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.min[0]).toBe(224);
 });
 test('Layer parser, gets correct max value from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.max[0]).toBe(294);
 });
 test('Layer parser, gets correct max value from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.opacity).toBe(0.54);
 });
 test('Layer parser, retrieves hidden palette layer from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.opacity).toBe(0.54);
 });
 test('Layer parser, retrieves correct number of vector layers from permalink string', () => {
@@ -69,17 +69,17 @@ test('Layer parser, retrieves correct number of vector layers from permalink str
 });
 test('Layer parser, gets correct vector layer ID', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.id).toBe('OrbitTracks_Aqua_Ascending');
 });
 test('Layer parser, gets correct custom vector style id from permalink string', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.custom[0]).toBe('yellow1');
 });
 test('Layer parser, retrieves hidden vector layer from permalink string', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
-  const layer = layers[1];
+  const layer = layers[0];
   expect(layer.opacity).toBe(0.46);
 });
 test('serialize layers and palettes', () => {

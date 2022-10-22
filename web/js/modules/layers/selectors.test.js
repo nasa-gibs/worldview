@@ -33,7 +33,7 @@ test('adds base layer', () => {
 
   const layerList = getLayers(getState(layers), {}).map((x) => x.id);
 
-  expect(layerList).toEqual(['terra-cr', 'mask', 'terra-aod']);
+  expect(layerList).toEqual(['mask', 'terra-cr', 'terra-aod']);
 });
 
 test('adds overlay layer', () => {
