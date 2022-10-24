@@ -21,6 +21,7 @@ import {
   addLayer as addLayerAction,
   removeGroup as removeGroupAction,
   toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import util from '../../util/util';
 import { formatDisplayDate } from '../../modules/date/util';
@@ -31,6 +32,7 @@ function Events(props) {
     eventsData,
     sources,
     isLoading,
+    layers,
     selectEvent,
     selected,
     openFilterModal,
@@ -48,6 +50,7 @@ function Events(props) {
     removeGroup,
     eventLayers,
     toggleVisibility,
+    toggleGroupVisibility,
   } = props;
 
   const filterControlHeight = 115;
@@ -108,10 +111,12 @@ function Events(props) {
               removeGroup={removeGroup}
               eventLayers={eventLayers}
               toggleVisibility={toggleVisibility}
+              toggleGroupVisibility={toggleGroupVisibility}
               isSelected={selected.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
               defaultEventLayer={defaultEventLayer}
+              layers={layers}
             />
           ))}
         </ul>
@@ -170,6 +175,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeGroup: (ids) => {
     dispatch(removeGroupAction(ids));
   },
+  toggleGroupVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -219,6 +227,7 @@ Events.propTypes = {
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  layers: PropTypes.array,
   openFilterModal: PropTypes.func,
   removeGroup: PropTypes.func,
   selected: PropTypes.object,
@@ -230,5 +239,6 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
+  toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
 };

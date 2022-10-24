@@ -16,10 +16,12 @@ function Event (props) {
     event,
     eventLayers,
     isSelected,
+    layers,
     removeGroup,
     selectedDate,
     selectEvent,
     sources,
+    toggleGroupVisibility,
     toggleVisibility,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
@@ -43,6 +45,13 @@ function Event (props) {
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
+      const layersToHide = [];
+      layers.forEach((layer) => {
+        if (layer.group === 'overlays' && layer.layergroup !== 'Reference') {
+          layersToHide.push(layer.id);
+        }
+      });
+      toggleGroupVisibility(layersToHide, false);
       removeGroup(eventLayers);
       toggleVisibility(defaultEventLayer, true);
       deselectEvent();
@@ -190,10 +199,12 @@ Event.propTypes = {
   event: PropTypes.object,
   eventLayers: PropTypes.array,
   isSelected: PropTypes.bool,
+  layers: PropTypes.array,
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   sources: PropTypes.array,
+  toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
 };
 

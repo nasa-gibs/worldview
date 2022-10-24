@@ -16,6 +16,7 @@ import {
   removeGroup as removeGroupAction,
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
   toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
@@ -56,13 +57,23 @@ class NaturalEvents extends React.Component {
 
   componentDidMount() {
     const {
-      toggleVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
+      toggleVisibility, toggleGroupVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
     } = this.props;
     const defaultLayerPresent = layers.some((layer) => layer.id === defaultEventLayer);
     if (!defaultLayerPresent) {
       addLayer(defaultEventLayer);
     } else if (defaultLayerPresent && !selectedEvent.date) {
       toggleVisibility(defaultEventLayer, true);
+    }
+
+    if (!selectedEvent.date) {
+      const layersToHide = [];
+      layers.forEach((layer) => {
+        if (layer.group === 'overlays' && layer.layergroup !== 'Reference') {
+          layersToHide.push(layer.id);
+        }
+      });
+      toggleGroupVisibility(layersToHide, false);
     }
   }
 
@@ -226,6 +237,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeGroup: (ids) => {
     dispatch(removeGroupAction(ids));
   },
+  toggleGroupVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
+  },
 });
 
 NaturalEvents.propTypes = {
@@ -239,6 +253,7 @@ NaturalEvents.propTypes = {
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
+  toggleGroupVisibility: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
   removeGroup: PropTypes.func,
