@@ -605,6 +605,18 @@ export function isRenderable(id, layers, date, bLayers, state) {
   return !obscured;
 }
 
+export const findEventLayers = (originalLayers, newLayers) => {
+  const uniqueLayers = [];
+
+  newLayers.forEach((newLayer) => {
+    if (!originalLayers.some((originalLayer) => originalLayer.id === newLayer.id)) {
+      uniqueLayers.push(newLayer.id);
+    }
+  });
+
+  return uniqueLayers;
+};
+
 export function activateLayersForEventCategory(state, category) {
   const {
     config: { naturalEvents: { layers } },

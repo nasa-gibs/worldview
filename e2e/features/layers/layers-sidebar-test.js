@@ -207,6 +207,7 @@ module.exports = {
       const actions = this.actions({ async: true });
       const layerGroupHeader = c.findElement(aodGroupHeader);
       const firesHeader = c.findElement(firesGroupHeader);
+      c.pause(500);
       return actions
         .click(layerGroupHeader)
         .pause(300)

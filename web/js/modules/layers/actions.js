@@ -9,6 +9,7 @@ import {
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
+  findEventLayers,
   getGranuleLayer,
   getActiveGranuleLayers,
 } from './selectors';
@@ -46,14 +47,20 @@ export function initSecondLayerGroup() {
 export function activateLayersForEventCategory(category) {
   return (dispatch, getState) => {
     const state = getState();
+
+    const originalLayers = state.layers.active.layers;
     const newLayers = activateLayersForEventCategorySelector(state, category);
     const overlayGroups = getOverlayGroups(newLayers);
+
+    const newEventLayers = findEventLayers(originalLayers, newLayers);
     overlayGroups.forEach((group) => { group.collapsed = true; });
+
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
       activeString: state.compare.activeString,
       layers: newLayers,
       overlayGroups,
+      eventLayers: newEventLayers,
     });
   };
 }

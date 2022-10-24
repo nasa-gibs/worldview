@@ -12,7 +12,11 @@ import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
 import {
+  addLayer as addLayerAction,
+  removeGroup as removeGroupAction,
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
+  toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
@@ -51,6 +55,28 @@ class NaturalEvents extends React.Component {
     this.selectEvent = this.selectEvent.bind(this);
   }
 
+  componentDidMount() {
+    const {
+      toggleVisibility, toggleGroupVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
+    } = this.props;
+    const defaultLayerPresent = layers.some((layer) => layer.id === defaultEventLayer);
+    if (!defaultLayerPresent) {
+      addLayer(defaultEventLayer);
+    } else if (defaultLayerPresent && !selectedEvent.date) {
+      toggleVisibility(defaultEventLayer, true);
+    }
+
+    if (!selectedEvent.date) {
+      const layersToHide = [];
+      layers.forEach((layer) => {
+        if (layer.group === 'overlays' && layer.layergroup !== 'Reference') {
+          layersToHide.push(layer.id);
+        }
+      });
+      toggleGroupVisibility(layersToHide, false);
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const {
       map,
@@ -75,6 +101,11 @@ class NaturalEvents extends React.Component {
         this.deselectEvent();
       }
     }
+  }
+
+  componentWillUnmount() {
+    const { toggleVisibility, defaultEventLayer } = this.props;
+    toggleVisibility(defaultEventLayer, false);
   }
 
   zoomIfVisible({ id, date }) {
@@ -103,7 +134,12 @@ class NaturalEvents extends React.Component {
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
+      selectDate,
+      selectEventFinished,
+      eventsData,
+      activateLayersForEventCategory,
+      eventLayers,
+      removeGroup,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -125,8 +161,9 @@ class NaturalEvents extends React.Component {
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
       if (!isInitialLoad) {
         if (categoryChange) {
-          activateLayersForEventCategory(event.categories[0].title);
+          removeGroup(eventLayers);
         }
+        activateLayersForEventCategory(event.categories[0].title);
       }
       selectEventFinished();
     });
@@ -164,7 +201,7 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, requestedEvents,
+    map, proj, requestedEvents, layers, config,
   } = state;
   const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
@@ -175,6 +212,9 @@ const mapStateToProps = (state) => {
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: getFilteredEvents(state),
     selectedEvent: selected,
+    eventLayers: layers.eventLayers,
+    layers: layers.active.layers,
+    defaultEventLayer: config.naturalEvents.defaultLayer,
   };
 };
 
@@ -188,17 +228,36 @@ const mapDispatchToProps = (dispatch) => ({
   selectEventFinished: () => {
     dispatch(selectedAction());
   },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleVisibilityAction(layerIds, visible));
+  },
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeGroup: (ids) => {
+    dispatch(removeGroupAction(ids));
+  },
+  toggleGroupVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
+  },
 });
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
+  addLayer: PropTypes.func,
+  defaultEventLayer: PropTypes.string,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  eventLayers: PropTypes.array,
+  layers: PropTypes.array,
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
+  toggleGroupVisibility: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
+  removeGroup: PropTypes.func,
+  toggleVisibility: PropTypes.func,
 };
 
 export default connect(
