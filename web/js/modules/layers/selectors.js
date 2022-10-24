@@ -319,6 +319,9 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
         }
         index += 1;
       });
+      if (lastRefIndex === 0) {
+        return lastRefIndex;
+      }
       return lastRefIndex + 1;
     };
 
