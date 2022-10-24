@@ -444,6 +444,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, options, day, state, attributes) {
+    //
     const { proj, animation } = state;
     let date;
     let gridExtent;

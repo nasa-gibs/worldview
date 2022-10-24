@@ -324,6 +324,11 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    console.log('calling setStyleFunction');
+    console.log(def);
+    console.log(vectorStyles);
+    console.log(olLayer);
+    console.log(state);
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
     if (lastSelection[key]) delete lastSelection[key];
   }

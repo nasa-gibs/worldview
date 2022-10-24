@@ -24,6 +24,7 @@ import {
  * @returns
  */
 export function getVectorLayers(state) {
+  console.log('getVectorLayers');
   const { map: { ui: { selected } } } = state;
   const layerGroups = selected.getLayers().getArray();
   return layerGroups.reduce((prev, layerGroup) => {
@@ -43,6 +44,7 @@ export function getVectorLayers(state) {
  * @return {object} object including the entries and legend
  */
 export function getVectorStyle(layerId, index, groupStr, state) {
+  console.log('getVectorStyle');
   groupStr = groupStr || state.compare.activeString;
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedVectorStyle = lodashGet(
@@ -56,8 +58,10 @@ export function getVectorStyle(layerId, index, groupStr, state) {
 }
 
 export function getAllVectorStyles(layerId, index, state) {
+  console.log('Getting All Vector Styles!');
   const { config, vectorStyles } = state;
   const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
+  console.log(`namne: ${name}`);
   let vectorStyle = vectorStyles.custom[name];
   if (!vectorStyle) {
     throw new Error(`${name} Is not a rendered vectorStyle`);
@@ -71,6 +75,7 @@ export function getAllVectorStyles(layerId, index, state) {
 }
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
+  console.log('findIndex');
   index = index || 0;
   const { values } = getVectorStyle(layerId, index, groupStr, state).entries;
   let result;
@@ -90,13 +95,16 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
 }
 
 export function setRange(layerId, props, index, palettes, state) {
+  console.log('setRange');
   // Placeholder filter range function
   return {
     layerId, props, index, palettes, state,
   };
 }
 
+// Review calls to this function & determine if calls are necessary for ASCAT
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('setStyleFunction');
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -104,18 +112,57 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { resolutions } = proj.selected;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
-  let glStyle = vectorStyles[styleId];
+  const glStyle = vectorStyles[styleId];
 
   // Forcing a valid glStyle if one cannot be found.
   if (glStyle === undefined) {
-    console.log('Forcing glStyle...');
-    glStyle = vectorStyles.FIRMS_VIIRS_Thermal_Anomalies;
+    return;
+    // console.log('Forcing glStyle for ascat...');
+    // glStyle = vectorStyles.FIRMS_VIIRS_Thermal_Anomalies;
+    // glStyle = {
+    //   version: 8,
+    //   name: 'ASCAT',
+    //   sources: {
+    //     ASCAT_source: {
+    //       type: 'vector',
+    //       tiles: [
+    //         // 'https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+    //         // 'https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+    //         'https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/2020-01-01/16km/0/0/0.mvt',
+    //       ],
+    //     },
+    //   },
+    //   layers: [
+    //     {
+    //       id: 'ASCAT_source_v1_NRT',
+    //       source: 'ASCAT_source',
+    //       'source-layer': 'ASCAT_source_v1_NRT',
+    //       type: 'circle',
+    //       paint: {
+    //         'circle-radius': [
+    //           'step',
+    //           [
+    //             'zoom',
+    //           ],
+    //           1,
+    //           1,
+    //           2,
+    //           3,
+    //           3,
+    //         ],
+    //         'circle-color': 'rgb(240, 40, 40)',
+    //       },
+    // },
+    // ],
   }
+
+  console.log(glStyle);
 
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
   }
 
+  console.log('getting layers');
   layer = layer.getLayers
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
@@ -151,6 +198,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
 }
 
 const shouldRenderFeature = (feature, acceptableExtent) => {
+  console.log('shouldRenderFeature');
   if (!acceptableExtent) return true;
   const midpoint = feature.getFlatCoordinates
     ? feature.getFlatCoordinates()
@@ -160,6 +208,7 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
 };
 
 export function getKey(layerId, groupStr, state) {
+  console.log('getKey');
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
@@ -179,6 +228,7 @@ export function getKey(layerId, groupStr, state) {
 }
 
 export function isActive(layerId, group, state) {
+  console.log('isActive');
   group = group || state.compare.activeString;
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
@@ -186,6 +236,7 @@ export function isActive(layerId, group, state) {
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('clearStyleFunction');
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -220,6 +271,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
+  console.log('applyStyle');
   const { config } = state;
   const { vectorStyles } = config;
   const activeLayers = getActiveLayers(state) || [];
@@ -235,5 +287,6 @@ export const applyStyle = (def, olVectorLayer, state) => {
       vectorStyleId = layer.custom;
     }
   });
+  console.log('setStyleFunction');
   setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };

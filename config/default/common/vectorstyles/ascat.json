@@ -5,7 +5,7 @@
     "ascat": {
       "type": "vector",
       "tiles": [
-        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/2020-01-01/16km/0/0/0.mvt"
       ]
     }
   },
