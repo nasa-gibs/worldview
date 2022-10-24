@@ -138,12 +138,12 @@ export default function mapui(models, config, store) {
         const def = lodashFind(action.layers, { id: action.id });
         if (def.type === 'granule') {
           self.processingPromise = new Promise((resolve) => {
-            resolve(addLayer(def));
+            resolve(addLayerUI(def));
           });
           return self.processingPromise;
         }
         store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
-        return addLayer(def);
+        return addLayerUI(def);
       }
       case REMOVE_MARKER:
         return removeCoordinatesMarker(action.coordinates);
@@ -812,7 +812,7 @@ export default function mapui(models, config, store) {
    * @param {object} def - layer Specs
    * @returns {void}
    */
-  const addLayer = async function(def, date, activeLayers) {
+  const addLayerUI = async function(def, date, activeLayers) {
     const state = store.getState();
     const { compare } = state;
     date = date || getSelectedDate(state);

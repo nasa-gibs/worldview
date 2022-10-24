@@ -175,6 +175,7 @@
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.4",
     "copy-to-clipboard": "^3.3.1",
+    "dat.gui": "^0.7.7",
     "elm-pep": "^1.0.6",
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",

@@ -499,6 +499,10 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
+
+
+
+
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
