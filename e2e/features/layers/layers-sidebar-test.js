@@ -75,7 +75,8 @@ module.exports = {
     c.expect.element(infoDialog).to.not.be.present;
   },
   'Toggle Layer Options': (c) => {
-    c.moveToElement(firesLayer, 0, 0);
+    c.pause(500);
+    // c.moveToElement(firesLayer, 0, 0);
     c.waitForElementVisible(optionsButton, TIME_LIMIT);
     c.click(optionsButton);
     c.waitForElementVisible(optionsDialog, TIME_LIMIT);
@@ -179,9 +180,9 @@ module.exports = {
     c.pause(500);
     c.useCss();
     c.expect.element('#group-overlays-checkbox-case').to.not.have.attribute('checked');
-
+    c.moveToElement(firesLayer, 0, 0);
     c.moveToElement(overlaysGroupHeader, 0, 0);
-    c.waitForElementVisible(`${overlaysGroupHeader} ${groupOptionsBtn}`);
+    c.waitForElementPresent(`${overlaysGroupHeader} ${groupOptionsBtn}`);
     c.click(`${overlaysGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${overlaysGroup} ${groupRemove}`).pause(200);
 
