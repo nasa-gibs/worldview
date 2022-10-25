@@ -26,7 +26,8 @@ export default class WindTile {
     this.gl.width = this.width;
     this.gl.height = this.height;
 
-    this.wind = window.wind = new WindGL(this.gl);
+    this.wind = new WindGL(this.gl);
+    window.wind = new WindGL(this.gl);
     this.wind.numParticles = 11024;
     this.frame();
     if (this.pxRatio !== 1) {
@@ -35,7 +36,8 @@ export default class WindTile {
   }
 
   updateData(data, extent, zoom, options) {
-    const windData = this.windData = this.organizeData(data, extent, zoom, options);
+    const windData = this.organizeData(data, extent, zoom, options);
+    this.windData = this.organizeData(data, extent, zoom, options);
     this.wind.setWind(windData);
     this.stopped = false;
     this.glCanvas.style = 'display:block';
@@ -65,12 +67,12 @@ export default class WindTile {
     const {
       uMin, vMin, uMax, vMax,
     } = options;
-    const uZero = Math.floor(255 * Math.abs(0 - uMin) / (uMax - uMin));
-    const vZero = Math.floor(255 * Math.abs(0 - vMin) / (vMax - vMin));
+    const uZero = Math.floor(255 * Math.abs(0 - uMin)) / (uMax - uMin);
+    const vZero = Math.floor(255 * Math.abs(0 - vMin)) / (vMax - vMin);
     const imageArray = new Uint8Array(width * height * 4);
     const j = new Uint8Array(width * height * 4);
 
-    for (let i = 0; i < NUM_POINTS; i++) {
+    for (let i = 0; i < NUM_POINTS; i += 1) {
       const flatCoordinates = vectorData[i].flatCoordinates_;
       const x = Math.floor((Math.abs(flatCoordinates[0] - longMin) / deltaLong) * width);
       const y = Math.floor(height - ((Math.abs(flatCoordinates[1] - latMin) / deltaLat) * height));
@@ -78,8 +80,8 @@ export default class WindTile {
       const v = vectorData[i].properties_.V;
       const ii = (y * width + x) * 4;
       j[ii] = i;
-      const r = Math.floor(255 * (u - uMin) / (uMax - uMin));
-      const g = Math.floor(255 * (v - vMin) / (vMax - vMin));
+      const r = Math.floor((255 * (u - uMin)) / (uMax - uMin));
+      const g = Math.floor((255 * (v - vMin)) / (vMax - vMin));
       imageArray[ii + 0] = r;
       imageArray[ii + 1] = g;
       imageArray[ii + 2] = 0;
@@ -87,8 +89,8 @@ export default class WindTile {
     }
 
     // Fill in empty pixels with zero wind color
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
         const i = (y * width + x) * 4;
         const index = j[i];
         if (!index) {

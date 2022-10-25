@@ -221,6 +221,7 @@
     "simplebar-react": "^2.1.0",
     "supercluster": "7.0.0",
     "url-template": "^3.0.0",
+    "web-vitals": "^1.1.2",
     "what-input": "^5.2.7"
   },
   "browserslist": [

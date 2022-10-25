@@ -1,14 +1,14 @@
 
 import * as dat from 'dat.gui';
-import olTile from 'ol/layer/Tile';
+import OLTile from 'ol/layer/Tile';
 import WMTS from 'ol/source/WMTS';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import MVT from 'ol/format/MVT';
 import { get } from 'ol/proj';
 import SourceVectorTile from 'ol/source/VectorTile';
 import LayerVectorTile from 'ol/layer/VectorTile';
-import olMap from 'ol/Map';
-import olView from 'ol/View';
+import OLMap from 'ol/Map';
+import OLView from 'ol/View';
 import WindTile from './renderer';
 import { throttle } from './util';
 // import './App.css';
@@ -43,7 +43,7 @@ const tileGridSizes = [
     matrixHeight: 20,
   },
 ];
-const base = new olTile({
+const base = new OLTile({
   extent: [-180, -90, 180, 90],
   crossOrigin: 'anonymous',
   source: new WMTS({
@@ -79,10 +79,10 @@ const vectorLayer = new LayerVectorTile({
   // Removing the style array renders each point in the default style (blue circles at each point, not animated)
   // style: [],
 });
-const map = new olMap({
+const map = new OLMap({
   layers: [base, vectorLayer],
   target: 'map',
-  view: new olView({
+  view: new OLView({
     center: [0, 0],
     maxZoom: 12,
     zoom: 1,
@@ -93,7 +93,7 @@ const map = new olMap({
 
 let i = 0;
 source.on('tileloadstart', (e) => {
-  i++;
+  i += 1;
 });
 let windRender;
 source.on('tileloadend', (e) => {
@@ -109,7 +109,7 @@ source.on('tileloadend', (e) => {
     };
     windRender = new WindTile(options);
   }
-  i--;
+  i -= 1;
   if (i === 1 && !windRender.stopped && windRender) {
     windRender.stop();
   }
