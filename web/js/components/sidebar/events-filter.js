@@ -24,6 +24,7 @@ function EventFilterModalBody (props) {
     setFilter,
     closeModal,
     showAll,
+    showAllTracks,
     parentId,
     isPolarProj,
     isMobile,
@@ -32,6 +33,7 @@ function EventFilterModalBody (props) {
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
   const [listAll, setListAll] = useState(showAll);
+  const [showAllTracksData, toggleShowAllTracks] = useState(showAllTracks);
 
   const parsedStartDate = selectedStartDate && new Date(moment(selectedStartDate).valueOf());
   const parsedEndDate = selectedEndDate && new Date(moment(selectedEndDate).valueOf());
@@ -53,7 +55,7 @@ function EventFilterModalBody (props) {
     const start = startDate && util.toISOStringDate(startDate);
     const end = endDate && util.toISOStringDate(endDate);
     closeModal();
-    setFilter(categories, start, end, listAll);
+    setFilter(categories, start, end, listAll, showAllTracksData);
     if (showAll !== listAll) {
       const event = listAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
       googleTagManager.pushEvent({ event });
@@ -148,6 +150,21 @@ function EventFilterModalBody (props) {
         </>
       )}
 
+      <Checkbox
+        id="show-all-tracks-filter"
+        label="Show tracks for all events"
+        onCheck={() => toggleShowAllTracks(!showAllTracksData)}
+        checked={showAllTracksData}
+      />
+      <FontAwesomeIcon id="bbox-show-all-tracks" icon="info-circle" />
+      <UncontrolledTooltip
+        placement="right"
+        target="bbox-show-all-tracks"
+      >
+        If checked, shows tracks for all of the events listed in the sidebar. If unchecked, tracks will only
+        show for a selected event.
+      </UncontrolledTooltip>
+
       <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>
         <Button
           id="filter-apply-btn"
@@ -180,6 +197,7 @@ EventFilterModalBody.propTypes = {
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
   showAll: PropTypes.bool,
+  showAllTracks: PropTypes.bool,
   isMobile: PropTypes.bool,
 };
 
@@ -188,7 +206,7 @@ const mapStateToProps = (state) => {
     events, proj, config, screenSize,
   } = state;
   const {
-    selectedCategories, selectedDates, showAll,
+    selectedCategories, selectedDates, showAll, showAllTracks,
   } = events;
 
   const isPolarProj = proj.selected.crs === CRS.ANTARCTIC || proj.selected.crs === CRS.ARCTIC;
@@ -200,19 +218,21 @@ const mapStateToProps = (state) => {
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
     showAll,
+    showAllTracks,
     isMobile: screenSize.isMobileDevice,
     screenHeight: screenSize.screenHeight,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setFilter: (categories, startDate, endDate, showAll) => {
+  setFilter: (categories, startDate, endDate, showAll, showAllTracks) => {
     dispatch(
       setEventsFilterAction(
         categories,
         startDate,
         endDate,
         showAll,
+        showAllTracks,
       ),
     );
   },

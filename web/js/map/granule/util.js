@@ -84,10 +84,32 @@ export const getIndexForSortedInsert = (array, date) => {
  * @param {string} endDate - date string
  * @returns {boolean}
  */
-export const isWithinDateRange = (date, startDate, endDate) => (startDate && endDate
-  ? date.getTime() <= new Date(endDate).getTime() && date.getTime() >= new Date(startDate).getTime()
-  : false);
+export const isWithinDateRange = (date, startDate, endDate) => (
+  startDate && endDate
+    ? new Date(date).getTime() <= new Date(endDate).getTime()
+      && new Date(date).getTime() >= new Date(startDate).getTime()
+    : false
+);
 
+/**
+ * Determine if a granule polygon falls within the specified bounds of
+ * imagery for a given projection
+ *
+ * @param {*} crs
+ * @param {*} granule
+ * @returns
+ */
+export const isWithinBounds = (crs, granule) => {
+  if (crs === CRS.GEOGRAPHIC || crs === CRS.WEB_MERCATOR) {
+    return granule.polygon.every(([lat, lon]) => lon > -65 && lon < 65);
+  }
+  if (crs === CRS.ANTARCTIC) {
+    return granule.polygon.every(([lat, lon]) => lon < -40);
+  }
+  if (crs === CRS.ARCTIC) {
+    return granule.polygon.every(([lat, lon]) => lon > 40);
+  }
+};
 
 export const getGranuleFootprints = (layer) => {
   const {
@@ -107,23 +129,65 @@ export const getGranuleFootprints = (layer) => {
 };
 
 /**
- * Get CMR query dates for building query string and child processes
- *
- * @method getCMRQueryDates
- * @static
+ * Get start/end dates for CMR granule query. We need a broader range
+ * for polar granules since only a few granules from each swath are
+ * visible at the poles
+ * .
+ * @param {string} crs
  * @param {object} selectedDate - date object
  * @returns {object}
     * @param {object} startQueryDate - date object
     * @param {object} endQueryDate - date object
   */
-export const getCMRQueryDates = (selectedDate) => {
+export const getCMRQueryDates = (crs, selectedDate) => {
   const date = new Date(selectedDate);
-  const startQueryDate = util.dateAdd(date, 'hour', -8);
-  const endQueryDate = util.dateAdd(date, 'hour', 4);
+  if (crs === CRS.GEOGRAPHIC || crs === CRS.WEB_MERCATOR) {
+    return {
+      startQueryDate: util.dateAdd(date, 'hour', -12),
+      endQueryDate: util.dateAdd(date, 'hour', 4),
+    };
+  }
+  // Polar projections
+  return {
+    startQueryDate: util.dateAdd(date, 'hour', -48),
+    endQueryDate: util.dateAdd(date, 'hour', 4),
+  };
+};
+
+/**
+ * Get the URL parameters for a CMR request for granule browse
+ * @param {*} def - layer definition
+ * @param {*} date - "current" date from which to base the query
+ * @param {*} crs
+ * @returns
+ */
+export const getParamsForGranuleRequest = (def, date, crs) => {
+  const dayNightFilter = 'DAY';
+  const bboxForProj = {
+    [CRS.WEB_MERCATOR]: [-180, -65, 180, 65],
+    [CRS.GEOGRAPHIC]: [-180, -65, 180, 65],
+    [CRS.ANTARCTIC]: [-180, -90, 180, -65],
+    [CRS.ARCTIC]: [-180, 65, 180, 90],
+  };
+  const { startQueryDate, endQueryDate } = getCMRQueryDates(crs, date);
+
+  const getShortName = () => {
+    try {
+      let { shortName } = def.conceptIds[0];
+      [shortName] = shortName.split('_');
+      return shortName;
+    } catch (e) {
+      console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
+    }
+  };
 
   return {
-    startQueryDate,
-    endQueryDate,
+    shortName: getShortName(),
+    startDate: startQueryDate.toISOString(),
+    endDate: endQueryDate.toISOString(),
+    dayNight: dayNightFilter,
+    bbox: bboxForProj[crs],
+    pageSize: 500,
   };
 };
 

@@ -172,7 +172,6 @@ class PlayQueue extends React.Component {
     }
 
     const totalLoadTime = ((avgFetchTime * numberOfFrames) / msPerSec / CONCURRENT_REQUESTS).toFixed(2);
-    console.log(this.fetchTimes);
     console.debug('Total frames: ', numberOfFrames);
     console.debug('Avg fetch time: ', (avgFetchTime / msPerSec).toFixed(2));
     console.debug('Play time (t/r): ', (totalPlayTime / msPerSec).toFixed(2), (remainingPlayTime / msPerSec).toFixed(2));

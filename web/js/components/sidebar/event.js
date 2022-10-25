@@ -11,12 +11,18 @@ import MonospaceDate from '../util/monospace-date';
 
 function Event (props) {
   const {
+    defaultEventLayer,
     deselectEvent,
     event,
+    eventLayers,
     isSelected,
+    layers,
+    removeGroup,
     selectedDate,
     selectEvent,
     sources,
+    toggleGroupVisibility,
+    toggleVisibility,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected
@@ -39,9 +45,19 @@ function Event (props) {
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
+      const layersToHide = [];
+      layers.forEach((layer) => {
+        if (layer.group === 'overlays' && layer.layergroup !== 'Reference') {
+          layersToHide.push(layer.id);
+        }
+      });
+      toggleGroupVisibility(layersToHide, false);
+      removeGroup(eventLayers);
+      toggleVisibility(defaultEventLayer, true);
       deselectEvent();
     } else {
       const selectedEventDate = date || getDefaultEventDate(event);
+      toggleVisibility(defaultEventLayer, false);
       selectEvent(event.id, selectedEventDate);
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
@@ -178,12 +194,18 @@ function Event (props) {
 }
 
 Event.propTypes = {
+  defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
+  eventLayers: PropTypes.array,
   isSelected: PropTypes.bool,
+  layers: PropTypes.array,
+  removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   sources: PropTypes.array,
+  toggleGroupVisibility: PropTypes.func,
+  toggleVisibility: PropTypes.func,
 };
 
 export default Event;

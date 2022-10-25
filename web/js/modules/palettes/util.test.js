@@ -90,12 +90,11 @@ describe('permalink 1.1', () => {
 
     const layer1 = stateFromLocation.layers.active.layers[0];
     const layer2 = stateFromLocation.layers.active.layers[1];
+    expect(layer1.id).toBe('terra-aod');
+    expect(layer1.custom).toBe('blue-1');
 
-    expect(layer1.id).toBe('aqua-aod');
-    expect(layer1.custom).toBe('red-1');
-
-    expect(layer2.id).toBe('terra-aod');
-    expect(layer2.custom).toBe('blue-1');
+    expect(layer2.id).toBe('aqua-aod');
+    expect(layer2.custom).toBe('red-1');
   });
 
   test('disregard palettes value if palette assigned to a layer that is not active', () => {

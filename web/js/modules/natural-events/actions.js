@@ -68,7 +68,7 @@ export function deselectEvent(id, date) {
   };
 }
 
-export function setEventsFilter(categories, start, end, showAll) {
+export function setEventsFilter(categories, start, end, showAll, showAllTracks) {
   return (dispatch, getState) => {
     const {
       selectedCategories,
@@ -84,6 +84,7 @@ export function setEventsFilter(categories, start, end, showAll) {
       start,
       end,
       showAll,
+      showAllTracks,
     });
     // Only make request if something has changed
     if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {

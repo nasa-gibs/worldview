@@ -9,7 +9,7 @@ import { LOADING_GRANULES } from '../../modules/loading/actions';
 import { ADD_GRANULE_LAYER_DATES } from '../../modules/layers/constants';
 
 const mockBaseCmrApi = 'mock.cmr.api/';
-const queryString = '?shortName=VJ102MOD&day_night_flag=DAY&temporal=2019-09-24T00%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=1000 ';
+const queryString = '?shortName=VJ102IMG&day_night_flag=DAY&temporal=2019-09-22T08%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=500';
 const cmrGranules = require('../../../mock/cmr_granules.json');
 
 fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules)
@@ -24,16 +24,6 @@ let createGranuleLayer;
 let store;
 
 const expectedDates = [
-  '2019-09-23T02:18:00Z',
-  '2019-09-23T03:42:00Z',
-  '2019-09-23T03:48:00Z',
-  '2019-09-23T03:54:00Z',
-  '2019-09-23T04:00:00Z',
-  '2019-09-23T05:18:00Z',
-  '2019-09-23T05:24:00Z',
-  '2019-09-23T05:30:00Z',
-  '2019-09-23T05:36:00Z',
-  '2019-09-23T05:42:00Z',
   '2019-09-23T07:00:00Z',
   '2019-09-23T07:06:00Z',
   '2019-09-23T07:12:00Z',

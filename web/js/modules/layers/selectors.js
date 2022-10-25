@@ -319,6 +319,9 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
         }
         index += 1;
       });
+      if (lastRefIndex === 0) {
+        return lastRefIndex;
+      }
       return lastRefIndex + 1;
     };
 
@@ -326,6 +329,8 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
 
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
+    } else if (def.layergroup === 'Reference') {
+      layers.unshift(def);
     } else {
       layers.splice(lastReferenceLayerIndex, 0, def);
     }
@@ -602,6 +607,18 @@ export function isRenderable(id, layers, date, bLayers, state) {
   );
   return !obscured;
 }
+
+export const findEventLayers = (originalLayers, newLayers) => {
+  const uniqueLayers = [];
+
+  newLayers.forEach((newLayer) => {
+    if (!originalLayers.some((originalLayer) => originalLayer.id === newLayer.id)) {
+      uniqueLayers.push(newLayer.id);
+    }
+  });
+
+  return uniqueLayers;
+};
 
 export function activateLayersForEventCategory(state, category) {
   const {

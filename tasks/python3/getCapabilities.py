@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-from concurrent.futures import ThreadPoolExecutor
 from optparse import OptionParser
 from collections import OrderedDict
 import os
 import sys
 import json
 import xmltodict
-import traceback
 import httpx
 import asyncio
 
@@ -110,7 +108,6 @@ async def process_remote(client, entry):
 
     except Exception as e:
         print(('ERROR: %s: %s' % (url, str(e))))
-        print((str(traceback.format_exc())))
 
 async def process_metadata(client, link, dir, ext):
     try:
@@ -133,7 +130,7 @@ async def gather_process(type, typeStr, client, dir, ext):
 async def main():
     if "wv-options-fetch" in config:
         limits = httpx.Limits(max_keepalive_connections=10, max_connections=10)
-        async with httpx.AsyncClient(limits=limits) as client:
+        async with httpx.AsyncClient(limits=limits, timeout=20.0) as client:
             await asyncio.gather(*[process_remote(client, entry) for entry in config["wv-options-fetch"]])
             if colormaps:
                 await gather_process(colormaps, 'colormaps', client, colormaps_dir, '.xml')

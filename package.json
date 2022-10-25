@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.34.0",
+  "version": "3.35.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "16.16.0"
+    "node": "16.18.0"
   },
   "husky": {
     "hooks": {
