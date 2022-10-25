@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "global_quarterly_2022q3_mosaic": {
+      "id": "global_quarterly_2022q3_mosaic",
+      "title": "2002 Q3 Global Quarterly",
+      "subtitle": "Planet Basemaps",
+      "description": "reference/planet/global_quarterly_2022q3_mosaic",
+      "tags": "planet basemaps",
+      "group": "baselayers",
+      "layergroup": "Blue Marble",
+      "wrapX": true,
+      "disableSnapshot": true,
+      "sourceOverride": "https://tiles{0-3}.planet.com/basemaps/v1/planet-tiles/global_quarterly_2022q3_mosaic/gmap/{TileMatrix}/{TileCol}/{TileRow}.png"
+    }
+  }
+}

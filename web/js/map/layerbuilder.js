@@ -406,7 +406,18 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
+    let urlParameters;
+    let requestEncoding = 'KVP';
+
+    if (id === 'global_quarterly_2022q3_mosaic') {
+      const apiKey = 'PLAKa264f4eb52904e1fb03876feff600740';
+      requestEncoding = 'REST';
+      urlParameters = `?api_key=${apiKey}`;
+    } else {
+      urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
+    }
+
+
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -414,6 +425,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
+      requestEncoding,
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),

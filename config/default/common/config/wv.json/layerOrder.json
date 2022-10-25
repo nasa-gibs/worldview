@@ -1,5 +1,6 @@
 {
 	"layerOrder": [
+		"global_quarterly_2022q3_mosaic",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",

@@ -12,6 +12,11 @@
                 "style": "circle"
             },
             {
+                "id": "webmerc",
+                "name": "Mercator",
+                "style": "fa fa-square fa-fw"
+            },
+            {
                 "id": "antarctic",
                 "name": "Antarctic",
                 "style": "arrow-circle-down"

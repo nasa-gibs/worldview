@@ -20,6 +20,9 @@
         },
         "WDPA:wms": {
             "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
+        },
+        "PLANET:webmerc": {
+            "url": "https://tiles{0-3}.planet.com/data/v1/"
         }
     }
 }
