@@ -19,8 +19,8 @@ import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import CircleStyle from 'ol/style/Circle';
-// import WindTile from '../vectorflow/renderer.js';
-// import { throttle } from '../vectorflow/util';
+import WindTile from '../vectorflow/renderer.js';
+import { throttle } from '../vectorflow/util';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -457,7 +457,7 @@ export default function mapLayerBuilder(config, cache, store) {
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
     console.log('layerbuilder: createLayerVector running');
-    const { proj, animation } = state;
+    const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
     let matrixIds;
@@ -549,7 +549,7 @@ export default function mapLayerBuilder(config, cache, store) {
         image: new CircleStyle({
           radius: 5,
           fill: new Fill({
-            color: 'yellow',
+            color: 'green',
           }),
           stroke: new Stroke({
             color: 'white',
@@ -561,63 +561,63 @@ export default function mapLayerBuilder(config, cache, store) {
 
     console.log('Can I force a WindTile here (somehow)?');
 
-    // let i = 0;
-    // const moving = false;
-    // const initiatedGUI = false;
-    // let currentFeatures;
-    // let zoom;
-    // let extent;
-    // let options;
+    let i = 0;
+    const moving = false;
+    const initiatedGUI = false;
+    let currentFeatures;
+    let zoom;
+    let extent;
+    let options;
 
-    // tileSource.on('tileloadstart', (e) => {
-    //   i += 1;
-    // });
-    // let windRender;
-    // tileSource.on('tileloadend', (e) => {
-    // if (!windRender) {
-    //   // const mapSize = map.getSize();
-    //   const tileOptions = {
-    //     uMin: -76.57695007324219,
-    //     uMax: 44.30181884765625,
-    //     vMin: -76.57695007324219,
-    //     vMax: 44.30181884765625,
-    //     // width: mapSize[0],
-    //     // height: mapSize[1],
-    //   };
-    //   windRender = new WindTile(tileOptions);
-    // }
-    // i -= 1;
-    // if (i === 1 && !windRender.stopped && windRender) {
-    //   windRender.stop();
-    // }
-    // if (i === 0 && !moving && windRender) {
-    //   if (!initiatedGUI) {
-    //     setTimeout(() => { updateRenderer(); }, 1);
-    //   } else {
-    //     updateRendererThrottled();
-    //   }
-    // }
-    // });
+    tileSource.on('tileloadstart', (e) => {
+      i += 1;
+    });
+    let windRender;
+    tileSource.on('tileloadend', (e) => {
+      if (!windRender) {
+        const mapSize = selected.getSize();
+        const tileOptions = {
+          uMin: -76.57695007324219,
+          uMax: 44.30181884765625,
+          vMin: -76.57695007324219,
+          vMax: 44.30181884765625,
+          width: mapSize[0],
+          height: mapSize[1],
+        };
+        windRender = new WindTile(tileOptions);
+      }
+      i -= 1;
+      if (i === 1 && !windRender.stopped && windRender) {
+        windRender.stop();
+      }
+      if (i === 0 && !moving && windRender) {
+        if (!initiatedGUI) {
+          setTimeout(() => { updateRenderer(); }, 1);
+        } else {
+          updateRendererThrottled();
+        }
+      }
+    });
 
-    // const updateRenderer = () => {
-    // const view = map.getView();
-    // const mapSize = map.getSize();
-    // extent = view.calculateExtent(mapSize);
-    // currentFeatures = vectorLayer.getSource().getFeaturesInExtent(extent);
-    // zoom = view.getZoom();
-    // options = {
-    //   uMin: -55.806217193603516,
-    //   uMax: 45.42329406738281,
-    //   vMin: -5.684286117553711,
-    //   vMax: 44.30181884765625,
-    //   width: mapSize[0],
-    //   height: mapSize[1],
-    //   ts: Date.now(),
-    // };
-    // windRender.updateData(currentFeatures, extent, zoom, options);
-    // if (!initiatedGUI) initGUI();
-    // };
-    // const updateRendererThrottled = throttle(updateRenderer, 150);
+    const updateRenderer = () => {
+      const view = selected.getView();
+      const mapSize = selected.getSize();
+      extent = view.calculateExtent(mapSize);
+      currentFeatures = layer.getSource().getFeaturesInExtent(extent);
+      zoom = view.getZoom();
+      options = {
+        uMin: -55.806217193603516,
+        uMax: 45.42329406738281,
+        vMin: -5.684286117553711,
+        vMax: 44.30181884765625,
+        width: mapSize[0],
+        height: mapSize[1],
+        ts: Date.now(),
+      };
+      windRender.updateData(currentFeatures, extent, zoom, options);
+      // if (!initiatedGUI) initGUI();
+    };
+    const updateRendererThrottled = throttle(updateRenderer, 150);
 
     // Below is OG worldview code
 

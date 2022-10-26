@@ -12,7 +12,9 @@ export default class WindTile {
     this.offset = options.offset || [0, 0];
     this.pxRatio = Math.max(Math.floor(window.devicePixelRatio) || 1, 2);
     this.meta = options.meta || {};
-    this.parent = options.parent || document.getElementById('root');
+
+    // Check Ben's demo & confirm what "parent" is
+    this.parent = options.parent || document.getElementById('app');
     this.glCanvas.id = 'gl-canvas';
     this.stopped = false;
     this.init();
