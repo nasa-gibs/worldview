@@ -248,8 +248,7 @@
       "node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox)/)"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/build/",
-      "<rootDir>/web/js/vectorflow/wind/shaders/"
+      "<rootDir>/build/"
     ]
   },
   "prettier": {

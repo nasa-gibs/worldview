@@ -623,14 +623,15 @@ export default function mapLayerBuilder(config, cache, store) {
     const initGUI = function() {
       const { wind } = windRender;
 
-      // How can I modify these defaults? I'd like to make the animated elements more prominent by default
-      gui.add(wind, 'numParticles', 144, 248832);
-      gui.add(wind, 'fadeOpacity', 0.96, 0.999).step(0.001).updateDisplay();
-      gui.add(wind, 'speedFactor', 0.05, 1.0);
-      gui.add(wind, 'dropRate', 0, 0.1);
-      gui.add(wind, 'dropRateBump', 0, 0.2);
-      gui.add(windRender, 'dataGridWidth', 18, 360).step(2).onChange(updateTexture);
+      gui.add(wind, 'numParticles', 144, 248832).setValue(148225);
+      gui.add(wind, 'fadeOpacity', 0.96, 0.999).setValue(0.97).step(0.001).updateDisplay();
+      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.5);
+      gui.add(wind, 'dropRate', 0, 0.1).setValue(0.025);
+      gui.add(wind, 'dropRateBump', 0, 0.2).setValue(0.04);
+      gui.add(windRender, 'dataGridWidth', 18, 360).setValue(44).step(2).onChange(updateTexture);
+
       initiatedGUI = true;
+      updateRenderer();
     };
     const updateTexture = function() {
       windRender.updateData(currentFeatures, extent, zoom, options);
