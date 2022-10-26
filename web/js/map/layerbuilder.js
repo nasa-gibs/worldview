@@ -539,30 +539,32 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       // style: [],
-      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as YELLOW circles
-      // style: new Style({
-      //   fill: new Fill({
-      //     color: 'red',
-      //   }),
-      //   stroke: new Stroke({
-      //     color: 'white',
-      //     width: 1.25,
-      //   }),
-      //   image: new CircleStyle({
-      //     radius: 5,
-      //     fill: new Fill({
-      //       color: 'green',
-      //     }),
-      //     stroke: new Stroke({
-      //       color: 'white',
-      //       width: 1.25,
-      //     }),
-      //   }),
-      // }),
+      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles
+      // Setting the radius to 0 includes each point but hides the visual
+      style: new Style({
+        // fill: new Fill({
+        //   color: 'red',
+        // }),
+        // stroke: new Stroke({
+        //   color: 'white',
+        //   width: 1.25,
+        // }),
+        image: new CircleStyle({
+          radius: 0,
+          fill: new Fill({
+            color: 'green',
+          }),
+          // stroke: new Stroke({
+          //   color: 'white',
+          //   width: 1.25,
+          // }),
+        }),
+      }),
     });
 
     console.log('Can I force a WindTile here (somehow)?');
 
+    // Vars to generate the animation & support the mini-GUI to play with the animation settings
     let i = 0;
     let moving = false;
     let initiatedGUI = false;
@@ -570,12 +572,12 @@ export default function mapLayerBuilder(config, cache, store) {
     let zoom;
     let extent;
     let options;
+    let windRender;
     const gui = new dat.GUI();
 
     tileSource.on('tileloadstart', (e) => {
       i += 1;
     });
-    let windRender;
     tileSource.on('tileloadend', (e) => {
       if (!windRender) {
         const mapSize = selected.getSize();
@@ -644,7 +646,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
       gui.add(wind, 'numParticles', 144, 248832).setValue(148225);
       gui.add(wind, 'fadeOpacity', 0.96, 0.999).setValue(0.97).step(0.001).updateDisplay();
-      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.5);
+      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.07);
       gui.add(wind, 'dropRate', 0, 0.1).setValue(0.025);
       gui.add(wind, 'dropRateBump', 0, 0.2).setValue(0.04);
       gui.add(windRender, 'dataGridWidth', 18, 360).setValue(44).step(2).onChange(updateTexture);
@@ -655,6 +657,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const updateTexture = function() {
       windRender.updateData(currentFeatures, extent, zoom, options);
     };
+
+
     // Below is OG worldview code
 
     applyStyle(def, layer, state, layeroptions);

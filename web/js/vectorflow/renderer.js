@@ -13,9 +13,11 @@ export default class WindTile {
     this.pxRatio = Math.max(Math.floor(window.devicePixelRatio) || 1, 2);
     this.meta = options.meta || {};
 
-    // Ben's demo sets parent to "root", creating a 2nd canvas element overlayed on top of the map
+    // Ben's demo set parent to "root", creating a 2nd canvas element overlayed on top of the map
     // We are assigning this to "app" which is the map element in WorldView
-    this.parent = options.parent || document.getElementById('app');
+    // BUT, we still get a second canvas :-(
+    // this.parent = options.parent || document.getElementById('app');
+    this.parent = document.querySelector('#wv-map-geographic > div > div.ol-unselectable.ol-layers > div');
     this.glCanvas.id = 'gl-canvas';
     this.stopped = false;
     this.init();
