@@ -19,6 +19,7 @@ import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import CircleStyle from 'ol/style/Circle';
+import * as dat from 'dat.gui';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -538,36 +539,37 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       // force a style onto the LayerVectorTile. This causes the ASCAT data to render as YELLOW circles
-      style: new Style({
-        fill: new Fill({
-          color: 'red',
-        }),
-        stroke: new Stroke({
-          color: 'white',
-          width: 1.25,
-        }),
-        image: new CircleStyle({
-          radius: 5,
-          fill: new Fill({
-            color: 'green',
-          }),
-          stroke: new Stroke({
-            color: 'white',
-            width: 1.25,
-          }),
-        }),
-      }),
+      // style: new Style({
+      //   fill: new Fill({
+      //     color: 'red',
+      //   }),
+      //   stroke: new Stroke({
+      //     color: 'white',
+      //     width: 1.25,
+      //   }),
+      //   image: new CircleStyle({
+      //     radius: 5,
+      //     fill: new Fill({
+      //       color: 'green',
+      //     }),
+      //     stroke: new Stroke({
+      //       color: 'white',
+      //       width: 1.25,
+      //     }),
+      //   }),
+      // }),
     });
 
     console.log('Can I force a WindTile here (somehow)?');
 
     let i = 0;
     const moving = false;
-    const initiatedGUI = false;
+    let initiatedGUI = false;
     let currentFeatures;
     let zoom;
     let extent;
     let options;
+    const gui = new dat.GUI();
 
     tileSource.on('tileloadstart', (e) => {
       i += 1;
@@ -615,10 +617,24 @@ export default function mapLayerBuilder(config, cache, store) {
         ts: Date.now(),
       };
       windRender.updateData(currentFeatures, extent, zoom, options);
-      // if (!initiatedGUI) initGUI();
+      if (!initiatedGUI) initGUI();
     };
     const updateRendererThrottled = throttle(updateRenderer, 150);
+    const initGUI = function() {
+      const { wind } = windRender;
 
+      // How can I modify these defaults? I'd like to make the animated elements more prominent by default
+      gui.add(wind, 'numParticles', 144, 248832);
+      gui.add(wind, 'fadeOpacity', 0.96, 0.999).step(0.001).updateDisplay();
+      gui.add(wind, 'speedFactor', 0.05, 1.0);
+      gui.add(wind, 'dropRate', 0, 0.1);
+      gui.add(wind, 'dropRateBump', 0, 0.2);
+      gui.add(windRender, 'dataGridWidth', 18, 360).step(2).onChange(updateTexture);
+      initiatedGUI = true;
+    };
+    const updateTexture = function() {
+      windRender.updateData(currentFeatures, extent, zoom, options);
+    };
     // Below is OG worldview code
 
     applyStyle(def, layer, state, layeroptions);

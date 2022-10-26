@@ -13,7 +13,8 @@ export default class WindTile {
     this.pxRatio = Math.max(Math.floor(window.devicePixelRatio) || 1, 2);
     this.meta = options.meta || {};
 
-    // Check Ben's demo & confirm what "parent" is
+    // Ben's demo sets parent to "root", creating a 2nd canvas element overlayed on top of the map
+    // We are assigning this to "app" which is the map element in WorldView
     this.parent = options.parent || document.getElementById('app');
     this.glCanvas.id = 'gl-canvas';
     this.stopped = false;
