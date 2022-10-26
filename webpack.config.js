@@ -101,6 +101,13 @@ module.exports = {
         },
         exclude: babelLoaderExcludes,
       },
+      // {
+      //   test: /\.(glsl|frag|vert)$/,
+      //   use: [
+      //     require.resolve('raw-loader'),
+      //     require.resolve('glslify-loader'),
+      //   ],
+      // },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [

@@ -6,14 +6,21 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
-
 import MVT from 'ol/format/MVT';
+
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
+import Style from 'ol/style/Style';
+import Stroke from 'ol/style/Stroke';
+import Fill from 'ol/style/Fill';
+import CircleStyle from 'ol/style/Circle';
+// import WindTile from '../vectorflow/renderer.js';
+// import { throttle } from '../vectorflow/util';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -434,6 +441,11 @@ export default function mapLayerBuilder(config, cache, store) {
     });
   }
 
+
+
+
+
+
   /** Create a new Vector Layer
     *
     * @param {object} def - Layer Specs
@@ -443,8 +455,8 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     * @returns {object} OpenLayers Vector layer
     */
-  const createLayerVector = function(def, options, day, state, attributes) {
-    //
+  const createLayerVector = function(def, layeroptions, day, state, attributes) {
+    console.log('layerbuilder: createLayerVector running');
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -488,7 +500,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const layerName = def.layer || def.id;
     const tileMatrixSet = def.matrixSet;
-    date = options.date || getSelectedDate(state);
+    date = layeroptions.date || getSelectedDate(state);
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
     const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
@@ -499,9 +511,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-
-
-
+    console.log('Creating Layer Vector');
 
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
@@ -527,15 +537,98 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
+      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as YELLOW circles
+      style: new Style({
+        fill: new Fill({
+          color: 'red',
+        }),
+        stroke: new Stroke({
+          color: 'white',
+          width: 1.25,
+        }),
+        image: new CircleStyle({
+          radius: 5,
+          fill: new Fill({
+            color: 'yellow',
+          }),
+          stroke: new Stroke({
+            color: 'white',
+            width: 1.25,
+          }),
+        }),
+      }),
     });
-    applyStyle(def, layer, state, options);
+
+    console.log('Can I force a WindTile here (somehow)?');
+
+    // let i = 0;
+    // const moving = false;
+    // const initiatedGUI = false;
+    // let currentFeatures;
+    // let zoom;
+    // let extent;
+    // let options;
+
+    // tileSource.on('tileloadstart', (e) => {
+    //   i += 1;
+    // });
+    // let windRender;
+    // tileSource.on('tileloadend', (e) => {
+    // if (!windRender) {
+    //   // const mapSize = map.getSize();
+    //   const tileOptions = {
+    //     uMin: -76.57695007324219,
+    //     uMax: 44.30181884765625,
+    //     vMin: -76.57695007324219,
+    //     vMax: 44.30181884765625,
+    //     // width: mapSize[0],
+    //     // height: mapSize[1],
+    //   };
+    //   windRender = new WindTile(tileOptions);
+    // }
+    // i -= 1;
+    // if (i === 1 && !windRender.stopped && windRender) {
+    //   windRender.stop();
+    // }
+    // if (i === 0 && !moving && windRender) {
+    //   if (!initiatedGUI) {
+    //     setTimeout(() => { updateRenderer(); }, 1);
+    //   } else {
+    //     updateRendererThrottled();
+    //   }
+    // }
+    // });
+
+    // const updateRenderer = () => {
+    // const view = map.getView();
+    // const mapSize = map.getSize();
+    // extent = view.calculateExtent(mapSize);
+    // currentFeatures = vectorLayer.getSource().getFeaturesInExtent(extent);
+    // zoom = view.getZoom();
+    // options = {
+    //   uMin: -55.806217193603516,
+    //   uMax: 45.42329406738281,
+    //   vMin: -5.684286117553711,
+    //   vMax: 44.30181884765625,
+    //   width: mapSize[0],
+    //   height: mapSize[1],
+    //   ts: Date.now(),
+    // };
+    // windRender.updateData(currentFeatures, extent, zoom, options);
+    // if (!initiatedGUI) initGUI();
+    // };
+    // const updateRendererThrottled = throttle(updateRenderer, 150);
+
+    // Below is OG worldview code
+
+    applyStyle(def, layer, state, layeroptions);
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
       const layerGroup = new OlLayerGroup({
         layers: [layer, wmsLayer],
       });
@@ -546,7 +639,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (breakPointResolution && animationIsPlaying) {
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
       wmsLayer.wv = attributes;
       return wmsLayer;
     }
