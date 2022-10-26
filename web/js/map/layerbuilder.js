@@ -538,6 +538,7 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
+      // style: [],
       // force a style onto the LayerVectorTile. This causes the ASCAT data to render as YELLOW circles
       // style: new Style({
       //   fill: new Fill({
@@ -563,7 +564,7 @@ export default function mapLayerBuilder(config, cache, store) {
     console.log('Can I force a WindTile here (somehow)?');
 
     let i = 0;
-    const moving = false;
+    let moving = false;
     let initiatedGUI = false;
     let currentFeatures;
     let zoom;
@@ -600,6 +601,24 @@ export default function mapLayerBuilder(config, cache, store) {
         }
       }
     });
+
+    selected.getView().on('change:center', () => {
+      if (windRender !== undefined) {
+        windRender.stop();
+        moving = true;
+      }
+    });
+    selected.getView().on('propertychange', (e) => {
+      if (e.key === 'resolution' && windRender) {
+        windRender.stop();
+        moving = true;
+      }
+    });
+    selected.on('moveend', (e) => {
+      moving = false;
+      if (i === 0 && windRender) updateRendererThrottled();
+    });
+
 
     const updateRenderer = () => {
       const view = selected.getView();
