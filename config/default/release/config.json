@@ -13,7 +13,7 @@
             "to": "gibs-antarctic.xml"
         },
         {
-            "from": "https://api.planet.com/basemaps/v1/mosaics/wmts?api_key=PLAKa264f4eb52904e1fb03876feff600740",
+            "from": "https://api.planet.com/basemaps/v1/mosaics/wmts?api_key=",
             "to": "planet-webmerc.xml"
         }
     ],

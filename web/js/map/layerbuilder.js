@@ -368,7 +368,7 @@ export default function mapLayerBuilder(config, cache, store) {
   function createLayerWMTS (def, options, day, state) {
     const { proj } = state;
     const {
-      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
+      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type, apiKey,
     } = def;
     const configSource = config.sources[source];
     const { date, polygon, shifted } = options;
@@ -409,8 +409,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let urlParameters;
     let requestEncoding = 'KVP';
 
-    if (id === 'global_quarterly_2022q3_mosaic') {
-      const apiKey = 'PLAKa264f4eb52904e1fb03876feff600740';
+    if (apiKey) {
       requestEncoding = 'REST';
       urlParameters = `?api_key=${apiKey}`;
     } else {
