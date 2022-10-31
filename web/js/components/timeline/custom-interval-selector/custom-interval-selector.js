@@ -116,8 +116,6 @@ CustomIntervalSelector.propTypes = {
   closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
-  customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
-  interval: PropTypes.number,
   modalOpen: PropTypes.bool,
 };
