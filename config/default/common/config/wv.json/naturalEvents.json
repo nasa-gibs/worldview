@@ -92,19 +92,19 @@
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Day",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Day",
-                        true
+                        false
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
@@ -332,19 +332,19 @@
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Day",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Day",
-                        true
+                        false
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
@@ -428,19 +428,19 @@
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Day",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Day",
-                        true
+                        false
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
@@ -714,19 +714,19 @@
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Day",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Day",
-                        true
+                        false
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
@@ -926,11 +926,11 @@
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Day",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
-                        false
+                        true
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
@@ -942,11 +942,11 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Day",
-                        true
+                        false
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
-                        true
+                        false
                     ],
                     [
                         "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
