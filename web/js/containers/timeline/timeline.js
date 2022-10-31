@@ -43,7 +43,7 @@ import {
   selectDate as selectDateAction,
   changeTimeScale,
   selectInterval,
-  changeCustomInterval,
+  changeCustomInterval as changeCustomIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -189,14 +189,19 @@ class Timeline extends React.Component {
     const {
       animStartLocationDate,
       animEndLocationDate,
+      changeCustomInterval,
+      customInterval,
+      customSelected,
       dateA,
       dateB,
+      interval,
       isAnimationPlaying,
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
     } = this.props;
     const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
+
 
     // handle update animation positioning and local state from play button/gif creation
     const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
@@ -215,6 +220,19 @@ class Timeline extends React.Component {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
+    }
+
+    const subdailyAdded = hasSubdailyLayers && !prevProps.hasSubdailyLayers;
+    const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const subdailyInterval = customInterval > 3 || interval > 3;
+
+    if (subdailyRemoved && subdailyInterval) {
+      changeCustomInterval();
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
+    }
+
+    if (subdailyAdded && !customSelected) {
+      changeCustomInterval(10, TIME_SCALE_TO_NUMBER.minute);
     }
 
     // if user adds a subdaily layer (and none were active) change the time scale to hourly
@@ -1344,6 +1362,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    interval,
     selected,
     selectedB,
     selectedZoom,
@@ -1451,6 +1470,8 @@ function mapStateToProps(state) {
     selectedDate,
     timeScale: TIME_SCALE_FROM_NUMBER[updatedSelectedZoom.toString()],
     timeScaleChangeUnit: unit,
+    customInterval: customInterval || interval,
+    interval,
     customIntervalValue: customDelta || 1,
     customIntervalZoomLevel: updatedCustomInterval || 3,
     nowOverride,
@@ -1491,7 +1512,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
-    dispatch(changeCustomInterval(delta, timeScale));
+    dispatch(changeCustomIntervalAction(delta, timeScale));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1547,8 +1568,10 @@ Timeline.propTypes = {
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.object,
+  changeCustomInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
+  customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
@@ -1557,6 +1580,7 @@ Timeline.propTypes = {
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
+  interval: PropTypes.number,
   isAnimationPlaying: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
   isAnimationWidgetOpen: PropTypes.bool,
