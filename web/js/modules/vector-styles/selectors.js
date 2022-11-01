@@ -107,16 +107,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
-  console.log('glStyle');
-  console.log(glStyle);
-  // console.log('styleId');
-  // console.log(styleId);
-
   // ASCAT does not include a glStyle, so we early return here in that instance
   if (glStyle === undefined) {
     return;
   }
-
 
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile

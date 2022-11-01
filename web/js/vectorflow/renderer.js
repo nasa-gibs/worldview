@@ -2,12 +2,15 @@ import WindGL from './wind/windindex';
 
 export default class WindTile {
   constructor(options) {
-    console.log(options);
     this.options = options;
     this.visibleExtent = [-180, -90, 180, 90];
     this.width = options.width || 512;
     this.height = options.height || 512;
     this.dataGridWidth = 360;
+
+    console.log('options');
+    console.log(options);
+
     this.glCanvas = options.canvas || document.createElement('canvas');
     this.olmap = options.olmap;
 
@@ -20,7 +23,10 @@ export default class WindTile {
     // We are assigning this to "app" which is the map element in WorldView
     // BUT, we still get a second canvas :-(
     // this.parent = options.parent || document.getElementById('app');
-    this.parent = document.querySelector('#wv-map-geographic > div > div.ol-unselectable.ol-layers > div');
+    const targetDiv = document.querySelector('#wv-map-geographic > div > div.ol-unselectable.ol-layers > div');
+    console.log('targetDiv');
+    console.log(targetDiv);
+    this.parent = targetDiv;
     // this.glCanvas.id = 'ben-canvas';
     this.stopped = false;
     this.init();
@@ -31,7 +37,7 @@ export default class WindTile {
     this.parent.prepend(this.glCanvas);
     this.glCanvas.width = this.width;
     this.glCanvas.height = this.height;
-    this.glCanvas.height = this.height;
+    // this.glCanvas.height = this.height;
     this.gl.width = this.width;
     this.gl.height = this.height;
 
@@ -49,14 +55,15 @@ export default class WindTile {
     this.windData = this.organizeData(data, extent, zoom, options);
     this.wind.setWind(windData);
     this.stopped = false;
-    this.glCanvas.style = 'display:block';
+    // this.glCanvas.style = 'display:block';
+    this.glCanvas.style = '"display:block position:absolute top:0 pointer-events:none"';
     windData.image = null;
   }
 
   stop() {
     delete this.wind.windData;
     this.stopped = true;
-    this.glCanvas.style = 'display:none';
+    // this.glCanvas.style = 'display:none';
   }
 
   organizeData(data, extent, zoom, options) {
@@ -120,6 +127,7 @@ export default class WindTile {
       height: deltaLat,
       textureHeight: height,
       textureWidth: width,
+      globalAlpha: 0.5,
     };
     return windData;
   }

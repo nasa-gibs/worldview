@@ -459,13 +459,6 @@ export default function mapLayerBuilder(config, cache, store) {
     * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
-    console.log('layerbuilder: createLayerVector running');
-    console.log(def.id);
-    console.log(layeroptions);
-    console.log(def);
-    console.log(state);
-    console.log(attributes);
-
     const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
@@ -520,8 +513,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-    console.log('Creating Layer Vector');
-
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
@@ -551,7 +542,7 @@ export default function mapLayerBuilder(config, cache, store) {
         // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
         // Setting the radius to 0 includes each point but hides the visual
         image: new CircleStyle({
-          radius: 2,
+          radius: 0,
           fill: new Fill({
             color: 'green',
           }),
@@ -571,7 +562,12 @@ export default function mapLayerBuilder(config, cache, store) {
 
     let windTileLayer;
     if (def.id === 'ascat') {
+      // Add z-index property to existing canvas
+      // FIND THE PROPER WAY TO DO THIS!
+      document.querySelectorAll('canvas')[0].style.zIndex = -1;
+
       windTileLayer = createWindtile(tileSource, selected, layer);
+      // console.log(windTileLayer);
     }
 
 
@@ -602,7 +598,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
-   * Create a new WMS Layer
+   * Create a WindTile
    *
    * @method createWindtile
    * @static
@@ -643,9 +639,6 @@ export default function mapLayerBuilder(config, cache, store) {
         windRender = new WindTile(tileOptions);
       }
 
-      console.log('windRender');
-      console.log(windRender);
-
       i -= 1;
       if (i === 1 && !windRender.stopped && windRender) {
         windRender.stop();
@@ -659,6 +652,7 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     });
 
+    // These listen for changes to position/zoom/other properties & re-render the animation canvas to compensate
     selected.getView().on('change:center', () => {
       if (windRender !== undefined) {
         windRender.stop();
@@ -671,6 +665,8 @@ export default function mapLayerBuilder(config, cache, store) {
         moving = true;
       }
     });
+
+    // when the user stops moving the map, we need to re-render the windtiles in the new position
     selected.on('moveend', (e) => {
       moving = false;
       if (i === 0 && windRender) updateRendererThrottled();
@@ -698,12 +694,12 @@ export default function mapLayerBuilder(config, cache, store) {
     const initGUI = function() {
       const { wind } = windRender;
 
-      gui.add(wind, 'numParticles', 144, 248832).setValue(148225);
-      gui.add(wind, 'fadeOpacity', 0.96, 0.999).setValue(0.97).step(0.001).updateDisplay();
-      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.07);
-      gui.add(wind, 'dropRate', 0, 0.1).setValue(0.025);
-      gui.add(wind, 'dropRateBump', 0, 0.2).setValue(0.04);
-      gui.add(windRender, 'dataGridWidth', 18, 360).setValue(44).step(2).onChange(updateTexture);
+      gui.add(wind, 'numParticles', 144, 248832).setValue(11025);
+      gui.add(wind, 'fadeOpacity', 0.96, 0.999).setValue(0.996).step(0.001).updateDisplay();
+      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.25);
+      gui.add(wind, 'dropRate', 0, 0.1).setValue(0.003);
+      gui.add(wind, 'dropRateBump', 0, 0.2).setValue(0.01);
+      gui.add(windRender, 'dataGridWidth', 18, 360).setValue(200).step(2).onChange(updateTexture);
 
       initiatedGUI = true;
       updateRenderer();
@@ -711,6 +707,10 @@ export default function mapLayerBuilder(config, cache, store) {
     const updateTexture = function() {
       windRender.updateData(currentFeatures, extent, zoom, options);
     };
+
+    // console.log('returning windRender');
+    // console.log(windRender);
+    return windRender;
   };
 
   /**
