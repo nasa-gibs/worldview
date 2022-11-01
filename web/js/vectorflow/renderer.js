@@ -2,12 +2,15 @@ import WindGL from './wind/windindex';
 
 export default class WindTile {
   constructor(options) {
+    console.log(options);
     this.options = options;
     this.visibleExtent = [-180, -90, 180, 90];
     this.width = options.width || 512;
     this.height = options.height || 512;
     this.dataGridWidth = 360;
     this.glCanvas = options.canvas || document.createElement('canvas');
+    this.olmap = options.olmap;
+
     this.gl = options.gl || this.glCanvas.getContext('webgl', { antialiasing: false });
     this.offset = options.offset || [0, 0];
     this.pxRatio = Math.max(Math.floor(window.devicePixelRatio) || 1, 2);
@@ -18,15 +21,16 @@ export default class WindTile {
     // BUT, we still get a second canvas :-(
     // this.parent = options.parent || document.getElementById('app');
     this.parent = document.querySelector('#wv-map-geographic > div > div.ol-unselectable.ol-layers > div');
-    this.glCanvas.id = 'gl-canvas';
+    // this.glCanvas.id = 'ben-canvas';
     this.stopped = false;
     this.init();
     this.callback = options.callback;
   }
 
   init() {
-    this.parent.appendChild(this.glCanvas);
+    this.parent.prepend(this.glCanvas);
     this.glCanvas.width = this.width;
+    this.glCanvas.height = this.height;
     this.glCanvas.height = this.height;
     this.gl.width = this.width;
     this.gl.height = this.height;

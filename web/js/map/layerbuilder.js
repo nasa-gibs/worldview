@@ -15,11 +15,13 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-import Style from 'ol/style/Style';
+import { Style, Icon } from 'ol/style';
+import Point from 'ol/geom/Point';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import CircleStyle from 'ol/style/Circle';
 import * as dat from 'dat.gui';
+// import { Point } from 'proj4';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -458,6 +460,12 @@ export default function mapLayerBuilder(config, cache, store) {
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
     console.log('layerbuilder: createLayerVector running');
+    console.log(def.id);
+    console.log(layeroptions);
+    console.log(def);
+    console.log(state);
+    console.log(attributes);
+
     const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
@@ -539,30 +547,72 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       // style: [],
-      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles
-      // Setting the radius to 0 includes each point but hides the visual
       style: new Style({
-        // fill: new Fill({
-        //   color: 'red',
-        // }),
-        // stroke: new Stroke({
-        //   color: 'white',
-        //   width: 1.25,
-        // }),
+        // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
+        // Setting the radius to 0 includes each point but hides the visual
         image: new CircleStyle({
-          radius: 0,
+          radius: 2,
           fill: new Fill({
             color: 'green',
           }),
-          // stroke: new Stroke({
-          //   color: 'white',
-          //   width: 1.25,
-          // }),
         }),
+
+        // Set as point to draw a line
+        // geometry: new Point(100),
+        // image: new Icon({
+        //   src: 'data/arow.png',
+        //   anchor: [0.75, 0.5],
+        //   rotateWithView: true,
+        //   // rotation: -rotation,
+        // }),
       }),
     });
 
-    console.log('Can I force a WindTile here (somehow)?');
+
+    let windTileLayer;
+    if (def.id === 'ascat') {
+      windTileLayer = createWindtile(tileSource, selected, layer);
+    }
+
+
+    applyStyle(def, layer, state, layeroptions);
+    layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
+
+    if (breakPointLayerDef && !animationIsPlaying) {
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
+      const layerGroup = new OlLayerGroup({
+        layers: [layer, wmsLayer],
+      });
+      wmsLayer.wv = attributes;
+      return layerGroup;
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
+    }
+
+    return layer;
+  };
+
+  /**
+   * Create a new WMS Layer
+   *
+   * @method createWindtile
+   * @static
+   * @param {object} tilesource
+   * @param {object} selected - OL map
+   * @param {object} layer
+   * @returns {object} OpenLayers WMS layer -- INCORRECT~!
+   */
+  const createWindtile = function(tileSource, selected, layer) {
+    console.log('Generating WindTile');
 
     // Vars to generate the animation & support the mini-GUI to play with the animation settings
     let i = 0;
@@ -582,6 +632,7 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!windRender) {
         const mapSize = selected.getSize();
         const tileOptions = {
+          olmap: selected,
           uMin: -76.57695007324219,
           uMax: 44.30181884765625,
           vMin: -76.57695007324219,
@@ -591,6 +642,10 @@ export default function mapLayerBuilder(config, cache, store) {
         };
         windRender = new WindTile(tileOptions);
       }
+
+      console.log('windRender');
+      console.log(windRender);
+
       i -= 1;
       if (i === 1 && !windRender.stopped && windRender) {
         windRender.stop();
@@ -620,7 +675,6 @@ export default function mapLayerBuilder(config, cache, store) {
       moving = false;
       if (i === 0 && windRender) updateRendererThrottled();
     });
-
 
     const updateRenderer = () => {
       const view = selected.getView();
@@ -657,34 +711,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const updateTexture = function() {
       windRender.updateData(currentFeatures, extent, zoom, options);
     };
-
-
-    // Below is OG worldview code
-
-    applyStyle(def, layer, state, layeroptions);
-    layer.wrap = day;
-    layer.wv = attributes;
-    layer.isVector = true;
-
-    if (breakPointLayerDef && !animationIsPlaying) {
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
-      const layerGroup = new OlLayerGroup({
-        layers: [layer, wmsLayer],
-      });
-      wmsLayer.wv = attributes;
-      return layerGroup;
-    }
-
-    if (breakPointResolution && animationIsPlaying) {
-      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
-      wmsLayer.wv = attributes;
-      return wmsLayer;
-    }
-
-    return layer;
   };
 
   /**
