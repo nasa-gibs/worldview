@@ -131,10 +131,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (existingGranules.length && datesQueried) {
       return existingGranules;
     }
-
     try {
       showLoading();
-      const response = await fetch(getGranulesUrl(params), CMR_AJAX_OPTIONS);
+      const requestUrl = getGranulesUrl(params);
+      const response = await fetch(requestUrl, CMR_AJAX_OPTIONS);
       data = await response.json();
       data = data.feed.entry;
       if (data.length) {
