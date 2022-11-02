@@ -84,12 +84,13 @@ export const getIndexForSortedInsert = (array, date) => {
  * @param {string} endDate - date string
  * @returns {boolean}
  */
-export const isWithinDateRange = (date, startDate, endDate) => (
-  startDate && endDate
+export const isWithinDateRange = (date, startDate, end) => {
+  const endDate = end || new Date();
+  return startDate && endDate
     ? new Date(date).getTime() <= new Date(endDate).getTime()
-      && new Date(date).getTime() >= new Date(startDate).getTime()
-    : false
-);
+    && new Date(date).getTime() >= new Date(startDate).getTime()
+    : false;
+};
 
 /**
  * Determine if a granule polygon falls within the specified bounds of
