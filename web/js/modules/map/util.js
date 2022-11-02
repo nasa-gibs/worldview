@@ -112,6 +112,12 @@ export function mapIsExtentValid(extent) {
 /*
  * Set default extent according to time of day:
  *
+ * at 00:00 UTC, start at far eastern edge of
+ * map: "20.6015625,-46.546875,179.9296875,53.015625"
+ *
+ * at 23:00 UTC, start at far western edge of map:
+ * "-179.9296875,-46.546875,-20.6015625,53.015625"
+ *
  * @method getLeadingExtent
  * @static
  * @param {Object} Time
@@ -119,18 +125,21 @@ export function mapIsExtentValid(extent) {
  * @returns {object} Extent Array
  */
 export function getLeadingExtent(loadtime) {
-  const curHour = loadtime.getUTCHours();
+  let curHour = loadtime.getUTCHours();
 
-  // These values are specifically tuned for the Aqua/MODIS default Corrected Reflectance Layer
-  const eastWestOffset = curHour * 0.6;
-  const minLonConst = 10;
-  const maxLongConst = 170;
-  const minLonMultiplier = -200 / 23;
-  const minLon = minLonConst + (curHour - eastWestOffset) * minLonMultiplier;
-  const maxLon = minLon + maxLongConst;
+  // For earlier hours when data is still being filled in, force a far eastern perspective
+  if (curHour < 3) {
+    curHour = 23;
+  } else if (curHour < 9) {
+    curHour = 0;
+  }
 
-  const minLat = -47;
-  const maxLat = 53;
+  // Compute east/west bounds
+  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
+  const maxLon = minLon + 159.328125;
+
+  const minLat = -46.546875;
+  const maxLat = 53.015625;
 
   return [minLon, minLat, maxLon, maxLat];
 }
