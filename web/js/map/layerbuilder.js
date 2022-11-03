@@ -52,7 +52,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAscatAnimated = false;
+  const renderAscatAnimated = true;
 
   /**
    * Return a layer, or layergroup, created with the supplied function
