@@ -52,7 +52,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAscatAnimated = true;
+  const renderAnimation = true;
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -542,7 +542,7 @@ export default function mapLayerBuilder(config, cache, store) {
         // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
         // Setting the radius to 0 includes each point but hides the visual
         image: new CircleStyle({
-          radius: renderAscatAnimated ? 0 : 2,
+          radius: renderAnimation ? 0 : 2,
           fill: new Fill({
             color: 'green',
           }),
@@ -565,7 +565,10 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     let windTileLayer;
-    if (def.id === 'ascat' && renderAscatAnimated) {
+    console.log(def);
+    const animationAllowed = def.id === 'ascat' || def.id === 'oscar_currents_final_sd' || def.id === 'oscar_currents_final_uv';
+
+    if (animationAllowed && renderAnimation) {
       // Add z-index property to existing canvas
       // FIND THE PROPER WAY TO DO THIS!
       document.querySelectorAll('canvas')[0].style.zIndex = -1;

@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "oscar_currents_final_sd": {
+      "id": "oscar_currents_final_sd",
+      "title": "oscar_currents_final_sd",
+      "subtitle": "oscar_currents_final_sd subtitle",
+      "description": "oscar_currents_final_sd description",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Vectors",
+      "vectorStyle": {
+        "id": "oscar_currents_final_sd"
+      },
+      "transition": true,
+      "projections": {
+        "geographic": {
+          "source": "GITC:geographic"
+        }
+      }
+    }
+  }
+}

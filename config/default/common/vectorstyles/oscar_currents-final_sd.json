@@ -1,0 +1,34 @@
+{
+  "version": 8,
+  "name": "oscar_currents_final_sd",
+  "sources": {
+    "ascat": {
+      "type": "vector",
+      "tiles": [
+        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/oscar_currents_final_sd/default/2020-01-01/2km/0/0/0.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "oscar_currents_final_sd",
+      "source": "oscar_currents_final_sd",
+      "source-layer": "oscar_currents_final_sd",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(160, 229, 26)"
+      }
+    }
+  ]
+}

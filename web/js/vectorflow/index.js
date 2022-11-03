@@ -59,11 +59,15 @@ const base = new OLTile({
     }),
   }),
 });
+
+// Modify to allow dynamic url for ascat/oscar
+const dataSourceUrl = 'https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/2020-01-01/16km/0/0/0.mvt';
+
 const source = new SourceVectorTile({
   visible: true,
   projection: get('EPSG:4326'),
   // url: 'https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=2020-03-21&layer=MISR_Cloud_Motion_Vector&tilematrixset=2km&Service=WMTS&Request=GetTile&Version=1.0.0&FORMAT=application%2Fvnd.mapbox-vector-tile&TileMatrix={z}&TileCol={x}&TileRow={y}',
-  url: 'https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/2020-01-01/16km/0/0/0.mvt',
+  url: dataSourceUrl,
   format: new MVT(),
   tileGrid: new WMTSTileGrid({
     extent: [-180, -90, 180, 90],
