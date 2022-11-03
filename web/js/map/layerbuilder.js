@@ -52,7 +52,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-
+  const renderAscatAnimated = false;
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -542,7 +542,7 @@ export default function mapLayerBuilder(config, cache, store) {
         // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
         // Setting the radius to 0 includes each point but hides the visual
         image: new CircleStyle({
-          radius: 0,
+          radius: renderAscatAnimated ? 0 : 2,
           fill: new Fill({
             color: 'green',
           }),
@@ -559,9 +559,13 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    applyStyle(def, layer, state, layeroptions);
+    layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
 
     let windTileLayer;
-    if (def.id === 'ascat') {
+    if (def.id === 'ascat' && renderAscatAnimated) {
       // Add z-index property to existing canvas
       // FIND THE PROPER WAY TO DO THIS!
       document.querySelectorAll('canvas')[0].style.zIndex = -1;
@@ -569,12 +573,6 @@ export default function mapLayerBuilder(config, cache, store) {
       windTileLayer = createWindtile(tileSource, selected, layer);
       // console.log(windTileLayer);
     }
-
-
-    applyStyle(def, layer, state, layeroptions);
-    layer.wrap = day;
-    layer.wv = attributes;
-    layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
