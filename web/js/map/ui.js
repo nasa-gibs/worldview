@@ -29,7 +29,6 @@ import * as olProj from 'ol/proj';
 import Cache from 'cachai';
 // eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue';
-import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import { fly, saveRotation } from './util';
@@ -37,6 +36,7 @@ import mapCompare from './compare/compare';
 import { granuleFootprint } from './granule/util';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
 import {
   REMOVE_MARKER,
   SET_MARKER,
