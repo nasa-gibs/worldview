@@ -118,6 +118,7 @@
         // React rules overrides
         "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
+        "react/no-unknown-property": "warn",
         "react/jsx-no-bind": "warn",
         "react/sort-comp": [
           "error",

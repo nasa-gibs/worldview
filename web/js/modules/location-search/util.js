@@ -1,5 +1,5 @@
 import React from 'react';
-import * as ReactDOMClient from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
 import OlOverlay from 'ol/Overlay';
@@ -80,12 +80,11 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
  */
 const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
-  const root = createRoot(overlayEl)
   const removeMarker = () => {
-    root.unmount(overlayEl);
+    ReactDOM.unmountComponentAtNode(overlayEl);
     removeMarkerPin();
   };
-  root.render(
+  ReactDOM.render(
     React.createElement(LocationMarker, { ...pinProps, removeMarker }),
     overlayEl,
   );

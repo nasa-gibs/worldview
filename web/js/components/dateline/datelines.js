@@ -52,71 +52,71 @@ function DateLines(props) {
   };
 
   useEffect(() => {
-    if (mapIsRendered){
-    if (!proj.selected.crs === CRS.GEOGRAPHIC) {
-      setHideLines(true);
+    if (mapIsRendered) {
+      if (!proj.selected.crs === CRS.GEOGRAPHIC) {
+        setHideLines(true);
+      }
     }
-  }
   }, [proj]);
 
   useEffect(() => {
-    if (mapIsRendered){
-    if (proj.id !== 'geographic' || !mapIsRendered) {
-      return;
+    if (mapIsRendered) {
+      if (proj.id !== 'geographic' || !mapIsRendered) {
+        return;
+      }
+      map.on('movestart', () => {
+        setHideLines(true);
+      });
+      map.on('moveend', updatePosition);
+      return () => {
+        map.un('movestart', updatePosition);
+        map.un('moveend', updatePosition);
+      };
     }
-    map.on('movestart', () => {
-      setHideLines(true);
-    });
-    map.on('moveend', updatePosition);
-    return () => {
-      map.un('movestart', updatePosition);
-      map.un('moveend', updatePosition);
-    };
-  }
   }, [mapIsRendered]);
 
   useEffect(() => {
-    if (mapIsRendered){
-    updatePosition()
+    if (mapIsRendered) {
+      updatePosition();
     }
-  }, [mapIsRendered])
+  }, [mapIsRendered]);
 
 
   return (
     mapIsRendered ? (
-    <>
-      <Line
-        id="dateline-left"
-        map={map}
-        hideText={hideText}
-        alwaysShow={alwaysShow}
-        isCompareActive={isCompareActive}
-        height={hideLines ? 0 : height}
-        lineX={-180}
-        lineY={startY}
-        date={date}
-        textCoords={textCoords}
-        setTextCoords={setTextCoords}
-        isMobilePhone={isMobilePhone}
-        isMobileTablet={isMobileTablet}
-      />
-      <Line
-        id="dateline-right"
-        map={map}
-        hideText={hideText}
-        alwaysShow={alwaysShow}
-        isCompareActive={isCompareActive}
-        height={hideLines ? 0 : height}
-        lineX={180}
-        lineY={startY}
-        date={util.dateAdd(date, 'day', -1)}
-        textCoords={textCoords}
-        setTextCoords={setTextCoords}
-        isMobilePhone={isMobilePhone}
-        isMobileTablet={isMobileTablet}
-      />
-    </>
-   ) : null 
+      <>
+        <Line
+          id="dateline-left"
+          map={map}
+          hideText={hideText}
+          alwaysShow={alwaysShow}
+          isCompareActive={isCompareActive}
+          height={hideLines ? 0 : height}
+          lineX={-180}
+          lineY={startY}
+          date={date}
+          textCoords={textCoords}
+          setTextCoords={setTextCoords}
+          isMobilePhone={isMobilePhone}
+          isMobileTablet={isMobileTablet}
+        />
+        <Line
+          id="dateline-right"
+          map={map}
+          hideText={hideText}
+          alwaysShow={alwaysShow}
+          isCompareActive={isCompareActive}
+          height={hideLines ? 0 : height}
+          lineX={180}
+          lineY={startY}
+          date={util.dateAdd(date, 'day', -1)}
+          textCoords={textCoords}
+          setTextCoords={setTextCoords}
+          isMobilePhone={isMobilePhone}
+          isMobileTablet={isMobileTablet}
+        />
+      </>
+    ) : null
   );
 }
 

@@ -108,12 +108,12 @@ function render (config, legacyState) {
   root.render(
     <Provider store={store}>
       <App models={models} store={store} />
-    </Provider>
+    </Provider>,
   );
   setTimeout(() => {
     combineUi(models, config, store); // Legacy UI
-  }, "10")
-  
+  }, '10');
+
   util.errorReport(errors);
 }
 
