@@ -138,7 +138,7 @@
     "postcss": "^8.4.16",
     "postcss-loader": "^7.0.1",
     "react-refresh": "^0.14.0",
-    "react-test-renderer": "^16.12.0",
+    "react-test-renderer": "^18.0.0",
     "redux-mock-store": "^1.5.3",
     "run-script-os": "^1.1.5",
     "sass": "^1.49.7",
@@ -159,8 +159,8 @@
     "yargs": "^15.3.0"
   },
   "dependencies": {
-    "@elastic/react-search-ui": "^1.5.1",
-    "@elastic/react-search-ui-views": "^1.5.1",
+    "@elastic/react-search-ui": "^1.18.2",
+    "@elastic/react-search-ui-views": "^1.18.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
@@ -191,25 +191,25 @@
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
     "prop-types": "^15.7.2",
-    "rc-slider": "9.2.2",
-    "react": "^16.14.0",
+    "rc-slider": "^9.6.5",
+    "react": "^18.0.0",
     "react-autocomplete": "^1.8.1",
-    "react-beautiful-dnd": "^13.0.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-contextmenu": "^2.14.0",
     "react-device-detect": "^2.2.2",
-    "react-dom": "^16.12.0",
+    "react-dom": "^18.0.0",
     "react-draggable": "^4.1.0",
     "react-image-crop": "^9.1.1",
     "react-infinite-scroller": "^1.2.4",
-    "react-joyride": "^2.3.0",
-    "react-masonry-component": "^6.2.1",
+    "react-joyride": "^2.5.3",
+    "react-masonry-component": "^6.3.0",
     "react-mobile-datepicker": "^4.0.1",
     "react-portal": "^4.2.1",
     "react-redux": "^7.1.3",
-    "react-resizable": "^1.9.0",
-    "react-swipe-to-delete-component": "^0.5.4",
+    "react-resizable": "^3.0.4",
+    "react-swipe-to-delete-component": "^1.0.8",
     "react-visibility-sensor": "^5.1.1",
-    "reactstrap": "8.1.x",
+    "reactstrap": "8.9.0",
     "redux": "^4.0.4",
     "redux-location-state": "^2.6.0",
     "redux-logger": "^3.0.6",
@@ -248,5 +248,24 @@
   },
   "prettier": {
     "singleQuote": true
+  },
+  "overrides": {
+    "react-autocomplete": {
+      "react": ">= 16.3.0",
+      "react-dom": ">= 16.3.0"
+    },
+    "react-contextmenu": {
+      "react": ">= 16.3.0",
+      "react-dom": ">= 16.3.0"
+    },
+    "react-swipe-to-delete-component": {
+      "react": ">= 16.3.0",
+      "react-dom": ">= 16.3.0"
+    },
+    "react-masonry-component": {
+      "react": ">= 16.3.0",
+      "react-dom": ">= 16.3.0"
+    }
   }
+
 }

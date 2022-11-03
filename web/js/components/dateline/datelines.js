@@ -12,8 +12,6 @@ function DateLines(props) {
     map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
-  if (!mapIsRendered) return null;
-
   const [height, setHeight] = useState(0);
   const [startY, setStartY] = useState(0);
   const [hideLines, setHideLines] = useState(false);
@@ -54,12 +52,15 @@ function DateLines(props) {
   };
 
   useEffect(() => {
+    if (mapIsRendered){
     if (!proj.selected.crs === CRS.GEOGRAPHIC) {
       setHideLines(true);
     }
+  }
   }, [proj]);
 
   useEffect(() => {
+    if (mapIsRendered){
     if (proj.id !== 'geographic' || !mapIsRendered) {
       return;
     }
@@ -71,11 +72,18 @@ function DateLines(props) {
       map.un('movestart', updatePosition);
       map.un('moveend', updatePosition);
     };
+  }
   }, [mapIsRendered]);
 
-  useEffect(updatePosition, [mapIsRendered]);
+  useEffect(() => {
+    if (mapIsRendered){
+    updatePosition()
+    }
+  }, [mapIsRendered])
+
 
   return (
+    mapIsRendered ? (
     <>
       <Line
         id="dateline-left"
@@ -108,6 +116,7 @@ function DateLines(props) {
         isMobileTablet={isMobileTablet}
       />
     </>
+   ) : null 
   );
 }
 
