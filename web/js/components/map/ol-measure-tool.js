@@ -1,7 +1,7 @@
-
+/* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { unByKey as OlObservableUnByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
@@ -19,8 +19,6 @@ import {
   Style as OlStyle,
 } from 'ol/style';
 import { transform } from 'ol/proj';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { array } from 'yargs';
 import {
   toggleMeasureActive as toggleMeasureActiveAction,
   updateMeasurements as updateMeasurementsAction,
@@ -65,11 +63,6 @@ function OlMeasureTool (props) {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
   const previousCrs = usePrevious(crs);
-
-  useEffect(() => {
-    console.log(projections);
-    console.log(proj);
-  });
 
   function usePrevious(data) {
     const ref = useRef();
@@ -352,9 +345,6 @@ function OlMeasureTool (props) {
 
 OlMeasureTool.propTypes = {
   map: PropTypes.object,
-  updateMeasurements: PropTypes.func,
-  proj: object,
-  projections: array,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   toggleMeasureActive: PropTypes.func,
