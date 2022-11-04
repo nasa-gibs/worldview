@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import util from '../util/util';
 import mapui from '../map/ui';
@@ -10,7 +10,6 @@ import {
   MAP_SINGLE_CLICK,
   MAP_CONTEXT_MENU,
 } from '../util/constants';
-import MapUIContext from './MapUIContext'
 import MapUI from './MapUI';
 
 const { events } = util;
@@ -39,11 +38,57 @@ const CombineUI = ({ models, config, store }) => {
     });
   };
 
-  const ui = {};
+  const tempUI = {};
+  // this component is for testing the current functionality
+  // useEffect(() => {
+  //   const combineUiFunction = () => {
+  //     const subscribeToStore = function () {
+  //       const state = store.getState();
+  //       const action = state.lastAction;
+  //       return events.trigger(REDUX_ACTION_DISPATCHED, action);
+  //     };
+  //     store.subscribe(subscribeToStore);
 
-  useEffect(() => {
-    const combineUiFunction = () => {
+  //     // This is where we should start to break out components.
+  //     // Instead of feeding all of these parameters to one function, we can pass them
+  //     // to components
+  //     console.log('console logging mapui() function', mapui(models, config, store, ui));
+  //     // tempUI.map = mapui(models, config, store, ui);
+  //     tempUI.supportsPassive = false;
+  //     try {
+  //       const opts = Object.defineProperty({}, 'passive', {
+  //         // eslint-disable-next-line getter-return
+  //         get() {
+  //           tempUI.supportsPassive = true;
+  //         },
+  //       });
+  //       window.addEventListener('testPassive', null, opts);
+  //       window.removeEventListener('testPassive', null, opts);
+  //     } catch (e) {
+  //       util.warn(e);
+  //     }
 
+  //     registerMapMouseHandlers(tempUI.map.proj);
+
+  //     // Sink all focus on inputs if click unhandled
+  //     document.addEventListener('click', (e) => {
+  //       if (e.target.nodeName !== 'INPUT') {
+  //         document.querySelectorAll('input').forEach((el) => el.blur());
+  //       }
+  //     });
+  //     document.activeElement.blur();
+  //     document.querySelectorAll('input').forEach((el) => el.blur());
+
+  //     return tempUI;
+  //   };
+  //     combineUiFunction();
+  // }, []);
+
+  const [ui, setUI] = useState({});
+  const myUI = {}
+
+  // this function is for testing the new components
+  const altCombineUiFunction = () => {
       const subscribeToStore = function () {
         const state = store.getState();
         const action = state.lastAction;
@@ -51,16 +96,14 @@ const CombineUI = ({ models, config, store }) => {
       };
       store.subscribe(subscribeToStore);
 
-      // This is where we should start to break out components.
-      // Instead of feeding all of these parameters to one function, we can pass them
-      // to components
-      ui.map = mapui(models, config, store, ui);
-      ui.supportsPassive = false;
+      // tempUI.map = mapui(models, config, store, ui);
+      myUI.map = ui;
+      myUI.supportsPassive = false;
       try {
         const opts = Object.defineProperty({}, 'passive', {
           // eslint-disable-next-line getter-return
           get() {
-            ui.supportsPassive = true;
+            myUI.supportsPassive = true;
           },
         });
         window.addEventListener('testPassive', null, opts);
@@ -69,7 +112,7 @@ const CombineUI = ({ models, config, store }) => {
         util.warn(e);
       }
 
-      registerMapMouseHandlers(ui.map.proj);
+      registerMapMouseHandlers(myUI.map.proj);
 
       // Sink all focus on inputs if click unhandled
       document.addEventListener('click', (e) => {
@@ -80,16 +123,34 @@ const CombineUI = ({ models, config, store }) => {
       document.activeElement.blur();
       document.querySelectorAll('input').forEach((el) => el.blur());
 
-      console.log(ui)
+      return myUI;
+  };
 
-      return ui;
-    };
+  useEffect(() => {
+    console.log("combine UI firing")
+  })
 
-    combineUiFunction();
-  }, []);
+  useEffect(() => {
+    if(ui.proj){
+      altCombineUiFunction();
+    }
+  }, [ui])
+
+  const testFunction = () => {
+    console.log(ui)
+  }
+
+  const buttonStyle = {
+    zIndex: '999'
+  }
 
   return (
-    <MapUI  />
+    <>
+      <MapUI models={models} config={config} store={store} ui={ui} setUI={setUI}/>
+      <div className="d-flex justify-content-center w-100">
+        <button onClick={testFunction} style={buttonStyle}>SHOW MY UI OBJECT</button>
+      </div>
+    </>
   );
 };
 
