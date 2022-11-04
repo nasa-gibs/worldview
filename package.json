@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.36.0",
+  "version": "3.37.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -171,7 +171,6 @@
     "bluebird": "3.7.2",
     "bootstrap": "4.4.1",
     "cachai": "^1.0.2",
-    "canvg-browser": "^1.0.0",
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.4",
     "copy-to-clipboard": "^3.3.1",
