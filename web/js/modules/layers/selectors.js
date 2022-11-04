@@ -25,6 +25,8 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
+export const getActiveCollections = ({ compare, layers }) => layers[compare.activeString].collections || {};
+
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection

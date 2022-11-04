@@ -5,8 +5,8 @@ import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
+import TileState from 'ol/TileState';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
-
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -14,12 +14,15 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
+
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
 import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { updateLayerCollectionVersionType } from '../modules/layers/actions';
+import { getActiveCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -39,10 +42,8 @@ import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
-
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -84,6 +85,51 @@ export default function mapLayerBuilder(config, cache, store) {
     return {
       expirationAbsolute: new Date(now + tenMin),
     };
+  };
+
+  /**
+   * We define our own tile loading function in order to capture custom header values
+   *
+   * @param {*} tile
+   * @param {*} src
+   */
+  const tileLoadFunction = (layer) => async function(tile, src) {
+    const { compare: { activeString } } = store.getState();
+    const activeCollections = getActiveCollections(store.getState());
+    const collection = activeCollections[layer.id];
+
+    const setCollectionInfo = (headers) => {
+      const actualId = headers.get('layer-identifier-actual');
+      const parts = actualId.split('_');
+      const version = parts[parts.length - 2];
+      const type = parts[parts.length - 1];
+      const needsUpdate = (collection || {}).type !== type || (collection || {}).version !== version;
+
+      if (actualId && (!collection || needsUpdate)) {
+        store.dispatch(updateLayerCollectionVersionType({
+          id: layer.id,
+          activeString,
+          collection: {
+            version,
+            type,
+          },
+        }));
+      }
+    };
+
+    try {
+      const response = await fetch(src);
+      const data = await response.blob();
+      setCollectionInfo(response.headers);
+
+      if (data !== undefined) {
+        tile.getImage().src = URL.createObjectURL(data);
+      } else {
+        tile.setState(TileState.ERROR);
+      }
+    } catch (e) {
+      tile.setState(TileState.ERROR);
+    }
   };
 
   /**
@@ -419,6 +465,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
+      tileLoadFunction: tileLoadFunction(def),
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);

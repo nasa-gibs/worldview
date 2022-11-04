@@ -30,6 +30,8 @@ import {
   UPDATE_GRANULE_LAYER_GEOMETRY,
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+  UPDATE_LAYER_COLLECTION_VERSION_TYPE,
+
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -381,5 +383,12 @@ export function changeGranuleSatelliteInstrumentGroup(id, granulePlatform) {
       geometry,
       activeKey: activeString,
     });
+  };
+}
+
+export function updateLayerCollectionVersionType(value) {
+  return {
+    type: UPDATE_LAYER_COLLECTION_VERSION_TYPE,
+    ...value,
   };
 }

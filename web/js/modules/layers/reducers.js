@@ -20,6 +20,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
+  UPDATE_LAYER_COLLECTION_VERSION_TYPE,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -41,6 +42,7 @@ const { GROUP_OVERLAYS } = safeLocalStorage.keys;
 const groupState = {
   groupOverlays: true,
   layers: [],
+  collections: {},
   overlayGroups: [],
   prevLayers: [],
   granuleFootprints: {},
@@ -335,6 +337,21 @@ export function layerReducer(state = initialState, action) {
           granuleFootprints: {
             $set: action.geometry,
           },
+        },
+      });
+
+    case UPDATE_LAYER_COLLECTION_VERSION_TYPE:
+      return update(state, {
+        [compareState]: {
+          collections: {
+            [action.id]: {
+              $set: {
+                version: action.collection.version,
+                type: action.collection.type,
+              },
+            },
+          },
+
         },
       });
 
