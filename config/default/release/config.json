@@ -15,6 +15,10 @@
         {
             "from": "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
             "to": "gitc-geographic.xml"
+        },
+        {
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
+            "to": "uat-gibs-geographic.xml"
         }
     ],
     "wv-options-wmts": [
@@ -29,6 +33,13 @@
             "source": "GITC:geographic",
             "from": "gitc-geographic.xml",
             "to": "gitc-geographic.json",
+            "projection": "geographic",
+            "maxResolution": 0.5625
+        },
+        {
+            "source": "UAT:GIBS:geographic",
+            "from": "uat-gibs-geographic.xml.xml",
+            "to": "uat-gibs-geographic.xml.json",
             "projection": "geographic",
             "maxResolution": 0.5625
         },

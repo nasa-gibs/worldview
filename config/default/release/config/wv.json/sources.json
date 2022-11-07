@@ -23,6 +23,9 @@
         },
         "WDPA:wms": {
             "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
+        },
+        "UAT:GIBS:geographic": {
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
         }
     }
 }

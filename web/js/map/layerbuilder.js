@@ -475,6 +475,62 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
+
+
+    // These checks are for the misr_cloud_motion_vector layer
+    // this is just to visualize the dataset from the demo instance so we can compare the demo to WV
+    if (!source.matrixSets) {
+      source.matrixSets = {
+        '2km': {
+          id: '2km',
+          maxResolution: 0.5625,
+          resolutions: [
+            0.5625,
+            0.28125,
+            0.140625,
+            0.0703125,
+            0.03515625,
+            0.017578125,
+          ],
+          tileSize: [
+            512,
+            512,
+          ],
+          tileMatrices: [
+            {
+              matrixWidth: 2,
+              matrixHeight: 1,
+            },
+            {
+              matrixWidth: 3,
+              matrixHeight: 2,
+            },
+            {
+              matrixWidth: 5,
+              matrixHeight: 3,
+            },
+            {
+              matrixWidth: 10,
+              matrixHeight: 5,
+            },
+            {
+              matrixWidth: 20,
+              matrixHeight: 10,
+            },
+            {
+              matrixWidth: 40,
+              matrixHeight: 20,
+            },
+          ],
+        },
+      };
+    }
+
+    if (!def.matrixSet) {
+      def.matrixSet = '2km';
+    }
+    // end of misr_cloud_motion_vector code
+
     const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
@@ -565,8 +621,8 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     let windTileLayer;
-    console.log(def);
-    const animationAllowed = def.id === 'ascat' || def.id === 'oscar_currents_final_sd' || def.id === 'oscar_currents_final_uv';
+    const vectorLayers = ['ascat', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
+    const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
       // Add z-index property to existing canvas

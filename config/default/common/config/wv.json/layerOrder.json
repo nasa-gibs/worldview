@@ -743,6 +743,7 @@
 		"MISR_Aerosol_Optical_Depth_Avg_Green_Monthly",
 		"MISR_Radiance_Average_Infrared_Color_Monthly",
 		"MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly",
+		"MISR_Cloud_Motion_Vector",
 		"RSS_Merged_Wind_Climatology_Monthly",
 		"RSS_Total_Precipitable_Water_Climatology_Monthly",
 		"MEaSUREs_Ice_Velocity_Greenland",

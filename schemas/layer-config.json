@@ -178,6 +178,7 @@
             "ascat",
             "oscar_currents_final_sd",
             "oscar_currents_final_uv",
+            "MISR_Cloud_Motion_Vector",
             "Vegetation Indices",
             "Vegetation Light Use Efficiency",
             "Volcano Hazard",
