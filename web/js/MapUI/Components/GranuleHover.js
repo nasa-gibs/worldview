@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getActiveGranuleFootPrints } from '../../modules/layers/selectors';
@@ -9,65 +8,53 @@ const { events } = util;
 
 const GranuleHover = (props) => {
   const {
+    granuleFootprints,
+    setGranuleFootprints,
     state,
-    granuleFootprintz,
-    setGranuleFootprintz,
     ui,
   } = props;
 
   const onGranuleHover = (platform, date, update) => {
-    if(!ui.proj) return;
+    if (!ui.proj) return;
     const proj = ui.selected.getView().getProjection().getCode();
     let geometry;
     if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    const granuleFootprintzCopy = granuleFootprintz
-    granuleFootprintzCopy[proj].addFootprint(geometry, date);
-    setGranuleFootprintz(granuleFootprintzCopy);
+    const granuleFootprintsCopy = granuleFootprints;
+    granuleFootprintsCopy[proj].addFootprint(geometry, date);
+    setGranuleFootprints(granuleFootprintsCopy);
   };
 
   const onGranuleHoverUpdate = (platform, date) => {
-    if(!ui.proj) return;
+    if (!ui.proj) return;
     const proj = ui.selected.getView().getProjection().getCode();
     let geometry;
     if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    const granuleFootprintzCopy = granuleFootprintz
-    granuleFootprintzCopy[proj].updateFootprint(geometry, date);
-    setGranuleFootprintz(granuleFootprintzCopy);
+    const granuleFootprintsCopy = granuleFootprints;
+    granuleFootprintsCopy[proj].updateFootprint(geometry, date);
+    setGranuleFootprints(granuleFootprintsCopy);
   };
-
-  const buttonStyle = {
-    zIndex: "999"
-  }
-
-  const testFunction = () => {
-    console.log(granuleFootprintz)
-  }
 
   events.on(GRANULE_HOVERED, onGranuleHover);
   events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
 
-  return (
-    <div className="d-flex justify-content-center">
-      <button style={buttonStyle} className="btn btn-success" onClick={testFunction}>UHHHHHHHHHH</button>
-    </div>
-  );
+  return null;
+};
 
-}
-
-const mapStateToProps = (state) => {
-  return {
-    state,
-  }
-}
+const mapStateToProps = (state) => ({
+  state,
+});
 
 export default connect(
   mapStateToProps,
 )(GranuleHover);
 
 GranuleHover.propTypes = {
-  state: PropTypes.object
-}
+  granuleFootprints: PropTypes.object,
+  setGranuleFootprints: PropTypes.func,
+  state: PropTypes.object,
+  ui: PropTypes.object,
+};

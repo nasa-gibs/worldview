@@ -96,7 +96,7 @@ const { events } = util;
 const MapUI = ({ models, config, store, ui, setUI }) => {
 
   const [markerAction, setMarkerAction] = useState({});
-  const [granuleFootprintz, setGranuleFootprintz] = useState({});
+  const [granuleFootprints, setGranuleFootprints] = useState({});
 
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
   const createUI = (models, config, store) => {
     console.log("mapUI firing")
     const animationDuration = 250;
-    const granuleFootprints = {};
+    const granuleFootprintsObj = {};
     const compareMapUi = mapCompare(store);
     const runningdata = new MapRunningData(compareMapUi, store);
     const doubleClickZoom = new OlInteractionDoubleClickZoom({
@@ -273,25 +273,25 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       }
     };
 
-    const onGranuleHover = (platform, date, update) => {
-      const state = store.getState();
-      const proj = self.selected.getView().getProjection().getCode();
-      let geometry;
-      if (platform && date) {
-        geometry = getActiveGranuleFootPrints(state)[date];
-      }
-      granuleFootprints[proj].addFootprint(geometry, date);
-    };
+    // const onGranuleHover = (platform, date, update) => {
+    //   const state = store.getState();
+    //   const proj = self.selected.getView().getProjection().getCode();
+    //   let geometry;
+    //   if (platform && date) {
+    //     geometry = getActiveGranuleFootPrints(state)[date];
+    //   }
+    //   granuleFootprintsObj[proj].addFootprint(geometry, date);
+    // };
 
-    const onGranuleHoverUpdate = (platform, date) => {
-      const state = store.getState();
-      const proj = self.selected.getView().getProjection().getCode();
-      let geometry;
-      if (platform && date) {
-        geometry = getActiveGranuleFootPrints(state)[date];
-      }
-      granuleFootprints[proj].updateFootprint(geometry, date);
-    };
+    // const onGranuleHoverUpdate = (platform, date) => {
+    //   const state = store.getState();
+    //   const proj = self.selected.getView().getProjection().getCode();
+    //   let geometry;
+    //   if (platform && date) {
+    //     geometry = getActiveGranuleFootPrints(state)[date];
+    //   }
+    //   granuleFootprintsObj[proj].updateFootprint(geometry, date);
+    // };
 
     /**
    * During animation we swap Vector tiles for WMS for better performance.
@@ -329,8 +329,8 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         }, 100);
       });
       events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-      events.on(GRANULE_HOVERED, onGranuleHover);
-      events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
+      // events.on(GRANULE_HOVERED, onGranuleHover);
+      // events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
       window.addEventListener('orientationchange', () => {
         setTimeout(() => { updateProjection(true); }, 200);
       });
@@ -1262,9 +1262,16 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         store.dispatch(stopLoading(MAP_LOADING));
       });
       map.on('rendercomplete', onRenderComplete);
-      granuleFootprints[proj.crs] = granuleFootprint(map);
-      setGranuleFootprintz({
-        ...granuleFootprints,
+
+      granuleFootprintsObj[proj.crs] = granuleFootprint(map);
+
+      // This could be a problem, we loop through each projection to add the
+      // functions but we can only update state once.
+      // If I move the granuleFootprintsObj into this function I have the same problem
+      // Seems like the loop starts somewhere above this function and below the object
+
+      setGranuleFootprints({
+        ...granuleFootprintsObj,
         [proj.crs]: granuleFootprint(map)
       });
       window.addEventListener('resize', () => {
@@ -1322,7 +1329,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
   return (
     <>
       <Markers action={markerAction} ui={ui} setUI={setUI} config={config}/>
-      <GranuleHover granuleFootprintz={granuleFootprintz} setGranuleFootprintz={setGranuleFootprintz} ui={ui} />
+      <GranuleHover granuleFootprints={granuleFootprints} setGranuleFootprints={setGranuleFootprints} ui={ui} />
     </>
   );
 };
