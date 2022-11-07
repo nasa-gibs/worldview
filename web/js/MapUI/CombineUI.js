@@ -148,7 +148,7 @@ const CombineUI = ({ models, config, store }) => {
     <>
       <MapUI models={models} config={config} store={store} ui={ui} setUI={setUI}/>
       <div className="d-flex justify-content-center w-100">
-        <button onClick={testFunction} style={buttonStyle}>SHOW MY UI OBJECT</button>
+        <button onClick={testFunction} style={buttonStyle} className="btn btn-primary">SHOW MY UI OBJECT</button>
       </div>
     </>
   );

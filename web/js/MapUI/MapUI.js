@@ -1,6 +1,7 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Markers from './Components/Markers';
+import GranuleHover from './Components/GranuleHover';
 
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-shadow */
@@ -95,6 +96,7 @@ const { events } = util;
 const MapUI = ({ models, config, store, ui, setUI }) => {
 
   const [markerAction, setMarkerAction] = useState({});
+  const [granuleFootprintz, setGranuleFootprintz] = useState({});
 
 
   useEffect(() => {
@@ -162,14 +164,14 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         }
         //   return removeCoordinatesMarker(action.coordinates);
         case SET_MARKER: {
-          if (action.flyToExistingMarker) {
-            return flyToMarker(action.coordinates);
-          }
-          setMarkerAction(action)
+          setMarkerAction(action);
+          // if (action.flyToExistingMarker) {
+          //   return flyToMarker(action.coordinates);
+          // }
           // return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
         }
         case TOGGLE_DIALOG_VISIBLE:
-          setMarkerAction(action)
+          setMarkerAction(action);
           // return addMarkerAndUpdateStore(false);
         case CLEAR_ROTATE: {
           self.selected.getView().animate({
@@ -345,14 +347,16 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    *
    * @returns {void}
    */
-    const removeCoordinatesMarker = (coordinatesObject) => {
-      self.markers.forEach((marker) => {
-        if (marker.id === coordinatesObject.id) {
-          marker.setMap(null);
-          self.selected.removeOverlay(marker);
-        }
-      });
-    };
+   //--------------------------------------------------------------
+    // const removeCoordinatesMarker = (coordinatesObject) => {
+    //   self.markers.forEach((marker) => {
+    //     if (marker.id === coordinatesObject.id) {
+    //       marker.setMap(null);
+    //       self.selected.removeOverlay(marker);
+    //     }
+    //   });
+    // };
+   //--------------------------------------------------------------
 
     /*
    * Remove all coordinates markers
@@ -362,13 +366,14 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    *
    * @returns {void}
    */
-    const removeAllCoordinatesMarkers = () => {
-      self.markers.forEach((marker) => {
-        marker.setMap(null);
-        self.selected.removeOverlay(marker);
-      });
-    };
-
+  //--------------------------------------------------------------
+    // const removeAllCoordinatesMarkers = () => {
+    //   self.markers.forEach((marker) => {
+    //     marker.setMap(null);
+    //     self.selected.removeOverlay(marker);
+    //   });
+    // };
+   //--------------------------------------------------------------
 
 
     /*
@@ -1258,6 +1263,10 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       });
       map.on('rendercomplete', onRenderComplete);
       granuleFootprints[proj.crs] = granuleFootprint(map);
+      setGranuleFootprintz({
+        ...granuleFootprints,
+        [proj.crs]: granuleFootprint(map)
+      });
       window.addEventListener('resize', () => {
         map.getView().changed();
       });
@@ -1313,6 +1322,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
   return (
     <>
       <Markers action={markerAction} ui={ui} setUI={setUI} config={config}/>
+      <GranuleHover granuleFootprintz={granuleFootprintz} setGranuleFootprintz={setGranuleFootprintz} ui={ui} />
     </>
   );
 };
