@@ -151,6 +151,7 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'vector':
             layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            console.log('Calling createLayerVector');
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
@@ -195,6 +196,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
+    console.log(layer);
 
     return layer;
   };
@@ -446,7 +448,20 @@ export default function mapLayerBuilder(config, cache, store) {
 
 
 
+  const animateVectors = function(layerName, tileSource, selected, layer) {
+    let windTileLayer;
+    const vectorLayers = ['ascat', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
+    const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
+    if (animationAllowed && renderAnimation) {
+    // Add z-index property to existing canvas
+    // FIND THE PROPER WAY TO DO THIS!
+      document.querySelectorAll('canvas')[0].style.zIndex = -1;
+
+      windTileLayer = createWindtile(tileSource, selected, layer);
+    // console.log(windTileLayer);
+    }
+  };
 
 
   /** Create a new Vector Layer
@@ -620,18 +635,21 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wv = attributes;
     layer.isVector = true;
 
-    let windTileLayer;
     const vectorLayers = ['ascat', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
-
     if (animationAllowed && renderAnimation) {
-      // Add z-index property to existing canvas
-      // FIND THE PROPER WAY TO DO THIS!
-      document.querySelectorAll('canvas')[0].style.zIndex = -1;
-
-      windTileLayer = createWindtile(tileSource, selected, layer);
-      // console.log(windTileLayer);
+      animateVectors(layerName, tileSource, selected, layer);
     }
+    // let windTileLayer;
+
+    // if (animationAllowed && renderAnimation) {
+    //   // Add z-index property to existing canvas
+    //   // FIND THE PROPER WAY TO DO THIS!
+    //   document.querySelectorAll('canvas')[0].style.zIndex = -1;
+
+    //   windTileLayer = createWindtile(tileSource, selected, layer);
+    //   // console.log(windTileLayer);
+    // }
 
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
