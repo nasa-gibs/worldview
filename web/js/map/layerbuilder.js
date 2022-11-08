@@ -196,7 +196,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
-    console.log(layer);
 
     return layer;
   };
@@ -454,12 +453,13 @@ export default function mapLayerBuilder(config, cache, store) {
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
-    // Add z-index property to existing canvas
-    // FIND THE PROPER WAY TO DO THIS!
-      document.querySelectorAll('canvas')[0].style.zIndex = -1;
-
+      const canvasElem = document.querySelectorAll('canvas');
+      if (canvasElem.length > 0) {
+        // Add z-index property to existing OL canvas. This ensures that the visualization is on the top layer.
+        // The z-index should be applied with CSS on map generation to avoid this code entirely.
+        canvasElem[0].style.zIndex = -1;
+      }
       windTileLayer = createWindtile(tileSource, selected, layer);
-    // console.log(windTileLayer);
     }
   };
 
