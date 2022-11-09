@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Cache from 'cachai';
 import util from '../util/util';
-import mapui from '../map/ui';
+import MapRunningData from '../map/runningdata';
 import {
   REDUX_ACTION_DISPATCHED,
   MAP_MOUSE_OUT,
@@ -10,12 +11,16 @@ import {
   MAP_SINGLE_CLICK,
   MAP_CONTEXT_MENU,
 } from '../util/constants';
+import mapCompare from '../map/compare/compare';
+import mapLayerBuilder from '../map/layerbuilder';
 import MapUI from './MapUI';
 
 const { events } = util;
 
 const CombineUI = ({ models, config, store }) => {
   const registerMapMouseHandlers = (maps) => {
+    // if(maps.anarctic === undefined)return;
+    console.log('4. registering mouse moves')
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
       const crs = map.getView().getProjection().getCode();
@@ -84,7 +89,25 @@ const CombineUI = ({ models, config, store }) => {
   //     combineUiFunction();
   // }, []);
 
-  const [ui, setUI] = useState({});
+  const cache = new Cache(400);
+  const compareMapUi = mapCompare(store);
+  const runningdata = new MapRunningData(compareMapUi, store);
+  const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
+
+  const [ui, setUI] = useState({
+    cache,
+    mapIsbeingDragged: false,
+    mapIsbeingZoomed: false,
+    proj: {}, // One map for each projection
+    selected: null, // The map for the selected projection
+    selectedVectors: {},
+    markers: [],
+    runningdata,
+    layerKey,
+    createLayer,
+    processingPromise: null,
+  });
+
   const myUI = {}
 
   // this function is for testing the new components
@@ -96,7 +119,6 @@ const CombineUI = ({ models, config, store }) => {
       };
       store.subscribe(subscribeToStore);
 
-      // tempUI.map = mapui(models, config, store, ui);
       myUI.map = ui;
       myUI.supportsPassive = false;
       try {
@@ -126,9 +148,9 @@ const CombineUI = ({ models, config, store }) => {
       return myUI;
   };
 
-  useEffect(() => {
-    console.log("combine UI firing")
-  })
+  // useEffect(() => {
+  //   console.log("combine UI firing")
+  // })
 
   useEffect(() => {
     if(ui.proj){

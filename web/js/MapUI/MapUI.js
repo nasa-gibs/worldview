@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Markers from './Components/Markers';
 import GranuleHover from './Components/GranuleHover';
+import CreateMap from './Components/CreateMap/CreateMap';
 
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-shadow */
@@ -93,39 +94,52 @@ import {
 
 const { events } = util;
 
-const MapUI = ({ models, config, store, ui, setUI }) => {
+const MapUI = (props) => {
+  const {
+    config,
+    map,
+    models,
+    setUI,
+    store,
+    ui,
+  } = props;
 
   const [markerAction, setMarkerAction] = useState({});
   const [granuleFootprints, setGranuleFootprints] = useState({});
+  const [isMapSet, setMap] = useState(false)
 
+  const layerQueue = new PQueue({ concurrency: 3 });
 
   useEffect(() => {
-
-  const createUI = (models, config, store) => {
-    console.log("mapUI firing")
-    const animationDuration = 250;
-    const granuleFootprintsObj = {};
+  const createUI = (models, config, store, layerQueue) => {
+    // COMMENT OUT LINES THAT ARE IN CREATEMAP.JS
+    // REPLACE SELF WITH A COPY OF UI?
+    console.log("2. createUI firing")
+    const uiCopy = ui;
+    // const animationDuration = 250;
+    // const granuleFootprintsObj = {};
     const compareMapUi = mapCompare(store);
-    const runningdata = new MapRunningData(compareMapUi, store);
-    const doubleClickZoom = new OlInteractionDoubleClickZoom({
-      duration: animationDuration,
-    });
-    const cache = new Cache(400);
-    const layerQueue = new PQueue({ concurrency: 3 });
-    const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
-    const self = {
-      cache,
-      mapIsbeingDragged: false,
-      mapIsbeingZoomed: false,
-      proj: {}, // One map for each projection
-      selected: null, // The map for the selected projection
-      selectedVectors: {},
-      markers: [],
-      runningdata,
-      layerKey,
-      createLayer,
-      processingPromise: null,
-    };
+    // const runningdata = new MapRunningData(compareMapUi, store);
+    // const doubleClickZoom = new OlInteractionDoubleClickZoom({
+    //   duration: animationDuration,
+    // });
+    const cache = uiCopy.cache;
+    // const layerQueue = new PQueue({ concurrency: 3 });
+    const createLayer = uiCopy.createLayer;
+    // const self = {
+    //   cache,
+    //   mapIsbeingDragged: false,
+    //   mapIsbeingZoomed: false,
+    //   proj: {}, // One map for each projection
+    //   selected: null, // The map for the selected projection
+    //   selectedVectors: {},
+    //   markers: [],
+    //   runningdata,
+    //   layerKey,
+    //   createLayer,
+    //   processingPromise: null,
+    // };
+
 
     /**
    * Subscribe to redux store and listen for
@@ -151,10 +165,10 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         case layerConstants.ADD_LAYER: {
           const def = lodashFind(action.layers, { id: action.id });
           if (def.type === 'granule') {
-            self.processingPromise = new Promise((resolve) => {
+            uiCopy.processingPromise = new Promise((resolve) => {
               resolve(addLayer(def));
             });
-            return self.processingPromise;
+            return uiCopy.processingPromise;
           }
           store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
           return addLayer(def);
@@ -174,14 +188,14 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
           setMarkerAction(action);
           // return addMarkerAndUpdateStore(false);
         case CLEAR_ROTATE: {
-          self.selected.getView().animate({
+          uiCopy.selected.getView().animate({
             duration: 500,
             rotation: 0,
           });
           return;
         }
         case REFRESH_ROTATE: {
-          self.selected.getView().animate({
+          uiCopy.selected.getView().animate({
             rotation: action.rotation,
             duration: 500,
           });
@@ -236,12 +250,12 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
           const newSelection = action.payload;
           updateVectorSelection(
             action.payload,
-            self.selectedVectors,
+            uiCopy.selectedVectors,
             getActiveLayers(state),
             type,
             state,
           );
-          self.selectedVectors = newSelection;
+          uiCopy.selectedVectors = newSelection;
           return;
         }
         case STOP_ANIMATION:
@@ -251,11 +265,11 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         case dateConstants.CHANGE_INTERVAL:
           return preloadNextTiles();
         case dateConstants.SELECT_DATE:
-          if (self.processingPromise) {
+          if (uiCopy.processingPromise) {
             return new Promise((resolve) => {
-              resolve(self.processingPromise);
+              resolve(uiCopy.processingPromise);
             }).then(() => {
-              self.processingPromise = null;
+              uiCopy.processingPromise = null;
               return updateDate(action.outOfStep);
             });
           }
@@ -316,10 +330,12 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
     const init = function() {
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-      lodashForOwn(config.projections, (proj) => {
-        const map = createMap(proj);
-        self.proj[proj.id] = map;
-      });
+
+    console.log("3. initiating");
+      // lodashForOwn(config.projections, (proj) => {
+      //   const map = createMap(proj);
+      //   uiCopy.proj[proj.id] = map;
+      // });
       events.on(MAP_DISABLE_CLICK_ZOOM, () => {
         doubleClickZoom.setActive(false);
       });
@@ -468,11 +484,11 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
       const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
       const coordinates = [coordinateX, coordinateY];
-      const resolution = self.selected.getView().getResolutionForExtent(extent);
-      const zoom = self.selected.getView().getZoomForResolution(resolution);
+      const resolution = uiCopy.selected.getView().getResolutionForExtent(extent);
+      const zoom = uiCopy.selected.getView().getZoomForResolution(resolution);
       // Animate to extent, zoom & rotate:
       // Don't animate when an event is selected (Event selection already animates)
-      return fly(self.selected, proj, coordinates, zoom, rotation);
+      return fly(uiCopy.selected, proj, coordinates, zoom, rotation);
     };
 
     /*
@@ -488,13 +504,13 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
     function updateProjection(start) {
       const state = store.getState();
       const { proj } = state;
-      if (self.selected) {
+      if (uiCopy.selected) {
       // Keep track of center point on projection switch
-        self.selected.previousCenter = self.selected.center;
-        hideMap(self.selected);
+        uiCopy.selected.previousCenter = uiCopy.selected.center;
+        hideMap(uiCopy.selected);
       }
-      self.selected = self.proj[proj.id];
-      const map = self.selected;
+      uiCopy.selected = uiCopy.proj[proj.id];
+      const map = uiCopy.selected;
 
       const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
       const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
@@ -502,7 +518,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
 
       store.dispatch({
         type: UPDATE_MAP_UI,
-        ui: self,
+        ui: uiCopy,
         rotation: start ? rotationStart : currentRotation,
       });
       reloadLayers();
@@ -513,8 +529,8 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       showMap(map);
       map.updateSize();
 
-      if (self.selected.previousCenter) {
-        self.selected.setCenter(self.selected.previousCenter);
+      if (uiCopy.selected.previousCenter) {
+        uiCopy.selected.setCenter(uiCopy.selected.previousCenter);
       }
       // This is awkward and needs a refactoring
       if (start) {
@@ -563,7 +579,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       const state = store.getState();
       const { screenSize } = state;
       const isMobile = screenSize.isMobileDevice;
-      const map = self.selected;
+      const map = uiCopy.selected;
 
       if (isMobile) {
         map.removeControl(map.wv.scaleImperial);
@@ -613,12 +629,12 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    * @returns {void}
    */
     const clearLayers = function() {
-      const activeLayers = self.selected
+      const activeLayers = uiCopy.selected
         .getLayers()
         .getArray()
         .slice(0);
       lodashEach(activeLayers, (mapLayer) => {
-        self.selected.removeLayer(mapLayer);
+        uiCopy.selected.removeLayer(mapLayer);
       });
       cache.clear();
     };
@@ -664,7 +680,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    */
 
     async function reloadLayers(granuleOptions) {
-      const map = self.selected;
+      const map = uiCopy.selected;
       const state = store.getState();
       const { compare } = state;
 
@@ -730,7 +746,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    */
     function updateLayerVisibilities() {
       const state = store.getState();
-      const layerGroup = self.selected.getLayers();
+      const layerGroup = uiCopy.selected.getLayers();
 
       const setRenderable = (layer, parentCompareGroup) => {
         const { id, group } = layer.wv;
@@ -786,7 +802,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    */
     const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
       const { id } = def;
-      const layers = self.selected.getLayers().getArray();
+      const layers = uiCopy.selected.getLayers().getArray();
       lodashEach(Object.keys(layers), (index) => {
         const layer = layers[index];
         if (layer.className_ === 'ol-layer') {
@@ -850,7 +866,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
       activeLayers = activeLayers || getActiveLayers(state);
       const reverseLayers = lodashCloneDeep(activeLayers).reverse();
       const index = lodashFindIndex(reverseLayers, { id: def.id });
-      const mapLayers = self.selected.getLayers().getArray();
+      const mapLayers = uiCopy.selected.getLayers().getArray();
       const firstLayer = mapLayers[0];
 
       if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
@@ -863,10 +879,10 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
         };
         const newLayer = await createLayer(def, options);
         activelayer.getLayers().insertAt(index, newLayer);
-        compareMapUi.create(self.selected, compare.mode);
+        compareMapUi.create(uiCopy.selected, compare.mode);
       } else {
         const newLayer = await createLayer(def);
-        self.selected.getLayers().insertAt(index, newLayer);
+        uiCopy.selected.getLayers().insertAt(index, newLayer);
       }
 
       updateLayerVisibilities();
@@ -884,7 +900,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
           const layerGroup = getActiveLayerGroup(state);
           if (layerGroup) layerGroup.getLayers().remove(layer);
         } else {
-          self.selected.removeLayer(layer);
+          uiCopy.selected.removeLayer(layer);
         }
       });
 
@@ -1057,7 +1073,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    * @returns {object} Layer object
    */
     function findLayer(def, activeCompareState) {
-      const layers = self.selected.getLayers().getArray();
+      const layers = uiCopy.selected.getLayers().getArray();
       let layer = lodashFind(layers, {
         wv: {
           id: def.id,
@@ -1099,7 +1115,7 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
     }
 
     const updateExtent = () => {
-      const map = self.selected;
+      const map = uiCopy.selected;
       const view = map.getView();
       const extent = view.calculateExtent();
       store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
@@ -1119,226 +1135,242 @@ const MapUI = ({ models, config, store, ui, setUI }) => {
    *
    * @returns {object} OpenLayers Map Object
    */
-    function createMap(proj, dateSelected) {
-      const state = store.getState();
-      dateSelected = dateSelected || getSelectedDate(state);
-      const mapContainerEl = document.getElementById('wv-map');
-      const mapEl = document.createElement('div');
-      const id = `wv-map-${proj.id}`;
+    // function createMap(proj, dateSelected) {
+    //   console.log("3. creating map")
+    //   const state = store.getState();
+    //   dateSelected = dateSelected || getSelectedDate(state);
+    //   const mapContainerEl = document.getElementById('wv-map');
+    //   const mapEl = document.createElement('div');
+    //   const id = `wv-map-${proj.id}`;
 
-      mapEl.setAttribute('id', id);
-      mapEl.setAttribute('data-proj', proj.id);
-      mapEl.classList.add('wv-map');
-      mapEl.style.display = 'none';
-      mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
+    //   mapEl.setAttribute('id', id);
+    //   mapEl.setAttribute('data-proj', proj.id);
+    //   mapEl.classList.add('wv-map');
+    //   mapEl.style.display = 'none';
+    //   mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
 
 
-      // Create two specific controls
-      const scaleMetric = new OlControlScaleLine({
-        className: 'wv-map-scale-metric',
-        units: 'metric',
-      });
-      const scaleImperial = new OlControlScaleLine({
-        className: 'wv-map-scale-imperial',
-        units: 'imperial',
-      });
-      const rotateInteraction = new OlInteractionDragRotate({
-        condition: altKeyOnly,
-        duration: animationDuration,
-      });
-      const mobileRotation = new OlInteractionPinchRotate({
-        duration: animationDuration,
-      });
-      const map = new OlMap({
-        view: new OlView({
-          maxResolution: proj.resolutions[0],
-          projection: olProj.get(proj.crs),
-          center: proj.startCenter,
-          zoom: proj.startZoom,
-          maxZoom: proj.numZoomLevels,
-          enableRotation: true,
-          extent: proj.id === 'geographic' ? [-250, -90, 250, 90] : proj.maxExtent,
-          constrainOnlyCenter: true,
-        }),
-        target: id,
-        renderer: ['canvas'],
-        logo: false,
-        controls: [scaleMetric, scaleImperial],
-        interactions: [
-          doubleClickZoom,
-          new OlInteractionDragPan({
-            kinetic: new OlKinetic(-0.005, 0.05, 100),
-          }),
-          new OlInteractionPinchZoom({
-            duration: animationDuration,
-          }),
-          new OlInteractionMouseWheelZoom({
-            duration: animationDuration,
-          }),
-          new OlInteractionDragZoom({
-            duration: animationDuration,
-          }),
-        ],
-        loadTilesWhileAnimating: true,
-        loadTilesWhileInteracting: true,
-        maxTilesLoading: 32,
-      });
-      map.wv = {
-        scaleMetric,
-        scaleImperial,
-      };
-      map.proj = proj.id;
-      createMousePosSel(map, proj);
-      map.getView().on('change:resolution', () => {
-        events.trigger(MAP_MOVE_START);
-      });
+    //   // Create two specific controls
+    //   const scaleMetric = new OlControlScaleLine({
+    //     className: 'wv-map-scale-metric',
+    //     units: 'metric',
+    //   });
+    //   const scaleImperial = new OlControlScaleLine({
+    //     className: 'wv-map-scale-imperial',
+    //     units: 'imperial',
+    //   });
+    //   const rotateInteraction = new OlInteractionDragRotate({
+    //     condition: altKeyOnly,
+    //     duration: animationDuration,
+    //   });
+    //   const mobileRotation = new OlInteractionPinchRotate({
+    //     duration: animationDuration,
+    //   });
+    //   const map = new OlMap({
+    //     view: new OlView({
+    //       maxResolution: proj.resolutions[0],
+    //       projection: olProj.get(proj.crs),
+    //       center: proj.startCenter,
+    //       zoom: proj.startZoom,
+    //       maxZoom: proj.numZoomLevels,
+    //       enableRotation: true,
+    //       extent: proj.id === 'geographic' ? [-250, -90, 250, 90] : proj.maxExtent,
+    //       constrainOnlyCenter: true,
+    //     }),
+    //     target: id,
+    //     renderer: ['canvas'],
+    //     logo: false,
+    //     controls: [scaleMetric, scaleImperial],
+    //     interactions: [
+    //       doubleClickZoom,
+    //       new OlInteractionDragPan({
+    //         kinetic: new OlKinetic(-0.005, 0.05, 100),
+    //       }),
+    //       new OlInteractionPinchZoom({
+    //         duration: animationDuration,
+    //       }),
+    //       new OlInteractionMouseWheelZoom({
+    //         duration: animationDuration,
+    //       }),
+    //       new OlInteractionDragZoom({
+    //         duration: animationDuration,
+    //       }),
+    //     ],
+    //     loadTilesWhileAnimating: true,
+    //     loadTilesWhileInteracting: true,
+    //     maxTilesLoading: 32,
+    //   });
+    //   map.wv = {
+    //     scaleMetric,
+    //     scaleImperial,
+    //   };
+    //   map.proj = proj.id;
+    //   createMousePosSel(map, proj);
+    //   map.getView().on('change:resolution', () => {
+    //     events.trigger(MAP_MOVE_START);
+    //   });
 
-      // This component is inside the map viewport container. Allowing
-      // mouse move events to bubble up displays map coordinates--let those
-      // be blank when over a component.
-      document.querySelector('.wv-map-scale-metric').addEventListener('mousemove', (e) => e.stopPropagation());
-      document.querySelector('.wv-map-scale-imperial').addEventListener('mousemove', (e) => e.stopPropagation());
+    //   // This component is inside the map viewport container. Allowing
+    //   // mouse move events to bubble up displays map coordinates--let those
+    //   // be blank when over a component.
+    //   document.querySelector('.wv-map-scale-metric').addEventListener('mousemove', (e) => e.stopPropagation());
+    //   document.querySelector('.wv-map-scale-imperial').addEventListener('mousemove', (e) => e.stopPropagation());
 
-      // Allow rotation by dragging for polar projections
-      if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
-        map.addInteraction(rotateInteraction);
-        map.addInteraction(mobileRotation);
-      }
+    //   // Allow rotation by dragging for polar projections
+    //   if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+    //     map.addInteraction(rotateInteraction);
+    //     map.addInteraction(mobileRotation);
+    //   }
 
-      const onRotate = () => {
-        const radians = map.getView().getRotation();
-        store.dispatch({
-          type: UPDATE_MAP_ROTATION,
-          rotation: radians,
-        });
-        const currentDeg = radians * (180.0 / Math.PI);
-        saveRotation(currentDeg, map.getView());
-        updateExtent();
-      };
+    //   const onRotate = () => {
+    //     const radians = map.getView().getRotation();
+    //     store.dispatch({
+    //       type: UPDATE_MAP_ROTATION,
+    //       rotation: radians,
+    //     });
+    //     const currentDeg = radians * (180.0 / Math.PI);
+    //     saveRotation(currentDeg, map.getView());
+    //     updateExtent();
+    //   };
 
-      // Set event listeners for changes on the map view (when rotated, zoomed, panned)
-      const debouncedUpdateExtent = lodashDebounce(updateExtent, 300);
-      const debouncedOnRotate = lodashDebounce(onRotate, 300);
+    //   // Set event listeners for changes on the map view (when rotated, zoomed, panned)
+    //   const debouncedUpdateExtent = lodashDebounce(updateExtent, 300);
+    //   const debouncedOnRotate = lodashDebounce(onRotate, 300);
 
-      map.getView().on('change:center', debouncedUpdateExtent);
-      map.getView().on('change:resolution', debouncedUpdateExtent);
-      map.getView().on('change:rotation', debouncedOnRotate);
+    //   map.getView().on('change:center', debouncedUpdateExtent);
+    //   map.getView().on('change:resolution', debouncedUpdateExtent);
+    //   map.getView().on('change:rotation', debouncedOnRotate);
 
-      map.on('pointerdrag', () => {
-        self.mapIsbeingDragged = true;
-        events.trigger(MAP_DRAG);
-      });
-      map.getView().on('propertychange', (e) => {
-        switch (e.key) {
-          case 'resolution':
-            self.mapIsbeingZoomed = true;
-            events.trigger(MAP_ZOOMING);
-            break;
-          default:
-            break;
-        }
-      });
-      map.on('moveend', (e) => {
-        setTimeout(() => {
-          self.mapIsbeingDragged = false;
-          self.mapIsbeingZoomed = false;
-        }, 200);
-      });
-      const onRenderComplete = () => {
-        store.dispatch({ type: RENDERED });
-        store.dispatch({
-          type: UPDATE_MAP_UI,
-          ui: self,
-          rotation: self.selected.getView().getRotation(),
-        });
-        setTimeout(preloadForCompareMode, 250);
-        map.un('rendercomplete', onRenderComplete);
-      };
+    //   map.on('pointerdrag', () => {
+    //     uiCopy.mapIsbeingDragged = true;
+    //     events.trigger(MAP_DRAG);
+    //   });
+    //   map.getView().on('propertychange', (e) => {
+    //     switch (e.key) {
+    //       case 'resolution':
+    //         uiCopy.mapIsbeingZoomed = true;
+    //         events.trigger(MAP_ZOOMING);
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   });
+    //   map.on('moveend', (e) => {
+    //     setTimeout(() => {
+    //       uiCopy.mapIsbeingDragged = false;
+    //       uiCopy.mapIsbeingZoomed = false;
+    //     }, 200);
+    //   });
+    //   const onRenderComplete = () => {
+    //     store.dispatch({ type: RENDERED });
+    //     store.dispatch({
+    //       type: UPDATE_MAP_UI,
+    //       ui: uiCopy,
+    //       rotation: uiCopy.selected.getView().getRotation(),
+    //     });
+    //     setTimeout(preloadForCompareMode, 250);
+    //     map.un('rendercomplete', onRenderComplete);
+    //   };
 
-      map.on('loadstart', () => {
-        store.dispatch(startLoading(MAP_LOADING));
-      });
-      map.on('loadend', () => {
-        store.dispatch(stopLoading(MAP_LOADING));
-      });
-      map.on('rendercomplete', onRenderComplete);
+    //   map.on('loadstart', () => {
+    //     store.dispatch(startLoading(MAP_LOADING));
+    //   });
+    //   map.on('loadend', () => {
+    //     store.dispatch(stopLoading(MAP_LOADING));
+    //   });
+    //   map.on('rendercomplete', onRenderComplete);
 
-      granuleFootprintsObj[proj.crs] = granuleFootprint(map);
+    //   granuleFootprintsObj[proj.crs] = granuleFootprint(map);
 
-      // This could be a problem, we loop through each projection to add the
-      // functions but we can only update state once.
-      // If I move the granuleFootprintsObj into this function I have the same problem
-      // Seems like the loop starts somewhere above this function and below the object
+    //   // This runs once for each projection and we can only set state once
+    //   // using a plain object to track now but we may need to seperate into 3
+    //   // state objects and combine
 
-      setGranuleFootprints({
-        ...granuleFootprintsObj,
-        [proj.crs]: granuleFootprint(map)
-      });
-      window.addEventListener('resize', () => {
-        map.getView().changed();
-      });
-      return map;
-    }
+    //   setGranuleFootprints({
+    //     ...granuleFootprintsObj,
+    //     [proj.crs]: granuleFootprint(map)
+    //   });
+    //   window.addEventListener('resize', () => {
+    //     map.getView().changed();
+    //   });
+    //   console.log(`map object for ${proj.crs}`, map);
+    //   return map;
+    // }
 
-    /**
-   * Creates map events based on mouse position
-   * @param {object} map - OpenLayers Map Object
-   * @returns {void}
-   */
-    function createMousePosSel(map) {
-      const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
-        const state = store.getState();
-        const {
-          events, locationSearch, sidebar, animation, measure, screenSize,
-        } = state;
-        const { isCoordinateSearchActive } = locationSearch;
-        const isMobile = screenSize.isMobileDevice;
-        const coords = map.getCoordinateFromPixel(pixel);
-        const isEventsTabActive = typeof events !== 'undefined' && events.active;
-        const isMapAnimating = animation.isPlaying;
+  //   /**
+  //  * Creates map events based on mouse position
+  //  * @param {object} map - OpenLayers Map Object
+  //  * @returns {void}
+  //  */
+  //   function createMousePosSel(map) {
+  //     console.log('testesttest')
+  //     const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
+  //       const state = store.getState();
+  //       const {
+  //         events, locationSearch, sidebar, animation, measure, screenSize,
+  //       } = state;
+  //       const { isCoordinateSearchActive } = locationSearch;
+  //       const isMobile = screenSize.isMobileDevice;
+  //       const coords = map.getCoordinateFromPixel(pixel);
+  //       const isEventsTabActive = typeof events !== 'undefined' && events.active;
+  //       const isMapAnimating = animation.isPlaying;
 
-        if (map.proj !== state.map.ui.selected.proj) return;
-        if (self.mapIsbeingZoomed) return;
-        if (self.mapIsbeingDragged) return;
-        if (compareMapUi && compareMapUi.dragging) return;
-        if (isMobile) return;
-        if (measure.isActive) return;
-        if (isCoordinateSearchActive) return;
-        if (!coords) return;
-        if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
+  //       if (map.proj !== state.map.ui.selected.proj) return;
+  //       if (uiCopy.mapIsbeingZoomed) return;
+  //       if (uiCopy.mapIsbeingDragged) return;
+  //       if (compareMapUi && compareMapUi.dragging) return;
+  //       if (isMobile) return;
+  //       if (measure.isActive) return;
+  //       if (isCoordinateSearchActive) return;
+  //       if (!coords) return;
+  //       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-        runningdata.newPoint(pixel, map);
-      }, 300);
+  //       runningdata.newPoint(pixel, map);
+  //     }, 300);
 
-      events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
-      events.on(MAP_MOUSE_OUT, (e) => {
-        throttledOnMouseMove.cancel();
-        runningdata.clearAll();
-      });
-    }
+  //     events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
+  //     events.on(MAP_MOUSE_OUT, (e) => {
+  //       throttledOnMouseMove.cancel();
+  //       runningdata.clearAll();
+  //     });
+  //   }
 
     if (document.getElementById('app')) {
       init();
     }
-    setUI(self)
-    // return self;
+    setUI(uiCopy)
+    // return uiCopy;
   };
-  createUI(models, config, store)
+  if(ui){
+    createUI(models, config, store, layerQueue)
+  }
+
 }, []);
+
+const testFunction = () => {
+  console.log('map', map )
+}
+
+const buttonStyle = {
+  zIndex: '99'
+}
 
   return (
     <>
+      <div className="d-flex justify-content-center w-100">
+        <button className="btn btn-success" onClick={testFunction} style={buttonStyle}>SHOW MYMAP OBJ</button>
+      </div>
       <Markers action={markerAction} ui={ui} setUI={setUI} config={config}/>
-      <GranuleHover granuleFootprints={granuleFootprints} setGranuleFootprints={setGranuleFootprints} ui={ui} />
+      <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
+      <CreateMap isMapSet={isMapSet} setMap={setMap} ui={ui} setUI={setUI} config={config} setGranuleFootprints={setGranuleFootprints} layerQueue={layerQueue}/>
     </>
   );
 };
 
 const mapStateToProps = (state) => {
-  const { settings } = state;
-  const { globalTemperatureUnit } = settings;
+  const { map } = state;
   return {
-    globalTemperatureUnit,
+    map,
   };
 };
 

@@ -9,33 +9,28 @@ const { events } = util;
 const GranuleHover = (props) => {
   const {
     granuleFootprints,
-    setGranuleFootprints,
     state,
     ui,
   } = props;
 
   const onGranuleHover = (platform, date, update) => {
-    if (!ui.proj) return;
     const proj = ui.selected.getView().getProjection().getCode();
+    if (!granuleFootprints[proj]) return;
     let geometry;
     if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    const granuleFootprintsCopy = granuleFootprints;
-    granuleFootprintsCopy[proj].addFootprint(geometry, date);
-    setGranuleFootprints(granuleFootprintsCopy);
+    granuleFootprints[proj].addFootprint(geometry, date);
   };
 
   const onGranuleHoverUpdate = (platform, date) => {
-    if (!ui.proj) return;
     const proj = ui.selected.getView().getProjection().getCode();
+    if (!granuleFootprints[proj]) return;
     let geometry;
     if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
-    const granuleFootprintsCopy = granuleFootprints;
-    granuleFootprintsCopy[proj].updateFootprint(geometry, date);
-    setGranuleFootprints(granuleFootprintsCopy);
+    granuleFootprints[proj].updateFootprint(geometry, date);
   };
 
   events.on(GRANULE_HOVERED, onGranuleHover);
