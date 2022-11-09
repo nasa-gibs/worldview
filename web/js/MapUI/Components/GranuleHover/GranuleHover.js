@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getActiveGranuleFootPrints } from '../../modules/layers/selectors';
-import { GRANULE_HOVERED, GRANULE_HOVER_UPDATE } from '../../util/constants';
-import util from '../../util/util';
+import { getActiveGranuleFootPrints } from '../../../modules/layers/selectors';
+import { GRANULE_HOVERED, GRANULE_HOVER_UPDATE } from '../../../util/constants';
+import util from '../../../util/util';
 
 const { events } = util;
 

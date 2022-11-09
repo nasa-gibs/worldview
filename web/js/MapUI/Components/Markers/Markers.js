@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { reverseGeocode } from '../../modules/location-search/util-api';
-import { getNormalizedCoordinate } from '../../components/location-search/util';
-import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } from '../../modules/location-search/util';
-import { setGeocodeResults, removeMarker } from '../../modules/location-search/actions';
-import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../modules/layers/selectors';
+import { reverseGeocode } from '../../../modules/location-search/util-api';
+import { getNormalizedCoordinate } from '../../../components/location-search/util';
+import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } from '../../../modules/location-search/util';
+import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
+import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
 const Markers = (props) => {
   const {

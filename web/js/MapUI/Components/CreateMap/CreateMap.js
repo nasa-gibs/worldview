@@ -49,7 +49,6 @@ const CreateMap = (props) => {
     clearPreload,
     compareMapUi,
     config,
-    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
@@ -57,9 +56,7 @@ const CreateMap = (props) => {
     isMeasureActive,
     isMobile,
     layerQueue,
-    preloadNextTiles,
-    selected,
-    selectedB,
+    preloadForCompareMode,
     setGranuleFootprints,
     setMap,
     setUI,
@@ -89,6 +86,17 @@ const CreateMap = (props) => {
     setUI(uiCopy);
   });
 
+  /*
+   * Create map object
+   *
+   * @method createMap
+   * @static
+   *
+   * @param {object} proj - Projection properties
+   * @param {object} dateSelected
+   *
+   * @returns {object} OpenLayers Map Object
+   */
   const mapCreation = (proj, uiCopy) => {
     const animationDuration = 250;
 
@@ -106,7 +114,6 @@ const CreateMap = (props) => {
     mapEl.style.display = 'none';
     mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
 
-    // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
       units: 'metric',
@@ -272,13 +279,6 @@ const CreateMap = (props) => {
     });
   }
 
-  function preloadForCompareMode(layerQueue) {
-    preloadNextTiles(selected, 'active', layerQueue);
-    if (isCompareActive) {
-      preloadNextTiles(selectedB, 'activeB');
-    }
-  }
-
   return null;
 };
 
@@ -317,18 +317,22 @@ const mapStateToProps = (state) => {
     }
   }
 
+  function preloadForCompareMode(layerQueue) {
+    preloadNextTiles(selected, 'active', layerQueue);
+    if (isCompareActive) {
+      preloadNextTiles(selectedB, 'activeB');
+    }
+  }
+
   return {
     compareMapUi,
-    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
     isMeasureActive,
     isMobile,
     lastPreloadDate,
-    preloadNextTiles,
-    selected,
-    selectedB,
+    preloadForCompareMode,
     sidebarActiveTab,
   };
 };
@@ -377,9 +381,7 @@ CreateMap.propTypes = {
   isMeasureActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerQueue: PropTypes.object,
-  preloadNextTiles: PropTypes.func,
-  selected: PropTypes.string,
-  selectedB: PropTypes.string,
+  preloadForCompareMode: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
   setMap: PropTypes.func,
   setUI: PropTypes.func,

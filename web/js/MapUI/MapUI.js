@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import Markers from './Components/Markers';
-import GranuleHover from './Components/GranuleHover';
+import Markers from './Components/Markers/Markers';
+import GranuleHover from './Components/GranuleHover/GranuleHover';
 import CreateMap from './Components/CreateMap/CreateMap';
 
 /* eslint-disable no-multi-assign */
