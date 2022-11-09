@@ -14,6 +14,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
+import lodashDebounce from 'lodash/debounce';
 
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
@@ -87,33 +88,57 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
+  const updateStore = lodashDebounce((id, activeString, version, type) => {
+    console.log('UPDATED STORE: ', id, version, type);
+    store.dispatch(updateLayerCollectionVersionType({
+      id,
+      activeString,
+      collection: {
+        version,
+        type,
+      },
+    }));
+  }, 500, { trailing: true });
+
   /**
    * We define our own tile loading function in order to capture custom header values
    *
    * @param {*} tile
    * @param {*} src
    */
-  const tileLoadFunction = (layer) => async function(tile, src) {
-    const { compare: { activeString } } = store.getState();
-    const activeCollections = getActiveCollections(store.getState());
+  const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
+    const state = store.getState();
+    const { compare: { activeString } } = state;
+    const activeCollections = getActiveCollections(state);
+    const appDate = getSelectedDate(state);
     const collection = activeCollections[layer.id];
 
-    const setCollectionInfo = (headers) => {
-      const actualId = headers.get('layer-identifier-actual');
-      const parts = actualId.split('_');
-      const version = parts[parts.length - 2];
-      const type = parts[parts.length - 1];
-      const needsUpdate = (collection || {}).type !== type || (collection || {}).version !== version;
+    // Since we preload tiles for the past/future, this fn can be called for dates other than what's shown
+    // which, if we aren't careful could overwrite the version/type info in the store for this layer incorrectly.
+    // If the app date doesn't match the layer date, we don't update.
+    const compareDates = (a, b) => {
+      const aDate = a.toISOString().split('T')[0];
+      const bDate = b.toISOString().split('T')[0];
+      return aDate === bDate;
+    };
 
-      if (actualId && (!collection || needsUpdate)) {
-        store.dispatch(updateLayerCollectionVersionType({
-          id: layer.id,
-          activeString,
-          collection: {
-            version,
-            type,
-          },
-        }));
+    const setCollectionInfo = (headers) => {
+      try {
+        const actualId = headers.get('layer-identifier-actual');
+
+        if (!actualId || !compareDates(appDate, layerDate)) {
+          return;
+        }
+        const parts = actualId.split('_');
+        const version = parts[parts.length - 2];
+        const type = parts[parts.length - 1];
+        const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
+
+        if (hasChanged) {
+          updateStore(layer.id, activeString, version, type);
+        }
+      } catch (e) {
+        console.error(e);
       }
     };
 
@@ -465,7 +490,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
-      tileLoadFunction: tileLoadFunction(def),
+      tileLoadFunction: tileLoadFunction(def, layerDate),
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
