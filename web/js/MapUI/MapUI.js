@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import Markers from './Components/Markers/Markers';
 import GranuleHover from './Components/GranuleHover/GranuleHover';
 import CreateMap from './Components/CreateMap/CreateMap';
+import RemoveLayer from './Components/Layers/RemoveLayer'
+import Layers from './Components/Layers/Layers'
 
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-shadow */
@@ -91,34 +93,52 @@ import {
   MAP_MOVE_START,
   MAP_ZOOMING,
 } from '../util/constants';
+import {
+  refreshRotation,
+  updateMapExtent,
+  updateRenderedState,
+  updateMapUI,
+} from '../modules/map/actions';
+import { clearPreload, setPreload } from '../modules/date/actions';
 
 const { events } = util;
 
 const MapUI = (props) => {
   const {
+    clearPreload,
     config,
     map,
     models,
+    preloadNextTiles,
     setUI,
     store,
     ui,
+    updateMapExtent,
   } = props;
 
+  // useEffect(() => {
+  //   console.log('mapUI rerendering')
+  // })
+
   const [markerAction, setMarkerAction] = useState({});
+  const [removeLayerAction, setRemoveLayerAction] = useState({})
   const [granuleFootprints, setGranuleFootprints] = useState({});
   const [isMapSet, setMap] = useState(false)
 
   const layerQueue = new PQueue({ concurrency: 3 });
+  const compareMapUi = mapCompare(store);
+  let uiCopy = ui;
+
 
   useEffect(() => {
   const createUI = (models, config, store, layerQueue) => {
     // COMMENT OUT LINES THAT ARE IN CREATEMAP.JS
     // REPLACE SELF WITH A COPY OF UI?
     console.log("2. createUI firing")
-    const uiCopy = ui;
+    uiCopy = ui;
     // const animationDuration = 250;
     // const granuleFootprintsObj = {};
-    const compareMapUi = mapCompare(store);
+
     // const runningdata = new MapRunningData(compareMapUi, store);
     // const doubleClickZoom = new OlInteractionDoubleClickZoom({
     //   duration: animationDuration,
@@ -215,7 +235,8 @@ const MapUI = (props) => {
         }
         case layerConstants.REMOVE_GROUP:
         case layerConstants.REMOVE_LAYER:
-          return removeLayer(action.layersToRemove);
+          // return removeLayer(action.layersToRemove);
+        return setRemoveLayerAction(action.layersToRemove)
         case layerConstants.UPDATE_OPACITY:
           return updateOpacity(action);
         case compareConstants.CHANGE_STATE:
@@ -744,48 +765,51 @@ const MapUI = (props) => {
    *
    * @returns {void}
    */
-    function updateLayerVisibilities() {
-      const state = store.getState();
-      const layerGroup = uiCopy.selected.getLayers();
+    // function updateLayerVisibilities() {
+    //   const state = store.getState();
 
-      const setRenderable = (layer, parentCompareGroup) => {
-        const { id, group } = layer.wv;
-        const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
-        const date = getSelectedDate(state, dateGroup);
-        const layers = getActiveLayers(state, parentCompareGroup || group);
-        const renderable = isRenderableLayer(id, layers, date, null, state);
-        layer.setVisible(renderable);
-      };
+    //   const layerGroup = uiCopy.selected.getLayers();
 
-      layerGroup.forEach((layer) => {
-        const compareActiveString = layer.get('group');
-        const granule = layer.get('granuleGroup');
+    //   console.log("uiCopy", layerGroup)
 
-        // Not in A|B
-        if (layer.wv && !granule) {
-          setRenderable(layer);
+    //   const setRenderable = (layer, parentCompareGroup) => {
+    //     const { id, group } = layer.wv;
+    //     const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
+    //     const date = getSelectedDate(state, dateGroup);
+    //     const layers = getActiveLayers(state, parentCompareGroup || group);
+    //     const renderable = isRenderableLayer(id, layers, date, null, state);
+    //     layer.setVisible(renderable);
+    //   };
 
-          // If in A|B layer-group will have a 'group' string
-        } else if (compareActiveString || granule) {
-          const compareGrouplayers = layer.getLayers().getArray();
+    //   layerGroup.forEach((layer) => {
+    //     const compareActiveString = layer.get('group');
+    //     const granule = layer.get('granuleGroup');
 
-          compareGrouplayers.forEach((subLayer) => {
-            if (!subLayer.wv) {
-              return;
-            }
-            // TileLayers within granule LayerGroup
-            if (subLayer.get('granuleGroup')) {
-              const granuleLayers = subLayer.getLayers().getArray();
-              granuleLayers.forEach((l) => setRenderable(l));
-              subLayer.setVisible(true);
-            }
-            setRenderable(subLayer, compareActiveString);
-          });
+    //     // Not in A|B
+    //     if (layer.wv && !granule) {
+    //       setRenderable(layer);
 
-          layer.setVisible(true);
-        }
-      });
-    }
+    //       // If in A|B layer-group will have a 'group' string
+    //     } else if (compareActiveString || granule) {
+    //       const compareGrouplayers = layer.getLayers().getArray();
+
+    //       compareGrouplayers.forEach((subLayer) => {
+    //         if (!subLayer.wv) {
+    //           return;
+    //         }
+    //         // TileLayers within granule LayerGroup
+    //         if (subLayer.get('granuleGroup')) {
+    //           const granuleLayers = subLayer.getLayers().getArray();
+    //           granuleLayers.forEach((l) => setRenderable(l));
+    //           subLayer.setVisible(true);
+    //         }
+    //         setRenderable(subLayer, compareActiveString);
+    //       });
+
+    //       layer.setVisible(true);
+    //     }
+    //   });
+    // }
 
     /*
    * Sets new opacity to granule layers
@@ -891,6 +915,7 @@ const MapUI = (props) => {
 
 
     function removeLayer(layersToRemove) {
+      console.log('removing layer')
       const state = store.getState();
       const { compare } = state;
 
@@ -1072,31 +1097,31 @@ const MapUI = (props) => {
    *
    * @returns {object} Layer object
    */
-    function findLayer(def, activeCompareState) {
-      const layers = uiCopy.selected.getLayers().getArray();
-      let layer = lodashFind(layers, {
-        wv: {
-          id: def.id,
-        },
-      });
+    // function findLayer(def, activeCompareState) {
+    //   const layers = uiCopy.selected.getLayers().getArray();
+    //   let layer = lodashFind(layers, {
+    //     wv: {
+    //       id: def.id,
+    //     },
+    //   });
 
-      if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granuleGroup'))) {
-        let olGroupLayer;
-        const layerKey = `${def.id}-${activeCompareState}`;
-        lodashEach(layers, (layerGroup) => {
-          if (layerGroup.get('layerId') === layerKey || layerGroup.get('group') === activeCompareState) {
-            olGroupLayer = layerGroup;
-          }
-        });
-        const subGroup = olGroupLayer.getLayers().getArray();
-        layer = lodashFind(subGroup, {
-          wv: {
-            id: def.id,
-          },
-        });
-      }
-      return layer;
-    }
+    //   if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granuleGroup'))) {
+    //     let olGroupLayer;
+    //     const layerKey = `${def.id}-${activeCompareState}`;
+    //     lodashEach(layers, (layerGroup) => {
+    //       if (layerGroup.get('layerId') === layerKey || layerGroup.get('group') === activeCompareState) {
+    //         olGroupLayer = layerGroup;
+    //       }
+    //     });
+    //     const subGroup = olGroupLayer.getLayers().getArray();
+    //     layer = lodashFind(subGroup, {
+    //       wv: {
+    //         id: def.id,
+    //       },
+    //     });
+    //   }
+    //   return layer;
+    // }
 
     /*
    * Return an Index value for a layer in the OPenLayers layer array
@@ -1114,15 +1139,15 @@ const MapUI = (props) => {
       });
     }
 
-    const updateExtent = () => {
-      const map = uiCopy.selected;
-      const view = map.getView();
-      const extent = view.calculateExtent();
-      store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
-      if (map.isRendered()) {
-        store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
-      }
-    };
+    // const updateExtent = () => {
+    //   const map = uiCopy.selected;
+    //   const view = map.getView();
+    //   const extent = view.calculateExtent();
+    //   store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
+    //   if (map.isRendered()) {
+    //     store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
+    //   }
+    // };
 
     /*
    * Create map object
@@ -1347,8 +1372,88 @@ const MapUI = (props) => {
 
 }, []);
 
+const updateExtent = () => {
+  const map = ui.selected;
+  const view = map.getView();
+  const extent = view.calculateExtent();
+  updateMapExtent(extent);
+  if (map.isRendered()) {
+    clearPreload();
+  }
+};
+
+const updateLayerVisibilities = useCallback(() => {
+  const state = store.getState();
+  const layerGroup = ui.selected.getLayers();
+
+  const setRenderable = (layer, parentCompareGroup) => {
+    const { id, group } = layer.wv;
+    const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
+    const date = getSelectedDate(state, dateGroup);
+    const layers = getActiveLayers(state, parentCompareGroup || group);
+    const renderable = isRenderableLayer(id, layers, date, null, state);
+    layer.setVisible(renderable);
+  };
+
+  layerGroup.forEach((layer) => {
+    const compareActiveString = layer.get('group');
+    const granule = layer.get('granuleGroup');
+
+    // Not in A|B
+    if (layer.wv && !granule) {
+      setRenderable(layer);
+
+      // If in A|B layer-group will have a 'group' string
+    } else if (compareActiveString || granule) {
+      const compareGrouplayers = layer.getLayers().getArray();
+
+      compareGrouplayers.forEach((subLayer) => {
+        if (!subLayer.wv) {
+          return;
+        }
+        // TileLayers within granule LayerGroup
+        if (subLayer.get('granuleGroup')) {
+          const granuleLayers = subLayer.getLayers().getArray();
+          granuleLayers.forEach((l) => setRenderable(l));
+          subLayer.setVisible(true);
+        }
+        setRenderable(subLayer, compareActiveString);
+      });
+
+      layer.setVisible(true);
+    }
+  });
+}, [])
+
+const findLayer = useCallback((def, activeCompareState) =>{
+  const layers = uiCopy.selected.getLayers().getArray();
+  let layer = lodashFind(layers, {
+    wv: {
+      id: def.id,
+    },
+  });
+
+  if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granuleGroup'))) {
+    let olGroupLayer;
+    const layerKey = `${def.id}-${activeCompareState}`;
+    lodashEach(layers, (layerGroup) => {
+      if (layerGroup.get('layerId') === layerKey || layerGroup.get('group') === activeCompareState) {
+        olGroupLayer = layerGroup;
+      }
+    });
+    const subGroup = olGroupLayer.getLayers().getArray();
+    layer = lodashFind(subGroup, {
+      wv: {
+        id: def.id,
+      },
+    });
+  }
+  return layer;
+}, [])
+
 const testFunction = () => {
-  console.log('map', map )
+  console.log('map', map.ui.selected.getLayers() )
+  console.log('ui', ui.selected.getLayers())
 }
 
 const buttonStyle = {
@@ -1362,18 +1467,67 @@ const buttonStyle = {
       </div>
       <Markers action={markerAction} ui={ui} setUI={setUI} config={config}/>
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
-      <CreateMap isMapSet={isMapSet} setMap={setMap} ui={ui} setUI={setUI} config={config} setGranuleFootprints={setGranuleFootprints} layerQueue={layerQueue}/>
+      <CreateMap
+        compareMapUi={compareMapUi}
+        isMapSet={isMapSet}
+        setMap={setMap}
+        ui={ui}
+        setUI={setUI}
+        config={config}
+        setGranuleFootprints={setGranuleFootprints}
+        layerQueue={layerQueue}
+        updateExtent={updateExtent}
+        preloadNextTiles={preloadNextTiles}
+        />
+      <RemoveLayer action={removeLayerAction} updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} />
+      {/* <Layers updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} /> */}
     </>
   );
 };
 
 const mapStateToProps = (state) => {
-  const { map } = state;
+  const { map, compare, date } = state;
+  const {
+    lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
+  } = date;
+  const selectedDate = date.selected
+  const activeString = compare;
+  const useDate = selectedDate || (preloaded ? lastPreloadDate : getSelectedDate(state));
+  const nextDate = getNextDateTime(state, 1, useDate);
+  const prevDate = getNextDateTime(state, -1, useDate);
+
+  async function preloadNextTiles(date, compareString, layerQueue) {
+
+    const useActiveString = compareString || activeString;
+    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+    if (preloaded && lastArrowDirection) {
+      setPreload(preloaded, subsequentDate);
+      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
+      return;
+    }
+    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
+    if (!date && !arrowDown) {
+      preloadNextTiles(subsequentDate, useActiveString);
+    }
+  }
+
   return {
+    preloadNextTiles,
     map,
   };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  clearPreload: () => {
+    dispatch(clearPreload());
+  },
+  updateMapExtent: (extent) => {
+    dispatch(updateMapExtent(extent));
+  },
+})
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(MapUI);

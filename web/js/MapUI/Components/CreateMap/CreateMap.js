@@ -19,17 +19,13 @@ import OlInteractionDragPan from 'ol/interaction/DragPan';
 import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import * as olProj from 'ol/proj';
-import mapCompare from '../../../map/compare/compare';
-import { getSelectedDate } from '../../../modules/date/selectors';
 import util from '../../../util/util';
 import {
   refreshRotation,
-  updateMapExtent,
   updateRenderedState,
   updateMapUI,
 } from '../../../modules/map/actions';
 import { saveRotation } from '../../../map/util';
-import { clearPreload, setPreload } from '../../../modules/date/actions';
 import {
   MAP_DRAG,
   MAP_MOUSE_MOVE,
@@ -38,15 +34,12 @@ import {
   MAP_ZOOMING,
 } from '../../../util/constants';
 import { startLoading, stopLoading, MAP_LOADING } from '../../../modules/loading/actions';
-import { getNextDateTime } from '../../../modules/date/util';
-import { promiseImageryForTime } from '../../../modules/map/util';
 import { granuleFootprint } from '../../../map/granule/util';
 
 const { events } = util;
 
 const CreateMap = (props) => {
   const {
-    clearPreload,
     compareMapUi,
     config,
     isCoordinateSearchActive,
@@ -64,7 +57,7 @@ const CreateMap = (props) => {
     startLoading,
     stopLoading,
     ui,
-    updateMapExtent,
+    updateExtent,
     updateMapUI,
     updateRenderedState,
     updateRotation,
@@ -185,16 +178,6 @@ const CreateMap = (props) => {
       map.addInteraction(mobileRotation);
     }
 
-    const updateExtent = () => {
-      const map = ui.selected;
-      const view = map.getView();
-      const extent = view.calculateExtent();
-      updateMapExtent(extent);
-      if (map.isRendered()) {
-        clearPreload();
-      }
-    };
-
     const onRotate = () => {
       const radians = map.getView().getRotation();
       updateRotation(radians);
@@ -282,40 +265,20 @@ const CreateMap = (props) => {
   return null;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
     events, locationSearch, sidebar, animation, measure, screenSize, date, compare,
   } = state;
+  const { preloadNextTiles } = ownProps;
   const { isCoordinateSearchActive } = locationSearch;
-  const {
-    selected, selectedB, lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
-  } = date;
+  const { selected, selectedB, lastPreloadDate } = date;
   const isMeasureActive = measure.isActive;
   const isEventsTabActive = typeof events !== 'undefined' && events.active;
   const isMobile = screenSize.isMobileDevice;
   const isMapAnimating = animation.isPlaying;
   const sidebarActiveTab = sidebar.activeTab;
   const isCompareActive = compare.active;
-  const activeString = compare;
-  const compareMapUi = mapCompare(state);
-  const useDate = selected || (preloaded ? lastPreloadDate : getSelectedDate(state));
-  const nextDate = getNextDateTime(state, 1, useDate);
-  const prevDate = getNextDateTime(state, -1, useDate);
 
-  async function preloadNextTiles(date, compareString, layerQueue) {
-    const useActiveString = compareString || activeString;
-    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
-    if (preloaded && lastArrowDirection) {
-      setPreload(preloaded, subsequentDate);
-      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
-      return;
-    }
-    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
-    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
-    if (!date && !arrowDown) {
-      preloadNextTiles(subsequentDate, useActiveString);
-    }
-  }
 
   function preloadForCompareMode(layerQueue) {
     preloadNextTiles(selected, 'active', layerQueue);
@@ -325,7 +288,6 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    compareMapUi,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
@@ -340,15 +302,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   updateRotation: (rotation) => {
     dispatch(refreshRotation(rotation));
-  },
-  clearPreload: () => {
-    dispatch(clearPreload());
-  },
-  updateMapExtent: (extent) => {
-    dispatch(updateMapExtent(extent));
-  },
-  setPreload: (preloaded, lastPreloadDate) => {
-    dispatch(setPreload(preloaded, lastPreloadDate));
   },
   updateRenderedState: () => {
     dispatch(updateRenderedState());
@@ -370,7 +323,6 @@ export default connect(
 )(CreateMap);
 
 CreateMap.propTypes = {
-  clearPreload: PropTypes.func,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
   isCompareActive: PropTypes.bool,
@@ -382,6 +334,7 @@ CreateMap.propTypes = {
   isMobile: PropTypes.bool,
   layerQueue: PropTypes.object,
   preloadForCompareMode: PropTypes.func,
+  preloadNextTiles: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
   setMap: PropTypes.func,
   setUI: PropTypes.func,
@@ -389,7 +342,6 @@ CreateMap.propTypes = {
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
   ui: PropTypes.object,
-  updateMapExtent: PropTypes.func,
   updateMapUI: PropTypes.func,
   updateRenderedState: PropTypes.func,
   updateRotation: PropTypes.func,
