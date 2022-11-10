@@ -293,10 +293,6 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
 
-  def.startDate = lodashGet(def, `projections[${projection}].startDate`) || def.startDate;
-  def.endDate = lodashGet(def, `projections[${projection}].endDate`) || def.endDate;
-  def.dateRanges = lodashGet(def, `projections[${projection}].dateRanges`) || def.dateRanges;
-
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
   } else if (!lodashIsUndefined(spec.hidden)) {

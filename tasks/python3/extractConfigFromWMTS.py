@@ -78,14 +78,14 @@ def process_layer(gc_layer, wv_layers, entry):
             try:
                 wv_layer = process_temporal(wv_layer, dimension["Value"])
 
-                # TODO we need a better way to identify granule layers
-                if ('Granule' in ident):
-                    temporalForProjection = {}
-                    temporalForProjection[entry["projection"]] = {
-                        "startDate": wv_layer["startDate"],
-                        "endDate": wv_layer["endDate"],
-                        "dateRanges": wv_layer["dateRanges"],
-                    }
+                # # TODO we need a better way to identify granule layers
+                # if ('Granule' in ident):
+                #     temporalForProjection = {}
+                #     temporalForProjection[entry["projection"]] = {
+                #         "startDate": wv_layer["startDate"],
+                #         "endDate": wv_layer["endDate"],
+                #         "dateRanges": wv_layer["dateRanges"],
+                #     }
 
             except Exception as e:
                 print(traceback.format_exc())
