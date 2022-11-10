@@ -635,7 +635,7 @@
 		"MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
 		"OSCAR_Sea_Surface_Currents_Meridional",
 		"OSCAR_Sea_Surface_Currents_Zonal",
-		"oscar_currents_final_sd",
+		"OSCAR_Sea_Surface_Currents_Final_SD",
 		"oscar_currents_final_uv",
 		"JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies",
 		"TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_GDR_Cycles",
