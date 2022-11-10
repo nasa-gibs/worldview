@@ -96,7 +96,7 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
-// Review calls to this function & determine if calls are necessary for ASCAT
+// Review calls to this function & determine if calls are necessary for Vector Flow Layers
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
@@ -107,7 +107,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
-  // ASCAT does not include a glStyle, so we early return here in that instance
+  // ASCAT_Ocean_Surface_Wind_Speed does not include a glStyle, so we early return here in that instance
   if (glStyle === undefined) {
     return;
   }

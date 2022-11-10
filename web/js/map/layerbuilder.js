@@ -449,7 +449,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
     let windTileLayer;
-    const vectorLayers = ['ascat', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -613,7 +613,7 @@ export default function mapLayerBuilder(config, cache, store) {
         // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
         // Setting the radius to 0 includes each point but hides the visual
         image: new CircleStyle({
-          radius: renderAnimation ? 0 : 2,
+          radius: renderAnimation ? 6 : 2,
           fill: new Fill({
             color: 'green',
           }),
@@ -635,21 +635,11 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wv = attributes;
     layer.isVector = true;
 
-    const vectorLayers = ['ascat', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'oscar_currents_final_sd', 'oscar_currents_final_uv'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
     if (animationAllowed && renderAnimation) {
       animateVectors(layerName, tileSource, selected, layer);
     }
-    // let windTileLayer;
-
-    // if (animationAllowed && renderAnimation) {
-    //   // Add z-index property to existing canvas
-    //   // FIND THE PROPER WAY TO DO THIS!
-    //   document.querySelectorAll('canvas')[0].style.zIndex = -1;
-
-    //   windTileLayer = createWindtile(tileSource, selected, layer);
-    //   // console.log(windTileLayer);
-    // }
 
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
@@ -782,10 +772,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const updateTexture = function() {
       windRender.updateData(currentFeatures, extent, zoom, options);
     };
-
-    // console.log('returning windRender');
-    // console.log(windRender);
-    return windRender;
   };
 
   /**

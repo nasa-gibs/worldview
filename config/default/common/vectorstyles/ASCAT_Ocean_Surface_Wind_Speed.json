@@ -1,19 +1,19 @@
 {
   "version": 8,
-  "name": "ascat",
+  "name": "ASCAT_Ocean_Surface_Wind_Speed",
   "sources": {
-    "ascat": {
+    "ASCAT_Ocean_Surface_Wind_Speed": {
       "type": "vector",
       "tiles": [
-        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ascat/default/2020-01-01/16km/0/0/0.mvt"
+        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/ASCAT_Ocean_Surface_Wind_Speed/default/2020-01-01/16km/0/0/0.mvt"
       ]
     }
   },
   "layers": [
     {
-      "id": "ascat",
-      "source": "ascat",
-      "source-layer": "ascat",
+      "id": "ASCAT_Ocean_Surface_Wind_Speed",
+      "source": "ASCAT_Ocean_Surface_Wind_Speed",
+      "source-layer": "ASCAT_Ocean_Surface_Wind_Speed",
       "type": "circle",
       "paint": {
         "circle-radius": [

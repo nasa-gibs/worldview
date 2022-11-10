@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "ASCAT_Ocean_Surface_Wind_Speed": {
+      "id": "ASCAT_Ocean_Surface_Wind_Speed",
+      "title": "ASCAT_Ocean_Surface_Wind_Speed",
+      "subtitle": "ASCAT_Ocean_Surface_Wind_Speed subtitle",
+      "description": "ASCAT_Ocean_Surface_Wind_Speed description",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Vectors",
+      "vectorStyle": {
+        "id": "ASCAT_Ocean_Surface_Wind_Speed"
+      },
+      "transition": true,
+      "projections": {
+        "geographic": {
+          "source": "GITC:geographic"
+        }
+      }
+    }
+  }
+}

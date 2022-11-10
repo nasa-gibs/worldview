@@ -2,7 +2,7 @@
   "version": 8,
   "name": "oscar_currents_final_sd",
   "sources": {
-    "ascat": {
+    "oscar_currents_final_sd": {
       "type": "vector",
       "tiles": [
         "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/oscar_currents_final_sd/default/2020-01-01/2km/0/0/0.mvt"

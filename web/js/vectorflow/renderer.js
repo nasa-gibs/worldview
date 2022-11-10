@@ -11,6 +11,7 @@ export default class WindTile {
     console.log('options');
     console.log(options);
 
+    // options.canvas needs to be found, otherwise a NEW canvas is being generated!
     this.glCanvas = options.canvas || document.createElement('canvas');
     this.olmap = options.olmap;
 
@@ -24,10 +25,8 @@ export default class WindTile {
     // BUT, we still get a second canvas :-(
     // this.parent = options.parent || document.getElementById('app');
     const targetDiv = document.querySelector('#wv-map-geographic > div > div.ol-unselectable.ol-layers > div');
-    console.log('targetDiv');
-    console.log(targetDiv);
     this.parent = targetDiv;
-    // this.glCanvas.id = 'ben-canvas';
+    this.glCanvas.id = ' animated-vector';
     this.stopped = false;
     this.init();
     this.callback = options.callback;

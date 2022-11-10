@@ -2,7 +2,7 @@
   "version": 8,
   "name": "MISR_Cloud_Motion_Vector",
   "sources": {
-    "ascat": {
+    "MISR_Cloud_Motion_Vector": {
       "type": "vector",
       "tiles": [
         "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/MISR_Cloud_Motion_Vector/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"

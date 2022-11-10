@@ -16,4 +16,4 @@ Overpasses: ???<br>
 Orbit: ???
 
 #### References
-Data Product: ascat
+Data Product: ASCAT_Ocean_Surface_Wind_Speed
