@@ -636,7 +636,7 @@
 		"OSCAR_Sea_Surface_Currents_Meridional",
 		"OSCAR_Sea_Surface_Currents_Zonal",
 		"OSCAR_Sea_Surface_Currents_Final_SD",
-		"oscar_currents_final_uv",
+		"OSCAR_Sea_Surface_Currents_Final_UV",
 		"JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies",
 		"TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_GDR_Cycles",
 		"TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_US_West_Coast_GAFECC",

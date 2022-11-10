@@ -449,7 +449,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
     let windTileLayer;
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'oscar_currents_final_uv'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -635,7 +635,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wv = attributes;
     layer.isVector = true;
 
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'oscar_currents_final_uv'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
     if (animationAllowed && renderAnimation) {
       animateVectors(layerName, tileSource, selected, layer);
