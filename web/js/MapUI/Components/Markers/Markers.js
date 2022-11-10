@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reverseGeocode } from '../../../modules/location-search/util-api';
@@ -10,14 +10,15 @@ import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../module
 const Markers = (props) => {
   const {
     action,
+    activeLayers,
     config,
     coordinates,
     isMobileDevice,
+    selectedMap,
+    selectedMapMarkers,
     proj,
     removeMarker,
     setGeocodeResults,
-    setUI,
-    state,
     ui,
   } = props;
 
@@ -49,14 +50,12 @@ const Markers = (props) => {
    * @returns {void}
    */
   const removeCoordinatesMarker = (coordinatesObject) => {
-    const uiCopy = ui;
-    uiCopy.markers.forEach((marker) => {
+    selectedMapMarkers.forEach((marker) => {
       if (marker.id === coordinatesObject.id) {
         marker.setMap(null);
-        uiCopy.selected.removeOverlay(marker);
+        selectedMap.removeOverlay(marker);
       }
     });
-    setUI(uiCopy);
   };
 
   /*
@@ -68,12 +67,10 @@ const Markers = (props) => {
    * @returns {void}
    */
   const removeAllCoordinatesMarkers = () => {
-    const uiCopy = ui;
-    uiCopy.markers.forEach((marker) => {
+    ui.markers.forEach((marker) => {
       marker.setMap(null);
-      uiCopy.selected.removeOverlay(marker);
+      ui.selected.removeOverlay(marker);
     });
-    setUI(uiCopy);
   };
 
   /*
@@ -102,10 +99,9 @@ const Markers = (props) => {
     const { sources } = config;
     const { longitude, latitude } = coordinatesObject;
     const latestCoordinates = coordinatesObject && [longitude, latitude];
-    const zoom = ui.selected.getView().getZoom();
-    const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
+    const zoom = selectedMap.getView().getZoom();
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-    animateCoordinates(ui.selected, proj, latestCoordinates, maxZoom);
+    animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom);
   };
 
   /*
@@ -119,7 +115,6 @@ const Markers = (props) => {
    * @returns {void}
    */
   const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
-    const uiCopy = ui;
     const results = geocodeResults;
     if (!results) return;
     const remove = () => removeMarker(coordinatesObject);
@@ -136,20 +131,18 @@ const Markers = (props) => {
       return false;
     }
 
-    uiCopy.markers.push(marker);
-    uiCopy.selected.addOverlay(marker);
-    uiCopy.selected.renderSync();
+    ui.markers.push(marker);
+    ui.selected.addOverlay(marker);
+    ui.selected.renderSync();
 
     if (shouldFlyToCoordinates) {
       flyToMarker(coordinatesObject);
     }
 
     setGeocodeResults(geocodeResults);
-    setUI(uiCopy);
   };
 
   useEffect(() => {
-    if (!ui.proj) return;
     handleActiveMapMarker();
   }, [ui]);
 
@@ -157,14 +150,21 @@ const Markers = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { locationSearch, proj, screenSize } = state;
+  const {
+    locationSearch, proj, screenSize, map,
+  } = state;
   const { coordinates } = locationSearch;
   const { isMobileDevice } = screenSize;
+  const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
+  const selectedMap = map.ui.selected;
+  const selectedMapMarkers = map.ui.markers;
   return {
+    activeLayers,
     coordinates,
     isMobileDevice,
+    selectedMap,
+    selectedMapMarkers,
     proj,
-    state,
   };
 };
 
@@ -177,10 +177,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Markers);
+export default React.memo(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Markers),
+);
 
 Markers.propTypes = {
   action: PropTypes.object,
@@ -190,7 +192,6 @@ Markers.propTypes = {
   proj: PropTypes.object,
   removeMarker: PropTypes.func,
   setGeocodeResults: PropTypes.func,
-  setUI: PropTypes.func,
   state: PropTypes.object,
   ui: PropTypes.object,
 };

@@ -914,23 +914,23 @@ const MapUI = (props) => {
     };
 
 
-    function removeLayer(layersToRemove) {
-      console.log('removing layer')
-      const state = store.getState();
-      const { compare } = state;
+    // function removeLayer(layersToRemove) {
+    //   console.log('removing layer')
+    //   const state = store.getState();
+    //   const { compare } = state;
 
-      layersToRemove.forEach((def) => {
-        const layer = findLayer(def, compare.activeString);
-        if (compare && compare.active) {
-          const layerGroup = getActiveLayerGroup(state);
-          if (layerGroup) layerGroup.getLayers().remove(layer);
-        } else {
-          uiCopy.selected.removeLayer(layer);
-        }
-      });
+    //   layersToRemove.forEach((def) => {
+    //     const layer = findLayer(def, compare.activeString);
+    //     if (compare && compare.active) {
+    //       const layerGroup = getActiveLayerGroup(state);
+    //       if (layerGroup) layerGroup.getLayers().remove(layer);
+    //     } else {
+    //       uiCopy.selected.removeLayer(layer);
+    //     }
+    //   });
 
-      updateLayerVisibilities();
-    }
+    //   updateLayerVisibilities();
+    // }
 
     function updateVectorStyles (def) {
       const state = store.getState();
@@ -1452,7 +1452,8 @@ const findLayer = useCallback((def, activeCompareState) =>{
 }, [])
 
 const testFunction = () => {
-  console.log('map', map.ui.selected.getLayers() )
+  // console.log('map', map.ui.selected.getLayers() )
+  console.log('map', map.ui )
   console.log('ui', ui.selected.getLayers())
 }
 
@@ -1465,7 +1466,7 @@ const buttonStyle = {
       <div className="d-flex justify-content-center w-100">
         <button className="btn btn-success" onClick={testFunction} style={buttonStyle}>SHOW MYMAP OBJ</button>
       </div>
-      <Markers action={markerAction} ui={ui} setUI={setUI} config={config}/>
+      <Markers action={markerAction} ui={ui} config={config}/>
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <CreateMap
         compareMapUi={compareMapUi}
@@ -1480,7 +1481,6 @@ const buttonStyle = {
         preloadNextTiles={preloadNextTiles}
         />
       <RemoveLayer action={removeLayerAction} updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} />
-      {/* <Layers updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} /> */}
     </>
   );
 };
