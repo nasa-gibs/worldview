@@ -217,7 +217,7 @@ const CreateMap = (props) => {
     const onRenderComplete = () => {
       updateRenderedState();
       updateMapUI(uiCopy, uiCopy.selected.getView().getRotation());
-      setTimeout(preloadForCompareMode, 250, layerQueue);
+      setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
     };
 
@@ -280,8 +280,8 @@ const mapStateToProps = (state, ownProps) => {
   const isCompareActive = compare.active;
 
 
-  function preloadForCompareMode(layerQueue) {
-    preloadNextTiles(selected, 'active', layerQueue);
+  function preloadForCompareMode() {
+    preloadNextTiles(selected, 'active',);
     if (isCompareActive) {
       preloadNextTiles(selectedB, 'activeB');
     }

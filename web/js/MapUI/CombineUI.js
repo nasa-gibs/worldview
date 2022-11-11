@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Cache from 'cachai';
+import PQueue from 'p-queue';
 import util from '../util/util';
 import MapRunningData from '../map/runningdata';
 import {
@@ -17,7 +19,14 @@ import MapUI from './MapUI';
 
 const { events } = util;
 
-const CombineUI = ({ models, config, store }) => {
+const CombineUI = (props) => {
+  const {
+    models,
+    config,
+    state,
+    store,
+  } = props;
+
   const registerMapMouseHandlers = (maps) => {
     // if(maps.anarctic === undefined)return;
     console.log('4. registering mouse moves')
@@ -90,7 +99,8 @@ const CombineUI = ({ models, config, store }) => {
   // }, []);
 
   const cache = new Cache(400);
-  const compareMapUi = mapCompare(store);
+  const layerQueue = new PQueue({ concurrency: 3 });
+  const compareMapUi = mapCompare(state);
   const runningdata = new MapRunningData(compareMapUi, store);
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
 
@@ -168,7 +178,7 @@ const CombineUI = ({ models, config, store }) => {
 
   return (
     <>
-      <MapUI models={models} config={config} store={store} ui={ui} setUI={setUI}/>
+      <MapUI models={models} config={config} store={store} ui={ui} setUI={setUI} layerQueue={layerQueue}/>
       <div className="d-flex justify-content-center w-100">
         <button onClick={testFunction} style={buttonStyle} className="btn btn-primary">SHOW MY UI OBJECT</button>
       </div>
@@ -176,7 +186,16 @@ const CombineUI = ({ models, config, store }) => {
   );
 };
 
-export default CombineUI;
+const mapStateToProps = (state) => {
+
+  return {
+    state
+  }
+}
+
+export default connect(
+  mapStateToProps,
+)(CombineUI);
 
 CombineUI.propTypes = {
   config: PropTypes.object,
