@@ -19,6 +19,7 @@ const RemoveLayer = (props) => {
   }, [action]);
 
   const removeLayer = (layersToRemove) => {
+    console.log('removing layer')
     layersToRemove.forEach((def) => {
       const layer = findLayer(def, compare.activeString);
       if (compare && compare.active) {
@@ -51,7 +52,7 @@ export default React.memo(
 );
 
 RemoveLayer.propTypes = {
-  action: PropTypes.object,
+  action: PropTypes.any,
   compare: PropTypes.object,
   findLayer: PropTypes.func,
   layerGroup: PropTypes.object,

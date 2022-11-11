@@ -40,8 +40,10 @@ const { events } = util;
 
 const CreateMap = (props) => {
   const {
+    preloadNextTiles,
     compareMapUi,
     config,
+    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
@@ -49,7 +51,8 @@ const CreateMap = (props) => {
     isMeasureActive,
     isMobile,
     layerQueue,
-    preloadForCompareMode,
+    selected,
+    selectedB,
     setGranuleFootprints,
     setMap,
     setUI,
@@ -262,6 +265,13 @@ const CreateMap = (props) => {
     });
   }
 
+  function preloadForCompareMode() {
+    preloadNextTiles(selected, 'active',);
+    if (isCompareActive) {
+      preloadNextTiles(selectedB, 'activeB');
+    }
+  }
+
   return null;
 };
 
@@ -279,22 +289,16 @@ const mapStateToProps = (state, ownProps) => {
   const sidebarActiveTab = sidebar.activeTab;
   const isCompareActive = compare.active;
 
-
-  function preloadForCompareMode() {
-    preloadNextTiles(selected, 'active',);
-    if (isCompareActive) {
-      preloadNextTiles(selectedB, 'activeB');
-    }
-  }
-
   return {
+    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
     isMeasureActive,
     isMobile,
     lastPreloadDate,
-    preloadForCompareMode,
+    selected,
+    selectedB,
     sidebarActiveTab,
   };
 };

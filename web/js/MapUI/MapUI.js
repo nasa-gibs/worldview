@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Markers from './Components/Markers/Markers';
 import GranuleHover from './Components/GranuleHover/GranuleHover';
 import CreateMap from './Components/CreateMap/CreateMap';
-import RemoveLayer from './Components/Layers/RemoveLayer'
+import RemoveLayer from './Components/Layers/RemoveLayer';
+import AddLayer from './Components/Layers/AddLayer';
 
 
 /* eslint-disable no-multi-assign */
@@ -106,6 +107,13 @@ const { events } = util;
 
 const MapUI = (props) => {
   const {
+    setPreload,
+    preloaded,
+    arrowDown,
+    lastArrowDirection,
+    prevDate,
+    nextDate,
+    activeString,
     activeLayers,
     clearPreload,
     compare,
@@ -115,7 +123,6 @@ const MapUI = (props) => {
     layerQueue,
     map,
     models,
-    preloadNextTiles,
     proj,
     selectedDate,
     selectedDateB,
@@ -127,25 +134,21 @@ const MapUI = (props) => {
     updateMapUI,
   } = props;
 
-  // useEffect(() => {
-
-  // })
-
   const [markerAction, setMarkerAction] = useState({});
-  const [removeLayerAction, setRemoveLayerAction] = useState({})
+  const [removeLayerAction, setRemoveLayerAction] = useState({});
+  const [addLayerAction, setAddLayerAction] = useState({})
   const [granuleFootprints, setGranuleFootprints] = useState({});
-  const [isMapSet, setMap] = useState(false)
+  const [isMapSet, setMap] = useState(false);
 
 
   const compareMapUi = mapCompare(store);
   let uiCopy = ui;
 
-   /**
-   * Subscribe to redux store and listen for
-   * specific action types
-   */
+  // useEffect(() => {
+  //   console.log("mapui rerendering")
+  // })
+
   const subscribeToStore = function(action) {
-    // const state = store.getState();
     switch (action.type) {
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -162,15 +165,16 @@ const MapUI = (props) => {
         return reloadLayers(granuleOptions);
       }
       case layerConstants.ADD_LAYER: {
+        console.log('addLayer event')
         const def = lodashFind(action.layers, { id: action.id });
         if (def.type === 'granule') {
-          uiCopy.processingPromise = new Promise((resolve) => {
-            resolve(addLayer(def));
+          ui.processingPromise = new Promise((resolve) => {
+            resolve(setAddLayerAction(def));
           });
-          return uiCopy.processingPromise;
+          return setAddLayerAction(def);
         }
-        store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
-        return addLayer(def);
+        clearPreload();
+        return setAddLayerAction(def)
       }
       case REMOVE_MARKER: {
       return setMarkerAction(action);
@@ -281,160 +285,33 @@ const MapUI = (props) => {
   };
 
   events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+  events.on(MAP_DISABLE_CLICK_ZOOM, () => {
+    doubleClickZoom.setActive(false);
+  });
+  events.on(MAP_ENABLE_CLICK_ZOOM, () => {
+    setTimeout(() => {
+      doubleClickZoom.setActive(true);
+    }, 100);
+  });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { updateProjection(true); }, 200);
+  });
 
   useEffect(() => {
-  const createUI = (models, config, store) => {
-    console.log("2. createUI firing")
+  const createUI = () => {
+    console.log("2. Initiating")
     uiCopy = ui;
 
-    // const cache = uiCopy.cache;
-    // const layerQueue = new PQueue({ concurrency: 3 });
-    const createLayer = uiCopy.createLayer;
-
-    const init = function() {
-    // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
-    // it is possible that config.projections somehow becomes array-like.
-
-    console.log("3. initiating");
-      // lodashForOwn(config.projections, (proj) => {
-      //   const map = createMap(proj);
-      //   uiCopy.proj[proj.id] = map;
-      // });
-      events.on(MAP_DISABLE_CLICK_ZOOM, () => {
-        doubleClickZoom.setActive(false);
-      });
-      events.on(MAP_ENABLE_CLICK_ZOOM, () => {
-        setTimeout(() => {
-          doubleClickZoom.setActive(true);
-        }, 100);
-      });
-      // events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-      // events.on(GRANULE_HOVERED, onGranuleHover);
-      // events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
-      window.addEventListener('orientationchange', () => {
-        setTimeout(() => { updateProjection(true); }, 200);
-      });
-      updateProjection(true);
-    };
-
-
-
-    function updateVectorStyles (def) {
-      const state = store.getState();
-      const activeLayers = getActiveLayers(state);
-      const { vectorStyles } = config;
-      const layerName = def.layer || def.id;
-      let vectorStyleId;
-
-      vectorStyleId = def.vectorStyle.id;
-      if (activeLayers) {
-        activeLayers.forEach((layer) => {
-          if (layer.id === layerName && layer.custom) {
-            vectorStyleId = layer.custom;
-          }
-        });
-      }
-      setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-    }
-
-    async function updateCompareLayer (def, index, layerCollection) {
-      const state = store.getState();
-      const { compare } = state;
-      const options = {
-        group: compare.activeString,
-        date: getSelectedDate(state),
-        ...getGranuleOptions(state, def, compare.activeString),
-      };
-      const updatedLayer = await createLayer(def, options);
-      layerCollection.setAt(index, updatedLayer);
-      compareMapUi.update(compare.activeString);
-    }
-
-
-
-    /**
-   * Preload tiles for the next and previous time interval so they are visible
-   * as soon as the user changes the date. We will usually only end up actually requesting
-   * either previous or next interval tiles since tiles are cached.
-   * (e.g. user adjust from July 1 => July 2, we preload July 3 which is "next"
-   * but no requests get made for "previous", July 1, since those are cached already.
-   */
-    // async function preloadNextTiles(date, compareString) {
-    //   const state = store.getState();
-    //   const {
-    //     lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
-    //   } = state.date;
-    //   const { activeString } = state.compare;
-    //   const useActiveString = compareString || activeString;
-    //   const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(state));
-    //   const nextDate = getNextDateTime(state, 1, useDate);
-    //   const prevDate = getNextDateTime(state, -1, useDate);
-    //   const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
-
-    //   // If we've preloaded N dates out, we need to use the latest
-    //   // preloaded date the next time we call this function or the buffer
-    //   // won't stay ahead of the 'animation' when holding down timetep arrows
-    //   if (preloaded && lastArrowDirection) {
-    //     store.dispatch({
-    //       type: dateConstants.SET_PRELOAD,
-    //       preloaded: true,
-    //       lastPreloadDate: subsequentDate,
-    //     });
-    //     layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
-    //     return;
-    //   }
-
-    //   layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
-    //   layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
-
-    //   if (!date && !arrowDown) {
-    //     preloadNextTiles(subsequentDate, useActiveString);
-    //   }
-    // }
-
-    async function bufferQuickAnimate(arrowDown) {
-      const BUFFER_SIZE = 8;
-      const preloadPromises = [];
-      const state = store.getState();
-      const { preloaded, lastPreloadDate } = state.date;
-      const selectedDate = getSelectedDate(state);
-      const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
-
-      if (currentBuffer >= BUFFER_SIZE) {
-        return;
-      }
-
-      const currentDate = preloaded ? lastPreloadDate : selectedDate;
-      const direction = arrowDown === 'right' ? 1 : -1;
-      let nextDate = getNextDateTime(state, direction, currentDate);
-
-      for (let step = 1; step <= BUFFER_SIZE; step += 1) {
-        preloadPromises.push(promiseImageryForTime(state, nextDate));
-        if (step !== BUFFER_SIZE) {
-          nextDate = getNextDateTime(state, direction, nextDate);
-        }
-      }
-      await Promise.all(preloadPromises);
-
-      store.dispatch({
-        type: dateConstants.SET_PRELOAD,
-        preloaded: true,
-        lastPreloadDate: nextDate,
-      });
-    }
-
     if (document.getElementById('app')) {
-      init();
+      updateProjection(true);;
     }
-    setUI(uiCopy)
-    // return uiCopy;
   };
-  if(ui){
-    createUI(models, config, store)
-  }
 
+  if(ui){
+    createUI()
+  }
 }, []);
-//===============================================
+
 
 
 
@@ -449,7 +326,7 @@ const updateExtent = () => {
 };
 
 
-const updateLayerVisibilities = useCallback(() => {
+const updateLayerVisibilities = () => {
   const state = store.getState();
   const layerGroup = ui.selected.getLayers();
 
@@ -490,15 +367,18 @@ const updateLayerVisibilities = useCallback(() => {
       layer.setVisible(true);
     }
   });
-}, [])
+}
 
 /**
  * Initiates the adding of a layer
  * @param {object} def - layer Specs
  * @returns {void}
  */
-    const addLayer = async function(def, date, activeLayers) {
+  const addLayer = async function(def, date, activeLayers) {
+    console.log("NO NO NO NO NO")
+    const createLayer = uiCopy.createLayer
     date = date || selectedDate
+    const state = store.getState();
     activeLayers = activeLayers || getActiveLayers(state);
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const index = lodashFindIndex(reverseLayers, { id: def.id });
@@ -515,15 +395,17 @@ const updateLayerVisibilities = useCallback(() => {
       };
       const newLayer = await createLayer(def, options);
       activelayer.getLayers().insertAt(index, newLayer);
-      compareMapUi.create(uiCopy.selected, compare.mode);
+      compareMapUi.create(ui.selected, compare.mode);
     } else {
       const newLayer = await createLayer(def);
+      console.log('ui.selected.getLayers()',ui.selected.getLayers() )
+
       uiCopy.selected.getLayers().insertAt(index, newLayer);
     }
 
     updateLayerVisibilities();
     preloadNextTiles();
-  };
+};
 
 
 const findLayer = useCallback((def, activeCompareState) =>{
@@ -644,6 +526,7 @@ let layer = lodashFind(layers, {
    */
 
   async function reloadLayers(granuleOptions) {
+    console.log('reloading layers')
   const map = uiCopy.selected;
   const createLayer = uiCopy.createLayer
 
@@ -855,6 +738,37 @@ const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
   });
 };
 
+function updateVectorStyles (def) {
+  const state = store.getState();
+  const activeLayers = getActiveLayers(state);
+  const { vectorStyles } = config;
+  const layerName = def.layer || def.id;
+  let vectorStyleId;
+
+  vectorStyleId = def.vectorStyle.id;
+  if (activeLayers) {
+    activeLayers.forEach((layer) => {
+      if (layer.id === layerName && layer.custom) {
+        vectorStyleId = layer.custom;
+      }
+    });
+  }
+  setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+}
+
+async function updateCompareLayer (def, index, layerCollection) {
+  const state = store.getState();
+  const { compare } = state;
+  const options = {
+    group: compare.activeString,
+    date: getSelectedDate(state),
+    ...getGranuleOptions(state, def, compare.activeString),
+  };
+  const updatedLayer = await createLayer(def, options);
+  layerCollection.setAt(index, updatedLayer);
+  compareMapUi.update(compare.activeString);
+}
+
     /**
    * Sets new opacity to layer
    * @param {object} def - layer Specs
@@ -895,7 +809,8 @@ const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
   }
 
   async function updateDate(outOfStepChange) {
-    const createLayer = uiCopy.createLayer;
+    console.log('updating date')
+    const createLayer = ui.createLayer;
     const state = store.getState();
     const { compare = {} } = state;
     const layerGroup = getActiveLayerGroup(state);
@@ -938,10 +853,58 @@ const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
     }
   }
 
+  async function bufferQuickAnimate(arrowDown) {
+    const BUFFER_SIZE = 8;
+    const preloadPromises = [];
+    const state = store.getState();
+    const { preloaded, lastPreloadDate } = state.date;
+    const selectedDate = getSelectedDate(state);
+    const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
+
+    if (currentBuffer >= BUFFER_SIZE) {
+      return;
+    }
+
+    const currentDate = preloaded ? lastPreloadDate : selectedDate;
+    const direction = arrowDown === 'right' ? 1 : -1;
+    let nextDate = getNextDateTime(state, direction, currentDate);
+
+    for (let step = 1; step <= BUFFER_SIZE; step += 1) {
+      preloadPromises.push(promiseImageryForTime(state, nextDate));
+      if (step !== BUFFER_SIZE) {
+        nextDate = getNextDateTime(state, direction, nextDate);
+      }
+    }
+    await Promise.all(preloadPromises);
+
+    store.dispatch({
+      type: dateConstants.SET_PRELOAD,
+      preloaded: true,
+      lastPreloadDate: nextDate,
+    });
+  }
+
+  async function preloadNextTiles(date, compareString) {
+
+    const useActiveString = compareString || activeString;
+    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+    if (preloaded && lastArrowDirection) {
+      setPreload(preloaded, subsequentDate);
+      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
+      return;
+    }
+    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
+    if (!date && !arrowDown) {
+      preloadNextTiles(subsequentDate, useActiveString);
+    }
+  }
+
 const testFunction = () => {
   // console.log('map', map.ui.selected.getLayers() )
   console.log('map', map.ui )
   console.log('ui', ui.selected.getLayers())
+  console.log('active layers', activeLayers)
 }
 
 const buttonStyle = {
@@ -968,6 +931,12 @@ const buttonStyle = {
         preloadNextTiles={preloadNextTiles}
         />
       <RemoveLayer action={removeLayerAction} updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} />
+      <AddLayer
+        def={addLayerAction}
+        preloadNextTiles={preloadNextTiles}
+        updateLayerVisibilities={updateLayerVisibilities}
+        ui={ui}
+        />
     </>
   );
 };
@@ -987,28 +956,33 @@ const mapStateToProps = (state, ownProps) => {
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
 
-  async function preloadNextTiles(date, compareString) {
+  // async function preloadNextTiles(date, compareString) {
 
-    const useActiveString = compareString || activeString;
-    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
-    if (preloaded && lastArrowDirection) {
-      setPreload(preloaded, subsequentDate);
-      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
-      return;
-    }
-    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
-    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
-    if (!date && !arrowDown) {
-      preloadNextTiles(subsequentDate, useActiveString);
-    }
-  }
+  //   const useActiveString = compareString || activeString;
+  //   const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
+  //   if (preloaded && lastArrowDirection) {
+  //     setPreload(preloaded, subsequentDate);
+  //     layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
+  //     return;
+  //   }
+  //   layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+  //   layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
+  //   if (!date && !arrowDown) {
+  //     preloadNextTiles(subsequentDate, useActiveString);
+  //   }
+  // }
 
   return {
+    preloaded,
+    arrowDown,
+    lastArrowDirection,
+    prevDate,
+    nextDate,
+    activeString,
     activeLayers,
     compare,
     isMobile,
     map,
-    preloadNextTiles,
     proj,
     selectedDate,
     selectedDateB,
@@ -1029,6 +1003,12 @@ const mapDispatchToProps = (dispatch) => ({
   updateMapUI: (ui, rotation) => {
     dispatch(updateMapUI(ui, rotation));
   },
+  setPreload: (preloaded, lastPreloadDate) => {
+    return {
+      preloaded,
+      lastPreloadDate,
+    }
+  }
 })
 
 export default connect(

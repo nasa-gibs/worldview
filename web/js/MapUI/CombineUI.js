@@ -23,9 +23,12 @@ const CombineUI = (props) => {
   const {
     models,
     config,
-    state,
     store,
   } = props;
+
+  useEffect(() => {
+    console.log('CombineUI rerendering')
+  })
 
   const registerMapMouseHandlers = (maps) => {
     // if(maps.anarctic === undefined)return;
@@ -100,7 +103,7 @@ const CombineUI = (props) => {
 
   const cache = new Cache(400);
   const layerQueue = new PQueue({ concurrency: 3 });
-  const compareMapUi = mapCompare(state);
+  const compareMapUi = mapCompare(store);
   const runningdata = new MapRunningData(compareMapUi, store);
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
 
@@ -186,16 +189,9 @@ const CombineUI = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
 
-  return {
-    state
-  }
-}
 
-export default connect(
-  mapStateToProps,
-)(CombineUI);
+export default CombineUI
 
 CombineUI.propTypes = {
   config: PropTypes.object,
