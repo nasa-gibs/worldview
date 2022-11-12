@@ -26,9 +26,9 @@ const CombineUI = (props) => {
     store,
   } = props;
 
-  useEffect(() => {
-    console.log('CombineUI rerendering')
-  })
+  // useEffect(() => {
+  //   console.log('CombineUI rerendering')
+  // })
 
   const registerMapMouseHandlers = (maps) => {
     // if(maps.anarctic === undefined)return;
@@ -181,7 +181,15 @@ const CombineUI = (props) => {
 
   return (
     <>
-      <MapUI models={models} config={config} store={store} ui={ui} setUI={setUI} layerQueue={layerQueue}/>
+      <MapUI
+        models={models}
+        compareMapUi={compareMapUi}
+        config={config}
+        store={store}
+        ui={ui}
+        setUI={setUI}
+        layerQueue={layerQueue}
+        />
       <div className="d-flex justify-content-center w-100">
         <button onClick={testFunction} style={buttonStyle} className="btn btn-primary">SHOW MY UI OBJECT</button>
       </div>

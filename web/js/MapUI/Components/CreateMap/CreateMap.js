@@ -275,11 +275,10 @@ const CreateMap = (props) => {
   return null;
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     events, locationSearch, sidebar, animation, measure, screenSize, date, compare,
   } = state;
-  const { preloadNextTiles } = ownProps;
   const { isCoordinateSearchActive } = locationSearch;
   const { selected, selectedB, lastPreloadDate } = date;
   const isMeasureActive = measure.isActive;

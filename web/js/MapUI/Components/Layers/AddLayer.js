@@ -22,6 +22,11 @@ const AddLayer = (props) => {
     addLayer(def);
   }, [def]);
 
+/**
+ * Initiates the adding of a layer
+ * @param {object} def - layer Specs
+ * @returns {void}
+ */
   const addLayer = async function(def, date, activeLayers) {
     const createLayer = ui.createLayer;
     date = date || selected;
