@@ -32,7 +32,7 @@ const CombineUI = (props) => {
 
   const registerMapMouseHandlers = (maps) => {
     // if(maps.anarctic === undefined)return;
-    console.log('4. registering mouse moves')
+    console.log('5. Registering Mouse Moves')
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
       const crs = map.getView().getProjection().getCode();
@@ -54,52 +54,6 @@ const CombineUI = (props) => {
       });
     });
   };
-
-  const tempUI = {};
-  // this component is for testing the current functionality
-  // useEffect(() => {
-  //   const combineUiFunction = () => {
-  //     const subscribeToStore = function () {
-  //       const state = store.getState();
-  //       const action = state.lastAction;
-  //       return events.trigger(REDUX_ACTION_DISPATCHED, action);
-  //     };
-  //     store.subscribe(subscribeToStore);
-
-  //     // This is where we should start to break out components.
-  //     // Instead of feeding all of these parameters to one function, we can pass them
-  //     // to components
-  //     console.log('console logging mapui() function', mapui(models, config, store, ui));
-  //     // tempUI.map = mapui(models, config, store, ui);
-  //     tempUI.supportsPassive = false;
-  //     try {
-  //       const opts = Object.defineProperty({}, 'passive', {
-  //         // eslint-disable-next-line getter-return
-  //         get() {
-  //           tempUI.supportsPassive = true;
-  //         },
-  //       });
-  //       window.addEventListener('testPassive', null, opts);
-  //       window.removeEventListener('testPassive', null, opts);
-  //     } catch (e) {
-  //       util.warn(e);
-  //     }
-
-  //     registerMapMouseHandlers(tempUI.map.proj);
-
-  //     // Sink all focus on inputs if click unhandled
-  //     document.addEventListener('click', (e) => {
-  //       if (e.target.nodeName !== 'INPUT') {
-  //         document.querySelectorAll('input').forEach((el) => el.blur());
-  //       }
-  //     });
-  //     document.activeElement.blur();
-  //     document.querySelectorAll('input').forEach((el) => el.blur());
-
-  //     return tempUI;
-  //   };
-  //     combineUiFunction();
-  // }, []);
 
   const cache = new Cache(400);
   const layerQueue = new PQueue({ concurrency: 3 });
@@ -124,7 +78,8 @@ const CombineUI = (props) => {
   const myUI = {}
 
   // this function is for testing the new components
-  const altCombineUiFunction = () => {
+  const combineUiFunction = () => {
+    console.log('4. Combine UI Function')
       const subscribeToStore = function () {
         const state = store.getState();
         const action = state.lastAction;
@@ -161,13 +116,9 @@ const CombineUI = (props) => {
       return myUI;
   };
 
-  // useEffect(() => {
-  //   console.log("combine UI firing")
-  // })
-
   useEffect(() => {
     if(ui.proj){
-      altCombineUiFunction();
+      combineUiFunction();
     }
   }, [ui])
 
@@ -189,7 +140,7 @@ const CombineUI = (props) => {
         ui={ui}
         setUI={setUI}
         layerQueue={layerQueue}
-        />
+      />
       <div className="d-flex justify-content-center w-100">
         <button onClick={testFunction} style={buttonStyle} className="btn btn-primary">SHOW MY UI OBJECT</button>
       </div>

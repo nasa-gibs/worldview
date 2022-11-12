@@ -110,6 +110,7 @@ const MapUI = (props) => {
   const {
     activeLayers,
     activeString,
+    allActiveLayers,
     arrowDown,
     clearPreload,
     compare,
@@ -118,6 +119,8 @@ const MapUI = (props) => {
     fitToLeadingExtent,
     isMobile,
     lastArrowDirection,
+    lastPreloadDate,
+    layerGroup,
     layerQueue,
     layers,
     map,
@@ -137,6 +140,7 @@ const MapUI = (props) => {
     updateMapUI,
   } = props;
 
+  const [actionObject, setActionObject] = useState({});
   const [markerAction, setMarkerAction] = useState({});
   const [removeLayerAction, setRemoveLayerAction] = useState({});
   const [addLayerAction, setAddLayerAction] = useState({});
@@ -144,10 +148,21 @@ const MapUI = (props) => {
   const [isMapSet, setMap] = useState(false);
 
   // useEffect(() => {
-  //   console.log('IS MOBILE TRUE?', isMobile)
-  // })
+  //   console.log('state triggered rerender')
+  // }, [state])
 
   const subscribeToStore = function(action) {
+    setActionObject(action)
+  }
+
+  useEffect(() => {
+    subscribeToStore2(actionObject)
+  }, [actionObject])
+
+  // might be rerendering a ton becuase it listens to all actions?
+  // can this go into the parent component?
+  const subscribeToStore2 = function(action) {
+    console.log('redux action triggered', action.type)
     switch (action.type) {
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -239,7 +254,6 @@ const MapUI = (props) => {
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case SET_SCREEN_INFO:
-        console.log('resize event');
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
@@ -299,10 +313,10 @@ const MapUI = (props) => {
   // Initial hook that initiates the map after it has been created in CreateMap.js
   useEffect(() => {
     if (document.getElementById('app')) {
-      console.log('2. Initiating');
+      console.log('2. Initiating Hook');
       updateProjection(true);
     }
-  }, []);
+  }, [ui]);
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -472,7 +486,6 @@ const MapUI = (props) => {
    */
 
   async function reloadLayers(granuleOptions) {
-    console.log('reloading layers');
     const map = ui.selected;
     const { createLayer } = ui;
     const state = { layers, compare, proj };
@@ -515,7 +528,6 @@ const MapUI = (props) => {
   * @returns {void}
   */
   const clearLayers = function() {
-    console.log('clearing layer');
     const activeLayers = ui.selected
       .getLayers()
       .getArray()
@@ -572,7 +584,7 @@ const MapUI = (props) => {
  * @returns {void}
  */
   function updateProjection(start) {
-    console.log('updating projection');
+    console.log('3. Updating Projection')
     if (ui.selected) {
       // Keep track of center point on projection switch
       ui.selected.previousCenter = ui.selected.center;
@@ -759,14 +771,9 @@ const MapUI = (props) => {
   }
 
   async function updateDate(outOfStepChange) {
-    console.log('updating date');
     const { createLayer } = ui;
-    const state = store.getState();
-    const { compare = {} } = state;
-    const layerGroup = getActiveLayerGroup(state);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
-    const activeLayers = getAllActiveLayers(state);
     const visibleLayers = activeLayers.filter(
       ({ id }) => layers
         .map(({ wv }) => lodashGet(wv, 'def.id'))
@@ -804,6 +811,7 @@ const MapUI = (props) => {
   }
 
   async function bufferQuickAnimate(arrowDown) {
+    console.log('buffer quick animate')
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
     const state = store.getState();
@@ -826,7 +834,7 @@ const MapUI = (props) => {
       }
     }
     await Promise.all(preloadPromises);
-
+    // setPreload(preloaded, nextDate)
     store.dispatch({
       type: dateConstants.SET_PRELOAD,
       preloaded: true,
@@ -851,9 +859,8 @@ const MapUI = (props) => {
 
   const testFunction = () => {
   // console.log('map', map.ui.selected.getLayers() )
-    console.log('map', map.ui);
-    console.log('ui', ui.selected.getLayers());
-    console.log('active layers', activeLayers);
+    console.log('map', map);
+    console.log('ui', ui);
   };
 
   const buttonStyle = {
@@ -863,7 +870,9 @@ const MapUI = (props) => {
   return (
     <>
       <div className="d-flex justify-content-center w-100">
-        <button className="btn btn-success" onClick={testFunction} style={buttonStyle}>SHOW MYMAP OBJ</button>
+        <button className="btn btn-success" onClick={testFunction} style={buttonStyle}>
+          MAP/UI/SELECTED DATE
+        </button>
       </div>
       <Markers action={markerAction} ui={ui} config={config} />
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
@@ -897,6 +906,7 @@ const mapStateToProps = (state, ownProps) => {
   const {
     lastPreloadDate, preloaded, lastArrowDirection, arrowDown, selected, selectedB,
   } = date;
+
   const isMobile = screenSize.isMobileDevice;
   const activeLayers = getActiveLayers(state);
   const selectedDate = selected;
@@ -905,16 +915,22 @@ const mapStateToProps = (state, ownProps) => {
   const useDate = selectedDate || (preloaded ? lastPreloadDate : getSelectedDate(state));
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
+  const layerGroup = getActiveLayerGroup(state);
+  const allActiveLayers = getAllActiveLayers(state);
+
 
   return {
     activeLayers,
     activeString,
+    allActiveLayers,
     arrowDown,
     compare,
     compare,
     isMobile,
     lastArrowDirection,
+    layerGroup,
     layers,
+    lastPreloadDate,
     map,
     nextDate,
     preloaded,
@@ -939,11 +955,9 @@ const mapDispatchToProps = (dispatch) => ({
   updateMapUI: (ui, rotation) => {
     dispatch(updateMapUI(ui, rotation));
   },
-  setPreload: (preloaded, lastPreloadDate) => ({
-    config,
-    preloaded,
-    lastPreloadDate,
-  }),
+  setPreload: (preloaded, lastPreloadDate) => {
+    dispatch(setPreload(preloaded, lastPreloadDate))
+  },
 });
 
 export default connect(
