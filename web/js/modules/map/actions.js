@@ -5,7 +5,7 @@ import {
   UPDATE_MAP_EXTENT,
   RENDERED,
   UPDATE_MAP_UI,
-  FITTED_TO_LEADING_EXTENT
+  FITTED_TO_LEADING_EXTENT,
 } from './constants';
 
 export function clearRotate() {

@@ -14,12 +14,12 @@ const RemoveLayer = (props) => {
   } = props;
 
   useEffect(() => {
-    if (JSON.stringify(action) === '{}') return;
-    removeLayer(action);
+    if (action.layersToRemove) {
+      removeLayer(action.layersToRemove);
+    }
   }, [action]);
 
   const removeLayer = (layersToRemove) => {
-    console.log('removing layer')
     layersToRemove.forEach((def) => {
       const layer = findLayer(def, compare.activeString);
       if (compare && compare.active) {

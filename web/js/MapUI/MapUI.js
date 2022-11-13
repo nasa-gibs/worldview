@@ -33,12 +33,12 @@ import * as olProj from 'ol/proj';
 import Cache from 'cachai';
 // eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue';
-import Layers from './Components/Layers/Layers';
 import AddLayer from './Components/Layers/AddLayer';
 import RemoveLayer from './Components/Layers/RemoveLayer';
 import CreateMap from './Components/CreateMap/CreateMap';
 import GranuleHover from './Components/GranuleHover/GranuleHover';
 import Markers from './Components/Markers/Markers';
+import UpdateDate from './Components/UpdateDate/UpdateDate';
 import mapLayerBuilder from '../map/layerbuilder';
 import MapRunningData from '../map/runningdata';
 import { fly, saveRotation } from '../map/util';
@@ -141,28 +141,23 @@ const MapUI = (props) => {
   } = props;
 
   const [actionObject, setActionObject] = useState({});
+  // seperate state variable needed to prevent action loop from Redux
   const [markerAction, setMarkerAction] = useState({});
-  const [removeLayerAction, setRemoveLayerAction] = useState({});
-  const [addLayerAction, setAddLayerAction] = useState({});
+  // seperate state variable needed to set footprints in CreateMap
   const [granuleFootprints, setGranuleFootprints] = useState({});
   const [isMapSet, setMap] = useState(false);
 
-  // useEffect(() => {
-  //   console.log('state triggered rerender')
-  // }, [state])
-
   const subscribeToStore = function(action) {
-    setActionObject(action)
-  }
+    setActionObject(action);
+  };
 
   useEffect(() => {
-    subscribeToStore2(actionObject)
-  }, [actionObject])
+    actionSwitch(actionObject);
+  }, [actionObject]);
 
-  // might be rerendering a ton becuase it listens to all actions?
-  // can this go into the parent component?
-  const subscribeToStore2 = function(action) {
-    console.log('redux action triggered', action.type)
+
+  const actionSwitch = function(action) {
+    console.log('redux action triggered', action.type);
     switch (action.type) {
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -178,17 +173,17 @@ const MapUI = (props) => {
         };
         return reloadLayers(granuleOptions);
       }
-      case layerConstants.ADD_LAYER: {
-        const def = lodashFind(action.layers, { id: action.id });
-        if (def.type === 'granule') {
-          ui.processingPromise = new Promise((resolve) => {
-            resolve(setAddLayerAction(def));
-          });
-          return setAddLayerAction(def);
-        }
-        clearPreload();
-        return setAddLayerAction(def);
-      }
+      // case layerConstants.ADD_LAYER: {
+      //   const def = lodashFind(action.layers, { id: action.id });
+      //   if (def.type === 'granule') {
+      //     ui.processingPromise = new Promise((resolve) => {
+      //       resolve(setAddLayerAction(def));
+      //     });
+      //     return setAddLayerAction(def);
+      //   }
+      //   clearPreload();
+      //   return setAddLayerAction(def);
+      // }
       case REMOVE_MARKER: {
         return setMarkerAction(action);
       }
@@ -223,9 +218,9 @@ const MapUI = (props) => {
         }, 200);
         return;
       }
-      case layerConstants.REMOVE_GROUP:
-      case layerConstants.REMOVE_LAYER:
-        return setRemoveLayerAction(action.layersToRemove);
+      // case layerConstants.REMOVE_GROUP:
+      // case layerConstants.REMOVE_LAYER:
+      //   return setRemoveLayerAction(action.layersToRemove);
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -274,21 +269,21 @@ const MapUI = (props) => {
       case dateConstants.CHANGE_CUSTOM_INTERVAL:
       case dateConstants.CHANGE_INTERVAL:
         return preloadNextTiles();
-      case dateConstants.SELECT_DATE:
-        if (ui.processingPromise) {
-          return new Promise((resolve) => {
-            resolve(ui.processingPromise);
-          }).then(() => {
-            ui.processingPromise = null;
-            return updateDate(action.outOfStep);
-          });
-        }
-        return updateDate(action.outOfStep);
-      case layerConstants.TOGGLE_LAYER_VISIBILITY:
-      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
-        updateDate();
-        break;
-      }
+      // case dateConstants.SELECT_DATE:
+      //   if (ui.processingPromise) {
+      //     return new Promise((resolve) => {
+      //       resolve(ui.processingPromise);
+      //     }).then(() => {
+      //       ui.processingPromise = null;
+      //       return updateDate(action.outOfStep);
+      //     });
+      //   }
+      //   return updateDate(action.outOfStep);
+      // case layerConstants.TOGGLE_LAYER_VISIBILITY:
+      // case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
+      //   updateDate();
+      //   break;
+      // }
       case dateConstants.ARROW_DOWN:
         bufferQuickAnimate(action.value);
         break;
@@ -329,7 +324,7 @@ const MapUI = (props) => {
   };
 
   const updateLayerVisibilities = () => {
-    const state = store.getState();
+    // const state = store.getState();
     const layerGroup = ui.selected.getLayers();
 
     const setRenderable = (layer, parentCompareGroup) => {
@@ -398,7 +393,7 @@ const MapUI = (props) => {
   }, []);
 
 
- /**
+  /**
  * Hide Map
  *
  * @method hideMap
@@ -446,7 +441,7 @@ const MapUI = (props) => {
     }
   }
 
- /**
+  /**
  * Get granule options for layerBuilding
  * @param {object} state
  * @param {Object} def
@@ -584,7 +579,7 @@ const MapUI = (props) => {
  * @returns {void}
  */
   function updateProjection(start) {
-    console.log('3. Updating Projection')
+    console.log('3. Updating Projection');
     if (ui.selected) {
       // Keep track of center point on projection switch
       ui.selected.previousCenter = ui.selected.center;
@@ -651,7 +646,7 @@ const MapUI = (props) => {
   // handleActiveMapMarker(start);
   }
 
- /**
+  /**
  * During animation we swap Vector tiles for WMS for better performance.
  * Once animation completes, we need to call reloadLayers to reload and replace
  * the WMS tiles with Vector tiles.
@@ -700,38 +695,36 @@ const MapUI = (props) => {
     });
   };
 
-  function updateVectorStyles (def) {
-    const state = store.getState();
-    const activeLayers = getActiveLayers(state);
-    const { vectorStyles } = config;
-    const layerName = def.layer || def.id;
-    let vectorStyleId;
+  // function updateVectorStyles (def) {
+  //   const activeLayers = getActiveLayers(state);
+  //   const { vectorStyles } = config;
+  //   const layerName = def.layer || def.id;
+  //   let vectorStyleId;
 
-    vectorStyleId = def.vectorStyle.id;
-    if (activeLayers) {
-      activeLayers.forEach((layer) => {
-        if (layer.id === layerName && layer.custom) {
-          vectorStyleId = layer.custom;
-        }
-      });
-    }
-    setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-  }
+  //   vectorStyleId = def.vectorStyle.id;
+  //   if (activeLayers) {
+  //     activeLayers.forEach((layer) => {
+  //       if (layer.id === layerName && layer.custom) {
+  //         vectorStyleId = layer.custom;
+  //       }
+  //     });
+  //   }
+  //   setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+  // }
 
-  async function updateCompareLayer (def, index, layerCollection) {
-    const state = store.getState();
-    const { compare } = state;
-    const options = {
-      group: compare.activeString,
-      date: getSelectedDate(state),
-      ...getGranuleOptions(state, def, compare.activeString),
-    };
-    const updatedLayer = await createLayer(def, options);
-    layerCollection.setAt(index, updatedLayer);
-    compareMapUi.update(compare.activeString);
-  }
+  // async function updateCompareLayer (def, index, layerCollection) {
+  //   const { compare } = state;
+  //   const options = {
+  //     group: compare.activeString,
+  //     date: getSelectedDate(state),
+  //     ...getGranuleOptions(state, def, compare.activeString),
+  //   };
+  //   const updatedLayer = await createLayer(def, options);
+  //   layerCollection.setAt(index, updatedLayer);
+  //   compareMapUi.update(compare.activeString);
+  // }
 
-   /**
+  /**
    * Sets new opacity to layer
    * @param {object} def - layer Specs
    * @param {number} value - number value
@@ -739,7 +732,7 @@ const MapUI = (props) => {
    */
   function updateOpacity(action) {
     const { id, opacity } = action;
-    const state = store.getState();
+    // const state = store.getState();
     const { compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(getActiveLayers(state), { id });
@@ -761,60 +754,60 @@ const MapUI = (props) => {
     }
   }
 
-  function findLayerIndex({ id }) {
-    const state = store.getState();
-    const layerGroup = getActiveLayerGroup(state);
-    const layers = layerGroup.getLayers().getArray();
-    return lodashFindIndex(layers, {
-      wv: { id },
-    });
-  }
+  // function findLayerIndex({ id }) {
+  //   // const state = store.getState();
+  //   const layerGroup = getActiveLayerGroup(state);
+  //   const layers = layerGroup.getLayers().getArray();
+  //   return lodashFindIndex(layers, {
+  //     wv: { id },
+  //   });
+  // }
 
-  async function updateDate(outOfStepChange) {
-    const { createLayer } = ui;
-    const mapLayerCollection = layerGroup.getLayers();
-    const layers = mapLayerCollection.getArray();
-    const visibleLayers = activeLayers.filter(
-      ({ id }) => layers
-        .map(({ wv }) => lodashGet(wv, 'def.id'))
-        .includes(id),
-    ).filter(({ visible }) => visible);
+  // async function updateDate(outOfStepChange) {
+  //   const { createLayer } = ui;
+  //   const mapLayerCollection = layerGroup.getLayers();
+  //   const layers = mapLayerCollection.getArray();
+  //   const visibleLayers = activeLayers.filter(
+  //     ({ id }) => layers
+  //       .map(({ wv }) => lodashGet(wv, 'def.id'))
+  //       .includes(id),
+  //   ).filter(({ visible }) => visible);
 
-    const layerPromises = visibleLayers.map(async (def) => {
-      const { id, type } = def;
-      const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
-        .includes(def.period);
-      const index = findLayerIndex(def);
-      const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
+  //   const layerPromises = visibleLayers.map(async (def) => {
+  //     const { id, type } = def;
+  //     const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
+  //       .includes(def.period);
+  //     const index = findLayerIndex(def);
+  //     const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
 
-      if (compare.active && layers.length) {
-        await updateCompareLayer(def, index, mapLayerCollection);
-      } else if (temporalLayer) {
-        if (index !== undefined && index !== -1) {
-          const layerValue = layers[index];
-          const layerOptions = type === 'granule'
-            ? { granuleCount: getGranuleCount(state, id) }
-            : { previousLayer: layerValue ? layerValue.wv : null };
-          const updatedLayer = await createLayer(def, layerOptions);
-          mapLayerCollection.setAt(index, updatedLayer);
-        }
-      }
-      if (hasVectorStyles && temporalLayer) {
-        updateVectorStyles(def);
-      }
-    });
-    await Promise.all(layerPromises);
-    updateLayerVisibilities();
-    if (!outOfStepChange) {
-      preloadNextTiles();
-    }
-  }
+  //     if (compare.active && layers.length) {
+  //       await updateCompareLayer(def, index, mapLayerCollection);
+  //     } else if (temporalLayer) {
+  //       if (index !== undefined && index !== -1) {
+  //         const layerValue = layers[index];
+  //         const layerOptions = type === 'granule'
+  //           ? { granuleCount: getGranuleCount(state, id) }
+  //           : { previousLayer: layerValue ? layerValue.wv : null };
+  //         const updatedLayer = await createLayer(def, layerOptions);
+  //         mapLayerCollection.setAt(index, updatedLayer);
+  //       }
+  //     }
+  //     if (hasVectorStyles && temporalLayer) {
+  //       updateVectorStyles(def);
+  //     }
+  //   });
+  //   await Promise.all(layerPromises);
+  //   updateLayerVisibilities();
+  //   if (!outOfStepChange) {
+  //     preloadNextTiles();
+  //   }
+  // }
 
   async function bufferQuickAnimate(arrowDown) {
-    console.log('buffer quick animate')
+    console.log('buffer quick animate');
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
-    const state = store.getState();
+    // const state = store.getState();
     const { preloaded, lastPreloadDate } = state.date;
     const selectedDate = getSelectedDate(state);
     const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
@@ -888,12 +881,26 @@ const MapUI = (props) => {
         updateExtent={updateExtent}
         preloadNextTiles={preloadNextTiles}
       />
-      <RemoveLayer action={removeLayerAction} updateLayerVisibilities={updateLayerVisibilities} findLayer={findLayer} />
+      <RemoveLayer
+        action={actionObject}
+        compareMapUi={compareMapUi}
+        updateLayerVisibilities={updateLayerVisibilities}
+        findLayer={findLayer}
+      />
       <AddLayer
-        def={addLayerAction}
+        action={actionObject}
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         ui={ui}
+      />
+      <UpdateDate
+        action={actionObject}
+        ui={ui}
+        compareMapUi={compareMapUi}
+        config={config}
+        preloadNextTiles={preloadNextTiles}
+        updateLayerVisibilities={updateLayerVisibilities}
+        getGranuleOptions={getGranuleOptions}
       />
     </>
   );
@@ -956,7 +963,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateMapUI(ui, rotation));
   },
   setPreload: (preloaded, lastPreloadDate) => {
-    dispatch(setPreload(preloaded, lastPreloadDate))
+    dispatch(setPreload(preloaded, lastPreloadDate));
   },
 });
 
