@@ -140,10 +140,10 @@ const MapUI = (props) => {
     selectedDateB,
     setPreload,
     setUI,
-    state,
     ui,
     updateMapExtent,
     updateMapUI,
+    vectorStylesState,
   } = props;
 
   const [actionObject, setActionObject] = useState({});
@@ -214,8 +214,8 @@ const MapUI = (props) => {
       }
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
-        const extent = lodashGet(state, 'map.extent');
-        const rotate = lodashGet(state, 'map.rotation') || 0;
+        const extent = lodashGet(map, 'extent');
+        const rotate = lodashGet(map, 'rotation') || 0;
         setTimeout(() => {
           updateProjection();
           if (newState.v && !newState.e && extent) {
@@ -262,9 +262,9 @@ const MapUI = (props) => {
         updateVectorSelection(
           action.payload,
           ui.selectedVectors,
-          getActiveLayers(state),
+          activeLayers,
           type,
-          state,
+          vectorStylesState,
         );
         ui.selectedVectors = newSelection;
         return;
@@ -373,8 +373,7 @@ const MapUI = (props) => {
   };
 
   // used in multiple places
-  // TODO: remove useCallback
-  const findLayer = useCallback((def, activeCompareState) => {
+  const findLayer = (def, activeCompareState) => {
     const layers = ui.selected.getLayers().getArray();
     let layer = lodashFind(layers, {
       wv: {
@@ -398,7 +397,7 @@ const MapUI = (props) => {
       });
     }
     return layer;
-  }, []);
+  }
 
 
   /**
@@ -842,17 +841,16 @@ const MapUI = (props) => {
     setPreload(true, nextDate)
   }
 
-  // being used all over the place
   async function preloadNextTiles(date, compareString) {
     const useActiveString = compareString || activeString;
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
     if (preloaded && lastArrowDirection) {
-      setPreload(preloaded, subsequentDate);
-      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
+      setPreload(true, subsequentDate);
+      layerQueue.add(() => promiseImageryForTime(promiseImageryState, subsequentDate, useActiveString));
       return;
     }
-    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
-    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(promiseImageryState, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(promiseImageryState, prevDate, useActiveString));
     if (!date && !arrowDown) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
@@ -928,6 +926,7 @@ const mapStateToProps = (state, ownProps) => {
     arrowDown, lastArrowDirection, lastPreloadDate, preloaded, selected, selectedB,
   } = date;
 
+  const vectorStylesState = { config, map, proj, vectorStyles }
   const promiseImageryState = { map, proj, embed, compare, layers, palettes, vectorStyles }
   const renderableLayersState = { date, compare, config, proj }
   const dateCompareState = { date, compare }
@@ -969,7 +968,7 @@ const mapStateToProps = (state, ownProps) => {
     renderableLayersState,
     selectedDate,
     selectedDateB,
-    state,
+    vectorStylesState,
   };
 };
 
