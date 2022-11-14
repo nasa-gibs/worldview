@@ -27,6 +27,8 @@ import {
 } from '../../../modules/map/actions';
 import { saveRotation } from '../../../map/util';
 import {
+  MAP_DISABLE_CLICK_ZOOM,
+  MAP_ENABLE_CLICK_ZOOM,
   MAP_DRAG,
   MAP_MOUSE_MOVE,
   MAP_MOUSE_OUT,
@@ -40,19 +42,15 @@ const { events } = util;
 
 const CreateMap = (props) => {
   const {
-    preloadNextTiles,
     compareMapUi,
     config,
-    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
     isMapSet,
     isMeasureActive,
     isMobile,
-    layerQueue,
-    selected,
-    selectedB,
+    preloadForCompareMode,
     setGranuleFootprints,
     setMap,
     setUI,
@@ -68,6 +66,10 @@ const CreateMap = (props) => {
 
   const { projections } = config;
   let granuleFootprintsObj = {};
+  const animationDuration = 250;
+  const doubleClickZoom = new OlInteractionDoubleClickZoom({
+    duration: animationDuration,
+  });
 
   useEffect(() => {
     if (isMapSet) return;
@@ -94,12 +96,6 @@ const CreateMap = (props) => {
    * @returns {object} OpenLayers Map Object
    */
   const mapCreation = (proj, uiCopy) => {
-    const animationDuration = 250;
-
-    const doubleClickZoom = new OlInteractionDoubleClickZoom({
-      duration: animationDuration,
-    });
-    //= ======================================
     const mapContainerEl = document.getElementById('wv-map');
     const mapEl = document.createElement('div');
     const id = `wv-map-${proj.id}`;
@@ -238,6 +234,15 @@ const CreateMap = (props) => {
       map.getView().changed();
     });
 
+    events.on(MAP_DISABLE_CLICK_ZOOM, () => {
+      doubleClickZoom.setActive(false);
+    });
+    events.on(MAP_ENABLE_CLICK_ZOOM, () => {
+      setTimeout(() => {
+        doubleClickZoom.setActive(true);
+      }, 100);
+    });
+
     return map;
   };
 
@@ -265,13 +270,6 @@ const CreateMap = (props) => {
     });
   }
 
-  function preloadForCompareMode() {
-    preloadNextTiles(selected, 'active',);
-    if (isCompareActive) {
-      preloadNextTiles(selectedB, 'activeB');
-    }
-  }
-
   return null;
 };
 
@@ -286,10 +284,8 @@ const mapStateToProps = (state) => {
   const isMobile = screenSize.isMobileDevice;
   const isMapAnimating = animation.isPlaying;
   const sidebarActiveTab = sidebar.activeTab;
-  const isCompareActive = compare.active;
 
   return {
-    isCompareActive,
     isCoordinateSearchActive,
     isEventsTabActive,
     isMapAnimating,
@@ -328,7 +324,6 @@ export default connect(
 CreateMap.propTypes = {
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
-  isCompareActive: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,
   isEventsTabActive: PropTypes.bool,
   isMapAnimating: PropTypes.bool,
@@ -337,7 +332,6 @@ CreateMap.propTypes = {
   isMobile: PropTypes.bool,
   layerQueue: PropTypes.object,
   preloadForCompareMode: PropTypes.func,
-  preloadNextTiles: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
   setMap: PropTypes.func,
   setUI: PropTypes.func,

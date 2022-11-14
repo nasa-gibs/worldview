@@ -26,12 +26,7 @@ const CombineUI = (props) => {
     store,
   } = props;
 
-  // useEffect(() => {
-  //   console.log('CombineUI rerendering')
-  // })
-
   const registerMapMouseHandlers = (maps) => {
-    // if(maps.anarctic === undefined)return;
     console.log('5. Registering Mouse Moves')
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
@@ -77,7 +72,6 @@ const CombineUI = (props) => {
 
   const myUI = {}
 
-  // this function is for testing the new components
   const combineUiFunction = () => {
     console.log('4. Combine UI Function')
       const subscribeToStore = function () {
@@ -146,8 +140,6 @@ const CombineUI = (props) => {
     </>
   );
 };
-
-
 
 export default CombineUI
 
