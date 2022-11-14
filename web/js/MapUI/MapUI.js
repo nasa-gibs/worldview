@@ -39,6 +39,7 @@ import CreateMap from './Components/CreateMap/CreateMap';
 import GranuleHover from './Components/GranuleHover/GranuleHover';
 import Markers from './Components/Markers/Markers';
 import UpdateDate from './Components/UpdateDate/UpdateDate';
+import UpdateOpacity from './Components/UpdateOpacity/UpdateOpacity'
 import mapLayerBuilder from '../map/layerbuilder';
 import MapRunningData from '../map/runningdata';
 import { fly, saveRotation } from '../map/util';
@@ -221,8 +222,8 @@ const MapUI = (props) => {
       // case layerConstants.REMOVE_GROUP:
       // case layerConstants.REMOVE_LAYER:
       //   return setRemoveLayerAction(action.layersToRemove);
-      case layerConstants.UPDATE_OPACITY:
-        return updateOpacity(action);
+      // case layerConstants.UPDATE_OPACITY:
+      //   return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
         if (store.getState().compare.mode === 'spy') {
           return reloadLayers();
@@ -323,8 +324,9 @@ const MapUI = (props) => {
     }
   };
 
+  // used in multiple components
+  // TODO: remove state object
   const updateLayerVisibilities = () => {
-    // const state = store.getState();
     const layerGroup = ui.selected.getLayers();
 
     const setRenderable = (layer, parentCompareGroup) => {
@@ -366,6 +368,8 @@ const MapUI = (props) => {
     });
   };
 
+  // used in multiple places
+  // TODO: remove useCallback
   const findLayer = useCallback((def, activeCompareState) => {
     const layers = ui.selected.getLayers().getArray();
     let layer = lodashFind(layers, {
@@ -449,6 +453,7 @@ const MapUI = (props) => {
  * @param {Object} options
  * @returns {Object}
  */
+// used in multiple components
   const getGranuleOptions = (state, { id, count, type }, activeString, options) => {
     if (type !== 'granule') return {};
     const reset = options && options.reset === id;
@@ -479,7 +484,7 @@ const MapUI = (props) => {
    *   @param {Boolean} id - layer id
    * @returns {void}
    */
-
+  // this can probably still be its own component
   async function reloadLayers(granuleOptions) {
     const map = ui.selected;
     const { createLayer } = ui;
@@ -522,6 +527,7 @@ const MapUI = (props) => {
   *
   * @returns {void}
   */
+ // reload layers component?
   const clearLayers = function() {
     const activeLayers = ui.selected
       .getLayers()
@@ -536,6 +542,7 @@ const MapUI = (props) => {
   /**
  * Create a Layergroup given the date and layerGroups
  */
+// reload layers component?
   async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
@@ -557,6 +564,7 @@ const MapUI = (props) => {
     });
   }
 
+  // unique action, not sure if its worth its own component
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -664,36 +672,37 @@ const MapUI = (props) => {
     }
   };
 
-  const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
-    const { id } = def;
-    const layers = ui.selected.getLayers().getArray();
-    lodashEach(Object.keys(layers), (index) => {
-      const layer = layers[index];
-      if (layer.className_ === 'ol-layer') {
-        if (compare && compare.active) {
-          const layerGroup = layer.getLayers().getArray();
-          lodashEach(Object.keys(layerGroup), (groupIndex) => {
-            const compareLayerGroup = layerGroup[groupIndex];
-            if (compareLayerGroup.wv.id === id) {
-              const tileLayer = compareLayerGroup.getLayers().getArray();
+  // can probably be updateOpacity component
+  // const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
+  //   const { id } = def;
+  //   const layers = ui.selected.getLayers().getArray();
+  //   lodashEach(Object.keys(layers), (index) => {
+  //     const layer = layers[index];
+  //     if (layer.className_ === 'ol-layer') {
+  //       if (compare && compare.active) {
+  //         const layerGroup = layer.getLayers().getArray();
+  //         lodashEach(Object.keys(layerGroup), (groupIndex) => {
+  //           const compareLayerGroup = layerGroup[groupIndex];
+  //           if (compareLayerGroup.wv.id === id) {
+  //             const tileLayer = compareLayerGroup.getLayers().getArray();
 
-              // inner first granule group tile layer
-              const firstTileLayer = tileLayer[0];
-              if (firstTileLayer.wv.id === id) {
-                if (firstTileLayer.wv.group === activeStr) {
-                  compareLayerGroup.setOpacity(opacity);
-                }
-              }
-            }
-          });
-        } else if (layer.wv.id === id) {
-          if (layer.wv.group === activeStr) {
-            layer.setOpacity(opacity);
-          }
-        }
-      }
-    });
-  };
+  //             // inner first granule group tile layer
+  //             const firstTileLayer = tileLayer[0];
+  //             if (firstTileLayer.wv.id === id) {
+  //               if (firstTileLayer.wv.group === activeStr) {
+  //                 compareLayerGroup.setOpacity(opacity);
+  //               }
+  //             }
+  //           }
+  //         });
+  //       } else if (layer.wv.id === id) {
+  //         if (layer.wv.group === activeStr) {
+  //           layer.setOpacity(opacity);
+  //         }
+  //       }
+  //     }
+  //   });
+  // };
 
   // function updateVectorStyles (def) {
   //   const activeLayers = getActiveLayers(state);
@@ -730,23 +739,24 @@ const MapUI = (props) => {
    * @param {number} value - number value
    * @returns {void}
    */
-  function updateOpacity(action) {
-    const { id, opacity } = action;
-    // const state = store.getState();
-    const { compare } = state;
-    const activeStr = compare.isCompareA ? 'active' : 'activeB';
-    const def = lodashFind(getActiveLayers(state), { id });
-    if (def.type === 'granule') {
-      updateGranuleLayerOpacity(def, activeStr, opacity, compare);
-    } else {
-      const layerGroup = findLayer(def, activeStr);
-      layerGroup.getLayersArray().forEach((l) => {
-        l.setOpacity(opacity);
-      });
-    }
-    updateLayerVisibilities();
-  }
+  // function updateOpacity(action) {
+  //   const { id, opacity } = action;
+  //   // const state = store.getState();
+  //   const { compare } = state;
+  //   const activeStr = compare.isCompareA ? 'active' : 'activeB';
+  //   const def = lodashFind(getActiveLayers(state), { id });
+  //   if (def.type === 'granule') {
+  //     updateGranuleLayerOpacity(def, activeStr, opacity, compare);
+  //   } else {
+  //     const layerGroup = findLayer(def, activeStr);
+  //     layerGroup.getLayersArray().forEach((l) => {
+  //       l.setOpacity(opacity);
+  //     });
+  //   }
+  //   updateLayerVisibilities();
+  // }
 
+  // I created this again in CreateMap, can probably just import it, it is being called with an action above
   function preloadForCompareMode() {
     preloadNextTiles(selectedDate, 'active');
     if (compare.active) {
@@ -803,6 +813,7 @@ const MapUI = (props) => {
   //   }
   // }
 
+  // standalone action not sure where to put it
   async function bufferQuickAnimate(arrowDown) {
     console.log('buffer quick animate');
     const BUFFER_SIZE = 8;
@@ -835,6 +846,7 @@ const MapUI = (props) => {
     });
   }
 
+  // being used all over the place
   async function preloadNextTiles(date, compareString) {
     const useActiveString = compareString || activeString;
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
@@ -901,6 +913,12 @@ const MapUI = (props) => {
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         getGranuleOptions={getGranuleOptions}
+      />
+      <UpdateOpacity
+        action={actionObject}
+        findLayer={findLayer}
+        ui={ui}
+        updateLayerVisibilities={updateLayerVisibilities}
       />
     </>
   );
