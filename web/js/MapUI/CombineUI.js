@@ -136,7 +136,6 @@ const CombineUI = (props) => {
         models={models}
         compareMapUi={compareMapUi}
         config={config}
-        store={store}
         ui={ui}
         setUI={setUI}
         layerQueue={layerQueue}

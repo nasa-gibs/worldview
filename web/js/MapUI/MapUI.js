@@ -110,13 +110,17 @@ const { events } = util;
 const MapUI = (props) => {
   const {
     activeLayers,
+    activeLayersState,
     activeString,
     allActiveLayers,
     arrowDown,
     clearPreload,
     compare,
+    compareMode,
     compareMapUi,
     config,
+    date,
+    dateCompareState,
     fitToLeadingExtent,
     isMobile,
     lastArrowDirection,
@@ -130,12 +134,13 @@ const MapUI = (props) => {
     preloaded,
     prevDate,
     proj,
+    promiseImageryState,
+    renderableLayersState,
     selectedDate,
     selectedDateB,
     setPreload,
     setUI,
     state,
-    store,
     ui,
     updateMapExtent,
     updateMapUI,
@@ -225,7 +230,7 @@ const MapUI = (props) => {
       // case layerConstants.UPDATE_OPACITY:
       //   return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
-        if (store.getState().compare.mode === 'spy') {
+        if (compareMode === 'spy') {
           return reloadLayers();
         }
         return;
@@ -325,16 +330,15 @@ const MapUI = (props) => {
   };
 
   // used in multiple components
-  // TODO: remove state object
   const updateLayerVisibilities = () => {
     const layerGroup = ui.selected.getLayers();
 
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
       const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
-      const date = getSelectedDate(state, dateGroup);
-      const layers = getActiveLayers(state, parentCompareGroup || group);
-      const renderable = isRenderableLayer(id, layers, date, null, state);
+      const date = getSelectedDate(dateCompareState, dateGroup);
+      const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
+      const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);
       layer.setVisible(renderable);
     };
 
@@ -550,7 +554,7 @@ const MapUI = (props) => {
       .map(async (def) => {
         const options = {
           ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
-          date: getSelectedDate(state, compareDateString),
+          date: getSelectedDate(dateCompareState, compareDateString),
           group: compareActiveString,
         };
         return createLayer(def, options);
@@ -559,7 +563,7 @@ const MapUI = (props) => {
 
     return new OlLayerGroup({
       layers: compareLayerGroup,
-      date: getSelectedDate(state, compareDateString),
+      date: getSelectedDate(dateCompareState, compareDateString),
       group: compareActiveString,
     });
   }
@@ -815,13 +819,10 @@ const MapUI = (props) => {
 
   // standalone action not sure where to put it
   async function bufferQuickAnimate(arrowDown) {
-    console.log('buffer quick animate');
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
-    // const state = store.getState();
-    const { preloaded, lastPreloadDate } = state.date;
-    const selectedDate = getSelectedDate(state);
-    const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
+    const selectedDate = getSelectedDate(dateCompareState);
+    const currentBuffer = preloaded ? getNumberStepsBetween(date, selectedDate, lastPreloadDate) : 0;
 
     if (currentBuffer >= BUFFER_SIZE) {
       return;
@@ -829,21 +830,16 @@ const MapUI = (props) => {
 
     const currentDate = preloaded ? lastPreloadDate : selectedDate;
     const direction = arrowDown === 'right' ? 1 : -1;
-    let nextDate = getNextDateTime(state, direction, currentDate);
+    let nextDate = getNextDateTime(dateCompareState, direction, currentDate);
 
     for (let step = 1; step <= BUFFER_SIZE; step += 1) {
-      preloadPromises.push(promiseImageryForTime(state, nextDate));
+      preloadPromises.push(promiseImageryForTime(promiseImageryState, nextDate));
       if (step !== BUFFER_SIZE) {
-        nextDate = getNextDateTime(state, direction, nextDate);
+        nextDate = getNextDateTime(dateCompareState, direction, nextDate);
       }
     }
     await Promise.all(preloadPromises);
-    // setPreload(preloaded, nextDate)
-    store.dispatch({
-      type: dateConstants.SET_PRELOAD,
-      preloaded: true,
-      lastPreloadDate: nextDate,
-    });
+    setPreload(true, nextDate)
   }
 
   // being used all over the place
@@ -926,12 +922,16 @@ const MapUI = (props) => {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    map, compare, date, proj, layers, screenSize,
+    compare, config, date, embed, layers, map, palettes, proj, screenSize, vectorStyles,
   } = state;
   const {
-    lastPreloadDate, preloaded, lastArrowDirection, arrowDown, selected, selectedB,
+    arrowDown, lastArrowDirection, lastPreloadDate, preloaded, selected, selectedB,
   } = date;
 
+  const promiseImageryState = { map, proj, embed, compare, layers, palettes, vectorStyles }
+  const renderableLayersState = { date, compare, config, proj }
+  const dateCompareState = { date, compare }
+  const activeLayersState = { embed, compare, layers}
   const isMobile = screenSize.isMobileDevice;
   const activeLayers = getActiveLayers(state);
   const selectedDate = selected;
@@ -942,15 +942,19 @@ const mapStateToProps = (state, ownProps) => {
   const prevDate = getNextDateTime(state, -1, useDate);
   const layerGroup = getActiveLayerGroup(state);
   const allActiveLayers = getAllActiveLayers(state);
+  const compareMode = compare.mode;
 
 
   return {
     activeLayers,
+    activeLayersState,
     activeString,
     allActiveLayers,
     arrowDown,
     compare,
-    compare,
+    compareMode,
+    date,
+    dateCompareState,
     isMobile,
     lastArrowDirection,
     layerGroup,
@@ -961,6 +965,8 @@ const mapStateToProps = (state, ownProps) => {
     preloaded,
     prevDate,
     proj,
+    promiseImageryState,
+    renderableLayersState,
     selectedDate,
     selectedDateB,
     state,
