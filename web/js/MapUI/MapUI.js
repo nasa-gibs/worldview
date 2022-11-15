@@ -41,8 +41,9 @@ import Markers from './Components/Markers/Markers';
 import UpdateDate from './Components/UpdateDate/UpdateDate';
 import UpdateOpacity from './Components/UpdateOpacity/UpdateOpacity';
 import UpdateProjection from './Components/UpdateProjection/UpdateProjection';
+import MouseMoveEvents from './Components/MouseMoveEvents/MouseMoveEvents';
 import mapLayerBuilder from '../map/layerbuilder';
-import MapRunningData from '../map/runningdata';
+
 import { fly, saveRotation } from '../map/util';
 import mapCompare from '../map/compare/compare';
 import { granuleFootprint } from '../map/granule/util';
@@ -139,35 +140,56 @@ const MapUI = (props) => {
     vectorStylesState,
   } = props;
 
-  const [actionObject, setActionObject] = useState({});
-  // seperate state variable needed to prevent action loop from Redux
-  const [markerAction, setMarkerAction] = useState({});
-  // seperate state variable needed to set footprints in CreateMap
-  const [granuleFootprints, setGranuleFootprints] = useState({});
   const [isMapSet, setMap] = useState(false);
   const [projectionTrigger, setProjectionTrigger] = useState(0);
+  const [projectionAction, setProjectionAction] = useState({})
+  const [addLayerAction, setAddLayerAction] = useState({})
+  const [removeLayersAction, setRemoveLayersAction] = useState({})
+  const [dateAction, setDateAction] = useState({})
+  const [opacityAction, setOpacityAction] = useState({});
+  const [markerAction, setMarkerAction] = useState({});
+  const [granuleFootprints, setGranuleFootprints] = useState({});
 
   const subscribeToStore = function(action) {
-    if (action.type === 'PROJECTION/CHANGE_PROJECTION') {
-      setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
-    }
-    setActionObject(action);
-  };
-
-  useEffect(() => {
-    actionSwitch(actionObject);
-  }, [actionObject]);
-
-
-  const actionSwitch = function(action) {
-    console.log('redux action triggered', action.type);
-    switch (action.type) {
-      case REMOVE_MARKER: {
-        return setMarkerAction(action);
+    switch(action.type) {
+      case CHANGE_PROJECTION: {
+      return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
-      case SET_MARKER: {
-        return setMarkerAction(action);
-      }
+      case layerConstants.ADD_LAYER:
+        return setAddLayerAction(action);
+      case STOP_ANIMATION:
+      case EXIT_ANIMATION:
+      case LOCATION_POP_ACTION:
+      case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS:
+      case layerConstants.RESET_GRANULE_LAYER_OPTIONS:
+      case compareConstants.CHANGE_STATE:
+      case layerConstants.REORDER_LAYERS:
+      case layerConstants.REORDER_OVERLAY_GROUPS:
+      case compareConstants.TOGGLE_ON_OFF:
+      case compareConstants.CHANGE_MODE:
+      case layerConstants.TOGGLE_OVERLAY_GROUPS:
+      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
+      case paletteConstants.SET_CUSTOM:
+      case paletteConstants.SET_DISABLED_CLASSIFICATION:
+      case paletteConstants.CLEAR_CUSTOM:
+      case layerConstants.ADD_LAYERS_FOR_EVENT:
+      case vectorStyleConstants.SET_FILTER_RANGE:
+      case vectorStyleConstants.SET_VECTORSTYLE:
+      case vectorStyleConstants.CLEAR_VECTORSTYLE:
+      case SET_SCREEN_INFO:
+        console.log(action.type)
+        return setProjectionAction(action)
+      case layerConstants.REMOVE_GROUP:
+      case layerConstants.REMOVE_LAYER:
+        return setRemoveLayersAction(action);
+      case dateConstants.SELECT_DATE:
+      case layerConstants.TOGGLE_LAYER_VISIBILITY:
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
+        return setDateAction(action)
+      case layerConstants.UPDATE_OPACITY:
+        return setOpacityAction(action);
+      case REMOVE_MARKER:
+      case SET_MARKER:
       case TOGGLE_DIALOG_VISIBLE:
         return setMarkerAction(action);
       case CLEAR_ROTATE: {
@@ -185,6 +207,7 @@ const MapUI = (props) => {
         return;
       }
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
+        console.log(action.type)
         const type = 'selection';
         const newSelection = action.payload;
         updateVectorSelection(
@@ -376,8 +399,9 @@ const MapUI = (props) => {
 
   const testFunction = () => {
   // console.log('map', map.ui.selected.getLayers() )
-    console.log('map', map);
-    console.log('ui', ui);
+    console.log('map state', map);
+    // console.log('ui', ui);
+    // console.log('promiseImageryState', promiseImageryState.palettes.rendered)
   };
 
   const buttonStyle = {
@@ -404,7 +428,7 @@ const MapUI = (props) => {
         preloadForCompareMode={preloadForCompareMode}
       />
       <UpdateProjection
-        action={actionObject}
+        action={projectionAction}
         compareMapUi={compareMapUi}
         config={config}
         getGranuleOptions={getGranuleOptions}
@@ -416,19 +440,19 @@ const MapUI = (props) => {
         updateLayerVisibilities={updateLayerVisibilities}
       />
       <RemoveLayer
-        action={actionObject}
+        action={removeLayersAction}
         compareMapUi={compareMapUi}
         updateLayerVisibilities={updateLayerVisibilities}
         findLayer={findLayer}
       />
       <AddLayer
-        action={actionObject}
+        action={addLayerAction}
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         ui={ui}
       />
       <UpdateDate
-        action={actionObject}
+        action={dateAction}
         ui={ui}
         compareMapUi={compareMapUi}
         config={config}
@@ -437,18 +461,19 @@ const MapUI = (props) => {
         getGranuleOptions={getGranuleOptions}
       />
       <UpdateOpacity
-        action={actionObject}
+        action={opacityAction}
         findLayer={findLayer}
         ui={ui}
         updateLayerVisibilities={updateLayerVisibilities}
       />
       <Markers action={markerAction} ui={ui} config={config} />
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
+      <MouseMoveEvents ui={ui} compareMapUi={compareMapUi}/>
     </>
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     compare, config, date, embed, layers, map, palettes, proj, screenSize, vectorStyles,
   } = state;

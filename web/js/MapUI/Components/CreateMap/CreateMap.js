@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   forOwn as lodashForOwn,
-  throttle as lodashThrottle,
   debounce as lodashDebounce,
 } from 'lodash';
 import OlMap from 'ol/Map';
@@ -30,8 +29,6 @@ import {
   MAP_DISABLE_CLICK_ZOOM,
   MAP_ENABLE_CLICK_ZOOM,
   MAP_DRAG,
-  MAP_MOUSE_MOVE,
-  MAP_MOUSE_OUT,
   MAP_MOVE_START,
   MAP_ZOOMING,
 } from '../../../util/constants';
@@ -42,19 +39,12 @@ const { events } = util;
 
 const CreateMap = (props) => {
   const {
-    compareMapUi,
     config,
-    isCoordinateSearchActive,
-    isEventsTabActive,
-    isMapAnimating,
     isMapSet,
-    isMeasureActive,
-    isMobile,
     preloadForCompareMode,
     setGranuleFootprints,
     setMap,
     setUI,
-    sidebarActiveTab,
     startLoading,
     stopLoading,
     ui,
@@ -84,7 +74,7 @@ const CreateMap = (props) => {
     setUI(uiCopy);
   });
 
-  /*
+  /**
    * Create map object
    *
    * @method createMap
@@ -160,7 +150,7 @@ const CreateMap = (props) => {
       scaleImperial,
     };
     map.proj = proj.id;
-    createMousePosSel(map, uiCopy);
+
     map.getView().on('change:resolution', () => {
       events.trigger(MAP_MOVE_START);
     });
@@ -242,59 +232,22 @@ const CreateMap = (props) => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-
     return map;
   };
-
-  function createMousePosSel(map, uiCopy) {
-    const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
-      const coords = map.getCoordinateFromPixel(pixel);
-
-      if (map.proj !== ui.selected.proj) return;
-      if (ui.mapIsbeingZoomed) return;
-      if (ui.mapIsbeingDragged) return;
-      if (compareMapUi && compareMapUi.dragging) return;
-      if (isMobile) return;
-      if (isMeasureActive) return;
-      if (isCoordinateSearchActive) return;
-      if (!coords) return;
-      if (isEventsTabActive || isMapAnimating || sidebarActiveTab === 'download') return;
-
-      uiCopy.runningdata.newPoint(pixel, map);
-    }, 300);
-
-    events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
-    events.on(MAP_MOUSE_OUT, (e) => {
-      throttledOnMouseMove.cancel();
-      uiCopy.runningdata.clearAll();
-    });
-  }
 
   return null;
 };
 
 const mapStateToProps = (state) => {
   const {
-    events, locationSearch, sidebar, animation, measure, screenSize, date, compare,
+    date
   } = state;
-  const { isCoordinateSearchActive } = locationSearch;
   const { selected, selectedB, lastPreloadDate } = date;
-  const isMeasureActive = measure.isActive;
-  const isEventsTabActive = typeof events !== 'undefined' && events.active;
-  const isMobile = screenSize.isMobileDevice;
-  const isMapAnimating = animation.isPlaying;
-  const sidebarActiveTab = sidebar.activeTab;
 
   return {
-    isCoordinateSearchActive,
-    isEventsTabActive,
-    isMapAnimating,
-    isMeasureActive,
-    isMobile,
     lastPreloadDate,
     selected,
     selectedB,
-    sidebarActiveTab,
   };
 };
 
@@ -322,20 +275,12 @@ export default connect(
 )(CreateMap);
 
 CreateMap.propTypes = {
-  compareMapUi: PropTypes.object,
   config: PropTypes.object,
-  isCoordinateSearchActive: PropTypes.bool,
-  isEventsTabActive: PropTypes.bool,
-  isMapAnimating: PropTypes.bool,
   isMapSet: PropTypes.bool,
-  isMeasureActive: PropTypes.bool,
-  isMobile: PropTypes.bool,
-  layerQueue: PropTypes.object,
   preloadForCompareMode: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
   setMap: PropTypes.func,
   setUI: PropTypes.func,
-  sidebarActiveTab: PropTypes.string,
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
   ui: PropTypes.object,

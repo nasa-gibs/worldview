@@ -188,7 +188,6 @@ const UpdateProjection = (props) => {
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
-    console.log('reloading layers');
     const map = ui.selected;
     const { createLayer } = ui;
 
@@ -278,7 +277,6 @@ const UpdateProjection = (props) => {
 
 
   const updateProjection = (start) => {
-    console.log('3. Updating Projection');
     if (ui.selected) {
       // Keep track of center point on projection switch
       ui.selected.previousCenter = ui.selected.center;

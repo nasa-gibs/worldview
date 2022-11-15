@@ -26,8 +26,12 @@ const CombineUI = (props) => {
     store,
   } = props;
 
+  useEffect(() => {
+    console.log('combine ui rerendering')
+  })
+
   const registerMapMouseHandlers = (maps) => {
-    console.log('5. Registering Mouse Moves')
+    console.log('4. Registering Mouse Moves')
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
       const crs = map.getView().getProjection().getCode();
@@ -70,10 +74,10 @@ const CombineUI = (props) => {
     processingPromise: null,
   });
 
-  const myUI = {}
+  const uiObject = {}
 
   const combineUiFunction = () => {
-    console.log('4. Combine UI Function')
+    console.log('3. Combine UI Function')
       const subscribeToStore = function () {
         const state = store.getState();
         const action = state.lastAction;
@@ -81,13 +85,13 @@ const CombineUI = (props) => {
       };
       store.subscribe(subscribeToStore);
 
-      myUI.map = ui;
-      myUI.supportsPassive = false;
+      uiObject.map = ui;
+      uiObject.supportsPassive = false;
       try {
         const opts = Object.defineProperty({}, 'passive', {
           // eslint-disable-next-line getter-return
           get() {
-            myUI.supportsPassive = true;
+            uiObject.supportsPassive = true;
           },
         });
         window.addEventListener('testPassive', null, opts);
@@ -96,7 +100,7 @@ const CombineUI = (props) => {
         util.warn(e);
       }
 
-      registerMapMouseHandlers(myUI.map.proj);
+      registerMapMouseHandlers(uiObject.map.proj);
 
       // Sink all focus on inputs if click unhandled
       document.addEventListener('click', (e) => {
@@ -107,7 +111,7 @@ const CombineUI = (props) => {
       document.activeElement.blur();
       document.querySelectorAll('input').forEach((el) => el.blur());
 
-      return myUI;
+      return uiObject;
   };
 
   useEffect(() => {
@@ -140,6 +144,7 @@ const CombineUI = (props) => {
     </>
   );
 };
+
 
 export default CombineUI
 
