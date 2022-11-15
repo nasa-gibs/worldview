@@ -275,7 +275,7 @@ function promiseLayerGroup(layerGroup, map) {
  */
 export async function promiseImageryForTime(state, date, activeString) {
   const { map } = state;
-  if(!map.ui.proj) return;
+  if (!map.ui.proj) return;
   const {
     cache, selected, createLayer, layerKey,
   } = map.ui;

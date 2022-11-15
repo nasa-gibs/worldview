@@ -13,7 +13,7 @@ import { clearPreload } from '../../../modules/date/actions';
 const AddLayer = (props) => {
   const {
     action,
-    activeLayersRedux,
+    activeLayersState,
     activeString,
     compareMapUi,
     mode,
@@ -45,7 +45,7 @@ const AddLayer = (props) => {
   const addLayer = async function(def, date, activeLayers) {
     const { createLayer } = ui;
     date = date || selected;
-    activeLayers = activeLayers || activeLayersRedux;
+    activeLayers = activeLayers || activeLayersState;
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const index = lodashFindIndex(reverseLayers, { id: def.id });
     const mapLayers = ui.selected.getLayers().getArray();
@@ -76,9 +76,9 @@ const mapStateToProps = (state) => {
   const { compare, date } = state;
   const { activeString, mode } = compare;
   const { selected } = date;
-  const activeLayersRedux = getActiveLayers(state);
+  const activeLayersState = getActiveLayers(state);
   return {
-    activeLayersRedux,
+    activeLayersState,
     activeString,
     mode,
     selected,
@@ -99,7 +99,7 @@ export default React.memo(
 );
 
 AddLayer.propTypes = {
-  activeLayersRedux: PropTypes.array,
+  activeLayersState: PropTypes.array,
   activeString: PropTypes.string,
   action: PropTypes.object,
   clearPreload: PropTypes.func,

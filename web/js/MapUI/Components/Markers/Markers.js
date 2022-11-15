@@ -58,7 +58,7 @@ const Markers = (props) => {
     });
   };
 
-  /*
+  /**
    * Remove all coordinates markers
    *
    * @method removeAllCoordinatesMarkers
@@ -73,7 +73,7 @@ const Markers = (props) => {
     });
   };
 
-  /*
+  /**
    * Handle reverse geocode and add map marker with results
    *
    * @method handleActiveMapMarker
@@ -104,7 +104,7 @@ const Markers = (props) => {
     animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom);
   };
 
-  /*
+  /**
    * Add map coordinate marker and update store
    *
    * @method addMarkerAndUpdateStore

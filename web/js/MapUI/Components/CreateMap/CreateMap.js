@@ -63,7 +63,6 @@ const CreateMap = (props) => {
 
   useEffect(() => {
     if (isMapSet) return;
-    console.log('1. Creating Map');
     setMap(true);
     const uiCopy = ui;
     lodashForOwn(projections, (proj) => {
@@ -239,19 +238,6 @@ const CreateMap = (props) => {
   return null;
 };
 
-const mapStateToProps = (state) => {
-  const {
-    date,
-  } = state;
-  const { selected, selectedB, lastPreloadDate } = date;
-
-  return {
-    lastPreloadDate,
-    selected,
-    selectedB,
-  };
-};
-
 const mapDispatchToProps = (dispatch) => ({
   updateRotation: (rotation) => {
     dispatch(refreshRotation(rotation));
@@ -271,7 +257,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(CreateMap);
 
@@ -285,6 +271,7 @@ CreateMap.propTypes = {
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
   ui: PropTypes.object,
+  updateExtent: PropTypes.func,
   updateMapUI: PropTypes.func,
   updateRenderedState: PropTypes.func,
   updateRotation: PropTypes.func,

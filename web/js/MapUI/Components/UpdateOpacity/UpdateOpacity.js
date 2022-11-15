@@ -57,7 +57,7 @@ const UpdateOpacity = (props) => {
     });
   };
 
-   /**
+  /**
    * Sets new opacity to layer
    * @param {object} def - layer Specs
    * @param {number} value - number value
@@ -87,9 +87,9 @@ const mapStateToProps = (state) => {
 
   return {
     activeLayers,
+    activeString,
     compare,
     isCompareActive,
-    activeString,
   };
 };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Cache from 'cachai';
 import PQueue from 'p-queue';
@@ -26,12 +25,7 @@ const CombineUI = (props) => {
     store,
   } = props;
 
-  useEffect(() => {
-    console.log('combine ui rerendering')
-  })
-
   const registerMapMouseHandlers = (maps) => {
-    console.log('4. Registering Mouse Moves')
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
       const crs = map.getView().getProjection().getCode();
@@ -74,59 +68,50 @@ const CombineUI = (props) => {
     processingPromise: null,
   });
 
-  const uiObject = {}
+  const uiObject = {};
 
   const combineUiFunction = () => {
-    console.log('3. Combine UI Function')
-      const subscribeToStore = function () {
-        const state = store.getState();
-        const action = state.lastAction;
-        return events.trigger(REDUX_ACTION_DISPATCHED, action);
-      };
-      store.subscribe(subscribeToStore);
+    const subscribeToStore = function () {
+      const state = store.getState();
+      const action = state.lastAction;
+      return events.trigger(REDUX_ACTION_DISPATCHED, action);
+    };
+    store.subscribe(subscribeToStore);
 
-      uiObject.map = ui;
-      uiObject.supportsPassive = false;
-      try {
-        const opts = Object.defineProperty({}, 'passive', {
-          // eslint-disable-next-line getter-return
-          get() {
-            uiObject.supportsPassive = true;
-          },
-        });
-        window.addEventListener('testPassive', null, opts);
-        window.removeEventListener('testPassive', null, opts);
-      } catch (e) {
-        util.warn(e);
-      }
-
-      registerMapMouseHandlers(uiObject.map.proj);
-
-      // Sink all focus on inputs if click unhandled
-      document.addEventListener('click', (e) => {
-        if (e.target.nodeName !== 'INPUT') {
-          document.querySelectorAll('input').forEach((el) => el.blur());
-        }
+    uiObject.map = ui;
+    uiObject.supportsPassive = false;
+    try {
+      const opts = Object.defineProperty({}, 'passive', {
+        // eslint-disable-next-line getter-return
+        get() {
+          uiObject.supportsPassive = true;
+        },
       });
-      document.activeElement.blur();
-      document.querySelectorAll('input').forEach((el) => el.blur());
+      window.addEventListener('testPassive', null, opts);
+      window.removeEventListener('testPassive', null, opts);
+    } catch (e) {
+      util.warn(e);
+    }
 
-      return uiObject;
+    registerMapMouseHandlers(uiObject.map.proj);
+
+    // Sink all focus on inputs if click unhandled
+    document.addEventListener('click', (e) => {
+      if (e.target.nodeName !== 'INPUT') {
+        document.querySelectorAll('input').forEach((el) => el.blur());
+      }
+    });
+    document.activeElement.blur();
+    document.querySelectorAll('input').forEach((el) => el.blur());
+
+    return uiObject;
   };
 
   useEffect(() => {
-    if(ui.proj){
+    if (ui.proj) {
       combineUiFunction();
     }
-  }, [ui])
-
-  const testFunction = () => {
-    console.log(ui)
-  }
-
-  const buttonStyle = {
-    zIndex: '999'
-  }
+  }, [ui]);
 
   return (
     <>
@@ -138,15 +123,12 @@ const CombineUI = (props) => {
         setUI={setUI}
         layerQueue={layerQueue}
       />
-      <div className="d-flex justify-content-center w-100">
-        <button onClick={testFunction} style={buttonStyle} className="btn btn-primary">SHOW MY UI OBJECT</button>
-      </div>
     </>
   );
 };
 
 
-export default CombineUI
+export default CombineUI;
 
 CombineUI.propTypes = {
   config: PropTypes.object,
