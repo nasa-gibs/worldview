@@ -111,6 +111,7 @@ const { events } = util;
 
 const MapUI = (props) => {
   const {
+    proj, embed, layers, palettes, vectorStyles,
     activeLayers,
     activeLayersState,
     activeString,
@@ -124,7 +125,6 @@ const MapUI = (props) => {
     lastArrowDirection,
     lastPreloadDate,
     layerQueue,
-    map,
     models,
     nextDate,
     preloaded,
@@ -142,18 +142,18 @@ const MapUI = (props) => {
 
   const [isMapSet, setMap] = useState(false);
   const [projectionTrigger, setProjectionTrigger] = useState(0);
-  const [projectionAction, setProjectionAction] = useState({})
-  const [addLayerAction, setAddLayerAction] = useState({})
-  const [removeLayersAction, setRemoveLayersAction] = useState({})
-  const [dateAction, setDateAction] = useState({})
+  const [projectionAction, setProjectionAction] = useState({});
+  const [addLayerAction, setAddLayerAction] = useState({});
+  const [removeLayersAction, setRemoveLayersAction] = useState({});
+  const [dateAction, setDateAction] = useState({});
   const [opacityAction, setOpacityAction] = useState({});
   const [markerAction, setMarkerAction] = useState({});
   const [granuleFootprints, setGranuleFootprints] = useState({});
 
   const subscribeToStore = function(action) {
-    switch(action.type) {
+    switch (action.type) {
       case CHANGE_PROJECTION: {
-      return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
+        return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
       case layerConstants.ADD_LAYER:
         return setAddLayerAction(action);
@@ -177,15 +177,15 @@ const MapUI = (props) => {
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case SET_SCREEN_INFO:
-        console.log(action.type)
-        return setProjectionAction(action)
+        console.log(action.type);
+        return setProjectionAction(action);
       case layerConstants.REMOVE_GROUP:
       case layerConstants.REMOVE_LAYER:
         return setRemoveLayersAction(action);
       case dateConstants.SELECT_DATE:
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
-        return setDateAction(action)
+        return setDateAction(action);
       case layerConstants.UPDATE_OPACITY:
         return setOpacityAction(action);
       case REMOVE_MARKER:
@@ -207,7 +207,7 @@ const MapUI = (props) => {
         return;
       }
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
-        console.log(action.type)
+        console.log(action.type);
         const type = 'selection';
         const newSelection = action.payload;
         updateVectorSelection(
@@ -243,6 +243,13 @@ const MapUI = (props) => {
       setProjectionTrigger(1);
     }
   }, [ui]);
+
+  // useEffect(() => {
+  //   if(ui.proj){
+  //     console.log("HUUUUUTTTTTT")
+  //     // preloadForCompareMode()
+  //   }
+  // }, [])
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -334,7 +341,6 @@ const MapUI = (props) => {
     if (type !== 'granule') return {};
     const reset = options && options.reset === id;
 
-    // TODO update
     const granuleState = getGranuleLayer(state, id, activeString);
     let granuleDates;
     let granuleCount;
@@ -359,6 +365,7 @@ const MapUI = (props) => {
   }
 
   async function bufferQuickAnimate(arrowDown) {
+
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
     const selectedDate = getSelectedDate(dateCompareState);
@@ -383,15 +390,17 @@ const MapUI = (props) => {
   }
 
   async function preloadNextTiles(date, compareString) {
+    const map = {ui};
+    const state = { proj, embed, layers, palettes, vectorStyles, compare, map}
     const useActiveString = compareString || activeString;
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
     if (preloaded && lastArrowDirection) {
       setPreload(true, subsequentDate);
-      layerQueue.add(() => promiseImageryForTime(promiseImageryState, subsequentDate, useActiveString));
+      layerQueue.add(() => promiseImageryForTime(state, subsequentDate, useActiveString));
       return;
     }
-    layerQueue.add(() => promiseImageryForTime(promiseImageryState, nextDate, useActiveString));
-    layerQueue.add(() => promiseImageryForTime(promiseImageryState, prevDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, nextDate, useActiveString));
+    layerQueue.add(() => promiseImageryForTime(state, prevDate, useActiveString));
     if (!date && !arrowDown) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
@@ -399,9 +408,11 @@ const MapUI = (props) => {
 
   const testFunction = () => {
   // console.log('map', map.ui.selected.getLayers() )
-    console.log('map state', map);
+    // console.log('map state', map);
     // console.log('ui', ui);
     // console.log('promiseImageryState', promiseImageryState.palettes.rendered)
+    // preloadNextTiles(selectedDate, 'active')
+    preloadForCompareMode()
   };
 
   const buttonStyle = {
@@ -468,7 +479,7 @@ const MapUI = (props) => {
       />
       <Markers action={markerAction} ui={ui} config={config} />
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
-      <MouseMoveEvents ui={ui} compareMapUi={compareMapUi}/>
+      <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
     </>
   );
 };
@@ -506,6 +517,7 @@ const mapStateToProps = (state) => {
   const compareMode = compare.mode;
 
   return {
+    proj, embed, layers, palettes, vectorStyles,
     activeLayers,
     activeLayersState,
     activeString,

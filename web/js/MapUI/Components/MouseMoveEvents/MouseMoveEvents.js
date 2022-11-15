@@ -24,8 +24,8 @@ const MouseMoveEvents = (props) => {
     compareMapUi,
   } = props;
 
-  const throttledOnMouseMove = lodashThrottle(({ pixel },) => {
-    if(!map.ui.selected) return;
+  const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
+    if (!map.ui.selected) return;
     const coords = map.ui.selected.getCoordinateFromPixel(pixel);
 
     if (map.proj !== ui.selected.proj) return;
@@ -48,11 +48,11 @@ const MouseMoveEvents = (props) => {
   });
 
   return null;
-}
+};
 
 const mapStateToProps = (state) => {
   const {
-    events, locationSearch, sidebar, animation, measure, screenSize, date, map
+    events, locationSearch, sidebar, animation, measure, screenSize, map,
   } = state;
   const { isCoordinateSearchActive } = locationSearch;
   const isEventsTabActive = typeof events !== 'undefined' && events.active;
@@ -69,8 +69,8 @@ const mapStateToProps = (state) => {
     isMapAnimating,
     sidebarActiveTab,
     map,
-  }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,
@@ -86,4 +86,4 @@ MouseMoveEvents.propTypes = {
   sidebarActiveTab: PropTypes.string,
   map: PropTypes.object,
   ui: PropTypes.object,
-}
+};

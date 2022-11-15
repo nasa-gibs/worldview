@@ -207,6 +207,7 @@ const CreateMap = (props) => {
       updateRenderedState();
       updateMapUI(uiCopy, uiCopy.selected.getView().getRotation());
       setTimeout(preloadForCompareMode, 250);
+
       map.un('rendercomplete', onRenderComplete);
     };
 
@@ -240,7 +241,7 @@ const CreateMap = (props) => {
 
 const mapStateToProps = (state) => {
   const {
-    date
+    date,
   } = state;
   const { selected, selectedB, lastPreloadDate } = date;
 
