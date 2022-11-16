@@ -1,0 +1,1 @@
+In Worldview, the Flood Product is available for 2 compositing periods: 2-day, and 3-day. For each composite, water detections for all observations (Terra and Aqua) over the compositing period (2, or 3 days) are accumulated, and if the total exceeds the required threshold (2, and 3 observations, respectively), the pixel is marked as water.
