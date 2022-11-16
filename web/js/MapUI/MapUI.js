@@ -15,6 +15,7 @@ import UpdateDate from './Components/UpdateDate/UpdateDate';
 import UpdateOpacity from './Components/UpdateOpacity/UpdateOpacity';
 import UpdateProjection from './Components/UpdateProjection/UpdateProjection';
 import MouseMoveEvents from './Components/MouseMoveEvents/MouseMoveEvents';
+import BufferQuickAnimate from './Components/BufferQuickAnimate/BufferQuickAnimate';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -35,7 +36,7 @@ import {
   getGranuleLayer,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
-import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
+import { getNextDateTime } from '../modules/date/util';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import { REFRESH_ROTATE, CLEAR_ROTATE } from '../modules/map/constants';
 import { promiseImageryForTime } from '../modules/map/util';
@@ -56,11 +57,9 @@ const MapUI = (props) => {
     compare,
     compareMapUi,
     config,
-    date,
     dateCompareState,
     embed,
     lastArrowDirection,
-    lastPreloadDate,
     layerQueue,
     layers,
     models,
@@ -69,7 +68,6 @@ const MapUI = (props) => {
     preloaded,
     prevDate,
     proj,
-    promiseImageryState,
     renderableLayersState,
     selectedDate,
     selectedDateB,
@@ -90,6 +88,7 @@ const MapUI = (props) => {
   const [opacityAction, setOpacityAction] = useState({});
   const [markerAction, setMarkerAction] = useState({});
   const [granuleFootprints, setGranuleFootprints] = useState({});
+  const [quickAnimateAction, setQuickAnimateAction] = useState({});
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -163,7 +162,7 @@ const MapUI = (props) => {
       case dateConstants.CHANGE_INTERVAL:
         return preloadNextTiles();
       case dateConstants.ARROW_DOWN:
-        bufferQuickAnimate(action.value);
+        setQuickAnimateAction(action);
         break;
       default:
         break;
@@ -261,7 +260,7 @@ const MapUI = (props) => {
   };
 
   /**
- * Get granule options for layerBuilding. Passed to multiple components.
+ * Get granule options for layerBuilding
  * @param {object} state
  * @param {Object} def
  * @param {String} layerGroupStr
@@ -293,30 +292,6 @@ const MapUI = (props) => {
     if (compare.active) {
       preloadNextTiles(selectedDateB, 'activeB');
     }
-  }
-
-  async function bufferQuickAnimate(arrowDown) {
-    const BUFFER_SIZE = 8;
-    const preloadPromises = [];
-    const selectedDate = getSelectedDate(dateCompareState);
-    const currentBuffer = preloaded ? getNumberStepsBetween(date, selectedDate, lastPreloadDate) : 0;
-
-    if (currentBuffer >= BUFFER_SIZE) {
-      return;
-    }
-
-    const currentDate = preloaded ? lastPreloadDate : selectedDate;
-    const direction = arrowDown === 'right' ? 1 : -1;
-    let nextDate = getNextDateTime(dateCompareState, direction, currentDate);
-
-    for (let step = 1; step <= BUFFER_SIZE; step += 1) {
-      preloadPromises.push(promiseImageryForTime(promiseImageryState, nextDate));
-      if (step !== BUFFER_SIZE) {
-        nextDate = getNextDateTime(dateCompareState, direction, nextDate);
-      }
-    }
-    await Promise.all(preloadPromises);
-    setPreload(true, nextDate);
   }
 
   async function preloadNextTiles(date, compareString) {
@@ -369,9 +344,11 @@ const MapUI = (props) => {
         compareMapUi={compareMapUi}
         updateLayerVisibilities={updateLayerVisibilities}
         findLayer={findLayer}
+        ui={ui}
       />
       <AddLayer
         action={addLayerAction}
+        compareMapUi={compareMapUi}
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         ui={ui}
@@ -394,6 +371,7 @@ const MapUI = (props) => {
       <Markers action={markerAction} ui={ui} config={config} />
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
+      <BufferQuickAnimate action={quickAnimateAction} />
     </>
   );
 };
@@ -408,9 +386,6 @@ const mapStateToProps = (state) => {
 
   const vectorStylesState = {
     config, map, proj, vectorStyles,
-  };
-  const promiseImageryState = {
-    map, proj, embed, compare, layers, palettes, vectorStyles,
   };
   const renderableLayersState = {
     date, compare, config, proj,
@@ -431,18 +406,15 @@ const mapStateToProps = (state) => {
     activeString,
     arrowDown,
     compare,
-    date,
     dateCompareState,
     embed,
     lastArrowDirection,
-    lastPreloadDate,
     layers,
     nextDate,
     palettes,
     preloaded,
     prevDate,
     proj,
-    promiseImageryState,
     renderableLayersState,
     selectedDate,
     selectedDateB,
@@ -477,11 +449,9 @@ MapUI.propTypes = {
   compare: PropTypes.object,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
-  date: PropTypes.object,
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
   lastArrowDirection: PropTypes.string,
-  lastPreloadDate: PropTypes.object,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,
   models: PropTypes.object,
@@ -490,7 +460,6 @@ MapUI.propTypes = {
   preloaded: PropTypes.bool,
   prevDate: PropTypes.object,
   proj: PropTypes.object,
-  promiseImageryState: PropTypes.object,
   renderableLayersState: PropTypes.object,
   selectedDate: PropTypes.object,
   selectedDateB: PropTypes.object,

@@ -6,11 +6,13 @@ import {
   get as lodashGet,
 } from 'lodash';
 import {
-  getActiveLayerGroup,
   getActiveLayers,
+  getAllActiveLayers,
+  getActiveLayerGroup,
   getGranuleCount,
 } from '../../../modules/layers/selectors';
 import { setStyleFunction } from '../../../modules/vector-styles/selectors';
+import { getSelectedDate } from '../../../modules/date/selectors';
 import * as dateConstants from '../../../modules/date/constants';
 import * as layerConstants from '../../../modules/layers/constants';
 
@@ -21,12 +23,13 @@ const UpdateDate = (props) => {
     activeString,
     compareMapUi,
     config,
+    dateCompareState,
     getGranuleOptions,
     granuleState,
     isCompareActive,
-    layerGroup,
+    layerState,
     preloadNextTiles,
-    selectedDate,
+    state,
     ui,
     updateLayerVisibilities,
     vectorStyleState,
@@ -53,6 +56,7 @@ const UpdateDate = (props) => {
   };
 
   function findLayerIndex({ id }) {
+    const layerGroup = getActiveLayerGroup(layerState);
     const layers = layerGroup.getLayers().getArray();
     return lodashFindIndex(layers, {
       wv: { id },
@@ -79,7 +83,7 @@ const UpdateDate = (props) => {
     const { createLayer } = ui;
     const options = {
       group: activeString,
-      date: selectedDate,
+      date: getSelectedDate(dateCompareState),
       ...getGranuleOptions(granuleState, def, activeString),
     };
     const updatedLayer = await createLayer(def, options);
@@ -89,8 +93,12 @@ const UpdateDate = (props) => {
 
   async function updateDate(outOfStepChange) {
     const { createLayer } = ui;
+
+    const layerGroup = getActiveLayerGroup(layerState);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
+    const activeLayers = getAllActiveLayers(state);
+
     const visibleLayers = activeLayers.filter(
       ({ id }) => layers
         .map(({ wv }) => lodashGet(wv, 'def.id'))
@@ -103,7 +111,6 @@ const UpdateDate = (props) => {
         .includes(def.period);
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
-
       if (isCompareActive && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else if (temporalLayer) {
@@ -132,23 +139,24 @@ const UpdateDate = (props) => {
 
 const mapStateToProps = (state) => {
   const {
-    compare, date, layers, proj, vectorStyles, config,
+    compare, date, layers, proj, vectorStyles, config, map,
   } = state;
+  const dateCompareState = { date, compare };
   const { activeString } = compare;
-  const selectedDate = date.selected;
   const activeLayers = getActiveLayers(state);
-  const layerGroup = getActiveLayerGroup(state);
   const isCompareActive = compare.active;
   const granuleState = { compare, layers };
+  const layerState = { compare, map };
   const vectorStyleState = { proj, vectorStyles, config };
 
   return {
     activeLayers,
     activeString,
+    dateCompareState,
     granuleState,
     isCompareActive,
-    layerGroup,
-    selectedDate,
+    layerState,
+    state,
     vectorStyleState,
   };
 };
@@ -159,16 +167,18 @@ export default connect(
 
 UpdateDate.propTypes = {
   action: PropTypes.object,
-  activeLayersRedux: PropTypes.array,
+  activeLayers: PropTypes.array,
   activeString: PropTypes.string,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
+  dateCompareState: PropTypes.object,
   getGranuleOptions: PropTypes.func,
   granuleState: PropTypes.object,
   isComparActive: PropTypes.bool,
-  layerGroup: PropTypes.object,
+  layerState: PropTypes.object,
   preloadNextTiles: PropTypes.func,
-  selectedDate: PropTypes.object,
-  updateLayerVisibilities: PropTypes.func,
+  state: PropTypes.object,
   ui: PropTypes.object,
+  updateLayerVisibilities: PropTypes.func,
+  vectorStyleState: PropTypes.object,
 };

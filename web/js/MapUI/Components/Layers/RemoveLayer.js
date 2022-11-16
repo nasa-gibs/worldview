@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getActiveLayerGroup } from '../../../modules/layers/selectors';
 
 const RemoveLayer = (props) => {
   const {
     action,
     compare,
     findLayer,
-    layerGroup,
-    mapSelected,
+    ui,
     updateLayerVisibilities,
   } = props;
 
@@ -23,9 +21,9 @@ const RemoveLayer = (props) => {
     layersToRemove.forEach((def) => {
       const layer = findLayer(def, compare.activeString);
       if (compare && compare.active) {
-        if (layerGroup) layerGroup.getLayers().remove(layer);
+        if (ui.selected) ui.selected.getLayers().remove(layer);
       } else {
-        mapSelected.removeLayer(layer);
+        ui.selected.removeLayer(layer);
       }
     });
     updateLayerVisibilities();
@@ -35,14 +33,10 @@ const RemoveLayer = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { compare, map } = state;
-  const layerGroup = getActiveLayerGroup(state);
-  const mapSelected = map.ui.selected;
+  const { compare } = state;
 
   return {
     compare,
-    layerGroup,
-    mapSelected,
   };
 };
 export default React.memo(
@@ -55,7 +49,6 @@ RemoveLayer.propTypes = {
   action: PropTypes.any,
   compare: PropTypes.object,
   findLayer: PropTypes.func,
-  layerGroup: PropTypes.object,
-  mapSelected: PropTypes.object,
+  ui: PropTypes.object,
   updateLayerVisibilities: PropTypes.func,
 };

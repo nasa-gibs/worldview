@@ -103,6 +103,7 @@ AddLayer.propTypes = {
   activeString: PropTypes.string,
   action: PropTypes.object,
   clearPreload: PropTypes.func,
+  compareMapUi: PropTypes.object,
   mode: PropTypes.string,
   preloadNextTiles: PropTypes.func,
   selected: PropTypes.object,

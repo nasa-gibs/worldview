@@ -68,7 +68,7 @@ const CombineUI = (props) => {
     processingPromise: null,
   });
 
-  const uiObject = {};
+  const uiProperties = {};
 
   const combineUiFunction = () => {
     const subscribeToStore = function () {
@@ -78,13 +78,13 @@ const CombineUI = (props) => {
     };
     store.subscribe(subscribeToStore);
 
-    uiObject.map = ui;
-    uiObject.supportsPassive = false;
+    uiProperties.map = ui;
+    uiProperties.supportsPassive = false;
     try {
       const opts = Object.defineProperty({}, 'passive', {
         // eslint-disable-next-line getter-return
         get() {
-          uiObject.supportsPassive = true;
+          uiProperties.supportsPassive = true;
         },
       });
       window.addEventListener('testPassive', null, opts);
@@ -93,7 +93,7 @@ const CombineUI = (props) => {
       util.warn(e);
     }
 
-    registerMapMouseHandlers(uiObject.map.proj);
+    registerMapMouseHandlers(uiProperties.map.proj);
 
     // Sink all focus on inputs if click unhandled
     document.addEventListener('click', (e) => {
@@ -104,7 +104,7 @@ const CombineUI = (props) => {
     document.activeElement.blur();
     document.querySelectorAll('input').forEach((el) => el.blur());
 
-    return uiObject;
+    return uiProperties;
   };
 
   useEffect(() => {
@@ -126,7 +126,6 @@ const CombineUI = (props) => {
     </>
   );
 };
-
 
 export default CombineUI;
 

@@ -27,7 +27,6 @@ import util from './util/util';
 import Brand from './brand';
 import combineModels from './combine-models';
 import parse from './parse';
-import combineUi from './combine-ui';
 import CombineUI from './MapUI/CombineUI';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
