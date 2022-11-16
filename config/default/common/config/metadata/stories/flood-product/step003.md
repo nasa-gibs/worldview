@@ -1,0 +1,1 @@
+Heavy monsoon rains starting in June contributed to the rising floodwaters in Pakistan.
