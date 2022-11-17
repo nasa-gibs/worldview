@@ -61,12 +61,11 @@ const MapUI = (props) => {
     embed,
     lastArrowDirection,
     layerQueue,
+    lastPreloadDate,
     layers,
     models,
-    nextDate,
     palettes,
     preloaded,
-    prevDate,
     proj,
     renderableLayersState,
     selectedDate,
@@ -316,6 +315,9 @@ const MapUI = (props) => {
       proj, embed, layers, palettes, vectorStyles, compare, map,
     };
     const useActiveString = compareString || activeString;
+    const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(dateCompareState));
+    const nextDate = getNextDateTime(dateCompareState, 1, useDate);
+    const prevDate = getNextDateTime(dateCompareState, -1, useDate);
     const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
     if (preloaded && lastArrowDirection) {
       setPreload(true, subsequentDate);
@@ -425,6 +427,7 @@ const mapStateToProps = (state) => {
     dateCompareState,
     embed,
     lastArrowDirection,
+    lastPreloadDate,
     layers,
     nextDate,
     palettes,
@@ -470,11 +473,10 @@ MapUI.propTypes = {
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,
+  lastPreloadDate: PropTypes.object,
   models: PropTypes.object,
-  nextDate: PropTypes.object,
   palettes: PropTypes.object,
   preloaded: PropTypes.bool,
-  prevDate: PropTypes.object,
   proj: PropTypes.object,
   renderableLayersState: PropTypes.object,
   selectedDate: PropTypes.object,

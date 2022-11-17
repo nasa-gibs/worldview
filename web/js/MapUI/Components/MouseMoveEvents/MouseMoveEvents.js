@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -24,6 +25,8 @@ const MouseMoveEvents = (props) => {
     compareMapUi,
   } = props;
 
+  const [mouseMove, setMouseMove] = useState({});
+
   const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
     if (!map.ui.selected) return;
 
@@ -38,11 +41,14 @@ const MouseMoveEvents = (props) => {
     if (isCoordinateSearchActive) return;
     if (!coords) return;
     if (isEventsTabActive || isMapAnimating || sidebarActiveTab === 'download') return;
-
     ui.runningdata.newPoint(pixel, ui.selected);
   }, 300);
 
-  events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);
+  useEffect(() => {
+    throttledOnMouseMove(mouseMove);
+  }, [mouseMove]);
+
+  events.on(MAP_MOUSE_MOVE, setMouseMove);
   events.on(MAP_MOUSE_OUT, (e) => {
     throttledOnMouseMove.cancel();
     ui.runningdata.clearAll();
