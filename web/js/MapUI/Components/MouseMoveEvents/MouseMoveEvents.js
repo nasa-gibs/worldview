@@ -26,9 +26,10 @@ const MouseMoveEvents = (props) => {
 
   const throttledOnMouseMove = lodashThrottle(({ pixel }) => {
     if (!map.ui.selected) return;
-    const coords = map.ui.selected.getCoordinateFromPixel(pixel);
 
-    if (map.proj !== ui.selected.proj) return;
+    const coords = ui.selected.getCoordinateFromPixel(pixel);
+
+    if (map.ui.selected.proj !== ui.selected.proj) return;
     if (ui.mapIsbeingZoomed) return;
     if (ui.mapIsbeingDragged) return;
     if (compareMapUi && compareMapUi.dragging) return;
@@ -38,7 +39,7 @@ const MouseMoveEvents = (props) => {
     if (!coords) return;
     if (isEventsTabActive || isMapAnimating || sidebarActiveTab === 'download') return;
 
-    ui.runningdata.newPoint(pixel, map);
+    ui.runningdata.newPoint(pixel, ui.selected);
   }, 300);
 
   events.on(MAP_MOUSE_MOVE, throttledOnMouseMove);

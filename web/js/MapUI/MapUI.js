@@ -89,6 +89,8 @@ const MapUI = (props) => {
   const [markerAction, setMarkerAction] = useState({});
   const [granuleFootprints, setGranuleFootprints] = useState({});
   const [quickAnimateAction, setQuickAnimateAction] = useState({});
+  const [vectorActions, setVectorActions] = useState({});
+  const [preloadAction, setPreloadAction] = useState({});
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -145,22 +147,11 @@ const MapUI = (props) => {
         });
         return;
       }
-      case vectorStyleConstants.SET_SELECTED_VECTORS: {
-        const type = 'selection';
-        const newSelection = action.payload;
-        updateVectorSelection(
-          action.payload,
-          ui.selectedVectors,
-          activeLayers,
-          type,
-          vectorStylesState,
-        );
-        ui.selectedVectors = newSelection;
-        return;
-      }
+      case vectorStyleConstants.SET_SELECTED_VECTORS:
+        return setVectorActions(action);
       case dateConstants.CHANGE_CUSTOM_INTERVAL:
       case dateConstants.CHANGE_INTERVAL:
-        return preloadNextTiles();
+        return setPreloadAction(action);
       case dateConstants.ARROW_DOWN:
         setQuickAnimateAction(action);
         break;
@@ -180,6 +171,31 @@ const MapUI = (props) => {
       setProjectionTrigger(1);
     }
   }, [ui]);
+
+  useEffect(() => {
+    if (vectorActions.type === vectorStyleConstants.SET_SELECTED_VECTORS) {
+      updateVectorSelections();
+    }
+  }, [vectorActions]);
+
+  useEffect(() => {
+    if (preloadAction.type === dateConstants.CHANGE_INTERVAL) {
+      preloadNextTiles();
+    }
+  }, [preloadAction]);
+
+  const updateVectorSelections = () => {
+    const type = 'selection';
+    const newSelection = vectorActions.payload;
+    updateVectorSelection(
+      vectorActions.payload,
+      ui.selectedVectors,
+      activeLayers,
+      type,
+      vectorStylesState,
+    );
+    ui.selectedVectors = newSelection;
+  };
 
   const updateExtent = () => {
     const map = ui.selected;
