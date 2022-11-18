@@ -11,7 +11,19 @@
         {
             "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-antarctic.xml"
-        }
+        },
+        {
+            "from": "https://uat.gitc.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
+            "to": "gitc-geographic.xml"
+          },
+          {
+            "from": "https://uat.gitc.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi?request=GetCapabilities",
+            "to": "gitc-arctic.xml"
+          },
+          {
+            "from": "https://uat.gitc.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi?request=GetCapabilities",
+            "to": "gitc-antarctic.xml"
+          }
     ],
     "wv-options-wmts": [
         {
@@ -34,6 +46,27 @@
             "to": "gibs-antarctic.json",
             "projection": "antarctic",
             "maxResolution": 8192.0
-        }
+        },
+        {
+            "source": "GITC:geographic",
+            "from": "gitc-geographic.xml",
+            "to": "gitc-geographic.json",
+            "projection": "geographic",
+            "maxResolution": 0.5625
+          },
+          {
+            "source": "GITC:arctic",
+            "from": "gitc-arctic.xml",
+            "to": "gitc-arctic.json",
+            "projection": "arctic",
+            "maxResolution": 8192.0
+          },
+          {
+            "source": "GITC:antarctic",
+            "from": "gitc-antarctic.xml",
+            "to": "gitc-antarctic.json",
+            "projection": "antarctic",
+            "maxResolution": 8192.0
+          }
     ]
 }
