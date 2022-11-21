@@ -15,7 +15,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-import { Style, Icon } from 'ol/style';
+import { Style, Icon, RegularShape } from 'ol/style';
 import Point from 'ol/geom/Point';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
@@ -448,8 +448,8 @@ export default function mapLayerBuilder(config, cache, store) {
 
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
-    let windTileLayer;
     const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
+    console.log(layerName);
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -459,7 +459,7 @@ export default function mapLayerBuilder(config, cache, store) {
         // The z-index should be applied with CSS on map generation to avoid this code entirely.
         canvasElem[0].style.zIndex = -1;
       }
-      windTileLayer = createWindtile(tileSource, selected, layer);
+      createWindtile(tileSource, selected, layer);
     }
   };
 
@@ -601,6 +601,10 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    const arrowSizeMultiplier = 1;
+    const arrowColor = 'red';
+    const radianDirection = 10;
+    // ol.layer.VectorTile
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -609,25 +613,51 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       // style: [],
-      style: new Style({
-        // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
-        // Setting the radius to 0 includes each point but hides the visual
-        image: new CircleStyle({
-          radius: renderAnimation ? 6 : 2,
-          fill: new Fill({
-            color: 'green',
+      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
+      // Setting the radius to 0 includes each point but hides the visual
+      // style: new Style({
+      //   image: new CircleStyle({
+      //     radius: renderAnimation ? 6 : 10,
+      //     fill: new Fill({
+      //       color: 'green',
+      //     }),
+      //   }),
+
+
+      // The arrow shaft
+      style: [
+        new Style({
+          image: new RegularShape({
+            points: 2,
+            radius: 10 * arrowSizeMultiplier,
+            stroke: new Stroke({
+              width: 2,
+              color: arrowColor,
+            }),
+            angle: radianDirection,
           }),
         }),
-
-        // Set as point to draw a line
-        // geometry: new Point(100),
-        // image: new Icon({
-        //   src: 'data/arow.png',
-        //   anchor: [0.75, 0.5],
-        //   rotateWithView: true,
-        //   // rotation: -rotation,
-        // }),
-      }),
+        // The arrow head
+        new Style({
+          image: new RegularShape({
+            points: 3,
+            radius: 5 * arrowSizeMultiplier,
+            angle: radianDirection,
+            fill: new Fill({
+              color: arrowColor,
+            }),
+          }),
+        }),
+      ],
+      // Set as point to draw a line
+      // geometry: new Point(100),
+      // image: new Icon({
+      //   src: 'data/arow.png',
+      //   anchor: [0.75, 0.5],
+      //   rotateWithView: true,
+      //   // rotation: -rotation,
+      // }),
+      // }),
     });
 
     applyStyle(def, layer, state, layeroptions);

@@ -8,9 +8,6 @@ export default class WindTile {
     this.height = options.height || 512;
     this.dataGridWidth = 360;
 
-    console.log('options');
-    console.log(options);
-
     // options.canvas needs to be found, otherwise a NEW canvas is being generated!
     this.glCanvas = options.canvas || document.createElement('canvas');
     this.olmap = options.olmap;
@@ -52,6 +49,7 @@ export default class WindTile {
   updateData(data, extent, zoom, options) {
     const windData = this.organizeData(data, extent, zoom, options);
     this.windData = this.organizeData(data, extent, zoom, options);
+    console.log(windData);
     this.wind.setWind(windData);
     this.stopped = false;
     // this.glCanvas.style = 'display:block';
