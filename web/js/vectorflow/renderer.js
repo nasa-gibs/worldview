@@ -49,7 +49,6 @@ export default class WindTile {
   updateData(data, extent, zoom, options) {
     const windData = this.organizeData(data, extent, zoom, options);
     this.windData = this.organizeData(data, extent, zoom, options);
-    console.log(windData);
     this.wind.setWind(windData);
     this.stopped = false;
     // this.glCanvas.style = 'display:block';

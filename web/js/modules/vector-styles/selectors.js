@@ -230,7 +230,7 @@ export const applyStyle = (def, olVectorLayer, state) => {
     return;
   }
 
-  // iterate to find the matching layer data & apply the associated style
+  // iterate to find the matching layer data & apply the custom style
   activeLayers.forEach((layer) => {
     if (layer.id === layerName && layer.custom) {
       vectorStyleId = layer.custom;

@@ -15,11 +15,9 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-import { Style, Icon, RegularShape } from 'ol/style';
-import Point from 'ol/geom/Point';
+import { Style, RegularShape } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
-import CircleStyle from 'ol/style/Circle';
 import * as dat from 'dat.gui';
 // import { Point } from 'proj4';
 import WindTile from '../vectorflow/renderer.js';
@@ -52,7 +50,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAnimation = true;
+  const renderAnimation = false;
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -151,7 +149,6 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'vector':
             layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            console.log('Calling createLayerVector');
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
@@ -449,7 +446,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
     const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
-    console.log(layerName);
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -601,9 +597,8 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
-    const arrowSizeMultiplier = 1;
-    const arrowColor = 'red';
-    const radianDirection = 10;
+    let counter = 0;
+
     // ol.layer.VectorTile
     const layer = new LayerVectorTile({
       extent: layerExtent,
@@ -612,52 +607,58 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
-      // style: [],
-      // force a style onto the LayerVectorTile. This causes the ASCAT data to render as GREEN circles (if "radius" is > 0)
-      // Setting the radius to 0 includes each point but hides the visual
-      // style: new Style({
-      //   image: new CircleStyle({
-      //     radius: renderAnimation ? 6 : 10,
-      //     fill: new Fill({
-      //       color: 'green',
-      //     }),
-      //   }),
+      style (feature, resolution) {
+        counter += 1;
 
+        // Due to processing issues, I am only rendering every 25th feature
+        if (counter % 25 !== 0) return [];
 
-      // The arrow shaft
-      style: [
-        new Style({
-          image: new RegularShape({
-            points: 2,
-            radius: 10 * arrowSizeMultiplier,
-            stroke: new Stroke({
-              width: 2,
-              color: arrowColor,
+        // This function styles each feature individually based on the feature specific data
+        let arrowSizeMultiplier;
+        let arrowColor;
+        const radianDirection = feature.get('dir');
+        const magnitude = feature.get('speed');
+
+        console.log(`radianDirection; ${radianDirection}`);
+
+        // Adjust color & arrow length based on magnitude
+        if (magnitude < 0.08) {
+          arrowColor = 'red';
+          arrowSizeMultiplier = 1;
+        } else if (magnitude < 0.17) {
+          arrowColor = 'blue';
+          arrowSizeMultiplier = 1.25;
+        } else {
+          arrowColor = 'green';
+          arrowSizeMultiplier = 1.5;
+        }
+
+        // The arrow shaft
+        return [
+          new Style({
+            image: new RegularShape({
+              points: 2,
+              radius: 10 * arrowSizeMultiplier,
+              stroke: new Stroke({
+                width: 2,
+                color: arrowColor,
+              }),
+              angle: radianDirection,
             }),
-            angle: radianDirection,
           }),
-        }),
-        // The arrow head
-        new Style({
-          image: new RegularShape({
-            points: 3,
-            radius: 5 * arrowSizeMultiplier,
-            angle: radianDirection,
-            fill: new Fill({
-              color: arrowColor,
+          // The arrow head
+          new Style({
+            image: new RegularShape({
+              points: 3,
+              radius: 5 * arrowSizeMultiplier,
+              angle: radianDirection,
+              fill: new Fill({
+                color: arrowColor,
+              }),
             }),
           }),
-        }),
-      ],
-      // Set as point to draw a line
-      // geometry: new Point(100),
-      // image: new Icon({
-      //   src: 'data/arow.png',
-      //   anchor: [0.75, 0.5],
-      //   rotateWithView: true,
-      //   // rotation: -rotation,
-      // }),
-      // }),
+        ];
+      },
     });
 
     applyStyle(def, layer, state, layeroptions);
@@ -703,8 +704,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMS layer -- INCORRECT~!
    */
   const createWindtile = function(tileSource, selected, layer) {
-    console.log('Generating WindTile');
-
     // Vars to generate the animation & support the mini-GUI to play with the animation settings
     let i = 0;
     let moving = false;

@@ -83,8 +83,6 @@ export default class WindGL {
     this.windData = windData;
     const height = windData.textureHeight;
     const width = windData.textureWidth;
-    console.log(`height: ${height}`);
-    console.log(`width: ${width}`);
     // console.log(windData.image);
     this.windTexture = util.createTexture(this.gl, this.gl.LINEAR, windData.image, width, height);
   }
