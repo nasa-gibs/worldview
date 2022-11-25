@@ -1,0 +1,1 @@
+The 3-Day window Flood product on the left "A" side shows the floodwaters in red, swipe the center bar back and forth to compare the red floodwater pixels with the false-color image on the right "B" side.
