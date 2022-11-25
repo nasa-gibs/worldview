@@ -1,0 +1,1 @@
+Here we compare the flooded area with a population density layer. The Population Density layer is on the right "B" side and shows high population areas in yellow to whites, which correspond directly to the floodwaters overlaid in red and show how a lot of the flooding affected areas of high population density.
