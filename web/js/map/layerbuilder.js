@@ -609,17 +609,15 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       style (feature, resolution) {
         counter += 1;
-
+        console.log(`counter: ${counter}`);
         // Due to processing issues, I am only rendering every 25th feature
-        if (counter % 25 !== 0) return [];
+        if (counter % 15 !== 0) return [];
 
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         let arrowColor;
         const radianDirection = feature.get('dir');
         const magnitude = feature.get('speed');
-
-        console.log(`radianDirection; ${radianDirection}`);
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
