@@ -29,7 +29,7 @@ const getShortenRequestString = (mock, permalink) => {
     return 'mock/short_link.json';
   }
   return (
-    `service/link/shorten.cgi${
+    `service/link/shorten${
       mockStr
     }?url=${
       encodeURIComponent(permalink)}`
