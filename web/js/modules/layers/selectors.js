@@ -90,6 +90,17 @@ export const getGranulePlatform = (state, activeString) => {
   return granulePlatform;
 };
 
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  // eslint-disable-next-line array-callback-return
+  const platformLayers = activeLayersArray.map(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      return key;
+    }
+  });
+  return platformLayers;
+};
+
 /**
  * Return an array of overlay groups for the currently active compare state
  * that are available for the currently active projection
