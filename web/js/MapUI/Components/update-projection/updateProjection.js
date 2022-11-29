@@ -146,7 +146,6 @@ const UpdateProjection = (props) => {
  * @param {object} granuleOptions object representing selected granule layer options
  */
   async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
-    console.log(compareActiveString, compareDateString, state, granuleOptions);
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
