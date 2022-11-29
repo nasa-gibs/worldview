@@ -470,6 +470,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
+    console.log('createLayerVector');
     const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
@@ -609,7 +610,10 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       style (feature, resolution) {
         counter += 1;
-        console.log(`counter: ${counter}`);
+
+        console.log(feature);
+
+
         // Due to processing issues, I am only rendering every 25th feature
         if (counter % 15 !== 0) return [];
 
