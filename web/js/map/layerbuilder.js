@@ -50,7 +50,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAnimation = false;
+  const renderAnimation = true;
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -445,7 +445,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -668,7 +668,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wv = attributes;
     layer.isVector = true;
 
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final_SD', 'OSCAR_Sea_Surface_Currents_Final_UV'];
+    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
     if (animationAllowed && renderAnimation) {
       animateVectors(layerName, tileSource, selected, layer);

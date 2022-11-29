@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "OSCAR_Sea_Surface_Currents_Final": {
+      "id": "OSCAR_Sea_Surface_Currents_Final",
+      "title": "OSCAR_Sea_Surface_Currents_Final",
+      "subtitle": "OSCAR_Sea_Surface_Currents_Final subtitle",
+      "description": "OSCAR_Sea_Surface_Currents_Final description",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Vectors",
+      "vectorStyle": {
+        "id": "OSCAR_Sea_Surface_Currents_Final"
+      },
+      "transition": true,
+      "projections": {
+        "geographic": {
+          "source": "GITC:geographic"
+        }
+      }
+    }
+  }
+}

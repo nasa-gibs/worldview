@@ -108,6 +108,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const glStyle = vectorStyles[styleId];
 
   // ASCAT_Ocean_Surface_Wind_Speed does not include a glStyle, so we early return here in that instance
+  console.log('glStyle');
+  console.log(glStyle);
   if (glStyle === undefined) {
     return;
   }
