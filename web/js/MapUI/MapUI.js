@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
-import AddLayer from './Components/Layers/AddLayer';
-import RemoveLayer from './Components/Layers/RemoveLayer';
-import CreateMap from './Components/CreateMap/CreateMap';
-import GranuleHover from './Components/GranuleHover/GranuleHover';
-import Markers from './Components/Markers/Markers';
-import UpdateDate from './Components/UpdateDate/UpdateDate';
-import UpdateOpacity from './Components/UpdateOpacity/UpdateOpacity';
-import UpdateProjection from './Components/UpdateProjection/UpdateProjection';
-import MouseMoveEvents from './Components/MouseMoveEvents/MouseMoveEvents';
-import BufferQuickAnimate from './Components/BufferQuickAnimate/BufferQuickAnimate';
+import AddLayer from './components/layers/addLayer';
+import RemoveLayer from './components/layers/removeLayer';
+import CreateMap from './components/create-map/createMap';
+import GranuleHover from './components/granule-hover/granuleHover';
+import Markers from './components/markers/markers';
+import UpdateDate from './components/update-date/updateDate';
+import UpdateOpacity from './components/update-opacity/updateOpacity';
+import UpdateProjection from './components/update-projection/updateProjection';
+import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
+import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';

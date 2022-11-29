@@ -134,9 +134,19 @@ const UpdateProjection = (props) => {
   };
 
   /**
- * Create a Layergroup given the date and layerGroups
+ * Create a Layergroup given the date and layerGroups when compare mode is activated and
+ * the group similar layers option is selected.
+ *
+ * @method getCompareLayerGroup
+ * @static
+ *
+ * @param {string} compareActiveString
+ * @param {string} compareDateString
+ * @param {object} state object representing the layers, compare, & proj properties from global state
+ * @param {object} granuleOptions object representing selected granule layer options
  */
   async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+    console.log(compareActiveString, compareDateString, state, granuleOptions);
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
@@ -163,16 +173,14 @@ const UpdateProjection = (props) => {
   * @method clearLayers
   * @static
   *
-  * @param {object} map - Openlayers Map obj
-  *
   * @returns {void}
   */
   const clearLayers = function() {
-    const activeLayers = ui.selected
+    const activeLayersUI = ui.selected
       .getLayers()
       .getArray()
       .slice(0);
-    lodashEach(activeLayers, (mapLayer) => {
+    lodashEach(activeLayersUI, (mapLayer) => {
       ui.selected.removeLayer(mapLayer);
     });
     ui.cache.clear();
@@ -181,14 +189,13 @@ const UpdateProjection = (props) => {
   /**
    * @method reloadLayers
    *
-   * @param {object} map - Openlayers Map obj
    * @param {Object} granuleOptions (optional: only used for granule layers)
    *   @param {Boolean} granuleDates - array of granule dates
    *   @param {Boolean} id - layer id
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
-    const map = ui.selected;
+    const mapUI = ui.selected;
     const { createLayer } = ui;
 
     if (!config.features.compare || !compare.active) {
@@ -203,7 +210,7 @@ const UpdateProjection = (props) => {
         return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);
-      lodashEach(createdLayers, (l) => { map.addLayer(l); });
+      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -212,8 +219,8 @@ const UpdateProjection = (props) => {
       clearLayers();
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
-      compareLayerGroups.forEach((layerGroup) => map.addLayer(layerGroup));
-      compareMapUi.create(map, compare.mode);
+      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
+      compareMapUi.create(mapUI, compare.mode);
     }
     updateLayerVisibilities();
   }
@@ -237,13 +244,13 @@ const UpdateProjection = (props) => {
  * @returns {void}
  */
   function onResize() {
-    const map = ui.selected;
+    const mapUI = ui.selected;
     if (isMobile) {
-      map.removeControl(map.wv.scaleImperial);
-      map.removeControl(map.wv.scaleMetric);
+      mapUI.removeControl(mapUI.wv.scaleImperial);
+      mapUI.removeControl(mapUI.wv.scaleMetric);
     } else {
-      map.addControl(map.wv.scaleImperial);
-      map.addControl(map.wv.scaleMetric);
+      mapUI.addControl(mapUI.wv.scaleImperial);
+      mapUI.addControl(mapUI.wv.scaleMetric);
     }
   }
 

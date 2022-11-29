@@ -41,11 +41,13 @@ const Markers = (props) => {
     }
   }, [action]);
 
-  /*
+  /**
    * Remove coordinates marker from all projections
    *
    * @method removeCoordinatesMarker
    * @static
+   *
+   * @param {Object} coordinatesObject - set of coordinates for marker
    *
    * @returns {void}
    */
@@ -110,8 +112,10 @@ const Markers = (props) => {
    * @method addMarkerAndUpdateStore
    * @static
    *
+   * @param {Boolean} showDialog
    * @param {Object} geocodeResults
    * @param {Boolean} shouldFlyToCoordinates - if location search via input
+   * @param {Object} coordinatesObject - set of coordinates for marker
    * @returns {void}
    */
   const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {

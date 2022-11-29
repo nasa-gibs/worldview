@@ -14,7 +14,7 @@ import {
 } from '../util/constants';
 import mapCompare from '../map/compare/compare';
 import mapLayerBuilder from '../map/layerbuilder';
-import MapUI from './MapUI';
+import MapUI from './mapUI';
 
 const { events } = util;
 

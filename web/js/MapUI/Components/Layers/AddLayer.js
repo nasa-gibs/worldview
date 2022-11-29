@@ -42,10 +42,10 @@ const AddLayer = (props) => {
  * @param {object} def - layer Specs
  * @returns {void}
  */
-  const addLayer = async function(def, date, activeLayers) {
+  const addLayer = async function(def, layerDate, activeLayersParam) {
     const { createLayer } = ui;
-    date = date || selected;
-    activeLayers = activeLayers || activeLayersState;
+    const date = layerDate || selected;
+    const activeLayers = activeLayersParam || activeLayersState;
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const index = lodashFindIndex(reverseLayers, { id: def.id });
     const mapLayers = ui.selected.getLayers().getArray();
