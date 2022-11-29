@@ -169,7 +169,8 @@ const CreateMap = (props) => {
     const onRotate = () => {
       const radians = map.getView().getRotation();
       updateRotation(radians);
-      const currentDeg = radians * (180.0 / Math.PI);
+      const PI_OVER_180 = Math.PI / 180;
+      const currentDeg = radians * PI_OVER_180;
       saveRotation(currentDeg, map.getView());
       updateExtent();
     };
