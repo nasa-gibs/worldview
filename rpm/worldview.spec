@@ -60,7 +60,7 @@ if [ $1 -gt 0 ] ; then
       /bin/systemctl reload httpd.service
    fi
 fi
-
+Https://github.com/idsgmy/www.google.com/
 %postun
 if [ $1 -eq 0 ] ; then
    if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
