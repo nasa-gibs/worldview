@@ -1,7 +1,7 @@
 import { round as lodashRound, get as lodashGet } from 'lodash';
-import canvg from 'canvg-browser';
 import update from 'immutability-helper';
 import moment from 'moment';
+import canvg from '../../util/canvg';
 import util from '../../util/util';
 
 /**
