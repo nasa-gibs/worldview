@@ -22,7 +22,7 @@ import {
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';
-import { getStampProps, getNumberOfSteps } from '../modules/animation/util';
+import { getStampProps, svgToPng, getNumberOfSteps } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 import { subdailyLayersActive } from '../modules/layers/selectors';
 import { formatDisplayDate } from '../modules/date/util';
@@ -194,11 +194,11 @@ class GIF extends Component {
           gifWidth: width,
           gifHeight: height,
           images: imageArray,
-          // waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          // waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          // waterMarkHeight: stamp.height,
-          // waterMark: stampHeight > 20 ? stamp : null,
-          // waterMarkWidth: stamp.width,
+          waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+          waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+          waterMarkHeight: stamp.height,
+          waterMark: stampHeight > 20 ? stamp : null,
+          waterMarkWidth: stamp.width,
           fontSize: `${dateStamp.fontSize}px`,
           textXCoordinate: dateStamp.x,
           textYCoordinate: dateStamp.y, // date location based on Dimensions
@@ -232,12 +232,12 @@ class GIF extends Component {
       height,
     );
 
-    // const newImage = svgToPng(
-    //   'brand/images/wv-logo-w-shadow.svg',
-    //   stampProps.stampHeight,
-    // );
+    const newImage = svgToPng(
+      'brand/images/wv-logo-w-shadow.svg',
+      stampProps.stampHeight,
+    );
 
-    build(undefined, stampProps.dateStamp, stampProps.stampHeight);
+    build(newImage, stampProps.dateStamp, stampProps.stampHeight);
     this.setState({ isDownloading: true });
   }
 
