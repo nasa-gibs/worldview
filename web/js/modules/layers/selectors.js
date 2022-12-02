@@ -92,10 +92,10 @@ export const getGranulePlatform = (state, activeString) => {
 
 export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
   const activeLayersArray = Object.entries(activeLayers);
-  // eslint-disable-next-line array-callback-return
-  const platformLayers = activeLayersArray.map(([key, value]) => {
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
     if (value.granulePlatform === platform) {
-      return key;
+      platformLayers.push(key);
     }
   });
   return platformLayers;

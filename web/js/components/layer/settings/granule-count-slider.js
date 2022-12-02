@@ -19,7 +19,7 @@ const GranuleCountSlider = (props) => {
   const [granuleCount, setGranuleCount] = useState(count);
 
   const onChange = (val) => {
-    updateGranuleLayerOptions(granuleDates, def.id, val);
+    updateGranuleLayerOptions(granuleDates, def, val);
   };
   const debounceOnchange = lodashDebounce(onChange, 300);
 

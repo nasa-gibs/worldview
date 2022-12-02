@@ -10,7 +10,6 @@ import {
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
   findEventLayers,
   getGranuleLayer,
-  getGranulePlatform,
   getGranuleLayersOfActivePlatform,
   getActiveGranuleLayers,
 } from './selectors';
@@ -345,12 +344,12 @@ function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
   };
 }
 
-export function updateGranuleLayerOptions(dates, id, count) {
+export function updateGranuleLayerOptions(dates, def, count) {
   return (dispatch, getState) => {
     const state = getState();
     const { activeString } = state.compare;
 
-    const granulePlatform = getGranulePlatform(state, activeString);
+    const granulePlatform = def.subtitle;
     const activeGranuleLayers = getActiveGranuleLayers(state);
     const platformLayers = getGranuleLayersOfActivePlatform(granulePlatform, activeGranuleLayers);
 
