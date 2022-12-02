@@ -417,6 +417,7 @@ a .wv-animation-widget-icon {
   height: 100%;
   box-sizing: border-box;
   bottom: 0;
+  background-color: $wv-solid-black;
 
   & .mobile-animation-header {
     padding: 0 20px 0 10px;
@@ -483,9 +484,16 @@ a .wv-animation-widget-icon {
       margin-top: 10px;
     }
 
+    & .mobile-animation-flex-container {
+      display: flex;
+      justify-content: center;
+      height: 85%;
+      margin: 0;
+    }
+
     & .mobile-animation-widget-container {
       margin: 0;
-      width: 98%;
+      width: 80%;
       height: 80%;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -495,7 +503,6 @@ a .wv-animation-widget-icon {
     #slider-case-row {
       grid-column: 1 / -1;
       width: 100%;
-      margin-top: 1rem;
 
       & .wv-slider-label {
         text-align: center;
@@ -516,12 +523,26 @@ a .wv-animation-widget-icon {
     & .mobile-animation-block-row {
       text-align: center;
       font-size: 18px;
+      width: 100%;
 
       & .mobile-date-picker-select-btn {
         position: relative;
         background-color: $wv-dark-blue;
         bottom: -10%;
         width: 95%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & .mobile-date-picker-select-btn-text {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        & span {
+          font-size: 23px;
+        }
       }
     }
 
@@ -557,8 +578,12 @@ a .wv-animation-widget-icon {
 
 #mobile-animation-widget-mobile-phone-landscape {
   & .wv-animation-widget {
-    & .rc-slider {
-      width: 400px;
+    & #slider-case-row {
+      margin-top: 1rem;
+
+      & .rc-slider {
+        width: 400px;
+      }
     }
   }
 }
