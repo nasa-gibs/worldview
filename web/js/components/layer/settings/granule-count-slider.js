@@ -1,50 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Slider from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 import { DEFAULT_NUM_GRANULES, MIN_GRANULES, MAX_GRANULES } from '../../../modules/layers/constants';
 
-class GranuleCountSlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.count,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.debounceOnchange = lodashDebounce(this.onChange, 300);
-  }
+const GranuleCountSlider = (props) => {
+  const {
+    count,
+    def,
+    granuleDates,
+    granulePlatform,
+    updateGranuleLayerOptions,
+  } = props;
 
-  onChange(val) {
-    const {
-      def,
-      updateGranuleLayerOptions,
-      granuleDates,
-    } = this.props;
-    updateGranuleLayerOptions(granuleDates, def.id, val);
-  }
+  const [granuleCount, setGranuleCount] = useState(count);
 
-  render() {
-    const { count } = this.props;
-    const { value } = this.state;
-    return (
-      <div className="layer-granule-count-select settings-component">
+  const onChange = (val) => {
+    updateGranuleLayerOptions(granuleDates, def, val);
+  };
+  const debounceOnchange = lodashDebounce(onChange, 300);
+
+  const satelliteInfo = `Updating granule count for all granules layers associated with the ${granulePlatform} satellite.`;
+
+  return (
+    <div className="layer-granule-count-select settings-component">
+      <div className="d-flex">
         <h2 className="wv-header">Granule Count</h2>
-        <Slider
-          min={MIN_GRANULES}
-          max={MAX_GRANULES}
-          defaultValue={count}
-          onChange={(val) => {
-            this.setState({ value: val });
-            this.debounceOnchange(val);
-          }}
-        />
-        <div className="wv-label wv-label-granule-count">
-          {value}
-        </div>
+        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ml-2" />
+        <UncontrolledTooltip
+          placement="right"
+          target="bbox-limit-info"
+        >
+          {satelliteInfo}
+        </UncontrolledTooltip>
       </div>
-    );
-  }
-}
+
+      <Slider
+        min={MIN_GRANULES}
+        max={MAX_GRANULES}
+        defaultValue={count}
+        onChange={(val) => {
+          setGranuleCount(val);
+          debounceOnchange(val);
+        }}
+      />
+      <div className="wv-label wv-label-granule-count">
+        {granuleCount}
+      </div>
+    </div>
+  );
+};
+
 GranuleCountSlider.defaultProps = {
   count: DEFAULT_NUM_GRANULES,
 };
@@ -52,7 +61,19 @@ GranuleCountSlider.propTypes = {
   granuleDates: PropTypes.array,
   def: PropTypes.object,
   count: PropTypes.number,
+  granulePlatform: PropTypes.string,
   updateGranuleLayerOptions: PropTypes.func,
 };
 
-export default GranuleCountSlider;
+const mapStateToProps = (state) => {
+  const { layers } = state;
+  const { granulePlatform } = layers.active;
+
+  return {
+    granulePlatform,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+)(GranuleCountSlider);
