@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getActiveGranuleFootPrints } from '../../../modules/layers/selectors';
@@ -13,9 +12,6 @@ const GranuleHover = (props) => {
     state,
     ui,
   } = props;
-
-  const [granuleHover, setGranuleHover] = useState({});
-  const [granuleHoverUpdate, setGranuleHoverUpdate] = useState({});
 
   const onGranuleHover = (platform, date, update) => {
     const proj = ui.selected.getView().getProjection().getCode();
@@ -34,21 +30,12 @@ const GranuleHover = (props) => {
     if (platform && date) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
+    if (!geometry) return;
     granuleFootprints[proj].updateFootprint(geometry, date);
   };
 
-  events.on(GRANULE_HOVERED, setGranuleHover);
-  events.on(GRANULE_HOVER_UPDATE, setGranuleHoverUpdate);
-
-  useEffect(() => {
-    if (!ui.selected) return;
-    onGranuleHover(granuleHover);
-  }, [granuleHover]);
-
-  useEffect(() => {
-    if (!ui.selected) return;
-    onGranuleHoverUpdate(granuleHoverUpdate);
-  }, [granuleHoverUpdate]);
+  events.on(GRANULE_HOVERED, onGranuleHover);
+  events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
 
   return null;
 };

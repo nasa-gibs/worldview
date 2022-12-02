@@ -27,15 +27,19 @@ const AddLayer = (props) => {
     if (action.type === layerConstants.ADD_LAYER) {
       const def = lodashFind(action.layers, { id: action.id });
       if (def.type === 'granule') {
-        ui.processingPromise = new Promise((resolve) => {
-          resolve(addLayer(def));
-        });
-        return addLayer(def);
+        granuleLayerAdd(def);
       }
       clearPreload();
       addLayer(def);
     }
   }, [action]);
+
+  const granuleLayerAdd = (def) => {
+    ui.processingPromise = new Promise((resolve) => {
+      resolve(addLayer(def));
+    });
+    return addLayer(def);
+  };
 
   /**
  * Initiates the adding of a layer
