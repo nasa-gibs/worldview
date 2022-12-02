@@ -372,28 +372,26 @@ export const granuleFootprint = (map) => {
     useSpatialIndex: false,
   });
 
-  const getVectorLayer = (text) => {
-    return new OlVectorLayer({
-      className: 'granule-map-footprint',
-      source: vectorSource,
-      style: [
-        new OlStyle({
-          stroke: new OlStyleStroke({
-            color: 'rgb(0, 123, 255, 0.65)',
-            width: 3,
-          }),
-          text: new OlText({
-            textAlign: 'center',
-            text,
-            font: '18px monospace',
-            fill: new OlStyleFill({ color: 'white' }),
-            stroke: new OlStyleStroke({ color: 'black', width: 2 }),
-            overflow: true,
-          }),
+  const getVectorLayer = (text) => new OlVectorLayer({
+    className: 'granule-map-footprint',
+    source: vectorSource,
+    style: [
+      new OlStyle({
+        stroke: new OlStyleStroke({
+          color: 'rgb(0, 123, 255, 0.65)',
+          width: 3,
         }),
-      ],
-    });
-  };
+        text: new OlText({
+          textAlign: 'center',
+          text,
+          font: '18px monospace',
+          fill: new OlStyleFill({ color: 'white' }),
+          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+          overflow: true,
+        }),
+      }),
+    ],
+  });
 
   const removeFootprint = () => {
     currentGranule = {};
