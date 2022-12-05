@@ -438,8 +438,8 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerOptions: (dates, id, count) => {
-    dispatch(updateGranuleLayerOptions(dates, id, count));
+  updateGranuleLayerOptions: (dates, def, count) => {
+    dispatch(updateGranuleLayerOptions(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
