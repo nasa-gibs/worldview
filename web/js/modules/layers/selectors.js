@@ -90,6 +90,17 @@ export const getGranulePlatform = (state, activeString) => {
   return granulePlatform;
 };
 
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      platformLayers.push(key);
+    }
+  });
+  return platformLayers;
+};
+
 /**
  * Return an array of overlay groups for the currently active compare state
  * that are available for the currently active projection
