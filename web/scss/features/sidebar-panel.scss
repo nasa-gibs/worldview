@@ -76,6 +76,8 @@
   width: 30px;
   border: 1px solid transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   svg.collapse-icon {
     height: 22px;

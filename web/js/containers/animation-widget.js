@@ -406,11 +406,17 @@ class AnimationWidget extends React.Component {
 
     const mobileID = getMobileIDs();
 
+    const collapseIconMobile = {
+      height: '30px',
+      width: '30px',
+      color: '#fff',
+    };
+
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
-          <span className="close wv-minimize" aria-label="Close" onClick={this.toggleCollapse}>
-            <FontAwesomeIcon icon="times" id="mobile-close-btn" />
+          <span aria-label="Close" onClick={this.toggleCollapse}>
+            <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
           </span>
         </div>
         <div className="mobile-animation-warning-message-container">
