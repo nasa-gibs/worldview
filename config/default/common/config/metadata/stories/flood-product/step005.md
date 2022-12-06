@@ -1,1 +1,1 @@
-The 3-Day window Flood product on the left "A" side shows the floodwaters in red, swipe the center bar back and forth to compare the red floodwater pixels with the false-color image on the right "B" side.
+Here we compare imagery from June and September 2022. The left "A" side displays imagery from 25 June, and the right "B' side shows imagery from 20 September. Much more water is clearly present in September, due to flooding (as well as seasonally greener vegetation).

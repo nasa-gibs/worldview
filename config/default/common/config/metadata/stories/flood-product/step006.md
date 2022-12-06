@@ -1,1 +1,1 @@
-Clouds have a great impact on being able to see the floodwaters. Press "Play" to watch this animation from 1 August to 16 September 2022 showing how clouds initially obscured much of the flooding. Clouds are represented by grey "insufficient data" pixels.
+The 3-Day window Flood product on the left "A" side shows the floodwaters in red, and normal water in cyan. Swipe the center bar back and forth to compare the flood detections to the false-color image on the right "B" side. Zoom in to investigate further.
