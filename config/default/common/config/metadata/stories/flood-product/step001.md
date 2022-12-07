@@ -1,1 +1,1 @@
-The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily global map of optically observed flooding. It is derived from the NRT MODIS Surface Reflectance (MOD09) datasets from both the Terra and Aqua satellites.
+The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily global map of optically observed flooding (the product cannot detect water under persistent cloud cover). It is derived from the NRT MODIS Surface Reflectance (MOD09) datasets from both the Terra and Aqua satellites.
