@@ -1,1 +1,1 @@
-Here we compare imagery from June and September 2022. The left "A" side displays imagery from 25 June, and the right "B' side shows imagery from 20 September. Much more water is clearly present in September, due to flooding (as well as seasonally greener vegetation).
+Heavy monsoon rains starting in June 2022 contributed to rising floodwaters in Pakistan. This false-color corrected reflectance image (Bands 7,2,1) from the MODIS instrument aboard the Terra satellite on 15 September 2022 illustrates the flood waters in dark blue.
