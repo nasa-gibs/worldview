@@ -126,17 +126,29 @@ export default function mapLayerBuilder(config, cache, store) {
       try {
         const actualId = headers.get('layer-identifier-actual');
 
+        // only updating for non cached dates?
+        // The store only updates for layers tiles (dates) that have not been cached yet
+        // Need to somehow keep track of the timeline between NRT data and STD in real time
+
+        console.log(actualId)
+
         if (!actualId || !compareDates(appDate, layerDate)) {
           return;
         }
+
         const parts = actualId.split('_');
         const version = parts[parts.length - 2];
         const type = parts[parts.length - 1];
         const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
 
+
         if (hasChanged) {
+          console.log("updating for app date ", appDate, " and layer date", layerDate);
           updateStore(layer.id, activeString, version, type);
         }
+
+          // updateStore(layer.id, activeString, version, type);
+
       } catch (e) {
         console.error(e);
       }
