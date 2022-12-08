@@ -31,7 +31,8 @@ import {
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_LAYER_COLLECTION_VERSION_TYPE,
-
+  UPDATE_LAYER_COLLECTION,
+  UPDATE_LAYER_DATE_COLLECTION,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -389,6 +390,38 @@ export function changeGranuleSatelliteInstrumentGroup(id, granulePlatform) {
 export function updateLayerCollectionVersionType(value) {
   return {
     type: UPDATE_LAYER_COLLECTION_VERSION_TYPE,
+    ...value,
+  };
+}
+
+export function updateLayerCollection(value) {
+  return (dispatch, getState) =>{
+  const { layers } = getState();
+  const {id, activeString} = value;
+  const dateCollections = layers[activeString].dateCollections[id]
+
+  if(!dateCollections){
+    console.log('Its not there!!!')
+  } else {
+    console.log(dateCollections)
+  }
+
+
+  // if(layers[activeString].dateCollections[value.id]){
+  //   console.log('its already there!!')
+  // } else {
+    dispatch({
+      type: UPDATE_LAYER_COLLECTION,
+      id,
+      activeString
+    })
+  }
+  // }
+}
+
+export function updateLayerDateCollection(value) {
+  return {
+    type: UPDATE_LAYER_DATE_COLLECTION,
     ...value,
   };
 }

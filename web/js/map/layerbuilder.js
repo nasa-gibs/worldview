@@ -22,7 +22,7 @@ import granuleLayerBuilder from './granule/granule-layer-builder';
 import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import { updateLayerCollectionVersionType } from '../modules/layers/actions';
+import { updateLayerCollectionVersionType, updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
 import { getActiveCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -100,6 +100,27 @@ export default function mapLayerBuilder(config, cache, store) {
     }));
   }, 500, { trailing: true });
 
+  const updateStoreForDateLayerCollection = lodashDebounce((id, activeString, version, type, date) => {
+    console.log('UPDATED STORE FOR DATE LAYER COLLECTION: ', id, version, type);
+    store.dispatch(updateLayerDateCollection({
+      id,
+      activeString,
+      date,
+      collection: {
+        version,
+        type,
+      },
+    }));
+  }, 500, { trailing: true });
+
+  const updateStoreForLayerCollection = lodashDebounce((id, activeString) => {
+    console.log('UPDATED STORE LAYER COLLECTION: ', id);
+    store.dispatch(updateLayerCollection({
+      id,
+      activeString,
+    }));
+  }, 500, { trailing: true });
+
   /**
    * We define our own tile loading function in order to capture custom header values
    *
@@ -122,16 +143,16 @@ export default function mapLayerBuilder(config, cache, store) {
       return aDate === bDate;
     };
 
+    const convertDate = (date) => {
+      const convertedDate = date.toISOString().split('T')[0];
+      return convertedDate;
+    }
+
     const setCollectionInfo = (headers) => {
       try {
         const actualId = headers.get('layer-identifier-actual');
 
-        // only updating for non cached dates?
-        // The store only updates for layers tiles (dates) that have not been cached yet
-        // Need to somehow keep track of the timeline between NRT data and STD in real time
-
-        console.log(actualId)
-
+        // console.log(actualId)
         if (!actualId || !compareDates(appDate, layerDate)) {
           return;
         }
@@ -141,13 +162,54 @@ export default function mapLayerBuilder(config, cache, store) {
         const type = parts[parts.length - 1];
         const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
 
-
         if (hasChanged) {
-          console.log("updating for app date ", appDate, " and layer date", layerDate);
+          // console.log("updating for app date ", appDate, " and layer date", layerDate);
           updateStore(layer.id, activeString, version, type);
         }
 
-          // updateStore(layer.id, activeString, version, type);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const setLayerCollection = (headers) => {
+      try {
+        const actualId = headers.get('layer-identifier-actual');
+        // ex: VIIRS_CrIS_SNPP_BT_Band33_Fussion_Day_v2_STD
+
+        if (!actualId) {
+          return;
+        }
+
+        const parts = actualId.split('_');
+
+        updateStoreForLayerCollection(layer.id, activeString);
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    const setDateCollectionInfo = (headers) => {
+      try {
+        const actualId = headers.get('layer-identifier-actual');
+        // ex: VIIRS_CrIS_SNPP_BT_Band33_Fussion_Day_v2_STD
+
+        if (!actualId) {
+          return;
+        }
+
+        const parts = actualId.split('_');
+        const version = parts[parts.length - 2];
+        const type = parts[parts.length - 1];
+        const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
+
+        if (hasChanged) {
+          // console.log("updating for app date ", appDate, " and layer date", layerDate);
+          // check if dates have already been made in the layer collection here?!?!?!
+          const convertedDate = convertDate(layerDate);
+          updateStoreForDateLayerCollection(layer.id, activeString, version, type, convertedDate);
+        }
 
       } catch (e) {
         console.error(e);
@@ -158,6 +220,8 @@ export default function mapLayerBuilder(config, cache, store) {
       const response = await fetch(src);
       const data = await response.blob();
       setCollectionInfo(response.headers);
+      setLayerCollection(response.headers);
+      // setDateCollectionInfo(response.headers);
 
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);

@@ -21,6 +21,8 @@ import {
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
   UPDATE_LAYER_COLLECTION_VERSION_TYPE,
+  UPDATE_LAYER_COLLECTION,
+  UPDATE_LAYER_DATE_COLLECTION,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -43,6 +45,7 @@ const groupState = {
   groupOverlays: true,
   layers: [],
   collections: {},
+  dateCollections: {},
   overlayGroups: [],
   prevLayers: [],
   granuleFootprints: {},
@@ -351,7 +354,38 @@ export function layerReducer(state = initialState, action) {
               },
             },
           },
+        },
+      });
 
+    case UPDATE_LAYER_COLLECTION:
+      return update(state, {
+        [action.activeString]: {
+          dateCollections: {
+            $merge:{
+              [action.id]: {
+                added: true
+              }
+            }
+
+
+          },
+        },
+      });
+
+    case UPDATE_LAYER_DATE_COLLECTION:
+      return update(state, {
+        [compareState]: {
+          dateCollections: {
+            [action.id]: {
+              [action.date]: {
+              $set: {
+                version: action.collection.version,
+                type: action.collection.type,
+                date: action.date,
+              },
+            },
+            },
+          },
         },
       });
 
