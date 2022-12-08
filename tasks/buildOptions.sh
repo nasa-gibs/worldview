@@ -8,6 +8,7 @@ OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
 PYTHON_SCRIPTS_DIR="$BASE/tasks/python3"
+NODE_SCRIPTS_DIR="$BASE/tasks/node"
 
 
 # If there is an active directory, use instead of defaults
@@ -51,7 +52,7 @@ mkdir -p "$BUILD_DIR/colormaps"
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
+    "$NODE_SCRIPTS_DIR/getCapabilities.js -c $OPT_DIR/$OPT_SUBDIR/config.json -gc $OPT_DIR/$OPT_SUBDIR/gc"
 
     # Get visualization metadata (if configured)
     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
@@ -61,84 +62,84 @@ if [ "$FETCH_GC" ] ; then
     exit 0
 fi
 
-"$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
-    "$BASE/schemas/layer-config.json"
+# "$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
+#     "$BASE/schemas/layer-config.json"
 
-if [ -e "$BUILD_DIR/features.json" ] ; then
-    cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
-fi
+# if [ -e "$BUILD_DIR/features.json" ] ; then
+#     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
+# fi
 
-# Run extractConfigFromWMTS.py script with config.json
-if [ -e "$BUILD_DIR/config.json" ] ; then
-    "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
-        "$BUILD_DIR/_wmts"
-fi
+# # Run extractConfigFromWMTS.py script with config.json
+# if [ -e "$BUILD_DIR/config.json" ] ; then
+#     "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
+#         "$BUILD_DIR/_wmts"
+# fi
 
-# Run processVectorStyles.py and move vectorstyles where we want them
-if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
-    mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
-    "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/gc/vectorstyles" \
-        "$BUILD_DIR/config/wv.json/vectorstyles"
-fi
+# # Run processVectorStyles.py and move vectorstyles where we want them
+# if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
+#     mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
+#     "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+#         "$BUILD_DIR/gc/vectorstyles" \
+#         "$BUILD_DIR/config/wv.json/vectorstyles"
+# fi
 
-# Run processVectorData.py and move vectordata where we want them
-if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
-    mkdir -p "$BUILD_DIR"/config/wv.json/vectordata
-    "$PYTHON_SCRIPTS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/gc/vectordata" \
-        "$BUILD_DIR/config/wv.json/vectordata"
-fi
+# # Run processVectorData.py and move vectordata where we want them
+# if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
+#     mkdir -p "$BUILD_DIR"/config/wv.json/vectordata
+#     "$PYTHON_SCRIPTS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+#         "$BUILD_DIR/gc/vectordata" \
+#         "$BUILD_DIR/config/wv.json/vectordata"
+# fi
 
-# Run processColormap.py and move colormaps where we want them
-if [ -e "$BUILD_DIR/colormaps" ] ; then
-    mkdir -p "$BUILD_DIR"/config/palettes
-    if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
-        cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
-    fi
-    "$PYTHON_SCRIPTS_DIR/processColormap.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-            "$BUILD_DIR/colormaps" \
-            "$BUILD_DIR/config/palettes"
-fi
+# # Run processColormap.py and move colormaps where we want them
+# if [ -e "$BUILD_DIR/colormaps" ] ; then
+#     mkdir -p "$BUILD_DIR"/config/palettes
+#     if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
+#         cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
+#     fi
+#     "$PYTHON_SCRIPTS_DIR/processColormap.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+#             "$BUILD_DIR/colormaps" \
+#             "$BUILD_DIR/config/palettes"
+# fi
 
-# Throw error if no categoryGroupOrder.json file present
-if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
-    echo "categoryGroupOrder.json not found.  Generating..."
-    "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
-        "$SRC_DIR/common/config/wv.json/"
-fi
+# # Throw error if no categoryGroupOrder.json file present
+# if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
+#     echo "categoryGroupOrder.json not found.  Generating..."
+#     "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
+#         "$SRC_DIR/common/config/wv.json/"
+# fi
 
-if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
-    cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
-fi
+# if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
+#     cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+# fi
 
-# Run mergeConfig.py on all directories in /config
-configs=$(ls "$BUILD_DIR/config")
-for config in $configs; do
-    case $config in
-        *.json)
-            "$PYTHON_SCRIPTS_DIR/mergeConfig.py" "$BUILD_DIR/config/$config" \
-                 "$DEST_DIR/config/$config"
-             ;;
-         *)
-             cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
-             ;;
-    esac
-done
+# # Run mergeConfig.py on all directories in /config
+# configs=$(ls "$BUILD_DIR/config")
+# for config in $configs; do
+#     case $config in
+#         *.json)
+#             "$PYTHON_SCRIPTS_DIR/mergeConfig.py" "$BUILD_DIR/config/$config" \
+#                  "$DEST_DIR/config/$config"
+#              ;;
+#          *)
+#              cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
+#              ;;
+#     esac
+# done
 
-# Run mergeConfigWithWMTS.py to merge layer metadata from WMTS GC with worldview layer configs into wv.json
-"$PYTHON_SCRIPTS_DIR/mergeConfigWithWMTS.py" "$BUILD_DIR/_wmts" \
-    "$DEST_DIR/config/wv.json"
+# # Run mergeConfigWithWMTS.py to merge layer metadata from WMTS GC with worldview layer configs into wv.json
+# "$PYTHON_SCRIPTS_DIR/mergeConfigWithWMTS.py" "$BUILD_DIR/_wmts" \
+#     "$DEST_DIR/config/wv.json"
 
-# Copy brand files from build to dest
-cp -r "$BUILD_DIR/brand" "$DEST_DIR"
-cp "$BUILD_DIR/brand.json" "$DEST_DIR"
+# # Copy brand files from build to dest
+# cp -r "$BUILD_DIR/brand" "$DEST_DIR"
+# cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
-# Validate the options build
-"$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
+# # Validate the options build
+# "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
 
-# Fetch preview images from WV Snapshots for any layers which they are missing
-"$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
-    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
+# # Fetch preview images from WV Snapshots for any layers which they are missing
+# "$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
+#     "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
 exit 0
