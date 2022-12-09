@@ -102,8 +102,16 @@
       "type": "symbol",
       "layout": {
         "text-field": [
-          "get",
-          "label"
+          "match",
+          [
+            "geometry-type"
+          ],
+          "Point",
+          [
+            "get",
+            "label"
+          ],
+          ""
         ],
         "text-font": [
           "Open Sans Bold",
@@ -129,7 +137,7 @@
               0
             ],
             0,
-            7
+            10
           ],
           1,
           [

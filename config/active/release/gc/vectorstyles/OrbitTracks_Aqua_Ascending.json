@@ -87,7 +87,23 @@
             3.5
           ],
           5,
-          5
+          [
+            "case",
+            [
+              "!=",
+              [
+                "%",
+                [
+                  "get",
+                  "minute"
+                ],
+                1
+              ],
+              0
+            ],
+            0,
+            5
+          ]
         ],
         "circle-color": "rgb(21, 192, 230)",
         "circle-opacity": 1
@@ -101,8 +117,16 @@
       "type": "symbol",
       "layout": {
         "text-field": [
-          "get",
-          "label"
+          "match",
+          [
+            "geometry-type"
+          ],
+          "Point",
+          [
+            "get",
+            "label"
+          ],
+          ""
         ],
         "text-font": [
           "Open Sans Bold",
