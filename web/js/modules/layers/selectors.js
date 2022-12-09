@@ -25,7 +25,15 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-export const getActiveCollections = ({ compare, layers }) => layers[compare.activeString].collections || {};
+export const getCollections = (layers, date, layer) => {
+  if (!layers.collections[layer.id]) return;
+  const dateCollection = layers.collections[layer.id].dates;
+  for (let i = 0; i < dateCollection.length; i += 1) {
+    if (dateCollection[i].date === date) {
+      return dateCollection[i];
+    }
+  }
+};
 
 /**
  * Return a list of layers for the currently active compare state

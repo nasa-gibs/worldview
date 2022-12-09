@@ -29,7 +29,9 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
-import { getActiveLayers, makeGetDescription, getActiveCollections } from '../../modules/layers/selectors';
+import {
+  getActiveLayers, makeGetDescription, getCollections,
+} from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 
@@ -48,6 +50,7 @@ function LayerRow (props) {
     compare,
     layer,
     compareState,
+    dateCollection,
     paletteLegends,
     getPalette,
     palette,
@@ -59,7 +62,6 @@ function LayerRow (props) {
     isEmbedModeActive,
     isLoading,
     isMobile,
-    layerCollection,
     zot,
     names,
     onRemoveClick,
@@ -329,6 +331,11 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
+  const testStyle = {
+    backgroundColor: 'blue',
+    color: 'white',
+  };
+
   const renderLayerRow = () => (
     <>
       {!isEmbedModeActive && (
@@ -359,7 +366,7 @@ function LayerRow (props) {
           </div>
           <h4 title={names.title}>{names.title}</h4>
           <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-          {layerCollection ? (<p>{layerCollection.version} {layerCollection.type}</p>) : ''}
+          {dateCollection ? (<p style={testStyle}>{dateCollection.version} {dateCollection.type}</p>) : ''}
           {hasPalette ? getPaletteLegend() : ''}
         </div>
         {isVectorLayer && isVisible ? renderVectorIcon() : null}
@@ -419,7 +426,7 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation,
+      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation, layers, date,
     } = state;
     const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
@@ -438,16 +445,17 @@ const makeMapStateToProps = () => {
     const tracksForLayer = getActiveLayers(state).filter(
       (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
     );
-    const collections = getActiveCollections(state);
-    const layerCollection = collections[layer.id];
+    const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
+    const convertedDate = activeDate.toISOString().split('T')[0];
+    const dateCollection = getCollections(layers, convertedDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
     return {
       compare,
+      dateCollection,
       tracksForLayer,
       measurementDescriptionPath,
       globalTemperatureUnit,
-      layerCollection,
       isCustomPalette,
       isDistractionFreeModeActive,
       isEmbedModeActive,
@@ -550,7 +558,7 @@ LayerRow.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
-  layerCollection: PropTypes.object,
+  dateCollection: PropTypes.object,
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,

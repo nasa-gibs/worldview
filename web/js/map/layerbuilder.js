@@ -14,7 +14,6 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-import lodashDebounce from 'lodash/debounce';
 
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
@@ -22,8 +21,8 @@ import granuleLayerBuilder from './granule/granule-layer-builder';
 import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import { updateLayerCollectionVersionType, updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
-import { getActiveCollections } from '../modules/layers/selectors';
+import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
+import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -88,38 +87,20 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const updateStore = lodashDebounce((id, activeString, version, type) => {
-    console.log('UPDATED STORE: ', id, version, type);
-    store.dispatch(updateLayerCollectionVersionType({
-      id,
-      activeString,
-      collection: {
-        version,
-        type,
-      },
-    }));
-  }, 500, { trailing: true });
-
-  const updateStoreForDateLayerCollection = lodashDebounce((id, activeString, version, type, date) => {
-    console.log('UPDATED STORE FOR DATE LAYER COLLECTION: ', id, version, type);
+  const updateStoreCollectionDates = (id, version, type, date) => {
     store.dispatch(updateLayerDateCollection({
       id,
-      activeString,
       date,
       collection: {
         version,
         type,
       },
     }));
-  }, 500, { trailing: true });
+  };
 
-  const updateStoreForLayerCollection = lodashDebounce((id, activeString) => {
-    console.log('UPDATED STORE LAYER COLLECTION: ', id);
-    store.dispatch(updateLayerCollection({
-      id,
-      activeString,
-    }));
-  }, 500, { trailing: true });
+  const updateStoreCollections = (id) => {
+    store.dispatch(updateLayerCollection({ id }));
+  };
 
   /**
    * We define our own tile loading function in order to capture custom header values
@@ -128,101 +109,29 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} src
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
-    const state = store.getState();
-    const { compare: { activeString } } = state;
-    const activeCollections = getActiveCollections(state);
-    const appDate = getSelectedDate(state);
-    const collection = activeCollections[layer.id];
+    const date = layerDate.toISOString().split('T')[0];
+    let actualId;
 
-    // Since we preload tiles for the past/future, this fn can be called for dates other than what's shown
-    // which, if we aren't careful could overwrite the version/type info in the store for this layer incorrectly.
-    // If the app date doesn't match the layer date, we don't update.
-    const compareDates = (a, b) => {
-      const aDate = a.toISOString().split('T')[0];
-      const bDate = b.toISOString().split('T')[0];
-      return aDate === bDate;
-    };
-
-    const convertDate = (date) => {
-      const convertedDate = date.toISOString().split('T')[0];
-      return convertedDate;
-    }
-
-    const setCollectionInfo = (headers) => {
-      try {
-        const actualId = headers.get('layer-identifier-actual');
-
-        // console.log(actualId)
-        if (!actualId || !compareDates(appDate, layerDate)) {
-          return;
-        }
-
+    const updateCollections = (headers) => {
+      actualId = headers.get('layer-identifier-actual');
+      if (!actualId) return;
+      const state = store.getState();
+      const { layers } = state;
+      const collectionCheck = getCollections(layers, date, layer);
+      // check if the collection & dates already exist for layer so we don't dispatch actions
+      if (!collectionCheck) {
+        updateStoreCollections(layer.id);
         const parts = actualId.split('_');
         const version = parts[parts.length - 2];
         const type = parts[parts.length - 1];
-        const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
-
-        if (hasChanged) {
-          // console.log("updating for app date ", appDate, " and layer date", layerDate);
-          updateStore(layer.id, activeString, version, type);
-        }
-
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    const setLayerCollection = (headers) => {
-      try {
-        const actualId = headers.get('layer-identifier-actual');
-        // ex: VIIRS_CrIS_SNPP_BT_Band33_Fussion_Day_v2_STD
-
-        if (!actualId) {
-          return;
-        }
-
-        const parts = actualId.split('_');
-
-        updateStoreForLayerCollection(layer.id, activeString);
-
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    const setDateCollectionInfo = (headers) => {
-      try {
-        const actualId = headers.get('layer-identifier-actual');
-        // ex: VIIRS_CrIS_SNPP_BT_Band33_Fussion_Day_v2_STD
-
-        if (!actualId) {
-          return;
-        }
-
-        const parts = actualId.split('_');
-        const version = parts[parts.length - 2];
-        const type = parts[parts.length - 1];
-        const hasChanged = (collection || {}).type !== type || (collection || {}).version !== version;
-
-        if (hasChanged) {
-          // console.log("updating for app date ", appDate, " and layer date", layerDate);
-          // check if dates have already been made in the layer collection here?!?!?!
-          const convertedDate = convertDate(layerDate);
-          updateStoreForDateLayerCollection(layer.id, activeString, version, type, convertedDate);
-        }
-
-      } catch (e) {
-        console.error(e);
+        updateStoreCollectionDates(layer.id, version, type, date);
       }
     };
 
     try {
       const response = await fetch(src);
       const data = await response.blob();
-      setCollectionInfo(response.headers);
-      setLayerCollection(response.headers);
-      // setDateCollectionInfo(response.headers);
-
+      updateCollections(response.headers);
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {

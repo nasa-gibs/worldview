@@ -20,7 +20,6 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
-  UPDATE_LAYER_COLLECTION_VERSION_TYPE,
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
 } from './constants';
@@ -44,8 +43,6 @@ const { GROUP_OVERLAYS } = safeLocalStorage.keys;
 const groupState = {
   groupOverlays: true,
   layers: [],
-  collections: {},
-  dateCollections: {},
   overlayGroups: [],
   prevLayers: [],
   granuleFootprints: {},
@@ -56,6 +53,7 @@ const groupState = {
 export const initialState = {
   active: { ...groupState },
   activeB: { ...groupState },
+  collections: {},
   layerConfig: {},
   startingLayers: [],
   granuleFootprints: {},
@@ -343,50 +341,32 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case UPDATE_LAYER_COLLECTION_VERSION_TYPE:
+    case UPDATE_LAYER_COLLECTION:
       return update(state, {
-        [compareState]: {
-          collections: {
+        collections: {
+          $merge: {
             [action.id]: {
-              $set: {
-                version: action.collection.version,
-                type: action.collection.type,
-              },
+              dates: [],
             },
           },
         },
-      });
 
-    case UPDATE_LAYER_COLLECTION:
-      return update(state, {
-        [action.activeString]: {
-          dateCollections: {
-            $merge:{
-              [action.id]: {
-                added: true
-              }
-            }
-
-
-          },
-        },
       });
 
     case UPDATE_LAYER_DATE_COLLECTION:
       return update(state, {
-        [compareState]: {
-          dateCollections: {
-            [action.id]: {
-              [action.date]: {
-              $set: {
+        collections: {
+          [action.id]: {
+            dates: {
+              $push: [{
                 version: action.collection.version,
                 type: action.collection.type,
                 date: action.date,
-              },
-            },
+              }],
             },
           },
         },
+
       });
 
     default:
