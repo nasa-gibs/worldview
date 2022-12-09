@@ -96,6 +96,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@webpack-cli/serve": "^1.7.0",
     "autoprefixer": "^10.4.12",
+    "axios": "^1.2.1",
     "babel-loader": "^8.1.0",
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
@@ -157,6 +158,7 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.11.1",
+    "xml-js": "^1.6.11",
     "yargs": "^17.6.2"
   },
   "dependencies": {
