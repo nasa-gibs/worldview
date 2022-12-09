@@ -52,17 +52,142 @@
           ]
         },
         "layergroup": {
-          "type": "string"
-        },
-        "product": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array"
-            }
+          "type": "string",
+          "enum": [
+            "Absolute Dynamic Topography",
+            "Aboveground Biomass",
+            "Aerosol Albedo",
+            "Aerosol Index",
+            "Aerosol Optical Depth",
+            "Aerosol Type",
+            "Albedo",
+            "Amphibian Richness",
+            "Areas of No Data (mask)",
+            "Blue Marble",
+            "Brightness Temperature",
+            "Canopy Characteristics",
+            "Carbon Dioxide",
+            "Carbon Monoxide",
+            "Chlorophyll A",
+            "Cirrus Reflectance",
+            "Clear Sky Confidence",
+            "Cloud Albedo",
+            "Cloud Effective Radius",
+            "Cloud Fraction",
+            "Cloud Liquid Water",
+            "Cloud Multi Layer Flag",
+            "Cloud Optical Thickness",
+            "Cloud Phase",
+            "Cloud Pressure",
+            "Cloud Top Height",
+            "Cloud Top Temperature",
+            "Cloud Water Path",
+            "Convective Rainwater Source",
+            "Corrected Reflectance",
+            "Cyclone Hazard",
+            "DHR Reflectance",
+            "Dams",
+            "Drought Hazard",
+            "Dust",
+            "Earth at Night",
+            "Evaporation",
+            "FPAR",
+            "Flood",
+            "Faraday Rotation",
+            "Granules",
+            "Precipitation Rate - Featured",
+            "Sea Surface Temperature - Featured",
+            "Fires and Thermal Anomalies",
+            "Flood Hazard",
+            "Forests, Mangrove",
+            "Freeze/Thaw",
+            "Frozen Area",
+            "Geostationary",
+            "Global Digital Elevation Map",
+            "Gross Primary Productivity",
+            "Heterotrophic Respiration",
+            "Human Built-up And Settlement Extent",
+            "Human Footprint",
+            "Ice Surface Temperature",
+            "Ice Velocity Antarctica",
+            "Ice Velocity Greenland",
+            "Impervious Surface",
+            "Isotropic Kernel Parameters",
+            "Land Cover",
+            "Land Surface Reflectance",
+            "Land Surface Temperature",
+            "Landslide Hazard",
+            "Latitude-Longitude Lines",
+            "Leaf Area Index",
+            "Lidar",
+            "Lightning",
+            "Liquid Water Equivalent",
+            "Mammal Richness",
+            "Methane",
+            "Net Ecosystem CO2 Exchange",
+            "Net Migration",
+            "Nitric Acid",
+            "Nitrogen Dioxide",
+            "Nitrous Oxide",
+            "Open Water Latent Energy Flux",
+            "Orbital Track",
+            "Outgoing Radiation",
+            "Ozone",
+            "Particulate Matter",
+            "Photosynthesis, Net",
+            "Photosynthetically Available Radiation",
+            "Population Density",
+            "Power Plants, Nuclear",
+            "Precipitation Estimate",
+            "Precipitation Rate",
+            "Radiance",
+            "Radiation",
+            "Reference",
+            "Reflectance",
+            "Relative Humidity",
+            "Reservoirs",
+            "Sea Ice Brightness Temperature",
+            "Sea Ice",
+            "Sea Surface Currents",
+            "Sea Surface Height Anomalies",
+            "Sea Surface Salinity",
+            "Sea Surface Temperature Anomalies",
+            "Sea Surface Temperature",
+            "Settlements",
+            "Sigma0",
+            "Snow Cover",
+            "Snow Depth",
+            "Snow Extent",
+            "Snow Mass",
+            "Snow Water Equivalent",
+            "Socioeconomic",
+            "Soil Moisture",
+            "Soil Temperature",
+            "Solar Induced Chlorophyll Fluorescence",
+            "Sulfur Dioxide",
+            "Surface Albedo",
+            "Surface Flux",
+            "Surface Pressure",
+            "TOA Albedo",
+            "TOA Flux",
+            "Terrain Elevation",
+            "Temperature",
+            "Urban Expansion",
+            "Urban Extents",
+            "Vectors",
+            "Vegetation Indices",
+            "Vegetation Light Use Efficiency",
+            "Volcano Hazard",
+            "Water Bodies",
+            "Water Vapor",
+            "Wind Speed"
           ]
+        },
+        "clickDisabledFeatures": {
+          "type": "array"
+        },
+        "modalShouldFollowClicks": {
+          "type": "boolean"
         },
         "palette": {
           "$ref": "#/definitions/palette"
@@ -75,22 +200,6 @@
         },
         "format": {
           "$ref": "#/definitions/format"
-        },
-        "tracks": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "daynight": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "day",
-              "night"
-            ]
-          }
         },
         "period": {
           "type": "string",
@@ -175,12 +284,12 @@
             }
           }
         },
-        "inactive": {
-          "type": "boolean",
-          "description": "TODO should be removed for vis metadata replacement!"
-        },
         "track": {
-          "description": "TODO should be removed for vis metadata replacement!",
+          "description": "An orbit track layer's orbit direction",
+          "type": "string"
+        },
+        "associatedLayers": {
+          "description": "ID of an associated layers (e.g. a corresponding granule layer)",
           "type": "string"
         },
         "layer": {
@@ -188,6 +297,9 @@
         },
         "disableSmartHandoff": {
           "type": "boolean"
+        },
+        "temporal": {
+          "type": "string"
         }
       },
       "allOf": [
@@ -213,7 +325,7 @@
           }
         },
         {
-          "description": "",
+          "description": "WMS layers require format property",
           "if": {
             "properties": {
               "type": {
@@ -238,7 +350,6 @@
         "wms",
         "wmts",
         "vector",
-        "variable",
         "granule"
       ]
     },

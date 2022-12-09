@@ -22,10 +22,11 @@ import {
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';
-import { getStampProps, svgToPng, getNumberOfSteps } from '../modules/animation/util';
+import { getStampProps, getNumberOfSteps } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 import { subdailyLayersActive } from '../modules/layers/selectors';
 import { formatDisplayDate } from '../modules/date/util';
+import { CRS } from '../modules/map/constants';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 const gifStream = new GifStream();
@@ -106,8 +107,8 @@ class GIF extends Component {
       map.ui.selected,
     );
     const { crs } = proj;
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const geolonlat1 = olProj.transform(lonlats[0], crs, CRS.GEOGRAPHIC);
+    const geolonlat2 = olProj.transform(lonlats[1], crs, CRS.GEOGRAPHIC);
     const resolution = imageUtilCalculateResolution(
       Math.round(map.ui.selected.getView().getZoom()),
       isGeoProjection,
@@ -193,11 +194,11 @@ class GIF extends Component {
           gifWidth: width,
           gifHeight: height,
           images: imageArray,
-          waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          waterMarkHeight: stamp.height,
-          waterMark: stampHeight > 20 ? stamp : null,
-          waterMarkWidth: stamp.width,
+          // waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+          // waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+          // waterMarkHeight: stamp.height,
+          // waterMark: stampHeight > 20 ? stamp : null,
+          // waterMarkWidth: stamp.width,
           fontSize: `${dateStamp.fontSize}px`,
           textXCoordinate: dateStamp.x,
           textYCoordinate: dateStamp.y, // date location based on Dimensions
@@ -221,6 +222,7 @@ class GIF extends Component {
         },
       );
     };
+
     const stampProps = getStampProps(
       stampWidthRatio,
       breakPointOne,
@@ -229,12 +231,13 @@ class GIF extends Component {
       width,
       height,
     );
-    const newImage = svgToPng(
-      'brand/images/wv-logo-w-shadow.svg',
-      stampProps.stampHeight,
-    );
 
-    build(newImage, stampProps.dateStamp, stampProps.stampHeight);
+    // const newImage = svgToPng(
+    //   'brand/images/wv-logo-w-shadow.svg',
+    //   stampProps.stampHeight,
+    // );
+
+    build(undefined, stampProps.dateStamp, stampProps.stampHeight);
     this.setState({ isDownloading: true });
   }
 
@@ -390,12 +393,12 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    browser, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
   const {
     customSelected, interval, customInterval, customDelta,
   } = date;

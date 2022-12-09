@@ -55,6 +55,7 @@ export const initialState = {
   layerConfig: {},
   startingLayers: [],
   granuleFootprints: {},
+  eventLayers: [],
 };
 
 export function getInitialState(config) {
@@ -137,6 +138,7 @@ export function layerReducer(state = initialState, action) {
           overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
+        eventLayers: action.eventLayers === undefined ? { $push: [] } : action.eventLayers.length ? { $set: action.eventLayers } : { $push: [] },
       });
 
     case TOGGLE_OVERLAY_GROUPS:

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Classifications">
+    <Entries>
+      <ColorMapEntry rgb="0,1,0" transparent="true" sourceValue="[-99]" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="245,245,255" transparent="false" sourceValue="[10]" ref="1"/>
+      <ColorMapEntry rgb="119,119,119" transparent="false" sourceValue="[20]" ref="2"/>
+      <ColorMapEntry rgb="225,225,255" transparent="false" sourceValue="[30]" ref="3"/>
+      <ColorMapEntry rgb="0,6,134" transparent="true" sourceValue="[40]" ref="4"/>
+      <ColorMapEntry rgb="0,0,1" transparent="true" sourceValue="[90]" ref="5"/>
+      <ColorMapEntry rgb="0,0,0" transparent="false" sourceValue="[91]" ref="6"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,1,0" tooltip="Fill Value" id="0"/>
+      <LegendEntry rgb="245,245,255" tooltip="Snow Covered Land" id="1"/>
+      <LegendEntry rgb="119,119,119" tooltip="Snow Free Land" id="2"/>
+      <LegendEntry rgb="225,225,255" tooltip="Sea Ice Cover" id="3"/>
+      <LegendEntry rgb="0,6,134" tooltip="Open Water" id="4"/>
+      <LegendEntry rgb="0,0,1" tooltip="Missing" id="5"/>
+      <LegendEntry rgb="0,0,0" tooltip="Pole Hole" id="6"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

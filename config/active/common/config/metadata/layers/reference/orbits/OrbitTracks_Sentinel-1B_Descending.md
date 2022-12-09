@@ -1,3 +1,5 @@
-The Sentinel-1B Orbital Track & Overpass Time (Ascending/Night) layer is the path of the Sentinel-1B satellite on its ascending/night-time orbit. Overpass times are shown in Coordinated Universal Time (UTC). 
+The Sentinel-1B Orbital Track & Overpass Time (Ascending/Night) layer is the path of the Sentinel-1B satellite on its ascending/night-time orbit. Overpass times are shown in Coordinated Universal Time (UTC).
+
+The Sentinel-1 mission is a constellation of two polar-orbiting satellites, Sentinel-1A and Sentinel-1B, which share the same orbital plane. They operate day and night performing C-band synthetic aperture radar imaging enabling them to acquire regardless of weather. The C-band synthetic aperture radar instrument has a right-looking active phased array antenna which operates in four acquisition modes: Strip Map, Interferometric Wide Swath, Extra-Wide Swath, and Wave Mode. This means that these orbit tracks reflect the path of the satellite and not the location of the data swaths; the data swaths are collected off nadir, to the right of the satellite. [Learn more about the Sentinel-1 instrument payload and acquisition modes](https://sentinel.esa.int/web/sentinel/missions/sentinel-1/instrument-payload).
 
 Orbital Track information from <https://www.space-track.org/>.

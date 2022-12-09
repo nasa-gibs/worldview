@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="[0,11)" value="[0,11)" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Biomes">
+    <Entries>
+      <ColorMapEntry rgb="168,0,0" transparent="false" sourceValue="[11]" value="[11]" ref="1"/>
+      <ColorMapEntry rgb="255,0,0" transparent="false" sourceValue="[12]" value="[12]" ref="2"/>
+      <ColorMapEntry rgb="0,112,255" transparent="false" sourceValue="[21]" value="[21]" ref="3"/>
+      <ColorMapEntry rgb="0,197,255" transparent="false" sourceValue="[22]" value="[22]" ref="4"/>
+      <ColorMapEntry rgb="0,255,197" transparent="false" sourceValue="[23]" value="[23]" ref="5"/>
+      <ColorMapEntry rgb="255,115,223" transparent="false" sourceValue="[24]" value="[24]" ref="6"/>
+      <ColorMapEntry rgb="169,0,230" transparent="false" sourceValue="[25]" value="[25]" ref="7"/>
+      <ColorMapEntry rgb="255,0,197" transparent="false" sourceValue="[26]" value="[26]" ref="8"/>
+      <ColorMapEntry rgb="112,168,0" transparent="false" sourceValue="[31]" value="[31]" ref="9"/>
+      <ColorMapEntry rgb="152,230,0" transparent="false" sourceValue="[32]" value="[32]" ref="10"/>
+      <ColorMapEntry rgb="230,230,0" transparent="false" sourceValue="[33]" value="[33]" ref="11"/>
+      <ColorMapEntry rgb="209,255,115" transparent="false" sourceValue="[34]" value="[34]" ref="12"/>
+      <ColorMapEntry rgb="255,255,115" transparent="false" sourceValue="[35]" value="[35]" ref="13"/>
+      <ColorMapEntry rgb="230,152,0" transparent="false" sourceValue="[41]" value="[41]" ref="14"/>
+      <ColorMapEntry rgb="255,211,127" transparent="false" sourceValue="[42]" value="[42]" ref="15"/>
+      <ColorMapEntry rgb="255,235,175" transparent="false" sourceValue="[43]" value="[43]" ref="16"/>
+      <ColorMapEntry rgb="46,209,111" transparent="false" sourceValue="[51]" value="[51]" ref="17"/>
+      <ColorMapEntry rgb="158,215,194" transparent="false" sourceValue="[52]" value="[52]" ref="18"/>
+      <ColorMapEntry rgb="205,255,205" transparent="false" sourceValue="[61]" value="[61]" ref="19"/>
+      <ColorMapEntry rgb="235,255,235" transparent="false" sourceValue="[62]" value="[62]" ref="20"/>
+      <ColorMapEntry rgb="225,225,225" transparent="false" sourceValue="[63]" value="[63]" ref="21"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="168,0,0" tooltip="Urban" id="1"/>
+      <LegendEntry rgb="255,0,0" tooltip="Dense settlements" id="2"/>
+      <LegendEntry rgb="0,112,255" tooltip="Rice villages" id="3"/>
+      <LegendEntry rgb="0,197,255" tooltip="Irrigated villages" id="4"/>
+      <LegendEntry rgb="0,255,197" tooltip="Cropped pastoral villages" id="5"/>
+      <LegendEntry rgb="255,115,223" tooltip="Pastoral villages" id="6"/>
+      <LegendEntry rgb="169,0,230" tooltip="Rainfed villages" id="7"/>
+      <LegendEntry rgb="255,0,197" tooltip="Rainfed mosaic villages" id="8"/>
+      <LegendEntry rgb="112,168,0" tooltip="Residential irrigated cropland" id="9"/>
+      <LegendEntry rgb="152,230,0" tooltip="Residential rainfed mosaic" id="10"/>
+      <LegendEntry rgb="230,230,0" tooltip="Populated irrigated cropland" id="11"/>
+      <LegendEntry rgb="209,255,115" tooltip="Populated rainfed cropland" id="12"/>
+      <LegendEntry rgb="255,255,115" tooltip="Remote cropland" id="13"/>
+      <LegendEntry rgb="230,152,0" tooltip="Residential rangeland" id="14"/>
+      <LegendEntry rgb="255,211,127" tooltip="Populated rangeland" id="15"/>
+      <LegendEntry rgb="255,235,175" tooltip="Remote rangeland" id="16"/>
+      <LegendEntry rgb="46,209,111" tooltip="Populated forest" id="17"/>
+      <LegendEntry rgb="158,215,194" tooltip="Remote forest" id="18"/>
+      <LegendEntry rgb="205,255,205" tooltip="Wild forest" id="19"/>
+      <LegendEntry rgb="235,255,235" tooltip="Sparse trees" id="20"/>
+      <LegendEntry rgb="225,225,225" tooltip="Barren" id="21"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

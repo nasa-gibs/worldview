@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Classifications">
+    <Entries>
+      <ColorMapEntry rgb="33,138,33" transparent="false" sourceValue="1" ref="0"/>
+      <ColorMapEntry rgb="49,204,49" transparent="false" sourceValue="2" ref="1"/>
+      <ColorMapEntry rgb="152,204,49" transparent="false" sourceValue="3" ref="2"/>
+      <ColorMapEntry rgb="150,250,150" transparent="false" sourceValue="4" ref="3"/>
+      <ColorMapEntry rgb="141,186,141" transparent="false" sourceValue="5" ref="4"/>
+      <ColorMapEntry rgb="186,141,141" transparent="false" sourceValue="6" ref="5"/>
+      <ColorMapEntry rgb="245,222,179" transparent="false" sourceValue="7" ref="6"/>
+      <ColorMapEntry rgb="218,235,157" transparent="false" sourceValue="8" ref="7"/>
+      <ColorMapEntry rgb="255,213,0" transparent="false" sourceValue="9" ref="8"/>
+      <ColorMapEntry rgb="240,185,103" transparent="false" sourceValue="10" ref="9"/>
+      <ColorMapEntry rgb="71,131,181" transparent="false" sourceValue="11" ref="10"/>
+      <ColorMapEntry rgb="250,239,115" transparent="false" sourceValue="12" ref="11"/>
+      <ColorMapEntry rgb="255,0,0" transparent="false" sourceValue="13" ref="12"/>
+      <ColorMapEntry rgb="153,147,86" transparent="false" sourceValue="14" ref="13"/>
+      <ColorMapEntry rgb="255,255,255" transparent="false" sourceValue="15" ref="14"/>
+      <ColorMapEntry rgb="191,191,189" transparent="false" sourceValue="16" ref="15"/>
+      <ColorMapEntry rgb="134,202,227" transparent="false" sourceValue="0,17" ref="16"/>
+      <ColorMapEntry rgb="100,100,100" transparent="false" sourceValue="255" ref="17"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="18"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="33,138,33" tooltip="Evergreen Needleleaf Forests" id="0"/>
+      <LegendEntry rgb="49,204,49" tooltip="Evergreen Broadleaf Forests" id="1"/>
+      <LegendEntry rgb="152,204,49" tooltip="Deciduous Needleleaf Forests" id="2"/>
+      <LegendEntry rgb="150,250,150" tooltip="Deciduous Broadleaf Forests" id="3"/>
+      <LegendEntry rgb="141,186,141" tooltip="Mixed Forests" id="4"/>
+      <LegendEntry rgb="186,141,141" tooltip="Closed Shrublands" id="5"/>
+      <LegendEntry rgb="245,222,179" tooltip="Open Shrublands" id="6"/>
+      <LegendEntry rgb="218,235,157" tooltip="Woody Savannas" id="7"/>
+      <LegendEntry rgb="255,213,0" tooltip="Savannas" id="8"/>
+      <LegendEntry rgb="240,185,103" tooltip="Grasslands" id="9"/>
+      <LegendEntry rgb="71,131,181" tooltip="Permanent Wetlands" id="10"/>
+      <LegendEntry rgb="250,239,115" tooltip="Croplands" id="11"/>
+      <LegendEntry rgb="255,0,0" tooltip="Urban and Built-up Lands" id="12"/>
+      <LegendEntry rgb="153,147,86" tooltip="Cropland/Natural Vegetation Mosaics" id="13"/>
+      <LegendEntry rgb="255,255,255" tooltip="Permanent Snow and Ice" id="14"/>
+      <LegendEntry rgb="191,191,189" tooltip="Barren" id="15"/>
+      <LegendEntry rgb="134,202,227" tooltip="Water Bodies" id="16"/>
+      <LegendEntry rgb="100,100,100" tooltip="Unclassified" id="17"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

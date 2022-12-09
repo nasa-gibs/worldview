@@ -12,6 +12,7 @@ import { transform } from 'ol/proj';
 import { Polygon as OlGeomPolygon } from 'ol/geom';
 import * as OlExtent from 'ol/extent';
 import util from '../../util/util';
+import { CRS } from '../../modules/map/constants';
 
 /**
  * Shift granules to hande dateline cross.  Granules are shifted if:
@@ -24,14 +25,12 @@ import util from '../../util/util';
  */
 export const datelineShiftGranules = (granules, currentDate, crs) => {
   const currentDayDate = new Date(currentDate).getUTCDate();
-  const datelineShiftNeeded = () => {
-    if (crs !== 'EPSG:4326') return false;
+  const datelineShiftNeeded = (() => {
+    if (crs !== CRS.GEOGRAPHIC) return false;
     const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
-    const someCross = granules.some(({ polygon }) => polygon.some(([lon]) => lon > 180 || lon < -180));
-    return someCross && !sameDays;
-  };
-
-  return !datelineShiftNeeded() ? granules : granules.map((granule) => {
+    return !sameDays;
+  })();
+  return !datelineShiftNeeded ? granules : granules.map((granule) => {
     const { date, polygon } = granule;
     const sameDay = currentDayDate === new Date(date).getUTCDate();
     const westSide = polygon.some(([lon]) => lon < 0);
@@ -81,78 +80,114 @@ export const getIndexForSortedInsert = (array, date) => {
  * @method isWithinDateRange
  * @static
  * @param {object} date - date object
- * @param {object} startDate - date object
- * @param {string} endDate - date object
+ * @param {string} startDate - date string
+ * @param {string} endDate - date string
  * @returns {boolean}
  */
-export const isWithinDateRange = (date, startDate, endDate) => (startDate && endDate
-  ? date.getTime() <= new Date(endDate).getTime() && date.getTime() >= new Date(startDate).getTime()
-  : false);
+export const isWithinDateRange = (date, startDate, endDate) => (
+  startDate && endDate
+    ? new Date(date).getTime() <= new Date(endDate).getTime()
+      && new Date(date).getTime() >= new Date(startDate).getTime()
+    : false
+);
 
 /**
+ * Determine if a granule polygon falls within the specified bounds of
+ * imagery for a given projection
  *
- * @param {*} layer
+ * @param {*} crs
+ * @param {*} granule
  * @returns
  */
+export const isWithinBounds = (crs, granule) => {
+  if (crs === CRS.GEOGRAPHIC || crs === CRS.WEB_MERCATOR) {
+    return granule.polygon.every(([lat, lon]) => lon > -65 && lon < 65);
+  }
+  if (crs === CRS.ANTARCTIC) {
+    return granule.polygon.every(([lat, lon]) => lon < -40);
+  }
+  if (crs === CRS.ARCTIC) {
+    return granule.polygon.every(([lat, lon]) => lon > 40);
+  }
+};
+
 export const getGranuleFootprints = (layer) => {
   const {
-    def, filteredGranules, granuleDates,
+    def, visibleGranules, granuleDates,
   } = layer.wv;
-  const { endDate, startDate, dateRanges } = def;
-
+  const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
 
-  // create geometry object with date:polygons key/value pair filtering out granules outside date range
-  return filteredGranules.reduce((dates, { date, polygon }) => {
+  return visibleGranules.reduce((dates, { date, polygon }) => {
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
-      // Only include granules that have imagery in this proj (determined by layer dateRanges)
-      const hasImagery = dateRanges.some(
-        ({ startDate: start, endDate: end }) => isWithinDateRange(granuleDate, start, end),
-      );
-      if (hasImagery) {
-        dates[date] = polygon;
-      }
+      dates[date] = polygon;
     }
     return dates;
   }, {});
 };
 
 /**
- * Get CMR query dates for building query string and child processes
- *
- * @method getCMRQueryDates
- * @static
+ * Get start/end dates for CMR granule query. We need a broader range
+ * for polar granules since only a few granules from each swath are
+ * visible at the poles
+ * .
+ * @param {string} crs
  * @param {object} selectedDate - date object
  * @returns {object}
     * @param {object} startQueryDate - date object
     * @param {object} endQueryDate - date object
   */
-export const getCMRQueryDates = (selectedDate) => {
-  // check if selectedDate is before or after 12 to determine date request range
+export const getCMRQueryDates = (crs, selectedDate) => {
   const date = new Date(selectedDate);
-  const isDateAfterNoon = date.getUTCHours() > 12;
+  if (crs === CRS.GEOGRAPHIC || crs === CRS.WEB_MERCATOR) {
+    return {
+      startQueryDate: util.dateAdd(date, 'hour', -12),
+      endQueryDate: util.dateAdd(date, 'hour', 4),
+    };
+  }
+  // Polar projections
+  return {
+    startQueryDate: util.dateAdd(date, 'hour', -48),
+    endQueryDate: util.dateAdd(date, 'hour', 4),
+  };
+};
 
-  const zeroedDate = util.clearTimeUTC(date);
+/**
+ * Get the URL parameters for a CMR request for granule browse
+ * @param {*} def - layer definition
+ * @param {*} date - "current" date from which to base the query
+ * @param {*} crs
+ * @returns
+ */
+export const getParamsForGranuleRequest = (def, date, crs) => {
+  const dayNightFilter = 'DAY';
+  const bboxForProj = {
+    [CRS.WEB_MERCATOR]: [-180, -65, 180, 65],
+    [CRS.GEOGRAPHIC]: [-180, -65, 180, 65],
+    [CRS.ANTARCTIC]: [-180, -90, 180, -65],
+    [CRS.ARCTIC]: [-180, 65, 180, 90],
+  };
+  const { startQueryDate, endQueryDate } = getCMRQueryDates(crs, date);
 
-  const dayBeforeDate = util.dateAdd(zeroedDate, 'day', -1);
-  const dayAfterDate = util.dateAdd(zeroedDate, 'day', 1);
-  const twoDayAfterDate = util.dateAdd(zeroedDate, 'day', 2);
-
-  const startQueryDate = dayBeforeDate;
-  let endQueryDate = isDateAfterNoon
-    ? twoDayAfterDate
-    : dayAfterDate;
-
-  // set current date if on leading edge of time coverage
-  endQueryDate = endQueryDate > new Date()
-    ? new Date()
-    : endQueryDate;
+  const getShortName = () => {
+    try {
+      let { shortName } = def.conceptIds[0];
+      [shortName] = shortName.split('_');
+      return shortName;
+    } catch (e) {
+      console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
+    }
+  };
 
   return {
-    startQueryDate,
-    endQueryDate,
+    shortName: getShortName(),
+    startDate: startQueryDate.toISOString(),
+    endDate: endQueryDate.toISOString(),
+    dayNight: dayNightFilter,
+    bbox: bboxForProj[crs],
+    pageSize: 500,
   };
 };
 
@@ -261,7 +296,7 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
  */
 export const transformGranuleData = (entry, date, crs) => {
   const line = new OlGeomLineString([]);
-  const maxDistance = crs === 'EPSG:4326' ? 270 : Number.POSITIVE_INFINITY;
+  const maxDistance = crs === CRS.GEOGRAPHIC ? 270 : Number.POSITIVE_INFINITY;
   const points = entry.polygons[0][0].split(' ');
   const dayNight = entry.day_night_flag;
   const polygonCoords = [];
@@ -291,7 +326,7 @@ export const transformGranuleData = (entry, date, crs) => {
 };
 
 export const transformGranulesForProj = (granules, crs) => granules.map((granule) => {
-  const transformedPolygon = granule.polygon.map((coords) => transform(coords, 'EPSG:4326', crs));
+  const transformedPolygon = granule.polygon.map((coords) => transform(coords, CRS.GEOGRAPHIC, crs));
   return {
     ...granule,
     polygon: transformedPolygon,
@@ -307,7 +342,9 @@ export const transformGranulesForProj = (granules, crs) => granules.map((granule
  *
  * @return {Boolean}
  */
-export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
+export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) => {
+  const polygon = new OlGeomPolygon([points]);
+
   const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
   // check is polygon footprint is within max extent, will allow partial corners within max extent
   const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
@@ -334,54 +371,69 @@ export const granuleFootprint = (map) => {
     useSpatialIndex: false,
   });
 
-  const getVectorLayer = (text) => new OlVectorLayer({
-    className: 'granule-map-footprint',
-    source: vectorSource,
-    style: [
-      new OlStyle({
-        fill: new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }),
-        stroke: new OlStyleStroke({
-          color: 'rgb(0, 123, 255, 0.65)',
-          width: 3,
+  const getVectorLayer = (text, showFill) => {
+    const fill = showFill ? new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }) : null;
+    return new OlVectorLayer({
+      className: 'granule-map-footprint',
+      source: vectorSource,
+      style: [
+        new OlStyle({
+          fill,
+          stroke: new OlStyleStroke({
+            color: 'rgb(0, 123, 255, 0.65)',
+            width: 3,
+          }),
+          text: new OlText({
+            textAlign: 'center',
+            text,
+            font: '18px monospace',
+            fill: new OlStyleFill({ color: 'white' }),
+            stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+            overflow: true,
+          }),
         }),
-        text: new OlText({
-          textAlign: 'center',
-          text,
-          font: '18px monospace',
-          fill: new OlStyleFill({ color: 'white' }),
-          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
-          overflow: true,
-        }),
-      }),
-    ],
-  });
+      ],
+    });
+  };
 
-  const drawFootprint = (granuleGeometry, date) => {
-    if (currentGranule[date]) {
-      return;
-    }
-    const clearGranule = () => {
-      currentGranule = {};
-      map.removeLayer(vectorLayer);
-      vectorSource.clear();
-    };
-    if (!currentGranule[date]) {
-      clearGranule();
-    }
-    if (!granuleGeometry || !date) {
-      clearGranule();
-      return;
-    }
-    currentGranule[date] = true;
-    const geometry = new OlGeomPolygon([granuleGeometry]);
+  const removeFootprint = () => {
+    currentGranule = {};
+    map.removeLayer(vectorLayer);
+    vectorSource.clear();
+  };
+
+  const drawFootprint = (points, date) => {
+    const geometry = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({ geometry });
+    const showFill = map.getView().getZoom() < 3;
+    const newVectorLayer = getVectorLayer(date, showFill);
     vectorSource.addFeature(featureFootprint);
-    const newVectorLayer = getVectorLayer(date);
     vectorLayer = newVectorLayer;
     map.addLayer(vectorLayer);
   };
 
+  const addFootprint = (points, date) => {
+    if (currentGranule[date]) {
+      return;
+    }
+    if (!points || !date) {
+      removeFootprint();
+      return;
+    }
+    if (!currentGranule[date]) {
+      removeFootprint();
+    }
+    currentGranule[date] = true;
+    drawFootprint(points, date);
+  };
+
+  const updateFootprint = (points, date) => {
+    removeFootprint();
+    drawFootprint(points, date);
+  };
+
   return {
-    drawFootprint,
+    addFootprint,
+    updateFootprint,
   };
 };

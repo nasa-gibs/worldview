@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Wild Areas Mapping">
+    <Entries>
+      <ColorMapEntry rgb="56,168,0" transparent="false" sourceValue="[1]" value="[1]" ref="1"/>
+      <ColorMapEntry rgb="44,162,95" transparent="false" sourceValue="[2]" value="[2]" ref="2"/>
+      <ColorMapEntry rgb="102,194,164" transparent="false" sourceValue="[3]" value="[3]" ref="3"/>
+      <ColorMapEntry rgb="173,221,142" transparent="false" sourceValue="[4]" value="[4]" ref="4"/>
+      <ColorMapEntry rgb="217,240,163" transparent="false" sourceValue="[5]" value="[5]" ref="5"/>
+      <ColorMapEntry rgb="255,255,204" transparent="false" sourceValue="[6]" value="[6]" ref="6"/>
+      <ColorMapEntry rgb="255,255,0" transparent="false" sourceValue="[7]" value="[7]" ref="7"/>
+      <ColorMapEntry rgb="255,237,111" transparent="false" sourceValue="[8]" value="[8]" ref="8"/>
+      <ColorMapEntry rgb="141,211,199" transparent="false" sourceValue="[9]" value="[9]" ref="9"/>
+      <ColorMapEntry rgb="204,235,197" transparent="false" sourceValue="[10]" value="[10]" ref="10"/>
+      <ColorMapEntry rgb="217,217,217" transparent="false" sourceValue="[11]" value="[11]" ref="11"/>
+      <ColorMapEntry rgb="251,128,114" transparent="false" sourceValue="[12]" value="[12]" ref="12"/>
+      <ColorMapEntry rgb="252,205,229" transparent="false" sourceValue="[13]" value="[13]" ref="13"/>
+      <ColorMapEntry rgb="188,128,189" transparent="false" sourceValue="[14]" value="[14]" ref="14"/>
+      <ColorMapEntry rgb="128,177,211" transparent="false" sourceValue="[98]" value="[98]" ref="15"/>
+      <ColorMapEntry rgb="255,255,255" transparent="false" sourceValue="[99]" value="[99]" ref="16"/>
+    </Entries>
+    <Legend type="classification" minLabel="Tropical and Subtropical Moist Broadleaf Forests" maxLabel="Rock and Ice">
+      <LegendEntry rgb="56,168,0" tooltip="Tropical and Subtropical Moist Broadleaf Forests" id="1"/>
+      <LegendEntry rgb="44,162,95" tooltip="Tropical and Subtropical Dry Broadleaf Forests" id="2"/>
+      <LegendEntry rgb="102,194,164" tooltip="Tropical and Subtropical Coniferous Forests" id="3"/>
+      <LegendEntry rgb="173,221,142" tooltip="Temperate Broadleaf and Mixed Forests" id="4"/>
+      <LegendEntry rgb="217,240,163" tooltip="Temperate Coniferous Forests" id="5"/>
+      <LegendEntry rgb="255,255,204" tooltip="Boreal Forests/Taiga" id="6"/>
+      <LegendEntry rgb="255,255,0" tooltip="Tropical and subtropical grasslands, savannas, and shrublands" id="7"/>
+      <LegendEntry rgb="255,237,111" tooltip="Temperate Grasslands, Savannas, and Shrublands" id="8"/>
+      <LegendEntry rgb="141,211,199" tooltip="Flooded Grasslands and Savannas" id="9"/>
+      <LegendEntry rgb="204,235,197" tooltip="Montane Grasslands and Shrublands" id="10"/>
+      <LegendEntry rgb="217,217,217" tooltip="Tundra" id="11"/>
+      <LegendEntry rgb="251,128,114" tooltip="Mediterranean Forests, Woodlands, and Scrub" id="12"/>
+      <LegendEntry rgb="252,205,229" tooltip="Deserts and Xeric Shrublands" id="13"/>
+      <LegendEntry rgb="188,128,189" tooltip="Mangroves" id="14"/>
+      <LegendEntry rgb="128,177,211" tooltip="Lakes" id="15"/>
+      <LegendEntry rgb="255,255,255" tooltip="Rock and Ice" id="16"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

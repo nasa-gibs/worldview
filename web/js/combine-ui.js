@@ -1,5 +1,13 @@
 import util from './util/util';
 import mapui from './map/ui';
+import {
+  REDUX_ACTION_DISPATCHED,
+  MAP_MOUSE_OUT,
+  MAP_MOVE_END,
+  MAP_MOUSE_MOVE,
+  MAP_SINGLE_CLICK,
+  MAP_CONTEXT_MENU,
+} from './util/constants';
 
 const { events } = util;
 
@@ -14,7 +22,7 @@ export default function combineUi(models, config, store) {
   const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
-    return events.trigger('redux:action-dispatched', action);
+    return events.trigger(REDUX_ACTION_DISPATCHED, action);
   };
   store.subscribe(subscribeToStore);
   ui.map = mapui(models, config, store, ui);
@@ -49,24 +57,22 @@ export default function combineUi(models, config, store) {
 function registerMapMouseHandlers(maps) {
   Object.values(maps).forEach((map) => {
     const element = map.getTargetElement();
-    const crs = map
-      .getView()
-      .getProjection()
-      .getCode();
-    element.addEventListener('mousemove', (event) => {
-      events.trigger('map:mousemove', event, map, crs);
+    const crs = map.getView().getProjection().getCode();
+
+    element.addEventListener('mouseleave', (event) => {
+      events.trigger(MAP_MOUSE_OUT, event);
     });
-    element.addEventListener('mouseout', (event) => {
-      events.trigger('map:mouseout', event, map, crs);
+    map.on('moveend', (event) => {
+      events.trigger(MAP_MOVE_END, event, map, crs);
+    });
+    map.on('pointermove', (event) => {
+      events.trigger(MAP_MOUSE_MOVE, event, map, crs);
     });
     map.on('singleclick', (event) => {
-      events.trigger('map:singleclick', event, map, crs);
+      events.trigger(MAP_SINGLE_CLICK, event, map, crs);
     });
     map.on('contextmenu', (event) => {
-      events.trigger('map:contextmenu', event, map, crs);
-    });
-    element.addEventListener('click', (event) => {
-      events.trigger('map:click', event, map, crs);
+      events.trigger(MAP_CONTEXT_MENU, event, map, crs);
     });
   });
 }

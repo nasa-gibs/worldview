@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 
-from concurrent.futures import ThreadPoolExecutor
 from optparse import OptionParser
 from collections import OrderedDict
 import os
 import sys
 import json
-import urllib3
-import urllib3.contrib.pyopenssl
 import xmltodict
-import traceback
-import certifi
+import httpx
+import asyncio
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -35,21 +32,19 @@ vectordata = {}
 colormaps_dir = os.path.join(output_dir, "colormaps")
 vectorstyles_dir = os.path.join(output_dir, "vectorstyles")
 vectordata_dir = os.path.join(output_dir, "vectordata")
-remote_count = 0
 error_count = 0
 warning_count = 0
-
-urllib3.contrib.pyopenssl.inject_into_urllib3()
-http = urllib3.PoolManager(
-    cert_reqs='CERT_REQUIRED',
-    ca_certs=certifi.where()
-)
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
+
+def handle_exception(e, link):
+    sys.stderr.write("\n %s:  WARN: Unable to fetch %s %s" % (prog, link, str(e)))
+    global warning_count
+    warning_count += 1
 
 def process_vector_data(layer):
     if "ows:Metadata" in layer and layer["ows:Metadata"] is not None:
@@ -65,8 +60,7 @@ def process_layer(layer):
     ident = layer["ows:Identifier"]
     if "ows:Metadata" in layer:
         if ident in config.get("skipPalettes", []):
-            sys.stderr.write("%s:    WARN: Skipping palette for %s\n" %
-                             prog, ident)
+            sys.stderr.write("%s: WARN: Skipping palette for %s\n" % prog, ident)
             global warning_count
             warning_count += 1
         elif layer["ows:Metadata"] is not None:
@@ -74,7 +68,6 @@ def process_layer(layer):
                 schema_version = item["@xlink:role"]
                 if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
                     colormap_link = item["@xlink:href"]
-                    #colormap_link = layer["ows:Metadata"]["@xlink:href"]
                     colormap_file = os.path.basename(colormap_link)
                     colormap_id = os.path.splitext(colormap_file)[0]
                     colormaps[colormap_id] = colormap_link
@@ -85,126 +78,70 @@ def process_layer(layer):
                     vector_style_id = os.path.splitext(vector_style_file)[0]
                     vectorstyles[vector_style_id] = vector_style_link
 
-def process_remote(entry):
-    url = entry["from"]
-    print("%s: %s" % (prog, url))
-    response = http.request('GET', url)
-    contents = response.data
-    output_file = os.path.join(output_dir, entry["to"])
-
-    # Write GetCapabilities responses to XML files
-    with open(output_file, "w", encoding="utf-8") as fp:
-        fp.write(contents.decode('utf-8'))
-    gc = xmltodict.parse(contents)
-
-    # Find all colormaps and vectorstyles in GetCapabilities responses and store them in memory
-    if gc["Capabilities"]["Contents"] is None:
-        print(('error: %s: no layers' % url))
-        return
-
+async def process_remote(client, entry):
     try:
-        if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
-            process_layer(gc["Capabilities"]["Contents"]["Layer"])
-            process_vector_data(gc["Capabilities"]["Contents"]["Layer"])
+        url = entry["from"]
+        print("%s: %s" % (prog, url))
+        response = await client.get(url)
+        contents = response.text
+        output_file = os.path.join(output_dir, entry["to"])
+
+        # Write GetCapabilities responses to XML files
+        with open(output_file, "w", encoding="utf-8") as fp:
+            fp.write(contents)
+        gc = xmltodict.parse(contents)
+
+        # Find all colormaps and vectorstyles in GetCapabilities responses and store them in memory
+        if gc["Capabilities"]["Contents"] is None:
+            print(('error: %s: no layers' % url))
+            return
+
+        layers = gc["Capabilities"]["Contents"]["Layer"]
+
+
+        if(type(layers) is OrderedDict):
+            process_layer(layers)
+            process_vector_data(layers)
         else:
-            for layer in gc["Capabilities"]["Contents"]["Layer"]:
-                process_layer(layer)
-                process_vector_data(layer)
+            [process_layer(layer) for layer in layers]
+            [process_vector_data(layer) for layer in layers]
 
     except Exception as e:
-        print(('error: %s: %s' % (url, str(e))))
-        print((str(traceback.format_exc())))
+        print(('ERROR: %s: %s' % (url, str(e))))
 
-# Fetch a single colormap and write to file
-def process_single_colormap(link):
+async def process_metadata(client, link, dir, ext):
     try:
-        response = http.request("GET", link)
-        contents = response.data
-        output_file = os.path.join(colormaps_dir, os.path.basename(link))
-        with open(output_file, "w", encoding='utf-8') as fp:
-            fp.write(contents.decode('utf-8'))
+        response = await client.get(link)
+        contents = response.text
+        if link.endswith(ext):
+            output_file = os.path.join(dir, os.path.basename(link))
+            with open(output_file, "w", encoding="utf-8") as fp:
+                fp.write(contents)
     except Exception as e:
-        sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
-            (prog, link, str(e)))
-        global warning_count
-        warning_count += 1
+        handle_exception(e, link)
 
-# Fetch every colormap from the API and write response to file system
-def process_colormaps():
-    print("%s: Fetching %d colormaps..." % (prog, len(colormaps)))
+async def gather_process(type, typeStr, client, dir, ext):
+    print("%s: Fetching %d %s" % (prog, len(type), typeStr))
     sys.stdout.flush()
-    if not os.path.exists(colormaps_dir):
-        os.makedirs(colormaps_dir)
-    with ThreadPoolExecutor() as executor:
-        for link in colormaps.values():
-            executor.submit(process_single_colormap, link)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    await asyncio.gather(*[process_metadata(client, link, dir, ext) for link in list(type.values())])
 
-# Fetch every vectorstyle from the API and write response to file system
-def process_vectorstyles():
-    print("%s: Fetching %d vectorstyles" % (prog, len(vectorstyles)))
-    sys.stdout.flush()
-    if not os.path.exists(vectorstyles_dir):
-        os.makedirs(vectorstyles_dir)
-    for link in list(vectorstyles.values()):
-        try:
-            response = http.request("GET", link)
-            contents = response.data
-            if link.endswith('.json'):
-                output_file = os.path.join(vectorstyles_dir, os.path.basename(link))
-            with open(output_file, "w", encoding="utf-8") as fp:
-                fp.write(contents.decode('utf-8'))
-        except Exception as e:
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
-                (prog, link, str(e)))
-            global warning_count
-            warning_count += 1
-
-# Fetch every vectordata from the API and write response to file system
-def process_vectordata():
-    print("%s: Fetching %d vectordata" % (prog, len(vectordata)))
-    sys.stdout.flush()
-    if not os.path.exists(vectordata_dir):
-        os.makedirs(vectordata_dir)
-    for link in list(vectordata.values()):
-        try:
-            response = http.request("GET", link)
-            contents = response.data
-            if link.endswith('.json'):
-                output_file = os.path.join(vectordata_dir, os.path.basename(link))
-            with open(output_file, "w", encoding="utf-8") as fp:
-                fp.write(contents.decode('utf-8'))
-        except Exception as e:
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
-                (prog, link, str(e)))
-            global warning_count
-            warning_count += 1
-
-futures = []
-tolerant = config.get("tolerant", False)
-if __name__ == "__main__":
+async def main():
     if "wv-options-fetch" in config:
-        with ThreadPoolExecutor() as executor:
-            for entry in config["wv-options-fetch"]:
-                futures.append(executor.submit(process_remote, entry))
-        for future in futures:
-            try:
-                remote_count += 1
-                future.result()
-            except Exception as e:
-                if tolerant:
-                    warning_count += 1
-                    sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
-                else:
-                    error_count += 1
-                    sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
-        if colormaps:
-            process_colormaps()
-        if vectorstyles:
-            process_vectorstyles()
-        if vectordata:
-            process_vectordata()
+        limits = httpx.Limits(max_keepalive_connections=10, max_connections=10)
+        async with httpx.AsyncClient(limits=limits, timeout=20.0) as client:
+            await asyncio.gather(*[process_remote(client, entry) for entry in config["wv-options-fetch"]])
+            if colormaps:
+                await gather_process(colormaps, 'colormaps', client, colormaps_dir, '.xml')
+            if vectorstyles:
+                await gather_process(vectorstyles, 'vectorstyles', client, vectorstyles_dir, '.json')
+            if vectordata:
+                await gather_process(vectordata, 'vectordata', client, vectordata_dir, '.json')
 
-print("%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count))
+asyncio.run(main())
+
+print("%s: %d error(s)" % (prog, error_count))
 
 if error_count > 0:
     sys.exit(1)

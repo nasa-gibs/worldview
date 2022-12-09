@@ -18,6 +18,15 @@
                         "Land_Mask",
                         "Land_Water_Map"
                     ]
+                },
+                "WDPA": {
+                    "id": "wdpa",
+                    "title": "WDPA",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "World_Database_on_Protected_Areas"
+                    ]
                 }
             }
         }

@@ -1,6 +1,5 @@
 .social-share {
   padding-top: 10px;
-  display: box;
   display: flexbox;
   display: flex;
   -ms-flex-pack: distribute;
@@ -92,11 +91,13 @@
     }
   }
 
-  a.share-embed-doc-link {
+  a.share-embed-doc-link,
+  #share-embed-doc-link {
     color: #7bf;
 
     &:hover {
       color: #7df;
+      text-decoration: underline;
     }
   }
 

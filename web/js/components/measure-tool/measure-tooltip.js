@@ -5,14 +5,17 @@ import {
   LineString as OlLineString,
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
+import { transform } from 'ol/proj';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import {
   getGeographicLibDistance,
   getGeographicLibArea,
 } from './util';
+import { CRS } from '../../modules/map/constants';
 
-const geographicProj = 'EPSG:4326';
+
 const metersPerKilometer = 1000;
 const ftPerMile = 5280;
 const sqFtPerSqMile = 27878400;
@@ -27,6 +30,7 @@ export default function MeasureTooltip(props) {
     unitOfMeasure,
     geometry,
     onRemove,
+    proj,
   } = props;
 
   const activeStaticClass = active
@@ -55,7 +59,7 @@ export default function MeasureTooltip(props) {
    * @return {String} - The formatted distance measurement
    */
   const getFormattedLength = () => {
-    const transformedLine = geometry.clone().transform(crs, geographicProj);
+    const transformedLine = geometry.clone().transform(crs, CRS.GEOGRAPHIC);
     const metricLength = getGeographicLibDistance(transformedLine);
     if (unitOfMeasure === 'km') {
       return metricLength > 100
@@ -74,7 +78,7 @@ export default function MeasureTooltip(props) {
    * @return {String} - The formatted area measurement
    */
   const getFormattedArea = () => {
-    const transformedPoly = geometry.clone().transform(crs, geographicProj);
+    const transformedPoly = geometry.clone().transform(crs, CRS.GEOGRAPHIC);
     const metricArea = getGeographicLibArea(transformedPoly);
     if (unitOfMeasure === 'km') {
       return metricArea > 10000
@@ -101,16 +105,34 @@ export default function MeasureTooltip(props) {
     }
   };
 
-  return (
-    <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
-      <span dangerouslySetInnerHTML={{ __html: getMeasurementValue() }} />
-      {!active && (
-        <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
-          <FontAwesomeIcon icon="times" fixedWidth />
-        </span>
-      )}
-    </div>
-  );
+  const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
+
+  const checkPolarCoordValidity = () => {
+    const coordinates = geometry.flatCoordinates;
+
+    // Distance & Area measurement coordinates are stored differently, so identify based on geometry type
+    const yCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
+    const xCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
+    const tCoord = transform([xCoord, yCoord], crs, CRS.GEOGRAPHIC);
+    return areCoordinatesWithinExtent(proj, tCoord);
+  };
+
+  const tooltipValue = getMeasurementValue();
+  const coordinatesAreValid = crs === CRS.GEOGRAPHIC ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
+
+  if (coordinatesAreValid) {
+    return (
+      <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
+        <span dangerouslySetInnerHTML={{ __html: tooltipValue }} />
+        {!active && (
+          <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
+            <FontAwesomeIcon icon="times" fixedWidth />
+          </span>
+        )}
+      </div>
+    );
+  }
+  return null;
 }
 
 MeasureTooltip.defaultProps = {
@@ -122,4 +144,5 @@ MeasureTooltip.propTypes = {
   geometry: PropTypes.object,
   onRemove: PropTypes.func,
   unitOfMeasure: PropTypes.string,
+  proj: PropTypes.object,
 };

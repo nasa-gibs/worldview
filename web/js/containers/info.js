@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import {
   openCustomContent,
+  toggleAboutModal,
 } from '../modules/modal/actions';
 import toggleDistractionFreeModeAction from '../modules/ui/actions';
-import AboutPage from '../components/about/about-page';
+import AboutModal from '../components/about/about';
 import IconList from '../components/util/icon-list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
@@ -23,6 +24,7 @@ import GlobalSettings from '../components/global-settings/global-settings';
 function InfoList (props) {
   const {
     sendFeedback,
+    feedbackEnabled,
     feedbackIsInitiated,
     globalSettingsClick,
     aboutClick,
@@ -31,6 +33,7 @@ function InfoList (props) {
     isDistractionFreeModeActive,
     isTourActive,
     isMobile,
+    openAboutModal,
     toggleDistractionFreeMode,
     notifications,
     notificationClick,
@@ -94,14 +97,16 @@ function InfoList (props) {
           sendFeedback(feedbackIsInitiated, isMobile);
         },
       };
+
+    const feedbackEntry = {
+      text: 'Send feedback',
+      iconClass: 'ui-icon',
+      iconName: 'envelope',
+      id: 'send_feedback_info_item',
+      ...feedbackAction,
+    };
+
     const arr = [
-      {
-        text: 'Send feedback',
-        iconClass: 'ui-icon',
-        iconName: 'envelope',
-        id: 'send_feedback_info_item',
-        ...feedbackAction,
-      },
       {
         text: 'Settings',
         iconClass: 'ui-icon',
@@ -118,6 +123,7 @@ function InfoList (props) {
         id: 'about_info_item',
         onClick: () => {
           aboutClick();
+          openAboutModal();
         },
       },
       {
@@ -128,6 +134,10 @@ function InfoList (props) {
         href: 'https://github.com/nasa-gibs/worldview',
       },
     ];
+
+    if (feedbackEnabled) {
+      arr.push(feedbackEntry);
+    }
 
     // limit explore for larger device displays
     if (window.innerWidth >= 740
@@ -156,18 +166,20 @@ function InfoList (props) {
 
 function mapStateToProps(state) {
   const {
-    ui, feedback, tour, notifications, config, models, browser,
+    ui, feedback, tour, notifications, config, models, screenSize,
   } = state;
   const { isDistractionFreeModeActive } = ui;
+  const { features: { feedback: feedbackEnabled } } = config;
 
   return {
+    feedbackEnabled,
     feedbackIsInitiated: feedback.isInitiated,
     isDistractionFreeModeActive,
     isTourActive: tour.active,
     notifications,
     config,
     models,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -216,13 +228,17 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   aboutClick: () => {
-    // Create new functionality here that renders the about page
-    // inside a modal window.
+    dispatch(toggleAboutModal(true));
+  },
+  openAboutModal: () => {
     dispatch(
       openCustomContent('ABOUT_MODAL', {
         headerText: 'About',
-        bodyComponent: AboutPage,
+        bodyComponent: AboutModal,
         wrapClassName: 'about-page-modal',
+        onClose: () => {
+          dispatch(toggleAboutModal(false));
+        },
       }),
     );
   },
@@ -237,12 +253,14 @@ InfoList.propTypes = {
   aboutClick: PropTypes.func,
   globalSettingsClick: PropTypes.func,
   config: PropTypes.object,
+  feedbackEnabled: PropTypes.bool,
   feedbackIsInitiated: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
+  openAboutModal: PropTypes.func,
   sendFeedback: PropTypes.func,
   startTour: PropTypes.func,
   toggleDistractionFreeMode: PropTypes.func,

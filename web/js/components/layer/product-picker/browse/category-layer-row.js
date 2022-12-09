@@ -244,11 +244,11 @@ CategoryLayerRow.propTypes = {
 const mapStateToProps = (state) => {
   const {
     config,
-    browser,
     proj,
     productPicker,
+    screenSize,
   } = state;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const {
     selectedMeasurement,
     selectedMeasurementSourceIndex,

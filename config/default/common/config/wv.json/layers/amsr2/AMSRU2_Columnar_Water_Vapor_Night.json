@@ -2,19 +2,10 @@
   "layers": {
     "AMSRU2_Columnar_Water_Vapor_Night": {
       "id": "AMSRU2_Columnar_Water_Vapor_Night",
-      "title": "Columnar Water Vapor (Night)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Columnar_Water_Vapor_Night",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Water Vapor",
-      "product": "AU_Rain_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Water Vapor"
     }
   }
 }

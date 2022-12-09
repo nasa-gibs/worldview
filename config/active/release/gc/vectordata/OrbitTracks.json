@@ -1,0 +1,91 @@
+{
+  "id": "Orbit_Tracks",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "label",
+      "Title"      : "Time",
+      "Description": "A default label containing the orbit track element’s time of day (24hr:mi) with optional day offset (e.g. ‘01:28 (+1)’).",
+      "DataType"   : "string",
+      "Units"      : "UTC",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "datetime",
+      "Title"      : "Date & Time",
+      "Description": "The full date and time of the orbit track element (e.g. ‘2019/09/12 18:58:00+00’).",
+      "DataType"   : "datetime",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "day_night",
+      "Title"      : "Day/Night Flag",
+      "Description": "Indicates whether the satellite was retrieving data in a 'Day', 'Night', or 'Both' (Transitional) state.  For non-sun synchronous orbits, a value of 'N/A' is provided.",
+      "DataType"   : "string",
+      "ValueList": [ "Day", "Night", "Both", "N/A" ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "direction",
+      "Title"      : "Direction of Travel",
+      "Description": "Indicates whether the satellite is ascending, descending, or transitioning between directions.",
+      "DataType"   : "string",
+      "ValueList": [ "Ascending", "Descending", "Transitional" ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "id",
+      "Title"      : "Identifier",
+      "Description": "A unique identifier for the orbit track element.",
+      "DataType"   : "string",
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "hour",
+      "Title"      : "Hour",
+      "Description": "Integer value for the hour component of the Datetime attribute.",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": 0, "Max": 23 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "minute",
+      "Title"      : "Minute",
+      "Description": "Integer value for the minute component of the Datetime attribute.",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": 0, "Max": 59 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "day_offset",
+      "Title"      : "Day Offset",
+      "Description": "Indicates whether the orbit track element represents a datetime that is before ('-1'), equal to ('0'), or after ('+1') the requested data day.",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": -1, "Max": 1 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

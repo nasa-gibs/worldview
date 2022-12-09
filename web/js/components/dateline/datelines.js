@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import Line from './line';
 import util from '../../util/util';
 import { getSelectedDate } from '../../modules/date/selectors';
+import { CRS } from '../../modules/map/constants';
 
 function DateLines(props) {
   const {
-    map, proj, date, isCompareActive, mapIsRendered, alwaysShow,
+    map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
   if (!mapIsRendered) return null;
@@ -53,14 +54,22 @@ function DateLines(props) {
   };
 
   useEffect(() => {
+    if (!proj.selected.crs === CRS.GEOGRAPHIC) {
+      setHideLines(true);
+    }
+  }, [proj]);
+
+  useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
       return;
     }
-    map.on('movestart', () => { setHideLines(true); });
+    map.on('movestart', () => {
+      setHideLines(true);
+    });
     map.on('moveend', updatePosition);
     return () => {
-      map.off('movestart', updatePosition);
-      map.off('moveend', updatePosition);
+      map.un('movestart', updatePosition);
+      map.un('moveend', updatePosition);
     };
   }, [mapIsRendered]);
 
@@ -71,6 +80,7 @@ function DateLines(props) {
       <Line
         id="dateline-left"
         map={map}
+        hideText={hideText}
         alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
         height={hideLines ? 0 : height}
@@ -79,10 +89,13 @@ function DateLines(props) {
         date={date}
         textCoords={textCoords}
         setTextCoords={setTextCoords}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
       />
       <Line
         id="dateline-right"
         map={map}
+        hideText={hideText}
         alwaysShow={alwaysShow}
         isCompareActive={isCompareActive}
         height={hideLines ? 0 : height}
@@ -91,6 +104,8 @@ function DateLines(props) {
         date={util.dateAdd(date, 'day', -1)}
         textCoords={textCoords}
         setTextCoords={setTextCoords}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
       />
     </>
   );
@@ -98,15 +113,21 @@ function DateLines(props) {
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, compare, settings,
+    proj, map, compare, settings, modal,
   } = state;
+  const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
+  const isGeographic = proj.selected.crs === CRS.GEOGRAPHIC;
+  const { isMobilePhone, isMobileTablet } = state.screenSize;
   return {
     proj,
     map: map.ui.selected,
     date: getSelectedDate(state),
     isCompareActive: compare.active,
     mapIsRendered: map.rendered,
-    alwaysShow: settings.alwaysShowDatelines,
+    hideText: isImageDownload || !isGeographic,
+    alwaysShow: isImageDownload || settings.alwaysShowDatelines,
+    isMobilePhone,
+    isMobileTablet,
   };
 };
 
@@ -117,6 +138,9 @@ DateLines.propTypes = {
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,
+  hideText: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
 };
 
 export default connect(

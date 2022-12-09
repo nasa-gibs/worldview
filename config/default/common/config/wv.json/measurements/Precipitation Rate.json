@@ -20,6 +20,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
+                        "GMI_Precipitation_Rate_Asc",
+                        "GMI_Precipitation_Rate_Dsc",
                         "GMI_Rain_Rate_Asc",
                         "GMI_Rain_Rate_Dsc",
                         "GMI_Snow_Rate_Asc",
@@ -159,8 +161,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "NLDAS_Surface_Total_Precipitation_Primary_Monthly",
-                        "NLDAS_Surface_Total_Precipitation_Secondary_Monthly"
+                        "NLDAS_Surface_Total_Precipitation_Primary_Monthly"
                     ]
                 },
                 "Merged Microwave Radiometers": {
@@ -175,7 +176,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/Precipitation",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Precipitation_Bias_Corrected_Monthly",

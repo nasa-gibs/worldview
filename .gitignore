@@ -30,17 +30,16 @@ e2e/reports
 # Config
 /config/*
 !/config/default
+!/config/active
 config/default/release/gc
 config/default/release/layer-metadata
-!/config/active
-config/active/release/gc
-config/active/release/layer-metadata
 # Jest
 /coverage
+/tasks/temp
 
-.idea
+/.cache/
+/.config/
+/.local/
+/.npm/
+/.idea
 .bash_history
-.cache/
-.config/
-.local/
-.npm/

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="[0,1)" value="[0,1)" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="1"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Species" id="0"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Mammal All Threats">
+    <Entries>
+      <ColorMapEntry rgb="179,255,179" transparent="false" sourceValue="[1]" value="[1]" ref="2"/>
+      <ColorMapEntry rgb="173,251,173" transparent="false" sourceValue="[2]" value="[2]" ref="3"/>
+      <ColorMapEntry rgb="167,247,167" transparent="false" sourceValue="[3]" value="[3]" ref="4"/>
+      <ColorMapEntry rgb="162,243,162" transparent="false" sourceValue="[4]" value="[4]" ref="5"/>
+      <ColorMapEntry rgb="156,239,156" transparent="false" sourceValue="[5]" value="[5]" ref="6"/>
+      <ColorMapEntry rgb="151,235,151" transparent="false" sourceValue="[6]" value="[6]" ref="7"/>
+      <ColorMapEntry rgb="145,231,145" transparent="false" sourceValue="[7]" value="[7]" ref="8"/>
+      <ColorMapEntry rgb="139,227,139" transparent="false" sourceValue="[8]" value="[8]" ref="9"/>
+      <ColorMapEntry rgb="134,223,134" transparent="false" sourceValue="[9]" value="[9]" ref="10"/>
+      <ColorMapEntry rgb="128,219,128" transparent="false" sourceValue="[10]" value="[10]" ref="11"/>
+      <ColorMapEntry rgb="123,215,123" transparent="false" sourceValue="[11]" value="[11]" ref="12"/>
+      <ColorMapEntry rgb="117,211,117" transparent="false" sourceValue="[12]" value="[12]" ref="13"/>
+      <ColorMapEntry rgb="111,207,111" transparent="false" sourceValue="[13]" value="[13]" ref="14"/>
+      <ColorMapEntry rgb="106,203,106" transparent="false" sourceValue="[14]" value="[14]" ref="15"/>
+      <ColorMapEntry rgb="100,199,100" transparent="false" sourceValue="[15]" value="[15]" ref="16"/>
+      <ColorMapEntry rgb="95,195,95" transparent="false" sourceValue="[16]" value="[16]" ref="17"/>
+      <ColorMapEntry rgb="89,191,89" transparent="false" sourceValue="[17]" value="[17]" ref="18"/>
+      <ColorMapEntry rgb="83,187,83" transparent="false" sourceValue="[18]" value="[18]" ref="19"/>
+      <ColorMapEntry rgb="78,183,78" transparent="false" sourceValue="[19]" value="[19]" ref="20"/>
+      <ColorMapEntry rgb="72,179,72" transparent="false" sourceValue="[20]" value="[20]" ref="21"/>
+      <ColorMapEntry rgb="67,175,67" transparent="false" sourceValue="[21]" value="[21]" ref="22"/>
+      <ColorMapEntry rgb="61,171,61" transparent="false" sourceValue="[22]" value="[22]" ref="23"/>
+      <ColorMapEntry rgb="55,167,55" transparent="false" sourceValue="[23]" value="[23]" ref="24"/>
+      <ColorMapEntry rgb="50,163,50" transparent="false" sourceValue="[24]" value="[24]" ref="25"/>
+      <ColorMapEntry rgb="44,159,44" transparent="false" sourceValue="[25]" value="[25]" ref="26"/>
+      <ColorMapEntry rgb="39,155,39" transparent="false" sourceValue="[26]" value="[26]" ref="27"/>
+      <ColorMapEntry rgb="33,151,33" transparent="false" sourceValue="[27]" value="[27]" ref="28"/>
+      <ColorMapEntry rgb="27,147,27" transparent="false" sourceValue="[28]" value="[28]" ref="29"/>
+      <ColorMapEntry rgb="22,143,22" transparent="false" sourceValue="[29]" value="[29]" ref="30"/>
+      <ColorMapEntry rgb="16,139,16" transparent="false" sourceValue="[30]" value="[30]" ref="31"/>
+      <ColorMapEntry rgb="11,135,11" transparent="false" sourceValue="[31]" value="[31]" ref="32"/>
+      <ColorMapEntry rgb="5,131,5" transparent="false" sourceValue="[32]" value="[32]" ref="33"/>
+      <ColorMapEntry rgb="0,128,0" transparent="false" sourceValue="[33]" value="[33]" ref="34"/>
+    </Entries>
+    <Legend type="discrete" minLabel="1" maxLabel="33">
+      <LegendEntry rgb="179,255,179" tooltip="1" id="2"/>
+      <LegendEntry rgb="173,251,173" tooltip="2" id="3"/>
+      <LegendEntry rgb="167,247,167" tooltip="3" id="4"/>
+      <LegendEntry rgb="162,243,162" tooltip="4" showTick="true" id="5"/>
+      <LegendEntry rgb="156,239,156" tooltip="5" id="6"/>
+      <LegendEntry rgb="151,235,151" tooltip="6" id="7"/>
+      <LegendEntry rgb="145,231,145" tooltip="7" id="8"/>
+      <LegendEntry rgb="139,227,139" tooltip="8" showTick="true" showLabel="true" label="8" id="9"/>
+      <LegendEntry rgb="134,223,134" tooltip="9" id="10"/>
+      <LegendEntry rgb="128,219,128" tooltip="10" id="11"/>
+      <LegendEntry rgb="123,215,123" tooltip="11" id="12"/>
+      <LegendEntry rgb="117,211,117" tooltip="12" showTick="true" id="13"/>
+      <LegendEntry rgb="111,207,111" tooltip="13" id="14"/>
+      <LegendEntry rgb="106,203,106" tooltip="14" id="15"/>
+      <LegendEntry rgb="100,199,100" tooltip="15" id="16"/>
+      <LegendEntry rgb="95,195,95" tooltip="16" showTick="true" showLabel="true" label="16" id="17"/>
+      <LegendEntry rgb="89,191,89" tooltip="17" id="18"/>
+      <LegendEntry rgb="83,187,83" tooltip="18" id="19"/>
+      <LegendEntry rgb="78,183,78" tooltip="19" id="20"/>
+      <LegendEntry rgb="72,179,72" tooltip="20" showTick="true" id="21"/>
+      <LegendEntry rgb="67,175,67" tooltip="21" id="22"/>
+      <LegendEntry rgb="61,171,61" tooltip="22" id="23"/>
+      <LegendEntry rgb="55,167,55" tooltip="23" id="24"/>
+      <LegendEntry rgb="50,163,50" tooltip="24" showTick="true" showLabel="true" label="24" id="25"/>
+      <LegendEntry rgb="44,159,44" tooltip="25" id="26"/>
+      <LegendEntry rgb="39,155,39" tooltip="26" id="27"/>
+      <LegendEntry rgb="33,151,33" tooltip="27" id="28"/>
+      <LegendEntry rgb="27,147,27" tooltip="28" showTick="true" id="29"/>
+      <LegendEntry rgb="22,143,22" tooltip="29" id="30"/>
+      <LegendEntry rgb="16,139,16" tooltip="30" id="31"/>
+      <LegendEntry rgb="11,135,11" tooltip="31" id="32"/>
+      <LegendEntry rgb="5,131,5" tooltip="32" id="33"/>
+      <LegendEntry rgb="0,128,0" tooltip="33" id="34"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

@@ -85,15 +85,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { compare } = state;
+  const { compare, screenSize } = state;
   const { isCompareA, active } = compare;
   const { dateA, dateB } = getCompareDates(state);
+  const isMobile = screenSize.isMobileDevice;
 
   return {
     isCompareA,
     dateA,
     dateB,
     isActive: active,
+    isMobile,
   };
 };
 

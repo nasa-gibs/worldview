@@ -10,7 +10,7 @@ const TIME_LIMIT = 5000;
 module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
 
   // verify mobile info toolbar is visible and contains valid mobile menu items

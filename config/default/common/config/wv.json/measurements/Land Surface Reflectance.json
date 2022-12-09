@@ -69,8 +69,8 @@
                     ]
                 },
                 "HLS-Landsat8": {
-                    "id": "HLS: Landsat 8",
-                    "title": "HLS: Landsat 8/OLI",
+                    "id": "HLS: Landsat 8 & 9",
+                    "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "multi-mission/hls/Reflectance",
                     "image": "",
                     "settings": [

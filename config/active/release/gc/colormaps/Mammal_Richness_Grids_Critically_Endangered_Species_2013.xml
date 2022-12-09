@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="[0,1)" value="[0,1)" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="1"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Species" id="0"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Mammal Critically Endangered Species">
+    <Entries>
+      <ColorMapEntry rgb="179,255,179" transparent="false" sourceValue="[1]" value="[1]" ref="2"/>
+      <ColorMapEntry rgb="89,191,89" transparent="false" sourceValue="[2]" value="[2]" ref="3"/>
+      <ColorMapEntry rgb="0,128,0" transparent="false" sourceValue="[3]" value="[3]" ref="4"/>
+    </Entries>
+    <Legend type="discrete" minLabel="1" maxLabel="3">
+      <LegendEntry rgb="179,255,179" tooltip="1" showTick="true" showLabel="true" label="1" id="2"/>
+      <LegendEntry rgb="89,191,89" tooltip="2" showTick="true" showLabel="true" label="2" id="3"/>
+      <LegendEntry rgb="0,128,0" tooltip="3" showTick="true" showLabel="true" label="3" id="4"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

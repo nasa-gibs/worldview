@@ -13,7 +13,7 @@ const trackMarker = '.track-marker';
 module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
   'Events populated in sidebar': (c) => {
     c.url(c.globals.url + localQueryStrings.mockEvents);

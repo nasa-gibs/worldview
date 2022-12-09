@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
 import util from '../../util/util';
+import { JOYRIDE_INCREMENT } from '../../util/constants';
 
 const { events } = util;
 const placeholderElements = [];
@@ -69,9 +70,9 @@ export default function JoyrideWrapper ({
     const incrementStep = () => {
       if (run && eventTriggersIncrement) setStepIndex(stepIndex + 1);
     };
-    events.on('joyride:increment', incrementStep);
+    events.on(JOYRIDE_INCREMENT, incrementStep);
     return () => {
-      events.off('joyride:increment', incrementStep);
+      events.off(JOYRIDE_INCREMENT, incrementStep);
     };
   });
 

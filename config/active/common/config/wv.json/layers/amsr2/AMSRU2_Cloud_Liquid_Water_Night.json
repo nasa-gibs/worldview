@@ -2,19 +2,10 @@
   "layers": {
     "AMSRU2_Cloud_Liquid_Water_Night": {
       "id": "AMSRU2_Cloud_Liquid_Water_Night",
-      "title": "Columnar Cloud Liquid Water (Night)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Cloud_Liquid_Water_Night",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Cloud Liquid Water",
-      "product": "",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Cloud Liquid Water"
     }
   }
 }

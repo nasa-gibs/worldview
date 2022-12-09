@@ -22,8 +22,12 @@
         rel="noopener noreferrer"><img src="images/gibs.png"></a>
     <div class="caption gibs-caption">Powered by GIBS</div>
 </div>
-<p>SOTO by Worldview uses the <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener noreferrer">Global
-        Imagery Browse Services</a> to rapidly retrieve its imagery for an interactive browsing experience.</p>
+<p>@OFFICIAL_NAME@ uses the <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener noreferrer">Global
+        Imagery Browse Services</a> to rapidly retrieve its imagery for an interactive browsing experience. While
+    @OFFICIAL_NAME@ uses <a href="https://openlayers.org" target="_blank" rel="noopener noreferrer">OpenLayers</a> as its
+    mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind, and several other
+    clients. We encourage interested developers to build their own clients or integrate NASA imagery into their
+    existing ones using these services.</p>
 <p><a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently
         Asked Questions</a></p>
 <hr>

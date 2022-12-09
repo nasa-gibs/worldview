@@ -6,14 +6,20 @@ import * as olProj from 'ol/proj';
 import {
   getDefaultEventDate,
   validateGeometryCoords,
+  toEventDateString,
 } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
 import {
+  addLayer as addLayerAction,
+  removeGroup as removeGroupAction,
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
+  toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { CRS } from '../../modules/map/constants';
 
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
@@ -25,6 +31,20 @@ const zoomLevelReference = {
   Volcanoes: 6,
 };
 
+/* For Wildfires that didn't happen today, move the timeline forward a day
+* to improve the chance that the fire is visible.
+* NOTE: If the fire happened yesterday and the imagery isn't yet available
+* for today, this may not help.
+*/
+const getUseDate = (event, date) => {
+  const today = toEventDateString(util.now());
+  const yesterday = toEventDateString(util.yesterday());
+  const recentDate = date === today || date === yesterday;
+  const isWildfireEvent = event.categories[0].title === 'Wildfires';
+  const parsedDate = util.parseDateUTC(date);
+  return isWildfireEvent && !recentDate ? util.dateAdd(parsedDate, 'day', 1) : parsedDate;
+};
+
 class NaturalEvents extends React.Component {
   constructor(props) {
     super(props);
@@ -33,6 +53,28 @@ class NaturalEvents extends React.Component {
       prevSelectedEvent: {},
     };
     this.selectEvent = this.selectEvent.bind(this);
+  }
+
+  componentDidMount() {
+    const {
+      toggleVisibility, toggleGroupVisibility, layers, selectedEvent, addLayer, defaultEventLayer,
+    } = this.props;
+    const defaultLayerPresent = layers.some((layer) => layer.id === defaultEventLayer);
+    if (!defaultLayerPresent) {
+      addLayer(defaultEventLayer);
+    } else if (defaultLayerPresent && !selectedEvent.date) {
+      toggleVisibility(defaultEventLayer, true);
+    }
+
+    if (!selectedEvent.date) {
+      const layersToHide = [];
+      layers.forEach((layer) => {
+        if (layer.group === 'overlays' && layer.layergroup !== 'Reference') {
+          layersToHide.push(layer.id);
+        }
+      });
+      toggleGroupVisibility(layersToHide, false);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,6 +103,11 @@ class NaturalEvents extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const { toggleVisibility, defaultEventLayer } = this.props;
+    toggleVisibility(defaultEventLayer, false);
+  }
+
   zoomIfVisible({ id, date }) {
     const { eventsData, proj } = this.props;
     const event = eventsData.find((e) => e.id === id);
@@ -76,18 +123,23 @@ class NaturalEvents extends React.Component {
   getZoomPromise = function(
     event,
     date,
-    isIdChange,
+    isSameEventID,
     isInitialLoad,
   ) {
     return isInitialLoad
       ? new Promise((resolve, reject) => { resolve(); })
-      : this.zoomToEvent(event, date, isIdChange);
+      : this.zoomToEvent(event, date, isSameEventID);
   };
 
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
+      selectDate,
+      selectEventFinished,
+      eventsData,
+      activateLayersForEventCategory,
+      eventLayers,
+      removeGroup,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -96,31 +148,21 @@ class NaturalEvents extends React.Component {
     const prevCategory = prevEvent ? prevEvent.categories[0].title : false;
     const event = eventsData.find((e) => e.id === id);
     const category = event && event.categories[0].title;
-    const isSameCategory = category === prevCategory;
+    const categoryChange = category !== prevCategory;
     if (!event) {
       return;
     }
     const eventDate = date || getDefaultEventDate(event);
-    const dateFormat = (d) => d.toISOString().split('T')[0];
+    const useDate = getUseDate(event, date);
 
     this.setState({ prevSelectedEvent: { id, date } });
 
+    selectDate(useDate);
     this.getZoomPromise(event, eventDate, !isIdChange, isInitialLoad).then(() => {
-      /* For Wildfires that didn't happen today, move the timeline forward a day
-       * to improve the chance that the fire is visible.
-       * NOTE: If the fire happened yesterday and the imagery isn't yet available
-       * for today, this may not help.
-       */
-      if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
-        const today = dateFormat(util.now());
-        const yesterday = dateFormat(util.yesterday());
-        if (date !== today || date !== yesterday) {
-          selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1));
+      if (!isInitialLoad) {
+        if (categoryChange) {
+          removeGroup(eventLayers);
         }
-      } else if (!isInitialLoad) {
-        selectDate(util.parseDateUTC(date));
-      }
-      if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForEventCategory(event.categories[0].title);
       }
       selectEventFinished();
@@ -136,13 +178,13 @@ class NaturalEvents extends React.Component {
 
     // check for polygon geometries and/or perform projection coordinate transform
     let coordinates;
-    const transformCoords = (coords) => olProj.transform(coords, 'EPSG:4326', crs);
+    const transformCoords = (coords) => olProj.transform(coords, CRS.GEOGRAPHIC, crs);
 
     if (geometry.type === 'Polygon') {
       const transformedCoords = geometry.coordinates[0].map(transformCoords);
       coordinates = olExtent.boundingExtent(transformedCoords);
     } else {
-      coordinates = olProj.transform(geometry.coordinates, 'EPSG:4326', crs);
+      coordinates = olProj.transform(geometry.coordinates, CRS.GEOGRAPHIC, crs);
     }
     return fly(map, proj, coordinates, zoom, null);
   };
@@ -159,7 +201,7 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, requestedEvents,
+    map, proj, requestedEvents, layers, config,
   } = state;
   const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
@@ -170,6 +212,9 @@ const mapStateToProps = (state) => {
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: getFilteredEvents(state),
     selectedEvent: selected,
+    eventLayers: layers.eventLayers,
+    layers: layers.active.layers,
+    defaultEventLayer: config.naturalEvents.defaultLayer,
   };
 };
 
@@ -183,17 +228,36 @@ const mapDispatchToProps = (dispatch) => ({
   selectEventFinished: () => {
     dispatch(selectedAction());
   },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleVisibilityAction(layerIds, visible));
+  },
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeGroup: (ids) => {
+    dispatch(removeGroupAction(ids));
+  },
+  toggleGroupVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
+  },
 });
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
+  addLayer: PropTypes.func,
+  defaultEventLayer: PropTypes.string,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  eventLayers: PropTypes.array,
+  layers: PropTypes.array,
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
   selectDate: PropTypes.func,
+  toggleGroupVisibility: PropTypes.func,
   map: PropTypes.object,
   proj: PropTypes.object,
+  removeGroup: PropTypes.func,
+  toggleVisibility: PropTypes.func,
 };
 
 export default connect(

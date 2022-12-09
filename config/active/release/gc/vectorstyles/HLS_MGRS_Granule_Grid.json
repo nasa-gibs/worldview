@@ -1,0 +1,53 @@
+{
+  "version": 8,
+  "name": "HLS_MGRS_Granule_Grid",
+  "sources": {
+    "HLS_MGRS_Granule_Grid": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/HLS_MGRS_Granule_Grid/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "HLS_MGRS_Granule_Grid",
+      "source": "HLS_MGRS_Granule_Grid",
+      "source-layer": "HLS_MGRS_Granule_Grid",
+      "source-description": "Default",
+      "type": "symbol",
+      "layout": {
+        "text-field": [
+          "get",
+          "identifier"
+        ],
+        "text-font": [
+          "Open Sans Bold",
+          "Arial Unicode MS Bold"
+        ],
+        "text-size": 11,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-anchor": "center"
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-opacity": 1,
+        "text-halo-color": "#000",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "HLS_MGRS_Granule_Grid",
+      "source": "HLS_MGRS_Granule_Grid",
+      "source-layer": "HLS_MGRS_Granule_Grid",
+      "source-description": "Default",
+      "type": "fill",
+      "paint": {
+        "fill-color": "rgb(0, 77, 168)",
+        "fill-opacity": 0.1,
+        "fill-outline-color": "#fff"
+      }
+    }
+  ]
+}

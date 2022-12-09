@@ -241,6 +241,7 @@ function getDateRangesTestState(state) {
       startDate: '2000-01-01',
       endDate: '2002-01-01',
       group: 'baselayers',
+      ongoing: true,
       projections: {
         geographic: {},
       },
@@ -250,6 +251,7 @@ function getDateRangesTestState(state) {
       startDate: '2001-01-01',
       endDate: '2003-01-01',
       group: 'overlays',
+      ongoing: true,
       projections: {
         geographic: {},
       },
@@ -306,7 +308,7 @@ test('date range for ended layers', () => {
     },
     startDate: '1990-01-01',
     endDate: '2005-01-01',
-    inactive: true,
+    ongoing: false,
   };
   layersConfig.end2 = {
     id: 'end1',
@@ -316,7 +318,7 @@ test('date range for ended layers', () => {
     },
     startDate: '1992-01-01',
     endDate: '2007-01-01',
-    inactive: true,
+    ongoing: false,
   };
   const adjustedConfig = update(config, { layers: { $set: layersConfig } });
   let layers = addLayer('end1', {}, [], layersConfig);

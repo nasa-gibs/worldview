@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "AMSRE_Columnar_Water_Vapor_Night": {
+      "id": "AMSRE_Columnar_Water_Vapor_Night",
+      "description": "amsre/AMSRE_Columnar_Water_Vapor_Night",
+      "group": "overlays",
+      "layergroup": "Water Vapor"
+    }
+  }
+}

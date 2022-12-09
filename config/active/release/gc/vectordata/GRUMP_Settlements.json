@@ -1,0 +1,80 @@
+{
+  "id": "GRUMP_Settlements",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "Name1",
+      "Title"      : "Settlement Name",
+      "Description": "Name of the settlement",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "ES00POP",
+      "Title"      : "Estimated 2000 Population",
+      "Description": "Estimated 2000 population, calculated using the UN population projections or intrinsic growth rates",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": -999, "Max": 18476438 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "Country",
+      "Title"      : "Country",
+      "Description": "Country name",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "Urborrur",
+      "Title"      : "Urban or Rural",
+      "Description": "Type of settlement, urban or rural",
+      "DataType"   : "string",
+      "ValueMap"   : { "U" : "Urban", "R" : "Rural" },
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "Latitude",
+      "Title"      : "Latitude",
+      "Description": "Latitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "Longitude",
+      "Title"      : "Longitude",
+      "Description": "Longitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "UID",
+      "Title"      : "ID",
+      "Description": "Settlement ID",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": 0, "Max": 48694 } ],
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

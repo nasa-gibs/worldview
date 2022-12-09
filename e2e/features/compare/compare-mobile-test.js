@@ -21,7 +21,7 @@ const TIME_LIMIT = 10000;
 module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
+    c.setWindowSize(375, 667); // iPhone 6/7/8 dimensions
   },
 
   // load SWIPE and verify that it is active

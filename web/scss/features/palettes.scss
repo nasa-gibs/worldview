@@ -47,6 +47,10 @@
   font-size: 10px;
   bottom: 0;
   width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
 }
 
 .wv-palettes-max,
@@ -55,14 +59,8 @@
   position: absolute;
 }
 
-.wv-palettes-max,
-.wv-palettes-min,
-.wv-palettes-title,
-.wv-running-label {
-  white-space: nowrap;
-  overflow: hidden;
-  display: inline-block;
-  text-overflow: ellipsis;
+.wv-running-category-label {
+  max-width: 197px;
 }
 
 .layer-hidden .wv-palettes-max,
@@ -270,4 +268,8 @@
   left: -50%;
   transform: rotate(-45deg);
   transform-origin: 95% 0;
+}
+
+.double-palette {
+  margin-bottom: 14px;
 }

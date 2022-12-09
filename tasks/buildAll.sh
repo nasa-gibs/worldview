@@ -10,6 +10,7 @@ cp bitly.json rpm/bitly.json
 # devDependencies are installed.
 
 npm ci --production=false --ignore-scripts
+node node_modules/.bin/patch-package  --allow-root
 $BASE/tasks/pythonInstall.sh linux
 pipenv run bash $BASE/tasks/distExplict.sh
 node $BASE/rpm/buildRPM.js

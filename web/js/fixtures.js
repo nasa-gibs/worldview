@@ -1,5 +1,7 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
+import Cache from 'cachai';
+
 import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
@@ -7,6 +9,8 @@ import { defaultState as initialAnimationState } from './modules/animation/reduc
 import { defaultAlertState } from './modules/alerts/reducer';
 import { getInitialEventsState } from './modules/natural-events/reducers';
 import util from './util/util';
+
+const mockBaseCmrApi = 'mock.cmr.api/';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -18,6 +22,7 @@ const fixtures = {
   light_blue: 'f0f0ffff',
   dark_blue: '000040',
 };
+
 fixtures.getState = function() {
   return {
     compare: initialCompareState,
@@ -32,6 +37,7 @@ fixtures.getState = function() {
       selected: {
         id: 'geographic',
         crs: 'EPSG:4326',
+        maxExtent: [-180, -90, 180, 90],
       },
     },
     palettes: {
@@ -241,6 +247,70 @@ fixtures.config = function() {
         crs: 'EPSG:3031',
       },
     },
+    sources: {
+      'GIBS:geographic:nrt': {
+        matrixSets: {
+          '250m': {
+            id: '250m',
+            maxResolution: 0.5625,
+            resolutions: [
+              0.5625,
+              0.28125,
+              0.140625,
+              0.0703125,
+              0.03515625,
+              0.017578125,
+              0.0087890625,
+              0.00439453125,
+              0.002197265625,
+            ],
+            tileSize: [
+              512,
+              512,
+            ],
+            tileMatrices: [
+              {
+                matrixWidth: 2,
+                matrixHeight: 1,
+              },
+              {
+                matrixWidth: 3,
+                matrixHeight: 2,
+              },
+              {
+                matrixWidth: 5,
+                matrixHeight: 3,
+              },
+              {
+                matrixWidth: 10,
+                matrixHeight: 5,
+              },
+              {
+                matrixWidth: 20,
+                matrixHeight: 10,
+              },
+              {
+                matrixWidth: 40,
+                matrixHeight: 20,
+              },
+              {
+                matrixWidth: 80,
+                matrixHeight: 40,
+              },
+              {
+                matrixWidth: 160,
+                matrixHeight: 80,
+              },
+              {
+                matrixWidth: 320,
+                matrixHeight: 160,
+              },
+            ],
+          },
+        },
+        url: 'https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi',
+      },
+    },
     layers: {
       'terra-cr': {
         id: 'terra-cr',
@@ -283,6 +353,77 @@ fixtures.config = function() {
       'granule-cr': {
         id: 'granule-cr',
         group: 'overlays',
+        startDate: '2019-09-23T00:12:00Z',
+        endDate: '2019-09-24T23:54:00Z',
+        source: 'GIBS:geographic:nrt',
+        matrixSet: '250m',
+        conceptIds: [
+          {
+            shortName: 'VJ102IMG_NRT',
+            title: 'VIIRS/JPSS1 Imagery Resolution 6 Min L1B Swath 375m NRT',
+            type: 'NRT',
+            value: 'C2208779826-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ103IMG_NRT',
+            title: 'VIIRS/JPSS1 Imagery Resolution Terrain Corrected Geolocation 6 Min L1 Swath 375m NRT',
+            type: 'NRT',
+            value: 'C2208793489-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ102MOD_NRT',
+            title: 'VIIRS/JPSS1 Moderate Resolution 6 Min L1B Swath 750m NRT',
+            type: 'NRT',
+            value: 'C2208778455-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ102MOD_NRT',
+            title: 'VIIRS/JPSS1 Moderate Resolution 6-Min L1B Swath 750m NRT',
+            type: 'NRT',
+            value: 'C1604614285-LANCEMODIS',
+            version: '2',
+          },
+        ],
+        dateRanges: [
+          {
+            startDate: '2019-09-23T00:12:00Z',
+            endDate: '2019-09-23T00:24:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T02:06:00Z',
+            endDate: '2019-09-23T02:06:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T02:18:00Z',
+            endDate: '2019-09-23T02:18:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T03:42:00Z',
+            endDate: '2019-09-23T04:00:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T05:18:00Z',
+            endDate: '2019-09-23T05:42:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T07:00:00Z',
+            endDate: '2019-09-23T07:24:00Z',
+            dateInterval: '6',
+          },
+          {
+            startDate: '2019-09-23T08:42:00Z',
+            endDate: '2019-09-23T09:06:00Z',
+            dateInterval: '6',
+          },
+        ],
         projections: {
           geographic: {
             startDate: '2019-09-23T00:12:00Z',
@@ -296,6 +437,31 @@ fixtures.config = function() {
               {
                 startDate: '2019-09-23T02:06:00Z',
                 endDate: '2019-09-23T02:06:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T02:18:00Z',
+                endDate: '2019-09-23T02:18:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T03:42:00Z',
+                endDate: '2019-09-23T04:00:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T05:18:00Z',
+                endDate: '2019-09-23T05:42:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T07:00:00Z',
+                endDate: '2019-09-23T07:24:00Z',
+                dateInterval: '6',
+              },
+              {
+                startDate: '2019-09-23T08:42:00Z',
+                endDate: '2019-09-23T09:06:00Z',
                 dateInterval: '6',
               },
             ],
@@ -347,7 +513,7 @@ fixtures.config = function() {
           arctic: {},
           antarctic: {},
         },
-        inactive: true,
+        ongoing: false,
       },
       MODIS_Combined_L4_LAI_4Day: {
         id: 'MODIS_Combined_L4_LAI_4Day',
@@ -357,6 +523,7 @@ fixtures.config = function() {
         group: 'overlays',
         product: 'MCD15A3H',
         layergroup: 'Leaf Area Index',
+        ongoing: true,
         dateRanges: [
           {
             startDate: '2018-01-01T00:00:00Z',
@@ -423,7 +590,7 @@ fixtures.config = function() {
         tags: 'vector vectors',
         group: 'overlays',
         layergroup: 'Orbital Track',
-        inactive: true,
+        ongoing: false,
         vectorStyle: {
           id: 'OrbitTracks_Aqua_Ascending',
         },
@@ -455,6 +622,9 @@ fixtures.config = function() {
       compare: true,
       naturalEvents: {
         host: 'fake.eonet.url/api',
+      },
+      cmr: {
+        url: mockBaseCmrApi,
       },
     },
     palettes: {
@@ -721,6 +891,8 @@ fixtures.config = function() {
     },
   };
 };
+
+fixtures.cache = new Cache(400);
 
 export function registerProjections() {
   proj4.defs(

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,6 +18,7 @@ import {
   Stroke as OlStyleStroke,
   Style as OlStyle,
 } from 'ol/style';
+import { transform } from 'ol/proj';
 import {
   toggleMeasureActive as toggleMeasureActiveAction,
   updateMeasurements as updateMeasurementsAction,
@@ -29,6 +30,16 @@ import {
 } from '../measure-tool/util';
 import MeasureTooltip from '../measure-tool/measure-tooltip';
 import util from '../../util/util';
+import {
+  MEASURE_DISTANCE,
+  MEASURE_AREA,
+  MEASURE_CLEAR,
+  MEASURE_DOWNLOAD_GEOJSON,
+  MAP_DISABLE_CLICK_ZOOM,
+  MAP_ENABLE_CLICK_ZOOM,
+} from '../../util/constants';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -38,19 +49,46 @@ let init = false;
 const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
+let draw;
 
 /**
  * A component to add measurement functionality to the OL map
  */
 function OlMeasureTool (props) {
-  let draw;
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
+  const previousCrs = usePrevious(crs);
+
+  function usePrevious(data) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = data;
+    }, [data]);
+    return ref.current;
+  }
+
+  // Monitor for projection change & terminate any incomplete measurement from the previous projection
+  useEffect(() => {
+    if (olMap != null) {
+      const regionFromCrs = {
+        [CRS.GEOGRAPHIC]: 'geographic',
+        [CRS.ARCTIC]: 'arctic',
+        [CRS.ANTARCTIC]: 'antarctic',
+      };
+
+      const geographyToTerminate = regionFromCrs[previousCrs];
+      terminateDraw(map.ui.proj[geographyToTerminate]);
+
+      if (document.getElementsByClassName('tooltip-active').length > 0) {
+        map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
+      }
+    }
+  }, [crs]);
 
   useEffect(() => {
     if (!init) {
@@ -68,22 +106,24 @@ function OlMeasureTool (props) {
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {
-      events.on('measure:distance', initDistanceMeasurement);
-      events.on('measure:area', initAreaMeasurement);
-      events.on('measure:clear', clearMeasurements);
-      events.on('measure:download-geojson', dlGeoJSON);
+      events.on(MEASURE_DISTANCE, initDistanceMeasurement);
+      events.on(MEASURE_AREA, initAreaMeasurement);
+      events.on(MEASURE_CLEAR, clearMeasurements);
+      events.on(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
     }
     return () => {
       if (map && map.rendered) {
-        events.off('measure:distance', initDistanceMeasurement);
-        events.off('measure:area', initAreaMeasurement);
-        events.off('measure:clear', clearMeasurements);
-        events.off('measure:download-geojson', dlGeoJSON);
+        events.off(MEASURE_DISTANCE, initDistanceMeasurement);
+        events.off(MEASURE_AREA, initAreaMeasurement);
+        events.off(MEASURE_CLEAR, clearMeasurements);
+        events.off(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
       }
     };
   }, [map, unitOfMeasure]);
 
   useEffect(recalculateAllMeasurements, [unitOfMeasure]);
+
+  useEffect(recalculateAllMeasurements, [crs]);
 
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)',
@@ -167,23 +207,28 @@ function OlMeasureTool (props) {
         crs={crs}
         unitOfMeasure={unitOfMeasure}
         onRemove={removeFeature}
+        olMap={olMap}
+        proj={proj}
       />
     ), overlay.getElement());
   };
 
-  const terminateDraw = (geom) => {
+  /**
+   * End the current measurement interaction & remove the visual representation from the map
+   */
+  const terminateDraw = (olMapToTerminate = olMap) => {
     tooltipElement = null;
     toggleMeasureActive(false);
-    olMap.removeInteraction(draw);
+    olMapToTerminate.removeInteraction(draw);
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
-    events.trigger('map:enable-click-zoom');
+    events.trigger(MAP_ENABLE_CLICK_ZOOM);
   };
 
   const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
-    events.trigger('map:disable-click-zoom');
+    events.trigger(MAP_DISABLE_CLICK_ZOOM);
     drawChangeListener = feature.getGeometry().on('change', (e) => {
       const geom = e.target;
       if (geom instanceof OlGeomPolygon) {
@@ -221,6 +266,12 @@ function OlMeasureTool (props) {
       source,
       type,
       style: drawStyles,
+      condition(e) {
+        const pixel = [e.originalEvent.x, e.originalEvent.y];
+        const coord = olMap.getCoordinateFromPixel(pixel);
+        const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
+        return areCoordinatesWithinExtent(proj, tCoord);
+      },
     });
     olMap.addInteraction(draw);
     if (!vectorLayers[crs]) {
@@ -325,6 +376,7 @@ const mapStateToProps = (state) => {
     crs,
     unitOfMeasure,
     projections,
+    proj,
   };
 };
 

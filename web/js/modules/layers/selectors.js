@@ -23,9 +23,6 @@ const getLayerId = (state, { layer }) => layer && layer.id;
 
 export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
 
-/**
- * Is overlay grouping currently enabled?
- */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
 /**
@@ -38,6 +35,22 @@ export const getActiveLayers = (state, activeString) => {
     return getActiveLayersEmbed(state, activeString);
   }
   return layers[activeString || compare.activeString].layers;
+};
+
+export const getActiveLayerGroup = (state) => {
+  const { compare, map } = state;
+  const { active, activeString } = compare || {};
+  if (active) {
+    const layerGroups = map.ui.selected.getLayers().getArray();
+    if (layerGroups.length > 1) {
+      return layerGroups[0].get('group') === activeString
+        ? layerGroups[0]
+        : layerGroups[1].get('group') === activeString
+          ? layerGroups[1]
+          : null;
+    }
+  }
+  return map.ui.selected;
 };
 
 export const getActiveGranuleLayers = (state, activeString) => {
@@ -295,10 +308,31 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
+
+    const findLastRefLayer = (layers) => {
+      let lastRefIndex = 0;
+      let index = 0;
+
+      layers.forEach((layer) => {
+        if (layer.layergroup === 'Reference') {
+          lastRefIndex = index;
+        }
+        index += 1;
+      });
+      if (lastRefIndex === 0) {
+        return lastRefIndex;
+      }
+      return lastRefIndex + 1;
+    };
+
+    const lastReferenceLayerIndex = findLastRefLayer(layers);
+
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
-    } else {
+    } else if (def.layergroup === 'Reference') {
       layers.unshift(def);
+    } else {
+      layers.splice(lastReferenceLayerIndex, 0, def);
     }
   } else {
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
@@ -456,24 +490,28 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     if (!def) {
       return;
     }
-    if (def.startDate) {
+    const {
+      startDate, endDate, ongoing, futureTime,
+    } = def;
+
+    if (startDate) {
       range = true;
-      const start = util.parseDateUTC(def.startDate).getTime();
+      const start = util.parseDateUTC(startDate).getTime();
       min = Math.min(min, start);
     }
 
     // For now, we assume that any layer with an end date is
     // an ongoing product unless it is marked as inactive.
-    if (def.futureTime && def.endDate) {
+    if (futureTime && endDate) {
       range = true;
-      max = util.parseDateUTC(def.endDate).getTime();
+      max = util.parseDateUTC(endDate).getTime();
       maxDates.push(new Date(max));
-    } else if (def.inactive && def.endDate) {
+    } else if (!ongoing && endDate) {
       range = true;
-      const end = util.parseDateUTC(def.endDate).getTime();
+      const end = util.parseDateUTC(endDate).getTime();
       max = Math.max(max, end);
       maxDates.push(new Date(max));
-    } else if (def.endDate) {
+    } else if (endDate) {
       range = true;
       max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
@@ -482,11 +520,11 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     // If there is a start date but no end date, this is a
     // product that is currently being created each day, set
     // the max day to today.
-    if (def.futureTime && !def.endDate) {
+    if (futureTime && !endDate) {
       // Calculate endDate + parsed futureTime from layer JSON
       max = getFutureLayerEndDate(def);
       maxDates.push(new Date(max));
-    } else if (def.startDate && !def.endDate) {
+    } else if (startDate && !endDate) {
       max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
     }
@@ -569,6 +607,18 @@ export function isRenderable(id, layers, date, bLayers, state) {
   );
   return !obscured;
 }
+
+export const findEventLayers = (originalLayers, newLayers) => {
+  const uniqueLayers = [];
+
+  newLayers.forEach((newLayer) => {
+    if (!originalLayers.some((originalLayer) => originalLayer.id === newLayer.id)) {
+      uniqueLayers.push(newLayer.id);
+    }
+  });
+
+  return uniqueLayers;
+};
 
 export function activateLayersForEventCategory(state, category) {
   const {
