@@ -25,6 +25,8 @@ class Rotation extends React.Component {
   }
 
   rotate(degrees) {
+    // This fires when rotating in COMPARE mode
+    console.log(`rotating ${degrees} degrees`);
     const { map, updateRotationState } = this.props;
     const mapView = map.ui.selected.getView();
     const currentDeg = mapView.getRotation() * (180.0 / Math.PI);
