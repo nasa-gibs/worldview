@@ -25,7 +25,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-160.85181369155183,-69.196652033098,152.2108767501309,88.8526811334104&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day,MODIS_Combined_Flood_2-Day(hidden),Land_Water_Map,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-11-15-T18%3A30%3A17Z"
+          "stepLink": "v=-160.85181369155183,-69.196652033098,152.2108767501309,88.8526811334104&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day,MODIS_Combined_Flood_2-Day(hidden),Land_Water_Map,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-11-15-T00%3A00%3A00Z"
         },
         {
           "id": "002",
@@ -43,7 +43,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=102.16593272929055,10.10728729936275,107.78896502357696,12.97203925520926&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(disabled=2),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-11-02-T00%3A00%3A00Z"
+          "stepLink": "v=68.25873404045207,22.57063779283085,72.25050789407688,24.570979824390598&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day(hidden),MODIS_Combined_Flood_2-Day(disabled=2),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day(disabled=2),MODIS_Combined_Flood_2-Day(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=true&cv=45&t=2022-09-07-T00%3A00%3A00Z&t1=2022-09-07-T00%3A00%3A00Z"
         },
         {
           "id": "004",
@@ -52,7 +52,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=68.25873404045207,22.57063779283085,72.25050789407688,24.570979824390598&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day(hidden),MODIS_Combined_Flood_2-Day(disabled=2),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_3-Day(disabled=2),MODIS_Combined_Flood_2-Day(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=true&cv=45&t=2022-09-07-T12%3A12%3A05Z&t1=2022-09-07-T12%3A12%3A05Z"
+          "stepLink": "v=102.16593272929055,10.10728729936275,107.78896502357696,12.97203925520926&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(disabled=2),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-11-02-T00%3A00%3A00Z"
         },
         {
           "id": "005",
@@ -61,7 +61,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=58.94267820873439,21.701433352920994,77.65836010597603,31.237879710046435&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Combined_Flood_3-Day(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-09-15-T18%3A30%3A17Z"
+          "stepLink": "v=58.94267820873439,21.701433352920994,77.65836010597603,31.237879710046435&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Combined_Flood_3-Day(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2022-09-15-T00%3A00%3A00Z"
         },
         {
           "id": "006",
@@ -70,7 +70,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=58.779178047891534,21.701433352920994,77.82186026681889,31.237879710046435&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=true&cv=52&t=2022-06-25-T18%3A30%3A17Z&t1=2022-09-20-T18%3A30%3A17Z"
+          "stepLink": "v=58.779178047891534,21.701433352920994,77.82186026681889,31.237879710046435&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Combined_Flood_2-Day(hidden),MODIS_Combined_Flood_3-Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_Bands721,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=true&cv=52&t=2022-06-25-T00%3A00%3A00Z&t1=2022-09-20-T00%3A00%3A00Z"
         },
         {
           "id": "007",
