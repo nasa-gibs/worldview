@@ -365,19 +365,19 @@ function LayerRow (props) {
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
-          {collections ? (<h4 title={names.title}>{names.title} <span className="collection-title">{collections.version} {collections.type}</span></h4>) :
+          {/* {collections ? (<h4 title={names.title}>{names.title} <span className="collection-title">{collections.version} {collections.type}</span></h4>) :
           (<h4 title={names.title}>{names.title}</h4>)
-        }
-          {/* <h4 title={names.title}>{names.title}</h4> */}
-          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+        } */}
+          <h4 title={names.title}>{names.title}</h4>
+          {/* <p dangerouslySetInnerHTML={{ __html: names.subtitle }} /> */}
 
           {/* <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
           {collections ? (<p><span className="collection-title" style={collectionStyle}>{collections.version} {collections.type}</span></p>) : ''} */}
 
-          {/* <div className="instrument-collection">
+          <div className="instrument-collection">
           <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-          {collections ? (<h6><span className="collection-title badge badge-pill badge-danger">{collections.version} {collections.type}</span></h6>) : ''}
-          </div> */}
+          {collections ? (<h6><span className="collection-title badge badge-pill badge-secondary">{collections.version} {collections.type}</span></h6>) : ''}
+          </div>
 
 
           {hasPalette ? getPaletteLegend() : ''}
