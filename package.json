@@ -216,7 +216,6 @@
     "regenerator-runtime": "^0.13.3",
     "reselect": "^4.0.0",
     "rgbcolor": "^0.0.4",
-    "shp-write": "^0.3.2",
     "simplebar-react": "^2.1.0",
     "stackblur": "^1.0.0",
     "supercluster": "7.0.0",
