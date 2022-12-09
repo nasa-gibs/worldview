@@ -1002,6 +1002,21 @@
   }
 }
 
+.collection-title {
+  font-style: italic;
+  // margin-left: 4px;
+  // padding: 1px 4px 1px 4px;
+  // color: white;
+  // border: 3px solid white;
+  // font-weight: bold;
+  // border-radius: 10px;
+}
+
+.instrument-collection {
+  display: flex;
+  justify-content: space-between;
+}
+
 /** React-Swipe-To-Delete Overrides */
 .swipe-to-delete .js-content:first-child {
   position: relative !important;

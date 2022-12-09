@@ -50,7 +50,7 @@ function LayerRow (props) {
     compare,
     layer,
     compareState,
-    dateCollection,
+    collections,
     paletteLegends,
     getPalette,
     palette,
@@ -331,10 +331,11 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
-  const testStyle = {
-    backgroundColor: 'blue',
-    color: 'white',
-  };
+  const collectionStyle = collections?.type == "NRT" ? {
+    backgroundColor: 'red'
+  } : {
+    backgroundColor: 'blue'
+  }
 
   const renderLayerRow = () => (
     <>
@@ -364,9 +365,21 @@ function LayerRow (props) {
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
-          <h4 title={names.title}>{names.title}</h4>
+          {collections ? (<h4 title={names.title}>{names.title} <span className="collection-title">{collections.version} {collections.type}</span></h4>) :
+          (<h4 title={names.title}>{names.title}</h4>)
+        }
+          {/* <h4 title={names.title}>{names.title}</h4> */}
           <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-          {dateCollection ? (<p style={testStyle}>{dateCollection.version} {dateCollection.type}</p>) : ''}
+
+          {/* <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          {collections ? (<p><span className="collection-title" style={collectionStyle}>{collections.version} {collections.type}</span></p>) : ''} */}
+
+          {/* <div className="instrument-collection">
+          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          {collections ? (<h6><span className="collection-title badge badge-pill badge-danger">{collections.version} {collections.type}</span></h6>) : ''}
+          </div> */}
+
+
           {hasPalette ? getPaletteLegend() : ''}
         </div>
         {isVectorLayer && isVisible ? renderVectorIcon() : null}
@@ -447,12 +460,12 @@ const makeMapStateToProps = () => {
     );
     const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
     const convertedDate = activeDate.toISOString().split('T')[0];
-    const dateCollection = getCollections(layers, convertedDate, layer);
+    const collections = getCollections(layers, convertedDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
     return {
       compare,
-      dateCollection,
+      collections,
       tracksForLayer,
       measurementDescriptionPath,
       globalTemperatureUnit,
@@ -558,7 +571,7 @@ LayerRow.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
-  dateCollection: PropTypes.object,
+  collections: PropTypes.object,
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,
