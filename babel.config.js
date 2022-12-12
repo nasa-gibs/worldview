@@ -5,23 +5,23 @@ module.exports = {
       {
         useBuiltIns: 'entry',
         corejs: '2.0',
-        loose: true,
+        loose: true
 
       }],
     [
       '@babel/preset-react',
       {
         useBuiltIns: 'entry',
-        corejs: '2.0',
-      },
-    ],
+        corejs: '2.0'
+      }
+    ]
   ],
   plugins: [
     [
       '@babel/plugin-proposal-class-properties',
       {
-        loose: true,
-      },
-    ],
-  ],
-};
+        loose: true
+      }
+    ]
+  ]
+}

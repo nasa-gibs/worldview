@@ -52,7 +52,7 @@ mkdir -p "$BUILD_DIR/colormaps"
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    `$NODE_SCRIPTS_DIR/getCapabilities.js --config "$OPT_DIR/$OPT_SUBDIR/config.json" --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
+    `node $NODE_SCRIPTS_DIR/getCapabilities.js --config "$OPT_DIR/$OPT_SUBDIR/config.json" --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
     # Get visualization metadata (if configured)
     # rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
