@@ -1,0 +1,1 @@
+Heavy monsoon rains starting in June 2022 contributed to rising floodwaters in Pakistan. This false-color corrected reflectance image (Bands 7,2,1) from the MODIS instrument aboard the Terra satellite on 15 September 2022 illustrates the flood waters in dark blue.

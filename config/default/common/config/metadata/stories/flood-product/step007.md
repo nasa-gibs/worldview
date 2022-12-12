@@ -1,0 +1,1 @@
+The 3-Day Flood Product on the left "A" side shows the floodwaters in red, and normal water in cyan. Swipe the center bar back and forth to compare the flood detections to the false-color image on the right "B" side. Zoom in to investigate further.

@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.37.0",
+  "version": "3.38.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -100,7 +100,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^106.0.1",
+    "chromedriver": "^108.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
     "css-hot-loader": "^1.4.1",
@@ -215,8 +215,9 @@
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.13.3",
     "reselect": "^4.0.0",
-    "shp-write": "^0.3.2",
+    "rgbcolor": "^0.0.4",
     "simplebar-react": "^2.1.0",
+    "stackblur": "^1.0.0",
     "supercluster": "7.0.0",
     "url-template": "^3.0.0",
     "what-input": "^5.2.7"

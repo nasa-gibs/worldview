@@ -84,12 +84,13 @@ export const getIndexForSortedInsert = (array, date) => {
  * @param {string} endDate - date string
  * @returns {boolean}
  */
-export const isWithinDateRange = (date, startDate, endDate) => (
-  startDate && endDate
+export const isWithinDateRange = (date, startDate, end) => {
+  const endDate = end || new Date();
+  return startDate && endDate
     ? new Date(date).getTime() <= new Date(endDate).getTime()
-      && new Date(date).getTime() >= new Date(startDate).getTime()
-    : false
-);
+    && new Date(date).getTime() >= new Date(startDate).getTime()
+    : false;
+};
 
 /**
  * Determine if a granule polygon falls within the specified bounds of
@@ -371,30 +372,26 @@ export const granuleFootprint = (map) => {
     useSpatialIndex: false,
   });
 
-  const getVectorLayer = (text, showFill) => {
-    const fill = showFill ? new OlStyleFill({ color: 'rgb(0, 123, 255, 0.25)' }) : null;
-    return new OlVectorLayer({
-      className: 'granule-map-footprint',
-      source: vectorSource,
-      style: [
-        new OlStyle({
-          fill,
-          stroke: new OlStyleStroke({
-            color: 'rgb(0, 123, 255, 0.65)',
-            width: 3,
-          }),
-          text: new OlText({
-            textAlign: 'center',
-            text,
-            font: '18px monospace',
-            fill: new OlStyleFill({ color: 'white' }),
-            stroke: new OlStyleStroke({ color: 'black', width: 2 }),
-            overflow: true,
-          }),
+  const getVectorLayer = (text) => new OlVectorLayer({
+    className: 'granule-map-footprint',
+    source: vectorSource,
+    style: [
+      new OlStyle({
+        stroke: new OlStyleStroke({
+          color: 'rgb(0, 123, 255, 0.65)',
+          width: 3,
         }),
-      ],
-    });
-  };
+        text: new OlText({
+          textAlign: 'center',
+          text,
+          font: '18px monospace',
+          fill: new OlStyleFill({ color: 'white' }),
+          stroke: new OlStyleStroke({ color: 'black', width: 2 }),
+          overflow: true,
+        }),
+      }),
+    ],
+  });
 
   const removeFootprint = () => {
     currentGranule = {};
@@ -405,8 +402,7 @@ export const granuleFootprint = (map) => {
   const drawFootprint = (points, date) => {
     const geometry = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({ geometry });
-    const showFill = map.getView().getZoom() < 3;
-    const newVectorLayer = getVectorLayer(date, showFill);
+    const newVectorLayer = getVectorLayer(date);
     vectorSource.addFeature(featureFootprint);
     vectorLayer = newVectorLayer;
     map.addLayer(vectorLayer);

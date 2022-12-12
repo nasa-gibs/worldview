@@ -82,7 +82,7 @@ class GranuleDateList extends PureComponent {
       result.source.index,
       result.destination.index,
     );
-    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
       lastMovedItem: result.draggableId, // granule date
     });
@@ -90,13 +90,14 @@ class GranuleDateList extends PureComponent {
 
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
+    console.log('uhh');
     e.preventDefault();
     const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex - 1,
     );
-    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
       lastMovedItem: granuleDate,
     });
@@ -110,7 +111,7 @@ class GranuleDateList extends PureComponent {
       sourceIndex,
       sourceIndex + 1,
     );
-    updateGranuleLayerOptions(reorderedItems, def.id, granuleCount);
+    updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
       lastMovedItem: granuleDate,
     });

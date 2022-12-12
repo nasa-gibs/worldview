@@ -90,6 +90,17 @@ export const getGranulePlatform = (state, activeString) => {
   return granulePlatform;
 };
 
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      platformLayers.push(key);
+    }
+  });
+  return platformLayers;
+};
+
 /**
  * Return an array of overlay groups for the currently active compare state
  * that are available for the currently active projection
@@ -292,10 +303,6 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
-
-  def.startDate = lodashGet(def, `projections[${projection}].startDate`) || def.startDate;
-  def.endDate = lodashGet(def, `projections[${projection}].endDate`) || def.endDate;
-  def.dateRanges = lodashGet(def, `projections[${projection}].dateRanges`) || def.dateRanges;
 
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
