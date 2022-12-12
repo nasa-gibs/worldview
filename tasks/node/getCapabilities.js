@@ -140,8 +140,7 @@ async function processGetCapabilities (outputFile) {
 
   try {
     if (!gc.Capabilities || !gc.Capabilities.Contents) {
-      console.error(`error: ${outputFile}: no layers`)
-      process.exit(1)
+      throw new Error(`error: ${outputFile}: no layers`)
     }
 
     const layers = gc.Capabilities.Contents.Layer
@@ -151,8 +150,7 @@ async function processGetCapabilities (outputFile) {
       processVectorData(layer)
     })
   } catch (error) {
-    console.error(`ERROR: ${outputFile}: ${error}`)
-    process.exit(1)
+    throw new Error(`ERROR: ${outputFile}: ${error}`)
   }
 }
 

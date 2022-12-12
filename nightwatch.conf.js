@@ -1,8 +1,8 @@
-const seleniumServer = require('selenium-server-standalone-jar');
-const chromedriver = require('chromedriver');
-const geckodriver = require('geckodriver');
+const seleniumServer = require('selenium-server-standalone-jar')
+const chromedriver = require('chromedriver')
+const geckodriver = require('geckodriver')
 
-const files = './e2e/features';
+const files = './e2e/features'
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
@@ -17,24 +17,24 @@ module.exports = {
       'webdriver.chrome.driver': chromedriver.path,
       'webdriver.gecko.driver': geckodriver.path,
       'webdriver.firefox.profile': 'nightwatch',
-      'webdriver.gecko.profile': 'nightwatch',
-    },
+      'webdriver.gecko.profile': 'nightwatch'
+    }
   },
   test_settings: {
     default: {
       launch_url: 'http://localhost',
       selenium_port: 4444,
       selenium_host: 'localhost',
-      marionette: true,
+      marionette: true
     },
     chrome: {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
           w3c: false,
-          prefs: { 'profile.managed_default_content_settings.notifications': 1 },
-        },
-      },
+          prefs: { 'profile.managed_default_content_settings.notifications': 1 }
+        }
+      }
     },
     chromeHeadless: {
       desiredCapabilities: {
@@ -42,9 +42,9 @@ module.exports = {
         'goog:chromeOptions': {
           w3c: false,
           prefs: { 'profile.managed_default_content_settings.notifications': 1 },
-          args: ['headless', 'no-sandbox', 'disable-gpu'],
-        },
-      },
+          args: ['headless', 'no-sandbox', 'disable-gpu']
+        }
+      }
     },
     chromeLocalStorageDisabled: {
       desiredCapabilities: {
@@ -52,24 +52,24 @@ module.exports = {
         'goog:chromeOptions': {
           w3c: false,
           prefs: { 'profile.managed_default_content_settings.notifications': 1 },
-          args: ['headless', 'no-sandbox', 'disable-gpu', 'disable-local-storage'],
-        },
-      },
+          args: ['headless', 'no-sandbox', 'disable-gpu', 'disable-local-storage']
+        }
+      }
     },
     firefox: {
       desiredCapabilities: {
         browserName: 'firefox',
-        javascriptEnabled: true,
-      },
+        javascriptEnabled: true
+      }
     },
     firefoxHeadless: {
       desiredCapabilities: {
         browserName: 'firefox',
         javascriptEnabled: true,
         'moz:firefoxOptions': {
-          args: ['--headless'],
-        },
-      },
+          args: ['--headless']
+        }
+      }
     },
     firefoxLocalStorageDisabled: {
       desiredCapabilities: {
@@ -78,10 +78,10 @@ module.exports = {
         'moz:firefoxOptions': {
           args: ['--headless'],
           prefs: {
-            'dom.storage.enabled': false,
-          },
-        },
-      },
-    },
-  },
-};
+            'dom.storage.enabled': false
+          }
+        }
+      }
+    }
+  }
+}

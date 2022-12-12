@@ -1,32 +1,32 @@
-const { normalizeViewport } = require('./normalize-viewport.js');
+const { normalizeViewport } = require('./normalize-viewport.js')
 
 module.exports = {
-  loadAndSkipTour(c, wait) {
-    normalizeViewport(c, 1024, 768);
+  loadAndSkipTour (c, wait) {
+    normalizeViewport(c, 1024, 768)
     c.url(c.globals.url).execute(
-      function() {
-        let showModal;
+      function () {
+        let showModal
         try {
           if (window.localStorage) {
-            showModal = !window.localStorage.getItem('hideTour');
+            showModal = !window.localStorage.getItem('hideTour')
           }
         } catch (error) {
           // If localStorage is disabled, tour modal does not show
-          showModal = false;
+          showModal = false
         }
-        return showModal;
+        return showModal
       },
       [],
-      function({ value: showModal }) {
+      function ({ value: showModal }) {
         if (showModal) {
           c.waitForElementVisible('.tour button.close', wait, () => {
-            c.click('.tour button.close');
-            c.pause(1000);
-          });
+            c.click('.tour button.close')
+            c.pause(1000)
+          })
         } else {
-          c.waitForElementVisible('#wv-logo', wait);
+          c.waitForElementVisible('#wv-logo', wait)
         }
-      },
-    );
-  },
-};
+      }
+    )
+  }
+}

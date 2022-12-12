@@ -100,7 +100,6 @@ module.exports = {
   yearUp: '.input-wrapper-year > div.date-arrows.date-arrow-up',
   datePickerWheel: '.datepicker-modal .datepicker-wheel',
 
-
   // layers
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
   aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
@@ -204,5 +203,5 @@ module.exports = {
   contextMenuAddMarker: '#context-menu-add-marker',
   contextMenuDistance: '#context-menu-measure-distance',
   contextMenuArea: '#context-menu-measure-area',
-  contentMenuChangeUnits: '#context-menu-change-units',
-};
+  contentMenuChangeUnits: '#context-menu-change-units'
+}

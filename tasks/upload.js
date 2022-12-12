@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 const fs = require('fs')
 const os = require('os')
@@ -11,8 +10,7 @@ const ssh = new NodeSSH()
 
 function error (msg) {
   const prog = path.basename(__filename)
-  console.error(`${prog}: error: ${msg}`)
-  process.exit(1)
+  throw new Error(`${prog}: error: ${msg}`)
 }
 
 const { argv } = yargs
@@ -63,7 +61,6 @@ appear on the command line.`)
 
 if (argv.help) {
   yargs.showHelp()
-  process.exit(0)
 }
 
 const baseDir = path.join(__dirname, '..')

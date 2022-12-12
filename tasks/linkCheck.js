@@ -32,6 +32,7 @@ const organizeURLStatus = async (scrapedUrls) => {
   const fileName = `./tasks/link-check/results/WV-link-check-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.json`
   fs.writeFile(fileName, stringified, 'utf8', () => {
     makeLine(`Results file created: ${fileName}`)
+    // eslint-disable-next-line n/no-process-exit
     process.exit()
   })
 }
