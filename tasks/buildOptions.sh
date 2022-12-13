@@ -52,14 +52,18 @@ mkdir -p "$BUILD_DIR/colormaps"
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    `node $NODE_SCRIPTS_DIR/getCapabilities.js --config "$OPT_DIR/$OPT_SUBDIR/config.json" --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
+    `node $NODE_SCRIPTS_DIR/getCapabilities.js \
+      --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
+      --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
     # Get visualization metadata (if configured)
-    # rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-    # mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-    # "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
-    #     "$BUILD_DIR/config/wv.json/layerOrder.json" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
-    # exit 0
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    `node $NODE_SCRIPTS_DIR/getVisMetadata.js \
+      --features "$BUILD_DIR/features.json" \
+      --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
+      --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
+    exit 0
 fi
 
 # "$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
