@@ -51,6 +51,7 @@ import {
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
   const renderAnimation = true;
+  const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -445,7 +446,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
 
   const animateVectors = function(layerName, tileSource, selected, layer) {
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
     if (animationAllowed && renderAnimation) {
@@ -470,7 +470,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
-    console.log('createLayerVector');
+    console.log('createLayerVector function called');
     const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
@@ -547,6 +547,9 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
+
+    console.log(def);
+    // ASCAT does not have def.matrixIds data
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
       lodashEach(matrixSet.resolutions, (resolution, index) => {
@@ -581,6 +584,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
+    console.log(tileMatrixSet);
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
@@ -600,7 +604,10 @@ export default function mapLayerBuilder(config, cache, store) {
 
     let counter = 0;
 
+    // ASCAT errors out but not sure why yet. OSCAR & MISR work properly
     // ol.layer.VectorTile
+    console.log('Creating LayerVectorTile');
+
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -611,6 +618,7 @@ export default function mapLayerBuilder(config, cache, store) {
       style (feature, resolution) {
         counter += 1;
 
+        console.log('style feature:');
         console.log(feature);
 
 
@@ -620,8 +628,14 @@ export default function mapLayerBuilder(config, cache, store) {
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         let arrowColor;
-        const radianDirection = feature.get('dir');
-        const magnitude = feature.get('speed');
+        let radianDirection = feature.get('direction'); // was "dir"
+        const magnitude = feature.get('magnitude'); // was "speed"
+
+        // If OSCAR/ASCAT we need to adjust the radian angle
+        // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
+        if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+          radianDirection -= 180;
+        }
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
@@ -663,12 +677,12 @@ export default function mapLayerBuilder(config, cache, store) {
       },
     });
 
+    console.log('Applying style');
     applyStyle(def, layer, state, layeroptions);
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
 
-    const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
     if (animationAllowed && renderAnimation) {
       animateVectors(layerName, tileSource, selected, layer);
