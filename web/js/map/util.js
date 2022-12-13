@@ -106,8 +106,6 @@ export function mergeBreakpointLayerAttributes(def, projId) {
    * @param {*} currentView
    */
 export function saveRotation(currentDeg, currentView) {
-  console.log('saveRotation currentView');
-  console.log(currentView);
   if (Math.abs(currentDeg) === 360) {
     currentView.setRotation(0);
   } else if (Math.abs(currentDeg) >= 360) {

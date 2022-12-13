@@ -117,11 +117,22 @@ export default class Swipe {
   clipA = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
-    const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, ctx.canvas.width - width, ctx.canvas.height);
-    ctx.clip();
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    const width = canvasWidth * (1 - swipeOffset / viewportWidth);
+    ctx.save(); // saves the current canvas state
+    ctx.beginPath(); // starts a new path by first emptying the list of sub-paths
+    const rectangleWidth = canvasWidth - width;
+    console.log(`rectangleWidth: ${rectangleWidth}`);
+    console.log(`canvasHeight: ${canvasHeight}`);
+
+    // rect: adds a rectangle to the current path.
+    ctx.rect(0, 0, rectangleWidth, canvasHeight);
+
+    // Add color to make clear what is being applied
+    ctx.fillStyle = 'blue';
+    ctx.fill();
+    ctx.clip(); // turns the current path into the clipping region
   }
 
   /**
@@ -135,6 +146,11 @@ export default class Swipe {
     ctx.save();
     ctx.beginPath();
     ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
+
+    // Add color to make clear what is being applied
+    ctx.fillStyle = 'pink';
+    ctx.fill();
+
     ctx.clip();
   }
 }
