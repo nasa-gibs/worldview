@@ -26,7 +26,7 @@ const options = yargs
     type: 'string',
     description: 'layer-metadata/all.json file'
   })
-  .epilog('Pulls visualization metadata files')
+  .epilog('Creates a layer metadata file containing all layers')
 
 const { argv } = options
 if (!argv.features && !argv.layerOrder && !argv.layerMetadata) {
@@ -54,18 +54,11 @@ if (fs.existsSync(layerOrderFile)) {
 }
 
 const outputFile = argv.layerMetadata
-let outputData
-let output
-if (fs.existsSync(outputFile)) {
-  outputData = fs.readFileSync(outputFile)
-  output = JSON.parse(outputData)
-}
 
 const metadataConfig = features.features.vismetadata
 const url = metadataConfig.url
 const daacMap = metadataConfig.daacMap || {}
 const layerMetadata = {}
-const failedRequests = []
 
 // These are alias or otherwise layers that don't exist in GIBS
 skipLayers = [
@@ -95,30 +88,62 @@ async function main (url) {
   for (layerId of layerOrder) {
     await getMetadata(layerId, url)
   }
-  console.warn(layerMetadata)
+
+  const layers = Object.keys(layerMetadata).sort().reduce(
+    (obj, key) => {
+      obj[key] = layerMetadata[key]
+      return obj
+    },
+    {}
+  )
+
+  await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
 }
 
 async function getDAAC (metadata) {
-  console.warn(metadata)
+  if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
+    return metadata
+  }
+  for (collection in metadata.conceptIds) {
+    origDataCenter = collection.dataCenter
+    dataCenter = daacMap.origDataCenter
+    if (!dataCenter && !metadata.dataCenter) {
+      metadata.dataCenter === [dataCenter]
+    } else if (!metadata.dataCenter.includes(dataCenter)) {
+      metadata.dataCenter.push(dataCenter)
+    }
+  }
+  return metadata
 }
 
 async function getMetadata (layerId, baseUrl) {
+  let errorCount = 0
   try {
-    await request({
+    return request({
       method: 'get',
       url: `${baseUrl}${layerId}.json`,
+      responseType: 'json',
       timeout: 10000
     }).then(async (response) => {
-      metadata = JSON.parse(response)
-      layerMetadata[layerId] = getDAAC(metadata)
+      metadata = response.data
+      layerMetadata[layerId] = await getDAAC(metadata)
+      metadataKeys = Object.keys(layerMetadata[layerId])
+      metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+      for (key of metadataKeys) {
+        delete layerMetadata[layerId][key]
+      }
     })
   } catch (error) {
-    // count how many times this has errored, then rety 2 times
-    // throw new Error(`{prog}: WARNING: Failed to retrieve metadata config for ${layerId}, will retry...`)
+    errorCount += 1
+    if (errorCount <= 2) {
+      console.warn(`${prog}: WARNING: Failed to retrieve metadata config for ${layerId}, will retry...`)
+      await getMetadata(layerId, baseUrl)
+    } else {
+      throw new Error(`{prog}: Error: Failed to retrieve metadata config for ${layerId}`)
+    }
   }
 }
 
 main(url).catch((err) => {
   console.error(err.stack)
-  throw new Error(`${prog}: Visualization metadata not configured. Exiting.`)
 })

@@ -66,8 +66,8 @@ if [ "$FETCH_GC" ] ; then
     exit 0
 fi
 
-# "$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
-#     "$BASE/schemas/layer-config.json"
+"$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
+    "$BASE/schemas/layer-config.json"
 
 # if [ -e "$BUILD_DIR/features.json" ] ; then
 #     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
