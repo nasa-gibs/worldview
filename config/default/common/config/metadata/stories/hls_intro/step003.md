@@ -1,1 +1,1 @@
- The HLS imagery are approximately 8 times higher spatial resolution than the MODIS and VIIRS surface reflectance layers - watch New York City come in focus as you swipe to the left!
+ The HLS imagery are approximately 1000 times finer spatial resolution than the MODIS VIIRS surface reflectance layers and 160 times finer spatial resolution than the VIIRS surface reflectance layers. Watch New York City come in focus as you swipe to the left!
