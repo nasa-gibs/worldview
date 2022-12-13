@@ -115,6 +115,7 @@ export default class Swipe {
    * @param {Object} event | OL Precompose event object
    */
   clipA = (event) => {
+    console.log(event);
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const canvasWidth = ctx.canvas.width;
@@ -126,11 +127,20 @@ export default class Swipe {
     console.log(`rectangleWidth: ${rectangleWidth}`);
     console.log(`canvasHeight: ${canvasHeight}`);
 
+    ctx.fillStyle = 'blue';
     // rect: adds a rectangle to the current path.
-    ctx.rect(0, 0, rectangleWidth, canvasHeight);
+    ctx.fillRect(0, 0, rectangleWidth, canvasHeight);
+
+    // Triangle
+    ctx.beginPath();
+    ctx.moveTo(650, 440);
+    ctx.lineTo(750, 360);
+    ctx.lineTo(850, 440);
+    ctx.closePath();
+    ctx.stroke();
 
     // Add color to make clear what is being applied
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = 'red';
     ctx.fill();
     ctx.clip(); // turns the current path into the clipping region
   }
@@ -150,7 +160,6 @@ export default class Swipe {
     // Add color to make clear what is being applied
     ctx.fillStyle = 'pink';
     ctx.fill();
-
     ctx.clip();
   }
 }
