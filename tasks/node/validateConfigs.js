@@ -12,17 +12,17 @@ const options = yargs
   .usage('Usage: $0 [options]')
   .option('inputDirectory', {
     demandOption: true,
-    alias: 'o',
+    alias: 'i',
     type: 'string',
     description: 'the wv.json layers directory'
   })
   .option('schemaFile', {
     demandOption: true,
-    alias: 'c',
+    alias: 's',
     type: 'string',
     description: 'layer-config.json schema'
   })
-  .epilog('Pulls visualization metadata files')
+  .epilog('Validates layers using a JSON schema')
 
 const { argv } = options
 if (!argv.inputDirectory && !argv.schemaFile) {
