@@ -95,6 +95,7 @@
     "@babel/preset-react": "^7.10.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@webpack-cli/serve": "^1.7.0",
+    "ajv": "^8.11.2",
     "autoprefixer": "^10.4.12",
     "axios": "^1.2.1",
     "babel-loader": "^8.1.0",

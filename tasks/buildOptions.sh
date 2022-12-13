@@ -50,28 +50,32 @@ mkdir -p "$BUILD_DIR/colormaps"
 
 # If $FETCH_GC is set, make various API requests
 if [ "$FETCH_GC" ] ; then
+    # TODO: Fix axios fetch timeouts
+    # Fetch GC files and create colormaps, vectordata and vectorstyle files
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
     `node $NODE_SCRIPTS_DIR/getCapabilities.js \
       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
       --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
-    # Get visualization metadata (if configured)
+    # TODO: Optimize performance of this script
+    # Get metadata for files in layerOrder.json and combine this data into 1 file
     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
     mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
     `node $NODE_SCRIPTS_DIR/getVisMetadata.js \
       --features "$BUILD_DIR/features.json" \
       --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
       --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
-    exit 0
 fi
 
-"$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
-    "$BASE/schemas/layer-config.json"
+# Validate layers in wv.json with a JSON schema
+`node $NODE_SCRIPTS_DIR/validateConfigs.js \
+  --inputDirectory "$SRC_DIR/common/config/wv.json/layers" \
+  --schemaFile "$BASE/schemas/layer-config.json"`
 
-# if [ -e "$BUILD_DIR/features.json" ] ; then
-#     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
-# fi
+if [ -e "$BUILD_DIR/features.json" ] ; then
+    cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
+fi
 
 # # Run extractConfigFromWMTS.py script with config.json
 # if [ -e "$BUILD_DIR/config.json" ] ; then
