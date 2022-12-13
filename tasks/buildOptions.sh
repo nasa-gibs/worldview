@@ -78,10 +78,12 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
 fi
 
 # # Run extractConfigFromWMTS.py script with config.json
-# if [ -e "$BUILD_DIR/config.json" ] ; then
-#     "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
-#         "$BUILD_DIR/_wmts"
-# fi
+if [ -e "$BUILD_DIR/config.json" ] ; then
+  `node $NODE_SCRIPTS_DIR/extractConfigFromWMTS.js \
+    --config "$BUILD_DIR/config.json" \
+    --inputDir "$BUILD_DIR/gc" \
+    --outputDir  "$BUILD_DIR/_wmts"
+fi
 
 # # Run processVectorStyles.py and move vectorstyles where we want them
 # if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
