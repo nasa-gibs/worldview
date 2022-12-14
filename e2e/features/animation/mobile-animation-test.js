@@ -20,7 +20,7 @@ module.exports = {
   },
 
   'Minimizing mobile animation widget opens collapsed animation widget': (c) => {
-    c.useCss().click('.wv-minimize');
+    c.useCss().click('#mobile-animation-close');
     c.waitForElementVisible('#collapsed-animate-widget-phone-portrait', TIME_LIMIT);
   },
 

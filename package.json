@@ -215,8 +215,9 @@
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.13.3",
     "reselect": "^4.0.0",
-    "shp-write": "^0.3.2",
+    "rgbcolor": "^0.0.4",
     "simplebar-react": "^2.1.0",
+    "stackblur": "^1.0.0",
     "supercluster": "7.0.0",
     "url-template": "^3.0.0",
     "what-input": "^5.2.7"

@@ -277,6 +277,7 @@ export function layerReducer(state = initialState, action) {
                 dates,
                 count,
                 granuleFootprints,
+                granulePlatform,
               },
             },
           },

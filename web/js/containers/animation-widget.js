@@ -406,11 +406,17 @@ class AnimationWidget extends React.Component {
 
     const mobileID = getMobileIDs();
 
+    const collapseIconMobile = {
+      height: '30px',
+      width: '30px',
+      color: '#fff',
+    };
+
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
-          <span className="close wv-minimize" aria-label="Close" onClick={this.toggleCollapse}>
-            <FontAwesomeIcon icon="times" id="mobile-close-btn" />
+          <span aria-label="Close" onClick={this.toggleCollapse} id="mobile-animation-close">
+            <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
           </span>
         </div>
         <div className="mobile-animation-warning-message-container">
@@ -420,60 +426,66 @@ class AnimationWidget extends React.Component {
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
-          <div className="mobile-animation-widget-container">
+          <div className="mobile-animation-flex-container">
+            <div className="mobile-animation-widget-container">
 
-            <div className="mobile-animation-flex-row">
-              <span>
-                Loop
-              </span>
-              <LoopButton looping={looping} onLoop={this.onLoop} isMobile={isMobile} />
-            </div>
-
-            <div className="mobile-animation-flex-row">
-              <MobileCustomIntervalSelector
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
-            </div>
-
-            <div className="mobile-animation-flex-row" id="slider-case-row">
-              <div className="wv-slider-case">
-                <Slider
-                  className="input-range"
-                  step={0.5}
-                  max={10}
-                  min={0.5}
-                  value={speed}
-                  onChange={(num) => this.setState({ speed: num })}
-                  handle={RangeHandle}
-                  onAfterChange={() => { onSlide(speed); }}
-                  disabled={isPlaying}
-                />
-                <span className="wv-slider-label">{sliderLabel}</span>
+              <div className="mobile-animation-flex-row">
+                <span>
+                  Loop
+                </span>
+                <LoopButton looping={looping} onLoop={this.onLoop} isMobile={isMobile} />
               </div>
-            </div>
 
-            <div className="mobile-animation-block-row" id="mobile-animation-start-date">
-              <span>Start Date</span>
-              <MobileDatePicker
-                date={startDate}
-                startDateLimit={minimumDate}
-                endDateLimit={endingDate}
-                onDateChange={this.onMobileDateChangeStart}
-                hasSubdailyLayers={hasSubdailyLayers}
-                isMobile={isMobile}
-              />
-            </div>
+              <div className="mobile-animation-flex-row">
+                <MobileCustomIntervalSelector
+                  hasSubdailyLayers={hasSubdailyLayers}
+                />
+              </div>
 
-            <div className="mobile-animation-block-row" id="mobile-animation-end-date">
-              <span>End Date</span>
-              <MobileDatePicker
-                date={endDate}
-                startDateLimit={startingDate}
-                endDateLimit={maximumDate}
-                onDateChange={this.onMobileDateChangeEnd}
-                hasSubdailyLayers={hasSubdailyLayers}
-                isMobile={isMobile}
-              />
+              <div className="mobile-animation-flex-row" id="slider-case-row">
+                <div className="wv-slider-case">
+                  <Slider
+                    className="input-range"
+                    step={0.5}
+                    max={10}
+                    min={0.5}
+                    value={speed}
+                    onChange={(num) => this.setState({ speed: num })}
+                    handle={RangeHandle}
+                    onAfterChange={() => { onSlide(speed); }}
+                    disabled={isPlaying}
+                  />
+                  <span className="wv-slider-label">{sliderLabel}</span>
+                </div>
+              </div>
+
+              <div className="mobile-animation-flex-row">
+                <div className="mobile-animation-block-row" id="mobile-animation-start-date">
+                  <span>Start Date</span>
+                  <MobileDatePicker
+                    date={startDate}
+                    startDateLimit={minimumDate}
+                    endDateLimit={endingDate}
+                    onDateChange={this.onMobileDateChangeStart}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    isMobile={isMobile}
+                  />
+                </div>
+              </div>
+
+              <div className="mobile-animation-flex-row">
+                <div className="mobile-animation-block-row" id="mobile-animation-end-date">
+                  <span>End Date</span>
+                  <MobileDatePicker
+                    date={endDate}
+                    startDateLimit={startingDate}
+                    endDateLimit={maximumDate}
+                    onDateChange={this.onMobileDateChangeEnd}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    isMobile={isMobile}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
