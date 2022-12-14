@@ -85,6 +85,7 @@ function LayerRow (props) {
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
+  const collectionIdentifierDescription = 'Near Real Time or Standard';
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
@@ -331,11 +332,7 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
-  const collectionStyle = collections?.type == "NRT" ? {
-    backgroundColor: 'red'
-  } : {
-    backgroundColor: 'blue'
-  }
+  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge badge-pill badge-secondary' : 'collection-title badge badge-pill badge-light';
 
   const renderLayerRow = () => (
     <>
@@ -360,25 +357,26 @@ function LayerRow (props) {
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
-      <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
+      <div id="test" className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
-          {/* {collections ? (<h4 title={names.title}>{names.title} <span className="collection-title">{collections.version} {collections.type}</span></h4>) :
-          (<h4 title={names.title}>{names.title}</h4>)
-        } */}
           <h4 title={names.title}>{names.title}</h4>
-          {/* <p dangerouslySetInnerHTML={{ __html: names.subtitle }} /> */}
-
-          {/* <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-          {collections ? (<p><span className="collection-title" style={collectionStyle}>{collections.version} {collections.type}</span></p>) : ''} */}
-
           <div className="instrument-collection">
-          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-          {collections ? (<h6><span className="collection-title badge badge-pill badge-secondary">{collections.version} {collections.type}</span></h6>) : ''}
-          </div>
+            <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
 
+            {collections ? (
+              <h6>
+                <span id="collection-identifier" className={collectionClass}>
+                  {collections.version} {collections.type}
+                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content">
+                    {collectionIdentifierDescription}
+                  </UncontrolledTooltip>
+                </span>
+              </h6>
+            ) : ''}
+          </div>
 
           {hasPalette ? getPaletteLegend() : ''}
         </div>
