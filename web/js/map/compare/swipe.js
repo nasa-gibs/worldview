@@ -115,33 +115,29 @@ export default class Swipe {
    * @param {Object} event | OL Precompose event object
    */
   clipA = (event) => {
-    console.log(event);
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const canvasWidth = ctx.canvas.width;
     const canvasHeight = ctx.canvas.height;
     const width = canvasWidth * (1 - swipeOffset / viewportWidth);
-    ctx.save(); // saves the current canvas state
-    ctx.beginPath(); // starts a new path by first emptying the list of sub-paths
     const rectangleWidth = canvasWidth - width;
-    console.log(`rectangleWidth: ${rectangleWidth}`);
-    console.log(`canvasHeight: ${canvasHeight}`);
+    // const rotationA = event.frameState.viewState.rotation;
+
+    ctx.save(); // saves the current canvas state
+    // ctx.beginPath(); // starts a new path by first emptying the list of sub-paths
 
     ctx.fillStyle = 'blue';
-    // rect: adds a rectangle to the current path.
+    // rect: adds a rectangle to the current path (start X, start Y , width, height).
     ctx.fillRect(0, 0, rectangleWidth, canvasHeight);
 
-    // Triangle
-    ctx.beginPath();
-    ctx.moveTo(650, 440);
-    ctx.lineTo(750, 360);
-    ctx.lineTo(850, 440);
-    ctx.closePath();
-    ctx.stroke();
-
-    // Add color to make clear what is being applied
-    ctx.fillStyle = 'red';
-    ctx.fill();
+    // Polygon
+    // ctx.strokeStyle = 'blue';
+    // ctx.moveTo(0, 0);
+    // ctx.lineTo(0, canvasWidth);
+    // ctx.lineTo(canvasWidth, canvasHeight);
+    // ctx.lineTo(0, canvasHeight);
+    // ctx.fill();
+    // ctx.closePath();
     ctx.clip(); // turns the current path into the clipping region
   }
 
@@ -153,12 +149,18 @@ export default class Swipe {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (swipeOffset / viewportWidth);
+    const rectangleWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    // const rotationB = event.frameState.viewState.rotation;
+
+    console.log(`width: ${width}`);
     ctx.save();
     ctx.beginPath();
-    ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
+    ctx.rotate(36 * (Math.PI / 180));
+    ctx.fillStyle = 'pink';
+    ctx.fillRect(width + 200, 0, rectangleWidth - width, canvasHeight);
 
     // Add color to make clear what is being applied
-    ctx.fillStyle = 'pink';
     ctx.fill();
     ctx.clip();
   }
