@@ -85,7 +85,7 @@ function LayerRow (props) {
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
-  const collectionIdentifierDescription = 'Near Real Time or Standard';
+  const collectionIdentifierDescription = 'Dataset version and the source of data processing, Near Real-Time (NRT) or Standard (STD)';
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
