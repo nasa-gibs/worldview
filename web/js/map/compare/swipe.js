@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashRound from 'lodash/round';
 import lodashEach from 'lodash/each';
+import { getRenderPixel } from 'ol/render';
 
 import util from '../../util/util';
 import { getCompareDates } from '../../modules/compare/selectors';
@@ -110,58 +111,84 @@ export default class Swipe {
   }
 
   /**
-   * Clip the reverse so users don't see this layerGroup when the other
-   * Layer group is transparent
+   * Set Clip/Mask for the "A" side of a comparison.
+   * We must mask the "A" side for circumstances where the B side has no
+   * active layer group(s) or those layer(s) are transparent
    * @param {Object} event | OL Precompose event object
    */
   clipA = (event) => {
-    const ctx = event.context;
-    const viewportWidth = event.frameState.size[0];
-    const canvasWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    const width = canvasWidth * (1 - swipeOffset / viewportWidth);
-    const rectangleWidth = canvasWidth - width;
+    // const ctx = event.context;
+    // const viewportWidth = event.frameState.size[0];
+    // const canvasWidth = ctx.canvas.width;
+    // const canvasHeight = ctx.canvas.height;
+    // const width = canvasWidth * (1 - swipeOffset / viewportWidth);
     // const rotationA = event.frameState.viewState.rotation;
 
-    ctx.save(); // saves the current canvas state
-    // ctx.beginPath(); // starts a new path by first emptying the list of sub-paths
+    // // console.log(`A: viewportWidth: ${viewportWidth} | canvasWidth: ${canvasWidth} | canvasHeight: ${canvasHeight} | rotationA: ${rotationA}`);
 
-    ctx.fillStyle = 'blue';
-    // rect: adds a rectangle to the current path (start X, start Y , width, height).
-    ctx.fillRect(0, 0, rectangleWidth, canvasHeight);
+    // ctx.save(); // saves the current canvas state
+    // ctx.rect(0, 0, width, canvasHeight);
+    // ctx.clip(); // turns the current path into the clipping region
 
-    // Polygon
-    // ctx.strokeStyle = 'blue';
-    // ctx.moveTo(0, 0);
-    // ctx.lineTo(0, canvasWidth);
-    // ctx.lineTo(canvasWidth, canvasHeight);
-    // ctx.lineTo(0, canvasHeight);
-    // ctx.fill();
-    // ctx.closePath();
-    ctx.clip(); // turns the current path into the clipping region
+    const ctx = event.context;
+    const mapSize = this.map.getSize();
+    const width = mapSize[0] * percentSwipe;
+    const topLeft = getRenderPixel(event, [width, 0]);
+    const topRight = getRenderPixel(event, [mapSize[0], 0]);
+    const bottomLeft = getRenderPixel(event, [width, mapSize[1]]);
+    const bottomRight = getRenderPixel(event, mapSize);
+
+    console.log(`topLeft: ${topLeft}`);
+    console.log(`topRight: ${topRight}`);
+    console.log(`bottomLeft: ${bottomLeft}`);
+    console.log(`bottomRight: ${bottomRight}`);
+
+    ctx.save();
+    // Construct our clipping mask counterclockwise!
+    ctx.beginPath();
+
+    // starting position
+    console.log(`starting position: ${topLeft[0]}, ${bottomRight[1]}`);
+    ctx.moveTo(topLeft[0], bottomRight[1]);
+
+    // bottom left
+    console.log(topLeft[0], 0);
+    ctx.lineTo(topLeft[0], 0);
+
+    // bottom right
+    console.log(topRight[0], 0);
+    ctx.lineTo(topRight[0], 0);
+
+    // top left
+    console.log(0, bottomRight[1]);
+    ctx.lineTo(0, bottomRight[1]);
+
+    ctx.closePath();
+    ctx.clip();
   }
 
   /**
-   * Clip the top layer at the right xOffset
+   * Set Clip/Mask for the "B" side of a comparison.
+   * The "B" side exists on top of the "A" side so it must be clipped
+   * to allow the "A" side to show.
    * @param {Object} event | OL Precompose event object
    */
   clipB = (event) => {
     const ctx = event.context;
-    const viewportWidth = event.frameState.size[0];
-    const width = ctx.canvas.width * (swipeOffset / viewportWidth);
-    const rectangleWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    // const rotationB = event.frameState.viewState.rotation;
+    const mapSize = this.map.getSize();
+    const width = mapSize[0] * percentSwipe;
+    const topLeft = getRenderPixel(event, [width, 0]);
+    const topRight = getRenderPixel(event, [mapSize[0], 0]);
+    const bottomLeft = getRenderPixel(event, [width, mapSize[1]]);
+    const bottomRight = getRenderPixel(event, mapSize);
 
-    console.log(`width: ${width}`);
     ctx.save();
     ctx.beginPath();
-    ctx.rotate(36 * (Math.PI / 180));
-    ctx.fillStyle = 'pink';
-    ctx.fillRect(width + 200, 0, rectangleWidth - width, canvasHeight);
-
-    // Add color to make clear what is being applied
-    ctx.fill();
+    ctx.moveTo(topLeft[0], topLeft[1]);
+    ctx.lineTo(bottomLeft[0], bottomLeft[1]);
+    ctx.lineTo(bottomRight[0], bottomRight[1]);
+    ctx.lineTo(topRight[0], topRight[1]);
+    ctx.closePath();
     ctx.clip();
   }
 }
