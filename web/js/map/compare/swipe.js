@@ -119,13 +119,13 @@ export default class Swipe {
   setClipMaskA = (event) => {
     const ctx = event.context;
     const mapSize = this.map.getSize();
-    const width = mapSize[0] * percentSwipe;
+    const widthSideA = mapSize[0] * percentSwipe;
 
     const coordinates = {
       topLeft: getRenderPixel(event, [0, 0]),
       bottomLeft: getRenderPixel(event, [0, mapSize[1]]),
-      bottomRight: getRenderPixel(event, [width, mapSize[1]]),
-      topRight: getRenderPixel(event, [width, 0]),
+      bottomRight: getRenderPixel(event, [widthSideA, mapSize[1]]),
+      topRight: getRenderPixel(event, [widthSideA, 0]),
     };
     setRectClipMask(ctx, coordinates);
   }
@@ -138,10 +138,10 @@ export default class Swipe {
   setClipMaskB = (event) => {
     const ctx = event.context;
     const mapSize = this.map.getSize();
-    const width = mapSize[0] * percentSwipe;
+    const widthSideB = mapSize[0] * percentSwipe;
     const coordinates = {
-      topLeft: getRenderPixel(event, [width, 0]),
-      bottomLeft: getRenderPixel(event, [width, mapSize[1]]),
+      topLeft: getRenderPixel(event, [widthSideB, 0]),
+      bottomLeft: getRenderPixel(event, [widthSideB, mapSize[1]]),
       bottomRight: getRenderPixel(event, mapSize),
       topRight: getRenderPixel(event, [mapSize[0], 0]),
     };
