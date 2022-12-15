@@ -117,52 +117,21 @@ export default class Swipe {
    * @param {Object} event | OL Precompose event object
    */
   clipA = (event) => {
-    // const ctx = event.context;
-    // const viewportWidth = event.frameState.size[0];
-    // const canvasWidth = ctx.canvas.width;
-    // const canvasHeight = ctx.canvas.height;
-    // const width = canvasWidth * (1 - swipeOffset / viewportWidth);
-    // const rotationA = event.frameState.viewState.rotation;
-
-    // // console.log(`A: viewportWidth: ${viewportWidth} | canvasWidth: ${canvasWidth} | canvasHeight: ${canvasHeight} | rotationA: ${rotationA}`);
-
-    // ctx.save(); // saves the current canvas state
-    // ctx.rect(0, 0, width, canvasHeight);
-    // ctx.clip(); // turns the current path into the clipping region
-
     const ctx = event.context;
     const mapSize = this.map.getSize();
     const width = mapSize[0] * percentSwipe;
-    const topLeft = getRenderPixel(event, [width, 0]);
-    const topRight = getRenderPixel(event, [mapSize[0], 0]);
-    const bottomLeft = getRenderPixel(event, [width, mapSize[1]]);
-    const bottomRight = getRenderPixel(event, mapSize);
+    const topLeft = getRenderPixel(event, [0, 0]);
+    const bottomLeft = getRenderPixel(event, [0, mapSize[1]]);
+    const bottomRight = getRenderPixel(event, [width, mapSize[1]]);
+    const topRight = getRenderPixel(event, [width, 0]);
 
-    console.log(`topLeft: ${topLeft}`);
-    console.log(`topRight: ${topRight}`);
-    console.log(`bottomLeft: ${bottomLeft}`);
-    console.log(`bottomRight: ${bottomRight}`);
-
-    ctx.save();
     // Construct our clipping mask counterclockwise!
+    ctx.save();
     ctx.beginPath();
-
-    // starting position
-    console.log(`starting position: ${topLeft[0]}, ${bottomRight[1]}`);
-    ctx.moveTo(topLeft[0], bottomRight[1]);
-
-    // bottom left
-    console.log(topLeft[0], 0);
-    ctx.lineTo(topLeft[0], 0);
-
-    // bottom right
-    console.log(topRight[0], 0);
-    ctx.lineTo(topRight[0], 0);
-
-    // top left
-    console.log(0, bottomRight[1]);
-    ctx.lineTo(0, bottomRight[1]);
-
+    ctx.moveTo(topLeft[0], topLeft[1]);
+    ctx.lineTo(bottomLeft[0], bottomLeft[1]);
+    ctx.lineTo(bottomRight[0], bottomRight[1]);
+    ctx.lineTo(topRight[0], topRight[1]);
     ctx.closePath();
     ctx.clip();
   }
@@ -178,9 +147,9 @@ export default class Swipe {
     const mapSize = this.map.getSize();
     const width = mapSize[0] * percentSwipe;
     const topLeft = getRenderPixel(event, [width, 0]);
-    const topRight = getRenderPixel(event, [mapSize[0], 0]);
     const bottomLeft = getRenderPixel(event, [width, mapSize[1]]);
     const bottomRight = getRenderPixel(event, mapSize);
+    const topRight = getRenderPixel(event, [mapSize[0], 0]);
 
     ctx.save();
     ctx.beginPath();
