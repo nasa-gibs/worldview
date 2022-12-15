@@ -6626,102 +6626,6 @@
       "subtitle": "GPM / GMI",
       "title": "Precipitation Rate (Descending)"
     },
-    "GMI_Rain_Rate_Asc": {
-      "conceptIds": [
-        {
-          "shortName": "GPM_2AGPROFGPMGMI",
-          "title": "GPM GMI (GPROF) Radiometer Precipitation Profiling L2A 1.5 hours 13 km V05 (GPM_2AGPROFGPMGMI) at GES DISC",
-          "type": "STD",
-          "value": "C1383813815-GES_DISC",
-          "version": "05"
-        }
-      ],
-      "dataCenter": [
-        "GES DISC"
-      ],
-      "layerPeriod": "Daily",
-      "ongoing": false,
-      "orbitDirection": [
-        "ascending"
-      ],
-      "orbitTracks": [
-        "OrbitTracks_GPM_Ascending"
-      ],
-      "subtitle": "GPM / GMI",
-      "title": "Rain Rate (Ascending)"
-    },
-    "GMI_Rain_Rate_Dsc": {
-      "conceptIds": [
-        {
-          "shortName": "GPM_2AGPROFGPMGMI",
-          "title": "GPM GMI (GPROF) Radiometer Precipitation Profiling L2A 1.5 hours 13 km V05 (GPM_2AGPROFGPMGMI) at GES DISC",
-          "type": "STD",
-          "value": "C1383813815-GES_DISC",
-          "version": "05"
-        }
-      ],
-      "dataCenter": [
-        "GES DISC"
-      ],
-      "layerPeriod": "Daily",
-      "ongoing": false,
-      "orbitDirection": [
-        "descending"
-      ],
-      "orbitTracks": [
-        "OrbitTracks_GPM_Descending"
-      ],
-      "subtitle": "GPM / GMI",
-      "title": "Rain Rate (Descending)"
-    },
-    "GMI_Snow_Rate_Asc": {
-      "conceptIds": [
-        {
-          "shortName": "GPM_2AGPROFGPMGMI",
-          "title": "GPM GMI (GPROF) Radiometer Precipitation Profiling L2A 1.5 hours 13 km V05 (GPM_2AGPROFGPMGMI) at GES DISC",
-          "type": "STD",
-          "value": "C1383813815-GES_DISC",
-          "version": "05"
-        }
-      ],
-      "dataCenter": [
-        "GES DISC"
-      ],
-      "layerPeriod": "Daily",
-      "ongoing": false,
-      "orbitDirection": [
-        "ascending"
-      ],
-      "orbitTracks": [
-        "OrbitTracks_GPM_Ascending"
-      ],
-      "subtitle": "GPM / GMI",
-      "title": "Snow Rate (Ascending)"
-    },
-    "GMI_Snow_Rate_Dsc": {
-      "conceptIds": [
-        {
-          "shortName": "GPM_2AGPROFGPMGMI",
-          "title": "GPM GMI (GPROF) Radiometer Precipitation Profiling L2A 1.5 hours 13 km V05 (GPM_2AGPROFGPMGMI) at GES DISC",
-          "type": "STD",
-          "value": "C1383813815-GES_DISC",
-          "version": "05"
-        }
-      ],
-      "dataCenter": [
-        "GES DISC"
-      ],
-      "layerPeriod": "Daily",
-      "ongoing": false,
-      "orbitDirection": [
-        "descending"
-      ],
-      "orbitTracks": [
-        "OrbitTracks_GPM_Descending"
-      ],
-      "subtitle": "GPM / GMI",
-      "title": "Snow Rate (Descending)"
-    },
     "GOES-East_ABI_Air_Mass": {
       "daynight": [
         "day",
@@ -18575,6 +18479,13 @@
           "type": "STD",
           "value": "C1685783927-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_FP",
+          "title": "OCO-2 Level 2 bias-corrected XCO2 and other select fields from the full-physics retrieval aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_FP) at GES DISC",
+          "type": "STD",
+          "value": "C2248652664-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
@@ -18602,6 +18513,13 @@
           "type": "STD",
           "value": "C1685783927-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_FP",
+          "title": "OCO-2 Level 2 bias-corrected XCO2 and other select fields from the full-physics retrieval aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_FP) at GES DISC",
+          "type": "STD",
+          "value": "C2248652664-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
@@ -18629,6 +18547,13 @@
           "type": "STD",
           "value": "C1685783920-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_SIF",
+          "title": "OCO-2 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_SIF) at GES DISC",
+          "type": "STD",
+          "value": "C2248652649-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
@@ -18656,6 +18581,13 @@
           "type": "STD",
           "value": "C1685783920-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_SIF",
+          "title": "OCO-2 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_SIF) at GES DISC",
+          "type": "STD",
+          "value": "C2248652649-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
@@ -18683,6 +18615,13 @@
           "type": "STD",
           "value": "C1685783920-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_SIF",
+          "title": "OCO-2 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_SIF) at GES DISC",
+          "type": "STD",
+          "value": "C2248652649-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
@@ -18710,6 +18649,13 @@
           "type": "STD",
           "value": "C1685783927-GES_DISC",
           "version": "10r"
+        },
+        {
+          "shortName": "OCO2_L2_Lite_FP",
+          "title": "OCO-2 Level 2 bias-corrected XCO2 and other select fields from the full-physics retrieval aggregated as daily files, Retrospective processing V11r (OCO2_L2_Lite_FP) at GES DISC",
+          "type": "STD",
+          "value": "C2248652664-GES_DISC",
+          "version": "11r"
         }
       ],
       "dataCenter": [
