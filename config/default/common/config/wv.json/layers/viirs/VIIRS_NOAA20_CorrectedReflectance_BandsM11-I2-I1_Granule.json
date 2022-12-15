@@ -2,7 +2,7 @@
   "layers": {
       "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule": {
           "id":       "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule",
-          "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
+          "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule",
           "tags":     "subdaily",
           "group":    "overlays",
           "layergroup": "Granules",

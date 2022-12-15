@@ -77,10 +77,6 @@
   "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": "2020-01-29T00:00:00Z",
   "VIIRS_NOAA20_Thermal_Anomalies_375m_Night": "2020-01-29T00:00:00Z",
 
-  "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT": "2019-09-22T16:00:00Z",
-  "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT": "2019-09-22T16:00:00Z",
-  "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT": "2019-09-22T16:00:00Z",
-
   "AMSRE_Columnar_Water_Vapor_Night": "2009-08-01T00:00:00Z",
   "AMSRE_Columnar_Water_Vapor_Day": "2009-08-01T00:00:00Z"
 
