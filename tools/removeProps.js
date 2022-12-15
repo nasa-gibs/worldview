@@ -28,7 +28,7 @@ function processConfig (filePath) {
   const layerId = Object.keys(layerJson.layers)[0]
   removeKeys.forEach((key) => {
     const entry = layerJson.layers[layerId]
-    // Leav ID prop on WMS entries
+    // Leave ID prop on WMS entries
     if (entry.type === 'wms' && key === 'id') return
     delete layerJson.layers[layerId][key]
   })

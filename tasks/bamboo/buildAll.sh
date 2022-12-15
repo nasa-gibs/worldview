@@ -12,9 +12,9 @@ node node_modules/.bin/patch-package  --allow-root
 
 # Replacement of npm run dist
 # Needed for bamboo to avoid permission errors with npm
-node $BASE/tasks/clean.js
+node $BASE/tasks/util/clean.js
 FETCH_GC=1 $BASE/tasks/buildOptions.sh
 $BASE/tasks/buildOptions.sh
-node $BASE/tasks/config.js
+node $BASE/tasks/util/config.js
 NODE_ENV=production npx webpack
-node $BASE/tasks/dist.js
+node $BASE/tasks/util/dist.js
