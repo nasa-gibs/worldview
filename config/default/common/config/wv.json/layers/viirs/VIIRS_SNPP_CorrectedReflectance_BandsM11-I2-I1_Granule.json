@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule": {
+          "id":       "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
+          "description": "viirs/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+          "tags":     "subdaily",
+          "group":    "overlays",
+          "layergroup": "Granules",
+          "type": "granule",
+          "period": "subdaily",
+          "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1"],
+          "availability": {
+            "rollingWindow": 14
+          },
+          "disableSnapshot": true
+      }
+  }
+}

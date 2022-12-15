@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule": {
+          "id":       "VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
+          "description": "viirs/VIIRS_SNPP_CorrectedReflectance_TrueColor",
+          "tags":     "subdaily",
+          "group":    "overlays",
+          "layergroup": "Granules",
+          "type": "granule",
+          "period": "subdaily",
+          "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_TrueColor"],
+          "availability": {
+            "rollingWindow": 14
+          },
+          "disableSnapshot": true
+      }
+  }
+}
