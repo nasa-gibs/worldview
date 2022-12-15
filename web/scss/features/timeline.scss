@@ -168,7 +168,6 @@ button:focus {
 
   & .date-arrow-down {
     transform: scaleY(-1);
-    transform: scaleY(-1);
     filter: flipv;
     filter: "FlipV";
   }
@@ -196,7 +195,6 @@ button:focus {
 
   & #left-arrow-group {
     transform: scaleX(-1);
-    transform: scaleX(-1);
   }
 
   & #left-arrow-group svg {
@@ -217,7 +215,7 @@ button:focus {
   & > .button-action-group:hover .arrow,
   & #zoom-buttons-group .button-action-group:hover .arrow {
     fill: #1a1a1a;
-    fill-opacity: 1;
+    fill-opacity: 100%;
     stroke: none;
   }
 
@@ -692,7 +690,7 @@ button:focus {
 .ab-group-case-active path {
   stroke: #515151;
   stroke-width: 1;
-  stroke-opacity: 1;
+  stroke-opacity: 100%;
 }
 
 .ab-group-case-active polygon,
