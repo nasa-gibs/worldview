@@ -5,9 +5,9 @@
 // ./build/options metadata and EONET natural events
 // *************************************************************************
 const fs = require('fs')
-const getUrlStatusCodeCollection = require('./link-check/url-check')
-const getHtmlUrls = require('./link-check/html-url-extract.js')
-const getNaturalEventsUrls = require('./link-check/natural-event-url-extract.js')
+const getUrlStatusCodeCollection = require('./url-check')
+const getHtmlUrls = require('./html-url-extract.js')
+const getNaturalEventsUrls = require('./natural-event-url-extract.js')
 
 const makeLine = (msg) => console.log(`${'-'.repeat(66)}
 \x1b[36m${msg}\x1b[0m`)
