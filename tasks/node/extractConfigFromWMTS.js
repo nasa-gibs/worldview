@@ -46,7 +46,7 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir)
 }
 
-// const tolerant = config.tolerant
+const tolerant = config.tolerant
 const entries = config['wv-options-wmts']
 // let skip = []
 
@@ -80,11 +80,46 @@ async function processLayer (gcLayer, wvLayers, entry) {
 }
 
 async function processEntry (entry) {
-  try {
-    processLayer()
-  } catch (error) {
+  const inputFile = path.join(inputDir, entry.from)
+  const gcId = path.basename(inputFile)
 
+  const wv = {
+    layers: {},
+    sources: {}
   }
+  const wvMatrixSets = {}
+
+  let gc
+
+  try {
+    fs.readFileSync(inputFile)
+    const gcXML = fs.readFileSync(inputFile, { encoding: 'utf-8' })
+    gc = convert.xml2json(gcXML, { compact: true, spaces: 2 })
+    gc = JSON.parse(gc)
+  } catch (error) {
+    if (tolerant) {
+      warningCount += 1
+      console.warn(`${prog}: WARN: ${inputFile} Unable to get GC: ${error}`)
+    } else {
+      errorCount += 1
+      console.error(`${prog}: ERROR: ${inputFile} Unable to get GC: ${error}`)
+    }
+    return { layerCount, warningCount, errorCount }
+  }
+
+  // TODO: errors can go uncaught here
+  gcContents = gc.Capabilities.Contents
+  wvLayers = wv.layers
+
+  if (!gcContents || !gcContents.Layer) {
+    errorCount += 1
+    console.error(`${prog}: ERROR: ${gcId} No Layers`)
+    return { layerCount, warningCount, errorCount }
+  }
+}
+
+async function processMatrixSet (gcMatricSet) {
+
 }
 
 main().catch((err) => {

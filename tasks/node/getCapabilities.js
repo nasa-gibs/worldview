@@ -9,7 +9,6 @@ const stream = require('stream')
 
 const finished = promisify(stream.finished)
 const prog = path.basename(__filename)
-// const baseDir = path.join(__dirname, '..');
 
 const options = yargs
   .usage('Usage: $0 [options]')
@@ -26,8 +25,6 @@ const options = yargs
     description: 'getcapabilities file'
   })
   .epilog('Pulls GetCapabilities XML and linked metadata from configured locations')
-
-// import config file from ./config/default/release/config.json
 
 const { argv } = options
 if (!argv.config && !argv.getcapabilities) {
@@ -61,7 +58,6 @@ async function main () {
   if (vectordata) {
     await gatherProcess(vectordata, 'vectordatas', vectordataDir, '.json')
   }
-  // process.exit();
 }
 
 async function getCapabilities () {
