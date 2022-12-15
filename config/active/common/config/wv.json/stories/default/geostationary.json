@@ -25,7 +25,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,GMI_Rain_Rate_Asc,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T00%3A0%3A00Z"
+          "stepLink": "v=-251.31057583345864,-94.81270915817784,131.23333740825313,84.85398267894074&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,GMI_Brightness_Temp_Asc,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-09-30-T00%3A0%3A00Z"
         },
         {
           "id": "002",

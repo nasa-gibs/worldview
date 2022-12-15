@@ -1,0 +1,1 @@
+Let's compare the flooded area with a population density layer. The left "A" side shows the flooded areas in red and the right "B" side shows estimated population density for 2020. Move the center swipe bar left and right to see how the floodwaters correspond to many of the highly populated areas, shown in shades of red.

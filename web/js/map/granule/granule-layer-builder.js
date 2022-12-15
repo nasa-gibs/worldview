@@ -64,26 +64,37 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
-   * Add granule cmr data to granule cmr object with date as key
+   * Collect granule metadata objects from a CMR response that have GIBS imagery
+   *
    * @param {data} CMR data
    * @param {id} layer id
   */
-  const addGranuleCMRDateData = (data, shortName, dateRanges) => {
+  const addGranuleCMRDateData = (def, data, shortName, dateRanges) => {
     const { proj: { selected: { crs } } } = store.getState();
     CMRDataStore[crs][shortName] = CMRDataStore[crs][shortName] || [];
     const granuleData = CMRDataStore[crs][shortName];
 
+    // Any granule metadata object that gets added here is assumed to have corresponding
+    // imagery in GIBS at the same time stamp.  Therefore when determining whether or not
+    // to include a granule from CMR we see if either is true:
+    // - (imageryInDateRange) the date for the granule falls within a date range defined by GIBS for this layer
+    // - (imageryInTrailingRange) the date falls after the end date of the last date range AND before the layer's end date,
+    //   or in the case of an ongoing layer with no endDate, now
+
+    const lastDateRange = dateRanges[dateRanges.length - 1];
+    const finalEndDate = def.endDate || new Date();
     data.forEach((entry) => {
       const date = toISOStringSeconds(entry.time_start);
-      const hasImagery = find(dateRanges, ({ startDate, endDate }) => isWithinDateRange(date, startDate, endDate));
+      const imageryInDateRange = find(dateRanges, (r) => isWithinDateRange(date, r.startDate, r.endDate));
+      const imageryInTrailingRange = isWithinDateRange(date, lastDateRange.endDate, finalEndDate);
       const existsForTime = find(granuleData, (g) => g.date === date);
-      if (!hasImagery || existsForTime) {
+      if (!(imageryInDateRange || imageryInTrailingRange) || existsForTime) {
         return;
       }
       const transformedGranule = transformGranuleData(entry, date, crs);
       granuleData.push(transformedGranule);
     });
-    return granuleData.sort((a, b) => {
+    granuleData.sort((a, b) => {
       const dateA = new Date(a.date).valueOf();
       const dateB = new Date(b.date).valueOf();
       return dateB - dateA;
@@ -111,40 +122,35 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const state = store.getState();
     const { proj: { selected: { crs } } } = state;
     const getGranulesUrl = getGranulesUrlSelector(state);
-    const params = getParamsForGranuleRequest(def, date, state);
+    const params = getParamsForGranuleRequest(def, date, crs);
     const { shortName } = params;
     let data = [];
-
     const existingGranules = CMRDataStore[crs][shortName] || [];
     const datesQueried = datesHaveBeenQueried(params.startDate, date, existingGranules);
 
     if (existingGranules.length && datesQueried) {
       return existingGranules;
     }
-
-    const makeQuery = async () => {
-      try {
-        showLoading();
-        const response = await fetch(getGranulesUrl(params), CMR_AJAX_OPTIONS);
-        data = await response.json();
-        data = data.feed.entry;
-        if (data.length) {
-          addGranuleCMRDateData(data, shortName, dateRanges);
-        } else {
-          const dateWithinRange = isWithinDateRange(date, startDate, endDate);
-          // only show modal error if layer not set to hidden and outside of selected date range
-          if (visible && dateWithinRange) throttleDispathCMRErrorDialog(title);
-        }
-      } catch (e) {
-        console.error(e);
-        throttleDispathCMRErrorDialog(title);
-        return data;
-      } finally {
-        hideLoading();
+    try {
+      showLoading();
+      const requestUrl = getGranulesUrl(params);
+      const response = await fetch(requestUrl, CMR_AJAX_OPTIONS);
+      data = await response.json();
+      data = data.feed.entry;
+      if (data.length) {
+        addGranuleCMRDateData(def, data, shortName, dateRanges);
+      } else {
+        const dateWithinRange = isWithinDateRange(date, startDate, endDate);
+        // only show modal error if layer not set to hidden and outside of selected date range
+        if (visible && dateWithinRange) throttleDispathCMRErrorDialog(title);
       }
-    };
-
-    await makeQuery();
+    } catch (e) {
+      console.error(e);
+      throttleDispathCMRErrorDialog(title);
+      return CMRDataStore[crs][shortName];
+    } finally {
+      hideLoading();
+    }
 
     return CMRDataStore[crs][shortName];
   };
