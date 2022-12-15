@@ -102,7 +102,6 @@ function OlMeasureTool (props) {
   }, [projections]);
 
   useEffect(() => {
-    // const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {

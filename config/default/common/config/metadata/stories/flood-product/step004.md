@@ -1,0 +1,1 @@
+Here we have disabled the grey "insufficient data" pixels to have a better view of the flood and water pixels. To enable or disable each of the three categories, click on the "View Options" icon on the right side of the layer. Alternatively, you can also adjust the opacity of the layer so you can more easily compare the flood layer with the false-color image underneath.

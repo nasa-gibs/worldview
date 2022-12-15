@@ -97,7 +97,7 @@ class CoverageItemList extends Component {
               background: layerItemBackground,
               color: textColor,
               float: 'left',
-              width: inactiveLayers ? '205px' : '175px',
+              width: inactiveLayers || formattedEndDate ? '205px' : '175px',
             }}
           >
             <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />

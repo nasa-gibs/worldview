@@ -10,7 +10,7 @@ const {
 } = localSelectors;
 
 const linkShareNav = '.link-share-nav';
-const embedShareNav = '.embed-share-nav';
+// const embedShareNav = '.embed-share-nav';
 const socialShareNav = '.social-share-nav';
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
   },
   'Share tabs link, embed, and social are visible and enabled': (c) => {
     c.expect.element(linkShareNav).to.be.present;
-    c.expect.element(embedShareNav).to.be.present;
+    // c.expect.element(embedShareNav).to.be.present;
     c.expect.element(socialShareNav).to.be.present;
     c.assert.cssClassPresent(`${linkShareNav} a`, 'active');
   },

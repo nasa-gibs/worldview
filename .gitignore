@@ -4,6 +4,7 @@
 /web/config
 /web/stories
 /dist
+/doc/embed.md
 /node_modules
 /web/ext/node_modules/*
 /tasks/link-check/results
