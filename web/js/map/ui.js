@@ -1170,11 +1170,11 @@ export default function mapui(models, config, store) {
     document.querySelector('.wv-map-scale-metric').addEventListener('mousemove', (e) => e.stopPropagation());
     document.querySelector('.wv-map-scale-imperial').addEventListener('mousemove', (e) => e.stopPropagation());
 
-    // Allow rotation by dragging for polar projections
-    // if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
-    map.addInteraction(rotateInteraction);
-    map.addInteraction(mobileRotation);
-    // }
+    // Allow rotation (hold ALT + click & drag) for polar projections
+    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+      map.addInteraction(rotateInteraction);
+      map.addInteraction(mobileRotation);
+    }
 
     const onRotate = () => {
       const radians = map.getView().getRotation();
