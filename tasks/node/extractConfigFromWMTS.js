@@ -60,7 +60,18 @@ const entries = config['wv-options-wmts']
 
 async function main () {
   for (entry of entries) {
+    // const { errorCount, warningCount, layerCount } = processEntry(entry)
     processEntry(entry)
+  }
+
+  console.warn(`
+    ${prog}:
+    ${totalErrorCount.length} errors,
+    ${totalWarningCount.length} warnings,
+    ${totalLayerCount.length} layers
+  `)
+  if (totalErrorCount > 0) {
+    throw new Error(`${prog}: Error: ${totalErrorCount.length} errors occured`)
   }
 }
 

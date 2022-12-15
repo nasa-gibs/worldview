@@ -44,7 +44,7 @@ const babelLoaderExcludes = [
   /fixtures\.js$/,
   /core-js/
 ]
-// Inlucde any modules that need to be transpiled by babel-loader
+// Include any modules that need to be transpiled by babel-loader
 const transpileDependencies = [
   'react-visibility-sensor'
 ]
