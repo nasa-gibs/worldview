@@ -2,7 +2,7 @@ const fs = require('fs')
 const moment = require('moment')
 const shell = require('shelljs')
 const tar = require('tar')
-const pkg = require('../package.json')
+const pkg = require('../../package.json')
 
 console.log('Preparing distribution')
 shell.rm('-rf', 'build/worldview')

@@ -1,4 +1,4 @@
-const pkg = require('../package.json')
+const pkg = require('../../package.json')
 
 // modified versionCompare function from https://stackoverflow.com/a/6832721
 const versionCompare = (v1, v2) => {
