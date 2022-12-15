@@ -3,7 +3,6 @@ import {
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
 import geographiclib from 'geographiclib';
-import shpWrite from 'shp-write';
 import FileSaver from 'file-saver';
 import { CRS } from '../../modules/map/constants';
 
@@ -151,19 +150,6 @@ function getFeatureJSON(measurements, crs) {
       };
     }),
   };
-}
-
-export function downloadShapefiles(measurements, crs) {
-  // Set names for feature types and zipped folder
-  const options = {
-    folder: 'worldviewMeasurements',
-    types: {
-      polygon: 'areaMeasurements',
-      polyline: 'distanceMeasurements',
-    },
-  };
-  const json = getFeatureJSON(measurements, crs);
-  shpWrite.download(json, options);
 }
 
 export function downloadGeoJSON(measurements, crs) {
