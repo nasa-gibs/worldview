@@ -366,7 +366,7 @@ function LayerRow (props) {
           <div className="instrument-collection">
             <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
 
-            {collections ? (
+            {collections && isVisible ? (
               <h6>
                 <span id="collection-identifier" className={collectionClass}>
                   {collections.version} {collections.type}
