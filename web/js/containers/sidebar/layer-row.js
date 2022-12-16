@@ -357,7 +357,7 @@ function LayerRow (props) {
 
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
-      <div id="test" className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
+      <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
@@ -370,7 +370,7 @@ function LayerRow (props) {
               <h6>
                 <span id="collection-identifier" className={collectionClass}>
                   {collections.version} {collections.type}
-                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: '250', hide: '0' }}>
+                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
                     {collectionIdentifierDescription}
                   </UncontrolledTooltip>
                 </span>

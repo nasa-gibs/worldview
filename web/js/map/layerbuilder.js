@@ -99,7 +99,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const updateStoreCollections = (id) => {
-    store.dispatch(updateLayerCollection({ id }));
+    store.dispatch(updateLayerCollection(id));
   };
 
   /**

@@ -394,10 +394,10 @@ export function changeGranuleSatelliteInstrumentGroup(id, granulePlatform) {
   };
 }
 
-export function updateLayerCollection(value) {
+export function updateLayerCollection(id) {
   return (dispatch, getState) => {
     const { layers } = getState();
-    const { id } = value;
+
     const collections = layers.collections[id];
     if (!collections) {
       dispatch({
@@ -408,9 +408,9 @@ export function updateLayerCollection(value) {
   };
 }
 
-export function updateLayerDateCollection(value) {
+export function updateLayerDateCollection(layerInfo) {
   return {
     type: UPDATE_LAYER_DATE_COLLECTION,
-    ...value,
+    ...layerInfo,
   };
 }
