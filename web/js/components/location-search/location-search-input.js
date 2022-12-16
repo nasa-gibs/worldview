@@ -122,6 +122,7 @@ class SearchBox extends Component {
         >
           {tooltipVisibilityCondition && (
           <UncontrolledTooltip
+            id="left-align-tooltip"
             trigger="hover"
             target={buttonId}
             boundariesElement="window"
@@ -177,6 +178,7 @@ class SearchBox extends Component {
         >
           {tooltipVisibilityCondition && (
           <UncontrolledTooltip
+            id="left-align-tooltip"
             trigger="hover"
             target={buttonId}
             boundariesElement="window"

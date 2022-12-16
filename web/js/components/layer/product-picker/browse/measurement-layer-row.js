@@ -63,6 +63,7 @@ function MeasurementLayerRow (props) {
         {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" />)}
         {(layerNotices || layerIsUnavailable) && (
           <UncontrolledTooltip
+            id="left-align-tooltip"
             target={itemElementId}
             boundariesElement="window"
             className="zot-tooltip"

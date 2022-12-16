@@ -29,6 +29,7 @@ export default function Zot (props) {
       className={className}
     >
       <UncontrolledTooltip
+        id="left-align-tooltip"
         className="zot-tooltip"
         boundariesElement="window"
         target={`${util.encodeId(layer)}-zot`}

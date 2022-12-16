@@ -140,6 +140,7 @@ function EventFilterModalBody (props) {
           />
           <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" />
           <UncontrolledTooltip
+            id="left-align-tooltip"
             placement="right"
             target="bbox-limit-info"
           >
@@ -158,6 +159,7 @@ function EventFilterModalBody (props) {
       />
       <FontAwesomeIcon id="bbox-show-all-tracks" icon="info-circle" />
       <UncontrolledTooltip
+        id="left-align-tooltip"
         placement="right"
         target="bbox-show-all-tracks"
       >

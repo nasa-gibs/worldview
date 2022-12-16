@@ -345,6 +345,7 @@ class SmartHandoff extends Component {
     const url = value && `${getConceptUrl(value)}.html`;
     return url && (
       <UncontrolledTooltip
+        id="left-align-tooltip"
         className="zot-tooltip"
         boundariesElement="window"
         target={tooltipTarget}

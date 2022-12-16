@@ -31,6 +31,7 @@ const GranuleCountSlider = (props) => {
         <h2 className="wv-header">Granule Count</h2>
         <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ml-2" />
         <UncontrolledTooltip
+          id="left-align-tooltip"
           placement="right"
           target="bbox-limit-info"
         >

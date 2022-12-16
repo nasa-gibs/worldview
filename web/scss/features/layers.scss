@@ -1012,6 +1012,12 @@
   justify-content: space-between;
 }
 
+#left-align-tooltip{
+  text-align: left;
+  padding: 4px 1px 5px 9px !important;
+
+}
+
 /** React-Swipe-To-Delete Overrides */
 .swipe-to-delete .js-content:first-child {
   position: relative !important;

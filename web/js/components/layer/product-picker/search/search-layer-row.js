@@ -146,6 +146,7 @@ class SearchLayerRow extends React.Component {
               icon="exclamation-triangle"
             />
             <UncontrolledTooltip
+              id="left-align-tooltip"
               className="zot-tooltip"
               placement="top"
               target={`${encodedId}-notice-info`}
