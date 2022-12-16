@@ -75,9 +75,9 @@ async function main () {
   }
 }
 
-async function processLayer (gcLayer, wvLayers, entry) {
+// async function processLayer (gcLayer, wvLayers, entry) {
 
-}
+// }
 
 async function processEntry (entry) {
   const inputFile = path.join(inputDir, entry.from)
@@ -87,7 +87,7 @@ async function processEntry (entry) {
     layers: {},
     sources: {}
   }
-  const wvMatrixSets = {}
+  // const wvMatrixSets = {}
 
   let gc
 
@@ -118,9 +118,9 @@ async function processEntry (entry) {
   }
 }
 
-async function processMatrixSet (gcMatricSet) {
+// async function processMatrixSet (gcMatricSet) {
 
-}
+// }
 
 main().catch((err) => {
   console.error(err.stack)
