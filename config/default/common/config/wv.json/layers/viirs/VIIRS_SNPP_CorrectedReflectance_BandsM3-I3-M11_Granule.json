@@ -10,7 +10,7 @@
           "period": "subdaily",
           "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11"],
           "availability": {
-            "rollingWindow": 14
+            "rollingWindow": 30
           },
           "disableSnapshot": true
       }
