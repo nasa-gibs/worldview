@@ -6,11 +6,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const CssUrlRelativePlugin = require('css-url-relative-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
   new MomentLocalesPlugin(),
+  new CssUrlRelativePlugin(),
   new MiniCssExtractPlugin({
     filename: 'wv.css',
   }),
@@ -60,7 +62,7 @@ module.exports = {
   output: {
     filename: 'wv.js',
     path: path.resolve(__dirname, 'web/build/'),
-    publicPath: '/build/',
+    publicPath: './',
     pathinfo: false,
     clean: true,
   },

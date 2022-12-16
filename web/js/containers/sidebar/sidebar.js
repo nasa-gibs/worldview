@@ -199,8 +199,8 @@ class Sidebar extends React.Component {
       ? 'Click to Open This @NAME@ Map in a New Tab'
       : 'Click to Reset @NAME@ to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
-    const mobileImgURL = '../../../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
-    const desktopImgURL = '../../../brand/images/wv-logo.svg?v=@BUILD_NONCE@';
+    const mobileImgURL = 'brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
+    const desktopImgURL = 'brand/images/wv-logo.svg?v=@BUILD_NONCE@';
 
     const sidebarStyle = isMobile ? {
       background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
