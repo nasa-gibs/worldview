@@ -140,6 +140,7 @@ function BrowseLayers (props) {
       : (
         <div className="recent-layers-mobile-header">
           <Tooltip
+            id="left-align-tooltip"
             className="facet-tooltip-content"
             isOpen={tooltipVisible}
             target="recent-tooltip-target"

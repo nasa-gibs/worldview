@@ -15,6 +15,7 @@ export default function EventIcon ({
   return (
     <>
       <Tooltip
+        id="left-align-tooltip"
         placement="top"
         target={id + slug}
         delay={{ show: 50, hide: 0 }}
