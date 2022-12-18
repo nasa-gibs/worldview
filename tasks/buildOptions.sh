@@ -82,24 +82,24 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
   `node $NODE_SCRIPTS_DIR/extractConfigFromWMTS.js \
     --config "$BUILD_DIR/config.json" \
     --inputDir "$BUILD_DIR/gc" \
-    --outputDir  "$BUILD_DIR/_wmts"
+    --outputDir  "$BUILD_DIR/_wmts"`
 fi
 
 # # Run processVectorStyles.py and move vectorstyles where we want them
-# if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
-#     mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
-#     "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-#         "$BUILD_DIR/gc/vectorstyles" \
-#         "$BUILD_DIR/config/wv.json/vectorstyles"
-# fi
+if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
+    mkdir -p "$BUILD_DIR/config/wv.json/vectorstyles"
+    `node $NODE_SCRIPTS_DIR/processVectorStyles.js \
+      --inputDir "$BUILD_DIR/gc/vectorstyles" \
+      --outputDir "$BUILD_DIR/config/wv.json/vectorstyles"`
+fi
 
-# # Run processVectorData.py and move vectordata where we want them
-# if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
-#     mkdir -p "$BUILD_DIR"/config/wv.json/vectordata
-#     "$PYTHON_SCRIPTS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-#         "$BUILD_DIR/gc/vectordata" \
-#         "$BUILD_DIR/config/wv.json/vectordata"
-# fi
+# Run processVectorData.py and move vectordata where we want them
+if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
+    mkdir -p "$BUILD_DIR/config/wv.json/vectordata"
+    `node $NODE_SCRIPTS_DIR/processVectorData.js \
+      --inputDir "$BUILD_DIR/gc/vectordata" \
+      --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
+fi
 
 # # Run processColormap.py and move colormaps where we want them
 # if [ -e "$BUILD_DIR/colormaps" ] ; then
