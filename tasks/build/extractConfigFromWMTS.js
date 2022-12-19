@@ -50,10 +50,11 @@ if (!fs.existsSync(outputDir)) {
 const tolerant = config.tolerant
 const entries = config['wv-options-wmts']
 const skip = config.skip || []
+const wvMatrixSets = {}
 
-const totalLayerCount = 0
+let totalLayerCount = 0
 let totalWarningCount = 0
-const totalErrorCount = 0
+let totalErrorCount = 0
 
 class SkipException extends Error {
   constructor (message) {
@@ -64,16 +65,15 @@ class SkipException extends Error {
 
 async function main () {
   for (entry of entries) {
-    // const { errorCount, warningCount, layerCount } = processEntry(entry)
-    await processEntry(entry)
+    let { errorCount, warningCount, layerCount } = await processEntry(entry)
+    // await processEntry(entry)
+    console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
+    totalErrorCount += errorCount
+    totalWarningCount += warningCount
+    totalLayerCount += layerCount
   }
 
-  console.warn(`
-    ${prog}:
-    ${totalErrorCount} errors,
-    ${totalWarningCount} warnings,
-    ${totalLayerCount} layers
-  `)
+  console.warn(`${prog}:${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
 
   if (totalErrorCount > 0) {
     throw new Error(`${prog}: Error: ${totalErrorCount} errors occured`)
@@ -203,7 +203,7 @@ async function processEntry (entry) {
     layers: {},
     sources: {}
   }
-  const wvMatrixSets = {}
+
   wv.sources[entry.source] = {
     matrixSets: wvMatrixSets
   }
@@ -222,7 +222,7 @@ async function processEntry (entry) {
       process.stderr.write(`${prog}: ERROR: [${inputFile}] Unable to get GC: ${e}\n`)
       errorCount += 1
     }
-    return [errorCount, warningCount, layerCount]
+    return { errorCount, warningCount, layerCount }
   }
 
   const gcContents = gc.Capabilities.Contents
@@ -231,7 +231,7 @@ async function processEntry (entry) {
   if (!gcContents || !gcContents.Layer) {
     errorCount += 1
     process.stderr.write(`${prog}: ERROR: [${gcId}] No layers\n`)
-    return [errorCount, warningCount, layerCount]
+    return { errorCount, warningCount, layerCount }
   }
 
   // if (typeof gc.Capabilities.Contents.Layer === 'object') {
@@ -268,13 +268,14 @@ async function processEntry (entry) {
   }
   // }
 
-  if (typeof gcContents.TileMatrixSet === 'object') {
+  if (gcContents.TileMatrixSet === "Object") {
     processMatrixSet(gcContents.TileMatrixSet)
   } else {
     gcContents.TileMatrixSet.forEach(gcMatrixSet => {
       processMatrixSet(gcMatrixSet)
     })
   }
+  return { errorCount, warningCount, layerCount }
 }
 
 function processMatrixSet (gcMatrixSet) {

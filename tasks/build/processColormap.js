@@ -42,6 +42,47 @@ const inputDir = argv.inputDir
 const outputDir = argv.outputDir
 
 const skips = config.skipPalettes || []
+let errorCount = 0
+let fileCount = 0
+
+const walk = (dir) => {
+  let results = []
+  const list = fs.readdirSync(dir)
+  list.forEach((file) => {
+    file = `${dir}/${file}`
+    const stat = fs.statSync(file)
+    if (stat && stat.isDirectory()) {
+      /* Recurse into a subdirectory */
+      results = results.concat(walk(file))
+    } else {
+      const fileType = file.split('.').pop()
+      if (fileType === 'xml') {
+        results.push(file)
+      }
+    }
+  })
+  return results
+}
+
+async function main() {
+  const files = await walk(inputDir)
+  for (const file of files) {
+    try {
+      const { id, xml } = await readFileAsync(file)
+      await processFile(id, xml)
+      fileCount += 1
+    } catch (error) {
+      console.error(`${prog}: ERROR: ${error.message}`)
+      errorCount += 1
+    }
+  }
+
+  console.warn(`${prog}: ${errorCount} error(s), ${fileCount} file(s)`)
+
+  if (errorCount > 0) {
+    throw new Error(`${prog}: Error: ${errorCount} errors occured`)
+  }
+}
 
 function toList (v) {
   return Array.isArray(v) ? v : [v]
@@ -51,16 +92,16 @@ function matchLegend (entry, legends) {
   try {
     let matched = 'false'
     for (const legend of legends) {
-      if (!legend['@id']) {
+      if (!legend._attributes.id) {
         throw new Error('No legend IDs')
       }
-      if (legend['@id'] === entry['@ref']) {
+      if (legend._attributes.id === entry._attributes.ref) {
         matched = legend
       }
     }
     return matched
   } catch (e) {
-    throw new Error(`Invalid reference: ${entry['@ref']}`)
+    throw new Error(`Invalid reference: ${entry._attributes.ref}`)
   }
 }
 
@@ -68,9 +109,8 @@ function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
 
   let transparentMap = 'true'
-
   for (const entry of entries) {
-    if (entry['@transparent'] === 'false') {
+    if (entry._attributes.transparent === 'false') {
       transparentMap = 'false'
     }
   }
@@ -81,7 +121,7 @@ function processEntries (colormap) {
   if (!colormap.Legend) {
     throw new Error('No Legend')
   }
-  const mapType = colormap.Legend['@type']
+  const mapType = colormap.Legend._attributes.type
   const legends = toList(colormap.Legend.LegendEntry)
   const colors = []
   const values = []
@@ -95,25 +135,25 @@ function processEntries (colormap) {
     const entry = entries[index]
     const legend = matchLegend(entry, legends)
     if (legend === 'false') {
-      refSkipList.push(entry['@ref'])
+      refSkipList.push(entry._attributes.ref)
       continue
     }
-    const [r, g, b] = entry['@rgb'].split(',')
+    const [r, g, b] = entry._attributes.rgb.split(',')
     let a = 0
-    if (entry.get('@transparent', 'false') === 'true') {
+    if (entry._attributes.transparent === 'true') {
       a = 255
     }
     if (a === 0) {
-      refSkipList.push(entry['@ref'])
+      refSkipList.push(entry._attributes.ref)
       continue
     }
-    if (!entry['@ref']) {
+    if (!entry._attributes.ref) {
       throw new Error('No ref in legend')
     }
-    refsList.push(entry['@ref'])
+    refsList.push(entry._attributes.ref)
     colors.push(colorFormat.format(parseInt(r, 10), parseInt(g, 10), parseInt(b, 10), a))
     if (mapType === 'continuous' || mapType === 'discrete') {
-      const items = entry['@value'].replace(/[()[\]]/g, '').split(',')
+      const items = entry._attributes['value'].replace(/[()[\]]/g, '').split(',')
       try {
         const newItems = []
         for (const item of items) {
@@ -127,27 +167,27 @@ function processEntries (colormap) {
           newItems.push(v)
         }
       } catch (error) {
-        throw new Error(`Invalid value: ${entry['@value']}`)
+        throw new Error(`Invalid value: ${entry._attributes.value}`)
       }
 
       let skipIndex = 0
       const idList = []
       for (const [index, entry] of legends.entries()) {
-        if (refSkipList.includes(entry['@id'])) {
+        if (refSkipList.includes(entry._attributes.id)) {
           skipIndex += 1
           continue
         }
-        const [r, g, b] = entry['@rgb'].split(',')
+        const [r, g, b] = entry._attributes['rgb'].split(',')
         legendColors.push(colorFormat.format(parseInt(r, 10), parseInt(g, 10), parseInt(b, 10), 255))
-        if (!entry['@tooltip']) {
+        if (!entry._attributes.tooltip) {
           throw new Error('No tooltips in legend')
         }
-        tooltips.push(entry['@tooltip'])
-        if (!entry['@id']) {
+        tooltips.push(entry._attributes.tooltip)
+        if (!entry._attributes.id) {
           throw new Error('No id in legend')
         }
-        idList.push(entry['@id'])
-        if (entry['@showTick']) {
+        idList.push(entry._attributes.id)
+        if (entry._attributes.showTick) {
           ticks.push(index - skipIndex)
         }
       }
@@ -188,26 +228,25 @@ async function readFileAsync (file) {
 
 async function processFile (id, xml) {
   const document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
-
   const colormaps = toList(document.ColorMaps.ColorMap)
   const maps = []
   for (const colormap of colormaps) {
-    const result = processEntries(colormap)
+    const result = await processEntries(colormap)
     if (result === 'transparent') {
       continue
     }
-    result.title = colormap['@title']
-    result.entries.title = colormap['@title']
-    result.legend.title = colormap['@title']
+    result.title = colormap._attributes.title
+    result.entries.title = colormap._attributes.title
+    result.legend.title = colormap._attributes.title
     result.legend.id = `${id}_${maps.length}_legend`
-    if ('@minLabel' in colormap.Legend) {
-      result.legend.minLabel = colormap.Legend['@minLabel']
+    if ('minLabel' in colormap.Legend._attributes) {
+      result.legend.minLabel = colormap.Legend._attributes.minLabel
     }
-    if ('@maxLabel' in colormap.Legend) {
-      result.legend.maxLabel = colormap.Legend['@maxLabel']
+    if ('maxLabel' in colormap.Legend._attributes) {
+      result.legend.maxLabel = colormap.Legend._attributes.maxLabel
     }
-    if ('@units' in colormap) {
-      result.legend.units = colormap['@units']
+    if ('units' in colormap._attributes) {
+      result.legend.units = colormap._attributes.units
     }
     maps.push(result)
   }
@@ -223,27 +262,6 @@ async function processFile (id, xml) {
 
   const outputFile = path.join(outputDir, `${id}.json`)
   await writeFile(outputFile, JSON.stringify(data, null, jsonOptions.indent), { encoding: 'utf-8' })
-}
-
-async function main () {
-  const files = await readdir(inputDir)
-  for (const file of files) {
-    const inputFile = path.join(inputDir, file)
-    try {
-      const { id, xml } = await readFileAsync(inputFile)
-      await processFile(id, xml)
-      fileCount += 1
-    } catch (e) {
-      console.error(`${prog}: ERROR: [${id}] ${e.message}`)
-      errorCount += 1
-    }
-  }
-
-  console.log(`${prog}: ${errorCount} error(s), ${fileCount} file(s)`)
-
-  if (errorCount > 0) {
-    throw new Error(`${prog}: Error: ${errorCount} errors occured`)
-  }
 }
 
 main().catch((err) => {
