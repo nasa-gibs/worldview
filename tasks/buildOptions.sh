@@ -100,6 +100,8 @@ if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
       --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
 fi
 
+# TODO: Await for entries.colors, entries.refs, entries.values,
+# legend.colors, legend.tooltips, legend.ticks, legend.refs,
 # Run processColormap.js and move colormaps where we want them
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes

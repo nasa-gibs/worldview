@@ -88,7 +88,7 @@ function toList (v) {
   return Array.isArray(v) ? v : [v]
 }
 
-function matchLegend (entry, legends) {
+async function matchLegend (entry, legends) {
   try {
     let matched = 'false'
     for (const legend of legends) {
@@ -105,7 +105,7 @@ function matchLegend (entry, legends) {
   }
 }
 
-function processEntries (colormap) {
+async function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
   for (const entry of entries) {
@@ -129,78 +129,87 @@ function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
-  const colorFormat = '%02x%02x%02x%02x'
-  for (let index = 0; index < entries.length; index += 1) {
-    const entry = entries[index]
-    const legend = matchLegend(entry, legends)
-    if (legend === 'false') {
-      refSkipList.push(entry._attributes.ref)
-      continue
-    }
-    const [r, g, b] = entry._attributes.rgb.split(',')
-    let a = 0
-    if (entry._attributes.transparent === 'true') {
-      a = 255
-    }
-    if (a === 0) {
-      refSkipList.push(entry._attributes.ref)
-      continue
-    }
-    if (!entry._attributes.ref) {
-      throw new Error('No ref in legend')
-    }
-    refsList.push(entry._attributes.ref)
-    const rHex = parseInt(r).toString(16)
-    const gHex = parseInt(g).toString(16)
-    const bHex = parseInt(b).toString(16)
-    const colorString = '#' + rHex + gHex + bHex + 'ff'
-    colors.push(colorString)
-    if (mapType === 'continuous' || mapType === 'discrete') {
-      const items = entry._attributes.value.replace(/[()[\]]/g, '').split(',')
-      try {
-        const newItems = []
-        for (const item of items) {
-          let v = parseFloat(item)
-          if (v === Number.POSITIVE_INFINITY) {
-            v = Number.MAX_VALUE
-          }
-          if (v === Number.NEGATIVE_INFINITY) {
-            v = Number.MIN_VALUE
-          }
-          newItems.push(v)
-        }
-      } catch (error) {
-        throw new Error(`Invalid value: ${entry._attributes.value}`)
-      }
-    }
-  }
 
+  // TODO: make this a separate function for entries?
+  await Promise.all(
+    entries.map(async (entry) => {
+      const legend = await matchLegend(entry, legends)
+      if (colormap._attributes.title === 'Columnar Water Vapor') {
+      }
+      if (legend === 'false') {
+        refSkipList.push(entry._attributes.ref)
+      }
+      const [r, g, b] = entry._attributes.rgb.split(',')
+      let a = 0
+      if (entry._attributes.transparent === 'true') {
+        a = 255
+      }
+      if (a === 0) {
+        refSkipList.push(entry._attributes.ref)
+      }
+      if (!entry._attributes.ref) {
+        throw new Error('No ref in legend')
+      }
+      refsList.push(entry._attributes.ref)
+      // TODO: turn this into reusable function
+      const rHex = parseInt(r).toString(16).padStart(2, '0')
+      const gHex = parseInt(g).toString(16).padStart(2, '0')
+      const bHex = parseInt(b).toString(16).padStart(2, '0')
+      const colorString = '#' + rHex + gHex + bHex + 'ff'
+
+      colors.push(colorString)
+      if (mapType === 'continuous' || mapType === 'discrete') {
+        const items = entry._attributes.value.replace(/[()[\]]/g, '').split(',')
+        try {
+          const newItems = []
+          for (const item of items) {
+            let v = parseFloat(item)
+            if (v === Number.POSITIVE_INFINITY) {
+              v = Number.MAX_VALUE
+            }
+            if (v === Number.NEGATIVE_INFINITY) {
+              v = Number.MIN_VALUE
+            }
+            newItems.push(v)
+          }
+        } catch (error) {
+          throw new Error(`Invalid value: ${entry._attributes.value}`)
+        }
+      }
+    })
+  )
+
+  // TODO: make this a separate function for legends?
   let skipIndex = 0
   const idList = []
-  for (const [index, entry] of legends.entries()) {
-    if (refSkipList.includes(entry._attributes.id)) {
-      skipIndex += 1
-      continue
-    }
-    const [r, g, b] = entry._attributes.rgb.split(',')
-    const rHex = parseInt(r).toString(16)
-    const gHex = parseInt(g).toString(16)
-    const bHex = parseInt(b).toString(16)
-    const colorString = '#' + rHex + gHex + bHex + 'ff'
-    colors.push(colorString)
-    legendColors.push(colorString)
-    if (!entry._attributes.tooltip) {
-      throw new Error('No tooltips in legend')
-    }
-    tooltips.push(entry._attributes.tooltip)
-    if (!entry._attributes.id) {
-      throw new Error('No id in legend')
-    }
-    idList.push(entry._attributes.id)
-    if (entry._attributes.showTick) {
-      ticks.push(index - skipIndex)
-    }
-  }
+  await Promise.all(
+    legends.map(async (entry, index) => {
+      if (refSkipList.includes(entry._attributes.id)) {
+        skipIndex += 1
+      }
+      const [r, g, b] = entry._attributes.rgb.split(',')
+
+      // TODO: turn this into reusable function
+      const rHex = parseInt(r).toString(16).padStart(2, '0')
+      const gHex = parseInt(g).toString(16).padStart(2, '0')
+      const bHex = parseInt(b).toString(16).padStart(2, '0')
+      const colorString = rHex + gHex + bHex + 'ff'
+
+      colors.push(colorString)
+      legendColors.push(colorString)
+      if (!entry._attributes.tooltip) {
+        throw new Error('No tooltips in legend')
+      }
+      tooltips.push(entry._attributes.tooltip)
+      if (!entry._attributes.id) {
+        throw new Error('No id in legend')
+      }
+      idList.push(entry._attributes.id)
+      if (entry._attributes.showTick) {
+        ticks.push(index - skipIndex)
+      }
+    })
+  )
 
   const result = {
     type: mapType,
