@@ -107,8 +107,16 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
-  // ASCAT_Ocean_Surface_Wind_Speed does not include a glStyle, so we early return here in that instance
+  // OSCAR_Cloud & ASCAT_Ocean_Surface_Wind_Speed do not include a glStyle from /getCapabilities yet,
+  // so we early return here so we can apply our own styling. Ultimately these styles will be served from
+  // the provider(s) and this check will go away.
   if (glStyle === undefined) {
+    return;
+  }
+
+  // This is temporary until the ASCAT JSON files from /getCapabilities are updated with
+  // the appropriate vector style name.
+  if (glStyle.name === 'OSCAR_Sea_Surface_Currents') {
     return;
   }
 

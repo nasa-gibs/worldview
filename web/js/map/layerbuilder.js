@@ -50,7 +50,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAnimation = true;
+  const renderAnimation = false;
   const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
 
   /**
@@ -470,7 +470,6 @@ export default function mapLayerBuilder(config, cache, store) {
     * @returns {object} OpenLayers Vector layer
     */
   const createLayerVector = function(def, layeroptions, day, state, attributes) {
-    console.log('createLayerVector function called');
     const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
@@ -548,7 +547,6 @@ export default function mapLayerBuilder(config, cache, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
 
-    console.log(def);
     // ASCAT does not have def.matrixIds data
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
@@ -584,7 +582,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-    console.log(tileMatrixSet);
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
@@ -604,10 +601,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     let counter = 0;
 
-    // ASCAT errors out but not sure why yet. OSCAR & MISR work properly
-    // ol.layer.VectorTile
     console.log('Creating LayerVectorTile');
-
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -618,9 +612,8 @@ export default function mapLayerBuilder(config, cache, store) {
       style (feature, resolution) {
         counter += 1;
 
-        console.log('style feature:');
-        console.log(feature);
-
+        // console.log('style feature:');
+        // console.log(feature);
 
         // Due to processing issues, I am only rendering every 25th feature
         if (counter % 15 !== 0) return [];
@@ -628,8 +621,8 @@ export default function mapLayerBuilder(config, cache, store) {
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         let arrowColor;
-        let radianDirection = feature.get('direction'); // was "dir"
-        const magnitude = feature.get('magnitude'); // was "speed"
+        let radianDirection = feature.get('direction');
+        const magnitude = feature.get('magnitude');
 
         // If OSCAR/ASCAT we need to adjust the radian angle
         // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
