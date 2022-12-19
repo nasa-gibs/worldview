@@ -130,9 +130,8 @@ async function processLayer (layer) {
 }
 
 async function processGetCapabilities (outputFile) {
-  const gcXML = fs.readFileSync(outputFile, { encoding: 'utf-8' })
-  let gc = convert.xml2json(gcXML, { compact: true, spaces: 2 })
-  gc = JSON.parse(gc)
+  const xml = fs.readFileSync(outputFile, { encoding: 'utf-8' })
+  const gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
 
   try {
     if (!gc.Capabilities || !gc.Capabilities.Contents) {

@@ -5,7 +5,7 @@ function toList (val) {
   return val instanceof Array ? val : [val]
 }
 
-module.exports = function processTemporal (wvLayer, value) {
+function processTemporal (wvLayer, value) {
   const dateFormat = 'YYYY-MM-DD'
   const timeFormat = 'HH:mm:ss'
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
@@ -94,4 +94,8 @@ module.exports = function processTemporal (wvLayer, value) {
     throw new Error(`Error processing temporal layer: ${e}`)
   }
   return wvLayer
+}
+
+module.exports = {
+  processTemporal
 }

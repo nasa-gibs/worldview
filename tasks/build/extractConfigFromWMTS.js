@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
+const convert = require('xml-js')
 const processTemporalLayer = require('./processTemporalLayer')
 
 const prog = path.basename(__filename)
@@ -64,15 +65,16 @@ class SkipException extends Error {
 async function main () {
   for (entry of entries) {
     // const { errorCount, warningCount, layerCount } = processEntry(entry)
-    processEntry(entry)
+    await processEntry(entry)
   }
 
   console.warn(`
     ${prog}:
-    ${totalErrorCount.length} errors,
-    ${totalWarningCount.length} warnings,
-    ${totalLayerCount.length} layers
+    ${totalErrorCount} errors,
+    ${totalWarningCount} warnings,
+    ${totalLayerCount} layers
   `)
+
   if (totalErrorCount > 0) {
     throw new Error(`${prog}: Error: ${totalErrorCount.length} errors occured`)
   }
@@ -146,15 +148,15 @@ function processLayer (gcLayer, wvLayers, entry) {
   // Vector data links
   if ((Object.prototype.hasOwnProperty.call(gcLayer, 'ows:Metadata') && gcLayer['ows:Metadata'] !== null)) {
     for (const item of gcLayer['ows:Metadata']) {
-      if (!Object.prototype.hasOwnProperty.call(item, '@xlink:role')) {
+      if (!(['xlink:role'] in item._attributes)) {
         throw new Error('No xlink:role')
       }
-      const schemaVersion = item['@xlink:role']
+      const schemaVersion = item._attributes['xlink:role']
 
       if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
-        const vectorDataLink = item['@xlink:href']
+        const vectorDataLink = item._attributes['xlink:href']
         const vectorDataFile = path.basename(vectorDataLink)
-        const vectorDataId = path.splitext(vectorDataFile)[0]
+        const vectorDataId = path.parse(vectorDataFile).name
         wvLayer.vectorData = {
           id: vectorDataId
         }
@@ -168,22 +170,22 @@ function processLayer (gcLayer, wvLayers, entry) {
       totalWarningCount++
     } else {
       for (const item of gcLayer['ows:Metadata']) {
-        if (!('@xlink:role' in item)) {
+        if (!(['xlink:role'] in item._attributes)) {
           throw new Error('No xlink:role')
         }
-        const schemaVersion = item['@xlink:role']
+        const schemaVersion = item._attributes['xlink:role']
 
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
-          const colormapLink = item['@xlink:href']
+          const colormapLink = item._attributes['xlink:href']
           const colormapFile = path.basename(colormapLink)
-          const colormapId = path.splitext(colormapFile)[0]
+          const colormapId = path.parse(colormapFile).name
           wvLayer.palette = {
             id: colormapId
           }
         } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
-          const vectorstyleLink = item['@xlink:href']
+          const vectorstyleLink = item._attributes['xlink:href']
           const vectorstyleFile = path.basename(vectorstyleLink)
-          const vectorstyleId = path.splitext(vectorstyleFile)[0]
+          const vectorstyleId = path.parse(vectorstyleFile).name
           wvLayer.vectorStyle = {
             id: vectorstyleId
           }
@@ -211,10 +213,10 @@ async function processEntry (entry) {
   let gc
   try {
     const xml = await fs.promises.readFile(inputFile, 'utf8')
-    gc = xmltodict.parse(xml)
+    gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
   } catch (e) {
     if (tolerant) {
-      process.stderr.write(`${prog}:   WARN: [${inputFile}] Unable to get GC: ${e}\n`)
+      process.stderr.write(`${prog}: WARN: [${inputFile}] Unable to get GC: ${e}\n`)
       warningCount += 1
     } else {
       process.stderr.write(`${prog}: ERROR: [${inputFile}] Unable to get GC: ${e}\n`)
@@ -232,41 +234,39 @@ async function processEntry (entry) {
     return [errorCount, warningCount, layerCount]
   }
 
-  if (typeof gc.Capabilities.Contents.Layer === 'object') {
-    const gcLayer = gc.Capabilities.Contents.Layer
-    const ident = gcLayer['ows:Identifier']
+  // if (typeof gc.Capabilities.Contents.Layer === 'object') {
+  //   const gcLayer = gc.Capabilities.Contents.Layer
+  //   const ident = gcLayer['ows:Identifier']
+  //   try {
+  //     layerCount += 1
+  //     processLayer(gcLayer, wvLayers, entry)
+  //   } catch (error) {
+  //     if (error instanceof SkipException) {
+  //       warningCount += 1
+  //       process.stderr.write(`${prog}: WARNING: [${ident}] Skipping\n`)
+  //     } else {
+  //       errorCount += 1
+  //       console.error(error.stack)
+  //       process.stderr.write(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
+  //     }
+  //   }
+  // } else {
+  for (const gcLayer of gcContents.Layer) {
     try {
       layerCount += 1
       processLayer(gcLayer, wvLayers, entry)
     } catch (error) {
       if (error instanceof SkipException) {
         warningCount += 1
-        process.stderr.write(`${prog}: WARNING: [${ident}] Skipping\n`)
+        process.stderr.write(`${prog}: WARNING: [${id}] Skipping\n`)
       } else {
         errorCount += 1
-        console.error(e.stack)
+        console.error(error.stack)
         process.stderr.write(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
       }
     }
-  } else {
-    for (const gcLayer of gcContents.Layer) {
-      // const ident = gcLayer['ows:Identifier']
-      try {
-        layerCount += 1
-        processLayer(gcLayer, wvLayers, entry)
-      } catch (error) {
-        if (se instanceof SkipException) {
-          warningCount += 1
-          process.stderr.write(`${prog}: WARNING: [${id}] Skipping\n`)
-        } else {
-          errorCount += 1
-          console.error(e.stack)
-        }
-      }
-    }
   }
-
-  processMatrixSet(gcMatrixSet)
+  // }
 
   if (typeof gcContents.TileMatrixSet === 'object') {
     processMatrixSet(gcContents.TileMatrixSet)

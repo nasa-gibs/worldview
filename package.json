@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": ">= 16.18.0"
+    "node": ">= 16"
   },
   "husky": {
     "hooks": {
@@ -59,16 +59,13 @@
     "e2e:headless:firefox": "npx nightwatch -e firefoxHeadless --skiptags skipLocalStorageEnabled --suiteRetries 2",
     "e2e:headless:firefox:localStorageDisabled": "npx nightwatch -e firefoxLocalStorageDisabled --tag localStorageDisabled",
     "getcapabilities": "bash -c 'FETCH_GC=1 npm run build:options'",
-    "generatePreviews": "python3 tasks/python3/fetchPreviewSnapshots.py",
+    "generatePreviews": "node ./tasks/node/fetchPreviewSnapshots.py",
     "linkcheck": "node ./tasks/link-check",
     "lint": "run-s lint:js lint:scss",
     "lint:scss": "npx stylelint ./web/scss/**/*.scss",
     "lint:js": "npx eslint . --quiet",
     "preinstall": "node tasks/util/checkNodeVersion.js",
-    "postinstall": "patch-package && npm run python",
-    "python": "run-script-os",
-    "python:darwin:linux": "bash -c 'tasks/pythonInstall.sh linux'",
-    "python:win32": "bash -c 'tasks/pythonInstall.sh'",
+    "postinstall": "patch-package",
     "start": "node ./tasks/util/start.js",
     "test": "run-script-os",
     "test:coverage": "run-script-os",
@@ -156,6 +153,7 @@
     "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.11.1",
     "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23",
     "yargs": "^17.6.2"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
+const yargs = require('yargs')
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -22,10 +23,10 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
-  .epilog('Extracts vector data information from GetCapabilities')
+  .epilog('Extracts vector style information from GetCapabilities')
 
 const { argv } = options
-if (!argv.config && !argv.inputDir && !argv.outputDir) {
+if (!argv.inputDir && !argv.outputDir) {
   throw new Error('Invalid number of arguments')
 }
 
@@ -60,11 +61,11 @@ async function copyFileAsync (file) {
     const responseData = {}
     const vectorLayerFilename = file
     const vectorLayerId = vectorLayerFilename.split('.json', 1)[0]
-    responseData.vectorData = {}
-    responseData.vectorData[vectorLayerId] = {}
+    responseData.vectorStyles = {}
+    responseData.vectorStyles[vectorLayerId] = {}
     const initialData = JSON.parse(await readFile(inputFile, 'utf-8'))
     for (const i in initialData) {
-      responseData.vectorData[vectorLayerId][i] = initialData[i]
+      responseData.vectorStyles[vectorLayerId][i] = initialData[i]
     }
     await writeFile(inputFile, JSON.stringify(responseData, null, 2), 'utf-8')
     await copyFile(inputFile, outputDir)
