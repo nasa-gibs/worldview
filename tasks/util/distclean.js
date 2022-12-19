@@ -1,8 +1,7 @@
 const shell = require('shelljs')
 
 const dirs = [
-  'node_modules',
-  '.python'
+  'node_modules'
 ]
 
 dirs.forEach((dir) => {
