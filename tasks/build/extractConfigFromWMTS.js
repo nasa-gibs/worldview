@@ -63,11 +63,17 @@ class SkipException extends Error {
   }
 }
 
+/**
+ * Main function
+ * @returns {Promise<void>}
+ * @throws {Error}
+ * @throws {SkipException}
+ */
 async function main () {
   for (entry of entries) {
-    let { errorCount, warningCount, layerCount } = await processEntry(entry)
-    // await processEntry(entry)
+    const { errorCount, warningCount, layerCount } = await processEntry(entry)
     console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
+
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
@@ -268,7 +274,7 @@ async function processEntry (entry) {
   }
   // }
 
-  if (gcContents.TileMatrixSet === "Object") {
+  if (gcContents.TileMatrixSet === 'Object') {
     processMatrixSet(gcContents.TileMatrixSet)
   } else {
     gcContents.TileMatrixSet.forEach(gcMatrixSet => {
