@@ -37,15 +37,13 @@ async function main () {
   let fileCount = 0
   let errorCount = 0
 
-  for (const files of inputDir) {
-    for (const file of fs.readdirSync(files)) {
-      try {
-        fileCount += 1
-        await copyFileAsync(file)
-      } catch (error) {
-        errorCount += 1
-        console.error(`${prog}: ERROR: [${file}] ${e}\n.`)
-      }
+  for (const file of fs.readdirSync(inputDir)) {
+    try {
+      fileCount += 1
+      await copyFileAsync(file)
+    } catch (error) {
+      errorCount += 1
+      console.error(`${prog}: ERROR: [${file}] ${error}\n.`)
     }
   }
 
@@ -57,18 +55,18 @@ async function main () {
 }
 
 async function copyFileAsync (file) {
-  if (inputFile.endsWith('.json')) {
+  if (file.endsWith('.json')) {
     const responseData = {}
     const vectorLayerFilename = file
     const vectorLayerId = vectorLayerFilename.split('.json', 1)[0]
     responseData.vectorStyles = {}
     responseData.vectorStyles[vectorLayerId] = {}
-    const initialData = JSON.parse(await readFile(inputFile, 'utf-8'))
+    const initialData = JSON.parse(await readFile(`${inputDir}/${file}`, 'utf-8'))
     for (const i in initialData) {
       responseData.vectorStyles[vectorLayerId][i] = initialData[i]
     }
-    await writeFile(inputFile, JSON.stringify(responseData, null, 2), 'utf-8')
-    await copyFile(inputFile, outputDir)
+    await writeFile(`${inputDir}/${file}`, JSON.stringify(responseData, null, 2), 'utf-8')
+    await copyFile(`${inputDir}/${file}`, `${outputDir}/${file}`)
   }
 }
 
