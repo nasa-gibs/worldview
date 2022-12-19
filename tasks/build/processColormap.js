@@ -4,7 +4,6 @@ const convert = require('xml-js')
 const { promisify } = require('util')
 const yargs = require('yargs')
 
-const readdir = promisify(fs.readdir)
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 
@@ -64,7 +63,7 @@ const walk = (dir) => {
   return results
 }
 
-async function main() {
+async function main () {
   const files = await walk(inputDir)
   for (const file of files) {
     try {
@@ -72,7 +71,8 @@ async function main() {
       await processFile(id, xml)
       fileCount += 1
     } catch (error) {
-      console.error(`${prog}: ERROR: ${error.message}`)
+      console.error(error)
+      console.error(`${prog}: ERROR: ${error}`)
       errorCount += 1
     }
   }
@@ -107,7 +107,6 @@ function matchLegend (entry, legends) {
 
 function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
-
   let transparentMap = 'true'
   for (const entry of entries) {
     if (entry._attributes.transparent === 'false') {
@@ -130,7 +129,7 @@ function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
-  const colorFormat = '{0:02x}{1:02x}{2:02x}{3:02x}'
+  const colorFormat = '%02x%02x%02x%02x'
   for (let index = 0; index < entries.length; index += 1) {
     const entry = entries[index]
     const legend = matchLegend(entry, legends)
@@ -151,9 +150,13 @@ function processEntries (colormap) {
       throw new Error('No ref in legend')
     }
     refsList.push(entry._attributes.ref)
-    colors.push(colorFormat.format(parseInt(r, 10), parseInt(g, 10), parseInt(b, 10), a))
+    const rHex = parseInt(r).toString(16)
+    const gHex = parseInt(g).toString(16)
+    const bHex = parseInt(b).toString(16)
+    const colorString = '#' + rHex + gHex + bHex + 'ff'
+    colors.push(colorString)
     if (mapType === 'continuous' || mapType === 'discrete') {
-      const items = entry._attributes['value'].replace(/[()[\]]/g, '').split(',')
+      const items = entry._attributes.value.replace(/[()[\]]/g, '').split(',')
       try {
         const newItems = []
         for (const item of items) {
@@ -169,51 +172,56 @@ function processEntries (colormap) {
       } catch (error) {
         throw new Error(`Invalid value: ${entry._attributes.value}`)
       }
-
-      let skipIndex = 0
-      const idList = []
-      for (const [index, entry] of legends.entries()) {
-        if (refSkipList.includes(entry._attributes.id)) {
-          skipIndex += 1
-          continue
-        }
-        const [r, g, b] = entry._attributes['rgb'].split(',')
-        legendColors.push(colorFormat.format(parseInt(r, 10), parseInt(g, 10), parseInt(b, 10), 255))
-        if (!entry._attributes.tooltip) {
-          throw new Error('No tooltips in legend')
-        }
-        tooltips.push(entry._attributes.tooltip)
-        if (!entry._attributes.id) {
-          throw new Error('No id in legend')
-        }
-        idList.push(entry._attributes.id)
-        if (entry._attributes.showTick) {
-          ticks.push(index - skipIndex)
-        }
-      }
-
-      const result = {
-        type: mapType,
-        entries: {
-          type: mapType,
-          colors,
-          refs: refsList
-        },
-        legend: {
-          colors: legendColors,
-          type: mapType,
-          tooltips,
-          ticks,
-          refs: idList
-        }
-      }
-      if (mapType === 'continuous' || mapType === 'discrete') {
-        result.entries.values = values
-      }
-
-      return result
     }
   }
+
+  let skipIndex = 0
+  const idList = []
+  for (const [index, entry] of legends.entries()) {
+    if (refSkipList.includes(entry._attributes.id)) {
+      skipIndex += 1
+      continue
+    }
+    const [r, g, b] = entry._attributes.rgb.split(',')
+    const rHex = parseInt(r).toString(16)
+    const gHex = parseInt(g).toString(16)
+    const bHex = parseInt(b).toString(16)
+    const colorString = '#' + rHex + gHex + bHex + 'ff'
+    colors.push(colorString)
+    legendColors.push(colorString)
+    if (!entry._attributes.tooltip) {
+      throw new Error('No tooltips in legend')
+    }
+    tooltips.push(entry._attributes.tooltip)
+    if (!entry._attributes.id) {
+      throw new Error('No id in legend')
+    }
+    idList.push(entry._attributes.id)
+    if (entry._attributes.showTick) {
+      ticks.push(index - skipIndex)
+    }
+  }
+
+  const result = {
+    type: mapType,
+    entries: {
+      type: mapType,
+      colors,
+      refs: refsList
+    },
+    legend: {
+      colors: legendColors,
+      type: mapType,
+      tooltips,
+      ticks,
+      refs: idList
+    }
+  }
+  if (mapType === 'continuous' || mapType === 'discrete') {
+    result.entries.values = values
+  }
+
+  return result
 }
 
 async function readFileAsync (file) {
