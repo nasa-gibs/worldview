@@ -76,7 +76,7 @@ async function main () {
   `)
 
   if (totalErrorCount > 0) {
-    throw new Error(`${prog}: Error: ${totalErrorCount.length} errors occured`)
+    throw new Error(`${prog}: Error: ${totalErrorCount} errors occured`)
   }
 }
 

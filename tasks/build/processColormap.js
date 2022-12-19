@@ -242,7 +242,7 @@ async function main () {
   console.log(`${prog}: ${errorCount} error(s), ${fileCount} file(s)`)
 
   if (errorCount > 0) {
-    throw new Error(`${prog}: Error: ${errorCount.length} errors occured`)
+    throw new Error(`${prog}: Error: ${errorCount} errors occured`)
   }
 }
 
