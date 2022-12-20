@@ -29,7 +29,9 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
-import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
+import {
+  getActiveLayers, makeGetDescription, getCollections,
+} from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 
@@ -48,6 +50,7 @@ function LayerRow (props) {
     compare,
     layer,
     compareState,
+    collections,
     paletteLegends,
     getPalette,
     palette,
@@ -82,6 +85,7 @@ function LayerRow (props) {
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
+  const collectionIdentifierDescription = 'Dataset version and the source of data processing, Near Real-Time (NRT) or Standard (STD)';
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
@@ -328,6 +332,8 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
+  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge badge-pill badge-secondary' : 'collection-title badge badge-pill badge-light';
+
   const renderLayerRow = () => (
     <>
       {!isEmbedModeActive && (
@@ -357,7 +363,21 @@ function LayerRow (props) {
             {showButtons && renderControls()}
           </div>
           <h4 title={names.title}>{names.title}</h4>
-          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          <div className="instrument-collection">
+            <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+
+            {collections && isVisible ? (
+              <h6>
+                <span id="collection-identifier" className={collectionClass}>
+                  {collections.version} {collections.type}
+                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+                    {collectionIdentifierDescription}
+                  </UncontrolledTooltip>
+                </span>
+              </h6>
+            ) : ''}
+          </div>
+
           {hasPalette ? getPaletteLegend() : ''}
         </div>
         {isVectorLayer && isVisible ? renderVectorIcon() : null}
@@ -417,7 +437,7 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation,
+      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation, layers, date,
     } = state;
     const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
@@ -436,10 +456,14 @@ const makeMapStateToProps = () => {
     const tracksForLayer = getActiveLayers(state).filter(
       (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
     );
+    const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
+    const convertedDate = activeDate.toISOString().split('T')[0];
+    const collections = getCollections(layers, convertedDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
     return {
       compare,
+      collections,
       tracksForLayer,
       measurementDescriptionPath,
       globalTemperatureUnit,
@@ -545,6 +569,7 @@ LayerRow.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
+  collections: PropTypes.object,
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,

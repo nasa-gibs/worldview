@@ -17,6 +17,9 @@ let defaultStateFromLocation = {
     active: {
       layers: [],
     },
+    activeB: {
+      layers: [],
+    },
   },
 };
 const globalState = fixtures.getState();
@@ -107,6 +110,9 @@ describe('permalink 1.0', () => {
         active: {
           layers: [],
         },
+        activeB: {
+          layers: [],
+        },
       },
     };
   });
@@ -134,6 +140,9 @@ describe('permalink 1.1', () => {
     defaultStateFromLocation = {
       layers: {
         active: {
+          layers: [],
+        },
+        activeB: {
           layers: [],
         },
       },
@@ -243,6 +252,9 @@ describe('Date range building', () => {
     defaultStateFromLocation = {
       layers: {
         active: {
+          layers: [],
+        },
+        activeB: {
           layers: [],
         },
       },

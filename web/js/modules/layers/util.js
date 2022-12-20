@@ -8,7 +8,6 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
-
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
@@ -1276,18 +1275,10 @@ export function mapLocationToLayerState(
     });
   }
 
-  // TODO how do we properly combine initial state with location state
-  newStateFromLocation.layers.active = {
-    ...newStateFromLocation.layers.active,
-    granuleLayers: {},
-    granulePlatform: '',
-  };
-
-  newStateFromLocation.layers.activeB = {
-    ...newStateFromLocation.layers.activeB,
-    granuleLayers: {},
-    granulePlatform: '',
-  };
+  newStateFromLocation.layers = update(state.layers, {
+    active: { $merge: newStateFromLocation.layers.active },
+    activeB: { $merge: newStateFromLocation.layers.activeB },
+  });
 
   return newStateFromLocation;
 }
