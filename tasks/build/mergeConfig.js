@@ -32,6 +32,7 @@ const conf = {}
 let fileCount = 0
 
 async function main () {
+  console.warn(inputDir)
   fs.readdirSync(inputDir).forEach(file => {
     try {
       if (!file.endsWith('.json')) return
