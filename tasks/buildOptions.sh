@@ -114,32 +114,32 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
       --outputDir "$BUILD_DIR/config/palettes"`
 fi
 
-# # Throw error if no categoryGroupOrder.json file present
-# if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
-#     echo "categoryGroupOrder.json not found.  Generating..."
-#     `node $SCRIPTS_DIR/generateCategoryGroupOrder.js \
-#       --inputDir "$SRC_DIR/common/config/wv.json/categories/" \
-#       --outputDir "$SRC_DIR/common/config/wv.json/"`
-# fi
+# Throw error if no categoryGroupOrder.json file present
+if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
+    echo "categoryGroupOrder.json not found.  Generating..."
+    `node $SCRIPTS_DIR/generateCategoryGroupOrder.js \
+      --inputDir "$SRC_DIR/common/config/wv.json/categories/" \
+      --outputDir "$SRC_DIR/common/config/wv.json/"`
+fi
 
-# if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
-#     cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
-# fi
+if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
+    cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+fi
 
-# # Run mergeConfig.js on all directories in /config
-# configs=$(ls "$BUILD_DIR/config")
-# for config in $configs; do
-#     case $config in
-#         *.json)
-#             `node $SCRIPTS_DIR/mergeConfig.js \
-#               --inputFile "$BUILD_DIR/config/$config" \
-#               --outputFile "$DEST_DIR/config/$config"`
-#              ;;
-#          *)
-#              cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
-#              ;;
-#     esac
-# done
+# Run mergeConfig.js on all directories in /config
+configs=$(ls "$BUILD_DIR/config")
+for config in $configs; do
+    case $config in
+        *.json)
+            `node $SCRIPTS_DIR/mergeConfig.js \
+              --inputDir "$BUILD_DIR/config/$config" \
+              --outputFile "$DEST_DIR/config/$config"`
+             ;;
+         *)
+             cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
+             ;;
+    esac
+done
 
 # # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
 # `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
