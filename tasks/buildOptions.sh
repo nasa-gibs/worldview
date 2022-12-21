@@ -57,14 +57,14 @@ mkdir -p "$BUILD_DIR/colormaps"
 #       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
 #       --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
-#     # TODO: Optimize performance of this script
-#     # Get metadata for files in layerOrder.json and combine this data into 1 file
-#     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-#     mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-#     `node $SCRIPTS_DIR/getVisMetadata.js \
-#       --features "$BUILD_DIR/features.json" \
-#       --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
-#       --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
+    # TODO: Optimize performance of this script
+    # Get metadata for files in layerOrder.json and combine this data into 1 file
+    # rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    # mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    # `node $SCRIPTS_DIR/getVisMetadata.js \
+    #   --features "$BUILD_DIR/features.json" \
+    #   --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
+    #   --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
 # fi
 
 # Validate layers in wv.json with a JSON schema
@@ -79,6 +79,7 @@ fi
 # TODO: Fix sometimes the following error is thrown:
 # TypeError: Converting circular structure to JSON
 # extractConfigFromWMTS.js:85:11
+# this is coming from an issue in getCapabilities.js
 # Run extractConfigFromWMTS.js script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
   `node $SCRIPTS_DIR/extractConfigFromWMTS.js \
@@ -128,14 +129,15 @@ if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
     cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
 fi
 
-# Run mergeConfig.js on all directories in /config
+# Run mergeConfig.js on each directory in /config containing .json files
+# This creates on palettes-custom.json and wv.json
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
     case $config in
         *.json)
-            `node $SCRIPTS_DIR/mergeConfig.js \
-              --inputDir "$BUILD_DIR/config/$config" \
-              --outputFile "$DEST_DIR/config/$config"`
+            bash -c "node $SCRIPTS_DIR/mergeConfig.js \
+              --inputDir '$BUILD_DIR/config/$config' \
+              --outputFile '$DEST_DIR/config/$config'"
              ;;
          *)
              cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
