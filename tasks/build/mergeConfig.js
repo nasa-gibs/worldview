@@ -32,26 +32,21 @@ const conf = {}
 let fileCount = 0
 
 async function main () {
-  console.warn(inputDir)
-  fs.readdirSync(inputDir).forEach(file => {
+  const files = fs.readdirSync(inputDir)
+  for (const file of files) {
     try {
       if (!file.endsWith('.json')) return
       fileCount += 1
       const data = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8'))
-      dictMerge(conf, data)
+      await dictMerge(conf, data)
     } catch (error) {
       throw new Error(`ERROR: ${path.join(inputDir, file)}: ${error.message}`)
     }
-  })
-
-  const jsonOptions = {
-    indent: 2,
-    separators: [',', ': ']
   }
 
-  fs.writeFileSync(outputFile, JSON.stringify(conf, null, jsonOptions.indent), 'utf-8')
+  fs.writeFileSync(outputFile, JSON.stringify(conf, null, 2), 'utf-8')
 
-  console.log(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
+  console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
 }
 
 main().catch((err) => {

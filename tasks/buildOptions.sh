@@ -47,7 +47,7 @@ fi
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 
-# If $FETCH_GC is set, make various API requests
+# # If $FETCH_GC is set, make various API requests
 # if [ "$FETCH_GC" ] ; then
 #     # TODO: Fix axios fetch timeouts
 #     # Fetch GC files and create colormaps, vectordata and vectorstyle files
@@ -68,21 +68,24 @@ mkdir -p "$BUILD_DIR/colormaps"
 # fi
 
 # Validate layers in wv.json with a JSON schema
-# `node $SCRIPTS_DIR/validateConfigs.js \
-#   --inputDirectory "$SRC_DIR/common/config/wv.json/layers" \
-#   --schemaFile "$BASE/schemas/layer-config.json"`
+`node $SCRIPTS_DIR/validateConfigs.js \
+  --inputDirectory "$SRC_DIR/common/config/wv.json/layers" \
+  --schemaFile "$BASE/schemas/layer-config.json"`
 
-# if [ -e "$BUILD_DIR/features.json" ] ; then
-#     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
-# fi
+if [ -e "$BUILD_DIR/features.json" ] ; then
+    cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
+fi
 
-# # # Run extractConfigFromWMTS.js script with config.json
-# if [ -e "$BUILD_DIR/config.json" ] ; then
-#   `node $SCRIPTS_DIR/extractConfigFromWMTS.js \
-#     --config "$BUILD_DIR/config.json" \
-#     --inputDir "$BUILD_DIR/gc" \
-#     --outputDir  "$BUILD_DIR/_wmts"`
-# fi
+# TODO: Fix sometimes the following error is thrown:
+# TypeError: Converting circular structure to JSON
+# extractConfigFromWMTS.js:85:11
+# Run extractConfigFromWMTS.js script with config.json
+if [ -e "$BUILD_DIR/config.json" ] ; then
+  `node $SCRIPTS_DIR/extractConfigFromWMTS.js \
+    --config "$BUILD_DIR/config.json" \
+    --inputDir "$BUILD_DIR/gc" \
+    --outputDir  "$BUILD_DIR/_wmts"`
+fi
 
 # Run processVectorStyles.js and move vectorstyles where we want them
 if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
@@ -100,8 +103,7 @@ if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
       --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
 fi
 
-# TODO: Await for entries.colors, entries.refs, entries.values,
-# legend.colors, legend.tooltips, legend.ticks, legend.refs,
+# TODO: fix erroneous data in files
 # Run processColormap.js and move colormaps where we want them
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes
