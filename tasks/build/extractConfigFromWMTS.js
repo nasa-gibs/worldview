@@ -3,7 +3,7 @@ const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
 const convert = require('xml-js')
-const processTemporalLayer = require('./processTemporalLayer')
+const { processTemporalLayer } = require('./processTemporalLayer')
 
 const prog = path.basename(__filename)
 
@@ -56,6 +56,11 @@ let totalLayerCount = 0
 let totalWarningCount = 0
 let totalErrorCount = 0
 
+const wv = {
+  layers: {},
+  sources: {}
+}
+
 class SkipException extends Error {
   constructor (message) {
     super(message)
@@ -74,6 +79,13 @@ async function main () {
     const { errorCount, warningCount, layerCount } = await processEntry(entry)
     console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
 
+    const outputFile = path.join(outputDir, entry.to)
+    fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
+      if (err) {
+        console.error(err)
+      }
+    })
+
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
@@ -86,129 +98,10 @@ async function main () {
   }
 }
 
-function processLayer (gcLayer, wvLayers, entry) {
-  const ident = gcLayer['ows:Identifier']
-  if (skip.includes(ident)) {
-    console.log(`${ident}: skipping`)
-    throw new SkipException(ident)
-  }
-
-  wvLayers[ident] = {}
-  let wvLayer = wvLayers[ident]
-  wvLayer.id = ident
-  wvLayer.type = 'wmts'
-  wvLayer.format = gcLayer.Format
-
-  const temporalForProjection = {}
-
-  // Extract start and end dates
-  if ('Dimension' in gcLayer) {
-    const dimension = gcLayer.Dimension
-    if (dimension['ows:Identifier'] === 'Time') {
-      try {
-        wvLayer = processTemporalLayer(wvLayer, dimension.Value)
-      } catch (e) {
-        console.error(e)
-        console.error(`${prog}: ERROR: [${ident}] Error processing time values.`)
-      }
-    }
-  }
-
-  // Extract matrix set
-  const matrixSetLink = gcLayer.TileMatrixSetLink
-  const matrixSet = matrixSetLink.TileMatrixSet
-
-  const projectionInfo = {
-    source: entry.source,
-    matrixSet
-  }
-
-  wvLayer.projections = {}
-  if (temporalForProjection[entry.projection]) {
-    wvLayer.projections[entry.projection] = {
-      ...projectionInfo,
-      ...temporalForProjection[entry.projection]
-    }
-    delete wvLayer.dateRanges
-    delete wvLayer.startDate
-    delete wvLayer.endDate
-  } else {
-    wvLayer.projections[entry.projection] = { ...projectionInfo }
-  }
-
-  if (Object.prototype.hasOwnProperty.call(matrixSetLink, 'TileMatrixSetLimits') && matrixSetLink.TileMatrixSetLimits !== null) {
-    const matrixSetLimits = matrixSetLink.TileMatrixSetLimits.TileMatrixLimits
-    const mappedSetLimits = []
-    for (const setLimit of matrixSetLimits) {
-      mappedSetLimits.push({
-        tileMatrix: setLimit.TileMatrix,
-        minTileRow: parseInt(setLimit.MinTileRow, 10),
-        maxTileRow: parseInt(setLimit.MaxTileRow, 10),
-        minTileCol: parseInt(setLimit.MinTileCol, 10),
-        maxTileCol: parseInt(setLimit.MaxTileCol, 10)
-      })
-    }
-    wvLayer.projections[entry.projection].matrixSetLimits = mappedSetLimits
-  }
-
-  // Vector data links
-  if ((Object.prototype.hasOwnProperty.call(gcLayer, 'ows:Metadata') && gcLayer['ows:Metadata'] !== null)) {
-    for (const item of gcLayer['ows:Metadata']) {
-      if (!(['xlink:role'] in item._attributes)) {
-        throw new Error('No xlink:role')
-      }
-      const schemaVersion = item._attributes['xlink:role']
-
-      if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
-        const vectorDataLink = item._attributes['xlink:href']
-        const vectorDataFile = path.basename(vectorDataLink)
-        const vectorDataId = path.parse(vectorDataFile).name
-        wvLayer.vectorData = {
-          id: vectorDataId
-        }
-      }
-    }
-  }
-
-  if (('ows:Metadata' in gcLayer) && (gcLayer['ows:Metadata'] !== null)) {
-    if (('skipPalettes' in config) && (ident in config.skipPalettes)) {
-      console.warn(`${prog}: WARNING: Skipping palette for ${ident}`)
-      totalWarningCount++
-    } else {
-      for (const item of gcLayer['ows:Metadata']) {
-        if (!(['xlink:role'] in item._attributes)) {
-          throw new Error('No xlink:role')
-        }
-        const schemaVersion = item._attributes['xlink:role']
-
-        if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
-          const colormapLink = item._attributes['xlink:href']
-          const colormapFile = path.basename(colormapLink)
-          const colormapId = path.parse(colormapFile).name
-          wvLayer.palette = {
-            id: colormapId
-          }
-        } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
-          const vectorstyleLink = item._attributes['xlink:href']
-          const vectorstyleFile = path.basename(vectorstyleLink)
-          const vectorstyleId = path.parse(vectorstyleFile).name
-          wvLayer.vectorStyle = {
-            id: vectorstyleId
-          }
-        }
-      }
-    }
-  }
-}
-
 async function processEntry (entry) {
   let layerCount = 0
   let warningCount = 0
   let errorCount = 0
-  const wv = {
-    layers: {},
-    sources: {}
-  }
 
   wv.sources[entry.source] = {
     matrixSets: wvMatrixSets
@@ -281,12 +174,128 @@ async function processEntry (entry) {
       processMatrixSet(gcMatrixSet)
     })
   }
+
   return { errorCount, warningCount, layerCount }
+}
+
+async function processLayer (gcLayer, wvLayers, entry) {
+  const ident = gcLayer['ows:Identifier']._text
+  if (skip.includes(ident)) {
+    console.log(`${ident}: skipping`)
+    throw new SkipException(ident)
+  }
+
+  wvLayers[ident] = {}
+  let wvLayer = wvLayers[ident]
+  wvLayer.id = ident
+  wvLayer.type = 'wmts'
+  wvLayer.format = gcLayer.Format._text
+
+  const temporalForProjection = {}
+
+  // Extract start and end dates
+  if ('Dimension' in gcLayer) {
+    const dimension = gcLayer.Dimension
+    if (dimension['ows:Identifier']._text === 'Time') {
+      try {
+        wvLayer = await processTemporalLayer(wvLayer, dimension.Value)
+      } catch (e) {
+        console.error(e)
+        console.error(`${prog}: ERROR: [${ident}] Error processing time values.`)
+      }
+    }
+  }
+
+  // Extract matrix set
+  const matrixSetLink = gcLayer.TileMatrixSetLink
+  const matrixSet = matrixSetLink.TileMatrixSet._text
+
+  const projectionInfo = {
+    source: entry.source,
+    matrixSet
+  }
+
+  wvLayer.projections = {}
+  if (temporalForProjection[entry.projection]) {
+    wvLayer.projections[entry.projection] = {
+      ...projectionInfo,
+      ...temporalForProjection[entry.projection]
+    }
+    delete wvLayer.dateRanges
+    delete wvLayer.startDate
+    delete wvLayer.endDate
+  } else {
+    wvLayer.projections[entry.projection] = { ...projectionInfo }
+  }
+
+  if (Object.prototype.hasOwnProperty.call(matrixSetLink, 'TileMatrixSetLimits') && matrixSetLink.TileMatrixSetLimits !== null) {
+    const matrixSetLimits = matrixSetLink.TileMatrixSetLimits.TileMatrixLimits
+    const mappedSetLimits = []
+    for (const setLimit of matrixSetLimits) {
+      mappedSetLimits.push({
+        tileMatrix: setLimit.TileMatrix._text,
+        minTileRow: parseInt(setLimit.MinTileRow, 10),
+        maxTileRow: parseInt(setLimit.MaxTileRow, 10),
+        minTileCol: parseInt(setLimit.MinTileCol, 10),
+        maxTileCol: parseInt(setLimit.MaxTileCol, 10)
+      })
+    }
+    wvLayer.projections[entry.projection].matrixSetLimits = mappedSetLimits
+  }
+
+  // Vector data links
+  if ((Object.prototype.hasOwnProperty.call(gcLayer, 'ows:Metadata') && gcLayer['ows:Metadata'] !== null)) {
+    for (const item of gcLayer['ows:Metadata']) {
+      if (!(['xlink:role'] in item._attributes)) {
+        throw new Error('No xlink:role')
+      }
+      const schemaVersion = item._attributes['xlink:role']
+
+      if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
+        const vectorDataLink = item._attributes['xlink:href']
+        const vectorDataFile = path.basename(vectorDataLink)
+        const vectorDataId = path.parse(vectorDataFile).name
+        wvLayer.vectorData = {
+          id: vectorDataId
+        }
+      }
+    }
+  }
+
+  if (('ows:Metadata' in gcLayer) && (gcLayer['ows:Metadata'] !== null)) {
+    if (('skipPalettes' in config) && (ident in config.skipPalettes)) {
+      console.warn(`${prog}: WARNING: Skipping palette for ${ident}`)
+      totalWarningCount++
+    } else {
+      for (const item of gcLayer['ows:Metadata']) {
+        if (!(['xlink:role'] in item._attributes)) {
+          throw new Error('No xlink:role')
+        }
+        const schemaVersion = item._attributes['xlink:role']
+
+        if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
+          const colormapLink = item._attributes['xlink:href']
+          const colormapFile = path.basename(colormapLink)
+          const colormapId = path.parse(colormapFile).name
+          wvLayer.palette = {
+            id: colormapId
+          }
+        } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
+          const vectorstyleLink = item._attributes['xlink:href']
+          const vectorstyleFile = path.basename(vectorstyleLink)
+          const vectorstyleId = path.parse(vectorstyleFile).name
+          wvLayer.vectorStyle = {
+            id: vectorstyleId
+          }
+        }
+      }
+    }
+  }
 }
 
 function processMatrixSet (gcMatrixSet) {
   const tileMatrixArr = gcMatrixSet.TileMatrix
-  const ident = gcMatrixSet['ows:Identifier']
+  const ident = gcMatrixSet['ows:Identifier']._text
   const zoomLevels = tileMatrixArr.length
   const resolutions = []
   const formattedTileMatrixArr = []

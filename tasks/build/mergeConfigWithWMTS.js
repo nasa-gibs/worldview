@@ -36,27 +36,37 @@ const outputData = JSON.parse(fs.readFileSync(outputFile, 'utf-8'))
 let fileCount = 0
 
 async function main () {
-  fs.readdirSync(inputDir).forEach(file => {
-    try {
-      if (!file.endsWith('.json')) return
-      fileCount += 1
-      const data = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8'))
-      newConf.layers = wmtsDictMerge(newConf.layers, data, outputData)
-      newConf.sources = dictMerge(newConf.sources, data.sources, outputData.sources)
-    } catch (e) {
-      throw new Error(`ERROR: ${path.join(inputDir, file)}: ${e.message}`)
-    }
-  })
-
-  newConf = dictMerge(newConf, outputData)
+  await processFiles()
+  newConf = await dictMerge(newConf, outputData)
 
   const jsonOptions = {}
   jsonOptions.indent = 2
   jsonOptions.separators = [',', ': ']
 
-  fs.writeFileSync(outputFile, JSON.stringify(newConf, jsonOptions))
+  await fs.writeFileSync(outputFile, JSON.stringify(newConf, jsonOptions))
 
-  console.log(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
+  console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
+}
+
+async function processFiles () {
+  try {
+    console.warn(inputDir)
+    const files = await fs.readdirSync(inputDir)
+    for (const file of files) {
+      if (!file.endsWith('.json')) continue
+      fileCount += 1
+      try {
+        const data = await fs.readFile(path.join(inputDir, file), 'utf-8')
+        const jsonData = JSON.parse(data)
+        newConf.layers = wmtsDictMerge(newConf.layers, jsonData, outputData)
+        newConf.sources = dictMerge(newConf.sources, jsonData.sources, outputData.sources)
+      } catch (error) {
+        throw new Error(`ERROR: ${path.join(inputDir, file)}: ${error.message}`)
+      }
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function wmtsDictMerge (target, obj, conf) {
