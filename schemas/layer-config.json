@@ -290,13 +290,16 @@
         },
         "associatedLayers": {
           "description": "ID of an associated layers (e.g. a corresponding granule layer)",
-          "type": "string"
+          "type": "array"
         },
         "layer": {
           "type": "string"
         },
         "disableSmartHandoff": {
           "type": "boolean"
+        },
+        "temporal": {
+          "type": "string"
         }
       },
       "allOf": [

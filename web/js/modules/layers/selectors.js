@@ -25,6 +25,16 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
+export const getCollections = (layers, date, layer) => {
+  if (!layers.collections[layer.id]) return;
+  const dateCollection = layers.collections[layer.id].dates;
+  for (let i = 0; i < dateCollection.length; i += 1) {
+    if (dateCollection[i].date === date) {
+      return dateCollection[i];
+    }
+  }
+};
+
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
@@ -88,6 +98,17 @@ export const getGranulePlatform = (state, activeString) => {
   const { compare, layers } = state;
   const { granulePlatform } = layers[activeString || compare.activeString];
   return granulePlatform;
+};
+
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      platformLayers.push(key);
+    }
+  });
+  return platformLayers;
 };
 
 /**
@@ -292,10 +313,6 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
-
-  def.startDate = lodashGet(def, `projections[${projection}].startDate`) || def.startDate;
-  def.endDate = lodashGet(def, `projections[${projection}].endDate`) || def.endDate;
-  def.dateRanges = lodashGet(def, `projections[${projection}].dateRanges`) || def.dateRanges;
 
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;

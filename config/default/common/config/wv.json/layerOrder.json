@@ -1,5 +1,11 @@
 {
 	"layerOrder": [
+		"VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
+		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
+		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule",
+		"VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule",
+		"VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule",
+		"VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
@@ -343,10 +349,6 @@
 		"GMI_Brightness_Temp_Dsc",
 		"GMI_Precipitation_Rate_Asc",
 		"GMI_Precipitation_Rate_Dsc",
-		"GMI_Rain_Rate_Asc",
-		"GMI_Rain_Rate_Dsc",
-		"GMI_Snow_Rate_Asc",
-		"GMI_Snow_Rate_Dsc",
 		"AMSRU2_Cloud_Liquid_Water_Day",
 		"AMSRU2_Cloud_Liquid_Water_Night",
 		"AMSRU2_Columnar_Water_Vapor_Day",
