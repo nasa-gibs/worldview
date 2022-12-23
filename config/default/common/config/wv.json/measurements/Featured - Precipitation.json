@@ -20,10 +20,8 @@
               "description": "",
               "image": "",
               "settings": [
-                  "GMI_Rain_Rate_Asc",
-                  "GMI_Rain_Rate_Dsc",
-                  "GMI_Snow_Rate_Asc",
-                  "GMI_Snow_Rate_Dsc",
+                  "GMI_Precipitation_Rate_Asc",
+                  "GMI_Precipitation_Rate_Dsc",
                   "OrbitTracks_GPM_Ascending",
                   "OrbitTracks_GPM_Descending"
               ]

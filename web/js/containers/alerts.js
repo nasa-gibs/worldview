@@ -162,7 +162,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, embed, events, sidebar, compare, alerts, ui, animation,
+    embed, events, sidebar, compare, alerts, ui, animation, screenSize,
   } = state;
   const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
   const activeLayers = getActiveLayers(state);
@@ -173,8 +173,8 @@ const mapStateToProps = (state) => {
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
-    isSmall: browser.lessThan.small,
-    isMobile: browser.lessThan.medium,
+    isSmall: screenSize.screenWidth < screenSize.breakpoints.small,
+    isMobile: screenSize.isMobileDevice,
     isAnimationActive: animation.isActive,
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
     isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,

@@ -64,7 +64,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "v=135.3898843909766,-36.762868566628185,138.77386045480637,-35.106130285378185&t=2020-01-03-T00%3A00%3A00Z&ics=true&ici=3&icd=9&as=2020-01-03-T00%3A00%3A00Z&ae=2020-01-12-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=0.5&ab=on"
+          "stepLink": "v=135.3898843909766,-36.857497884809625,138.77386045480637,-35.011500967196746&ics=true&ici=3&icd=9&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=false&t=2020-01-03-T00%3A00%3A00Z"
         },
         {
           "description": "step005.html",

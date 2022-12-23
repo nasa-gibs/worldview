@@ -132,7 +132,7 @@ class TimelineLayerCoveragePanel extends Component {
       timelineStartDateLimit,
     } = this.props;
     const {
-      endDate, futureTime, startDate, inactive,
+      endDate, futureTime, startDate, ongoing,
     } = layer;
 
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
@@ -146,7 +146,7 @@ class TimelineLayerCoveragePanel extends Component {
     } else {
       layerStart = new Date(timelineStartDateLimit).getTime();
     }
-    if (rangeEnd || inactive === true) {
+    if (rangeEnd || !ongoing) {
       layerEnd = new Date(rangeEnd || endDate).getTime();
     } else if (futureTime && endDate) {
       layerEnd = new Date(endDate).getTime();

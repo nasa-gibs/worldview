@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Classifications">
+    <Entries>
+      <ColorMapEntry rgb="255,200,255" transparent="true" sourceValue="0" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="200,200,200" transparent="true" sourceValue="1" ref="1"/>
+      <ColorMapEntry rgb="189,0,189" transparent="true" sourceValue="11" ref="2"/>
+      <ColorMapEntry rgb="0,128,0" transparent="true" sourceValue="25" ref="3"/>
+      <ColorMapEntry rgb="0,0,255" transparent="true" sourceValue="37" ref="4"/>
+      <ColorMapEntry rgb="35,35,117" transparent="true" sourceValue="39" ref="5"/>
+      <ColorMapEntry rgb="0,191,255" transparent="true" sourceValue="50" ref="6"/>
+      <ColorMapEntry rgb="255,255,176" transparent="true" sourceValue="100" ref="7"/>
+      <ColorMapEntry rgb="255,100,100" transparent="false" sourceValue="200" ref="8"/>
+      <ColorMapEntry rgb="170,0,0" transparent="true" sourceValue="254" ref="9"/>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="255" ref="10"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,200,255" tooltip="Missing Data" id="0"/>
+      <LegendEntry rgb="200,200,200" tooltip="No Decision" id="1"/>
+      <LegendEntry rgb="189,0,189" tooltip="Night" id="2"/>
+      <LegendEntry rgb="0,128,0" tooltip="Land" id="3"/>
+      <LegendEntry rgb="0,0,255" tooltip="Inland Water" id="4"/>
+      <LegendEntry rgb="35,35,117" tooltip="Ocean" id="5"/>
+      <LegendEntry rgb="0,191,255" tooltip="Cloud" id="6"/>
+      <LegendEntry rgb="255,255,176" tooltip="Lake Ice" id="7"/>
+      <LegendEntry rgb="255,100,100" tooltip="Sea Ice" id="8"/>
+      <LegendEntry rgb="170,0,0" tooltip="Detector Saturated" id="9"/>
+      <LegendEntry rgb="255,255,255" tooltip="Fill" id="10"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

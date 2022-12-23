@@ -9,19 +9,32 @@
       ]
     }
   },
-  "layers": [{
-
-    "id": "GRUMP_Settlements_v1.01_STD",
-    "source": "GRUMP_Settlements",
-    "source-layer": "GRUMP_Settlements_v1.01_STD",
-    "source-description": "Default",
-    "type": "circle",
-    "paint": {
-      "circle-radius": ["step", ["zoom"], 1, 17, 2, 19, 3, 22, 5],
-      "circle-color": "rgb(0, 123, 255)",
-      "circle-stroke-color": "rgba(0,0,0,0.7)",
-      "circle-opacity": 0.7,
-      "circle-stroke-width": 0.3
+  "layers": [
+    {
+      "id": "GRUMP_Settlements_v1.01_STD",
+      "source": "GRUMP_Settlements",
+      "source-layer": "GRUMP_Settlements_v1.01_STD",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3,
+          6,
+          5
+        ],
+        "circle-color": "rgb(0, 123, 255)",
+        "circle-stroke-color": "rgba(0,0,0,0.7)",
+        "circle-opacity": 0.7,
+        "circle-stroke-width": 0.3
+      }
     }
-  }]
+  ]
 }

@@ -102,8 +102,9 @@ module.exports = {
     c.url(`${c.globals.url}?t=2019-02-22`);
     c
       .click(dateSelectorDayInput)
-      .setValue(dateSelectorDayInput, [31, c.Keys.ENTER]);
-    c.assert.cssClassPresent(dateSelectorDayInput, 'invalid-input');
+      .sendKeys(dateSelectorDayInput, [31, c.Keys.ENTER])
+      .pause(500);
+    c.assert.hasClass(dateSelectorDayInput, 'invalid-input');
   },
 
   // verify user can change year on invalid date to a valid one and remove invalid-input class
@@ -111,10 +112,10 @@ module.exports = {
     c.url(`${c.globals.url}?t=2019-02-22`);
     c
       .click(dateSelectorYearInput)
-      .setValue(dateSelectorYearInput, [2020, c.Keys.ENTER]);
-    c.setValue(dateSelectorMonthInput, ['MAR', c.Keys.ENTER]);
-    c.setValue(dateSelectorDayInput, [31, c.Keys.ENTER]);
-    c.setValue(dateSelectorYearInput, [2019, c.Keys.ENTER]);
+      .sendKeys(dateSelectorYearInput, 2020);
+    c.sendKeys(dateSelectorMonthInput, 'MAR');
+    c.sendKeys(dateSelectorDayInput, 31);
+    c.sendKeys(dateSelectorYearInput, 2019);
     c.assert.not.cssClassPresent(dateSelectorDayInput, 'invalid-input');
     c.assert.not.cssClassPresent(dateSelectorMonthInput, 'invalid-input');
     c.assert.not.cssClassPresent(dateSelectorYearInput, 'invalid-input');

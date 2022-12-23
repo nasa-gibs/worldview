@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" value="[0]" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="Fill" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Deep Blue Aerosol Type">
+  	<Entries>
+          <ColorMapEntry rgb="153,85,51" transparent="false" value="[1]"  ref="1"/>
+          <ColorMapEntry rgb="255,0,0" transparent="false" value="[2]" ref="2"/>
+          <ColorMapEntry rgb="152,35,238" transparent="false" value="[3]" ref="3"/>
+          <ColorMapEntry rgb="0,1,136" transparent="false" value="[4]" ref="4"/>
+          <ColorMapEntry rgb="2,102,0" transparent="false" value="[5]" ref="5"/>
+          <ColorMapEntry rgb="255,221,0" transparent="false" value="[6]" ref="6"/>
+          <ColorMapEntry rgb="217,217,217" transparent="false" value="[7]" ref="7"/>
+          <ColorMapEntry rgb="120,255,0" transparent="false" value="[8]" ref="8"/>
+      </Entries>
+      <Legend type="classification">
+          <LegendEntry rgb="153,85,51" tooltip="Dust" id="1"/>
+          <LegendEntry rgb="255,0,0" tooltip="Smoke" id="2"/>
+          <LegendEntry rgb="152,35,238" tooltip="High Altitude Smoke" id="3"/>
+          <LegendEntry rgb="0,1,136" tooltip="Pyrocumulonimbus Clouds" id="4"/>
+          <LegendEntry rgb="2,102,0" tooltip="Non-Smoke Fine Mode" id="5"/>
+          <LegendEntry rgb="255,221,0" tooltip="Mixed" id="6"/>
+          <LegendEntry rgb="217,217,217" tooltip="Background" id="7"/>
+          <LegendEntry rgb="120,255,0" tooltip="Fine Dominated" id="8"/>
+     </Legend>
+  </ColorMap>
+</ColorMaps>

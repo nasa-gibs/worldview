@@ -114,7 +114,8 @@ button:focus {
     position: absolute;
     top: -15px;
     height: 30px;
-    width: 100%;
+
+    // width: 100%;
     max-width: inherit;
   }
 
@@ -167,7 +168,6 @@ button:focus {
 
   & .date-arrow-down {
     transform: scaleY(-1);
-    transform: scaleY(-1);
     filter: flipv;
     filter: "FlipV";
   }
@@ -195,7 +195,6 @@ button:focus {
 
   & #left-arrow-group {
     transform: scaleX(-1);
-    transform: scaleX(-1);
   }
 
   & #left-arrow-group svg {
@@ -216,7 +215,7 @@ button:focus {
   & > .button-action-group:hover .arrow,
   & #zoom-buttons-group .button-action-group:hover .arrow {
     fill: #1a1a1a;
-    fill-opacity: 1;
+    fill-opacity: 100%;
     stroke: none;
   }
 
@@ -691,7 +690,7 @@ button:focus {
 .ab-group-case-active path {
   stroke: #515151;
   stroke-width: 1;
-  stroke-opacity: 1;
+  stroke-opacity: 100%;
 }
 
 .ab-group-case-active polygon,
@@ -728,13 +727,16 @@ button:focus {
   background: $wv-transparent-black;
   color: #fff;
   border: thin solid #333;
-  font-size: 23px;
-  padding: 14px 8px;
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
-  height: 44px;
-  font-family: $wv-monospace-font;
+
+  & .mobile-date-picker-select-btn-text {
+    height: 44px;
+    font-family: $wv-monospace-font;
+    font-size: 23px;
+    padding: 14px 8px;
+  }
 }
 
 .datepicker-modal {
@@ -815,4 +817,53 @@ button:focus {
 
 #timeline-header .button-action-group .now-btn-1:hover svg path {
   fill: #1a1a1a;
+}
+
+.mobile-animate-button {
+  position: absolute;
+  background: $wv-transparent-black;
+  border: thin solid #333;
+  height: 44px;
+  width: 60px;
+  border-radius: 5px;
+}
+
+.animate-button-phone-portrait {
+  left: 140px;
+  bottom: 75px;
+}
+
+.animate-button-phone-portrait-subdaily {
+  left: 140px;
+  bottom: 75px;
+}
+
+.animate-button-phone-landscape {
+  left: 320px;
+  bottom: 20px;
+}
+
+.animate-button-phone-landscape-subdaily {
+  left: 420px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-portrait {
+  left: 325px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-portrait-subdaily {
+  left: 420px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-landscape {
+  left: 323px;
+  bottom: 20px;
+}
+
+.animate-button-tablet-landscape-subdaily {
+  left: 420px;
+  bottom: 20px;
 }

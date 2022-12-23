@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -21,9 +21,6 @@ import {
   removeLayer as removeLayerAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
-import util from '../../util/util';
-
-const { events } = util;
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -59,14 +56,6 @@ function LayerList(props) {
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
-  const [runningDataObj, setRunningDataObj] = useState({});
-
-  useEffect(() => {
-    events.on('map:running-data', setRunningDataObj);
-    return () => {
-      events.off('map:running-data', setRunningDataObj);
-    };
-  }, []);
 
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
@@ -124,7 +113,6 @@ function LayerList(props) {
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
-        runningObject={runningDataObj[id]}
       />
     );
   };
@@ -228,7 +216,7 @@ LayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    embed, proj, config, map, animation,
+    embed, proj, config, map, animation, screenSize,
   } = state;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
@@ -242,7 +230,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     zots,
     isEmbedModeActive,
-    isMobile: state.browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     activeLayers,
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),

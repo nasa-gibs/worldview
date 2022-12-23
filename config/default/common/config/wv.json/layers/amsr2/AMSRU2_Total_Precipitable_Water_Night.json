@@ -2,19 +2,10 @@
   "layers": {
     "AMSRU2_Total_Precipitable_Water_Night": {
       "id": "AMSRU2_Total_Precipitable_Water_Night",
-      "title": "Total Precipitable Water (Night)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Total_Precipitable_Water_Night",
       "tags": "amsru2 amsr-u2",
       "group": "overlays",
-      "layergroup": "Precipitation Rate",
-      "product": "",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Precipitation Rate"
     }
   }
 }

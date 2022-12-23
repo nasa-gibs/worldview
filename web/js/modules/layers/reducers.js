@@ -20,7 +20,6 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
-  UPDATE_ON_PROJ_CHANGE,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -55,6 +54,7 @@ export const initialState = {
   layerConfig: {},
   startingLayers: [],
   granuleFootprints: {},
+  eventLayers: [],
 };
 
 export function getInitialState(config) {
@@ -102,20 +102,6 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case UPDATE_ON_PROJ_CHANGE:
-      return update(state, {
-        active: {
-          $merge: {
-            layers: action.layersA,
-          },
-        },
-        activeB: {
-          $merge: {
-            layers: action.layersB,
-          },
-        },
-      });
-
     case REMOVE_LAYER:
     case REMOVE_GROUP:
       return update(state, {
@@ -137,6 +123,7 @@ export function layerReducer(state = initialState, action) {
           overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
+        eventLayers: action.eventLayers === undefined ? { $push: [] } : action.eventLayers.length ? { $set: action.eventLayers } : { $push: [] },
       });
 
     case TOGGLE_OVERLAY_GROUPS:
@@ -287,6 +274,7 @@ export function layerReducer(state = initialState, action) {
                 dates,
                 count,
                 granuleFootprints,
+                granulePlatform,
               },
             },
           },

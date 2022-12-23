@@ -5,8 +5,16 @@ import {
   TOGGLE,
   RENDER_TEMPLATE,
   CLOSE,
+  OPEN_ABOUT,
+  CLOSE_ABOUT,
 } from './constants';
 import { requestAction } from '../core/actions';
+
+export function toggleAboutModal(isOpen) {
+  return {
+    type: isOpen ? OPEN_ABOUT : CLOSE_ABOUT,
+  };
+}
 
 export function openBasicContent(modalHeader, bodyText) {
   return {

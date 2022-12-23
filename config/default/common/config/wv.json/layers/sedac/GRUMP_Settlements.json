@@ -2,15 +2,11 @@
   "layers": {
     "GRUMP_Settlements": {
       "id": "GRUMP_Settlements",
-      "title": "Settlements",
-      "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
       "description": "sedac/GRUMP_Settlements",
       "type": "vector",
       "tags": "vectors",
       "group": "overlays",
       "layergroup": "Socioeconomic",
-      "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
-      "inactive": true,
       "palette": {
         "id": "GRUMP_Settlements",
         "immutable": true

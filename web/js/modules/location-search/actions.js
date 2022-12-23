@@ -1,14 +1,15 @@
 import {
   CLEAR_SUGGESTIONS,
+  REMOVE_MARKER,
   SET_MARKER,
   SET_SUGGESTION,
+  SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
 import { requestAction } from '../core/actions';
 import {
-  areCoordinatesWithinExtent,
   setLocalStorageCollapseState,
 } from './util';
 import {
@@ -58,13 +59,14 @@ export function toggleReverseGeocodeActive(isActive) {
  * @param {Object} reverseGeocodeResults
  * @param {Boolean} isInputSearch
  */
-export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch) {
+export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      proj,
-      locationSearch,
+      locationSearch: { coordinates },
     } = state;
+    const longitude = Number(coord[0].toFixed(4));
+    const latitude = Number(coord[1].toFixed(4));
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -73,15 +75,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
-    const stateCoordinates = locationSearch.coordinates;
-    const markerAlreadyExists = stateCoordinates.find((stateCoordinate) => stateCoordinate.latitude === coordinates[0] && stateCoordinate.longitude === coordinates[1]);
-    if (!coordinatesWithinExtent) {
-      return dispatch({
-        type: SET_MARKER,
-        coordinates: [],
-      });
-    }
+    const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
 
     if (markerAlreadyExists) {
       return dispatch({
@@ -93,18 +87,30 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       });
     }
 
-    const coordinatesObject = {
-      id: Math.floor(Math.random() * (coordinates[0] + coordinates[1])),
-      latitude: coordinates[0],
-      longitude: coordinates[1],
-    };
-
     dispatch({
       type: SET_MARKER,
-      coordinates: coordinatesObject,
+      coordinates: {
+        id: Math.floor(longitude + latitude),
+        longitude,
+        latitude,
+      },
       reverseGeocodeResults,
       isCoordinatesSearchActive: isInputSearch,
     });
+  };
+}
+
+export function removeMarker(coordinates) {
+  return {
+    type: REMOVE_MARKER,
+    coordinates,
+  };
+}
+
+export function setGeocodeResults(results) {
+  return {
+    type: SET_REVERSE_GEOCODE_RESULTS,
+    results,
   };
 }
 

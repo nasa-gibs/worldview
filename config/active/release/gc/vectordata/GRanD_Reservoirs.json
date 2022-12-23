@@ -1,0 +1,47 @@
+{
+  "id": "GRanD_Reservoirs",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "GRAND_ID",
+      "Title"      : "GRAND Unique ID",
+      "Description": "Unique ID for each point representing a dam and its associated reservoir; the point location is an approximation of the dam location.",
+      "DataType"   : "int",
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "AREA_SKM",
+      "Title"      : "Representative Surface Area",
+      "Description": "Representative surface area of reservoir in square kilometers; consolidated from other ‘Area’ columns in the following order of priority: ‘Area_poly’ over ‘Area_rep’ over ‘Area_max’ over ‘Area_min’; exceptions apply if value in ‘Area_poly’ column seems unreliable or rounded.",
+      "Units"      : "Square KM",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 500 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "POLY_SRC",
+      "Title"      : "Polygon Source",
+      "Description": "Polygon source",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "Continent",
+      "Title"      : "Continent",
+      "Description": "Name of Continent",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

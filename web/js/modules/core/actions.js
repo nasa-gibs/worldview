@@ -1,4 +1,4 @@
-export function requestAction(
+export async function requestAction(
   dispatch,
   actionName,
   url,
@@ -7,19 +7,17 @@ export function requestAction(
   options,
 ) {
   dispatch(startRequest(actionName, id));
-  return new Promise((resolve, reject) => fetch(url, options)
-    .then((response) => (mimeType === 'application/json'
-      ? response.json()
-      : response.text()
-    ))
-    .then((data) => {
-      dispatch(fetchSuccess(actionName, data, id));
-      resolve(data);
-    })
-    .catch((error) => {
-      dispatch(fetchFailure(actionName, error, id));
-      reject(error);
-    }));
+  try {
+    const response = await fetch(url, options);
+    const data = mimeType === 'application/json'
+      ? await response.json()
+      : await response.text();
+    dispatch(fetchSuccess(actionName, data, id));
+    return data;
+  } catch (error) {
+    dispatch(fetchFailure(actionName, error, id));
+    console.error(error);
+  }
 }
 
 export function startRequest(actionName, id) {

@@ -31,7 +31,7 @@ module.exports = {
 
   'Animation is disabled when compare mode active': (c) => {
     const disableMessage = 'Animation feature is deactivated when Compare feature is active';
-    c.assert.cssClassPresent(animationButtonCase, 'wv-disabled-button');
+    c.assert.hasClass(animationButtonCase, 'wv-disabled-button');
     c.assert.attributeContains(animationButtonCase, 'aria-label', disableMessage);
     c.moveToElement(animationButtonCase, 5, 5);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
@@ -45,9 +45,9 @@ module.exports = {
 
   'Image download is disabled when compare mode active': (c) => {
     const disableMessage = 'You must exit comparison mode to use the snapshot feature';
-    c.assert.cssClassPresent(snapshotToolbarButton, 'disabled');
+    c.assert.hasClass(snapshotToolbarButton, 'disabled');
     c.assert.attributeContains(snapshotToolbarButton, 'aria-label', disableMessage);
-    c.moveToElement('#snapshot-btn-wrapper svg', 10, 10);
+    c.click('#snapshot-btn-wrapper');
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
       c.assert.containsText(tooltipSelector, disableMessage);
     });

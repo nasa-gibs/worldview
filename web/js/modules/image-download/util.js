@@ -2,11 +2,11 @@ import {
   each as lodashEach,
   get as lodashGet,
 } from 'lodash';
-import { boundingExtent, containsCoordinate } from 'ol/extent';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
-import { coordinatesCRSTransform } from '../projection/util';
+import { CRS } from '../map/constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -105,7 +105,7 @@ const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opaciti
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
+export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
   const {
     layersArray,
@@ -124,7 +124,7 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   const params = [
     'REQUEST=GetSnapshot',
     `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
-    `BBOX=${bboxWMS13(lonlats, crs)}`,
+    `BBOX=${bboxWMS13(bbox, crs)}`,
     `CRS=${crs}`,
     `LAYERS=${layersArray.join(',')}`,
     `WRAP=${layerWraps.join(',')}`,
@@ -138,17 +138,15 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   if (isWorldfile) {
     params.push('WORLDFILE=true');
   }
+
   // handle adding coordinates marker
   if (markerCoordinates.length > 0) {
-    // transform for WVS
-    const coordinates = coordinatesCRSTransform(markerCoordinates, 'EPSG:4326', crs);
-    const [longitude, latitude] = coordinates;
-    // prevent marker requests outside selected bounding box
-    const bboxExtent = boundingExtent([lonlats[0], lonlats[1]]);
-    const coordinatesWithinBbox = containsCoordinate(bboxExtent, coordinates);
-    if (coordinatesWithinBbox) {
-      params.push(`MARKER=${longitude},${latitude}`);
-    }
+    const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
+      const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
+      // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
+      return validCoords.concat([mCoord[0], mCoord[1]]);
+    }, []);
+    params.push(`MARKER=${coords.join(',')}`);
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
@@ -247,6 +245,7 @@ export function imageUtilGetLayers(products, proj) {
   });
   return layers;
 }
+
 /*
  * Retrieves opacities from palettes
  *
@@ -294,6 +293,7 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     ? resolution / POLAR_ESTIMATION_CONSTANT
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
+
 export function imageUtilGetConversionFactor(proj) {
   if (proj === 'geographic') return POLAR_ESTIMATION_CONSTANT;
   return GEO_ESTIMATION_CONSTANT;
@@ -301,18 +301,27 @@ export function imageUtilGetConversionFactor(proj) {
 
 /*
  * Retrieves coordinates from pixel
- *
- * @method getCoords
- * @private
- *
  * @returns {array} array of coords
- *
  */
 export function imageUtilGetCoordsFromPixelValues(pixels, map) {
+  const {
+    x, y, x2, y2,
+  } = pixels;
   return [
-    map.getCoordinateFromPixel([Math.floor(pixels.x), Math.floor(pixels.y2)]),
-    map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)]),
+    map.getCoordinateFromPixel([Math.floor(x), Math.floor(y2)]),
+    map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y)]),
   ];
+}
+
+export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
+  const [x, y2] = map.getPixelFromCoordinate([bottomLeft[0], bottomLeft[1]]);
+  const [x2, y] = map.getPixelFromCoordinate([topRight[0], topRight[1]]);
+  return {
+    x: Math.round(x),
+    y: Math.round(y),
+    x2: Math.round(x2),
+    y2: Math.round(y2),
+  };
 }
 
 /**
@@ -322,7 +331,7 @@ export function imageUtilGetCoordsFromPixelValues(pixels, map) {
  * Y,X order, otherwise in X,Y order.
  */
 export function bboxWMS13(lonlats, crs) {
-  if (crs === 'EPSG:4326') {
+  if (crs === CRS.GEOGRAPHIC) {
     return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
       lonlats[1][0]
     }`;
@@ -341,6 +350,7 @@ export function imageSizeValid(imgHeight, imgWidth, maxSize) {
   }
   return true;
 }
+
 export function getDimensions(projection, bounds, resolution) {
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(

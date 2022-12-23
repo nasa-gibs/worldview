@@ -651,7 +651,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
     dateRanges,
     futureTime,
     period,
-    inactive,
+    ongoing,
   } = def;
   let dateArray = [];
   if (!dateRanges) { return dateArray; }
@@ -735,7 +735,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         currentDateTime = currentDate.getTime();
       }
       // set maxDate to current date if layer coverage is ongoing
-      if (index === dateRanges.length - 1 && !inactive) {
+      if (index === dateRanges.length - 1 && ongoing) {
         if (futureTime) {
           maxDate = new Date(endDate);
         } else {
@@ -1365,10 +1365,9 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId, isMobil
  * @param {*} layers
  */
 export function adjustStartDates(layers) {
-  const adjustDate = (days) => moment.utc()
-    .subtract(days, 'days')
-    .startOf('day')
-    .format('YYYY-MM-DD');
+  const adjustDate = (days) => `${moment.utc()
+    .subtract(days * 24, 'hours')
+    .format('YYYY-MM-DDThh:mm:ss')}Z`;
 
   const applyDateAdjustment = (layer) => {
     const { availability, dateRanges } = layer;
@@ -1380,6 +1379,7 @@ export function adjustStartDates(layers) {
     if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
       firstDateRange.startDate = adjustDate(rollingWindow);
+      layer.startDate = adjustDate(rollingWindow);
     } else {
       console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
@@ -1427,8 +1427,8 @@ export function adjustActiveDateRanges(layers, appNow) {
   const appNowYear = appNow.getUTCFullYear();
   const applyDateRangeAdjustment = (layer) => {
     const { dateRanges } = layer;
-    const { inactive, period } = layer;
-    const failConditions = inactive
+    const { ongoing, period } = layer;
+    const failConditions = !ongoing
       || !dateRanges
       || period === 'subdaily';
     if (failConditions) {

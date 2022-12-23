@@ -3,13 +3,19 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
-function LoadingIndicator({ msg, isLoading }) {
-  const spinnerStyle = {
+function LoadingIndicator({ msg, isLoading, isMobile }) {
+  const spinnerStyle = isMobile ? {
     position: 'absolute',
     top: 10,
-    left: 300,
+    left: 80,
     zIndex: 999,
-  };
+  }
+    : {
+      position: 'absolute',
+      top: 10,
+      left: 300,
+      zIndex: 999,
+    };
 
   return isLoading && (
     <div style={spinnerStyle}>
@@ -18,17 +24,19 @@ function LoadingIndicator({ msg, isLoading }) {
     </div>
   );
 }
-
 LoadingIndicator.propTypes = {
   msg: PropTypes.string,
   isLoading: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
-  const { msg, isLoading } = state.loading;
+  const { screenSize, loading } = state;
+  const { msg, isLoading } = loading;
   return {
-    msg,
     isLoading,
+    isMobile: screenSize.isMobileDevice,
+    msg,
   };
 };
 export default connect(mapStateToProps)(LoadingIndicator);

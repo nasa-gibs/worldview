@@ -3,7 +3,11 @@ The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily glo
 Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
 
 #### Current Issues
-Far west tiles (Hawaii, Alaska):  Due to issues with processing imagery around the international dateline for this product, far west tiles will sometimes appear with data at the start of the day, long before Terra or Aqua have observed for the day. Users are advised to disregard such data, until the Corrected Reflectance layers confirm current-day observations have been processed.
+- The flood layers are displaying a large number of flood pixels in the far north at present (generally above 60N). Most of these are false-positive detections, a result of the large number of overlapping images towards the poles in the source MODIS imagery (due to the nature of the spacecraft's polar orbit). During summer when such regions have long periods of daylight, even more observations are available, but this increases the chance that repeated cloud-shadow false-positives pass the compositing requirement, and contaminate the product. We are working on various adjustments to the algorithm to minimize this.
+
+At the same time, note there is actual major flooding in the region along various Arctic rivers (as of mid June 2022). These are easily distinguishable by the spatial pattern of flooding (occurring clearly along river courses). The false positives are generally scattered around randomly, or appear similar to cloud spatial patterns (not conforming to local hydrology).
+
+- Far west tiles (Hawaii, Alaska):  Due to issues with processing imagery around the international dateline for this product, far west tiles will sometimes appear with data at the start of the day, long before Terra or Aqua have observed for the day. Users are advised to disregard such data, until the Corrected Reflectance layers confirm current-day observations have been processed.
 
 #### Limitations
 Common situations in which the flood product may be unable to accurately identify flood include:
@@ -15,7 +19,7 @@ Common situations in which the flood product may be unable to accurately identif
 - Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
 #### Spatial Coverage
-Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevB.pdf) for included tiles).
+Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://www.earthdata.nasa.gov/s3fs-public/imported/MCDWD_UserGuide_RevB.pdf) for included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, with resolution increasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.

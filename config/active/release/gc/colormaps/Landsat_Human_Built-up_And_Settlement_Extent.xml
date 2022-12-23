@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Classification">
+    <Entries>
+      <ColorMapEntry rgb="178,178,178" transparent="true" sourceValue="205.0" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="225,225,225" transparent="false" sourceValue="200.0" ref="1"/>
+      <ColorMapEntry rgb="217,95,2" transparent="false" sourceValue="201.0" ref="2"/>
+      <ColorMapEntry rgb="55,126,184" transparent="false" sourceValue="202.0" ref="3"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="178,178,178" tooltip="NoData/Cloud/Shadow" id="0"/>
+      <LegendEntry rgb="225,225,225" tooltip="Not HBASE" id="1"/>
+      <LegendEntry rgb="217,95,2" tooltip="HBASE" id="2"/>
+      <LegendEntry rgb="55,126,184" tooltip="Road" id="3"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

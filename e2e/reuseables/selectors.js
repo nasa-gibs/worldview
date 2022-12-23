@@ -30,6 +30,10 @@ module.exports = {
   animationIntervalSelector: '#wv-animation-widget #current-interval',
   animationFrameSlider: '#wv-animation-widget .rc-slider',
 
+  // mobile animations
+  mobileAnimateButton: '#animate-button',
+  mobileAnimationWidget: '.wv-animation-widget-wrapper-mobile',
+
   // sidebar, layers
   sidebarContainer: '#products-holder',
   infoButton: '.wv-layers-info',
@@ -46,6 +50,7 @@ module.exports = {
   firesRemove: '#close-activeVIIRS_NOAA20_Thermal_Anomalies_375m_All',
   aodGroup: '#active-Aerosol_Optical_Depth',
   aodGroupHeader: '#active-Aerosol_Optical_Depth .layer-group-header',
+  firesGroupHeader: '#active-Fires_and_Thermal_Anomalies .layer-group-header',
   overlaysGroup: '#active-overlays',
   overlaysGroupHeader: '#active-overlays .layer-group-header',
   baselayersGroup: '#active-baselayers',
@@ -93,6 +98,7 @@ module.exports = {
   monthUp: '.input-wrapper-month > div.date-arrows.date-arrow-up',
   yearDown: '.input-wrapper-year > div.date-arrows.date-arrow-down',
   yearUp: '.input-wrapper-year > div.date-arrows.date-arrow-up',
+  datePickerWheel: '.datepicker-modal .datepicker-wheel',
 
 
   // layers

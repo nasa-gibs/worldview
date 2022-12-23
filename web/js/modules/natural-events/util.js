@@ -7,6 +7,7 @@ import util from '../../util/util';
 import {
   LIMIT_EVENT_REQUEST_COUNT,
 } from './constants';
+import { CRS } from '../map/constants';
 
 export function parseEvent(eventString) {
   const values = eventString.split(',');
@@ -127,9 +128,9 @@ export function getEventsRequestURL (state) {
   // represent exact bounds seen in app since they are expressed in EPSG:4326
   // format which is the only format the API supports
   const extentBounds = {
-    'EPSG:4326': [-180, 90, 180, -90],
-    'EPSG:3413': [-180, 40, 180, 90],
-    'EPSG:3031': [-180, -90, 180, -40],
+    [CRS.GEOGRAPHIC]: [-180, 90, 180, -90],
+    [CRS.ARCTIC]: [-180, 40, 180, 90],
+    [CRS.ANTARCTIC]: [-180, -90, 180, -40],
   };
   const { crs } = proj.selected;
   const selectedMap = map && map.ui.selected;
@@ -139,7 +140,7 @@ export function getEventsRequestURL (state) {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
-  const useBbox = bbox && bbox.length && crs === 'EPSG:4326';
+  const useBbox = bbox && bbox.length && crs === CRS.GEOGRAPHIC;
   params.bbox = useBbox ? bbox : extentBounds[crs];
 
   if (start && end) {
@@ -152,19 +153,23 @@ export function getEventsRequestURL (state) {
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }
 
+export const toEventDateString = (d) => d.toISOString().split('T')[0];
+
 /**
  *
  * @param {*} event
  */
-export function getDefaultEventDate(event) {
-  const preDate = event.geometry[0] && event.geometry[0].date;
-  let date = new Date(preDate).toISOString().split('T')[0];
-  if (event.geometry.length < 2) return date;
-  const category = event.categories.title || event.categories[0].title;
-  const today = util.now().toISOString().split('T')[0];
+export function getDefaultEventDate({ geometry, categories }) {
+  const preDate = geometry[0] && geometry[0].date;
+  let date = toEventDateString(new Date(preDate));
+  if (geometry.length < 2) {
+    return date;
+  }
+  const category = categories.title || categories[0].title;
+  const today = toEventDateString(util.now());
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
-    [date] = new Date(event.geometry[1].date).toISOString().split('T');
+    [date] = geometry[1].date.split('T');
   }
   return date;
 }
@@ -181,7 +186,7 @@ export const validateGeometryCoords = (geometry, proj) => {
   const { coordinates, type } = geometry;
   const { crs, maxExtent } = proj;
   const passesFilter = (coords) => {
-    const tCoords = transform(coords, 'EPSG:4326', crs);
+    const tCoords = transform(coords, CRS.GEOGRAPHIC, crs);
     return containsCoordinate(maxExtent, tCoords);
   };
   if (type === 'Point') {

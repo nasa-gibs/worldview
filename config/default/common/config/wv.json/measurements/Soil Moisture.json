@@ -8,7 +8,7 @@
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
-                    "description": "amsre/SoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRE_Soil_Moisture_NPD_Day",
@@ -136,9 +136,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-			                  "NLDAS_Underground_Soil_Moisture_Mosaic_Monthly",
-                              "NLDAS_Underground_Soil_Moisture_Noah_Monthly",
-                              "NLDAS_Underground_Soil_Moisture_VIC_Monthly"
+                              "NLDAS_Underground_Soil_Moisture_Noah_Monthly"
                     ]
                 },
                 "MERRA-2": {

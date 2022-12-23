@@ -326,6 +326,19 @@ const getParameters = function(config, parameters) {
         setAsEmptyItem: true,
       },
     },
+    efa: {
+      stateKey: 'events.showAllTracks',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (showAllTracks, state) => {
+          const eventsActive = get(state, 'events.active');
+          return eventsActive ? showAllTracks : undefined;
+        },
+        setAsEmptyItem: true,
+      },
+    },
     efd: {
       stateKey: 'events.selectedDates',
       type: 'object',
@@ -462,6 +475,14 @@ const getParameters = function(config, parameters) {
     },
     ab: {
       stateKey: 'animation.isActive',
+      initialState: false,
+      options: {
+        serialize: (boo) => (boo ? 'on' : undefined),
+        parse: (str) => str === 'on',
+      },
+    },
+    abt: {
+      stateKey: 'modalAbout.isOpen',
       initialState: false,
       options: {
         serialize: (boo) => (boo ? 'on' : undefined),

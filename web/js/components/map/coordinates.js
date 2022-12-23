@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import util from '../../util/util';
 
 // previous : next
@@ -67,3 +66,7 @@ Coordinates.propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
 };
+
+
+
+

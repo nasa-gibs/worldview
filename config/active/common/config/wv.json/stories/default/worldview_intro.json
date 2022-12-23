@@ -34,7 +34,7 @@
               {
                 "target": "#layers-sidebar-tab",
                 "title": "Layer List",
-                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the topmost active base layer will display. Toggle on and off the layers by clicking on the \"eye\" icon to the left of the layer name.",
+                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the topmost active base layer will display. The Group Similar Layers checkbox allows you to group layers by measurement. Toggle on and off the layers by clicking on the \"eye\" icon to the left of the layer name. To adjust layer order, click and hold on a layer or group and move it in the Layer List.",
                 "spotlightClicks": false,
                 "disableOverlayClose": true,
                 "placementBeacon": "bottom"
@@ -102,7 +102,7 @@
               {
                 "target": "#ol-coords-case",
                 "title": "Map Coordinates",
-                "content": "When hovering over the map, coordinates are shown here. In tour mode, hover your cursor here to see coordinates. Click on the coordinates to change between common formats like Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes.",
+                "content": "When hovering over the map, coordinates are shown here. In tour mode, hover your cursor here to see coordinates. Click on the coordinates to change between common formats like Decimal Degrees (DD), Degrees Decimal Minutes (DDM), and Degrees Minutes Seconds (DMS).",
                 "placementBeacon": "top"
               },
               {
@@ -118,7 +118,7 @@
               },
               {
                 "target": "#wv-share-button",
-                "content": "Create a custom URL link of your Worldview page, copy HTML code to embed Worldview into a web page, and share Worldview via social media with friends and colleagues!",
+                "content": "Create a custom URL link of your Worldview page and share Worldview via social media with friends and colleagues!",
                 "placementBeacon": "bottom"
               },
               {
@@ -133,7 +133,7 @@
               },
               {
                 "target": "#wv-info-button",
-                "content": "Click here to provide feedback, explore the app through self-guided tours (like this one!), view service notifications, change global/app-wide settings (just temperature units for now!), and find out more about developing the Worldview application by checking out the open source code. You can also access Distraction Free mode, which hides most of the application so you can focus solely on the map imagery.",
+                "content": "Click here to provide feedback, explore the app through self-guided tours (like this one!), view service notifications, change global/app-wide settings, and find out more about developing the Worldview application by checking out the open source code. You can also access Distraction Free mode, which hides most of the application so you can focus solely on the map imagery.",
                 "placementBeacon": "bottom"
               }
             ]

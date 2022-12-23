@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="1"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Data" id="0"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Land Surface Temperature Difference" units="°C">
+    <Entries>
+      <ColorMapEntry rgb="2,38,130" transparent="false" sourceValue="(-INF,-3)" value="(-INF,-3)" ref="2"/>
+      <ColorMapEntry rgb="47,85,181" transparent="false" sourceValue="[-3,-2)" value="[-3,-2)" ref="3"/>
+      <ColorMapEntry rgb="38,153,191" transparent="false" sourceValue="[-2,-1)" value="[-2,-1)" ref="4"/>
+      <ColorMapEntry rgb="121,222,242" transparent="false" sourceValue="[-1,-0.25)" value="[-1,-0.25)" ref="5"/>
+      <ColorMapEntry rgb="199,215,158" transparent="false" sourceValue="[-0.25,0.25)" value="[-0.25,0.25)" ref="6"/>
+      <ColorMapEntry rgb="244,228,146" transparent="false" sourceValue="[0.25,1)" value="[0.25,1)" ref="7"/>
+      <ColorMapEntry rgb="244,176,112" transparent="false" sourceValue="[1,2)" value="[1,2)" ref="8"/>
+      <ColorMapEntry rgb="209,95,50" transparent="false" sourceValue="[2,3)" value="[2,3)" ref="9"/>
+      <ColorMapEntry rgb="170,16,5" transparent="false" sourceValue="[3,+INF)" value="[3,+INF)" ref="10"/>
+    </Entries>
+    <Legend type="discrete" minLabel="&lt; 3" maxLabel="&#8805; 3">
+      <LegendEntry rgb="2,38,130" tooltip="&lt; -3" id="2"/>
+      <LegendEntry rgb="47,85,181" tooltip="-3 – -2" showTick="true" id="3"/>
+      <LegendEntry rgb="38,153,191" tooltip="-2 – -1" showTick="true" showLabel="true" label="-2 - -1" id="4"/>
+      <LegendEntry rgb="121,222,242" tooltip="-1 – -0.25" showTick="true" id="5"/>
+      <LegendEntry rgb="199,215,158" tooltip="-0.25 – 0.25" showTick="true" showLabel="true" label="-0.25 - 0.25" id="6"/>
+      <LegendEntry rgb="244,228,146" tooltip="0.25 – 1" showTick="true" id="7"/>
+      <LegendEntry rgb="244,176,112" tooltip="1 – 2" showTick="true" showLabel="true" label="1 - 2" id="8"/>
+      <LegendEntry rgb="209,95,50" tooltip="2 – 3" showTick="true" id="9"/>
+      <LegendEntry rgb="170,16,5" tooltip="&#8805; 3" id="10"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

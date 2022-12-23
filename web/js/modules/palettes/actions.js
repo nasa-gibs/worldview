@@ -1,4 +1,7 @@
-import { forOwn as lodashForOwn } from 'lodash';
+import {
+  forOwn as lodashForOwn,
+  findIndex as lodashFindIndex,
+} from 'lodash';
 import { requestAction } from '../core/actions';
 import {
   REQUEST_PALETTE,
@@ -174,14 +177,23 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
         hasDisabled = true;
       }
     });
-    dispatch({
-      type: SET_DISABLED_CLASSIFICATION,
-      groupName,
-      activeString: groupName,
-      layerId,
-      palettes: newActivePalettesObj,
-      props: { disabled: hasDisabled },
-    });
+    // sometimes an active palette will be related to layers that we already removed during the
+    // tour process. need to check if the layer is active to prevent errors when dispatching
+    const getLayerIndex = () => {
+      const activeLayers = state.layers[groupName].layers;
+      return lodashFindIndex(activeLayers, { id: layerId });
+    };
+    const layerIndex = state.layers[groupName].layers[getLayerIndex()];
+    if (layerIndex) {
+      dispatch({
+        type: SET_DISABLED_CLASSIFICATION,
+        groupName,
+        activeString: groupName,
+        layerId,
+        palettes: newActivePalettesObj,
+        props: { disabled: hasDisabled },
+      });
+    }
   };
 }
 export function refreshDisabledClassification(layerId, disabledArray, index, groupName) {

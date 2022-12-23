@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Urban/Rural Extents">
+    <Entries>
+      <ColorMapEntry rgb="255,153,153" transparent="false" sourceValue="[1]" value="[1]" ref="0"/>
+      <ColorMapEntry rgb="153,0,0" transparent="false" sourceValue="[2]" value="[2]" ref="1"/>
+    </Entries>
+    <Legend type="classification" minLabel="1" maxLabel="255">
+      <LegendEntry rgb="255,153,153" tooltip="Rural" id="0"/>
+      <LegendEntry rgb="153,0,0" tooltip="Urban" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="254,224,210" transparent="true" sourceValue="[255]" value="[255]" nodata="true" ref="2"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="3"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="254,224,210" tooltip="No Data" id="2"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Retrieval" id="3"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

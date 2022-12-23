@@ -1121,6 +1121,7 @@
                     ]
                 ]
             }
-        }
+        },
+        "defaultLayer": "BlueMarble_NextGeneration"
     }
 }

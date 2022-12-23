@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "Graticule_15m": {
+      "id": "Graticule_15m",
+      "tags": "lat lon lat-lon",
+      "description": "reference/Graticule_15m",
+      "group": "overlays",
+      "format": "image/png",
+      "noTransition": true,
+      
+      "layergroup": "Latitude-Longitude Lines",
+      "projections": {
+        "arctic": {
+          "id": "Graticule",
+          "layer": "Graticule",
+          "subtitle": "Polarview / Graticule",
+          "type": "wmts",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        },
+        "antarctic": {
+          "id": "Graticule",
+          "layer": "Graticule",
+          "subtitle": "Polarview / Graticule",
+          "type": "wmts",
+          "source": "GIBS:antarctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "subtitle": "Natural Earth",
+          "type": "wmts",
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}

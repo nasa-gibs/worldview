@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Cloud Phase Optical Properties">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="0" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="100,100,100" transparent="true" sourceValue="1" ref="1"/>
+      <ColorMapEntry rgb="0,0,100" transparent="false" sourceValue="2" ref="2"/>
+      <ColorMapEntry rgb="188,210,254" transparent="false" sourceValue="3" ref="3"/>
+      <ColorMapEntry rgb="240,190,64" transparent="false" sourceValue="4" ref="4"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="Fill" id="0"/>
+      <LegendEntry rgb="100,100,100" tooltip="Clear" id="1"/>
+      <LegendEntry rgb="0,0,100" tooltip="Liquid Water" id="2"/>
+      <LegendEntry rgb="188,210,254" tooltip="Ice" id="3"/>
+      <LegendEntry rgb="240,190,64" tooltip="Uncertain" id="4"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

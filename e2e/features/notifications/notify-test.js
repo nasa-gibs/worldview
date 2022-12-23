@@ -104,7 +104,8 @@ module.exports = {
     c.setValue(layersSearchField, 'MODIS_Aqua_CorrectedReflectance_TrueColor');
     c.waitForElementVisible('#MODIS_Aqua_CorrectedReflectance_TrueColor-notice-info', TIME_LIMIT);
     c.pause(300);
-    c.moveToElement('#MODIS_Aqua_CorrectedReflectance_TrueColor-notice-info', 12, 12);
+    c.moveToElement('css selector', '.layer-notice-icon', 0, 0);
+    c.pause(500);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div:first-of-type`, aquaNotice);
     c.assert.containsText(`${tooltipSelector} div:last-of-type`, multiNotice);
@@ -113,3 +114,4 @@ module.exports = {
     c.end();
   },
 };
+

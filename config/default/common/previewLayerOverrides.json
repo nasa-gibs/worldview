@@ -16,6 +16,9 @@
   "GOES-West_ABI_Band2_Red_Visible_1km": "2020-01-02T21:00:00Z",
   "GOES-West_ABI_Band13_Clean_Infrared": "2020-01-02T21:00:00Z",
 
+  "GMI_Precipitation_Rate_Asc": "2020-01-02T00:00:00Z",
+  "GMI_Precipitation_Rate_Dsc": "2020-01-02T00:00:00Z",
+
   "Himawari_AHI_Air_Mass": "2020-01-02T03:00:00Z",
   "Himawari_AHI_Band3_Red_Visible_1km": "2020-01-02T03:00:00Z",
   "Himawari_AHI_Band13_Clean_Infrared": "2020-01-02T03:00:00Z",
@@ -47,6 +50,9 @@
   "OrbitTracks_Landsat-8_Ascending": "2019-02-14T00:00:00Z",
   "OrbitTracks_Landsat-8_Descending": "2019-02-14T00:00:00Z",
 
+  "OrbitTracks_Landsat-9_Ascending": "2022-02-14T00:00:00Z",
+  "OrbitTracks_Landsat-9_Descending": "2022-02-14T00:00:00Z",
+
   "OrbitTracks_SMAP_Ascending": "2019-02-14T00:00:00Z",
   "OrbitTracks_SMAP_Descending": "2019-02-14T00:00:00Z",
 
@@ -73,6 +79,9 @@
 
   "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT": "2019-09-22T16:00:00Z",
   "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT": "2019-09-22T16:00:00Z",
-  "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT": "2019-09-22T16:00:00Z"
+  "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT": "2019-09-22T16:00:00Z",
+
+  "AMSRE_Columnar_Water_Vapor_Night": "2009-08-01T00:00:00Z",
+  "AMSRE_Columnar_Water_Vapor_Day": "2009-08-01T00:00:00Z"
 
 }

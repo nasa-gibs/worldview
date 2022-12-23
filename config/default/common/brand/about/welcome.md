@@ -1,9 +1,9 @@
-<h1>Welcome to Worldview<span class="version"> Version @BUILD_VERSION@ (<a href="https://github.com/nasa-gibs/worldview/releases"
+<h1>About @OFFICIAL_NAME@<span class="version"> Version @BUILD_VERSION@ (<a href="https://github.com/nasa-gibs/worldview/releases"
             target="_blank" rel="noopener noreferrer">Release
             Notes</a>)</span></h1>
 <div class="right">
     <div class="caption"><a href="https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS"
-            target="_blank" rel="noopener noreferrer"> What's new in Worldview! </a></div>
+            target="_blank" rel="noopener noreferrer"> What's new in @OFFICIAL_NAME@! </a></div>
 </div>
 <p>This <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source
         code</a> app from NASA's <a href="https://earthdata.nasa.gov/eosdis" target="_blank"
@@ -20,9 +20,9 @@
         rel="noopener noreferrer"><img src="images/gibs.png"></a>
     <div class="caption gibs-caption">Powered by GIBS</div>
 </div>
-<p>Worldview uses the <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener noreferrer">Global
+<p>@OFFICIAL_NAME@ uses the <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener noreferrer">Global
         Imagery Browse Services</a> to rapidly retrieve its imagery for an interactive browsing experience. While
-    Worldview uses <a href="https://openlayers.org" target="_blank" rel="noopener noreferrer">OpenLayers</a> as its
+    @OFFICIAL_NAME@ uses <a href="https://openlayers.org" target="_blank" rel="noopener noreferrer">OpenLayers</a> as its
     mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind, and several other
     clients. We encourage interested developers to build their own clients or integrate NASA imagery into their
     existing ones using these services.</p>

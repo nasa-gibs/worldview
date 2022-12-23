@@ -163,7 +163,6 @@
 
 .wv-date-selector-widget #left-arrow-group {
   transform: scaleX(-1);
-  transform: scaleX(-1);
 }
 
 .wv-date-selector-widget #left-arrow-group svg {
@@ -173,7 +172,7 @@
 
 .wv-date-selector-widget > .button-action-group:hover .arrow {
   fill: #1a1a1a;
-  fill-opacity: 1;
+  fill-opacity: 100%;
   stroke: none;
 }
 

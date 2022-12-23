@@ -1,7 +1,7 @@
 import { round as lodashRound, get as lodashGet } from 'lodash';
-import canvg from 'canvg-browser';
 import update from 'immutability-helper';
 import moment from 'moment';
+import canvg from '../../util/canvg';
 import util from '../../util/util';
 
 /**
@@ -39,9 +39,19 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
 export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
   let i = 1;
   let currentDate = start;
+  let nextDate = util.dateAdd(start, interval, delta);
+  if (nextDate > end) {
+    i = 1;
+    return i;
+  }
   while (currentDate < end) {
     i += 1;
     currentDate = util.dateAdd(currentDate, interval, delta);
+    nextDate = util.dateAdd(currentDate, interval, delta);
+    // checking to see if next date is after end date to prevent creation of extra frame
+    if (nextDate > end) {
+      return i;
+    }
     // if checking for a max number limit, break out after reaching it
     if (maxToCheck && i >= maxToCheck) {
       return i;
@@ -86,21 +96,21 @@ export function getStampProps(
   return { stampHeight, dateStamp };
 }
 
-export function svgToPng(svgURL, stampHeight) {
-  const canvasEl = document.createElement('canvas');
-  const canvgOptions = {
-    log: false,
-    ignoreMouse: true,
-    scaleHeight: stampHeight,
-  };
-  canvg(canvasEl, svgURL, canvgOptions);
-  const newImage = new Image();
-  newImage.src = canvasEl.toDataURL('image/png');
-  newImage.width = canvasEl.width;
-  newImage.height = canvasEl.height;
+// export function svgToPng(svgURL, stampHeight) {
+//   const canvasEl = document.createElement('canvas');
+//   const canvgOptions = {
+//     log: false,
+//     ignoreMouse: true,
+//     scaleHeight: stampHeight,
+//   };
+//   canvg(canvasEl, svgURL, canvgOptions);
+//   const newImage = new Image();
+//   newImage.src = canvasEl.toDataURL('image/png');
+//   newImage.width = canvasEl.width;
+//   newImage.height = canvasEl.height;
 
-  return newImage;
-}
+//   return newImage;
+// }
 
 export function mapLocationToAnimationState(
   parameters,

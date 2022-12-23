@@ -25,18 +25,29 @@ function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
   c.useCss().click(measureDistanceBtn);
   c.pause(200);
   c.waitForElementVisible('#measurement-alert', TIME_LIMIT);
-  c.moveToElement('#wv-map-geographic', startX, startY)
-    .mouseButtonClick(0);
-  c.pause(200);
-  c.moveToElement('#wv-map-geographic', endX, endY)
-    .mouseButtonClick(0)
-    .mouseButtonClick(0)
-    .pause(100);
+  c.perform(function() {
+    const actions = this.actions({ async: true });
+
+    return actions
+      .move({
+        origin: 'viewport',
+        x: startX,
+        y: startY,
+      })
+      .click()
+      .move({
+        origin: 'pointer',
+        x: endX,
+        y: endY,
+      })
+      .doubleClick();
+  });
 }
 
 module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    c.setWindowSize(1700, 1000);
   },
   'Clicking the measure button opens the menu': (c) => {
     c.expect.element(measureMenu).to.not.be.present;
@@ -59,11 +70,16 @@ module.exports = {
     if (c.options.desiredCapabilities.browserName === 'firefox') { // right click doesn't work in firefox
       return;
     }
-    c.moveToElement('#wv-map-geographic', 200, 110)
-      .mouseButtonClick(0)
-      .moveTo(null, 200, 210)
-      .mouseButtonClick(1)
-      .mouseButtonClick(0);
+    c.perform(function() {
+      const actions = this.actions({ async: true });
+      return actions
+        .move({
+          origin: 'viewport',
+          x: 200,
+          y: 110,
+        })
+        .contextClick();
+    });
     c.pause(300);
     c.expect.element('#measurement-alert').to.not.be.present;
     c.expect.element(sidebarContainer)
@@ -76,6 +92,7 @@ module.exports = {
     createDistanceMeasurement(c, [400, 200], [450, 300]);
     createDistanceMeasurement(c, [350, 250], [350, 220]);
     c.waitForElementVisible(geoMeasurementTooltip, TIME_LIMIT);
+    c.pause(500);
     c.expect.elements(geoMeasurementTooltip).count.to.equal(2);
   },
   'Creating a area measurement causes a tooltip to show': (c) => {
@@ -83,20 +100,31 @@ module.exports = {
       return;
     }
     c.useCss().click(measureBtn);
+    c.pause(500);
     c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       c.useCss().click(measureAreaBtn);
-      c.moveTo(null, -250, 10);
-      c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 0, 100);
-      c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 100, 0);
-      c.mouseButtonClick(0);
-      c.pause(200);
-      c.moveTo(null, 0, -100);
-      c.mouseButtonClick(0);
-      c.mouseButtonClick(0);
+      c.perform(function() {
+        const actions = this.actions({ async: true });
+
+        return actions
+          .move({
+            origin: 'viewport',
+            x: 375,
+            y: 225,
+          })
+          .click()
+          .move({
+            origin: 'pointer',
+            x: 400,
+            y: 275,
+          })
+          .click()
+          .move({
+            x: 450,
+            y: 300,
+          })
+          .doubleClick();
+      });
       c.waitForElementVisible(geoMeasurementTooltip, TIME_LIMIT);
       c.expect.elements(geoMeasurementTooltip).count.to.equal(3);
     });
@@ -106,6 +134,7 @@ module.exports = {
       return;
     }
     c.click(measureBtn);
+    c.pause(500);
     c.waitForElementVisible(downloadGeojsonBtn);
     // c.waitForElementVisible(downloadShapefileBtn);
     c.click('.modal');
@@ -160,8 +189,9 @@ module.exports = {
     c.click(measureBtn);
     await c.waitForElementVisible(measureMenu, TIME_LIMIT);
     await c.click(unitOfMeasureToggle);
+    c.pause(500);
     const tooltips = await c.elements('css selector', measurementTooltip);
-    tooltips.value.forEach((element) => {
+    tooltips.forEach((element) => {
       c.elementIdText(element.ELEMENT, (elResult) => {
         const pass = elResult.value.includes('mi');
         c.assert.ok(pass);
