@@ -2,17 +2,17 @@
     "measurements": {
         "Latitude-Longitude Lines": {
             "id": "latitude-longitude-lines",
-            "title":    "Latitude-Longitude Lines",
-            "subtitle": "OpenLayers/Graticule Control",
+            "title": "Latitude-Longitude Lines",
+            "subtitle": "Natural Earth/Graticule Control",
             "multichoice": true,
             "sources": {
-                "OpenLayers": {
-                    "id": "openlayers",
-                    "title": "OpenLayers",
+                "naturalearthdata.com": {
+                    "id": "natural-earth",
+                    "title": "Natural Earth",
                     "description": "",
                     "image": "",
                     "settings": [
-                        "Graticule"
+                        "Graticule_15m"
                     ]
                 }
             }

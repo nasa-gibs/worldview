@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
-import OrbitTracks from './orbit-tracks-toggle';
+import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
@@ -113,6 +113,7 @@ class LayerSettings extends React.Component {
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
+
       if (legend.type === 'classification' && legend.colors.length > 1) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
@@ -177,10 +178,10 @@ class LayerSettings extends React.Component {
       navElements.push(navItemEl);
     });
     return (
-      <>
+      <div className="double-palette">
         <Nav tabs>{navElements}</Nav>
         <TabContent activeTab={activeIndex}>{paneElements}</TabContent>
-      </>
+      </div>
     );
   }
 
@@ -339,6 +340,8 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
     } = this.props;
+    const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
+    const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
@@ -358,7 +361,7 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
+        {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>
     );
   }
@@ -366,7 +369,7 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser, settings,
+    config, palettes, compare, screenSize, settings,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
@@ -385,7 +388,7 @@ function mapStateToProps(state, ownProps) {
     paletteOrder: config.paletteOrder,
     granuleOptions,
     groupName,
-    screenHeight: browser.screenHeight,
+    screenHeight: screenSize.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
@@ -435,8 +438,8 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerOptions: (dates, id, count) => {
-    dispatch(updateGranuleLayerOptions(dates, id, count));
+  updateGranuleLayerOptions: (dates, def, count) => {
+    dispatch(updateGranuleLayerOptions(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));

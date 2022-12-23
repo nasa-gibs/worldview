@@ -1,0 +1,171 @@
+{
+  "id": "GRanD_Dams",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "GRAND_ID",
+      "Title"      : "GRAND Unique ID",
+      "Description": "Unique ID for each point representing a dam and its associated reservoir; the point location is an approximation of the dam location.",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": 1, "Max": 6862 } ],
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DAM_NAME",
+      "Title"      : "Dam Name",
+      "Description": "Name of dam structure.",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "RIVER",
+      "Title"      : "River",
+      "Description": "Name of impounded river",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : true,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "MAIN_BASIN",
+      "Title"      : "Main Basin",
+      "Description": "Name of main basin",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : true,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "SUB_BASIN",
+      "Title"      : "Sub-basin",
+      "Description": "Name of sub-basin",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : true,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "MAIN_USE",
+      "Title"      : "Main Use",
+      "Description": "Main purpose of reservoir:<br><ul><li>Irrigation; Hydroelectricity; Water supply; Flood control; Recreation;</li><li>Navigation; Fisheries; Pollution control; Livestock; or Other</li></ul>",
+      "DataType"   : "string",
+      "Function"   : "Style",
+      "IsOptional" : true,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "CAP_MCM",
+      "Title"      : "Representative Capacity",
+      "Description": "Representative maximum storage capacity of reservoir in million cubic meters; consolidated from other 'Cap' columns in the following order of priority: 'Cap_max' over 'Cap_rep' over 'Cap_min'; exceptions apply if value in 'Cap_max' column seems unreliable or rounded.",
+      "Units"      : "cubic m",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": -99, "Max": 204800 } ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "AREA_SKM",
+      "Title"      : "Representative Surface Area",
+      "Description": "Representative surface area of reservoir in square kilometers; consolidated from other 'Area' columns in the following order of priority: 'Area_poly' over 'Area_rep' over 'Area_max' over 'Area_min'; exceptions apply if value in 'Area_poly' column seems unreliable or rounded.",
+      "Units"      : "square km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": -99, "Max": 67165 } ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "CATCH_SKM",
+      "Title"      : "Calculated Upstream Catchment Area",
+      "Description": "Area of upstream catchment draining into the reservoir in square kilometers; value derived from HydroSHEDS at 15s resolution at point location of dam.",
+      "Units"      : "square km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 1, "Max": 2874631 } ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DAM_HGT_M",
+      "Title"      : "Dam Height",
+      "Description": "Height of dam in meters.",
+      "Units"      : "m",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": -99, "Max": 335 } ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DAM_LEN_M",
+      "Title"      : "Dam Length",
+      "Description": "Length of dam in meters.",
+      "Units"      : "m",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": -99, "Max": 80000 } ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DEPTH_M",
+      "Title"      : "Depth",
+      "Description": "Average depth of reservoir in meters; calculated as ratio between storage capacity ('Cap_mcm') and surface area ('Area_skm'); values that are somewhat higher than the dam height ('Dam_hgt_m') may still be reasonable, e.g. if the storage capacity refers to the maximum volume yet the reservoir polygon represents a low-fill status; values capped at 1,000 indicate exceedingly high values, which may be due to inconsistencies in the data.",
+      "Units"      : "m",
+      "DataType"   : "string",
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DIS_AVG_LS",
+      "Title"      : "Average Discharge",
+      "Description": "Long-term (1961-90) average discharge at reservoir location in liters per second; value derived from HydroSHEDS flow routing scheme combined with WaterGAP2 runoff estimates at 15s resolution at point location of dam.",
+      "Units"      : "Liters/s",
+      "DataType"   : "string",
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "LAT_DD",
+      "Title"      : "Latitude",
+      "Description": "Latitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "LONG_DD",
+      "Title"      : "Longitude",
+      "Description": "Longitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+
+  ]
+}

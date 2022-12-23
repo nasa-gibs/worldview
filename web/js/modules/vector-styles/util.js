@@ -8,7 +8,7 @@ import {
 import {
   Stroke, Style, Fill, Circle,
 } from 'ol/style';
-import { setStyleFunction } from './selectors';
+import { getVectorLayers, setStyleFunction } from './selectors';
 import { isFromActiveCompareRegion } from '../compare/util';
 
 export function getVectorStyleAttributeArray(layer) {
@@ -46,9 +46,11 @@ export function getMinValue(v) {
 export function getMaxValue(v) {
   return v.length ? v[v.length - 1] : v;
 }
+
 export function isConditional(item) {
   return Array.isArray(item) && item[0] === 'case';
 }
+
 export function adjustCircleRadius(style) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
@@ -60,17 +62,7 @@ export function adjustCircleRadius(style) {
     }),
   });
 }
-export function getOrbitPointStyles(feature, styleArray) {
-  return styleArray.map((style) => {
-    const type = feature.getType();
-    switch (type) {
-      case 'Point':
-        return adjustCircleRadius(style);
-      default:
-        return style;
-    }
-  });
-}
+
 export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
@@ -98,6 +90,7 @@ export function selectedPolygonStyle(style) {
   fill.setColor(color);
   return style;
 }
+
 export function offsetLineStringStyle(feature, styleArray) {
   return styleArray.map((style) => {
     const text = style.getText();
@@ -107,6 +100,7 @@ export function offsetLineStringStyle(feature, styleArray) {
     return style;
   });
 }
+
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
@@ -121,6 +115,7 @@ export function selectedStyleFunction(feature, styleArray, size) {
     }
   });
 }
+
 export function getConditionalColors(color) {
   const array = Array.from(color);
   array.shift();
@@ -150,6 +145,7 @@ export function getConditionalColors(color) {
   }
   return { colors, labels };
 }
+
 export function getPaletteForStyle(layer, layerstyleLayerObject) {
   const styleLayerObject = layerstyleLayerObject.layers[0];
   const color = styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color'];
@@ -172,12 +168,14 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
     id: `${layer.id}0_legend`,
   }];
 }
+
 export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
   if (acceptableExtent) {
     return lon > acceptableExtent[0] && lon < acceptableExtent[2];
   }
   return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
 }
+
 /**
  * Use modal/screen dimensions and click pixel location
  * to return X & Y offsets for modal
@@ -207,6 +205,7 @@ function getModalOffset(dimensionProps) {
   }
   return { offsetLeft, offsetTop };
 }
+
 /**
  * Get Organized data for each feature at pixel
  * @param {Object} mapProps
@@ -218,7 +217,9 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const metaArray = [];
   const selected = {};
   let exceededLengthLimit = false;
+  let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
+  let modalShouldFollowClicks = false;
   const featureOptions = isMobile ? { hitTolerance: 5 } : {};
   // max displayed results of features at pixel
   const desktopLimit = 12;
@@ -226,6 +227,11 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
+    const featureId = feature.getId();
+    if (featureId === 'coordinates-map-marker') {
+      isCoordinatesMarker = true;
+      return;
+    }
     if (lengthCheck(metaArray)) {
       exceededLengthLimit = true;
       return true;
@@ -254,7 +260,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
       if (selected[layerId].includes(uniqueIdentifier)) return;
-
+      if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {
         legend: properties,
         features,
@@ -270,9 +276,10 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
   }, featureOptions);
   return {
-    selected, metaArray, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,
   };
 }
+
 /**
  * Get organized vector modal contents for clicked
  * map location
@@ -286,8 +293,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
  */
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const { config, compare } = state;
-  const { screenWidth, screenHeight, lessThan } = state.browser;
-  const isMobile = lessThan.medium;
+  const { screenWidth, screenHeight, isMobileDevice } = state.screenSize;
+  const isMobile = isMobileDevice;
   const x = pixels[0];
   const y = pixels[1];
   const modalOffsetProps = {
@@ -296,33 +303,34 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
   const {
-    selected, metaArray, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,
   } = getModalContentsAtPixel(mapProps, config, compare, isMobile);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
+    isCoordinatesMarker,
+    modalShouldFollowClicks,
     exceededLengthLimit,
   };
 }
+
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  const { vectorStyles } = state.config;
+  const { config: { vectorStyles } } = state;
+  const vectorLayers = getVectorLayers(state);
+
   for (const [key] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);
+    const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
-    setStyleFunction(
-      def,
-      def.vectorStyle.id,
-      vectorStyles,
-      null,
-      state,
-    );
+    const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
   }
 }

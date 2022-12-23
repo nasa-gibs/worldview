@@ -54,13 +54,13 @@
 .toolbar-list-modal.modal-dialog {
   width: 160px;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: 1200px) {
     width: 180px;
   }
 }
 
 .toolbar-medium-modal {
-  width: 230px;
+  width: 235px;
 
   &.modal-dialog .modal-header {
     padding: 5px 10px 5px 6px;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="[255]" value="[255]" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Landslide Hazard">
+    <Entries>
+      <ColorMapEntry rgb="254,254,254" transparent="false" sourceValue="[2]" value="[2]" ref="1"/>
+      <ColorMapEntry rgb="255,254,204" transparent="false" sourceValue="[3]" value="[3]" ref="2"/>
+      <ColorMapEntry rgb="255,237,160" transparent="false" sourceValue="[4]" value="[4]" ref="3"/>
+      <ColorMapEntry rgb="254,217,118" transparent="false" sourceValue="[5]" value="[5]" ref="4"/>
+      <ColorMapEntry rgb="254,178,76" transparent="false" sourceValue="[6]" value="[6]" ref="5"/>
+      <ColorMapEntry rgb="253,141,60" transparent="false" sourceValue="[7]" value="[7]" ref="6"/>
+      <ColorMapEntry rgb="252,78,32" transparent="false" sourceValue="[8]" value="[8]" ref="7"/>
+      <ColorMapEntry rgb="177,0,38" transparent="false" sourceValue="[9,255)" value="[9,255)" ref="8"/>
+    </Entries>
+    <Legend type="classification" minLabel="2" maxLabel="&#8805; 9">
+      <LegendEntry rgb="254,254,254" tooltip="Negligible to Very Low" id="1"/>
+      <LegendEntry rgb="255,254,204" tooltip="Low" id="2"/>
+      <LegendEntry rgb="255,237,160" tooltip="Low to Moderate" id="3"/>
+      <LegendEntry rgb="254,217,118" tooltip="Moderate" id="4"/>
+      <LegendEntry rgb="254,178,76" tooltip="Medium" id="5"/>
+      <LegendEntry rgb="253,141,60" tooltip="Medium to High" id="6"/>
+      <LegendEntry rgb="252,78,32" tooltip="High" id="7"/>
+      <LegendEntry rgb="177,0,38" tooltip="Very High" id="8"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

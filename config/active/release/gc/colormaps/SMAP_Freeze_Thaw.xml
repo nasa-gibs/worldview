@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Freeze/Thaw">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="1" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="100,79,45" transparent="false" sourceValue="0" ref="1"/>
+      <ColorMapEntry rgb="101,134,255" transparent="false" sourceValue="1" ref="2"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="Not Recommended" id="0"/>
+      <LegendEntry rgb="100,79,45" tooltip="Thaw" id="1"/>
+      <LegendEntry rgb="101,134,255" tooltip="Freeze" id="2"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

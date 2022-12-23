@@ -17,6 +17,7 @@ import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { CRS } from '../../modules/map/constants';
 
 const icons = [
   'Dust and Haze',
@@ -86,7 +87,7 @@ class EventMarkers extends React.Component {
 
       let { coordinates } = geometry;
 
-      const transformCoords = (coords) => olProj.transform(coords, 'EPSG:4326', crs);
+      const transformCoords = (coords) => olProj.transform(coords, CRS.GEOGRAPHIC, crs);
 
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
@@ -224,7 +225,7 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
   });
 };
 
-const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
+const createBoundingBox = function(coordinates, title, proj = CRS.GEOGRAPHIC) {
   const lightStroke = new OlStyleStyle({
     stroke: new OlStyleStroke({
       color: [255, 255, 255, 0.6],
@@ -240,7 +241,7 @@ const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
       lineDash: [8, 12],
     }),
   });
-  const boxPolygon = new OlGeomPolygon(coordinates).transform('EPSG:4326', proj);
+  const boxPolygon = new OlGeomPolygon(coordinates).transform(CRS.GEOGRAPHIC, proj);
   const boxFeature = new OlFeature({
     geometry: boxPolygon,
     name: title,
@@ -258,7 +259,7 @@ const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar, date, browser,
+    map, proj, events, requestedEvents, sidebar, date, screenSize,
   } = state;
 
   return {
@@ -268,7 +269,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     isAnimatingToEvent: events.isAnimatingToEvent,
     eventsData: getFilteredEvents(state),
     eventsDataIsLoading: requestedEvents.isLoading,

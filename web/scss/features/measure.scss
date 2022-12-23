@@ -39,15 +39,9 @@
   }
 }
 
-@media (max-width: $mobile-max-width) {
-  .wv-measure-button {
-    bottom: 20px;
-  }
-
-  .modal-dialog.measure-tool-modal {
-    bottom: 60px;
-    margin: 0;
-  }
+.modal-dialog.measure-tool-modal.measure-mobile {
+  bottom: 60px;
+  margin: 0;
 }
 
 .measure-unit-toggle {

@@ -1,0 +1,1 @@
+Clouds have a great impact on being able to see the floodwaters. Press "Play" to watch this animation from 1 August to 16 September 2022 showing how clouds initially obscured much of the flooding. Excessive clouds are represented by grey "insufficient data" pixels.

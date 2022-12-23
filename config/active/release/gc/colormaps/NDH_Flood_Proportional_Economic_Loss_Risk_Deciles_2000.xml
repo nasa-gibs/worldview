@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="[0]" value="[0]" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Data" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Economic Risk" units="Decile">
+    <Entries>
+      <ColorMapEntry rgb="247,251,255" transparent="false" sourceValue="[1]" value="[1]" ref="1"/>
+      <ColorMapEntry rgb="255,247,251" transparent="false" sourceValue="[2]" value="[2]" ref="2"/>
+      <ColorMapEntry rgb="236,231,242" transparent="false" sourceValue="[3]" value="[3]" ref="3"/>
+      <ColorMapEntry rgb="208,209,230" transparent="false" sourceValue="[4]" value="[4]" ref="4"/>
+      <ColorMapEntry rgb="166,189,219" transparent="false" sourceValue="[5]" value="[5]" ref="5"/>
+      <ColorMapEntry rgb="116,169,207" transparent="false" sourceValue="[6]" value="[6]" ref="6"/>
+      <ColorMapEntry rgb="54,144,192" transparent="false" sourceValue="[7]" value="[7]" ref="7"/>
+      <ColorMapEntry rgb="5,112,176" transparent="false" sourceValue="[8]" value="[8]" ref="8"/>
+      <ColorMapEntry rgb="4,90,141" transparent="false" sourceValue="[9]" value="[9]" ref="9"/>
+      <ColorMapEntry rgb="2,56,88" transparent="false" sourceValue="[10]" value="[10]" ref="10"/>
+    </Entries>
+    <Legend type="discrete" minLabel="1st" maxLabel="10th">
+      <LegendEntry rgb="247,251,255" tooltip="1st" showTick="true" id="1"/>
+      <LegendEntry rgb="255,247,251" tooltip="2nd" showTick="true" showLabel="true" label="2nd" id="2"/>
+      <LegendEntry rgb="236,231,242" tooltip="3rd" showTick="true" id="3"/>
+      <LegendEntry rgb="208,209,230" tooltip="4th" showTick="true" showLabel="true" label="4th" id="4"/>
+      <LegendEntry rgb="166,189,219" tooltip="5th" showTick="true" id="5"/>
+      <LegendEntry rgb="116,169,207" tooltip="6th" showTick="true" showLabel="true" label="6th" id="6"/>
+      <LegendEntry rgb="54,144,192" tooltip="7th" showTick="true" id="7"/>
+      <LegendEntry rgb="5,112,176" tooltip="8th" showTick="true" showLabel="true" label="8th" id="8"/>
+      <LegendEntry rgb="4,90,141" tooltip="9th" showTick="true" id="9"/>
+      <LegendEntry rgb="2,56,88" tooltip="10th" id="10"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

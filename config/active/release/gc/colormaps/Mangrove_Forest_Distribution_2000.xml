@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="[255]" value="[255]" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="1"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="Absence of Mangroves" id="0"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Mangrove Forests">
+    <Entries>
+      <ColorMapEntry rgb="0,255,0" transparent="false" sourceValue="[1]" value="[1]" ref="2"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,255,0" tooltip="Presence of Mangroves" id="2"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

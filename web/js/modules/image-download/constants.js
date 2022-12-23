@@ -46,13 +46,9 @@ const PALETTE_WARNING = 'One or more layers on the map have been modified (chang
   + 'snapshot. Would you like to temporarily revert to the original '
   + 'layer(s)?';
 
-const GRATICLE_WARNING = 'The graticule layer cannot be used to take a snapshot. Would you '
-  + 'like to temporarily hide this layer?';
-
 const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to temporarily reset rotation?';
 
 export const notificationWarnings = {
   palette: PALETTE_WARNING,
-  graticule: GRATICLE_WARNING,
   rotate: ROTATE_WARNING,
 };

@@ -1,0 +1,1 @@
+Here we compare imagery from June and September 2022. The left "A" side displays imagery from 25 June, and the right "B' side shows imagery from 20 September. Due to flooding, much more water is clearly present in September, as well as seasonally greener vegetation.

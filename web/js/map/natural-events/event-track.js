@@ -13,7 +13,7 @@ import {
 } from './cluster';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
-
+import { CRS } from '../../modules/map/constants';
 
 import {
   getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
@@ -25,14 +25,17 @@ class EventTrack extends React.Component {
 
     this.state = {
       trackDetails: {},
+      allTrackDetails: {},
     };
 
+    // debounce delays the function call by a set amount of time. in this case 50 milliseconds
     this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 50);
     this.debouncedOnPropertyChange = lodashDebounce(
       this.onPropertyChange.bind(this),
       100,
       { leading: true, trailing: true },
     );
+    this.debouncedUpdateAllTracks = lodashDebounce(this.updateAllTracks, 50);
   }
 
   componentDidMount() {
@@ -41,7 +44,7 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
+      isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracks,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
@@ -50,6 +53,7 @@ class EventTrack extends React.Component {
     const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevProps.eventsData);
     const prevMap = prevProps.map;
     const prevExtent = prevProps.extent;
+    const prevShowAllTracks = prevProps.showAllTracks;
     const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
     const { trackDetails } = this.state;
 
@@ -58,32 +62,54 @@ class EventTrack extends React.Component {
         this.update(null);
         this.removeTrack(prevMap);
         removePointOverlays(prevMap, trackDetails.pointsAndArrows);
+        if (showAllTracks) {
+          this.removeAllTracks(prevMap);
+        }
       }
       this.initialize();
     }
 
-    if (!isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+    // remove all tracks when deselecting option
+    if (!showAllTracks && prevShowAllTracks !== showAllTracks) {
+      this.removeAllTracks(map);
+    }
+
+    // show all tracks when selecting as option
+    if (showAllTracks && !isPlaying && (prevShowAllTracks !== showAllTracks || selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      this.debouncedUpdateAllTracks();
+    }
+
+    // show only selected track if show all tracks is not selected
+    if (!isPlaying && !showAllTracks && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
       this.debouncedTrackUpdate();
     }
 
-    if (eventDeselect) {
+    // only remove selected track when event is deselected
+    if (eventDeselect && !showAllTracks) {
       this.removeTrack(map);
     }
   }
 
   componentWillUnmount() {
-    const { map } = this.props;
+    const { map, showAllTracks } = this.props;
     this.update(null);
     map.getView().un('propertychange', this.debouncedOnPropertyChange);
+    if (showAllTracks) {
+      this.removeAllTracks(map);
+    }
   }
 
   initialize() {
-    const { map } = this.props;
+    const { map, showAllTracks } = this.props;
     if (!map) return;
     map.getView().on('propertychange', this.debouncedOnPropertyChange);
     map.once('postrender', () => { this.debouncedTrackUpdate(); });
+    if (showAllTracks) {
+      map.once('postrender', () => { this.debouncedUpdateAllTracks(); });
+    }
   }
 
+  // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
   updateCurrentTrack() {
     const { selectedEvent, eventsData } = this.props;
     const { id, date } = selectedEvent;
@@ -94,8 +120,13 @@ class EventTrack extends React.Component {
   }
 
   onPropertyChange = (e) => {
-    const { map } = this.props;
-    const { trackDetails } = this.state;
+    const { map, showAllTracks } = this.props;
+    const { trackDetails, allTrackDetails } = this.state;
+
+    if (showAllTracks && !allTrackDetails.length) return;
+    if (showAllTracks && (e.key === 'resolution' || e.key === 'rotation')) {
+      this.removeAllTracks(map);
+    }
     if (!trackDetails.id) return;
     if (e.key === 'resolution' || e.key === 'rotation') {
       const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
@@ -104,8 +135,11 @@ class EventTrack extends React.Component {
   }
 
   addTrack = (map, { track, pointsAndArrows }) => {
-    map.addOverlay(track);
-    addPointOverlays(map, pointsAndArrows);
+    const { isAnimatingToEvent } = this.props;
+    if (!isAnimatingToEvent) {
+      map.addOverlay(track);
+      addPointOverlays(map, pointsAndArrows);
+    }
   }
 
   removeTrack = function(map) {
@@ -115,6 +149,56 @@ class EventTrack extends React.Component {
     removePointOverlays(map, pointsAndArrows);
     return {};
   };
+
+  removeAllTracks = (map) => {
+    const { allTrackDetails } = this.state;
+    allTrackDetails.forEach((trackDetail) => {
+      const { pointsAndArrows } = trackDetail.newTrackDetails;
+      const { track } = trackDetail.newTrackDetails;
+      map.removeOverlay(track);
+      removePointOverlays(map, pointsAndArrows);
+    });
+  }
+
+  updateAllTracks = () => {
+    const {
+      proj, map, eventsData, selectEvent, showAllTracks,
+    } = this.props;
+    const { allTrackDetails, trackDetails } = this.state;
+    let newTrackDetails;
+    const allTracks = [];
+
+    const createAndAddTrack = (singleEvent, eventID, eventDate) => {
+      const {
+        track,
+        pointsAndArrows,
+      } = getTracksAndPoints(singleEvent, proj, map, eventDate, selectEvent, showAllTracks);
+
+      newTrackDetails = {
+        id: eventID,
+        selectedDate: eventDate,
+        track,
+        pointsAndArrows,
+        hidden: false,
+      };
+      allTracks.push({ newTrackDetails });
+      this.addTrack(map, newTrackDetails);
+    };
+
+    if (allTrackDetails.length) {
+      this.removeAllTracks(map);
+    }
+
+    eventsData.forEach((event) => {
+      const eventID = event.id;
+      const eventDate = event.geometry[0].date.slice(0, 10);
+      if (event.geometry.length > 1 && eventID !== trackDetails.id) {
+        createAndAddTrack(event, eventID, eventDate);
+      }
+    });
+
+    this.setState({ allTrackDetails: allTracks });
+  }
 
   /**
    * Update track
@@ -220,10 +304,10 @@ const updateSelection = function(newDate) {
  * @param {Function} callback
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback) {
+const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback, showAllTracks) {
   const pointsAndArrows = [];
   const trackSegments = [];
-  const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map);
+  const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
 
   clusters.forEach((clusterPoint, index) => {
     const date = clusterPoint.properties.date || clusterPoint.properties.startDate;
@@ -237,8 +321,8 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback)
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
         const { crs } = proj.selected;
-        prevCoordinates = olProj.transform(prevCoordinates, 'EPSG:4326', crs);
-        nextCoordinates = olProj.transform(nextCoordinates, 'EPSG:4326', crs);
+        prevCoordinates = olProj.transform(prevCoordinates, CRS.GEOGRAPHIC, crs);
+        nextCoordinates = olProj.transform(nextCoordinates, CRS.GEOGRAPHIC, crs);
       }
       const lineSegmentArray = [prevCoordinates, nextCoordinates];
       const arrowOverlay = getArrows(lineSegmentArray, map);
@@ -279,6 +363,8 @@ const mapStateToProps = (state) => {
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
+    showAllTracks: events.showAllTracks,
+    isActive: events.active,
   };
 };
 
@@ -298,6 +384,7 @@ EventTrack.propTypes = {
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
   selectedDate: PropTypes.object,
+  showAllTracks: PropTypes.bool,
 };
 
 export default connect(

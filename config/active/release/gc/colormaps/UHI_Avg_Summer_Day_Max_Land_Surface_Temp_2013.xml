@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" ref="1"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Data" id="0"/>
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="1"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Land Surface Temperature" units="°C">
+    <Entries>
+      <ColorMapEntry rgb="102,46,158" transparent="false" sourceValue="(-INF,5)" value="(-INF,5)" ref="2"/>
+      <ColorMapEntry rgb="69,94,217" transparent="false" sourceValue="[5,10)" value="[5,10)" ref="3"/>
+      <ColorMapEntry rgb="137,194,250" transparent="false" sourceValue="[10,15)" value="[10,15)" ref="4"/>
+      <ColorMapEntry rgb="252,203,53" transparent="false" sourceValue="[15,20)" value="[15,20)" ref="5"/>
+      <ColorMapEntry rgb="255,127,0" transparent="false" sourceValue="[20,25)" value="[20,25)" ref="6"/>
+      <ColorMapEntry rgb="214,58,49" transparent="false" sourceValue="[25,+INF)" value="[25,+INF)" ref="7"/>
+    </Entries>
+    <Legend type="discrete" minLabel="&lt; 5" maxLabel="&#8805; 25">
+      <LegendEntry rgb="102,46,158" tooltip="&lt; 5" id="2"/>
+      <LegendEntry rgb="69,94,217" tooltip="5 – 10" showTick="true" showLabel="true" label="5-10" id="3"/>
+      <LegendEntry rgb="137,194,250" tooltip="10 – 15" showTick="true" showLabel="true" label="10-15" id="4"/>
+      <LegendEntry rgb="252,203,53" tooltip="15 – 20" showTick="true" showLabel="true" label="15-20" id="5"/>
+      <LegendEntry rgb="255,127,0" tooltip="20 – 25" showTick="true" showLabel="true" label="20-25" id="6"/>
+      <LegendEntry rgb="214,58,49" tooltip="&#8805; 25" id="7"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

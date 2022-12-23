@@ -3,11 +3,10 @@ import {
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
 import geographiclib from 'geographiclib';
-import shpWrite from 'shp-write';
 import FileSaver from 'file-saver';
+import { CRS } from '../../modules/map/constants';
 
 const geod = geographiclib.Geodesic.WGS84;
-const geographicProj = 'EPSG:4326';
 
 /**
  * Shift x value of every coord except the last,
@@ -35,7 +34,7 @@ function checkForXFlip(geom, projection) {
   const coords = geom.getCoordinates();
   const [x1] = coords[coords.length - 2];
   const [x2] = coords[coords.length - 1];
-  if (Math.abs(x1 - x2) > 180 && projection === geographicProj) {
+  if (Math.abs(x1 - x2) > 180 && projection === CRS.GEOGRAPHIC) {
     if (x1 < x2) {
       geom.setCoordinates(shiftXCoords(coords, 360));
     } else if (x1 > x2) {
@@ -53,7 +52,7 @@ function checkForXFlip(geom, projection) {
 export function transformLineStringArc(geom, projection) {
   const coords = [];
   const distance = 50000; // meters between segments
-  const transformedGeom = checkForXFlip(geom, projection).clone().transform(projection, geographicProj);
+  const transformedGeom = checkForXFlip(geom, projection).clone().transform(projection, CRS.GEOGRAPHIC);
   transformedGeom.forEachSegment((segStart, segEnd) => {
     const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     const n = Math.ceil(line.s13 / distance);
@@ -63,7 +62,7 @@ export function transformLineStringArc(geom, projection) {
       coords.push([r.lon2, r.lat2]);
     }
   });
-  return new OlGeomMultiLineString([coords]).transform(geographicProj, projection);
+  return new OlGeomMultiLineString([coords]).transform(CRS.GEOGRAPHIC, projection);
 }
 
 /**
@@ -73,7 +72,7 @@ export function transformLineStringArc(geom, projection) {
  */
 export function transformPolygonArc(geom, projection) {
   const coords = [];
-  const transformedGeom = geom.clone().transform(projection, geographicProj);
+  const transformedGeom = geom.clone().transform(projection, CRS.GEOGRAPHIC);
   const distance = 50000; // meters between segments
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i += 1) {
@@ -90,7 +89,7 @@ export function transformPolygonArc(geom, projection) {
       coords.push([r.lon2, r.lat2]);
     }
   }
-  return new OlGeomPolygon([coords]).transform(geographicProj, projection);
+  return new OlGeomPolygon([coords]).transform(CRS.GEOGRAPHIC, projection);
 }
 
 /**
@@ -151,19 +150,6 @@ function getFeatureJSON(measurements, crs) {
       };
     }),
   };
-}
-
-export function downloadShapefiles(measurements, crs) {
-  // Set names for feature types and zipped folder
-  const options = {
-    folder: 'worldviewMeasurements',
-    types: {
-      polygon: 'areaMeasurements',
-      polyline: 'distanceMeasurements',
-    },
-  };
-  const json = getFeatureJSON(measurements, crs);
-  shpWrite.download(json, options);
 }
 
 export function downloadGeoJSON(measurements, crs) {

@@ -1,0 +1,169 @@
+{
+  "id": "FIRMS_MODIS_Thermal_Anomalies",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "LATITUDE",
+      "Title"      : "Latitude",
+      "Description": "Latitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "LONGITUDE",
+      "Title"      : "Longitude",
+      "Description": "Longitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "BRIGHTNESS",
+      "Title"      : "Brightness Temperature (Channel 21/22)",
+      "Description": "Channel 21/22 brightness temperature of the fire pixel, measured in Kelvin.",
+      "Units"      : "Kelvin",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 500 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "BRIGHT_T31",
+      "Title"      : "Brightness Temperature (Channel 31)",
+      "Description": "Channel 31 brightness temperature of the fire pixel, measured in Kelvin.",
+      "Units"      : "Kelvin",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 500 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "FRP",
+      "Title"      : "Fire Radiative Power",
+      "Description": "The Fire Radiative Power (FRP) is a measure of the rate of radiant heat output from a fire. It has been demonstrated in small-scale experimental fires that the FRP of a fire is related to the rate at which fuel is being consumed (Wooster et al., 2005) and smoke emissions released (Freeborn et al., 2008).",
+      "Units"      : "MW",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 20000 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "CONFIDENCE",
+      "Title"      : "Detection Confidence",
+      "Description": "This value is based on a collection of intermediate algorithm quantities used in the detection process. It is intended to help users gauge the quality of individual hotspot/fire pixels. Confidence estimates range between 0 and 100%.",
+      "Units"      : "%",
+      "DataType"   : "int",
+      "ValueRanges": [ { "Min": 0, "Max": 100 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DAYNIGHT",
+      "Title"      : "Day/Night Flag",
+      "Description": "Indicates whether the fire point was observed during the ‘day’ or ‘night’.",
+      "DataType"   : "string",
+      "ValueMap"   : { "D" : "Daytime Fire", "N" : "Nighttime Fire" },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "SCAN",
+      "Title"      : "Along-Scan Pixel Size",
+      "Description": "The algorithm produces 1km pixels at nadir, but pixels get bigger toward the edge of scan. This value reflects the actual along-scan pixel size.",
+      "Units"      : "km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 1.0, "Max": 5.0 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "TRACK",
+      "Title"      : "Along-Track Pixel Size",
+      "Description": "The algorithm produces 1km pixels at nadir, but pixels get bigger toward the edge of scan. This value reflects the actual along-track pixel size.",
+      "Units"      : "km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 1.0, "Max": 2.0 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "ACQ_DATE",
+      "Title"      : "Acquisition Date",
+      "Description": "The date of acquisition for this fire point. (YYYY-MM-DD)",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "ACQ_TIME",
+      "Title"      : "Acquisition Time",
+      "Description": "The time of acquisition for this fire point, in UTC. (HHMM)",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "SATELLITE",
+      "Title"      : "Satellite",
+      "Description": "Satellite from which the fire is observed.",
+      "DataType"   : "string",
+      "ValueMap"   : { "A" : "Aqua", "T" : "Terra", "Aqua" : "Aqua", "Terra" : "Terra" },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "VERSION",
+      "Title"      : "Collection and Source",
+      "Description": "The collection (e.g. MODIS Collection 6) and source of data processing: Near Real-Time (NRT suffix added to collection) or Standard Processing (collection only).",
+      "DataType"   : "string",
+      "ValueMap"   : {
+                        "6.1NRT" : "Collection 6.1 Near Real-Time processing",
+                        "6.1"    : "Collection 6.1 Standard processing",
+                        "6.0NRT" : "Collection 6 Near Real-Time processing",
+                        "6.0"    : "Collection 6 Standard processing",
+                        "6.02"   : "Collection 6 Standard processing",
+                        "6.03"   : "Collection 6 Standard processing"
+                     },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "UID",
+      "Title"      : "Unique Identifier",
+      "Description": "Unique identifier of the data point.",
+      "DataType"   : "int",
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

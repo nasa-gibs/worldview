@@ -2,4 +2,8 @@ The MOPITT Carbon Monoxide (Level 2, Daily, Day/Night, Total Column) layer shows
 
 The MOPITT Carbon Monoxide (L2, Daily, Day/Night, Total Column) layer is available from the Measurements of Pollution in the Troposphere (MOPITT) instrument on the Terra satellite. The sensor resolution is 22 km at nadir, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [MOP02R_NRT] (https://cmr.earthdata.nasa.gov/search/concepts/C1398625065-MOPITT.html)
+Data Download: [Level 2 NRT](http://lance1.acom.ucar.edu/data/L2/)
+
+References: [MOPITT Near Real-Time Data Download Service](http://lance1.acom.ucar.edu/)
+
+

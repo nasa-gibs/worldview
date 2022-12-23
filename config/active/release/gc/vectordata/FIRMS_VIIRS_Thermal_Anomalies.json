@@ -1,0 +1,194 @@
+{
+  "id": "FIRMS_SNPP_Thermal_Anomalies",
+  "mvt_properties": [
+
+
+    {
+      "Identifier" : "LATITUDE",
+      "Title"      : "Latitude",
+      "Description": "Latitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "LONGITUDE",
+      "Title"      : "Longitude",
+      "Description": "Longitude in Decimal Degrees",
+      "Units"      : "°",
+      "DataType"   : "float",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "BRIGHT_TI4",
+      "Title"      : "Brightness Temperature (Channel I-4)",
+      "Description": "Channel I-4 brightness temperature of the fire pixel, measured in Kelvin.",
+      "Units"      : "Kelvin",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 500 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "BRIGHT_TI5",
+      "Title"      : "Brightness Temperature (Channel I-5)",
+      "Description": "Channel I-5 brightness temperature of the fire pixel, measured in Kelvin.",
+      "Units"      : "Kelvin",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 500 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "FRP",
+      "Title"      : "Fire Radiative Power",
+      "Description": "The Fire Radiative Power (FRP) is a measure of the rate of radiant heat output from a fire. It has been demonstrated in small-scale experimental fires that the FRP of a fire is related to the rate at which fuel is being consumed (Wooster et al., 2005) and smoke emissions released (Freeborn et al., 2008).",
+      "Units"      : "MW",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 0, "Max": 20000 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "CONFIDENCE",
+      "Title"      : "Detection Confidence",
+      "Description": "This value is based on a collection of intermediate algorithm quantities used in the detection process. It is intended to help users gauge the quality of individual hotspot/fire pixels. Confidence values are set to low, nominal and high.  Low confidence daytime fire pixels are typically associated with areas of sun glint and lower relative temperature anomaly (<15K) in the mid-infrared channel I4. Nominal confidence pixels are those free of potential sun glint contamination during the day and marked by strong (>15K) temperature anomaly in either day or nighttime data. High confidence fire pixels are associated with day or nighttime saturated pixels.",
+      "DataType"   : "string",
+      "ValueMap"   : { "low"     : "Low Confidence",
+                       "nominal" : "Nominal Confidence",
+                       "high"    : "High Confidence",
+                       "l"       : "Low Confidence",
+                       "n"       : "Nominal Confidence",
+                       "h"       : "High Confidence"
+                     },
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "DAYNIGHT",
+      "Title"      : "Day/Night Flag",
+      "Description": "Indicates whether the fire point was observed during the ‘day’ or ‘night’.",
+      "DataType"   : "string",
+      "ValueMap"   : { "D" : "Daytime Fire", "N" : "Nighttime Fire" },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "SCAN",
+      "Title"      : "Along-Scan Pixel Size",
+      "Description": "The algorithm produces 375m pixels at nadir, but pixels get bigger toward the edge of scan. This value reflects the actual along-scan pixel size.",
+      "Units"      : "km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 1.0, "Max": 5.0 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "TRACK",
+      "Title"      : "Along-Track Pixel Size",
+      "Description": "The algorithm produces 375m pixels at nadir, but pixels get bigger toward the edge of scan. This value reflects the actual along-track pixel size.",
+      "Units"      : "km",
+      "DataType"   : "float",
+      "ValueRanges": [ { "Min": 1.0, "Max": 2.0 } ],
+      "Function"   : "Style",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "ACQ_DATE",
+      "Title"      : "Acquisition Date",
+      "Description": "The date of acquisition for this fire point. (YYYY-MM-DD)",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "ACQ_TIME",
+      "Title"      : "Acquisition Time",
+      "Description": "The time of acquisition for this fire point, in UTC. (HHMM)",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "TYPE",
+      "Title"      : "Inferred Hot Spot Type",
+      "Description": "The inferred type of the detected hot spot.",
+      "DataType"   : "string",
+      "ValueMap"   : {
+                       "0" : "Presumed vegetation fire",
+                       "1" : "Active Volcano",
+                       "2" : "Other static land source",
+                       "3" : "Offshore detection (Includes all detections over water)"
+                     },
+      "Function"   : "Describe",
+      "IsOptional" : true,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "SATELLITE",
+      "Title"      : "Satellite",
+      "Description": "Satellite from which the fire is observed.",
+      "DataType"   : "string",
+      "ValueMap"   : {
+                       "N" : "Suomi National Polar-orbiting Partnership (Suomi-NPP)",
+                       "1" : "NOAA-20 / Joint Polar Satellite System - 1 (JPSS-1)"
+                     },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "VERSION",
+      "Title"      : "Collection and Source",
+      "Description": "The collection (e.g. VIIRS Collection 1) and source of data processing: Near Real-Time (NRT suffix added to collection) or Standard Processing (collection only).",
+      "DataType"   : "string",
+      "ValueMap"   : {
+                       "2.0NRT" : "Collection 2 Near Real-Time processing",
+                       "2.0"    : "Collection 2 Standard processing",
+                       "2"      : "Collection 2 Standard processing",
+                       "1.0NRT" : "Collection 1 Near Real-Time processing",
+                       "1.0"    : "Collection 1 Standard processing",
+                       "1"      : "Collection 1 Standard processing"
+                     },
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "UID",
+      "Title"      : "Unique Identifier",
+      "Description": "Unique identifier of the data point.",
+      "DataType"   : "int",
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

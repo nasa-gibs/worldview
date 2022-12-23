@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Classification">
+    <Entries>
+      <ColorMapEntry rgb="253,253,253" transparent="true" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="178,178,178" transparent="true" ref="1"/>
+      <ColorMapEntry rgb="225,225,225" transparent="true" ref="2"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="253,253,253" tooltip="No Data" id="0"/>
+      <LegendEntry rgb="178,178,178" tooltip="Not HBASE" id="1"/>
+      <LegendEntry rgb="225,225,225" tooltip="NoData/Cloud/Shadow" id="2"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Man-made Impervious Surface" units="%">
+    <Entries>
+      <ColorMapEntry rgb="190,232,255" transparent="false" value="[0]" ref="3"/>
+      <ColorMapEntry rgb="161,218,237" transparent="false" value="[1,10)" ref="4"/>
+      <ColorMapEntry rgb="138,198,235" transparent="false" value="[11,20)" ref="5"/>
+      <ColorMapEntry rgb="116,180,232" transparent="false" value="[21,30)" ref="6"/>
+      <ColorMapEntry rgb="92,163,230" transparent="false" value="[31,40)" ref="7"/>
+      <ColorMapEntry rgb="66,146,227" transparent="false" value="[41,50)" ref="8"/>
+      <ColorMapEntry rgb="31,131,224" transparent="false" value="[51,60)" ref="9"/>
+      <ColorMapEntry rgb="34,111,212" transparent="false" value="[61,70)" ref="10"/>
+      <ColorMapEntry rgb="34,89,199" transparent="false" value="[71,80)" ref="11"/>
+      <ColorMapEntry rgb="29,68,184" transparent="false" value="[81,90)" ref="12"/>
+      <ColorMapEntry rgb="26,50,171" transparent="false" value="[91,100)" ref="13"/>
+    </Entries>
+    <Legend type="discrete" minLabel="0" maxLabel="100">
+      <LegendEntry rgb="190,232,255" tooltip="0" id="3"/>
+      <LegendEntry rgb="161,218,237" tooltip="1 – 10" showTick="true" id="4"/>
+      <LegendEntry rgb="138,198,235" tooltip="11 – 20" showTick="true" showLabel="true" label="11 – 20" id="5"/>
+      <LegendEntry rgb="116,180,232" tooltip="21 – 30" showTick="true" id="6"/>
+      <LegendEntry rgb="92,163,230" tooltip="31 – 40" showTick="true" showLabel="true" label="31 – 40" id="7"/>
+      <LegendEntry rgb="66,146,227" tooltip="41 – 50" showTick="true" id="8"/>
+      <LegendEntry rgb="31,131,224" tooltip="51 – 60" showTick="true" showLabel="true" label="51 – 60" id="9"/>
+      <LegendEntry rgb="34,111,212" tooltip="61 – 70" showTick="true" id="10"/>
+      <LegendEntry rgb="34,89,199" tooltip="71 – 80" showTick="true" showLabel="true" label="71 – 80" id="11"/>
+      <LegendEntry rgb="29,68,184" tooltip="81 – 90" showTick="true" id="12"/>
+      <LegendEntry rgb="26,50,171" tooltip="91 – 100" id="13"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

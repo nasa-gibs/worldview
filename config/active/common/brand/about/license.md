@@ -8,4 +8,4 @@
 <hr>
 <p>@BUILD_TIMESTAMP@<br> Responsible NASA Official: <a href="mailto:ryan.a.boller@nasa.gov">Ryan
         Boller</a><br>
-<a href="https://www.nasa.gov/about/highlights/HP_Privacy.html">Web Privacy Policy</a></p>
+<a href="https://www.nasa.gov/about/highlights/HP_Privacy.html" target="_blank">Web Privacy Policy</a></p>

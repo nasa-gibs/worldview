@@ -19,6 +19,7 @@ import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff
 import GranuleCount from '../../components/smart-handoffs/granule-count';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
+import { getActiveGranuleLayers } from '../../modules/layers/selectors';
 import {
   getValidLayersForHandoffs,
   getConceptUrl as getConceptUrlSelector,
@@ -26,12 +27,13 @@ import {
 } from '../../modules/smart-handoff/selectors';
 import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
-import openEarthDataSearch from '../../modules/smart-handoff/util';
+import openEarthDataSearch, { getStartEndDates } from '../../modules/smart-handoff/util';
 import {
   selectCollection as selectCollectionAction,
   fetchAvailableTools as fetchAvailableToolsAction,
   validateLayersConceptIds as validateLayersConceptIdsAction,
 } from '../../modules/smart-handoff/actions';
+import { CRS } from '../../modules/map/constants';
 
 import { formatDisplayDate } from '../../modules/date/util';
 
@@ -167,8 +169,8 @@ class SmartHandoff extends Component {
     const newBoundaries = {
       x,
       y,
-      x2: x + width,
-      y2: y + height,
+      x2: width ? x + width : boundaries.x2,
+      y2: height ? y + height : boundaries.y2,
     };
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
@@ -178,8 +180,8 @@ class SmartHandoff extends Component {
     const { crs } = proj;
 
     // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const bottomLeft = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const topRight = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const bottomLeft = olProj.transform(lonlats[0], crs, CRS.GEOGRAPHIC);
+    const topRight = olProj.transform(lonlats[1], crs, CRS.GEOGRAPHIC);
     let [x1, y1] = bottomLeft;
     let [x2, y2] = topRight;
 
@@ -232,12 +234,13 @@ class SmartHandoff extends Component {
    * Handle bounding box checkbox toggle
    */
   onCheckboxToggle() {
-    const { showBoundingBox } = this.state;
+    const { showBoundingBox, boundaries } = this.state;
     if (!showBoundingBox) {
       googleTagManager.pushEvent({
         event: 'smart_handoffs_toggle_true_target_area',
       });
       this.setState({ showBoundingBox: true });
+      this.onBoundaryChange(boundaries, true);
     } else {
       this.setState({
         showBoundingBox: false,
@@ -253,10 +256,12 @@ class SmartHandoff extends Component {
     const {
       availableTools,
       displayDate,
+      isGranuleLayer,
       proj,
-      selectedDate,
       selectedLayer,
       selectedCollection,
+      startDate,
+      endDate,
       showWarningModal,
     } = this.props;
     const {
@@ -264,27 +269,31 @@ class SmartHandoff extends Component {
       showBoundingBox,
     } = this.state;
 
-    // Used to determine if the added smart-handoff modal should be shown
+    // Used to determine if the smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
     const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
-    const { dateRanges } = selectedLayer;
-    const includeDates = dateRanges && dateRanges.length;
+    let useDisplayDate = displayDate;
+
+    if (isGranuleLayer) {
+      const formatGranuleStart = formatDisplayDate(startDate, isGranuleLayer);
+      const formatGranuleEnd = formatDisplayDate(endDate, isGranuleLayer);
+      useDisplayDate = `${formatGranuleStart} - ${formatGranuleEnd}`;
+    }
 
     const continueToEDS = () => {
       const options = {
         projection: proj.crs,
         conceptId: selectedCollection.value,
         currentExtent,
-        includeDates,
-        selectedDate,
-        selectedCollection,
         showBoundingBox,
+        startDate,
+        endDate,
       };
       return openEarthDataSearch(availableTools, options);
     };
 
     if (!hideModal) {
-      showWarningModal(displayDate, selectedLayer, selectedCollection, continueToEDS);
+      showWarningModal(useDisplayDate, selectedLayer, selectedCollection, continueToEDS);
     } else {
       continueToEDS();
     }
@@ -422,6 +431,7 @@ class SmartHandoff extends Component {
       screenHeight,
       screenWidth,
       selectedLayer,
+      selectedCollection,
     } = this.props;
 
     const {
@@ -434,7 +444,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return selectedLayer && proj.id === 'geographic' && (
+    return selectedCollection && selectedLayer && proj.id === 'geographic' && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -540,11 +550,14 @@ class SmartHandoff extends Component {
       displayDate,
       getGranulesUrl,
       isLoading,
+      granuleLayers,
       showNotAvailableModal,
       selectedLayer,
       selectedCollection,
       selectedDate,
       showGranuleHelpModal,
+      startDate,
+      endDate,
       validatedLayers,
     } = this.props;
     const {
@@ -584,9 +597,11 @@ class SmartHandoff extends Component {
           {isValidDownload && (
             <GranuleCount
               displayDate={displayDate}
+              granuleLayers={granuleLayers}
               currentExtent={isValidDownload && showBoundingBox ? currentExtent : undefined}
               selectedDate={selectedDate}
-              selectedLayer={selectedLayer}
+              startDate={startDate}
+              endDate={endDate}
               selectedCollection={selectedCollection}
               showGranuleHelpModal={showGranuleHelpModal}
               getGranulesUrl={getGranulesUrl}
@@ -596,7 +611,7 @@ class SmartHandoff extends Component {
             onClick={this.onClickDownload}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
-            valid={!!isValidDownload}
+            valid={!!isValidDownload && !!selectedCollection}
           />
         </div>
       </>
@@ -606,19 +621,24 @@ class SmartHandoff extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    browser, map, proj, smartHandoffs,
+    screenSize, map, proj, smartHandoffs,
   } = state;
   const {
     conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
   } = smartHandoffs;
-  const { screenWidth, screenHeight } = browser;
+  const { screenWidth, screenHeight } = screenSize;
 
+  const granuleLayers = getActiveGranuleLayers(state);
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const availableLayers = getValidLayersForHandoffs(state);
   const selectedLayer = availableLayers.find(({ id }) => id === layerId);
   const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
   const isLoading = isLoadingTools || isValidatingCollections;
+  const isGranuleLayer = selectedLayer && selectedLayer.type === 'granule';
+  const { startDate, endDate } = selectedLayer
+    ? getStartEndDates(selectedLayer, selectedDate, granuleLayers)
+    : {};
 
   return {
     availableLayers,
@@ -626,6 +646,8 @@ const mapStateToProps = (state) => {
     getConceptUrl: getConceptUrlSelector(state),
     getGranulesUrl: getGranulesUrlSelector(state),
     isLoading,
+    isGranuleLayer,
+    granuleLayers,
     map,
     proj: proj.selected,
     requestFailed,
@@ -634,6 +656,8 @@ const mapStateToProps = (state) => {
     selectedDate: selectedDateFormatted,
     selectedLayer,
     selectedCollection,
+    startDate,
+    endDate,
     availableTools,
     validatedConceptIds,
     validatedLayers,
@@ -704,8 +728,11 @@ SmartHandoff.propTypes = {
   availableTools: PropTypes.array,
   displayDate: PropTypes.string,
   isLoading: PropTypes.bool,
+  isGranuleLayer: PropTypes.bool,
+  endDate: PropTypes.string,
   getConceptUrl: PropTypes.func,
   getGranulesUrl: PropTypes.func,
+  granuleLayers: PropTypes.object,
   map: PropTypes.object.isRequired,
   proj: PropTypes.object,
   fetchAvailableTools: PropTypes.func,
@@ -719,6 +746,7 @@ SmartHandoff.propTypes = {
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
   showNotAvailableModal: PropTypes.func,
+  startDate: PropTypes.string,
   validatedLayers: PropTypes.array,
   validatedConceptIds: PropTypes.object,
   validateLayersConceptIds: PropTypes.func,

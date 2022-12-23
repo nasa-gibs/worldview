@@ -2,15 +2,12 @@
   "layers": {
     "MODIS_Aqua_Thermal_Anomalies_Day": {
       "id": "MODIS_Aqua_Thermal_Anomalies_Day",
-      "title": "Fires and Thermal Anomalies (Day)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
       "tags": "hotspots vectors",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
-      "product": "MYD14",
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {
@@ -21,12 +18,6 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ],
       "transition": true,
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_Day",

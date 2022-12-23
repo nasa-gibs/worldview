@@ -190,10 +190,10 @@ SearchLayerList.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { productPicker, browser } = state;
+  const { productPicker, screenSize } = state;
   const { selectedLayer, categoryType } = productPicker;
   return {
-    isMobile: browser.lessThan.medium,
+    isMobile: screenSize.isMobileDevice,
     recentLayerMode: categoryType === 'recent',
     selectedLayer,
   };

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Quality">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="0" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="49,161,49" transparent="false" sourceValue="1" ref="1"/>
+      <ColorMapEntry rgb="214,187,41" transparent="false" sourceValue="2" ref="2"/>
+      <ColorMapEntry rgb="214,45,0" transparent="false" sourceValue="3" ref="3"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="Quality" id="0"/>
+      <LegendEntry rgb="49,161,49" tooltip="Approved" id="1"/>
+      <LegendEntry rgb="214,187,41" tooltip="Caution" id="2"/>
+      <LegendEntry rgb="214,45,0" tooltip="Bad" id="3"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

@@ -67,7 +67,6 @@
 .wv-map-rotate-right {
   display: block;
   width: 36px;
-  padding: 12px;
   height: 38px;
 }
 
@@ -100,14 +99,16 @@
   border-bottom-right-radius: 10px;
 }
 
-@media (max-width: $mobile-max-width) {
-  .wv-zoom-buttons {
-    display: none;
-  }
+.wv-zoom-buttons-mobile {
+  display: none;
+}
 
-  .wv-rotation-buttons {
-    top: 96px;
-  }
+.wv-rotation-buttons-mobile {
+  top: 96px;
+  right: 10px;
+  width: 38px;
+  height: 130px;
+  position: absolute;
 
   .wv-map-rotate-left,
   .wv-map-rotate-right {

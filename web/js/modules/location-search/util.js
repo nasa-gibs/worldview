@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
 import OlOverlay from 'ol/Overlay';
-import { containsXY } from 'ol/extent';
+import { containsCoordinate } from 'ol/extent';
+import { transform } from 'ol/proj';
 import LocationMarker from '../../components/location-search/location-marker';
-import { coordinatesCRSTransform } from '../projection/util';
 import safeLocalStorage from '../../util/local-storage';
 import { fly } from '../../map/util';
+import { FULL_MAP_EXTENT, CRS } from '../map/constants';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -23,7 +24,7 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
-    [x, y] = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
   fly(map, proj, [x, y], zoom);
 }
@@ -36,13 +37,9 @@ export function animateCoordinates(map, proj, coordinates, zoom) {
  */
 export function areCoordinatesWithinExtent(proj, coordinates) {
   const { maxExtent, crs } = proj.selected;
-  let [x, y] = coordinates;
-  if (crs !== 'EPSG:4326') {
-    const transformedXY = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
-    [x, y] = transformedXY;
-  }
-  const coordinatesWithinExtent = containsXY(maxExtent, x, y);
-  return coordinatesWithinExtent;
+  const extent = crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent;
+  const coord = crs === CRS.GEOGRAPHIC ? coordinates : transform(coordinates, CRS.GEOGRAPHIC, crs);
+  return containsCoordinate(extent, coord); // expects X then Y!
 }
 
 /**
@@ -54,19 +51,13 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  */
 export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
   const { crs } = proj.selected;
-  const coordinates = [coordinatesObject.latitude, coordinatesObject.longitude];
-  const { id } = coordinatesObject;
-
-  // only add marker within current map extent
-  const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
-  if (!coordinatesWithinExtent) {
-    return false;
-  }
+  const { id, longitude, latitude } = coordinatesObject;
+  const coordinates = [longitude, latitude];
 
   // transform coordinates if not CRS EPSG:4326
   let transformedCoords = coordinates;
   if (proj !== 'geographic') {
-    transformedCoords = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    transformedCoords = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
 
   const pinProps = {
@@ -123,21 +114,21 @@ export function mapLocationToLocationSearchState(
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
   const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
-    const [latitude, longitude] = coordinate
+    const [longitude, latitude] = coordinate
       ? coordinate.split(',')
         .map((coord) => Number(coord))
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
       : [];
 
     const validatedCoordinates = isValid && {
-      id: Math.floor(Math.random() * (latitude + longitude)),
+      id: Math.floor(longitude + latitude),
       latitude,
       longitude,
     };
     return validatedCoordinates;
   });
 
-  const isMobile = state.browser.lessThan.medium;
+  const isMobile = state.screenSize.isMobileDevice;
   const localStorageCollapseState = getLocalStorageCollapseState();
   const isExpanded = !isMobile && !localStorageCollapseState;
 
@@ -152,8 +143,8 @@ export function mapLocationToLocationSearchState(
 
 export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
-  const serializeCoordinates = (coordinate) => {
-    const coordinateValues = [coordinate.latitude, coordinate.longitude];
+  const serializeCoordinates = ({ longitude, latitude }) => {
+    const coordinateValues = [longitude, latitude];
     if (!map.ui.selected) return;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
     if (!coordinatesWithinExtent) return;

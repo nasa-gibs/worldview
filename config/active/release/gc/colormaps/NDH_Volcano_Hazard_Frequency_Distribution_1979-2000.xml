@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="255,255,255" transparent="true" sourceValue="[0]" value="[0]" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,255" tooltip="No Data" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Volcano Frequency">
+    <Entries>
+      <ColorMapEntry rgb="255,255,178" transparent="false" sourceValue="[1,10]" value="[1,10]" ref="1"/>
+      <ColorMapEntry rgb="254,204,92" transparent="false" sourceValue="[11,30]" value="[11,30]" ref="2"/>
+      <ColorMapEntry rgb="253,141,60" transparent="false" sourceValue="[31,60]" value="[31,60]" ref="3"/>
+      <ColorMapEntry rgb="227,26,28" transparent="false" sourceValue="[61,130]" value="[61,130]" ref="4"/>
+    </Entries>
+    <Legend type="discrete" minLabel="1" maxLabel="130">
+      <LegendEntry rgb="255,255,178" tooltip="1 – 10" showTick="true" showLabel="true" label="1 - 10" id="1"/>
+      <LegendEntry rgb="254,204,92" tooltip="11 – 30" showTick="true" showLabel="true" label="11 - 30" id="2"/>
+      <LegendEntry rgb="253,141,60" tooltip="31 – 60" showTick="true" showLabel="true" label="31 - 60" id="3"/>
+      <LegendEntry rgb="227,26,28" tooltip="61 – 130" showTick="true" showLabel="true" label="61 - 130" id="4"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

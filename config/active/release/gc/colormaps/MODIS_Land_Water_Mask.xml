@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Water Mask">
+    <Entries>
+      <ColorMapEntry rgb="122,87,6" transparent="true" sourceValue="0" ref="0"/>
+      <ColorMapEntry rgb="168,248,255" transparent="false" sourceValue="1,253" ref="1"/>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="2"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="122,87,6" tooltip="Land" id="0"/>
+      <LegendEntry rgb="168,248,255" tooltip="Water" id="1"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

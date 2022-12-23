@@ -29,6 +29,7 @@ const {
   layerVisible,
   sidebarContainer,
   groupedOverlaysAllLayers,
+  firesGroupHeader,
 } = require('../../reuseables/selectors.js');
 
 const vectorsQueryString = '?v=-70.43215000968726,28.678203599725197,-59.81569241792232,31.62330063930118&l=GRanD_Dams,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor';
@@ -51,11 +52,11 @@ const groupedLayerIdOrder = [
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
 ];
 const ungroupedReorderdLayerIdOrder = [
-  'active-MODIS_Combined_Value_Added_AOD',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
+  'active-MODIS_Combined_Value_Added_AOD',
+  'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
-  'active-Reference_Features_15m',
 ];
 
 module.exports = {
@@ -74,7 +75,8 @@ module.exports = {
     c.expect.element(infoDialog).to.not.be.present;
   },
   'Toggle Layer Options': (c) => {
-    c.moveToElement(firesLayer, 0, 0);
+    c.pause(500);
+    // c.moveToElement(firesLayer, 0, 0);
     c.waitForElementVisible(optionsButton, TIME_LIMIT);
     c.click(optionsButton);
     c.waitForElementVisible(optionsDialog, TIME_LIMIT);
@@ -175,10 +177,12 @@ module.exports = {
 
   'Ungrouped: Removing baselayers/overlays removes the layers but not the header': (c) => {
     c.click(groupCheckbox);
-    c.expect.element(groupCheckbox).to.not.have.attribute('checked');
-
+    c.pause(500);
+    c.useCss();
+    c.expect.element('#group-overlays-checkbox-case').to.not.have.attribute('checked');
+    c.moveToElement(firesLayer, 0, 0);
     c.moveToElement(overlaysGroupHeader, 0, 0);
-    c.waitForElementVisible(`${overlaysGroupHeader} ${groupOptionsBtn}`);
+    c.waitForElementPresent(`${overlaysGroupHeader} ${groupOptionsBtn}`);
     c.click(`${overlaysGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${overlaysGroup} ${groupRemove}`).pause(200);
 
@@ -195,14 +199,38 @@ module.exports = {
   },
 
   'Re-ordering groups, then disabling groups keeps individual layer order': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return;
+    }
     c.url(c.globals.url + twoGroupsQueryString);
     c.waitForElementVisible(aodGroup, TIME_LIMIT);
-    c.moveToElement(aodGroupHeader, 0, 0);
-    c.mouseButtonDown(0).pause(200);
-    c.moveTo(null, 50, 0).pause(200);
-    c.moveTo(null, -50, -150).pause(200);
-    c.mouseButtonUp(0).pause(1000);
-    c.click(groupCheckbox).pause(200);
+    c.perform(function() {
+      const actions = this.actions({ async: true });
+      const layerGroupHeader = c.findElement(aodGroupHeader);
+      const firesHeader = c.findElement(firesGroupHeader);
+      c.pause(500);
+      return actions
+        .click(layerGroupHeader)
+        .pause(300)
+        .press()
+        .pause(300)
+        .move({
+          origin: layerGroupHeader,
+          x: 50,
+          y: 0,
+        })
+        .pause(300)
+        .move({
+          origin: firesHeader,
+          x: 0,
+          y: 50,
+        })
+        .pause(300)
+        .release()
+        .pause(300);
+    });
+    c.click(groupCheckbox);
+    c.pause(500);
     checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
   },
 

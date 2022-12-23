@@ -6,10 +6,14 @@ import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 import copy from 'copy-to-clipboard';
 import { transform } from 'ol/proj';
+
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
 import { changeUnits } from '../../modules/measure/actions';
-import { getFormattedCoordinates } from '../location-search/util';
+import { getFormattedCoordinates, getNormalizedCoordinate } from '../location-search/util';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { CONTEXT_MENU_LOCATION, MAP_SINGLE_CLICK, MAP_CONTEXT_MENU } from '../../util/constants';
+import { CRS } from '../../modules/map/constants';
 
 const { events } = util;
 
@@ -19,22 +23,27 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, crs, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive,
+    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
   } = props;
-  const [getMap, setMap] = useState(map);
-  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
-
+  const { crs } = proj.selected;
+  const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;
   const handleClick = () => (show ? setShow(false) : null);
 
-  function handleContextEvent(event, olMap) {
+  function handleContextEvent(event) {
     if (measurementIsActive) return;
     event.originalEvent.preventDefault();
-    const coord = olMap.getCoordinateFromPixel(event.pixel);
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    setPixelCoords({ pixel: event.pixel });
-    setFormattedCoordinates(getFormattedCoordinates(lat, lon).join(','));
-    setMap(olMap);
-    setShow(true);
+    const coord = map.getCoordinateFromPixel(event.pixel);
+    const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
+    const [lon, lat] = getNormalizedCoordinate(tCoord);
+
+    if (areCoordinatesWithinExtent(proj, [lon, lat])) {
+      const fCoord = getFormattedCoordinates([lat, lon]);
+      setFormattedCoordinates(fCoord);
+      setPixelCoords({ pixel: event.pixel });
+      setShow(true);
+    } else {
+      setShow(false);
+    }
   }
 
   function copyCoordsToClipboard() {
@@ -54,8 +63,8 @@ function RightClickMenu(props) {
     events.trigger(`measure:${action}`);
   }
 
-  function addPlaceMarkerHandler(coords, olMap, crsData) {
-    events.trigger('context-menu:location', coords, olMap, crsData);
+  function addPlaceMarkerHandler(coords, olMap, crs) {
+    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crs);
     setShow(false);
   }
 
@@ -70,91 +79,95 @@ function RightClickMenu(props) {
 
   useEffect(() => {
     if (isCoordinateSearchActive) return;
-    events.on('map:singleclick', handleClick);
-    events.on('map:contextmenu', handleContextEvent);
+    events.on(MAP_SINGLE_CLICK, handleClick);
+    events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
-      events.off('map:singleclick', handleClick);
-      events.off('map:contextmenu', handleContextEvent);
+      events.off(MAP_SINGLE_CLICK, handleClick);
+      events.off(MAP_CONTEXT_MENU, handleContextEvent);
     };
   });
 
-  if (show) {
-    return (
-      <div id="context-menu">
-        <CopyClipboardTooltip
-          tooltipToggleTime={toolTipToggleTime}
-          clearCopyToClipboardTooltip={() => {}}
-          placement="top"
-        />
-        <ContextMenu id="context-menu-trigger">
-          <MenuItem
-            onClick={() => copyCoordsToClipboard()}
-            attributes={{ id: 'context-menu-copy' }}
-          >
-            <span id="copy-coordinates-to-clipboard-button">
-              {formattedCoordinates}
-            </span>
-          </MenuItem>
-          <MenuItem
-            onClick={() => addPlaceMarkerHandler(pixelCoords, getMap, crs)}
-            attributes={{ id: 'context-menu-add-marker' }}
-          >
-            Add Place Marker
-          </MenuItem>
-          <MenuItem divider />
-          <MenuItem
-            onClick={() => handleMeasurementMenu('distance')}
-            attributes={{ id: 'context-menu-measure-distance' }}
-          >
-            Measure Distance
-          </MenuItem>
-          <MenuItem
-            onClick={() => handleMeasurementMenu('area')}
-            attributes={{ id: 'context-menu-measure-area' }}
-          >
-            Measure Area
-          </MenuItem>
-          {measurementsInProj
-          && (
-          <MenuItem
-            onClick={() => handleMeasurementMenu('clear')}
-            attributes={{ id: 'context-menu-clear-measurements' }}
-          >
-            Remove Measurements
-          </MenuItem>
-          )}
-          <MenuItem
-            onClick={() => handleMeasurementMenu('units')}
-            attributes={{ id: 'context-menu-change-units' }}
-          >
-            Change Units to
-            {' '}
-            {oppositeUnitOfMeasure().oppositeUnit}
-          </MenuItem>
-        </ContextMenu>
-      </div>
-    );
-  }
+  const mobileStyle = isMobile ? 'react-contextmenu-mobile' : '';
 
-  return <></>;
+  return show && (
+    <div id="context-menu">
+      <CopyClipboardTooltip
+        tooltipToggleTime={toolTipToggleTime}
+        clearCopyToClipboardTooltip={() => {}}
+        placement="top"
+      />
+      <ContextMenu id="context-menu-trigger">
+        <MenuItem
+          onClick={() => copyCoordsToClipboard()}
+          attributes={{ id: 'context-menu-copy' }}
+          className={mobileStyle}
+        >
+          <span id="copy-coordinates-to-clipboard-button">
+            {formattedCoordinates}
+          </span>
+        </MenuItem>
+        <MenuItem
+          onClick={() => addPlaceMarkerHandler(pixelCoords, map, crs)}
+          attributes={{ id: 'context-menu-add-marker' }}
+          className={mobileStyle}
+        >
+          Add Place Marker
+        </MenuItem>
+        <MenuItem divider />
+        <MenuItem
+          onClick={() => handleMeasurementMenu('distance')}
+          attributes={{ id: 'context-menu-measure-distance' }}
+          className={mobileStyle}
+        >
+          Measure Distance
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleMeasurementMenu('area')}
+          attributes={{ id: 'context-menu-measure-area' }}
+          className={mobileStyle}
+        >
+          Measure Area
+        </MenuItem>
+        {measurementsInProj
+        && (
+        <MenuItem
+          onClick={() => handleMeasurementMenu('clear')}
+          attributes={{ id: 'context-menu-clear-measurements' }}
+          className={mobileStyle}
+        >
+          Remove Measurements
+        </MenuItem>
+        )}
+        <MenuItem
+          onClick={() => handleMeasurementMenu('units')}
+          attributes={{ id: 'context-menu-change-units' }}
+          className={mobileStyle}
+        >
+          Change Units to
+          {' '}
+          {oppositeUnitOfMeasure().oppositeUnit}
+        </MenuItem>
+      </ContextMenu>
+    </div>
+  );
 }
 
 function mapStateToProps(state) {
   const {
-    map, proj, measure, locationSearch, config,
+    map, proj, measure, locationSearch, config, screenSize,
   } = state;
   const { unitOfMeasure, allMeasurements, isActive } = measure;
-  const { crs } = proj.selected;
   const { coordinates, isCoordinateSearchActive } = locationSearch;
   return {
-    map,
-    crs,
+    map: map.ui.selected,
+    proj,
     unitOfMeasure,
     allMeasurements,
     measurementIsActive: isActive,
     coordinates,
     isCoordinateSearchActive,
     config,
+    isMobile: screenSize.isMobileDevice,
   };
 }
 
@@ -165,12 +178,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 RightClickMenu.propTypes = {
   map: PropTypes.object,
-  crs: PropTypes.string,
+  proj: PropTypes.object,
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
   allMeasurements: PropTypes.object,
   measurementIsActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 export default connect(

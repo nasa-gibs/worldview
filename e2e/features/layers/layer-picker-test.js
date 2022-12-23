@@ -182,6 +182,7 @@ module.exports = {
   },
   'Finding layer by ID with search': (c) => {
     c.clearValue(layersSearchField);
+    c.pause(1000);
     c.setValue(
       layersSearchField,
       'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly',

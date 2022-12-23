@@ -45,6 +45,7 @@ const eventsReducerState = {
   },
   active: false,
   showAll: true,
+  showAllTracks: false,
   isAnimatingToEvent: false,
   selectedCategories: [],
   selectedDates: {
@@ -92,6 +93,7 @@ export function eventsReducer(state = eventsReducerState, action) {
       return {
         ...state,
         showAll: action.showAll,
+        showAllTracks: action.showAllTracks,
         selectedCategories: action.categories,
         selectedDates: {
           start: action.start,

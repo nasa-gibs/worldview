@@ -3,7 +3,7 @@
         "Temperature": {
             "id": "temperature",
             "title":    "Temperature",
-            "subtitle": "Aqua/AIRS, Aura/MLS, GLDAS, NLDAS, Daymet, MERRA-2",
+            "subtitle": "Aqua/AIRS, Aura/MLS, GLDAS, NLDAS, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -63,18 +63,18 @@
                         "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly"
                     ]
                 },
-                "MERRA-2": {
-                    "id": "merra-2",
-                    "title": "MERRA-2",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "MERRA2_Surface_Skin_Temperature_Monthly",
-                        "MERRA2_2m_Air_Temperature_Monthly",
-                        "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
-                        "MERRA2_Air_Temperature_250hPa_Monthly"
-                    ]
-                    }
+                    "MERRA-2": {
+                        "id": "merra-2",
+                        "title": "MERRA-2",
+                        "description": "",
+                        "image": "",
+                        "settings": [
+                            "MERRA2_Surface_Skin_Temperature_Monthly",
+                            "MERRA2_2m_Air_Temperature_Monthly",
+                            "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
+                            "MERRA2_Air_Temperature_250hPa_Monthly"
+                        ]
+                      }
             }
         }
     }

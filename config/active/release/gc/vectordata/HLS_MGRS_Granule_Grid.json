@@ -1,0 +1,36 @@
+{
+  "id": "HLS_MGRS_Granule_Grid",
+  "mvt_properties": [
+
+    {
+      "Identifier" : "identifier",
+      "Title"      : "Grid Identifier",
+      "Description": "Grid Identifier",
+      "DataType"   : "string",
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : true
+    },
+
+    {
+      "Identifier" : "type",
+      "Title"      : "Grid Element Type",
+      "Description": "Grid Element Type",
+      "DataType"   : "string",
+      "ValueList": [ "MGRS", "S2" ],
+      "Function"   : "Describe",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    },
+
+    {
+      "Identifier" : "UID",
+      "Title"      : "Feature ID",
+      "Description": "Unique ID for each grid element.",
+      "DataType"   : "string",
+      "Function"   : "Identify",
+      "IsOptional" : false,
+      "IsLabel"    : false
+    }
+  ]
+}

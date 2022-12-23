@@ -20,6 +20,7 @@ import {
 } from '../../../modules/product-picker/actions';
 import { getLayersForProjection } from '../../../modules/product-picker/selectors';
 import util from '../../../util/util';
+import { JOYRIDE_INCREMENT } from '../../../util/constants';
 
 const { events } = util;
 
@@ -108,7 +109,7 @@ class ProductPickerHeader extends React.Component {
     const { mode, toggleSearchMode } = this.props;
     if (mode !== 'search') {
       setTimeout(() => {
-        events.trigger('joyride:increment');
+        events.trigger(JOYRIDE_INCREMENT);
       }, 4000);
       toggleSearchMode();
     }
@@ -265,7 +266,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { productPicker, browser, proj } = state;
+  const { productPicker, screenSize, proj } = state;
   const {
     mode,
     category,
@@ -274,7 +275,7 @@ const mapStateToProps = (state) => {
     selectedLayer,
     searchConfig,
   } = productPicker;
-  const isMobile = browser.lessThan.medium;
+  const isMobile = screenSize.isMobileDevice;
   const layers = getLayersForProjection(state);
 
   return {

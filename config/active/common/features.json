@@ -1,7 +1,7 @@
 {
     "features": {
         "animation": true,
-        "urlShortening": true,
+        "urlShortening": false,
         "customPalettes": true,
         "compare": true,
         "tour": true,
@@ -17,6 +17,7 @@
                 "NSIDC_ECS": "NSIDC DAAC",
                 "LAADS": "LAADS DAAC",
                 "PODAAC": "PO.DAAC",
+                "POCLOUD": "PO.DAAC",
                 "LPDAAC_ECS": "LP DAAC",
                 "SEDAC": "SEDAC",
                 "LARC_ASDC": "ASDC",
@@ -27,6 +28,7 @@
                 "ASIPS": "Atmosphere SIPS",
                 "LPCLOUD":	"LPDAAC",
                 "ORNL_DAAC": "ORNL DAAC",
+                "ORNL_CLOUD": "ORNL DAAC",
                 "MOPITT": "MOPITT SIPS"
             }
         },

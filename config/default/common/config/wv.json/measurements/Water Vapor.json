@@ -3,7 +3,7 @@
         "Water Vapor": {
             "id": "water-vapor",
             "title":    "Water Vapor",
-            "subtitle": "Aqua/MODIS, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -17,6 +17,18 @@
                         "OrbitTracks_Aqua_Descending"
                     ]
                 },
+                "Aqua/AMSR-E": {
+                    "id": "aqua-amsr-e",
+                    "title": "Aqua/AMSR-E",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AMSRE_Columnar_Water_Vapor_Day",
+                        "AMSRE_Columnar_Water_Vapor_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+              },
                 "Aura/MLS": {
                     "id": "aura-mls",
                     "title": "Aura/MLS",
