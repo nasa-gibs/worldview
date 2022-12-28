@@ -371,7 +371,11 @@ function LayerRow (props) {
               <h6>
                 <span id="collection-identifier" className={collectionClass}>
                   {collections.version} {collections.type}
+<<<<<<< HEAD
                   <UncontrolledTooltip id="left-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+=======
+                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+>>>>>>> de213dd619c15ba72356449f6d41ad0217114b99
                     {collectionIdentifierDescription}
                   </UncontrolledTooltip>
                 </span>
