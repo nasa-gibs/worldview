@@ -27,7 +27,7 @@ function ProductFacet(props) {
   const renderHeaderIcons = () => (
     <>
       <Tooltip
-        id="left-align-tooltip"
+        id="center-align-tooltip"
         className="facet-tooltip-content"
         isOpen={tooltipVisible}
         target={`${field}-tooltip-target`}

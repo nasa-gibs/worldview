@@ -26,7 +26,7 @@ const PlayButton = ({
     >
       {!isMobile && (
         <UncontrolledTooltip
-          id="left-align-tooltip"
+          id="center-align-tooltip"
           target={buttonId}
           placement="top"
         >

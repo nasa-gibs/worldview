@@ -107,7 +107,7 @@ const GifButton = (props) => {
         <UncontrolledTooltip
           placement="right"
           target="create-gif-button"
-          id="left-align-tooltip"
+          id="center-align-tooltip"
         >
           {showWarning ? warningMessage : labelText}
         </UncontrolledTooltip>

@@ -16,7 +16,7 @@ const HoverTooltip = (props) => {
 
   return !isMobile && (
     <UncontrolledTooltip
-      id="left-align-tooltip"
+      id="center-align-tooltip"
       trigger="hover"
       target={target}
       boundariesElement="window"

@@ -30,7 +30,7 @@ function RecentLayersList(props) {
       <div className="recent-layers-header">
         <h2> Recently Used Layers </h2>
         <Tooltip
-          id="left-align-tooltip"
+          id="center-align-tooltip"
           className="facet-tooltip-content"
           isOpen={tooltipVisible}
           target="recent-layer-tooltip-target"

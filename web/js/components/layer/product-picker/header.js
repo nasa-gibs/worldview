@@ -161,7 +161,7 @@ class ProductPickerHeader extends React.Component {
                 onClick={this.revertToInitialScreen}
               >
                 <UncontrolledTooltip
-                  id="left-align-tooltip"
+                  id="center-align-tooltip"
                   placement="right"
                   target="layer-back-button"
                 >
@@ -190,7 +190,7 @@ class ProductPickerHeader extends React.Component {
               aria-label="Filtered layer search"
             >
               <UncontrolledTooltip
-                id="left-align-tooltip"
+                id="center-align-tooltip"
                 placement="right"
                 target="layer-filter-button"
               >

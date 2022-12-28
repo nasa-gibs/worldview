@@ -380,7 +380,7 @@ class TimelineLayerCoveragePanel extends Component {
           onClick={this.togglePanelOpenClose}
           style={panelHandleStyle}
         >
-          <UncontrolledTooltip id="left-align-tooltip" placement="top" target="timeline-layer-coverage-panel-handle">
+          <UncontrolledTooltip id="center-align-tooltip" placement="top" target="timeline-layer-coverage-panel-handle">
             {panelToggleLabelText}
           </UncontrolledTooltip>
           <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />

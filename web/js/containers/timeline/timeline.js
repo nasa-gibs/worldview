@@ -1323,7 +1323,7 @@ class Timeline extends React.Component {
                       aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                       onClick={this.toggleHideTimeline}
                     >
-                      <UncontrolledTooltip id="left-align-tooltip" target="timeline-hide" placement="top">
+                      <UncontrolledTooltip id="center-align-tooltip" target="timeline-hide" placement="top">
                         {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                       </UncontrolledTooltip>
                       <div

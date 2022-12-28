@@ -225,7 +225,7 @@ function LayerRow (props) {
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
         onClick={() => onRemoveClick(layer.id)}
       >
-        <UncontrolledTooltip id="left-align-tooltip" placement="top" target={removeLayerBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={removeLayerBtnId}>
           {removeLayerBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="times" fixedWidth />
@@ -237,7 +237,7 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={() => onOptionsClick(layer, title)}
       >
-        <UncontrolledTooltip id="left-align-tooltip" placement="top" target={layerOptionsBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerOptionsBtnId}>
           {layerOptionsBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
@@ -249,7 +249,7 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
       >
-        <UncontrolledTooltip id="left-align-tooltip" placement="top" target={layerInfoBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
@@ -273,7 +273,7 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
-        <UncontrolledTooltip id="left-align-tooltip" placement="top" target={layerVectorBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerVectorBtnId}>
           {title}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="hand-pointer" fixedWidth />
@@ -345,7 +345,7 @@ function LayerRow (props) {
         >
           {!isAnimating && (
           <UncontrolledTooltip
-            id="left-align-tooltip"
+            id="center-align-tooltip"
             placement="right"
             target={`hide${encodedLayerId}`}
           >
@@ -371,11 +371,7 @@ function LayerRow (props) {
               <h6>
                 <span id="collection-identifier" className={collectionClass}>
                   {collections.version} {collections.type}
-<<<<<<< HEAD
-                  <UncontrolledTooltip id="left-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
-=======
-                  <UncontrolledTooltip placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
->>>>>>> de213dd619c15ba72356449f6d41ad0217114b99
+                  <UncontrolledTooltip id="center-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
                     {collectionIdentifierDescription}
                   </UncontrolledTooltip>
                 </span>
