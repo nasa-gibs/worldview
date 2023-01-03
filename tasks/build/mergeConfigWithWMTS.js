@@ -50,7 +50,6 @@ async function main () {
 
 async function processFiles () {
   try {
-    console.warn(inputDir)
     const files = await fs.readdirSync(inputDir)
     for (const file of files) {
       if (!file.endsWith('.json')) continue
