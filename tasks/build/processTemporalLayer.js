@@ -18,7 +18,6 @@ async function processTemporalLayer (wvLayer, value) {
   try {
     const ranges = toList(value)
     if (ranges && ranges[0] && ranges[0]._text && ranges[0]._text.includes('T')) {
-      console.warn(ranges[0]._text)
       wvLayer.period = 'subdaily'
     } else {
       if (ranges && ranges[0] && ranges[0]._text && ranges[0]._text.endsWith('Y')) {
