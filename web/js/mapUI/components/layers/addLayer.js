@@ -27,7 +27,7 @@ const AddLayer = (props) => {
     if (action.type === layerConstants.ADD_LAYER) {
       const def = lodashFind(action.layers, { id: action.id });
       if (def.type === 'granule') {
-        granuleLayerAdd(def);
+        return granuleLayerAdd(def);
       }
       clearPreload();
       addLayer(def);
@@ -38,7 +38,6 @@ const AddLayer = (props) => {
     ui.processingPromise = new Promise((resolve) => {
       resolve(addLayer(def));
     });
-    return addLayer(def);
   };
 
   /**
