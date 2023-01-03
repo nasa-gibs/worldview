@@ -120,6 +120,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     return;
   }
 
+  console.log(glStyle);
+
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
   }

@@ -11,6 +11,7 @@ import MVT from 'ol/format/MVT';
 
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
@@ -21,6 +22,7 @@ import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import * as dat from 'dat.gui';
 // import { Point } from 'proj4';
+import Bluebird from 'bluebird';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -657,10 +659,40 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
-    let counter = 0;
+    // Attempting to create a layer utilizing WebGL to improve performance
+    const webGLlayer = new WebGLPointsLayer({
+      source: tileSource,
+      style: {
+        symbol: {
+          symbolType: 'triangle',
+          size: 18,
+          color: 'green',
+        },
+      },
+      // extent: layerExtent,
+      // renderMode: 'vector',
+      // preload: 0,
+      // ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      // ...isMinBreakPoint && { minResolution: breakPointResolution },
+      // style (feature, resolution) {
+      //   return new Style({
+      //     image: new RegularShape({
+      //       size: 2,
+      //     //       points: 2,
+      //     //       radius: 10,
+      //     //       stroke: new Stroke({
+      //     //         width: 2,
+      //     //         color: 'red',
+      //     //       }),
+      //     //       angle: 53,
+      //     }),
+      //   });
+      // },
+    });
 
-    console.log('Creating LayerVectorTile');
-    const layer = new LayerVectorTile({
+    let counter = 0;
+    // Creating a layer with arrows, modifying color, scale & direction
+    const vectorlayer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
@@ -669,11 +701,7 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       style (feature, resolution) {
         counter += 1;
-
-        // console.log('style feature:');
-        // console.log(feature);
-
-        // Due to processing issues, I am only rendering every 25th feature
+        // Due to processing issues, I am only rendering every 15th feature
         if (counter % 15 !== 0) return [];
 
         // This function styles each feature individually based on the feature specific data
@@ -727,6 +755,96 @@ export default function mapLayerBuilder(config, cache, store) {
         ];
       },
     });
+
+    // This is the style associated with misr_cloud from getCapabilities.
+    const misrStyle =
+    // 'circle-radius': {
+    //   base: 2,
+    //   stops: [[12, 1], [22, 7]],
+    // },
+    // 'circle-color': [
+    //   'case',
+    //   ['<', ['get', 'magnitude'], 4.0], 'rgb(0, 7, 255)',
+    //   ['all', ['>=', ['get', 'magnitude'], 4.0], ['<', ['get', 'magnitude'], 8.0]], 'rgb(0,143,255)',
+    //   ['all', ['>=', ['get', 'magnitude'], 8.0], ['<', ['get', 'magnitude'], 12.0]], 'rgb(15,255,239)',
+    //   ['all', ['>=', ['get', 'magnitude'], 12.0], ['<', ['get', 'magnitude'], 16.0]], 'rgb(151,255,103)',
+    //   ['all', ['>=', ['get', 'magnitude'], 16.0], ['<', ['get', 'magnitude'], 20.0]], 'rgb(255,223,0)',
+    //   ['all', ['>=', ['get', 'magnitude'], 20.0], ['<', ['get', 'magnitude'], 24.0]], 'rgb(255,91,0)',
+    //   ['all', ['>=', ['get', 'magnitude'], 24.0], ['<', ['get', 'magnitude'], 28.0]], 'rgb(206,0,0)',
+    //   'rgb(131,0,0)',
+    // ],
+
+     [
+       new Style({
+         image: new RegularShape({
+           points: 2,
+           radius: 10,
+           stroke: new Stroke({
+             width: 2,
+             color: 'red',
+           }),
+           angle: 45,
+         }),
+       }),
+     ];
+
+    // Creating a layer with cones, modifying color, scale & direction
+    const vectorlayerCones = new LayerVectorTile({
+      extent: layerExtent,
+      source: tileSource,
+      renderMode: 'vector',
+      preload: 0,
+      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      ...isMinBreakPoint && { minResolution: breakPointResolution },
+      style (feature, resolution) {
+        console.log(feature);
+        counter += 1;
+        // Due to processing issues, I am only rendering every 15th feature
+        if (counter % 15 !== 0) return [];
+
+        // This function styles each feature individually based on the feature specific data
+        let arrowSizeMultiplier;
+        let arrowColor;
+        let radianDirection = feature.get('direction');
+        const magnitude = feature.get('magnitude');
+
+        // If OSCAR/ASCAT we need to adjust the radian angle
+        // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
+        if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+          radianDirection -= 180;
+        }
+
+        // Adjust color & arrow length based on magnitude
+        if (magnitude < 0.08) {
+          arrowColor = 'red';
+          arrowSizeMultiplier = 1;
+        } else if (magnitude < 0.17) {
+          arrowColor = 'blue';
+          arrowSizeMultiplier = 1.25;
+        } else {
+          arrowColor = 'green';
+          arrowSizeMultiplier = 1.5;
+        }
+
+        return [
+          // The Cone
+          new Style({
+            image: new RegularShape({
+              scale: [1, 4], // width, height
+              points: 3,
+              radius: 5 * arrowSizeMultiplier,
+              angle: radianDirection,
+              fill: new Fill({
+                color: arrowColor,
+              }),
+            }),
+          }),
+        ];
+      },
+    });
+
+    // Select the layer to load (vectorlayer, webGLLayer, vectorlayerCones)
+    const layer = vectorlayer;
 
     console.log('Applying style');
     applyStyle(def, layer, state, layeroptions);
