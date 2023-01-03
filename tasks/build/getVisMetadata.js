@@ -26,7 +26,7 @@ const options = yargs
     type: 'string',
     description: 'layer-metadata/all.json file'
   })
-  .epilog('Creates a layer metadata file containing all layers')
+  .epilog('Creates a layer-metadata file containing all layers')
 
 const { argv } = options
 if (!argv.features && !argv.layerOrder && !argv.layerMetadata) {
@@ -67,7 +67,7 @@ skipLayers = [
   'World_Database_on_Protected_Areas'
 ]
 
-// NOTE:  Only using these properties at this time
+// NOTE: Only using these properties at this time
 useKeys = [
   'conceptIds',
   'dataCenter',
@@ -84,7 +84,7 @@ async function main (url) {
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
-  console.warn(`${prog}: Pulling vis metadata for ${layerOrder.length} layers... `)
+  console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   for (layerId of layerOrder) {
     await getMetadata(layerId, url)
   }
@@ -98,6 +98,7 @@ async function main (url) {
   )
 
   await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
+  console.warn(`${prog}: Created ${path.parse(outputFile).base} combined layer-metadata file`)
 }
 
 async function getDAAC (metadata) {

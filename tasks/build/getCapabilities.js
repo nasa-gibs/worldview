@@ -50,13 +50,13 @@ async function main () {
   await getCapabilities()
 
   if (colormaps) {
-    await gatherProcess(colormaps, 'colormaps', colormapsDir, '.xml')
+    await gatherProcess(colormaps, 'colormap files', colormapsDir, '.xml')
   }
   if (vectorstyles) {
-    await gatherProcess(vectorstyles, 'vectorstyles', vectorstylesDir, '.json')
+    await gatherProcess(vectorstyles, 'vectorstyle files', vectorstylesDir, '.json')
   }
   if (vectordata) {
-    await gatherProcess(vectordata, 'vectordatas', vectordataDir, '.json')
+    await gatherProcess(vectordata, 'vectordata files', vectordataDir, '.json')
   }
 }
 

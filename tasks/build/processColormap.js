@@ -245,41 +245,44 @@ async function readFileAsync (file) {
 
 async function processFile (id, xml) {
   let document
+  let colormaps
   try {
     document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
+    if (document && document.ColorMaps && document.ColorMaps.ColorMap) {
+      colormaps = await toList(document.ColorMaps.ColorMap)
+    }
+    const maps = []
+    for (const colormap of colormaps) {
+      const result = await processEntries(colormap)
+      if (result === 'transparent') {
+        continue
+      }
+      result.title = colormap._attributes.title
+      result.entries.title = colormap._attributes.title
+      result.legend.title = colormap._attributes.title
+      result.legend.id = `${id}_${maps.length}_legend`
+      if ('minLabel' in colormap.Legend._attributes) {
+        result.legend.minLabel = colormap.Legend._attributes.minLabel
+      }
+      if ('maxLabel' in colormap.Legend._attributes) {
+        result.legend.maxLabel = colormap.Legend._attributes.maxLabel
+      }
+      if ('units' in colormap._attributes) {
+        result.legend.units = colormap._attributes.units
+      }
+      maps.push(result)
+    }
+
+    const data = {
+      id,
+      maps
+    }
+
+    const outputFile = path.join(outputDir, `${id}.json`)
+    await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
   } catch (error) {
-    console.warn(xml)
+    console.error(error)
   }
-  const colormaps = toList(document.ColorMaps.ColorMap)
-  const maps = []
-  for (const colormap of colormaps) {
-    const result = await processEntries(colormap)
-    if (result === 'transparent') {
-      continue
-    }
-    result.title = colormap._attributes.title
-    result.entries.title = colormap._attributes.title
-    result.legend.title = colormap._attributes.title
-    result.legend.id = `${id}_${maps.length}_legend`
-    if ('minLabel' in colormap.Legend._attributes) {
-      result.legend.minLabel = colormap.Legend._attributes.minLabel
-    }
-    if ('maxLabel' in colormap.Legend._attributes) {
-      result.legend.maxLabel = colormap.Legend._attributes.maxLabel
-    }
-    if ('units' in colormap._attributes) {
-      result.legend.units = colormap._attributes.units
-    }
-    maps.push(result)
-  }
-
-  const data = {
-    id,
-    maps
-  }
-
-  const outputFile = path.join(outputDir, `${id}.json`)
-  await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
 }
 
 main().catch((err) => {
