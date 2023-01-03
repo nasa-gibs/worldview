@@ -244,7 +244,12 @@ async function readFileAsync (file) {
 }
 
 async function processFile (id, xml) {
-  const document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
+  let document
+  try {
+    document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
+  } catch (error) {
+    console.warn(xml)
+  }
   const colormaps = toList(document.ColorMaps.ColorMap)
   const maps = []
   for (const colormap of colormaps) {
@@ -272,13 +277,9 @@ async function processFile (id, xml) {
     id,
     maps
   }
-  const jsonOptions = {
-    indent: 2,
-    separators: [',', ': ']
-  }
 
   const outputFile = path.join(outputDir, `${id}.json`)
-  await writeFile(outputFile, JSON.stringify(data, null, jsonOptions.indent), { encoding: 'utf-8' })
+  await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
 }
 
 main().catch((err) => {
