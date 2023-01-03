@@ -20,8 +20,8 @@ module.exports = {
   },
 
   'Minimizing mobile animation widget opens collapsed animation widget': (c) => {
-    c.useCss().click('#mobile-animation-close');
-    c.waitForElementVisible('#collapsed-animate-widget-phone-portrait', TIME_LIMIT);
+    c.useCss().click('#mobile-animation-close')
+    c.waitForElementVisible('#collapsed-animate-widget-phone-portrait', TIME_LIMIT)
   },
 
   'Playing the animation changes the date of the mobile date picker': (c) => {

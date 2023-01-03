@@ -172,13 +172,13 @@ module.exports = {
     c.expect.element(availableFilterCheckboxInput).to.be.selected
   },
   'Disabling coverage filter updates list': (c) => {
-    c.click(availableFilterCheckbox);
-    c.pause(200);
-    c.expect.element(availableFilterCheckboxInput).to.not.be.selected;
-    c.expect.elements(layersSearchRow).count.to.equal(10);
+    c.click(availableFilterCheckbox)
+    c.pause(200)
+    c.expect.element(availableFilterCheckboxInput).to.not.be.selected
+    c.expect.elements(layersSearchRow).count.to.equal(10)
     c
       .assert
-      .containsText(layerResultsCountText, 'Showing 10 out of');
+      .containsText(layerResultsCountText, 'Showing 10 out of')
   },
   'Finding layer by ID with search': (c) => {
     c.clearValue(layersSearchField)

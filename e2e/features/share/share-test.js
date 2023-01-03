@@ -9,9 +9,9 @@ const {
   shareLinkInput
 } = localSelectors
 
-const linkShareNav = '.link-share-nav';
+const linkShareNav = '.link-share-nav'
 // const embedShareNav = '.embed-share-nav';
-const socialShareNav = '.social-share-nav';
+const socialShareNav = '.social-share-nav'
 
 module.exports = {
   before (c) {
@@ -24,10 +24,10 @@ module.exports = {
     c.expect.element(shareToolbar).to.be.present
   },
   'Share tabs link, embed, and social are visible and enabled': (c) => {
-    c.expect.element(linkShareNav).to.be.present;
+    c.expect.element(linkShareNav).to.be.present
     // c.expect.element(embedShareNav).to.be.present;
-    c.expect.element(socialShareNav).to.be.present;
-    c.assert.cssClassPresent(`${linkShareNav} a`, 'active');
+    c.expect.element(socialShareNav).to.be.present
+    c.assert.cssClassPresent(`${linkShareNav} a`, 'active')
   },
   'Share link clipboard with existing time query string param in the page url will have the same serialized time': (c) => {
     const queryString = '?t=2018-12-31'
