@@ -98,7 +98,7 @@ async function main (url) {
   )
 
   await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
-  console.warn(`${prog}: Created ${path.parse(outputFile).base} combined layer-metadata file`)
+  console.warn(`${prog}: Combined all layer-metadata files into ${path.parse(outputFile).base}`)
 }
 
 async function getDAAC (metadata) {

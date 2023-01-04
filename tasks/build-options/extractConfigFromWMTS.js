@@ -76,6 +76,8 @@ class SkipException extends Error {
  */
 async function main () {
   for (entry of entries) {
+    wv.layers = {}
+    wv.source = {}
     const { errorCount, warningCount, layerCount } = await processEntry(entry)
     console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
 
