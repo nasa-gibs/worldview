@@ -76,7 +76,7 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
 fi
 
-# TODO: Fix _wmts files subdaily time formatting and sources
+# TODO: Fix _wmts wvMatrixSets entries
 # Run extractConfigFromWMTS.js script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
   `node $SCRIPTS_DIR/extractConfigFromWMTS.js \

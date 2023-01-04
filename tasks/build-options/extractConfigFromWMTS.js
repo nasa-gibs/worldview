@@ -50,7 +50,6 @@ if (!fs.existsSync(outputDir)) {
 const tolerant = config.tolerant
 const entries = config['wv-options-wmts']
 const skip = config.skip || []
-const wvMatrixSets = {}
 
 let totalLayerCount = 0
 let totalWarningCount = 0
@@ -60,6 +59,7 @@ const wv = {
   layers: {},
   sources: {}
 }
+let wvMatrixSets = {}
 
 class SkipException extends Error {
   constructor (message) {
@@ -77,7 +77,8 @@ class SkipException extends Error {
 async function main () {
   for (entry of entries) {
     wv.layers = {}
-    wv.source = {}
+    wv.sources = {}
+    wvMatrixSets = {}
     const { errorCount, warningCount, layerCount } = await processEntry(entry)
     console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
 
