@@ -47,25 +47,25 @@ fi
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 
-# If $FETCH_GC is set, make various API requests
-if [ "$FETCH_GC" ] ; then
-    # TODO: Fix axios fetch timeouts
-    # Fetch GC files and create colormaps, vectordata and vectorstyle files
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    `node $SCRIPTS_DIR/getCapabilities.js \
-      --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
-      --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
+# # If $FETCH_GC is set, make various API requests
+# if [ "$FETCH_GC" ] ; then
+#     # TODO: Fix axios fetch timeouts
+#     # Fetch GC files and create colormaps, vectordata and vectorstyle files
+#     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
+#     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
+#     `node $SCRIPTS_DIR/getCapabilities.js \
+#       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
+#       --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
-    # TODO: Optimize performance of this script
-    # Get metadata for files in layerOrder.json and combine this data into 1 file
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-    mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
-    `node $SCRIPTS_DIR/getVisMetadata.js \
-      --features "$BUILD_DIR/features.json" \
-      --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
-      --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
-fi
+#     # TODO: Optimize performance of this script
+#     # Get metadata for files in layerOrder.json and combine this data into 1 file
+#     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+#     mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+#     `node $SCRIPTS_DIR/getVisMetadata.js \
+#       --features "$BUILD_DIR/features.json" \
+#       --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
+#       --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"`
+# fi
 
 # Validate layers in wv.json with a JSON schema
 `node $SCRIPTS_DIR/validateConfigs.js \
@@ -76,7 +76,7 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
 fi
 
-# TODO: Fix _wmts files incorrect formatting for dateRanges.dateInterval and missing endDate
+# TODO: Fix _wmts files subdaily time formatting and sources
 # Run extractConfigFromWMTS.js script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
   `node $SCRIPTS_DIR/extractConfigFromWMTS.js \

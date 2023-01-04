@@ -13,7 +13,6 @@ class ValueError extends Error {
 
 async function processTemporalLayer (wvLayer, value) {
   const dateFormat = 'YYYY-MM-DD'
-  const timeFormat = 'HH:mm:ss'
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
   try {
     const ranges = toList(value)
@@ -42,21 +41,13 @@ async function processTemporalLayer (wvLayer, value) {
       ) {
         startDate = moment.min(startDate, moment(start, dateFormat))
         endDate = moment.max(endDate, moment(end, dateFormat))
-        if (startDate) {
-          const startDateParse = moment(start, dateFormat)
-          dateRangeStart.push(
-            `${startDateParse.format(dateFormat)}T${startDateParse.format(
-              timeFormat
-            )}Z`
-          )
+        if (start) {
+          startDate = moment(start, dateFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
+          dateRangeStart.push(startDate)
         }
-        if (endDate) {
-          const endDateParse = moment(end, dateFormat)
-          dateRangeEnd.push(
-            `${endDateParse.format(dateFormat)}T${endDateParse.format(
-              timeFormat
-            )}Z`
-          )
+        if (end) {
+          endDate = moment(end, dateFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
+          dateRangeEnd.push(endDate)
         }
         if (interval !== 'P1D') {
           endDate = moment(endDate).add(moment.duration(interval))
@@ -66,32 +57,27 @@ async function processTemporalLayer (wvLayer, value) {
         rangeInterval.push(match)
       } else {
         // Subdaily Layers
-        const startTime = start.replace('T', ' ').replace('Z', '')
-        const endTime = end.replace('T', ' ').replace('Z', '')
-        startDate = moment.min(startDate, moment(startTime, dateTimeFormat))
-        endDate = moment.max(endDate, moment(endTime, dateTimeFormat))
+        startDate = moment(start, dateTimeFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
+        endDate = moment(end, dateTimeFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
 
-        if (startDate) {
-          const startTimeParse = moment(startTime, dateTimeFormat)
-          dateRangeStart.push(startTimeParse.format(`${dateFormat}T${timeFormat}Z`))
+        if (start) {
+          dateRangeStart.push(startDate)
         }
-        if (endDate) {
-          const endTimeParse = moment(endTime, dateTimeFormat)
-          dateRangeEnd.push(endTimeParse.format(`${dateFormat}T${timeFormat}Z`))
+        if (end) {
+          dateRangeEnd.push(endDate)
         }
 
         rangeInterval.push(interval.match(/\d+/)[0])
       }
 
-      wvLayer.startDate = moment(startDate).format(`${dateFormat}T${timeFormat}Z`)
-      if (!endDate.isSame(moment.min())) {
-        wvLayer.endDate = moment(endDate).format(`${dateFormat}T${timeFormat}Z`)
-      }
+      wvLayer.startDate = dateRangeStart[0]
+      wvLayer.endDate = dateRangeEnd[dateRangeEnd.length - 1]
+
       if (dateRangeStart.length && dateRangeEnd.length) {
         wvLayer.dateRanges = dateRangeStart.map((s, i) => ({
           startDate: s,
           endDate: dateRangeEnd[i],
-          dateInterval: rangeInterval[i]
+          dateInterval: rangeInterval[i][0]
         }))
       }
     }
