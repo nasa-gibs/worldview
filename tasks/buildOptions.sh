@@ -7,7 +7,7 @@ SRC_DIR="$BASE/config/default"
 OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-SCRIPTS_DIR="$BASE/tasks/build"
+SCRIPTS_DIR="$BASE/tasks/build-options"
 
 
 # If there is an active directory, use instead of defaults
