@@ -50,12 +50,12 @@ async function main () {
 
 async function processFiles () {
   try {
-    const files = await fs.readdirSync(inputDir)
+    const files = fs.readdirSync(inputDir)
     for (const file of files) {
       if (!file.endsWith('.json')) continue
       fileCount += 1
       try {
-        const data = await fs.readFile(path.join(inputDir, file), 'utf-8')
+        const data = fs.readFileSync(path.join(inputDir, file), 'utf-8')
         const jsonData = JSON.parse(data)
         newConf.layers = wmtsDictMerge(newConf.layers, jsonData, outputData)
         newConf.sources = dictMerge(newConf.sources, jsonData.sources, outputData.sources)
@@ -68,19 +68,38 @@ async function processFiles () {
   }
 }
 
-function wmtsDictMerge (target, obj, conf) {
-  if (typeof obj !== 'object' || !Object.prototype.hasOwnProperty.call(obj, 'layers')) return obj
-  if (typeof conf !== 'object' || !Object.prototype.hasOwnProperty.call(conf, 'layers')) return obj
+// function wmtsDictMerge (target, obj, conf) {
+//   // console.warn(conf.layers)
 
-  for (const [k, v] of Object.entries(obj.layers)) {
-    if (Object.prototype.hasOwnProperty.call(conf.layer, k) && typeof conf.layers[k] === 'object') {
+//   if (typeof obj !== 'object') {
+//     return obj
+//   }
+
+//   target = conf.map(item => ({
+//     ...obj.find(({ layers }) => item.layers === layers),
+//     ...item
+//   }))
+//   console.warn(target)
+//   return target
+// }
+
+function wmtsDictMerge (target, obj, conf) {
+  obj = obj.layers
+  // conf = conf.layers
+
+  if (typeof obj !== 'object') {
+    return obj
+  }
+
+  for (const [k, v] of Object.entries(obj)) {
+    if (k in conf && typeof conf[k] === 'object') {
       let foundSourceMisMatch = false
-      if (Object.prototype.hasOwnProperty.call(v, 'projections') && Object.prototype.hasOwnProperty.call(conf.layers[k], 'projections')) {
-        const confProjections = conf.layers[k].projections
+      if ('projections' in v && 'projections' in conf[k]) {
+        const confProjections = conf[k].projections
         for (const [projectionKey, projection] of Object.entries(v.projections)) {
           const source = projection.source
-          if (Object.prototype.hasOwnProperty.call(confProjections, projectionKey)) {
-            if (Object.prototype.hasOwnProperty.call(confProjections[projectionKey], 'source')) {
+          if (projectionKey in confProjections) {
+            if ('source' in confProjections[projectionKey]) {
               if (source !== confProjections[projectionKey].source) {
                 foundSourceMisMatch = true
                 continue
@@ -89,11 +108,13 @@ function wmtsDictMerge (target, obj, conf) {
           }
         }
       }
-      if (foundSourceMisMatch) continue
-      if (Object.prototype.hasOwnProperty.call(target, k) && typeof target[k] === 'object') {
-        dictMerge(target[k], v, conf.layers[k])
+      if (foundSourceMisMatch) {
+        continue
+      }
+      if (k in target && typeof target[k] === 'object') {
+        target[k] = wmtsDictMerge(target[k], v, conf[k])
       } else {
-        target[k] = dictMerge(v, conf.layers[k])
+        target[k] = wmtsDictMerge(v, conf[k])
       }
     }
   }
