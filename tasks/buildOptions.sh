@@ -100,7 +100,6 @@ if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
       --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
 fi
 
-# TODO: fix erroneous data in files
 # Run processColormap.js and move colormaps where we want them
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes
@@ -141,24 +140,30 @@ for config in $configs; do
     esac
 done
 
-# # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
+# TODO: Missing the following variables in wv.json layers
+# type, format, period, startDate, endDate, dateRanges, projections,
+# palette, dataCenter,
+# this means _wmts .json files are not getting merged into wv.json properly
+
+# Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
 `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
   --inputDir "$BUILD_DIR/_wmts" \
   --outputFile "$DEST_DIR/config/wv.json"`
 
 # Copy brand files from build to dest
-# cp -r "$BUILD_DIR/brand" "$DEST_DIR"
-# cp "$BUILD_DIR/brand.json" "$DEST_DIR"
+cp -r "$BUILD_DIR/brand" "$DEST_DIR"
+cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
-# # Validate the options build
-# `node $SCRIPTS_DIR/validateOptions.js" \
-#   --inputFile "$BUILD_DIR/config.json" \
-#   --outputDir "$DEST_DIR/config`
 
-# # Fetch preview images from WV Snapshots for any layers which they are missing
-# `node $SCRIPTS_DIR/fetchPreviewSnapshots.js" \
-#   --inputFile "$DEST_DIR/config/wv.json" \
-#   --outputFile "$OPT_DIR/common/previewLayerOverrides.json" \
+# Validate the options build
+# `node $SCRIPTS_DIR/validateOptions.js \
+#   --optionsFile "$BUILD_DIR/config.json" \
+#   --configDir "$DEST_DIR/config"`
+
+# Fetch preview images from WV Snapshots for any layers which they are missing
+# `node $SCRIPTS_DIR/fetchPreviewSnapshots.js \
+#   --wvJsonFile "$DEST_DIR/config/wv.json" \
+#   --overridesFile "$OPT_DIR/common/previewLayerOverrides.json" \
 #   --featuresFile "$BUILD_DIR/features.json"`
 
 exit 0

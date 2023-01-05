@@ -1,3 +1,21 @@
+async function deepCopy (obj) {
+  if (typeof obj !== 'object') {
+    return obj
+  }
+  let copy
+  if (Array.isArray(obj)) {
+    copy = []
+  } else {
+    copy = {}
+  }
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      copy[key] = await deepCopy(obj[key])
+    }
+  }
+  return copy
+}
+
 async function dictMerge (target, ...args) {
   // Merge multiple objects
   if (args.length > 1) {
@@ -21,7 +39,7 @@ async function dictMerge (target, ...args) {
       }
       await dictMerge(target[k], v)
     } else {
-      target[k] = Object.assign({}, v)
+      target[k] = await deepCopy(v)
     }
   }
   return target

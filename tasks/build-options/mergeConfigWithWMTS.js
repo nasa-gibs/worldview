@@ -57,8 +57,8 @@ async function processFiles () {
       try {
         const data = fs.readFileSync(path.join(inputDir, file), 'utf-8')
         const jsonData = JSON.parse(data)
-        newConf.layers = wmtsDictMerge(newConf.layers, jsonData, outputData)
-        newConf.sources = dictMerge(newConf.sources, jsonData.sources, outputData.sources)
+        newConf.layers = await wmtsDictMerge(newConf.layers, jsonData, outputData)
+        newConf.sources = await dictMerge(newConf.sources, jsonData.sources, outputData.sources)
       } catch (error) {
         throw new Error(`ERROR: ${path.join(inputDir, file)}: ${error.message}`)
       }
@@ -83,8 +83,9 @@ async function processFiles () {
 //   return target
 // }
 
-function wmtsDictMerge (target, obj, conf) {
+async function wmtsDictMerge (target, obj, conf) {
   obj = obj.layers
+
   // conf = conf.layers
 
   if (typeof obj !== 'object') {
