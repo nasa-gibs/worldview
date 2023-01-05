@@ -39,7 +39,7 @@ async function main () {
 }
 
 async function mergeFiles (inputDir) {
-  const files = await fs.readdirSync(inputDir)
+  const files = fs.readdirSync(inputDir)
   for (const file of files) {
     try {
       if (file.endsWith('.json')) {

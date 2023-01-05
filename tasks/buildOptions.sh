@@ -76,7 +76,6 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
 fi
 
-# TODO: Fix _wmts wvMatrixSets entries
 # Run extractConfigFromWMTS.js script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
   `node $SCRIPTS_DIR/extractConfigFromWMTS.js \
@@ -85,69 +84,69 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
     --outputDir  "$BUILD_DIR/_wmts"`
 fi
 
-# # Run processVectorStyles.js and move vectorstyles where we want them
-# if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
-#     mkdir -p "$BUILD_DIR/config/wv.json/vectorstyles"
-#     `node $SCRIPTS_DIR/processVectorStyles.js \
-#       --inputDir "$BUILD_DIR/gc/vectorstyles" \
-#       --outputDir "$BUILD_DIR/config/wv.json/vectorstyles"`
-# fi
+# Run processVectorStyles.js and move vectorstyles where we want them
+if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
+    mkdir -p "$BUILD_DIR/config/wv.json/vectorstyles"
+    `node $SCRIPTS_DIR/processVectorStyles.js \
+      --inputDir "$BUILD_DIR/gc/vectorstyles" \
+      --outputDir "$BUILD_DIR/config/wv.json/vectorstyles"`
+fi
 
-# # Run processVectorData.js and move vectordata where we want them
-# if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
-#     mkdir -p "$BUILD_DIR/config/wv.json/vectordata"
-#     `node $SCRIPTS_DIR/processVectorData.js \
-#       --inputDir "$BUILD_DIR/gc/vectordata" \
-#       --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
-# fi
+# Run processVectorData.js and move vectordata where we want them
+if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
+    mkdir -p "$BUILD_DIR/config/wv.json/vectordata"
+    `node $SCRIPTS_DIR/processVectorData.js \
+      --inputDir "$BUILD_DIR/gc/vectordata" \
+      --outputDir "$BUILD_DIR/config/wv.json/vectordata"`
+fi
 
-# # TODO: fix erroneous data in files
-# # Run processColormap.js and move colormaps where we want them
-# if [ -e "$BUILD_DIR/colormaps" ] ; then
-#     mkdir -p "$BUILD_DIR"/config/palettes
-#     if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
-#         cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
-#     fi
-#     `node $SCRIPTS_DIR/processColormap.js \
-#       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
-#       --inputDir "$BUILD_DIR/colormaps" \
-#       --outputDir "$BUILD_DIR/config/palettes"`
-# fi
+# TODO: fix erroneous data in files
+# Run processColormap.js and move colormaps where we want them
+if [ -e "$BUILD_DIR/colormaps" ] ; then
+    mkdir -p "$BUILD_DIR"/config/palettes
+    if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
+        cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
+    fi
+    `node $SCRIPTS_DIR/processColormap.js \
+      --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
+      --inputDir "$BUILD_DIR/colormaps" \
+      --outputDir "$BUILD_DIR/config/palettes"`
+fi
 
-# # Throw error if no categoryGroupOrder.json file present
-# if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
-#     echo "categoryGroupOrder.json not found.  Generating..."
-#     `node $SCRIPTS_DIR/generateCategoryGroupOrder.js \
-#       --inputDir "$SRC_DIR/common/config/wv.json/categories/" \
-#       --outputDir "$SRC_DIR/common/config/wv.json/"`
-# fi
+# Throw error if no categoryGroupOrder.json file present
+if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
+    echo "categoryGroupOrder.json not found.  Generating..."
+    `node $SCRIPTS_DIR/generateCategoryGroupOrder.js \
+      --inputDir "$SRC_DIR/common/config/wv.json/categories/" \
+      --outputDir "$SRC_DIR/common/config/wv.json/"`
+fi
 
-# if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
-#     cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
-# fi
+if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
+    cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+fi
 
-# # Run mergeConfig.js on each directory in /config containing .json files
-# # This creates on palettes-custom.json and wv.json
-# configs=$(ls "$BUILD_DIR/config")
-# for config in $configs; do
-#     case $config in
-#         *.json)
-#             bash -c "node $SCRIPTS_DIR/mergeConfig.js \
-#               --inputDir '$BUILD_DIR/config/$config' \
-#               --outputFile '$DEST_DIR/config/$config'"
-#              ;;
-#          *)
-#              cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
-#              ;;
-#     esac
-# done
+# Run mergeConfig.js on each directory in /config containing .json files
+# This creates on palettes-custom.json and wv.json
+configs=$(ls "$BUILD_DIR/config")
+for config in $configs; do
+    case $config in
+        *.json)
+            bash -c "node $SCRIPTS_DIR/mergeConfig.js \
+              --inputDir '$BUILD_DIR/config/$config' \
+              --outputFile '$DEST_DIR/config/$config'"
+             ;;
+         *)
+             cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
+             ;;
+    esac
+done
 
-# # # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
-# `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
-#   --inputDir "$BUILD_DIR/_wmts" \
-#   --outputFile "$DEST_DIR/config/wv.json"`
+# # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
+`node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
+  --inputDir "$BUILD_DIR/_wmts" \
+  --outputFile "$DEST_DIR/config/wv.json"`
 
-# # Copy brand files from build to dest
+# Copy brand files from build to dest
 # cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 # cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 

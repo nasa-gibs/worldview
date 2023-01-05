@@ -309,18 +309,17 @@ function processMatrixSet (gcMatrixSet) {
 
   for (const tileMatrix of tileMatrixArr) {
     formattedTileMatrixArr.push({
-      matrixWidth: parseInt(tileMatrix.MatrixWidth, 10),
-      matrixHeight: parseInt(tileMatrix.MatrixHeight, 10)
+      matrixWidth: parseInt(tileMatrix.MatrixWidth._text, 10),
+      matrixHeight: parseInt(tileMatrix.MatrixHeight._text, 10)
     })
   }
-
   wvMatrixSets[ident] = {
     id: ident,
     maxResolution,
     resolutions,
     tileSize: [
-      parseInt(tileMatrixArr[0].TileWidth, 10),
-      parseInt(tileMatrixArr[0].TileHeight, 10)
+      parseInt(tileMatrixArr[0].TileWidth._text, 10),
+      parseInt(tileMatrixArr[0].TileHeight._text, 10)
     ],
     tileMatrices: formattedTileMatrixArr
   }
