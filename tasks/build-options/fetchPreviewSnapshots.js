@@ -1,10 +1,10 @@
-const yargs = require('yargs')
+const moment = require('moment')
 const axios = require('axios')
-const { promisify } = require('util')
 const fs = require('fs')
-const readFileAsync = promisify(fs.readFile)
+const path = require('path')
+const yargs = require('yargs')
 
-const prog = require('path').basename(__filename)
+const prog = path.basename(__filename)
 
 const options = yargs
   .usage('Usage: $0  <wv.json> <overrides_file>')
@@ -37,11 +37,11 @@ const wvJsonFile = argv.wvJsonFile
 const overridesFile = argv.overridesFile
 const featuresFile = argv.featuresFile
 
-const badSnapshots = []
 let overrideDatesDict = {}
+const badSnapshots = []
 let totalSuccessCount = 0
 let totalFailureCount = 0
-// const timeFormat = '%Y-%m-%dT%H:%M:%SZ'
+const timeFormat = 'YYYY-MM-DDTHH:mm:ssZ'
 let snapshotsUrl = ''
 const paramDict = {
   base: {
@@ -67,38 +67,32 @@ const paramDict = {
     HEIGHT: '512'
   }
 }
-
-// These layers should not be combined with the reference layer
 const standaloneLayers = [
   'Graticule_15m',
   'Coastlines_15m',
   'Reference_Features_15m',
   'Reference_Labels_15m'
 ]
-
 const destImgDir = './web/images/layers/previews/'
-
 const referenceLayers = {
   geographic: 'OSM_Land_Water_Map',
   arctic: 'OSM_Land_Water_Map',
   antarctic: 'SCAR_Land_Water_Map'
 }
 
-const current = new Date()
-
 async function main () {
   // Check to see if this feature is enabled in features.json before continuing
-  const featuresFileContent = await readFileAsync(featuresFile, { encoding: 'utf-8' })
+  const featuresFileContent = fs.readFileSync(featuresFile, { encoding: 'utf-8' })
   const featuresDict = JSON.parse(featuresFileContent)
   if (featuresDict.features.previewSnapshots === false) {
     throw new Error('previewSnapshots note enabled in features.json')
   }
 
   // Allow manual configuration of layer ID to specific date to generate desired preview
-  const overridesFileContent = await readFileAsync(overridesFile, { encoding: 'utf-8' })
+  const overridesFileContent = fs.readFileSync(overridesFile, { encoding: 'utf-8' })
   overrideDatesDict = JSON.parse(overridesFileContent)
 
-  const wvJsonFileContent = await readFileAsync(wvJsonFile, { encoding: 'utf-8' })
+  const wvJsonFileContent = fs.readFileSync(wvJsonFile, { encoding: 'utf-8' })
   const wvJsonDict = JSON.parse(wvJsonFileContent)
   const layers = wvJsonDict.layers
   snapshotsUrl = wvJsonDict.features.imageDownload.url
@@ -107,15 +101,8 @@ async function main () {
     throw new Error(`${prog}: Layer preview fetching disabled. Exiting.`)
   }
 
-  const promises = []
   for (const layer of Object.values(layers)) {
-    promises.push(getSnapshots(layer))
-  }
-
-  try {
-    await Promise.all(promises)
-  } catch (error) {
-    console.error(`${error}`)
+    await getSnapshots(layer)
   }
 
   if (badSnapshots.length > 0) {
@@ -137,79 +124,73 @@ async function main () {
   }
 }
 
-function trackBadSnapshots (layerId, projection, request, imgPath) {
+async function trackBadSnapshots (layerId, projection, request, imgFile, badSnapshots) {
   const arcticBadSize = 9949
   const antarcticBadSize = 4060
   const geographicBadSize = 12088
+  const size = imgFile.tell()
 
-  fs.stat(imgPath, (error, stats) => {
-    if (error) {
-      console.error(error)
-      return
-    }
-
-    const size = stats.size
-    if ([arcticBadSize, antarcticBadSize, geographicBadSize].includes(size)) {
-      badSnapshots.push({
-        id: layerId,
-        projection,
-        url: request.url
-      })
-    }
-  })
+  if (size === geographicBadSize || size === arcticBadSize || size === antarcticBadSize) {
+    badSnapshots.push({
+      id: layerId,
+      projection,
+      url: request.url
+    })
+  }
 }
 
-function getBestDate (projection, period, dateRanges) {
+async function getBestDate (projection, period, dateRanges) {
   const lastRange = dateRanges[dateRanges.length - 1]
   const startDate = lastRange.startDate
   const endDate = lastRange.endDate
-  const parsedStartDate = new Date(startDate)
-  const parsedEndDate = new Date(endDate)
-  const pYear = parsedEndDate.getFullYear()
-  const pMonth = parsedEndDate.getMonth() + 1 // months are 0-indexed in JavaScript
+  const parsedStartDate = moment(startDate, timeFormat)
+  const parsedEndDate = moment(endDate, timeFormat)
+  const pYear = parsedEndDate.year()
+  const pMonth = parsedEndDate.month()
   let interval = parseInt(lastRange.dateInterval, 10)
   let alteredDate = null
 
-  // Handle daily layers
   if (period === 'daily') {
-    // Go back a few more days for single day layers since something
-    // too recent may not be processed yet
     if (interval === 1) {
       interval = 3
     }
-    alteredDate = new Date(parsedEndDate - interval * 24 * 60 * 60 * 1000)
+    alteredDate = parsedEndDate.subtract(interval, 'days')
+  } else {
+    alteredDate = parsedEndDate.subtract(interval, 'months')
   }
 
   // Choose a good daylight month for arctic
   if (projection === 'arctic' && ![4, 5, 6, 7, 8, 9].includes(pMonth)) {
-    if (pYear === current.getFullYear() && current.getMonth() + 1 < 6) {
-      alteredDate = new Date(pYear - 1, 5, 1)
+    const currentYear = moment().year()
+    const currentMonth = moment().month() + 1
+    if (pYear === currentYear && currentMonth < 6) {
+      alteredDate = moment({ year: pYear - 1, month: 5, day: 1 })
     } else {
-      alteredDate = new Date(pYear, 5, 1)
+      alteredDate = moment({ year: pYear, month: 5, day: 1 })
     }
   }
 
   // Choose a good daylight month for antarctic
   if (projection === 'antarctic' && ![10, 11, 12, 1, 2].includes(pMonth)) {
-    // TODO handle "bad" months for antarctic
-    alteredDate = new Date(pYear, 11, 1)
+    alteredDate = moment({ year: pYear, month: 11, day: 1 })
   }
 
   // Make sure modified date isn't out of layer date range
-  if (alteredDate && alteredDate >= parsedStartDate) {
-    return alteredDate.toISOString().slice(0, -5) + 'Z'
+  if (alteredDate && alteredDate.isSameOrAfter(parsedStartDate)) {
+    return alteredDate.format(timeFormat)
   }
+
   return endDate
 }
 
-function getTimeParam (projection, layerId, layer, params) {
+async function getTimeParam (projection, layerId, layer, params) {
   // Only include TIME param for temporal layers
   const dateRanges = layer.dateRanges
   const startDate = layer.startDate
   const period = layer.period
 
   if (dateRanges) {
-    params.TIME = getBestDate(projection, period, dateRanges)
+    params.TIME = await getBestDate(projection, period, dateRanges)
   } else if (startDate) {
     params.TIME = startDate
   }
@@ -237,7 +218,7 @@ async function getSnapshots (layer) {
     }
 
     const params = { ...paramDict.base, ...paramDict[projection] }
-    getTimeParam(projection, wvLayerId, layer, params)
+    await getTimeParam(projection, wvLayerId, layer, params)
 
     if (gibsLayerId !== referenceLayer && !standaloneLayers.includes(gibsLayerId)) {
       params.LAYERS = `${referenceLayer},${gibsLayerId}`
@@ -262,7 +243,7 @@ async function getSnapshots (layer) {
         totalSuccessCount += 1
         await fs.promises.writeFile(destFileName, imageReq.data, { flag: 'wx' })
         if (gibsLayerId === referenceLayers[projection]) continue
-        trackBadSnapshots(wvLayerId, projection, imageReq, imageReq.data)
+        await trackBadSnapshots(wvLayerId, projection, imageReq, imageReq.data)
       } else {
         totalFailureCount += 1
       }

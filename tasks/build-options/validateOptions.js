@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
+const moment = require('moment')
+const { processTemporalLayer } = require('./processTemporalLayer')
 const prog = path.basename(__filename)
 
 const options = yargs
@@ -47,172 +49,169 @@ function error (message) {
 }
 
 function warn (message) {
-  console.error(`${prog}:  WARN: ${message}`)
+  console.error(`${prog}: WARN: ${message}`)
   warningCount += 1
 }
 
 function removeLayer (wv, layerId) {
   removedLayers.push(layerId)
   delete wv.layers[layerId]
-  if (wv.layerOrder.includes(layerId)) wv.layerOrder.splice(wv.layerOrder.indexOf(layerId), 1)
+  if (wv.layerOrder.includes(layerId)) {
+    wv.layerOrder = wv.layerOrder.filter((id) => id !== layerId)
+  }
 }
 
 function isDateTimeFormat (input) {
   try {
-    Date.parse(input)
+    moment(input, 'YYYY-MM-DD HH:mm:ss')
     return true
   } catch (e) {
     return false
   }
 }
 
-if (tolerant) console.warn('Validation enforcement disabled')
+if (tolerant) warn('Validation enforcement disabled')
 
-let startDate = new Date(Number.MAX_SAFE_INTEGER)
+let startDate = moment.max()
 
 async function main () {
   for (const layerId of Object.keys(wv.layers)) {
     let layer = wv.layers[layerId]
-
-    if (layerId !== layer.get('id')) {
-      error(`[${layerId}] layer id does not match id of ${layer.get('id')}`)
+    if (layerId !== layer.id) {
+      error(`[${layerId}] layer id does not match id of ${layer.id}`)
     }
     if (!wv.layerOrder.includes(layerId)) {
-      if (opt.get('layerOrderExceptions', []).includes(layerId)) {
+      if (opt.layerOrderExceptions && opt.layerOrderExceptions.includes(layerId)) {
         removeLayer(wv, layerId)
         continue
-      } else if (tolerant || opt.get('ignoreLayerOrder', false)) {
+      } else if (tolerant || opt.ignoreLayerOrder) {
         wv.layerOrder.push(layerId)
       } else {
         removeLayer(wv, layerId)
         continue
       }
     }
-    if (!layer.projections || layer.projections.length === 0) {
-      error(`[${layerId}] No projections defined or not found in GC documents`)
-      removeLayer(wv, layerId)
-      continue
-    }
-    if (!Object.prototype.hasOwnProperty.call(layer, 'type')) {
-      error(
-        `[${layerId}] No type defined. Possible to be expecting configuration via GC document but was not found`
-      )
-      removeLayer(wv, layerId)
-      continue
-    }
-    if (Object.prototype.hasOwnProperty.call(layer, 'palette') && !Object.prototype.hasOwnProperty.call(layer.palette, 'id')) {
-      error(`[${layerId}] No palette definition`)
-    } else if (Object.prototype.hasOwnProperty.call(layer, 'palette')) {
-      const paletteId = layer.palette.id
-      if (!fs.existsSync(path.join(configDir, 'palettes', `${paletteId}.json`))) {
-        error(`[${layerId}] Unknown palette: ${paletteId}`)
-        delete layer.palette
-      }
-    }
-    if (Object.prototype.hasOwnProperty.call(layer, 'vectorStyle') && !Object.prototype.hasOwnProperty.call(layer.vectorStyle, 'id')) {
+    // if (!layer.projections || !layer.projections.length) {
+    //   error(`[${layerId}] No projections defined or not found in GC documents`)
+    //   removeLayer(wv, layerId)
+    //   continue
+    // }
+    // if (!layer.type) {
+    //   error(`[${layerId}] No type defined. Possible to be expecting configuration via GC document but was not found`)
+    //   removeLayer(wv, layerId)
+    //   continue
+    // }
+    // if (layer.palette && !layer.palette.id) {
+    //   error(`[${layerId}] No palette definition`)
+    // } else if (layer.palette) {
+    //   const paletteId = layer.palette.id
+    //   if (!fs.existsSync(path.join(configDir, `palettes/${paletteId}.json`))) {
+    //     error(`[${layerId}] palette ${paletteId} not found in palettes folder`)
+    //   }
+    // }
+    if (layer.vectorStyle && !layer.vectorStyle.id) {
       error(`[${layerId}] No vectorStyle definition`)
     }
-    if (!Object.prototype.hasOwnProperty.call(layer, 'group') && opt.get('warnOnUnexpectedLayer')) {
+    if (!layer.group && opt.warnOnUnexpectedLayer) {
       error(`[${layerId}] Possible unexpected layer, no group defined`)
       removeLayer(wv, layerId)
       continue
-    } else if (!Object.prototype.hasOwnProperty.call(layer, 'group')) {
+    } else if (!layer.group) {
       removeLayer(wv, layerId)
       continue
     }
-    for (const projId of Object.keys(layer.projections)) {
-      const projection = layer.projections[projId]
-      if (Object.prototype.hasOwnProperty.call(projection, 'matrixSet')) {
-        const source = projection.source
-        const matrixSet = projection.matrixSet
-        if (!Object.prototype.hasOwnProperty.call(wv.sources, source)) {
-          error(`[${layerId}:${projId}] Invalid source: ${source}`)
-          delete layer.projections[projId]
-        } else if (!Object.prototype.hasOwnProperty.call(wv.sources[source], 'matrixSets')) {
-          error(`[${layerId}:${projId}] No matrix sets for projection`)
-          delete layer.projections[projId]
-        } else if (!wv.sources[source].matrixSets.includes(matrixSet)) {
-          error(`[${layerId}:${projId}] Invalid matrix set: ${matrixSet}`)
-          delete layer.projections[projId]
-        }
-      }
+    // for (const projId of Object.keys(layer.projections)) {
+    //   const projection = layer.projections[projId]
+    //   if (projection.matrixSet) {
+    //     const source = projection.source
+    //     const matrixSet = projection.matrixSet
+    //     if (!wv.sources[source]) {
+    //       error(`[${layerId}:${projId}] Invalid source: ${source}`)
+    //       delete layer.projections[projId]
+    //     } else if (!wv.sources[source].matrixSets) {
+    //       error(`[${layerId}:${projId}] No matrix sets for projection`)
+    //       delete layer.projections[projId]
+    //     } else if (!wv.sources[source].matrixSets[matrixSet]) {
+    //       error(`[${layerId}:${projId}] Invalid matrix set: ${matrixSet}`)
+    //       delete layer.projections[projId]
+    //     }
+    //   }
+    // }
+    if ('temporal' in layer) {
+      warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
+      layer = await processTemporalLayer(layer, layer.temporal)
     }
-    if (Object.prototype.hasOwnProperty.call(layer, 'temporal')) {
-      console.warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
-      layer = processTemporal(layer, layer.temporal)
+    if (layer.futureTime) {
+      if ('endDate' in layer) delete layer.endDate
     }
-    if (layer.get('futureTime')) {
-      if (Object.prototype.hasOwnProperty.call(layer, 'endDate')) {
-        delete layer.endDate
-      }
-    }
-    if (layer.get('futureTime', false)) {
+
+    if (layer.futureTime) {
       // do nothing
     } else {
-      if (Object.prototype.hasOwnProperty.call(layer, 'endDate') && layer.get('ongoing', true)) {
-        delete layer.endDate
-      }
+      if ('endDate' in layer && layer.ongoing) delete layer.endDate
     }
-    if (Object.prototype.hasOwnProperty.call(layer, 'startDate')) {
+    if ('startDate' in layer) {
       const startTime = layer.startDate.replace('T', ' ').replace('Z', '')
       let d
       if (isDateTimeFormat(startTime)) {
-        d = new Date(startTime)
+        d = moment(startTime, 'YYYY-MM-DD HH:mm:ss')
       } else {
-        d = new Date(layer.startDate)
+        d = moment(layer.startDate, 'YYYY-MM-DD')
       }
-      startDate = Math.min(startDate, d)
+      startDate = moment.min(startDate, d)
     }
   }
 
-  if (startDate.getTime() !== Number.MAX_VALUE) {
-    wv.startDate = startDate.toISOString()
+  if (startDate.isValid()) {
+    wv.startDate = startDate.format('YYYY-MM-DD') + 'T' + startDate.format('HH:mm:ss') + 'Z'
   }
 
   for (const layerId of wv.layerOrder) {
-    if (!Object.prototype.hasOwnProperty.call(wv.layers, layerId)) {
+    if (!wv.layers[layerId]) {
       error(`[${layerId}] In layer order but no definition`)
     }
   }
 
   const startingLayers = []
   for (const startingLayer of wv.defaults.startingLayers) {
-    if (!Object.prototype.hasOwnProperty.call(wv.layers, startingLayer.id)) {
+    if (!wv.layers[startingLayer.id]) {
       error(`Invalid starting layer: ${startingLayer.id}`)
     } else {
       startingLayers.push(startingLayer)
     }
   }
   wv.defaults.startingLayers = startingLayers
-  wv.buildDate = Date.now()
+  wv.buildDate = Math.round(Date.now() / 1000)
 
-  for (const projection of Object.keys(wv.naturalEvents.layers)) {
-    for (const eventType of Object.keys(wv.naturalEvents.layers[projection])) {
-      for (const layerObject of wv.naturalEvents.layers[projection][eventType]) {
-        if (!Object.prototype.hasOwnProperty.call(wv.layers, layerObject[0])) {
-          error(
-            `The ${layerObject[0]} layer in the Natural events ${projection} ${eventType} config does not have a matching ID in the layer config`
-          )
+  for (const [projection, projectionValue] of Object.entries(wv.naturalEvents.layers)) {
+    for (const [eventType, eventTypeLayerList] of Object.entries(projectionValue)) {
+      for (const layerObject of eventTypeLayerList) {
+        if (!wv.layers[layerObject[0]]) {
+          error(`The ${layerObject[0]} layer in the Natural events ${projection} ${eventType} config does not have a matching ID in the layer config`)
         }
       }
     }
   }
 
   for (const measurement of Object.values(wv.measurements)) {
-    if (!Object.prototype.hasOwnProperty.call(measurement, 'sources')) continue
+    if (!measurement.sources) continue
     for (const source of Object.values(measurement.sources)) {
-      if (!Object.prototype.hasOwnProperty.call(source, 'settings')) continue
+      if (!source.settings) continue
       for (const setting of source.settings) {
-        if (!Object.prototype.hasOwnProperty.call(wv.layers, setting)) {
-          error(
-            `In measurement ${measurement.id}, source ${source.id}, layer not found: ${setting}`
-          )
+        if (!wv.layers[setting]) {
+          error(`In measurement ${measurement.id}, source ${source.id}, layer not found: ${setting}`)
         }
       }
     }
   }
 
-  console.log(`${prog}: ${errorCount} error(s), ${warningCount} warning(s), ${removeCount} removed`)
+  const removeCount = removedLayers.length
+  console.warn(`${prog}: ${errorCount} error(s), ${warningCount} warning(s), ${removeCount} removed`)
+  if (removeCount > 0) {
+    console.warn(removedLayers)
+  }
+
+  fs.writeFileSync(mainConfigFile, JSON.stringify(wv, null, 2))
 
   if (errorCount > 0) {
     throw new Error(`${prog}: Error: ${errorCount} errors occured`)

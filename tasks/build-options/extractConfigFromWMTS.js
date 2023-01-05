@@ -313,6 +313,7 @@ function processMatrixSet (gcMatrixSet) {
       matrixHeight: parseInt(tileMatrix.MatrixHeight._text, 10)
     })
   }
+
   wvMatrixSets[ident] = {
     id: ident,
     maxResolution,
