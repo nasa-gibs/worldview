@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import HoverTooltip from '../util/hover-tooltip';
 import { TEMPERATURE_UNITS } from '../../modules/settings/constants';
 
 const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }) => (
@@ -11,12 +10,13 @@ const TemperatureUnitButtons = ({ changeTemperatureUnit, globalTemperatureUnit }
       Temperature Unit
       {' '}
       <span><FontAwesomeIcon id="temperature-unit-buttons-info-icon" icon="info-circle" /></span>
-      <HoverTooltip
-        isMobile={false}
-        labelText="Applied to relevant temperature layers"
+      <UncontrolledTooltip
+        id="temperature-setting-tooltip"
         target="temperature-unit-buttons-info-icon"
         placement="right"
-      />
+      >
+        Applied to relevant temperature layers
+      </UncontrolledTooltip>
     </h3>
     <ButtonGroup>
       {TEMPERATURE_UNITS.map((unit) => (
