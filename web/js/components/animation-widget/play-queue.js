@@ -232,7 +232,6 @@ class PlayQueue extends React.Component {
     const {
       isLoopActive, startDate, togglePlaying, speed,
     } = this.props;
-    // Could base this off animation speed?
     const loopDelay = speed === 0.5 ? 2000 : 1000 / speed;
 
     if (isLoopActive) {
