@@ -25,6 +25,7 @@ const LoopButton = ({ looping, onLoop, isMobile }) => {
       {isMobile ? null
         : (
           <UncontrolledTooltip
+            id="center-align-tooltip"
             placement="top"
             target={buttonId}
           >

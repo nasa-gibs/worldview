@@ -108,6 +108,7 @@ class CoordinatesDialog extends Component {
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
+              id="center-align-tooltip"
               trigger="hover"
               target={closeButtonId}
               boundariesElement="window"
@@ -126,6 +127,7 @@ class CoordinatesDialog extends Component {
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
+              id="center-align-tooltip"
               trigger="hover"
               target={minimizeButtonId}
               boundariesElement="window"
@@ -158,6 +160,7 @@ class CoordinatesDialog extends Component {
       >
         {tooltipVisibilityCondition && (
           <UncontrolledTooltip
+            id="center-align-tooltip"
             placement="bottom"
             trigger="hover"
             target={buttonId}

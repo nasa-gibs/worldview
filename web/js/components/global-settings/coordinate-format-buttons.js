@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import HoverTooltip from '../util/hover-tooltip';
 import { COORDINATE_FORMATS } from '../../modules/settings/constants';
 
 function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) {
   const coordinateMenuOptions = ['DD', 'DDM', 'DMS'];
+  const labelText = 'Applied to all on screen coordinates';
 
   return (
     <div className="settings-component">
@@ -14,12 +14,13 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
         Coordinate Format (latitude, longitude)
         {' '}
         <span><FontAwesomeIcon id="coordinate-format-buttons-info-icon" icon="info-circle" /></span>
-        <HoverTooltip
-          isMobile={false}
-          labelText="Applied to all on screen coordinates"
+        <UncontrolledTooltip
+          id="coordinate-setting-tooltip"
           target="coordinate-format-buttons-info-icon"
           placement="right"
-        />
+        >
+          {labelText}
+        </UncontrolledTooltip>
       </h3>
       <ButtonGroup>
         {COORDINATE_FORMATS.map((format, i) => (

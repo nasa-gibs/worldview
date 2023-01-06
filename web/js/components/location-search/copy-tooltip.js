@@ -44,6 +44,7 @@ class CopyClipboardTooltip extends PureComponent {
     const { placement } = this.props;
     return (
       <Tooltip
+        id="center-align-tooltip"
         placement={placement}
         isOpen={showCopiedToolTip}
         hideArrow
