@@ -333,6 +333,8 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
  * @param {Object} state
  */
 export function loadPalettes(permlinkState, state) {
+  console.log('permlinkState');
+  console.log(permlinkState);
   let stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (permlinkState.l1) {
     stateArray = [
