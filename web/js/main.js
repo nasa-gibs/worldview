@@ -29,7 +29,6 @@ import combineModels from './combine-models';
 import parse from './parse';
 import CombineUI from './mapUI/combineUI';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
-
 import {
   layersParse12,
   adjustEndDates,
@@ -175,7 +174,6 @@ window.onload = () => {
           return layer.id + str;
         });
       }
-
       const legacyState = parse(parameters, config, errors);
       adjustStartDates(config.layers);
 
@@ -199,7 +197,6 @@ window.onload = () => {
           }
         });
       }
-
       preloadPalettes(layers, {}, false).then((obj) => {
         config.palettes = {
           custom: obj.custom,
@@ -215,4 +212,3 @@ window.onload = () => {
 };
 
 export default history;
-

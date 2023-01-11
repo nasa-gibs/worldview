@@ -12,6 +12,7 @@ import { getMinValue, getMaxValue } from './util';
 /**
  * Gets a single colormap (entries / legend combo)
  *
+ *
  * @method get
  * @static
  * @param str {string} The ID of the layer
@@ -37,8 +38,7 @@ export function getPalette(layerId, index, groupStr, state) {
   if (renderedPalette) {
     return renderedPalette;
   }
-  const temp = getRenderedPalette(layerId, index, state);
-  return temp;
+  return getRenderedPalette(layerId, index, state);
 }
 
 export function getRenderedPalette(layerId, index, state) {

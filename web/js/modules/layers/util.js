@@ -10,7 +10,6 @@ import {
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
-import { layer } from '@fortawesome/fontawesome-svg-core';
 import {
   addLayer,
   getStartingLayers,
