@@ -50,6 +50,7 @@ export default class VectorMetaTooltip extends React.Component {
           <FontAwesomeIcon icon="info" className="vector-info-icon cursor-pointer" />
         </div>
         <Tooltip
+          id="center-align-tooltip"
           dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"
           placement="right"

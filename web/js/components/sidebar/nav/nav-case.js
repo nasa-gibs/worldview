@@ -110,7 +110,7 @@ function NavCase (props) {
           aria-label="Hide sidebar"
           style={collapseIconMobile}
         />
-        <UncontrolledTooltip placement="right" target="toggleIconHolder">
+        <UncontrolledTooltip id="center-align-tooltip" placement="right" target="toggleIconHolder">
           Hide sidebar
         </UncontrolledTooltip>
       </div>

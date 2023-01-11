@@ -384,6 +384,7 @@ class PaletteLegend extends React.Component {
 
                   {isVisible && (
                     <Tooltip
+                      id="center-align-tooltip"
                       placement={singleKey ? 'right' : 'bottom'}
                       isOpen={isActiveKey}
                       className="wv-palette-tooltip"
