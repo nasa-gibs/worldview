@@ -28,7 +28,8 @@ import Brand from './brand';
 import combineModels from './combine-models';
 import parse from './parse';
 import CombineUI from './mapUI/combineUI';
-import { preloadPalettes, loadPalettes, hasCustomTypePalette } from './modules/palettes/util';
+import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
+
 import {
   layersParse12,
   adjustEndDates,
@@ -153,9 +154,7 @@ window.onload = () => {
         custom: {},
       };
 
-
       // Determine which layers need to be preloaded
-      // It feels like this could be done more efficiently...?
       let layers = [];
       if (
         (parameters.l && hasCustomTypePalette(parameters.l))
@@ -176,18 +175,9 @@ window.onload = () => {
           return layer.id + str;
         });
       }
+
       const legacyState = parse(parameters, config, errors);
       adjustStartDates(config.layers);
-
-
-
-      // Check URL parameters to see which layer(s) are loaded. If layers have palettes, update the state accordingly.
-      // parameters.l === list of layers on the A side
-      // parameters.l1 === list of layers on the B side
-      console.log(parameters);
-      // loadPalettes(parameters, legacyState);
-
-
 
       // handle extending active layer date ranges
       adjustActiveDateRanges(config.layers, pageLoadTime);
@@ -209,6 +199,7 @@ window.onload = () => {
           }
         });
       }
+
       preloadPalettes(layers, {}, false).then((obj) => {
         config.palettes = {
           custom: obj.custom,
@@ -224,3 +215,4 @@ window.onload = () => {
 };
 
 export default history;
+

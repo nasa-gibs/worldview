@@ -25,6 +25,7 @@ import * as vectorStyleConstants from '../../../modules/vector-styles/constants'
 import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
+import { requestPalette } from '../../../modules/palettes/actions';
 
 const UpdateProjection = (props) => {
   const {
@@ -48,6 +49,7 @@ const UpdateProjection = (props) => {
     updateLayerVisibilities,
     updateMapUI,
     ui,
+    requestPalette,
   } = props;
 
   useEffect(() => {
@@ -155,6 +157,10 @@ const UpdateProjection = (props) => {
           date: getSelectedDate(dateCompareState, compareDateString),
           group: compareActiveString,
         };
+        // Check if the layer contains a palette & load if necessary
+        if (def.palette) {
+          requestPalette(def.id);
+        }
         return createLayer(def, options);
       });
     const compareLayerGroup = await Promise.all(layers);
@@ -365,6 +371,7 @@ const mapStateToProps = (state) => {
     layerState,
     proj,
     map,
+    requestPalette,
   };
 };
 
@@ -374,6 +381,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   updateMapUI: (ui, rotation) => {
     dispatch(updateMapUI(ui, rotation));
+  },
+  requestPalette: (id) => {
+    dispatch(requestPalette(id));
   },
 });
 
@@ -402,4 +412,5 @@ UpdateProjection.propTypes = {
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
   updateMapUi: PropTypes.func,
+  requestPalette: PropTypes.func,
 };
