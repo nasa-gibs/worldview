@@ -92,6 +92,7 @@ class MeasureButton extends React.Component {
           style={mobileMeasureButtonStyle}
         >
           <UncontrolledTooltip
+            id="center-align-tooltip"
             placement="top"
             target={buttonId}
           >

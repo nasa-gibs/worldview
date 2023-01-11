@@ -46,6 +46,7 @@ const AnimationButton = (props) => {
         {isMobile ? null
           : (
             <UncontrolledTooltip
+              id="center-align-tooltip"
               placement="top"
               target={buttonId}
             >

@@ -72,6 +72,7 @@ const Switch = (props) => {
             <>
               <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} tabIndex="-1" />
               <Tooltip
+                id="center-align-tooltip"
                 placement="right"
                 isOpen={tooltipOpen}
                 target={`${id}-switch-tooltip`}

@@ -1002,6 +1002,16 @@
   }
 }
 
+.collection-title {
+  margin-right: 4px;
+}
+
+.instrument-collection {
+  margin-top: 3px;
+  display: flex;
+  justify-content: space-between;
+}
+
 /** React-Swipe-To-Delete Overrides */
 .swipe-to-delete .js-content:first-child {
   position: relative !important;

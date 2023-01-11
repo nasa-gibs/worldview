@@ -20,6 +20,8 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
+  UPDATE_LAYER_COLLECTION,
+  UPDATE_LAYER_DATE_COLLECTION,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -51,6 +53,7 @@ const groupState = {
 export const initialState = {
   active: { ...groupState },
   activeB: { ...groupState },
+  collections: {},
   layerConfig: {},
   startingLayers: [],
   granuleFootprints: {},
@@ -337,6 +340,34 @@ export function layerReducer(state = initialState, action) {
             $set: action.geometry,
           },
         },
+      });
+
+    case UPDATE_LAYER_COLLECTION:
+      return update(state, {
+        collections: {
+          $merge: {
+            [action.id]: {
+              dates: [],
+            },
+          },
+        },
+
+      });
+
+    case UPDATE_LAYER_DATE_COLLECTION:
+      return update(state, {
+        collections: {
+          [action.id]: {
+            dates: {
+              $push: [{
+                version: action.collection.version,
+                type: action.collection.type,
+                date: action.date,
+              }],
+            },
+          },
+        },
+
       });
 
     default:

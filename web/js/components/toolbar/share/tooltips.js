@@ -64,6 +64,7 @@ class ShareToolTips extends PureComponent {
     return (
       <>
         <Tooltip
+          id="center-align-tooltip"
           placement="right"
           isOpen={showErrorTooltip}
           target=".share-body"
@@ -72,6 +73,7 @@ class ShareToolTips extends PureComponent {
           Link cannot be shortened at this time.
         </Tooltip>
         <Tooltip
+          id="center-align-tooltip"
           placement="right"
           isOpen={showCopiedToolTip}
           target=".share-body"
