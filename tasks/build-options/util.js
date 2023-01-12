@@ -1,5 +1,5 @@
-async function deepCopy (obj) {
-  if (typeof obj !== 'object') {
+function deepCopy (obj) {
+  if (!(obj instanceof Object)) {
     return obj
   }
   let copy
@@ -10,36 +10,31 @@ async function deepCopy (obj) {
   }
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      copy[key] = await deepCopy(obj[key])
+      copy[key] = deepCopy(obj[key])
     }
   }
   return copy
 }
 
-async function dictMerge (target, ...args) {
+function dictMerge (target, ...args) {
   // Merge multiple objects
   if (args.length > 1) {
     for (const obj of args) {
-      await dictMerge(target, obj)
+      dictMerge(target, obj)
     }
     return target
   }
 
   // Recursively merge objects and set non-object values
   const obj = args[0]
-  if (typeof obj !== 'object' || obj === null) {
+  if (!(obj instanceof Object)) {
     return obj
   }
   for (const [k, v] of Object.entries(obj)) {
-    if (k in target && typeof target[k] === 'object' && target[k] !== null) {
-      if ('type' in v && 'type' in target[k]) {
-        if (v.type !== target[k].type) {
-          return target
-        }
-      }
-      await dictMerge(target[k], v)
+    if (k in target && (target[k] instanceof Object)) {
+      target[k] = dictMerge(target[k], v)
     } else {
-      target[k] = await deepCopy(v)
+      target[k] = deepCopy(v)
     }
   }
   return target

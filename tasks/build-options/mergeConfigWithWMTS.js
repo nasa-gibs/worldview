@@ -29,6 +29,7 @@ const inputDir = argv.inputDir
 const outputFile = argv.outputFile
 
 let newConf = {}
+let layers = {}
 newConf.layers = {}
 newConf.sources = {}
 
@@ -36,8 +37,11 @@ const outputData = JSON.parse(fs.readFileSync(outputFile, 'utf-8'))
 let fileCount = 0
 
 async function main () {
+  layers = newConf.layers
+  delete layers.sources
+  delete newConf.layers
+  newConf = dictMerge(newConf, outputData)
   await processFiles()
-  newConf = await dictMerge(newConf, outputData)
 
   const jsonOptions = {}
   jsonOptions.indent = 2
@@ -57,8 +61,8 @@ async function processFiles () {
       try {
         const data = fs.readFileSync(path.join(inputDir, file), 'utf-8')
         const jsonData = JSON.parse(data)
-        newConf.layers = await wmtsDictMerge(newConf.layers, jsonData, outputData)
-        newConf.sources = await dictMerge(newConf.sources, jsonData.sources, outputData.sources)
+        newConf.layers = await wmtsDictMerge(layers, jsonData, outputData)
+        newConf.sources = dictMerge(newConf.sources, jsonData.sources, outputData.sources)
       } catch (error) {
         throw new Error(`ERROR: ${path.join(inputDir, file)}: ${error.message}`)
       }
@@ -68,30 +72,10 @@ async function processFiles () {
   }
 }
 
-// function wmtsDictMerge (target, obj, conf) {
-//   // console.warn(conf.layers)
-
-//   if (typeof obj !== 'object') {
-//     return obj
-//   }
-
-//   target = conf.map(item => ({
-//     ...obj.find(({ layers }) => item.layers === layers),
-//     ...item
-//   }))
-//   console.warn(target)
-//   return target
-// }
-
 async function wmtsDictMerge (target, obj, conf) {
-  obj = obj.layers
-
-  // conf = conf.layers
-
-  if (typeof obj !== 'object') {
+  if (!(obj instanceof Object)) {
     return obj
   }
-
   for (const [k, v] of Object.entries(obj)) {
     if (k in conf && typeof conf[k] === 'object') {
       let foundSourceMisMatch = false
@@ -113,13 +97,13 @@ async function wmtsDictMerge (target, obj, conf) {
         continue
       }
       if (k in target && typeof target[k] === 'object') {
-        target[k] = wmtsDictMerge(target[k], v, conf[k])
+        target[k] = dictMerge(target[k], v, conf[k])
       } else {
-        target[k] = wmtsDictMerge(v, conf[k])
+        target[k] = dictMerge(v, conf[k])
       }
     }
   }
-  return target
+  return target.layers
 }
 
 main().catch((err) => {
