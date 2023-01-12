@@ -47,9 +47,10 @@ fi
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 
+# TODO: dataCenter merging is not working properly, check the wv.json file
+
 # # If $FETCH_GC is set, make various API requests
 # if [ "$FETCH_GC" ] ; then
-#     # TODO: Fix axios fetch timeouts
 #     # Fetch GC files and create colormaps, vectordata and vectorstyle files
 #     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
 #     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
@@ -57,7 +58,6 @@ mkdir -p "$BUILD_DIR/colormaps"
 #       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
 #       --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc"`
 
-#     # TODO: Optimize performance of this script
 #     # Get metadata for files in layerOrder.json and combine this data into 1 file
 #     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
 #     mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
@@ -139,11 +139,6 @@ for config in $configs; do
              ;;
     esac
 done
-
-# TODO: Missing the following variables in wv.json layers
-# type, format, period, startDate, endDate, dateRanges, projections,
-# palette, dataCenter,
-# this means _wmts .json files are not getting merged into wv.json properly
 
 # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
 `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
