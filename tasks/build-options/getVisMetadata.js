@@ -105,11 +105,15 @@ async function getDAAC (metadata) {
   if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
     return metadata
   }
-  for (collection in metadata.conceptIds) {
-    origDataCenter = collection.dataCenter
-    dataCenter = daacMap.origDataCenter
-    if (!dataCenter && !metadata.dataCenter) {
-      metadata.dataCenter === [dataCenter]
+  for (collection of metadata.conceptIds) {
+    const origDataCenter = collection.dataCenter
+    const dataCenter = daacMap[origDataCenter]
+    if (!dataCenter) {
+      continue
+    }
+    await delete collection.dataCenter
+    if (!metadata.dataCenter) {
+      metadata.dataCenter = [dataCenter]
     } else if (!metadata.dataCenter.includes(dataCenter)) {
       metadata.dataCenter.push(dataCenter)
     }

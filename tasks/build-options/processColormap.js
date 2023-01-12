@@ -155,7 +155,7 @@ async function processEntries (colormap) {
       const rHex = parseInt(r).toString(16).padStart(2, '0')
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
-      const colorString = '#' + rHex + gHex + bHex + 'ff'
+      const colorString = rHex + gHex + bHex + 'ff'
 
       colors.push(colorString)
       if (mapType === 'continuous' || mapType === 'discrete') {
@@ -172,6 +172,7 @@ async function processEntries (colormap) {
             }
             newItems.push(v)
           }
+          values.push(newItems)
         } catch (error) {
           throw new Error(`Invalid value: ${entry._attributes.value}`)
         }
@@ -185,7 +186,7 @@ async function processEntries (colormap) {
   await Promise.all(
     legends.map(async (entry, index) => {
       if (refSkipList.includes(entry._attributes.id)) {
-        skipIndex += 1
+        skipIndex++
       }
       const [r, g, b] = entry._attributes.rgb.split(',')
 
@@ -195,7 +196,6 @@ async function processEntries (colormap) {
       const bHex = parseInt(b).toString(16).padStart(2, '0')
       const colorString = rHex + gHex + bHex + 'ff'
 
-      colors.push(colorString)
       legendColors.push(colorString)
       if (!entry._attributes.tooltip) {
         throw new Error('No tooltips in legend')
@@ -206,7 +206,7 @@ async function processEntries (colormap) {
       }
       idList.push(entry._attributes.id)
       if (entry._attributes.showTick) {
-        ticks.push(index - skipIndex)
+        ticks.push(skipIndex - 1)
       }
     })
   )
