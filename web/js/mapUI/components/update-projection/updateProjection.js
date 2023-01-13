@@ -26,7 +26,7 @@ import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 
-const UpdateProjection = (props) => {
+function UpdateProjection(props) {
   const {
     action,
     activeLayers,
@@ -345,7 +345,7 @@ const UpdateProjection = (props) => {
   };
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {

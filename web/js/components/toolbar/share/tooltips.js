@@ -38,14 +38,14 @@ class ShareToolTips extends PureComponent {
   clearPendingTimeouts = () => {
     clearTimeout(this.showCopiedToolTipTimeout);
     clearTimeout(this.showErrorTimeout);
-  }
+  };
 
   updateToolTipState = (toolTipChange, tooltipErrorChange) => {
     this.setState({
       showErrorTooltip: tooltipErrorChange,
       showCopiedToolTip: toolTipChange,
     });
-  }
+  };
 
   render() {
     const { showErrorTooltip, showCopiedToolTip } = this.state;

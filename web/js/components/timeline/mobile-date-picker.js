@@ -79,7 +79,7 @@ class MobileDatePicker extends Component {
     this.setState({
       isOpen: true,
     });
-  }
+  };
 
   handleCancel = () => {
     const {
@@ -89,13 +89,13 @@ class MobileDatePicker extends Component {
       isOpen: false,
       time: this.convertToUTCDateObject(date),
     });
-  }
+  };
 
   handleChange = (date) => {
     this.setState({
       time: date,
     });
-  }
+  };
 
   handleSelect = (time) => {
     const { onDateChange } = this.props;
@@ -106,7 +106,7 @@ class MobileDatePicker extends Component {
     // convert date back to local time
     const date = this.convertToLocalDateObject(time);
     onDateChange(getISODateFormatted(date));
-  }
+  };
 
   // used for init mount
   setInitDates = () => {
@@ -120,26 +120,26 @@ class MobileDatePicker extends Component {
       minDate: this.convertToUTCDateObject(startDateLimit),
       maxDate: this.convertToUTCDateObject(endDateLimit),
     });
-  }
+  };
 
   // change to UTC offset time for date picker controls
   convertToUTCDateObject = (dateString) => {
     const date = new Date(dateString);
     const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     return dateUTC;
-  }
+  };
 
   // change to offset time used in parent component date setting functions
   convertToLocalDateObject = (date) => {
     const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     return dateLocal;
-  }
+  };
 
   getHeaderTime = (time, isSubdaily) => (
     <div className="datepicker-header">
       {getDisplayDate(new Date(this.convertToLocalDateObject(time)), isSubdaily)}
     </div>
-  )
+  );
 
   render() {
     const {

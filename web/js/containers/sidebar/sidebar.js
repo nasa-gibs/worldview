@@ -306,67 +306,65 @@ class Sidebar extends React.Component {
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {this.renderSidebarLogo()}
-          <>
-            {!isDistractionFreeModeActive && isCollapsed && (
-              <CollapsedButton
+          {!isDistractionFreeModeActive && isCollapsed && (
+          <CollapsedButton
+            isMobile={isMobile}
+            isEmbed={isEmbedModeActive}
+            onclick={this.toggleSidebar}
+            numberOfLayers={numberOfLayers}
+          />
+          )}
+          <div
+            id="products-holder"
+            className="products-holder-case"
+            style={productsHolderStyle}
+          >
+            {!isCollapsed && (
+            <>
+              <NavCase
+                activeTab={activeTab}
+                onTabClick={onTabClick}
+                tabTypes={tabTypes}
                 isMobile={isMobile}
-                isEmbed={isEmbedModeActive}
-                onclick={this.toggleSidebar}
-                numberOfLayers={numberOfLayers}
+                toggleSidebar={this.toggleSidebar}
+                isCompareMode={isCompareMode}
+                isDataDisabled={isDataDisabled}
+                isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
               />
-            )}
-            <div
-              id="products-holder"
-              className="products-holder-case"
-              style={productsHolderStyle}
-            >
-              {!isCollapsed && (
-                <>
-                  <NavCase
-                    activeTab={activeTab}
-                    onTabClick={onTabClick}
-                    tabTypes={tabTypes}
-                    isMobile={isMobile}
-                    toggleSidebar={this.toggleSidebar}
-                    isCompareMode={isCompareMode}
-                    isDataDisabled={isDataDisabled}
-                    isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="layers">
+                  {this.getProductsToRender(activeTab, isCompareMode)}
+                </TabPane>
+                {naturalEvents && activeTab === 'events' && (
+                <TabPane tabId="events">
+                  <Events
+                    height={subComponentHeight}
+                    isLoading={isLoadingEvents}
+                    hasRequestError={hasEventRequestError}
+                    eventsData={eventsData}
+                    sources={eventsSources}
                   />
-                  <TabContent activeTab={activeTab}>
-                    <TabPane tabId="layers">
-                      {this.getProductsToRender(activeTab, isCompareMode)}
-                    </TabPane>
-                    {naturalEvents && activeTab === 'events' && (
-                      <TabPane tabId="events">
-                        <Events
-                          height={subComponentHeight}
-                          isLoading={isLoadingEvents}
-                          hasRequestError={hasEventRequestError}
-                          eventsData={eventsData}
-                          sources={eventsSources}
-                        />
-                      </TabPane>
-                    )}
-                    {smartHandoffs && activeTab === 'download' && (
-                      <TabPane tabId="download">
-                        <SmartHandoff
-                          isActive={activeTab === 'download'}
-                          tabTypes={tabTypes}
-                        />
-                      </TabPane>
-                    )}
+                </TabPane>
+                )}
+                {smartHandoffs && activeTab === 'download' && (
+                <TabPane tabId="download">
+                  <SmartHandoff
+                    isActive={activeTab === 'download'}
+                    tabTypes={tabTypes}
+                  />
+                </TabPane>
+                )}
 
-                    <FooterContent
-                      ref={(el) => { this.footerElement = el; }}
-                      tabTypes={tabTypes}
-                      activeTab={activeTab}
-                    />
+                <FooterContent
+                  ref={(el) => { this.footerElement = el; }}
+                  tabTypes={tabTypes}
+                  activeTab={activeTab}
+                />
 
-                  </TabContent>
-                </>
-              )}
-            </div>
-          </>
+              </TabContent>
+            </>
+            )}
+          </div>
         </section>
       </ErrorBoundary>
     );

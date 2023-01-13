@@ -258,7 +258,7 @@ class Timeline extends React.Component {
   // chain throttled timescale wheel change call after debounce for smoother UX
   throttleChangeTimeScaleWheel = (e) => {
     this.throttleChangeTimeScaleWheelFire(e);
-  }
+  };
 
   // HOVER TIME
   /**
@@ -275,7 +275,7 @@ class Timeline extends React.Component {
         leftOffset: leftOffset - parentOffset, // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
       });
     });
-  }
+  };
 
   /**
   * @desc show hover line
@@ -289,7 +289,7 @@ class Timeline extends React.Component {
         showHoverLine: true,
       });
     }
-  }
+  };
 
   /**
   * @desc hide hover line
@@ -302,7 +302,7 @@ class Timeline extends React.Component {
         showHoverLine: false,
       });
     }
-  }
+  };
 
   /**
   * @desc toggle dragger time on/off
@@ -315,7 +315,7 @@ class Timeline extends React.Component {
       showHoverLine: false,
       isDraggerDragging: toggleBoolean,
     });
-  }
+  };
 
   /**
   * @desc handle svg blue line axis hover
@@ -363,7 +363,7 @@ class Timeline extends React.Component {
         });
       }
     });
-  }
+  };
 
   /**
   * @desc handles dynamic position changes from axis that affect dragger and range select
@@ -411,7 +411,7 @@ class Timeline extends React.Component {
       animationEndLocation,
       hoverTime,
     });
-  }
+  };
 
   /**
   * @desc handles dynamic positioning update based on simple drag
@@ -439,7 +439,7 @@ class Timeline extends React.Component {
       animationStartLocation,
       animationEndLocation,
     });
-  }
+  };
 
   /**
   * @desc handles dynamic positioning update based on axis drag stop event
@@ -463,7 +463,7 @@ class Timeline extends React.Component {
       transformX,
       hoverTime,
     });
-  }
+  };
 
   /**
   * @desc update is timeline moved (drag timeline vs. click) and if timeline is dragging
@@ -474,7 +474,7 @@ class Timeline extends React.Component {
     this.setState({
       isTimelineDragging,
     });
-  }
+  };
 
   /**
   * @desc handle left/right arrow decrement/increment date
@@ -581,7 +581,7 @@ class Timeline extends React.Component {
     } else if (timeScaleNumber < maxTimeScaleNumber) {
       this.changeTimeScale(timeScaleNumber + 1);
     }
-  }
+  };
 
   /**
   * @desc open animation widget
@@ -642,7 +642,7 @@ class Timeline extends React.Component {
       isAnimationDraggerDragging: isDragging,
     });
     this.determineAnimationDraggerUpdate(startDate, endDate);
-  }
+  };
 
   /**
   * @desc handle animation date dragger updates of startDate, endDate, or both
@@ -666,7 +666,7 @@ class Timeline extends React.Component {
     } else if (endChanged) {
       this.debounceOnUpdateEndDate(endDate);
     }
-  }
+  };
 
   /**
   * @desc handle animation dragger location and date state update
@@ -695,7 +695,7 @@ class Timeline extends React.Component {
       animationStartLocationDate: startDate,
       animationEndLocationDate: endDate,
     });
-  }
+  };
 
   /**
   * @desc handle animation dragger location and date state update and global date update
@@ -717,7 +717,7 @@ class Timeline extends React.Component {
     if (didStartDateChange || didEndDateChange) {
       this.debounceOnUpdateStartAndEndDate(startDate, endDate);
     }
-  }
+  };
 
   // DRAGGER
   /**
@@ -759,7 +759,7 @@ class Timeline extends React.Component {
         this.onDateChange(newDate, 'selectedB');
       }
     }
-  }
+  };
 
   /**
   * @desc set dragger visibility
@@ -772,7 +772,7 @@ class Timeline extends React.Component {
       draggerVisible,
       draggerVisibleB,
     });
-  }
+  };
 
   /**
   * @desc set matching layer coverage range for selected layers timeline
@@ -784,7 +784,7 @@ class Timeline extends React.Component {
       matchingTimelineCoverage: dateRange,
       shouldIncludeHiddenLayers,
     });
-  }
+  };
 
   /**
   * @desc toggle layer coverage panel open/closed
@@ -800,7 +800,7 @@ class Timeline extends React.Component {
     this.setState({
       isTimelineLayerCoveragePanelOpen: isOpen,
     });
-  }
+  };
 
   /**
   * @desc update dragger time state
@@ -818,7 +818,7 @@ class Timeline extends React.Component {
         draggerTimeState: date,
       });
     }
-  }
+  };
 
   /**
    * Make sure user is not currently interacting with the timeline/dragger/scale/etc,
@@ -863,7 +863,7 @@ class Timeline extends React.Component {
       hoverTime: dateA,
       initialLoadComplete: true,
     });
-  }
+  };
 
   /**
   * @desc change store date
@@ -885,12 +885,12 @@ class Timeline extends React.Component {
       });
     }
     this.debounceDateUpdate(dateObj, draggerSelected);
-  }
+  };
 
   handleSelectNowButton = () => {
     const { triggerTodayButton } = this.props;
     triggerTodayButton();
-  }
+  };
 
   /**
   * @desc getMobileDateButtonStyle date change button style for smaller displays
@@ -933,7 +933,7 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
-  }
+  };
 
   renderDateChangeArrows = () => {
     const {
@@ -950,7 +950,7 @@ class Timeline extends React.Component {
         handleSelectNowButton={this.handleSelectNowButton}
       />
     );
-  }
+  };
 
   renderMobile() {
     const {
@@ -1098,12 +1098,11 @@ class Timeline extends React.Component {
     };
 
     return (
-      <>
-        <div
-          className="timeline-container"
-          style={containerDisplayStyle}
-        >
-          {initialLoadComplete && !isDistractionFreeModeActive
+      <div
+        className="timeline-container"
+        style={containerDisplayStyle}
+      >
+        {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
               {isMobile || isEmbedModeActive
@@ -1334,8 +1333,7 @@ class Timeline extends React.Component {
                 )}
             </ErrorBoundary>
             )}
-        </div>
-      </>
+      </div>
     );
   }
 }

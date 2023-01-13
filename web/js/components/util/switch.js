@@ -4,7 +4,7 @@ import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
-const Switch = (props) => {
+function Switch(props) {
   const {
     border,
     id,
@@ -86,7 +86,7 @@ const Switch = (props) => {
       </div>
     </div>
   );
-};
+}
 Switch.defaultProps = {
   containerClassAddition: '',
   border: false,

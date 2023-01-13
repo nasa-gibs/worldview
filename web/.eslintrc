@@ -156,7 +156,17 @@
           }
         ],
         "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off" // 965 errors
+        "react/require-default-props": "off", // 965 errors,
+        "class-methods-use-this": "warn",
+        "react/no-unused-class-component-methods": "warn",
+        "react/no-unknown-property": "warn",
+        "react/jsx-no-useless-fragment": "warn",
+        "react/no-unstable-nested-components": "warn",
+        "react/prop-types": "warn",
+        "react/no-unused-prop-types": "warn",
+        "default-param-last": "warn",
+        "prefer-regex-literals": "warn",
+        "no-promise-executor-return": "warn"
       }
     }
   ]

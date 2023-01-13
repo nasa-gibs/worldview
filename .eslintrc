@@ -16,7 +16,8 @@
       "rules": {
         "no-undef": "off",
         "n/no-unpublished-require": "off",
-        "no-unused-expressions": "off"
+        "no-unused-expressions": "off",
+        "prefer-regex-literals": "warn"
       }
     }
   ]

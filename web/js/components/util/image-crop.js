@@ -7,7 +7,7 @@ import { pick, some } from 'lodash';
 // https://stackoverflow.com/a/13139830
 const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-const RenderCoordinates = (props) => {
+function RenderCoordinates(props) {
   const { coordinates, topRightStyle, bottomLeftStyle } = props;
   if (bottomLeftStyle.width < 50) {
     return '';
@@ -30,9 +30,9 @@ const RenderCoordinates = (props) => {
       </div>
     </>
   );
-};
+}
 
-const Crop = (props) => {
+function Crop(props) {
   const {
     onClose,
     onChange,
@@ -74,8 +74,10 @@ const Crop = (props) => {
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
     const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
-        && some(pick(cropBoundaries, 'x', 'y', 'width', 'height'),
-          (value, key) => value !== prevCrop.current[key]);
+        && some(
+          pick(cropBoundaries, 'x', 'y', 'width', 'height'),
+          (value, key) => value !== prevCrop.current[key],
+        );
     if (changed) {
       onDragStop(cropBoundaries);
     } else {
@@ -119,7 +121,7 @@ const Crop = (props) => {
       />
     </Portal>
   );
-};
+}
 export default Crop;
 
 Crop.defaultProps = {

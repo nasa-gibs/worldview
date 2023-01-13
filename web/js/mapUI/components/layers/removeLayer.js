@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const RemoveLayer = (props) => {
+function RemoveLayer(props) {
   const {
     action,
     compare,
@@ -30,7 +30,7 @@ const RemoveLayer = (props) => {
   };
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const { compare } = state;
