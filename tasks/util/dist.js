@@ -21,7 +21,7 @@ if (!features.previewSnapshots) {
 
 console.log('Branding')
 // eslint-disable-next-line n/no-missing-require
-const brand = require('../build/worldview/brand/brand.json')
+const brand = require('../../build/worldview/brand/brand.json')
 
 const applyTo = [
   'build/worldview/index.html',
