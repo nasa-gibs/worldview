@@ -147,19 +147,22 @@ async function trackBadSnapshots (layerId, projection, request, imgFile, badSnap
 async function getBestDate (projection, period, dateRanges) {
   const lastRange = dateRanges[dateRanges.length - 1]
   const startDate = lastRange.startDate
-  const endDate = lastRange.endDate
-  const parsedStartDate = moment(startDate)
-  const parsedEndDate = moment(endDate)
-  const parsedEndYear = parsedEndDate.year() + 1
+  let endDate = lastRange.endDate
+  const parsedStartDate = moment(startDate).utc()
+  const parsedEndDate = moment(endDate).utc()
+  const parsedEndYear = parsedEndDate.year()
   const parsedEndMonth = parsedEndDate.month() + 1
   let interval = parseInt(lastRange.dateInterval, 10)
   let alteredDate = null
 
+  // Handle daily layers
   if (period === 'daily') {
     if (interval === 1) {
+      // Go back a few more days for single day layers since something
+      // too recent may not be processed yet
       interval = 3
     }
-    alteredDate = moment(startDate).subtract(interval, 'days').utc().format()
+    alteredDate = moment(endDate).subtract(interval, 'days').utc().format()
   } else {
     alteredDate = moment(endDate).subtract(interval, 'months').utc().format()
   }
@@ -169,20 +172,20 @@ async function getBestDate (projection, period, dateRanges) {
     const currentYear = moment().year()
     const currentMonth = moment().month() + 1
     if (parsedEndYear === currentYear && currentMonth < 6) {
-      alteredDate = moment({ year: parsedEndYear - 1, month: 5, day: 1 }).utc().format()
+      alteredDate = moment({ year: parsedEndYear - 1, month: 4, day: 1 }).utc().format().utcOffset(0)
     } else {
-      alteredDate = moment({ year: parsedEndYear, month: 5, day: 1 }).utc().format()
+      alteredDate = moment({ year: parsedEndYear, month: 4, day: 1 }).utc().format()
     }
   }
 
   // Choose a good daylight month for antarctic
   if (projection === 'antarctic' && ![10, 11, 12, 1, 2].includes(parsedEndMonth)) {
-    alteredDate = moment({ year: parsedEndYear, month: 11, day: 1 }).utc().format()
+    alteredDate = moment({ year: parsedEndYear, month: 10, day: 1 }).utc().format()
   }
 
   // Make sure modified date isn't out of layer date range
   if (alteredDate && moment(alteredDate).isSameOrAfter(parsedStartDate)) {
-    return alteredDate
+    endDate = alteredDate
   }
 
   return endDate
