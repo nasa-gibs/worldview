@@ -91,24 +91,6 @@ async function main () {
         continue
       }
     }
-    // if (!layer.projections || !layer.projections.length) {
-    //   error(`[${layerId}] No projections defined or not found in GC documents`)
-    //   removeLayer(wv, layerId)
-    //   continue
-    // }
-    // if (!layer.type) {
-    //   error(`[${layerId}] No type defined. Possible to be expecting configuration via GC document but was not found`)
-    //   removeLayer(wv, layerId)
-    //   continue
-    // }
-    // if (layer.palette && !layer.palette.id) {
-    //   error(`[${layerId}] No palette definition`)
-    // } else if (layer.palette) {
-    //   const paletteId = layer.palette.id
-    //   if (!fs.existsSync(path.join(configDir, `palettes/${paletteId}.json`))) {
-    //     error(`[${layerId}] palette ${paletteId} not found in palettes folder`)
-    //   }
-    // }
     if (layer.vectorStyle && !layer.vectorStyle.id) {
       error(`[${layerId}] No vectorStyle definition`)
     }
@@ -120,23 +102,6 @@ async function main () {
       removeLayer(wv, layerId)
       continue
     }
-    // for (const projId of Object.keys(layer.projections)) {
-    //   const projection = layer.projections[projId]
-    //   if (projection.matrixSet) {
-    //     const source = projection.source
-    //     const matrixSet = projection.matrixSet
-    //     if (!wv.sources[source]) {
-    //       error(`[${layerId}:${projId}] Invalid source: ${source}`)
-    //       delete layer.projections[projId]
-    //     } else if (!wv.sources[source].matrixSets) {
-    //       error(`[${layerId}:${projId}] No matrix sets for projection`)
-    //       delete layer.projections[projId]
-    //     } else if (!wv.sources[source].matrixSets[matrixSet]) {
-    //       error(`[${layerId}:${projId}] Invalid matrix set: ${matrixSet}`)
-    //       delete layer.projections[projId]
-    //     }
-    //   }
-    // }
     if ('temporal' in layer) {
       warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
       layer = await processTemporalLayer(layer, layer.temporal)
