@@ -128,7 +128,12 @@ async function trackBadSnapshots (layerId, projection, request, imgFile, badSnap
   const arcticBadSize = 9949
   const antarcticBadSize = 4060
   const geographicBadSize = 12088
-  const size = imgFile.tell()
+  let size = 0
+
+  fs.stat(imgFile, (err, stats) => {
+    if (err) throw err
+    size = stats.size
+  })
 
   if (size === geographicBadSize || size === arcticBadSize || size === antarcticBadSize) {
     badSnapshots.push({
@@ -143,10 +148,10 @@ async function getBestDate (projection, period, dateRanges) {
   const lastRange = dateRanges[dateRanges.length - 1]
   const startDate = lastRange.startDate
   const endDate = lastRange.endDate
-  const parsedStartDate = moment(startDate, timeFormat)
-  const parsedEndDate = moment(endDate, timeFormat)
-  const pYear = parsedEndDate.year()
-  const pMonth = parsedEndDate.month()
+  const parsedStartDate = moment(startDate)
+  const parsedEndDate = moment(endDate)
+  const parsedEndYear = parsedEndDate.year() + 1
+  const parsedEndMonth = parsedEndDate.month() + 1
   let interval = parseInt(lastRange.dateInterval, 10)
   let alteredDate = null
 
@@ -154,30 +159,30 @@ async function getBestDate (projection, period, dateRanges) {
     if (interval === 1) {
       interval = 3
     }
-    alteredDate = parsedEndDate.subtract(interval, 'days')
+    alteredDate = moment(startDate).subtract(interval, 'days').utc().format()
   } else {
-    alteredDate = parsedEndDate.subtract(interval, 'months')
+    alteredDate = moment(endDate).subtract(interval, 'months').utc().format()
   }
 
   // Choose a good daylight month for arctic
-  if (projection === 'arctic' && ![4, 5, 6, 7, 8, 9].includes(pMonth)) {
+  if (projection === 'arctic' && ![4, 5, 6, 7, 8, 9].includes(parsedEndMonth)) {
     const currentYear = moment().year()
     const currentMonth = moment().month() + 1
-    if (pYear === currentYear && currentMonth < 6) {
-      alteredDate = moment({ year: pYear - 1, month: 5, day: 1 })
+    if (parsedEndYear === currentYear && currentMonth < 6) {
+      alteredDate = moment({ year: parsedEndYear - 1, month: 5, day: 1 }).utc().format()
     } else {
-      alteredDate = moment({ year: pYear, month: 5, day: 1 })
+      alteredDate = moment({ year: parsedEndYear, month: 5, day: 1 }).utc().format()
     }
   }
 
   // Choose a good daylight month for antarctic
-  if (projection === 'antarctic' && ![10, 11, 12, 1, 2].includes(pMonth)) {
-    alteredDate = moment({ year: pYear, month: 11, day: 1 })
+  if (projection === 'antarctic' && ![10, 11, 12, 1, 2].includes(parsedEndMonth)) {
+    alteredDate = moment({ year: parsedEndYear, month: 11, day: 1 }).utc().format()
   }
 
   // Make sure modified date isn't out of layer date range
-  if (alteredDate && alteredDate.isSameOrAfter(parsedStartDate)) {
-    return alteredDate.format(timeFormat)
+  if (alteredDate && moment(alteredDate).isSameOrAfter(parsedStartDate)) {
+    return alteredDate
   }
 
   return endDate
@@ -205,6 +210,7 @@ async function getSnapshots (layer) {
   for (const projection of Object.keys(layer.projections)) {
     const projDict = layer.projections[projection]
     const referenceLayer = referenceLayers[projection]
+    const params = { ...paramDict.base, ...paramDict[projection] }
 
     // Sometimes a layer id is provided per projection (e.g. Land Mask layers)
     // We need to use this layer id to request the layer from WVS/GIBS
@@ -217,7 +223,14 @@ async function getSnapshots (layer) {
       gibsLayerId = wvLayerId = layer.id
     }
 
-    const params = { ...paramDict.base, ...paramDict[projection] }
+    const destFileName = path.join(destImgDir, projection, `${wvLayerId}.jpg`)
+
+    // Only get images that we don't have already
+    const fileExists = await fs.promises.stat(destFileName)
+      .then(() => true)
+      .catch(() => false)
+    if (fileExists) continue
+
     await getTimeParam(projection, wvLayerId, layer, params)
 
     if (gibsLayerId !== referenceLayer && !standaloneLayers.includes(gibsLayerId)) {
@@ -227,25 +240,28 @@ async function getSnapshots (layer) {
       params.LAYERS = gibsLayerId
     }
 
-    const destFileName = path.join(destImgDir, projection, `${wvLayerId}.jpg`)
-
-    // Only get images that we don't have already
-    const fileExists = await fs.promises.stat(destFileName)
-      .then(() => true)
-      .catch(() => false)
-    if (fileExists) continue
-
     try {
-      const imageReq = await axios.get(snapshotsUrl, { params })
-      let statusText = 'ERROR'
+      const imageReq = await axios({
+        method: 'get',
+        url: snapshotsUrl,
+        params,
+        responseType: 'stream'
+      })
       if (imageReq.status === 200) {
         statusText = 'SUCCESS'
         totalSuccessCount += 1
-        await fs.promises.writeFile(destFileName, imageReq.data, { flag: 'wx' })
-        if (gibsLayerId === referenceLayers[projection]) continue
-        await trackBadSnapshots(wvLayerId, projection, imageReq, imageReq.data)
+        const dest = await fs.createWriteStream(destFileName, { flags: 'wx' })
+        dest.on('finish', () => {
+          console.warn(`File ${destFileName} has been written`)
+          if (gibsLayerId === referenceLayers[projection]) {
+            return
+          }
+          trackBadSnapshots(wvLayerId, projection, imageReq, destFileName)
+        })
+        imageReq.data.pipe(dest)
       } else {
         totalFailureCount += 1
+        statusText = 'ERROR'
       }
       console.warn(`\n${prog}: Result: ${statusText} - ${imageReq.status}`)
       console.warn(`${prog}: Layer: ${wvLayerId}`)
