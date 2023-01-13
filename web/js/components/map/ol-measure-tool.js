@@ -199,17 +199,19 @@ function OlMeasureTool (props) {
       updateMeasurements(allMeasurements);
     };
 
-    ReactDOM.render((
-      <MeasureTooltip
-        active={!!tooltipElement}
-        geometry={feature.getGeometry()}
-        crs={crs}
-        unitOfMeasure={unitOfMeasure}
-        onRemove={removeFeature}
-        olMap={olMap}
-        proj={proj}
-      />
-    ), overlay.getElement());
+    ReactDOM.render(
+      (
+        <MeasureTooltip
+          active={!!tooltipElement}
+          geometry={feature.getGeometry()}
+          crs={crs}
+          unitOfMeasure={unitOfMeasure}
+          onRemove={removeFeature}
+          olMap={olMap}
+          proj={proj}
+        />
+      ), overlay.getElement(),
+    );
   };
 
   /**

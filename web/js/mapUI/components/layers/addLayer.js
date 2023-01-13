@@ -10,7 +10,7 @@ import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload } from '../../../modules/date/actions';
 
-const AddLayer = (props) => {
+function AddLayer(props) {
   const {
     action,
     activeLayersState,
@@ -73,7 +73,7 @@ const AddLayer = (props) => {
     preloadNextTiles();
   };
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const { compare, date } = state;

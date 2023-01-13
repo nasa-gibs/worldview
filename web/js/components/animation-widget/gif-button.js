@@ -34,7 +34,7 @@ import { hasCustomPaletteInActiveProjection } from '../../modules/palettes/util'
 const maxGifFrames = 40;
 let onCloseGif;
 
-const GifButton = (props) => {
+function GifButton(props) {
   const {
     toggleGif,
     onUpdateStartAndEndDate,
@@ -115,7 +115,7 @@ const GifButton = (props) => {
       {isGifActive && <GifContainer onClose={onCloseGif} />}
     </>
   );
-};
+}
 
 const mapStateToProps = (state) => {
   const {

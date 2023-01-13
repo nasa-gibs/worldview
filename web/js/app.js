@@ -74,7 +74,7 @@ class App extends React.Component {
   setVhCSSProperty = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
+  };
 
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
@@ -86,7 +86,7 @@ class App extends React.Component {
   getScreenInfo = () => {
     const { setScreenInfoAction } = this.props;
     setScreenInfoAction();
-  }
+  };
 
   onload() {
     const self = this;

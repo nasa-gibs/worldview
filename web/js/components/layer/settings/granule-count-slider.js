@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 import { DEFAULT_NUM_GRANULES, MIN_GRANULES, MAX_GRANULES } from '../../../modules/layers/constants';
 
-const GranuleCountSlider = (props) => {
+function GranuleCountSlider(props) {
   const {
     count,
     def,
@@ -53,7 +53,7 @@ const GranuleCountSlider = (props) => {
       </div>
     </div>
   );
-};
+}
 
 GranuleCountSlider.defaultProps = {
   count: DEFAULT_NUM_GRANULES,

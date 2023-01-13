@@ -134,8 +134,6 @@ async function processEntries (colormap) {
   await Promise.all(
     entries.map(async (entry) => {
       const legend = await matchLegend(entry, legends)
-      if (colormap._attributes.title === 'Columnar Water Vapor') {
-      }
       if (legend === 'false') {
         refSkipList.push(entry._attributes.ref)
       }

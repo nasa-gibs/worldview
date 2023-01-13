@@ -83,7 +83,7 @@ class LocationSearchModal extends Component {
   getSuggestions = (val) => {
     const { getSuggestions } = this.props;
     getSuggestions(val);
-  }
+  };
 
   // dismiss message instruction alert
   dismissReverseGeocodeAlert = () => this.setState({ showReverseGeocodeAlert: false });
@@ -105,7 +105,7 @@ class LocationSearchModal extends Component {
       showNoSuggestionsAlert: false,
       showReverseGeocodeAlert: false,
     });
-  }
+  };
 
   // handle submitting search after inputting coordinates
   onCoordinateInputSelect = () => {
@@ -133,7 +133,7 @@ class LocationSearchModal extends Component {
       clearSuggestions();
       updatePendingCoordinates([]);
     }
-  }
+  };
 
   // handle selecting menu item in search results
   onSelect = (value, item) => {
@@ -169,7 +169,7 @@ class LocationSearchModal extends Component {
         }
       }
     }).catch((error) => console.error(error));
-  }
+  };
 
   // handle input value change including text/coordinates typing, pasting, cutting
   onChange = (e, value) => {
@@ -197,7 +197,7 @@ class LocationSearchModal extends Component {
       // provide suggestions to populate search result menu item(s)
       this.debounceGetSuggestions(value);
     }
-  }
+  };
 
   // clear text input and search results
   clearInput = () => {
@@ -208,7 +208,7 @@ class LocationSearchModal extends Component {
     updateValue('');
     clearSuggestions();
     this.clearAlerts();
-  }
+  };
 
   // initiate instruction alert and activate store level toggleReverseGeocodeActive
   initReverseGeocode = (e) => {
@@ -227,7 +227,7 @@ class LocationSearchModal extends Component {
     googleTagManager.pushEvent({
       event: 'location_search_reverse_geocode',
     });
-  }
+  };
 
   renderTooltip = (buttonId, labelText) => {
     const { isMobile } = this.props;
@@ -238,7 +238,7 @@ class LocationSearchModal extends Component {
         target={buttonId}
       />
     );
-  }
+  };
 
   // render alert message to instruct user map interaction
   renderReverseGeocodeAlert = () => {
@@ -259,7 +259,7 @@ class LocationSearchModal extends Component {
         onDismiss={this.dismissReverseGeocodeAlert}
       />
     );
-  }
+  };
 
   // render alert message to indicate entered location is outside of map extent
   renderExtentAlert = () => {
@@ -278,7 +278,7 @@ class LocationSearchModal extends Component {
         onDismiss={() => this.setExtentAlert(false)}
       />
     );
-  }
+  };
 
   // render alert message to indicate no suggestions for input value
   renderNoSuggestionsAlert = () => {
@@ -297,7 +297,7 @@ class LocationSearchModal extends Component {
         onDismiss={() => this.setNoSuggestionsAlert(false)}
       />
     );
-  }
+  };
 
   // render Location Search component minimize button (not visible in mobile)
   renderMinimizeButton = () => {
@@ -316,7 +316,7 @@ class LocationSearchModal extends Component {
         </Button>
       </InputGroupAddon>
     );
-  }
+  };
 
   // render add coordinate marker button for reverse geocode
   renderAddCoordinateButton = () => {
@@ -336,7 +336,7 @@ class LocationSearchModal extends Component {
         </Button>
       </InputGroupAddon>
     );
-  }
+  };
 
   render() {
     const {
