@@ -60,7 +60,7 @@
     "lint:scss": "npx stylelint ./web/scss/**/*.scss",
     "lint:js": "npx eslint . --quiet",
     "preinstall": "node tasks/util/checkNodeVersion.js",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package && husky install",
     "start": "node ./tasks/util/start.js",
     "test": "run-script-os",
     "test:coverage": "run-script-os",
