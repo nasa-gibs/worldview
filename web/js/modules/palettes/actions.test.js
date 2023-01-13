@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import { assign, cloneDeep } from 'lodash';
 import update from 'immutability-helper';
+import { TextEncoder, TextDecoder } from 'util';
 import {
   requestPalette,
   setThresholdRangeAndSquash,
@@ -19,6 +20,10 @@ import {
   CLEAR_CUSTOM,
 } from './constants';
 import fixtures from '../../fixtures';
+
+// jsdom polyfills
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 const middlewares = [thunk];
 
