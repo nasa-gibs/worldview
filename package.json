@@ -25,11 +25,6 @@
   "engines": {
     "node": ">= 16"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
-  },
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "build": "run-s clean getcapabilities build:config build:dev",
