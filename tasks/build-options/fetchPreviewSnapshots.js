@@ -41,7 +41,6 @@ let overrideDatesDict = {}
 const badSnapshots = []
 let totalSuccessCount = 0
 let totalFailureCount = 0
-const timeFormat = 'YYYY-MM-DDTHH:mm:ssZ'
 let snapshotsUrl = ''
 const paramDict = {
   base: {
