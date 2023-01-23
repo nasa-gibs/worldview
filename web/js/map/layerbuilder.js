@@ -629,12 +629,20 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
 
-    const layerName = def.layer || def.id;
+    let layerName = def.layer || def.id;
+    console.log(`layerName: ${layerName}`);
+    if (layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+      layerName = 'OSCAR_Sea_Surface_Currents';
+    }
     const tileMatrixSet = def.matrixSet;
     date = layeroptions.date || getSelectedDate(state);
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
-    const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
+    let urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
+    console.log(`url: ${urlParameters}`);
+    if (layerName === 'OSCAR_Sea_Surface_Currents') {
+      urlParameters = urlParameters.replace('OSCAR_Sea_Surface_Currents', 'OSCAR_Sea_Surface_Currents_Final');
+    }
     const wrapX = !!(day === 1 || day === -1);
     const breakPointLayerDef = def.breakPointLayer;
     const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
@@ -700,6 +708,7 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       style (feature, resolution) {
+        // console.log(feature);
         counter += 1;
         // Due to processing issues, I am only rendering every 15th feature
         if (counter % 15 !== 0) return [];
@@ -707,14 +716,8 @@ export default function mapLayerBuilder(config, cache, store) {
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         let arrowColor;
-        let radianDirection = feature.get('direction');
+        const radianDirection = feature.get('direction');
         const magnitude = feature.get('magnitude');
-
-        // If OSCAR/ASCAT we need to adjust the radian angle
-        // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
-        if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
-          radianDirection -= 180;
-        }
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
@@ -757,36 +760,19 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     // This is the style associated with misr_cloud from getCapabilities.
-    const misrStyle =
-    // 'circle-radius': {
-    //   base: 2,
-    //   stops: [[12, 1], [22, 7]],
-    // },
-    // 'circle-color': [
-    //   'case',
-    //   ['<', ['get', 'magnitude'], 4.0], 'rgb(0, 7, 255)',
-    //   ['all', ['>=', ['get', 'magnitude'], 4.0], ['<', ['get', 'magnitude'], 8.0]], 'rgb(0,143,255)',
-    //   ['all', ['>=', ['get', 'magnitude'], 8.0], ['<', ['get', 'magnitude'], 12.0]], 'rgb(15,255,239)',
-    //   ['all', ['>=', ['get', 'magnitude'], 12.0], ['<', ['get', 'magnitude'], 16.0]], 'rgb(151,255,103)',
-    //   ['all', ['>=', ['get', 'magnitude'], 16.0], ['<', ['get', 'magnitude'], 20.0]], 'rgb(255,223,0)',
-    //   ['all', ['>=', ['get', 'magnitude'], 20.0], ['<', ['get', 'magnitude'], 24.0]], 'rgb(255,91,0)',
-    //   ['all', ['>=', ['get', 'magnitude'], 24.0], ['<', ['get', 'magnitude'], 28.0]], 'rgb(206,0,0)',
-    //   'rgb(131,0,0)',
-    // ],
-
-     [
-       new Style({
-         image: new RegularShape({
-           points: 2,
-           radius: 10,
-           stroke: new Stroke({
-             width: 2,
-             color: 'red',
-           }),
-           angle: 45,
-         }),
-       }),
-     ];
+    const misrStyle = [
+      new Style({
+        image: new RegularShape({
+          points: 2,
+          radius: 10,
+          stroke: new Stroke({
+            width: 2,
+            color: 'red',
+          }),
+          angle: 45,
+        }),
+      }),
+    ];
 
     // Creating a layer with cones, modifying color, scale & direction
     const vectorlayerCones = new LayerVectorTile({
@@ -805,14 +791,14 @@ export default function mapLayerBuilder(config, cache, store) {
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         let arrowColor;
-        let radianDirection = feature.get('direction');
+        const radianDirection = feature.get('direction');
         const magnitude = feature.get('magnitude');
 
         // If OSCAR/ASCAT we need to adjust the radian angle
         // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
-        if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
-          radianDirection -= 180;
-        }
+        // if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+        //   radianDirection -= 180;
+        // }
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
@@ -845,9 +831,10 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // Select the layer to load (vectorlayer, webGLLayer, vectorlayerCones)
     const layer = vectorlayer;
+    console.log(layer);
 
-    console.log('Applying style');
     applyStyle(def, layer, state, layeroptions);
+    console.log(layer);
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;

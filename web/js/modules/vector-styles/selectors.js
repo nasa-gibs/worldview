@@ -16,9 +16,8 @@ import {
 } from '../layers/selectors';
 
 /**
- * Get OpenLayers layers from state that were created from WV vector
- * layer definiteions. NOTE: This currently also will include the associate WMS
- * breakpoint layers as well.
+ * Get OpenLayers layers from state that were created from WV vector layer
+ * definitions. NOTE: This includes the associated WMS breakpoint layers as well.
  *
  * @param {*} state
  * @returns
@@ -67,6 +66,7 @@ export function getAllVectorStyles(layerId, index, state) {
       vectorStyle = vectorStyle.layers[index];
     }
   }
+
   return vectorStyle;
 }
 
@@ -107,19 +107,17 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
-  // OSCAR_Cloud & ASCAT_Ocean_Surface_Wind_Speed do not include a glStyle from /getCapabilities yet,
-  // so we early return here so we can apply our own styling. Ultimately these styles will be served from
-  // the provider(s) and this check will go away.
   if (glStyle === undefined) {
+    console.log('glStyle not found!!');
     return;
   }
 
-  // This is temporary until the ASCAT JSON files from /getCapabilities are updated with
-  // the appropriate vector style name.
-  if (glStyle.name === 'OSCAR_Sea_Surface_Currents') {
-    return;
+  // Custom dealing with OSCAR
+  if (styleId === 'OSCAR_Sea_Surface_Currents') {
+    // return here if we want to apply our custom arrow styling (NOT the glStyle)
+    // return;
   }
-
+  console.log('glStyle');
   console.log(glStyle);
 
   if (!layer || layer.isWMS) {
@@ -133,8 +131,24 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
+  // Explore layer data!
+  // const maxNumberToPrint = 500;
+  // if (glStyle.name === 'OSCAR_Sea_Surface_Currents' || glStyle.name === 'MISR_Cloud_Motion_Vector') {
+  //   let count = 0;
+  //   console.log('listing features');
+  //   layer.setStyle((feature, resolution) => {
+  //     count += 1;
+  //     if (count < maxNumberToPrint) {
+  //       console.log(feature.flatCoordinates_);
+  //     }
+  //     return styleFunction(feature, resolution);
+  //   });
+  // }
+
+
   // Handle selected feature style
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
+    console.log('handle features');
     const extentStartX = layer.getExtent()[0];
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
@@ -190,12 +204,16 @@ export function getKey(layerId, groupStr, state) {
 
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
+  if (layerId === 'OSCAR_Sea_Surface_Currents_Final') {
+    layerId = 'OSCAR_Sea_Surface_Currents';
+  }
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('clearStyleFunction');
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');

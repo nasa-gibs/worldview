@@ -336,6 +336,7 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    console.log('calling stylefunction...');
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
   }
 }
