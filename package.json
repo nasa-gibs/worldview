@@ -134,7 +134,7 @@
     "run-script-os": "^1.1.5",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
-    "selenium-server-standalone-jar": "^3.141.59",
+    "selenium-server-standalone-jar": "^4.7.1",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
     "stylelint": "^14.16.1",

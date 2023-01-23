@@ -20,13 +20,13 @@ module.exports = {
         localSelectors.animationWidget,
         TIME_LIMIT,
         () => {
-          client.click(localSelectors.createGifIcon).pause(1000)
+          client.click(localSelectors.createGifIcon).pause(2000)
           client.expect.element(askDialog).to.be.present
           client
             .useCss()
             .click(paletteDialogOkButton)
-            .pause(1000)
-          client.click(localSelectors.createGifButton).pause(1000)
+            .pause(2000)
+          client.click(localSelectors.createGifButton).pause(2000)
           client.waitForElementVisible(
             localSelectors.gifResults,
             TIME_LIMIT,
@@ -52,12 +52,12 @@ module.exports = {
       localSelectors.animationWidget,
       TIME_LIMIT,
       () => {
-        client.click(localSelectors.createGifIcon).pause(1000)
+        client.click(localSelectors.createGifIcon).pause(2000)
         client.useCss().assert.containsText(articeRotationResetButton, '-18')
         client
           .useCss()
           .click(rotationDialogOkButton)
-          .pause(1000)
+          .pause(2000)
         client.useCss().assert.containsText(articeRotationResetButton, '0')
       }
     )
@@ -70,7 +70,7 @@ module.exports = {
       localSelectors.animationWidget,
       TIME_LIMIT,
       () => {
-        client.click(localSelectors.createGifIcon).pause(1000)
+        client.click(localSelectors.createGifIcon).pause(2000)
         client.waitForElementVisible(
           localSelectors.createGifButton,
           TIME_LIMIT,
@@ -97,7 +97,7 @@ module.exports = {
             client.assert.ok('#wv-checkbox-gif') // checkbox is checked
             client
               .click(localSelectors.gifPreviewEndResolutionOption500)
-              .pause(1000)
+              .pause(2000)
             client.assert.value(
               localSelectors.gifPreviewEndResolutionSelector,
               '2'

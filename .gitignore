@@ -26,6 +26,7 @@ options
 *.log
 # Nightwatch stuff
 e2e/reports
+e2e/screens
 *.jar
 # Config
 /config/*
