@@ -1,5 +1,5 @@
 const seleniumServer = require('selenium-server-standalone-jar')
-const chromedriver = require('chromedriver')
+const chromedriver = require('./node_modules/chromedriver')
 const geckodriver = require('geckodriver')
 
 const files = './e2e/features'
