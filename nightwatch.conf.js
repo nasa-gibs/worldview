@@ -1,12 +1,8 @@
 const seleniumServer = require('selenium-server-standalone-jar')
-const chromedriver = require('./node_modules/chromedriver')
+const chromedriver = require('chromedriver')
 const geckodriver = require('geckodriver')
 
 const files = './e2e/features'
-const chromePath = chromedriver.path
-console.log(chromedriver.version)
-console.log('testing')
-console.log(chromePath)
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
