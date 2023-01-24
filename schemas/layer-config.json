@@ -350,7 +350,8 @@
         "wms",
         "wmts",
         "vector",
-        "granule"
+        "granule",
+        "ttiler"
       ]
     },
     "format": {

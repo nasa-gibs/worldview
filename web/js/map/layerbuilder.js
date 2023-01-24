@@ -3,18 +3,21 @@
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
+import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import TileState from 'ol/TileState';
+import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
+import axios from 'axios';
+import qs from 'qs';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -37,7 +40,6 @@ import {
 import {
   nearestInterval,
 } from '../modules/layers/util';
-
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -186,7 +188,6 @@ export default function mapLayerBuilder(config, cache, store) {
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
-
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
@@ -200,6 +201,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            break;
+          case 'ttiler':
+            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
@@ -690,6 +694,98 @@ export default function mapLayerBuilder(config, cache, store) {
       source: tileSource,
     });
     layer.isWMS = true;
+    return layer;
+  };
+
+  const registerSearch = async (def, options, day, state) => {
+    const { date } = state;
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    const layerID = def.id;
+    const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
+    const bandCombo = ['B07', 'B05', 'B04'];
+    const collectionID = layerID === 'HLSS30_FIRMS' ? 'HLSS30' : 'HLSL30';
+
+    const temporalRange = [`${requestDate}T00:00:00Z`, `${requestDate}T23:59:59Z`];
+
+    const collectionsFilter = {
+      op: '=',
+      args: [{ property: 'collection' }, collectionID],
+    };
+
+    const temporalFilter = {
+      op: 't_intersects',
+      args: [{ property: 'datetime' }, { interval: temporalRange }],
+    };
+
+    const searchBody = {
+      'filter-lang': 'cql2-json',
+      context: 'on',
+      filter: {
+        op: 'and',
+        args: [
+          collectionsFilter,
+          temporalFilter,
+        ],
+      },
+    };
+
+    const mosaicResponse = await axios
+      .post(`${BASE_URL}/mosaic/register`, searchBody)
+      .then((res) => res.data);
+
+    const tilesHref = mosaicResponse.links.find(
+      (link) => link.rel === 'tilejson',
+    ).href;
+
+    const params = {
+      post_process: 'swir',
+      assets: bandCombo,
+    };
+
+    const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
+
+    const tilejsonResponse = await axios
+      .get(tilesHref, {
+        params: new URLSearchParams(queryString),
+      })
+      .then((res) => res.data);
+
+    const { name } = tilejsonResponse;
+
+    return name;
+  };
+
+  const createTtilerLayer = async (def, options, day, state) => {
+    const { proj: { selected } } = state;
+    const { maxExtent, crs } = selected;
+
+    const source = config.sources[def.source];
+
+    const searchID = await registerSearch(def, options, day, state);
+
+    const tileUrlFunction = (tileCoord) => {
+      const z = tileCoord[0] - 1;
+      const x = tileCoord[1];
+      const y = tileCoord[2];
+      // TODO: update projection and asset parameters for different values
+      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&assets=B07&assets=B05&assets=B04`;
+      return source.url + urlParams;
+    };
+
+    const xyzSourceOptions = {
+      crossOrigin: 'anonymous',
+      projection: get(crs),
+      tileUrlFunction,
+    };
+
+    const xyzSource = new OlSourceXYZ(xyzSourceOptions);
+
+    const layer = new OlLayerTile({
+      source: xyzSource,
+      className: def.id,
+      minZoom: 7,
+      extent: maxExtent,
+    });
     return layer;
   };
 

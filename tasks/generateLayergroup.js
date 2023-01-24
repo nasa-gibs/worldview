@@ -10,6 +10,7 @@ const measurementsArray = [];
 
 // This is a set of layer IDs which we do not wish to generate (or re-generate)
 const EXCEPTIONS = [
+  'HLSS30_FIRMS',
   'World_Database_on_Protected_Areas',
   'Reference_Labels',
   'Reference_Features',
