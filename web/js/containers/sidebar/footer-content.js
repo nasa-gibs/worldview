@@ -35,6 +35,12 @@ const FooterContent = React.forwardRef((props, ref) => {
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
     : `Exit Comparison${isMobile ? ' Mode' : ''}`;
 
+  const isChartActive = false;
+  const chartBtnText = !isChartActive
+    ? `Start Chart${isMobile ? ' Mode' : ''}`
+    : `Exit Chart${isMobile ? ' Mode' : ''}`;
+
+
   const onClickAddLayers = (e) => {
     e.stopPropagation();
     addLayers(isPlaying, isMobile, breakpoints, screenWidth);
@@ -70,6 +76,14 @@ const FooterContent = React.forwardRef((props, ref) => {
           style={!compareFeature ? { display: 'none' } : null}
           onClick={onClickToggleCompare}
           text={compareBtnText}
+        />
+        <Button
+          id="chart-toggle-button"
+          aria-label={chartBtnText}
+          className="chart-toggle-button"
+          style={!compareFeature ? { display: 'none' } : null}
+          onClick={onClickToggleCompare}
+          text={chartBtnText}
         />
       </div>
     </>

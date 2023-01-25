@@ -187,16 +187,17 @@ footer .product-buttons {
   padding: 10px;
   height: 47px;
   width: initial;
+  display: flex;
 }
 
 footer .layers-add {
-  position: absolute;
+  // position: absolute;
   left: 10px;
 }
 
-footer .compare-toggle-button {
-  position: absolute;
-  right: 10px;
+footer .compare-toggle-button, footer .chart-toggle-button {
+  // position: absolute;
+  // right: 10px;
   border-bottom: none;
 }
 
