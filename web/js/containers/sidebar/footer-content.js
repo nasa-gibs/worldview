@@ -37,8 +37,8 @@ const FooterContent = React.forwardRef((props, ref) => {
 
   const isChartActive = false;
   const chartBtnText = !isChartActive
-    ? `Start Chart${isMobile ? ' Mode' : ''}`
-    : `Exit Chart${isMobile ? ' Mode' : ''}`;
+    ? `Start Charting${isMobile ? ' Mode' : ''}`
+    : `Exit Charting${isMobile ? ' Mode' : ''}`;
 
 
   const onClickAddLayers = (e) => {
@@ -55,12 +55,6 @@ const FooterContent = React.forwardRef((props, ref) => {
 
   const renderLayersFooter = () => (
     <>
-      <ModeSelection
-        isActive={isCompareActive}
-        isMobile={isMobile}
-        selected={compareMode}
-        onclick={changeCompareMode}
-      />
       <div className="product-buttons">
         <Button
           id="layers-add"
@@ -86,6 +80,12 @@ const FooterContent = React.forwardRef((props, ref) => {
           text={chartBtnText}
         />
       </div>
+      <ModeSelection
+        isActive={isCompareActive}
+        isMobile={isMobile}
+        selected={compareMode}
+        onclick={changeCompareMode}
+      />
     </>
   );
 
