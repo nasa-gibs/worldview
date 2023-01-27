@@ -15,18 +15,17 @@ import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
+import {
+  toggleOverlayGroups as toggleOverlayGroupsAction,
+} from '../../modules/layers/actions';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
     isCompareActive,
     compareMode,
     isMobile,
-    breakpoints,
-    screenWidth,
-    isPlaying,
     activeTab,
     changeCompareMode,
-    addLayers,
     toggleCompare,
     compareFeature,
     eventsData,
@@ -40,13 +39,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     ? `Start Charting${isMobile ? ' Mode' : ''}`
     : `Exit Charting${isMobile ? ' Mode' : ''}`;
 
-
-  const onClickAddLayers = (e) => {
-    e.stopPropagation();
-    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
-    googleTagManager.pushEvent({ event: 'add_layers' });
-  };
-
   const onClickToggleCompare = (e) => {
     e.stopPropagation();
     toggleCompare();
@@ -56,29 +48,24 @@ const FooterContent = React.forwardRef((props, ref) => {
   const renderLayersFooter = () => (
     <>
       <div className="product-buttons">
-        <Button
-          id="layers-add"
-          aria-label="Add layers"
-          className="layers-add red"
-          text="+ Add Layers"
-          onClick={onClickAddLayers}
-        />
-        <Button
-          id="compare-toggle-button"
-          aria-label={compareBtnText}
-          className="compare-toggle-button"
-          style={!compareFeature ? { display: 'none' } : null}
-          onClick={onClickToggleCompare}
-          text={compareBtnText}
-        />
-        <Button
-          id="chart-toggle-button"
-          aria-label={chartBtnText}
-          className="chart-toggle-button"
-          style={!compareFeature ? { display: 'none' } : null}
-          onClick={onClickToggleCompare}
-          text={chartBtnText}
-        />
+        <div className="compare-chart-container">
+          <Button
+            id="chart-toggle-button"
+            aria-label={chartBtnText}
+            className="chart-toggle-button"
+            style={!compareFeature ? { display: 'none' } : null}
+            onClick={onClickToggleCompare}
+            text={chartBtnText}
+          />
+          <Button
+            id="compare-toggle-button"
+            aria-label={compareBtnText}
+            className="compare-toggle-button"
+            style={!compareFeature ? { display: 'none' } : null}
+            onClick={onClickToggleCompare}
+            text={compareBtnText}
+          />
+        </div>
       </div>
       <ModeSelection
         isActive={isCompareActive}
@@ -128,7 +115,7 @@ const FooterContent = React.forwardRef((props, ref) => {
   );
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
     animation, config, compare, screenSize,
   } = state;
@@ -150,6 +137,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
     dispatch(toggleCompareOnOff());
+  },
+  toggleOverlayGroups: () => {
+    setTimeout(() => {
+      dispatch(toggleOverlayGroupsAction());
+    });
   },
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
@@ -180,15 +172,11 @@ export default connect(
 
 FooterContent.propTypes = {
   activeTab: PropTypes.string,
-  addLayers: PropTypes.func,
   changeCompareMode: PropTypes.func,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
   eventsData: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  screenWidth: PropTypes.number,
-  breakpoints: PropTypes.object,
-  isPlaying: PropTypes.bool,
   toggleCompare: PropTypes.func,
 };

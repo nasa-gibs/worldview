@@ -181,28 +181,34 @@
 
 #products-holder footer {
   width: initial;
+  margin-bottom: 10px;
 }
 
-footer .product-buttons {
-  padding: 10px;
+footer .product-buttons .layers-add-container {
   height: 47px;
-  width: initial;
   display: flex;
+  padding: 10px;
+  justify-content: space-around;
 }
 
-footer .layers-add {
-  // position: absolute;
-  left: 10px;
+.compare-chart-container {
+  display: flex;
+  justify-content: space-around;
 }
 
-footer .compare-toggle-button, footer .chart-toggle-button {
-  // position: absolute;
-  // right: 10px;
-  border-bottom: none;
+.layers-add-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0px;
 }
 
 .layer-group-baselayers {
   margin-top: 10px;
+}
+
+.compare-chart-container > button {
+  width: 45%;
+  height: 30px;
 }
 
 .layer-group-case {
