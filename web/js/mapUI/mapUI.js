@@ -44,6 +44,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
+import { fly } from '../map/util';
 
 const { events } = util;
 
@@ -215,6 +216,9 @@ const MapUI = (props) => {
       const date = getSelectedDate(dateCompareState, dateGroup);
       const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
       const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);
+      if(id == "HLSS30_FIRMS"){
+        console.log('renderable', renderable)
+      }
       layer.setVisible(renderable);
     };
 
@@ -224,6 +228,10 @@ const MapUI = (props) => {
 
       // Not in A|B
       if (layer.wv && !granule) {
+        if(layer.wv.id == "HLSS30_FIRMS"){
+          console.log("FIRMS reporting")
+        }
+
         setRenderable(layer);
 
       // If in A|B layer-group will have a 'group' string
@@ -331,8 +339,32 @@ const MapUI = (props) => {
     }
   }
 
+  const buttonStyle = {
+    zIndex: "99"
+  }
+
+  const testFunction = () => {
+    console.log(ui.selected.getLayers().array_)
+  }
+
+  const flyNewYork = () => {
+    const coordinates = [-79.275048, 42.323128]
+    return fly(ui.selected, proj, coordinates, 9)
+  }
+
+  const flyConnecticut = () => {
+    const coordinates = [-72.680563, 41.699929]
+    return fly(ui.selected, proj, coordinates, 9)
+  }
+
+
   return (
     <>
+      <div className="d-flex justify-content-center">
+        <button style={buttonStyle} onClick={testFunction}> Test Function </button>
+        <button style={buttonStyle} onClick={flyNewYork}>Fly New York</button>
+        <button style={buttonStyle} onClick={flyConnecticut}>Fly Connecticut</button>
+      </div>
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}
@@ -379,6 +411,7 @@ const MapUI = (props) => {
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         getGranuleOptions={getGranuleOptions}
+        findLayer={findLayer}
       />
       <UpdateOpacity
         action={opacityAction}

@@ -24,6 +24,7 @@ const UpdateDate = (props) => {
     compareMapUi,
     config,
     dateCompareState,
+    findLayer,
     getGranuleOptions,
     granuleState,
     isCompareActive,
@@ -114,7 +115,17 @@ const UpdateDate = (props) => {
       if (isCompareActive && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection);
       } else if (temporalLayer) {
-        if (index !== undefined && index !== -1) {
+        if(def.id == "HLSS30_FIRMS"){
+          console.log(`!!updating temporal layer for ${id} from updateDate for index ${index}!!`)
+        }
+        if (def.type == "ttiler"){
+          handleTtilerLayer(def, index, createLayer, layers)
+          .then((createdTtilerLayer) => {
+            console.log(`this is the updated layer`, createdTtilerLayer)
+            ui.selected.addLayer(createdTtilerLayer)
+            mapLayerCollection.setAt(index, createdTtilerLayer);
+          });
+        } else if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(granuleState, id) }
@@ -132,6 +143,13 @@ const UpdateDate = (props) => {
     if (!outOfStepChange) {
       preloadNextTiles();
     }
+  }
+
+  const handleTtilerLayer = async (def, index, createLayer, layers) => {
+    const layer = findLayer(def, activeString);
+    ui.selected.removeLayer(layer);
+    const layerOptions = layers[index]
+    return createLayer(def, layerOptions);
   }
 
   return null;

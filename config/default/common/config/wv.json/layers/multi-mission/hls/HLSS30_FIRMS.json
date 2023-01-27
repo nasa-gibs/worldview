@@ -10,6 +10,7 @@
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "ttiler",
+      "period": "daily",
       "wrapX": false,
       "projections": {
         "geographic": {

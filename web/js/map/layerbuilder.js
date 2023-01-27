@@ -155,8 +155,11 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayerWrapper = async (def, key, options, dateOptions) => {
     const state = store.getState();
-    const { sidebar: { activeTab } } = state;
+    const { sidebar: { activeTab }, date: {selected} } = state;
     const proj = state.proj.selected;
+    if(def.id == "HLSS30_FIRMS"){
+      console.log(`2. CREATELAYERWRAPPER for ${def.id} for ${selected}`)
+    }
     const {
       breakPointLayer,
       id,
@@ -203,14 +206,16 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'ttiler':
-            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+            // layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+            layer = await createTtilerLayer(def, options, null, state, attributes)
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
         }
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
-        layer.setVisible(false);
+        if (def.type !== "ttiler") layer.setVisible(false);
+        // layer.setVisible(false);
       } else {
         layer = await getGranuleLayer(def, attributes, options);
       }
@@ -230,8 +235,12 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
-    const { compare: { activeString } } = state;
+    const { compare: { activeString }, date: { selected } } = state;
     options.group = options.group || activeString;
+
+    if(def.id == "HLSS30_FIRMS"){
+      console.log(`1. Creating ${def.id} in LAYERBUILDER for date: ${selected}`)
+    }
 
     const {
       closestDate,
@@ -756,7 +765,8 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createTtilerLayer = async (def, options, day, state) => {
-    const { proj: { selected } } = state;
+
+    const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
 
     const source = config.sources[def.source];
@@ -780,12 +790,18 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    const className = def.id + " " + requestDate
+
     const layer = new OlLayerTile({
       source: xyzSource,
-      className: def.id,
+      className,
       minZoom: 7,
       extent: maxExtent,
     });
+
+    console.log(`3. CREATETTILERLAYER with ${searchID} for ${date.selected} with`, layer)
+
     return layer;
   };
 
