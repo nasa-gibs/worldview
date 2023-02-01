@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
-const request = require('axios').default
+const axios = require('axios').default
 const convert = require('xml-js')
 const { promisify } = require('util')
 const stream = require('stream')
@@ -74,9 +74,10 @@ async function getCapabilities () {
   }
 }
 
+// convert to superagent and use promises
 async function fetchConfigs (inputFile, outputFile) {
   const writer = await fs.createWriteStream(outputFile)
-  return request({
+  return axios({
     method: 'get',
     url: inputFile,
     responseType: 'stream',
@@ -87,8 +88,14 @@ async function fetchConfigs (inputFile, outputFile) {
   })
 }
 
-async function handleException (error, link) {
-  console.warn(`\n ${prog} WARN: Unable to fetch ${link} ${error}`)
+async function handleException (error, link, dir, ext, count) {
+  if (!count) count = 0
+  count++
+  if (count <= 5) {
+    await processMetadata(link, dir, ext, count)
+  } else {
+    console.warn(`\n ${prog} WARN: Unable to fetch ${link} ${error}`)
+  }
 }
 
 async function processVectorData (layer) {
@@ -149,14 +156,15 @@ async function processGetCapabilities (outputFile) {
   }
 }
 
-async function processMetadata (link, dir, ext) {
+async function processMetadata (link, dir, ext, count) {
+  // if (count) console.warn(`retry #${count} for ${link}`)
   try {
     const outputFile = path.join(dir, path.basename(link))
     if (link.endsWith(ext)) {
       await fetchConfigs(link, outputFile)
     }
   } catch (error) {
-    handleException(error, link)
+    handleException(error, link, dir, ext, count)
   }
 }
 
