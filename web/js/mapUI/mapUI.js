@@ -216,9 +216,7 @@ const MapUI = (props) => {
       const date = getSelectedDate(dateCompareState, dateGroup);
       const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
       const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);
-      if(id == "HLSS30_FIRMS"){
-        console.log('renderable', renderable)
-      }
+
       layer.setVisible(renderable);
     };
 
@@ -228,10 +226,6 @@ const MapUI = (props) => {
 
       // Not in A|B
       if (layer.wv && !granule) {
-        if(layer.wv.id == "HLSS30_FIRMS"){
-          console.log("FIRMS reporting")
-        }
-
         setRenderable(layer);
 
       // If in A|B layer-group will have a 'group' string

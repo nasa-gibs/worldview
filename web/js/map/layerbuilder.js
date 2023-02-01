@@ -206,8 +206,7 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'ttiler':
-            // layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
-            layer = await createTtilerLayer(def, options, null, state, attributes)
+            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
@@ -240,6 +239,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     if(def.id == "HLSS30_FIRMS"){
       console.log(`1. Creating ${def.id} in LAYERBUILDER for date: ${selected}`)
+      // console.log('options', options)
     }
 
     const {
@@ -708,13 +708,23 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const registerSearch = async (def, options, day, state) => {
     const { date } = state;
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    let requestDate
+    if(options.group === 'activeB'){
+      requestDate = date.selectedB
+    } else {
+      requestDate = date.selected
+    }
+
+    const formattedDate = util.toISOStringSeconds(util.roundTimeOneMinute(requestDate)).slice(0, 10);
+    // console.log('options from register search', options)
+    // console.log('selected date from register serach', date.selected)
+    console.log('formattedDate', formattedDate)
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
     const bandCombo = ['B07', 'B05', 'B04'];
     const collectionID = layerID === 'HLSS30_FIRMS' ? 'HLSS30' : 'HLSL30';
 
-    const temporalRange = [`${requestDate}T00:00:00Z`, `${requestDate}T23:59:59Z`];
+    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
 
     const collectionsFilter = {
       op: '=',

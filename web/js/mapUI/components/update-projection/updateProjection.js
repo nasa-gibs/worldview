@@ -212,9 +212,6 @@ const UpdateProjection = (props) => {
       const defs = getLayers(layerState, { reverse: true });
       const layerPromises = defs.map((def) => {
         const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
-        if(def.id == "HLSS30_FIRMS"){
-          console.log('!!reloading layer from updateProjection!!')
-        }
         return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);

@@ -52,7 +52,10 @@ const UpdateDate = (props) => {
       }
       return updateDate(action.outOfStep);
     } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
-      return updateDate();
+      const outOfStep = false;
+      // if date not changing we do not want to recreate ttiler layer
+      const skipTtiler = true;
+      return updateDate(outOfStep, skipTtiler);
     }
   };
 
@@ -80,19 +83,42 @@ const UpdateDate = (props) => {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
   }
 
-  async function updateCompareLayer (def, index, layerCollection) {
+  const handleTtilerLayer = async (def, index, createLayer, layers, options, compare) => {
+    const layer = findLayer(def, activeString);
+    if(compare){
+      ui.selected.getLayers().remove(layer);
+    } else {
+      ui.selected.removeLayer(layer);
+    }
+
+    const layerOptions = options || layers[index]
+    return createLayer(def, layerOptions);
+  }
+
+  async function updateCompareLayer (def, index, layerCollection, skipTtiler) {
     const { createLayer } = ui;
     const options = {
       group: activeString,
       date: getSelectedDate(dateCompareState),
       ...getGranuleOptions(granuleState, def, activeString),
     };
-    const updatedLayer = await createLayer(def, options);
-    layerCollection.setAt(index, updatedLayer);
-    compareMapUi.update(activeString);
+    if (def.type == "ttiler"){
+      if(skipTtiler) return;
+      const layers = layerCollection.getArray();
+      handleTtilerLayer(def, index, createLayer, layers, options, true)
+      .then((createdTtilerLayer) => {
+        ui.selected.addLayer(createdTtilerLayer);
+        layerCollection.setAt(index, createdTtilerLayer)
+        compareMapUi.update(activeString);
+      });
+    } else {
+      const updatedLayer = await createLayer(def, options);
+      layerCollection.setAt(index, updatedLayer);
+      compareMapUi.update(activeString);
+    }
   }
 
-  async function updateDate(outOfStepChange) {
+  async function updateDate(outOfStepChange, skipTtiler) {
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
@@ -113,15 +139,11 @@ const UpdateDate = (props) => {
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length) {
-        await updateCompareLayer(def, index, mapLayerCollection);
+        await updateCompareLayer(def, index, mapLayerCollection, skipTtiler);
       } else if (temporalLayer) {
-        if(def.id == "HLSS30_FIRMS"){
-          console.log(`!!updating temporal layer for ${id} from updateDate for index ${index}!!`)
-        }
-        if (def.type == "ttiler"){
+        if (def.type == "ttiler" && !skipTtiler){
           handleTtilerLayer(def, index, createLayer, layers)
           .then((createdTtilerLayer) => {
-            console.log(`this is the updated layer`, createdTtilerLayer)
             ui.selected.addLayer(createdTtilerLayer)
             mapLayerCollection.setAt(index, createdTtilerLayer);
           });
@@ -143,13 +165,6 @@ const UpdateDate = (props) => {
     if (!outOfStepChange) {
       preloadNextTiles();
     }
-  }
-
-  const handleTtilerLayer = async (def, index, createLayer, layers) => {
-    const layer = findLayer(def, activeString);
-    ui.selected.removeLayer(layer);
-    const layerOptions = layers[index]
-    return createLayer(def, layerOptions);
   }
 
   return null;
