@@ -338,7 +338,15 @@ const MapUI = (props) => {
   }
 
   const testFunction = () => {
-    console.log(ui.selected.getLayers().array_)
+    const mapLayers = ui.selected.getLayers().getArray();
+    const firstLayer = mapLayers[0];
+    const compareLayer = firstLayer.get('group') === activeString
+    ? firstLayer
+    : mapLayers[1];
+    const compareLayers = compareLayer.getLayers()
+    console.log(ui.selected)
+    console.log(ui.selected.getLayers())
+    console.log(compareLayers)
   }
 
   const flyNewYork = () => {

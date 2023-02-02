@@ -83,10 +83,11 @@ const UpdateDate = (props) => {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
   }
 
-  const handleTtilerLayer = async (def, index, createLayer, layers, options, compare) => {
+  const handleTtilerLayer = async (def, index, createLayer, layers, options, compareLayerGroup) => {
     const layer = findLayer(def, activeString);
-    if(compare){
-      ui.selected.getLayers().remove(layer);
+    if(compareLayerGroup){
+      const compareLayers = compareLayerGroup.getLayers()
+      compareLayers.remove(layer)
     } else {
       ui.selected.removeLayer(layer);
     }
@@ -95,25 +96,32 @@ const UpdateDate = (props) => {
     return createLayer(def, layerOptions);
   }
 
-  async function updateCompareLayer (def, index, layerCollection, skipTtiler) {
+  async function updateCompareLayer (def, index, mapLayerCollection, layers, skipTtiler) {
     const { createLayer } = ui;
     const options = {
       group: activeString,
       date: getSelectedDate(dateCompareState),
       ...getGranuleOptions(granuleState, def, activeString),
     };
+
     if (def.type == "ttiler"){
       if(skipTtiler) return;
-      const layers = layerCollection.getArray();
-      handleTtilerLayer(def, index, createLayer, layers, options, true)
+
+      const mapLayers = ui.selected.getLayers().getArray();
+      const firstLayer = mapLayers[0];
+      const compareLayerGroup = firstLayer.get('group') === activeString
+        ? firstLayer
+        : mapLayers[1];
+
+      handleTtilerLayer(def, index, createLayer, layers, options, compareLayerGroup)
       .then((createdTtilerLayer) => {
-        ui.selected.addLayer(createdTtilerLayer);
-        layerCollection.setAt(index, createdTtilerLayer)
+        compareLayerGroup.getLayers().insertAt(index, createdTtilerLayer);
         compareMapUi.update(activeString);
       });
+
     } else {
       const updatedLayer = await createLayer(def, options);
-      layerCollection.setAt(index, updatedLayer);
+      mapLayerCollection.setAt(index, updatedLayer);
       compareMapUi.update(activeString);
     }
   }
@@ -139,13 +147,13 @@ const UpdateDate = (props) => {
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length) {
-        await updateCompareLayer(def, index, mapLayerCollection, skipTtiler);
+        await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
       } else if (temporalLayer) {
         if (def.type == "ttiler" && !skipTtiler){
           handleTtilerLayer(def, index, createLayer, layers)
           .then((createdTtilerLayer) => {
             ui.selected.addLayer(createdTtilerLayer)
-            mapLayerCollection.setAt(index, createdTtilerLayer);
+            // mapLayerCollection.setAt(index, createdTtilerLayer);
           });
         } else if (index !== undefined && index !== -1) {
           const layerValue = layers[index];

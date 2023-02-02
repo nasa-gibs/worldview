@@ -155,11 +155,8 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayerWrapper = async (def, key, options, dateOptions) => {
     const state = store.getState();
-    const { sidebar: { activeTab }, date: {selected} } = state;
+    const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;
-    if(def.id == "HLSS30_FIRMS"){
-      console.log(`2. CREATELAYERWRAPPER for ${def.id} for ${selected}`)
-    }
     const {
       breakPointLayer,
       id,
@@ -214,7 +211,6 @@ export default function mapLayerBuilder(config, cache, store) {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
         if (def.type !== "ttiler") layer.setVisible(false);
-        // layer.setVisible(false);
       } else {
         layer = await getGranuleLayer(def, attributes, options);
       }
@@ -234,13 +230,8 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
-    const { compare: { activeString }, date: { selected } } = state;
+    const { compare: { activeString } } = state;
     options.group = options.group || activeString;
-
-    if(def.id == "HLSS30_FIRMS"){
-      console.log(`1. Creating ${def.id} in LAYERBUILDER for date: ${selected}`)
-      // console.log('options', options)
-    }
 
     const {
       closestDate,
@@ -706,7 +697,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, day, state) => {
+  const registerSearch = async (def, options, state) => {
     const { date } = state;
     let requestDate
     if(options.group === 'activeB'){
@@ -715,13 +706,12 @@ export default function mapLayerBuilder(config, cache, store) {
       requestDate = date.selected
     }
 
-    const formattedDate = util.toISOStringSeconds(util.roundTimeOneMinute(requestDate)).slice(0, 10);
-    // console.log('options from register search', options)
-    // console.log('selected date from register serach', date.selected)
-    console.log('formattedDate', formattedDate)
+    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10)
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
     const bandCombo = ['B07', 'B05', 'B04'];
+
+    // This will need to be reworked once we decide on layer definitions
     const collectionID = layerID === 'HLSS30_FIRMS' ? 'HLSS30' : 'HLSL30';
 
     const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
@@ -781,7 +771,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const source = config.sources[def.source];
 
-    const searchID = await registerSearch(def, options, day, state);
+    const searchID = await registerSearch(def, options, state);
 
     const tileUrlFunction = (tileCoord) => {
       const z = tileCoord[0] - 1;
@@ -809,8 +799,6 @@ export default function mapLayerBuilder(config, cache, store) {
       minZoom: 7,
       extent: maxExtent,
     });
-
-    console.log(`3. CREATETTILERLAYER with ${searchID} for ${date.selected} with`, layer)
 
     return layer;
   };
