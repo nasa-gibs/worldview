@@ -210,7 +210,7 @@ export default function mapLayerBuilder(config, cache, store) {
         }
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
-        if (def.type !== "ttiler") layer.setVisible(false);
+        if (def.type !== 'ttiler') layer.setVisible(false);
       } else {
         layer = await getGranuleLayer(def, attributes, options);
       }
@@ -699,14 +699,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const registerSearch = async (def, options, state) => {
     const { date } = state;
-    let requestDate
-    if(options.group === 'activeB'){
-      requestDate = date.selectedB
+    let requestDate;
+    if (options.group === 'activeB') {
+      requestDate = date.selectedB;
     } else {
-      requestDate = date.selected
+      requestDate = date.selected;
     }
 
-    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10)
+    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
     const bandCombo = ['B07', 'B05', 'B04'];
@@ -765,7 +765,6 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createTtilerLayer = async (def, options, day, state) => {
-
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
 
@@ -791,7 +790,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
     const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
-    const className = def.id + " " + requestDate
+    const className = `${def.id} ${requestDate}`;
 
     const layer = new OlLayerTile({
       source: xyzSource,

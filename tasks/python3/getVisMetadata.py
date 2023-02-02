@@ -17,6 +17,7 @@ output_file = args[2]
 
 # These are alias or otherwise layers that don't exist in GIBS
 skip_layers = [
+  'HLSL30_FIRMS',
   'HLSS30_FIRMS',
   'Land_Water_Map',
   'Land_Mask',

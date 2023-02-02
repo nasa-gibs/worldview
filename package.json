@@ -240,7 +240,8 @@
       "node_modules"
     ],
     "moduleNameMapper": {
-      "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
+      "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js",
+      "axios": "axios/dist/node/axios.cjs"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox)/)"

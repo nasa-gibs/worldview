@@ -44,7 +44,6 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
-import { fly } from '../map/util';
 
 const { events } = util;
 
@@ -333,40 +332,8 @@ const MapUI = (props) => {
     }
   }
 
-  const buttonStyle = {
-    zIndex: "99"
-  }
-
-  const testFunction = () => {
-    const mapLayers = ui.selected.getLayers().getArray();
-    const firstLayer = mapLayers[0];
-    const compareLayer = firstLayer.get('group') === activeString
-    ? firstLayer
-    : mapLayers[1];
-    const compareLayers = compareLayer.getLayers()
-    console.log(ui.selected)
-    console.log(ui.selected.getLayers())
-    console.log(compareLayers)
-  }
-
-  const flyNewYork = () => {
-    const coordinates = [-79.275048, 42.323128]
-    return fly(ui.selected, proj, coordinates, 9)
-  }
-
-  const flyConnecticut = () => {
-    const coordinates = [-72.680563, 41.699929]
-    return fly(ui.selected, proj, coordinates, 9)
-  }
-
-
   return (
     <>
-      <div className="d-flex justify-content-center">
-        <button style={buttonStyle} onClick={testFunction}> Test Function </button>
-        <button style={buttonStyle} onClick={flyNewYork}>Fly New York</button>
-        <button style={buttonStyle} onClick={flyConnecticut}>Fly Connecticut</button>
-      </div>
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}

@@ -85,16 +85,16 @@ const UpdateDate = (props) => {
 
   const handleTtilerLayer = async (def, index, createLayer, layers, options, compareLayerGroup) => {
     const layer = findLayer(def, activeString);
-    if(compareLayerGroup){
-      const compareLayers = compareLayerGroup.getLayers()
-      compareLayers.remove(layer)
+    if (compareLayerGroup) {
+      const compareLayers = compareLayerGroup.getLayers();
+      compareLayers.remove(layer);
     } else {
       ui.selected.removeLayer(layer);
     }
 
-    const layerOptions = options || layers[index]
+    const layerOptions = options || layers[index];
     return createLayer(def, layerOptions);
-  }
+  };
 
   async function updateCompareLayer (def, index, mapLayerCollection, layers, skipTtiler) {
     const { createLayer } = ui;
@@ -104,8 +104,8 @@ const UpdateDate = (props) => {
       ...getGranuleOptions(granuleState, def, activeString),
     };
 
-    if (def.type == "ttiler"){
-      if(skipTtiler) return;
+    if (def.type === 'ttiler') {
+      if (skipTtiler) return;
 
       const mapLayers = ui.selected.getLayers().getArray();
       const firstLayer = mapLayers[0];
@@ -114,11 +114,10 @@ const UpdateDate = (props) => {
         : mapLayers[1];
 
       handleTtilerLayer(def, index, createLayer, layers, options, compareLayerGroup)
-      .then((createdTtilerLayer) => {
-        compareLayerGroup.getLayers().insertAt(index, createdTtilerLayer);
-        compareMapUi.update(activeString);
-      });
-
+        .then((createdTtilerLayer) => {
+          compareLayerGroup.getLayers().insertAt(index, createdTtilerLayer);
+          compareMapUi.update(activeString);
+        });
     } else {
       const updatedLayer = await createLayer(def, options);
       mapLayerCollection.setAt(index, updatedLayer);
@@ -149,12 +148,12 @@ const UpdateDate = (props) => {
       if (isCompareActive && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
       } else if (temporalLayer) {
-        if (def.type == "ttiler" && !skipTtiler){
+        if (def.type === 'ttiler' && !skipTtiler) {
           handleTtilerLayer(def, index, createLayer, layers)
-          .then((createdTtilerLayer) => {
-            ui.selected.addLayer(createdTtilerLayer)
+            .then((createdTtilerLayer) => {
+              ui.selected.addLayer(createdTtilerLayer);
             // mapLayerCollection.setAt(index, createdTtilerLayer);
-          });
+            });
         } else if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'

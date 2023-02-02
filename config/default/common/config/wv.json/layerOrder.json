@@ -1,5 +1,6 @@
 {
 	"layerOrder": [
+		"HLSL30_FIRMS",
 		"HLSS30_FIRMS",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
