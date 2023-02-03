@@ -144,6 +144,7 @@ class Sidebar extends React.Component {
   }
 
   getProductsToRender(activeTab, isCompareMode) {
+    // console.log('getProductsToRender - layer or compare?');
     const { activeString } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {

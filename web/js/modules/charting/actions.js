@@ -14,8 +14,6 @@ export function toggleActiveChartingState() {
 }
 export function toggleChartingOnOff() {
   return (dispatch, getState) => {
-    console.log('running toggleChartingOnOff');
-    console.log(getState().charting);
     if (!getState().charting.active) {
       dispatch(initSecondLayerGroup());
       dispatch(initSecondDate());

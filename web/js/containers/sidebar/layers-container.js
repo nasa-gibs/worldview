@@ -199,9 +199,10 @@ function LayersContainer (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    compare, embed, layers, animation, screenSize,
+    compare, charting, embed, layers, animation, screenSize,
   } = state;
   const isCompareActive = compare.active;
+  const isChartingActive = charting.active;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const { groupOverlays } = layers[compareState];
@@ -218,6 +219,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isAnimating: animation.isPlaying,
     isCompareActive,
+    isChartingActive,
     isEmbedModeActive,
     isMobile,
     baselayers,
@@ -271,6 +273,7 @@ LayersContainer.propTypes = {
   isActive: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,

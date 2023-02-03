@@ -23,6 +23,7 @@ import {
 const FooterContent = React.forwardRef((props, ref) => {
   const {
     isCompareActive,
+    isChartingActive,
     compareMode,
     isMobile,
     activeTab,
@@ -33,14 +34,11 @@ const FooterContent = React.forwardRef((props, ref) => {
     eventsData,
   } = props;
 
-  // This needs to be derived from props
-  const isChartActive = false;
-
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
     : `Exit Comparison${isMobile ? ' Mode' : ''}`;
 
-  const chartBtnText = !isChartActive
+  const chartBtnText = !isChartingActive
     ? `Start Charting${isMobile ? ' Mode' : ''}`
     : `Exit Charting${isMobile ? ' Mode' : ''}`;
 
@@ -127,7 +125,7 @@ const FooterContent = React.forwardRef((props, ref) => {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    animation, config, compare, screenSize,
+    animation, config, compare, charting, screenSize,
   } = state;
   const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
@@ -139,6 +137,7 @@ const mapStateToProps = (state, ownProps) => {
     isPlaying,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
+    isChartingActive: charting.active,
     compareMode: compare.mode,
     eventsData,
   };
@@ -191,6 +190,7 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   eventsData: PropTypes.array,
   isCompareActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
