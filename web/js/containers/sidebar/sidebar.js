@@ -8,6 +8,7 @@ import {
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import LayersContainer from './layers-container';
+import ChartingLayerMenu from './charting.js';
 import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
@@ -100,7 +101,9 @@ class Sidebar extends React.Component {
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
-    const { isMobile, screenHeight, isCompareMode } = this.props;
+    const {
+      isMobile, screenHeight, isCompareMode,
+    } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
     const groupCheckboxHeight = 35;
@@ -143,8 +146,7 @@ class Sidebar extends React.Component {
     collapseExpandToggle();
   }
 
-  getProductsToRender(activeTab, isCompareMode) {
-    // console.log('getProductsToRender - layer or compare?');
+  getProductsToRender(activeTab, isCompareMode, isChartMode) {
     const { activeString } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {
@@ -154,7 +156,17 @@ class Sidebar extends React.Component {
           height={subComponentHeight}
         />
       );
-    } if (!isCompareMode) {
+    } if (isChartMode) {
+      console.log('render chart mode layer selector');
+      return (
+        <ChartingLayerMenu
+          height={subComponentHeight}
+          isActive={activeTab === 'layers'}
+          compareState={activeString}
+          chartState={isChartMode}
+        />
+      );
+    } if (!isCompareMode && !isChartMode) {
       return (
         <LayersContainer
           height={subComponentHeight}
@@ -259,6 +271,7 @@ class Sidebar extends React.Component {
       hasEventRequestError,
       isCollapsed,
       isCompareMode,
+      isChartMode,
       isDataDisabled,
       isDistractionFreeModeActive,
       isEmbedModeActive,
@@ -335,7 +348,7 @@ class Sidebar extends React.Component {
                   />
                   <TabContent activeTab={activeTab}>
                     <TabPane tabId="layers">
-                      {this.getProductsToRender(activeTab, isCompareMode)}
+                      {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
                     </TabPane>
                     {naturalEvents && activeTab === 'events' && (
                       <TabPane tabId="events">
@@ -378,6 +391,7 @@ const mapStateToProps = (state) => {
   const {
     animation,
     compare,
+    charting,
     config,
     embed,
     events,
@@ -425,6 +439,7 @@ const mapStateToProps = (state) => {
     hasEventRequestError,
     isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     isCompareMode: compare.active,
+    isChartMode: charting.active,
     isDataDisabled: events.isAnimatingToEvent,
     isDistractionFreeModeActive,
     isEmbedModeActive,
@@ -483,6 +498,7 @@ Sidebar.propTypes = {
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
+  isChartMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
