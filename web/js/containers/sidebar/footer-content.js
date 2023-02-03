@@ -28,6 +28,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     activeTab,
     changeCompareMode,
     toggleCompare,
+    toggleCharting,
     compareFeature,
     eventsData,
   } = props;
@@ -154,9 +155,6 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
   changeCompareMode: (str) => {
-    dispatch(changeMode(str));
-  },
-  changeChartingMode: (str) => {
     dispatch(changeMode(str));
   },
   addLayers: (isPlaying) => {

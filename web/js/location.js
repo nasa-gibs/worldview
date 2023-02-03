@@ -24,6 +24,7 @@ import {
   parseEventFilterDates,
 } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
+import { mapLocationToChartingState } from './modules/charting/util';
 import {
   mapLocationToProjState,
   parseProjection,
@@ -56,6 +57,7 @@ import {
  * @param {Object} location | Redux-location-state Location object
  */
 export const mapLocationToState = (state, location) => {
+  console.log('mapLocationToState');
   const { config } = state;
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
@@ -82,6 +84,10 @@ export const mapLocationToState = (state, location) => {
       state,
     );
     stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation,
+    );
+    stateFromLocation = mapLocationToChartingState(
       parameters,
       stateFromLocation,
     );

@@ -4,6 +4,7 @@ import Cache from 'cachai';
 
 import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
+import { initialChartingState } from './modules/charting/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
@@ -26,6 +27,7 @@ const fixtures = {
 fixtures.getState = function() {
   return {
     compare: initialCompareState,
+    charting: initialChartingState,
     config: fixtures.config(),
     layers: initialLayerState,
     alerts: defaultAlertState,

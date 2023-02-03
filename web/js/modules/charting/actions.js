@@ -13,15 +13,6 @@ export function toggleActivechartingState() {
     dispatch({ type: CHANGE_STATE });
   };
 }
-export function togglechartingOnOff() {
-  return (dispatch, getState) => {
-    if (!getState().charting.bStatesInitiated) {
-      dispatch(initSecondLayerGroup());
-      dispatch(initSecondDate());
-    }
-    dispatch({ type: TOGGLE_ON_OFF });
-  };
-}
 export function toggleActiveChartingState() {
   return (dispatch, getState) => {
     dispatch(clearPreload());
@@ -30,6 +21,8 @@ export function toggleActiveChartingState() {
 }
 export function toggleChartingOnOff() {
   return (dispatch, getState) => {
+    console.log('running toggleChartingOnOff');
+    console.log(getState());
     if (!getState().charting.bStatesInitiated) {
       dispatch(initSecondLayerGroup());
       dispatch(initSecondDate());

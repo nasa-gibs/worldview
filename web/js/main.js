@@ -103,16 +103,16 @@ function render (config, legacyState) {
   );
 
   // Determine how the state is initially set!!!
-  console.log('models');
-  console.log(models);
-  console.log('config');
-  console.log(config);
-  console.log('parameters');
-  console.log(parameters);
+  // console.log('models');
+  // console.log(models);
+  // console.log('config');
+  // console.log(config);
+  // console.log('parameters');
+  // console.log(parameters);
 
   // "store" contains a compare key; duplicate that structure for charting
-  console.log('store.getState()');
-  console.log(store.getState());
+  // console.log('store.getState()');
+  // console.log(store.getState());
 
 
   listenForHistoryChange(store, history);
