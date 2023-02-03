@@ -10,7 +10,7 @@ import { isMobileOnly, isTablet } from 'react-device-detect';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import { toggleChartingOnOff, changeChartingMode } from '../../modules/charting/actions';
+import { toggleChartingOnOff } from '../../modules/charting/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
@@ -32,11 +32,14 @@ const FooterContent = React.forwardRef((props, ref) => {
     compareFeature,
     eventsData,
   } = props;
+
+  // This needs to be derived from props
+  const isChartActive = false;
+
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
     : `Exit Comparison${isMobile ? ' Mode' : ''}`;
 
-  const isChartActive = false;
   const chartBtnText = !isChartActive
     ? `Start Charting${isMobile ? ' Mode' : ''}`
     : `Exit Charting${isMobile ? ' Mode' : ''}`;
