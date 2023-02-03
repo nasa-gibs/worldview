@@ -7,24 +7,30 @@ import {
   CHANGE_MODE,
 } from './constants';
 
-export function toggleActiveCompareState() {
+export function toggleActivechartingState() {
   return (dispatch, getState) => {
     dispatch(clearPreload());
     dispatch({ type: CHANGE_STATE });
   };
 }
-export function toggleCompareOnOff() {
+export function togglechartingOnOff() {
   return (dispatch, getState) => {
-    if (!getState().compare.bStatesInitiated) {
+    if (!getState().charting.bStatesInitiated) {
       dispatch(initSecondLayerGroup());
       dispatch(initSecondDate());
     }
     dispatch({ type: TOGGLE_ON_OFF });
   };
 }
+export function toggleActiveChartingState() {
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({ type: CHANGE_STATE });
+  };
+}
 export function toggleChartingOnOff() {
   return (dispatch, getState) => {
-    if (!getState().compare.bStatesInitiated) {
+    if (!getState().charting.bStatesInitiated) {
       dispatch(initSecondLayerGroup());
       dispatch(initSecondDate());
     }
@@ -34,6 +40,6 @@ export function toggleChartingOnOff() {
 export function setValue(num) {
   return { type: CHANGE_VALUE, value: num };
 }
-export function changeMode(str) {
+export function changeChartingMode(str) {
   return { type: CHANGE_MODE, mode: str };
 }

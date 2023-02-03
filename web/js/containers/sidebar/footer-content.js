@@ -10,6 +10,7 @@ import { isMobileOnly, isTablet } from 'react-device-detect';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
+import { toggleChartingOnOff, changeChartingMode } from '../../modules/charting/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
@@ -44,6 +45,11 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCompare();
     googleTagManager.pushEvent({ event: 'comparison_mode' });
   };
+  const onClickToggleCharting = (e) => {
+    e.stopPropagation();
+    toggleCharting();
+    googleTagManager.pushEvent({ event: 'charting_mode' });
+  };
 
   const renderLayersFooter = () => (
     <>
@@ -54,7 +60,7 @@ const FooterContent = React.forwardRef((props, ref) => {
             aria-label={chartBtnText}
             className="chart-toggle-button"
             style={!compareFeature ? { display: 'none' } : null}
-            onClick={onClickToggleCompare}
+            onClick={onClickToggleCharting}
             text={chartBtnText}
           />
           <Button
@@ -138,12 +144,19 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
     dispatch(toggleCompareOnOff());
   },
+  toggleCharting: () => {
+    console.log('toggleCharting');
+    dispatch(toggleChartingOnOff());
+  },
   toggleOverlayGroups: () => {
     setTimeout(() => {
       dispatch(toggleOverlayGroupsAction());
     });
   },
   changeCompareMode: (str) => {
+    dispatch(changeMode(str));
+  },
+  changeChartingMode: (str) => {
     dispatch(changeMode(str));
   },
   addLayers: (isPlaying) => {
@@ -179,4 +192,5 @@ FooterContent.propTypes = {
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   toggleCompare: PropTypes.func,
+  toggleCharting: PropTypes.func,
 };
