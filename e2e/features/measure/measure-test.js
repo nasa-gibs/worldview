@@ -14,7 +14,7 @@ const {
   geoMeasurementTooltip,
   arcticMeasurementTooltip,
   sidebarContainer,
-  unitOfMeasureToggle,
+  // unitOfMeasureToggle,
   downloadGeojsonBtn
   // downloadShapefileBtn,
 } = localSelectors

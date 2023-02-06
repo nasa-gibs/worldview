@@ -28,8 +28,8 @@ const {
   layerHidden,
   layerVisible,
   sidebarContainer,
-  groupedOverlaysAllLayers,
-  firesGroupHeader
+  groupedOverlaysAllLayers
+  // firesGroupHeader
 } = require('../../reuseables/selectors.js')
 
 const vectorsQueryString = '?v=-70.43215000968726,28.678203599725197,-59.81569241792232,31.62330063930118&l=GRanD_Dams,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor'
@@ -51,12 +51,14 @@ const groupedLayerIdOrder = [
   'active-MODIS_Combined_Value_Added_AOD',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'
 ]
-const ungroupedReorderdLayerIdOrder = [
-  'active-MODIS_Combined_Value_Added_AOD',
-  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
-  'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
-  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All'
-]
+
+// const ungroupedReorderdLayerIdOrder = [
+//   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
+//   'active-MODIS_Combined_Value_Added_AOD',
+//   'active-Reference_Features_15m',
+//   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
+//   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All'
+// ]
 
 module.exports = {
   before: (c) => {
