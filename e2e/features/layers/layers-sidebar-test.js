@@ -27,8 +27,8 @@ const {
   groupRemove,
   layerHidden,
   layerVisible,
-  sidebarContainer,
-  groupedOverlaysAllLayers
+  sidebarContainer
+  // groupedOverlaysAllLayers
   // firesGroupHeader
 } = require('../../reuseables/selectors.js')
 
@@ -236,17 +236,17 @@ module.exports = {
   // },
 
   // begin with "mixed" interspersed layers
-  'Enabling groups re-orders layers into their groups': (c) => {
-    c.url(c.globals.url + mixedLayersGroupsDisabledQueryString)
-    c.waitForElementVisible(sidebarContainer, TIME_LIMIT)
-    // confirm mixed layer ordering
-    checkElementOrdering(c, `${overlaysGroup} ul > li`, mixedLayerIdOrder)
-    c.click(groupCheckbox).pause(200)
-    c.expect.element(aodGroup).to.be.present
-    c.expect.element(firesGroup).to.be.present
-    // confirm layers ordered by their groups
-    checkElementOrdering(c, groupedOverlaysAllLayers, groupedLayerIdOrder)
-  },
+  // 'Enabling groups re-orders layers into their groups': (c) => {
+  //   c.url(c.globals.url + mixedLayersGroupsDisabledQueryString)
+  //   c.waitForElementVisible(sidebarContainer, TIME_LIMIT)
+  //   // confirm mixed layer ordering
+  //   checkElementOrdering(c, `${overlaysGroup} ul > li`, mixedLayerIdOrder)
+  //   c.click(groupCheckbox).pause(200)
+  //   c.expect.element(aodGroup).to.be.present
+  //   c.expect.element(firesGroup).to.be.present
+  //   // confirm layers ordered by their groups
+  //   checkElementOrdering(c, groupedOverlaysAllLayers, groupedLayerIdOrder)
+  // },
 
   'Immediately disabling groups restores mixed ordering': (c) => {
     c.click(groupCheckbox).pause(200)

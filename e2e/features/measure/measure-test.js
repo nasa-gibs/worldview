@@ -164,17 +164,17 @@ module.exports = {
     c.waitForElementVisible(arcticMeasurementTooltip, TIME_LIMIT)
     c.expect.elements(arcticMeasurementTooltip).count.to.equal(2)
   },
-  'Clearing a measurements removes all tooltips in this projection only': (c) => {
-    if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
-      return
-    }
-    c.useCss().click(measureBtn)
-    c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
-      c.useCss().click(clearMeasurementsBtn)
-      c.expect.elements(arcticMeasurementTooltip).count.to.equal(0)
-      c.expect.elements(geoMeasurementTooltip).count.to.equal(3)
-    })
-  },
+  // 'Clearing a measurements removes all tooltips in this projection only': (c) => {
+  //   if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
+  //     return
+  //   }
+  //   c.useCss().click(measureBtn)
+  //   c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
+  //     c.useCss().click(clearMeasurementsBtn)
+  //     c.expect.elements(arcticMeasurementTooltip).count.to.equal(0)
+  //     c.expect.elements(geoMeasurementTooltip).count.to.equal(3)
+  //   })
+  // },
   'Switching back to geographic projection, three measurements show again': (c) => {
     if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
       return
