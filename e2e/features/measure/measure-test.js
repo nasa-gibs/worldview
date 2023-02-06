@@ -8,13 +8,13 @@ const {
   measureBtn,
   measureAreaBtn,
   measureDistanceBtn,
-  // clearMeasurementsBtn,
+  clearMeasurementsBtn,
   measureMenu,
-  // measurementTooltip,
+  measurementTooltip,
   geoMeasurementTooltip,
   arcticMeasurementTooltip,
   sidebarContainer,
-  // unitOfMeasureToggle,
+  unitOfMeasureToggle,
   downloadGeojsonBtn
   // downloadShapefileBtn,
 } = localSelectors
@@ -164,17 +164,18 @@ module.exports = {
     c.waitForElementVisible(arcticMeasurementTooltip, TIME_LIMIT)
     c.expect.elements(arcticMeasurementTooltip).count.to.equal(2)
   },
-  // 'Clearing a measurements removes all tooltips in this projection only': (c) => {
-  //   if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
-  //     return
-  //   }
-  //   c.useCss().click(measureBtn)
-  //   c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
-  //     c.useCss().click(clearMeasurementsBtn)
-  //     c.expect.elements(arcticMeasurementTooltip).count.to.equal(0)
-  //     c.expect.elements(geoMeasurementTooltip).count.to.equal(3)
-  //   })
-  // },
+  'Clearing a measurements removes all tooltips in this projection only': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox' ||
+        c.options.desiredCapabilities.browserName === 'chrome') {
+      return
+    }
+    c.useCss().click(measureBtn)
+    c.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
+      c.useCss().click(clearMeasurementsBtn)
+      c.expect.elements(arcticMeasurementTooltip).count.to.equal(0)
+      c.expect.elements(geoMeasurementTooltip).count.to.equal(3)
+    })
+  },
   'Switching back to geographic projection, three measurements show again': (c) => {
     if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
       return
@@ -183,30 +184,32 @@ module.exports = {
     c.expect.elements(geoMeasurementTooltip).count.to.equal(3)
   },
   // TODO: Fix macOS chrome test
-  // 'Toggling unit of measure updates the measurement value': async (c) => {
-  //   if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
-  //     return
-  //   }
-  //   c.click(measureBtn)
-  //   await c.waitForElementVisible(measureMenu, TIME_LIMIT)
-  //   await c.click(unitOfMeasureToggle)
-  //   c.pause(500)
-  //   const tooltips = await c.elements('css selector', measurementTooltip)
-  //   tooltips.forEach((element) => {
-  //     c.elementIdText(element.ELEMENT, (elResult) => {
-  //       const pass = elResult.value.includes('mi')
-  //       c.assert.ok(pass)
-  //     })
-  //   })
-  // },
-  // 'Clearing a measurements removes all tooltips': (c) => {
-  //   if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
-  //     return
-  //   }
-  //   c.waitForElementVisible(measureMenu)
-  //   c.useCss().click(clearMeasurementsBtn)
-  //   c.expect.elements(measurementTooltip).count.to.equal(0)
-  // },
+  'Toggling unit of measure updates the measurement value': async (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox' ||
+        c.options.desiredCapabilities.browserName === 'chrome') {
+      return
+    }
+    c.click(measureBtn)
+    await c.waitForElementVisible(measureMenu, TIME_LIMIT)
+    await c.click(unitOfMeasureToggle)
+    c.pause(500)
+    const tooltips = await c.elements('css selector', measurementTooltip)
+    tooltips.forEach((element) => {
+      c.elementIdText(element.ELEMENT, (elResult) => {
+        const pass = elResult.value.includes('mi')
+        c.assert.ok(pass)
+      })
+    })
+  },
+  'Clearing a measurements removes all tooltips': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox' ||
+        c.options.desiredCapabilities.browserName === 'chrome') {
+      return
+    }
+    c.waitForElementVisible(measureMenu)
+    c.useCss().click(clearMeasurementsBtn)
+    c.expect.elements(measurementTooltip).count.to.equal(0)
+  },
   after (c) {
     c.end()
   }
