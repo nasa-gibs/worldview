@@ -149,7 +149,7 @@ class OlCoordinates extends React.Component {
               onFormatChange={this.changeFormat}
             />
             {latitude && latitude && (
-              <UncontrolledTooltip placement="bottom" target="ol-coords-case">
+              <UncontrolledTooltip id="center-align-tooltip" placement="bottom" target="ol-coords-case">
                 Change coordinates format
               </UncontrolledTooltip>
             )}

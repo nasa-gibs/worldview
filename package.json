@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.39.2",
+  "version": "3.40.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -185,8 +185,8 @@
     "moment": "^2.29.4",
     "moment-locales-webpack-plugin": "^1.2.0",
     "node-dir": "^0.1.17",
-    "ol": "7.1.0",
-    "ol-mapbox-style": "9.1.0",
+    "ol": "7.2.2",
+    "ol-mapbox-style": "9.4.0",
     "p-queue": "^7.3.0",
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
