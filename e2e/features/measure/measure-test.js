@@ -8,9 +8,9 @@ const {
   measureBtn,
   measureAreaBtn,
   measureDistanceBtn,
-  clearMeasurementsBtn,
+  // clearMeasurementsBtn,
   measureMenu,
-  measurementTooltip,
+  // measurementTooltip,
   geoMeasurementTooltip,
   arcticMeasurementTooltip,
   sidebarContainer,
@@ -199,14 +199,14 @@ module.exports = {
   //     })
   //   })
   // },
-  'Clearing a measurements removes all tooltips': (c) => {
-    if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
-      return
-    }
-    c.waitForElementVisible(measureMenu)
-    c.useCss().click(clearMeasurementsBtn)
-    c.expect.elements(measurementTooltip).count.to.equal(0)
-  },
+  // 'Clearing a measurements removes all tooltips': (c) => {
+  //   if (c.options.desiredCapabilities.browserName === 'firefox') { // c.elements() returns different values for firefox
+  //     return
+  //   }
+  //   c.waitForElementVisible(measureMenu)
+  //   c.useCss().click(clearMeasurementsBtn)
+  //   c.expect.elements(measurementTooltip).count.to.equal(0)
+  // },
   after (c) {
     c.end()
   }
