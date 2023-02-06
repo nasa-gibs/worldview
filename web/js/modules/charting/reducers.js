@@ -3,6 +3,11 @@ import { TOGGLE_ON_OFF } from './constants';
 
 export const initialChartingState = {
   active: false,
+  aoiSelected: false,
+  aoiCoordinates: [],
+  timeSpanSingleDate: true,
+  timeSpanStartdate: null,
+  timeSpanEndDate: null,
 };
 export function chartingReducer(state = initialChartingState, action) {
   switch (action.type) {

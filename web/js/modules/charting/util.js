@@ -3,7 +3,6 @@ import { initialChartingState } from './reducers';
 import { formatDisplayDate } from '../date/util';
 
 export function mapLocationToChartingState(parameters, stateFromLocation) {
-  console.log('mapLocationToChartingState');
   stateFromLocation = update(stateFromLocation, {
     charting: { $set: initialChartingState },
   });

@@ -380,7 +380,7 @@ footer .product-buttons .layers-add-container {
   }
 }
 
-.wv-ab-mode-selection-case {
+.wv-ab-mode-selection-case, .wv-charting-mode-container {
   margin: 5px;
   color: #fff;
 }
@@ -394,7 +394,8 @@ footer .product-buttons .layers-add-container {
   opacity: 1;
 }
 
-.wv-ab-mode-selection-case > div {
+.wv-ab-mode-selection-case > div,
+.wv-charting-mode-container > div {
   margin-left: 10px;
 }
 
@@ -402,6 +403,26 @@ footer .product-buttons .layers-add-container {
 .wv-ab-mode-selection-case h3 {
   display: inline-block;
 }
+
+.charting-aoi-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 10px;
+}
+
+.charting-timespan-container,
+.charting-date-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.charting-timespan-container {
+  align-items: center;
+  width: 80%;
+  margin: 10px;
+}
+
 
 #products-holder footer p {
   color: #ccc;

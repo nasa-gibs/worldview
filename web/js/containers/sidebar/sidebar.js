@@ -157,7 +157,6 @@ class Sidebar extends React.Component {
         />
       );
     } if (isChartMode) {
-      console.log('render chart mode layer selector');
       return (
         <ChartingLayerMenu
           height={subComponentHeight}
@@ -281,7 +280,20 @@ class Sidebar extends React.Component {
       onTabClick,
       screenHeight,
       tabTypes,
+      isChartingActive,
+      aoiSelected,
+      aoiCoordinates,
+      timeSpanSingleDate,
+      timeSpanStartdate,
+      timeSpanEndDate,
     } = this.props;
+    // console.log(`isChartingActive: ${isChartingActive}`);
+    // console.log(`aoiSelected: ${aoiSelected}`);
+    // console.log(`aoiCoordinates: ${aoiCoordinates}`);
+    // console.log(`timeSpanSingleDate: ${timeSpanSingleDate}`);
+    // console.log(`timeSpanStartdate: ${timeSpanStartdate}`);
+    // console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
+
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
@@ -514,4 +526,10 @@ Sidebar.propTypes = {
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
   selectedDate: PropTypes.object,
+  isChartingActive: PropTypes.bool,
+  aoiSelected: PropTypes.bool,
+  aoiCoordinates: PropTypes.array,
+  timeSpanSingleDate: PropTypes.bool,
+  timeSpanStartdate: PropTypes.instanceOf(Date),
+  timeSpanEndDate: PropTypes.instanceOf(Date),
 };

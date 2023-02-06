@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
+import ChartingModeOptions from '../../components/sidebar/charting-mode-options';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import { toggleChartingOnOff } from '../../modules/charting/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
@@ -23,14 +24,19 @@ import {
 const FooterContent = React.forwardRef((props, ref) => {
   const {
     isCompareActive,
-    isChartingActive,
     compareMode,
-    isMobile,
-    activeTab,
     changeCompareMode,
     toggleCompare,
-    toggleCharting,
     compareFeature,
+    isChartingActive,
+    aoiSelected,
+    aoiCoordinates,
+    timeSpanSingleDate,
+    timeSpanStartdate,
+    timeSpanEndDate,
+    toggleCharting,
+    isMobile,
+    activeTab,
     eventsData,
   } = props;
 
@@ -80,6 +86,15 @@ const FooterContent = React.forwardRef((props, ref) => {
         isMobile={isMobile}
         selected={compareMode}
         onclick={changeCompareMode}
+      />
+      <ChartingModeOptions
+        isChartingActive={isChartingActive}
+        isMobile={isMobile}
+        aoiSelected={aoiSelected}
+        aoiCoordinates={aoiCoordinates}
+        timeSpanSingleDate={timeSpanSingleDate}
+        timeSpanStartdate={timeSpanStartdate}
+        timeSpanEndDate={timeSpanEndDate}
       />
     </>
   );
@@ -194,4 +209,9 @@ FooterContent.propTypes = {
   isMobile: PropTypes.bool,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
+  aoiSelected: PropTypes.bool,
+  aoiCoordinates: PropTypes.array,
+  timeSpanSingleDate: PropTypes.bool,
+  timeSpanStartdate: PropTypes.instanceOf(Date),
+  timeSpanEndDate: PropTypes.instanceOf(Date),
 };
