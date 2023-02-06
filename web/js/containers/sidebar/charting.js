@@ -188,7 +188,7 @@ function ChartingLayerMenu (props) {
             id="group-overlays-checkbox"
             checked={groupOverlays}
             onCheck={toggleOverlayGroups}
-            label="Group Similar Layers (Charting mode)"
+            label="Group Similar Layers"
           />
         </div>
       </div>

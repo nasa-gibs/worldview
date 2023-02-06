@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 
-class ModeSelection extends React.Component {
+class CompareModeOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,11 +58,11 @@ class ModeSelection extends React.Component {
     );
   }
 }
-ModeSelection.propTypes = {
+CompareModeOptions.propTypes = {
   isActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   onclick: PropTypes.func,
   selected: PropTypes.string,
 };
 
-export default ModeSelection;
+export default CompareModeOptions;

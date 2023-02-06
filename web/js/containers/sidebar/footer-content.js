@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import Button from '../../components/util/button';
-import ModeSelection from '../../components/sidebar/mode-selection';
+import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import { toggleChartingOnOff } from '../../modules/charting/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
@@ -68,14 +68,14 @@ const FooterContent = React.forwardRef((props, ref) => {
           <Button
             id="compare-toggle-button"
             aria-label={compareBtnText}
-            className="compare-toggle-button"
+            className={!isChartingActive ? 'compare-toggle-button' : 'btn.disabled'}
             style={!compareFeature ? { display: 'none' } : null}
-            onClick={onClickToggleCompare}
+            onClick={!isChartingActive ? onClickToggleCompare : null}
             text={compareBtnText}
           />
         </div>
       </div>
-      <ModeSelection
+      <CompareModeOptions
         isActive={isCompareActive}
         isMobile={isMobile}
         selected={compareMode}
