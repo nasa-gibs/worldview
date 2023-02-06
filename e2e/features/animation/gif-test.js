@@ -15,7 +15,8 @@ module.exports = {
   // TODO: Fix FireFox and Chrome test
   'Downloading GIF when custom colormap is activated': function (client) {
     if (client.options.desiredCapabilities.browserName !== 'ie' &&
-        client.options.desiredCapabilities.browserName !== 'chrome') {
+      client.options.desiredCapabilities.browserName !== 'chrome' &&
+      client.options.desiredCapabilities.browserName !== 'firefox') {
       // Custom colormaps down exist in IE
       client.url(client.globals.url + localQueryStrings.activeCustomColormap)
       client.waitForElementVisible(

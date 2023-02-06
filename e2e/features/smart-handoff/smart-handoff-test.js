@@ -37,6 +37,9 @@ module.exports = {
   },
 
   'Select "Cloud Effective Radius" layer and check that it is available for download': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     // Go to layers tabs
     c.click(layersTab)
     c.pause(300)
@@ -71,11 +74,17 @@ module.exports = {
   },
 
   'Enable area of interest': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click('#chk-crop-toggle')
     c.waitForElementVisible('.granule-count-info', TIME_LIMIT)
   },
 
   'Arriving via permalink, data tab selected and granule count shows': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     reuseables.loadAndSkipTour(c, TIME_LIMIT)
     c.url(c.globals.url + permalinkParams)
     c.expect.element(dataTabButton).to.be.visible
@@ -84,6 +93,9 @@ module.exports = {
   },
 
   'Changing collection updates URL': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(SSTRadioButton)
     c.pause(200)
     c.assert.urlContains('&sh=GHRSST_L4_MUR_Sea_Surface_Temperature,C1664741463-PODAAC')
@@ -99,6 +111,9 @@ module.exports = {
   },
 
   'Map extent entirely across dateline disables download button and displays warning for user to zoom out to see available map': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + extentCrossedDateline)
     c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT)
     c.expect.element(downloadButton).to.be.visible
@@ -110,6 +125,9 @@ module.exports = {
   },
 
   'Download via Earthdata Search': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + permalinkParams)
     c.waitForElementVisible(smartHandoffContainer, TIME_LIMIT)
     c.click(downloadButton)

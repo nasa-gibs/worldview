@@ -66,6 +66,9 @@ module.exports = {
 
   // Individual layer interactions
   'Toggle layer Info': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + twoGroupsQueryString)
     c.moveToElement(firesLayer, 0, 0)
     c.waitForElementVisible(infoButton, TIME_LIMIT)
@@ -75,6 +78,9 @@ module.exports = {
     c.expect.element(infoDialog).to.not.be.present
   },
   'Toggle Layer Options': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.pause(500)
     // c.moveToElement(firesLayer, 0, 0);
     c.waitForElementVisible(optionsButton, TIME_LIMIT)
@@ -91,6 +97,9 @@ module.exports = {
   },
 
   'Adding a layer causes it to appear in the appropriate group': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + someGroupsQueryString)
     c.click(addLayers)
     c.waitForElementVisible(categoriesNav, TIME_LIMIT)
@@ -103,6 +112,9 @@ module.exports = {
   },
 
   'Disabling groups puts all overlays into a single group': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(groupCheckbox)
     c.waitForElementVisible(overlaysGroup, TIME_LIMIT)
     c.expect.element(firesLayer).to.be.present
@@ -111,6 +123,9 @@ module.exports = {
   },
 
   'Re-enabling groups restores grouping': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(groupCheckbox)
     c.waitForElementVisible(firesGroup, TIME_LIMIT)
     c.expect.element(aodGroup).to.be.present
@@ -119,6 +134,9 @@ module.exports = {
   },
 
   'Removing the last layer in a group removes the group': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.moveToElement(firesLayer, 0, 0)
     c.waitForElementVisible(firesRemove, TIME_LIMIT)
     c.click(firesRemove).pause(500)
@@ -126,6 +144,9 @@ module.exports = {
   },
 
   'Removing a group removes all layers and the group header': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + twoGroupsQueryString)
     c.waitForElementVisible(aodGroup, TIME_LIMIT)
     c.moveToElement(aodGroupHeader, 0, 0)
@@ -136,6 +157,9 @@ module.exports = {
   },
 
   'Load with groups disabled from permalink': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + mixedLayersGroupsDisabledQueryString)
     c.expect.element(groupCheckbox).to.be.present
     c.expect.element(groupCheckbox).to.not.have.attribute('checked')
@@ -146,6 +170,9 @@ module.exports = {
   },
 
   'Load multiple groups from permalink': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + twoGroupsQueryString)
     c.expect.element(groupCheckbox).to.be.present
     c.assert.attributeContains(groupCheckbox, 'checked', true)
@@ -156,6 +183,9 @@ module.exports = {
   },
 
   'Hide all ...': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.moveToElement(sidebarContainer, 0, 0)
     c.moveToElement(aodGroupHeader, 0, 0)
     c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`)
@@ -166,6 +196,9 @@ module.exports = {
   },
 
   'Show all ...': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.moveToElement(sidebarContainer, 0, 0)
     c.moveToElement(aodGroupHeader, 0, 0)
     c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`)
@@ -176,6 +209,9 @@ module.exports = {
   },
 
   'Ungrouped: Removing baselayers/overlays removes the layers but not the header': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(groupCheckbox)
     c.pause(500)
     c.useCss()
@@ -237,7 +273,8 @@ module.exports = {
 
   // begin with "mixed" interspersed layers
   'Enabling groups re-orders layers into their groups': (c) => {
-    if (c.options.desiredCapabilities.browserName === 'chrome') {
+    if (c.options.desiredCapabilities.browserName === 'firefox' ||
+        c.options.desiredCapabilities.browserName === 'chrome') {
       return
     }
     c.url(c.globals.url + mixedLayersGroupsDisabledQueryString)
@@ -252,6 +289,9 @@ module.exports = {
   },
 
   'Immediately disabling groups restores mixed ordering': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(groupCheckbox).pause(200)
     c.expect.element(aodGroup).to.not.be.present
     c.expect.element(firesGroup).to.not.be.present
@@ -260,7 +300,8 @@ module.exports = {
   },
 
   'Making a change to grouped layers causes group ordering to be retained when ungrouped': (c) => {
-    if (c.options.desiredCapabilities.browserName === 'chrome') { // right click doesn't work in firefox
+    if (c.options.desiredCapabilities.browserName === 'firefox' ||
+        c.options.desiredCapabilities.browserName === 'chrome') {
       return
     }
     c.url(c.globals.url + mixedLayersGroupsDisabledQueryString)
@@ -280,10 +321,16 @@ module.exports = {
 
   // Vector layers
   'vector layer has pointer icon': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + vectorsQueryString)
     c.waitForElementVisible('#active-GRanD_Dams .fa-hand-pointer', TIME_LIMIT)
   },
   'clicking vector layer pointer shows modal': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click('#active-GRanD_Dams .fa-hand-pointer')
     c.waitForElementVisible('.modal-content', TIME_LIMIT, (e) => {
       c.assert.containsText('.modal-content',

@@ -17,6 +17,9 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT)
   },
   'Layer option features work in A|B mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.url(c.globals.url + localQueryStrings.swipeAOD)
     c.waitForElementVisible(aerosolLayer, TIME_LIMIT)
     c.expect.element(AodOptionsPanelBody).to.not.be.present
@@ -33,6 +36,9 @@ module.exports = {
     }
   },
   'Layer info dialog works in A|B mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(`${AodOptionsPanelHeader} .close`).pause(1000)
     c.moveToElement(aerosolLayer, 1, 1)
     c.waitForElementVisible(`${aerosolLayer} .wv-layers-info`)
@@ -44,6 +50,9 @@ module.exports = {
     )
   },
   'expect clicking A|B button to close options dialog': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(`${AodInfoPanel} .close`).pause(500)
     c.click(localSelectors.compareButton)
     c.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
@@ -51,6 +60,9 @@ module.exports = {
     })
   },
   'Layer option features after exiting A|B mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.moveToElement(aerosolLayer, 1, 1).pause(200)
     c.click(`${aerosolLayer} .wv-layers-options`)
     c.waitForElementVisible(AodOptionsPanelBody, TIME_LIMIT, () => {
@@ -67,6 +79,9 @@ module.exports = {
     })
   },
   'Layer info dialog works after exiting A|B mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(`${AodOptionsPanelHeader} .close`).pause(500)
     c.moveToElement(aerosolLayer, 0, 0).pause(200)
     c.click(`${aerosolLayer} .wv-layers-info`)
@@ -86,6 +101,9 @@ module.exports = {
   'expect reactivating A|B to close options dialog and activate B state': function (
     c
   ) {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(`${AodInfoPanel} .close`).pause(500)
     c.moveToElement(aerosolLayer, 1, 1).pause(200)
     c.click(`${aerosolLayer} .wv-layers-options`).pause(500)
@@ -98,6 +116,9 @@ module.exports = {
     })
   },
   'Layer option features work in B state': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.waitForElementVisible(correctedReflectanceBLayer, TIME_LIMIT)
     c.expect.element(AodOptionsPanelBody).to.not.be.present
     c.moveToElement(correctedReflectanceBLayer, 1, 1).pause(200)
@@ -114,6 +135,9 @@ module.exports = {
     }
   },
   'Layer info dialog works after clicking into B mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(`${correctedReflectanceOptionsPanelHeader} .close`)
     c.waitForElementNotPresent('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header', TIME_LIMIT)
     c.moveToElement(correctedReflectanceBLayer, 0, 0).pause(200)

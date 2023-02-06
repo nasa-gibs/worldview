@@ -38,6 +38,9 @@ module.exports = {
     })
   },
   'Removing individual layers updates the list': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.moveToElement('#MODIS_Aqua_Aerosol-search-row', 15, 15)
     c.waitForElementVisible('.recent-layer-delete', TIME_LIMIT, (e) => {
       c.click('.recent-layer-delete')

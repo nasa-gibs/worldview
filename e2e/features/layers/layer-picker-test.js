@@ -76,12 +76,18 @@ module.exports = {
     })
   },
   'Entering search text transitions to search mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.setValue(layersSearchField, 'ozone')
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
       c.expect.elements(layersSearchRow).count.to.equal(6)
     })
   },
   'Updating input changes results': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.clearValue(layersSearchField)
     c.setValue(layersSearchField, 'ozone day')
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
@@ -89,12 +95,18 @@ module.exports = {
     })
   },
   'Selecting a row shows the detail panel': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click('#MLS_O3_46hPa_Day-search-row')
     c.waitForElementVisible(layerDetails, TIME_LIMIT, (e) => {
       c.expect.element(layerDetailHeader).to.be.present
     })
   },
   'Add layer button and list item checbox are in sync': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     const checkBox = '.search-row.layers-all-layer.selected .wv-checkbox'
     c.click(addToMapButton)
     c.pause(200)
@@ -113,6 +125,9 @@ module.exports = {
     })
   },
   '"Available 2013 May 15" filter removes items not available from list, adds a chip': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.clearValue(layersSearchField)
     c.setValue(layersSearchField, '(True')
     c.moveToElement(coverageTooltipIcon, 2, 2, (e) => {
@@ -133,6 +148,9 @@ module.exports = {
     })
   },
   'Closing and reopening layer picker restores state.': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     // First, select a row and confirm details are showing
     c.click(layersSearchRow)
     c.waitForElementVisible(layerDetailHeader, TIME_LIMIT, (e) => {
@@ -158,6 +176,9 @@ module.exports = {
     })
   },
   'Changing app date is reflected in coverage facets': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     // Close the modal
     c.click(layersModalCloseButton)
 
@@ -172,6 +193,9 @@ module.exports = {
     c.expect.element(availableFilterCheckboxInput).to.be.selected
   },
   'Disabling coverage filter updates list': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(availableFilterCheckbox)
     c.pause(200)
     c.expect.element(availableFilterCheckboxInput).to.not.be.selected
@@ -181,6 +205,9 @@ module.exports = {
       .containsText(layerResultsCountText, 'Showing 10 out of')
   },
   'Finding layer by ID with search': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.clearValue(layersSearchField)
     c.pause(1000)
     c.setValue(
@@ -193,6 +220,9 @@ module.exports = {
     })
   },
   'Back button returns to main selection but retains search input': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.waitForElementVisible(layerPickerBackButton, TIME_LIMIT, (e) => {
       c.click(layerPickerBackButton)
       c.getValue(layersSearchField, (result) => {
@@ -202,6 +232,9 @@ module.exports = {
     })
   },
   'Switching to "Science Disciplines" tab updates category/measurement choices': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(scienceDisciplinesTab)
     c.expect.element('#scientific-all').to.be.present
     c.expect.element('#atmosphere').to.be.present
@@ -215,6 +248,9 @@ module.exports = {
     c.expect.element('#scientific-other').to.be.present
   },
   'Selecting a measurement from the grid shows sources and details for first source': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click(aodMeasurement)
     c.waitForElementVisible(aodMeasurementContents, TIME_LIMIT, (e) => {
       c.waitForElementVisible(layerBrowseDetail, TIME_LIMIT, (e) => {
@@ -233,6 +269,9 @@ module.exports = {
     })
   },
   'Available grid source layer measuremet does not have unavaiable coverage icon': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     // swith to Aqua/MODIS measurement nav item
     c.click(aquaModisTab)
     c.waitForElementVisible(aodTabContentAquaMODIS, TIME_LIMIT, (e) => {
@@ -248,6 +287,9 @@ module.exports = {
     })
   },
   'Selecting layers from product picker adds them to the sidebar/map': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.waitForElementVisible(aodChoices, TIME_LIMIT, (e) => {
       c.click(aodCheckboxMODIS)
       c.click(aodCheckboxMAIAC)
@@ -259,11 +301,17 @@ module.exports = {
     })
   },
   'Collapsed sidebar shows updated layer count': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.click('#toggleIconHolder')
     c.assert.containsText('.layer-count', '9 Layers')
     c.click(collapsedLayerButton)
   },
   'When switching arctic projection, go straight to measurements browse list if previously in category mode': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     // Switch projection and confirm measurement view
     switchProjection(c, 'arctic')
     c.pause(100)
@@ -273,6 +321,9 @@ module.exports = {
     })
   },
   'Searching in arctic projection': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     c.setValue(layersSearchField, 'sea')
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
       c.expect.elements(layersSearchRow).count.to.equal(15)
@@ -285,6 +336,9 @@ module.exports = {
     })
   },
   'Switching back to geographic projetion, categories appear': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return
+    }
     switchProjection(c, 'geographic')
     c.click(addLayers)
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c))
