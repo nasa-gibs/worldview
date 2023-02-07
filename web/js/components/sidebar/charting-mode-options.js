@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
+import { toggleChartingAOIOnOff } from '../../modules/charting/actions';
 
 class ChartingModeOptions extends React.Component {
   constructor(props) {
@@ -28,13 +30,9 @@ class ChartingModeOptions extends React.Component {
       timeSpanSingleDate,
       timeSpanStartdate,
       timeSpanEndDate,
+      toggleAOI,
     } = this.props;
-    // console.log(`isChartingActive: ${isChartingActive}`);
-    // console.log(`aoiSelected: ${aoiSelected}`);
-    // console.log(`aoiCoordinates: ${aoiCoordinates}`);
-    // console.log(`timeSpanSingleDate: ${timeSpanSingleDate}`);
-    // console.log(`timeSpanStartdate: ${timeSpanStartdate}`);
-    // console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
+
     let aoiTextPrompt = 'Select Area of Interest';
     if (aoiSelected) {
       aoiTextPrompt = 'Area of Interest Selected';
@@ -47,7 +45,10 @@ class ChartingModeOptions extends React.Component {
       >
         <div className="charting-aoi-container">
           <h3>{aoiTextPrompt}</h3>
-          <FontAwesomeIcon icon={faPencilAlt} />
+          <FontAwesomeIcon
+            icon={faPencilAlt}
+            onClick={toggleAOI}
+          />
         </div>
         <div className="charting-timespan-container">
           <h3>Time Span:</h3>
@@ -76,6 +77,30 @@ class ChartingModeOptions extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const {
+    charting,
+  } = state;
+
+  return {
+    charting,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleAOI: () => {
+    dispatch(toggleChartingAOIOnOff());
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  null,
+  { forwardRef: true },
+)(ChartingModeOptions);
+
 ChartingModeOptions.propTypes = {
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
@@ -84,6 +109,6 @@ ChartingModeOptions.propTypes = {
   timeSpanSingleDate: PropTypes.bool,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
+  toggleAOI: PropTypes.func,
 };
 
-export default ChartingModeOptions;

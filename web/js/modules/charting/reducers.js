@@ -1,10 +1,11 @@
 import { assign as lodashAssign } from 'lodash';
-import { TOGGLE_ON_OFF } from './constants';
+import { TOGGLE_ON_OFF, TOGGLE_AOI_ON_OFF } from './constants';
 
 export const initialChartingState = {
-  active: false,
+  aoiActive: false,
   aoiSelected: false,
   aoiCoordinates: [],
+  chartingActive: false,
   timeSpanSingleDate: true,
   timeSpanStartdate: null,
   timeSpanEndDate: null,
@@ -14,6 +15,10 @@ export function chartingReducer(state = initialChartingState, action) {
     case TOGGLE_ON_OFF:
       return lodashAssign({}, state, {
         active: !state.active,
+      });
+    case TOGGLE_AOI_ON_OFF:
+      return lodashAssign({}, state, {
+        aoiActive: !state.aoiActive,
       });
     default:
       break;

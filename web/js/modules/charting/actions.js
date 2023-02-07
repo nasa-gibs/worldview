@@ -1,17 +1,13 @@
 import { initSecondLayerGroup } from '../layers/actions';
-import { initSecondDate, clearPreload } from '../date/actions';
+import { initSecondDate } from '../date/actions';
 import {
-  CHANGE_STATE,
   TOGGLE_ON_OFF,
-  CHANGE_VALUE,
+  TOGGLE_AOI_ON_OFF,
+  // TOGGLE_DATE_MODE,
+  // UPDATE_START_DATE,
+  // UPDATE_END_DATE,
 } from './constants';
 
-export function toggleActiveChartingState() {
-  return (dispatch, getState) => {
-    dispatch(clearPreload());
-    dispatch({ type: CHANGE_STATE });
-  };
-}
 export function toggleChartingOnOff() {
   return (dispatch, getState) => {
     if (!getState().charting.active) {
@@ -21,6 +17,9 @@ export function toggleChartingOnOff() {
     dispatch({ type: TOGGLE_ON_OFF });
   };
 }
-export function setValue(num) {
-  return { type: CHANGE_VALUE, value: num };
+export function toggleChartingAOIOnOff() {
+  console.log('toggleChartingAOIOnOff running');
+  return (dispatch, getState) => {
+    dispatch({ type: TOGGLE_AOI_ON_OFF });
+  };
 }

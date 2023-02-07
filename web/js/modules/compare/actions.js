@@ -22,15 +22,6 @@ export function toggleCompareOnOff() {
     dispatch({ type: TOGGLE_ON_OFF });
   };
 }
-export function toggleChartingOnOff() {
-  return (dispatch, getState) => {
-    if (!getState().compare.bStatesInitiated) {
-      dispatch(initSecondLayerGroup());
-      dispatch(initSecondDate());
-    }
-    dispatch({ type: TOGGLE_ON_OFF });
-  };
-}
 export function setValue(num) {
   return { type: CHANGE_VALUE, value: num };
 }

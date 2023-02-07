@@ -163,7 +163,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleCompareOnOff());
   },
   toggleCharting: () => {
-    console.log('toggleCharting');
     dispatch(toggleChartingOnOff());
   },
   toggleOverlayGroups: () => {
