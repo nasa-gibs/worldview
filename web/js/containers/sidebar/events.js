@@ -135,8 +135,12 @@ function Events(props) {
       >
         <div id="wv-events">
           {isLoading || hasRequestError ? (
-            <div className="events-loading-text">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
+            // notranslate included below to prevent Google Translate extension from crashing the page
+            <div className="events-loading-text notranslate">
+              {hasRequestError && (
+                <FontAwesomeIcon icon="exclamation-triangle" fixedWidth />
+              )}
+
               {errorOrLoadingText}
             </div>
           ) : renderEventList()}
