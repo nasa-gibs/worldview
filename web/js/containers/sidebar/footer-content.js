@@ -170,24 +170,6 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(toggleOverlayGroupsAction());
     });
   },
-  changeCompareMode: (str) => {
-    dispatch(changeMode(str));
-  },
-  addLayers: (isPlaying) => {
-    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
-    if (isPlaying) {
-      dispatch(stopAnimationAction());
-    }
-    dispatch(
-      openCustomContent('LAYER_PICKER_COMPONENT', {
-        headerText: null,
-        modalClassName,
-        backdrop: true,
-        CompletelyCustomModal: SearchUiProvider,
-        wrapClassName: '',
-      }),
-    );
-  },
 });
 
 export default connect(

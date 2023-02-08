@@ -4,7 +4,11 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
+import { DragBox, Select } from 'ol/interaction.js';
+import { Fill, Stroke, Style } from 'ol/style.js';
+import { any } from 'bluebird';
 import { toggleChartingAOIOnOff } from '../../modules/charting/actions';
+import { openCustomContent } from '../../modules/modal/actions';
 
 class ChartingModeOptions extends React.Component {
   constructor(props) {
@@ -21,6 +25,51 @@ class ChartingModeOptions extends React.Component {
     }
   }
 
+  onAoiButtonClick = (evt, props) => {
+    console.log('props');
+    console.log(this.props);
+    console.log('onAoiButtonClick');
+    const { toggleAOI, olMap } = this.props;
+    toggleAOI();
+
+    const selectedStyle = new Style({
+      fill: new Fill({
+        color: 'rgba(255, 255, 255, 0.6)',
+      }),
+      stroke: new Stroke({
+        color: 'rgba(255, 255, 255, 0.7)',
+        width: 2,
+      }),
+    });
+
+    // a normal select interaction to handle click
+    const select = new Select({
+      style (feature) {
+        const color = feature.get('COLOR_BIO') || '#eeeeee';
+        selectedStyle.getFill().setColor(color);
+        return selectedStyle;
+      },
+    });
+    console.log('olMap');
+    console.log(olMap);
+    olMap.addInteraction(select);
+
+    // Open Modal (for now)
+    // const { openModal } = this.props;
+    // const isTouchDevice = evt.type === 'touchend';
+    // evt.stopPropagation();
+    // evt.preventDefault();
+    // MEASURE_MENU_PROPS.touchDevice = isTouchDevice;
+    // openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
+    // this.setState({
+    //   isTouchDevice,
+    //   showAlert: true,
+    // });
+    // googleTagManager.pushEvent({
+    //   event: 'measure_tool_activated',
+    // });
+  }
+
   render() {
     const {
       isChartingActive,
@@ -30,7 +79,6 @@ class ChartingModeOptions extends React.Component {
       timeSpanSingleDate,
       timeSpanStartdate,
       timeSpanEndDate,
-      toggleAOI,
     } = this.props;
 
     let aoiTextPrompt = 'Select Area of Interest';
@@ -47,7 +95,7 @@ class ChartingModeOptions extends React.Component {
           <h3>{aoiTextPrompt}</h3>
           <FontAwesomeIcon
             icon={faPencilAlt}
-            onClick={toggleAOI}
+            onClick={this.onAoiButtonClick}
           />
         </div>
         <div className="charting-timespan-container">
@@ -80,17 +128,20 @@ class ChartingModeOptions extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    charting,
+    charting, map,
   } = state;
 
   return {
-    charting,
+    charting, olMap: map.ui.selected,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   toggleAOI: () => {
     dispatch(toggleChartingAOIOnOff());
+  },
+  openModal: (key, customParams) => {
+    dispatch(openCustomContent(key, customParams));
   },
 });
 
@@ -110,5 +161,6 @@ ChartingModeOptions.propTypes = {
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAOI: PropTypes.func,
+  olMap: PropTypes.object,
 };
 

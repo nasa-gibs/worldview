@@ -9,17 +9,13 @@ import {
 } from './constants';
 
 export function toggleChartingOnOff() {
-  return (dispatch, getState) => {
-    if (!getState().charting.active) {
-      dispatch(initSecondLayerGroup());
-      dispatch(initSecondDate());
-    }
+  return (dispatch) => {
     dispatch({ type: TOGGLE_ON_OFF });
   };
 }
 export function toggleChartingAOIOnOff() {
   console.log('toggleChartingAOIOnOff running');
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch({ type: TOGGLE_AOI_ON_OFF });
   };
 }
