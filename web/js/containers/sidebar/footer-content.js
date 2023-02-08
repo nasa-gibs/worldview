@@ -66,15 +66,15 @@ const FooterContent = React.forwardRef((props, ref) => {
           <Button
             id="chart-toggle-button"
             aria-label={chartBtnText}
-            className="chart-toggle-button"
+            className={!isCompareActive ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
             style={!compareFeature ? { display: 'none' } : null}
-            onClick={onClickToggleCharting}
+            onClick={!isCompareActive ? onClickToggleCharting : null}
             text={chartBtnText}
           />
           <Button
             id="compare-toggle-button"
             aria-label={compareBtnText}
-            className={!isChartingActive ? 'compare-toggle-button' : 'btn.disabled'}
+            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
             style={!compareFeature ? { display: 'none' } : null}
             onClick={!isChartingActive ? onClickToggleCompare : null}
             text={compareBtnText}
