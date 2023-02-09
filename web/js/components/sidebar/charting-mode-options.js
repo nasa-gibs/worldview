@@ -4,11 +4,30 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-import { DragBox, Select } from 'ol/interaction.js';
-import { Fill, Stroke, Style } from 'ol/style.js';
-import { any } from 'bluebird';
+
+import Draw, { createBox } from 'ol/interaction/Draw.js';
+
+import {
+  Circle as OlStyleCircle,
+  Fill as OlStyleFill,
+  Stroke as OlStyleStroke,
+  Style as OlStyle,
+} from 'ol/style';
+import { transform } from 'ol/proj';
+import {
+  LineString as OlLineString,
+  Polygon as OlGeomPolygon,
+} from 'ol/geom';
 import { toggleChartingAOIOnOff } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
+import { CRS } from '../../modules/map/constants';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import {
+  transformLineStringArc,
+  transformPolygonArc,
+} from '../measure-tool/util';
+
+const sources = {};
 
 class ChartingModeOptions extends React.Component {
   constructor(props) {
@@ -25,49 +44,84 @@ class ChartingModeOptions extends React.Component {
     }
   }
 
+  areaBgFill = new OlStyleFill({
+    color: 'rgba(213, 78, 33, 0.1)',
+  });
+
+  solidBlackLineStroke = new OlStyleStroke({
+    color: 'rgba(0, 0, 0, 1)',
+    lineJoin: 'round',
+    width: 5,
+  });
+
+  drawStyles = [
+    new OlStyle({
+      fill: this.areaBgFill,
+      stroke: this.solidBlackLineStroke,
+      geometry: this.styleGeometryFn,
+    }),
+    new OlStyle({
+      stroke: new OlStyleStroke({
+        color: '#fff',
+        lineDash: [10, 20],
+        lineJoin: 'round',
+        width: 2,
+      }),
+      image: new OlStyleCircle({
+        radius: 7,
+        stroke: new OlStyleStroke({
+          color: 'rgba(0, 0, 0, 0.7)',
+        }),
+        fill: new OlStyleFill({
+          color: 'rgba(255, 255, 255, 0.3)',
+        }),
+      }),
+      geometry: this.styleGeometryFn,
+    }),
+  ];
+
+  /**
+     * Call the appropriate transform function to add great circle arcs to
+     * lines and polygon edges.  Otherwise pass through unaffected.
+     * @param {*} feature
+     */
+  styleGeometryFn = (feature) => {
+    const { crs } = this.props;
+    const geometry = feature.getGeometry();
+    if (geometry instanceof OlLineString) {
+      return transformLineStringArc(geometry, crs);
+    }
+    if (geometry instanceof OlGeomPolygon) {
+      return transformPolygonArc(geometry, crs);
+    }
+    return geometry;
+  };
+
   onAoiButtonClick = (evt, props) => {
     console.log('props');
     console.log(this.props);
     console.log('onAoiButtonClick');
-    const { toggleAOI, olMap } = this.props;
+    const {
+      toggleAOI, olMap, crs, proj,
+    } = this.props;
     toggleAOI();
 
-    const selectedStyle = new Style({
-      fill: new Fill({
-        color: 'rgba(255, 255, 255, 0.6)',
-      }),
-      stroke: new Stroke({
-        color: 'rgba(255, 255, 255, 0.7)',
-        width: 2,
-      }),
-    });
-
-    // a normal select interaction to handle click
-    const select = new Select({
-      style (feature) {
-        const color = feature.get('COLOR_BIO') || '#eeeeee';
-        selectedStyle.getFill().setColor(color);
-        return selectedStyle;
+    // Define draw option
+    const draw = new Draw({
+      source: sources[crs],
+      type: 'Circle',
+      geometryFunction: createBox(),
+      // style: this.drawStyles,
+      condition(e) {
+        const pixel = [e.originalEvent.x, e.originalEvent.y];
+        const coord = olMap.getCoordinateFromPixel(pixel);
+        const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
+        return areCoordinatesWithinExtent(proj, tCoord);
       },
     });
     console.log('olMap');
     console.log(olMap);
-    olMap.addInteraction(select);
-
-    // Open Modal (for now)
-    // const { openModal } = this.props;
-    // const isTouchDevice = evt.type === 'touchend';
-    // evt.stopPropagation();
-    // evt.preventDefault();
-    // MEASURE_MENU_PROPS.touchDevice = isTouchDevice;
-    // openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
-    // this.setState({
-    //   isTouchDevice,
-    //   showAlert: true,
-    // });
-    // googleTagManager.pushEvent({
-    //   event: 'measure_tool_activated',
-    // });
+    olMap.addInteraction(draw);
   }
 
   render() {
@@ -128,11 +182,11 @@ class ChartingModeOptions extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    charting, map,
+    charting, map, proj,
   } = state;
-
+  const { crs } = proj.selected;
   return {
-    charting, olMap: map.ui.selected,
+    charting, olMap: map.ui.selected, proj, crs,
   };
 };
 
@@ -162,5 +216,7 @@ ChartingModeOptions.propTypes = {
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAOI: PropTypes.func,
   olMap: PropTypes.object,
+  crs: PropTypes.string,
+  proj: PropTypes.object,
 };
 
