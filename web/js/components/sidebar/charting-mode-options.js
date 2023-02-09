@@ -4,9 +4,8 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-
 import Draw, { createBox } from 'ol/interaction/Draw.js';
-
+import Overlay from 'ol/Overlay';
 import {
   Circle as OlStyleCircle,
   Fill as OlStyleFill,
@@ -37,54 +36,12 @@ class ChartingModeOptions extends React.Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(newProp) {
-    const { selected } = this.state;
-    if (selected !== newProp.selected) {
-      this.setState({ selected: newProp.selected });
-    }
-  }
-
-  areaBgFill = new OlStyleFill({
-    color: 'rgba(213, 78, 33, 0.1)',
-  });
-
-  solidBlackLineStroke = new OlStyleStroke({
-    color: 'rgba(0, 0, 0, 1)',
-    lineJoin: 'round',
-    width: 5,
-  });
-
-  drawStyles = [
-    new OlStyle({
-      fill: this.areaBgFill,
-      stroke: this.solidBlackLineStroke,
-      geometry: this.styleGeometryFn,
-    }),
-    new OlStyle({
-      stroke: new OlStyleStroke({
-        color: '#fff',
-        lineDash: [10, 20],
-        lineJoin: 'round',
-        width: 2,
-      }),
-      image: new OlStyleCircle({
-        radius: 7,
-        stroke: new OlStyleStroke({
-          color: 'rgba(0, 0, 0, 0.7)',
-        }),
-        fill: new OlStyleFill({
-          color: 'rgba(255, 255, 255, 0.3)',
-        }),
-      }),
-      geometry: this.styleGeometryFn,
-    }),
-  ];
-
   /**
-     * Call the appropriate transform function to add great circle arcs to
-     * lines and polygon edges.  Otherwise pass through unaffected.
-     * @param {*} feature
-     */
+   * Copied from measurment tool; not sure if required yet
+   * Call the appropriate transform function to add great circle arcs to
+   * lines and polygon edges.  Otherwise pass through unaffected.
+   * @param {*} feature
+   */
   styleGeometryFn = (feature) => {
     const { crs } = this.props;
     const geometry = feature.getGeometry();
@@ -98,12 +55,11 @@ class ChartingModeOptions extends React.Component {
   };
 
   onAoiButtonClick = (evt, props) => {
-    console.log('props');
-    console.log(this.props);
-    console.log('onAoiButtonClick');
     const {
       toggleAOI, olMap, crs, proj,
     } = this.props;
+    console.log('olMap at onAoiButtonClick');
+    console.log(olMap);
     toggleAOI();
 
     // Define draw option
@@ -111,6 +67,8 @@ class ChartingModeOptions extends React.Component {
       source: sources[crs],
       type: 'Circle',
       geometryFunction: createBox(),
+
+      // This is done in the measurement tool to validate the area selected
       // style: this.drawStyles,
       condition(e) {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
@@ -119,10 +77,30 @@ class ChartingModeOptions extends React.Component {
         return areCoordinatesWithinExtent(proj, tCoord);
       },
     });
-    console.log('olMap');
-    console.log(olMap);
     olMap.addInteraction(draw);
+    console.log('olMap after draw');
+    console.log(olMap);
+
+    const tooltipElement = document.createElement('div');
+    const tooltipOverlay = new Overlay({
+      element: tooltipElement,
+      offset: [0, -15],
+      positioning: 'bottom-center',
+      stopEvent: false,
+    });
+    olMap.addOverlay(tooltipOverlay);
+
+    // draw.on('drawstart', this.drawStartCallback);
+    // draw.on('drawend', this.drawEndCallback);
   }
+
+  // drawStartCallback = () => {
+  //   console.log('drawStartCallback');
+  // }
+
+  // drawEndCallback = () => {
+  //   console.log('drawEndCallback');
+  // }
 
   render() {
     const {
