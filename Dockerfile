@@ -19,8 +19,8 @@ RUN dnf install -y epel-release && \
     xz
 RUN mkdir -p /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=16.19.0
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash && \
+ENV NODE_VERSION=18.14.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
     nvm use v${NODE_VERSION} && \
