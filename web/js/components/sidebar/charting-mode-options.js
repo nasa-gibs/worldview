@@ -4,8 +4,9 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-import Draw, { createBox } from 'ol/interaction/Draw.js';
-import Overlay from 'ol/Overlay';
+import { Draw as OlInteractionDraw } from 'ol/interaction';
+import { createBox } from 'ol/interaction/Draw.js';
+import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
 import {
@@ -90,6 +91,22 @@ function ChartingModeOptions (props) {
     }),
   ];
 
+  const vectorStyles = [
+    new OlStyle({
+      fill: areaBgFill,
+      stroke: solidBlackLineStroke,
+      geometry: styleGeometryFn,
+    }),
+    new OlStyle({
+      stroke: new OlStyleStroke({
+        color: '#fff',
+        lineJoin: 'round',
+        width: 2,
+      }),
+      geometry: styleGeometryFn,
+    }),
+  ];
+
   const onAoiButtonClick = (evt) => {
     toggleAOI();
 
@@ -98,35 +115,29 @@ function ChartingModeOptions (props) {
     console.log(sources[crs]);
 
     // Define draw option
-    const draw = new Draw({
-      source: sources[crs],
-      type: 'Circle',
-      style: drawStyles,
-      geometryFunction: createBox(),
-
-      // This is done in the measurement tool to validate the area selected
-      // style: this.drawStyles,
+    const draw = new OlInteractionDraw({
+      source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
+      type: 'Circle', // Geometry type of the geometries being drawn with this instance.
+      style: drawStyles, // Style for sketch features.
+      // This is from measurement tool; validate area selected
       condition(e) {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
         const coord = olMap.getCoordinateFromPixel(pixel);
         const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
-        const t = areCoordinatesWithinExtent(proj, tCoord);
-        console.log(t);
-        return t;
+        return areCoordinatesWithinExtent(proj, tCoord);
       },
+      geometryFunction: createBox(), // Function that is called when a geometry's coordinates are updated.
+
     });
     console.log('adding interaction');
     olMap.addInteraction(draw);
-
-    const tooltipElement = document.createElement('div');
-    const tooltipOverlay = new Overlay({
-      element: tooltipElement,
-      offset: [0, -15],
-      positioning: 'bottom-center',
-      stopEvent: false,
-    });
-    console.log('adding overlay');
-    olMap.addOverlay(tooltipOverlay);
+    if (!vectorLayers[crs]) {
+      vectorLayers[crs] = new OlVectorLayer({
+        source: sources[crs],
+        style: vectorStyles,
+        map: olMap,
+      });
+    }
   };
 
   const {
