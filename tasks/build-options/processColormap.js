@@ -137,7 +137,7 @@ async function processEntries (colormap) {
       if (legend === 'false') {
         refSkipList.push(entry._attributes.ref)
       }
-      const [r, g, b] = entry._attributes.rgb.split(',')
+      // const [r, g, b] = entry._attributes.rgb.split(',')
       let a = 0
       if (entry._attributes.transparent === 'true') {
         a = 255
@@ -148,16 +148,7 @@ async function processEntries (colormap) {
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
       }
-      refsList.push(entry._attributes.ref)
-      // TODO: turn this into reusable function
-      const rHex = parseInt(r).toString(16).padStart(2, '0')
-      const gHex = parseInt(g).toString(16).padStart(2, '0')
-      const bHex = parseInt(b).toString(16).padStart(2, '0')
-      const colorString = rHex + gHex + bHex + 'ff'
 
-      if (colorString !== '000000ff' && colorString !== '000001ff' && colorString !== 'ffff00ff') {
-        colors.push(colorString)
-      }
       if (mapType === 'continuous' || mapType === 'discrete') {
         const items = entry._attributes.value.replace(/[()[\]]/g, '').split(',')
         try {
@@ -195,7 +186,8 @@ async function processEntries (colormap) {
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
       const colorString = rHex + gHex + bHex + 'ff'
-      if (colorString !== '000000ff' && colorString !== '000001ff' && colorString !== 'ffff00ff') {
+      if (colorString !== '000000ff' && colorString !== '000001ff') {
+        colors.push(colorString)
         legendColors.push(colorString)
       }
       if (!entry._attributes.tooltip) {
@@ -208,6 +200,7 @@ async function processEntries (colormap) {
         throw new Error('No id in legend')
       }
       if (refSkipList.includes(entry._attributes.id)) {
+        refsList.push(entry._attributes.id)
         idList.push(entry._attributes.id)
       }
       if (entry._attributes.showTick) {
