@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,66 +6,102 @@ import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-
 import { connect } from 'react-redux';
 import Draw, { createBox } from 'ol/interaction/Draw.js';
 import Overlay from 'ol/Overlay';
+import { transform } from 'ol/proj';
+import { Vector as OlVectorSource } from 'ol/source';
 import {
   Circle as OlStyleCircle,
   Fill as OlStyleFill,
   Stroke as OlStyleStroke,
   Style as OlStyle,
 } from 'ol/style';
-import { transform } from 'ol/proj';
-import {
-  LineString as OlLineString,
-  Polygon as OlGeomPolygon,
-} from 'ol/geom';
 import { toggleChartingAOIOnOff } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
-import {
-  transformLineStringArc,
-  transformPolygonArc,
-} from '../measure-tool/util';
 
+const allMeasurements = {};
+const vectorLayers = {};
 const sources = {};
+let init = false;
 
-class ChartingModeOptions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selected: props.selected,
-    };
-  }
+function ChartingModeOptions (props) {
+  const {
+    toggleAOI, olMap, crs, proj, projections,
+  } = props;
+  useEffect(() => {
+    if (!init) {
+      projections.forEach((key) => {
+        allMeasurements[key] = {};
+        vectorLayers[key] = null;
+        sources[key] = new OlVectorSource({ wrapX: false });
+      });
+      init = true;
+    }
+  }, [projections]);
+
+  const areaBgFill = new OlStyleFill({
+    color: 'rgba(213, 78, 33, 0.1)',
+  });
+  const solidBlackLineStroke = new OlStyleStroke({
+    color: 'rgba(0, 0, 0, 1)',
+    lineJoin: 'round',
+    width: 5,
+  });
 
   /**
-   * Copied from measurment tool; not sure if required yet
    * Call the appropriate transform function to add great circle arcs to
    * lines and polygon edges.  Otherwise pass through unaffected.
    * @param {*} feature
    */
-  styleGeometryFn = (feature) => {
-    const { crs } = this.props;
+  const styleGeometryFn = (feature) => {
     const geometry = feature.getGeometry();
-    if (geometry instanceof OlLineString) {
-      return transformLineStringArc(geometry, crs);
-    }
-    if (geometry instanceof OlGeomPolygon) {
-      return transformPolygonArc(geometry, crs);
-    }
+    // if (geometry instanceof OlLineString) {
+    //   return transformLineStringArc(geometry, crs);
+    // }
+    // if (geometry instanceof OlGeomPolygon) {
+    //   return transformPolygonArc(geometry, crs);
+    // }
     return geometry;
   };
 
-  onAoiButtonClick = (evt, props) => {
-    const {
-      toggleAOI, olMap, crs, proj,
-    } = this.props;
-    console.log('olMap at onAoiButtonClick');
-    console.log(olMap);
+  const drawStyles = [
+    new OlStyle({
+      fill: areaBgFill,
+      stroke: solidBlackLineStroke,
+      geometry: styleGeometryFn,
+    }),
+    new OlStyle({
+      stroke: new OlStyleStroke({
+        color: '#fff',
+        lineDash: [10, 20],
+        lineJoin: 'round',
+        width: 2,
+      }),
+      image: new OlStyleCircle({
+        radius: 7,
+        stroke: new OlStyleStroke({
+          color: 'rgba(0, 0, 0, 0.7)',
+        }),
+        fill: new OlStyleFill({
+          color: 'rgba(255, 255, 255, 0.3)',
+        }),
+      }),
+      geometry: styleGeometryFn,
+    }),
+  ];
+
+  const onAoiButtonClick = (evt) => {
     toggleAOI();
+
+    console.log(`crs: ${crs}`); // EPSG:4326
+    console.log(sources);
+    console.log(sources[crs]);
 
     // Define draw option
     const draw = new Draw({
       source: sources[crs],
       type: 'Circle',
+      style: drawStyles,
       geometryFunction: createBox(),
 
       // This is done in the measurement tool to validate the area selected
@@ -74,12 +110,13 @@ class ChartingModeOptions extends React.Component {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
         const coord = olMap.getCoordinateFromPixel(pixel);
         const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
-        return areCoordinatesWithinExtent(proj, tCoord);
+        const t = areCoordinatesWithinExtent(proj, tCoord);
+        console.log(t);
+        return t;
       },
     });
+    console.log('adding interaction');
     olMap.addInteraction(draw);
-    console.log('olMap after draw');
-    console.log(olMap);
 
     const tooltipElement = document.createElement('div');
     const tooltipOverlay = new Overlay({
@@ -88,83 +125,73 @@ class ChartingModeOptions extends React.Component {
       positioning: 'bottom-center',
       stopEvent: false,
     });
+    console.log('adding overlay');
     olMap.addOverlay(tooltipOverlay);
+  };
 
-    // draw.on('drawstart', this.drawStartCallback);
-    // draw.on('drawend', this.drawEndCallback);
+  const {
+    isChartingActive,
+    isMobile,
+    aoiSelected,
+    aoiCoordinates,
+    timeSpanSingleDate,
+    timeSpanStartdate,
+    timeSpanEndDate,
+  } = props;
+
+  let aoiTextPrompt = 'Select Area of Interest';
+  if (aoiSelected) {
+    aoiTextPrompt = 'Area of Interest Selected';
   }
 
-  // drawStartCallback = () => {
-  //   console.log('drawStartCallback');
-  // }
-
-  // drawEndCallback = () => {
-  //   console.log('drawEndCallback');
-  // }
-
-  render() {
-    const {
-      isChartingActive,
-      isMobile,
-      aoiSelected,
-      aoiCoordinates,
-      timeSpanSingleDate,
-      timeSpanStartdate,
-      timeSpanEndDate,
-    } = this.props;
-
-    let aoiTextPrompt = 'Select Area of Interest';
-    if (aoiSelected) {
-      aoiTextPrompt = 'Area of Interest Selected';
-    }
-    return (
-      <div
-        id="wv-charting-mode-container"
-        className="wv-charting-mode-container"
-        style={{ display: isChartingActive && !isMobile ? 'block' : 'none' }}
-      >
-        <div className="charting-aoi-container">
-          <h3>{aoiTextPrompt}</h3>
-          <FontAwesomeIcon
-            icon={faPencilAlt}
-            onClick={this.onAoiButtonClick}
-          />
-        </div>
-        <div className="charting-timespan-container">
-          <h3>Time Span:</h3>
-          <ButtonGroup size="sm">
-            <Button
-              id="charting-single-date-button"
-              className="charting-button charting-single-date-button"
-            >
-              One Date
-            </Button>
-            <Button
-              id="charting-date-range-button"
-              className="compare-button compare-swipe-button"
-            >
-              Date Range
-            </Button>
-          </ButtonGroup>
-        </div>
-        <div className="charting-date-container">
-          <div className="charting-start-date">Start Date</div>
-          <div className="charting-end-date">End Date</div>
-          <FontAwesomeIcon icon={faCalendarDay} />
-          <FontAwesomeIcon icon={faInfo} />
-        </div>
+  return (
+    <div
+      id="wv-charting-mode-container"
+      className="wv-charting-mode-container"
+      style={{ display: isChartingActive && !isMobile ? 'block' : 'none' }}
+    >
+      <div className="charting-aoi-container">
+        <h3>{aoiTextPrompt}</h3>
+        <FontAwesomeIcon
+          icon={faPencilAlt}
+          onClick={onAoiButtonClick}
+        />
       </div>
-    );
-  }
+      <div className="charting-timespan-container">
+        <h3>Time Span:</h3>
+        <ButtonGroup size="sm">
+          <Button
+            id="charting-single-date-button"
+            className="charting-button charting-single-date-button"
+          >
+            One Date
+          </Button>
+          <Button
+            id="charting-date-range-button"
+            className="compare-button compare-swipe-button"
+          >
+            Date Range
+          </Button>
+        </ButtonGroup>
+      </div>
+      <div className="charting-date-container">
+        <div className="charting-start-date">Start Date</div>
+        <div className="charting-end-date">End Date</div>
+        <FontAwesomeIcon icon={faCalendarDay} />
+        <FontAwesomeIcon icon={faInfo} />
+      </div>
+    </div>
+  );
 }
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    charting, map, proj,
+    charting, map, proj, config,
   } = state;
   const { crs } = proj.selected;
+  const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    charting, olMap: map.ui.selected, proj, crs,
+    charting, olMap: map.ui.selected, proj, crs, projections,
   };
 };
 
@@ -180,8 +207,6 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  null,
-  { forwardRef: true },
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {
@@ -196,5 +221,6 @@ ChartingModeOptions.propTypes = {
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
+  projections: PropTypes.array,
 };
 

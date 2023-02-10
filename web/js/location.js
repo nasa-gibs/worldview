@@ -57,7 +57,6 @@ import {
  * @param {Object} location | Redux-location-state Location object
  */
 export const mapLocationToState = (state, location) => {
-  console.log('mapLocationToState');
   const { config } = state;
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
