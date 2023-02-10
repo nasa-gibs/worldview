@@ -208,7 +208,6 @@
     "regenerator-runtime": "^0.13.3",
     "reselect": "^4.0.0",
     "rgbcolor": "^0.0.4",
-    "simplebar": "^5.3.9",
     "simplebar-react": "^2.1.0",
     "stackblur": "^1.0.0",
     "supercluster": "7.0.0",
