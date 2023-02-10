@@ -118,10 +118,10 @@ async function processEntry (entry) {
     gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
   } catch (e) {
     if (tolerant) {
-      process.stderr.write(`${prog}: WARN: [${inputFile}] Unable to get GC: ${e}\n`)
+      console.warn(`${prog}: WARN: [${inputFile}] Unable to get GC: ${e}\n`)
       warningCount += 1
     } else {
-      process.stderr.write(`${prog}: ERROR: [${inputFile}] Unable to get GC: ${e}\n`)
+      console.error(`${prog}: ERROR: [${inputFile}] Unable to get GC: ${e}\n`)
       errorCount += 1
     }
     return { errorCount, warningCount, layerCount }
@@ -132,27 +132,10 @@ async function processEntry (entry) {
 
   if (!gcContents || !gcContents.Layer) {
     errorCount += 1
-    process.stderr.write(`${prog}: ERROR: [${gcId}] No layers\n`)
+    console.error(`${prog}: ERROR: [${gcId}] No layers\n`)
     return { errorCount, warningCount, layerCount }
   }
 
-  // if (typeof gc.Capabilities.Contents.Layer === 'object') {
-  //   const gcLayer = gc.Capabilities.Contents.Layer
-  //   const ident = gcLayer['ows:Identifier']
-  //   try {
-  //     layerCount += 1
-  //     processLayer(gcLayer, wvLayers, entry)
-  //   } catch (error) {
-  //     if (error instanceof SkipException) {
-  //       warningCount += 1
-  //       process.stderr.write(`${prog}: WARNING: [${ident}] Skipping\n`)
-  //     } else {
-  //       errorCount += 1
-  //       console.error(error.stack)
-  //       process.stderr.write(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
-  //     }
-  //   }
-  // } else {
   for (const gcLayer of gcContents.Layer) {
     try {
       layerCount += 1
@@ -160,15 +143,14 @@ async function processEntry (entry) {
     } catch (error) {
       if (error instanceof SkipException) {
         warningCount += 1
-        process.stderr.write(`${prog}: WARNING: [${id}] Skipping\n`)
+        console.warn(`${prog}: WARNING: [${id}] Skipping\n`)
       } else {
         errorCount += 1
         console.error(error.stack)
-        process.stderr.write(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
+        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
       }
     }
   }
-  // }
 
   if (gcContents.TileMatrixSet === 'Object') {
     processMatrixSet(gcContents.TileMatrixSet)

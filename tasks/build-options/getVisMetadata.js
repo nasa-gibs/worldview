@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
-const request = require('axios').default
+const axios = require('axios').default
 
 const prog = path.basename(__filename)
 
@@ -121,31 +121,33 @@ async function getDAAC (metadata) {
   return metadata
 }
 
-async function getMetadata (layerId, baseUrl) {
-  let errorCount = 0
-  try {
-    return request({
-      method: 'get',
-      url: `${baseUrl}${layerId}.json`,
-      responseType: 'json',
-      timeout: 10000
-    }).then(async (response) => {
-      metadata = response.data
-      layerMetadata[layerId] = await getDAAC(metadata)
-      metadataKeys = Object.keys(layerMetadata[layerId])
-      metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
-      for (key of metadataKeys) {
-        delete layerMetadata[layerId][key]
-      }
-    })
-  } catch (error) {
-    errorCount += 1
-    if (errorCount <= 2) {
-      console.warn(`${prog}: WARNING: Failed to retrieve metadata config for ${layerId}, will retry...`)
-      await getMetadata(layerId, baseUrl)
-    } else {
-      throw new Error(`{prog}: Error: Failed to retrieve metadata config for ${layerId}`)
+async function getMetadata (layerId, baseUrl, count) {
+  if (count) console.warn(`retry #${count} for ${layerId}`)
+  return axios({
+    method: 'get',
+    url: `${baseUrl}${layerId}.json`,
+    responseType: 'json',
+    timeout: 10000
+  }).then(async (response) => {
+    metadata = response.data
+    layerMetadata[layerId] = await getDAAC(metadata)
+    metadataKeys = Object.keys(layerMetadata[layerId])
+    metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+    for (key of metadataKeys) {
+      delete layerMetadata[layerId][key]
     }
+  }).catch((error) => {
+    handleException(error, layerId, url, count)
+  })
+}
+
+async function handleException (error, layerId, url, count) {
+  if (!count) count = 0
+  count++
+  if (count <= 5) {
+    await getMetadata(layerId, url, count)
+  } else {
+    console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
   }
 }
 
