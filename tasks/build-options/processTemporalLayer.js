@@ -77,7 +77,7 @@ async function processTemporalLayer (wvLayer, value) {
         wvLayer.dateRanges = dateRangeStart.map((s, i) => ({
           startDate: s,
           endDate: dateRangeEnd[i],
-          dateInterval: rangeInterval[i][0]
+          dateInterval: rangeInterval[i]
         }))
       }
     }

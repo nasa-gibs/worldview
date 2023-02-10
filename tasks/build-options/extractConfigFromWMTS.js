@@ -237,10 +237,10 @@ async function processLayer (gcLayer, wvLayers, entry) {
     for (const setLimit of matrixSetLimits) {
       mappedSetLimits.push({
         tileMatrix: setLimit.TileMatrix._text,
-        minTileRow: parseInt(setLimit.MinTileRow, 10),
-        maxTileRow: parseInt(setLimit.MaxTileRow, 10),
-        minTileCol: parseInt(setLimit.MinTileCol, 10),
-        maxTileCol: parseInt(setLimit.MaxTileCol, 10)
+        minTileRow: parseInt(setLimit.MinTileRow._text, 10),
+        maxTileRow: parseInt(setLimit.MaxTileRow._text, 10),
+        minTileCol: parseInt(setLimit.MinTileCol._text, 10),
+        maxTileCol: parseInt(setLimit.MaxTileCol._text, 10)
       })
     }
     wvLayer.projections[entry.projection].matrixSetLimits = mappedSetLimits

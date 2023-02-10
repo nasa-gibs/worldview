@@ -250,7 +250,7 @@ async function readFileAsync (file) {
 
 async function processFile (id, xml) {
   let document
-  let colormaps
+  let colormaps = []
   try {
     document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
     if (document && document.ColorMaps && document.ColorMaps.ColorMap) {
@@ -286,6 +286,7 @@ async function processFile (id, xml) {
     const outputFile = path.join(outputDir, `${id}.json`)
     await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
   } catch (error) {
+    console.error(id)
     console.error(error)
   }
 }
