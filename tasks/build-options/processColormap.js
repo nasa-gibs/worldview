@@ -155,7 +155,7 @@ async function processEntries (colormap) {
       const bHex = parseInt(b).toString(16).padStart(2, '0')
       const colorString = rHex + gHex + bHex + 'ff'
 
-      if (colorString !== '000000ff' && colorString !== '000001ff') {
+      if (colorString !== '000000ff' && colorString !== '000001ff' && colorString !== 'ffff00ff') {
         colors.push(colorString)
       }
       if (mapType === 'continuous' || mapType === 'discrete') {
@@ -195,19 +195,21 @@ async function processEntries (colormap) {
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
       const colorString = rHex + gHex + bHex + 'ff'
-      if (colorString !== '000000ff' && colorString !== '000001ff') {
+      if (colorString !== '000000ff' && colorString !== '000001ff' && colorString !== 'ffff00ff') {
         legendColors.push(colorString)
       }
       if (!entry._attributes.tooltip) {
         throw new Error('No tooltips in legend')
       }
-      if (entry._attributes.tooltip !== 'No Data') {
+      if (entry._attributes.tooltip !== 'No Data' && entry._attributes.tooltip !== 'No Water') {
         tooltips.push(entry._attributes.tooltip)
       }
       if (!entry._attributes.id) {
         throw new Error('No id in legend')
       }
-      idList.push(entry._attributes.id)
+      if (refSkipList.includes(entry._attributes.id)) {
+        idList.push(entry._attributes.id)
+      }
       if (entry._attributes.showTick) {
         ticks.push(skipIndex - 1)
       }
