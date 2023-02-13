@@ -105,17 +105,18 @@ function ChartingModeOptions (props) {
   ];
 
   const onAreaOfInterestButtonClick = (evt) => {
+    toggleAreaOfInterest();
     // If aoiActive is active & button clicked, the user has elected to end the process
+    console.log(`aoiActive: ${aoiActive}`);
     if (aoiActive) {
+      beginDrawingAOI();
+    } else {
       endDrawingAOI();
     }
-    beginDrawingAOI();
   };
 
   // initialize a new Area of interest draw interaction.
   function beginDrawingAOI () {
-    toggleAreaOfInterest();
-
     // Define draw interaction
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
@@ -177,6 +178,7 @@ function ChartingModeOptions (props) {
 
   function endDrawingAOI () {
     console.log('endDrawingAOI');
+    olMap.removeInteraction(draw);
   }
 
   /**
