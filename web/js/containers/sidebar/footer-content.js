@@ -55,7 +55,6 @@ const FooterContent = React.forwardRef((props, ref) => {
   };
   const onClickToggleCharting = (e) => {
     e.stopPropagation();
-    console.log('Clear AOI from map if exiting!!!!');
     toggleCharting();
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
@@ -91,11 +90,6 @@ const FooterContent = React.forwardRef((props, ref) => {
       <ChartingModeOptions
         isChartingActive={isChartingActive}
         isMobile={isMobile}
-        aoiSelected={aoiSelected}
-        aoiCoordinates={aoiCoordinates}
-        timeSpanSingleDate={timeSpanSingleDate}
-        timeSpanStartdate={timeSpanStartdate}
-        timeSpanEndDate={timeSpanEndDate}
       />
     </>
   );

@@ -15,7 +15,7 @@ import {
   Stroke as OlStyleStroke,
   Style as OlStyle,
 } from 'ol/style';
-import { toggleChartingAOIOnOff } from '../../modules/charting/actions';
+import { toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
@@ -29,6 +29,8 @@ let draw;
 function ChartingModeOptions (props) {
   const {
     toggleAreaOfInterestActive,
+    toggleAreaOfInterestSelected,
+    updateAOICoordinates,
     olMap,
     crs,
     proj,
@@ -57,7 +59,7 @@ function ChartingModeOptions (props) {
 
   useEffect(() => {
     // if toggling off
-    clearAllAOI();
+    resetAOI();
     endDrawingAOI();
   }, [isChartingActive]);
 
@@ -121,7 +123,7 @@ function ChartingModeOptions (props) {
 
   // initialize a new Area of interest draw interaction.
   function beginDrawingAOI () {
-    clearAllAOI();
+    resetAOI();
     // Define draw interaction
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
@@ -164,6 +166,8 @@ function ChartingModeOptions (props) {
     };
     endDrawingAOI();
     toggleAreaOfInterestActive();
+    toggleAreaOfInterestSelected();
+    getCoordinatesFromAOI(feature.getGeometry());
   };
 
   /**
@@ -178,7 +182,7 @@ function ChartingModeOptions (props) {
   /**
    * Clear any existing AOI's from the current map projection
    */
-  function clearAllAOI() {
+  function resetAOI() {
     Object.values(AOIFeatureObj[crs]).forEach(
       ({ feature, overlay }) => {
         sources[crs].removeFeature(feature);
@@ -189,10 +193,17 @@ function ChartingModeOptions (props) {
       vectorLayers[crs].setMap(null);
       vectorLayers[crs] = null;
     }
+
+    toggleAreaOfInterestSelected(false);
+    updateAOICoordinates(null);
+  }
+
+  function getCoordinatesFromAOI(geometry) {
+    const extent = geometry.getExtent();
+    updateAOICoordinates(extent);
   }
 
   let aoiTextPrompt = 'Select Area of Interest';
-  console.log(`aoiSelected: ${aoiSelected}`);
   if (aoiSelected) {
     aoiTextPrompt = 'Area of Interest Selected';
   }
@@ -242,10 +253,10 @@ const mapStateToProps = (state, ownProps) => {
     charting, map, proj, config,
   } = state;
   const { crs } = proj.selected;
-  const { aoiActive } = charting;
+  const { aoiActive, aoiCoordinates, aoiSelected } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    charting, olMap: map.ui.selected, proj, crs, projections, aoiActive,
+    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected,
   };
 };
 
@@ -253,11 +264,14 @@ const mapDispatchToProps = (dispatch) => ({
   toggleAreaOfInterestActive: () => {
     dispatch(toggleChartingAOIOnOff());
   },
+  toggleAreaOfInterestSelected: (featureSetting) => {
+    dispatch(toggleAOISelected(featureSetting));
+  },
+  updateAOICoordinates: (extent) => {
+    dispatch(updateChartingAOICoordinates(extent));
+  },
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
-  },
-  toggleAOIActive: () => {
-    dispatch(toggleAOIActive());
   },
 });
 
@@ -275,10 +289,11 @@ ChartingModeOptions.propTypes = {
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAreaOfInterestActive: PropTypes.func,
+  toggleAreaOfInterestSelected: PropTypes.func,
+  updateAOICoordinates: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
   projections: PropTypes.array,
   aoiActive: PropTypes.bool,
 };
-

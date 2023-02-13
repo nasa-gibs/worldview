@@ -21,6 +21,7 @@ class CompareModeOptions extends React.Component {
     const {
       isActive, isMobile, selected, onclick,
     } = this.props;
+    console.log(this.props);
     return (
       <div
         id="wv-ab-mode-selection-case"
