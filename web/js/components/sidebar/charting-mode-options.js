@@ -24,11 +24,26 @@ const allMeasurements = {};
 const vectorLayers = {};
 const sources = {};
 let init = false;
+let draw;
 
 function ChartingModeOptions (props) {
   const {
-    toggleAOI, olMap, crs, proj, projections,
+    toggleAreaOfInterest,
+    olMap,
+    crs,
+    proj,
+    projections,
+    isChartingActive,
+    isMobile,
+    aoiSelected,
+    aoiActive,
+    aoiCoordinates,
+    timeSpanSingleDate,
+    timeSpanStartdate,
+    timeSpanEndDate,
   } = props;
+
+  // Listen for changes in projections
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
@@ -40,6 +55,8 @@ function ChartingModeOptions (props) {
     }
   }, [projections]);
 
+  // areaBgFill, solidBlackLineStroke, drawStyles & vectorStyles should be constants
+  // & shared with the measurement tool
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)',
   });
@@ -49,27 +66,10 @@ function ChartingModeOptions (props) {
     width: 5,
   });
 
-  /**
-   * Call the appropriate transform function to add great circle arcs to
-   * lines and polygon edges.  Otherwise pass through unaffected.
-   * @param {*} feature
-   */
-  const styleGeometryFn = (feature) => {
-    const geometry = feature.getGeometry();
-    // if (geometry instanceof OlLineString) {
-    //   return transformLineStringArc(geometry, crs);
-    // }
-    // if (geometry instanceof OlGeomPolygon) {
-    //   return transformPolygonArc(geometry, crs);
-    // }
-    return geometry;
-  };
-
   const drawStyles = [
     new OlStyle({
       fill: areaBgFill,
       stroke: solidBlackLineStroke,
-      geometry: styleGeometryFn,
     }),
     new OlStyle({
       stroke: new OlStyleStroke({
@@ -87,7 +87,6 @@ function ChartingModeOptions (props) {
           color: 'rgba(255, 255, 255, 0.3)',
         }),
       }),
-      geometry: styleGeometryFn,
     }),
   ];
 
@@ -95,7 +94,6 @@ function ChartingModeOptions (props) {
     new OlStyle({
       fill: areaBgFill,
       stroke: solidBlackLineStroke,
-      geometry: styleGeometryFn,
     }),
     new OlStyle({
       stroke: new OlStyleStroke({
@@ -103,19 +101,23 @@ function ChartingModeOptions (props) {
         lineJoin: 'round',
         width: 2,
       }),
-      geometry: styleGeometryFn,
     }),
   ];
 
-  const onAoiButtonClick = (evt) => {
-    toggleAOI();
+  const onAreaOfInterestButtonClick = (evt) => {
+    // If aoiActive is active & button clicked, the user has elected to end the process
+    if (aoiActive) {
+      endDrawingAOI();
+    }
+    beginDrawingAOI();
+  };
 
-    console.log(`crs: ${crs}`); // EPSG:4326
-    console.log(sources);
-    console.log(sources[crs]);
+  // initialize a new Area of interest draw interaction.
+  function beginDrawingAOI () {
+    toggleAreaOfInterest();
 
-    // Define draw option
-    const draw = new OlInteractionDraw({
+    // Define draw interaction
+    draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
       type: 'Circle', // Geometry type of the geometries being drawn with this instance.
       style: drawStyles, // Style for sketch features.
@@ -129,8 +131,10 @@ function ChartingModeOptions (props) {
       geometryFunction: createBox(), // Function that is called when a geometry's coordinates are updated.
 
     });
-    console.log('adding interaction');
     olMap.addInteraction(draw);
+    draw.on('drawstart', drawStartCallback);
+    draw.on('drawend', drawEndCallback);
+
     if (!vectorLayers[crs]) {
       vectorLayers[crs] = new OlVectorLayer({
         source: sources[crs],
@@ -138,17 +142,68 @@ function ChartingModeOptions (props) {
         map: olMap,
       });
     }
+  }
+
+  const drawStartCallback = ({ feature }) => {
+    console.log('drawStartCallback');
+    console.log(`feature.ol_uid: ${feature.ol_uid}`);
+
+    // This clears all AOIs, including the current one :-(
+    // clearMeasurements(feature);
+
+    // let tooltipCoord;
+    // events.trigger(MAP_DISABLE_CLICK_ZOOM);
+    // drawChangeListener = feature.getGeometry().on('change', (e) => {
+    //   const geom = e.target;
+    //   if (geom instanceof OlGeomPolygon) {
+    //     tooltipCoord = geom.getInteriorPoint().getCoordinates();
+    //   } else if (geom instanceof OlLineString) {
+    //     tooltipCoord = geom.getLastCoordinate();
+    //   }
+    //   renderTooltip(feature, tooltipOverlay);
+    //   tooltipOverlay.setPosition(tooltipCoord);
+    // });
   };
 
-  const {
-    isChartingActive,
-    isMobile,
-    aoiSelected,
-    aoiCoordinates,
-    timeSpanSingleDate,
-    timeSpanStartdate,
-    timeSpanEndDate,
-  } = props;
+  const drawEndCallback = ({ feature }) => {
+    console.log('drawEndCallback');
+    allMeasurements[crs][feature.ol_uid] = {
+      feature,
+    };
+    console.log(allMeasurements[crs]);
+    // updateMeasurements(allMeasurements);
+    // terminateDraw();
+  };
+
+  function endDrawingAOI () {
+    console.log('endDrawingAOI');
+  }
+
+  /**
+   * Clear all existing measurements on the current map projection
+   */
+  function clearMeasurements (activeFeature) {
+    console.log('clearing measurements');
+    console.log('allMeasurements[crs]');
+    console.log(allMeasurements[crs]);
+    Object.values(allMeasurements[crs]).forEach(
+      ({ feature, overlay }) => {
+        console.log('in forEach');
+        console.log(`activeFeature.ol_uid: ${activeFeature.ol_uid}`);
+        console.log(`feature.ol_uid: ${feature.ol_uid}`);
+        sources[crs].removeFeature(feature);
+      },
+    );
+
+    allMeasurements[crs] = {};
+    // updateMeasurements(allMeasurements);
+    // terminateDraw();
+    // olMap.removeOverlay(tooltipOverlay);
+    if (vectorLayers[crs]) {
+      vectorLayers[crs].setMap(null);
+      vectorLayers[crs] = null;
+    }
+  }
 
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
@@ -165,7 +220,7 @@ function ChartingModeOptions (props) {
         <h3>{aoiTextPrompt}</h3>
         <FontAwesomeIcon
           icon={faPencilAlt}
-          onClick={onAoiButtonClick}
+          onClick={onAreaOfInterestButtonClick}
         />
       </div>
       <div className="charting-timespan-container">
@@ -200,14 +255,15 @@ const mapStateToProps = (state, ownProps) => {
     charting, map, proj, config,
   } = state;
   const { crs } = proj.selected;
+  const { aoiActive } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    charting, olMap: map.ui.selected, proj, crs, projections,
+    charting, olMap: map.ui.selected, proj, crs, projections, aoiActive,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleAOI: () => {
+  toggleAreaOfInterest: () => {
     dispatch(toggleChartingAOIOnOff());
   },
   openModal: (key, customParams) => {
@@ -228,10 +284,11 @@ ChartingModeOptions.propTypes = {
   timeSpanSingleDate: PropTypes.bool,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
-  toggleAOI: PropTypes.func,
+  toggleAreaOfInterest: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
   projections: PropTypes.array,
+  aoiActive: PropTypes.bool,
 };
 
