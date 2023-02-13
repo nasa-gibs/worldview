@@ -1,11 +1,11 @@
-FROM centos:7
+FROM almalinux:9.1
 
-RUN yum install -y epel-release && \
-    yum install -y \
+RUN dnf install -y epel-release && \
+    dnf --enablerepo=crb install giflib-devel -y && \
+    dnf install -y \
     "@Development Tools" \
     cairo-devel \
     firefox \
-    giflib-devel \
     httpd \
     libjpeg-turbo-devel \
     java-1.8.0-openjdk \
@@ -18,10 +18,10 @@ RUN yum install -y epel-release && \
     openssl-devel \
     xz
 RUN cd /usr/src && \
-    wget https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz  && \
-    tar xzf Python-3.9.4.tgz && \
-    rm Python-3.9.4.tgz && \
-    cd Python-3.9.4 && \
+    wget https://www.python.org/ftp/python/3.9.16/Python-3.9.16.tgz  && \
+    tar xzf Python-3.9.16.tgz && \
+    rm Python-3.9.16.tgz && \
+    cd Python-3.9.16 && \
     ./configure --enable-optimizations && \
     make altinstall && \
     ln -sf /usr/local/bin/python3.9 /usr/local/bin/python3 && \
@@ -34,7 +34,7 @@ RUN cd /usr/src && \
 RUN mkdir -p /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
 ENV NODE_VERSION=18.14.0
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
     nvm use v${NODE_VERSION} && \
