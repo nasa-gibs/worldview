@@ -8,13 +8,19 @@ import {
   // UPDATE_END_DATE,
 } from './constants';
 
-export function toggleChartingOnOff() {
+export function toggleChartingModeOnOff() {
+  console.log('toggleChartingModeOnOff running');
   return (dispatch) => {
     dispatch({ type: TOGGLE_ON_OFF });
   };
 }
 export function toggleChartingAOIOnOff() {
-  console.log('toggleChartingAOIOnOff running');
+  return (dispatch) => {
+    dispatch({ type: TOGGLE_AOI_ON_OFF });
+  };
+}
+export function toggleAOIActive() {
+  console.log('toggleAOIActive running');
   return (dispatch) => {
     dispatch({ type: TOGGLE_AOI_ON_OFF });
   };

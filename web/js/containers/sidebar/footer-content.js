@@ -11,7 +11,7 @@ import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import ChartingModeOptions from '../../components/sidebar/charting-mode-options';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import { toggleChartingOnOff } from '../../modules/charting/actions';
+import { toggleChartingModeOnOff } from '../../modules/charting/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
@@ -55,6 +55,7 @@ const FooterContent = React.forwardRef((props, ref) => {
   };
   const onClickToggleCharting = (e) => {
     e.stopPropagation();
+    console.log('Clear AOI from map if exiting!!!!');
     toggleCharting();
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
@@ -163,7 +164,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleCompareOnOff());
   },
   toggleCharting: () => {
-    dispatch(toggleChartingOnOff());
+    dispatch(toggleChartingModeOnOff());
   },
   toggleOverlayGroups: () => {
     setTimeout(() => {

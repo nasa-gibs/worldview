@@ -20,7 +20,7 @@ import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
-const allMeasurements = {};
+const AOIFeatureObj = {};
 const vectorLayers = {};
 const sources = {};
 let init = false;
@@ -28,7 +28,7 @@ let draw;
 
 function ChartingModeOptions (props) {
   const {
-    toggleAreaOfInterest,
+    toggleAreaOfInterestActive,
     olMap,
     crs,
     proj,
@@ -47,13 +47,19 @@ function ChartingModeOptions (props) {
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
-        allMeasurements[key] = {};
+        AOIFeatureObj[key] = {};
         vectorLayers[key] = null;
         sources[key] = new OlVectorSource({ wrapX: false });
       });
       init = true;
     }
   }, [projections]);
+
+  useEffect(() => {
+    // if toggling off
+    clearAllAOI();
+    endDrawingAOI();
+  }, [isChartingActive]);
 
   // areaBgFill, solidBlackLineStroke, drawStyles & vectorStyles should be constants
   // & shared with the measurement tool
@@ -105,10 +111,8 @@ function ChartingModeOptions (props) {
   ];
 
   const onAreaOfInterestButtonClick = (evt) => {
-    toggleAreaOfInterest();
-    // If aoiActive is active & button clicked, the user has elected to end the process
-    console.log(`aoiActive: ${aoiActive}`);
-    if (aoiActive) {
+    toggleAreaOfInterestActive();
+    if (!aoiActive) {
       beginDrawingAOI();
     } else {
       endDrawingAOI();
@@ -117,6 +121,7 @@ function ChartingModeOptions (props) {
 
   // initialize a new Area of interest draw interaction.
   function beginDrawingAOI () {
+    clearAllAOI();
     // Define draw interaction
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
@@ -147,60 +152,39 @@ function ChartingModeOptions (props) {
 
   const drawStartCallback = ({ feature }) => {
     console.log('drawStartCallback');
-    console.log(`feature.ol_uid: ${feature.ol_uid}`);
-
-    // This clears all AOIs, including the current one :-(
-    // clearMeasurements(feature);
-
-    // let tooltipCoord;
-    // events.trigger(MAP_DISABLE_CLICK_ZOOM);
-    // drawChangeListener = feature.getGeometry().on('change', (e) => {
-    //   const geom = e.target;
-    //   if (geom instanceof OlGeomPolygon) {
-    //     tooltipCoord = geom.getInteriorPoint().getCoordinates();
-    //   } else if (geom instanceof OlLineString) {
-    //     tooltipCoord = geom.getLastCoordinate();
-    //   }
-    //   renderTooltip(feature, tooltipOverlay);
-    //   tooltipOverlay.setPosition(tooltipCoord);
-    // });
   };
 
+  /**
+   * Triggers when draw is completed
+   */
   const drawEndCallback = ({ feature }) => {
-    console.log('drawEndCallback');
-    allMeasurements[crs][feature.ol_uid] = {
+    // Add the draw feature to the collection
+    AOIFeatureObj[crs][feature.ol_uid] = {
       feature,
     };
-    console.log(allMeasurements[crs]);
-    // updateMeasurements(allMeasurements);
-    // terminateDraw();
+    endDrawingAOI();
+    toggleAreaOfInterestActive();
   };
 
+  /**
+   * End the AOI draw interaction
+   */
   function endDrawingAOI () {
-    console.log('endDrawingAOI');
-    olMap.removeInteraction(draw);
+    if (draw) {
+      olMap.removeInteraction(draw);
+    }
   }
 
   /**
-   * Clear all existing measurements on the current map projection
+   * Clear any existing AOI's from the current map projection
    */
-  function clearMeasurements (activeFeature) {
-    console.log('clearing measurements');
-    console.log('allMeasurements[crs]');
-    console.log(allMeasurements[crs]);
-    Object.values(allMeasurements[crs]).forEach(
+  function clearAllAOI() {
+    Object.values(AOIFeatureObj[crs]).forEach(
       ({ feature, overlay }) => {
-        console.log('in forEach');
-        console.log(`activeFeature.ol_uid: ${activeFeature.ol_uid}`);
-        console.log(`feature.ol_uid: ${feature.ol_uid}`);
         sources[crs].removeFeature(feature);
       },
     );
 
-    allMeasurements[crs] = {};
-    // updateMeasurements(allMeasurements);
-    // terminateDraw();
-    // olMap.removeOverlay(tooltipOverlay);
     if (vectorLayers[crs]) {
       vectorLayers[crs].setMap(null);
       vectorLayers[crs] = null;
@@ -208,6 +192,7 @@ function ChartingModeOptions (props) {
   }
 
   let aoiTextPrompt = 'Select Area of Interest';
+  console.log(`aoiSelected: ${aoiSelected}`);
   if (aoiSelected) {
     aoiTextPrompt = 'Area of Interest Selected';
   }
@@ -265,11 +250,14 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleAreaOfInterest: () => {
+  toggleAreaOfInterestActive: () => {
     dispatch(toggleChartingAOIOnOff());
   },
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
+  },
+  toggleAOIActive: () => {
+    dispatch(toggleAOIActive());
   },
 });
 
@@ -286,7 +274,7 @@ ChartingModeOptions.propTypes = {
   timeSpanSingleDate: PropTypes.bool,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
-  toggleAreaOfInterest: PropTypes.func,
+  toggleAreaOfInterestActive: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
