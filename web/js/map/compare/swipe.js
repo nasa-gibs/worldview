@@ -75,7 +75,7 @@ export default class Swipe {
     });
     layersSideA = [];
     layersSideB = [];
-  }
+  };
 
   getSwipeOffset = () => swipeOffset;
 
@@ -128,7 +128,7 @@ export default class Swipe {
       topRight: getRenderPixel(event, [widthSideA, 0]),
     };
     setRectClipMask(ctx, coordinates);
-  }
+  };
 
   /**
    * Set Clipping mask for the "B" side of a comparison.
@@ -146,7 +146,7 @@ export default class Swipe {
       topRight: getRenderPixel(event, [mapSize[0], 0]),
     };
     setRectClipMask(ctx, coordinates);
-  }
+  };
 }
 
 /**

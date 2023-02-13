@@ -75,7 +75,7 @@ class ProductPickerHeader extends React.Component {
     if (showMobileFacets) {
       toggleMobileFacets();
     }
-  }
+  };
 
   renderBreadCrumb() {
     const { category } = this.props;

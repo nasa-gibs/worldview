@@ -12,7 +12,7 @@ import {
 
 const { events } = util;
 
-const MouseMoveEvents = (props) => {
+function MouseMoveEvents(props) {
   const {
     isCoordinateSearchActive,
     isEventsTabActive,
@@ -55,7 +55,7 @@ const MouseMoveEvents = (props) => {
   });
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {

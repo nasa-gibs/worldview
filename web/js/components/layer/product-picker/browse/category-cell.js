@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CategoryCell = (props) => {
+function CategoryCell(props) {
   const {
     category,
     measurementConfig,
@@ -101,7 +101,7 @@ const CategoryCell = (props) => {
       </div>
     </div>
   );
-};
+}
 
 CategoryCell.propTypes = {
   category: PropTypes.object,

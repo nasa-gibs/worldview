@@ -90,7 +90,7 @@ export class CoordinatesMarker extends Component {
         onDismiss={() => this.setState({ showExtentAlert: false })}
       />
     );
-  }
+  };
 
   render() {
     const { showExtentAlert } = this.state;

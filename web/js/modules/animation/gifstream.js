@@ -161,11 +161,13 @@ export default class GifStream {
               Math.round((processedImages / imageLength) * 100),
             );
             processedImages++;
-            setTimeout(() => {
+            setTimeout(
+              () => {
               // This was needed in order for callback to be applied
-              pull();
-            },
-            10);
+                pull();
+              },
+              10,
+            );
           }
         });
       };

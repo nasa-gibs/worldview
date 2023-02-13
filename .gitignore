@@ -18,7 +18,6 @@ python
 .pydevproject
 .DS_Store
 bitly.json
-tools
 *~
 *.swp
 options
@@ -27,6 +26,7 @@ options
 *.log
 # Nightwatch stuff
 e2e/reports
+e2e/screens
 *.jar
 # Config
 /config/*

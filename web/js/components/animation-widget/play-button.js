@@ -7,9 +7,9 @@ import { UncontrolledTooltip } from 'reactstrap';
  * @class PlayButton
  * @extends React.Component
  */
-const PlayButton = ({
+function PlayButton({
   playing, pause, play, isDisabled, isMobile,
-}) => {
+}) {
   const buttonId = 'play-button';
   const labelText = isDisabled
     ? 'Too many animation frames. Reduce time range or increase increment size.'
@@ -38,7 +38,7 @@ const PlayButton = ({
         : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
     </a>
   );
-};
+}
 
 PlayButton.propTypes = {
   pause: PropTypes.func,

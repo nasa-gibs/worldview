@@ -1,166 +1,23 @@
 {
-  "env": {
-    "browser": true,
-    "node": true,
-    "jest/globals": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 2019,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
-  "plugins": [
-    "react",
-    "jest",
-    "no-storage"
-  ],
-  "extends": "airbnb",
-  "parser": "@babel/eslint-parser",
-  "settings": {
-    "react": {
-      "version": "detect"
-    },
-    "import/resolver": {
-      "node": {}, // Needed for node core modules (https://github.com/benmosher/eslint-plugin-import/issues/1396)
-      "webpack": {}
-    }
-  },
+  "extends": ["standard", "plugin:n/recommended"],
   "rules": {
-    // The following rules are cases where our base rules
-    // differed from AirBnB Style guide. Keeping for now.
-    "no-unused-vars": [
-      "error",
-      {
-        "vars": "all",
-        "args": "none"
-      }
-    ],
-    "camelcase": [
-      "error",
-      {
-        "allow": [
-          "^UNSAFE_"
-        ],
-        "properties": "never"
-      }
-    ],
-    "no-useless-call": "error",
-    "no-extra-parens": "error",
-    "space-before-function-paren": "off",
-    "import/extensions": "off",
-    "no-multiple-empty-lines": "off",
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": [
-          "tasks/*.js",
-          "tasks/**/*.js",
-          "rpm/*.js",
-          "**/*test.js",
-          "**/*config.js",
-          "**/*conf.js"
-        ]
-      }
-    ],
-    "no-storage/no-browser-storage": "error"
+    "new-cap": ["error", {}],
+    "camelcase": ["error", {
+      "ignoreDestructuring": true,
+      "properties": "never"
+    }],
+    "n/no-path-concat": "warn",
+    "n/no-deprecated-api": "warn",
+    "no-async-promise-executor": "warn"
   },
   "overrides": [
     {
-      "files": [
-        "**/*.js"
-      ],
+      "files": ["*.js"],
       "rules": {
-        /* BEGIN Airbnb overrides
-
-          Rules below are overriding the Airbnb style guide rules in order to get code
-          to pass without having to fix hundreds of existing errors by hand.
-
-          For rules set to "off": consider setting to "warn" to identify non-compliance in new code
-          For rules set to "warn": consider removing to throw errors on existing and future code
-        */
-        // Base rule overrides
-        "no-nested-ternary": "off", // 58 errors
-        "no-shadow": "warn", // 136 errors
-        "max-len": "off",
-        "consistent-return": "off", // 73 errors
-        "no-underscore-dangle": "off",
-        "func-names": "off",
-        "no-param-reassign": [ // 329 errors
-          "warn",
-          {
-            "props": false
-          }
-        ],
-        "no-use-before-define": [
-          "error",
-          {
-            "functions": false,
-            "classes": true,
-            "variables": false
-          }
-        ],
-        // Import rules overrides
-        "import/no-cycle": "warn",
-        // Accesibility rules overrides
-        "jsx-a11y/no-noninteractive-tabindex": "off",
-        "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "jsx-a11y/anchor-has-content": "off",
-        "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/anchor-is-valid": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "jsx-a11y/alt-text": "off",
-        "jsx-a11y/mouse-events-have-key-events": "off",
-        "jsx-a11y/tabindex-no-positive": "off",
-        "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
-        // React rules overrides
-        "react/jsx-props-no-spreading": "warn", // 17 errors
-        "react/jsx-filename-extension": "off",
-        "react/jsx-no-bind": "warn",
-        "react/sort-comp": [
-          "error",
-          {
-            "order": [
-              "static-methods",
-              "lifecycle",
-              "everything-else",
-              "render"
-            ],
-            "groups": {
-              "lifecycle": [
-                "displayName",
-                "propTypes",
-                "contextTypes",
-                "childContextTypes",
-                "mixins",
-                "statics",
-                "defaultProps",
-                "constructor",
-                "getDefaultProps",
-                "state",
-                "getInitialState",
-                "getChildContext",
-                "getDerivedStateFromProps",
-                "componentWillMount",
-                "UNSAFE_componentWillMount",
-                "componentDidMount",
-                "componentWillReceiveProps",
-                "UNSAFE_componentWillReceiveProps",
-                "shouldComponentUpdate",
-                "componentWillUpdate",
-                "UNSAFE_componentWillUpdate",
-                "getSnapshotBeforeUpdate",
-                "componentDidUpdate",
-                "componentDidCatch",
-                "componentWillUnmount"
-              ]
-            }
-          }
-        ],
-        "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off" // 965 errors
+        "no-undef": "off",
+        "n/no-unpublished-require": "off",
+        "no-unused-expressions": "off",
+        "prefer-regex-literals": "warn"
       }
     }
   ]
