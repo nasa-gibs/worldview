@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Bash commands to run in Bamboo to prepare an rpm for deployment
+# Bash commands to run in Bamboo for deployment
 
 BASE=$(dirname "$0")/../..
 
