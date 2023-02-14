@@ -331,10 +331,10 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
       let index = 0;
 
       layers.forEach((layer) => {
-        if (layer.layergroup === 'Reference') {
+        if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
+          index += 1;
         }
-        index += 1;
       });
       if (lastRefIndex === 0) {
         return lastRefIndex;

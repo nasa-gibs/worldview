@@ -6,7 +6,7 @@ import { getSelectedDate } from '../../../modules/date/selectors';
 import { promiseImageryForTime } from '../../../modules/map/util';
 import { setPreload } from '../../../modules/date/actions';
 
-const BufferQuickAnimate = (props) => {
+function BufferQuickAnimate(props) {
   const {
     action,
     date,
@@ -49,7 +49,7 @@ const BufferQuickAnimate = (props) => {
   }
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {

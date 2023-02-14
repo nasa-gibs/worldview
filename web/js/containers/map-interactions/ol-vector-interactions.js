@@ -108,7 +108,7 @@ export class VectorInteractions extends React.Component {
     if (!toggledGranuleFootprint) {
       this.clearGranuleFootprint();
     }
-  }
+  };
 
   handleCursorChange(pixel, map, lon, lat) {
     const {
@@ -149,7 +149,7 @@ export class VectorInteractions extends React.Component {
   mouseOut = () => {
     this.mouseMove.cancel();
     events.trigger(GRANULE_HOVERED, null);
-  }
+  };
 
   mouseMove({ pixel }, map, crs) {
     const {
@@ -311,7 +311,8 @@ const mapDispatchToProps = (dispatch) => ({
     const modalWidth = isMobile ? screenWidth : 445;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
 
-    dispatch(openCustomContent(dialogId,
+    dispatch(openCustomContent(
+      dialogId,
       {
         backdrop: false,
         clickableBehindModal: true,
@@ -336,7 +337,8 @@ const mapDispatchToProps = (dispatch) => ({
             dispatch(selectVectorFeaturesActionCreator({}));
           }, 1);
         },
-      }));
+      },
+    ));
   },
 });
 

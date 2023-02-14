@@ -5,19 +5,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { openCustomContent } from '../modules/modal/actions';
 
 const HEADER_TEXT = 'Error!';
-const BODY_COMPONENT = () => (
-  <>
-    <div className="error-header">
-      <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" size="3x" />
-      An unexpected error has occurred!
-    </div>
-    <div className="error-body">
-      Please reload the page and try again. If you continue to have problems,
-      contact us at
-      <a href="mailto:@MAIL@"> @MAIL@ </a>
-    </div>
-  </>
-);
+function BODY_COMPONENT() {
+  return (
+    <>
+      <div className="error-header">
+        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" size="3x" />
+        An unexpected error has occurred!
+      </div>
+      <div className="error-body">
+        Please reload the page and try again. If you continue to have problems,
+        contact us at
+        <a href="mailto:@MAIL@"> @MAIL@ </a>
+      </div>
+    </>
+  );
+}
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);

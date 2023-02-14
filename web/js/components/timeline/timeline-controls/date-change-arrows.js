@@ -53,7 +53,7 @@ class DateChangeArrows extends PureComponent {
     const { setArrowDown } = this.props;
     setArrowDown(direction);
     arrowDownCheckTimer = null;
-  }
+  };
 
   handleKeyDown = (e) => {
     const { arrowDown } = this.props;
@@ -65,7 +65,7 @@ class DateChangeArrows extends PureComponent {
       e.preventDefault();
       if (!arrowDown) this.onArrowDown(direction);
     }
-  }
+  };
 
   handleKeyUp = (e) => {
     const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
@@ -80,7 +80,7 @@ class DateChangeArrows extends PureComponent {
     arrowDownCheckTimer = setTimeout(() => {
       this.clickAndHold(direction);
     }, CLICK_HOLD_DELAY);
-  }
+  };
 
   onArrowUp = (direction) => {
     const { setArrowUp, arrowDown } = this.props;
@@ -90,7 +90,7 @@ class DateChangeArrows extends PureComponent {
     clearInterval(intervals[direction]);
     intervals[direction] = 0;
     if (arrowDown) setArrowUp();
-  }
+  };
 
   render() {
     const {

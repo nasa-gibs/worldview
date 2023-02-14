@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
+import { TextEncoder, TextDecoder } from 'util';
 import {
   openBasicContent,
   openCustomContent,
@@ -10,6 +11,10 @@ import {
 } from './actions';
 import * as constants from './constants';
 import util from '../../util/util';
+
+// jsdom polyfills
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

@@ -6,7 +6,7 @@ import util from '../../../util/util';
 
 const { events } = util;
 
-const GranuleHover = (props) => {
+function GranuleHover(props) {
   const {
     granuleFootprints,
     state,
@@ -38,7 +38,7 @@ const GranuleHover = (props) => {
   events.on(GRANULE_HOVER_UPDATE, onGranuleHoverUpdate);
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => ({
   state,

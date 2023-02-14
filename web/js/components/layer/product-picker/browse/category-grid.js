@@ -17,7 +17,7 @@ import {
  * @class LayerList
  * @extends React.Component
  */
-const CategoryGrid = (props) => {
+function CategoryGrid(props) {
   const {
     categories,
     measurementConfig,
@@ -53,7 +53,7 @@ const CategoryGrid = (props) => {
       ))}
     </Masonry>
   );
-};
+}
 const mapDispatchToProps = (dispatch) => ({
   showMeasurements: (category, selectedMeasurement) => {
     dispatch(showMeasurementsAction({ category, selectedMeasurement }));

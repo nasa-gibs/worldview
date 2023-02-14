@@ -23,52 +23,50 @@ function GlobalSettings(props) {
   } = props;
 
   return (
-    <>
-      <div className="global-setting-container">
+    <div className="global-setting-container">
 
-        <TemperatureUnitButtons
-          changeTemperatureUnit={changeTemperatureUnitAction}
-          globalTemperatureUnit={globalTemperatureUnit}
-        />
+      <TemperatureUnitButtons
+        changeTemperatureUnit={changeTemperatureUnitAction}
+        globalTemperatureUnit={globalTemperatureUnit}
+      />
 
-        <CoordinateFormatButtons
-          changeCoordinateFormat={changeCoordinateFormatAction}
-          coordinateFormat={coordinateFormat}
-        />
+      <CoordinateFormatButtons
+        changeCoordinateFormat={changeCoordinateFormatAction}
+        coordinateFormat={coordinateFormat}
+      />
 
-        <div className="settings-component">
-          <h3 className="wv-header">
-            Show Antimeridian / Approximate Date Line
-            {' '}
-            <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" /></span>
-            <HoverTooltip
-              isMobile={false}
-              labelText="For many layers, this line represents the transition of daytime imagery from one day to the next."
-              target="datelines-toggle"
-              placement="right"
-            />
-          </h3>
-          <ButtonGroup>
-            <Button
-              outline
-              className="setting-button"
-              active={alwaysShowDatelines}
-              onClick={() => toggleAlwaysShowDatelines(true)}
-            >
-              Always
-            </Button>
-            <Button
-              outline
-              className="setting-button"
-              active={!alwaysShowDatelines}
-              onClick={() => toggleAlwaysShowDatelines(false)}
-            >
-              On Hover
-            </Button>
-          </ButtonGroup>
-        </div>
+      <div className="settings-component">
+        <h3 className="wv-header">
+          Show Antimeridian / Approximate Date Line
+          {' '}
+          <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" /></span>
+          <HoverTooltip
+            isMobile={false}
+            labelText="For many layers, this line represents the transition of daytime imagery from one day to the next."
+            target="datelines-toggle"
+            placement="right"
+          />
+        </h3>
+        <ButtonGroup>
+          <Button
+            outline
+            className="setting-button"
+            active={alwaysShowDatelines}
+            onClick={() => toggleAlwaysShowDatelines(true)}
+          >
+            Always
+          </Button>
+          <Button
+            outline
+            className="setting-button"
+            active={!alwaysShowDatelines}
+            onClick={() => toggleAlwaysShowDatelines(false)}
+          >
+            On Hover
+          </Button>
+        </ButtonGroup>
       </div>
-    </>
+    </div>
   );
 }
 

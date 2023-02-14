@@ -27,7 +27,7 @@ import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/const
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette } from '../../../modules/palettes/actions';
 
-const UpdateProjection = (props) => {
+function UpdateProjection(props) {
   const {
     action,
     activeLayers,
@@ -351,7 +351,7 @@ const UpdateProjection = (props) => {
   };
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {
