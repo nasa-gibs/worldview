@@ -157,6 +157,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
     dispatch(toggleCompareOnOff());
   },
+  changeCompareMode: (str) => {
+    dispatch(changeMode(str));
+  },
   toggleCharting: () => {
     dispatch(toggleChartingModeOnOff());
   },

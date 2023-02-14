@@ -287,12 +287,6 @@ class Sidebar extends React.Component {
       timeSpanStartdate,
       timeSpanEndDate,
     } = this.props;
-    // console.log(`isChartingActive: ${isChartingActive}`);
-    // console.log(`aoiSelected: ${aoiSelected}`);
-    // console.log(`aoiCoordinates: ${aoiCoordinates}`);
-    // console.log(`timeSpanSingleDate: ${timeSpanSingleDate}`);
-    // console.log(`timeSpanStartdate: ${timeSpanStartdate}`);
-    // console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
 
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
     const { naturalEvents } = config.features;
