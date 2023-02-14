@@ -6,15 +6,13 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMobileOnly, isTablet } from 'react-device-detect';
+import ChartingInfo from '../../components/charting/charting-info.js';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import ChartingModeOptions from '../../components/sidebar/charting-mode-options';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import { toggleChartingModeOnOff } from '../../modules/charting/actions';
-import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
-import { stop as stopAnimationAction } from '../../modules/animation/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 import {
@@ -29,6 +27,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCompare,
     compareFeature,
     isChartingActive,
+    openChartingInfoModal,
     aoiSelected,
     aoiCoordinates,
     timeSpanSingleDate,
@@ -56,6 +55,9 @@ const FooterContent = React.forwardRef((props, ref) => {
   const onClickToggleCharting = (e) => {
     e.stopPropagation();
     toggleCharting();
+    if (!isChartingActive) {
+      openChartingInfoModal();
+    }
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
 
@@ -168,6 +170,18 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(toggleOverlayGroupsAction());
     });
   },
+  openChartingInfoModal: () => {
+    // This is the charting tool info window from the wireframes
+    dispatch(
+      openCustomContent('CHARTING_INFO_MODAL', {
+        headerText: 'Charting Tool',
+        backdrop: false,
+        bodyComponent: ChartingInfo,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -188,6 +202,7 @@ FooterContent.propTypes = {
   isMobile: PropTypes.bool,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
+  openChartingInfoModal: PropTypes.func,
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
   timeSpanSingleDate: PropTypes.bool,

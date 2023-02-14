@@ -19,6 +19,7 @@ import { toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import ChartingInfo from '../charting/charting-info.js';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -31,6 +32,7 @@ function ChartingModeOptions (props) {
     toggleAreaOfInterestActive,
     toggleAreaOfInterestSelected,
     updateAOICoordinates,
+    openChartingInfoModal,
     olMap,
     crs,
     proj,
@@ -242,7 +244,10 @@ function ChartingModeOptions (props) {
         <div className="charting-start-date">Start Date</div>
         <div className="charting-end-date">End Date</div>
         <FontAwesomeIcon icon={faCalendarDay} />
-        <FontAwesomeIcon icon={faInfo} />
+        <FontAwesomeIcon
+          icon={faInfo}
+          onClick={openChartingInfoModal}
+        />
       </div>
     </div>
   );
@@ -270,8 +275,17 @@ const mapDispatchToProps = (dispatch) => ({
   updateAOICoordinates: (extent) => {
     dispatch(updateChartingAOICoordinates(extent));
   },
-  openModal: (key, customParams) => {
-    dispatch(openCustomContent(key, customParams));
+  openChartingInfoModal: () => {
+    // This is the charting tool info window from the wireframes
+    dispatch(
+      openCustomContent('CHARTING_INFO_MODAL', {
+        headerText: 'Charting Tool',
+        backdrop: false,
+        bodyComponent: ChartingInfo,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
   },
 });
 
@@ -291,6 +305,7 @@ ChartingModeOptions.propTypes = {
   toggleAreaOfInterestActive: PropTypes.func,
   toggleAreaOfInterestSelected: PropTypes.func,
   updateAOICoordinates: PropTypes.func,
+  openChartingInfoModal: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
