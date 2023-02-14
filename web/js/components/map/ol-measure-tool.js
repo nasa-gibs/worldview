@@ -124,6 +124,9 @@ function OlMeasureTool (props) {
 
   useEffect(recalculateAllMeasurements, [crs]);
 
+  // we need this to make sure we have the latest version of olMap in renderToolTip()
+  useEffect(recalculateAllMeasurements, [olMap]);
+
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)',
   });
