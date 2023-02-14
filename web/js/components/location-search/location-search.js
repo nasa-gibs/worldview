@@ -43,7 +43,7 @@ class LocationSearch extends Component {
         updateValue={this.updateValue}
       />
     );
-  }
+  };
 
   render() {
     const {

@@ -37,7 +37,7 @@ class CopyClipboardTooltip extends PureComponent {
     this.setState({
       showCopiedToolTip: true,
     });
-  }
+  };
 
   render() {
     const { showCopiedToolTip } = this.state;

@@ -23,8 +23,12 @@ LookupImageTile.prototype.load = function() {
       const octets = that.canvas_.width * that.canvas_.height * 4;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
-      const imageData = g.getImageData(0, 0, that.canvas_.width,
-        that.canvas_.height);
+      const imageData = g.getImageData(
+        0,
+        0,
+        that.canvas_.width,
+        that.canvas_.height,
+      );
       const pixels = imageData.data;
 
       for (let i = 0; i < octets; i += 4) {
@@ -53,7 +57,14 @@ LookupImageTile.prototype.load = function() {
 
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
-    return new LookupImageTile(lookup, tileCoord, state, src,
-      crossOrigin, tileLoadFunction, sourceOptions);
+    return new LookupImageTile(
+      lookup,
+      tileCoord,
+      state,
+      src,
+      crossOrigin,
+      tileLoadFunction,
+      sourceOptions,
+    );
   };
 }

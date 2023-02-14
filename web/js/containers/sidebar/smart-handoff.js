@@ -135,7 +135,7 @@ class SmartHandoff extends Component {
     const inRightWing = extent[0] > maxExtent[2] && extent[2] > maxExtent[2];
     const isWithinWings = inLeftWing || inRightWing;
     this.setState({ showZoomedIntoDatelineAlert: isWithinWings });
-  }
+  };
 
   /**
    * Fires when the bounding box / crop toggle is activated and changed
@@ -305,40 +305,40 @@ class SmartHandoff extends Component {
    * @param {Boolean} selectionOutside
    * @param {Boolean} entireSelectionOutside
    */
-   updateSelectionAlerts = (entireSelectionOutside) => {
-     const { selectionOutsideExtents } = this.state;
-     if (entireSelectionOutside !== selectionOutsideExtents) {
-       this.setState({ selectionOutsideExtents: entireSelectionOutside });
-     }
-   }
+  updateSelectionAlerts = (entireSelectionOutside) => {
+    const { selectionOutsideExtents } = this.state;
+    if (entireSelectionOutside !== selectionOutsideExtents) {
+      this.setState({ selectionOutsideExtents: entireSelectionOutside });
+    }
+  };
 
-   /**
+  /**
    * Render alerts to indicate map view/area of interest outside visible extents
    * 1) The map view is zoomed entirely into the map wings
    * 2) The entire area of interest crossed the dateline
    */
-   renderSelectionWarning = () => {
-     const {
-       showBoundingBox,
-       selectionOutsideExtents,
-       showZoomedIntoDatelineAlert,
-     } = this.state;
+  renderSelectionWarning = () => {
+    const {
+      showBoundingBox,
+      selectionOutsideExtents,
+      showZoomedIntoDatelineAlert,
+    } = this.state;
 
-     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
-       ? 'The selection is outside the available map area.'
-       : showZoomedIntoDatelineAlert
-         ? 'The map is zoomed into an area with no available data.'
-         : '';
+    const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
+      ? 'The selection is outside the available map area.'
+      : showZoomedIntoDatelineAlert
+        ? 'The map is zoomed into an area with no available data.'
+        : '';
 
-     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
-     <AlertUtil
-       id="data-download-unavailable-dateline-alert"
-       isOpen
-       title="Data Download Unavailable"
-       message={message}
-     />
-     );
-   }
+    return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
+    <AlertUtil
+      id="data-download-unavailable-dateline-alert"
+      isOpen
+      title="Data Download Unavailable"
+      message={message}
+    />
+    );
+  };
 
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
     const { getConceptUrl } = this.props;
@@ -360,7 +360,7 @@ class SmartHandoff extends Component {
         </div>
       </UncontrolledTooltip>
     );
-  }
+  };
 
   /**
    * Render radio buttons for layer selection
@@ -504,9 +504,7 @@ class SmartHandoff extends Component {
       <div className="smart-handoff-side-panel error">
         {requestFailed
           ? (
-            <>
-              <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
-            </>
+            <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
           )
           : (
             <>
@@ -523,7 +521,7 @@ class SmartHandoff extends Component {
           )}
       </div>
     );
-  }
+  };
 
   renderLoadingSpinner = () => {
     const containerStyle = {
@@ -541,7 +539,7 @@ class SmartHandoff extends Component {
         <Spinner style={spinnerStyle} color="light" size="lg" />
       </div>
     );
-  }
+  };
 
   /**
    * Default render which displays the download panel

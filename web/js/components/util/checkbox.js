@@ -20,9 +20,7 @@ export default function Checkbox (props) {
   return (
     <>
       {showDisabledToolTip && (
-        <>
-          <HoverTooltip target={`#${id}-case`} labelText={title} placement={tooltipPlacement} />
-        </>
+        <HoverTooltip target={`#${id}-case`} labelText={title} placement={tooltipPlacement} />
       )}
       <div id={`${id}-case`} className={caseClassName}>
         <input

@@ -123,7 +123,7 @@ class OlCoordinates extends React.Component {
       format,
       width,
     });
-  }
+  };
 
   render() {
     const {

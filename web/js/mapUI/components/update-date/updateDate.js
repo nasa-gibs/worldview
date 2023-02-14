@@ -16,7 +16,7 @@ import { getSelectedDate } from '../../../modules/date/selectors';
 import * as dateConstants from '../../../modules/date/constants';
 import * as layerConstants from '../../../modules/layers/constants';
 
-const UpdateDate = (props) => {
+function UpdateDate(props) {
   const {
     action,
     activeLayers,
@@ -135,7 +135,7 @@ const UpdateDate = (props) => {
   }
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {

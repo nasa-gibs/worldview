@@ -7,7 +7,7 @@ import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } 
 import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
-const Markers = (props) => {
+function Markers(props) {
   const {
     action,
     activeLayers,
@@ -151,7 +151,7 @@ const Markers = (props) => {
   }, [ui]);
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {

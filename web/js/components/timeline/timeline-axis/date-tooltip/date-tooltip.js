@@ -49,7 +49,7 @@ class DateTooltip extends Component {
     this.setState({
       showTooltip: shouldDisplay,
     });
-  }
+  };
 
   displayAndTimeoutTooltip = () => {
     clearTimeout(this.showTooltipTimeout);
@@ -57,7 +57,7 @@ class DateTooltip extends Component {
     this.showTooltipTimeout = setTimeout(() => {
       this.updateTooltipDisplayState(false);
     }, 1800);
-  }
+  };
 
   /**
   * @param {String} time
@@ -122,7 +122,7 @@ class DateTooltip extends Component {
       display,
       width: `${width}px`,
     };
-  }
+  };
 
   render() {
     const { showTooltip } = this.state;
