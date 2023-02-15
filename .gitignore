@@ -36,3 +36,6 @@ config/default/release/layer-metadata
 # Jest
 /coverage
 /tasks/temp
+/test-results/
+/playwright-report/
+/playwright/.cache/
