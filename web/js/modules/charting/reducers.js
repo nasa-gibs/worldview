@@ -1,6 +1,6 @@
 import { assign as lodashAssign } from 'lodash';
 import {
-  TOGGLE_ON_OFF, TOGGLE_AOI_ON_OFF, UPDATE_AOI_COORDINATES, TOGGLE_AOI_SELECTED_ON_OFF,
+  TOGGLE_ON_OFF, TOGGLE_AOI_ON_OFF, UPDATE_AOI_COORDINATES, TOGGLE_AOI_SELECTED_ON_OFF, UPDATE_CHARTING_DATE_SELECTION,
 } from './constants';
 
 export const initialChartingState = {
@@ -8,7 +8,7 @@ export const initialChartingState = {
   aoiSelected: false,
   aoiCoordinates: [],
   chartingActive: false,
-  timeSpanSingleDate: true,
+  timeSpanSelection: 'single',
   timeSpanStartdate: null,
   timeSpanEndDate: null,
 };
@@ -36,7 +36,11 @@ export function chartingReducer(state = initialChartingState, action) {
       return lodashAssign({}, state, {
         aoiSelected: !state.aoiSelected,
       });
-
+    case UPDATE_CHARTING_DATE_SELECTION:
+      console.log(action);
+      return lodashAssign({}, state, {
+        timeSpanSelection: action.buttonClicked,
+      });
     default:
       break;
   }

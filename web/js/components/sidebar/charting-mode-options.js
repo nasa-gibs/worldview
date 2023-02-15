@@ -9,7 +9,9 @@ import { createBox } from 'ol/interaction/Draw.js';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
-import { toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected } from '../../modules/charting/actions';
+import {
+  toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected, updateChartingDateSelection,
+} from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
@@ -41,7 +43,7 @@ function ChartingModeOptions (props) {
     aoiSelected,
     aoiActive,
     aoiCoordinates,
-    timeSpanSingleDate,
+    timeSpanSelection,
     timeSpanStartdate,
     timeSpanEndDate,
   } = props;
@@ -160,8 +162,6 @@ function ChartingModeOptions (props) {
     // Identify all "live" layers (not hidden)
     const liveLayers = getLiveLayers();
     const topLayer = liveLayers[0];
-    console.log(topLayer);
-    console.log(aoiCoordinates);
   }
 
   /**
@@ -171,9 +171,20 @@ function ChartingModeOptions (props) {
     return activeLayers.filter((obj) => obj.visible === true);
   }
 
+
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
     aoiTextPrompt = 'Area of Interest Selected';
+  }
+
+  let singleDateBtnStatus = '';
+  let dateRangeBtnStatus = '';
+  if (timeSpanSelection === 'single') {
+    singleDateBtnStatus = 'btn-active';
+    dateRangeBtnStatus = '';
+  } else {
+    singleDateBtnStatus = '';
+    dateRangeBtnStatus = 'btn-active';
   }
 
   return (
@@ -194,14 +205,14 @@ function ChartingModeOptions (props) {
         <ButtonGroup size="sm">
           <Button
             id="charting-single-date-button"
-            className="charting-button charting-single-date-button"
+            className={`charting-button ${singleDateBtnStatus}`}
             onClick={() => onChartDateButtonClick('single')}
           >
             One Date
           </Button>
           <Button
             id="charting-date-range-button"
-            className="compare-button compare-swipe-button"
+            className={`charting-button ${dateRangeBtnStatus}`}
             onClick={() => onChartDateButtonClick('range')}
           >
             Date Range
@@ -227,10 +238,12 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
-  const { aoiActive, aoiCoordinates, aoiSelected } = charting;
+  const {
+    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection,
+  } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected, activeLayers,
+    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected, activeLayers, timeSpanSelection,
   };
 };
 
@@ -256,8 +269,9 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  onChartDateButtonClick: (mode) => {
-    console.log(`onChartDateButtonClick: ${mode}`);
+  onChartDateButtonClick: (buttonClicked) => {
+    console.log(`onChartDateButtonClick: ${buttonClicked}`);
+    dispatch(updateChartingDateSelection(buttonClicked));
   },
 });
 
@@ -272,7 +286,7 @@ ChartingModeOptions.propTypes = {
   isMobile: PropTypes.bool,
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
-  timeSpanSingleDate: PropTypes.bool,
+  timeSpanSelection: PropTypes.string,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAreaOfInterestActive: PropTypes.func,

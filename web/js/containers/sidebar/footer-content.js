@@ -30,7 +30,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     openChartingInfoModal,
     aoiSelected,
     aoiCoordinates,
-    timeSpanSingleDate,
+    timeSpanSelection,
     timeSpanStartdate,
     timeSpanEndDate,
     toggleCharting,
@@ -205,7 +205,7 @@ FooterContent.propTypes = {
   openChartingInfoModal: PropTypes.func,
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
-  timeSpanSingleDate: PropTypes.bool,
+  timeSpanSelection: PropTypes.string,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
 };

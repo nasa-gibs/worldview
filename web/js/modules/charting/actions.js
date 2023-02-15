@@ -1,13 +1,9 @@
-// import { initSecondLayerGroup } from '../layers/actions';
-// import { initSecondDate } from '../date/actions';
 import {
   TOGGLE_ON_OFF,
   TOGGLE_AOI_ON_OFF,
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
-  // TOGGLE_DATE_MODE,
-  // UPDATE_START_DATE,
-  // UPDATE_END_DATE,
+  UPDATE_CHARTING_DATE_SELECTION,
 } from './constants';
 
 export function toggleChartingModeOnOff() {
@@ -22,9 +18,13 @@ export function toggleChartingAOIOnOff() {
   };
 }
 export function toggleAOISelected(action = null) {
-  console.log('toggleAOISelected');
   return (dispatch) => {
     dispatch({ type: TOGGLE_AOI_SELECTED_ON_OFF, action });
+  };
+}
+export function updateChartingDateSelection(buttonClicked) {
+  return (dispatch) => {
+    dispatch({ type: UPDATE_CHARTING_DATE_SELECTION, buttonClicked });
   };
 }
 export function updateChartingAOICoordinates(extent) {

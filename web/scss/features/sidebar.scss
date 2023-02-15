@@ -422,7 +422,9 @@ footer .product-buttons .layers-add-container {
   width: 80%;
   margin: 10px;
 }
-
+.btn-active {
+  border: 3px solid red !important;
+}
 
 #products-holder footer p {
   color: #ccc;

@@ -283,7 +283,7 @@ class Sidebar extends React.Component {
       isChartingActive,
       aoiSelected,
       aoiCoordinates,
-      timeSpanSingleDate,
+      timeSpanSelection,
       timeSpanStartdate,
       timeSpanEndDate,
     } = this.props;
@@ -523,7 +523,7 @@ Sidebar.propTypes = {
   isChartingActive: PropTypes.bool,
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
-  timeSpanSingleDate: PropTypes.bool,
+  timeSpanSelection: PropTypes.string,
   timeSpanStartdate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
 };
