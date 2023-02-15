@@ -26,10 +26,12 @@ let draw;
 
 function ChartingModeOptions (props) {
   const {
+    activeLayers,
     toggleAreaOfInterestActive,
     toggleAreaOfInterestSelected,
     updateAOICoordinates,
     openChartingInfoModal,
+    onChartDateButtonClick,
     olMap,
     crs,
     proj,
@@ -44,7 +46,6 @@ function ChartingModeOptions (props) {
     timeSpanEndDate,
   } = props;
 
-  // Listen for changes in projections
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
@@ -58,22 +59,25 @@ function ChartingModeOptions (props) {
 
   useEffect(() => {
     // if toggling off
-    resetAOI();
-    endDrawingAOI();
+    resetAreaOfInterest();
+    endDrawingAreaOfInterest();
   }, [isChartingActive]);
+
+  useEffect(() => {
+    processAreaOfInterestCoordinates();
+  }, [aoiCoordinates]);
 
   const onAreaOfInterestButtonClick = (evt) => {
     toggleAreaOfInterestActive();
     if (!aoiActive) {
       beginDrawingAOI();
     } else {
-      endDrawingAOI();
+      endDrawingAreaOfInterest();
     }
   };
 
-  // initialize a new Area of interest draw interaction.
   function beginDrawingAOI () {
-    resetAOI();
+    resetAreaOfInterest();
     // Define draw interaction
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
@@ -90,7 +94,7 @@ function ChartingModeOptions (props) {
 
     });
     olMap.addInteraction(draw);
-    draw.on('drawstart', drawStartCallback);
+    // draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
 
     if (!vectorLayers[crs]) {
@@ -102,9 +106,9 @@ function ChartingModeOptions (props) {
     }
   }
 
-  const drawStartCallback = ({ feature }) => {
-    console.log('drawStartCallback');
-  };
+  // const drawStartCallback = ({ feature }) => {
+  //   console.log('drawStartCallback');
+  // };
 
   /**
    * Triggers when draw is completed
@@ -114,16 +118,16 @@ function ChartingModeOptions (props) {
     AOIFeatureObj[crs][feature.ol_uid] = {
       feature,
     };
-    endDrawingAOI();
+    endDrawingAreaOfInterest();
     toggleAreaOfInterestActive();
     toggleAreaOfInterestSelected();
-    getCoordinatesFromAOI(feature.getGeometry());
+    getAreaOfInterestCoordinates(feature.getGeometry());
   };
 
   /**
    * End the AOI draw interaction
    */
-  function endDrawingAOI () {
+  function endDrawingAreaOfInterest () {
     if (draw) {
       olMap.removeInteraction(draw);
     }
@@ -132,7 +136,7 @@ function ChartingModeOptions (props) {
   /**
    * Clear any existing AOI's from the current map projection
    */
-  function resetAOI() {
+  function resetAreaOfInterest() {
     Object.values(AOIFeatureObj[crs]).forEach(
       ({ feature, overlay }) => {
         sources[crs].removeFeature(feature);
@@ -148,9 +152,23 @@ function ChartingModeOptions (props) {
     updateAOICoordinates(null);
   }
 
-  function getCoordinatesFromAOI(geometry) {
-    const extent = geometry.getExtent();
-    updateAOICoordinates(extent);
+  function getAreaOfInterestCoordinates(geometry) {
+    updateAOICoordinates(geometry.getExtent());
+  }
+
+  function processAreaOfInterestCoordinates() {
+    // Identify all "live" layers (not hidden)
+    const liveLayers = getLiveLayers();
+    const topLayer = liveLayers[0];
+    console.log(topLayer);
+    console.log(aoiCoordinates);
+  }
+
+  /**
+   * Filters the layers array & returns those with visible set to 'true'.
+   */
+  function getLiveLayers() {
+    return activeLayers.filter((obj) => obj.visible === true);
   }
 
   let aoiTextPrompt = 'Select Area of Interest';
@@ -177,12 +195,14 @@ function ChartingModeOptions (props) {
           <Button
             id="charting-single-date-button"
             className="charting-button charting-single-date-button"
+            onClick={() => onChartDateButtonClick('single')}
           >
             One Date
           </Button>
           <Button
             id="charting-date-range-button"
             className="compare-button compare-swipe-button"
+            onClick={() => onChartDateButtonClick('range')}
           >
             Date Range
           </Button>
@@ -203,13 +223,14 @@ function ChartingModeOptions (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    charting, map, proj, config,
+    charting, map, proj, config, layers,
   } = state;
+  const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const { aoiActive, aoiCoordinates, aoiSelected } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected,
+    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected, activeLayers,
   };
 };
 
@@ -235,6 +256,9 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  onChartDateButtonClick: (mode) => {
+    console.log(`onChartDateButtonClick: ${mode}`);
+  },
 });
 
 export default connect(
@@ -243,6 +267,7 @@ export default connect(
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {
+  activeLayers: PropTypes.array,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   aoiSelected: PropTypes.bool,
@@ -254,6 +279,7 @@ ChartingModeOptions.propTypes = {
   toggleAreaOfInterestSelected: PropTypes.func,
   updateAOICoordinates: PropTypes.func,
   openChartingInfoModal: PropTypes.func,
+  onChartDateButtonClick: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
