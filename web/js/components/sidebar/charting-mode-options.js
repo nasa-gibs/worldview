@@ -9,6 +9,7 @@ import { createBox } from 'ol/interaction/Draw.js';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
+import { format } from 'ol/coordinate';
 import {
   toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected, updateChartingDateSelection,
 } from '../../modules/charting/actions';
@@ -44,8 +45,8 @@ function ChartingModeOptions (props) {
     aoiActive,
     aoiCoordinates,
     timeSpanSelection,
-    timeSpanStartdate,
-    timeSpanEndDate,
+    selected,
+    selectedB,
   } = props;
 
   useEffect(() => {
@@ -171,6 +172,16 @@ function ChartingModeOptions (props) {
     return activeLayers.filter((obj) => obj.visible === true);
   }
 
+  function formatDateString(dateObj) {
+    const date = new Date(dateObj);
+    const year = date.getFullYear();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const day = date.getDate();
+    return `${year} ${month} ${day}`;
+  }
+
+  const primaryDate = formatDateString(selected);
+  const secondaryDate = formatDateString(selectedB);
 
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
@@ -220,8 +231,8 @@ function ChartingModeOptions (props) {
         </ButtonGroup>
       </div>
       <div className="charting-date-container">
-        <div className="charting-start-date">Start Date</div>
-        <div className="charting-end-date">End Date</div>
+        <div className="charting-start-date">{primaryDate}</div>
+        <div className="charting-end-date">{secondaryDate}</div>
         <FontAwesomeIcon icon={faCalendarDay} />
         <FontAwesomeIcon
           icon={faInfo}
@@ -234,16 +245,27 @@ function ChartingModeOptions (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    charting, map, proj, config, layers,
+    charting, map, proj, config, layers, date,
   } = state;
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
     aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection,
   } = charting;
+  const { selected, selectedB } = date;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
-    olMap: map.ui.selected, proj, crs, projections, aoiActive, aoiCoordinates, aoiSelected, activeLayers, timeSpanSelection,
+    olMap: map.ui.selected,
+    proj,
+    crs,
+    projections,
+    aoiActive,
+    aoiCoordinates,
+    aoiSelected,
+    activeLayers,
+    timeSpanSelection,
+    selected,
+    selectedB,
   };
 };
 
@@ -270,7 +292,6 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   onChartDateButtonClick: (buttonClicked) => {
-    console.log(`onChartDateButtonClick: ${buttonClicked}`);
     dispatch(updateChartingDateSelection(buttonClicked));
   },
 });
