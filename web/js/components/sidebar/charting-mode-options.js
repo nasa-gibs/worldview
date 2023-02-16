@@ -9,10 +9,10 @@ import { createBox } from 'ol/interaction/Draw.js';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
-import { format } from 'ol/coordinate';
 import {
   toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected, updateChartingDateSelection,
 } from '../../modules/charting/actions';
+import ChartingDateSelector from '../charting/charting-date-selector';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
@@ -241,6 +241,7 @@ function ChartingModeOptions (props) {
         <div className="charting-start-date">{primaryDate}</div>
         {dateRangeValue}
         <FontAwesomeIcon icon={faCalendarDay} />
+        <ChartingDateSelector />
       </div>
     </div>
   );
