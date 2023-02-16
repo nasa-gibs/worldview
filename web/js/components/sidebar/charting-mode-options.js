@@ -61,7 +61,6 @@ function ChartingModeOptions (props) {
   }, [projections]);
 
   useEffect(() => {
-    // if toggling off
     resetAreaOfInterest();
     endDrawingAreaOfInterest();
   }, [isChartingActive]);
@@ -81,7 +80,6 @@ function ChartingModeOptions (props) {
 
   function beginDrawingAOI () {
     resetAreaOfInterest();
-    // Define draw interaction
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
       type: 'Circle', // Geometry type of the geometries being drawn with this instance.
@@ -198,6 +196,11 @@ function ChartingModeOptions (props) {
     dateRangeBtnStatus = 'btn-active';
   }
 
+  let dateRangeValue;
+  if (timeSpanSelection === 'range') {
+    dateRangeValue = <div className="charting-end-date">{secondaryDate}</div>;
+  }
+
   return (
     <div
       id="wv-charting-mode-container"
@@ -210,16 +213,20 @@ function ChartingModeOptions (props) {
           icon={faPencilAlt}
           onClick={onAreaOfInterestButtonClick}
         />
+        <FontAwesomeIcon
+          icon={faInfo}
+          onClick={openChartingInfoModal}
+        />
       </div>
       <div className="charting-timespan-container">
         <h3>Time Span:</h3>
         <ButtonGroup size="sm">
           <Button
-            id="charting-single-date-button"
+            id="charting-date-single-button"
             className={`charting-button ${singleDateBtnStatus}`}
             onClick={() => onChartDateButtonClick('single')}
           >
-            One Date
+            Single Date
           </Button>
           <Button
             id="charting-date-range-button"
@@ -232,12 +239,8 @@ function ChartingModeOptions (props) {
       </div>
       <div className="charting-date-container">
         <div className="charting-start-date">{primaryDate}</div>
-        <div className="charting-end-date">{secondaryDate}</div>
-        <FontAwesomeIcon icon={faCalendarDay} />
-        <FontAwesomeIcon
-          icon={faInfo}
-          onClick={openChartingInfoModal}
-        />
+        {dateRangeValue}
+        {/* <FontAwesomeIcon icon={faCalendarDay} /> */}
       </div>
     </div>
   );
