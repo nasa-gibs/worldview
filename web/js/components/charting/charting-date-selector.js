@@ -7,6 +7,7 @@ function ChartingDateSelector (props) {
   // const {
   //   startDate, minDate, maxDate, subDailyMode,
   // } = props;
+  // These need to be pulled in from the props appropriately!!
   const startDate = new Date();
   const minDate = new Date();
   const maxDate = new Date();
@@ -16,9 +17,11 @@ function ChartingDateSelector (props) {
   console.log(`minDate: ${minDate}`);
   console.log(`maxDate: ${maxDate}`);
   console.log(`subDailyMode: ${subDailyMode}`);
+
   function onDateChange() {
     console.log('changed');
   }
+
   return (
     <div id="date-selector-main">
       <DateSelector
