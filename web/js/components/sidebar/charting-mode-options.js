@@ -240,7 +240,7 @@ function ChartingModeOptions (props) {
       <div className="charting-date-container">
         <div className="charting-start-date">{primaryDate}</div>
         {dateRangeValue}
-        {/* <FontAwesomeIcon icon={faCalendarDay} /> */}
+        <FontAwesomeIcon icon={faCalendarDay} />
       </div>
     </div>
   );
