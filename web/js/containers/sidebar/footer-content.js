@@ -182,6 +182,17 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  openChartingDateModal: () => {
+    dispatch(
+      openCustomContent('CHARTING_DATE_MODAL', {
+        headerText: 'Charting Mode Date Selection',
+        backdrop: false,
+        bodyComponent: ChartingInfo,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
 });
 
 export default connect(

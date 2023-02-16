@@ -13,11 +13,6 @@ function ChartingDateSelector (props) {
   const maxDate = new Date();
   const subDailyMode = false;
 
-  console.log(`startDate: ${startDate}`);
-  console.log(`minDate: ${minDate}`);
-  console.log(`maxDate: ${maxDate}`);
-  console.log(`subDailyMode: ${subDailyMode}`);
-
   function onDateChange() {
     console.log('changed');
   }

@@ -12,11 +12,11 @@ import { Vector as OlVectorSource } from 'ol/source';
 import {
   toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected, updateChartingDateSelection,
 } from '../../modules/charting/actions';
-import ChartingDateSelector from '../charting/charting-date-selector';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info.js';
+import ChartingDateComponent from '../charting/charting-date-component';
 import {
   drawStyles, vectorStyles,
 } from '../charting/charting-aoi-style.js';
@@ -35,6 +35,7 @@ function ChartingModeOptions (props) {
     updateAOICoordinates,
     openChartingInfoModal,
     onChartDateButtonClick,
+    openChartingDateModal,
     olMap,
     crs,
     proj,
@@ -240,8 +241,10 @@ function ChartingModeOptions (props) {
       <div className="charting-date-container">
         <div className="charting-start-date">{primaryDate}</div>
         {dateRangeValue}
-        <FontAwesomeIcon icon={faCalendarDay} />
-        <ChartingDateSelector />
+        <FontAwesomeIcon
+          icon={faCalendarDay}
+          onClick={openChartingDateModal}
+        />
       </div>
     </div>
   );
@@ -295,6 +298,17 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  openChartingDateModal: () => {
+    dispatch(
+      openCustomContent('CHARTING_DATE_MODAL', {
+        headerText: 'Charting Mode Date Selection',
+        backdrop: false,
+        bodyComponent: ChartingDateComponent,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
   onChartDateButtonClick: (buttonClicked) => {
     dispatch(updateChartingDateSelection(buttonClicked));
   },
@@ -318,6 +332,7 @@ ChartingModeOptions.propTypes = {
   toggleAreaOfInterestSelected: PropTypes.func,
   updateAOICoordinates: PropTypes.func,
   openChartingInfoModal: PropTypes.func,
+  openChartingDateModal: PropTypes.func,
   onChartDateButtonClick: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
