@@ -420,8 +420,13 @@ footer .product-buttons .layers-add-container {
   align-items: center;
   margin: 10px;
 }
-.btn-active {
+.charting-timespan-container > div > .btn-active {
   border: 3px solid red !important;
+}
+.charting-info-container {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 1.5em;
 }
 
 #products-holder footer p {

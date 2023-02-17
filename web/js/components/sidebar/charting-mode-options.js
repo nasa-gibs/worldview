@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faCalendarDay, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { Draw as OlInteractionDraw } from 'ol/interaction';
 import { createBox } from 'ol/interaction/Draw.js';
@@ -214,12 +214,12 @@ function ChartingModeOptions (props) {
           icon={faPencilAlt}
           onClick={onAreaOfInterestButtonClick}
         />
-        <FontAwesomeIcon
-          icon={faInfo}
-          onClick={openChartingInfoModal}
-        />
       </div>
       <div className="charting-timespan-container">
+        <FontAwesomeIcon
+          icon={faCalendarDay}
+          onClick={openChartingDateModal}
+        />
         <h3>Time Span:</h3>
         <ButtonGroup size="sm">
           <Button
@@ -241,9 +241,11 @@ function ChartingModeOptions (props) {
       <div className="charting-date-container">
         <div className="charting-start-date">{primaryDate}</div>
         {dateRangeValue}
+      </div>
+      <div className="charting-info-container">
         <FontAwesomeIcon
-          icon={faCalendarDay}
-          onClick={openChartingDateModal}
+          icon="info-circle"
+          onClick={openChartingInfoModal}
         />
       </div>
     </div>
