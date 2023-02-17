@@ -4,6 +4,8 @@ import {
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
   UPDATE_CHARTING_DATE_SELECTION,
+  UPDATE_START_DATE,
+  UPDATE_END_DATE,
 } from './constants';
 
 export function toggleChartingModeOnOff() {
@@ -30,5 +32,20 @@ export function updateChartingDateSelection(buttonClicked) {
 export function updateChartingAOICoordinates(extent) {
   return (dispatch) => {
     dispatch({ type: UPDATE_AOI_COORDINATES, extent });
+  };
+}
+export function changeStartDate(date) {
+  console.log('ACTION changing start date');
+  console.log(date);
+  // Adjust date accordingly before dispatching
+  return (dispatch) => {
+    dispatch({ type: UPDATE_START_DATE, date });
+  };
+}
+export function changeEndDate(date) {
+  console.log('ACTION changing end date');
+  return {
+    type: UPDATE_END_DATE,
+    value: date,
   };
 }

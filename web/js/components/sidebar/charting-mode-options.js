@@ -220,6 +220,7 @@ function ChartingModeOptions (props) {
           icon={faCalendarDay}
           onClick={openChartingDateModal}
         />
+        <ChartingDateComponent />
         <h3>Time Span:</h3>
         <ButtonGroup size="sm">
           <Button
