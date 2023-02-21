@@ -124,6 +124,9 @@ export const getActiveOverlayGroups = (state) => {
     return getActiveOverlayGroupsEmbed(state);
   }
   const activeLayersMap = getActiveLayersMap(state);
+
+  if (!Object.keys(activeLayersMap).length) return [];
+
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
       (id) => !!activeLayersMap[id].projections[proj.id],
