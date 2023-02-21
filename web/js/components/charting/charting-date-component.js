@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import DateSelector from '../date-selector/date-selector';
 import DateRangeSelector from '../date-selector/date-range-selector';
 import {
   changeStartDate,
@@ -12,14 +11,14 @@ function ChartingDateComponent (props) {
   const {
     onUpdateStartDate, onUpdateEndDate, timeSpanStartdate, timeSpanEndDate,
   } = props;
-  const minDate = new Date();
-  const maxDate = new Date();
+  const minDate = new Date('01/01/1900');
+  const maxDate = new Date('12/31/2035');
 
   function onDateChange([newStartDate, newEndDate]) {
     console.log(`timeSpanStartdate: ${timeSpanStartdate}`);
-    console.log(`newStartDate: ${newStartDate}`);
     console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
-    console.log(`newEndDate: ${newEndDate}`);
+    console.log(`minDate: ${minDate}`);
+    console.log(`maxDate: ${maxDate}`);
 
     if (newStartDate !== timeSpanStartdate) {
       onUpdateStartDate(newStartDate);
@@ -39,7 +38,7 @@ function ChartingDateComponent (props) {
         startDate={timeSpanStartdate}
         endDate={timeSpanEndDate}
         // setDateRange={this.onDateChange} in animation widget (class component)
-        // setDateRange={onDateChange}
+        setDateRange={onDateChange}
         minDate={minDate}
         maxDate={maxDate}
         subDailyMode={false}
@@ -58,10 +57,13 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  // These functions are passed as props to date-selector
   onUpdateStartDate(date) {
+    console.log('onUpdateStartDate running');
     dispatch(changeStartDate(date));
   },
   onUpdateEndDate(date) {
+    console.log('onUpdateEndDate running');
     dispatch(changeEndDate(date));
   },
 });

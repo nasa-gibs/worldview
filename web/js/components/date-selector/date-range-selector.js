@@ -8,6 +8,7 @@ export default function DateRangeSelector (props) {
   } = props;
 
   const setStartDate = (newStart) => {
+    // console.log(`DateRangeselection setStartDate newStart: ${newStart}`);
     setDateRange([newStart, endDate]);
   };
   const setEndDate = (newEnd) => {

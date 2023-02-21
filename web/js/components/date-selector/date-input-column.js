@@ -218,6 +218,8 @@ class DateInputColumn extends Component {
   }
 
   changeDate = (amt) => {
+    console.log('changeDate');
+    console.log(`amt: ${amt}`);
     const {
       date, minDate, maxDate, type, updateDate, isDisabled,
     } = this.props;

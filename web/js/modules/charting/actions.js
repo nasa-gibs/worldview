@@ -35,9 +35,6 @@ export function updateChartingAOICoordinates(extent) {
   };
 }
 export function changeStartDate(date) {
-  console.log('ACTION changing start date');
-  console.log(date);
-  // Adjust date accordingly before dispatching
   return (dispatch) => {
     dispatch({ type: UPDATE_START_DATE, date });
   };
