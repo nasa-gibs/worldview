@@ -400,6 +400,7 @@ export const granuleFootprint = (map) => {
   };
 
   const drawFootprint = (points, date) => {
+    console.log('drawFootprint');
     const geometry = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({ geometry });
     const newVectorLayer = getVectorLayer(date);
