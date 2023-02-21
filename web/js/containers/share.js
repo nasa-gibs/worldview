@@ -16,7 +16,9 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
+import {
+  getPermalink, getShareLink, wrapWithObject,
+} from '../modules/link/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -36,7 +38,7 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const SOCIAL_SHARE_TABS = ['link', 'social'];
+const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -269,7 +271,7 @@ class ShareLinkContainer extends Component {
       activeTab,
     } = this.state;
     const embedValue = this.getPermalink(true);
-    const embedIframeHTMLCode = wrapWithIframe(embedValue);
+    const embedIframeHTMLCode = wrapWithObject(embedValue);
 
     return (
       <TabPane tabId="embed" className="share-tab-embed">
@@ -330,7 +332,7 @@ class ShareLinkContainer extends Component {
           {this.renderNavTabs()}
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
-            {/* {this.renderEmbedTab()} */}
+            {this.renderEmbedTab()}
             {this.renderSocialTab()}
           </TabContent>
         </div>
