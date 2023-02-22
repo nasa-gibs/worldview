@@ -11,6 +11,7 @@ import OlGeomLineString from 'ol/geom/LineString';
 import { transform } from 'ol/proj';
 import { Polygon as OlGeomPolygon } from 'ol/geom';
 import * as OlExtent from 'ol/extent';
+import debounce from 'lodash/debounce';
 import util from '../../util/util';
 import { CRS } from '../../modules/map/constants';
 
@@ -364,7 +365,8 @@ export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) =
  * @param {*} map
  * @returns
  */
-export const granuleFootprint = (map) => {
+export const granuleFootprint = (map, initialIsMobile) => {
+  console.log(`initialIsMobile: ${initialIsMobile}`);
   let currentGranule = {};
   let vectorLayer = {};
   const vectorSource = new OlVectorSource({
@@ -400,7 +402,6 @@ export const granuleFootprint = (map) => {
   };
 
   const drawFootprint = (points, date) => {
-    console.log('drawFootprint');
     const geometry = new OlGeomPolygon([points]);
     const featureFootprint = new OlFeature({ geometry });
     const newVectorLayer = getVectorLayer(date);
@@ -408,6 +409,8 @@ export const granuleFootprint = (map) => {
     vectorLayer = newVectorLayer;
     map.addLayer(vectorLayer);
   };
+
+  const debouncedDrawFootprint = debounce(drawFootprint, 2000);
 
   const addFootprint = (points, date) => {
     if (currentGranule[date]) {
@@ -421,12 +424,20 @@ export const granuleFootprint = (map) => {
       removeFootprint();
     }
     currentGranule[date] = true;
-    drawFootprint(points, date);
+    if (initialIsMobile) {
+      debouncedDrawFootprint(points, date);
+    } else {
+      drawFootprint(points, date, 'addFootprint');
+    }
   };
 
   const updateFootprint = (points, date) => {
     removeFootprint();
-    drawFootprint(points, date);
+    if (initialIsMobile) {
+      debouncedDrawFootprint(points, date);
+    } else {
+      drawFootprint(points, date, 'addFootprint');
+    }
   };
 
   return {
