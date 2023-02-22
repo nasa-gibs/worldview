@@ -199,17 +199,17 @@ test('Opening modal after cancelling changed values shows previous unchanged val
 
 test('Changing criteria in modal DOES update summary of criteria in sidebar on APPLY', async () => {
   await startInputYear.click();
-  await startInputYear.type('2000');
+  await startInputYear.fill('2000');
   await startInputMonth.click();
-  await startInputMonth.type('APR');
+  await startInputMonth.fill('APR');
   await startInputDay.click();
-  await startInputDay.type('19');
+  await startInputDay.fill('19');
   await endInputYear.click();
-  await endInputYear.type('2001');
+  await endInputYear.fill('2001');
   await endInputMonth.click();
-  await endInputMonth.type('NOV');
+  await endInputMonth.fill('NOV');
   await endInputDay.click();
-  await endInputDay.type('11');
+  await endInputDay.fill('11');
 
   const wildfiresSwitchEl = page.locator('#wildfires-switch + .react-switch-label')
   const dustSwitchEl = page.locator('#dustHaze-switch + .react-switch-label')
@@ -221,12 +221,22 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
 
   await filterModalApply.click();
 
-  // unfortunately the chromium test will fail without this delay
-  await page.waitForTimeout(1000);
-
   await expect(filterDates).toContainText('2000 APR 19 - 2001 NOV 11');
   await expect(filterIcons).toHaveCount(2);
   await expect(dustHazeIcon).toBeVisible();
   await expect(volcanoesIcon).toBeVisible();
   await expect(wildfiresIcon).not.toBeVisible();
+});
+
+test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
+  await page.goto(backwardsCompatibleEventUrl);
+
+  await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31');
+
+  await filterButton.click();
+
+  assertDateInputValues('2005-DEC-31', '2005-DEC-31')
+  await expect(filterIcons).toHaveCount(8);
+  await expect(mapExtentFilterCheckbox).not.toBeChecked();
+  await filterModalCancel.click();
 });
