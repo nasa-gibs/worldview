@@ -6,6 +6,7 @@ import {
   TOGGLE_AOI_SELECTED_ON_OFF,
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
+  UPDATE_END_DATE,
 } from './constants';
 
 export const initialChartingState = {
@@ -14,7 +15,7 @@ export const initialChartingState = {
   aoiCoordinates: [],
   chartingActive: false,
   timeSpanSelection: 'single',
-  timeSpanStartdate: new Date(),
+  timeSpanStartDate: new Date(),
   timeSpanEndDate: new Date(),
 };
 export function chartingReducer(state = initialChartingState, action) {
@@ -47,7 +48,11 @@ export function chartingReducer(state = initialChartingState, action) {
       });
     case UPDATE_START_DATE:
       return lodashAssign({}, state, {
-        timeSpanStartdate: action.date,
+        timeSpanStartDate: action.date,
+      });
+    case UPDATE_END_DATE:
+      return lodashAssign({}, state, {
+        timeSpanEndDate: action.date,
       });
     default:
       break;

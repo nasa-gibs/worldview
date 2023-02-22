@@ -266,10 +266,7 @@ class DateSelector extends Component {
   // eslint-disable-next-line react/destructuring-assignment
   updateDate = (date = this.props.date, isRollDate = false) => {
     const { onDateChange } = this.props;
-    console.log(`[date-selector] updateDate() date: ${date}`);
-    console.log(`[date-selector] updateDate() isRollDate: ${isRollDate}`);
     const newDate = this.updateDateCheck(date, isRollDate);
-    console.log(`[date-selector] updateDate() newDate: ${newDate}`);
     if (newDate) {
       onDateChange(newDate);
       // clear the pending timeunit inputs and reset validation

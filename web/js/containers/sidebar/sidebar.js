@@ -284,7 +284,7 @@ class Sidebar extends React.Component {
       aoiSelected,
       aoiCoordinates,
       timeSpanSelection,
-      timeSpanStartdate,
+      timeSpanStartDate,
       timeSpanEndDate,
     } = this.props;
 
@@ -524,6 +524,6 @@ Sidebar.propTypes = {
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
   timeSpanSelection: PropTypes.string,
-  timeSpanStartdate: PropTypes.instanceOf(Date),
+  timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
 };

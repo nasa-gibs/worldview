@@ -46,9 +46,10 @@ function ChartingModeOptions (props) {
     aoiActive,
     aoiCoordinates,
     timeSpanSelection,
-    selected,
-    selectedB,
+    timeSpanStartDate,
+    timeSpanEndDate,
   } = props;
+  console.log(props);
 
   useEffect(() => {
     if (!init) {
@@ -179,8 +180,11 @@ function ChartingModeOptions (props) {
     return `${year} ${month} ${day}`;
   }
 
-  const primaryDate = formatDateString(selected);
-  const secondaryDate = formatDateString(selectedB);
+  const primaryDate = formatDateString(timeSpanStartDate);
+  const secondaryDate = formatDateString(timeSpanEndDate);
+
+  console.log(`primaryDate: ${primaryDate}`);
+  console.log(`secondaryDate: ${secondaryDate}`);
 
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
@@ -259,9 +263,8 @@ const mapStateToProps = (state, ownProps) => {
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
-    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection,
+    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanEndDate, timeSpanStartDate,
   } = charting;
-  const { selected, selectedB } = date;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
     olMap: map.ui.selected,
@@ -273,8 +276,8 @@ const mapStateToProps = (state, ownProps) => {
     aoiSelected,
     activeLayers,
     timeSpanSelection,
-    selected,
-    selectedB,
+    timeSpanEndDate,
+    timeSpanStartDate,
   };
 };
 
@@ -328,7 +331,7 @@ ChartingModeOptions.propTypes = {
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
   timeSpanSelection: PropTypes.string,
-  timeSpanStartdate: PropTypes.instanceOf(Date),
+  timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAreaOfInterestActive: PropTypes.func,
   toggleAreaOfInterestSelected: PropTypes.func,

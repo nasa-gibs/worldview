@@ -9,18 +9,18 @@ import {
 
 function ChartingDateComponent (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartdate, timeSpanEndDate,
+    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate,
   } = props;
   const minDate = new Date('01/01/1900');
   const maxDate = new Date('12/31/2035');
 
   function onDateChange([newStartDate, newEndDate]) {
-    console.log(`timeSpanStartdate: ${timeSpanStartdate}`);
+    console.log(`timeSpanStartDate: ${timeSpanStartDate}`);
     console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
     console.log(`minDate: ${minDate}`);
     console.log(`maxDate: ${maxDate}`);
 
-    if (newStartDate !== timeSpanStartdate) {
+    if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
 
@@ -35,7 +35,7 @@ function ChartingDateComponent (props) {
       {/* Copied from animation widget */}
       <DateRangeSelector
         idSuffix="charting-date-picker"
-        startDate={timeSpanStartdate}
+        startDate={timeSpanStartDate}
         endDate={timeSpanEndDate}
         // setDateRange={this.onDateChange} in animation widget (class component)
         setDateRange={onDateChange}
@@ -51,9 +51,9 @@ function mapStateToProps(state) {
   const {
     date, charting,
   } = state;
-  const { timeSpanStartdate, timeSpanEndDate } = charting;
+  const { timeSpanStartDate, timeSpanEndDate } = charting;
 
-  return { date, timeSpanStartdate, timeSpanEndDate };
+  return { date, timeSpanStartDate, timeSpanEndDate };
 }
 
 const mapDispatchToProps = (dispatch) => ({
@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 ChartingDateComponent.propTypes = {
-  timeSpanStartdate: PropTypes.object,
+  timeSpanStartDate: PropTypes.object,
   timeSpanEndDate: PropTypes.object,
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,

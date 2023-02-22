@@ -41,8 +41,11 @@ export function changeStartDate(date) {
 }
 export function changeEndDate(date) {
   console.log('ACTION changing end date');
-  return {
-    type: UPDATE_END_DATE,
-    value: date,
+  // return {
+  //   type: UPDATE_END_DATE,
+  //   value: date,
+  // };
+  return (dispatch) => {
+    dispatch({ type: UPDATE_END_DATE, date });
   };
 }

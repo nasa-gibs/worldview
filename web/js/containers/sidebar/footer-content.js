@@ -31,7 +31,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     aoiSelected,
     aoiCoordinates,
     timeSpanSelection,
-    timeSpanStartdate,
+    timeSpanStartDate,
     timeSpanEndDate,
     toggleCharting,
     isMobile,
@@ -217,6 +217,6 @@ FooterContent.propTypes = {
   aoiSelected: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
   timeSpanSelection: PropTypes.string,
-  timeSpanStartdate: PropTypes.instanceOf(Date),
+  timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
 };
