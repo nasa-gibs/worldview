@@ -10,12 +10,16 @@ import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
 import {
-  toggleChartingAOIOnOff, updateChartingAOICoordinates, toggleAOISelected, updateChartingDateSelection,
+  toggleChartingAOIOnOff,
+  updateChartingAOICoordinates,
+  toggleAOISelected,
+  updateChartingDateSelection,
 } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info.js';
+import ChartingStatistics from '../charting/charting-statistics.js';
 import ChartingDateComponent from '../charting/charting-date-component';
 import {
   drawStyles, vectorStyles,
@@ -35,6 +39,7 @@ function ChartingModeOptions (props) {
     updateAOICoordinates,
     openChartingInfoModal,
     onChartDateButtonClick,
+    onChartSimpleStatsButtonClick,
     openChartingDateModal,
     olMap,
     crs,
@@ -49,7 +54,6 @@ function ChartingModeOptions (props) {
     timeSpanStartDate,
     timeSpanEndDate,
   } = props;
-  console.log(props);
 
   useEffect(() => {
     if (!init) {
@@ -183,9 +187,6 @@ function ChartingModeOptions (props) {
   const primaryDate = formatDateString(timeSpanStartDate);
   const secondaryDate = formatDateString(timeSpanEndDate);
 
-  console.log(`primaryDate: ${primaryDate}`);
-  console.log(`secondaryDate: ${secondaryDate}`);
-
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
     aoiTextPrompt = 'Area of Interest Selected';
@@ -246,6 +247,24 @@ function ChartingModeOptions (props) {
         <div className="charting-start-date">{primaryDate}</div>
         {dateRangeValue}
       </div>
+
+      <ButtonGroup size="sm">
+        <Button
+          id="charting-simple-stats-button"
+          className="charting-button"
+          onClick={() => onChartSimpleStatsButtonClick()}
+        >
+          Simple Stats
+        </Button>
+        <Button
+          id="charting-create-chart-button"
+          className="charting-button"
+          onClick={() => onChartDateButtonClick()}
+        >
+          Create Chart
+        </Button>
+      </ButtonGroup>
+
       <div className="charting-info-container">
         <FontAwesomeIcon
           icon="info-circle"
@@ -317,6 +336,18 @@ const mapDispatchToProps = (dispatch) => ({
   onChartDateButtonClick: (buttonClicked) => {
     dispatch(updateChartingDateSelection(buttonClicked));
   },
+  onChartSimpleStatsButtonClick: (buttonClicked) => {
+    // This is the modal to display the simple charting stats
+    dispatch(
+      openCustomContent('CHARTING QUICK STATISTICS', {
+        headerText: 'Charting Quick Statistics',
+        backdrop: false,
+        bodyComponent: ChartingStatistics,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -339,6 +370,7 @@ ChartingModeOptions.propTypes = {
   openChartingInfoModal: PropTypes.func,
   openChartingDateModal: PropTypes.func,
   onChartDateButtonClick: PropTypes.func,
+  onChartSimpleStatsButtonClick: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,

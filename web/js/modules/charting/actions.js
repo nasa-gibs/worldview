@@ -16,7 +16,6 @@ export function toggleChartingModeOnOff() {
 export function toggleChartingAOIOnOff() {
   return (dispatch) => {
     dispatch({ type: TOGGLE_AOI_ON_OFF });
-    // toggleAOISelected();
   };
 }
 export function toggleAOISelected(action = null) {
@@ -40,11 +39,6 @@ export function changeStartDate(date) {
   };
 }
 export function changeEndDate(date) {
-  console.log('ACTION changing end date');
-  // return {
-  //   type: UPDATE_END_DATE,
-  //   value: date,
-  // };
   return (dispatch) => {
     dispatch({ type: UPDATE_END_DATE, date });
   };
