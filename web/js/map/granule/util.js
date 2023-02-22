@@ -409,7 +409,7 @@ export const granuleFootprint = (map, initialIsMobile) => {
     map.addLayer(vectorLayer);
   };
 
-  const debouncedDrawFootprint = debounce(drawFootprint, 2000);
+  const debouncedDrawFootprint = debounce(drawFootprint, 850);
 
   const addFootprint = (points, date) => {
     if (currentGranule[date]) {
