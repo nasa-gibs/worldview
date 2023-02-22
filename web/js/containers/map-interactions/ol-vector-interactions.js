@@ -303,7 +303,6 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
   openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive) => {
-    console.log('openVectorDialog');
     const { screenHeight, screenWidth } = screenSize;
     const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();

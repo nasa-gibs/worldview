@@ -366,7 +366,6 @@ export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) =
  * @returns
  */
 export const granuleFootprint = (map, initialIsMobile) => {
-  console.log(`initialIsMobile: ${initialIsMobile}`);
   let currentGranule = {};
   let vectorLayer = {};
   const vectorSource = new OlVectorSource({
