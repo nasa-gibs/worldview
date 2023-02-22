@@ -5,9 +5,13 @@ const url = 'http://localhost:3000/?v=-78.52435703125,37.8608744140625,-75.56244
 
 test.describe.configure({ mode: 'serial' });
 let page
+let dmButton
+let marker
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
+  dmButton = page.getByRole('button', { name: 'Set latlon-dm Format' })
+  marker = page.locator('.tooltip-coordinates');
 });
 
 test.afterAll(async () => {
@@ -20,14 +24,28 @@ test('Open page', async () => {
 });
 
 test('Change coordinates format from coordinate case updates global settings coordinate format', async () => {
-  await page.locator('canvas').click()
-  await page.locator('id=ol-coords-case').click();
+  await page.locator('canvas').click();
+  await page.locator('#ol-coords-case').click();
   await page.getByRole('button', { name: 'Information' }).click();
   await page.getByRole('button', { name: 'Settings' }).click();
 
-  const dmButton = page.getByRole('button', { name: 'Set latlon-dm Format' })
+  await expect(dmButton).toHaveClass(/active/)
+});
 
-  const isActive = await dmButton.getAttribute('class').then(classList => classList.includes('active'));
-  await expect(isActive).toBe(true);
+test('Selecting LATLON-DMS in Global Settings changes coordinate format in location marker', async () => {
+  const expectedText = '38°48\'16"N,  77°02\'36"W';
+
+  await page.getByRole('button', { name: 'Set latlon-dms Format' }).click();
+
+  expect(marker).toContainText(expectedText);
+});
+
+test('Change coordinates format from coordinate case changes coordinate format in location marker', async () => {
+  const expectedText = '38.8046°, -77.0434°';
+
+  await page.locator('canvas').click();
+  await page.locator('#ol-coords-case').click();
+
+  expect(marker).toContainText(expectedText);
 });
 
