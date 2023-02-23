@@ -21,6 +21,7 @@ import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info.js';
 import ChartingStatistics from '../charting/charting-statistics.js';
 import ChartingDateComponent from '../charting/charting-date-component';
+import ChartingChartComponent from '../charting/charting-chart-component';
 import {
   drawStyles, vectorStyles,
 } from '../charting/charting-aoi-style.js';
@@ -40,6 +41,7 @@ function ChartingModeOptions (props) {
     openChartingInfoModal,
     onChartDateButtonClick,
     onChartSimpleStatsButtonClick,
+    onCreateChartButtonClick,
     openChartingDateModal,
     olMap,
     crs,
@@ -259,7 +261,7 @@ function ChartingModeOptions (props) {
         <Button
           id="charting-create-chart-button"
           className="charting-button"
-          onClick={() => onChartDateButtonClick()}
+          onClick={() => onCreateChartButtonClick()}
         >
           Create Chart
         </Button>
@@ -348,6 +350,18 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  onCreateChartButtonClick: (buttonClicked) => {
+    // This is the modal to display the actual chart
+    dispatch(
+      openCustomContent('CHART', {
+        headerText: '[Layer] Chart',
+        backdrop: false,
+        bodyComponent: ChartingChartComponent,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -371,6 +385,7 @@ ChartingModeOptions.propTypes = {
   openChartingDateModal: PropTypes.func,
   onChartDateButtonClick: PropTypes.func,
   onChartSimpleStatsButtonClick: PropTypes.func,
+  onCreateChartButtonClick: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
