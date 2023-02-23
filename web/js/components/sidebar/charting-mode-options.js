@@ -40,7 +40,7 @@ function ChartingModeOptions (props) {
     updateAOICoordinates,
     openChartingInfoModal,
     onChartDateButtonClick,
-    onChartSimpleStatsButtonClick,
+    displaySimpleStats,
     onCreateChartButtonClick,
     openChartingDateModal,
     olMap,
@@ -184,6 +184,26 @@ function ChartingModeOptions (props) {
     const month = date.toLocaleString('default', { month: 'short' });
     const day = date.getDate();
     return `${year} ${month} ${day}`;
+  }
+
+  function onChartSimpleStatsButtonClick() {
+    const simpleStatsURI = 'https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=2016-01-01&_type=date&steps=1&layer=GHRSST_L4_MUR_Sea_Surface_Temperature&colormap=GHRSST_Sea_Surface_Temperature.xml&_scale=1&bbox=-90%2C-180%2C90%2C180&bins=10';
+    const statsPromise = fetch(simpleStatsURI);
+
+    statsPromise
+      .then((response) => {
+        if (!response.ok) {
+          throw Error('Failed to retrieve data.');
+        }
+        return response.json();
+      })
+      .then((statData) => {
+        console.log(statData);
+        displaySimpleStats();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const primaryDate = formatDateString(timeSpanStartDate);
@@ -338,7 +358,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChartDateButtonClick: (buttonClicked) => {
     dispatch(updateChartingDateSelection(buttonClicked));
   },
-  onChartSimpleStatsButtonClick: (buttonClicked) => {
+  displaySimpleStats: () => {
     // This is the modal to display the simple charting stats
     dispatch(
       openCustomContent('CHARTING QUICK STATISTICS', {
@@ -384,7 +404,7 @@ ChartingModeOptions.propTypes = {
   openChartingInfoModal: PropTypes.func,
   openChartingDateModal: PropTypes.func,
   onChartDateButtonClick: PropTypes.func,
-  onChartSimpleStatsButtonClick: PropTypes.func,
+  displaySimpleStats: PropTypes.func,
   onCreateChartButtonClick: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
