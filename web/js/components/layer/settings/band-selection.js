@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Dropdown,
   DropdownToggle,
@@ -6,23 +7,26 @@ import {
   DropdownItem,
   Button,
 } from 'reactstrap';
+import { connect } from 'react-redux';
+import { updateBandCombination, removeLayer } from '../../../modules/layers/actions';
 
-const BandSelection = () => {
+const BandSelection = ({ layer, updateBandCombination, removeLayer }) => {
   const [bandSelection, setBandSelection] = useState({
-    r: 'B07',
-    g: 'B05',
-    b: 'B04',
+    r: layer.bandCombo.r,
+    g: layer.bandCombo.g,
+    b: layer.bandCombo.b,
   });
 
   const confirmSelection = () => {
-    console.log(bandSelection);
+    removeLayer(layer.id);
+    updateBandCombination(layer.id, bandSelection);
   };
 
   // eslint-disable-next-line react/prop-types
   const DropdownComponent = ({ channel }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(!dropdownOpen);
-    const bandValue = bandSelection[channel];
+    const bandValue = bandSelection[channel] || layer.bandCombo[0];
 
     const bandChoices = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08'];
 
@@ -82,7 +86,22 @@ const BandSelection = () => {
   );
 };
 
-export default BandSelection;
+const mapDispatchToProps = (dispatch) => ({
+  updateBandCombination: (id, bandCombo) => {
+    dispatch(updateBandCombination(id, bandCombo));
+  },
+  removeLayer: (id) => {
+    dispatch(removeLayer(id));
+  },
+});
 
+export default connect(
+  null,
+  mapDispatchToProps,
+)(BandSelection);
 
-
+BandSelection.propTypes = {
+  layer: PropTypes.object,
+  updateBandCombination: PropTypes.func,
+  removeLayer: PropTypes.func,
+};

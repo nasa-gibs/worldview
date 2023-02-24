@@ -414,3 +414,34 @@ export function updateLayerDateCollection(layerInfo) {
     ...layerInfo,
   };
 }
+
+export function updateBandCombination(id, bandCombo) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      layers, compare, proj, config,
+    } = state;
+    const layerObj = layers.layerConfig[id];
+    const { groupOverlays } = layers[compare.activeString];
+    const activeLayers = getActiveLayersSelector(state);
+    const overlays = getLayersSelector(state, { group: 'overlays' });
+    const newLayers = addLayerSelector(
+      id,
+      {},
+      activeLayers,
+      layers.layerConfig,
+      overlays.length || 0,
+      proj.id,
+      groupOverlays,
+      bandCombo,
+    );
+    const projections = Object.keys(config.projections);
+    updateRecentLayers(layerObj, projections);
+    dispatch({
+      type: ADD_LAYER,
+      id,
+      activeString: compare.activeString,
+      layers: newLayers,
+    });
+  };
+}
