@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
+import BandSelection from './band-selection';
 import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
@@ -52,6 +53,7 @@ import {
   setOpacity,
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
+import { toggleCustomContent } from '../../../modules/modal/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -333,18 +335,22 @@ class LayerSettings extends React.Component {
   }
 
   renderCustomizeBandSelectionButton = () => {
-
+    const {
+      layer,
+      onCustomizeBandClick,
+    } = this.props;
     return (
       <Button
-      id="customize-bands"
-      aria-label="Customize band selection"
-      className="wv-button red"
+        id="customize-bands"
+        aria-label="Customize band selection"
+        className="wv-button red"
+        onClick={() => onCustomizeBandClick(layer)}
       >
         <span className="button-text">
           Customize Band Selection
         </span>
       </Button>
-    )
+    );
   }
 
   render() {
@@ -461,6 +467,24 @@ const mapDispatchToProps = (dispatch) => ({
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
   },
+  onCustomizeBandClick: (layer) => {
+    const key = `BAND_SELECTION_MODAL_${layer.id}`;
+    const title = `Customize Bands for the ${layer.title} layer`;
+    dispatch(
+      toggleCustomContent(key, {
+        headerText: title,
+        backdrop: false,
+        bodyComponent: BandSelection,
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: 'sidebar-modal layer-settings-modal', // TO-DO replace class name
+        timeout: 150,
+        size: 'lg',
+        bodyComponentProps: {
+          layer,
+        },
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -485,6 +509,7 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
+  onCustomizeBandClick: PropTypes.func,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
