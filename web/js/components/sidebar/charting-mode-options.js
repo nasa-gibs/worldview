@@ -9,6 +9,7 @@ import { createBox } from 'ol/interaction/Draw.js';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
+import { layer } from '@fortawesome/fontawesome-svg-core';
 import {
   toggleChartingAOIOnOff,
   updateChartingAOICoordinates,
@@ -73,9 +74,12 @@ function ChartingModeOptions (props) {
     endDrawingAreaOfInterest();
   }, [isChartingActive]);
 
-  useEffect(() => {
-    processAreaOfInterestCoordinates();
-  }, [aoiCoordinates]);
+  // useEffect(() => {
+  //   processAreaOfInterestCoordinates();
+  // }, [aoiCoordinates]);
+
+  const primaryDate = formatDateString(timeSpanStartDate);
+  const secondaryDate = formatDateString(timeSpanEndDate);
 
   const onAreaOfInterestButtonClick = (evt) => {
     toggleAreaOfInterestActive();
@@ -165,10 +169,10 @@ function ChartingModeOptions (props) {
     updateAOICoordinates(geometry.getExtent());
   }
 
-  function processAreaOfInterestCoordinates() {
-    // Identify all "live" layers (not hidden)
+  function getTopLayerInfo() {
     const liveLayers = getLiveLayers();
     const topLayer = liveLayers[0];
+    return topLayer;
   }
 
   /**
@@ -186,15 +190,49 @@ function ChartingModeOptions (props) {
     return `${year} ${month} ${day}`;
   }
 
+  function getFormattedDateForRequest(dateStr) {
+    const dateParts = dateStr.split(' ');
+    const year = dateParts[0];
+    const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
+    const day = dateParts[2];
+    return `${year}-${month}-${day}`;
+  }
+
   async function onChartSimpleStatsButtonClick() {
-    const simpleStatsURI = getSimpleStatsRequestURL();
+    const layerInfo = getTopLayerInfo();
+    const uriParameters = getSimpleStatsURIParams(layerInfo);
+    const simpleStatsURI = getSimpleStatsRequestURL(uriParameters);
     const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
-    console.log(simpleStatsData);
     displaySimpleStats(simpleStatsData);
   }
 
-  function getSimpleStatsRequestURL() {
-    return 'https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=2016-01-01&_type=date&steps=1&layer=GHRSST_L4_MUR_Sea_Surface_Temperature&colormap=GHRSST_Sea_Surface_Temperature.xml&_scale=1&bbox=-90%2C-180%2C90%2C180&bins=10';
+  function getSimpleStatsURIParams(layerInfo) {
+    const formattedDate = getFormattedDateForRequest(primaryDate);
+    console.log(`aoiCoordinates: ${aoiCoordinates}`);
+    return {
+      timestamp: formattedDate, // start date
+      type: timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
+      steps: 1, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
+      layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
+      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
+      areaOfInterestCoords: '-90%2C-180%2C90%2C180', // Bounding box of latitude and longitude.
+      bins: 10, // Number of bins to used in returned histogram. e.g. 10
+      scale: 1, // unused
+    };
+  }
+
+  function getSimpleStatsRequestURL(uriParameters) {
+    const {
+      timestamp,
+      type,
+      steps,
+      layer,
+      colormap,
+      scale,
+      areaOfInterestCoords,
+      bins,
+    } = uriParameters;
+    return `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=${timestamp}&_type=${type}&steps=${steps}&layer=${layer}&colormap=${colormap}&_scale=${scale}&bbox=${areaOfInterestCoords}&bins=${bins}`;
   }
 
   async function getSimpleStatsData(simpleStatsURI) {
@@ -205,17 +243,12 @@ function ChartingModeOptions (props) {
 
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
-      console.log('response');
-      console.log(response);
       const data = await response.text();
       return data;
     } catch (error) {
       console.log('Error requesting simple statistis', error);
     }
   }
-
-  const primaryDate = formatDateString(timeSpanStartDate);
-  const secondaryDate = formatDateString(timeSpanEndDate);
 
   let aoiTextPrompt = 'Select Area of Interest';
   if (aoiSelected) {
@@ -224,7 +257,7 @@ function ChartingModeOptions (props) {
 
   let singleDateBtnStatus = '';
   let dateRangeBtnStatus = '';
-  if (timeSpanSelection === 'single') {
+  if (timeSpanSelection === 'date') {
     singleDateBtnStatus = 'btn-active';
     dateRangeBtnStatus = '';
   } else {
@@ -260,7 +293,7 @@ function ChartingModeOptions (props) {
           <Button
             id="charting-date-single-button"
             className={`charting-button ${singleDateBtnStatus}`}
-            onClick={() => onChartDateButtonClick('single')}
+            onClick={() => onChartDateButtonClick('date')}
           >
             Single Date
           </Button>

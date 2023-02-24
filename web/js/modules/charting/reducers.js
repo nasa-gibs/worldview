@@ -14,7 +14,7 @@ export const initialChartingState = {
   aoiSelected: false,
   aoiCoordinates: [],
   chartingActive: false,
-  timeSpanSelection: 'single',
+  timeSpanSelection: 'date',
   timeSpanStartDate: new Date(),
   timeSpanEndDate: new Date(),
 };
