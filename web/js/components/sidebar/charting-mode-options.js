@@ -206,16 +206,23 @@ function ChartingModeOptions (props) {
     displaySimpleStats(simpleStatsData);
   }
 
+  function getFormattedAreaOfInterest(aoi) {
+    if (aoi == null) {
+      return [-90, -180, 90, 180];
+    }
+    // swap index 0 & 1, and index 2 & 3; order of lat/lon needs to be reversed
+    return [aoi[1], aoi[0], aoi[3], aoi[2]];
+  }
   function getSimpleStatsURIParams(layerInfo) {
     const formattedDate = getFormattedDateForRequest(primaryDate);
-    console.log(`aoiCoordinates: ${aoiCoordinates}`);
+    const formattedAreaOfInterest = getFormattedAreaOfInterest(aoiCoordinates);
     return {
       timestamp: formattedDate, // start date
       type: timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
       steps: 1, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
-      areaOfInterestCoords: '-90%2C-180%2C90%2C180', // Bounding box of latitude and longitude.
+      areaOfInterestCoords: formattedAreaOfInterest, // Bounding box of latitude and longitude.
       bins: 10, // Number of bins to used in returned histogram. e.g. 10
       scale: 1, // unused
     };
