@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink,
+  Button, TabContent, TabPane, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -332,6 +332,21 @@ class LayerSettings extends React.Component {
       ) : null;
   }
 
+  renderCustomizeBandSelectionButton = () => {
+
+    return (
+      <Button
+      id="customize-bands"
+      aria-label="Customize band selection"
+      className="wv-button red"
+      >
+        <span className="button-text">
+          Customize Band Selection
+        </span>
+      </Button>
+    )
+  }
+
   render() {
     let renderCustomizations;
     const {
@@ -342,6 +357,7 @@ class LayerSettings extends React.Component {
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
+    const ttilerLayer = layer.type === 'ttiler';
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
@@ -362,6 +378,7 @@ class LayerSettings extends React.Component {
         {this.renderGranuleSettings()}
         {renderCustomizations}
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
+        {ttilerLayer && this.renderCustomizeBandSelectionButton()}
       </>
     );
   }
