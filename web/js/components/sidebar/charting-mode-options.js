@@ -186,24 +186,32 @@ function ChartingModeOptions (props) {
     return `${year} ${month} ${day}`;
   }
 
-  function onChartSimpleStatsButtonClick() {
-    const simpleStatsURI = 'https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=2016-01-01&_type=date&steps=1&layer=GHRSST_L4_MUR_Sea_Surface_Temperature&colormap=GHRSST_Sea_Surface_Temperature.xml&_scale=1&bbox=-90%2C-180%2C90%2C180&bins=10';
-    const statsPromise = fetch(simpleStatsURI);
+  async function onChartSimpleStatsButtonClick() {
+    const simpleStatsURI = getSimpleStatsRequestURL();
+    const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
+    console.log(simpleStatsData);
+    displaySimpleStats(simpleStatsData);
+  }
 
-    statsPromise
-      .then((response) => {
-        if (!response.ok) {
-          throw Error('Failed to retrieve data.');
-        }
-        return response.json();
-      })
-      .then((statData) => {
-        console.log(statData);
-        displaySimpleStats();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  function getSimpleStatsRequestURL() {
+    return 'https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=2016-01-01&_type=date&steps=1&layer=GHRSST_L4_MUR_Sea_Surface_Temperature&colormap=GHRSST_Sea_Surface_Temperature.xml&_scale=1&bbox=-90%2C-180%2C90%2C180&bins=10';
+  }
+
+  async function getSimpleStatsData(simpleStatsURI) {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    try {
+      const response = await fetch(simpleStatsURI, requestOptions);
+      console.log('response');
+      console.log(response);
+      const data = await response.text();
+      return data;
+    } catch (error) {
+      console.log('Error requesting simple statistis', error);
+    }
   }
 
   const primaryDate = formatDateString(timeSpanStartDate);
@@ -358,7 +366,7 @@ const mapDispatchToProps = (dispatch) => ({
   onChartDateButtonClick: (buttonClicked) => {
     dispatch(updateChartingDateSelection(buttonClicked));
   },
-  displaySimpleStats: () => {
+  displaySimpleStats: (simpleStatsData) => {
     // This is the modal to display the simple charting stats
     dispatch(
       openCustomContent('CHARTING QUICK STATISTICS', {
@@ -367,6 +375,9 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingStatistics,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+        bodyComponentProps: {
+          simpleStatsData,
+        },
       }),
     );
   },
