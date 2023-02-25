@@ -9,8 +9,11 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { updateBandCombination, removeLayer } from '../../../modules/layers/actions';
+import { onClose } from '../../../modules/modal/actions';
 
-const BandSelection = ({ layer, updateBandCombination, removeLayer }) => {
+const BandSelection = ({
+  layer, updateBandCombination, removeLayer, closeModal,
+}) => {
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
@@ -20,6 +23,7 @@ const BandSelection = ({ layer, updateBandCombination, removeLayer }) => {
   const confirmSelection = () => {
     removeLayer(layer.id);
     updateBandCombination(layer.id, bandSelection);
+    closeModal();
   };
 
   // eslint-disable-next-line react/prop-types
@@ -93,6 +97,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeLayer: (id) => {
     dispatch(removeLayer(id));
   },
+  closeModal: () => {
+    dispatch(onClose());
+  },
 });
 
 export default connect(
@@ -104,4 +111,5 @@ BandSelection.propTypes = {
   layer: PropTypes.object,
   updateBandCombination: PropTypes.func,
   removeLayer: PropTypes.func,
+  closeModal: PropTypes.func,
 };

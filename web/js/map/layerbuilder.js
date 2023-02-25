@@ -56,6 +56,9 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} wrapLayer
    */
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+    if (def.type === 'ttiler') {
+      console.log('ima ttiler');
+    }
     const state = store.getState();
     const layer = createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
@@ -171,6 +174,9 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
+    if (def.type === 'ttiler') {
+      console.log('hello');
+    }
 
     if (!layer || isGranule) {
       if (!date) date = options.date || getSelectedDate(state);
@@ -191,6 +197,9 @@ export default function mapLayerBuilder(config, cache, store) {
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
+      if (def.type === 'ttiler') {
+        console.log('pls');
+      }
       if (!isGranule) {
         switch (def.type) {
           case 'wmts':
@@ -765,8 +774,10 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createTtilerLayer = async (def, options, day, state) => {
+    console.log(def);
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
+    const { r, g, b } = def.bandCombo;
 
     const source = config.sources[def.source];
 
@@ -776,8 +787,9 @@ export default function mapLayerBuilder(config, cache, store) {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
-      // TODO: update projection and asset parameters for different values
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&assets=B07&assets=B05&assets=B04`;
+
+      console.log(`r: ${r} g: ${g} b: ${b}`);
+      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&assets=${r}&assets=${g}&assets=${b}`;
       return source.url + urlParams;
     };
 
