@@ -15,8 +15,6 @@ export const initialChartingState = {
   aoiCoordinates: [],
   chartingActive: false,
   timeSpanSelection: 'date',
-  // timeSpanStartDate: new Date(),
-  // timeSpanEndDate: new Date(),
   timeSpanStartDate: undefined,
   timeSpanEndDate: undefined,
 };
