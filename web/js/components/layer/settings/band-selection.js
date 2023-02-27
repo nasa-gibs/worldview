@@ -11,9 +11,9 @@ import { connect } from 'react-redux';
 import { updateBandCombination, removeLayer } from '../../../modules/layers/actions';
 import { onClose } from '../../../modules/modal/actions';
 
-const BandSelection = ({
+function BandSelection({
   layer, updateBandCombination, removeLayer, closeModal,
-}) => {
+}) {
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
@@ -27,7 +27,7 @@ const BandSelection = ({
   };
 
   // eslint-disable-next-line react/prop-types
-  const DropdownComponent = ({ channel }) => {
+  function DropdownComponent({ channel }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(!dropdownOpen);
     const bandValue = bandSelection[channel] || layer.bandCombo[0];
@@ -55,40 +55,38 @@ const BandSelection = ({
         </DropdownMenu>
       </Dropdown>
     );
-  };
+  }
 
   return (
-    <>
-      <div className="d-flex justify-content-center align-items-center flex-column">
-        <h3>Select a band combination</h3>
-        <div className="d-flex justify-content-between align-items-center mt-4 categories-dropdown-header">
-          <p className="mr-2">R:</p>
-          <DropdownComponent channel="r" />
-        </div>
-        <div className="d-flex justify-content-between align-items-center mt-4">
-          <p className="mr-2">G:</p>
-          <DropdownComponent channel="g" />
-        </div>
-        <div className="d-flex justify-content-between align-items-center mt-4">
-          <p className="mr-2">B:</p>
-          <DropdownComponent channel="b" />
-        </div>
-        <div className="mt-4">
-          <Button
-            id="confirm-band-selection"
-            aria-label="Confirm band selection"
-            className="wv-button red"
-            onClick={() => confirmSelection()}
-          >
-            <span className="button-text">
-              Confirm Band Selection
-            </span>
-          </Button>
-        </div>
+    <div className="d-flex justify-content-center align-items-center flex-column">
+      <h3>Select a band combination</h3>
+      <div className="d-flex justify-content-between align-items-center mt-4 categories-dropdown-header">
+        <p className="mr-2">R:</p>
+        <DropdownComponent channel="r" />
       </div>
-    </>
+      <div className="d-flex justify-content-between align-items-center mt-4">
+        <p className="mr-2">G:</p>
+        <DropdownComponent channel="g" />
+      </div>
+      <div className="d-flex justify-content-between align-items-center mt-4">
+        <p className="mr-2">B:</p>
+        <DropdownComponent channel="b" />
+      </div>
+      <div className="mt-4">
+        <Button
+          id="confirm-band-selection"
+          aria-label="Confirm band selection"
+          className="wv-button red"
+          onClick={() => confirmSelection()}
+        >
+          <span className="button-text">
+            Confirm Band Selection
+          </span>
+        </Button>
+      </div>
+    </div>
   );
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
   updateBandCombination: (id, bandCombo) => {

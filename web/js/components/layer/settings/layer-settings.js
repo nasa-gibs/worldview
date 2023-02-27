@@ -349,7 +349,7 @@ class LayerSettings extends React.Component {
         </span>
       </Button>
     );
-  }
+  };
 
   render() {
     let renderCustomizations;
