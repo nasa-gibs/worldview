@@ -55,9 +55,10 @@ function ChartingModeOptions (props) {
     timeSpanSelection,
     timeSpanStartDate,
     timeSpanEndDate,
-    timelineDate,
+    timelineStartDate,
+    timelineEndDate,
   } = props;
-  // console.log(date);
+
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
@@ -74,17 +75,29 @@ function ChartingModeOptions (props) {
     endDrawingAreaOfInterest();
   }, [isChartingActive]);
 
-  let x;
-  if (timeSpanStartDate === undefined) {
-    x = new Date();
-  } else {
-    x = timeSpanStartDate;
-  }
+  const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
 
-  console.log('x');
-  console.log(x);
-  const primaryDate = formatDateString(x);
-  const secondaryDate = formatDateString(timeSpanEndDate);
+  const primaryDate = formatDateString(initialStartDate);
+  const secondaryDate = formatDateString(initialEndDate);
+
+  /**
+   * Processes the start & end times & aligns them with the timeline if values are undefined
+   */
+  function initializeDates(start, end) {
+    let startDate;
+    let endDate;
+    if (start === undefined) {
+      startDate = timelineStartDate; // SHOULD BE date.selected
+    } else {
+      startDate = start;
+    }
+    if (end === undefined) {
+      endDate = timelineEndDate;
+    } else {
+      endDate = end; // should be date.selectedB
+    }
+    return { initialStartDate: startDate, initialEndDate: endDate };
+  }
 
   const onAreaOfInterestButtonClick = (evt) => {
     toggleAreaOfInterestActive();
@@ -356,7 +369,8 @@ const mapStateToProps = (state, ownProps) => {
     aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanStartDate, timeSpanEndDate,
   } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const timelineDate = date.selected;
+  const timelineStartDate = date.selected;
+  const timelineEndDate = date.selectedB;
   return {
     olMap: map.ui.selected,
     proj,
@@ -369,7 +383,8 @@ const mapStateToProps = (state, ownProps) => {
     timeSpanSelection,
     timeSpanEndDate,
     timeSpanStartDate,
-    timelineDate,
+    timelineStartDate,
+    timelineEndDate,
   };
 };
 
@@ -465,5 +480,6 @@ ChartingModeOptions.propTypes = {
   proj: PropTypes.object,
   projections: PropTypes.array,
   aoiActive: PropTypes.bool,
-  timelineDate: PropTypes.instanceOf(Date),
+  timelineStartDate: PropTypes.instanceOf(Date),
+  timelineEndDate: PropTypes.instanceOf(Date),
 };

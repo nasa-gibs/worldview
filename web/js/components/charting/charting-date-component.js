@@ -12,10 +12,9 @@ function ChartingDateComponent (props) {
     onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date,
   } = props;
 
-  console.log('ChartingDateComponent');
-  const { selected } = date;
+  const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
-  console.log(`startdate: ${startdate}`);
+  const endDate = timeSpanEndDate == null ? selectedB : timeSpanEndDate;
   const minDate = new Date('01/01/1900');
   const maxDate = new Date('12/31/2035');
 
@@ -36,7 +35,7 @@ function ChartingDateComponent (props) {
       <DateRangeSelector
         idSuffix="charting-date-picker"
         startDate={startdate}
-        endDate={timeSpanEndDate}
+        endDate={endDate}
         setDateRange={onDateChange}
         minDate={minDate}
         maxDate={maxDate}

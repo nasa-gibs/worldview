@@ -18,7 +18,7 @@ export const initialChartingState = {
   // timeSpanStartDate: new Date(),
   // timeSpanEndDate: new Date(),
   timeSpanStartDate: undefined,
-  timeSpanEndDate: new Date(),
+  timeSpanEndDate: undefined,
 };
 export function chartingReducer(state = initialChartingState, action) {
   switch (action.type) {
