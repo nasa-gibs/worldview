@@ -1,3 +1,5 @@
+**NOTE: This layer is undergoing beta testing. Imagery is pixelated in certain areas and is currently being investigated.**
+
 Granule Corrected Reflectance imagery displays each 6-minute granule of imagery in near real-time. It is available on a 15 day rolling window basis. Each granule shows imagery as it was captured by the VIIRS instrument in that 6-minute time period and reveals areas that may have otherwise been obscured by the mosaicking of subsequent overpasses.
 
 For a daily overview, please refer to the associated Corrected Reflectance Mosaic/Composite image.

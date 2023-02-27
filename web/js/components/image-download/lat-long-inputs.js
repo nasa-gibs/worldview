@@ -14,9 +14,9 @@ const isValidExtent = (extent) => {
   return true;
 };
 
-const Input = ({
+function Input({
   index, title, boundingBoxArray, onLatLongChange, inputNumber, viewExtent, crs,
-}) => {
+}) {
   const [inputValue, setInputValue] = useState(inputNumber);
   const [isInvalid, setInputInvalid] = useState(false);
 
@@ -81,9 +81,9 @@ const Input = ({
       {isInvalid && (<span className="red-font invalid">Not Visible</span>)}
     </div>
   );
-};
+}
 
-const LatLongSelect = (props) => {
+function LatLongSelect(props) {
   const {
     onLatLongChange, geoLatLong, viewExtent, crs,
   } = props;
@@ -163,7 +163,7 @@ const LatLongSelect = (props) => {
       )}
     </div>
   );
-};
+}
 export default LatLongSelect;
 
 const {

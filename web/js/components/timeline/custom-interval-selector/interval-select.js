@@ -13,7 +13,7 @@ import {
  *
  * @class TimeScaleSelect
  */
-const IntervalSelect = (props) => {
+function IntervalSelect(props) {
   const {
     zoomLevel,
     hasSubdailyLayers,
@@ -106,7 +106,7 @@ const IntervalSelect = (props) => {
       )}
     </>
   );
-};
+}
 
 IntervalSelect.propTypes = {
   changeZoomLevel: PropTypes.func,

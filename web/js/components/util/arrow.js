@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 /*
  * @function Arrow Up/Down
  */
-const Arrow = ({ onClick, type, direction }) => {
+function Arrow({ onClick, type, direction }) {
   const containerClassName = `date-arrows date-arrow-${direction}`;
   const arrowClassName = `${direction}arrow`;
 
@@ -19,7 +19,7 @@ const Arrow = ({ onClick, type, direction }) => {
       </svg>
     </div>
   );
-};
+}
 
 Arrow.propTypes = {
   direction: PropTypes.string,

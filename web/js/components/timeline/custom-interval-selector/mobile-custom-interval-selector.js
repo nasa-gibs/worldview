@@ -12,7 +12,7 @@ import {
   changeCustomInterval as changeCustomIntervalAction,
 } from '../../../modules/date/actions';
 
-const MobileCustomIntervalSelector = (props) => {
+function MobileCustomIntervalSelector(props) {
   const {
     changeCustomInterval,
     customInterval,
@@ -50,7 +50,7 @@ const MobileCustomIntervalSelector = (props) => {
       </div>
     </div>
   );
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
   changeCustomInterval: (delta, timeScale) => {

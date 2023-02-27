@@ -1,11 +1,11 @@
-FROM centos:7
+FROM almalinux:9.1
 
-RUN yum install -y epel-release && \
-    yum install -y \
+RUN dnf install -y epel-release && \
+    dnf --enablerepo=crb install giflib-devel -y && \
+    dnf install -y \
     "@Development Tools" \
     cairo-devel \
     firefox \
-    giflib-devel \
     httpd \
     libjpeg-turbo-devel \
     java-1.8.0-openjdk \
@@ -17,24 +17,10 @@ RUN yum install -y epel-release && \
     libffi-devel \
     openssl-devel \
     xz
-RUN cd /usr/src && \
-    wget https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz  && \
-    tar xzf Python-3.9.4.tgz && \
-    rm Python-3.9.4.tgz && \
-    cd Python-3.9.4 && \
-    ./configure --enable-optimizations && \
-    make altinstall && \
-    ln -sf /usr/local/bin/python3.9 /usr/local/bin/python3 && \
-    python3 -V && \
-    curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && \
-    python3 -m ensurepip && \
-    pip install --upgrade pip && \
-    pip --version
 RUN mkdir -p /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=16.18.0
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+ENV NODE_VERSION=18.14.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
     nvm use v${NODE_VERSION} && \
@@ -53,9 +39,6 @@ RUN mkdir -p /build/node_modules && \
     nightwatch
 
 VOLUME /build/node_modules
-VOLUME /build/.python
 
 EXPOSE 80
 CMD  tail -f /dev/null
-
-

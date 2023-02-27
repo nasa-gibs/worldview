@@ -37,7 +37,7 @@ import { granuleFootprint } from '../../../map/granule/util';
 
 const { events } = util;
 
-const CreateMap = (props) => {
+function CreateMap(props) {
   const {
     config,
     isMapSet,
@@ -237,7 +237,7 @@ const CreateMap = (props) => {
   };
 
   return null;
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
   updateRotation: (rotation) => {

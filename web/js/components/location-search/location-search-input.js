@@ -53,7 +53,7 @@ class SearchBox extends Component {
         onSelect(firstSuggestion.text, firstSuggestion);
       }
     }
-  }
+  };
 
   // handle key press to use ENTER key to select
   handleKeyPress = (e) => {
@@ -68,14 +68,14 @@ class SearchBox extends Component {
         onCoordinateInputSelect();
       }
     }
-  }
+  };
 
   // render search result menu item container
   renderMenu = (children) => (
     <div className="location-search-results-menu">
       {children}
     </div>
-  )
+  );
 
   // render individual menu items with conditional styling
   renderItem = (item, isHighlighted) => {
@@ -94,7 +94,7 @@ class SearchBox extends Component {
         {item.text}
       </div>
     );
-  }
+  };
 
   // render submit button
   renderSubmitButton = () => {
@@ -135,7 +135,7 @@ class SearchBox extends Component {
         </Button>
       </InputGroupAddon>
     );
-  }
+  };
 
   // render alert icon
   renderAlertIcon = () => {
@@ -154,7 +154,7 @@ class SearchBox extends Component {
       </InputGroupAddon>
       )
     );
-  }
+  };
 
   // render clear input X
   renderClearInput = () => {
@@ -192,7 +192,7 @@ class SearchBox extends Component {
       </InputGroupAddon>
       )
     );
-  }
+  };
 
   // conditional autocomplete wrapper styling
   getWrapperStyle = () => {
@@ -213,7 +213,7 @@ class SearchBox extends Component {
       width: isMobile ? '90%' : '298px',
       paddingRight: paddingRightStyle,
     };
-  }
+  };
 
   render() {
     const {

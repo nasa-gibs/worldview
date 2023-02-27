@@ -138,12 +138,10 @@ export default function GranuleCount (props) {
       <div className="granule-count-info">
 
         {!isLoading && (
-          <>
-            <span className="fade-in">
+          <span className="fade-in">
               {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
               {granulesExist ? totalGranules : 'NONE'}
-            </span>
-          </>
+          </span>
         )}
 
         {!isLoading ? renderDownloadSize() : renderLoading()}

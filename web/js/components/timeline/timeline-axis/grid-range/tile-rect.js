@@ -75,7 +75,7 @@ class TileRect extends PureComponent {
   showHover = (e) => {
     const { item, index, showHover } = this.props;
     showHover(e, item.rawDate, item.rawNextDate, index);
-  }
+  };
 
   render() {
     const {
@@ -89,46 +89,44 @@ class TileRect extends PureComponent {
     const whiteLineStrokeWidth = lineLengthY !== 10 ? 2 : 1;
     const indexGridWithCoeff = index * gridWidth;
     return (
-      <>
-        <g onMouseMove={this.showHover}>
-          <rect
-            className="axis-grid-rect"
-            width={gridWidth}
-            height={65}
-            x={indexGridWithCoeff}
-            fill="transparent"
-          />
-          <line
-            className="axis-grid-line"
-            stroke="black"
-            strokeLinecap="round"
-            strokeWidth="0.2"
-            x1={indexGridWithCoeff + 2.2}
-            x2={indexGridWithCoeff + 2.2}
-            y1="0"
-            y2={lineLengthY}
-          />
-          <line
-            className="axis-grid-line"
-            stroke="#555"
-            strokeWidth={1}
-            x1={indexGridWithCoeff + 1}
-            x2={indexGridWithCoeff + 1 + gridWidth}
-            y1="46"
-            y2="46"
-          />
-          <line
-            className="axis-grid-line"
-            stroke="white"
-            strokeLinecap="round"
-            strokeWidth={whiteLineStrokeWidth}
-            x1={indexGridWithCoeff + 1}
-            x2={indexGridWithCoeff + 1}
-            y1="0"
-            y2={lineLengthY}
-          />
-        </g>
-      </>
+      <g onMouseMove={this.showHover}>
+        <rect
+          className="axis-grid-rect"
+          width={gridWidth}
+          height={65}
+          x={indexGridWithCoeff}
+          fill="transparent"
+        />
+        <line
+          className="axis-grid-line"
+          stroke="black"
+          strokeLinecap="round"
+          strokeWidth="0.2"
+          x1={indexGridWithCoeff + 2.2}
+          x2={indexGridWithCoeff + 2.2}
+          y1="0"
+          y2={lineLengthY}
+        />
+        <line
+          className="axis-grid-line"
+          stroke="#555"
+          strokeWidth={1}
+          x1={indexGridWithCoeff + 1}
+          x2={indexGridWithCoeff + 1 + gridWidth}
+          y1="46"
+          y2="46"
+        />
+        <line
+          className="axis-grid-line"
+          stroke="white"
+          strokeLinecap="round"
+          strokeWidth={whiteLineStrokeWidth}
+          x1={indexGridWithCoeff + 1}
+          x2={indexGridWithCoeff + 1}
+          y1="0"
+          y2={lineLengthY}
+        />
+      </g>
     );
   }
 }
