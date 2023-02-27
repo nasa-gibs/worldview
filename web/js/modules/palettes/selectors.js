@@ -42,8 +42,10 @@ export function getPalette(layerId, index, groupStr, state) {
 }
 
 export function getRenderedPalette(layerId, index, state) {
-  const { config, palettes } = state;
+  const { config, palettes, sidebar: { isCollapsed } } = state;
+  if (isCollapsed) return;
   const name = lodashGet(config, `layers['${layerId}'].palette.id`);
+
   let palette = palettes.rendered[name];
   if (!palette) {
     throw new Error(`${name} Is not a rendered palette`);
