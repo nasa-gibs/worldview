@@ -9,7 +9,6 @@ import { createBox } from 'ol/interaction/Draw.js';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
-import { layer } from '@fortawesome/fontawesome-svg-core';
 import {
   toggleChartingAOIOnOff,
   updateChartingAOICoordinates,
@@ -56,8 +55,9 @@ function ChartingModeOptions (props) {
     timeSpanSelection,
     timeSpanStartDate,
     timeSpanEndDate,
+    timelineDate,
   } = props;
-
+  // console.log(date);
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
@@ -73,10 +73,6 @@ function ChartingModeOptions (props) {
     resetAreaOfInterest();
     endDrawingAreaOfInterest();
   }, [isChartingActive]);
-
-  // useEffect(() => {
-  //   processAreaOfInterestCoordinates();
-  // }, [aoiCoordinates]);
 
   const primaryDate = formatDateString(timeSpanStartDate);
   const secondaryDate = formatDateString(timeSpanEndDate);
@@ -95,7 +91,7 @@ function ChartingModeOptions (props) {
     draw = new OlInteractionDraw({
       source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
       type: 'Circle', // Geometry type of the geometries being drawn with this instance.
-      style: drawStyles, // Style for sketch features.
+      style: drawStyles, // Style used to indicate Area of Interest
       // This is from measurement tool; validate area selected
       condition(e) {
         const pixel = [e.originalEvent.x, e.originalEvent.y];
@@ -107,7 +103,6 @@ function ChartingModeOptions (props) {
 
     });
     olMap.addInteraction(draw);
-    // draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
 
     if (!vectorLayers[crs]) {
@@ -118,10 +113,6 @@ function ChartingModeOptions (props) {
       });
     }
   }
-
-  // const drawStartCallback = ({ feature }) => {
-  //   console.log('drawStartCallback');
-  // };
 
   /**
    * Triggers when draw is completed
@@ -203,21 +194,22 @@ function ChartingModeOptions (props) {
     const uriParameters = getSimpleStatsURIParams(layerInfo);
     const simpleStatsURI = getSimpleStatsRequestURL(uriParameters);
     const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
-    displaySimpleStats(simpleStatsData);
+    const displayData = { title: layerInfo.title, subtitle: layerInfo.subtitle, ...simpleStatsData };
+    displaySimpleStats(displayData);
   }
 
   function getFormattedAreaOfInterest(aoi) {
     if (aoi == null) {
       return [-90, -180, 90, 180];
     }
-    // swap index 0 & 1, and index 2 & 3; order of lat/lon needs to be reversed
+    // lat/lon needs to be lon/lat; swap index 0 & 1, and index 2 & 3
     return [aoi[1], aoi[0], aoi[3], aoi[2]];
   }
   function getSimpleStatsURIParams(layerInfo) {
-    const formattedDate = getFormattedDateForRequest(primaryDate);
+    const formattedStartDate = getFormattedDateForRequest(primaryDate);
     const formattedAreaOfInterest = getFormattedAreaOfInterest(aoiCoordinates);
     return {
-      timestamp: formattedDate, // start date
+      timestamp: formattedStartDate, // start date
       type: timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
       steps: 1, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
@@ -251,7 +243,7 @@ function ChartingModeOptions (props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-      return data;
+      return JSON.parse(data);
     } catch (error) {
       console.log('Error requesting simple statistis', error);
     }
@@ -352,9 +344,10 @@ const mapStateToProps = (state, ownProps) => {
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
-    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanEndDate, timeSpanStartDate,
+    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanStartDate, timeSpanEndDate,
   } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
+  const timelineDate = date.selected;
   return {
     olMap: map.ui.selected,
     proj,
@@ -367,6 +360,7 @@ const mapStateToProps = (state, ownProps) => {
     timeSpanSelection,
     timeSpanEndDate,
     timeSpanStartDate,
+    timelineDate,
   };
 };
 
@@ -410,7 +404,7 @@ const mapDispatchToProps = (dispatch) => ({
     // This is the modal to display the simple charting stats
     dispatch(
       openCustomContent('CHARTING QUICK STATISTICS', {
-        headerText: 'Charting Quick Statistics',
+        headerText: `${simpleStatsData.title} - ${simpleStatsData.subtitle} Simple Statistics`,
         backdrop: false,
         bodyComponent: ChartingStatistics,
         wrapClassName: 'clickable-behind-modal',
@@ -462,4 +456,5 @@ ChartingModeOptions.propTypes = {
   proj: PropTypes.object,
   projections: PropTypes.array,
   aoiActive: PropTypes.bool,
+  timelineDate: PropTypes.instanceOf(Date),
 };

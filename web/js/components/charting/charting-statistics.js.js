@@ -8,34 +8,53 @@ function ChartingStatistics(props) {
 
   const {
     median, mean, max, stdev,
-  } = JSON.parse(simpleStatsData);
+  } = simpleStatsData;
+
+
+  function formatToThreeDigits(str) {
+    return parseFloat(str).toFixed(3);
+  }
 
   return (
     <div className="charting-statistics-container">
-      <div className="charting-statistics-text">
-        Median:
-        {' '}
-        {median}
-        <br />
-        Mean:
-        {' '}
-        {mean}
-        <br />
-        Max:
-        {' '}
-        {max}
-        <br />
-        Stdev:
-        {' '}
-        {stdev}
-        <br />
+      <div className="charting-statistics-row">
+        <div className="charting-statistics-label">
+          Median:
+        </div>
+        <div className="charting-statistics-value">
+          {formatToThreeDigits(median)}
+        </div>
+      </div>
+      <div className="charting-statistics-row">
+        <div className="charting-statistics-label">
+          Mean:
+        </div>
+        <div className="charting-statistics-value">
+          {formatToThreeDigits(mean)}
+        </div>
+      </div>
+      <div className="charting-statistics-row">
+        <div className="charting-statistics-label">
+          Max:
+        </div>
+        <div className="charting-statistics-value">
+          {formatToThreeDigits(max)}
+        </div>
+      </div>
+      <div className="charting-statistics-row">
+        <div className="charting-statistics-label">
+          Stdev:
+        </div>
+        <div className="charting-statistics-value">
+          {formatToThreeDigits(stdev)}
+        </div>
       </div>
     </div>
   );
 }
 
 ChartingStatistics.propTypes = {
-  simpleStatsData: PropTypes.string,
+  simpleStatsData: PropTypes.object,
 };
 
 export default ChartingStatistics;

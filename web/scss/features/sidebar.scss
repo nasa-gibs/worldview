@@ -428,13 +428,20 @@ footer .product-buttons .layers-add-container {
   margin-top: 15px;
   font-size: 1.5em;
 }
-
 #products-holder footer p {
   color: #ccc;
   margin: 3px 0 8px;
   line-height: 1.4em;
 }
-
+.charting-statistics-label {
+  font-weight: bolder;
+  min-width: 25%;
+}
+.charting-statistics-row {
+  display: flex;
+  margin: 0 0 1em 0;
+  padding: .25em;
+}
 #products-holder footer .action {
   display: block;
   border-color: transparent;

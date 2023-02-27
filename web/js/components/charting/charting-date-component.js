@@ -15,11 +15,6 @@ function ChartingDateComponent (props) {
   const maxDate = new Date('12/31/2035');
 
   function onDateChange([newStartDate, newEndDate]) {
-    console.log(`timeSpanStartDate: ${timeSpanStartDate}`);
-    console.log(`timeSpanEndDate: ${timeSpanEndDate}`);
-    console.log(`minDate: ${minDate}`);
-    console.log(`maxDate: ${maxDate}`);
-
     if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
@@ -59,11 +54,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
   // These functions are passed as props to date-selector
   onUpdateStartDate(date) {
-    console.log('onUpdateStartDate running');
     dispatch(changeStartDate(date));
   },
   onUpdateEndDate(date) {
-    console.log('onUpdateEndDate running');
     dispatch(changeEndDate(date));
   },
 });
@@ -73,6 +66,7 @@ ChartingDateComponent.propTypes = {
   timeSpanEndDate: PropTypes.object,
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
+  timelineDate: PropTypes.object,
 };
 
 export default connect(
