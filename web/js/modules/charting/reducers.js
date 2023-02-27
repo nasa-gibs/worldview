@@ -15,7 +15,9 @@ export const initialChartingState = {
   aoiCoordinates: [],
   chartingActive: false,
   timeSpanSelection: 'date',
-  timeSpanStartDate: new Date(),
+  // timeSpanStartDate: new Date(),
+  // timeSpanEndDate: new Date(),
+  timeSpanStartDate: undefined,
   timeSpanEndDate: new Date(),
 };
 export function chartingReducer(state = initialChartingState, action) {

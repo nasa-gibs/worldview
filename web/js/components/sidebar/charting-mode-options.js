@@ -74,7 +74,16 @@ function ChartingModeOptions (props) {
     endDrawingAreaOfInterest();
   }, [isChartingActive]);
 
-  const primaryDate = formatDateString(timeSpanStartDate);
+  let x;
+  if (timeSpanStartDate === undefined) {
+    x = new Date();
+  } else {
+    x = timeSpanStartDate;
+  }
+
+  console.log('x');
+  console.log(x);
+  const primaryDate = formatDateString(x);
   const secondaryDate = formatDateString(timeSpanEndDate);
 
   const onAreaOfInterestButtonClick = (evt) => {

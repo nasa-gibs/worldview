@@ -9,8 +9,13 @@ import {
 
 function ChartingDateComponent (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate,
+    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date,
   } = props;
+
+  console.log('ChartingDateComponent');
+  const { selected } = date;
+  const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
+  console.log(`startdate: ${startdate}`);
   const minDate = new Date('01/01/1900');
   const maxDate = new Date('12/31/2035');
 
@@ -30,9 +35,8 @@ function ChartingDateComponent (props) {
       {/* Copied from animation widget */}
       <DateRangeSelector
         idSuffix="charting-date-picker"
-        startDate={timeSpanStartDate}
+        startDate={startdate}
         endDate={timeSpanEndDate}
-        // setDateRange={this.onDateChange} in animation widget (class component)
         setDateRange={onDateChange}
         minDate={minDate}
         maxDate={maxDate}
@@ -66,7 +70,7 @@ ChartingDateComponent.propTypes = {
   timeSpanEndDate: PropTypes.object,
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
-  timelineDate: PropTypes.object,
+  date: PropTypes.object,
 };
 
 export default connect(
