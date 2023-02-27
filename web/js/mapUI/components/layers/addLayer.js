@@ -15,10 +15,10 @@ function AddLayer(props) {
     action,
     activeLayersState,
     activeString,
+    compareDate,
     compareMapUi,
     mode,
     preloadNextTiles,
-    selected,
     updateLayerVisibilities,
     ui,
   } = props;
@@ -47,7 +47,7 @@ function AddLayer(props) {
  */
   const addLayer = async function(def, layerDate, activeLayersParam) {
     const { createLayer } = ui;
-    const date = layerDate || selected;
+    const date = layerDate || compareDate;
     const activeLayers = activeLayersParam || activeLayersState;
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const index = lodashFindIndex(reverseLayers, { id: def.id });
@@ -78,13 +78,14 @@ function AddLayer(props) {
 const mapStateToProps = (state) => {
   const { compare, date } = state;
   const { activeString, mode } = compare;
-  const { selected } = date;
+  const { selected, selectedB } = date;
   const activeLayersState = getActiveLayers(state);
+  const compareDate = compare.active && activeString === 'activeB' ? selectedB : selected;
   return {
     activeLayersState,
+    compareDate,
     activeString,
     mode,
-    selected,
   };
 };
 
