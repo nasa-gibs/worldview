@@ -171,7 +171,7 @@ async function getBestDate (projection, period, dateRanges) {
     const currentYear = moment().year()
     const currentMonth = moment().month() + 1
     if (parsedEndYear === currentYear && currentMonth < 6) {
-      alteredDate = moment({ year: parsedEndYear - 1, month: 4, day: 1 }).utc().format().utcOffset(0)
+      alteredDate = moment({ year: parsedEndYear - 1, month: 4, day: 1 }).utc().format()
     } else {
       alteredDate = moment({ year: parsedEndYear, month: 4, day: 1 }).utc().format()
     }
@@ -269,7 +269,10 @@ async function getSnapshots (layer) {
       console.warn(`${prog}: Layer: ${wvLayerId}`)
       console.warn(`${prog}: URL: ${imageReq.config.url}`)
     } catch (e) {
-      console.error(`${prog} ERROR: ${e}`)
+      totalFailureCount += 1
+      statusText = 'ERROR'
+      console.error(`${prog} ERROR: Unable to fetch layer: ${wvLayerId} proj:${projection}`)
+      // console.error(`${prog} Error: ${e}`)
     }
   }
 }
