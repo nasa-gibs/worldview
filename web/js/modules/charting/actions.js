@@ -6,6 +6,7 @@ import {
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
+  UPDATE_ACTIVE_CHART,
 } from './constants';
 
 export function toggleChartingModeOnOff() {
@@ -41,5 +42,11 @@ export function changeStartDate(date) {
 export function changeEndDate(date) {
   return (dispatch) => {
     dispatch({ type: UPDATE_END_DATE, date });
+  };
+}
+export function updateActiveChartingLayerAction(layerId) {
+  console.log(`updateActiveChartingLayerAction: ${layerId}`);
+  return (dispatch) => {
+    dispatch({ type: UPDATE_ACTIVE_CHART, layerId });
   };
 }

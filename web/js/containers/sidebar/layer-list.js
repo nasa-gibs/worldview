@@ -106,6 +106,7 @@ function LayerList(props) {
       <LayerRow
         layer={layer}
         compareState={compareState}
+        isChartingActive={isChartingActive}
         isInProjection={!!projections[projId]}
         key={id}
         index={index}

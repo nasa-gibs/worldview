@@ -6,8 +6,6 @@ export default function DateRangeSelector (props) {
   const {
     startDate, endDate, setDateRange, minDate, maxDate, subDailyMode, idSuffix, isDisabled,
   } = props;
-  console.log('startDate');
-  console.log(startDate);
 
   const setStartDate = (newStart) => {
     // console.log(`DateRangeselection setStartDate newStart: ${newStart}`);

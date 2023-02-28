@@ -7,10 +7,12 @@ import {
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
+  UPDATE_ACTIVE_CHART,
 } from './constants';
 
 export const initialChartingState = {
   active: false,
+  activeLayer: undefined,
   aoiActive: false,
   aoiSelected: false,
   aoiCoordinates: [],
@@ -53,6 +55,12 @@ export function chartingReducer(state = initialChartingState, action) {
     case UPDATE_END_DATE:
       return lodashAssign({}, state, {
         timeSpanEndDate: action.date,
+      });
+    case UPDATE_ACTIVE_CHART:
+      console.log('UPDATE_ACTIVE_CHART Reducing');
+      console.log(action.layerId);
+      return lodashAssign({}, state, {
+        activeLayer: action.layerId,
       });
     default:
       break;

@@ -1,9 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { isMobileOnly, isTablet } from 'react-device-detect';
-// import googleTagManager from 'googleTagManager';
 import LayerList from './layer-list';
 import {
   getAllActiveOverlaysBaselayers,
@@ -12,23 +10,17 @@ import {
   getFilteredOverlayGroups,
 } from '../../modules/layers/selectors';
 import {
-  reorderOverlayGroups as reorderOverlayGroupsAction,
-  toggleOverlayGroups as toggleOverlayGroupsAction,
-  toggleGroupCollapsed as toggleGroupCollapsedAction,
-} from '../../modules/layers/actions';
-// import Checkbox from '../../components/util/checkbox';
-// import util from '../../util/util';
-// import Button from '../../components/util/button';
-import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
-import { openCustomContent } from '../../modules/modal/actions';
-import { stop as stopAnimationAction } from '../../modules/animation/actions';
+  updateActiveChartingLayerAction,
+} from '../../modules/charting/actions';
 
 function ChartingLayerMenu (props) {
   const {
     activeLayersWithPalettes,
+    activeLayer,
     height,
     isActive,
     isEmbedModeActive,
+    updateActiveChartingLayer,
   } = props;
 
   let minHeight = '100px';
@@ -47,17 +39,16 @@ function ChartingLayerMenu (props) {
     paddingBottom: '4px',
   };
 
+  useEffect(() => {
+    updateActiveChartingLayer(activeLayersWithPalettes[0].id);
+  }, []);
+
   return isActive && (
     <div id="layers-scroll-container" style={scrollContainerStyles}>
       <div className="layer-container sidebar-panel">
-
-        {/* {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && ( */}
         <LayerList
           title="Overlays"
           groupId="overlays"
-          // compareState={compareState}
-          // collapsed={overlaysCollapsed}
-          // toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
           layers={activeLayersWithPalettes}
           layerSplit={activeLayersWithPalettes.length}
           showDropdownBtn={false}
@@ -104,31 +95,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  reorderOverlayGroups: (layers, groups) => {
-    dispatch(reorderOverlayGroupsAction(layers, groups));
-  },
-  toggleOverlayGroups: () => {
-    setTimeout(() => {
-      dispatch(toggleOverlayGroupsAction());
-    });
-  },
-  toggleCollapse: (groupName, collapsed) => {
-    dispatch(toggleGroupCollapsedAction(groupName, collapsed));
-  },
-  addLayers: (isPlaying) => {
-    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
-    if (isPlaying) {
-      dispatch(stopAnimationAction());
-    }
-    dispatch(
-      openCustomContent('LAYER_PICKER_COMPONENT', {
-        headerText: null,
-        modalClassName,
-        backdrop: true,
-        CompletelyCustomModal: SearchUiProvider,
-        wrapClassName: '',
-      }),
-    );
+  updateActiveChartingLayer: (layersId) => {
+    dispatch(updateActiveChartingLayerAction(layersId));
   },
 });
 
@@ -139,8 +107,9 @@ export default connect(
 
 ChartingLayerMenu.propTypes = {
   activeLayersWithPalettes: PropTypes.array,
+  activeLayer: PropTypes.string,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  overlays: PropTypes.array,
+  updateActiveChartingLayer: PropTypes.func,
 };

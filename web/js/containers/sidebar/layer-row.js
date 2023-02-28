@@ -79,6 +79,8 @@ function LayerRow (props) {
     isVectorLayer,
     measurementDescriptionPath,
     isAnimating,
+    isChartingActive,
+    updateActiveChartingLayer,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -336,7 +338,7 @@ function LayerRow (props) {
 
   const renderLayerRow = () => (
     <>
-      {!isEmbedModeActive && (
+      {(!isEmbedModeActive && !isChartingActive) && (
         <a
           id={`hide${encodedLayerId}`}
           className={getVisibilityToggleClass()}
@@ -355,7 +357,27 @@ function LayerRow (props) {
           <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
         </a>
       )}
-
+      {isChartingActive && (
+        <>
+          <div />
+          <a
+            id={`hide${encodedLayerId}`}
+            className="layer-visible visibility"
+            // aria-label={visibilityTitle}
+            onClick={() => makeActiveForCharting(layer.id)}
+          >
+            <UncontrolledTooltip
+              id="center-align-tooltip"
+              placement="right"
+              target={`hide${encodedLayerId}`}
+            >
+              Select layer for processing
+            </UncontrolledTooltip>
+            {/* <FontAwesomeIcon icon="fa-solid fa-circle-dot" className="fa-circle-dot" /> */}
+            Make Primary
+          </a>
+        </>
+      )}
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
@@ -397,6 +419,9 @@ function LayerRow (props) {
     </>
   );
 
+  const makeActiveForCharting = (layer) => {
+    updateActiveChartingLayer(layer);
+  };
   return (
     <Draggable
       isDragDisabled={isEmbedModeActive || isAnimating}
@@ -543,6 +568,10 @@ const mapDispatchToProps = (dispatch) => ({
   requestPalette: (id) => {
     dispatch(requestPalette(id));
   },
+  updateActiveChartingLayer: (layerId) => {
+    console.log('updateActiveChartingLayer');
+    dispatch(requestPalette(layerId));
+  },
 });
 
 export default connect(
@@ -577,6 +606,7 @@ LayerRow.propTypes = {
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
+  updateActiveChartingLayer: PropTypes.func,
   palette: PropTypes.object,
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
@@ -588,4 +618,5 @@ LayerRow.propTypes = {
   zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
 };
