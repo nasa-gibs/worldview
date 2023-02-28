@@ -34,6 +34,7 @@ let draw;
 
 function ChartingModeOptions (props) {
   const {
+    activeLayer,
     activeLayers,
     toggleAreaOfInterestActive,
     toggleAreaOfInterestSelected,
@@ -182,10 +183,9 @@ function ChartingModeOptions (props) {
     updateAOICoordinates(geometry.getExtent());
   }
 
-  function getTopLayerInfo() {
-    // This needs to get smarter!!
+  function getActiveChartingLayer() {
     const liveLayers = getLiveLayers();
-    const filteredLayerList = liveLayers.filter((layer) => layer.hasOwnProperty('palette'));
+    const filteredLayerList = liveLayers.filter((layer) => layer.id === activeLayer);
     if (filteredLayerList.length > 0) {
       return filteredLayerList[0];
     }
@@ -216,7 +216,7 @@ function ChartingModeOptions (props) {
   }
 
   async function onChartSimpleStatsButtonClick() {
-    const layerInfo = getTopLayerInfo();
+    const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       // abort with warning
       console.log('No valid layer detected.');
@@ -380,20 +380,21 @@ const mapStateToProps = (state, ownProps) => {
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
-    aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanStartDate, timeSpanEndDate,
+    activeLayer, aoiActive, aoiCoordinates, aoiSelected, timeSpanSelection, timeSpanStartDate, timeSpanEndDate,
   } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   const timelineStartDate = date.selected;
   const timelineEndDate = date.selectedB;
   return {
-    olMap: map.ui.selected,
-    proj,
-    crs,
-    projections,
+    activeLayers,
+    activeLayer,
     aoiActive,
     aoiCoordinates,
     aoiSelected,
-    activeLayers,
+    crs,
+    olMap: map.ui.selected,
+    proj,
+    projections,
     timeSpanSelection,
     timeSpanEndDate,
     timeSpanStartDate,
@@ -474,6 +475,7 @@ export default connect(
 
 ChartingModeOptions.propTypes = {
   activeLayers: PropTypes.array,
+  activeLayer: PropTypes.string,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   aoiSelected: PropTypes.bool,
