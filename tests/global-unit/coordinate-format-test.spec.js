@@ -28,23 +28,18 @@ test('Change coordinates format from coordinate case updates global settings coo
   await page.locator('#ol-coords-case').click()
   await page.getByRole('button', { name: 'Information' }).click()
   await page.getByRole('button', { name: 'Settings' }).click()
-
   await expect(dmButton).toHaveClass(/active/)
 })
 
 test('Selecting LATLON-DMS in Global Settings changes coordinate format in location marker', async () => {
   const expectedText = '38°48\'16"N,  77°02\'36"W'
-
   await page.getByRole('button', { name: 'Set latlon-dms Format' }).click()
-
   expect(marker).toContainText(expectedText)
 })
 
 test('Change coordinates format from coordinate case changes coordinate format in location marker', async () => {
   const expectedText = '38.8046°, -77.0434°'
-
   await page.locator('canvas').click()
   await page.locator('#ol-coords-case').click()
-
   expect(marker).toContainText(expectedText)
 })
