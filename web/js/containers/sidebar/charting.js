@@ -100,11 +100,11 @@ function ChartingLayerMenu (props) {
     );
   };
 
-  const onClickAddLayers = (e) => {
-    e.stopPropagation();
-    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
-    googleTagManager.pushEvent({ event: 'add_layers' });
-  };
+  // const onClickAddLayers = (e) => {
+  //   e.stopPropagation();
+  //   addLayers(isPlaying, isMobile, breakpoints, screenWidth);
+  //   googleTagManager.pushEvent({ event: 'add_layers' });
+  // };
 
   const renderOverlayGroups = () => (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -142,25 +142,24 @@ function ChartingLayerMenu (props) {
     paddingBottom: '4px',
   };
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
-  const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
+  // const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
   return isActive && (
-    <>
-      <div id="layers-scroll-container" style={scrollContainerStyles}>
-        <div className="layer-container sidebar-panel">
+    <div id="layers-scroll-container" style={scrollContainerStyles}>
+      <div className="layer-container sidebar-panel">
 
-          {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
-            <LayerList
-              title="Overlays"
-              groupId="overlays"
-              compareState={compareState}
-              collapsed={overlaysCollapsed}
-              toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
-              layers={overlays}
-              layerSplit={overlays.length}
-            />
-          )}
+        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
+        <LayerList
+          title="Overlays"
+          groupId="overlays"
+          // compareState={compareState}
+          // collapsed={overlaysCollapsed}
+          // toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
+          layers={overlays}
+          layerSplit={overlays.length}
+        />
+        )}
 
-          {!shouldHideForEmbedNoBaseLayers && (
+        {/* {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -172,27 +171,9 @@ function ChartingLayerMenu (props) {
               layerSplit={overlays.length}
             />
           </div>
-          )}
-        </div>
+        )} */}
       </div>
-      <div className="product-buttons">
-        <div className="layers-add-container">
-          <Button
-            id="layers-add"
-            aria-label="Add layers"
-            className="layers-add red"
-            text="+ Add Layers"
-            onClick={onClickAddLayers}
-          />
-          <Checkbox
-            id="group-overlays-checkbox"
-            checked={groupOverlays}
-            onCheck={toggleOverlayGroups}
-            label="Group Similar Layers"
-          />
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
 

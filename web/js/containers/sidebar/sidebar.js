@@ -149,6 +149,7 @@ class Sidebar extends React.Component {
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
     const { activeString, chartingModeAccessible } = this.props;
     const { subComponentHeight } = this.state;
+    console.log(`isChartMode: ${isChartMode}`);
     if (isCompareMode) {
       return (
         <CompareCase
@@ -157,6 +158,7 @@ class Sidebar extends React.Component {
         />
       );
     } if (isChartMode) {
+      console.log('loading ChartingLayerMenu');
       return (
         <ChartingLayerMenu
           height={subComponentHeight}
