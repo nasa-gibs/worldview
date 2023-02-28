@@ -365,7 +365,7 @@ function ChartingModeOptions (props) {
             className="charting-button"
             onClick={() => onCreateChartButtonClick()}
           >
-            Create Chart
+            Request Chart
           </Button>
         </ButtonGroup>
       </div>

@@ -455,6 +455,8 @@ footer .product-buttons .layers-add-container {
 .charting-buttons {
   font-size: 1.5em;
   margin-top: 1em;
+  display: flex;
+  justify-content: space-around;
 }
 .charting-indicator {
   font-size: 1.5em;
@@ -463,6 +465,9 @@ footer .product-buttons .layers-add-container {
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+button#charting-simple-stats-button {
+  border-right: 3px solid black;
 }
 #products-holder footer p {
   color: #ccc;
