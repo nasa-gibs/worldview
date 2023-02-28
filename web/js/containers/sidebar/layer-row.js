@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
+import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
 import {
@@ -225,6 +226,7 @@ function LayerRow (props) {
   const renderControls = () => !isAnimating && (
     <>
       {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
+      {!isChartingActive && (
       <a
         id={removeLayerBtnId}
         aria-label={removeLayerBtnTitle}
@@ -236,6 +238,7 @@ function LayerRow (props) {
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="times" fixedWidth />
       </a>
+      )}
       <a
         id={layerOptionsBtnId}
         aria-label={layerOptionsBtnTitle}
@@ -376,7 +379,17 @@ function LayerRow (props) {
               Select layer for processing
             </UncontrolledTooltip>
             {/* <FontAwesomeIcon icon="fa-solid fa-circle-dot" className="fa-circle-dot" /> */}
-            {layer.id === activeChartingLayer ? 'active' : 'Dormant'}
+            {layer.id === activeChartingLayer ? (
+              <FontAwesomeIcon
+                icon={faToggleOn}
+                className="charting-indicator"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faToggleOff}
+                className="charting-indicator"
+              />
+            )}
           </a>
         </>
       )}

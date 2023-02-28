@@ -453,7 +453,16 @@ footer .product-buttons .layers-add-container {
   padding: .25em;
 }
 .charting-buttons {
+  font-size: 1.5em;
   margin-top: 1em;
+}
+.charting-indicator {
+  font-size: 1.5em;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 #products-holder footer p {
   color: #ccc;
