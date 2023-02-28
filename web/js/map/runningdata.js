@@ -35,6 +35,8 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this vector layer
     const shouldNotProcessVectorLayer = (layer) => {
+      const state = store.getState();
+      const { sidebar: { isCollapsed } } = state;
       const def = lodashGet(layer, 'wv.def');
       if (!def) return true;
       const { wrapX, wrapadjacentdays } = def;
@@ -44,7 +46,7 @@ export default function MapRunningData(compareUi, store) {
       const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), coords);
       const inCompareRegion = isFromActiveCompareRegion(pixel, layer.wv.group, compare, swipeOffset);
       const hasPalette = !lodashIsEmpty(def.palette);
-      return !isRenderedFeature || !inCompareRegion || featureOutsideExtent || !hasPalette;
+      return !isRenderedFeature || !inCompareRegion || featureOutsideExtent || !hasPalette || isCollapsed;
     };
 
     // Running data for vector layers
@@ -76,10 +78,12 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this raster layer
     const shouldNotProcessRasterLayer = (layer) => {
+      const state = store.getState();
+      const { sidebar: { isCollapsed } } = state;
       const type = lodashGet(layer, 'wv.def.type');
       const isGranule = type === 'granule' && !layer.get('granuleGroup');
       const hasPalette = !!lodashGet(layer, 'wv.def.palette');
-      return isGranule || layer.isVector || !hasPalette;
+      return isGranule || layer.isVector || !hasPalette || isCollapsed;
     };
 
     // Running data for raster layers

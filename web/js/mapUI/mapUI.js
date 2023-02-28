@@ -359,7 +359,6 @@ function MapUI(props) {
       />
       <RemoveLayer
         action={removeLayersAction}
-        compareMapUi={compareMapUi}
         updateLayerVisibilities={updateLayerVisibilities}
         findLayer={findLayer}
         ui={ui}
