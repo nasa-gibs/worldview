@@ -183,9 +183,13 @@ function ChartingModeOptions (props) {
   }
 
   function getTopLayerInfo() {
+    // This needs to get smarter!!
     const liveLayers = getLiveLayers();
-    const topLayer = liveLayers[0];
-    return topLayer;
+    const filteredLayerList = liveLayers.filter((layer) => layer.hasOwnProperty('palette'));
+    if (filteredLayerList.length > 0) {
+      return filteredLayerList[0];
+    }
+    return null;
   }
 
   /**
@@ -213,6 +217,11 @@ function ChartingModeOptions (props) {
 
   async function onChartSimpleStatsButtonClick() {
     const layerInfo = getTopLayerInfo();
+    if (layerInfo == null) {
+      // abort with warning
+      console.log('No valid layer detected.');
+      return;
+    }
     const uriParameters = getSimpleStatsURIParams(layerInfo);
     const simpleStatsURI = getSimpleStatsRequestURL(uriParameters);
     const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
@@ -286,9 +295,9 @@ function ChartingModeOptions (props) {
     dateRangeBtnStatus = 'btn-active';
   }
 
-  let dateRangeValue;
+  let dateRangeValue = primaryDate;
   if (timeSpanSelection === 'range') {
-    dateRangeValue = <div className="charting-end-date">{secondaryDate}</div>;
+    dateRangeValue = `${primaryDate} - ${secondaryDate}`;
   }
 
   return (
@@ -305,10 +314,6 @@ function ChartingModeOptions (props) {
         />
       </div>
       <div className="charting-timespan-container">
-        <FontAwesomeIcon
-          icon={faCalendarDay}
-          onClick={openChartingDateModal}
-        />
         <h3>Time Span:</h3>
         <ButtonGroup size="sm">
           <Button
@@ -327,33 +332,42 @@ function ChartingModeOptions (props) {
           </Button>
         </ButtonGroup>
       </div>
-      <div className="charting-date-container">
-        <div className="charting-start-date">{primaryDate}</div>
-        {dateRangeValue}
+      <div className="charting-date-row">
+        <div className="charting-date-container">
+          {dateRangeValue}
+        </div>
+        <div className="charting-icons">
+          <div className="charting-calendar-container">
+            <FontAwesomeIcon
+              icon={faCalendarDay}
+              onClick={openChartingDateModal}
+            />
+          </div>
+          <div className="charting-info-container">
+            <FontAwesomeIcon
+              icon="info-circle"
+              onClick={openChartingInfoModal}
+            />
+          </div>
+        </div>
       </div>
-
-      <ButtonGroup size="sm">
-        <Button
-          id="charting-simple-stats-button"
-          className="charting-button"
-          onClick={() => onChartSimpleStatsButtonClick()}
-        >
-          Simple Stats
-        </Button>
-        <Button
-          id="charting-create-chart-button"
-          className="charting-button"
-          onClick={() => onCreateChartButtonClick()}
-        >
-          Create Chart
-        </Button>
-      </ButtonGroup>
-
-      <div className="charting-info-container">
-        <FontAwesomeIcon
-          icon="info-circle"
-          onClick={openChartingInfoModal}
-        />
+      <div className="charting-buttons">
+        <ButtonGroup size="sm">
+          <Button
+            id="charting-simple-stats-button"
+            className="charting-button"
+            onClick={() => onChartSimpleStatsButtonClick()}
+          >
+            Request Simple Stats
+          </Button>
+          <Button
+            id="charting-create-chart-button"
+            className="charting-button"
+            onClick={() => onCreateChartButtonClick()}
+          >
+            Create Chart
+          </Button>
+        </ButtonGroup>
       </div>
     </div>
   );

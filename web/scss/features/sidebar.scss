@@ -408,30 +408,40 @@ footer .product-buttons .layers-add-container {
   justify-content: space-between;
   width: 80%;
   margin: 10px;
+  svg {
+    font-size: 1.4em;
+  }
+  h3 {
+    line-height: 1.4em;
+  }
 }
-
+.charting-date-row {
+  display: flex;
+  justify-content: space-around;
+}
 .charting-timespan-container,
 .charting-date-container {
   display: flex;
   justify-content: space-around;
 }
-
 .charting-timespan-container {
   align-items: center;
   margin: 10px;
+  div > .btn-active {
+    background: #d54e21;
+    border-color: #d54e21;
+  }
+  svg {
+    font-size: 1.4em;
+  }
 }
-.charting-timespan-container > div > .btn-active {
-  border: 3px solid red !important;
-}
-.charting-info-container {
+.charting-info-container, .charting-calendar-container {
   text-align: center;
-  margin-top: 15px;
-  font-size: 1.5em;
+  font-size: 1.4em;
+  margin-right: 10px;
 }
-#products-holder footer p {
-  color: #ccc;
-  margin: 3px 0 8px;
-  line-height: 1.4em;
+.charting-icons {
+  display: flex;
 }
 .charting-statistics-label {
   font-weight: bolder;
@@ -441,6 +451,14 @@ footer .product-buttons .layers-add-container {
   display: flex;
   margin: 0 0 1em 0;
   padding: .25em;
+}
+.charting-buttons {
+  margin-top: 1em;
+}
+#products-holder footer p {
+  color: #ccc;
+  margin: 3px 0 8px;
+  line-height: 1.4em;
 }
 #products-holder footer .action {
   display: block;

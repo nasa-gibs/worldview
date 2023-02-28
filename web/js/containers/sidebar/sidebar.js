@@ -147,7 +147,7 @@ class Sidebar extends React.Component {
   }
 
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
-    const { activeString } = this.props;
+    const { activeString, chartingModeAccessible } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {
       return (
@@ -163,6 +163,7 @@ class Sidebar extends React.Component {
           isActive={activeTab === 'layers'}
           compareState={activeString}
           chartState={isChartMode}
+          chartingModeAccessible={chartingModeAccessible}
         />
       );
     } if (!isCompareMode && !isChartMode) {
@@ -280,12 +281,7 @@ class Sidebar extends React.Component {
       onTabClick,
       screenHeight,
       tabTypes,
-      isChartingActive,
-      aoiSelected,
-      aoiCoordinates,
-      timeSpanSelection,
-      timeSpanStartDate,
-      timeSpanEndDate,
+      chartingModeAccessible,
     } = this.props;
 
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
@@ -326,67 +322,66 @@ class Sidebar extends React.Component {
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {this.renderSidebarLogo()}
-          <>
-            {!isDistractionFreeModeActive && isCollapsed && (
-              <CollapsedButton
+          {!isDistractionFreeModeActive && isCollapsed && (
+          <CollapsedButton
+            isMobile={isMobile}
+            isEmbed={isEmbedModeActive}
+            onclick={this.toggleSidebar}
+            numberOfLayers={numberOfLayers}
+          />
+          )}
+          <div
+            id="products-holder"
+            className="products-holder-case"
+            style={productsHolderStyle}
+          >
+            {!isCollapsed && (
+            <>
+              <NavCase
+                activeTab={activeTab}
+                onTabClick={onTabClick}
+                tabTypes={tabTypes}
                 isMobile={isMobile}
-                isEmbed={isEmbedModeActive}
-                onclick={this.toggleSidebar}
-                numberOfLayers={numberOfLayers}
+                toggleSidebar={this.toggleSidebar}
+                isCompareMode={isCompareMode}
+                isDataDisabled={isDataDisabled}
+                isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
               />
-            )}
-            <div
-              id="products-holder"
-              className="products-holder-case"
-              style={productsHolderStyle}
-            >
-              {!isCollapsed && (
-                <>
-                  <NavCase
-                    activeTab={activeTab}
-                    onTabClick={onTabClick}
-                    tabTypes={tabTypes}
-                    isMobile={isMobile}
-                    toggleSidebar={this.toggleSidebar}
-                    isCompareMode={isCompareMode}
-                    isDataDisabled={isDataDisabled}
-                    isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="layers">
+                  {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                </TabPane>
+                {naturalEvents && activeTab === 'events' && (
+                <TabPane tabId="events">
+                  <Events
+                    height={subComponentHeight}
+                    isLoading={isLoadingEvents}
+                    hasRequestError={hasEventRequestError}
+                    eventsData={eventsData}
+                    sources={eventsSources}
                   />
-                  <TabContent activeTab={activeTab}>
-                    <TabPane tabId="layers">
-                      {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
-                    </TabPane>
-                    {naturalEvents && activeTab === 'events' && (
-                      <TabPane tabId="events">
-                        <Events
-                          height={subComponentHeight}
-                          isLoading={isLoadingEvents}
-                          hasRequestError={hasEventRequestError}
-                          eventsData={eventsData}
-                          sources={eventsSources}
-                        />
-                      </TabPane>
-                    )}
-                    {smartHandoffs && activeTab === 'download' && (
-                      <TabPane tabId="download">
-                        <SmartHandoff
-                          isActive={activeTab === 'download'}
-                          tabTypes={tabTypes}
-                        />
-                      </TabPane>
-                    )}
+                </TabPane>
+                )}
+                {smartHandoffs && activeTab === 'download' && (
+                <TabPane tabId="download">
+                  <SmartHandoff
+                    isActive={activeTab === 'download'}
+                    tabTypes={tabTypes}
+                  />
+                </TabPane>
+                )}
 
-                    <FooterContent
-                      ref={(el) => { this.footerElement = el; }}
-                      tabTypes={tabTypes}
-                      activeTab={activeTab}
-                    />
+                <FooterContent
+                  ref={(el) => { this.footerElement = el; }}
+                  tabTypes={tabTypes}
+                  activeTab={activeTab}
+                  chartingModeAccessible={chartingModeAccessible}
+                />
 
-                  </TabContent>
-                </>
-              )}
-            </div>
-          </>
+              </TabContent>
+            </>
+            )}
+          </div>
         </section>
       </ErrorBoundary>
     );
@@ -401,6 +396,7 @@ const mapStateToProps = (state) => {
     config,
     embed,
     events,
+    layers,
     measure,
     modal,
     map,
@@ -410,6 +406,8 @@ const mapStateToProps = (state) => {
     sidebar,
     ui,
   } = state;
+
+  const chartingModeAccessible = layers.active.layers.filter((layer) => layer.hasOwnProperty('palette')).length > 0;
 
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
@@ -438,6 +436,7 @@ const mapStateToProps = (state) => {
   return {
     activeTab,
     activeString,
+    chartingModeAccessible,
     config,
     eventsData,
     eventsSources,
@@ -497,6 +496,7 @@ Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
+  chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
   eventsData: PropTypes.array,
@@ -520,10 +520,4 @@ Sidebar.propTypes = {
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
   selectedDate: PropTypes.object,
-  isChartingActive: PropTypes.bool,
-  aoiSelected: PropTypes.bool,
-  aoiCoordinates: PropTypes.array,
-  timeSpanSelection: PropTypes.string,
-  timeSpanStartDate: PropTypes.instanceOf(Date),
-  timeSpanEndDate: PropTypes.instanceOf(Date),
 };

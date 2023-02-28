@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import {
@@ -21,17 +21,18 @@ import {
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
-    isCompareActive,
-    compareMode,
+    activeTab,
     changeCompareMode,
-    toggleCompare,
+    chartingModeAccessible,
+    compareMode,
     compareFeature,
+    eventsData,
     isChartingActive,
+    isCompareActive,
+    isMobile,
     openChartingInfoModal,
     toggleCharting,
-    isMobile,
-    activeTab,
-    eventsData,
+    toggleCompare,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -63,9 +64,9 @@ const FooterContent = React.forwardRef((props, ref) => {
           <Button
             id="chart-toggle-button"
             aria-label={chartBtnText}
-            className={!isCompareActive ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
             style={!compareFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive ? onClickToggleCharting : null}
+            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
             text={chartBtnText}
           />
           <Button
@@ -200,18 +201,14 @@ export default connect(
 FooterContent.propTypes = {
   activeTab: PropTypes.string,
   changeCompareMode: PropTypes.func,
+  chartingModeAccessible: PropTypes.bool,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
   eventsData: PropTypes.array,
-  isCompareActive: PropTypes.bool,
   isChartingActive: PropTypes.bool,
+  isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
-  openChartingInfoModal: PropTypes.func,
-  aoiSelected: PropTypes.bool,
-  aoiCoordinates: PropTypes.array,
-  timeSpanSelection: PropTypes.string,
-  timeSpanStartDate: PropTypes.instanceOf(Date),
-  timeSpanEndDate: PropTypes.instanceOf(Date),
 };
