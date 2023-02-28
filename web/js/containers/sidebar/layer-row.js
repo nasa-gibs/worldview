@@ -34,6 +34,9 @@ import {
 } from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
+import {
+  updateActiveChartingLayerAction,
+} from '../../modules/charting/actions';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -80,6 +83,7 @@ function LayerRow (props) {
     measurementDescriptionPath,
     isAnimating,
     isChartingActive,
+    activeChartingLayer,
     updateActiveChartingLayer,
   } = props;
 
@@ -335,7 +339,6 @@ function LayerRow (props) {
       : ['far', 'eye'];
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge badge-pill badge-secondary' : 'collection-title badge badge-pill badge-light';
-
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (
@@ -362,8 +365,7 @@ function LayerRow (props) {
           <div />
           <a
             id={`hide${encodedLayerId}`}
-            className="layer-visible visibility"
-            // aria-label={visibilityTitle}
+            className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
             onClick={() => makeActiveForCharting(layer.id)}
           >
             <UncontrolledTooltip
@@ -374,7 +376,7 @@ function LayerRow (props) {
               Select layer for processing
             </UncontrolledTooltip>
             {/* <FontAwesomeIcon icon="fa-solid fa-circle-dot" className="fa-circle-dot" /> */}
-            Make Primary
+            {layer.id === activeChartingLayer ? 'active' : 'Dormant'}
           </a>
         </>
       )}
@@ -420,7 +422,9 @@ function LayerRow (props) {
   );
 
   const makeActiveForCharting = (layer) => {
-    updateActiveChartingLayer(layer);
+    if (layer !== activeChartingLayer) {
+      updateActiveChartingLayer(layer);
+    }
   };
   return (
     <Draggable
@@ -568,9 +572,8 @@ const mapDispatchToProps = (dispatch) => ({
   requestPalette: (id) => {
     dispatch(requestPalette(id));
   },
-  updateActiveChartingLayer: (layerId) => {
-    console.log('updateActiveChartingLayer');
-    dispatch(requestPalette(layerId));
+  updateActiveChartingLayer: (layersId) => {
+    dispatch(updateActiveChartingLayerAction(layersId));
   },
 });
 
@@ -619,4 +622,5 @@ LayerRow.propTypes = {
   isVectorLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isChartingActive: PropTypes.bool,
+  activeChartingLayer: PropTypes.string,
 };

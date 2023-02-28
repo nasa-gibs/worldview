@@ -40,6 +40,7 @@ function ChartingLayerMenu (props) {
   };
 
   useEffect(() => {
+    console.log('updating active charting layer');
     updateActiveChartingLayer(activeLayersWithPalettes[0].id);
   }, []);
 

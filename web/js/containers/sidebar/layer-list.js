@@ -32,6 +32,7 @@ const reorder = (list, startIndex, endIndex) => {
 function LayerList(props) {
   const {
     activeLayers,
+    activeChartingLayer,
     available,
     compareState,
     collapsed,
@@ -107,6 +108,7 @@ function LayerList(props) {
         layer={layer}
         compareState={compareState}
         isChartingActive={isChartingActive}
+        activeChartingLayer={activeChartingLayer}
         isInProjection={!!projections[projId]}
         key={id}
         index={index}
@@ -222,6 +224,7 @@ const mapStateToProps = (state, ownProps) => {
     embed, proj, config, map, animation, screenSize, charting,
   } = state;
   const isChartingActive = charting.active;
+  const activeChartingLayer = charting.activeLayer;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
@@ -242,6 +245,7 @@ const mapStateToProps = (state, ownProps) => {
     numVisible,
     isAnimating: animation.isPlaying,
     isChartingActive,
+    activeChartingLayer,
   };
 };
 
