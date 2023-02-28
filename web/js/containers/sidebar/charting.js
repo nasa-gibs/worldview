@@ -60,6 +60,7 @@ function ChartingLayerMenu (props) {
           // toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
           layers={activeLayersWithPalettes}
           layerSplit={activeLayersWithPalettes.length}
+          showDropdownBtn={false}
         />
       </div>
     </div>

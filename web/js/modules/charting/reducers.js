@@ -10,10 +10,10 @@ import {
 } from './constants';
 
 export const initialChartingState = {
+  active: false,
   aoiActive: false,
   aoiSelected: false,
   aoiCoordinates: [],
-  chartingActive: false,
   timeSpanSelection: 'date',
   timeSpanStartDate: undefined,
   timeSpanEndDate: undefined,

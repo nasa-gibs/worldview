@@ -31,26 +31,26 @@ const reorder = (list, startIndex, endIndex) => {
 
 function LayerList(props) {
   const {
+    activeLayers,
+    available,
     compareState,
     collapsed,
-    reorderLayers,
-    layerSplit,
-    activeLayers,
-    layers,
-    zots,
-    projId,
     getNames,
-    available,
     groupId,
-    title,
+    isAnimating,
+    isMobile,
+    isChartingActive,
+    layerSplit,
+    layers,
+    numVisible,
+    projId,
     removeLayers,
+    reorderLayers,
+    title,
     toggleVisibility,
     toggleCollapse,
-    isMobile,
-    numVisible,
-    isAnimating,
+    zots,
   } = props;
-
   const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
@@ -117,7 +117,7 @@ function LayerList(props) {
     );
   };
 
-  const renderDropdownMenu = () => !isAnimating && (
+  const renderDropdownMenu = () => (!isAnimating && !isChartingActive) && (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
       <DropdownToggle>
         <FontAwesomeIcon
@@ -216,8 +216,9 @@ LayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    embed, proj, config, map, animation, screenSize,
+    embed, proj, config, map, animation, screenSize, charting,
   } = state;
+  const isChartingActive = charting.active;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
@@ -237,6 +238,7 @@ const mapStateToProps = (state, ownProps) => {
     available: (layerId) => availableSelector(state)(layerId),
     numVisible,
     isAnimating: animation.isPlaying,
+    isChartingActive,
   };
 };
 
