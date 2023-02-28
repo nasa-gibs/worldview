@@ -152,11 +152,13 @@ function LayerList(props) {
       </h3>
       <div className="layer-group-icons">
         {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
-        <FontAwesomeIcon
-          className="layer-group-collapse"
-          icon={!collapsed ? 'caret-down' : 'caret-left'}
-          onClick={() => toggleCollapse(groupId, !collapsed)}
-        />
+        {!isChartingActive && (
+          <FontAwesomeIcon
+            className="layer-group-collapse"
+            icon={!collapsed ? 'caret-down' : 'caret-left'}
+            onClick={() => toggleCollapse(groupId, !collapsed)}
+          />
+        )}
       </div>
     </div>
   );
