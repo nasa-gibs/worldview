@@ -203,7 +203,7 @@ function ChartingModeOptions (props) {
     const date = new Date(dateObj);
     const year = date.getFullYear();
     const month = date.toLocaleString('default', { month: 'short' });
-    const day = date.getDate();
+    const day = `0${date.getDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
