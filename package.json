@@ -210,6 +210,7 @@
     "react-swipe-to-delete-component": "^0.5.4",
     "react-visibility-sensor": "^5.1.1",
     "reactstrap": "8.1.x",
+    "recharts": "^2.4.3",
     "redux": "^4.0.4",
     "redux-location-state": "^2.6.0",
     "redux-logger": "^3.0.6",
