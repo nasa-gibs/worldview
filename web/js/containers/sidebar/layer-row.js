@@ -367,14 +367,14 @@ function LayerRow (props) {
         <>
           <div />
           <a
-            id={`hide${encodedLayerId}`}
+            id={`activate-${encodedLayerId}`}
             className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
             onClick={() => makeActiveForCharting(layer.id)}
           >
             <UncontrolledTooltip
               id="center-align-tooltip"
               placement="right"
-              target={`hide${encodedLayerId}`}
+              target={`activate-${encodedLayerId}`}
             >
               Select layer for processing
             </UncontrolledTooltip>

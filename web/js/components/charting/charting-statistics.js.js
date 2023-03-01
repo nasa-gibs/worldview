@@ -16,40 +16,47 @@ function ChartingStatistics(props) {
   }
 
   return (
-    <div className="charting-statistics-container">
-      <div className="charting-statistics-row">
-        <div className="charting-statistics-label">
-          Median:
+    <>
+      <div className="charting-statistics-container">
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            Median:
+          </div>
+          <div className="charting-statistics-value">
+            {formatToThreeDigits(median)}
+          </div>
         </div>
-        <div className="charting-statistics-value">
-          {formatToThreeDigits(median)}
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            Mean:
+          </div>
+          <div className="charting-statistics-value">
+            {formatToThreeDigits(mean)}
+          </div>
+        </div>
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            Max:
+          </div>
+          <div className="charting-statistics-value">
+            {formatToThreeDigits(max)}
+          </div>
+        </div>
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            Stdev:
+          </div>
+          <div className="charting-statistics-value">
+            {formatToThreeDigits(stdev)}
+          </div>
         </div>
       </div>
-      <div className="charting-statistics-row">
-        <div className="charting-statistics-label">
-          Mean:
-        </div>
-        <div className="charting-statistics-value">
-          {formatToThreeDigits(mean)}
-        </div>
+      <div className="charting-discalimer">
+        <strong>NOTE:</strong>
+        {' '}
+        Numerical analyses performed on imagery should only be used for initial basic exploratory purposes
       </div>
-      <div className="charting-statistics-row">
-        <div className="charting-statistics-label">
-          Max:
-        </div>
-        <div className="charting-statistics-value">
-          {formatToThreeDigits(max)}
-        </div>
-      </div>
-      <div className="charting-statistics-row">
-        <div className="charting-statistics-label">
-          Stdev:
-        </div>
-        <div className="charting-statistics-value">
-          {formatToThreeDigits(stdev)}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
