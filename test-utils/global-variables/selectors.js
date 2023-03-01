@@ -33,8 +33,11 @@ module.exports = (page) => ({
   arcticRotationResetButton: page.locator('.wv-map-reset-rotation'),
 
   // mobile animations
-  mobileAnimateButton: page.locator('#animate-button'),
+  mobileAnimateButton: page.locator('.mobile-animate-button'),
   mobileAnimationWidget: page.locator('.wv-animation-widget-wrapper-mobile'),
+  closeMobileAnimation: page.locator('#mobile-animation-close'),
+  mobileAnimationPortraitView: page.locator('#collapsed-animate-widget-phone-portrait'),
+  mobileDatePickerSpanText: page.locator('.mobile-date-picker-select-btn-text span'),
 
   // sidebar, layers
   sidebarContainer: page.locator('#products-holder'),
