@@ -172,7 +172,7 @@
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
     "immutability-helper": "^3.0.1",
-    "jsdom-worker": "^0.2.1",
+    "jsdom-worker": "^0.3.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-locales-webpack-plugin": "^1.2.0",
