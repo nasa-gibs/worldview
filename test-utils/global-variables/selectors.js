@@ -29,6 +29,8 @@ module.exports = (page) => ({
   minuteEndInput: page.locator('#minute-animation-widget-end'),
   animationIntervalSelector: page.locator('#wv-animation-widget #current-interval'),
   animationFrameSlider: page.locator('#wv-animation-widget .rc-slider'),
+  rotationDialogOkButton: page.locator('#image_download_notify_rotate .accept-notify'),
+  arcticRotationResetButton: page.locator('.wv-map-reset-rotation'),
 
   // mobile animations
   mobileAnimateButton: page.locator('#animate-button'),
