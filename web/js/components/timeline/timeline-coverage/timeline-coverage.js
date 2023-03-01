@@ -102,7 +102,7 @@ class TimelineLayerCoveragePanel extends Component {
     this.setState({
       activeLayers: layers,
     });
-  }
+  };
 
   /**
   * @desc get active layers
@@ -112,7 +112,7 @@ class TimelineLayerCoveragePanel extends Component {
   getActiveLayers = (layers) => {
     const { shouldIncludeHiddenLayers } = this.state;
     return layers.filter((layer) => (shouldIncludeHiddenLayers ? true : layer.visible));
-  }
+  };
 
   /**
   * @desc get line dimensions for given date range
@@ -190,7 +190,7 @@ class TimelineLayerCoveragePanel extends Component {
       layerStartBeforeAxisFront,
       layerEndBeforeAxisBack,
     };
-  }
+  };
 
   /**
   * @desc handle open/close modal from clicking handle
@@ -202,7 +202,7 @@ class TimelineLayerCoveragePanel extends Component {
       toggleLayerCoveragePanel,
     } = this.props;
     toggleLayerCoveragePanel(!isTimelineLayerCoveragePanelOpen);
-  }
+  };
 
   /**
   * @desc add matching coverage to timeline
@@ -219,7 +219,7 @@ class TimelineLayerCoveragePanel extends Component {
       activeLayers: layers,
       shouldIncludeHiddenLayers: isChecked,
     });
-  }
+  };
 
   /**
   * @desc get startDate and endDate based on layers currently selected for matching coverage
@@ -263,13 +263,13 @@ class TimelineLayerCoveragePanel extends Component {
         endDate: endDate.toISOString(),
       };
     }
-  }
+  };
 
   stopPropagation = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
     e.preventDefault();
-  }
+  };
 
   /**
   * @desc render info button for layer coverage panel coverage info modal
@@ -291,7 +291,7 @@ class TimelineLayerCoveragePanel extends Component {
         <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" />
       </a>
     );
-  }
+  };
 
   /**
   * @desc handle dynamic conditional container styling, className, and text label generation
@@ -344,7 +344,7 @@ class TimelineLayerCoveragePanel extends Component {
       panelChevronClassName,
       isPanelOpenClassName,
     };
-  }
+  };
 
   render() {
     const {

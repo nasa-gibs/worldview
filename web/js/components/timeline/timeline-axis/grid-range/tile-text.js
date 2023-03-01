@@ -30,34 +30,32 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
     xOffsetAdded = 5;
   }
   return (
-    <>
-      <g
-        transform={`translate(${indexGridWithCoeff + xOffsetAdded})`}
+    <g
+      transform={`translate(${indexGridWithCoeff + xOffsetAdded})`}
+    >
+      <text
+        className={`axis-grid-text axis-grid-text-${item.timeScale}`}
+        x="0"
+        y="62"
+        fill="white"
+        clipPath="url(#textDisplay)"
       >
-        <text
-          className={`axis-grid-text axis-grid-text-${item.timeScale}`}
-          x="0"
-          y="62"
-          fill="white"
-          clipPath="url(#textDisplay)"
-        >
-          {dateText}
-        </text>
-        {item.timeScale === 'day'
-          ? (
-            <text
-              className="axis-grid-text axis-grid-text-year"
-              x="40"
-              y="62"
-              fill="#cccccc"
-              clipPath="url(#textDisplay)"
-            >
-              {dateTextYear}
-            </text>
-          )
-          : null}
-      </g>
-    </>
+        {dateText}
+      </text>
+      {item.timeScale === 'day'
+        ? (
+          <text
+            className="axis-grid-text axis-grid-text-year"
+            x="40"
+            y="62"
+            fill="#cccccc"
+            clipPath="url(#textDisplay)"
+          >
+            {dateTextYear}
+          </text>
+        )
+        : null}
+    </g>
   );
 };
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NavItem, NavLink } from 'reactstrap';
 import HoverTooltip from '../../util/hover-tooltip';
 
-const CustomNavItem = (props) => {
+function CustomNavItem(props) {
   const {
     isMobile,
     shouldHideInMobile,
@@ -42,7 +42,7 @@ const CustomNavItem = (props) => {
       </NavLink>
     </NavItem>
   );
-};
+}
 
 CustomNavItem.propTypes = {
   className: PropTypes.string,

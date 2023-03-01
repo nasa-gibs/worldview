@@ -37,7 +37,7 @@ import { granuleFootprint } from '../../../map/granule/util';
 
 const { events } = util;
 
-const CreateMap = (props) => {
+function CreateMap(props) {
   const {
     config,
     isMapSet,
@@ -54,7 +54,7 @@ const CreateMap = (props) => {
     updateRotation,
   } = props;
 
-  const { projections } = config;
+  const { initialIsMobile, projections } = config;
   let granuleFootprintsObj = {};
   const animationDuration = 250;
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
@@ -219,7 +219,7 @@ const CreateMap = (props) => {
     });
     map.on('rendercomplete', onRenderComplete);
 
-    granuleFootprintsObj = { ...granuleFootprintsObj, [proj.crs]: granuleFootprint(map) };
+    granuleFootprintsObj = { ...granuleFootprintsObj, [proj.crs]: granuleFootprint(map, initialIsMobile) };
 
     window.addEventListener('resize', () => {
       map.getView().changed();
@@ -237,7 +237,7 @@ const CreateMap = (props) => {
   };
 
   return null;
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
   updateRotation: (rotation) => {

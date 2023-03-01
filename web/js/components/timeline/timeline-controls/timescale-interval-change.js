@@ -63,49 +63,49 @@ class TimeScaleIntervalChange extends PureComponent {
     this.setState({
       toolTipHovered: hovered,
     });
-  }
+  };
 
   onClick = () => {
     const { toolTipHovered } = this.state;
     this.setState({
       toolTipHovered: !toolTipHovered,
     });
-  }
+  };
 
   handleClickInterval = (timescale, openModal = false) => {
     // send props function to change timescale interval throughout app
     this.setState({
       toolTipHovered: false,
     }, this.setTimeScaleIntervalChangeUnit(timescale, openModal));
-  }
+  };
 
   /**
   * @desc handle SELECT of LEFT/RIGHT interval selection
   * @param {String} timeScale
   * @param {Boolean} modalOpen - is custom interval modal open
   */
-    setTimeScaleIntervalChangeUnit = (timeScale, openModal) => {
-      const {
-        customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
-      } = this.props;
-      const customSelected = timeScale === 'custom';
-      let delta;
-      let newTimeScale = timeScale;
+  setTimeScaleIntervalChangeUnit = (timeScale, openModal) => {
+    const {
+      customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
+    } = this.props;
+    const customSelected = timeScale === 'custom';
+    let delta;
+    let newTimeScale = timeScale;
 
-      if (openModal) {
-        toggleCustomModal(openModal, modalType);
-        return;
-      }
+    if (openModal) {
+      toggleCustomModal(openModal, modalType);
+      return;
+    }
 
-      if (customSelected && customInterval && customDelta) {
-        newTimeScale = customInterval;
-        delta = customDelta;
-      } else {
-        newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
-        delta = 1;
-      }
-      selectInterval(delta, newTimeScale, customSelected);
-    };
+    if (customSelected && customInterval && customDelta) {
+      newTimeScale = customInterval;
+      delta = customDelta;
+    } else {
+      newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
+      delta = 1;
+    }
+    selectInterval(delta, newTimeScale, customSelected);
+  };
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
@@ -113,14 +113,14 @@ class TimeScaleIntervalChange extends PureComponent {
     this.setState({
       customIntervalText: `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`,
     });
-  }
+  };
 
   // reset custom text for custom interval
   resetCustomIntervalText = () => {
     this.setState({
       customIntervalText: 'Custom',
     });
-  }
+  };
 
   renderTooltip = () => {
     const { toolTipHovered, customIntervalText } = this.state;
@@ -188,7 +188,7 @@ class TimeScaleIntervalChange extends PureComponent {
         </div>
       </div>
     );
-  }
+  };
 
   render() {
     const {
@@ -202,26 +202,24 @@ class TimeScaleIntervalChange extends PureComponent {
 
     const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
     return (
-      <>
-        <div
-          id="timeline-interval-btn-container"
-          className="interval-btn-container noselect no-drag"
-          onMouseEnter={() => this.setTooltipState(true)}
-          onMouseLeave={() => this.setTooltipState(false)}
-          onClick={this.onClick}
+      <div
+        id="timeline-interval-btn-container"
+        className="interval-btn-container noselect no-drag"
+        onMouseEnter={() => this.setTooltipState(true)}
+        onMouseLeave={() => this.setTooltipState(false)}
+        onClick={this.onClick}
+      >
+
+        <span
+          id="current-interval"
+          className={className}
         >
+          {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+        </span>
 
-          <span
-            id="current-interval"
-            className={className}
-          >
-            {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
-          </span>
+        {!isDisabled ? this.renderTooltip() : null}
 
-          {!isDisabled ? this.renderTooltip() : null}
-
-        </div>
-      </>
+      </div>
     );
   }
 }

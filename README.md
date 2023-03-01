@@ -31,7 +31,7 @@ to find out the latest features and imagery available.
 
 ## Install
 
-This project uses Node and Python. See the [dependencies](#dependencies) section for more information.
+This project uses Node.JS. See the [dependencies](#dependencies) section for more information.
 
 ```bash
 git clone https://github.com/nasa-gibs/worldview.git
@@ -47,17 +47,11 @@ The following are required to install and run Worldview:
 
 - [Node LTS](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
-- [Python v3.7.1 or Later](https://www.python.org/)
-
-  - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
-  - macOS users should use homebrew to install **Python v3**
-    - `brew install python`
 
 Windows users will also need the following:
 
-- [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
-- [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)
-- [Add `python` to the path](https://docs.python.org/3/using/windows.html#installation-steps)
+- [Git Bash](https://git-scm.com/downloads)
+
 
 ## Usage
 

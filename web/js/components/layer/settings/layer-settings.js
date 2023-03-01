@@ -281,17 +281,15 @@ class LayerSettings extends React.Component {
       [customStyle] = layer.custom;
     }
     return (
-      <>
-        <VectorStyle
-          setStyle={setStyle}
-          clearStyle={clearStyle}
-          activeVectorStyle={customStyle || layer.id}
-          layer={layer}
-          index={0}
-          groupName={groupName}
-          vectorStyles={vectorStyles}
-        />
-      </>
+      <VectorStyle
+        setStyle={setStyle}
+        clearStyle={clearStyle}
+        activeVectorStyle={customStyle || layer.id}
+        layer={layer}
+        index={0}
+        groupName={groupName}
+        vectorStyles={vectorStyles}
+      />
     );
   }
 
@@ -330,7 +328,7 @@ class LayerSettings extends React.Component {
           )}
         </>
       ) : null;
-  }
+  };
 
   render() {
     let renderCustomizations;

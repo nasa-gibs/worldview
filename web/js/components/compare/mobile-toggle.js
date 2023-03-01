@@ -29,22 +29,20 @@ function MobileComparisonToggle (props) {
   const classB = !isCompareASelected ? 'compare-btn-selected' : '';
 
   return (
-    <>
-      <div className="comparison-mobile-select-toggle">
-        <div
-          className={`compare-toggle-selected-btn ${classA}`}
-          onClick={() => toggleCompareASelected(true)}
-        >
-          A
-        </div>
-        <div
-          className={`compare-toggle-selected-btn ${classB}`}
-          onClick={() => toggleCompareASelected(false)}
-        >
-          B
-        </div>
+    <div className="comparison-mobile-select-toggle">
+      <div
+        className={`compare-toggle-selected-btn ${classA}`}
+        onClick={() => toggleCompareASelected(true)}
+      >
+        A
       </div>
-    </>
+      <div
+        className={`compare-toggle-selected-btn ${classB}`}
+        onClick={() => toggleCompareASelected(false)}
+      >
+        B
+      </div>
+    </div>
   );
 }
 

@@ -87,7 +87,7 @@ class TimelineRangeSelector extends React.Component {
       endLocation: endX,
     });
     this.animationDraggerPositionUpdate(startX, endX, true);
-  }
+  };
 
   /*
    * Send callback with new locations on
@@ -100,7 +100,7 @@ class TimelineRangeSelector extends React.Component {
   onDragStop = () => {
     const { endLocation, startLocation } = this.state;
     this.animationDraggerPositionUpdate(startLocation, endLocation, false);
-  }
+  };
 
   /*
    * Update state based on distance range was dragged
@@ -123,7 +123,7 @@ class TimelineRangeSelector extends React.Component {
         deltaStart,
       };
     });
-  }
+  };
 
   // update animation dragger helper function
   getAnimationLocateDateUpdate = (animLocationDate, animDraggerLocation, deltaX, { diffZeroValues, diffFactor }) => {
@@ -157,7 +157,7 @@ class TimelineRangeSelector extends React.Component {
     const draggerTimeStartValue = new Date(animLocationDate).getTime();
     const newLocationDate = draggerTimeStartValue + (diffFactor * deltaX);
     return new Date(newLocationDate);
-  }
+  };
 
   // handle animation dragger drag change
   animationDraggerPositionUpdate = (draggerStartLocation, draggerEndLocation, isDragging) => {
@@ -244,7 +244,7 @@ class TimelineRangeSelector extends React.Component {
       draggerEndLocation,
       isDragging,
     );
-  }
+  };
 
   updateLocation = () => {
     const { startLocation, endLocation } = this.props;
@@ -252,7 +252,7 @@ class TimelineRangeSelector extends React.Component {
       startLocation,
       endLocation,
     });
-  }
+  };
 
   /*
    * @method render

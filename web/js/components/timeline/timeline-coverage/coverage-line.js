@@ -55,7 +55,7 @@ class CoverageLine extends PureComponent {
       dateRangeEnd,
       toolTipText,
     };
-  }
+  };
 
   /**
   * @desc get line DOM element from full/partial (interval) date range with tooltip
@@ -135,7 +135,7 @@ class CoverageLine extends PureComponent {
         </rect>
       </g>
     );
-  }
+  };
 
   render() {
     const {
