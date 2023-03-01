@@ -68,6 +68,7 @@ module.exports = (page) => ({
   groupedOverlaysAllLayers: page.locator('.layer-container > ul .item.productsitem'),
   sidebarButton: page.locator('#accordion-toggler-button'),
   sidebarContent: page.locator('#products-holder'),
+
   // compare
   swipeButton: page.locator('#compare-swipe-button'),
   opacityButton: page.locator('#compare-opacity-button'),
@@ -78,6 +79,10 @@ module.exports = (page) => ({
   compareButton: page.locator('#compare-toggle-button'),
   compareButtonText: page.locator('#compare-toggle-button > span'),
   compareMobileSelectToggle: page.locator('.comparison-mobile-select-toggle'),
+  ModisTrueColorLayerA: page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor'),
+  ModisTrueColorLayerB: page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'),
+  toggleButton: page.locator('#toggleIconHolder'),
+  collapsedToggleButton: page.locator('#accordion-toggler-button'),
 
   // measure
   measureBtn: page.locator('#wv-measure-button'),
