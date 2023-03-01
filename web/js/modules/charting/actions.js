@@ -45,7 +45,6 @@ export function changeEndDate(date) {
   };
 }
 export function updateActiveChartingLayerAction(layerId) {
-  console.log(`updateActiveChartingLayerAction: ${layerId}`);
   return (dispatch) => {
     dispatch({ type: UPDATE_ACTIVE_CHART, layerId });
   };

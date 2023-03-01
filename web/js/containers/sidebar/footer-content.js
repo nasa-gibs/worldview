@@ -11,7 +11,9 @@ import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import ChartingModeOptions from '../../components/sidebar/charting-mode-options';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import { toggleChartingModeOnOff } from '../../modules/charting/actions';
+import {
+  toggleChartingModeOnOff,
+} from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';

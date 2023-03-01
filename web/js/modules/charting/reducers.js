@@ -23,9 +23,23 @@ export const initialChartingState = {
 export function chartingReducer(state = initialChartingState, action) {
   switch (action.type) {
     case TOGGLE_ON_OFF:
+      if (state.active) {
+        // reset to initial charting state
+        return lodashAssign({}, state, {
+          active: false,
+          activeLayer: undefined,
+          aoiActive: false,
+          aoiCoordinates: null,
+          aoiSelected: false,
+          timeSpanEndDate: undefined,
+          timeSpanSelection: 'date',
+          timeSpanStartDate: undefined,
+        });
+      }
       return lodashAssign({}, state, {
         active: !state.active,
       });
+
     case TOGGLE_AOI_ON_OFF:
       return lodashAssign({}, state, {
         aoiActive: !state.aoiActive,
@@ -57,8 +71,6 @@ export function chartingReducer(state = initialChartingState, action) {
         timeSpanEndDate: action.date,
       });
     case UPDATE_ACTIVE_CHART:
-      console.log('UPDATE_ACTIVE_CHART Reducing');
-      console.log(action.layerId);
       return lodashAssign({}, state, {
         activeLayer: action.layerId,
       });
