@@ -238,9 +238,11 @@ function ChartingModeOptions (props) {
   }
   function getSimpleStatsURIParams(layerInfo) {
     const formattedStartDate = getFormattedDateForRequest(primaryDate);
+    const formattedEndDate = getFormattedDateForRequest(secondaryDate);
     const formattedAreaOfInterest = getFormattedAreaOfInterest(aoiCoordinates);
     return {
       timestamp: formattedStartDate, // start date
+      endTimestamp: formattedEndDate, // end date
       type: timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
       steps: 1, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
@@ -254,15 +256,18 @@ function ChartingModeOptions (props) {
   function getSimpleStatsRequestURL(uriParameters) {
     const {
       timestamp,
-      type,
+      endTimestamp,
       steps,
       layer,
       colormap,
-      scale,
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    return `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?timestamp=${timestamp}&_type=${type}&steps=${steps}&layer=${layer}&colormap=${colormap}&_scale=${scale}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${timeSpanSelection}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    if (timeSpanSelection === 'range') {
+      requestURL += `&end_timestamp=${endTimestamp}`;
+    }
+    return requestURL;
   }
 
   async function getSimpleStatsData(simpleStatsURI) {
