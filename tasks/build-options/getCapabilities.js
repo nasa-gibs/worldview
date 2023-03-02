@@ -74,7 +74,6 @@ async function getCapabilities () {
   }
 }
 
-// convert to superagent and use promises
 async function fetchConfigs (inputFile, outputFile) {
   const writer = await fs.createWriteStream(outputFile)
   return axios({
@@ -173,9 +172,9 @@ async function gatherProcess (type, typeStr, dir, ext) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  Object.values(type).forEach(async (link) => {
+  for (const link of Object.values(type)) {
     await processMetadata(link, dir, ext)
-  })
+  }
 }
 
 main().catch((err) => {

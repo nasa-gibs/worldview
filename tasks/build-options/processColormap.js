@@ -258,10 +258,9 @@ async function readFileAsync (file) {
 }
 
 async function processFile (id, xml) {
-  let document
   let colormaps = []
   try {
-    document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
+    const document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
     if (document && document.ColorMaps && document.ColorMaps.ColorMap) {
       colormaps = await toList(document.ColorMaps.ColorMap)
     }

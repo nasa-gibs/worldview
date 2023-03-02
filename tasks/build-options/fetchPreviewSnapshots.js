@@ -209,72 +209,77 @@ async function getTimeParam (projection, layerId, layer, params) {
 }
 
 async function getSnapshots (layer) {
-  for (const projection of Object.keys(layer.projections)) {
-    const projDict = layer.projections[projection]
-    const referenceLayer = referenceLayers[projection]
-    const params = { ...paramDict.base, ...paramDict[projection] }
+  if (layer && layer.projections) {
+    for (const projection of Object.keys(layer.projections)) {
+      const projDict = layer.projections[projection]
+      const referenceLayer = referenceLayers[projection]
+      const params = { ...paramDict.base, ...paramDict[projection] }
 
-    // Sometimes a layer id is provided per projection (e.g. Land Mask layers)
-    // We need to use this layer id to request the layer from WVS/GIBS
-    // But, we need to use the WV id as the file name (since that's how we will look up the image in WV)
-    let gibsLayerId, wvLayerId
-    if (projDict.layer) {
-      gibsLayerId = projDict.layer
-      wvLayerId = layer.id
-    } else {
-      gibsLayerId = wvLayerId = layer.id
-    }
-
-    const destFileName = path.join(destImgDir, projection, `${wvLayerId}.jpg`)
-
-    // Only get images that we don't have already
-    const fileExists = await fs.promises.stat(destFileName)
-      .then(() => true)
-      .catch(() => false)
-    if (fileExists) continue
-
-    await getTimeParam(projection, wvLayerId, layer, params)
-
-    if (gibsLayerId !== referenceLayer && !standaloneLayers.includes(gibsLayerId)) {
-      params.LAYERS = `${referenceLayer},${gibsLayerId}`
-      params.OPACITIES = '0.50,1'
-    } else {
-      params.LAYERS = gibsLayerId
-    }
-
-    try {
-      const imageReq = await axios({
-        method: 'get',
-        url: snapshotsUrl,
-        params,
-        responseType: 'stream'
-      })
-      if (imageReq.status === 200) {
-        statusText = 'SUCCESS'
-        totalSuccessCount += 1
-        const dest = await fs.createWriteStream(destFileName, { flags: 'wx' })
-        dest.on('finish', () => {
-          console.warn(`File ${destFileName} has been written`)
-          if (gibsLayerId === referenceLayers[projection]) {
-            return
-          }
-          trackBadSnapshots(wvLayerId, projection, imageReq, destFileName)
-        })
-        imageReq.data.pipe(dest)
+      // Sometimes a layer id is provided per projection (e.g. Land Mask layers)
+      // We need to use this layer id to request the layer from WVS/GIBS
+      // But, we need to use the WV id as the file name (since that's how we will look up the image in WV)
+      let gibsLayerId, wvLayerId
+      if (projDict.layer) {
+        gibsLayerId = projDict.layer
+        wvLayerId = layer.id
       } else {
+        gibsLayerId = wvLayerId = layer.id
+      }
+
+      const destFileName = path.join(destImgDir, projection, `${wvLayerId}.jpg`)
+
+      // Only get images that we don't have already
+      const fileExists = await fs.promises.stat(destFileName)
+        .then(() => true)
+        .catch(() => false)
+      if (fileExists) continue
+
+      await getTimeParam(projection, wvLayerId, layer, params)
+
+      if (gibsLayerId !== referenceLayer && !standaloneLayers.includes(gibsLayerId)) {
+        params.LAYERS = `${referenceLayer},${gibsLayerId}`
+        params.OPACITIES = '0.50,1'
+      } else {
+        params.LAYERS = gibsLayerId
+      }
+
+      try {
+        const imageReq = await axios({
+          method: 'get',
+          url: snapshotsUrl,
+          params,
+          responseType: 'stream'
+        })
+        if (imageReq.status === 200) {
+          statusText = 'SUCCESS'
+          totalSuccessCount += 1
+          const dest = await fs.createWriteStream(destFileName, { flags: 'wx' })
+          dest.on('finish', () => {
+            console.warn(`File ${destFileName} has been written`)
+            if (gibsLayerId === referenceLayers[projection]) {
+              return
+            }
+            trackBadSnapshots(wvLayerId, projection, imageReq, destFileName)
+          })
+          imageReq.data.pipe(dest)
+        } else {
+          totalFailureCount += 1
+          statusText = 'ERROR'
+        }
+        console.warn(`\n${prog}: Result: ${statusText} - ${imageReq.status}`)
+        console.warn(`${prog}: Layer: ${wvLayerId}`)
+        console.warn(`${prog}: URL: ${imageReq.config.url}`)
+      } catch (e) {
         totalFailureCount += 1
         statusText = 'ERROR'
+        console.error(`${prog} ERROR: Unable to fetch layer: ${wvLayerId} proj:${projection}`)
+        // console.error(`${prog} Error: ${e}`)
       }
-      console.warn(`\n${prog}: Result: ${statusText} - ${imageReq.status}`)
-      console.warn(`${prog}: Layer: ${wvLayerId}`)
-      console.warn(`${prog}: URL: ${imageReq.config.url}`)
-    } catch (e) {
-      totalFailureCount += 1
-      statusText = 'ERROR'
-      console.error(`${prog} ERROR: Unable to fetch layer: ${wvLayerId} proj:${projection}`)
-      // console.error(`${prog} Error: ${e}`)
     }
   }
+  // } else {
+  //   console.warn(`${prog}: No projections for layer: ${layer.id}`)
+  // }
 }
 
 main().catch((err) => {
