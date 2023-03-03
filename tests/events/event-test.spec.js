@@ -20,7 +20,6 @@ test.afterAll(async () => {
 test('Make sure that 4 fire layers are not present in layer list: use mock', async () => {
   const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
-
   await expect(sidebarEvent).toBeVisible()
   await expect(thermAnomSNPPday).not.toBeVisible()
   await expect(thermAnomSNPPnight).not.toBeVisible()
