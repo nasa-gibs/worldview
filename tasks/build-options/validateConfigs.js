@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
-const glob = require('glob')
+const { globSync } = require('glob')
 const Ajv = require('ajv')
 const ajv = new Ajv()
 
@@ -41,7 +41,7 @@ invalidJsonFiles = []
 console.warn(`${prog}: Validating layer configs...`)
 
 async function main () {
-  let files = await glob.sync(inputDirectory + '/**/*')
+  let files = globSync(inputDirectory + '/**/*')
   files = files.filter(file => file.endsWith('.json'))
   for (filePath of files) {
     validateFile(filePath)

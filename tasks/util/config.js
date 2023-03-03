@@ -1,5 +1,5 @@
 const fs = require('fs')
-const glob = require('glob')
+const { globSync } = require('glob')
 const showdown = require('showdown')
 const shell = require('shelljs')
 const console = require('console')
@@ -10,8 +10,8 @@ const converter = new showdown.Converter({
   // don't require escaping underscores in the middle of a word
   literalMidWordUnderscores: true
 })
-const configFiles = glob.sync('build/options/config/metadata/**/*.md')
-const aboutFiles = glob.sync('build/options/brand/about/*.md')
+const configFiles = globSync('build/options/config/metadata/**/*.md')
+const aboutFiles = globSync('build/options/brand/about/*.md')
 function convertMDtoHTML (mdFiles) {
   for (const mdFile of mdFiles) {
     const dest = mdFile.replace(/\.md$/, '.html')
