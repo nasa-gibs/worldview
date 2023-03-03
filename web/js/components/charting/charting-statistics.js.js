@@ -7,9 +7,15 @@ function ChartingStatistics(props) {
   } = props;
 
   const {
-    median, mean, max, stdev,
+    median, mean, max, stdev, timestamp, type, endTimestamp,
   } = simpleStatsData;
 
+  let dateStr;
+  if (type === 'date') {
+    dateStr = `Date: ${timestamp}`;
+  } else {
+    dateStr = `Date range: ${timestamp} - ${endTimestamp}`;
+  }
 
   function formatToThreeDigits(str) {
     return parseFloat(str).toFixed(3);
@@ -18,6 +24,11 @@ function ChartingStatistics(props) {
   return (
     <>
       <div className="charting-statistics-container">
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            {dateStr}
+          </div>
+        </div>
         <div className="charting-statistics-row">
           <div className="charting-statistics-label">
             Median:

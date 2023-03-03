@@ -225,7 +225,9 @@ function ChartingModeOptions (props) {
     const uriParameters = getSimpleStatsURIParams(layerInfo);
     const simpleStatsURI = getSimpleStatsRequestURL(uriParameters);
     const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
-    const displayData = { title: layerInfo.title, subtitle: layerInfo.subtitle, ...simpleStatsData };
+    const displayData = {
+      title: layerInfo.title, subtitle: layerInfo.subtitle, ...simpleStatsData, ...uriParameters,
+    };
     displaySimpleStats(displayData);
   }
 
