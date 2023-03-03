@@ -47,6 +47,7 @@ module.exports = (page) => ({
   optionsDialog: page.locator('.layer-settings-modal'),
   addLayers: page.locator('#layers-add'),
   dataDownloadTabButton: page.locator('#download-sidebar-tab'),
+  eventsSidebarTabButton: page.locator('#events-sidebar-tab'),
   groupCheckbox: page.locator('#group-overlays-checkbox'),
   viirsFiresCheckbox: page.locator('#VIIRS_NOAA20_Thermal_Anomalies_375m_All-checkbox'),
   firesGroup: page.locator('#active-Fires_and_Thermal_Anomalies'),
