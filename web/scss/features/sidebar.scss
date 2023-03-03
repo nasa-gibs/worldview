@@ -466,6 +466,9 @@ footer .product-buttons .layers-add-container {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+#charting-chart {
+  max-width: 800px;
+}
 button#charting-simple-stats-button {
   border-right: 3px solid black;
 }

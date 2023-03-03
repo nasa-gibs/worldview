@@ -42,7 +42,7 @@ function ChartingModeOptions (props) {
     openChartingInfoModal,
     onChartDateButtonClick,
     displaySimpleStats,
-    onCreateChartButtonClick,
+    displayChart,
     openChartingDateModal,
     olMap,
     crs,
@@ -215,20 +215,25 @@ function ChartingModeOptions (props) {
     return `${year}-${month}-${day}`;
   }
 
-  async function onChartSimpleStatsButtonClick() {
+  async function onChartOrStatsButtonClick(requestType) {
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       // abort with warning
       console.log('No valid layer detected.');
       return;
     }
-    const uriParameters = getSimpleStatsURIParams(layerInfo);
-    const simpleStatsURI = getSimpleStatsRequestURL(uriParameters);
-    const simpleStatsData = await getSimpleStatsData(simpleStatsURI);
-    const displayData = {
-      title: layerInfo.title, subtitle: layerInfo.subtitle, ...simpleStatsData, ...uriParameters,
+    const uriParameters = getRequestParameters(layerInfo, requestType);
+    const requestURI = getSimpleStatsRequestURL(uriParameters);
+    const data = await getRequestData(requestURI);
+    const dataToRender = {
+      title: layerInfo.title, subtitle: layerInfo.subtitle, ...data, ...uriParameters,
     };
-    displaySimpleStats(displayData);
+    if (requestType === 'chart') {
+      const rechartsData = formatDataForRecharts(dataToRender);
+      displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+    } else {
+      displaySimpleStats(dataToRender);
+    }
   }
 
   function getFormattedAreaOfInterest(aoi) {
@@ -238,15 +243,15 @@ function ChartingModeOptions (props) {
     // lat/lon needs to be lon/lat; swap index 0 & 1, and index 2 & 3
     return [aoi[1], aoi[0], aoi[3], aoi[2]];
   }
-  function getSimpleStatsURIParams(layerInfo) {
+  function getRequestParameters(layerInfo, requestType) {
     const formattedStartDate = getFormattedDateForRequest(primaryDate);
     const formattedEndDate = getFormattedDateForRequest(secondaryDate);
     const formattedAreaOfInterest = getFormattedAreaOfInterest(aoiCoordinates);
     return {
       timestamp: formattedStartDate, // start date
       endTimestamp: formattedEndDate, // end date
-      type: timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
-      steps: 1, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
+      type: requestType === 'chart' ? 'series' : timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
+      steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: formattedAreaOfInterest, // Bounding box of latitude and longitude.
@@ -257,6 +262,7 @@ function ChartingModeOptions (props) {
 
   function getSimpleStatsRequestURL(uriParameters) {
     const {
+      type,
       timestamp,
       endTimestamp,
       steps,
@@ -265,14 +271,14 @@ function ChartingModeOptions (props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${timeSpanSelection}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
-    if (timeSpanSelection === 'range') {
+    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
     return requestURL;
   }
 
-  async function getSimpleStatsData(simpleStatsURI) {
+  async function getRequestData(simpleStatsURI) {
     const requestOptions = {
       method: 'GET',
       redirect: 'follow',
@@ -285,6 +291,29 @@ function ChartingModeOptions (props) {
     } catch (error) {
       console.log('Error requesting simple statistis', error);
     }
+  }
+
+  function formatDataForRecharts(data) {
+    // min, max, mean, median, stdev
+    const xAxisNames = getXAxisNames(data.min);
+    const rechartsData = [];
+    for (let i = 0; i < xAxisNames.length; i++) {
+      const name = xAxisNames[i];
+      const entry = {
+        name,
+        min: data.min[name],
+        max: data.max[name],
+        mean: data.mean[name],
+        median: data.median[name],
+        stddev: data.stdev[name],
+      };
+      rechartsData.push(entry);
+    }
+    return rechartsData;
+  }
+
+  function getXAxisNames(data) {
+    return Object.keys(data);
   }
 
   let aoiTextPrompt = 'Select Area of Interest';
@@ -363,14 +392,14 @@ function ChartingModeOptions (props) {
           <Button
             id="charting-simple-stats-button"
             className="charting-button"
-            onClick={() => onChartSimpleStatsButtonClick()}
+            onClick={() => onChartOrStatsButtonClick('stats')}
           >
             Request Simple Stats
           </Button>
           <Button
             id="charting-create-chart-button"
             className="charting-button"
-            onClick={() => onCreateChartButtonClick()}
+            onClick={() => onChartOrStatsButtonClick('chart')}
           >
             Request Chart
           </Button>
@@ -446,30 +475,33 @@ const mapDispatchToProps = (dispatch) => ({
   onChartDateButtonClick: (buttonClicked) => {
     dispatch(updateChartingDateSelection(buttonClicked));
   },
-  displaySimpleStats: (simpleStatsData) => {
+  displaySimpleStats: (data) => {
     // This is the modal to display the simple charting stats
     dispatch(
-      openCustomContent('CHARTING QUICK STATISTICS', {
-        headerText: `${simpleStatsData.title} - ${simpleStatsData.subtitle} Simple Statistics`,
+      openCustomContent('CHARTING-STATISTICS', {
+        headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
         backdrop: false,
         bodyComponent: ChartingStatistics,
         wrapClassName: 'clickable-behind-modal',
-        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+        modalClassName: 'stats-dialog',
         bodyComponentProps: {
-          simpleStatsData,
+          data,
         },
       }),
     );
   },
-  onCreateChartButtonClick: (buttonClicked) => {
-    // This is the modal to display the actual chart
+  displayChart: (liveData) => {
+    console.log(liveData);
     dispatch(
-      openCustomContent('CHART', {
-        headerText: '[Layer] Chart',
+      openCustomContent('CHARTING-CHART', {
+        headerText: `${liveData.title} - ${liveData.subtitle}`,
         backdrop: false,
         bodyComponent: ChartingChartComponent,
         wrapClassName: 'clickable-behind-modal',
-        modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+        modalClassName: 'chart-dialog',
+        bodyComponentProps: {
+          liveData,
+        },
       }),
     );
   },
@@ -497,7 +529,7 @@ ChartingModeOptions.propTypes = {
   openChartingDateModal: PropTypes.func,
   onChartDateButtonClick: PropTypes.func,
   displaySimpleStats: PropTypes.func,
-  onCreateChartButtonClick: PropTypes.func,
+  displayChart: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,

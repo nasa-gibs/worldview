@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 function ChartingStatistics(props) {
   const {
-    simpleStatsData,
+    data,
   } = props;
 
   const {
     median, mean, max, stdev, timestamp, type, endTimestamp,
-  } = simpleStatsData;
+  } = data;
 
   let dateStr;
   if (type === 'date') {
@@ -72,7 +72,7 @@ function ChartingStatistics(props) {
 }
 
 ChartingStatistics.propTypes = {
-  simpleStatsData: PropTypes.object,
+  data: PropTypes.object,
 };
 
 export default ChartingStatistics;

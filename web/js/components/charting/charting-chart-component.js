@@ -2,91 +2,94 @@ import React from 'react';
 import {
   LineChart, Line, XAxis, YAxis, Legend,
 } from 'recharts';
+import PropTypes from 'prop-types';
 
-class ChartingChartComponent extends React.Component {
-  data = [
-    {
-      name: 'January',
-      Google: 467,
-      Yahoo: 369,
-      Bing: 415,
-    },
-    {
-      name: 'February',
-      Google: 861,
-      Yahoo: 78,
-      Bing: 351,
-    },
-    {
-      name: 'March',
-      Google: 601,
-      Yahoo: 716,
-      Bing: 675,
-    },
-    {
-      name: 'April',
-      Google: 833,
-      Yahoo: 875,
-      Bing: 802,
-    },
-    {
-      name: 'May',
-      Google: 436,
-      Yahoo: 718,
-      Bing: 378,
-    },
-    {
-      name: 'June',
-      Google: 818,
-      Yahoo: 240,
-      Bing: 492,
-    },
-    {
-      name: 'July',
-      Google: 23,
-      Yahoo: 574,
-      Bing: 325,
-    },
-  ];
+function ChartingChartComponent (props) {
+  const {
+    liveData,
+  } = props;
 
-  lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink'];
+  const { data } = liveData;
+  //   {
+  //     name: 'January',
+  //     Google: 467,
+  //     Yahoo: 369,
+  //     Bing: 415,
+  //   },
+  //   {
+  //     name: 'February',
+  //     Google: 861,
+  //     Yahoo: 78,
+  //     Bing: 351,
+  //   },
+  //   {
+  //     name: 'March',
+  //     Google: 601,
+  //     Yahoo: 716,
+  //     Bing: 675,
+  //   },
+  //   {
+  //     name: 'April',
+  //     Google: 833,
+  //     Yahoo: 875,
+  //     Bing: 802,
+  //   },
+  //   {
+  //     name: 'May',
+  //     Google: 436,
+  //     Yahoo: 718,
+  //     Bing: 378,
+  //   },
+  //   {
+  //     name: 'June',
+  //     Google: 818,
+  //     Yahoo: 240,
+  //     Bing: 492,
+  //   },
+  //   {
+  //     name: 'July',
+  //     Google: 23,
+  //     Yahoo: 574,
+  //     Bing: 325,
+  //   },
+  // ];
+  const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink'];
+  const dataKeys = [];
+  for (let i = 0; i < data.length; i++) {
+    dataKeys.push(data[i].name);
+  }
 
-  getLineChart = (props) => {
-    // console.log(props);
-    // const { data, lineColors } = this.props;
-
-    console.log(this.data);
-    const dataKeys = Object.keys(this.data[0]).slice(1);
-
-    const chartLinesArr = dataKeys.map((id, index) => (
+  function getLineChart(data) {
+    const chartLinesArr = dataKeys.map((name, index) => (
       <Line
         type="linear"
-        key={id}
+        key={name}
         dataKey={dataKeys[index]}
-        stroke={this.lineColors[index]}
+        stroke={lineColors[index]}
       />
     ));
     return chartLinesArr;
-  };
-
-  render() {
-    return (
-      <>
-        <div className="charting-chart-container">
-          <div className="charting-chart-text">
-            <h3>Show Chart Here!</h3>
-            <LineChart width={600} height={300} data={this.data}>
-              <Legend />
-              {this.getLineChart()}
-              <XAxis datakey="name" />
-              <YAxis />
-              <Legend />
-            </LineChart>
-          </div>
-        </div>
-      </>
-    );
   }
+
+  return (
+    <>
+      <div className="charting-chart-container">
+        <div className="charting-chart-text">
+          <LineChart width={600} height={300} data={data}>
+            <Legend />
+            {getLineChart(data)}
+            <XAxis datakey="name" />
+            <YAxis />
+            <Legend />
+          </LineChart>
+        </div>
+      </div>
+    </>
+  );
 }
+
+ChartingChartComponent.propTypes = {
+  liveData: PropTypes.object,
+};
 
 export default ChartingChartComponent;
