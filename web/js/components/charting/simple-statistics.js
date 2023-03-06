@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function ChartingStatistics(props) {
+function SimpleStatistics(props) {
   const {
     data,
   } = props;
@@ -71,9 +71,9 @@ function ChartingStatistics(props) {
   );
 }
 
-ChartingStatistics.propTypes = {
+SimpleStatistics.propTypes = {
   data: PropTypes.object,
 };
 
-export default ChartingStatistics;
+export default SimpleStatistics;
 

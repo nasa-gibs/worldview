@@ -7,7 +7,7 @@ import {
   changeEndDate,
 } from '../../modules/charting/actions';
 
-function ChartingDateComponent (props) {
+function ChartingDateSelector (props) {
   const {
     onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date,
   } = props;
@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-ChartingDateComponent.propTypes = {
+ChartingDateSelector.propTypes = {
   timeSpanStartDate: PropTypes.object,
   timeSpanEndDate: PropTypes.object,
   onUpdateStartDate: PropTypes.func,
@@ -75,4 +75,4 @@ ChartingDateComponent.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ChartingDateComponent);
+)(ChartingDateSelector);

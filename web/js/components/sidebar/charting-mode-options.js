@@ -19,12 +19,12 @@ import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info.js';
-import ChartingStatistics from '../charting/charting-statistics.js';
-import ChartingDateComponent from '../charting/charting-date-component';
-import ChartingChartComponent from '../charting/charting-chart-component';
+import SimpleStatistics from '../charting/simple-statistics.js';
+import ChartingDateSelector from '../charting/charting-date-selector';
+import ChartComponent from '../charting/chart-component';
 import {
   drawStyles, vectorStyles,
-} from '../charting/charting-aoi-style.js';
+} from '../charting/charting-area-of-interest-style.js';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -225,6 +225,8 @@ function ChartingModeOptions (props) {
     const uriParameters = getRequestParameters(layerInfo, requestType);
     const requestURI = getSimpleStatsRequestURL(uriParameters);
     const data = await getRequestData(requestURI);
+    console.log(data);
+
     const dataToRender = {
       title: layerInfo.title, subtitle: layerInfo.subtitle, ...data, ...uriParameters,
     };
@@ -289,7 +291,8 @@ function ChartingModeOptions (props) {
       const data = await response.text();
       return JSON.parse(data);
     } catch (error) {
-      console.log('Error requesting simple statistis', error);
+      console.log('Error requesting simple statistics', error);
+      return error;
     }
   }
 
@@ -466,7 +469,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('CHARTING_DATE_MODAL', {
         headerText: 'Charting Mode Date Selection',
         backdrop: false,
-        bodyComponent: ChartingDateComponent,
+        bodyComponent: ChartingDateSelector,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
       }),
@@ -481,7 +484,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('CHARTING-STATISTICS', {
         headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
         backdrop: false,
-        bodyComponent: ChartingStatistics,
+        bodyComponent: SimpleStatistics,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'stats-dialog',
         bodyComponentProps: {
@@ -496,7 +499,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('CHARTING-CHART', {
         headerText: `${liveData.title} - ${liveData.subtitle}`,
         backdrop: false,
-        bodyComponent: ChartingChartComponent,
+        bodyComponent: ChartComponent,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'chart-dialog',
         bodyComponentProps: {

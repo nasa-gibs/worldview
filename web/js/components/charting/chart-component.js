@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 import PropTypes from 'prop-types';
 
-function ChartingChartComponent (props) {
+function ChartComponent (props) {
   const {
     liveData,
   } = props;
@@ -47,8 +47,8 @@ function ChartingChartComponent (props) {
   );
 }
 
-ChartingChartComponent.propTypes = {
+ChartComponent.propTypes = {
   liveData: PropTypes.object,
 };
 
-export default ChartingChartComponent;
+export default ChartComponent;
