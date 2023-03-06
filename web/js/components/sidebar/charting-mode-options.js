@@ -300,7 +300,7 @@ function ChartingModeOptions (props) {
     for (let i = 0; i < xAxisNames.length; i++) {
       const name = xAxisNames[i];
       const entry = {
-        name,
+        name: name.split('T')[0],
         min: data.min[name],
         max: data.max[name],
         mean: data.mean[name],
