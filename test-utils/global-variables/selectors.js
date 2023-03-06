@@ -277,4 +277,8 @@ module.exports = (page) => ({
   globalSelectInput: page.locator('#image-global-cb'),
   bboxTopCoords: page.locator('#wv-image-top'),
   bboxBottomCoords: page.locator('#wv-image-bottom'),
+  imageResolution: page.locator('#wv-image-resolution'),
+  imageFormat: page.locator('#wv-image-format'),
+  imageWorldFile: page.locator('#wv-image-worldfile'),
+  imageMaxSize: page.locator('.wv-image-max-size')
 })
