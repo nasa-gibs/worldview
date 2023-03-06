@@ -16,7 +16,6 @@ import {
 function ChartingLayerMenu (props) {
   const {
     activeLayersWithPalettes,
-    activeLayer,
     height,
     isActive,
     isEmbedModeActive,
@@ -107,7 +106,6 @@ export default connect(
 
 ChartingLayerMenu.propTypes = {
   activeLayersWithPalettes: PropTypes.array,
-  activeLayer: PropTypes.string,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,

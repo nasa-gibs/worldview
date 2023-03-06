@@ -34,12 +34,12 @@ export function updateChartingAOICoordinates(extent) {
     dispatch({ type: UPDATE_AOI_COORDINATES, extent });
   };
 }
-export function changeStartDate(date) {
+export function changeChartingStartDate(date) {
   return (dispatch) => {
     dispatch({ type: UPDATE_START_DATE, date });
   };
 }
-export function changeEndDate(date) {
+export function changeChartingEndDate(date) {
   return (dispatch) => {
     dispatch({ type: UPDATE_END_DATE, date });
   };

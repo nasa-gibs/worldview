@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DateRangeSelector from '../date-selector/date-range-selector';
 import {
-  changeStartDate,
-  changeEndDate,
+  changeChartingStartDate,
+  changeChartingEndDate,
 } from '../../modules/charting/actions';
 
 function ChartingDateSelector (props) {
@@ -16,7 +16,7 @@ function ChartingDateSelector (props) {
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
   const endDate = timeSpanEndDate == null ? selectedB : timeSpanEndDate;
   const minDate = new Date('01/01/1900');
-  const maxDate = new Date('12/31/2035');
+  const maxDate = new Date();
 
   function onDateChange([newStartDate, newEndDate]) {
     if (newStartDate !== timeSpanStartDate) {
@@ -30,8 +30,6 @@ function ChartingDateSelector (props) {
 
   return (
     <div className="charting-date-container">
-      {/* From/To Date/Time Selection */}
-      {/* Copied from animation widget */}
       <DateRangeSelector
         idSuffix="charting-date-picker"
         startDate={startdate}
@@ -55,12 +53,11 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  // These functions are passed as props to date-selector
   onUpdateStartDate(date) {
-    dispatch(changeStartDate(date));
+    dispatch(changeChartingStartDate(date));
   },
   onUpdateEndDate(date) {
-    dispatch(changeEndDate(date));
+    dispatch(changeChartingEndDate(date));
   },
 });
 

@@ -77,26 +77,17 @@ function ChartingModeOptions (props) {
   }, [isChartingActive]);
 
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
-
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
+   * @param {Date} start
+   * @param {Date} end
    */
   function initializeDates(start, end) {
-    let startDate;
-    let endDate;
-    if (start === undefined) {
-      startDate = timelineStartDate; // SHOULD BE date.selected
-    } else {
-      startDate = start;
-    }
-    if (end === undefined) {
-      endDate = timelineEndDate;
-    } else {
-      endDate = end; // should be date.selectedB
-    }
+    const startDate = start === undefined ? timelineStartDate : start;
+    const endDate = end === undefined ? timelineEndDate : end;
     return { initialStartDate: startDate, initialEndDate: endDate };
   }
 
@@ -137,9 +128,6 @@ function ChartingModeOptions (props) {
     }
   }
 
-  /**
-   * Triggers when draw is completed
-   */
   const drawEndCallback = ({ feature }) => {
     // Add the draw feature to the collection
     AOIFeatureObj[crs][feature.ol_uid] = {
@@ -151,21 +139,15 @@ function ChartingModeOptions (props) {
     getAreaOfInterestCoordinates(feature.getGeometry());
   };
 
-  /**
-   * End the AOI draw interaction
-   */
   function endDrawingAreaOfInterest () {
     if (draw) {
       olMap.removeInteraction(draw);
     }
   }
 
-  /**
-   * Clear any existing AOI's from the current map projection
-   */
   function resetAreaOfInterest() {
     Object.values(AOIFeatureObj[crs]).forEach(
-      ({ feature, overlay }) => {
+      ({ feature }) => {
         sources[crs].removeFeature(feature);
       },
     );
@@ -207,7 +189,7 @@ function ChartingModeOptions (props) {
     return `${year} ${month} ${day}`;
   }
 
-  function getFormattedDateForRequest(dateStr) {
+  function formatDateForImageStat(dateStr) {
     const dateParts = dateStr.split(' ');
     const year = dateParts[0];
     const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
@@ -218,51 +200,67 @@ function ChartingModeOptions (props) {
   async function onChartOrStatsButtonClick(requestType) {
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
-      // abort with warning
       console.log('No valid layer detected.');
       return;
     }
-    const uriParameters = getRequestParameters(layerInfo, requestType);
-    const requestURI = getSimpleStatsRequestURL(uriParameters);
-    const data = await getRequestData(requestURI);
-    console.log(data);
-
-    const dataToRender = {
-      title: layerInfo.title, subtitle: layerInfo.subtitle, ...data, ...uriParameters,
-    };
-    if (requestType === 'chart') {
-      const rechartsData = formatDataForRecharts(dataToRender);
-      displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+    const requestedLayerSource = layerInfo.projections.geographic.source;
+    if (requestedLayerSource === 'GIBS:geographic') {
+      const uriParameters = getImageStatRequestParameters(layerInfo, requestType);
+      const requestURI = getImageStatStatsRequestURL(uriParameters);
+      const data = await getImageStatData(requestURI);
+      const dataToRender = {
+        title: layerInfo.title,
+        subtitle: layerInfo.subtitle,
+        ...data,
+        ...uriParameters,
+      };
+      if (requestType === 'chart') {
+        const rechartsData = formatGIBSDataForRecharts(dataToRender);
+        displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+      } else {
+        displaySimpleStats(dataToRender);
+      }
     } else {
-      displaySimpleStats(dataToRender);
+      // handle requests for layers outside of GIBS here!
+      console.log('Unable to process layer that is not provided by GIBS.');
     }
   }
 
-  function getFormattedAreaOfInterest(aoi) {
+  /**
+   * Provides a default AOI of the entire map if unspecified, and modifies the Openlayers coordinates for use with imageStat API
+   * @param {Object} aoi (Area Of Interest)
+   */
+  function convertOLcoordsForImageStat(aoi) {
     if (aoi == null) {
       return [-90, -180, 90, 180];
     }
     // lat/lon needs to be lon/lat; swap index 0 & 1, and index 2 & 3
     return [aoi[1], aoi[0], aoi[3], aoi[2]];
   }
-  function getRequestParameters(layerInfo, requestType) {
-    const formattedStartDate = getFormattedDateForRequest(primaryDate);
-    const formattedEndDate = getFormattedDateForRequest(secondaryDate);
-    const formattedAreaOfInterest = getFormattedAreaOfInterest(aoiCoordinates);
+
+  /**
+   * Returns the ImageStat request parameters based on the provided layer
+   * @param {Object} layerInfo
+   * @param {String} requestType | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   */
+  function getImageStatRequestParameters(layerInfo, requestType) {
+    const startDateForImageStat = formatDateForImageStat(primaryDate);
+    const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
-      timestamp: formattedStartDate, // start date
-      endTimestamp: formattedEndDate, // end date
-      type: requestType === 'chart' ? 'series' : timeSpanSelection, // Use 'date' for a single date, 'range' for a summary of a range, or 'series' for data from a sample of dates within a range.
+      timestamp: startDateForImageStat, // start date
+      endTimestamp: endDateForImageStat, // end date
+      type: requestType === 'chart' ? 'series' : timeSpanSelection,
       steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
-      areaOfInterestCoords: formattedAreaOfInterest, // Bounding box of latitude and longitude.
+      areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
       bins: 10, // Number of bins to used in returned histogram. e.g. 10
       scale: 1, // unused
     };
   }
 
-  function getSimpleStatsRequestURL(uriParameters) {
+  function getImageStatStatsRequestURL(uriParameters) {
     const {
       type,
       timestamp,
@@ -280,7 +278,11 @@ function ChartingModeOptions (props) {
     return requestURL;
   }
 
-  async function getRequestData(simpleStatsURI) {
+  /**
+   * Execute the ImageStat API request
+   * @param {String} simpleStatsURI
+   */
+  async function getImageStatData(simpleStatsURI) {
     const requestOptions = {
       method: 'GET',
       redirect: 'follow',
@@ -296,14 +298,17 @@ function ChartingModeOptions (props) {
     }
   }
 
-  function formatDataForRecharts(data) {
-    // min, max, mean, median, stdev
-    const xAxisNames = getXAxisNames(data.min);
+  /**
+   * Process the ImageStat (GIBS) data for use in the Recharts library
+   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   */
+  function formatGIBSDataForRecharts(data) {
+    const xAxisNames = getKeysFromObj(data.min);
     const rechartsData = [];
-    for (let i = 0; i < xAxisNames.length; i++) {
+    for (let i = 0; i < xAxisNames.length; i += 1) {
       const name = xAxisNames[i];
       const entry = {
-        name: name.split('T')[0],
+        name: name.split('T')[0], // Remove the time element from the date string
         min: data.min[name],
         max: data.max[name],
         mean: data.mean[name],
@@ -315,29 +320,14 @@ function ChartingModeOptions (props) {
     return rechartsData;
   }
 
-  function getXAxisNames(data) {
+  function getKeysFromObj(data) {
     return Object.keys(data);
   }
 
-  let aoiTextPrompt = 'Select Area of Interest';
-  if (aoiSelected) {
-    aoiTextPrompt = 'Area of Interest Selected';
-  }
-
-  let singleDateBtnStatus = '';
-  let dateRangeBtnStatus = '';
-  if (timeSpanSelection === 'date') {
-    singleDateBtnStatus = 'btn-active';
-    dateRangeBtnStatus = '';
-  } else {
-    singleDateBtnStatus = '';
-    dateRangeBtnStatus = 'btn-active';
-  }
-
-  let dateRangeValue = primaryDate;
-  if (timeSpanSelection === 'range') {
-    dateRangeValue = `${primaryDate} - ${secondaryDate}`;
-  }
+  const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
+  const singleDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
+  const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
+  const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
 
   return (
     <div
@@ -412,7 +402,7 @@ function ChartingModeOptions (props) {
   );
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     charting, map, proj, config, layers, date,
   } = state;
@@ -453,7 +443,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateChartingAOICoordinates(extent));
   },
   openChartingInfoModal: () => {
-    // This is the charting tool info window from the wireframes
     dispatch(
       openCustomContent('CHARTING_INFO_MODAL', {
         headerText: 'Charting Tool',
@@ -479,7 +468,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateChartingDateSelection(buttonClicked));
   },
   displaySimpleStats: (data) => {
-    // This is the modal to display the simple charting stats
     dispatch(
       openCustomContent('CHARTING-STATISTICS', {
         headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
@@ -494,7 +482,6 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   displayChart: (liveData) => {
-    console.log(liveData);
     dispatch(
       openCustomContent('CHARTING-CHART', {
         headerText: `${liveData.title} - ${liveData.subtitle}`,

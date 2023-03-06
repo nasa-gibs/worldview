@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function SimpleStatistics(props) {
-  const {
-    data,
-  } = props;
+  const { data } = props;
 
   const {
     median, mean, max, stdev, timestamp, type, endTimestamp,

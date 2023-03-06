@@ -12,20 +12,32 @@ function ChartComponent (props) {
   const { data } = liveData;
 
   // Arbitrary array of colors to use
-  const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'blue', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
 
+  /**
+   * Return an array of Recharts Line objects
+   * @param {Object} chartData
+   */
   function getLineChart(chartData) {
-    const dataKeys = Object.keys(chartData[0]).slice(1);
+    const chartLineName = getLineNames(chartData);
 
-    const chartLinesArr = dataKeys.map((id, index) => (
+    const chartLinesArr = chartLineName.map((id, index) => (
       <Line
         type="linear"
-        key={id} // XAxis (date) value
-        dataKey={dataKeys[index]}
+        key={id}
+        dataKey={chartLineName[index]}
         stroke={lineColors[index]}
       />
     ));
     return chartLinesArr;
+  }
+
+  /**
+   * Extracts each key from the provided object & returns the list, removing 'name' from the collection
+   * @param {Object} chartData
+   */
+  function getLineNames(obj) {
+    return Object.keys(obj[0]).filter((val) => val !== 'name');
   }
 
   return (
