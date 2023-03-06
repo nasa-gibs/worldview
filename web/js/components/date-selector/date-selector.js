@@ -267,6 +267,7 @@ class DateSelector extends Component {
   updateDate = (date = this.props.date, isRollDate = false) => {
     const { onDateChange } = this.props;
     const newDate = this.updateDateCheck(date, isRollDate);
+
     if (newDate) {
       onDateChange(newDate);
       // clear the pending timeunit inputs and reset validation

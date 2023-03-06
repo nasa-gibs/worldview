@@ -101,7 +101,6 @@ function render (config, legacyState) {
       applyMiddleware(...middleware),
     ),
   );
-
   listenForHistoryChange(store, history);
 
   ReactDOM.render(

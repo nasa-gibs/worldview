@@ -374,6 +374,7 @@ function mapStateToProps(state, ownProps) {
   const { custom } = palettes;
   const groupName = compare.activeString;
   const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
+
   const granuleState = getGranuleLayer(state, ownProps.layer.id);
   const granuleOptions = {};
   if (granuleState) {
