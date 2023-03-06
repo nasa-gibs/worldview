@@ -1,5 +1,3 @@
-const { skipTour } = require('../../test-utils/global-variables/querystrings')
-
 /**
  * Make selections for dropdown elements.
  * @param {Object} page - Playwright object representing the browser page.
@@ -30,7 +28,7 @@ const getAttribute = async (page, el, attribute) => {
  */
 const joinUrl = async (startParams, layers) => {
   if (layers !== null) return `${skipTour}?${startParams.join('&')}${layers}`
-  return `${skipTour}?${startParams.join('&')}`
+  return `http://localhost:3000/?${startParams.join('&')}`
 }
 
 /**

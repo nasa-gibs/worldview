@@ -20,6 +20,14 @@ const closeImageDownloadPanel = async (page) => {
   await page.locator('#toolbar_snapshot .close').click()
 }
 
+const zoomIn = async (page) => {
+  await page.locator('button.wv-map-zoom-in').click()
+}
+
+const zoomOut = async (page) => {
+  await page.locator('button.wv-map-zoom-out').click()
+}
+
 /**
  * Drag one of the draggers on the timeline.
  * To find the x parameter you need to inspect the exact date on the timeline you want to drag to
@@ -55,5 +63,7 @@ module.exports = {
   closeImageDownloadPanel,
   openImageDownloadPanel,
   switchProjections,
-  timelineDrag
+  timelineDrag,
+  zoomIn,
+  zoomOut,
 }

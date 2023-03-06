@@ -32,7 +32,7 @@ test.afterAll(async () => {
 })
 
 test('JPEG is the default', async () => {
-  const url = await joinUrl(startParams)
+  const url = await joinUrl(startParams, null)
   await page.goto(url)
   await openImageDownloadPanel(page)
   await clickDownload(page)
