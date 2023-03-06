@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
-const { switchProjections } = require('../../test-utils/hooks/hooks')
+const { switchProjections } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -108,7 +108,6 @@ test('Loading from permalink sets all criteria properly', async () => {
   await expect(filterIcons).toHaveCount(1)
   await expect(wildfiresIcon).toBeVisible()
   await expect(filterDates).toHaveText('2020 JAN 16 - 2020 JUN 16')
-
   await filterButton.click()
   await assertDateInputValues('2020-JAN-16', '2020-JUN-16')
   await expect(dustSwitch).not.toBeChecked()
@@ -232,11 +231,8 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
 test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
   const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox, filterModalCancel, } = selectors
   await page.goto(backwardsCompatibleEventUrl)
-
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
-
   await filterButton.click()
-
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
   await expect(filterIcons).toHaveCount(8)
   await expect(mapExtentFilterCheckbox).not.toBeChecked()

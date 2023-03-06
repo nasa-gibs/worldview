@@ -103,6 +103,8 @@ module.exports = (page) => ({
   timelineHeader: page.locator('#timeline-header'),
   mobileDatePickerSelectButton: page.locator('.mobile-date-picker-select-btn'),
   dragger: page.locator('.timeline-dragger'),
+  draggerA: page.locator('.timeline-dragger.draggerA'),
+  draggerB: page.locator('.timeline-dragger.draggerB'),
   dayDown: page.locator('.input-wrapper-day > div.date-arrows.date-arrow-down'),
   dayUp: page.locator('.input-wrapper-day > div.date-arrows.date-arrow-up'),
   monthDown: page.locator('.input-wrapper-month > div.date-arrows.date-arrow-down'),
@@ -110,6 +112,9 @@ module.exports = (page) => ({
   yearDown: page.locator('.input-wrapper-year > div.date-arrows.date-arrow-down'),
   yearUp: page.locator('.input-wrapper-year > div.date-arrows.date-arrow-up'),
   datePickerWheel: page.locator('.datepicker-modal .datepicker-wheel'),
+  dateSelectorDayInput: page.locator('#date-selector-main .input-wrapper-day input'),
+  dateSelectorMonthInput: page.locator('#date-selector-main .input-wrapper-month input'),
+  dateSelectorYearInput: page.locator('#date-selector-main .input-wrapper-year input'),
 
   // layers
   layersModalCloseButton: page.locator('.custom-layer-dialog .modal-header .close'),
