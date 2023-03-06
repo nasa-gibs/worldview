@@ -31,7 +31,7 @@ test.afterAll(async () => {
 
 test('Verify that global select is present and not selected', async () => {
   const { globalSelectInput } = selectors
-  const url = await joinUrl(startParams)
+  const url = await joinUrl(startParams, null)
   await page.goto(url)
   await openImageDownloadPanel(page)
   await expect(globalSelectInput).toBeVisible()

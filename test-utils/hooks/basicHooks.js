@@ -26,8 +26,10 @@ const getAttribute = async (page, el, attribute) => {
 /**
  * Returns a URL from an array of string parameters.
  * @param {Array} startParams - Array of strings each representing URL parameters.
+ * @param {string|null} layers - String representing layers parameter.
  */
-const joinUrl = async (startParams) => {
+const joinUrl = async (startParams, layers) => {
+  if (layers !== null) return `${skipTour}?${startParams.join('&')}${layers}`
   return `${skipTour}?${startParams.join('&')}`
 }
 
