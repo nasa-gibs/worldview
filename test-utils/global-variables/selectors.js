@@ -274,4 +274,7 @@ module.exports = (page) => ({
   overlayLayerItems: page.locator('#overlays li'),
   resolutionTooltip: page.locator('#zoom-btn-container'),
   notifyMessage: page.locator('.wv-alert .alert-content'),
+  globalSelectInput: page.locator('#image-global-cb'),
+  bboxTopCoords: page.locator('#wv-image-top'),
+  bboxBottomCoords: page.locator('#wv-image-bottom'),
 })

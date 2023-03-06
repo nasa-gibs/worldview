@@ -1,3 +1,5 @@
+const { skipTour } = require('../../test-utils/global-variables/querystrings')
+
 // use this hook to make selections from dropdowns
 const selectOption = async (page, element, index) => {
   const selectElement = await page.locator(element)
@@ -11,7 +13,12 @@ const getAttribute = async (page, element, attribute) => {
   return elAttribute
 }
 
+const joinUrl = async (startParams) => {
+  return `${skipTour}?${startParams.join('&')}`
+}
+
 module.exports = {
   getAttribute,
+  joinUrl,
   selectOption,
 }

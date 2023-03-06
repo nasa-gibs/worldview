@@ -9,6 +9,7 @@ const {
 } = require('../../test-utils/hooks/wvHooks')
 const {
   getAttribute,
+  joinUrl,
   selectOption
 } = require('../../test-utils/hooks/basicHooks')
 
@@ -32,7 +33,7 @@ test.afterAll(async () => {
 })
 
 test('JPEG is the default', async () => {
-  const url = `${skipTour}?${startParams.join('&')}`
+  const url = await joinUrl(startParams)
   await page.goto(url)
   await openImageDownloadPanel(page)
   await clickDownload(page)
