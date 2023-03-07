@@ -9,8 +9,10 @@ import {
 
 function ChartingDateSelector (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date,
+    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date, layerStartDate, layerEndDate,
   } = props;
+  console.log(`layerStartDate: ${layerStartDate}`);
+  console.log(`layerEndDate: ${layerEndDate}`);
 
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
@@ -64,6 +66,8 @@ const mapDispatchToProps = (dispatch) => ({
 ChartingDateSelector.propTypes = {
   timeSpanStartDate: PropTypes.object,
   timeSpanEndDate: PropTypes.object,
+  layerEndDate: PropTypes.string,
+  layerStartDate: PropTypes.string,
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   date: PropTypes.object,

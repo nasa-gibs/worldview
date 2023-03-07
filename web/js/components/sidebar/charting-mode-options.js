@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -208,8 +208,11 @@ function ChartingModeOptions (props) {
       const uriParameters = getImageStatRequestParameters(layerInfo, requestType);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
+
       console.log('data - eror check here!');
       console.log(data);
+
+
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -326,6 +329,13 @@ function ChartingModeOptions (props) {
     return Object.keys(data);
   }
 
+  function onDateIconClick() {
+    const layerInfo = getActiveChartingLayer();
+    const layerStartDate = layerInfo.dateRanges[0].startDate;
+    const layerEndDate = layerInfo.dateRanges[0].endDate;
+    openChartingDateModal({ layerStartDate, layerEndDate });
+  }
+
   const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
   const singleDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
   const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
@@ -371,7 +381,7 @@ function ChartingModeOptions (props) {
           <div className="charting-calendar-container">
             <FontAwesomeIcon
               icon={faCalendarDay}
-              onClick={openChartingDateModal}
+              onClick={onDateIconClick}
             />
           </div>
           <div className="charting-info-container">
@@ -455,7 +465,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  openChartingDateModal: () => {
+  openChartingDateModal: (dateObj) => {
     dispatch(
       openCustomContent('CHARTING_DATE_MODAL', {
         headerText: 'Charting Mode Date Selection',
@@ -463,6 +473,10 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingDateSelector,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
+        bodyComponentProps: {
+          layerStartDate: dateObj.layerStartDate,
+          layerEndDate: dateObj.layerEndDate,
+        },
       }),
     );
   },
