@@ -18,7 +18,24 @@ function ChartingDateSelector (props) {
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
   const endDate = timeSpanEndDate == null ? selectedB : timeSpanEndDate;
   const minDate = new Date('01/01/1900');
-  const maxDate = new Date();
+  const maxDate = new Date('01/01/1910');
+
+  // Confirm start & end dates are within the min & max dates
+  // Adjust if necessary
+  if (startdate < minDate) {
+    console.log(`startDate (${startdate} is less than minDate (${minDate}))`);
+  }
+  if (startdate > maxDate) {
+    console.log(`startDate (${startdate} is later than maxDate (${maxDate}))`);
+  }
+  if (endDate < minDate) {
+    console.log(`endDate (${endDate} is less than minDate (${minDate}))`);
+  }
+  if (endDate > maxDate) {
+    console.log(`endDate (${endDate} is later than maxDate (${maxDate}))`);
+  }
+
+
 
   function onDateChange([newStartDate, newEndDate]) {
     if (newStartDate !== timeSpanStartDate) {
