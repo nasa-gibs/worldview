@@ -208,15 +208,18 @@ function ChartingModeOptions (props) {
       const uriParameters = getImageStatRequestParameters(layerInfo, requestType);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
-
-      console.log('data - eror check here!');
       console.log(data);
 
+      // This is the generic message from ImageStat API
+      if (!data.ok) {
+        console.log('Request Failed!!');
+        return;
+      }
 
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
-        ...data,
+        ...data.body,
         ...uriParameters,
       };
       if (requestType === 'chart') {
@@ -296,10 +299,23 @@ function ChartingModeOptions (props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-      return JSON.parse(data);
+      // This is the response when the imageStat server fails for any reason
+      if (data === 'Internal Server Error') {
+        return {
+          ok: false,
+          body: data,
+        };
+      }
+
+      return {
+        ok: true,
+        body: JSON.parse(data),
+      };
     } catch (error) {
-      console.log('Error requesting simple statistics', error);
-      return error;
+      return {
+        ok: false,
+        error,
+      };
     }
   }
 
