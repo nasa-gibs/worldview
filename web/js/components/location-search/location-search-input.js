@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
-import { Button, InputGroupAddon, UncontrolledTooltip } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchBox extends Component {
@@ -109,10 +109,7 @@ class SearchBox extends Component {
     const tooltipVisibilityCondition = inputValue && !isMobile;
 
     return (
-      <InputGroupAddon
-        className="location-search-input-group-addon submit-group"
-        addonType="prepend"
-      >
+      <div className="location-search-input-group-addon submit-group">
         <Button
           id={buttonId}
           style={buttonStyle}
@@ -133,7 +130,7 @@ class SearchBox extends Component {
           )}
           <FontAwesomeIcon icon="search-location" size="1x" />
         </Button>
-      </InputGroupAddon>
+      </div>
     );
   };
 
@@ -145,13 +142,9 @@ class SearchBox extends Component {
 
     return (
       activeAlert && (
-      <InputGroupAddon
-        className="location-search-input-group-addon location-search-input-alert-icon"
-        addonType="append"
-        title="The entered location is not available."
-      >
-        <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
-      </InputGroupAddon>
+        <div className="location-search-input-group-addon location-search-input-alert-icon">
+          <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
+        </div>
       )
     );
   };
@@ -167,10 +160,6 @@ class SearchBox extends Component {
 
     return (
       inputValue && (
-      <InputGroupAddon
-        className="location-search-input-group-addon location-search-input-clear-container"
-        addonType="append"
-      >
         <Button
           id={buttonId}
           onClick={clearInput}
@@ -189,7 +178,6 @@ class SearchBox extends Component {
           )}
           <FontAwesomeIcon icon="times" size="1x" />
         </Button>
-      </InputGroupAddon>
       )
     );
   };

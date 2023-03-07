@@ -7,7 +7,6 @@ import {
   startCase as lodashStartCase,
 } from 'lodash';
 import {
-  InputGroupAddon,
   Input,
   InputGroup,
   Button,
@@ -210,15 +209,13 @@ class ShareLinkContainer extends Component {
           e.preventDefault();
         }}
       />
-      <InputGroupAddon addonType="append">
-        <Button
-          id={`copy-to-clipboard-button-${type}`}
-          onClick={() => this.copyToClipboard(value)}
-          onTouchEnd={() => this.copyToClipboard(value)}
-        >
-          COPY
-        </Button>
-      </InputGroupAddon>
+      <Button
+        id={`copy-to-clipboard-button-${type}`}
+        onClick={() => this.copyToClipboard(value)}
+        onTouchEnd={() => this.copyToClipboard(value)}
+      >
+        COPY
+      </Button>
     </InputGroup>
   );
 
