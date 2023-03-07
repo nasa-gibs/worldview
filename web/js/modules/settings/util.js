@@ -1,7 +1,5 @@
-import tConverter from '@khanisak/temperature-converter';
-
-// fix package specific spelling
-const celsiusSpellFix = (unit) => (unit === 'Celsius' ? 'Celcius' : unit);
+// import tConverter from '@khanisak/temperature-converter';
+import { Celcius, Fahrenheit, Kelvin } from '@khanisak/temperature-converter';
 
 export function getTemperatureUnitFromAbbrev(unitAbbrev) {
   const temps = {
@@ -15,19 +13,27 @@ export function getTemperatureUnitFromAbbrev(unitAbbrev) {
 export function getAbbrevFromTemperatureUnit(unit) {
   const temps = {
     Kelvin: 'K',
-    Celsius: '°C',
+    Celcius: '°C',
     Fahrenheit: '°F',
   };
   return temps[unit];
 }
 
 export function unitConvert(value, initialUnit, targetUnit) {
-  const result = tConverter.convert(
-    value,
-    tConverter.unit[celsiusSpellFix(initialUnit)],
-    tConverter.unit[celsiusSpellFix(targetUnit)],
-  );
-  return result;
+  if (initialUnit === 'Celcius') {
+    if (targetUnit === 'Fahrenheit') return new Celcius(value).toFahrenheit().value;
+    if (targetUnit === 'Kelvin') return new Celcius(value).toKelvin().value;
+  }
+
+  if (initialUnit === 'Fahrenheit') {
+    if (targetUnit === 'Celcius') return new Fahrenheit(value).toCelcius().value;
+    if (targetUnit === 'Kelvin') return new Fahrenheit(value).toKelvin().value;
+  }
+
+  if (initialUnit === 'Kelvin') {
+    if (targetUnit === 'Celcius') return new Kelvin(value).toCelcius().value;
+    if (targetUnit === 'Fahrenheit') return new Kelvin(value).toFahrenheit().value;
+  }
 }
 
 export function checkTemperatureUnitConversion(units, globalTemperatureUnit) {

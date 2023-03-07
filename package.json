@@ -159,7 +159,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@khanisak/temperature-converter": "^1.2.0",
+    "@khanisak/temperature-converter": "^2.0.1",
     "@redux-devtools/extension": "^3.2.5",
     "bluebird": "3.7.2",
     "bootstrap": "4.4.1",
