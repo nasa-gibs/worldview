@@ -6,6 +6,7 @@ import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
+// import { offsetLineStringStyle } from '../../modules/vector-styles/util';
 
 function ChartingDateSelector (props) {
   const {
@@ -17,25 +18,10 @@ function ChartingDateSelector (props) {
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
   const endDate = timeSpanEndDate == null ? selectedB : timeSpanEndDate;
-  const minDate = new Date('01/01/1900');
-  const maxDate = new Date('01/01/1910');
 
   // Confirm start & end dates are within the min & max dates
-  // Adjust if necessary
-  if (startdate < minDate) {
-    console.log(`startDate (${startdate} is less than minDate (${minDate}))`);
-  }
-  if (startdate > maxDate) {
-    console.log(`startDate (${startdate} is later than maxDate (${maxDate}))`);
-  }
-  if (endDate < minDate) {
-    console.log(`endDate (${endDate} is less than minDate (${minDate}))`);
-  }
-  if (endDate > maxDate) {
-    console.log(`endDate (${endDate} is later than maxDate (${maxDate}))`);
-  }
-
-
+  const validStartDate = startdate < layerStartDate ? layerStartDate : startdate;
+  const validEndDate = endDate > layerEndDate ? layerEndDate : endDate;
 
   function onDateChange([newStartDate, newEndDate]) {
     if (newStartDate !== timeSpanStartDate) {
@@ -51,11 +37,11 @@ function ChartingDateSelector (props) {
     <div className="charting-date-container">
       <DateRangeSelector
         idSuffix="charting-date-picker"
-        startDate={startdate}
-        endDate={endDate}
+        startDate={validStartDate}
+        endDate={validEndDate}
         setDateRange={onDateChange}
-        minDate={minDate}
-        maxDate={maxDate}
+        minDate={layerStartDate}
+        maxDate={layerEndDate}
         subDailyMode={false}
         isDisabled={false}
       />
@@ -83,8 +69,8 @@ const mapDispatchToProps = (dispatch) => ({
 ChartingDateSelector.propTypes = {
   timeSpanStartDate: PropTypes.object,
   timeSpanEndDate: PropTypes.object,
-  layerEndDate: PropTypes.string,
-  layerStartDate: PropTypes.string,
+  layerEndDate: PropTypes.object,
+  layerStartDate: PropTypes.object,
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   date: PropTypes.object,
