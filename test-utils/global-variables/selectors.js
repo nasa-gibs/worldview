@@ -121,7 +121,7 @@ module.exports = (page) => ({
   aerosolOpticalDepth: page.locator('#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth'),
   layersSearchField: page.locator('input#layers-search-input'),
   categoriesNav: page.locator('#categories-nav'),
-  allCategoryHeader: page.locator('#legacy-all .layer-category-name'),
+  allCategoryHeader: page.locator('#legacy-all h3'),
   layersAll: page.locator('.layers-all-layer'),
   layerBrowseList: page.locator('.layer-list-container.browse'),
   layerBrowseDetail: page.locator('.layer-detail-container.browse'),
