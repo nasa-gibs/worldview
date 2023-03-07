@@ -163,12 +163,12 @@ module.exports = (page) => ({
   layerContainer: page.locator('.layer-container.sidebar-panel'),
   sourceMetadataCollapsed: page.locator('.source-metadata.overflow'),
   sourceMetadataExpanded: page.locator('.source-metadata'),
-  aquaTerraModisHeader: page.locator('#aerosol-optical-depth-aqua-terra-modis h3:first-of-type'),
+  aquaTerraModisHeader: page.locator('#aboutaerosolopticaldepthaod'),
   maiacHeader: page.locator('#aerosol-optical-depth-aqua-terra-modis h3:last-of-type'),
   sourceTabs: page.locator('.source-nav-item'),
   aodSearchRow: page.locator('#MODIS_Aqua_Aerosol-search-row'),
   aodSearchCheckbox: page.locator('#MODIS_Aqua_Aerosol-search-row > .wv-checkbox'),
-  availableFacetLabel: page.locator('#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type'),
+  availableFacetLabel: page.locator('#coverage-facet .sui-multi-checkbox-facet label:nth-child(1)'),
   categoryAtmosphereLabel: page.locator('#categories-facet [for="example_facet_CategoryAtmosphere"]'),
   categoryFacetCollapseToggle: page.locator('#categories-facet .facet-collapse-toggle'),
   categoryFacetChoicesContainer: page.locator('#categories-facet .sui-multi-checkbox-facet'),
@@ -176,6 +176,7 @@ module.exports = (page) => ({
   measurementFacetChoices: page.locator('#measurements-facet .sui-multi-checkbox-facet > label'),
   measurementMoreButton: page.locator('#measurements-facet .sui-facet-view-more'),
   sourcesMERRALabel: page.locator('#sources-facet [for="example_facet_SourceMERRA-2"]'),
+  layerFilterButton: page.locator('#layer-filter-button'),
 
   // map
   geographicMap: page.locator('#wv-map-geographic'),
