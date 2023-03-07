@@ -208,6 +208,8 @@ function ChartingModeOptions (props) {
       const uriParameters = getImageStatRequestParameters(layerInfo, requestType);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
+      console.log('data - eror check here!');
+      console.log(data);
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -469,12 +471,13 @@ const mapDispatchToProps = (dispatch) => ({
   },
   displaySimpleStats: (data) => {
     dispatch(
-      openCustomContent('CHARTING-STATISTICS', {
+      openCustomContent('staticBackdrop', {
         headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
         backdrop: false,
         bodyComponent: SimpleStatistics,
-        wrapClassName: 'clickable-behind-modal',
+        wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'stats-dialog',
+        type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           data,
         },
@@ -487,8 +490,9 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: `${liveData.title} - ${liveData.subtitle}`,
         backdrop: false,
         bodyComponent: ChartComponent,
-        wrapClassName: 'clickable-behind-modal',
+        wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-dialog',
+        type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
         },
