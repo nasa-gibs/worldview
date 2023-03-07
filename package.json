@@ -162,7 +162,7 @@
     "@khanisak/temperature-converter": "^2.0.1",
     "@redux-devtools/extension": "^3.2.5",
     "bluebird": "3.7.2",
-    "bootstrap": "4.4.1",
+    "bootstrap": "5.2.3",
     "cachai": "^1.0.2",
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.7",
