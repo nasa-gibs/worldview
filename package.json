@@ -209,7 +209,7 @@
     "reselect": "^4.1.7",
     "rgbcolor": "^1.0.1",
     "simplebar": "^6.2.1",
-    "simplebar-react": "^2.1.0",
+    "simplebar-react": "^3.2.1",
     "stackblur": "^1.0.0",
     "supercluster": "7.1.5",
     "url-template": "^3.1.0",
