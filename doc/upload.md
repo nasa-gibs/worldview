@@ -1,6 +1,6 @@
 # upload.js
 
-Upload Worldview to a remote host using `tasks/upload.js`.
+Upload Worldview to a remote host using `tasks/util/upload.js`.
 
 ```
 upload.js [options] <name>
@@ -48,11 +48,11 @@ separate instances of Worldview can be easily uploaded by just using the
 Upload to a directory named `my-feature-branch` under the `root` directory.
 
 ```bash
-tasks/upload.js my-feature-branch
+tasks/util/upload.js my-feature-branch
 ```
 
 Upload to a different `host` than the one specified in `upload.config`.
 
 ```bash
-tasks/upload.js --host example.com my-feature-branch
+tasks/util/upload.js --host example.com my-feature-branch
 ```
