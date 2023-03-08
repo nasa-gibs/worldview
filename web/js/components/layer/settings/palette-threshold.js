@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import { Range as RangeInput } from 'rc-slider';
+import Slider from 'rc-slider';
 import Checkbox from '../../util/checkbox';
 import {
   checkTemperatureUnitConversion, convertPaletteValue,
 } from '../../../modules/settings/util';
+
+const RangeInput = Slider.Range;
 
 class PaletteThreshold extends React.Component {
   constructor(props) {

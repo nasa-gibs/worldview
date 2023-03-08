@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import Slider from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
 import MonospaceDate from '../util/monospace-date';
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
+const SliderWithTooltip = Slider.createSliderWithTooltip;
 const percentFormatter = function(v) {
   return `${v} %`;
 };

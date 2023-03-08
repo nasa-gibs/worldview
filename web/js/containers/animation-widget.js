@@ -5,7 +5,7 @@ import {
   get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
-import Slider, { Handle } from 'rc-slider';
+import Slider from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getISODateFormatted } from '../components/timeline/date-util';
@@ -52,6 +52,7 @@ import {
   toggleAnimationCollapse,
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
+const Handle = Slider.Handle;
 
 function RangeHandle(props) {
   const {
