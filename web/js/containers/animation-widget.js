@@ -52,7 +52,8 @@ import {
   toggleAnimationCollapse,
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
-const Handle = Slider.Handle;
+
+const { Handle } = Slider
 
 function RangeHandle(props) {
   const {
