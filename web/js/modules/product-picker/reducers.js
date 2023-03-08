@@ -1,5 +1,4 @@
 import googleTagManager from 'googleTagManager';
-import { get as lodashGet } from 'lodash';
 
 import {
   SAVE_SEARCH_STATE,
