@@ -299,8 +299,10 @@ function ChartingModeOptions (props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-      // This is the response when the imageStat server fails for any reason
+      // This is the response when the imageStat server fails
       if (data === 'Internal Server Error') {
+        console.log('Charting request response:');
+        console.log(response);
         return {
           ok: false,
           body: data,
@@ -501,7 +503,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   displaySimpleStats: (data) => {
     dispatch(
-      openCustomContent('staticBackdrop', {
+      openCustomContent('CHARTING_STATS_MODAL', {
         headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
         backdrop: false,
         bodyComponent: SimpleStatistics,
