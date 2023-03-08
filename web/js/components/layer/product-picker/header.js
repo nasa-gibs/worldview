@@ -80,36 +80,19 @@ class ProductPickerHeader extends React.Component {
   renderBreadCrumb() {
     const { category } = this.props;
     return (
-      <>
-        <Button
-          id="layer-back-button"
-          className="back-button"
-          color="secondary"
+      <Breadcrumb tag="nav" className="layer-bread-crumb">
+        <BreadcrumbItem
+          tag="a"
+          title="Back to Layer Categories"
+          href="#"
           onClick={this.revertToInitialScreen}
         >
-          <UncontrolledTooltip
-            id="center-align-tooltip"
-            placement="right"
-            target="layer-back-button"
-          >
-            Return to category view
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="arrow-left" />
-        </Button>
-        <Breadcrumb tag="nav" className="layer-bread-crumb">
-          <BreadcrumbItem
-            tag="a"
-            title="Back to Layer Categories"
-            href="#"
-            onClick={this.revertToInitialScreen}
-          >
-            Categories
-          </BreadcrumbItem>
-          <BreadcrumbItem active tag="span">
-            {category && category.title}
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </>
+          Categories
+        </BreadcrumbItem>
+        <BreadcrumbItem active tag="span">
+          {category && category.title}
+        </BreadcrumbItem>
+      </Breadcrumb>
     );
   }
 
@@ -151,11 +134,12 @@ class ProductPickerHeader extends React.Component {
     } = this.props;
     const searchMode = mode === 'search';
     const categoryId = category && category.id;
+    const recentLayersMode = categoryType === 'recent';
     const showBackButton = searchMode
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
-      && mode !== 'category');
-    const recentLayersMode = categoryType === 'recent';
+      && mode !== 'category'
+      && !recentLayersMode);
     const isBreadCrumb = showBackButton && !searchMode && width > 650 && !recentLayersMode;
     const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
     const showFilterBtnMobile = recentLayersMode
@@ -171,6 +155,21 @@ class ProductPickerHeader extends React.Component {
         <InputGroup id="layer-search" className="layer-search">
           {showBackButton && (
             <>
+              <Button
+                id="layer-back-button"
+                className="back-button"
+                color="secondary"
+                onClick={this.revertToInitialScreen}
+              >
+                <UncontrolledTooltip
+                  id="center-align-tooltip"
+                  placement="right"
+                  target="layer-back-button"
+                >
+                  Return to category view
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon="arrow-left" />
+              </Button>
               {isBreadCrumb && this.renderBreadCrumb()}
             </>
           )}
