@@ -53,7 +53,7 @@ import {
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
 
-const { Handle } = Slider
+const { Handle } = Slider;
 
 function RangeHandle(props) {
   const {
