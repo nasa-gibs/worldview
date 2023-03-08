@@ -12,8 +12,8 @@ function ChartingDateSelector (props) {
   const {
     onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date, layerStartDate, layerEndDate,
   } = props;
-  console.log(`layerStartDate: ${layerStartDate}`);
-  console.log(`layerEndDate: ${layerEndDate}`);
+  // console.log(`layerStartDate: ${layerStartDate}`);
+  // console.log(`layerEndDate: ${layerEndDate}`);
 
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
