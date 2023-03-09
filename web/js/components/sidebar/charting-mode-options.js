@@ -197,7 +197,7 @@ function ChartingModeOptions (props) {
     return `${year}-${month}-${day}`;
   }
 
-  async function onChartOrStatsButtonClick(requestType) {
+  async function onChartOrStatsButtonClick() {
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       console.log('No valid layer detected.');
@@ -205,10 +205,9 @@ function ChartingModeOptions (props) {
     }
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, requestType);
+      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
-      console.log(data);
 
       // This is the generic message from ImageStat API
       if (!data.ok) {
@@ -222,7 +221,8 @@ function ChartingModeOptions (props) {
         ...data.body,
         ...uriParameters,
       };
-      if (requestType === 'chart') {
+
+      if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
       } else {
@@ -249,16 +249,16 @@ function ChartingModeOptions (props) {
   /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
-   * @param {String} requestType | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, requestType) {
+  function getImageStatRequestParameters(layerInfo, timeSpanSelection) {
     const startDateForImageStat = formatDateForImageStat(primaryDate);
     const endDateForImageStat = formatDateForImageStat(secondaryDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
-      type: requestType === 'chart' ? 'series' : timeSpanSelection,
+      type: timeSpanSelection === 'range' ? 'series' : 'date',
       steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
@@ -301,8 +301,6 @@ function ChartingModeOptions (props) {
       const data = await response.text();
       // This is the response when the imageStat server fails
       if (data === 'Internal Server Error') {
-        console.log('Charting request response:');
-        console.log(response);
         return {
           ok: false,
           body: data,
@@ -413,16 +411,9 @@ function ChartingModeOptions (props) {
       <div className="charting-buttons">
         <ButtonGroup size="sm">
           <Button
-            id="charting-simple-stats-button"
-            className="charting-button"
-            onClick={() => onChartOrStatsButtonClick('stats')}
-          >
-            Request Simple Stats
-          </Button>
-          <Button
             id="charting-create-chart-button"
             className="charting-button"
-            onClick={() => onChartOrStatsButtonClick('chart')}
+            onClick={() => onChartOrStatsButtonClick()}
           >
             Request Chart
           </Button>
