@@ -135,12 +135,14 @@ class ProductPickerHeader extends React.Component {
     const searchMode = mode === 'search';
     const categoryId = category && category.id;
     const recentLayersMode = categoryType === 'recent';
+    const featuredLayersMode = categoryType === 'featured';
     const showBackButton = searchMode
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
       && mode !== 'category'
+      && !featuredLayersMode
       && !recentLayersMode);
-    const isBreadCrumb = showBackButton && !searchMode && width > 650 && !recentLayersMode;
+    const isBreadCrumb = showBackButton && !searchMode && width > 650;
     const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
     const showFilterBtnMobile = recentLayersMode
       || (searchMode ? !showMobileFacets : !selectedLayer);
