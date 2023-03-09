@@ -119,8 +119,6 @@ const assertLayerOrdering = async (page, layerContainer, orderedLayers) => {
     const layerID = await layer.getAttribute('id')
     return layerID
   }))
-  console.log(layerIDs)
-  console.log(orderedLayers)
   expect(layerIDs).toEqual(orderedLayers)
 }
 

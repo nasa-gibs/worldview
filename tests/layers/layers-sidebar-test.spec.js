@@ -1,12 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const {
-  assertCategories,
-  switchProjections,
-  assertLayerOrdering
-} = require('../../test-utils/hooks/wvHooks')
-const { getAttribute } = require('../../test-utils/hooks/basicHooks')
+const { assertLayerOrdering } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -15,19 +10,21 @@ const vectorsQueryString = 'http://localhost:3000/?v=-70.43215000968726,28.67820
 const someGroupsQueryString = 'http://localhost:3000/?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels_15m(hidden),Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
 const twoGroupsQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
 const mixedLayersGroupsDisabledQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features_15m,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false'
+
 const mixedLayerIdOrder = [
   'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
-  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'
+  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
 ]
 const groupedLayerIdOrder = [
   'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
-  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'
+  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
+  'active-MODIS_Terra_CorrectedReflectance_TrueColor',
 ]
 const ungroupedReorderdLayerIdOrder = [
   'active-MODIS_Combined_Value_Added_AOD',
@@ -63,19 +60,14 @@ test('Toggle layer Info', async () => {
 
 
 test('Toggle Layer Options', async () => {
-  const {
-    optionsButton,
-    optionsDialog
-   } = selectors
+  const { optionsButton, optionsDialog } = selectors
    await optionsButton.click()
    await optionsButton.click()
    await expect(optionsDialog).not.toBeVisible()
 })
 
 test('Layer groups are enabled by default', async () => {
-  const {
-    groupCheckbox
-   } = selectors
+  const { groupCheckbox } = selectors
    await expect(groupCheckbox).toBeVisible()
    await expect(groupCheckbox).toBeChecked()
 })
@@ -112,10 +104,7 @@ test('Disabling groups puts all overlays into a single group', async () => {
 })
 
 test('Re-enabling groups restores grouping', async () => {
-  const {
-    groupCheckbox,
-    aodGroup,
-   } = selectors
+  const { groupCheckbox, aodGroup } = selectors
    await groupCheckbox.click()
    await expect(aodGroup).toBeVisible()
    const fireGroupItems = await page.locator('#active-Fires_and_Thermal_Anomalies ul > li')
@@ -136,10 +125,7 @@ test('Removing the last layer in a group removes the group', async () => {
 })
 
 test('Removing a group removes all layers and the group header', async () => {
-  const {
-    aodGroupHeader,
-    aodGroup
-   } = selectors
+  const { aodGroupHeader, aodGroup } = selectors
    await page.goto(twoGroupsQueryString)
    await aodGroupHeader.hover()
    await page.locator('#active-Aerosol_Optical_Depth .layer-group-more-options > button').click()
@@ -182,10 +168,7 @@ test('Load multiple groups from permalink', async () => {
 })
 
 test('Hide all...', async () => {
-  const {
-    sidebarContainer,
-    aodGroupHeader,
-   } = selectors
+  const { sidebarContainer, aodGroupHeader } = selectors
    await sidebarContainer.hover()
    await aodGroupHeader.hover()
    await page.locator('#active-Aerosol_Optical_Depth .layer-group-more-options > button').click()
@@ -197,10 +180,7 @@ test('Hide all...', async () => {
 })
 
 test('Show all...', async () => {
-  const {
-    sidebarContainer,
-    aodGroupHeader,
-   } = selectors
+  const { sidebarContainer, aodGroupHeader } = selectors
    await sidebarContainer.hover()
    await aodGroupHeader.hover()
    await page.locator('#active-Aerosol_Optical_Depth .layer-group-more-options > button').click()
@@ -253,7 +233,7 @@ test('Re-ordering groups, then disabling groups keeps individual layer order', a
   await assertLayerOrdering(page, layersContainer, ungroupedReorderdLayerIdOrder)
 })
 
-test.only('Enabling groups re-orders layers into their groups', async () => {
+test('Enabling groups re-orders layers into their groups', async () => {
   const {
     aodGroup,
     firesGroup,
@@ -265,7 +245,40 @@ test.only('Enabling groups re-orders layers into their groups', async () => {
   await groupCheckbox.click()
   await expect(aodGroup).toBeVisible()
   await expect(firesGroup).toBeVisible()
-  const groupedLayersContainer = '.layer-container ul li'
+  const groupedLayersContainer = '.layer-container ul .productsitem'
   await assertLayerOrdering(page, groupedLayersContainer, groupedLayerIdOrder)
+})
 
+test('Immediately disabling groups restores mixed ordering', async () => {
+  const {
+    aodGroup,
+    firesGroup,
+    groupCheckbox
+   } = selectors
+  await groupCheckbox.click()
+  await expect(aodGroup).not.toBeVisible()
+  await expect(firesGroup).not.toBeVisible()
+  const layersContainer = '#active-overlays li'
+  await assertLayerOrdering(page, layersContainer, mixedLayerIdOrder)
+})
+
+test('Making a change to grouped layers causes group ordering to be retained when ungrouped', async () => {
+  const { groupCheckbox, aodGroupHeader } = selectors
+  await page.goto(mixedLayersGroupsDisabledQueryString)
+  await groupCheckbox.click()
+  await aodGroupHeader.hover()
+  await page.locator('#active-Aerosol_Optical_Depth .layer-group-more-options > button').click()
+  await page.locator('#active-Aerosol_Optical_Depth .layer-group-more-options #hide-all').click()
+  await groupCheckbox.click()
+  const groupedLayersContainer = '.layer-container ul .productsitem'
+  await assertLayerOrdering(page, groupedLayersContainer, groupedLayerIdOrder)
+})
+
+test('Vector layer has pointer icon & clicking vector layer pointer shows modal', async () => {
+  await page.goto(vectorsQueryString)
+  const handPointer = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
+  await expect(handPointer).toBeVisible()
+  await handPointer.click()
+  const modalContent = await page.locator('.modal-content')
+  await expect(modalContent).toContainText('Vector features may not be clickable at all zoom levels.')
 })
