@@ -336,7 +336,7 @@ function ChartingModeOptions (props) {
         // max: data.max[name],
         mean: data.mean[name],
         // median: data.median[name],
-        stddev: data.stdev[name],
+        // stddev: data.stdev[name],
       };
       rechartsData.push(entry);
     }
@@ -349,7 +349,6 @@ function ChartingModeOptions (props) {
 
   function onDateIconClick() {
     const layerInfo = getActiveChartingLayer();
-    console.log(layerInfo);
     const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
     const layerEndDate = new Date(layerInfo.dateRanges[0].endDate);
     openChartingDateModal({ layerStartDate, layerEndDate });
