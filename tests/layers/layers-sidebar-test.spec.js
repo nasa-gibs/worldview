@@ -1,7 +1,11 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { assertCategories, switchProjections } = require('../../test-utils/hooks/wvHooks')
+const {
+  assertCategories,
+  switchProjections,
+  assertLayerOrdering
+} = require('../../test-utils/hooks/wvHooks')
 const { getAttribute } = require('../../test-utils/hooks/basicHooks')
 
 let page
@@ -26,11 +30,11 @@ const groupedLayerIdOrder = [
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'
 ]
 const ungroupedReorderdLayerIdOrder = [
-  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
   'active-MODIS_Combined_Value_Added_AOD',
-  'active-Reference_Features_15m',
+  'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
-  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All'
+  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  'active-Reference_Features_15m',
 ]
 
 test.describe.configure({ mode: 'serial' })
@@ -160,7 +164,7 @@ test('Load with groups disabled from permalink', async () => {
    await expect(overlayGroupItems).toHaveCount(5)
 })
 
-test.only('Load multiple groups from permalink', async () => {
+test('Load multiple groups from permalink', async () => {
   const {
     groupCheckbox,
     firesGroup,
@@ -177,7 +181,7 @@ test.only('Load multiple groups from permalink', async () => {
    await expect(aodGroupItems).toHaveCount(2)
 })
 
-test.only('Hide all...', async () => {
+test('Hide all...', async () => {
   const {
     sidebarContainer,
     aodGroupHeader,
@@ -192,7 +196,7 @@ test.only('Hide all...', async () => {
    await expect(aodGroupVisibleLayers).toHaveCount(0)
 })
 
-test.only('Show all...', async () => {
+test('Show all...', async () => {
   const {
     sidebarContainer,
     aodGroupHeader,
@@ -207,31 +211,61 @@ test.only('Show all...', async () => {
    await expect(aodGroupVisibleLayers).toHaveCount(2)
 })
 
-test.only('Ungrouped: Removing baselayers/overlays removes the layers but not the header', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'Baselayers group options button does not appear on hover in testing for Safari')
+test('Ungrouped: Removing baselayers/overlays removes the layers but not the header', async () => {
   const {
     groupCheckbox,
     firesLayer,
     overlaysGroupHeader,
-    baselayersGroupHeader,
     overlaysGroup,
-    baselayersGroup
    } = selectors
    await groupCheckbox.click()
-  //  const groupOverlaysCheckbox = await page.locator('#group-overlays-checkbox')
-  //  await expect(groupOverlaysCheckbox).not.toBeChecked()
    await firesLayer.hover()
    await overlaysGroupHeader.hover()
-   await page.locator('#active-overlays .layer-group-header .layer-group-more-options > button').click()
-   await page.locator('#active-overlays .layer-group-header .layer-group-more-options #remove-group').click()
-
-   await baselayersGroupHeader.hover()
-   await page.locator('#active-baselayers .layer-group-header .layer-group-more-options > button').click()
-   await page.locator('#active-baselayers .layer-group-header .layer-group-more-options #remove-group').click()
+   await page.locator('#active-overlays .layer-group-more-options > button').click()
+   await page.locator('#active-overlays .layer-group-more-options #remove-group').click()
    await expect(overlaysGroup).toBeVisible()
    const overlayGroupItems = page.locator('#active-overlays ul > li')
    await expect(overlayGroupItems).toHaveCount(0)
-   await expect(baselayersGroup).toBeVisible()
-   const baseLayerGroupItems = page.locator('#active-baselayers ul > li')
-   await expect(baseLayerGroupItems).toHaveCount(0)
+})
+
+test('Re-ordering groups, then disabling groups keeps individual layer order', async () => {
+  const {
+    aodGroupHeader,
+    firesGroupHeader,
+    groupCheckbox
+   } = selectors
+  await page.goto(twoGroupsQueryString)
+  const aodBoundingBox = await aodGroupHeader.boundingBox()
+  const firesBoundingBox = await firesGroupHeader.boundingBox()
+  // this 'steps' option is important for making the drag work with the 'react-draggable' library
+  await page.mouse.move(
+    aodBoundingBox.x,
+    aodBoundingBox.y,
+    { steps: 10 }
+  )
+  await page.mouse.down()
+  const x = firesBoundingBox.x + firesBoundingBox.width / 2
+  const y = firesBoundingBox.y + firesBoundingBox.height / 2
+  await page.mouse.move(x, y, { steps: 10 })
+  await page.mouse.up()
+  await groupCheckbox.click()
+  const layersContainer = '#active-overlays li'
+  await assertLayerOrdering(page, layersContainer, ungroupedReorderdLayerIdOrder)
+})
+
+test.only('Enabling groups re-orders layers into their groups', async () => {
+  const {
+    aodGroup,
+    firesGroup,
+    groupCheckbox
+   } = selectors
+  await page.goto(mixedLayersGroupsDisabledQueryString)
+  const layersContainer = '#active-overlays li'
+  await assertLayerOrdering(page, layersContainer, mixedLayerIdOrder)
+  await groupCheckbox.click()
+  await expect(aodGroup).toBeVisible()
+  await expect(firesGroup).toBeVisible()
+  const groupedLayersContainer = '.layer-container ul li'
+  await assertLayerOrdering(page, groupedLayersContainer, groupedLayerIdOrder)
+
 })

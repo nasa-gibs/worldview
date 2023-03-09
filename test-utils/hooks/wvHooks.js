@@ -107,9 +107,27 @@ const assertCategories = async (page) => {
   await expect(other).toBeVisible()
 }
 
+/**
+ * Check the layer order in the sidebar and compare it agaisnt an array of ordered layers
+ * @param {Object} page - Playwright object representing the browser page.
+ * @param {string} layerContainer - A string for identifying each layer <li> element in the sidebar
+ * @param {Array} orderedLayers - An array of strings representing the expected layer ordering
+ */
+const assertLayerOrdering = async (page, layerContainer, orderedLayers) => {
+  const layers = await page.$$(layerContainer);
+  const layerIDs = await Promise.all(layers.map(async (layer) => {
+    const layerID = await layer.getAttribute('id')
+    return layerID
+  }))
+  console.log(layerIDs)
+  console.log(orderedLayers)
+  expect(layerIDs).toEqual(orderedLayers)
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
+  assertLayerOrdering,
   clickDownload,
   dateSelectorMonthDay,
   closeImageDownloadPanel,
