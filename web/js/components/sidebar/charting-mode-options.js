@@ -355,7 +355,7 @@ function ChartingModeOptions (props) {
   }
 
   const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
-  const singleDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
+  const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
   const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
 
@@ -377,10 +377,10 @@ function ChartingModeOptions (props) {
         <ButtonGroup size="sm">
           <Button
             id="charting-date-single-button"
-            className={`charting-button ${singleDateBtnStatus}`}
+            className={`charting-button ${oneDateBtnStatus}`}
             onClick={() => onChartDateButtonClick('date')}
           >
-            Single Date
+            One Date
           </Button>
           <Button
             id="charting-date-range-button"
