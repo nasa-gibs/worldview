@@ -4,6 +4,7 @@ import {
   TOGGLE_AOI_ON_OFF,
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
+  TOGGLE_REQUEST_IN_PROGRESS,
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
@@ -16,6 +17,7 @@ export const initialChartingState = {
   aoiActive: false,
   aoiSelected: false,
   aoiCoordinates: [],
+  chartRequestInProgress: false,
   timeSpanSelection: 'range',
   timeSpanStartDate: undefined,
   timeSpanEndDate: undefined,
@@ -31,6 +33,7 @@ export function chartingReducer(state = initialChartingState, action) {
           aoiActive: false,
           aoiCoordinates: null,
           aoiSelected: false,
+          chartRequestInProgress: false,
           timeSpanEndDate: undefined,
           timeSpanSelection: 'range',
           timeSpanStartDate: undefined,
@@ -43,6 +46,10 @@ export function chartingReducer(state = initialChartingState, action) {
     case TOGGLE_AOI_ON_OFF:
       return lodashAssign({}, state, {
         aoiActive: !state.aoiActive,
+      });
+    case TOGGLE_REQUEST_IN_PROGRESS:
+      return lodashAssign({}, state, {
+        chartRequestInProgress: action.status,
       });
     case UPDATE_AOI_COORDINATES:
       // action.extent = the geometry from the drawn AOI box

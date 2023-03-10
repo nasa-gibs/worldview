@@ -3,6 +3,7 @@ import {
   TOGGLE_AOI_ON_OFF,
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
+  TOGGLE_REQUEST_IN_PROGRESS,
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
@@ -17,6 +18,11 @@ export function toggleChartingModeOnOff() {
 export function toggleChartingAOIOnOff() {
   return (dispatch) => {
     dispatch({ type: TOGGLE_AOI_ON_OFF });
+  };
+}
+export function updateRequestInProgressAction(status) {
+  return (dispatch) => {
+    dispatch({ type: TOGGLE_REQUEST_IN_PROGRESS, status });
   };
 }
 export function toggleAOISelected(action = null) {
