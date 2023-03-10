@@ -122,11 +122,34 @@ const assertLayerOrdering = async (page, layerContainer, orderedLayers) => {
   expect(layerIDs).toEqual(orderedLayers)
 }
 
+/**
+ * Create a distance measurement
+ * @param {Object} page - Playwright object representing the browser page.
+ * @param {Array} start - An array of two integers representing the starting x & y position
+ * @param {Array} finish - An array of two integers representing the starting x & y position
+ */
+const createDistanceMeasurement = async (page, start, finish) => {
+  await page.locator('#wv-measure-button').click()
+  await page.locator('#measure-distance-button').click()
+  await page.mouse.click(start[0], start[1])
+  await page.mouse.dblclick(finish[0], finish[1])
+}
+
+const createAreaMeasurement = async (page, pointOne, pointTwo, pointThree) => {
+  await page.locator('#wv-measure-button').click()
+  await page.locator('#measure-area-button').click()
+  await page.mouse.click(pointOne[0], pointOne[1])
+  await page.mouse.click(pointTwo[0], pointTwo[1])
+  await page.mouse.dblclick(pointThree[0], pointThree[1])
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
   assertLayerOrdering,
   clickDownload,
+  createAreaMeasurement,
+  createDistanceMeasurement,
   dateSelectorMonthDay,
   closeImageDownloadPanel,
   openImageDownloadPanel,
