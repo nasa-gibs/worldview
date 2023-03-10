@@ -348,7 +348,7 @@ function ChartingModeOptions (props) {
   function onDateIconClick() {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-    const layerEndDate = new Date(layerInfo.dateRanges[0].endDate);
+    const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
     openChartingDateModal({ layerStartDate, layerEndDate });
   }
 
