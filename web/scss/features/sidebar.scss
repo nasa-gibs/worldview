@@ -445,7 +445,7 @@ footer .product-buttons .layers-add-container {
 }
 .charting-statistics-label {
   font-weight: bolder;
-  min-width: 25%;
+  min-width: 40%;
 }
 .charting-statistics-row {
   display: flex;
@@ -475,6 +475,14 @@ button#charting-simple-stats-button {
 .charting-info, .charting-disclaimer {
   text-align: left;
   margin-bottom: 12px;
+}
+.charting-chart-container {
+  display: flex;
+  justify-content: space-between;
+}
+.charting-stat-text {
+  float: left;
+  margin-left: 20px;
 }
 #products-holder footer p {
   color: #ccc;

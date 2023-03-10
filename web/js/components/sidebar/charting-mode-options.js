@@ -330,11 +330,11 @@ function ChartingModeOptions (props) {
       const name = xAxisNames[i];
       const entry = {
         name: name.split('T')[0], // Remove the time element from the date string
-        // min: data.min[name],
-        // max: data.max[name],
+        min: data.min[name],
+        max: data.max[name],
         mean: data.mean[name],
-        // median: data.median[name],
-        // stddev: data.stdev[name],
+        median: data.median[name],
+        stddev: data.stdev[name],
       };
       rechartsData.push(entry);
     }
