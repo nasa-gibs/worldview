@@ -11,10 +11,7 @@ const url = 'http://localhost:3000/?t=2020-07-04'
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext({
-    viewport: { width: 375, height: 667 }
-  })
-  page = await context.newPage()
+  page = await browser.newPage()
   selectors = createSelectors(page)
 })
 
@@ -23,9 +20,8 @@ test.afterAll(async () => {
 })
 
 test('Layer picker shows categories when first opened', async () => {
-  const { collapsedLayerButton, addLayers } = selectors
+  const { addLayers } = selectors
   await page.goto(url)
-  await collapsedLayerButton.click()
   await addLayers.click()
   await assertCategories(page)
 })
@@ -40,12 +36,22 @@ test('Select several layers', async () => {
 })
 
 test('Recent tab shows layers that were selected', async () => {
-  await page.locator('.categories-dropdown-header .dropdown-toggle').click()
-  await page.locator('.categories-dropdown-item:nth-of-type(4)').click()
+  await page.locator('.recent-tab').click()
   const aquaAerosolRow = await page.locator('#MODIS_Aqua_Aerosol-search-row')
   const aodSearchRow = await page.locator('#MODIS_Combined_Value_Added_AOD-search-row')
   const omiSearchRow = await page.locator('#OMI_Aerosol_Optical_Depth-search-row')
   await expect(aquaAerosolRow).toBeVisible()
+  await expect(omiSearchRow).toBeVisible()
+  await expect(aodSearchRow).toBeVisible()
+})
+
+test('Removing individual layers updates the list', async () => {
+  const aquaAerosolRow = await page.locator('#MODIS_Aqua_Aerosol-search-row')
+  const aodSearchRow = await page.locator('#MODIS_Combined_Value_Added_AOD-search-row')
+  const omiSearchRow = await page.locator('#OMI_Aerosol_Optical_Depth-search-row')
+  await aquaAerosolRow.hover({ position: { x: 15, y: 15 }})
+  await page.locator('.recent-layer-delete').click()
+  await expect(aquaAerosolRow).not.toBeVisible()
   await expect(omiSearchRow).toBeVisible()
   await expect(aodSearchRow).toBeVisible()
 })
