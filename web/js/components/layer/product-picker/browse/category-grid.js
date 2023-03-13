@@ -27,13 +27,9 @@ function CategoryGrid(props) {
     width,
   } = props;
   const setColumnWidth = (width) => {
-    console.log(width)
-    if (width >= 656) {
-      return 310;
-    } else {
-      return 0;
-    }
-  }
+    if (width >= 656) return 310;
+    return 0;
+  };
   const masonryOptions = {
     transitionDuration: '0.6s',
     columnWidth: setColumnWidth(width),
