@@ -8,6 +8,7 @@ import {
   UPDATE_START_DATE,
   UPDATE_END_DATE,
   UPDATE_ACTIVE_CHART,
+  UPDATE_REQUEST_STATUS_MESSAGE,
 } from './constants';
 
 export function toggleChartingModeOnOff() {
@@ -23,6 +24,11 @@ export function toggleChartingAOIOnOff() {
 export function updateRequestInProgressAction(status) {
   return (dispatch) => {
     dispatch({ type: TOGGLE_REQUEST_IN_PROGRESS, status });
+  };
+}
+export function updateRequestStatusMessageAction(message) {
+  return (dispatch) => {
+    dispatch({ type: UPDATE_REQUEST_STATUS_MESSAGE, message });
   };
 }
 export function toggleAOISelected(action = null) {

@@ -15,6 +15,7 @@ import {
   updateChartingAOICoordinates,
   updateChartingDateSelection,
   updateRequestInProgressAction,
+  updateRequestStatusMessageAction,
 } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
@@ -42,12 +43,14 @@ function ChartingModeOptions (props) {
     toggleAreaOfInterestSelected,
     updateAOICoordinates,
     updateRequestInProgress,
+    updateRequestStatusMessage,
     openChartingInfoModal,
     onChartDateButtonClick,
     displaySimpleStats,
     displayChart,
     openChartingDateModal,
     olMap,
+    requestStatusMessage,
     crs,
     proj,
     projections,
@@ -202,11 +205,10 @@ function ChartingModeOptions (props) {
 
   async function onChartOrStatsButtonClick() {
     // chartRequestInProgress
-    updateRequestInProgress(true);
+    updateChartRequestStatus(true);
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
-      console.log('No valid layer detected.');
-      updateRequestInProgress(false);
+      updateChartRequestStatus(false, 'No valid layer detected for request.');
       return;
     }
     const requestedLayerSource = layerInfo.projections.geographic.source;
@@ -217,8 +219,7 @@ function ChartingModeOptions (props) {
 
       // This is the generic message from ImageStat API
       if (!data.ok) {
-        console.log('Request Failed!!');
-        updateRequestInProgress(false);
+        updateChartRequestStatus(false, 'Chart request failed.');
         return;
       }
 
@@ -232,16 +233,20 @@ function ChartingModeOptions (props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
-        updateRequestInProgress(false);
+        updateChartRequestStatus(false, 'Success');
       } else {
         displaySimpleStats(dataToRender);
-        updateRequestInProgress(false);
+        updateChartRequestStatus(false, 'Success');
       }
     } else {
       // handle requests for layers outside of GIBS here!
-      console.log('Unable to process layer that is not provided by GIBS.');
-      updateRequestInProgress(false);
+      updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
     }
+  }
+
+  function updateChartRequestStatus(status, message = '') {
+    updateRequestInProgress(status);
+    updateRequestStatusMessage(message);
   }
 
   /**
@@ -433,6 +438,9 @@ function ChartingModeOptions (props) {
       <div className="charting-request-status">
         {chartRequestMessage}
       </div>
+      <div className="charting-request-status">
+        {requestStatusMessage}
+      </div>
     </div>
   );
 }
@@ -444,7 +452,7 @@ const mapStateToProps = (state) => {
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
-    activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate,
+    activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, requestStatusMessage,
   } = charting;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   const timelineStartDate = date.selected;
@@ -460,6 +468,7 @@ const mapStateToProps = (state) => {
     olMap: map.ui.selected,
     proj,
     projections,
+    requestStatusMessage,
     timeSpanSelection,
     timeSpanEndDate,
     timeSpanStartDate,
@@ -480,6 +489,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   updateRequestInProgress: (status) => {
     dispatch(updateRequestInProgressAction(status));
+  },
+  updateRequestStatusMessage: (message) => {
+    dispatch(updateRequestStatusMessageAction(message));
   },
   openChartingInfoModal: () => {
     dispatch(
@@ -555,12 +567,14 @@ ChartingModeOptions.propTypes = {
   aoiSelected: PropTypes.bool,
   chartRequestInProgress: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
+  requestStatusMessage: PropTypes.string,
   timeSpanSelection: PropTypes.string,
   timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
   toggleAreaOfInterestActive: PropTypes.func,
   toggleAreaOfInterestSelected: PropTypes.func,
   updateRequestInProgress: PropTypes.func,
+  updateRequestStatusMessage: PropTypes.func,
   updateAOICoordinates: PropTypes.func,
   openChartingInfoModal: PropTypes.func,
   openChartingDateModal: PropTypes.func,
