@@ -117,6 +117,9 @@ module.exports = (page) => ({
   dateSelectorYearInput: page.locator('#date-selector-main .input-wrapper-year input'),
   dateSelectorHourInput: page.locator('#date-selector-main .input-wrapper-hour input'),
   dateSelectorMinuteInput: page.locator('#date-selector-main .input-wrapper-minute input'),
+  mobileDatePickerSelectBtn: page.locator('.mobile-date-picker-select-btn'),
+  rightArrow: page.locator('#right-arrow-group'),
+  mobileDatePickerHeader: page.locator('.datepicker .datepicker-header .datepicker-header'),
 
   // layers
   layersModalCloseButton: page.locator('.custom-layer-dialog .modal-header .close'),
