@@ -853,10 +853,6 @@
     }
   }
 
-  .category-masonry-case .layer-category {
-    width: 100%;
-  }
-
   .category-background-cover {
     background-size: cover;
   }
@@ -882,6 +878,16 @@
       height: 30px;
       width: 30px;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .category-masonry-case {
+    width: 100%;
+  }
+
+  .layer-category {
+    width: 48.5%;
   }
 }
 
@@ -963,8 +969,12 @@
     }
   }
 
-  .category-masonry-case .layer-category {
+  .category-masonry-case {
     width: 100%;
+  }
+
+  .layer-category {
+    width: 310px;
   }
 
   .category-background-cover {
