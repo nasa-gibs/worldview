@@ -12,10 +12,7 @@ let aboutPage
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext({
-    viewport: { width: 1700, height: 1000 }
-  })
-  page = await context.newPage()
+  page = await browser.newPage()
   selectors = createSelectors(page)
   aboutPage = page.locator('.about-page')
 })
