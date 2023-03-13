@@ -153,7 +153,7 @@ export class VectorInteractions extends React.Component {
 
   mouseMove({ pixel }, map, crs) {
     const {
-      isCoordinateSearchActive, measureIsActive, granuleFootprints, isMobile
+      isCoordinateSearchActive, measureIsActive, granuleFootprints, isMobile,
     } = this.props;
     const coord = map.getCoordinateFromPixel(pixel);
     const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
