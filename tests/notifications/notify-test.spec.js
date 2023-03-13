@@ -1,13 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { skipTour } = require('../../test-utils/global-variables/querystrings')
-const { getAttribute } = require('../../test-utils/hooks/basicHooks')
-const {
-  createDistanceMeasurement,
-  createAreaMeasurement,
-  switchProjections,
-} = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -30,7 +23,6 @@ test.beforeAll(async ({ browser }) => {
   notificationsListItem = page.locator('#notifications_info_item .fa-exclamation-circle')
   tooltipSelector = page.locator('.tooltip-inner div')
 })
-
 
 test.afterAll(async () => {
   await page.close()
