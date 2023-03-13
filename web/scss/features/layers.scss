@@ -881,13 +881,15 @@
   }
 }
 
-@media (max-width: 768px) {
-  .category-masonry-case {
+@media (max-width: $mobile-max-width) {
+  .layer-category {
     width: 100%;
   }
+}
 
+@media (max-width: $desktop-min-width) {
   .layer-category {
-    width: 48.5%;
+    width: 48%;
   }
 }
 
@@ -973,9 +975,9 @@
     width: 100%;
   }
 
-  .layer-category {
-    width: 310px;
-  }
+  // .layer-category {
+  //   width: 310px;
+  // }
 
   .category-background-cover {
     background-size: cover;
