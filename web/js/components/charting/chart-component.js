@@ -31,7 +31,7 @@ function ChartComponent (props) {
         yAxisMax = data[i].mean;
       }
     }
-    return [Math.floor(yAxisMin) - 25, Math.floor(yAxisMax) + 25];
+    return [Math.floor(yAxisMin * 0.9), Math.floor(yAxisMax * 1.1)];
   }
 
   /**
