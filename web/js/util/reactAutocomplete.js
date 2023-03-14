@@ -1,10 +1,6 @@
-// const React = require('react')
 import React from 'react';
-// const PropTypes = require('prop-types')
 import PropTypes from 'prop-types';
-// const { findDOMNode } = require('react-dom')
 import { findDOMNode } from 'react-dom';
-// const scrollIntoView = require('dom-scroll-into-view')
 import scrollIntoView from 'dom-scroll-into-view';
 
 const IMPERATIVE_API = [
@@ -16,7 +12,7 @@ const IMPERATIVE_API = [
   'setCustomValidity',
   'setSelectionRange',
   'setRangeText',
-]
+];
 
 function getScrollOffset() {
   return {
@@ -27,7 +23,7 @@ function getScrollOffset() {
       ? window.pageYOffset
       : (document.documentElement || document.body.parentNode || document.body).scrollTop,
   }
-}
+};
 
 class Autocomplete extends React.Component {
 
@@ -192,7 +188,7 @@ class Autocomplete extends React.Component {
     autoHighlight: true,
     selectOnBlur: false,
     onMenuVisibilityChange() {},
-  }
+  };
 
   constructor(props) {
     super(props)
@@ -200,30 +196,30 @@ class Autocomplete extends React.Component {
       isOpen: false,
       highlightedIndex: null,
     }
-    this._debugStates = []
-    this.ensureHighlightedIndex = this.ensureHighlightedIndex.bind(this)
-    this.exposeAPI = this.exposeAPI.bind(this)
-    this.handleInputFocus = this.handleInputFocus.bind(this)
-    this.handleInputBlur = this.handleInputBlur.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleKeyDown = this.handleKeyDown.bind(this)
-    this.handleInputClick = this.handleInputClick.bind(this)
-    this.maybeAutoCompleteText = this.maybeAutoCompleteText.bind(this)
-  }
+    this._debugStates = [];
+    this.ensureHighlightedIndex = this.ensureHighlightedIndex.bind(this);
+    this.exposeAPI = this.exposeAPI.bind(this);
+    this.handleInputFocus = this.handleInputFocus.bind(this);
+    this.handleInputBlur = this.handleInputBlur.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleInputClick = this.handleInputClick.bind(this);
+    this.maybeAutoCompleteText = this.maybeAutoCompleteText.bind(this);
+  };
 
   componentWillMount() {
     // this.refs is frozen, so we need to assign a new object to it
-    this.refs = {}
-    this._ignoreBlur = false
-    this._ignoreFocus = false
-    this._scrollOffset = null
-    this._scrollTimer = null
-  }
+    this.refs = {};
+    this._ignoreBlur = false;
+    this._ignoreFocus = false;
+    this._scrollOffset = null;
+    this._scrollTimer = null;
+  };
 
   componentWillUnmount() {
-    clearTimeout(this._scrollTimer)
-    this._scrollTimer = null
-  }
+    clearTimeout(this._scrollTimer);
+    this._scrollTimer = null;
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.state.highlightedIndex !== null) {
@@ -236,29 +232,29 @@ class Autocomplete extends React.Component {
 
   componentDidMount() {
     if (this.isOpen()) {
-      this.setMenuPositions()
+      this.setMenuPositions();
     }
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if ((this.state.isOpen && !prevState.isOpen) || ('open' in this.props && this.props.open && !prevProps.open))
-      this.setMenuPositions()
+      this.setMenuPositions();
 
-    this.maybeScrollItemIntoView()
+    this.maybeScrollItemIntoView();
     if (prevState.isOpen !== this.state.isOpen) {
-      this.props.onMenuVisibilityChange(this.state.isOpen)
+      this.props.onMenuVisibilityChange(this.state.isOpen);
     }
-  }
+  };
 
   exposeAPI(el) {
-    this.refs.input = el
-    IMPERATIVE_API.forEach(ev => this[ev] = (el && el[ev] && el[ev].bind(el)))
+    this.refs.input = el;
+    IMPERATIVE_API.forEach(ev => this[ev] = (el && el[ev] && el[ev].bind(el)));
   }
 
   maybeScrollItemIntoView() {
     if (this.isOpen() && this.state.highlightedIndex !== null) {
-      const itemNode = this.refs[`item-${this.state.highlightedIndex}`]
-      const menuNode = this.refs.menu
+      const itemNode = this.refs[`item-${this.state.highlightedIndex}`];
+      const menuNode = this.refs.menu;
       scrollIntoView(
         findDOMNode(itemNode),
         findDOMNode(menuNode),
@@ -269,83 +265,82 @@ class Autocomplete extends React.Component {
 
   handleKeyDown(event) {
     if (Autocomplete.keyDownHandlers[event.key])
-      Autocomplete.keyDownHandlers[event.key].call(this, event)
+      Autocomplete.keyDownHandlers[event.key].call(this, event);
     else if (!this.isOpen()) {
       this.setState({
         isOpen: true
-      })
+      });
     }
   }
 
   handleChange(event) {
-    this.props.onChange(event, event.target.value)
+    this.props.onChange(event, event.target.value);
   }
 
   static keyDownHandlers = {
     ArrowDown(event) {
-      event.preventDefault()
-      const items = this.getFilteredItems(this.props)
-      if (!items.length) return
-      const { highlightedIndex } = this.state
-      let index = highlightedIndex === null ? -1 : highlightedIndex
+      event.preventDefault();
+      const items = this.getFilteredItems(this.props);
+      if (!items.length) return;
+      const { highlightedIndex } = this.state;
+      let index = highlightedIndex === null ? -1 : highlightedIndex;
       for (let i = 0; i < items.length ; i++) {
-        const p = (index + i + 1) % items.length
+        const p = (index + i + 1) % items.length;
         if (this.props.isItemSelectable(items[p])) {
-          index = p
-          break
+          index = p;
+          break;
         }
       }
       if (index > -1 && index !== highlightedIndex) {
         this.setState({
           highlightedIndex: index,
           isOpen: true,
-        })
+        });
       }
     },
 
     ArrowUp(event) {
-      event.preventDefault()
-      const items = this.getFilteredItems(this.props)
-      if (!items.length) return
-      const { highlightedIndex } = this.state
-      let index = highlightedIndex === null ? items.length : highlightedIndex
+      event.preventDefault();
+      const items = this.getFilteredItems(this.props);
+      if (!items.length) return;
+      const { highlightedIndex } = this.state;
+      let index = highlightedIndex === null ? items.length : highlightedIndex;
       for (let i = 0; i < items.length ; i++) {
-        const p = (index - (1 + i) + items.length) % items.length
+        const p = (index - (1 + i) + items.length) % items.length;
         if (this.props.isItemSelectable(items[p])) {
-          index = p
-          break
+          index = p;
+          break;
         }
       }
       if (index !== items.length) {
         this.setState({
           highlightedIndex: index,
           isOpen: true,
-        })
+        });
       }
     },
 
     Enter(event) {
       // Key code 229 is used for selecting items from character selectors (Pinyin, Kana, etc)
-      if (event.keyCode !== 13) return
+      if (event.keyCode !== 13) return;
       // In case the user is currently hovering over the menu
-      this.setIgnoreBlur(false)
+      this.setIgnoreBlur(false);
       if (!this.isOpen()) {
         // menu is closed so there is no selection to accept -> do nothing
-        return
+        return;
       }
       else if (this.state.highlightedIndex == null) {
         // input has focus but no menu item is selected + enter is hit -> close the menu, highlight whatever's in input
         this.setState({
           isOpen: false
         }, () => {
-          this.refs.input.select()
-        })
-      }
-      else {
+          this.refs.input.select();
+        });
+      } else {
         // text entered + menu item has been highlighted + enter is hit -> update value to that of selected menu item, close the menu
-        event.preventDefault()
-        const item = this.getFilteredItems(this.props)[this.state.highlightedIndex]
-        const value = this.props.getItemValue(item)
+        event.preventDefault();
+        const item = this.getFilteredItems(this.props)[this.state.highlightedIndex];
+        const value = this.props.getItemValue(item);
         this.setState({
           isOpen: false,
           highlightedIndex: null
@@ -356,106 +351,106 @@ class Autocomplete extends React.Component {
             value.length
           )
           this.props.onSelect(value, item)
-        })
+        });
       }
     },
 
     Escape() {
       // In case the user is currently hovering over the menu
-      this.setIgnoreBlur(false)
+      this.setIgnoreBlur(false);
       this.setState({
         highlightedIndex: null,
         isOpen: false
-      })
+      });
     },
 
     Tab() {
       // In case the user is currently hovering over the menu
-      this.setIgnoreBlur(false)
+      this.setIgnoreBlur(false);
     },
-  }
+  };
 
   getFilteredItems(props) {
-    let items = props.items
+    let { items } = props;
 
     if (props.shouldItemRender) {
       items = items.filter((item) => (
         props.shouldItemRender(item, props.value)
-      ))
+      ));
     }
 
     if (props.sortItems) {
       items.sort((a, b) => (
         props.sortItems(a, b, props.value)
-      ))
+      ));
     }
 
-    return items
-  }
+    return items;
+  };
 
   maybeAutoCompleteText(state, props) {
-    const { highlightedIndex } = state
-    const { value, getItemValue } = props
-    let index = highlightedIndex === null ? 0 : highlightedIndex
-    let items = this.getFilteredItems(props)
+    const { highlightedIndex } = state;
+    const { value, getItemValue } = props;
+    let index = highlightedIndex === null ? 0 : highlightedIndex;
+    let items = this.getFilteredItems(props);
     for (let i = 0; i < items.length ; i++) {
       if (props.isItemSelectable(items[index]))
-        break
-      index = (index + 1) % items.length
+        break;
+      index = (index + 1) % items.length;
     }
-    const matchedItem = items[index] && props.isItemSelectable(items[index]) ? items[index] : null
+    const matchedItem = items[index] && props.isItemSelectable(items[index]) ? items[index] : null;
     if (value !== '' && matchedItem) {
-      const itemValue = getItemValue(matchedItem)
+      const itemValue = getItemValue(matchedItem);
       const itemValueDoesMatch = (itemValue.toLowerCase().indexOf(
         value.toLowerCase()
-      ) === 0)
+      ) === 0);
       if (itemValueDoesMatch) {
-        return { highlightedIndex: index }
+        return { highlightedIndex: index };
       }
     }
-    return { highlightedIndex: null }
-  }
+    return { highlightedIndex: null };
+  };
 
   ensureHighlightedIndex(state, props) {
     if (state.highlightedIndex >= this.getFilteredItems(props).length) {
-      return { highlightedIndex: null }
+      return { highlightedIndex: null };
     }
-  }
+  };
 
   setMenuPositions() {
-    const node = this.refs.input
-    const rect = node.getBoundingClientRect()
-    const computedStyle = global.window.getComputedStyle(node)
-    const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0
-    const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0
-    const marginRight = parseInt(computedStyle.marginRight, 10) || 0
+    const node = this.refs.input;
+    const rect = node.getBoundingClientRect();
+    const computedStyle = global.window.getComputedStyle(node);
+    const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
+    const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
+    const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
     this.setState({
       menuTop: rect.bottom + marginBottom,
       menuLeft: rect.left + marginLeft,
       menuWidth: rect.width + marginLeft + marginRight
-    })
-  }
+    });
+  };
 
   highlightItemFromMouse(index) {
-    this.setState({ highlightedIndex: index })
+    this.setState({ highlightedIndex: index });
   }
 
   selectItemFromMouse(item) {
-    const value = this.props.getItemValue(item)
+    const value = this.props.getItemValue(item);
     // The menu will de-render before a mouseLeave event
     // happens. Clear the flag to release control over focus
-    this.setIgnoreBlur(false)
+    this.setIgnoreBlur(false);
     this.setState({
       isOpen: false,
       highlightedIndex: null
     }, () => {
-      this.props.onSelect(value, item)
-    })
-  }
+      this.props.onSelect(value, item);
+    });
+  };
 
   setIgnoreBlur(ignore) {
-    this._ignoreBlur = ignore
-  }
+    this._ignoreBlur = ignore;
+  };
 
   renderMenu() {
     const items = this.getFilteredItems(this.props).map((item, index) => {
@@ -476,52 +471,52 @@ class Autocomplete extends React.Component {
       left: this.state.menuLeft,
       top: this.state.menuTop,
       minWidth: this.state.menuWidth,
-    }
-    const menu = this.props.renderMenu(items, this.props.value, style)
+    };
+    const menu = this.props.renderMenu(items, this.props.value, style);
     return React.cloneElement(menu, {
       ref: e => this.refs.menu = e,
       // Ignore blur to prevent menu from de-rendering before we can process click
       onTouchStart: () => this.setIgnoreBlur(true),
       onMouseEnter: () => this.setIgnoreBlur(true),
       onMouseLeave: () => this.setIgnoreBlur(false),
-    })
-  }
+    });
+  };
 
   handleInputBlur(event) {
     if (this._ignoreBlur) {
-      this._ignoreFocus = true
-      this._scrollOffset = getScrollOffset()
-      this.refs.input.focus()
-      return
-    }
-    let setStateCallback
-    const { highlightedIndex } = this.state
+      this._ignoreFocus = true;
+      this._scrollOffset = getScrollOffset();
+      this.refs.input.focus();
+      return;
+    };
+    let setStateCallback;
+    const { highlightedIndex } = this.state;
     if (this.props.selectOnBlur && highlightedIndex !== null) {
-      const items = this.getFilteredItems(this.props)
-      const item = items[highlightedIndex]
-      const value = this.props.getItemValue(item)
-      setStateCallback = () => this.props.onSelect(value, item)
+      const items = this.getFilteredItems(this.props);
+      const item = items[highlightedIndex];
+      const value = this.props.getItemValue(item);
+      setStateCallback = () => this.props.onSelect(value, item);
     }
     this.setState({
       isOpen: false,
       highlightedIndex: null
-    }, setStateCallback)
-    const { onBlur } = this.props.inputProps
+    }, setStateCallback);
+    const { onBlur } = this.props.inputProps;
     if (onBlur) {
-      onBlur(event)
+      onBlur(event);
     }
-  }
+  };
 
   handleInputFocus(event) {
     if (this._ignoreFocus) {
-      this._ignoreFocus = false
-      const { x, y } = this._scrollOffset
-      this._scrollOffset = null
+      this._ignoreFocus = false;
+      const { x, y } = this._scrollOffset;
+      this._scrollOffset = null;
       // Focus will cause the browser to scroll the <input> into view.
       // This can cause the mouse coords to change, which in turn
       // could cause a new highlight to happen, cancelling the click
       // event (when selecting with the mouse)
-      window.scrollTo(x, y)
+      window.scrollTo(x, y);
       // Some browsers wait until all focus event handlers have been
       // processed before scrolling the <input> into view, so let's
       // scroll again on the next tick to ensure we're back to where
@@ -531,49 +526,49 @@ class Autocomplete extends React.Component {
       // are triggered.
       clearTimeout(this._scrollTimer)
       this._scrollTimer = setTimeout(() => {
-        this._scrollTimer = null
-        window.scrollTo(x, y)
-      }, 0)
-      return
+        this._scrollTimer = null;
+        window.scrollTo(x, y);
+      }, 0);
+      return;
     }
-    this.setState({ isOpen: true })
-    const { onFocus } = this.props.inputProps
+    this.setState({ isOpen: true });
+    const { onFocus } = this.props.inputProps;
     if (onFocus) {
-      onFocus(event)
+      onFocus(event);
     }
-  }
+  };
 
   isInputFocused() {
-    const el = this.refs.input
-    return el.ownerDocument && (el === el.ownerDocument.activeElement)
-  }
+    const el = this.refs.input;
+    return el.ownerDocument && (el === el.ownerDocument.activeElement);
+  };
 
   handleInputClick() {
     // Input will not be focused if it's disabled
     if (this.isInputFocused() && !this.isOpen())
-      this.setState({ isOpen: true })
-  }
+      this.setState({ isOpen: true });
+  };
 
   composeEventHandlers(internal, external) {
     return external
       ? e => { internal(e); external(e) }
-      : internal
-  }
+      : internal;
+  };
 
   isOpen() {
-    return 'open' in this.props ? this.props.open : this.state.isOpen
-  }
+    return 'open' in this.props ? this.props.open : this.state.isOpen;
+  };
 
   render() {
     if (this.props.debug) { // you don't like it, you love it
       this._debugStates.push({
         id: this._debugStates.length,
         state: this.state
-      })
+      });
     }
 
-    const { inputProps } = this.props
-    const open = this.isOpen()
+    const { inputProps } = this.props;
+    const open = this.isOpen();
     return (
       <div style={{ ...this.props.wrapperStyle }} {...this.props.wrapperProps}>
         {this.props.renderInput({
@@ -598,7 +593,7 @@ class Autocomplete extends React.Component {
         )}
       </div>
     )
-  }
+  };
 }
 
 export default Autocomplete

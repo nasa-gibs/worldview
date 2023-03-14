@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import Autocomplete from 'react-autocomplete';
-import Autocomplete from '../../util/reactAutocomplete';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Autocomplete from '../../util/reactAutocomplete';
 
 class SearchBox extends Component {
   constructor(props) {
