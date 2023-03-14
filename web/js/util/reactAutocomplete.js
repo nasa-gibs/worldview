@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
@@ -162,7 +163,7 @@ class Autocomplete extends React.Component {
     value: '',
     wrapperProps: {},
     wrapperStyle: {
-      display: 'inline-block'
+      display: 'inline-block',
     },
     inputProps: {},
     renderInput(props) {
@@ -213,12 +214,12 @@ class Autocomplete extends React.Component {
     this._ignoreFocus = false;
     this._scrollOffset = null;
     this._scrollTimer = null;
-  };
+  }
 
   componentWillUnmount() {
     clearTimeout(this._scrollTimer);
     this._scrollTimer = null;
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.state.highlightedIndex !== null) {
@@ -233,7 +234,7 @@ class Autocomplete extends React.Component {
     if (this.isOpen()) {
       this.setMenuPositions();
     }
-  };
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if ((this.state.isOpen && !prevState.isOpen) || ('open' in this.props && this.props.open && !prevProps.open))
@@ -243,7 +244,7 @@ class Autocomplete extends React.Component {
     if (prevState.isOpen !== this.state.isOpen) {
       this.props.onMenuVisibilityChange(this.state.isOpen);
     }
-  };
+  }
 
   exposeAPI(el) {
     this.refs.input = el;
