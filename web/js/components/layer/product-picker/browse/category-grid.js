@@ -24,7 +24,6 @@ function CategoryGrid(props) {
     showMeasurements,
     hasMeasurementSource,
     categoryType,
-    width,
   } = props;
   const masonryOptions = {
     transitionDuration: '0.6s',
