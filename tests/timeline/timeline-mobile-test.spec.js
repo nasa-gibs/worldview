@@ -8,7 +8,6 @@ let selectors
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
-
   const context = await browser.newContext({
     viewport: { width: 375, height: 667 }
   })
