@@ -5,7 +5,7 @@ function SimpleStatistics(props) {
   const { data } = props;
 
   const {
-    median, mean, max, stdev, timestamp, type, endTimestamp,
+    median, mean, max, min, stdev, timestamp, type, endTimestamp,
   } = data;
 
   let dateStr;
@@ -41,6 +41,14 @@ function SimpleStatistics(props) {
           </div>
           <div className="charting-statistics-value">
             {formatToThreeDigits(mean)}
+          </div>
+        </div>
+        <div className="charting-statistics-row">
+          <div className="charting-statistics-label">
+            Min:
+          </div>
+          <div className="charting-statistics-value">
+            {formatToThreeDigits(min)}
           </div>
         </div>
         <div className="charting-statistics-row">

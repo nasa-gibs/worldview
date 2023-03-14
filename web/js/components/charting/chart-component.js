@@ -10,9 +10,29 @@ function ChartComponent (props) {
   } = props;
 
   const { data } = liveData;
+  const yAxisLimitArray = getYAxisMinAndMax(data);
 
   // Arbitrary array of colors to use
   const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+
+  /**
+   * Process the data & determine the min & max MEAN values to establish the Y Axis Scale
+   * @param {Object} data
+   */
+  function getYAxisMinAndMax(data) {
+    let yAxisMax;
+    let yAxisMin;
+    for (let i = 0; i < data.length; i += 1) {
+      // Establish mean min & max values for chart rendering
+      if (data[i].mean < yAxisMin || yAxisMin === undefined) {
+        yAxisMin = data[i].mean;
+      }
+      if (data[i].mean > yAxisMax || yAxisMax === undefined) {
+        yAxisMax = data[i].mean;
+      }
+    }
+    return [Math.floor(yAxisMin) - 25, Math.floor(yAxisMax) + 25];
+  }
 
   /**
    * Return an array of Recharts Line objects
@@ -129,7 +149,7 @@ function ChartComponent (props) {
             <Legend />
             {getLineChart(data)}
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis type="number" domain={yAxisLimitArray} />
             <Legend />
           </LineChart>
         </div>
