@@ -31,7 +31,16 @@ function ChartComponent (props) {
         yAxisMax = data[i].mean;
       }
     }
-    return [Math.floor(yAxisMin * 0.9), Math.floor(yAxisMax * 1.1)];
+    // return [Math.floor(yAxisMin * 0.9), Math.floor(yAxisMax * 1.1)];
+    return [roundToNearestTwentyFive(yAxisMin * 0.9), roundToNearestTwentyFive(yAxisMax * 1.1)];
+  }
+
+  /**
+   * Return num rounded to the nearest multiple of 25
+   * @param {number} num
+   */
+  function roundToNearestTwentyFive(num) {
+    return (Math.round((num * 0.01) * 4) / 4) * 100;
   }
 
   /**

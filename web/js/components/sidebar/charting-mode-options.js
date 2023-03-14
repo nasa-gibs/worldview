@@ -216,7 +216,6 @@ function ChartingModeOptions (props) {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
-      console.log(data);
 
       // This is the generic message from ImageStat API
       if (!data.ok) {
