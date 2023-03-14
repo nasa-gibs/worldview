@@ -887,7 +887,7 @@
   }
 }
 
-@media (max-width: $desktop-min-width) {
+@media (max-width: $desktop-min-width) and (min-width: $mobile-max-width) {
   .layer-category {
     width: 48%;
   }

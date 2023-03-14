@@ -26,13 +26,9 @@ function CategoryGrid(props) {
     categoryType,
     width,
   } = props;
-  const setColumnWidth = (width) => {
-    if (width >= 656) return 310;
-    return 0;
-  };
   const masonryOptions = {
     transitionDuration: '0.6s',
-    columnWidth: setColumnWidth(width),
+    columnWidth: 0,
     gutter: 10,
   };
   categories.forEach((item) => {
