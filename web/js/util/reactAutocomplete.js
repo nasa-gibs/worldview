@@ -16,17 +16,16 @@ const IMPERATIVE_API = [
 
 function getScrollOffset() {
   return {
-    x: (window.pageXOffset !== undefined)
+    x: window.pageXOffset !== undefined
       ? window.pageXOffset
       : (document.documentElement || document.body.parentNode || document.body).scrollLeft,
-    y: (window.pageYOffset !== undefined)
+    y: window.pageYOffset !== undefined
       ? window.pageYOffset
       : (document.documentElement || document.body.parentNode || document.body).scrollTop,
-  }
-};
+  };
+}
 
 class Autocomplete extends React.Component {
-
   static propTypes = {
     /**
      * The items to display in the dropdown menu
@@ -157,7 +156,7 @@ class Autocomplete extends React.Component {
      */
     open: PropTypes.bool,
     debug: PropTypes.bool,
-  }
+  };
 
   static defaultProps = {
     value: '',
@@ -167,13 +166,13 @@ class Autocomplete extends React.Component {
     },
     inputProps: {},
     renderInput(props) {
-      return <input {...props} />
+      return <input {...props} />;
     },
     onChange() {},
     onSelect() {},
-    isItemSelectable() { return true },
+    isItemSelectable() { return true; },
     renderMenu(items, value, style) {
-      return <div style={{ ...style, ...this.menuStyle }} children={items}/>
+      return <div style={{ ...style, ...this.menuStyle }} children={items}/>;
     },
     menuStyle: {
       borderRadius: '3px',
@@ -191,11 +190,11 @@ class Autocomplete extends React.Component {
   };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isOpen: false,
       highlightedIndex: null,
-    }
+    };
     this._debugStates = [];
     this.ensureHighlightedIndex = this.ensureHighlightedIndex.bind(this);
     this.exposeAPI = this.exposeAPI.bind(this);
