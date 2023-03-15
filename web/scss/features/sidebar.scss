@@ -35,6 +35,7 @@
         .nav-item {
           width: 120px;
           margin-right: 15px;
+          font-size: 12px;
 
           a.nav-link {
             height: $wv-mob-sb-tabs-height - 2;
@@ -223,6 +224,11 @@ footer .compare-toggle-button {
     font-size: 12px;
     max-width: 232px;
     line-height: 15px;
+
+    @media screen and (max-width: $tablet-max-width) and (orientation: landscape),
+    (max-width: $mobile-max-width) {
+      font-size: 16px;
+    }
   }
 
   .dropdown {
