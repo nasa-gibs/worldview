@@ -24,11 +24,10 @@ function CategoryGrid(props) {
     showMeasurements,
     hasMeasurementSource,
     categoryType,
-    width,
   } = props;
   const masonryOptions = {
     transitionDuration: '0.6s',
-    columnWidth: width >= 630 ? 310 : width - 26,
+    columnWidth: 0,
     gutter: 10,
   };
   categories.forEach((item) => {
