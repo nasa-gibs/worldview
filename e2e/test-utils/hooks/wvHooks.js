@@ -143,15 +143,31 @@ const createAreaMeasurement = async (page, pointOne, pointTwo, pointThree) => {
   await page.mouse.dblclick(pointThree[0], pointThree[1])
 }
 
+const localStorageEnabled = () => {
+  let enabled
+  try {
+    if (window.localStorage) {
+      const uid = new Date().toString()
+      window.localStorage.setItem(uid, uid)
+      enabled = window.localStorage.getItem(uid) === uid
+      window.localStorage.removeItem(uid)
+    }
+  } catch (error) {
+    enabled = false
+  }
+  return !!enabled
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
   assertLayerOrdering,
   clickDownload,
+  closeImageDownloadPanel,
   createAreaMeasurement,
   createDistanceMeasurement,
   dateSelectorMonthDay,
-  closeImageDownloadPanel,
+  localStorageEnabled,
   openImageDownloadPanel,
   switchProjections,
   timelineDrag,

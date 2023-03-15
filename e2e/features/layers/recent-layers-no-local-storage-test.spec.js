@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { localStorageEnabled } = require('../../e2e/reuseables/local-storage-check')
+const { localStorageEnabled } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors

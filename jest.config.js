@@ -13,7 +13,7 @@ module.exports = {
     'node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox|node-fetch|data-uri-to-buffer|fetch-blob|formdata-polyfill)/)'
   ],
   testPathIgnorePatterns: [
-    '<rootDir>/tests/'
+    '<rootDir>/e2e/'
   ],
   modulePathIgnorePatterns: [
     '<rootDir>/build/'
