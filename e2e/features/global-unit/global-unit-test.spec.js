@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const url = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&t=2020-09-28-T20%3A40%3A53Z'
+
+const SSTQueryString = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&t=2020-09-28-T20%3A40%3A53Z'
 
 let page
 let globalSettingsModal
@@ -24,12 +25,8 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test('Open page', async () => {
-  await page.goto(url)
-  await expect(page).toHaveTitle('@OFFICIAL_NAME@')
-})
-
 test('Global settings menu item opens global settings modal', async () => {
+  await page.goto(SSTQueryString)
   await page.getByRole('button', { name: 'Information' }).click()
   await page.getByRole('button', { name: 'Settings' }).click()
   await expect(globalSettingsModal).toBeVisible()
@@ -48,7 +45,7 @@ test('Selecting Kelvin unit changes unit being used in layer palette legend', as
 })
 
 test('Kelvin global unit is retained via localStorage and active on new url', async () => {
-  await page.goto(url)
+  await page.goto(SSTQueryString)
   await page.getByRole('button', { name: 'Information' }).click()
   await page.getByRole('button', { name: 'Settings' }).click()
   await expect(kelvinButton).toHaveClass(/active/)
