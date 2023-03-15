@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
 import MonospaceDate from '../util/monospace-date';
 
-const SliderWithTooltip = Slider.createSliderWithTooltip;
 const percentFormatter = function(v) {
   return `${v} %`;
 };
@@ -15,7 +14,7 @@ const percentFormatter = function(v) {
  * @class OpacitySlider
  * @extends React.Component
  */
-class OpacitySlider extends React.Component {
+class OpacitySlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,8 +73,9 @@ class OpacitySlider extends React.Component {
             <MonospaceDate date={dateAText} />
           </h4>
         </label>
-        <div className="input-range ">
-          <SliderWithTooltip
+        <div className="input-range">
+          <Slider
+            range
             defaultValue={value}
             tipFormatter={percentFormatter}
             onChange={this.debounceOpacityUpdate}
