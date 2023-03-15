@@ -5,7 +5,7 @@ const {
   animationTooManyFramesGifCustomInterval,
   activeAnimationWidget,
   animationTooManyFramesGif,
-  animationProjectionRotated,
+  animationProjectionRotated
 } = require('../../test-utils/global-variables/querystrings')
 
 let page
@@ -38,7 +38,7 @@ test('GIF selection preview is Accurate and selections that are too high disable
     gifPreviewEndDate,
     gifPreviewFrameRateValue,
     gifPreviewEndResolutionSelector,
-    gifDownloadButton,
+    gifDownloadButton
   } = selectors
   await page.goto(activeAnimationWidget)
   await createGifIcon.click()
@@ -51,7 +51,7 @@ test('GIF selection preview is Accurate and selections that are too high disable
   await expect(gifBox).toBeChecked()
   const gifResolution = page.locator('#gif-resolution')
   await gifResolution.click()
-  await page.locator('#gif-resolution').selectOption('2');
+  await page.locator('#gif-resolution').selectOption('2')
   await expect(gifPreviewEndResolutionSelector).toHaveValue('2')
   await expect(gifDownloadButton).toBeDisabled()
 })

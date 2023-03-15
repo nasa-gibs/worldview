@@ -23,8 +23,8 @@ test('Verify subdaily default year, month, day, hour, minute date selector input
     dateSelectorHourInput,
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput,
-   } = selectors
+    dateSelectorYearInput
+  } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
   await expect(dateSelectorMinuteInput).toBeVisible()
   await expect(dateSelectorHourInput).toBeVisible()
@@ -46,7 +46,7 @@ test('Change date using left/right arrows', async () => {
 test('Left timeline arrow will not be disabled by default', async () => {
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
-  await page.getByRole('button', { name: 'Close' }).click();
+  await page.getByRole('button', { name: 'Close' }).click()
   const leftArrow = await page.locator('#left-arrow-group')
   await expect(leftArrow).not.toHaveClass(/button-disabled/)
 })
@@ -54,7 +54,7 @@ test('Left timeline arrow will not be disabled by default', async () => {
 test('Right timeline arrow will be disabled by default', async () => {
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
-  await page.getByRole('button', { name: 'Close' }).click();
+  await page.getByRole('button', { name: 'Close' }).click()
   const rightArrow = await page.locator('#right-arrow-group')
   await expect(rightArrow).toHaveClass(/button-disabled/)
 })
@@ -62,7 +62,7 @@ test('Right timeline arrow will be disabled by default', async () => {
 test('Now button will be disabled by default', async () => {
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
-  await page.getByRole('button', { name: 'Close' }).click();
+  await page.getByRole('button', { name: 'Close' }).click()
   const nowButton = page.locator('#now-button-group')
   await expect(nowButton).toHaveClass(/button-disabled/)
 })
@@ -83,8 +83,8 @@ test('Verify date selector is populated with date YYYY-MON-DD', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput,
-   } = selectors
+    dateSelectorYearInput
+  } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
   await expect(dateSelectorDayInput).toHaveValue('22')
@@ -98,8 +98,8 @@ test('Verify subdaily date selector is populated with date YYYY-MON-DD-HH-MM', a
     dateSelectorMonthInput,
     dateSelectorYearInput,
     dateSelectorHourInput,
-    dateSelectorMinuteInput,
-   } = selectors
+    dateSelectorMinuteInput
+  } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
   await expect(dateSelectorMinuteInput).toHaveValue('46')
   await expect(dateSelectorHourInput).toHaveValue('09')
@@ -121,8 +121,8 @@ test('Allow invalid year to valid year values in date selector', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput,
-   } = selectors
+    dateSelectorYearInput
+  } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
   await dateSelectorYearInput.fill('2020')
@@ -138,8 +138,8 @@ test('Verify invalid days are rolled over', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput,
-   } = selectors
+    dateSelectorYearInput
+  } = selectors
   const queryString = 'http://localhost:3000/?t=2013-02-29'
   await page.goto(queryString)
   await expect(dateSelectorDayInput).toHaveValue('01')
@@ -153,8 +153,8 @@ test('Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the
     dayDown,
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput,
-   } = selectors
+    dateSelectorYearInput
+  } = selectors
   const queryString = 'http://localhost:3000/?t=2013-02-28'
   await page.goto(queryString)
   await dayUp.click()

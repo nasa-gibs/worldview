@@ -24,9 +24,9 @@ test('Verify that recent layers tab does not show when local storage is disabled
   await page.goto(url)
   const localStorage = localStorageEnabled()
   if (!localStorage) {
-  await addLayers.click
-  const recentTab = await page.locator('.recent-tab')
-  await expect(recentTab).not.toBeVisible()
+    await addLayers.click
+    const recentTab = await page.locator('.recent-tab')
+    await expect(recentTab).not.toBeVisible()
   } else {
     console.log('Local storage was enabled for this test.')
   }

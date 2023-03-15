@@ -21,7 +21,7 @@ const assertDateInputValues = async (start, end) => {
     startInputDay,
     endInputYear,
     endInputMonth,
-    endInputDay,
+    endInputDay
   } = selectors
   const [startYear, startMonth, startDay] = start.split('-')
   const [endYear, endMonth, endDay] = end.split('-')
@@ -38,7 +38,7 @@ test.afterAll(async () => {
 })
 
 test('Default filtering includes last 120 days and all categories', async () => {
-  const { eventsTab, filterIcons, filterDates }  = selectors
+  const { eventsTab, filterIcons, filterDates } = selectors
   await page.goto(fixedAppNow)
   await eventsTab.click()
   await expect(filterIcons).toHaveCount(8)
@@ -56,8 +56,8 @@ test('Filter modal inputs are correct', async () => {
     volcanoesSwitch,
     watercolorSwitch,
     wildfiresSwitch,
-    mapExtentFilterCheckbox,
-  }  = selectors
+    mapExtentFilterCheckbox
+  } = selectors
   await filterButton.click()
   await assertDateInputValues('2011-SEP-02', '2011-DEC-31')
   await expect(dustSwitch).toBeChecked()
@@ -93,8 +93,8 @@ test('Loading from permalink sets all criteria properly', async () => {
     mapExtentFilterCheckbox,
     filterIcons,
     wildfiresIcon,
-    filterDates,
-  }  = selectors
+    filterDates
+  } = selectors
   await page.goto(wildfiresWithDates)
 
   const currentUrl = page.url()
@@ -133,7 +133,7 @@ test('Changing criteria in modal DOES NOT update summary of criteria in sidebar 
     filterModalCancel,
     filterDates,
     filterIcons,
-    wildfiresIcon,
+    wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
   await filterButton.click()
@@ -172,8 +172,8 @@ test('Opening modal after cancelling changed values shows previous unchanged val
     volcanoesSwitch,
     watercolorSwitch,
     wildfiresSwitch,
-    mapExtentFilterCheckbox,
-  }  = selectors
+    mapExtentFilterCheckbox
+  } = selectors
   await filterButton.click()
   await assertDateInputValues('2020-JAN-16', '2020-JUN-16')
   await expect(dustSwitch).not.toBeChecked()
@@ -200,7 +200,7 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
     filterIcons,
     wildfiresIcon,
     dustHazeIcon,
-    volcanoesIcon,
+    volcanoesIcon
   } = selectors
   await startInputYear.click()
   await startInputYear.fill('2000')
@@ -229,7 +229,7 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
 })
 
 test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
-  const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox, filterModalCancel, } = selectors
+  const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox, filterModalCancel } = selectors
   await page.goto(backwardsCompatibleEventUrl)
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
@@ -240,7 +240,7 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
 })
 
 test('No extent search checkbox in polar projections', async () => {
-  const { filterButton, mapExtentFilterCheckbox, filterModalCancel, } = selectors
+  const { filterButton, mapExtentFilterCheckbox, filterModalCancel } = selectors
   await page.goto(extentsUrl)
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeVisible()

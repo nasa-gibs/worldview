@@ -5,8 +5,8 @@ const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
   clickDownload,
-  zoomIn,
- } = require('../../test-utils/hooks/wvHooks')
+  zoomIn
+} = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
 let page
@@ -122,7 +122,7 @@ test('Confirm bounding box integrity', async () => {
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
   const matcher = /BBOX=([^,]+),([^,]+),([^,]+),([^&]+)/
   const matches = matcher.exec(urlAttribute)
-  if (matches !== null){
+  if (matches !== null) {
     const x0 = Number.parseFloat(matches[1])
     const y0 = Number.parseFloat(matches[2])
     const x1 = Number.parseFloat(matches[3])

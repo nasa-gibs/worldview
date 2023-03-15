@@ -40,7 +40,7 @@ test('Playing the animation changes the date of the mobile date picker', async (
   const { mobileDatePickerSpanText } = selectors
   await page.locator('#collapsed-animate-widget-phone-portrait').click()
   // this pause is the minimum amount of time needed to load & play the animation on a throttled connection
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(10000)
   await expect(mobileDatePickerSpanText).toHaveText('2019 AUG 01')
 })
 

@@ -5,9 +5,6 @@ const { swipeAndAIsActive } = require('../../test-utils/global-variables/queryst
 
 let page
 let selectors
-let aodChoices
-let aodCombinedValueId
-let aodMAIACId
 let aodCheckBox
 let aodMAIACCheckbox
 
@@ -16,9 +13,6 @@ test.describe.configure({ mode: 'serial' })
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
-  aodChoices = page.locator('#accordion-legacy-all-aerosol-optical-depth .measure-row-contents')
-  aodCombinedValueId = page.locator('MODIS_Combined_Value_Added_AOD')
-  aodMAIACId = page.locator('MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth')
   aodCheckBox = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox')
   aodMAIACCheckbox = page.locator('#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth .wv-checkbox input')
 })
@@ -31,7 +25,7 @@ test('Add AOD Layer to Layer Group A', async () => {
   const {
     addLayers,
     aerosolOpticalDepth,
-    layersModalCloseButton,
+    layersModalCloseButton
   } = selectors
   await page.goto(swipeAndAIsActive)
   await addLayers.click()

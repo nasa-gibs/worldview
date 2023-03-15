@@ -6,7 +6,7 @@
  */
 const selectOption = async (page, element, index) => {
   const selectElement = await page.locator(element)
-  await selectElement.selectOption({ index: index})
+  await selectElement.selectOption({ index })
 }
 
 /**
@@ -47,5 +47,5 @@ module.exports = {
   clearAndChangeInput,
   getAttribute,
   joinUrl,
-  selectOption,
+  selectOption
 }

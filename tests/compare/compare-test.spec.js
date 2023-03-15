@@ -89,7 +89,7 @@ test('Collapse layer list with B state and test label shows correct number of la
   await expect(collapsedToggleButton).not.toBeVisible()
   await toggleButton.click()
   await expect(collapsedToggleButton).toBeVisible()
-  const layerCount = page.locator("#accordion-toggler-button .layer-count")
+  const layerCount = page.locator('#accordion-toggler-button .layer-count')
   await expect(layerCount).toHaveText('6 Layers')
   await collapsedToggleButton.click()
   const referenceFeatures = page.locator('#activeB-Reference_Features_15m')

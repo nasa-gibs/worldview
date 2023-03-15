@@ -24,8 +24,8 @@ test('Info toolbar is visible and contains valid menu items', async () => {
     measureBtn,
     projToolbarButton,
     shareToolbarButton,
-    snapshotToolbarButton,
-   } = selectors
+    snapshotToolbarButton
+  } = selectors
   await page.goto(skipTour)
   await expect(locationSearchComponent).toBeVisible()
   await expect(locationSearchToolbarButton).not.toBeVisible()

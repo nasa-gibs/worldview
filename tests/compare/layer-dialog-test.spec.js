@@ -7,11 +7,8 @@ let page
 let selectors
 let aerosolLayer
 let AodOptionsPanelBody
-let AodOptionsPanelHeader
 let AodInfoPanel
 let correctedReflectanceBLayer
-let correctedReflectanceOptionsPanelHeader
-let correctedReflectanceOptionsPanelBody
 let correctedReflectanceInfoPanel
 
 test.describe.configure({ mode: 'serial' })
@@ -21,11 +18,8 @@ test.beforeAll(async ({ browser }) => {
   selectors = createSelectors(page)
   aerosolLayer = page.locator('#active-MODIS_Terra_Aerosol')
   AodOptionsPanelBody = page.locator('#layer_options_modal-modis_terra_aerosol .modal-body')
-  AodOptionsPanelHeader = page.locator('#layer_options_modal-modis_terra_aerosol .modal-header')
   AodInfoPanel = page.locator('.layer_info_modal-modis_terra_aerosol')
   correctedReflectanceBLayer = page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor')
-  correctedReflectanceOptionsPanelHeader = page.locator('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header')
-  correctedReflectanceOptionsPanelBody = page.locator('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-body')
   correctedReflectanceInfoPanel = page.locator('#layer_info_modal-modis_terra_correctedreflectance_truecolor')
 })
 
@@ -37,10 +31,10 @@ test('Layer option features work in A|B mode', async () => {
   await page.goto(swipeAOD)
   await expect(AodOptionsPanelBody).not.toBeVisible()
   await aerosolLayer.hover()
-  await page.locator(`#active-MODIS_Terra_Aerosol .wv-layers-options`).click()
-  const modalTitle = page.locator(`#layer_options_modal-modis_terra_aerosol .modal-header .modal-title`)
+  await page.locator('#active-MODIS_Terra_Aerosol .wv-layers-options').click()
+  const modalTitle = page.locator('#layer_options_modal-modis_terra_aerosol .modal-header .modal-title')
   await expect(modalTitle).toHaveText('Aerosol Optical Depth')
-  const paletteSelector = page.locator(`#layer_options_modal-modis_terra_aerosol .modal-body .wv-palette-selector`)
+  const paletteSelector = page.locator('#layer_options_modal-modis_terra_aerosol .modal-body .wv-palette-selector')
   await expect(paletteSelector).toBeVisible()
 })
 

@@ -64,7 +64,7 @@ test('Available grid source layer measuremet does not have unavaiable coverage c
   const {
     aquaTerraMODISTab,
     aquaModisTab,
-    aodCheckbox,
+    aodCheckbox
   } = selectors
   await aquaTerraMODISTab.click()
   await aquaModisTab.click()
@@ -158,7 +158,7 @@ test('Add to layer button and checkbox are in sync', async () => {
   const {
     addToMapButton,
     aodSearchCheckbox,
-    aodCheckbox,
+    aodCheckbox
   } = selectors
   await addToMapButton.click()
   await expect(aodSearchCheckbox).not.toHaveClass('checked')

@@ -65,8 +65,8 @@ test('Embed mode styling is correct', async () => {
     shareToolbarButton,
     snapshotToolbarButton,
     addLayers,
-    compareButton,
-   } = selectors
+    compareButton
+  } = selectors
   const timelineMobileHeader = await page.locator('.timeline-header-mobile')
   const mobileDateArrows = await page.locator('.mobile-date-change-arrows-btn')
   await expect(timelineMobileHeader).toBeVisible()

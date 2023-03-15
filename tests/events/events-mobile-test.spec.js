@@ -40,7 +40,7 @@ test('Clicking event in list closes sidebar and selects marker for event on map'
 })
 
 test('Events load when arriving via permalink', async () => {
-  const { sidebarButton, sidebarContent, icebergEvent, selectedMarker } = selectors
+  const { sidebarButton, sidebarContent, selectedMarker } = selectors
   await page.goto(stormEventSelected)
   await expect(selectedMarker).toBeVisible()
   await expect(sidebarContent).not.toBeVisible()

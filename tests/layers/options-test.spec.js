@@ -34,7 +34,6 @@ test('Verify that custom blue custom palette is checked', async () => {
   const activeBluePaletteCheckbox = await page.locator('.wv-palette-selector-row.checked #wv-palette-radio-blue_2')
   await expect(activeDefaultPaletteCheckbox).not.toBeVisible()
   await expect(activeBluePaletteCheckbox).toBeVisible()
-
 })
 
 test('Verify that threshold and opacity components update when different layer setting button clicked', async () => {

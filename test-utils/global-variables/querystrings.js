@@ -37,5 +37,5 @@ module.exports = {
   referenceLayersOnly: 'http://localhost:3000/?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m',
 
   // skip tour
-  skipTour: 'http://localhost:3000/?lg=false&t=2023-02-28-T18%3A32%3A41Z',
+  skipTour: 'http://localhost:3000/?lg=false&t=2023-02-28-T18%3A32%3A41Z'
 }

@@ -44,7 +44,6 @@ test('Use Mock to make sure appropriate number of event markers are appended to 
   await expect(eventIcons).toHaveCount(8)
 })
 
-
 test('Selecting event shows track points and markers which are not visible when switched to layer tab', async () => {
   const { secondEvent, trackMarker, eventIcons, eventsTab, layersTab } = selectors
   await secondEvent.click()

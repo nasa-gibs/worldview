@@ -3,8 +3,8 @@ const { test, expect } = require('@playwright/test')
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload,
- } = require('../../test-utils/hooks/wvHooks')
+  clickDownload
+} = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
 let page

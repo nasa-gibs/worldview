@@ -86,7 +86,7 @@ test('"Available 2013 May 15" filter removes items not available from list, adds
     layerPickerBackButton,
     availableFilterCheckbox,
     layersSearchRow,
-    layerResultsCountText,
+    layerResultsCountText
   } = selectors
   await layersSearchField.clear()
   await layersSearchField.fill('(True')
@@ -150,7 +150,7 @@ test('Disabling coverage filter updates list', async () => {
     availableFilterCheckbox,
     availableFilterCheckboxInput,
     layersSearchRow,
-    layerResultsCountText,
+    layerResultsCountText
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()

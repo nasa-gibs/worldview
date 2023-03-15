@@ -6,7 +6,7 @@ const { getAttribute } = require('../../test-utils/hooks/basicHooks')
 const {
   createDistanceMeasurement,
   createAreaMeasurement,
-  switchProjections,
+  switchProjections
 } = require('../../test-utils/hooks/wvHooks')
 
 let page
@@ -53,7 +53,7 @@ test('Creating a distance measurement causes a tooltip to show', async () => {
 })
 
 test('Creating an area measurement causes a tooltip to show', async () => {
-  const { geoMeasurementTooltip} = selectors
+  const { geoMeasurementTooltip } = selectors
   await createAreaMeasurement(page, [500, 500], [500, 700], [600, 600])
   await expect(geoMeasurementTooltip).toHaveCount(3)
 })
@@ -89,7 +89,7 @@ test('Clearing a measurements removes all tooltips in this projection only', asy
     measureBtn,
     clearMeasurementsBtn,
     arcticMeasurementTooltip,
-    geoMeasurementTooltip,
+    geoMeasurementTooltip
   } = selectors
   await measureBtn.click()
   await clearMeasurementsBtn.click()
@@ -119,6 +119,6 @@ test('Toggling unit of measure updates the measurement value', async () => {
   await createDistanceMeasurement(page, [850, 500], [850, 700])
   await measureBtn.click()
   await unitOfMeasureToggle.click()
-  const tooltip = await page.locator('.tooltip-measure span').first();
+  const tooltip = await page.locator('.tooltip-measure span').first()
   await expect(tooltip).toContainText('mi')
 })

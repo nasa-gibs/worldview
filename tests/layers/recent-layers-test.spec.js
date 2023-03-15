@@ -49,7 +49,7 @@ test('Removing individual layers updates the list', async () => {
   const aquaAerosolRow = await page.locator('#MODIS_Aqua_Aerosol-search-row')
   const aodSearchRow = await page.locator('#MODIS_Combined_Value_Added_AOD-search-row')
   const omiSearchRow = await page.locator('#OMI_Aerosol_Optical_Depth-search-row')
-  await aquaAerosolRow.hover({ position: { x: 15, y: 15 }})
+  await aquaAerosolRow.hover({ position: { x: 15, y: 15 } })
   await page.locator('.recent-layer-delete').click()
   await expect(aquaAerosolRow).not.toBeVisible()
   await expect(omiSearchRow).toBeVisible()

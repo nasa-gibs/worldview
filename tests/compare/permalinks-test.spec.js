@@ -4,7 +4,7 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const {
   swipeAndAIsActive,
   opacityAndBIsActive,
-  spyAndBIsActive,
+  spyAndBIsActive
 } = require('../../test-utils/global-variables/querystrings')
 
 let page

@@ -4,8 +4,8 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const {
   skipTour,
   subdailyLayerIntervalTimescale,
-  knownDate,
- } = require('../../test-utils/global-variables/querystrings')
+  knownDate
+} = require('../../test-utils/global-variables/querystrings')
 
 let page
 let selectors

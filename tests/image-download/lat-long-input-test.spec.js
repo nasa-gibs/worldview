@@ -21,7 +21,7 @@ test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
   editCoordsTitle = page.locator('.wv-image-input-title span:first-child')
-  editCoordsSubtitle =  page.getByRole('heading', { name: 'Top Right' })
+  editCoordsSubtitle = page.getByRole('heading', { name: 'Top Right' })
 })
 
 test.afterAll(async () => {

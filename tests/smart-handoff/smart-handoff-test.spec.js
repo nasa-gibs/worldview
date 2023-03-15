@@ -23,7 +23,7 @@ test('Data tab is available and in default state when clicked', async () => {
   await page.goto(queryString)
   await expect(dataDownloadTabButton).toBeVisible()
   await dataDownloadTabButton.click()
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(5000)
   await expect(handoffTitle).toContainText('None of your current layers are available for download.')
 })
 
@@ -33,7 +33,7 @@ test('Select "Cloud Effective Radius" layer and check that it is available for d
     allCategoryHeader,
     layersTab,
     layersModalCloseButton,
-    dataDownloadTabButton,
+    dataDownloadTabButton
   } = selectors
   await layersTab.click()
   await addLayers.click()

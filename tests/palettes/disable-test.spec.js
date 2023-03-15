@@ -29,7 +29,7 @@ test('Verify that toggling class updates permalink and layer-legend', async () =
 })
 
 test('Verify that toggling class-all off updates permalink and layer-legend', async () => {
-  await page.locator('div').filter({ hasText: 'Disable/EnableAll' }).locator('label').first().click();
+  await page.locator('div').filter({ hasText: 'Disable/EnableAll' }).locator('label').first().click()
   const firstColorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active0.disabled-classification')
   const lastColorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active15.disabled-classification')
   await expect(firstColorBoxDisabled).toBeVisible()
@@ -39,7 +39,7 @@ test('Verify that toggling class-all off updates permalink and layer-legend', as
 })
 
 test('Verify that toggling class-all on updates permalink and layer-legend', async () => {
-  await page.locator('div').filter({ hasText: 'Disable/EnableAll' }).locator('label').first().click();
+  await page.locator('div').filter({ hasText: 'Disable/EnableAll' }).locator('label').first().click()
   const firstColorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active0.disabled-classification')
   const lastColorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active15.disabled-classification')
   await expect(firstColorBoxDisabled).not.toBeVisible()

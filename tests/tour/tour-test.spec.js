@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 
@@ -25,13 +25,12 @@ test('Verify that all tour modals are present when the page is loaded', async ()
 })
 
 test('Run tour', async () => {
-  let totalSteps
   await page.locator('.tour-box:first-child').click()
   const stepsElement = await page.locator('.tour-in-progress .step-total')
   const stepsText = await stepsElement.textContent()
-  totalSteps = parseInt(stepsText)
+  const totalSteps = parseInt(stepsText)
   const nextStep = await page.locator('.step-container .step-next')
-  for (let i = 0; i < totalSteps; i += 1){
+  for (let i = 0; i < totalSteps; i += 1) {
     await nextStep.click()
   }
   await page.locator('.tour-complete button.close')

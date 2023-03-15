@@ -114,7 +114,7 @@ const assertCategories = async (page) => {
  * @param {Array} orderedLayers - An array of strings representing the expected layer ordering
  */
 const assertLayerOrdering = async (page, layerContainer, orderedLayers) => {
-  const layers = await page.$$(layerContainer);
+  const layers = await page.$$(layerContainer)
   const layerIDs = await Promise.all(layers.map(async (layer) => {
     const layerID = await layer.getAttribute('id')
     return layerID
@@ -156,5 +156,5 @@ module.exports = {
   switchProjections,
   timelineDrag,
   zoomIn,
-  zoomOut,
+  zoomOut
 }

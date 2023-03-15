@@ -27,13 +27,13 @@ test('Clicking beacon shows the floater tooltip', async () => {
   const dimensions = await page.evaluate(() => {
     return {
       width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight,
-    };
-  });
-  const centerX = dimensions.width / 2;
-  const centerY = dimensions.height / 2;
-  await page.mouse.click(centerX, centerY);
-  await page.getByRole('button', { name: 'Open the dialog' }).click();
+      height: document.documentElement.clientHeight
+    }
+  })
+  const centerX = dimensions.width / 2
+  const centerY = dimensions.height / 2
+  await page.mouse.click(centerX, centerY)
+  await page.getByRole('button', { name: 'Open the dialog' }).click()
   const tooltip = await page.locator('.react-joyride__tooltip')
   await expect(tooltip).toBeVisible()
 })
