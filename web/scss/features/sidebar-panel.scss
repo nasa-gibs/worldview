@@ -605,8 +605,8 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media screen and (max-width: $tablet-max-width) and (orientation: landscape),
-  (max-width: $mobile-max-width) {
+@media screen and (max-width: 1024px) and (max-height: 768px) and (orientation: landscape),
+  (max-width: 768px) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;
