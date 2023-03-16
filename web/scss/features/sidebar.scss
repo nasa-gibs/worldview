@@ -226,7 +226,7 @@ footer .compare-toggle-button {
     line-height: 15px;
 
     @media screen and (max-width: $tablet-max-width) and (orientation: landscape),
-    (max-width: $mobile-max-width) {
+      (max-width: $mobile-max-width) {
       font-size: 16px;
     }
   }

@@ -606,7 +606,7 @@ li.item.productsitem.inmotion,
 }
 
 @media screen and (max-width: $tablet-max-width) and (orientation: landscape),
-(max-width: $mobile-max-width) {
+  (max-width: $mobile-max-width) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;
