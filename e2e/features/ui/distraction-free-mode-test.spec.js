@@ -34,7 +34,7 @@ const distractionFreeModeValidElsRemoved = async (proj, isActive) => {
     mapRotateRight
   } = selectors
 
-  let presentEls = [
+  let uiElements = [
     infoToolbarButton,
     locationSearchToolbarButton,
     measureBtn,
@@ -43,16 +43,14 @@ const distractionFreeModeValidElsRemoved = async (proj, isActive) => {
     snapshotToolbarButton,
     timelineHeader,
     zoomInButton,
-    zoomOutButton
-  ]
-  const visibleEls = [
+    zoomOutButton,
     sidebarContainer
   ]
 
   // add rotate buttons for polar projections
   if (proj !== 'geographic') {
-    presentEls = [
-      ...presentEls,
+    uiElements = [
+      ...uiElements,
       mapRotateLeft,
       mapRotateReset,
       mapRotateRight
@@ -61,12 +59,14 @@ const distractionFreeModeValidElsRemoved = async (proj, isActive) => {
 
   if (isActive) {
     // distraction free mode is active and els should be removed/hidden
-    presentEls.forEach((el) => expect(el).not.toBeVisible())
-    visibleEls.forEach((el) => expect(el).not.toBeVisible())
+    for (const el of uiElements) {
+      await expect(el).not.toBeVisible()
+    }
   } else {
     // els should be added/visible
-    presentEls.forEach((el) => expect(el).toBeVisible())
-    visibleEls.forEach((el) => expect(el).toBeVisible())
+    for (const el of uiElements) {
+      await expect(el).toBeVisible()
+    }
   }
 }
 
