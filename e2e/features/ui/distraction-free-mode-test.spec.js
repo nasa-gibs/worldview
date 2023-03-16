@@ -61,7 +61,7 @@ const distractionFreeModeValidElsRemoved = async (proj, isActive) => {
 
   if (isActive) {
     // distraction free mode is active and els should be removed/hidden
-    presentEls.forEach((el) => expect(el).toBeVisible())
+    presentEls.forEach((el) => expect(el).not.toBeVisible())
     visibleEls.forEach((el) => expect(el).not.toBeVisible())
   } else {
     // els should be added/visible
