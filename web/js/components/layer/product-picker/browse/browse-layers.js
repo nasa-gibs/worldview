@@ -210,7 +210,7 @@ function BrowseLayers (props) {
               <CategoryGrid width={width} />
             </div>
           ) : renderContent()
-        }
+      }
     </>
   );
 }

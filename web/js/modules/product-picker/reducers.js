@@ -166,7 +166,7 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         categoryType: 'featured',
-        category,
+        category: null,
         mode: 'measurements',
         selectedLayer: null,
         selectedMeasurement: selectedMeasurementId,
