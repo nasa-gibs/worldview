@@ -79,8 +79,8 @@
   }
 }
 
-@media screen and (max-width: 1024px) and (max-height: 768px) and (orientation: landscape),
-  (max-width: 768px) {
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+  (max-width: $mobile-max-wdith) {
   .facet-container .inner-container {
     div.no-matches {
       font-size: 20px;

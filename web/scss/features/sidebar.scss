@@ -28,8 +28,8 @@
     border-right: 1px solid #333;
     border-left: 1px solid #333;
 
-    @media screen and (max-width: 1024px) and (max-height: 768px) and (orientation: landscape),
-      (max-width: 768px) {
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
       &.nav-tabs {
         height: $wv-mob-sb-tabs-height;
 
@@ -226,8 +226,8 @@ footer .compare-toggle-button {
     max-width: 232px;
     line-height: 15px;
 
-    @media screen and (max-width: 1024px) and (max-height: 768px) and (orientation: landscape),
-      (max-width: 768px) {
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
       font-size: 16px;
     }
   }
