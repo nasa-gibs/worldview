@@ -10,7 +10,7 @@ function ChartComponent (props) {
   } = props;
 
   const { data } = liveData;
-  const yAxisLimitArray = getYAxisMinAndMax(data);
+  const yAxisValuesArr = getYAxisValues(data);
 
   // Arbitrary array of colors to use
   const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -19,28 +19,31 @@ function ChartComponent (props) {
    * Process the data & determine the min & max MEAN values to establish the Y Axis Scale
    * @param {Object} data
    */
-  function getYAxisMinAndMax(data) {
-    let yAxisMax;
-    let yAxisMin;
+  function getYAxisValues(data) {
+    let lowestMin;
+    let highestMax;
     for (let i = 0; i < data.length; i += 1) {
       // Establish mean min & max values for chart rendering
-      if (data[i].mean < yAxisMin || yAxisMin === undefined) {
-        yAxisMin = data[i].mean;
+      if (data[i].mean < lowestMin || lowestMin === undefined) {
+        lowestMin = data[i].mean;
       }
-      if (data[i].mean > yAxisMax || yAxisMax === undefined) {
-        yAxisMax = data[i].mean;
+      if (data[i].mean > highestMax || highestMax === undefined) {
+        highestMax = data[i].mean;
       }
     }
-    // return [Math.floor(yAxisMin * 0.9), Math.floor(yAxisMax * 1.1)];
-    return [roundToNearestTwentyFive(yAxisMin * 0.9), roundToNearestTwentyFive(yAxisMax * 1.1)];
+
+    return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
   /**
-   * Return num rounded to the nearest multiple of 25
-   * @param {number} num
+   * Return an array of provided min & max values buffered by 10%
+   * @param {number} min | the lowest mean value of the collected data
+   * @param {number} max | the highest mean value of the collected data
    */
-  function roundToNearestTwentyFive(num) {
-    return (Math.round((num * 0.01) * 4) / 4) * 100;
+  function bufferYAxisMinAndMax(min, max) {
+    const yAxisMin = Math.floor(min * 4) / 4;
+    const yAxisMax = Math.ceil(max * 4) / 4;
+    return [yAxisMin - yAxisMin * 0.1, yAxisMax + yAxisMax * 0.1];
   }
 
   /**
@@ -158,7 +161,7 @@ function ChartComponent (props) {
             <Legend />
             {getLineChart(data)}
             <XAxis dataKey="name" />
-            <YAxis type="number" domain={yAxisLimitArray} />
+            <YAxis type="number" domain={yAxisValuesArr} />
             <Legend />
           </LineChart>
         </div>
