@@ -189,7 +189,7 @@ function LayerRow (props) {
           icon="ellipsis-v"
         />
       </DropdownToggle>
-      <DropdownMenu positionFixed container='body' className='layer-options-dropdown-menu'>
+      <DropdownMenu positionFixed container="body" className="layer-options-dropdown-menu">
         <DropdownItem
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
