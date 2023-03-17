@@ -216,7 +216,7 @@ test('Re-ordering groups, then disabling groups keeps individual layer order', a
   await page.goto(twoGroupsQueryString)
   const aodBoundingBox = await aodGroupHeader.boundingBox()
   const firesBoundingBox = await firesGroupHeader.boundingBox()
-  // this 'steps' option is important for making the drag work with the 'react-draggable' library
+  // this 'steps' option is important for making the drag action work with the 'react-draggable' library
   await page.mouse.move(
     aodBoundingBox.x,
     aodBoundingBox.y,
@@ -227,6 +227,7 @@ test('Re-ordering groups, then disabling groups keeps individual layer order', a
   const y = firesBoundingBox.y + firesBoundingBox.height / 2
   await page.mouse.move(x, y, { steps: 10 })
   await page.mouse.up()
+  await page.waitForTimeout(300)
   await groupCheckbox.click()
   const layersContainer = '#active-overlays li'
   await assertLayerOrdering(page, layersContainer, ungroupedReorderdLayerIdOrder)
