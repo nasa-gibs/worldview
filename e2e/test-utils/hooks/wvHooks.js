@@ -158,6 +158,17 @@ const localStorageEnabled = () => {
   return !!enabled
 }
 
+/**
+ * Some react switches & buttons may have unexpected behavior when tested at high speeds
+ * This adds a custom pause after a click to ensure the switch behaves properly
+ * @param {Object} page - Playwright object representing the browser page.
+ * @param {String} locator - A string for identifying the react switch label
+ */
+const clickAndWait = async (page, locator) => {
+  await page.locator(locator).click()
+  await page.waitForTimeout(200)
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
@@ -169,6 +180,7 @@ module.exports = {
   dateSelectorMonthDay,
   localStorageEnabled,
   openImageDownloadPanel,
+  clickAndWait,
   switchProjections,
   timelineDrag,
   zoomIn,

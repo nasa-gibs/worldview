@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
-const { switchProjections } = require('../../test-utils/hooks/wvHooks')
+const { switchProjections, clickAndWait } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -72,7 +72,7 @@ test('Filter modal inputs are correct', async () => {
 })
 
 test('URL params for categories, dates, and extent filtering are present', async () => {
-  const currentUrl = page.url()
+  const currentUrl = await page.url()
   expect(currentUrl).toContain('e=true')
   expect(currentUrl).toContain('efc=dustHaze,manmade,seaLakeIce,severeStorms,snow,volcanoes,waterColor,wildfires')
   expect(currentUrl).toContain('efd=2011-09-02,2011-12-31')
@@ -97,7 +97,7 @@ test('Loading from permalink sets all criteria properly', async () => {
   } = selectors
   await page.goto(wildfiresWithDates)
 
-  const currentUrl = page.url()
+  const currentUrl = await page.url()
 
   expect(currentUrl).toContain('e=true')
   expect(currentUrl).toContain('efc=wildfires')
@@ -137,24 +137,15 @@ test('Changing criteria in modal DOES NOT update summary of criteria in sidebar 
   } = selectors
   await page.goto(wildfiresWithDates)
   await filterButton.click()
-  await startInputYear.click()
-  await startInputYear.type('2000')
-  await startInputMonth.click()
-  await startInputMonth.type('APR')
-  await startInputDay.click()
-  await startInputDay.type('19')
-  await endInputYear.click()
-  await endInputYear.type('2001')
-  await endInputMonth.click()
-  await endInputMonth.type('NOV')
-  await endInputDay.click()
-  await endInputDay.type('11')
-  const wildfiresSwitchEl = page.locator('#wildfires-switch + .react-switch-label')
-  const dustSwitchEl = page.locator('#dustHaze-switch + .react-switch-label')
-  const volcanoesSwitchEl = page.locator('#volcanoes-switch + .react-switch-label')
-  await wildfiresSwitchEl.click()
-  await dustSwitchEl.click()
-  await volcanoesSwitchEl.click()
+  await startInputYear.fill('2000')
+  await startInputMonth.fill('APR')
+  await startInputDay.fill('19')
+  await endInputYear.fill('2001')
+  await endInputMonth.fill('NOV')
+  await endInputDay.fill('11')
+  await clickAndWait(page, '#wildfires-switch + .react-switch-label')
+  await clickAndWait(page, '#dustHaze-switch + .react-switch-label')
+  await clickAndWait(page, '#volcanoes-switch + .react-switch-label')
   await filterModalCancel.click()
   await expect(filterDates).toContainText('2020 JAN 16 - 2020 JUN 16')
   await expect(filterIcons).toHaveCount(1)
@@ -202,24 +193,15 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
     dustHazeIcon,
     volcanoesIcon
   } = selectors
-  await startInputYear.click()
   await startInputYear.fill('2000')
-  await startInputMonth.click()
   await startInputMonth.fill('APR')
-  await startInputDay.click()
   await startInputDay.fill('19')
-  await endInputYear.click()
   await endInputYear.fill('2001')
-  await endInputMonth.click()
   await endInputMonth.fill('NOV')
-  await endInputDay.click()
   await endInputDay.fill('11')
-  const wildfiresSwitchEl = page.locator('#wildfires-switch + .react-switch-label')
-  const dustSwitchEl = page.locator('#dustHaze-switch + .react-switch-label')
-  const volcanoesSwitchEl = page.locator('#volcanoes-switch + .react-switch-label')
-  await wildfiresSwitchEl.click()
-  await dustSwitchEl.click()
-  await volcanoesSwitchEl.click()
+  await clickAndWait(page, '#wildfires-switch + .react-switch-label')
+  await clickAndWait(page, '#dustHaze-switch + .react-switch-label')
+  await clickAndWait(page, '#volcanoes-switch + .react-switch-label')
   await filterModalApply.click()
   await expect(filterDates).toContainText('2000 APR 19 - 2001 NOV 11')
   await expect(filterIcons).toHaveCount(2)
