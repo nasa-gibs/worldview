@@ -109,7 +109,7 @@ class SearchBox extends Component {
     const tooltipVisibilityCondition = inputValue && !isMobile;
 
     return (
-      <div className="location-search-input-group-addon submit-group">
+      <div className="location-search-input-group-addon submit-group location-search-icon">
         <Button
           id={buttonId}
           style={buttonStyle}
