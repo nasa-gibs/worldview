@@ -162,6 +162,7 @@ test('Finding layer by ID with search', async () => {
   const { layersSearchField, layersAll } = selectors
   await layersSearchField.clear()
   await layersSearchField.fill('MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly')
+  await page.waitForTimeout(300)
   await expect(layersAll).toContainText('Total Aerosol Optical Thickness Scattering 550nm')
   await expect(layersAll).toContainText('MERRA-2')
 })

@@ -82,7 +82,7 @@ test('Verify that zots show for the layers that have notices', async () => {
   await expect(multiNotice).toContainText('Several layers are experiencing delays in processing.')
   await expect(particulateZot).toBeVisible()
   await particulateZot.hover()
-  const tooltip = await page.locator('.tooltip-inner div div')
+  const tooltip = await page.locator('.tooltip-inner div div').first()
   await expect(tooltip).toContainText('Several layers are experiencing delays in processing.')
 })
 
