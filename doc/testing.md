@@ -26,40 +26,17 @@ End to end tests are integrated into our CI and are required to pass before a su
 
 Run end-to-end tests using `npm run e2e`
 
-To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:e2e`. See the [Docker](docker.md) page for more information.
+To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:ci`. See the [Docker](docker.md) page for more information.
 
-### Browserstack
+### Playwright Binaries
 
-Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
+Playwright is a powerful end-to-end testing library that provides a high-level API to automate and test web applications in multiple browsers, including Chromium, WebKit, and Firefox.
 
-To run tests in BrowserStack from your local machine:
+To perform the testing and automation tasks, Playwright requires browser binaries that are specifically built and configured for use with Playwright.
 
-1) Log into [BrowserStack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
-2) Add the following to your shell configuration (`.bashrc` or `.profile`);
+These binaries are essential for running end-to-end tests using Playwright, as they contain the necessary components for launching and controlling the browsers in a way that is compatible with the Playwright API.
 
-```bash
-export BROWSERSTACK_ACCESS_KEY=yourkeyhere
-export BROWSERSTACK_USER=yourusernamehere
-```
-
-### Selenium Drivers
-
- **(Note)** Driver reliability varies between Operating systems. Using local selenium drivers to run tests is more useful as a development tool for creating new tests than it is for verifying if all tests are passing.
-
-To run tests on your machine using a Chrome driver: Run `npm run e2e:chrome`.
-
-To run tests on your machine using a Firefox driver:
-
-1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
-2) Run `npm run e2e:firefox`.
-
-To run tests for both browsers in sequence: `npm run e2e`.
-
-### Developing new End to End Tests
-
-* When creating new tests you will likely want to work locally with a `Chrome` or `Firefox` driver to expedite the development process.
-* If there is a specific test that you would like to run, you can change the `files` variable found in `./e2e/browserstack.conf.js` to point directly to your test.
-* If there is a specific browser that you would like to test, you can specify which in `./e2e/environments.json`
+The `postinstall` script automatically installs the Playwright browser binaries for Chromium, WebKit, and Firefox.
 
 ## Debug Parameters
 
