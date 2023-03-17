@@ -189,11 +189,11 @@ function LayerRow (props) {
           icon="ellipsis-v"
         />
       </DropdownToggle>
-      <DropdownMenu positionfixed="true">
+      <DropdownMenu positionFixed container={'body'} className='layer-options-dropdown-menu'>
         <DropdownItem
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
-          className="button wv-layers-info"
+          className="button wv-layers-info layer-options-dropdown-item"
           onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
           {layerInfoBtnTitle}
@@ -201,7 +201,7 @@ function LayerRow (props) {
         <DropdownItem
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
-          className="button wv-layers-options"
+          className="button wv-layers-options layer-options-dropdown-item"
           onClick={() => onOptionsClick(layer, title)}
         >
           {layerOptionsBtnTitle}
@@ -209,6 +209,7 @@ function LayerRow (props) {
         <DropdownItem
           id={removeLayerBtnId}
           onClick={() => onRemoveClick(layer.id)}
+          className="button wv-layers-options layer-options-dropdown-item"
         >
           {removeLayerBtnTitle}
         </DropdownItem>

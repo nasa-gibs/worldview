@@ -245,37 +245,6 @@ footer .compare-toggle-button {
         box-shadow: none;
       }
     }
-
-    .dropdown-menu {
-      margin: 0;
-      background-color: #3a3a3a;
-      color: #eee;
-      border-radius: 0;
-      box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
-    }
-
-    .dropdown-item {
-      color: #eee;
-      font-size: 14px;
-      padding: 6px 12px;
-
-      @media (max-width: $mobile-max-width) {
-        font-size: 18px;
-        padding: 12px 14px;
-      }
-
-      &:hover {
-        color: #fff;
-        background-color: #d54e21;
-      }
-
-      &:active,
-      &.active {
-        background: #d54e21;
-        color: #fff;
-        text-shadow: 1px 1px 0 #000;
-      }
-    }
   }
 
   .layer-group-more-options {
@@ -316,6 +285,38 @@ footer .compare-toggle-button {
 
   .layer-group-visibility {
     margin: 0 5px;
+  }
+}
+
+/* override bootstrap 5 dropdown menu */
+.layer-options-dropdown-menu {
+  margin: 0;
+  background-color: #3a3a3a;
+  color: #eee;
+  border-radius: 0;
+  box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
+}
+
+.layer-options-dropdown-item {
+  color: #eee;
+  font-size: 14px;
+  padding: 6px 12px;
+
+  @media (max-width: $mobile-max-width) {
+    font-size: 18px;
+    padding: 12px 14px;
+  }
+
+  &:hover {
+    color: #fff;
+    background-color: #d54e21;
+  }
+
+  &:active,
+  &.active {
+    background: #d54e21;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
   }
 }
 
