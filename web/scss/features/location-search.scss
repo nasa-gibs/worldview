@@ -41,7 +41,12 @@
   border: none;
   border-radius: 0;
   box-sizing: border-box;
-  color: #999;
+  color: #fff;
+  border-left: 2px solid rgb(51 51 51 / 65%);
+}
+
+.location-search-clear-button:hover {
+  background: none;
   border-left: 2px solid rgb(51 51 51 / 65%);
 }
 
