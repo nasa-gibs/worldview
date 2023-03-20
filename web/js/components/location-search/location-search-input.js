@@ -220,7 +220,7 @@ class SearchBox extends Component {
     const mobileStyle = isMobile ? {
       width: '100%', display: 'flex',
     } : {
-      display: 'flex', width: '85%'
+      display: 'flex', width: '85%',
     };
     return (
       <div
