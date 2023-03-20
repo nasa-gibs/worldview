@@ -213,11 +213,8 @@
 /* TOUR IN PROGRESS */
 .tour-in-progress {
   .modal {
-    left: auto;
-    right: 0;
-    top: auto;
+    inset: auto 0 343px auto;
     width: 248px;
-    bottom: 343px;
     height: 200px;
     overflow: visible;
   }
