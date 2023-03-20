@@ -157,7 +157,7 @@ class SearchBox extends Component {
     const buttonId = 'location-search-clear-button';
     const labelText = 'Clear search text';
     const tooltipVisibilityCondition = inputValue && !isMobile;
-    const positionStyle = isMobile ? {left: '-21px'} : {left: '-34px'}
+    const positionStyle = isMobile ? { left: '-21px' } : { left: '-34px' };
     return (
       inputValue && (
         <Button
@@ -218,8 +218,10 @@ class SearchBox extends Component {
       : 'Search for places or enter coordinates';
 
     const mobileStyle = isMobile ? {
-      width: '100%', display: 'flex'
-    } : {display: 'flex', width: '85%'};
+      width: '100%', display: 'flex',
+    } : {
+      display: 'flex', width: '85%'
+    };
     return (
       <div
         className="location-search-input-container"
