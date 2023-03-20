@@ -27,7 +27,7 @@ test('Clicking the share link button opens the share dialog', async () => {
   await expect(shareToolbar).toBeVisible()
 })
 
-test('Share tabs link, embed, and social are visible and enabled', async () => {
+test('Share tabs link and social are visible and enabled', async () => {
   const linkShareNav = await page.locator('.link-share-nav')
   const socialShareNav = await page.locator('.social-share-nav')
   const linkShareActive = await page.locator('.link-share-nav a')
