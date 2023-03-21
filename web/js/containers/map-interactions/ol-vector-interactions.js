@@ -153,7 +153,7 @@ export class VectorInteractions extends React.Component {
 
   mouseMove({ pixel }, map, crs) {
     const {
-      isCoordinateSearchActive, measureIsActive, granuleFootprints,
+      isCoordinateSearchActive, measureIsActive, granuleFootprints, isMobile,
     } = this.props;
     const coord = map.getCoordinateFromPixel(pixel);
     const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
@@ -164,7 +164,7 @@ export class VectorInteractions extends React.Component {
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
-    if (granuleFootprints) {
+    if (granuleFootprints && !isMobile) {
       this.handleGranuleHover(pixel, coord);
     }
     this.handleCursorChange(pixel, map, lon, lat);
@@ -194,6 +194,11 @@ export class VectorInteractions extends React.Component {
 
     const mapRes = map.getView().getResolution();
     const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id, isMobile);
+
+    if (isMobile) {
+      const coord = map.getCoordinateFromPixel(pixels);
+      this.handleGranuleHover(pixels, coord);
+    }
 
     if (metaArray.length) {
       if (hasNonClickableVectorLayerType) {

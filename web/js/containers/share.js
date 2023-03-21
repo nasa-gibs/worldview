@@ -37,7 +37,7 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
+const SOCIAL_SHARE_TABS = ['link', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -329,7 +329,7 @@ class ShareLinkContainer extends Component {
           {this.renderNavTabs()}
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
-            {this.renderEmbedTab()}
+            {/* {this.renderEmbedTab()} */}
             {this.renderSocialTab()}
           </TabContent>
         </div>

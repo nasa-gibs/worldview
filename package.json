@@ -54,7 +54,7 @@
     "e2e:headless:firefox": "npx nightwatch -e firefoxHeadless --skiptags skipLocalStorageEnabled --suiteRetries 2",
     "e2e:headless:firefox:localStorageDisabled": "npx nightwatch -e firefoxLocalStorageDisabled --tag localStorageDisabled",
     "getcapabilities": "bash -c 'FETCH_GC=1 npm run build:options'",
-    "generatePreviews": "node ./tasks/node/fetchPreviewSnapshots.py",
+    "generatePreviews": "node ./tasks/build-options/fetchPreviewSnapshots.py",
     "linkcheck": "node ./tasks/link-check",
     "lint": "run-s lint:js lint:scss",
     "lint:scss": "npx stylelint ./web/scss/**/*.scss",
