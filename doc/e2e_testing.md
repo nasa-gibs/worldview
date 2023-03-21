@@ -39,7 +39,6 @@ Playwright commands can be used to run the entire test suite, individual tests a
 - `npx playwright test compare-test.spec.js` : Run individual test headless
 - `npx playwright test compare-test.spec.js --headed` : Run individual test headed
 - `npx playwright test compare-test.spec.js --headed --project=firefox` : Run individual test headed for specific browser
-- `npx playwright test compare-test.spec.js --headed --viewport-size=375,667` : Run individual test in headed mode with mobile viewport
 - `npx playwright test compare-test.spec.js --repeat-each=5` : Run individual test in a loop
 - `npx playwright test compare-test.spec.js --debug` : Run individual test in debug mode
 - `npx playwright codegen http://localhost:3000` : Launch codegen
