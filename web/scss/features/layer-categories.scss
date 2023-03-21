@@ -97,6 +97,10 @@
     padding: 1px 15px;
     vertical-align: middle;
     float: left;
+
+    a:hover {
+      color: #000 !important;
+    }
   }
 
   & .category-breadcrumb {
@@ -139,6 +143,7 @@
       padding: 10px;
       color: #fff;
       background: $wv-transparent-black;
+      text-decoration: none;
     }
 
     & .layer-category-name:hover {
@@ -158,6 +163,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       box-sizing: border-box;
+      text-decoration: none;
     }
 
     & .layer-category-name:hover {
@@ -248,7 +254,7 @@
   }
 
   &:hover {
-    color: #eee;
+    // color: #eee;
     background: #504d4d;
   }
 
