@@ -28,15 +28,7 @@ Run end-to-end tests using `npm run e2e`
 
 To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:ci`. See the [Docker](docker.md) page for more information.
 
-### Playwright Binaries
-
-Playwright is a powerful end-to-end testing library that provides a high-level API to automate and test web applications in multiple browsers, including Chromium, WebKit, and Firefox.
-
-To perform the testing and automation tasks, Playwright requires browser binaries that are specifically built and configured for use with Playwright.
-
-These binaries are essential for running end-to-end tests using Playwright, as they contain the necessary components for launching and controlling the browsers in a way that is compatible with the Playwright API.
-
-The `postinstall` script automatically installs the Playwright browser binaries for Chromium, WebKit, and Firefox.
+See the [end to end testing](e2e_testing.md) page for more information on how to run the end to end tests.
 
 ## Debug Parameters
 
