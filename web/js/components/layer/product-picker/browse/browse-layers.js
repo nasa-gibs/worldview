@@ -203,8 +203,12 @@ function BrowseLayers (props) {
   return (
     <>
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
-      <div className="product-outter-list-case" style={
-        isCategoryDisplay ? { display: 'block', visibility: 'visible' } : { display: 'none', visibility: 'hidden' } }>
+      <div
+        className="product-outter-list-case"
+        style={
+          isCategoryDisplay ? { display: 'block', visibility: 'visible' } : { display: 'none', visibility: 'hidden' }
+        }
+      >
         <CategoryGrid width={width} />
       </div>
       { renderContent() }
