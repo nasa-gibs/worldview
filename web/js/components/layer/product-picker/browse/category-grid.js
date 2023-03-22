@@ -30,6 +30,7 @@ function CategoryGrid(props) {
     columnWidth: 0,
     gutter: 10,
   };
+  console.log(categories)
   categories.forEach((item) => {
     item.sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
   });
@@ -72,9 +73,9 @@ function mapStateToProps(state) {
     selectedMeasurementSourceIndex,
   } = productPicker;
   const categoryConfig = getCategoryConfig(state);
-
+  console.log(typeof categoryConfig === 'undefined' ? {} : Object.values(categoryConfig))
   return {
-    categories: Object.values(categoryConfig),
+    categories: typeof categoryConfig === 'undefined' ? [] : Object.values(categoryConfig),
     categoryType,
     category,
     measurementConfig: config.measurements,
