@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { Form } from 'reactstrap';
+import { Form, FormGroup, Input } from 'reactstrap';
 
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/icon-list';
@@ -94,18 +94,19 @@ class MeasureMenu extends Component {
     return (
       <>
         <Form>
-          <div className="measure-unit-toggle custom-control custom-switch">
-            <input
+          <FormGroup switch style={{padding: '1px 5px 0px 27px'}}>
+            <Input
               id="unit-toggle"
               className="custom-control-input"
-              type="checkbox"
+              type="switch"
               onChange={this.unitToggle}
               defaultChecked={unitOfMeasure === 'mi'}
             />
             <label className="custom-control-label" htmlFor="unit-toggle">
               {unitOfMeasure}
             </label>
-          </div>
+          </FormGroup>
+          <hr className="measure-unit-line" />
         </Form>
         <IconList
           list={OPTIONS_ARRAY}
