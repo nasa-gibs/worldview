@@ -7,5 +7,5 @@ npm cache verify
 npm install --unsafe-perm
 npm run build
 npm start &
-npx playwright install firefox
-npx playwright test --project=firefox
+npx playwright install
+npx playwright test

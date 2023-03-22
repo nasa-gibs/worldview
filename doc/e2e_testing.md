@@ -2,7 +2,11 @@
 
 End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
 
-Run end-to-end tests using `npm run e2e`.
+## Scripts
+
+- `e2e` :  Builds WV and runs the end to end tests for Firefox & Chromium in a Docker container
+
+See the [Docker](docker.md) page for more information.
 
 ## Playwright Binaries
 
@@ -12,21 +16,7 @@ To perform the testing and automation tasks, Playwright requires browser binarie
 
 These binaries are essential for running end-to-end tests using Playwright, as they contain the necessary components for launching and controlling the browsers in a way that is compatible with the Playwright API.
 
-The `postinstall` script automatically installs the Playwright browser binaries for Chromium, WebKit, and Firefox.
-
-## Scripts
-
-Several scripts have been setup in the package.json to easily run end to end tests.
-
-- `e2e` :  Runs tests in headed mode for Chromium, Firefox & Webkit
-- `e2e:headless` : Runs tests in headless mode for Chromium, Firefox & Webkit
-- `e2e:gui:chromium` : Runs tests in headed mode for Chromium
-- `e2e:gui:firefox` : Runs tests in headed mode for Firefox
-- `e2e:gui:webkit` : Runs tests in headed mode for Webkit
-- `e2e:headless:chromium` : Runs tests in headless mode for Chromium
-- `e2e:headless:firefox` : Runs tests in headless mode for Firefox
-- `e2e:headless:webkit` : Runs tests in headless mode for Webkit
-- `npm run docker:ci` : Build worlview and run Firefox tests in Docker
+To run Playwright tests locally you will need to run `npx playwright install` which will install the latest binaries for Chromium, Firefox & Webkit.
 
 ## Commands
 
@@ -49,8 +39,6 @@ Playwright commands can be used to run the entire test suite, individual tests a
 The `slowMo` property can be found in playwright.config.js file at the root directory.
 
 This property can be changed to a higher value to make it easier to watch the actions taking place in headed mode.
-
-This property must be set back to 200 before creating a PR.
 
 ## codegen
 
@@ -82,10 +70,6 @@ These hooks typically perform two or more Playwright actions or assertions and c
 The basicHooks.js file contains hooks that perform generic operations such as the `selectOption` hook that selects an option from a dropdown.
 
 The wvHooks.js file contains hooks that perform Worldview specific operations such as the `createDistanceMeasurement` hook that will create a line measurement based on a start and finish location.
-
-## Docker
-
-To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:ci`. See the [Docker](docker.md) page for more information.
 
 ## Creating End To End Tests
 
