@@ -41,7 +41,7 @@ jobs:
           npm run start &
           npx playwright install chromium &
           sleep 10
-          npm run e2e:headless:chromium --reporter=list
+          npx playwright test --project=chromium --reporter=list
 
       - name: Run E2E tests - Firefox / Windows
         if: ${{ runner.os == 'Windows' }}
@@ -49,6 +49,6 @@ jobs:
           npm run start &
           npx playwright install firefox &
           sleep 10
-          npm run e2e:headless:firefox --reporter=list
+          npx playwright test --project=firefox --reporter=list
 
 
