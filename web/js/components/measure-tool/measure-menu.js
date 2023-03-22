@@ -94,7 +94,7 @@ class MeasureMenu extends Component {
     return (
       <>
         <Form>
-          <FormGroup switch style={{padding: '1px 5px 0px 27px'}}>
+          <FormGroup switch style={{ padding: '1px 5px 0px 27px' }}>
             <Input
               id="unit-toggle"
               className="custom-control-input"
