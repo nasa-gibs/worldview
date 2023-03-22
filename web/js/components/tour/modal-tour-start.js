@@ -67,6 +67,11 @@ class ModalStart extends React.Component {
       modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour,
     } = this.props;
     const { checked } = this.state;
+    const closeBtn = (
+      <button className="tour-close-btn" onClick={endTour} type="button">
+        &times;
+      </button>
+    )
     return (
       <Modal
         isOpen={modalStart}
@@ -78,7 +83,7 @@ class ModalStart extends React.Component {
         keyboard={false}
         innerRef={this.setWrapperRef}
       >
-        <ModalHeader toggle={endTour}>
+        <ModalHeader toggle={endTour} close={closeBtn}>
           Welcome to @NAME@!
         </ModalHeader>
 
