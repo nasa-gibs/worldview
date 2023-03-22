@@ -333,7 +333,7 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
-  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge badge-pill badge-secondary' : 'collection-title badge badge-pill badge-light';
+  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill bg-light';
 
   const renderLayerRow = () => (
     <>
