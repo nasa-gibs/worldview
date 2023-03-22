@@ -71,7 +71,7 @@ class ModalStart extends React.Component {
       <button className="tour-close-btn" onClick={endTour} type="button">
         &times;
       </button>
-    )
+    );
     return (
       <Modal
         isOpen={modalStart}
