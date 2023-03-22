@@ -345,3 +345,16 @@
     line-height: 23px;
   }
 }
+
+.layer-btn-close {
+  position: relative;
+  border: none;
+  font-weight: bold;
+  color: rgb(108, 108, 108);
+  background: none;
+  font-size: 30px;
+}
+
+.layer-btn-close:hover {
+  color: black;
+}
