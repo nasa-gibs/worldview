@@ -51,6 +51,7 @@ async function processTemporalLayer (wvLayer, value) {
         }
         if (interval !== 'P1D') {
           endDate = moment(endDate).add(moment.duration(interval))
+          dateRangeEnd.push(endDate)
         }
         const regex = new RegExp(/\d+/g)
         const match = regex.exec(interval)
