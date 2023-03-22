@@ -82,7 +82,7 @@ class ProductPicker extends React.Component {
       width,
     } = this.props;
     const closeBtn = (
-      <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? {top: '-10px'} : {}} type="button">
+      <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? { top: '-10px' } : {}} type="button">
         &times;
       </button>
     );
