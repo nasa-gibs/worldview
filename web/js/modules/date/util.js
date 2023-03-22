@@ -363,12 +363,14 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
 
     case 'yearly':
-      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
+      // if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
+      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear());
       dateString = moment(parsedDate).format('YYYY');
       break;
 
     case 'monthly':
-      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
+      // if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
+      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth());
       dateString = moment(parsedDate).format('YYYY MMM').toUpperCase();
       break;
 
