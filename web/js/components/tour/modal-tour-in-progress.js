@@ -40,7 +40,7 @@ class ModalInProgress extends React.Component {
           backdrop={false}
           keyboard={false}
         >
-          <ModalHeader toggle={endTour} close={closeBtn} style={{display: 'flex', alignItems: 'baseline'}}>
+          <ModalHeader toggle={endTour} close={closeBtn} style={{ display: 'flex', alignItems: 'baseline' }}>
             {currentStory.title}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
