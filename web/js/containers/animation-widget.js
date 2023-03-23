@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
   debounce as lodashDebounce,
@@ -6,6 +6,8 @@ import {
 } from 'lodash';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
+import raf from 'rc-util/lib/raf';
+import Tooltip from 'rc-tooltip';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getISODateFormatted } from '../components/timeline/date-util';
@@ -78,6 +80,64 @@ function RangeHandle(props) {
       />
     </>
   );
+}
+
+const HandleTooltip = (props) => {
+  const { value, children, visible, tipFormatter = (val) => `${val}`, ...restProps } = props;
+
+  const tooltipRef = useRef()
+  const rafRef = useRef()
+
+  function cancelKeepAlign() {
+    raf.cancel(rafRef.current);
+  }
+
+  function keepAlign() {
+    rafRef.current = raf(() => {
+      tooltipRef.current?.forceAlign()
+    });
+  }
+
+  useEffect(() => {
+    if (visible) {
+      keepAlign();
+    } else {
+      cancelKeepAlign();
+    }
+
+    return cancelKeepAlign;
+  }, [value, visible]);
+
+  return (
+    <Tooltip
+      placement="top"
+      overlay={tipFormatter(value)}
+      overlayInnerStyle={{ minHeight: 'auto', color: '#fff', zIndex: '3'}}
+      style={{position: 'fixed !important'}}
+      ref={tooltipRef}
+      visible={visible}
+      {...restProps}
+    >
+      {children}
+    </Tooltip>
+  )
+}
+
+const TooltipSlider = ({ tipFormatter, tipProps, ...props }) => {
+  const tipHandleRender = (node, handleProps) => {
+    return (
+      <HandleTooltip
+        value={handleProps.value}
+        visible={handleProps.dragging}
+        tipFormatter={tipFormatter}
+        {...tipProps}
+      >
+        {node}
+      </HandleTooltip>
+    )
+  }
+
+  return <Slider {...props} handleRender={tipHandleRender} />
 }
 
 const widgetWidth = 334;
@@ -413,7 +473,10 @@ class AnimationWidget extends React.Component {
       width: '30px',
       color: '#fff',
     };
-
+    const onFrameSliderChange = (num) => {
+      this.setState({ speed: num })
+      onSlide(speed)
+    }
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
         <div className="mobile-animation-header">
@@ -446,16 +509,25 @@ class AnimationWidget extends React.Component {
 
               <div className="mobile-animation-flex-row" id="slider-case-row">
                 <div className="wv-slider-case">
-                  <Slider
+                  {/* <Slider
                     className="input-range"
                     step={0.5}
                     max={10}
                     min={0.5}
                     value={speed}
-                    onChange={(num) => this.setState({ speed: num })}
+                    onChange={(num) => onFrameSliderChange(num)}
                     handle={RangeHandle}
-                    onAfterChange={() => { onSlide(speed); }}
                     disabled={isPlaying}
+                  /> */}
+                  <TooltipSlider
+                    className="input-range"
+                    step={0.5}
+                    max={10}
+                    min={0.5}
+                    value={speed}
+                    disabled={isPlaying}
+                    onChange={(num) => onFrameSliderChange(num)}
+                    tipFormatter={(value) => `${value}`}
                   />
                   <span className="wv-slider-label">{sliderLabel}</span>
                 </div>
@@ -516,7 +588,10 @@ class AnimationWidget extends React.Component {
     } = this.props;
     const { speed, widgetPosition } = this.state;
     const cancelSelector = '.no-drag, .date-arrows';
-
+    const onFrameSliderChange = (num) => {
+      this.setState({ speed: num })
+      onSlide(speed)
+    }
     return (
       <Draggable
         bounds="body"
@@ -558,16 +633,26 @@ class AnimationWidget extends React.Component {
 
             {/* FPS slider */}
             <div className="wv-slider-case">
-              <Slider
+              {/* <Slider
                 className="input-range"
                 step={0.5}
                 max={10}
                 min={0.5}
                 value={speed}
-                onChange={(num) => this.setState({ speed: num })}
+                onChange={(num) => onFrameSliderChange(num)}
                 handle={RangeHandle}
-                onAfterChange={() => { onSlide(speed); }}
                 disabled={isPlaying}
+              /> */}
+              <TooltipSlider
+                className="input-range"
+                step={0.5}
+                max={10}
+                min={0.5}
+                value={speed}
+                onChange={(num) => onFrameSliderChange(num)}
+                disabled={isPlaying}
+                tipFormatter={(value) => `${value}`}
+                style={{color: 'white'}}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
