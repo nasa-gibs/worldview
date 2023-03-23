@@ -219,6 +219,23 @@
 
 /* TOUR IN PROGRESS */
 .tour-in-progress {
+  .end-tour-close-btn {
+    color: #ddd;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    width: 1px;
+    height: 1px;
+    font-weight: bold;
+    -webkit-text-stroke: 1px black;
+  }
+
+  .end-tour-close-btn:hover {
+    color: #fff;
+  }
+
   .modal {
     inset: auto 0 343px auto;
     width: 248px;
