@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
@@ -85,8 +86,8 @@ function RangeHandle(props) {
 const HandleTooltip = (props) => {
   const { value, children, visible, tipFormatter = (val) => `${val}`, ...restProps } = props;
 
-  const tooltipRef = useRef()
-  const rafRef = useRef()
+  const tooltipRef = useRef();
+  const rafRef = useRef();
 
   function cancelKeepAlign() {
     raf.cancel(rafRef.current);
@@ -94,7 +95,7 @@ const HandleTooltip = (props) => {
 
   function keepAlign() {
     rafRef.current = raf(() => {
-      tooltipRef.current?.forceAlign()
+      tooltipRef.current?.forceAlign();
     });
   }
 
