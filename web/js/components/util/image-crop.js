@@ -56,7 +56,7 @@ function Crop(props) {
     y,
     width,
     height,
-    unit: 'px'
+    unit: 'px',
   });
   const [loading, setLoaded] = useState(true);
   const prevCrop = useRef(crop);
@@ -116,7 +116,7 @@ function Crop(props) {
         onComplete={onFinishDrag}
         onChange={onDrag}
       >
-        <img src={TRANSPARENT_GIF} style={{width: maxWidth, height: maxHeight}} />
+        <img src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
       </ReactCrop>
     </Portal>
   );
