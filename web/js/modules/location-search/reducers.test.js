@@ -31,7 +31,7 @@ describe('locationSearch', () => {
   test(
     `${TOGGLE_SHOW_LOCATION_SEARCH
     } shows Location Search isExpanded and `
-      + 'should return new state',
+      + 'should return new state [locationsearch-reducers-toggle]',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
@@ -47,7 +47,7 @@ describe('locationSearch', () => {
   test(
     `${TOGGLE_REVERSE_GEOCODE
     } toggles isCoordinateSearchActive to true and `
-      + 'should return new state',
+      + 'should return new state [locationsearch-reducers-reverse-geocode]',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
@@ -63,7 +63,7 @@ describe('locationSearch', () => {
   test(
     `${SET_MARKER
     } updates coordinates, reverseGeocodeResults `
-    + 'and sets isCoordinateSearchActive to false and should return new state',
+    + 'and sets isCoordinateSearchActive to false and should return new state [locationsearch-reducers-set-marker]',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
@@ -82,7 +82,7 @@ describe('locationSearch', () => {
   test(
     `${SET_SUGGESTION
     } updates suggestions with value and `
-      + 'should return new state',
+      + 'should return new state [locationsearch-reducers-set-suggestion]',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
@@ -98,7 +98,7 @@ describe('locationSearch', () => {
   test(
     `${CLEAR_SUGGESTIONS
     } updates suggestions and suggestedPlace with clear value and `
-      + 'should return new state',
+      + 'should return new state [locationsearch-reducers-clear-suggestion]',
     () => {
       expect(
         locationSearchReducer(locationSearchState, {
