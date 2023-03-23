@@ -11,9 +11,10 @@ Use `npm run lint:scss` or `npm run lint:js` to check SCSS or JS files separatel
 ## Unit Tests
 
 Unit tests are run using the Jest testing framework. Unit tests ran as part of the main testing suite, i.e. `npm test`.
-Use `npm test:unit` to run unit tests individually.
-_Note:_ Make sure to run `npm run getcapabilities` and
-`npm run build:config` first to build the configuration.
+
+To run unit tests individually use the `npm run test:unit:tag` script and provide the unit tag. Ex: `npm run test:unit:tag -- alert-initial-state`. The tags can be found at the end of each test description in square brackets. `'Should return the initial state [alert-initial-state]'`.
+
+To run a batch of unit tests you can use the `npm run test:batch:directory` script and provide the module directory of the tests. This will run each file in the directory provided. Ex: `npm run test:batch:directory -- animation`. This will run the `actions.test.js`, `reducer.test.js` and `util.test.js` test files located in the `modules/animation` directory.
 
 To test against a different time zone, run `npm run test:unit:tz`. _Note:_ This currently doesn't work in Windows.
 
