@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import { Range as RangeInput } from 'rc-slider';
+import Slider from 'rc-slider';
 
 class VectorFilter extends React.Component {
   constructor(props) {
@@ -62,7 +62,8 @@ class VectorFilter extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <RangeInput
+          <Slider
+            range
             defaultValue={[start, end]}
             min={min}
             max={max}

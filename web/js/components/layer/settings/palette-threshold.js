@@ -7,8 +7,6 @@ import {
   checkTemperatureUnitConversion, convertPaletteValue,
 } from '../../../modules/settings/util';
 
-const RangeInput = Slider.Range;
-
 class PaletteThreshold extends React.Component {
   constructor(props) {
     super(props);
@@ -133,7 +131,8 @@ class PaletteThreshold extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <RangeInput
+          <Slider
+            range
             defaultValue={[start, end]}
             min={min}
             max={max}
