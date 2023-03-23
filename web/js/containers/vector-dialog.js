@@ -52,7 +52,7 @@ class VectorDialog extends React.Component {
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
     const closeBtn = (
-      <button onClick={toggleWithClose} type="button">
+      <button onClick={toggleWithClose} type="button" className="vector-close-btn">
         &times;
       </button>
     );
