@@ -18,6 +18,5 @@ module.exports = {
   modulePathIgnorePatterns: [
     '<rootDir>/build/'
   ],
-  "testMatch": ["**/?(*.)test.js"],
   testEnvironment: 'jsdom'
 }
