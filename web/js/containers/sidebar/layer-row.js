@@ -253,7 +253,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
+        <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" />
       </a>
     </>
   );
