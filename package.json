@@ -159,6 +159,7 @@
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^3.3.3",
+    "dom-scroll-into-view": "^2.0.1",
     "element-resize-detector": "^1.2.4",
     "elm-pep": "^1.0.6",
     "file-saver": "^2.0.5",
