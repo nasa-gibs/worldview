@@ -16,7 +16,7 @@ describe('Notification fetch action', () => {
   afterEach(() => {
     fetchMock.restore();
   });
-  test('triggers start and success action types', () => {
+  test('triggers start and success action types [notifications-actions-success]', () => {
     const loc = 'mock/';
     fetchMock.getOnce(loc, {
       body: constants.MOCK_RESPONSE,
@@ -40,7 +40,7 @@ describe('Notification fetch action', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
-  test(`creates ${constants.REQUEST_NOTIFICATIONS_FAILURE} Action`, () => {
+  test(`creates ${constants.REQUEST_NOTIFICATIONS_FAILURE} Action [notifications-actions-failure]`, () => {
     const loc = 'mock/';
     fetchMock.mock(loc, {
       throws: ERROR_MESSAGE,
@@ -60,7 +60,7 @@ describe('Notification fetch action', () => {
       });
   });
 });
-describe('Notification post-request actions', () => {
+describe('Notification post-request actions [notifications-actions-post-request]', () => {
   test(
     `setNotification action returns ${
       constants.SET_NOTIFICATIONS
@@ -78,7 +78,7 @@ describe('Notification post-request actions', () => {
   test(
     `notificationsSeen action returns ${
       constants.NOTIFICATIONS_SEEN
-    } action type`,
+    } action type [notifications-actions-seen]`,
     () => {
       const expectedAction = {
         type: constants.NOTIFICATIONS_SEEN,
