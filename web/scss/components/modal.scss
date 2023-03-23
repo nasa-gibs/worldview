@@ -113,6 +113,17 @@
   color: #eee;
 }
 
+.modal-close-btn {
+  color: #ddd;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+}
+
+.modal-close-btn:hover {
+  color: #fff;
+}
+
 .clickable-behind-modal .modal {
   position: inherit;
 }
