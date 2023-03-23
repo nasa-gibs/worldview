@@ -58,6 +58,7 @@
     "t-debug": "npx playwright test --debug",
     "test": "run-script-os",
     "test:unit:tag": "node ./tasks/util/runSingleUnitTest.js",
+    "test:batch:directory": "node ./tasks/util/runTestBatch.js",
     "test:coverage": "run-script-os",
     "test:coverage:default": "run-s test:unit:coverage test:unit:tz:coverage lint",
     "test:coverage:win32": "run-s test:unit:coverage lint",

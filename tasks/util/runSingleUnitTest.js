@@ -28,3 +28,5 @@ try {
 } catch (error) {
   throw new Error(error.status)
 }
+
+// npm run test:unit:tag -- alert-initial-state
