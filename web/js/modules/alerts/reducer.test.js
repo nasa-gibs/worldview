@@ -7,7 +7,7 @@ import {
 } from './constants';
 
 describe('alertReducer', () => {
-  test('should return the initial state', () => {
+  test('should return the initial state [alert-initial-state]', () => {
     expect(alertReducer(undefined, {})).toEqual(
       defaultAlertState,
     );
