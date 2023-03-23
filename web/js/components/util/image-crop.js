@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Cropper from 'react-image-crop';
+import ReactCrop from 'react-image-crop';
 import { Portal } from 'react-portal';
 import { pick, some } from 'lodash';
 
@@ -56,8 +56,10 @@ function Crop(props) {
     y,
     width,
     height,
+    unit: 'px'
   });
   const [loading, setLoaded] = useState(true);
+  const prevCrop = useRef(crop);
 
   useEffect(() => {
     setCrop({
@@ -65,6 +67,7 @@ function Crop(props) {
       y,
       width,
       height,
+      unit: 'px',
     });
   }, [x, y, width, height]);
 
@@ -86,13 +89,11 @@ function Crop(props) {
   };
 
   const onDrag = (cropBoundaries) => {
-    if (loading) return;
     setCrop(cropBoundaries);
     if (cropBoundaries.width && cropBoundaries.height) {
       onChange(cropBoundaries);
     }
   };
-  const prevCrop = useRef(crop);
 
   return (
     <Portal node={document && document.getElementById('wv-content')}>
@@ -104,21 +105,19 @@ function Crop(props) {
         />
       )}
 
-      <Cropper
+      <ReactCrop
         crop={crop}
-        src={TRANSPARENT_GIF}
         style={{
           background: crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
           zIndex,
-        }}
-        imageStyle={{
-          width: maxWidth,
-          height: maxHeight,
+          height: '100%',
         }}
         keepSelection={keepSelection}
         onComplete={onFinishDrag}
         onChange={onDrag}
-      />
+      >
+        <img src={TRANSPARENT_GIF} style={{width: maxWidth, height: maxHeight}} />
+      </ReactCrop>
     </Portal>
   );
 }
