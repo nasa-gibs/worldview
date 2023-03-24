@@ -6,9 +6,7 @@ import {
   get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
-import Slider from 'rc-slider';
 import raf from 'rc-util/lib/raf';
-import Tooltip from 'rc-tooltip';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getISODateFormatted } from '../components/timeline/date-util';
@@ -55,6 +53,9 @@ import {
   toggleAnimationCollapse,
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
+import Slider from 'rc-slider';
+import Tooltip from 'rc-tooltip';
+import 'rc-slider/assets/index.css';
 
 const { Handle } = Slider;
 
