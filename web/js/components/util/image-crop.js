@@ -73,7 +73,6 @@ function Crop(props) {
 
   const onFinishDrag = (cropBoundaries) => {
     const { width: cWidth, height: cHeight } = cropBoundaries;
-    if (loading) return setLoaded(false); // Hack -- prevent event from triggering onload
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
     const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
