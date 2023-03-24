@@ -1019,12 +1019,3 @@
   display: flex;
   justify-content: space-between;
 }
-
-/** React-Swipe-To-Delete Overrides */
-.swipe-to-delete .js-content:first-child {
-  position: relative !important;
-}
-
-.layers-all .swipe-to-delete .js-delete {
-  margin-top: 5px;
-}
