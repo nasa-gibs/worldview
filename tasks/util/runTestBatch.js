@@ -1,4 +1,5 @@
 const { execSync } = require('child_process')
+const path = require('path')
 
 const directory = process.argv[2]
 
@@ -7,7 +8,8 @@ if (!directory) {
 }
 
 try {
-  const command = `jest 'web/js/modules/${directory}/'`
+  const testDirectory = path.join('web', 'js', 'modules', directory).replace(/\\/g, '/')
+  const command = `jest ${testDirectory}`
   execSync(command, { stdio: 'inherit' })
 } catch (error) {
   throw new Error(error.status)
