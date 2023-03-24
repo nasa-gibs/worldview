@@ -21,15 +21,15 @@ To test against a different time zone, run `npm run test:unit:tz`. _Note:_ This 
 To view the unit test code coverage, run `npm run test:coverage`.
 Use `npm run test:unit:coverage` or `npm run test:unit:tz:coverage` to run coverage tests individually.
 
-## End-to-end Tests
+## End-To-End Tests
 
-End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
+The end-to-end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by end-to-end tests to cover any new functionality you add.
 
 Run end-to-end tests using `npm run e2e`
 
 To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:ci`. See the [Docker](docker.md) page for more information.
 
-See the [end to end testing](e2e_testing.md) page for more information on how to run the end to end tests.
+See the [end-to-end testing](e2e_testing.md) page for more information on how to run the end-to-end tests.
 
 ## Debug Parameters
 

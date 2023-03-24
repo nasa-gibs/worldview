@@ -1,10 +1,10 @@
-# End To End Testing
+# End-To-End Testing
 
-End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
+End-to-end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by end-to-end tests to cover any new functionality you add.
 
 ## Scripts
 
-- `e2e` :  Builds WV and runs the end to end tests for Firefox & Chromium in a Docker container
+- `e2e` :  Builds WV and runs the end-to-end tests for Firefox & Chromium in a Docker container
 
 See the [Docker](docker.md) page for more information.
 
@@ -71,9 +71,9 @@ The basicHooks.js file contains hooks that perform generic operations such as th
 
 The wvHooks.js file contains hooks that perform Worldview specific operations such as the `createDistanceMeasurement` hook that will create a line measurement based on a start and finish location.
 
-## Creating End To End Tests
+## Creating End-To-End Tests
 
-This section will go over the basics of creating an end to end test. This will use `recent-layers-test.spec.js` as an example if you want to follow along.
+This section will go over the basics of creating an end-to-end test. This will use `recent-layers-test.spec.js` as an example if you want to follow along.
 
 ### **Imports & Top Level Variables**
 
