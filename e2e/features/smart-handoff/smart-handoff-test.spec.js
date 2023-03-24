@@ -61,7 +61,7 @@ test('Arriving via permalink, data tab selected and granule count shows', async 
 })
 
 test('Changing collection updates URL', async () => {
-  await page.getByLabel('Standard - v4.1').check();
+  await page.getByLabel('Standard - v4.1').check()
   const url = await page.url()
   expect(url).toContain('&sh=GHRSST_L4_MUR_Sea_Surface_Temperature')
 })
