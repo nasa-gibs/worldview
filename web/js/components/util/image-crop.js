@@ -58,7 +58,6 @@ function Crop(props) {
     height,
     unit: 'px',
   });
-  const [loading, setLoaded] = useState(true);
   const prevCrop = useRef(crop);
 
   useEffect(() => {
