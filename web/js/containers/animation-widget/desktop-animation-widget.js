@@ -1,41 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Slider from 'rc-slider';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import raf from 'rc-util/lib/raf';
 import DateRangeSelector from '../../components/date-selector/date-range-selector';
 import LoopButton from '../../components/animation-widget/loop-button';
 import PlayButton from '../../components/animation-widget/play-button';
 import GifButton from '../../components/animation-widget/gif-button'
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/timescale-interval-change';
 import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
-
-// function RangeHandle(props) {
-//   const {
-//     value, offset, dragging, ...restProps
-//   } = props;
-
-//   const positionStyle = {
-//     position: 'absolute',
-//     left: `${(offset - 5).toFixed(2)}%`,
-//   };
-
-//   return (
-//     <>
-//       <span className="anim-frame-rate-label" style={positionStyle}>
-//         {value < 10 ? value.toFixed(1) : value}
-//       </span>
-//       <Handle
-//         dragging={dragging.toString()}
-//         value={value}
-//         offset={offset}
-//         {...restProps}
-//       />
-//     </>
-//   );
-// }
 
 const DesktopAnimationWidget = (props) => {
   const {
@@ -117,17 +89,25 @@ const DesktopAnimationWidget = (props) => {
 
         {/* FPS slider */}
         <div className="wv-slider-case">
-          <Slider
-            className="input-range"
-            step={0.5}
-            max={10}
-            min={0.5}
-            value={speed}
-            onChange={(num) => onFrameSliderChange(num)}
-            // handle={RangeHandle}
-            disabled={isPlaying}
-          />
-          <span className="wv-slider-label">{sliderLabel}</span>
+          <div className="input-range-wrapper" style={{ position: 'relative' }}>
+            <input
+              type="range"
+              className="input-range form-range"
+              step={0.5}
+              max={10}
+              min={0.5}
+              value={speed}
+              onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
+              disabled={isPlaying}
+              style={{
+                '--value-percent': `${(speed - 0.5) / (10 - 0.5) * 100}%`,
+              }}
+            />
+          </div>
+          <span className="wv-slider-label">
+
+            {speed} { ' ' } {sliderLabel}
+          </span>
         </div>
 
         <GifButton
@@ -153,6 +133,36 @@ const DesktopAnimationWidget = (props) => {
     </div>
   </Draggable>
   )
+}
+
+DesktopAnimationWidget.propTypes = {
+  animationCustomModalOpen: PropTypes.bool,
+  customModalType: PropTypes.string,
+  endDate: PropTypes.object,
+  handleDragStart: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
+  interval: PropTypes.string,
+  isPlaying: PropTypes.bool,
+  looping: PropTypes.bool,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  numberOfFrames: PropTypes.number,
+  onClose: PropTypes.func,
+  onDateChange: PropTypes.func,
+  onExpandedDrag: PropTypes.func,
+  onLoop: PropTypes.func,
+  onPushPause: PropTypes.func,
+  onPushPlay: PropTypes.func,
+  onSlide: PropTypes.func,
+  playDisabled: PropTypes.bool,
+  toggleCollapse: PropTypes.func,
+  setSpeed: PropTypes.func,
+  sliderLabel: PropTypes.string,
+  speed: PropTypes.number,
+  startDate: PropTypes.object,
+  subDailyMode: PropTypes.bool,
+  widgetPosition: PropTypes.object,
+  zeroDates: PropTypes.func,
 }
 
 export default DesktopAnimationWidget
