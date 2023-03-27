@@ -712,12 +712,6 @@ a .wv-animation-widget-icon {
 
 // the rc-slider library was replaced with a bootstrap range, use this to custom style range
 .form-range {
-  // Change the appearance of the input range track
-  &::-webkit-slider-runnable-track {
-    height: 4px;
-    background-color: #ccc;
-  }
-
   &::-moz-range-track {
     height: 4px;
     background-color: #ccc;
@@ -730,8 +724,7 @@ a .wv-animation-widget-icon {
 
   // Customize the handle
   &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    margin-top: -8px; // Adjust the handle position
+    margin-top: -8px;
     width: 20px;
     height: 20px;
     background-color: white;
@@ -760,6 +753,7 @@ a .wv-animation-widget-icon {
 
   // Change the color of the selected portion
   &::-webkit-slider-runnable-track {
+    height: 4px;
     background: linear-gradient(
       to right,
       $wv-dark-blue 0%,
@@ -776,49 +770,33 @@ a .wv-animation-widget-icon {
 }
 
 .form-range.range-mobile {
-  margin-top: 15px;
-
   &::-webkit-slider-runnable-track {
     height: 10px;
-    background-color: #ccc;
+    width: 300px;
   }
 
   &::-moz-range-track {
     height: 10px;
-    background-color: #ccc;
+    width: 300px;
   }
 
   &::-ms-track {
     height: 10px;
-    background-color: #ccc;
+    width: 300px;
   }
 
   &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    margin-top: -8px; // Adjust the handle position
     width: 30px;
     height: 30px;
-    background-color: white;
-    border: 2px solid $wv-dark-blue;
-    border-radius: 50%;
-    cursor: pointer;
   }
 
   &::-moz-range-thumb {
     width: 30px;
     height: 30px;
-    background-color: white;
-    border: 2px solid $wv-dark-blue;
-    border-radius: 50%;
-    cursor: pointer;
   }
 
   &::-ms-thumb {
     width: 30px;
     height: 30px;
-    background-color: white;
-    border: 2px solid $wv-dark-blue;
-    border-radius: 50%;
-    cursor: pointer;
   }
 }

@@ -40,7 +40,6 @@ function MobileAnimationWidget (props) {
   } = props;
 
   const debounceDateUpdate = lodashDebounce(selectDate, 8);
-
   const minimumDate = getISODateFormatted(minDate);
   const maximumDate = getISODateFormatted(maxDate);
   const endingDate = getISODateFormatted(endDate);
@@ -63,6 +62,7 @@ function MobileAnimationWidget (props) {
     width: '30px',
     color: '#fff',
   };
+
   const onFrameSliderChange = (num) => {
     setSpeed(num);
     onSlide(speed);
@@ -111,15 +111,12 @@ function MobileAnimationWidget (props) {
             </div>
 
             <div className="mobile-animation-flex-row" id="slider-case-row">
+              <span className="wv-slider-label">
+                {speed}
+                {' '}
+                {sliderLabel}
+              </span>
               <div className="wv-slider-case">
-
-                <span className="wv-slider-label">
-                  {speed}
-                  {' '}
-                  { ' ' }
-                  {' '}
-                  {sliderLabel}
-                </span>
                 <div className="input-range-wrapper" style={{ position: 'relative' }}>
                   <input
                     type="range"
@@ -132,6 +129,7 @@ function MobileAnimationWidget (props) {
                     disabled={isPlaying}
                     style={{
                       '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%`,
+                      width: '300px',
                     }}
                   />
                 </div>
