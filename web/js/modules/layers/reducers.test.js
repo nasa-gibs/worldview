@@ -48,7 +48,7 @@ describe('layer Reducer tests', () => {
     initialEventLayers = [];
   });
 
-  test('initial state has layers and overlayGroups as expected', () => {
+  test('initial state has layers and overlayGroups as expected [layers-reducer-initial-state]', () => {
     expect(initialLayers.length).toEqual(3);
     expect(initialLayers[0].id).toEqual('terra-aod');
     expect(initialLayers[1].id).toEqual('aqua-cr');
@@ -66,7 +66,7 @@ describe('layer Reducer tests', () => {
     expect(initialState.active.prevLayers.length).toEqual(0);
   });
 
-  test('Common actions update active layer array and groups', () => {
+  test('Common actions update active layer array and groups [layers-reducer-common-actions]', () => {
     const actions = [
       ADD_LAYER,
       REORDER_LAYERS,
@@ -88,7 +88,7 @@ describe('layer Reducer tests', () => {
     });
   });
 
-  test('Remove layer and group', () => {
+  test('Remove layer and group [layers-reducer-remove-layer]', () => {
     const actions = [
       REMOVE_LAYER,
       REMOVE_GROUP,
@@ -110,7 +110,7 @@ describe('layer Reducer tests', () => {
     });
   });
 
-  test('ADD_LAYERS_FOR_EVENT sets new groups, layers, and clears prevLayeers', () => {
+  test('ADD_LAYERS_FOR_EVENT sets new groups, layers, and clears prevLayeers [layers-reducer-add-layer-for-event]', () => {
     const response = layerReducer(initialState, {
       type: ADD_LAYERS_FOR_EVENT,
       activeString: 'active',
@@ -123,7 +123,7 @@ describe('layer Reducer tests', () => {
     expect(response.active.prevLayers).toEqual([]);
   });
 
-  test('REORDER_OVERLAY_GROUPS sets new groups, layers, and clears prevLayeers', () => {
+  test('REORDER_OVERLAY_GROUPS sets new groups, layers, and clears prevLayers [layers-reducer-reorder-overlay-groups]', () => {
     const response = layerReducer(initialState, {
       type: REORDER_OVERLAY_GROUPS,
       activeString: 'active',
@@ -136,7 +136,7 @@ describe('layer Reducer tests', () => {
     expect(response.active.prevLayers).toEqual([]);
   });
 
-  test('INIT_SECOND_LAYER_GROUP copies current layer state', () => {
+  test('INIT_SECOND_LAYER_GROUP copies current layer state [layers-reducer-second-layer-group]', () => {
     const response = layerReducer(initialState, {
       type: INIT_SECOND_LAYER_GROUP,
     });
@@ -144,7 +144,7 @@ describe('layer Reducer tests', () => {
     expect(initialState.active).toEqual(response.activeB);
   });
 
-  test('TOGGLE_LAYER_VISIBILITY action toggles layer state visibility', () => {
+  test('TOGGLE_LAYER_VISIBILITY action toggles layer state visibility [layers-reducer-toggle-visibility]', () => {
     const response = layerReducer(initialState, {
       type: TOGGLE_LAYER_VISIBILITY,
       id: 'terra-cr',
@@ -155,7 +155,7 @@ describe('layer Reducer tests', () => {
     expect(getTestLayer(response.active.layers).visible).toBeFalsy();
   });
 
-  test('TOGGLE_COLLAPSE_OVERLAY_GROUP toggles collapsed state of group', () => {
+  test('TOGGLE_COLLAPSE_OVERLAY_GROUP toggles collapsed state of group [layers-reducer-collapse-overlay-group]', () => {
     const response = layerReducer(initialState, {
       type: TOGGLE_COLLAPSE_OVERLAY_GROUP,
       groupName: 'AOD',
@@ -166,7 +166,7 @@ describe('layer Reducer tests', () => {
     expect(getTestGroup(response.active.overlayGroups)).toBeTruthy();
   });
 
-  test('TOGGLE_OVERLAY_GROUPS ungroups layers when grouped', () => {
+  test('TOGGLE_OVERLAY_GROUPS ungroups layers when grouped [layers-reducer-ungroup-layers]', () => {
     const mockLayers = ['layer1', 'layer2', 'layer3'];
     const response = layerReducer(initialState, {
       type: TOGGLE_OVERLAY_GROUPS,
@@ -181,7 +181,7 @@ describe('layer Reducer tests', () => {
     expect(response.active.prevLayers).toEqual(undefined);
   });
 
-  test('TOGGLE_OVERLAY_GROUPS groups layers when ungrouped', () => {
+  test('TOGGLE_OVERLAY_GROUPS groups layers when ungrouped [layers-reducer-group-layers]', () => {
     const response = layerReducer(initialState, {
       type: TOGGLE_OVERLAY_GROUPS,
       activeString: 'active',
@@ -196,7 +196,7 @@ describe('layer Reducer tests', () => {
     expect(response.active.prevLayers).toEqual(initialLayers);
   });
 
-  test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props', () => {
+  test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props [layers-reducer-update-palettes]', () => {
     const response = layerReducer(initialState, {
       type: SET_THRESHOLD_RANGE_AND_SQUASH,
       props: { squash: true, min: 0.3 },
@@ -209,7 +209,7 @@ describe('layer Reducer tests', () => {
     expect(responseLayer.min).toEqual(0.3);
   });
 
-  test('CLEAR_CUSTOM_PALETTE action removed custom value', () => {
+  test('CLEAR_CUSTOM_PALETTE action removed custom value [layers-reducer-clear-custom-palette]', () => {
     const customInitial = update(initialState, {
       active: {
         layers: {
@@ -226,7 +226,7 @@ describe('layer Reducer tests', () => {
     expect(getTestLayer(response.active.layers).custom).toEqual(undefined);
   });
 
-  test('SET_CUSTOM_PALETTE action removed custom value', () => {
+  test('SET_CUSTOM_PALETTE action removed custom value [layers-reducer-set-custom-palette]', () => {
     const response = layerReducer(initialState, {
       type: SET_CUSTOM_PALETTE,
       id: 'terra-cr',
@@ -238,7 +238,7 @@ describe('layer Reducer tests', () => {
     expect(getTestLayer(response.active.layers).custom).toEqual(['custom-id']);
   });
 
-  test('UPDATE_OPACITY action updates opacity for given layer', () => {
+  test('UPDATE_OPACITY action updates opacity for given layer [layers-reducer-update-opacity]', () => {
     const response = layerReducer(initialState, {
       type: UPDATE_OPACITY,
       activeString: 'active',
