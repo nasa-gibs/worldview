@@ -1,34 +1,28 @@
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import {
-  debounce as lodashDebounce,
-  get as lodashGet,
-} from 'lodash';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Draggable from 'react-draggable';
 import PlayButton from '../../components/animation-widget/play-button';
 
-
-const CollapsedAnimationWidget = (props) => {
+function CollapsedAnimationWidget (props) {
   const {
+    breakpoints,
+    collapsedWidgetPosition,
+    handleDragStart,
     hasSubdailyLayers,
+    isLandscape,
     isMobile,
+    isMobilePhone,
+    isMobileTablet,
     isPlaying,
+    isPortrait,
     onClose,
     onCollapsedDrag,
     onPushPause,
     onPushPlay,
     playDisabled,
-    isPortrait,
-    isLandscape,
-    isMobilePhone,
-    isMobileTablet,
     screenWidth,
-    breakpoints,
-    collapsedWidgetPosition,
-    handleDragStart,
-    toggleCollapse
+    toggleCollapse,
   } = props;
 
   const cancelSelector = '.no-drag, svg';
@@ -85,4 +79,24 @@ const CollapsedAnimationWidget = (props) => {
   );
 }
 
-export default CollapsedAnimationWidget
+CollapsedAnimationWidget.propTypes = {
+  breakpoints: PropTypes.object,
+  collapsedWidgetPosition: PropTypes.object,
+  handleDragStart: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
+  isLandscape: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  isPlaying: PropTypes.bool,
+  isPortrait: PropTypes.bool,
+  onClose: PropTypes.func,
+  onCollapsedDrag: PropTypes.func,
+  onPushPause: PropTypes.func,
+  onPushPlay: PropTypes.func,
+  playDisabled: PropTypes.bool,
+  screenWidth: PropTypes.number,
+  toggleCollapse: PropTypes.func,
+};
+
+export default CollapsedAnimationWidget;

@@ -45,11 +45,8 @@ import {
   toggleAnimationCollapse,
   onIntervalSelect,
   toggleCustomIntervalModal,
-  startDate,
-  endDate,
   onUpdateStartAndEndDate,
 } from '../../modules/animation/actions';
-import GifButton from '../../components/animation-widget/gif-button';
 import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 import usePrevious from '../../../js/util/customHooks'
@@ -64,7 +61,6 @@ const AnimationWidget = (props) => {
     breakpoints,
     currentDate,
     delta,
-    draggerSelected,
     endDate,
     hasFutureLayers,
     hasSubdailyLayers,
@@ -82,6 +78,7 @@ const AnimationWidget = (props) => {
     minDate,
     maxDate,
     numberOfFrames,
+    onClose,
     onIntervalSelect,
     onPushLoop,
     onPushPause,
@@ -92,7 +89,9 @@ const AnimationWidget = (props) => {
     onUpdateStartDate,
     onUpdateStartAndEndDate,
     playDisabled,
+    promiseImageryForTime,
     screenWidth,
+    selectDate,
     sliderLabel,
     speedRedux,
     snappedCurrentDate,
@@ -174,7 +173,7 @@ const AnimationWidget = (props) => {
     }
 
     const onLoop = () => {
-      if (looping) onPushLoop(looping)
+      onPushLoop(looping)
     }
 
     const onDateChange = ([newStartDate, newEndDate]) => {
@@ -198,24 +197,32 @@ const AnimationWidget = (props) => {
       onUpdateEndDate(dateObj);
     };
 
-    const onIntervalSelectFunc = (timeScale, openModal) => {
-      let delta;
-      const customSelected = timeScale === 'custom';
+    // almost positive that this function does nothing
 
-      if (openModal) {
-        toggleCustomIntervalModal(openModal);
-        return;
-      }
+    // const onIntervalSelectFunc = (timeScale, openModal) => {
+    //   let delta;
+    //   const customSelected = timeScale === 'custom';
 
-      if (customSelected && customInterval && customDelta) {
-        timeScale = customInterval;
-        delta = customDelta;
-      } else {
-        timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
-        delta = 1;
-      }
-      onIntervalSelect(delta, timeScale, customSelected);
-    }
+    //   if (openModal) {
+    //     toggleCustomIntervalModal(openModal);
+    //     return;
+    //   }
+
+    //   if (customSelected && customInterval && customDelta) {
+    //     timeScale = customInterval;
+    //     delta = customDelta;
+    //   } else {
+    //     timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
+    //     delta = 1;
+    //   }
+    //   onIntervalSelect(delta, timeScale, customSelected);
+    // }
+
+    // pretty sure this function does nothing too
+
+    // const toggleCustomIntervalModal = (isOpen) => {
+    //   toggleCustomModal(isOpen, customModalType.ANIMATION)
+    // }
 
   /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
@@ -228,24 +235,27 @@ const AnimationWidget = (props) => {
     * @param {Object} JS Date - endDate
    */
   const zeroDates = () => {
+    let startDateZeroed = new Date(startDate);
+    let endDateZeroed = new Date(endDate);
+
     if (subDailyMode) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
-      let startMinutes = startDate.getMinutes();
-      let endMinutes = endDate.getMinutes();
-      startDate.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
-      startDate.setUTCSeconds(0);
-      startDate.setUTCMilliseconds(0);
-      endDate.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
-      endDate.setUTCSeconds(0);
-      endDate.setUTCMilliseconds(0);
+      let startMinutes = startDateZeroed.getMinutes();
+      let endMinutes = endDateZeroed.getMinutes();
+      startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      startDateZeroed.setUTCSeconds(0);
+      startDateZeroed.setUTCMilliseconds(0);
+      endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      endDateZeroed.setUTCSeconds(0);
+      endDateZeroed.setUTCMilliseconds(0);
     } else {
       // for nonsubdaily, zero start and end dates to UTC 00:00:00:00
-      let startDate = util.clearTimeUTC(startDate);
-      let endDate = util.clearTimeUTC(endDate);
+      startDateZeroed = util.clearTimeUTC(startDate);
+      endDateZeroed = util.clearTimeUTC(endDate);
     }
     return {
-      startDate,
-      endDate,
+      startDate: startDateZeroed,
+      endDate: endDateZeroed,
     };
   };
 
@@ -256,10 +266,6 @@ const AnimationWidget = (props) => {
       } = zeroDates();
       onUpdateStartAndEndDate(startDate, endDate);
       onPushPlay();
-    }
-
-    const toggleCustomIntervalModal = (isOpen) => {
-      toggleCustomModal(isOpen, customModalType.ANIMATION)
     }
 
   return isActive ? (
@@ -300,7 +306,8 @@ const AnimationWidget = (props) => {
           collapsedWidgetPosition={collapsedWidgetPosition}
           handleDragStart={handleDragStart}
           onCollapsedDrag={onCollapsedDrag}
-          onPushPlay={onPushPlay}
+          onPushPlay={onPushPlayFunc}
+          toggleCollapse={toggleCollapse}
         />
       ) : (
         <DesktopAnimationWidget
@@ -430,7 +437,6 @@ const mapStateToProps = (state) => {
     startDate,
     endDate,
     isCollapsed,
-    draggerSelected: isCompareA ? 'selected' : 'selectedB',
     snappedCurrentDate,
     currentDate,
     minDate,
