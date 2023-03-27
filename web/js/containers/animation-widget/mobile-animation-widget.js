@@ -1,36 +1,47 @@
 /* eslint-disable */
 import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
 import {
   debounce as lodashDebounce,
   get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getISODateFormatted } from '../../components/timeline/date-util';
+import MobileCustomIntervalSelector from '../../components/timeline/custom-interval-selector/mobile-custom-interval-selector';
+import MobileDatePicker from '../../components/timeline/mobile-date-picker';
+import LoopButton from '../../components/animation-widget/loop-button';
 
 const MobileAnimationWidget = (props) => {
   const {
-    looping,
-    isPlaying,
-    maxDate,
-    minDate,
-    onSlide,
-    sliderLabel,
-    startDate,
+    breakpoints,
     endDate,
-    subDailyMode,
     hasSubdailyLayers,
+    isLandscape,
     isMobile,
     isMobilePhone,
     isMobileTablet,
-    screenWidth,
-    screenHeight,
-    breakpoints,
-    isLandscape,
+    isPlaying,
     isPortrait,
+    looping,
+    maxDate,
+    minDate,
+    onLoop,
+    onSlide,
+    onUpdateEndDate,
+    onUpdateStartDate,
     playDisabled,
+    selectDate,
+    screenHeight,
+    screenWidth,
+    setSpeed,
+    sliderLabel,
     speed,
-    setSpeed
+    startDate,
+    subDailyMode,
+    toggleCollapse,
   } = props
+
+  const debounceDateUpdate = lodashDebounce(selectDate, 8);
 
   const minimumDate = getISODateFormatted(minDate);
   const maximumDate = getISODateFormatted(maxDate);
@@ -58,6 +69,18 @@ const MobileAnimationWidget = (props) => {
     setSpeed(num)
     onSlide(speed)
   }
+
+  const onMobileDateChangeStart = (date) => {
+    const dateObj = new Date(date);
+    debounceDateUpdate(dateObj);
+    onUpdateStartDate(dateObj);
+  };
+
+  const onMobileDateChangeEnd = (date) => {
+    const dateObj = new Date(date);
+    debounceDateUpdate(dateObj);
+    onUpdateEndDate(dateObj);
+  };
 
   return (
     <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
@@ -101,7 +124,7 @@ const MobileAnimationWidget = (props) => {
                   handle={RangeHandle}
                   disabled={isPlaying}
                 /> */}
-                <TooltipSlider
+                {/* <TooltipSlider
                   className="input-range"
                   step={0.5}
                   max={10}
@@ -110,7 +133,7 @@ const MobileAnimationWidget = (props) => {
                   disabled={isPlaying}
                   onChange={(num) => onFrameSliderChange(num)}
                   tipFormatter={(value) => `${value}`}
-                />
+                /> */}
                 <span className="wv-slider-label">{sliderLabel}</span>
               </div>
             </div>
@@ -149,4 +172,32 @@ const MobileAnimationWidget = (props) => {
   );
 }
 
-export default MobileAnimationWidget
+MobileAnimationWidget.propTypes = {
+  breakpoints: PropTypes.object,
+  hasSubdailyLayers: PropTypes.bool,
+  isLandscape: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  isPlaying: PropTypes.bool,
+  isPortrait: PropTypes.bool,
+  looping: PropTypes.bool,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  onLoop: PropTypes.func,
+  onSlide: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
+  onUpdateStartDate: PropTypes.func,
+  playDisabled: PropTypes.bool,
+  selectDate: PropTypes.func,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  setSpeed: PropTypes.func,
+  sliderLabel: PropTypes.string,
+  speed: PropTypes.number,
+  startDate: PropTypes.object,
+  subDailyMode: PropTypes.bool,
+  toggleCollapse: PropTypes.func,
+}
+
+export default MobileAnimationWidget;

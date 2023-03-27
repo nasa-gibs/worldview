@@ -1,16 +1,10 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
-import { connect } from 'react-redux';
-import {
-  debounce as lodashDebounce,
-  get as lodashGet,
-} from 'lodash';
 import PropTypes from 'prop-types';
-import { getISODateFormatted } from '../../components/timeline/date-util';
+import { connect } from 'react-redux';
+import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '.././error-boundary';
-import MobileCustomIntervalSelector from '../../components/timeline/custom-interval-selector/mobile-custom-interval-selector';
-import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 import PlayQueue from '../../components/animation-widget/play-queue';
 import { promiseImageryForTime } from '../../modules/map/util'
 import {
@@ -90,6 +84,7 @@ const AnimationWidget = (props) => {
     onUpdateStartAndEndDate,
     playDisabled,
     promiseImageryForTime,
+    screenHeight,
     screenWidth,
     selectDate,
     sliderLabel,
@@ -101,16 +96,12 @@ const AnimationWidget = (props) => {
 
   const widgetWidth = 334;
   const subdailyWidgetWidth = 460;
-  const maxFrames = 300;
-  const mobileMaxFrames = 50;
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
-  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth /2, y: -25 })
+  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth /2 - halfWidgetWidth, y: -25 })
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 })
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false)
   const [speed, setSpeed] = useState(speedRedux)
-
-  const debounceDateUpdate = lodashDebounce(selectDate, 8);
 
   // component did mount
   useEffect(() => {
@@ -184,18 +175,6 @@ const AnimationWidget = (props) => {
         onUpdateEndDate(newEndDate)
       }
     }
-
-    const onMobileDateChangeStart = (date) => {
-      const dateObj = new Date(date);
-      debounceDateUpdate(dateObj);
-      onUpdateStartDate(dateObj);
-    };
-
-    const onMobileDateChangeEnd = (date) => {
-      const dateObj = new Date(date);
-      debounceDateUpdate(dateObj);
-      onUpdateEndDate(dateObj);
-    };
 
     // almost positive that this function does nothing
 
@@ -309,6 +288,35 @@ const AnimationWidget = (props) => {
           onPushPlay={onPushPlayFunc}
           toggleCollapse={toggleCollapse}
         />
+      ) : isMobile ? (
+        <MobileAnimationWidget
+          breakpoints={breakpoints}
+          endDate={endDate}
+          hasSubdailyLayers={hasSubdailyLayers}
+          isLandscape={isLandscape}
+          isMobile={isMobile}
+          isMobilePhone={isMobilePhone}
+          isMobileTablet={isMobileTablet}
+          isPlaying={isPlaying}
+          isPortrait={isPortrait}
+          looping={looping}
+          maxDate={maxDate}
+          minDate={minDate}
+          onLoop={onLoop}
+          onSlide={onSlide}
+          onUpdateEndDate={onUpdateEndDate}
+          onUpdateStartDate={onUpdateStartDate}
+          playDisabled={playDisabled}
+          selectDate={selectDate}
+          screenHeight={screenHeight}
+          screenWidth={screenWidth}
+          setSpeed={setSpeed}
+          sliderLabel={sliderLabel}
+          speed={speed}
+          startDate={startDate}
+          subDailyMode={subDailyMode}
+          toggleCollapse={toggleCollapse}
+        />
       ) : (
         <DesktopAnimationWidget
           animationCustomModalOpen={animationCustomModalOpen}
@@ -404,6 +412,7 @@ const mapStateToProps = (state) => {
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
   const maxFrames = 300;
+  const mobileMaxFrames = 50;
   const frameLimit = screenSize.isMobileDevice ? mobileMaxFrames : maxFrames;
   const numberOfFrames = getNumberOfSteps(
     startDate,
