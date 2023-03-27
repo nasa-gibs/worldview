@@ -29,8 +29,7 @@ import './font-awesome-library';
 // actions
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
-import AnimationWidget from './containers/animation-widget';
-import AnimationWidgetUpdated from './containers/animation-widget/animation-widget-updated';
+import AnimationWidget from './containers/animation-widget/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
@@ -155,8 +154,7 @@ class App extends React.Component {
         <div id="imagedownload" />
         <Timeline />
         <div>
-          {/* {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null} */}
-          {isAnimationWidgetActive ? <AnimationWidgetUpdated key={locationKey || '2'} /> : null}
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
         <Embed />

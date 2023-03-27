@@ -1,12 +1,11 @@
-/* eslint-disable */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
-import ErrorBoundary from '.././error-boundary';
+import ErrorBoundary from '../error-boundary';
 import PlayQueue from '../../components/animation-widget/play-queue';
-import { promiseImageryForTime } from '../../modules/map/util'
+import { promiseImageryForTime } from '../../modules/map/util';
 import {
   selectDate,
   selectInterval,
@@ -14,7 +13,6 @@ import {
 } from '../../modules/date/actions';
 import {
   TIME_SCALE_FROM_NUMBER,
-  TIME_SCALE_TO_NUMBER,
   customModalType,
 } from '../../modules/date/constants';
 import {
@@ -37,18 +35,13 @@ import {
   changeEndDate,
   changeStartAndEndDate,
   toggleAnimationCollapse,
-  onIntervalSelect,
-  toggleCustomIntervalModal,
-  onUpdateStartAndEndDate,
 } from '../../modules/animation/actions';
-import Slider from 'rc-slider';
-import Tooltip from 'rc-tooltip';
-import usePrevious from '../../../js/util/customHooks'
-import DesktopAnimationWidget from './desktop-animation-widget'
-import MobileAnimationWidget from './mobile-animation-widget'
-import CollapsedAnimationWidget from './collapsed-animation-widget'
+import usePrevious from '../../util/customHooks';
+import DesktopAnimationWidget from './desktop-animation-widget';
+import MobileAnimationWidget from './mobile-animation-widget';
+import CollapsedAnimationWidget from './collapsed-animation-widget';
 
-const AnimationWidget = (props) => {
+function AnimationWidget (props) {
   const {
     appNow,
     animationCustomModalOpen,
@@ -73,7 +66,6 @@ const AnimationWidget = (props) => {
     maxDate,
     numberOfFrames,
     onClose,
-    onIntervalSelect,
     onPushLoop,
     onPushPause,
     onPushPlay,
@@ -92,116 +84,86 @@ const AnimationWidget = (props) => {
     snappedCurrentDate,
     startDate,
     subDailyMode,
-  } = props
+  } = props;
 
   const widgetWidth = 334;
   const subdailyWidgetWidth = 460;
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
-  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth /2 - halfWidgetWidth, y: -25 })
-  const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 })
-  const [userHasMovedWidget, setUserHasMovedWidget] = useState(false)
-  const [speed, setSpeed] = useState(speedRedux)
+  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth / 2 - halfWidgetWidth, y: -25 });
+  const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
+  const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
+  const [speed, setSpeed] = useState(speedRedux);
+
+  const prevSubDailyMode = usePrevious(subDailyMode);
+  const prevHasFutureLayers = usePrevious(hasFutureLayers);
 
   // component did mount
   useEffect(() => {
-    if(isEmbedModeActive){
-      setWidgetPosition({ x: 10, y: 0 })
+    if (isEmbedModeActive) {
+      setWidgetPosition({ x: 10, y: 0 });
     }
-  }, [])
-
-  const prevSubDailyMode = usePrevious(subDailyMode)
-  const prevHasFutureLayers = usePrevious(hasFutureLayers)
+  }, []);
 
   // component did update
   useEffect(() => {
-    const subdailyChange = subDailyMode !== prevSubDailyMode && prevSubDailyMode !== undefined
+    const subdailyChange = subDailyMode !== prevSubDailyMode && prevSubDailyMode !== undefined;
 
-    if(prevHasFutureLayers && !hasFutureLayers) {
-      onUpdateEndDate(appNow)
+    if (prevHasFutureLayers && !hasFutureLayers) {
+      onUpdateEndDate(appNow);
     }
 
     // If toggle between subdaily/daily & widget hasn't been manually moved, try to keep centered
     if (subdailyChange && !userHasMovedWidget) {
-      const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth
+      const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
 
       setWidgetPosition({
         x: (screenWidth / 2) - (useWidth / 2),
         y: 0,
-    })
+      });
     }
-  })
+  });
 
-    /**
-   * Prevent drag when interacting with child elements (e.g. buttons)
-   * Only allow drag when targeting "background" elements
-   */
-    const handleDragStart = (e, data) => {
-      const draggableTargets = [
-        'wv-animation-widget',
-        'wv-animation-widget-header',
-        'wv-anim-dates-case',
-        'thru-label',
-      ];
-      const { classList } = e.target;
-      return draggableTargets.some((tClass) => classList.contains(tClass));
-    };
+  // Prevent drag when interacting with child elements (e.g. buttons) Only allow drag when targeting "background" elements
+  const handleDragStart = (e, data) => {
+    const draggableTargets = [
+      'wv-animation-widget',
+      'wv-animation-widget-header',
+      'wv-anim-dates-case',
+      'thru-label',
+    ];
+    const { classList } = e.target;
+    return draggableTargets.some((tClass) => classList.contains(tClass));
+  };
 
-    const toggleCollapse = () => {
-      onToggleAnimationCollapse();
+  const toggleCollapse = () => {
+    onToggleAnimationCollapse();
+  };
+
+  const onExpandedDrag = (e, position) => {
+    const { x, y } = position;
+    setUserHasMovedWidget(true);
+    setWidgetPosition({ x, y });
+  };
+
+  const onCollapsedDrag = (e, position) => {
+    const { x, y } = position;
+    setUserHasMovedWidget(true);
+    setCollapsedWidgetPosition({ x, y });
+  };
+
+  const onLoop = () => {
+    onPushLoop(looping);
+  };
+
+  const onDateChange = ([newStartDate, newEndDate]) => {
+    if (newStartDate !== startDate) {
+      onUpdateStartDate(newStartDate);
     }
-
-    const onExpandedDrag = (e, position) => {
-      const { x, y } = position
-      setUserHasMovedWidget(true)
-      setWidgetPosition({ x, y})
+    if (newEndDate !== endDate) {
+      onUpdateEndDate(newEndDate);
     }
-
-    const onCollapsedDrag = (e, position) => {
-      const { x, y } = position
-      setUserHasMovedWidget(true)
-      setCollapsedWidgetPosition({ x, y })
-    }
-
-    const onLoop = () => {
-      onPushLoop(looping)
-    }
-
-    const onDateChange = ([newStartDate, newEndDate]) => {
-      if (newStartDate !== startDate) {
-        onUpdateStartDate(newStartDate)
-      }
-      if (newEndDate !== endDate) {
-        onUpdateEndDate(newEndDate)
-      }
-    }
-
-    // almost positive that this function does nothing
-
-    // const onIntervalSelectFunc = (timeScale, openModal) => {
-    //   let delta;
-    //   const customSelected = timeScale === 'custom';
-
-    //   if (openModal) {
-    //     toggleCustomIntervalModal(openModal);
-    //     return;
-    //   }
-
-    //   if (customSelected && customInterval && customDelta) {
-    //     timeScale = customInterval;
-    //     delta = customDelta;
-    //   } else {
-    //     timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
-    //     delta = 1;
-    //   }
-    //   onIntervalSelect(delta, timeScale, customSelected);
-    // }
-
-    // pretty sure this function does nothing too
-
-    // const toggleCustomIntervalModal = (isOpen) => {
-    //   toggleCustomModal(isOpen, customModalType.ANIMATION)
-    // }
+  };
 
   /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
@@ -219,8 +181,8 @@ const AnimationWidget = (props) => {
 
     if (subDailyMode) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
-      let startMinutes = startDateZeroed.getMinutes();
-      let endMinutes = endDateZeroed.getMinutes();
+      const startMinutes = startDateZeroed.getMinutes();
+      const endMinutes = endDateZeroed.getMinutes();
       startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
@@ -238,14 +200,14 @@ const AnimationWidget = (props) => {
     };
   };
 
-    const onPushPlayFunc = () => {
-      const {
-        startDate,
-        endDate,
-      } = zeroDates();
-      onUpdateStartAndEndDate(startDate, endDate);
-      onPushPlay();
-    }
+  const onPushPlayFunc = () => {
+    const {
+      startDate,
+      endDate,
+    } = zeroDates();
+    onUpdateStartAndEndDate(startDate, endDate);
+    onPushPlay();
+  };
 
   return isActive ? (
     <ErrorBoundary>
@@ -350,7 +312,7 @@ const AnimationWidget = (props) => {
       )}
     </ErrorBoundary>
   ) : null;
-  }
+}
 
 const mapStateToProps = (state) => {
   const {
@@ -380,7 +342,6 @@ const mapStateToProps = (state) => {
     interval,
     customInterval,
   } = date;
-  const { isCompareA } = compare;
 
   const hasSubdailyLayers = subdailyLayersActive(state);
   const activeLayersForProj = getAllActiveLayers(state);
@@ -478,7 +439,7 @@ const mapStateToProps = (state) => {
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
@@ -517,9 +478,58 @@ const mapDispatchToProps = (dispatch) => ({
   onToggleAnimationCollapse: () => {
     dispatch(toggleAnimationCollapse());
   },
-})
+});
+
+AnimationWidget.propTypes = {
+  appNow: PropTypes.object,
+  animationCustomModalOpen: PropTypes.bool,
+  breakpoints: PropTypes.object,
+  snappedCurrentDate: PropTypes.object,
+  currentDate: PropTypes.object,
+  customDelta: PropTypes.number,
+  customInterval: PropTypes.number,
+  delta: PropTypes.number,
+  endDate: PropTypes.object,
+  hasFutureLayers: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
+  interval: PropTypes.string,
+  isActive: PropTypes.bool,
+  isCollapsed: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isMobilePhone: PropTypes.bool,
+  isMobileTablet: PropTypes.bool,
+  isPlaying: PropTypes.bool,
+  isPortrait: PropTypes.bool,
+  isLandscape: PropTypes.bool,
+  looping: PropTypes.bool,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  numberOfFrames: PropTypes.number,
+  onToggleAnimationCollapse: PropTypes.func,
+  onClose: PropTypes.func,
+  onIntervalSelect: PropTypes.func,
+  onPushLoop: PropTypes.func,
+  onPushPause: PropTypes.func,
+  onPushPlay: PropTypes.func,
+  onSlide: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
+  onUpdateStartAndEndDate: PropTypes.func,
+  onUpdateStartDate: PropTypes.func,
+  playDisabled: PropTypes.bool,
+  promiseImageryForTime: PropTypes.func,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  selectDate: PropTypes.func,
+  sliderLabel: PropTypes.string,
+  speed: PropTypes.number,
+  startDate: PropTypes.object,
+  subDailyMode: PropTypes.bool,
+  toggleCustomModal: PropTypes.func,
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  )(AnimationWidget)
+)(AnimationWidget);

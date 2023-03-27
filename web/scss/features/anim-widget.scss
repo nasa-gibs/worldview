@@ -774,3 +774,51 @@ a .wv-animation-widget-icon {
     background-color: $wv-dark-blue;
   }
 }
+
+.form-range.range-mobile {
+  margin-top: 15px;
+
+  &::-webkit-slider-runnable-track {
+    height: 10px;
+    background-color: #ccc;
+  }
+
+  &::-moz-range-track {
+    height: 10px;
+    background-color: #ccc;
+  }
+
+  &::-ms-track {
+    height: 10px;
+    background-color: #ccc;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -8px; // Adjust the handle position
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 2px solid $wv-dark-blue;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 2px solid $wv-dark-blue;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &::-ms-thumb {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 2px solid $wv-dark-blue;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}

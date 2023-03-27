@@ -1,8 +1,6 @@
-/* eslint-disable */
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   debounce as lodashDebounce,
-  get as lodashGet,
 } from 'lodash';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +9,7 @@ import MobileCustomIntervalSelector from '../../components/timeline/custom-inter
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 import LoopButton from '../../components/animation-widget/loop-button';
 
-const MobileAnimationWidget = (props) => {
+function MobileAnimationWidget (props) {
   const {
     breakpoints,
     endDate,
@@ -39,7 +37,7 @@ const MobileAnimationWidget = (props) => {
     startDate,
     subDailyMode,
     toggleCollapse,
-  } = props
+  } = props;
 
   const debounceDateUpdate = lodashDebounce(selectDate, 8);
 
@@ -66,9 +64,9 @@ const MobileAnimationWidget = (props) => {
     color: '#fff',
   };
   const onFrameSliderChange = (num) => {
-    setSpeed(num)
-    onSlide(speed)
-  }
+    setSpeed(num);
+    onSlide(speed);
+  };
 
   const onMobileDateChangeStart = (date) => {
     const dateObj = new Date(date);
@@ -114,27 +112,30 @@ const MobileAnimationWidget = (props) => {
 
             <div className="mobile-animation-flex-row" id="slider-case-row">
               <div className="wv-slider-case">
-                {/* <Slider
-                  className="input-range"
-                  step={0.5}
-                  max={10}
-                  min={0.5}
-                  value={speed}
-                  onChange={(num) => onFrameSliderChange(num)}
-                  handle={RangeHandle}
-                  disabled={isPlaying}
-                /> */}
-                {/* <TooltipSlider
-                  className="input-range"
-                  step={0.5}
-                  max={10}
-                  min={0.5}
-                  value={speed}
-                  disabled={isPlaying}
-                  onChange={(num) => onFrameSliderChange(num)}
-                  tipFormatter={(value) => `${value}`}
-                /> */}
-                <span className="wv-slider-label">{sliderLabel}</span>
+
+                <span className="wv-slider-label">
+                  {speed}
+                  {' '}
+                  { ' ' }
+                  {' '}
+                  {sliderLabel}
+                </span>
+                <div className="input-range-wrapper" style={{ position: 'relative' }}>
+                  <input
+                    type="range"
+                    className="input-range form-range range-mobile"
+                    step={0.5}
+                    max={10}
+                    min={0.5}
+                    value={speed}
+                    onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
+                    disabled={isPlaying}
+                    style={{
+                      '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%`,
+                    }}
+                  />
+                </div>
+
               </div>
             </div>
 
@@ -174,6 +175,7 @@ const MobileAnimationWidget = (props) => {
 
 MobileAnimationWidget.propTypes = {
   breakpoints: PropTypes.object,
+  endDate: PropTypes.object,
   hasSubdailyLayers: PropTypes.bool,
   isLandscape: PropTypes.bool,
   isMobile: PropTypes.bool,
@@ -198,6 +200,6 @@ MobileAnimationWidget.propTypes = {
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
   toggleCollapse: PropTypes.func,
-}
+};
 
 export default MobileAnimationWidget;
