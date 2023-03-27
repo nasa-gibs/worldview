@@ -210,14 +210,16 @@ function ChartingModeOptions (props) {
 
     // Initiate Sentinel Hub request
     const data = await getSentinelHubData();
-    console.log(data);
-
-    // if (!data.ok) {
-    //   updateChartRequestStatus(false, 'Chart request failed.');
-    // }
+    if (!data.ok) {
+      updateChartRequestStatus(false, 'Chart request failed.');
+      return;
+    }
+    const rechartsData = formatSentinelHubDataForRecharts(data.body.data);
+    displayChart({ title: 'Sentinel-2-l2a', subtitle: 'Monthly Max NDVI', data: rechartsData });
+    updateChartRequestStatus(false, 'Success');
 
     // const rechartsData = formatSentinelHubDataForRecharts(data);
-    // // displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+    // displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
     // displayChart({ data: rechartsData });
 
     // ImageStat request procedure
@@ -324,8 +326,27 @@ function ChartingModeOptions (props) {
     const token = await getSentinelHubToken();
     const requestParams = getSentinelHubRequestParams(token);
     const data = await getSentinelHubRequestData(requestParams);
-    console.log(data);
     return data;
+  }
+
+  /**
+   * Process the ImageStat (GIBS) data for use in the Recharts library
+   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   */
+  function formatSentinelHubDataForRecharts(data) {
+    const rechartsData = [];
+    for (let i = 0; i < data.length; i += 1) {
+      const name = data[i].interval.from;
+      const entry = {
+        name: name.split('T')[0], // Remove the time element from the date string
+        min: data[i].outputs.data.bands.monthly_max_ndvi.stats.min,
+        max: data[i].outputs.data.bands.monthly_max_ndvi.stats.max,
+        mean: data[i].outputs.data.bands.monthly_max_ndvi.stats.mean,
+        stddev: data[i].outputs.data.bands.monthly_max_ndvi.stats.stDev,
+      };
+      rechartsData.push(entry);
+    }
+    return rechartsData;
   }
 
   /**
@@ -385,6 +406,13 @@ function ChartingModeOptions (props) {
 
   function getKeysFromObj(data) {
     return Object.keys(data);
+  }
+  function getSentinelHubKeysFromObj(data) {
+    const arr = [];
+    for (let i = 0; i < data.length; i += 1) {
+      arr.push(data[i].interval.from);
+    }
+    return arr;
   }
 
   function onDateIconClick() {

@@ -83,28 +83,28 @@ function ChartComponent (props) {
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
-    let medianTotal = 0;
+    // const medianTotal = 0;
     let stddevTotal = 0;
 
     for (let i = 0; i < data.length; i += 1) {
       meanTotal += data[i].mean;
       minTotal += data[i].min;
       maxTotal += data[i].max;
-      medianTotal += data[i].median;
+      // medianTotal += data[i].median;
       stddevTotal += data[i].stddev;
     }
 
     return (
       <>
         <div className="charting-statistics-container">
-          <div className="charting-statistics-row">
+          {/* <div className="charting-statistics-row">
             <div className="charting-statistics-label">
               Median:
             </div>
             <div className="charting-statistics-value">
               {formatToThreeDigits(parseFloat(medianTotal) / count)}
             </div>
-          </div>
+          </div> */}
           <div className="charting-statistics-row">
             <div className="charting-statistics-label">
               Mean:
