@@ -1018,6 +1018,10 @@
   margin-top: 3px;
   display: flex;
   justify-content: space-between;
+
+  h6 {
+    margin-right: 20px;
+  }
 }
 
 /** React-Swipe-To-Delete Overrides */
