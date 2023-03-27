@@ -27,6 +27,7 @@ import ChartComponent from '../charting/chart-component';
 import {
   drawStyles, vectorStyles,
 } from '../charting/charting-area-of-interest-style.js';
+import getToken from '../../modules/charting/sentinelHubScripts.js';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -206,41 +207,54 @@ function ChartingModeOptions (props) {
   async function onChartOrStatsButtonClick() {
     // chartRequestInProgress
     updateChartRequestStatus(true);
-    const layerInfo = getActiveChartingLayer();
-    if (layerInfo == null) {
-      updateChartRequestStatus(false, 'No valid layer detected for request.');
-      return;
+
+    // Initiate Sentinel Hub request
+    const data = await getSentinelHubData();
+
+    if (!data.ok) {
+      updateChartRequestStatus(false, 'Chart request failed.');
     }
-    const requestedLayerSource = layerInfo.projections.geographic.source;
-    if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
 
-      if (!data.ok) {
-        updateChartRequestStatus(false, 'Chart request failed.');
-        return;
-      }
+    // const rechartsData = formatSentinelHubDataForRecharts(data);
+    // // displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+    // displayChart({ data: rechartsData });
 
-      const dataToRender = {
-        title: layerInfo.title,
-        subtitle: layerInfo.subtitle,
-        ...data.body,
-        ...uriParameters,
-      };
+    // ImageStat request procedure
+    // const layerInfo = getActiveChartingLayer();
+    // if (layerInfo == null) {
+    //   updateChartRequestStatus(false, 'No valid layer detected for request.');
+    //   return;
+    // }
+    // const requestedLayerSource = layerInfo.projections.geographic.source;
+    // if (requestedLayerSource === 'GIBS:geographic') {
+    //   const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
+    //   const requestURI = getImageStatStatsRequestURL(uriParameters);
+    //   const data = await getImageStatData(requestURI);
 
-      if (timeSpanSelection === 'range') {
-        const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
-        updateChartRequestStatus(false, 'Success');
-      } else {
-        displaySimpleStats(dataToRender);
-        updateChartRequestStatus(false, 'Success');
-      }
-    } else {
-      // handle requests for layers outside of GIBS here!
-      updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
-    }
+    //   if (!data.ok) {
+    //     updateChartRequestStatus(false, 'Chart request failed.');
+    //     return;
+    //   }
+
+    //   const dataToRender = {
+    //     title: layerInfo.title,
+    //     subtitle: layerInfo.subtitle,
+    //     ...data.body,
+    //     ...uriParameters,
+    //   };
+
+    //   if (timeSpanSelection === 'range') {
+    //     const rechartsData = formatGIBSDataForRecharts(dataToRender);
+    //     displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+    //     updateChartRequestStatus(false, 'Success');
+    //   } else {
+    //     displaySimpleStats(dataToRender);
+    //     updateChartRequestStatus(false, 'Success');
+    //   }
+    // } else {
+    //   // handle requests for layers outside of GIBS here!
+    //   updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
+    // }
   }
 
   function updateChartRequestStatus(status, message = '') {
@@ -298,6 +312,43 @@ function ChartingModeOptions (props) {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
     return requestURL;
+  }
+
+  /**
+   * Execute the ImageStat API request
+   * @param {String} simpleStatsURI
+   */
+  async function getSentinelHubData(simpleStatsURI) {
+    // get a token
+    const token = await getToken();
+    console.log(token);
+
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    try {
+      const response = await fetch(simpleStatsURI, requestOptions);
+      const data = await response.text();
+      // This is the response when the imageStat server fails
+      if (data === 'Internal Server Error') {
+        return {
+          ok: false,
+          body: data,
+        };
+      }
+
+      return {
+        ok: true,
+        body: JSON.parse(data),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error,
+      };
+    }
   }
 
   /**
@@ -378,7 +429,7 @@ function ChartingModeOptions (props) {
       className="wv-charting-mode-container"
       style={{ display: isChartingActive && !isMobile ? 'block' : 'none' }}
     >
-      <div className="charting-aoi-container">
+      {/* <div className="charting-aoi-container">
         <h3>{aoiTextPrompt}</h3>
         <FontAwesomeIcon
           icon={faPencilAlt}
@@ -414,15 +465,15 @@ function ChartingModeOptions (props) {
               icon={faCalendarDay}
               onClick={onDateIconClick}
             />
-          </div>
-          <div className="charting-info-container">
-            <FontAwesomeIcon
-              icon="info-circle"
-              onClick={openChartingInfoModal}
-            />
-          </div>
-        </div>
+  </div> */}
+      <div className="charting-info-container">
+        <FontAwesomeIcon
+          icon="info-circle"
+          onClick={openChartingInfoModal}
+        />
       </div>
+      {/* </div>
+      </div>  */}
       <div className="charting-buttons">
         <ButtonGroup size="sm">
           <Button
@@ -430,7 +481,7 @@ function ChartingModeOptions (props) {
             className="charting-button"
             onClick={() => onChartOrStatsButtonClick()}
           >
-            Request Chart
+            Request Sentinel Hub Chart
           </Button>
         </ButtonGroup>
       </div>

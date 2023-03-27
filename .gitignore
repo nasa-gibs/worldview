@@ -36,3 +36,5 @@ config/default/release/layer-metadata
 # Jest
 /coverage
 /tasks/temp
+# Sentinel Hub Keys
+keys.js

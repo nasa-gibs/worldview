@@ -5,12 +5,10 @@ function ChartingInfo(props) {
     <div className="charting-info-container">
       <div className="charting-info-text">
         <p className="charting-info">
-          Click on the pencil icon to click and drag a bounding box on the map to define an Area of Interest (AOI).
+          This is a demonstration of making a request to the Sentinel Hub API, processing the data & displaying the results in a chart.
         </p>
 
-        <p className="charting-info">In Date Range mode (the default mode), select the calendar icon near the bottom of the Layers panel and increment the values in the resulting window to change their dates. To use a single date instead of a range, choose One Date at the bottom of the Layers panel.</p>
-
-        <p className="charting-info">Select the active layer via the toggle icon on its left. Click on Request Chart & you will see additional data as you hover over points on the enlarged chart.</p>
+        <p className="charting-info">This request is a STATIC request. Regardless of the layer & date active on the page this demo will ignore those values & use the same STATIC values for the data request.</p>
 
         <p className="charting-info">Exit the charting mode by selecting Exit Charting near the botom of the Layers Panel.</p>
 
