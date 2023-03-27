@@ -27,7 +27,7 @@ import ChartComponent from '../charting/chart-component';
 import {
   drawStyles, vectorStyles,
 } from '../charting/charting-area-of-interest-style.js';
-import getToken from '../../modules/charting/sentinelHubScripts.js';
+import { getSentinelHubToken, getSentinelHubRequestParams, getSentinelHubRequestData } from '../../modules/charting/sentinelHubScripts.js';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -210,10 +210,11 @@ function ChartingModeOptions (props) {
 
     // Initiate Sentinel Hub request
     const data = await getSentinelHubData();
+    console.log(data);
 
-    if (!data.ok) {
-      updateChartRequestStatus(false, 'Chart request failed.');
-    }
+    // if (!data.ok) {
+    //   updateChartRequestStatus(false, 'Chart request failed.');
+    // }
 
     // const rechartsData = formatSentinelHubDataForRecharts(data);
     // // displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
@@ -315,40 +316,16 @@ function ChartingModeOptions (props) {
   }
 
   /**
-   * Execute the ImageStat API request
+   * Execute the Sentinel Hub API request
    * @param {String} simpleStatsURI
    */
-  async function getSentinelHubData(simpleStatsURI) {
+  async function getSentinelHubData() {
     // get a token
-    const token = await getToken();
-    console.log(token);
-
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
-
-    try {
-      const response = await fetch(simpleStatsURI, requestOptions);
-      const data = await response.text();
-      // This is the response when the imageStat server fails
-      if (data === 'Internal Server Error') {
-        return {
-          ok: false,
-          body: data,
-        };
-      }
-
-      return {
-        ok: true,
-        body: JSON.parse(data),
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
-    }
+    const token = await getSentinelHubToken();
+    const requestParams = getSentinelHubRequestParams(token);
+    const data = await getSentinelHubRequestData(requestParams);
+    console.log(data);
+    return data;
   }
 
   /**
