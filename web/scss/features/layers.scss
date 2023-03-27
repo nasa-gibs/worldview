@@ -1018,9 +1018,14 @@
   margin-top: 3px;
   display: flex;
   justify-content: space-between;
+}
 
-  h6 {
-    margin-right: 20px;
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+(max-width: $mobile-max-width) {
+  .instrument-collection {
+    h6 {
+      margin-right: 20px;
+    }
   }
 }
 
