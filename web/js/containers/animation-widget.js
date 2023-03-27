@@ -89,16 +89,6 @@ const HandleTooltip = (props) => {
   const tooltipRef = useRef();
   const rafRef = useRef();
 
-  function cancelKeepAlign() {
-    raf.cancel(rafRef.current);
-  }
-
-  function keepAlign() {
-    rafRef.current = raf(() => {
-      tooltipRef.current?.forceAlign();
-    });
-  }
-
   useEffect(() => {
     if (visible) {
       keepAlign();
@@ -109,12 +99,21 @@ const HandleTooltip = (props) => {
     return cancelKeepAlign;
   }, [value, visible]);
 
+  function cancelKeepAlign() {
+    raf.cancel(rafRef.current);
+  }
+
+  function keepAlign() {
+    rafRef.current = raf(() => {
+      tooltipRef.current?.forceAlign();
+    });
+  }
+
   return (
     <Tooltip
       placement="top"
       overlay={tipFormatter(value)}
       overlayInnerStyle={{ minHeight: 'auto', color: '#fff', zIndex: '3'}}
-      style={{position: 'fixed !important'}}
       ref={tooltipRef}
       visible={visible}
       {...restProps}
@@ -131,6 +130,7 @@ const TooltipSlider = ({ tipFormatter, tipProps, ...props }) => {
         value={handleProps.value}
         visible={handleProps.dragging}
         tipFormatter={tipFormatter}
+        style={{position: 'fixed !important'}}
         {...tipProps}
       >
         {node}
