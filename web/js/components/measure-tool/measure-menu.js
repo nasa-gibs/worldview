@@ -45,18 +45,18 @@ const OPTIONS_ARRAY = [
 ];
 
 const MeasureMenu = function () {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const triggerEvent = (eventName) => {
     events.trigger(eventName);
-    dispatch(onToggle())
-  }
+    dispatch(onToggle());
+  };
 
   const unitToggle = (evt) => {
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    dispatch(changeUnits(units))
-  }
+    dispatch(changeUnits(units));
+  };
 
   const [isMobile, isTouchDevice, unitOfMeasure, measurementsInProj] = useSelector((state) => [
     state.screenSize.isMobileDevice,
