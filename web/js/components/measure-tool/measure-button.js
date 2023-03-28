@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
@@ -20,7 +20,7 @@ const MEASURE_MENU_PROPS = {
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
 const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete. ';
 
-const MeasureButton = function () {
+const MeasureButton = memo(function () {
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -42,18 +42,24 @@ const MeasureButton = function () {
     setShowAlert(false);
   };
 
-  const [isActive, isDistractionFreeModeActive, isMobile] = useSelector((state) => [
-    state.measure.isActive,
-    state.ui.isDistractionFreeModeActive,
-    state.screenSize.isMobileDevice,
-  ]);
+  const isActive = useSelector((state) => state.measure.isActive);
+  const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
 
-  const faSize = isMobile ? '2x' : '1x';
-  const shouldShowAlert = isActive && showAlert;
-  const message = isTouchDevice ? mobileHelpMsg : helpMsg;
+  const memoizedSelectors = useMemo(() => {
+    return {
+      isActive,
+      isDistractionFreeModeActive,
+      isMobile,
+    };
+  }, [isActive, isDistractionFreeModeActive, isMobile]);
+
   const buttonId = 'wv-measure-button';
   const labelText = 'Measure distances & areas';
-  const mobileMeasureButtonStyle = isMobile ? {
+  const faSize = memoizedSelectors.isMobile ? '2x' : '1x';
+  const shouldShowAlert = memoizedSelectors.isActive && showAlert;
+  const message = isTouchDevice ? mobileHelpMsg : helpMsg;
+  const mobileMeasureButtonStyle = memoizedSelectors.isMobile ? {
     bottom: '20px',
     fontSize: '14.3px',
     height: '44px',
@@ -74,14 +80,14 @@ const MeasureButton = function () {
       />
       )}
 
-      {!isDistractionFreeModeActive && (
+      {!memoizedSelectors.isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-measure-button wv-toolbar-button"
         aria-label={labelText}
         onTouchEnd={onButtonClick}
         onMouseDown={onButtonClick}
-        disabled={isActive}
+        disabled={memoizedSelectors.isActive}
         style={mobileMeasureButtonStyle}
       >
         <UncontrolledTooltip
@@ -96,6 +102,6 @@ const MeasureButton = function () {
       )}
     </>
   );
-};
+});
 
 export default MeasureButton;
