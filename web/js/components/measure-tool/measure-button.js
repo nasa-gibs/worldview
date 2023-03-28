@@ -1,4 +1,4 @@
-import React, { useState, memo, useMemo } from 'react';
+import React, { useState, memo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
@@ -59,8 +59,6 @@ const MeasureButton = memo(() => {
     margin: '0 0 0 4px',
     padding: '5.72px 9.1px',
   } : null;
-
-  console.log('render')
 
   return (
     <>
