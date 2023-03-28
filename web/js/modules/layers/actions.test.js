@@ -63,7 +63,7 @@ describe('Layer actions', () => {
     store = mockStore(getState(layers));
   });
 
-  test('REMOVE_LAYER action removes layer by id', () => {
+  test('REMOVE_LAYER action removes layer by id [layers-action-remove-layer-by-id]', () => {
     const def = layers[0];
     store.dispatch(removeLayer('aqua-aod'));
     const actionResponse = store.getActions()[0];
@@ -79,14 +79,14 @@ describe('Layer actions', () => {
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('REMOVE_LAYER does nothing on non-existent id', () => {
+  test('REMOVE_LAYER does nothing on non-existent id [layers-action-remove-layer-no-id]', () => {
     store.dispatch(removeLayer('INVALID TEST LAYER ID'));
     const actionResponse = store.getActions()[0];
     const expectedPayload = undefined;
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('REMOVE_GROUP removes each layer in group', () => {
+  test('REMOVE_GROUP removes each layer in group [layers-action-remove-group]', () => {
     store.dispatch(removeGroup(['terra-aod', 'aqua-aod']));
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
@@ -99,7 +99,7 @@ describe('Layer actions', () => {
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('TOGGLE_OVERLAY_GROUPS when grouped, toggling ungroups layers', () => {
+  test('TOGGLE_OVERLAY_GROUPS when grouped, toggling ungroups layers [layers-action-toggle-group]', () => {
     store.dispatch(toggleOverlayGroups());
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
