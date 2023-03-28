@@ -21,6 +21,7 @@
   z-index: 1 !important;
 }
 
+/* stylelint-disable property-no-vendor-prefix */
 .swipe-to-delete .js-content {
   position: relative !important;
   z-index: 2 !important;
@@ -28,6 +29,7 @@
   -moz-user-select: none !important;
   -ms-user-select: none !important;
 }
+/* stylelint-enable property-no-vendor-prefix */
 
 .swipe-to-delete .js-content:first-child {
   position: relative !important;

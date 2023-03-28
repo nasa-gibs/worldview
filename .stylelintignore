@@ -10,3 +10,4 @@ reports/*
 test/*
 !web/css
 web/scss/overrides/*
+web/scss/lib/*

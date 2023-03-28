@@ -14,4 +14,3 @@ web/build/*
 web/dist/*
 web/ext/*
 web/js/lib/*
-web/scss/lib/react-swipe-to-delete.scss
