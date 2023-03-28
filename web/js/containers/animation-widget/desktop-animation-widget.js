@@ -99,9 +99,7 @@ function DesktopAnimationWidget(props) {
                 value={speed}
                 onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
                 disabled={isPlaying}
-                style={{
-                  '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%`,
-                }}
+                style={{ '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%` }}
               />
             </div>
             <span className="wv-slider-label">
@@ -139,7 +137,7 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
-  customModalType: PropTypes.string,
+  customModalType: PropTypes.object,
   endDate: PropTypes.object,
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
