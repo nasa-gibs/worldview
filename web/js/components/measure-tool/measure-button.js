@@ -20,10 +20,12 @@ const MEASURE_MENU_PROPS = {
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
 const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete. ';
 
-const MeasureButton = memo(function () {
+const MeasureButton = memo(() => {
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  const dismissAlert = () => setShowAlert(false);
 
   const onButtonClick = (evt) => {
     const touchDevice = evt.type === 'touchend';
@@ -38,21 +40,15 @@ const MeasureButton = memo(function () {
     });
   };
 
-  const dismissAlert = () => {
-    setShowAlert(false);
-  };
-
   const isActive = useSelector((state) => state.measure.isActive);
   const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
   const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
 
-  const memoizedSelectors = useMemo(() => {
-    return {
-      isActive,
-      isDistractionFreeModeActive,
-      isMobile,
-    };
-  }, [isActive, isDistractionFreeModeActive, isMobile]);
+  const memoizedSelectors = useMemo(() => ({
+    isActive,
+    isDistractionFreeModeActive,
+    isMobile,
+  }), [isActive, isDistractionFreeModeActive, isMobile]);
 
   const buttonId = 'wv-measure-button';
   const labelText = 'Measure distances & areas';
