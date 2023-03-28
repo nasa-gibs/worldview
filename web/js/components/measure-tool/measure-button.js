@@ -20,7 +20,7 @@ const MEASURE_MENU_PROPS = {
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
 const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete. ';
 
-const MeasureButton = () => {
+const MeasureButton = function () {
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -31,16 +31,16 @@ const MeasureButton = () => {
     evt.preventDefault();
     MEASURE_MENU_PROPS.touchDevice = touchDevice;
     dispatch(openCustomContent('MEASURE_MENU', MEASURE_MENU_PROPS));
-    setIsTouchDevice(touchDevice)
-    setShowAlert(true)
+    setIsTouchDevice(touchDevice);
+    setShowAlert(true);
     googleTagManager.pushEvent({
       event: 'measure_tool_activated',
     });
-  }
+  };
 
   const dismissAlert = () => {
-    setShowAlert(false)
-  }
+    setShowAlert(false);
+  };
 
   const [isActive, isDistractionFreeModeActive, isMobile] = useSelector((state) => [
     state.measure.isActive,
@@ -95,7 +95,7 @@ const MeasureButton = () => {
       </Button>
       )}
     </>
-  )
-}
+  );
+};
 
 export default MeasureButton;
