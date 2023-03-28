@@ -39,7 +39,7 @@ function GranuleCountSlider(props) {
         </UncontrolledTooltip>
       </div>
 
-      <Slider
+      {/* <Slider
         min={MIN_GRANULES}
         max={MAX_GRANULES}
         defaultValue={count}
@@ -47,6 +47,22 @@ function GranuleCountSlider(props) {
           setGranuleCount(val);
           debounceOnchange(val);
         }}
+      /> */}
+      <input
+        type="range"
+        className="form-range"
+        min={MIN_GRANULES}
+        max={MAX_GRANULES}
+        defaultValue={count}
+        onChange={(e) => {
+          const val = parseInt(e.target.value, 10);
+          setGranuleCount(val);
+          debounceOnchange(val);
+        }}
+        style={{
+          '--value-percent': `${((granuleCount - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES)) * 100}%`,
+        }}
+
       />
       <div className="wv-label wv-label-granule-count">
         {granuleCount}
