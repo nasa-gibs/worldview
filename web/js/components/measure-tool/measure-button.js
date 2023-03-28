@@ -1,5 +1,5 @@
 import React, { useState, memo, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,11 +23,11 @@ const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to comple
 const MeasureButton = memo(() => {
   const dispatch = useDispatch();
 
-  const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => useMemo(() => ({
+  const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => ({
     isActive: state.measure.isActive,
     isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
     isMobile: state.screenSize.isMobileDevice,
-  }), [state.measure.isActive, state.ui.isDistractionFreeModeActive, state.screenSize.isMobileDevice]));
+  }), shallowEqual);
 
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -59,6 +59,8 @@ const MeasureButton = memo(() => {
     margin: '0 0 0 4px',
     padding: '5.72px 9.1px',
   } : null;
+
+  console.log('render')
 
   return (
     <>
