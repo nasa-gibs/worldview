@@ -1020,6 +1020,15 @@
   justify-content: space-between;
 }
 
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+  (max-width: $mobile-max-width) {
+  .instrument-collection {
+    h6 {
+      margin-right: 20px;
+    }
+  }
+}
+
 /** React-Swipe-To-Delete Overrides */
 .swipe-to-delete .js-content:first-child {
   position: relative !important;
