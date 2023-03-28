@@ -22,6 +22,13 @@ const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to comple
 
 const MeasureButton = memo(() => {
   const dispatch = useDispatch();
+
+  const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => useMemo(() => ({
+    isActive: state.measure.isActive,
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
+    isMobile: state.screenSize.isMobileDevice,
+  }), [state.measure.isActive, state.ui.isDistractionFreeModeActive, state.screenSize.isMobileDevice]));
+
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
@@ -40,22 +47,12 @@ const MeasureButton = memo(() => {
     });
   };
 
-  const isActive = useSelector((state) => state.measure.isActive);
-  const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
-  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
-
-  const memoizedSelectors = useMemo(() => ({
-    isActive,
-    isDistractionFreeModeActive,
-    isMobile,
-  }), [isActive, isDistractionFreeModeActive, isMobile]);
-
   const buttonId = 'wv-measure-button';
   const labelText = 'Measure distances & areas';
-  const faSize = memoizedSelectors.isMobile ? '2x' : '1x';
-  const shouldShowAlert = memoizedSelectors.isActive && showAlert;
+  const faSize = isMobile ? '2x' : '1x';
+  const shouldShowAlert = isActive && showAlert;
   const message = isTouchDevice ? mobileHelpMsg : helpMsg;
-  const mobileMeasureButtonStyle = memoizedSelectors.isMobile ? {
+  const mobileMeasureButtonStyle = isMobile ? {
     bottom: '20px',
     fontSize: '14.3px',
     height: '44px',
@@ -76,14 +73,14 @@ const MeasureButton = memo(() => {
       />
       )}
 
-      {!memoizedSelectors.isDistractionFreeModeActive && (
+      {!isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-measure-button wv-toolbar-button"
         aria-label={labelText}
         onTouchEnd={onButtonClick}
         onMouseDown={onButtonClick}
-        disabled={memoizedSelectors.isActive}
+        disabled={isActive}
         style={mobileMeasureButtonStyle}
       >
         <UncontrolledTooltip
