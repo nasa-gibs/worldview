@@ -57,6 +57,11 @@ const MeasureMenu = function () {
     measurementsInProj: !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length,
   }), shallowEqual);
 
+  const listSize = isTouchDevice ? 'large' : 'small';
+  DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
+  const getRemoveOptionIndex = OPTIONS_ARRAY.findIndex((item) => item.text === 'Remove Measurements');
+  OPTIONS_ARRAY[getRemoveOptionIndex].hidden = !measurementsInProj;
+
   const triggerEvent = (eventName) => {
     events.trigger(eventName);
     onToggle();
@@ -67,11 +72,6 @@ const MeasureMenu = function () {
     const units = checked ? 'mi' : 'km';
     dispatch(changeUnits(units));
   };
-
-  const listSize = isTouchDevice ? 'large' : 'small';
-  DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
-  const getRemoveOptionIndex = OPTIONS_ARRAY.findIndex((item) => item.text === 'Remove Measurements');
-  OPTIONS_ARRAY[getRemoveOptionIndex].hidden = !measurementsInProj;
 
   return (
     <>
