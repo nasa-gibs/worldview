@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Form } from 'reactstrap';
 
-import { onToggle } from '../../modules/modal/actions';
+import { onToggle as onToggleAction } from '../../modules/modal/actions';
 import { changeUnits } from '../../modules/measure/actions';
 import IconList from '../util/icon-list';
 import util from '../../util/util';
@@ -46,6 +46,7 @@ const OPTIONS_ARRAY = [
 
 const MeasureMenu = function () {
   const dispatch = useDispatch();
+  const onToggle = () => { dispatch(onToggleAction()) }
 
   const {
     isMobile, isTouchDevice, unitOfMeasure, measurementsInProj,
@@ -58,7 +59,7 @@ const MeasureMenu = function () {
 
   const triggerEvent = (eventName) => {
     events.trigger(eventName);
-    dispatch(onToggle());
+    onToggle();
   };
 
   const unitToggle = (evt) => {
