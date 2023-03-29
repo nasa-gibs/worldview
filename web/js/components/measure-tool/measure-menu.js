@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { memo } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Form } from 'reactstrap';
 
 import { onToggle } from '../../modules/modal/actions';
@@ -44,8 +44,15 @@ const OPTIONS_ARRAY = [
   DOWNLOAD_GEOJSON,
 ];
 
-const MeasureMenu = function () {
+const MeasureMenu = memo(() => {
   const dispatch = useDispatch();
+
+  const { isMobile, isTouchDevice, unitOfMeasure, measurementsInProj } = useSelector((state) => ({
+    isMobile: state.screenSize.isMobileDevice,
+    isTouchDevice: state.modal.customProps.touchDevice,
+    unitOfMeasure: state.measure.unitOfMeasure,
+    measurementsInProj: !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length,
+  }), shallowEqual);
 
   const triggerEvent = (eventName) => {
     events.trigger(eventName);
@@ -57,13 +64,6 @@ const MeasureMenu = function () {
     const units = checked ? 'mi' : 'km';
     dispatch(changeUnits(units));
   };
-
-  const [isMobile, isTouchDevice, unitOfMeasure, measurementsInProj] = useSelector((state) => [
-    state.screenSize.isMobileDevice,
-    state.modal.customProps.touchDevice,
-    state.measure.unitOfMeasure,
-    !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length,
-  ]);
 
   const listSize = isTouchDevice ? 'large' : 'small';
   DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
@@ -93,6 +93,6 @@ const MeasureMenu = function () {
       />
     </>
   );
-};
+});
 
 export default MeasureMenu;
