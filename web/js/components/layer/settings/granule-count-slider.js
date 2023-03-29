@@ -28,7 +28,7 @@ function GranuleCountSlider(props) {
     <div className="layer-granule-count-select settings-component">
       <div className="d-flex">
         <h2 className="wv-header">Granule Count</h2>
-        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ml-2" />
+        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ms-2" />
         <UncontrolledTooltip
           id="center-align-tooltip"
           placement="right"
@@ -37,16 +37,6 @@ function GranuleCountSlider(props) {
           {satelliteInfo}
         </UncontrolledTooltip>
       </div>
-
-      {/* <Slider
-        min={MIN_GRANULES}
-        max={MAX_GRANULES}
-        defaultValue={count}
-        onChange={(val) => {
-          setGranuleCount(val);
-          debounceOnchange(val);
-        }}
-      /> */}
       <input
         type="range"
         className="form-range"
