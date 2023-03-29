@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/playwright:focal
+# FROM mcr.microsoft.com/playwright:focal
 
-WORKDIR /build
+# WORKDIR /build
 
-RUN mkdir -p /build/node_modules && \
-    npm install \
-    @playwright/test \
-    playwright-firefox
+# RUN mkdir -p /build/node_modules && \
+#     npm install \
+#     @playwright/test \
+#     playwright-firefox
 
-VOLUME /build/node_modules
+# VOLUME /build/node_modules

@@ -28,5 +28,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
+WORKDIR /build
+
 EXPOSE 80
 CMD  tail -f /dev/null
