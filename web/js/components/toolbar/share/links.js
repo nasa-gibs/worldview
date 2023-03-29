@@ -4,12 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HoverTooltip from '../../util/hover-tooltip';
 
 const ShareLinks = function ({ isMobile, onClick }) {
-
   const handleClick = (event, type) => {
     event.preventDefault();
     onClick(type);
-  }
-
+  };
   return (
     <div id="social-share" className="social-share">
       <a
@@ -70,7 +68,7 @@ const ShareLinks = function ({ isMobile, onClick }) {
       </a>
     </div>
   );
-}
+};
 
 ShareLinks.propTypes = {
   isMobile: PropTypes.bool,
