@@ -47,7 +47,9 @@ const OPTIONS_ARRAY = [
 const MeasureMenu = memo(() => {
   const dispatch = useDispatch();
 
-  const { isMobile, isTouchDevice, unitOfMeasure, measurementsInProj } = useSelector((state) => ({
+  const {
+    isMobile, isTouchDevice, unitOfMeasure, measurementsInProj
+  } = useSelector((state) => ({
     isMobile: state.screenSize.isMobileDevice,
     isTouchDevice: state.modal.customProps.touchDevice,
     unitOfMeasure: state.measure.unitOfMeasure,
