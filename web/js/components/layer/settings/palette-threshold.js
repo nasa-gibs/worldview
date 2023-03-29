@@ -126,8 +126,8 @@ class PaletteThreshold extends React.Component {
       endLabel += ` ${units}`;
     }
 
-  const startPercent = ((start - min) / (max - min)) * 100;
-  const endPercent = ((end - min) / (max - min)) * 100;
+    const startPercent = ((start - min) / (max - min)) * 100;
+    const endPercent = ((end - min) / (max - min)) * 100;
 
     return (
       <div className="layer-threshold-select settings-component mb-5">
