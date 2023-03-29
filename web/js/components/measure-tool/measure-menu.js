@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Form } from 'reactstrap';
 
