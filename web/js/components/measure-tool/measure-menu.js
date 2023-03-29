@@ -44,7 +44,7 @@ const OPTIONS_ARRAY = [
   DOWNLOAD_GEOJSON,
 ];
 
-const MeasureMenu = memo(() => {
+const MeasureMenu = function () {
   const dispatch = useDispatch();
 
   const {
@@ -95,6 +95,6 @@ const MeasureMenu = memo(() => {
       />
     </>
   );
-});
+};
 
 export default MeasureMenu;
