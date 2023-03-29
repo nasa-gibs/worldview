@@ -39,16 +39,16 @@ jobs:
         if: ${{ runner.os == 'macOS' }}
         run: |
           npm run start &
+          npx playwright install chromium &
           sleep 10
-          npm run e2e:headless:chrome:localStorageDisabled
-          npm run e2e:headless:chrome
+          npx playwright test --project=chromium --reporter=list
 
       - name: Run E2E tests - Firefox / Windows
         if: ${{ runner.os == 'Windows' }}
         run: |
           npm run start &
+          npx playwright install firefox &
           sleep 10
-          npm run e2e:headless:firefox:localStorageDisabled
-          npm run e2e:headless:firefox
+          npx playwright test --project=firefox --reporter=list
 
 

@@ -58,7 +58,7 @@ const interval = 3;
 
 describe('Date timescale changes', () => {
   test(
-    `changeTimeScale action returns ${CHANGE_TIME_SCALE} as type and ${interval} as value`,
+    `changeTimeScale action returns ${CHANGE_TIME_SCALE} as type and ${interval} as value [date-action-time-scale]`,
     () => {
       const expectedAction = {
         type: CHANGE_TIME_SCALE,
@@ -69,7 +69,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `updateAppNow action returns ${UPDATE_APP_NOW} as type and ${mockDate} as value`,
+    `updateAppNow action returns ${UPDATE_APP_NOW} as type and ${mockDate} as value [date-action-update-app-now]`,
     () => {
       const expectedAction = {
         type: UPDATE_APP_NOW,
@@ -80,7 +80,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `selectDate action returns ${SELECT_DATE} as type, 'selected' as activeString, and ${mockDate} as value`,
+    `selectDate action returns ${SELECT_DATE} as type, 'selected' as activeString, and ${mockDate} as value [date-action-select-date]`,
     () => {
       const expectedFirst = {
         type: CLEAR_PRELOAD,
@@ -122,7 +122,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value`,
+    `selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value [date-action-select-date-b]`,
     () => {
       const prevDate = new Date('2021-01-01');
       const expectedFirst = {
@@ -165,7 +165,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${customInterval} as value and ${delta} as delta`,
+    `changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${customInterval} as value and ${delta} as delta [date-action-custom-interval]`,
     () => {
       const store = mockStore({
         date: {},
@@ -192,7 +192,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `selectInterval action returns ${CHANGE_INTERVAL} as type and ${interval} as value and ${delta} as delta and true as customSelected`,
+    `selectInterval action returns ${CHANGE_INTERVAL} as type and ${interval} as value and ${delta} as delta and true as customSelected [date-action-interval]`,
     () => {
       const store = mockStore({
         date: {},

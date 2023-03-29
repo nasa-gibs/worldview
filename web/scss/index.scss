@@ -47,8 +47,12 @@
 @import "features/tour";
 @import "features/vectorMeta";
 
+/* Library Files */
+@import "lib/react-swipe-to-delete";
+
 /* Dependency Overrides */
 @import "overrides/rc-slider";
 @import "overrides/react-joyride";
 @import "overrides/react-search-ui";
 @import "overrides/react-simplebar";
+@import "overrides/react-swipe-to-delete";

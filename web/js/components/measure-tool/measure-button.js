@@ -1,6 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,112 +18,83 @@ const MEASURE_MENU_PROPS = {
 };
 
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
-const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete. ';
+const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete.';
 
-class MeasureButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showAlert: true,
-      isTouchDevice: false,
-    };
-    this.onButtonClick = this.onButtonClick.bind(this);
-    this.dismissAlert = this.dismissAlert.bind(this);
-  }
+const MeasureButton = function () {
+  const dispatch = useDispatch();
 
-  onButtonClick(evt) {
-    const { openModal } = this.props;
-    const isTouchDevice = evt.type === 'touchend';
+  const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => ({
+    isActive: state.measure.isActive,
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
+    isMobile: state.screenSize.isMobileDevice,
+  }), shallowEqual);
+
+  const [showAlert, setShowAlert] = useState(true);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  const dismissAlert = () => setShowAlert(false);
+
+  const onButtonClick = (evt) => {
     evt.stopPropagation();
     evt.preventDefault();
-    MEASURE_MENU_PROPS.touchDevice = isTouchDevice;
-    openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
-    this.setState({
-      isTouchDevice,
-      showAlert: true,
-    });
+    const touchDevice = evt.type === 'touchend';
+    MEASURE_MENU_PROPS.touchDevice = touchDevice;
+    dispatch(openCustomContent('MEASURE_MENU', MEASURE_MENU_PROPS));
+    setIsTouchDevice(touchDevice);
+    setShowAlert(true);
     googleTagManager.pushEvent({
       event: 'measure_tool_activated',
     });
-  }
+  };
 
-  dismissAlert() {
-    this.setState({ showAlert: false });
-  }
+  const buttonId = 'wv-measure-button';
+  const labelText = 'Measure distances & areas';
+  const faSize = isMobile ? '2x' : '1x';
+  const shouldShowAlert = isActive && showAlert;
+  const message = isTouchDevice ? mobileHelpMsg : helpMsg;
+  const mobileMeasureButtonStyle = isMobile ? {
+    bottom: '20px',
+    fontSize: '14.3px',
+    height: '44px',
+    margin: '0 0 0 4px',
+    padding: '5.72px 9.1px',
+  } : null;
 
-  render() {
-    const { isActive, isDistractionFreeModeActive, isMobile } = this.props;
-    const { showAlert, isTouchDevice } = this.state;
-    const faSize = isMobile ? '2x' : '1x';
-    const shouldShowAlert = isActive && showAlert;
-    const message = isTouchDevice ? mobileHelpMsg : helpMsg;
-    const buttonId = 'wv-measure-button';
-    const labelText = 'Measure distances & areas';
-    const mobileMeasureButtonStyle = isMobile ? {
-      bottom: '20px',
-      fontSize: '14.3px',
-      height: '44px',
-      margin: '0 0 0 4px',
-      padding: '5.72px 9.1px',
-    } : null;
+  return (
+    <>
+      {shouldShowAlert && (
+      <AlertUtil
+        id="measurement-alert"
+        isOpen
+        icon="ruler"
+        title="Measure Tool"
+        message={message}
+        onDismiss={dismissAlert}
+      />
+      )}
 
-    return (
-      <>
-        {shouldShowAlert && (
-        <AlertUtil
-          id="measurement-alert"
-          isOpen
-          icon="ruler"
-          title="Measure Tool"
-          message={message}
-          onDismiss={this.dismissAlert}
-        />
-        )}
-
-        {!isDistractionFreeModeActive && (
-        <Button
-          id={buttonId}
-          className="wv-measure-button wv-toolbar-button"
-          aria-label={labelText}
-          onTouchEnd={this.onButtonClick}
-          onMouseDown={this.onButtonClick}
-          disabled={isActive}
-          style={mobileMeasureButtonStyle}
+      {!isDistractionFreeModeActive && (
+      <Button
+        id={buttonId}
+        className="wv-measure-button wv-toolbar-button"
+        aria-label={labelText}
+        onTouchEnd={onButtonClick}
+        onMouseDown={onButtonClick}
+        disabled={isActive}
+        style={mobileMeasureButtonStyle}
+      >
+        <UncontrolledTooltip
+          id="center-align-tooltip"
+          placement="top"
+          target={buttonId}
         >
-          <UncontrolledTooltip
-            id="center-align-tooltip"
-            placement="top"
-            target={buttonId}
-          >
-            {labelText}
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="ruler" size={faSize} />
-        </Button>
-        )}
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  isActive: state.measure.isActive,
-  isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
-  isMobile: state.screenSize.isMobileDevice,
-});
-const mapDispatchToProps = (dispatch) => ({
-  openModal: (key, customParams) => {
-    dispatch(openCustomContent(key, customParams));
-  },
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MeasureButton);
-
-MeasureButton.propTypes = {
-  isActive: PropTypes.bool,
-  isDistractionFreeModeActive: PropTypes.bool,
-  isMobile: PropTypes.bool,
-  openModal: PropTypes.func,
+          {labelText}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="ruler" size={faSize} />
+      </Button>
+      )}
+    </>
+  );
 };
+
+export default MeasureButton;
