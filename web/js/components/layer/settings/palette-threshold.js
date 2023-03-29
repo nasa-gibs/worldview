@@ -86,6 +86,20 @@ class PaletteThreshold extends React.Component {
     );
   }
 
+  updateStartThreshold(value) {
+    const { end } = this.state;
+    const clampedValue = Math.min(value, end - 1);
+    this.updateThreshold([clampedValue, end]);
+  }
+
+  updateEndThreshold(value) {
+    const { start } = this.state;
+    const clampedValue = Math.max(value, start + 1);
+    this.updateThreshold([start, clampedValue]);
+  }
+
+
+
   render() {
     const {
       start, end, squashed,
@@ -112,8 +126,11 @@ class PaletteThreshold extends React.Component {
       endLabel += ` ${units}`;
     }
 
+  const startPercent = ((start - min) / (max - min)) * 100;
+  const endPercent = ((end - min) / (max - min)) * 100;
+
     return (
-      <div className="layer-threshold-select settings-component">
+      <div className="layer-threshold-select settings-component mb-5">
         <h2 className="wv-header">Thresholds</h2>
         <div id={`wv-palette-squash${index}`} className="wv-palette-squash">
           <Checkbox
@@ -132,17 +149,23 @@ class PaletteThreshold extends React.Component {
         >
           <input
             type="range"
-            className="form-range mt-2"
-            defaultValue={[start, end]}
+            className="form-range start-range"
+            value={start}
             min={min}
-            max={max}
-            onChange={(e) => this.updateThreshold([start, parseInt(e.target.value, 10)])}
-            style={{
-              '--value-percent': `${((end - min) / (max - min)) * 100}%`,
-              '--start-value-percent': `${((start - min) / (max - min)) * 100}%`,
-            }}
+            max={Math.max(min, end - 1)}
+            onChange={(e) => this.updateStartThreshold(parseInt(e.target.value, 10))}
+            style={{ '--value-percent': `${startPercent}%` }}
           />
-          <div className="wv-label">
+          <input
+            type="range"
+            className="form-range end-range"
+            value={end}
+            min={Math.min(max, start + 1)}
+            max={max}
+            onChange={(e) => this.updateEndThreshold(parseInt(e.target.value, 10))}
+            style={{ '--value-percent': `${endPercent}%` }}
+          />
+          <div className="wv-label mt-2">
             <span className="wv-label-range-min wv-label-range">
               {startLabel}
             </span>
