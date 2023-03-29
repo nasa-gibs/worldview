@@ -39,7 +39,6 @@ import setScreenInfo from './modules/screen-size/actions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
 import 'simplebar/dist/simplebar.min.css';
-import 'react-swipe-to-delete-component/dist/swipe-to-delete.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import 'react-resizable/css/styles.css';
 // App CSS

@@ -21,7 +21,7 @@ describe('Short Link request action', () => {
   test(
     `creates ${
       constants.REQUEST_SHORT_LINK_SUCESSS
-    } when short link is complete`,
+    } when short link is complete [link-actions-request-short-link]`,
     () => {
       const loc = 'mock/';
       fetchMock.getOnce(loc, {
@@ -47,7 +47,7 @@ describe('Short Link request action', () => {
         });
     },
   );
-  test(`creates ${constants.REQUEST_SHORT_LINK_FAILURE} Action`, () => {
+  test(`creates ${constants.REQUEST_SHORT_LINK_FAILURE} Action [link-actions-failure]`, () => {
     const loc = 'mock/';
     fetchMock.mock(loc, {
       throws: ERROR_MESSAGE,
@@ -69,7 +69,7 @@ describe('Short Link request action', () => {
 });
 describe('updatePermalink action', () => {
   test(
-    `${constants.UPDATE_PERMALINK} action type returns new permalink`,
+    `${constants.UPDATE_PERMALINK} action type returns new permalink [link-actions-update-permalink]`,
     () => {
       const testString = 'thisIsATestString';
       const expectedAction = {
