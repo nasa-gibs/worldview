@@ -2,42 +2,42 @@
 // the rc-slider library was replaced with a bootstrap range, use this to custom style range
 .form-range {
     &::-moz-range-track {
-      height: 4px;
+      height: 6px;
       background-color: #ccc;
     }
 
     &::-ms-track {
-      height: 4px;
+      height: 6px;
       background-color: #ccc;
     }
 
     // Customize the handle
     &::-webkit-slider-thumb {
       margin-top: -8px;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       background-color: white;
-      border: 2px solid $wv-dark-blue;
+      border: 2px solid #ABE2FB;
       border-radius: 50%;
-      cursor: pointer;
+      cursor: grab;
     }
 
     &::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       background-color: white;
-      border: 2px solid $wv-dark-blue;
+      border: 2px solid #ABE2FB;
       border-radius: 50%;
-      cursor: pointer;
+      cursor: grab;
     }
 
     &::-ms-thumb {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       background-color: white;
-      border: 2px solid $wv-dark-blue;
+      border: 2px solid #ABE2FB;
       border-radius: 50%;
-      cursor: pointer;
+      cursor: grab;
     }
 
     // Change the color of the selected portion
@@ -45,8 +45,8 @@
       height: 4px;
       background: linear-gradient(
         to right,
-        $wv-dark-blue 0%,
-        $wv-dark-blue var(--value-percent, 0%),
+        #ABE2FB 0%,
+        #ABE2FB var(--value-percent, 0%),
         #ccc var(--value-percent, 0%),
         #ccc 100%
       );

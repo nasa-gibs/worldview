@@ -53,7 +53,7 @@ function GranuleCountSlider(props) {
         }}
 
       />
-      <div className="wv-label wv-label-granule-count">
+      <div className="wv-label wv-label-granule-count mt-1">
         {granuleCount}
       </div>
     </div>

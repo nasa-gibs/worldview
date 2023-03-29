@@ -102,7 +102,7 @@ function DesktopAnimationWidget(props) {
                 style={{ '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%` }}
               />
             </div>
-            <span className="wv-slider-label">
+            <span className="wv-slider-label mt-1">
 
               {speed}
               {' '}

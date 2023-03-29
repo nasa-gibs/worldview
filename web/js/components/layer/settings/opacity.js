@@ -32,7 +32,7 @@ class OpacitySelect extends React.Component {
           }}
           style={{ '--value-percent': `${value}%` }}
         />
-        <div className="wv-label wv-label-opacity">
+        <div className="wv-label wv-label-opacity mt-1">
           {`${value}%`}
         </div>
       </div>
