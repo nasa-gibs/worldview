@@ -511,10 +511,6 @@ a .wv-animation-widget-icon {
         text-align: center;
         margin: auto;
       }
-
-      & .rc-slider {
-        margin: auto;
-      }
     }
 
     & #warning-message-row {
@@ -583,10 +579,6 @@ a .wv-animation-widget-icon {
   & .wv-animation-widget {
     & #slider-case-row {
       margin-top: 1rem;
-
-      & .rc-slider {
-        width: 400px;
-      }
     }
   }
 }
@@ -618,10 +610,6 @@ a .wv-animation-widget-icon {
 
       & .wv-slider-case {
         margin-top: 1.5rem;
-
-        & .rc-slider {
-          width: 300px;
-        }
       }
 
       & span {
@@ -642,10 +630,6 @@ a .wv-animation-widget-icon {
 
   & .wv-minimize {
     top: 1px;
-  }
-
-  & .rc-slider {
-    width: 400px;
   }
 }
 
