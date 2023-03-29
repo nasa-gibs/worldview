@@ -28,7 +28,14 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
+FROM mcr.microsoft.com/playwright:focal
+
 WORKDIR /build
+
+RUN mkdir -p /build/node_modules && \
+    npm install \
+    @playwright/test \
+    playwright-firefox
 
 EXPOSE 80
 CMD  tail -f /dev/null
