@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import Slider from 'rc-slider';
 import Checkbox from '../../util/checkbox';
 import {
   checkTemperatureUnitConversion, convertPaletteValue,
@@ -50,8 +49,8 @@ class PaletteThreshold extends React.Component {
       layerId, index, groupName, palette, legend,
     } = this.props;
     const { start, end, squashed } = this.state;
-    const newStart = Math.ceil(Number(thresholdArray[0]));
-    const newEnd = Math.ceil(Number(thresholdArray[1]));
+    const newStart = parseInt(thresholdArray[0], 10);
+    const newEnd = parseInt(thresholdArray[1], 10);
     const startRef = legend.refs[newStart];
     const endRef = legend.refs[newEnd];
 
@@ -131,12 +130,17 @@ class PaletteThreshold extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <Slider
-            range
+          <input
+            type="range"
+            className="form-range mt-2"
             defaultValue={[start, end]}
             min={min}
             max={max}
-            onChange={this.updateThreshold}
+            onChange={(e) => this.updateThreshold([start, parseInt(e.target.value, 10)])}
+            style={{
+              '--value-percent': `${((end - min) / (max - min)) * 100}%`,
+              '--start-value-percent': `${((start - min) / (max - min)) * 100}%`,
+            }}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">
