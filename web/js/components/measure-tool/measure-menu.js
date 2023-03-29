@@ -46,7 +46,7 @@ const OPTIONS_ARRAY = [
 
 const MeasureMenu = function () {
   const dispatch = useDispatch();
-  const onToggle = () => { dispatch(onToggleAction()) }
+  const onToggle = () => { dispatch(onToggleAction()); };
 
   const {
     isMobile, isTouchDevice, unitOfMeasure, measurementsInProj,
