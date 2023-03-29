@@ -17,6 +17,7 @@
 @import "components/notifications";
 @import "components/switch";
 @import "components/tooltip";
+@import "components/range";
 
 /* Features */
 @import "features/about";
@@ -48,7 +49,6 @@
 @import "features/vectorMeta";
 
 /* Dependency Overrides */
-@import "overrides/rc-slider";
 @import "overrides/react-joyride";
 @import "overrides/react-search-ui";
 @import "overrides/react-simplebar";
