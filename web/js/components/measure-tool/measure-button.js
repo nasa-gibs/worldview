@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
@@ -18,9 +18,9 @@ const MEASURE_MENU_PROPS = {
 };
 
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
-const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete. ';
+const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to complete.';
 
-const MeasureButton = memo(() => {
+const MeasureButton = function () {
   const dispatch = useDispatch();
 
   const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => ({
@@ -35,9 +35,9 @@ const MeasureButton = memo(() => {
   const dismissAlert = () => setShowAlert(false);
 
   const onButtonClick = (evt) => {
-    const touchDevice = evt.type === 'touchend';
     evt.stopPropagation();
     evt.preventDefault();
+    const touchDevice = evt.type === 'touchend';
     MEASURE_MENU_PROPS.touchDevice = touchDevice;
     dispatch(openCustomContent('MEASURE_MENU', MEASURE_MENU_PROPS));
     setIsTouchDevice(touchDevice);
@@ -95,6 +95,6 @@ const MeasureButton = memo(() => {
       )}
     </>
   );
-});
+};
 
 export default MeasureButton;
