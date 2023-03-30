@@ -11,55 +11,25 @@ Use `npm run lint:scss` or `npm run lint:js` to check SCSS or JS files separatel
 ## Unit Tests
 
 Unit tests are run using the Jest testing framework. Unit tests ran as part of the main testing suite, i.e. `npm test`.
-Use `npm test:unit` to run unit tests individually.
-_Note:_ Make sure to run `npm run getcapabilities` and
-`npm run build:config` first to build the configuration.
+
+To run unit tests individually use the `npm run test:unit:tag` script and provide the unit tag. Ex: `npm run test:unit:tag -- alert-initial-state`. The tags can be found at the end of each test description in square brackets. `'Should return the initial state [alert-initial-state]'`.
+
+To run a batch of unit tests you can use the `npm run test:batch:directory` script and provide the module directory of the tests. This will run each file in the directory provided. Ex: `npm run test:batch:directory -- animation`. This will run the `actions.test.js`, `reducer.test.js` and `util.test.js` test files located in the `modules/animation` directory.
 
 To test against a different time zone, run `npm run test:unit:tz`. _Note:_ This currently doesn't work in Windows.
 
 To view the unit test code coverage, run `npm run test:coverage`.
 Use `npm run test:unit:coverage` or `npm run test:unit:tz:coverage` to run coverage tests individually.
 
-## End-to-end Tests
+## End-To-End Tests
 
-End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
+The end-to-end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by end-to-end tests to cover any new functionality you add.
 
 Run end-to-end tests using `npm run e2e`
 
-To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:e2e`. See the [Docker](docker.md) page for more information.
+To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Run the tests with `npm run docker:ci`. See the [Docker](docker.md) page for more information.
 
-### Browserstack
-
-Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
-
-To run tests in BrowserStack from your local machine:
-
-1) Log into [BrowserStack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
-2) Add the following to your shell configuration (`.bashrc` or `.profile`);
-
-```bash
-export BROWSERSTACK_ACCESS_KEY=yourkeyhere
-export BROWSERSTACK_USER=yourusernamehere
-```
-
-### Selenium Drivers
-
- **(Note)** Driver reliability varies between Operating systems. Using local selenium drivers to run tests is more useful as a development tool for creating new tests than it is for verifying if all tests are passing.
-
-To run tests on your machine using a Chrome driver: Run `npm run e2e:chrome`.
-
-To run tests on your machine using a Firefox driver:
-
-1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
-2) Run `npm run e2e:firefox`.
-
-To run tests for both browsers in sequence: `npm run e2e`.
-
-### Developing new End to End Tests
-
-* When creating new tests you will likely want to work locally with a `Chrome` or `Firefox` driver to expedite the development process.
-* If there is a specific test that you would like to run, you can change the `files` variable found in `./e2e/browserstack.conf.js` to point directly to your test.
-* If there is a specific browser that you would like to test, you can specify which in `./e2e/environments.json`
+See the [end-to-end testing](e2e_testing.md) page for more information on how to run the end-to-end tests.
 
 ## Debug Parameters
 

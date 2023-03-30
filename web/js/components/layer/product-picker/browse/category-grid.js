@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashOrderBy from 'lodash/orderBy';
-import Masonry from 'react-masonry-component';
+import MasonryComponent from '../../../../util/masonry';
 import CategoryCell from './category-cell';
 import {
   showMeasurements as showMeasurementsAction,
@@ -39,7 +39,7 @@ function CategoryGrid(props) {
     ['asc'],
   );
   return (
-    <Masonry className="category-masonry-case" options={masonryOptions}>
+    <MasonryComponent className="category-masonry-case" options={masonryOptions}>
       {orderedCategories.map((category) => (
         <CategoryCell
           key={category.id}
@@ -50,7 +50,7 @@ function CategoryGrid(props) {
           hasMeasurementSource={hasMeasurementSource}
         />
       ))}
-    </Masonry>
+    </MasonryComponent>
   );
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -72,9 +72,8 @@ function mapStateToProps(state) {
     selectedMeasurementSourceIndex,
   } = productPicker;
   const categoryConfig = getCategoryConfig(state);
-
   return {
-    categories: Object.values(categoryConfig),
+    categories: typeof categoryConfig === 'undefined' ? [] : Object.values(categoryConfig),
     categoryType,
     category,
     measurementConfig: config.measurements,
