@@ -90,7 +90,7 @@ module.exports = (page) => ({
   measureDistanceBtn: page.locator('#measure-distance-button'),
   measureAreaBtn: page.locator('#measure-area-button'),
   clearMeasurementsBtn: page.locator('#clear-measurements-button'),
-  unitOfMeasureToggle: page.locator('.measure-unit-toggle .custom-control-label'),
+  unitOfMeasureToggle: page.locator('#unit-toggle'),
   measurementTooltip: page.locator('.tooltip-measure'),
   geoMeasurementTooltip: page.locator('#wv-map-geographic .tooltip-measure'),
   arcticMeasurementTooltip: page.locator('#wv-map-arctic .tooltip-measure'),
@@ -121,7 +121,7 @@ module.exports = (page) => ({
   mobileDatePickerHeader: page.locator('.datepicker .datepicker-header .datepicker-header'),
 
   // layers
-  layersModalCloseButton: page.locator('.custom-layer-dialog .modal-header .close'),
+  layersModalCloseButton: page.locator('.layer-btn-close'),
   aerosolOpticalDepth: page.locator('#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth'),
   layersSearchField: page.locator('input#layers-search-input'),
   categoriesNav: page.locator('#categories-nav'),
@@ -272,7 +272,7 @@ module.exports = (page) => ({
   dataTab: page.locator('#download-sidebar-tab'),
   yearlyResolutionTooltip: page.locator('#zoom-years'),
   timelineSetToYears: page.locator('#current-zoom.zoom-years'),
-  modalCloseButton: page.locator('.modal-header .close'),
+  modalCloseButton: page.locator('.modal-close-btn'),
   notificationDismissButton: page.locator('.wv-alert .close-alert .fa-times'),
   overlayLayerItems: page.locator('#overlays li'),
   resolutionTooltip: page.locator('#zoom-btn-container'),

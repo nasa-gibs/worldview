@@ -82,14 +82,14 @@ test('Verify that Url is updated', async ({ browserName }) => {
 
 test('Verify Events message and clicking message opens dialog', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { notifyMessage } = selectors
+  const { notifyMessage, modalCloseButton } = selectors
   await expect(notifyMessage).toBeVisible()
   await expect(notifyMessage).toContainText('Events may not be visible at all times.')
   await notifyMessage.click()
   await expect(page.locator('#event_visibility_info h1')).toContainText('Why can’t I see an event?')
-  await page.locator('#event_visibility_info .close').click()
+  await modalCloseButton.click()
   await expect(page.locator('#event_visibility_info')).not.toBeVisible()
-  await page.locator('.wv-alert .close-alert .fa-times').click()
+  await page.locator('#event-alert-close').click()
   await expect(page.locator('.wv-alert .close-alert .fa-times')).not.toBeVisible()
 })
 
