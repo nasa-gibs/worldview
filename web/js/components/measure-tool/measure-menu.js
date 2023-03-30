@@ -3,7 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Form } from 'reactstrap';
 
 import { onToggle as onToggleAction } from '../../modules/modal/actions';
-import { changeUnits } from '../../modules/measure/actions';
+import { changeUnits as changeUnitsAction } from '../../modules/measure/actions';
 import IconList from '../util/icon-list';
 import util from '../../util/util';
 
@@ -47,6 +47,7 @@ const OPTIONS_ARRAY = [
 const MeasureMenu = function () {
   const dispatch = useDispatch();
   const onToggle = () => { dispatch(onToggleAction()); };
+  const changeUnits = (units) => { dispatch(changeUnitsAction(units)); };
 
   const {
     isMobile, isTouchDevice, unitOfMeasure, measurementsInProj,
@@ -70,7 +71,7 @@ const MeasureMenu = function () {
   const unitToggle = (evt) => {
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    dispatch(changeUnits(units));
+    changeUnits(units);
   };
 
   return (
