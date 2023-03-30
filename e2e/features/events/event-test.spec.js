@@ -52,7 +52,6 @@ test('Selecting event shows track points and markers which are not visible when 
   const { secondEvent, trackMarker, eventIcons, eventsTab, layersTab } = selectors
   await page.waitForTimeout(1000)
   await secondEvent.click()
-  await page.screenshot({ path: 'events-screenshot.png', fullPage: true })
   await expect(trackMarker).toHaveCount(5)
   await layersTab.click()
   await expect(trackMarker).not.toBeVisible()
