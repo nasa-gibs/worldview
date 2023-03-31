@@ -44,6 +44,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  let layer_set_opacity_count = 0
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -211,7 +212,10 @@ export default function mapLayerBuilder(config, cache, store) {
         layer = await getGranuleLayer(def, attributes, options);
       }
     }
-    layer.setOpacity(opacity || 1.0);
+    if (layer_set_opacity_count === 0) {
+      await layer.setOpacity(opacity || 1.0);
+    }
+    layer_set_opacity_count++
     return layer;
   };
 
