@@ -27,7 +27,7 @@
       }
 
       & .form-check-input {
-        margin: 0 0 0 -20px;
+        margin: 0 0 0 -8px;
       }
     }
   }
@@ -44,11 +44,11 @@
   margin: 0;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+.form-check-input:checked ~ .custom-control-label::before {
   border-color: #fff;
 }
 
-.custom-control-input {
+.form-check-input {
   background-color: #007bff;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%27-4 -4 8 8%27%3E%3Ccircle r=%273%27 fill=%27%23fff%27/%3E%3C/svg%3E") !important;
 }
