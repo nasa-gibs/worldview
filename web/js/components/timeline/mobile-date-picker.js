@@ -52,7 +52,7 @@ const subDailyDateConfig = {
   },
 };
 
-  // change to UTC offset time for date picker controls
+// change to UTC offset time for date picker controls
 const convertToUTCDateObject = (dateString) => {
   const date = new Date(dateString);
   const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
@@ -70,9 +70,9 @@ const MobileDatePicker = function ({
   startDateLimit,
   endDateLimit,
   onDateChange,
-  hasSubdailyLayers
+  hasSubdailyLayers,
 }) {
-  const [time, setTime] = useState(convertToUTCDateObject(date))
+  const [time, setTime] = useState(convertToUTCDateObject(date));
   const [minDate, setMinDate] = useState(convertToUTCDateObject(startDateLimit));
   const [maxDate, setMaxDate] = useState(convertToUTCDateObject(endDateLimit));
   const [isOpen, setIsOpen] = useState(false);
