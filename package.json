@@ -195,7 +195,7 @@
     "react-resizable": "^1.9.0",
     "react-swipe-to-delete-component": "1.0.5",
     "react-visibility-sensor": "^5.1.1",
-    "reactstrap": "8.1.x",
+    "reactstrap": "9.1.x",
     "redux": "^4.0.4",
     "redux-location-state": "^2.6.0",
     "redux-logger": "^3.0.6",
