@@ -45,7 +45,7 @@ const PaletteSelect = function ({
       setCustomPalette(layer.id, id, index, groupName);
     }
     setActivePalette(id);
-  }
+  };
 
   const customLegend = (id) => {
     const source = getDefaultLegend(layer.id, index);
@@ -114,7 +114,7 @@ const PaletteSelect = function ({
           id={`wv-palette-radio-${id}`}
           type="radio"
           name="wv-palette-radio"
-          onClick={() => this.onChangePalette(id)}
+          onClick={() => onChangePalette(id)}
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
           <span
@@ -126,7 +126,7 @@ const PaletteSelect = function ({
           <span className="wv-palette-label">{description}</span>
         </label>
       </div>
-    )
+    );
   };
 
   const recommended = layer.palette.recommended || [];
@@ -153,7 +153,7 @@ const PaletteSelect = function ({
       </Scrollbar>
     </div>
   );
-}
+};
 
 // class PaletteSelect extends React.Component {
 //   constructor(props) {
