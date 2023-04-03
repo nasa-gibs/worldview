@@ -13,25 +13,25 @@ export function getTemperatureUnitFromAbbrev(unitAbbrev) {
 export function getAbbrevFromTemperatureUnit(unit) {
   const temps = {
     Kelvin: 'K',
-    Celcius: '°C',
+    Celsius: '°C',
     Fahrenheit: '°F',
   };
   return temps[unit];
 }
 
 export function unitConvert(value, initialUnit, targetUnit) {
-  if (initialUnit === 'Celcius') {
+  if (initialUnit === 'Celsius') {
     if (targetUnit === 'Fahrenheit') return new Celcius(value).toFahrenheit().value;
     if (targetUnit === 'Kelvin') return new Celcius(value).toKelvin().value;
   }
 
   if (initialUnit === 'Fahrenheit') {
-    if (targetUnit === 'Celcius') return new Fahrenheit(value).toCelcius().value;
+    if (targetUnit === 'Celsius') return new Fahrenheit(value).toCelcius().value;
     if (targetUnit === 'Kelvin') return new Fahrenheit(value).toKelvin().value;
   }
 
   if (initialUnit === 'Kelvin') {
-    if (targetUnit === 'Celcius') return new Kelvin(value).toCelcius().value;
+    if (targetUnit === 'Celsius') return new Kelvin(value).toCelcius().value;
     if (targetUnit === 'Fahrenheit') return new Kelvin(value).toFahrenheit().value;
   }
 }
