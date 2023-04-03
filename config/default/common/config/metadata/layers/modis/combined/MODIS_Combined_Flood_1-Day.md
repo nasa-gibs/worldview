@@ -4,6 +4,15 @@ Users are advised to compare the flood product against the contributing MODIS re
 
 For the 1-day product it is important to understand the high potential for cloud-shadow false-positives, if the source imagery (Terra or Aqua) has cloud cover.
 
+As of January 12, 2023, a topographic filter has been applied to remove water detections from mountainous areas, greatly reducing the number of terrain shadow false-positives in such areas. These areas appear in all products as "Insufficient Data" (gray in default Worldview display).
+
+#### Current Issues
+- The flood layers are displaying a large number of flood pixels in the far north at present (generally above 60N). Most of these are false-positive detections, a result of the large number of overlapping images towards the poles in the source MODIS imagery (due to the nature of the spacecraft's polar orbit). During summer when such regions have long periods of daylight, even more observations are available, but this increases the chance that repeated cloud-shadow false-positives pass the compositing requirement, and contaminate the product. We are working on various adjustments to the algorithm to minimize this.
+
+At the same time, note there is actual major flooding in the region along various Arctic rivers (as of mid June 2022). These are easily distinguishable by the spatial pattern of flooding (occurring clearly along river courses). The false positives are generally scattered around randomly, or appear similar to cloud spatial patterns (not conforming to local hydrology).
+
+- Far west tiles (Hawaii, Alaska):  Due to issues with processing imagery around the international dateline for this product, far west tiles will sometimes appear with data at the start of the day, long before Terra or Aqua have observed for the day. Users are advised to disregard such data, until the Corrected Reflectance layers confirm current-day observations have been processed.
+
 #### Limitations
 Common situations in which the flood product may be unable to accurately identify flood include:
 
@@ -12,7 +21,6 @@ Common situations in which the flood product may be unable to accurately identif
 - Terrain shadow false-positives: terrain shadows can create false-positives in mountains, generally only in wintertime. These are typically easy to identify due to their pattern (reflecting topography), and by comparison to reflectance imagery.
 - Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely be reported as flood.
 - Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
-
 
 #### Spatial Coverage
 Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://www.earthdata.nasa.gov/s3fs-public/imported/MCDWD_UserGuide_RevB.pdf) for included tiles).
@@ -23,7 +31,7 @@ Nominal equatorial resolution is ~232 m per pixel, with resolution increasing to
 #### Frequency
 One product per day, per tile. During the day, data products are updated as NRT MOD09 data are received (an initial product may be updated if additional intersecting swath data is later received).
 
-To help estimate if the final flood product (for the day) is available in Worldview for a given area of interest, users can check if both the Terra and Aqua Corrected Reflectance layers are displaying for the area.  If they are, the flood product has likely also been updated (or will be within an hour).
+To help estimate if the final flood product (for the day) is available in Worldview for a given area of interest, users can check if both the Terra and Aqua Corrected Reflectance layers are displaying for the area. If they are, the flood product has likely also been updated (or will be within an hour).
 
 Flood products displayed in Worldview are updated every 30 minutes, approximately on the hour and at 30 minutes past the hour.
 
