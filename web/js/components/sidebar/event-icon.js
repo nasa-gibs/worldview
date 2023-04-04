@@ -100,10 +100,10 @@ export default function EventIcon ({
 
     document.body.appendChild(divTooltipArrow);
     document.body.appendChild(divTooltip);
-    return (() => {
+    return () => {
       divTooltip.remove();
       divTooltipArrow.remove();
-    });
+    };
   });
 
   return (
