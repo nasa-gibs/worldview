@@ -213,6 +213,7 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
       title,
       id,
       hideTooltip,
+      isSelected,
     }),
     overlayEl,
   );
