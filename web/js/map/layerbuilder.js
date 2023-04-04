@@ -550,7 +550,6 @@ export default function mapLayerBuilder(config, cache, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
 
-    console.log(def);
     // ASCAT does not have def.matrixIds data
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
@@ -586,7 +585,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
 
-    console.log(tileMatrixSet);
     const tileSource = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
@@ -606,10 +604,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     let counter = 0;
 
-    // ASCAT errors out but not sure why yet. OSCAR & MISR work properly
-    // ol.layer.VectorTile
-    console.log('Creating LayerVectorTile');
-
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -620,91 +614,53 @@ export default function mapLayerBuilder(config, cache, store) {
       style (feature, resolution) {
         counter += 1;
 
-        // Due to processing issues, I am only rendering every 25th feature
-        if (counter % 15 !== 0) return [];
+        // Due to the large number of points to render for OSCAR, I am only rendering every 25th feature
+        if (counter % 25 !== 0) return [];
 
         // This function styles each feature individually based on the feature specific data
-        // let arrowSizeMultiplier;
-        // let arrowColor;
+        let arrowSizeMultiplier;
         const radianDirection = feature.get('direction'); // was "dir"
         const magnitude = feature.get('magnitude'); // was "speed"
 
-        // // If OSCAR/ASCAT we need to adjust the radian angle
-        // // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
-        // if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
-        //   radianDirection -= 180;
-        // }
+        // This returns an array, but doesn't render. Too slow??
+        let arrowColor = colorGradient(magnitude);
 
-        // // Adjust color & arrow length based on magnitude
-        // if (magnitude < 0.08) {
-        //   arrowColor = 'red';
-        //   arrowSizeMultiplier = 1;
-        // } else if (magnitude < 0.17) {
-        //   arrowColor = 'blue';
-        //   arrowSizeMultiplier = 1.25;
-        // } else {
-        //   arrowColor = 'green';
-        //   arrowSizeMultiplier = 1.5;
-        // }
+        // Adjust color & arrow length based on magnitude
+        if (magnitude < 0.08) {
+          arrowColor = [255, 0, 0];
+          arrowSizeMultiplier = 1;
+        } else if (magnitude < 0.17) {
+          arrowColor = [0, 0, 255];
+          arrowSizeMultiplier = 1.25;
+        } else {
+          arrowColor = [0, 255, 0];
+          arrowSizeMultiplier = 1.5;
+        }
+        console.log(`arrowColor2: ${arrowColor}`);
 
-        // // The arrow shaft
-        // const arrowShape = [
-        //   new Style({
-        //     image: new RegularShape({
-        //       points: 2,
-        //       radius: 10 * arrowSizeMultiplier,
-        //       displacement: [10, 0],
-        //       stroke: new Stroke({
-        //         width: 2,
-        //         color: arrowColor,
-        //       }),
-        //       angle: radianDirection,
-        //     }),
-        //   }),
-        //   // The arrow head
-        //   new Style({
-        //     image: new RegularShape({
-        //       points: 3,
-        //       radius: 5 * arrowSizeMultiplier,
-        //       angle: radianDirection,
-        //       // displacement: [5, 25],
-        //       fill: new Fill({
-        //         color: arrowColor,
-        //       }),
-        //     }),
-        //   }),
-        // ];
-        // return arrowShape;
-
-        // arrow attempt #2
         // https://openlayers.org/en/latest/examples/wind-arrows.html
         const shaft = new RegularShape({
           points: 2,
           radius: 5,
           stroke: new Stroke({
-            width: 2,
-            color: 'yellow',
+            width: 4,
+            color: arrowColor,
           }),
           rotateWithView: true,
         });
 
         const head = new RegularShape({
           points: 3,
-          radius: 5,
+          radius: 8,
           fill: new Fill({
-            color: 'yellow',
+            color: arrowColor,
           }),
           rotateWithView: true,
         });
 
         const styles = [new Style({ image: shaft }), new Style({ image: head })];
-
-        // const wind = feature.get('wind');
-        // rotate arrow away from wind origin
-        // const angle = ((wind.deg - 180) * Math.PI) / 180;
-        // const scale = wind.speed / 10;
         const angle = ((radianDirection - 180) * Math.PI) / 180;
-        const scale = magnitude * 10;
+        const scale = (magnitude + 1) * arrowSizeMultiplier;
         shaft.setScale([1, scale]);
         shaft.setRotation(angle);
         head.setDisplacement([
@@ -716,7 +672,28 @@ export default function mapLayerBuilder(config, cache, store) {
       },
     });
 
-    console.log('Applying style');
+    function colorGradient(fadeFraction) {
+      const color1 = {
+        red: 19, green: 233, blue: 19,
+      };
+      const color2 = {
+        red: 255, green: 255, blue: 0,
+      };
+      const fade = fadeFraction;
+
+      const diffRed = color2.red - color1.red;
+      const diffGreen = color2.green - color1.green;
+      const diffBlue = color2.blue - color1.blue;
+
+      const gradient = {
+        red: parseInt(Math.floor(color1.red + (diffRed * fade)), 10),
+        green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
+        blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
+      };
+      console.log('returning');
+      return [gradient.red, gradient.green, gradient.blue];
+    }
+
     applyStyle(def, layer, state, layeroptions);
     layer.wrap = day;
     layer.wv = attributes;
