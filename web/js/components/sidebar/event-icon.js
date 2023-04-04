@@ -35,8 +35,8 @@ export default function EventIcon ({
 
     let divTooltipRect = divTooltip.getBoundingClientRect();
     if (isSelected) {
-      tooltipTop = `${containerRect.y - containerRect.height / 2 - wrappedText}px`;
-      tooltipLeft = `${containerRect.x - divTooltipRect.width / 2 + 25}px`;
+      tooltipTop = `${containerRect.y - containerRect.height / 2 - wrappedText - 10}px`;
+      tooltipLeft = `${containerRect.x - divTooltipRect.width / 2 + 17}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
