@@ -23,28 +23,30 @@ export default function EventIcon ({
     const divTooltip = document.getElementById(tooltipId);
     const divTooltipArrow = document.getElementById(tooltipArrowId);
 
-    let arrowTop, arrowLeft, tooltipTop, tooltipLeft;
-    arrowTop = arrowLeft = tooltipTop = tooltipLeft = '0px';
-    let wrappedText = 0
+    let arrowTop = '0px';
+    let arrowLeft = '0px';
+    let tooltipTop = '0px';
+    let tooltipLeft = '0px';
+    let wrappedText = 0;
 
     if (divTooltip.getBoundingClientRect().height > 30) {
       wrappedText = 10;
     }
 
     if (isSelected) {
-      tooltipTop = `${containerRect.y - containerRect.height/2 - wrappedText}px`;
-      tooltipLeft = `${containerRect.x - containerRect.width/2 - 30}px`;
+      tooltipTop = `${containerRect.y - containerRect.height / 2 - wrappedText}px`;
+      tooltipLeft = `${containerRect.x - containerRect.width / 2 - 30}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
       const divTooltipRect = divTooltip.getBoundingClientRect();
       arrowTop = `${divTooltipRect.y + 5 - wrappedText}px`;
-      arrowLeft = `${divTooltipRect.x + divTooltipRect.width/2 - 10}px`;
+      arrowLeft = `${divTooltipRect.x + divTooltipRect.width / 2 - 10}px`;
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     } else {
-      tooltipTop = (containerRect.y - containerRect.height/2 - 20 - wrappedText) + 'px';
-      tooltipLeft = (containerRect.x - containerRect.width/2 - 54) + 'px';
+      tooltipTop = (containerRect.y - containerRect.height / 2 - 20 - wrappedText) + 'px';
+      tooltipLeft = (containerRect.x - containerRect.width / 2 - 54) + 'px';
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
@@ -105,7 +107,7 @@ export default function EventIcon ({
   });
 
   return (
-    <div ref={tooltipContainerRef} onMouseEnter={e => handleEnter(e)} onMouseLeave={e => handleLeave(e)}>
+    <div ref={tooltipContainerRef} onMouseEnter={(e) => handleEnter(e)} onMouseLeave={(e) => handleLeave(e)}>
       {/* <Tooltip
         id="center-align-tooltip"
         placement="top"
