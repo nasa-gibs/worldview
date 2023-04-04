@@ -65,13 +65,14 @@ const convertToLocalDateObject = (date) => {
   return dateLocal;
 };
 
-const MobileDatePicker = function ({
-  date,
-  startDateLimit,
-  endDateLimit,
-  onDateChange,
-  hasSubdailyLayers,
-}) {
+const MobileDatePicker = function (props) {
+  const {
+    date,
+    startDateLimit,
+    endDateLimit,
+    onDateChange,
+    hasSubdailyLayers,
+  } = props;
   const [time, setTime] = useState(convertToUTCDateObject(date));
   const [minDate, setMinDate] = useState(convertToUTCDateObject(startDateLimit));
   const [maxDate, setMaxDate] = useState(convertToUTCDateObject(endDateLimit));
@@ -115,6 +116,9 @@ const MobileDatePicker = function ({
     </div>
   );
 
+  const displayDate = getDisplayDate(date, hasSubdailyLayers);
+  const headerTime = getHeaderTime(time, hasSubdailyLayers);
+
   return (
     time && (
       <>
@@ -123,14 +127,14 @@ const MobileDatePicker = function ({
           onClick={handleClickDateButton}
         >
           <div className="mobile-date-picker-select-btn-text">
-            <span>{getDisplayDate(date, hasSubdailyLayers)}</span>
+            <span>{displayDate}</span>
           </div>
         </div>
         <DatePicker
           dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
           showCaption
           theme="android-dark"
-          customHeader={getHeaderTime(time, hasSubdailyLayers)}
+          customHeader={headerTime}
           confirmText="OK"
           cancelText="CANCEL"
           min={minDate}
