@@ -16,6 +16,7 @@ const getCategoryType = ({ productPicker }) => productPicker.categoryType;
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection, getSelectedDate],
   (config, projection, selectedDate) => {
+    console.log(`getProjection: ${getProjection}`);
     const layersWithFacetProps = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections[projection])

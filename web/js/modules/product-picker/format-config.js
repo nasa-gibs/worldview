@@ -110,6 +110,8 @@ export default function buildLayerFacetProps(config, selectedDate) {
       }
       layer.daynight = layer.daynight.map(capitalizeFirstLetter);
     }
+    console.log('layer');
+    console.log(layer);
     return layer;
   });
 }
