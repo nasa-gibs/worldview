@@ -107,8 +107,8 @@ module.exports = {
         test: /\.(glsl|frag|vert)$/,
         use: [
           require.resolve('raw-loader'),
-          require.resolve('glslify-loader'),
-        ],
+          require.resolve('glslify-loader')
+        ]
       },
       {
         test: /\.(sa|sc|c)ss$/,
