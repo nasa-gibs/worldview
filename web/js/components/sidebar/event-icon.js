@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 // import { Tooltip } from 'reactstrap';
 
 export default function EventIcon ({
-  id, category, title, hideTooltip, isSelected
+  id, category, title, hideTooltip, isSelected,
 }) {
-  const tooltipContainerRef = useRef()
+  const tooltipContainerRef = useRef();
   // const [tooltipOpen, setTooltipOpen] = useState(false);
   const slug = category.toLowerCase().split(' ').join('-');
   const tooltipId = `tooltip-${slug}-${id}`;
-  const tooltipArrowId = tooltipId + '-arrow';
+  const tooltipArrowId = `arrow-${tooltipId}`;
 
   // const toggle = ({ buttons }) => {
   //   const open = buttons ? false : !tooltipOpen;
@@ -19,29 +19,27 @@ export default function EventIcon ({
   const handleEnter = (e) => {
     e.preventDefault();
 
-    const containerRect = tooltipContainerRef.current.getBoundingClientRect()
+    const containerRect = tooltipContainerRef.current.getBoundingClientRect();
     const divTooltip = document.getElementById(tooltipId);
     const divTooltipArrow = document.getElementById(tooltipArrowId);
 
-    let arrowTop = '0px'
-    let arrowLeft = '0px'
-    let tooltipTop = '0px'
-    let tooltipLeft = '0px'
+    let arrowTop, arrowLeft, tooltipTop, tooltipLeft;
+    arrowTop = arrowLeft = tooltipTop = tooltipLeft = '0px';
     let wrappedText = 0
 
     if (divTooltip.getBoundingClientRect().height > 30) {
-      wrappedText = 10
+      wrappedText = 10;
     }
 
     if (isSelected) {
-      tooltipTop = (containerRect.y - containerRect.height/2 - wrappedText) + 'px';
-      tooltipLeft = (containerRect.x - containerRect.width/2 - 30) + 'px';
+      tooltipTop = `${containerRect.y - containerRect.height/2 - wrappedText}px`;
+      tooltipLeft = `${containerRect.x - containerRect.width/2 - 30}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
       const divTooltipRect = divTooltip.getBoundingClientRect();
-      arrowTop = (divTooltipRect.y + 5 - wrappedText) + 'px';
-      arrowLeft = (divTooltipRect.x + divTooltipRect.width/2 - 10) + 'px';
+      arrowTop = `${divTooltipRect.y + 5 - wrappedText}px`;
+      arrowLeft = `${divTooltipRect.x + divTooltipRect.width/2 - 10}px`;
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     } else {
@@ -52,11 +50,11 @@ export default function EventIcon ({
 
       const divTooltipRect = divTooltip.getBoundingClientRect();
       if (wrappedText > 0) {
-        arrowTop = (divTooltipRect.y + 5 + wrappedText + 3) + 'px';
+        arrowTop = `${divTooltipRect.y + 5 + wrappedText + 3}px`;
       } else {
-        arrowTop = (divTooltipRect.y + 5 + wrappedText) + 'px';
+        arrowTop = `${divTooltipRect.y + 5 + wrappedText}px`;
       }
-      arrowLeft = (divTooltipRect.x + divTooltipRect.width/2 - 10) + 'px';
+      arrowLeft = `${divTooltipRect.x + divTooltipRect.width/2 - 10}px`;
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     }
@@ -88,7 +86,7 @@ export default function EventIcon ({
     divTooltip.style.setProperty('visibility', 'hidden');
 
     const divTooltipArrow = document.createElement('div');
-    divTooltipArrow.setAttribute('id', tooltipId + '-arrow');
+    divTooltipArrow.setAttribute('id', tooltipArrowId);
     divTooltipArrow.style.setProperty('background', '#000');
     divTooltipArrow.style.setProperty('border-radius', '2px');
     divTooltipArrow.style.setProperty('z-index', '1000');
@@ -100,11 +98,11 @@ export default function EventIcon ({
 
     document.body.appendChild(divTooltipArrow);
     document.body.appendChild(divTooltip);
-    return () => {
-      divTooltip.remove()
-      divTooltipArrow.remove()
-    }
-  })
+    return (() => {
+      divTooltip.remove();
+      divTooltipArrow.remove();
+    });
+  });
 
   return (
     <div ref={tooltipContainerRef} onMouseEnter={e => handleEnter(e)} onMouseLeave={e => handleLeave(e)}>
