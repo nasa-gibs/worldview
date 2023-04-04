@@ -16,10 +16,12 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import { Style, RegularShape } from 'ol/style';
+import Draw from 'ol/interaction/Draw.js';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import * as dat from 'dat.gui';
 // import { Point } from 'proj4';
+import Polygon from 'ol/geom/Polygon.js';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -50,7 +52,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAnimation = true;
+  const renderParticleFlow = false;
   const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
 
   /**
@@ -448,7 +450,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const animateVectors = function(layerName, tileSource, selected, layer) {
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
-    if (animationAllowed && renderAnimation) {
+    if (animationAllowed && renderParticleFlow) {
       const canvasElem = document.querySelectorAll('canvas');
       if (canvasElem.length > 0) {
         // Add z-index property to existing OL canvas. This ensures that the visualization is on the top layer.
@@ -618,62 +620,99 @@ export default function mapLayerBuilder(config, cache, store) {
       style (feature, resolution) {
         counter += 1;
 
-        console.log('style feature:');
-        console.log(feature);
-
-
         // Due to processing issues, I am only rendering every 25th feature
         if (counter % 15 !== 0) return [];
 
         // This function styles each feature individually based on the feature specific data
-        let arrowSizeMultiplier;
-        let arrowColor;
-        let radianDirection = feature.get('direction'); // was "dir"
+        // let arrowSizeMultiplier;
+        // let arrowColor;
+        const radianDirection = feature.get('direction'); // was "dir"
         const magnitude = feature.get('magnitude'); // was "speed"
 
-        // If OSCAR/ASCAT we need to adjust the radian angle
-        // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
-        if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
-          radianDirection -= 180;
-        }
+        // // If OSCAR/ASCAT we need to adjust the radian angle
+        // // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
+        // if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+        //   radianDirection -= 180;
+        // }
 
-        // Adjust color & arrow length based on magnitude
-        if (magnitude < 0.08) {
-          arrowColor = 'red';
-          arrowSizeMultiplier = 1;
-        } else if (magnitude < 0.17) {
-          arrowColor = 'blue';
-          arrowSizeMultiplier = 1.25;
-        } else {
-          arrowColor = 'green';
-          arrowSizeMultiplier = 1.5;
-        }
+        // // Adjust color & arrow length based on magnitude
+        // if (magnitude < 0.08) {
+        //   arrowColor = 'red';
+        //   arrowSizeMultiplier = 1;
+        // } else if (magnitude < 0.17) {
+        //   arrowColor = 'blue';
+        //   arrowSizeMultiplier = 1.25;
+        // } else {
+        //   arrowColor = 'green';
+        //   arrowSizeMultiplier = 1.5;
+        // }
 
-        // The arrow shaft
-        return [
-          new Style({
-            image: new RegularShape({
-              points: 2,
-              radius: 10 * arrowSizeMultiplier,
-              stroke: new Stroke({
-                width: 2,
-                color: arrowColor,
-              }),
-              angle: radianDirection,
-            }),
+        // // The arrow shaft
+        // const arrowShape = [
+        //   new Style({
+        //     image: new RegularShape({
+        //       points: 2,
+        //       radius: 10 * arrowSizeMultiplier,
+        //       displacement: [10, 0],
+        //       stroke: new Stroke({
+        //         width: 2,
+        //         color: arrowColor,
+        //       }),
+        //       angle: radianDirection,
+        //     }),
+        //   }),
+        //   // The arrow head
+        //   new Style({
+        //     image: new RegularShape({
+        //       points: 3,
+        //       radius: 5 * arrowSizeMultiplier,
+        //       angle: radianDirection,
+        //       // displacement: [5, 25],
+        //       fill: new Fill({
+        //         color: arrowColor,
+        //       }),
+        //     }),
+        //   }),
+        // ];
+        // return arrowShape;
+
+        // arrow attempt #2
+        // https://openlayers.org/en/latest/examples/wind-arrows.html
+        const shaft = new RegularShape({
+          points: 2,
+          radius: 5,
+          stroke: new Stroke({
+            width: 2,
+            color: 'yellow',
           }),
-          // The arrow head
-          new Style({
-            image: new RegularShape({
-              points: 3,
-              radius: 5 * arrowSizeMultiplier,
-              angle: radianDirection,
-              fill: new Fill({
-                color: arrowColor,
-              }),
-            }),
+          rotateWithView: true,
+        });
+
+        const head = new RegularShape({
+          points: 3,
+          radius: 5,
+          fill: new Fill({
+            color: 'yellow',
           }),
-        ];
+          rotateWithView: true,
+        });
+
+        const styles = [new Style({ image: shaft }), new Style({ image: head })];
+
+        // const wind = feature.get('wind');
+        // rotate arrow away from wind origin
+        // const angle = ((wind.deg - 180) * Math.PI) / 180;
+        // const scale = wind.speed / 10;
+        const angle = ((radianDirection - 180) * Math.PI) / 180;
+        const scale = magnitude * 10;
+        shaft.setScale([1, scale]);
+        shaft.setRotation(angle);
+        head.setDisplacement([
+          0,
+          head.getRadius() / 2 + shaft.getRadius() * scale,
+        ]);
+        head.setRotation(angle);
+        return styles;
       },
     });
 
@@ -684,7 +723,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
-    if (animationAllowed && renderAnimation) {
+    if (animationAllowed && renderParticleFlow) {
       animateVectors(layerName, tileSource, selected, layer);
     }
 
