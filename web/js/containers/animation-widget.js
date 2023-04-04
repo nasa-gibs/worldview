@@ -53,7 +53,7 @@ import {
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
 
-const RangeHandle = (props) => {
+function RangeHandle(props) {
   const {
     value, offset, dragging, ...restProps
   } = props;
@@ -76,7 +76,7 @@ const RangeHandle = (props) => {
       />
     </>
   );
-};
+}
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
@@ -206,20 +206,6 @@ class AnimationWidget extends React.Component {
     }
   }
 
-    onMobileDateChangeStart = (date) => {
-      const { onUpdateStartDate } = this.props;
-      const dateObj = new Date(date);
-      this.debounceDateUpdate(dateObj);
-      onUpdateStartDate(dateObj);
-    }
-
-    onMobileDateChangeEnd = (date) => {
-      const { onUpdateEndDate } = this.props;
-      const dateObj = new Date(date);
-      this.debounceDateUpdate(dateObj);
-      onUpdateEndDate(dateObj);
-    }
-
     onIntervalSelect(timeScale, openModal) {
       let delta;
       const { onIntervalSelect, customInterval, customDelta } = this.props;
@@ -251,7 +237,7 @@ class AnimationWidget extends React.Component {
     } = this.zeroDates();
     onUpdateStartAndEndDate(startDate, endDate);
     onPushPlay();
-  }
+  };
 
   /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
@@ -288,7 +274,7 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate,
     };
-  }
+  };
 
   toggleCustomIntervalModal = (isOpen) => {
     const { toggleCustomModal } = this.props;
@@ -319,11 +305,19 @@ class AnimationWidget extends React.Component {
       + `${isLandscape ? 'landscape ' : ''}`;
     const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
-    const widgetIDs = (isMobilePhone && isPortrait) || (screenWidth < 670 && hasSubdailyLayers) || (screenWidth < 575 && !hasSubdailyLayers) ? `collapsed-animate-widget-phone-portrait${subdailyID}`
-      : isMobilePhone && isLandscape ? `collapsed-animate-widget-phone-landscape${subdailyID}`
-        : (isMobileTablet && isPortrait) || (screenWidth < breakpoints.small) ? `collapsed-animate-widget-tablet-portrait${subdailyID}`
-          : isMobileTablet && isLandscape ? `collapsed-animate-widget-tablet-landscape${subdailyID}`
-            : 'collapsed-animate-widget';
+    const getWidgetIDs = () => {
+      if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+        return `-phone-portrait${subdailyID}`;
+      } if (isMobilePhone && isLandscape) {
+        return `-phone-landscape${subdailyID}`;
+      } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
+        return `-tablet-portrait${subdailyID}`;
+      } if (isMobileTablet && isLandscape) {
+        return `-tablet-landscape${subdailyID}`;
+      }
+    };
+
+    const widgetIDs = getWidgetIDs();
 
     return !dontShow && (
       <Draggable
@@ -336,7 +330,7 @@ class AnimationWidget extends React.Component {
       >
         <div
           className={widgetClasses}
-          id={widgetIDs}
+          id={`collapsed-animate-widget${widgetIDs}`}
         >
           <div
             id="wv-animation-widget"
@@ -377,82 +371,109 @@ class AnimationWidget extends React.Component {
       breakpoints,
       isLandscape,
       isPortrait,
+      playDisabled,
     } = this.props;
     const { speed } = this.state;
-
-    const mobileID = (isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800) ? 'mobile-phone-landscape'
-      : (isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550) ? 'mobile-phone-portrait'
-        : isMobileTablet || screenWidth <= breakpoints.small ? 'tablet' : 'mobile';
 
     const minimumDate = getISODateFormatted(minDate);
     const maximumDate = getISODateFormatted(maxDate);
     const endingDate = getISODateFormatted(endDate);
     const startingDate = getISODateFormatted(startDate);
 
+    const getMobileIDs = () => {
+      if ((isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
+        return 'mobile-phone-landscape';
+      } if ((isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
+        return 'mobile-phone-portrait';
+      } if (isMobileTablet || screenWidth <= breakpoints.small) {
+        return 'tablet';
+      }
+    };
+
+    const mobileID = getMobileIDs();
+
+    const collapseIconMobile = {
+      height: '30px',
+      width: '30px',
+      color: '#fff',
+    };
+
     return (
       <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
+        <div className="mobile-animation-header">
+          <span aria-label="Close" onClick={this.toggleCollapse} id="mobile-animation-close">
+            <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
+          </span>
+        </div>
+        <div className="mobile-animation-warning-message-container">
+          <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>
+        </div>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
-          <div className="mobile-animation-widget-container">
+          <div className="mobile-animation-flex-container">
+            <div className="mobile-animation-widget-container">
 
-            <div className="mobile-animation-flex-row">
-              <span>
-                Loop
-              </span>
-              <LoopButton looping={looping} onLoop={this.onLoop} />
-            </div>
+              <div className="mobile-animation-flex-row">
+                <span>
+                  Loop
+                </span>
+                <LoopButton looping={looping} onLoop={this.onLoop} isMobile={isMobile} />
+              </div>
 
-            <div className="mobile-animation-flex-row">
-              <MobileCustomIntervalSelector
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
-            </div>
-
-            <div className="mobile-animation-flex-row" id="slider-case-row">
-              <div className="wv-slider-case">
-                <Slider
-                  className="input-range"
-                  step={0.5}
-                  max={10}
-                  min={0.5}
-                  value={speed}
-                  onChange={(num) => this.setState({ speed: num })}
-                  handle={RangeHandle}
-                  onAfterChange={() => { onSlide(speed); }}
-                  disabled={isPlaying}
+              <div className="mobile-animation-flex-row">
+                <MobileCustomIntervalSelector
+                  hasSubdailyLayers={hasSubdailyLayers}
                 />
-                <span className="wv-slider-label">{sliderLabel}</span>
+              </div>
+
+              <div className="mobile-animation-flex-row" id="slider-case-row">
+                <div className="wv-slider-case">
+                  <Slider
+                    className="input-range"
+                    step={0.5}
+                    max={10}
+                    min={0.5}
+                    value={speed}
+                    onChange={(num) => this.setState({ speed: num })}
+                    handle={RangeHandle}
+                    onAfterChange={() => { onSlide(speed); }}
+                    disabled={isPlaying}
+                  />
+                  <span className="wv-slider-label">{sliderLabel}</span>
+                </div>
+              </div>
+
+              <div className="mobile-animation-flex-row">
+                <div className="mobile-animation-block-row" id="mobile-animation-start-date">
+                  <span>Start Date</span>
+                  <MobileDatePicker
+                    date={startDate}
+                    startDateLimit={minimumDate}
+                    endDateLimit={endingDate}
+                    onDateChange={this.onMobileDateChangeStart}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    isMobile={isMobile}
+                  />
+                </div>
+              </div>
+
+              <div className="mobile-animation-flex-row">
+                <div className="mobile-animation-block-row" id="mobile-animation-end-date">
+                  <span>End Date</span>
+                  <MobileDatePicker
+                    date={endDate}
+                    startDateLimit={startingDate}
+                    endDateLimit={maximumDate}
+                    onDateChange={this.onMobileDateChangeEnd}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    isMobile={isMobile}
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="mobile-animation-block-row" id="mobile-animation-start-date">
-              <span>Start Date</span>
-              <MobileDatePicker
-                date={startDate}
-                startDateLimit={minimumDate}
-                endDateLimit={endingDate}
-                onDateChange={this.onMobileDateChangeStart}
-                hasSubdailyLayers={hasSubdailyLayers}
-                isMobile={isMobile}
-              />
-            </div>
-
-            <div className="mobile-animation-block-row" id="mobile-animation-end-date">
-              <span>End Date</span>
-              <MobileDatePicker
-                date={endDate}
-                startDateLimit={startingDate}
-                endDateLimit={maximumDate}
-                onDateChange={this.onMobileDateChangeEnd}
-                hasSubdailyLayers={hasSubdailyLayers}
-                isMobile={isMobile}
-              />
-            </div>
-
           </div>
-          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
         </div>
       </div>
     );

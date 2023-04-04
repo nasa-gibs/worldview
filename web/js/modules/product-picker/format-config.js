@@ -83,7 +83,10 @@ function setTypeProp(layer) {
   const { type } = layer;
   const rasterTypes = ['wms', 'wmts'];
   if (rasterTypes.includes(type)) {
-    layer.type = 'Raster';
+    layer.type = 'Raster (Mosaicked)';
+  }
+  if (layer.type === 'granule') {
+    layer.type = 'Raster (Granule)';
   }
   layer.type = capitalizeFirstLetter(layer.type);
   return layer;

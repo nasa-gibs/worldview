@@ -102,7 +102,6 @@ function OlMeasureTool (props) {
   }, [projections]);
 
   useEffect(() => {
-    // const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {
@@ -124,6 +123,9 @@ function OlMeasureTool (props) {
   useEffect(recalculateAllMeasurements, [unitOfMeasure]);
 
   useEffect(recalculateAllMeasurements, [crs]);
+
+  // we need this to make sure we have the latest version of olMap in renderToolTip()
+  useEffect(recalculateAllMeasurements, [olMap]);
 
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)',
@@ -200,17 +202,19 @@ function OlMeasureTool (props) {
       updateMeasurements(allMeasurements);
     };
 
-    ReactDOM.render((
-      <MeasureTooltip
-        active={!!tooltipElement}
-        geometry={feature.getGeometry()}
-        crs={crs}
-        unitOfMeasure={unitOfMeasure}
-        onRemove={removeFeature}
-        olMap={olMap}
-        proj={proj}
-      />
-    ), overlay.getElement());
+    ReactDOM.render(
+      (
+        <MeasureTooltip
+          active={!!tooltipElement}
+          geometry={feature.getGeometry()}
+          crs={crs}
+          unitOfMeasure={unitOfMeasure}
+          onRemove={removeFeature}
+          olMap={olMap}
+          proj={proj}
+        />
+      ), overlay.getElement(),
+    );
   };
 
   /**

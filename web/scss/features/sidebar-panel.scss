@@ -76,6 +76,9 @@
   width: 30px;
   border: 1px solid transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   svg.collapse-icon {
     height: 22px;
@@ -602,7 +605,8 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media (max-width: $mobile-max-width) {
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+  (max-width: $mobile-max-width) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;

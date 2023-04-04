@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 
-const AnimationButton = (props) => {
+function AnimationButton(props) {
   const {
     disabled,
     label,
@@ -14,36 +14,50 @@ const AnimationButton = (props) => {
     isPortrait,
     isMobilePhone,
     isMobileTablet,
+    isMobile,
     hasSubdailyLayers,
   } = props;
 
   const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
   const buttonId = 'animate-button';
   const labelText = label || 'Set up animation';
-  const className = (isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers) ? `mobile-animate-button animate-button-phone-portrait${subdailyID}`
-    : isMobilePhone && isLandscape ? `mobile-animate-button animate-button-phone-landscape${subdailyID}`
-      : (isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small) ? `mobile-animate-button animate-button-tablet-portrait${subdailyID}`
-        : isMobileTablet && isLandscape ? `mobile-animate-button animate-button-tablet-landscape${subdailyID}`
-          : ' animate-button';
+
+  const getButtonClassName = () => {
+    if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+      return `phone-portrait${subdailyID}`;
+    } if (isMobilePhone && isLandscape) {
+      return `phone-landscape${subdailyID}`;
+    } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
+      return `tablet-portrait${subdailyID}`;
+    } if (isMobileTablet && isLandscape) {
+      return `tablet-landscape${subdailyID}`;
+    }
+  };
+
+  const buttonClass = getButtonClassName();
 
   return (
     <div
       onClick={clickAnimationButton}
-      className={disabled ? `wv-disabled-button button-action-group ${className}` : `button-action-group ${className}`}
+      className={disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
-        <UncontrolledTooltip
-          placement="top"
-          target={buttonId}
-        >
-          {labelText}
-        </UncontrolledTooltip>
+        {isMobile ? null
+          : (
+            <UncontrolledTooltip
+              id="center-align-tooltip"
+              placement="top"
+              target={buttonId}
+            >
+              {labelText}
+            </UncontrolledTooltip>
+          )}
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
       </div>
     </div>
   );
-};
+}
 
 AnimationButton.propTypes = {
   breakpoints: PropTypes.object,
@@ -55,6 +69,7 @@ AnimationButton.propTypes = {
   isPortrait: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
+  isMobile: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
 };
 

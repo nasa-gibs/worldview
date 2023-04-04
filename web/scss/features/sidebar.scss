@@ -28,13 +28,15 @@
     border-right: 1px solid #333;
     border-left: 1px solid #333;
 
-    @media (max-width: $mobile-max-width) {
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
       &.nav-tabs {
         height: $wv-mob-sb-tabs-height;
 
         .nav-item {
           width: 120px;
           margin-right: 15px;
+          font-size: 12px;
 
           a.nav-link {
             height: $wv-mob-sb-tabs-height - 2;
@@ -223,6 +225,11 @@ footer .compare-toggle-button {
     font-size: 12px;
     max-width: 232px;
     line-height: 15px;
+
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
+      font-size: 16px;
+    }
   }
 
   .dropdown {
@@ -359,7 +366,7 @@ footer .compare-toggle-button {
   }
 
   #products-holder footer .product-buttons {
-    height: 120px;
+    height: 70px;
   }
 }
 
@@ -540,7 +547,7 @@ footer .compare-toggle-button {
 }
 
 .layer-info-modal {
-  width: 500px;
+  width: 510px;
 
   .modal-body {
     overflow-y: scroll;

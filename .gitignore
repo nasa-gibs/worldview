@@ -4,6 +4,7 @@
 /web/config
 /web/stories
 /dist
+/doc/embed.md
 /node_modules
 /web/ext/node_modules/*
 /tasks/link-check/results
@@ -17,15 +18,17 @@ python
 .pydevproject
 .DS_Store
 bitly.json
-tools
 *~
 *.swp
 options
 \#*
 .vagrant
 *.log
-# Nightwatch stuff
+# Playwright stuff
 e2e/reports
+e2e/screens
+playwright-report/
+playwright/.cache/
 *.jar
 # Config
 /config/*
@@ -35,3 +38,5 @@ config/default/release/layer-metadata
 # Jest
 /coverage
 /tasks/temp
+/test-results/
+

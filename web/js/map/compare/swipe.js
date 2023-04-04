@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashRound from 'lodash/round';
 import lodashEach from 'lodash/each';
+import { getRenderPixel } from 'ol/render';
 
 import util from '../../util/util';
 import { getCompareDates } from '../../modules/compare/selectors';
@@ -26,11 +27,11 @@ const restore = function(event) {
 };
 
 const applyListenersA = function(layer) {
-  layer.on('prerender', this.clipA);
+  layer.on('prerender', this.setClipMaskA);
   layer.on('postrender', restore);
 };
 const applyListenersB = function(layer) {
-  layer.on('prerender', this.clipB);
+  layer.on('prerender', this.setClipMaskB);
   layer.on('postrender', restore);
 };
 
@@ -65,16 +66,16 @@ export default class Swipe {
   destroy = () => {
     mapCase.removeChild(line);
     lodashEach(layersSideA, (layer) => {
-      layer.un('prerender', this.clipA);
+      layer.un('prerender', this.setClipMaskA);
       layer.un('postrender', restore);
     });
     lodashEach(layersSideB, (layer) => {
-      layer.un('prerender', this.clipB);
+      layer.un('prerender', this.setClipMaskB);
       layer.un('postrender', restore);
     });
     layersSideA = [];
     layersSideB = [];
-  }
+  };
 
   getSwipeOffset = () => swipeOffset;
 
@@ -110,34 +111,67 @@ export default class Swipe {
   }
 
   /**
-   * Clip the reverse so users don't see this layerGroup when the other
-   * Layer group is transparent
-   * @param {Object} event | OL Precompose event object
+   * Set Clipping mask for the "A" side of a comparison.
+   * Note: The "B" side is layered above the "A" side on the DOM.
+   * We must mask the "A" side in case the B side has no imagery
+   * @param {Object} event | Openlayers Precompose event object
    */
-  clipA = (event) => {
+  setClipMaskA = (event) => {
     const ctx = event.context;
-    const viewportWidth = event.frameState.size[0];
-    const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, ctx.canvas.width - width, ctx.canvas.height);
-    ctx.clip();
-  }
+    const mapSize = this.map.getSize();
+    const widthSideA = mapSize[0] * percentSwipe;
+
+    const coordinates = {
+      topLeft: getRenderPixel(event, [0, 0]),
+      bottomLeft: getRenderPixel(event, [0, mapSize[1]]),
+      bottomRight: getRenderPixel(event, [widthSideA, mapSize[1]]),
+      topRight: getRenderPixel(event, [widthSideA, 0]),
+    };
+    setRectClipMask(ctx, coordinates);
+  };
 
   /**
-   * Clip the top layer at the right xOffset
-   * @param {Object} event | OL Precompose event object
+   * Set Clipping mask for the "B" side of a comparison.
+   * Note: The "B" side is layered above the "A" side on the DOM.
+   * @param {Object} event | Openlayers Precompose event object
    */
-  clipB = (event) => {
+  setClipMaskB = (event) => {
     const ctx = event.context;
-    const viewportWidth = event.frameState.size[0];
-    const width = ctx.canvas.width * (swipeOffset / viewportWidth);
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
-    ctx.clip();
-  }
+    const mapSize = this.map.getSize();
+    const widthSideB = mapSize[0] * percentSwipe;
+    const coordinates = {
+      topLeft: getRenderPixel(event, [widthSideB, 0]),
+      bottomLeft: getRenderPixel(event, [widthSideB, mapSize[1]]),
+      bottomRight: getRenderPixel(event, mapSize),
+      topRight: getRenderPixel(event, [mapSize[0], 0]),
+    };
+    setRectClipMask(ctx, coordinates);
+  };
 }
+
+/**
+ * Apply a rectangular clipping mask from the provided coordinates
+ * @param {CanvasRenderingContext2D} context | Canvas context requiring a clipping mask
+ * @param {Object} coordinates | Contains 4 points of the rectangle to be created
+ * @param {property} topLeft | Top Left positional coordinates in XY format
+ * @param {property} bottomLeft | Bottom Left positional coordinates in XY format
+ * @param {property} bottomRight | Bottom Right positional coordinates in XY format
+ * @param {property} topRight | Top Right positional coordinates in XY format
+ */
+const setRectClipMask = function(context, coordinates) {
+  const {
+    topLeft, bottomLeft, bottomRight, topRight,
+  } = coordinates;
+
+  context.save();
+  context.beginPath();
+  context.moveTo(topLeft[0], topLeft[1]);
+  context.lineTo(bottomLeft[0], bottomLeft[1]);
+  context.lineTo(bottomRight[0], bottomRight[1]);
+  context.lineTo(topRight[0], topRight[1]);
+  context.closePath();
+  context.clip();
+};
 
 /**
  * Add Swiper

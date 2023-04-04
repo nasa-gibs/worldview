@@ -356,27 +356,26 @@ export const outOfStepChange = (state, newDate) => {
 export const coverageDateFormatter = (dateType, date, period) => {
   if (!date) return;
   let dateString;
-  const parsedDate = parseDate(date);
+  const parsedDate = new Date(date);
   switch (period) {
     case 'subdaily':
       dateString = formatDisplayDate(parsedDate, true);
       break;
 
     case 'yearly':
-      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
-      dateString = moment(parsedDate).format('YYYY');
+      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear());
+      dateString = moment.utc(parsedDate).format('YYYY');
       break;
 
     case 'monthly':
-      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
-      dateString = moment(parsedDate).format('YYYY MMM').toUpperCase();
+      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth());
+      dateString = moment.utc(parsedDate).format('YYYY MMM').toUpperCase();
       break;
 
     default:
       dateString = formatDisplayDate(parsedDate);
       break;
   }
-
   return (<MonospaceDate date={dateString} />);
 };
 

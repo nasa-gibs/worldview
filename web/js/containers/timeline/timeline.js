@@ -43,7 +43,7 @@ import {
   selectDate as selectDateAction,
   changeTimeScale,
   selectInterval,
-  changeCustomInterval,
+  changeCustomInterval as changeCustomIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -189,14 +189,19 @@ class Timeline extends React.Component {
     const {
       animStartLocationDate,
       animEndLocationDate,
+      changeCustomInterval,
+      customInterval,
+      customSelected,
       dateA,
       dateB,
+      interval,
       isAnimationPlaying,
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
     } = this.props;
     const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
+
 
     // handle update animation positioning and local state from play button/gif creation
     const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
@@ -215,6 +220,19 @@ class Timeline extends React.Component {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
+    }
+
+    const subdailyAdded = hasSubdailyLayers && !prevProps.hasSubdailyLayers;
+    const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const subdailyInterval = customInterval > 3 || interval > 3;
+
+    if (subdailyRemoved && subdailyInterval) {
+      changeCustomInterval();
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
+    }
+
+    if (subdailyAdded && !customSelected) {
+      changeCustomInterval(10, TIME_SCALE_TO_NUMBER.minute);
     }
 
     // if user adds a subdaily layer (and none were active) change the time scale to hourly
@@ -240,7 +258,7 @@ class Timeline extends React.Component {
   // chain throttled timescale wheel change call after debounce for smoother UX
   throttleChangeTimeScaleWheel = (e) => {
     this.throttleChangeTimeScaleWheelFire(e);
-  }
+  };
 
   // HOVER TIME
   /**
@@ -257,7 +275,7 @@ class Timeline extends React.Component {
         leftOffset: leftOffset - parentOffset, // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
       });
     });
-  }
+  };
 
   /**
   * @desc show hover line
@@ -271,7 +289,7 @@ class Timeline extends React.Component {
         showHoverLine: true,
       });
     }
-  }
+  };
 
   /**
   * @desc hide hover line
@@ -284,7 +302,7 @@ class Timeline extends React.Component {
         showHoverLine: false,
       });
     }
-  }
+  };
 
   /**
   * @desc toggle dragger time on/off
@@ -297,7 +315,7 @@ class Timeline extends React.Component {
       showHoverLine: false,
       isDraggerDragging: toggleBoolean,
     });
-  }
+  };
 
   /**
   * @desc handle svg blue line axis hover
@@ -345,7 +363,7 @@ class Timeline extends React.Component {
         });
       }
     });
-  }
+  };
 
   /**
   * @desc handles dynamic position changes from axis that affect dragger and range select
@@ -393,7 +411,7 @@ class Timeline extends React.Component {
       animationEndLocation,
       hoverTime,
     });
-  }
+  };
 
   /**
   * @desc handles dynamic positioning update based on simple drag
@@ -421,7 +439,7 @@ class Timeline extends React.Component {
       animationStartLocation,
       animationEndLocation,
     });
-  }
+  };
 
   /**
   * @desc handles dynamic positioning update based on axis drag stop event
@@ -445,7 +463,7 @@ class Timeline extends React.Component {
       transformX,
       hoverTime,
     });
-  }
+  };
 
   /**
   * @desc update is timeline moved (drag timeline vs. click) and if timeline is dragging
@@ -456,7 +474,7 @@ class Timeline extends React.Component {
     this.setState({
       isTimelineDragging,
     });
-  }
+  };
 
   /**
   * @desc handle left/right arrow decrement/increment date
@@ -563,7 +581,7 @@ class Timeline extends React.Component {
     } else if (timeScaleNumber < maxTimeScaleNumber) {
       this.changeTimeScale(timeScaleNumber + 1);
     }
-  }
+  };
 
   /**
   * @desc open animation widget
@@ -624,7 +642,7 @@ class Timeline extends React.Component {
       isAnimationDraggerDragging: isDragging,
     });
     this.determineAnimationDraggerUpdate(startDate, endDate);
-  }
+  };
 
   /**
   * @desc handle animation date dragger updates of startDate, endDate, or both
@@ -648,7 +666,7 @@ class Timeline extends React.Component {
     } else if (endChanged) {
       this.debounceOnUpdateEndDate(endDate);
     }
-  }
+  };
 
   /**
   * @desc handle animation dragger location and date state update
@@ -677,7 +695,7 @@ class Timeline extends React.Component {
       animationStartLocationDate: startDate,
       animationEndLocationDate: endDate,
     });
-  }
+  };
 
   /**
   * @desc handle animation dragger location and date state update and global date update
@@ -699,7 +717,7 @@ class Timeline extends React.Component {
     if (didStartDateChange || didEndDateChange) {
       this.debounceOnUpdateStartAndEndDate(startDate, endDate);
     }
-  }
+  };
 
   // DRAGGER
   /**
@@ -741,7 +759,7 @@ class Timeline extends React.Component {
         this.onDateChange(newDate, 'selectedB');
       }
     }
-  }
+  };
 
   /**
   * @desc set dragger visibility
@@ -754,7 +772,7 @@ class Timeline extends React.Component {
       draggerVisible,
       draggerVisibleB,
     });
-  }
+  };
 
   /**
   * @desc set matching layer coverage range for selected layers timeline
@@ -766,7 +784,7 @@ class Timeline extends React.Component {
       matchingTimelineCoverage: dateRange,
       shouldIncludeHiddenLayers,
     });
-  }
+  };
 
   /**
   * @desc toggle layer coverage panel open/closed
@@ -782,7 +800,7 @@ class Timeline extends React.Component {
     this.setState({
       isTimelineLayerCoveragePanelOpen: isOpen,
     });
-  }
+  };
 
   /**
   * @desc update dragger time state
@@ -800,7 +818,7 @@ class Timeline extends React.Component {
         draggerTimeState: date,
       });
     }
-  }
+  };
 
   /**
    * Make sure user is not currently interacting with the timeline/dragger/scale/etc,
@@ -845,7 +863,7 @@ class Timeline extends React.Component {
       hoverTime: dateA,
       initialLoadComplete: true,
     });
-  }
+  };
 
   /**
   * @desc change store date
@@ -867,12 +885,12 @@ class Timeline extends React.Component {
       });
     }
     this.debounceDateUpdate(dateObj, draggerSelected);
-  }
+  };
 
   handleSelectNowButton = () => {
     const { triggerTodayButton } = this.props;
     triggerTodayButton();
-  }
+  };
 
   /**
   * @desc getMobileDateButtonStyle date change button style for smaller displays
@@ -915,7 +933,7 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
-  }
+  };
 
   renderDateChangeArrows = () => {
     const {
@@ -932,7 +950,7 @@ class Timeline extends React.Component {
         handleSelectNowButton={this.handleSelectNowButton}
       />
     );
-  }
+  };
 
   renderMobile() {
     const {
@@ -985,16 +1003,14 @@ class Timeline extends React.Component {
             hasSubdailyLayers={hasSubdailyLayers}
             disabled={animationDisabled}
             label={
-isCompareModeActive
-  ? 'Animation feature is deactivated when Compare feature is active'
-  : isDataDownload
-    ? 'Animation feature is deactivated when Data Download feature is active'
-    : ''
-}
+              isCompareModeActive
+                ? 'Animation feature is deactivated when Compare feature is active'
+                : isDataDownload
+                  ? 'Animation feature is deactivated when Data Download feature is active'
+                  : ''
+            }
           />
-
           )}
-
         </div>
       </div>
     );
@@ -1082,12 +1098,11 @@ isCompareModeActive
     };
 
     return (
-      <>
-        <div
-          className="timeline-container"
-          style={containerDisplayStyle}
-        >
-          {initialLoadComplete && !isDistractionFreeModeActive
+      <div
+        className="timeline-container"
+        style={containerDisplayStyle}
+      >
+        {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
               {isMobile || isEmbedModeActive
@@ -1307,7 +1322,7 @@ isCompareModeActive
                       aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                       onClick={this.toggleHideTimeline}
                     >
-                      <UncontrolledTooltip target="timeline-hide" placement="top">
+                      <UncontrolledTooltip id="center-align-tooltip" target="timeline-hide" placement="top">
                         {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                       </UncontrolledTooltip>
                       <div
@@ -1318,8 +1333,7 @@ isCompareModeActive
                 )}
             </ErrorBoundary>
             )}
-        </div>
-      </>
+      </div>
     );
   }
 }
@@ -1346,6 +1360,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    interval,
     selected,
     selectedB,
     selectedZoom,
@@ -1453,6 +1468,8 @@ function mapStateToProps(state) {
     selectedDate,
     timeScale: TIME_SCALE_FROM_NUMBER[updatedSelectedZoom.toString()],
     timeScaleChangeUnit: unit,
+    customInterval: customInterval || interval,
+    interval,
     customIntervalValue: customDelta || 1,
     customIntervalZoomLevel: updatedCustomInterval || 3,
     nowOverride,
@@ -1493,7 +1510,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
-    dispatch(changeCustomInterval(delta, timeScale));
+    dispatch(changeCustomIntervalAction(delta, timeScale));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1549,8 +1566,10 @@ Timeline.propTypes = {
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.object,
+  changeCustomInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
+  customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
@@ -1559,6 +1578,7 @@ Timeline.propTypes = {
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
+  interval: PropTypes.number,
   isAnimationPlaying: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
   isAnimationWidgetOpen: PropTypes.bool,

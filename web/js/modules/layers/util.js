@@ -8,7 +8,6 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
-
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
@@ -1276,18 +1275,10 @@ export function mapLocationToLayerState(
     });
   }
 
-  // TODO how do we properly combine initial state with location state
-  newStateFromLocation.layers.active = {
-    ...newStateFromLocation.layers.active,
-    granuleLayers: {},
-    granulePlatform: '',
-  };
-
-  newStateFromLocation.layers.activeB = {
-    ...newStateFromLocation.layers.activeB,
-    granuleLayers: {},
-    granulePlatform: '',
-  };
+  newStateFromLocation.layers = update(state.layers, {
+    active: { $merge: newStateFromLocation.layers.active },
+    activeB: { $merge: newStateFromLocation.layers.activeB },
+  });
 
   return newStateFromLocation;
 }
@@ -1365,10 +1356,9 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId, isMobil
  * @param {*} layers
  */
 export function adjustStartDates(layers) {
-  const adjustDate = (days) => moment.utc()
-    .subtract(days, 'days')
-    .startOf('day')
-    .format('YYYY-MM-DD');
+  const adjustDate = (days) => `${moment.utc()
+    .subtract(days * 24, 'hours')
+    .format('YYYY-MM-DDThh:mm:ss')}Z`;
 
   const applyDateAdjustment = (layer) => {
     const { availability, dateRanges } = layer;
@@ -1380,6 +1370,7 @@ export function adjustStartDates(layers) {
     if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
       firstDateRange.startDate = adjustDate(rollingWindow);
+      layer.startDate = adjustDate(rollingWindow);
     } else {
       console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }

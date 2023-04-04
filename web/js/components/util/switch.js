@@ -4,7 +4,7 @@ import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
-const Switch = (props) => {
+function Switch(props) {
   const {
     border,
     id,
@@ -72,6 +72,7 @@ const Switch = (props) => {
             <>
               <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} tabIndex="-1" />
               <Tooltip
+                id="center-align-tooltip"
                 placement="right"
                 isOpen={tooltipOpen}
                 target={`${id}-switch-tooltip`}
@@ -85,7 +86,7 @@ const Switch = (props) => {
       </div>
     </div>
   );
-};
+}
 Switch.defaultProps = {
   containerClassAddition: '',
   border: false,

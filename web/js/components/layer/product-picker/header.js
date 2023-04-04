@@ -75,7 +75,7 @@ class ProductPickerHeader extends React.Component {
     if (showMobileFacets) {
       toggleMobileFacets();
     }
-  }
+  };
 
   renderBreadCrumb() {
     const { category } = this.props;
@@ -134,11 +134,14 @@ class ProductPickerHeader extends React.Component {
     } = this.props;
     const searchMode = mode === 'search';
     const categoryId = category && category.id;
+    const recentLayersMode = categoryType === 'recent';
+    const featuredLayersMode = categoryType === 'featured';
     const showBackButton = searchMode
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
-      && mode !== 'category');
-    const recentLayersMode = categoryType === 'recent';
+      && mode !== 'category'
+      && !featuredLayersMode
+      && !recentLayersMode);
     const isBreadCrumb = showBackButton && !searchMode && width > 650;
     const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
     const showFilterBtnMobile = recentLayersMode
@@ -161,6 +164,7 @@ class ProductPickerHeader extends React.Component {
                 onClick={this.revertToInitialScreen}
               >
                 <UncontrolledTooltip
+                  id="center-align-tooltip"
                   placement="right"
                   target="layer-back-button"
                 >
@@ -189,6 +193,7 @@ class ProductPickerHeader extends React.Component {
               aria-label="Filtered layer search"
             >
               <UncontrolledTooltip
+                id="center-align-tooltip"
                 placement="right"
                 target="layer-filter-button"
               >

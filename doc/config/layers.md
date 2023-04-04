@@ -94,14 +94,12 @@ Example:
 * **tags**: Additional text used for matching this layer when searching in the add layers tab. This allows Aerosol Optical Depth layers to match when "aod" is typed in.
 * **noTransition**: For WMTS layers only, if set to `true`, the map will not display lower-resolution tiles while loading.
 * **transition**: For WMS layers only, if set to `true`, the map will display lower-resolution tiles while loading.
-* **product**: Associated product in the Common Metadata Repository (CMR).
-* **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, `[512, 512]`
-* **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **description**: Point to a markdown file within the metadata folder to provide a layer description.
-* **wrapX**: Wrap the layer across the anti-meridian.
 * **disableSnapshot**: Disable Worldview Snapshots (WVS) for layer.
+* **disableSmartHandoff**: Disable data download capability for a layer.
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
+* **wrapX**: Wrap the layer across the anti-meridian.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:
   * **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
   * **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see [`config/default/common/config/palettes-custom.json`](../../config/default/common/config/palettes-custom.json)). Example, *["orange_1", "red_1"]*
@@ -178,9 +176,9 @@ Note:
 
 ### Granule Layer CMR Requirements
 
-Granule layers rely on Common Metadata Repository (CMR) metadata to 1) filter day/night collections, 2) determine range based on filters, and 3) collect time/polygon data for selected granules.
+Granule layers rely on Common Metadata Repository (CMR) metadata to collect footprint polygon metadata for visible granules.
 
-The following parameters need to be present in the CMR for the granule layer:
+The following parameters need to be present in the CMR responsefor the granule layer:
 ```js
 "feed.entry" [
   {
@@ -190,7 +188,6 @@ The following parameters need to be present in the CMR for the granule layer:
       "-68.998596 172.739944 -59.319592 -123.048164 -42.500546 -144.210709 -48.444565 176.622818 -68.998596 172.739944"
       ]
     ],
-    "day_night_flag": "DAY",
     ...(other CMR required parameters)*
   }
 ]

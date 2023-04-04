@@ -2,6 +2,7 @@
 import {
   datelineShiftGranules, getCMRQueryDates, transformGranuleData, areCoordinatesAndPolygonExtentValid,
 } from './util';
+import { CRS } from '../../modules/map/constants';
 import util from '../../util/util';
 
 const mockGranules = require('../../../mock/granules.json');
@@ -37,16 +38,14 @@ const singleTransformedGranule = {
 describe('shifting dateline granules', () => {
   it('no shift when datline is crossed with same day', async () => {
     const selectedDate = new Date('2019-09-24T00:24:00.000Z');
-    const crs = 'EPSG:4326';
-    const granules = datelineShiftGranules(mockGranules.three, selectedDate, crs);
+    const granules = datelineShiftGranules(mockGranules.three, selectedDate, CRS.GEOGRAPHIC);
 
     expect(granules).toEqual(mockGranules.three);
   });
 
   it('shifts when granules cross days', async () => {
     const selectedDate = new Date('2019-09-24T00:12:00.000Z');
-    const crs = 'EPSG:4326';
-    const shiftedGranules = datelineShiftGranules(mockGranules.two, selectedDate, crs);
+    const shiftedGranules = datelineShiftGranules(mockGranules.two, selectedDate, CRS.GEOGRAPHIC);
 
     expect(shiftedGranules).toEqual(mockGranules.twoShifted);
     expect(shiftedGranules.every(({ shifted }) => shifted)).toEqual(true);
@@ -55,11 +54,11 @@ describe('shifting dateline granules', () => {
 
 describe('getting CMR query date range', () => {
   it('starts 8 hours before, 4 hours after, ', () => {
-    const selectedDate = new Date('2019-09-24T00:20:00.000Z');
-    const expectedStart = new Date('2019-09-23T16:20:00.000Z');
-    const expectedEnd = new Date('2019-09-24T04:20:00.000Z');
+    const selectedDate = new Date('2019-09-24T00:00:00.000Z');
+    const expectedStart = new Date('2019-09-23T12:00:00.000Z');
+    const expectedEnd = new Date('2019-09-24T04:00:00.000Z');
 
-    const { startQueryDate, endQueryDate } = getCMRQueryDates(selectedDate);
+    const { startQueryDate, endQueryDate } = getCMRQueryDates(CRS.GEOGRAPHIC, selectedDate);
     expect(startQueryDate).toEqual(expectedStart);
     expect(endQueryDate).toEqual(expectedEnd);
   });
@@ -69,8 +68,7 @@ describe('transform cmr granule data', () => {
   it('converts cmr metadata into expected granule format', () => {
     const singleEntry = cmrGranules.feed.entry[0];
     const date = util.toISOStringSeconds(singleEntry.time_start);
-    const crs = 'EPSG:4326';
-    const transformedEntry = transformGranuleData(singleEntry, date, crs);
+    const transformedEntry = transformGranuleData(singleEntry, date, CRS.GEOGRAPHIC);
 
     expect(transformedEntry.dayNight).toEqual('NIGHT');
     expect(transformedEntry.date).toEqual('2019-09-22T23:54:00Z');

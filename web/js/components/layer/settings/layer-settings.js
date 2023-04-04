@@ -281,17 +281,15 @@ class LayerSettings extends React.Component {
       [customStyle] = layer.custom;
     }
     return (
-      <>
-        <VectorStyle
-          setStyle={setStyle}
-          clearStyle={clearStyle}
-          activeVectorStyle={customStyle || layer.id}
-          layer={layer}
-          index={0}
-          groupName={groupName}
-          vectorStyles={vectorStyles}
-        />
-      </>
+      <VectorStyle
+        setStyle={setStyle}
+        clearStyle={clearStyle}
+        activeVectorStyle={customStyle || layer.id}
+        layer={layer}
+        index={0}
+        groupName={groupName}
+        vectorStyles={vectorStyles}
+      />
     );
   }
 
@@ -330,7 +328,7 @@ class LayerSettings extends React.Component {
           )}
         </>
       ) : null;
-  }
+  };
 
   render() {
     let renderCustomizations;
@@ -438,8 +436,8 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerOptions: (dates, id, count) => {
-    dispatch(updateGranuleLayerOptions(dates, id, count));
+  updateGranuleLayerOptions: (dates, def, count) => {
+    dispatch(updateGranuleLayerOptions(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));

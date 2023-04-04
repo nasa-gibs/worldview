@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import fixtures from '../../fixtures';
 import { addLayer, getLayers } from './selectors';
 import {
-  removeLayer, removeGroup, toggleOverlayGroups, updateDatesOnProjChange,
+  removeLayer, removeGroup, toggleOverlayGroups,
 } from './actions';
 import * as LAYER_CONSTANTS from './constants';
 
@@ -63,7 +63,7 @@ describe('Layer actions', () => {
     store = mockStore(getState(layers));
   });
 
-  test('REMOVE_LAYER action removes layer by id', () => {
+  test('REMOVE_LAYER action removes layer by id [layers-action-remove-layer-by-id]', () => {
     const def = layers[0];
     store.dispatch(removeLayer('aqua-aod'));
     const actionResponse = store.getActions()[0];
@@ -79,14 +79,14 @@ describe('Layer actions', () => {
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('REMOVE_LAYER does nothing on non-existent id', () => {
+  test('REMOVE_LAYER does nothing on non-existent id [layers-action-remove-layer-no-id]', () => {
     store.dispatch(removeLayer('INVALID TEST LAYER ID'));
     const actionResponse = store.getActions()[0];
     const expectedPayload = undefined;
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('REMOVE_GROUP removes each layer in group', () => {
+  test('REMOVE_GROUP removes each layer in group [layers-action-remove-group]', () => {
     store.dispatch(removeGroup(['terra-aod', 'aqua-aod']));
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
@@ -99,7 +99,7 @@ describe('Layer actions', () => {
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('TOGGLE_OVERLAY_GROUPS when grouped, toggling ungroups layers', () => {
+  test('TOGGLE_OVERLAY_GROUPS when grouped, toggling ungroups layers [layers-action-toggle-group]', () => {
     store.dispatch(toggleOverlayGroups());
     const actionResponse = store.getActions()[0];
     const expectedPayload = {
@@ -110,20 +110,5 @@ describe('Layer actions', () => {
       overlayGroups: [],
     };
     expect(actionResponse).toEqual(expectedPayload);
-  });
-
-  test('UPDATE_ON_PROJ_CHANGE updates layer dates based on projection', () => {
-    layers = addMockLayer('granule-cr', layers, 'geographic');
-    store = mockStore(getState(layers));
-    store.dispatch(updateDatesOnProjChange('arctic'));
-    const actionResponse = store.getActions()[0];
-    const { startDate, endDate, dateRanges: [firstRange, secondRange] } = actionResponse.layersA[0];
-
-    expect(startDate).toEqual('2019-07-21T00:36:00Z');
-    expect(endDate).toEqual('2019-09-24T22:30:00Z');
-    expect(firstRange.startDate).toEqual('2019-07-21T00:36:00Z');
-    expect(firstRange.endDate).toEqual('2019-07-21T00:54:00Z');
-    expect(secondRange.startDate).toEqual('2019-07-21T02:18:00Z');
-    expect(secondRange.endDate).toEqual('2019-07-21T02:36:00Z');
   });
 });

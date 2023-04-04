@@ -72,10 +72,11 @@ function NavCase (props) {
     width: '45px',
   } : null;
   const collapseIconMobile = isMobile ? {
-    height: '40px',
-    width: '40px',
+    height: '30px',
+    width: '30px',
     color: '#fff',
   } : null;
+  const fontAwesomeStyle = isMobile ? 'times' : 'caret-up';
 
   return (
     <Nav tabs className="main-nav">
@@ -105,11 +106,11 @@ function NavCase (props) {
       >
         <FontAwesomeIcon
           className="collapse-icon"
-          icon="caret-up"
+          icon={fontAwesomeStyle}
           aria-label="Hide sidebar"
           style={collapseIconMobile}
         />
-        <UncontrolledTooltip placement="right" target="toggleIconHolder">
+        <UncontrolledTooltip id="center-align-tooltip" placement="right" target="toggleIconHolder">
           Hide sidebar
         </UncontrolledTooltip>
       </div>

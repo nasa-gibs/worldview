@@ -8,6 +8,7 @@ import { getInitialState as getInitialDateState } from './modules/date/reducers'
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
 import { getInitialEventsState } from './modules/natural-events/reducers';
+import { sidebarState as initialSidebarState } from './modules/sidebar/reducers';
 import util from './util/util';
 
 const mockBaseCmrApi = 'mock.cmr.api/';
@@ -33,6 +34,7 @@ fixtures.getState = function() {
     events: getInitialEventsState(fixtures.config()),
     map: fixtures.map(),
     animation: initialAnimationState,
+    sidebar: initialSidebarState,
     proj: {
       selected: {
         id: 'geographic',
@@ -357,6 +359,36 @@ fixtures.config = function() {
         endDate: '2019-09-24T23:54:00Z',
         source: 'GIBS:geographic:nrt',
         matrixSet: '250m',
+        conceptIds: [
+          {
+            shortName: 'VJ102IMG_NRT',
+            title: 'VIIRS/JPSS1 Imagery Resolution 6 Min L1B Swath 375m NRT',
+            type: 'NRT',
+            value: 'C2208779826-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ103IMG_NRT',
+            title: 'VIIRS/JPSS1 Imagery Resolution Terrain Corrected Geolocation 6 Min L1 Swath 375m NRT',
+            type: 'NRT',
+            value: 'C2208793489-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ102MOD_NRT',
+            title: 'VIIRS/JPSS1 Moderate Resolution 6 Min L1B Swath 750m NRT',
+            type: 'NRT',
+            value: 'C2208778455-LANCEMODIS',
+            version: '2.1',
+          },
+          {
+            shortName: 'VJ102MOD_NRT',
+            title: 'VIIRS/JPSS1 Moderate Resolution 6-Min L1B Swath 750m NRT',
+            type: 'NRT',
+            value: 'C1604614285-LANCEMODIS',
+            version: '2',
+          },
+        ],
         dateRanges: [
           {
             startDate: '2019-09-23T00:12:00Z',

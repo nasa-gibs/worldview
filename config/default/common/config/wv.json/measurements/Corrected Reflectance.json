@@ -35,9 +35,12 @@
                     "image": "",
                     "settings": [
                 	"VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                    "VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
                 	"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+                    "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
                 	"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
-                        "OrbitTracks_Suomi_NPP_Ascending"
+                    "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule",
+                    "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
                 "NOAA-20/VIIRS": {
@@ -47,8 +50,11 @@
                     "image": "",
                     "settings": [
                 	"VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+                    "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule",
                 	"VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
+                    "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule",
                 	"VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
+                    "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule",
                     "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },

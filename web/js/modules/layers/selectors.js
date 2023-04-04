@@ -25,6 +25,16 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
+export const getCollections = (layers, date, layer) => {
+  if (!layers.collections[layer.id]) return;
+  const dateCollection = layers.collections[layer.id].dates;
+  for (let i = 0; i < dateCollection.length; i += 1) {
+    if (dateCollection[i].date === date) {
+      return dateCollection[i];
+    }
+  }
+};
+
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
@@ -88,6 +98,17 @@ export const getGranulePlatform = (state, activeString) => {
   const { compare, layers } = state;
   const { granulePlatform } = layers[activeString || compare.activeString];
   return granulePlatform;
+};
+
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      platformLayers.push(key);
+    }
+  });
+  return platformLayers;
 };
 
 /**
@@ -293,10 +314,6 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
 
-  def.startDate = lodashGet(def, `projections[${projection}].startDate`) || def.startDate;
-  def.endDate = lodashGet(def, `projections[${projection}].endDate`) || def.endDate;
-  def.dateRanges = lodashGet(def, `projections[${projection}].dateRanges`) || def.dateRanges;
-
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
   } else if (!lodashIsUndefined(spec.hidden)) {
@@ -308,10 +325,31 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
+
+    const findLastRefLayer = (layers) => {
+      let lastRefIndex = 0;
+      let index = 0;
+
+      layers.forEach((layer) => {
+        if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
+          lastRefIndex = index;
+          index += 1;
+        }
+      });
+      if (lastRefIndex === 0) {
+        return lastRefIndex;
+      }
+      return lastRefIndex + 1;
+    };
+
+    const lastReferenceLayerIndex = findLastRefLayer(layers);
+
     if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
-    } else {
+    } else if (def.layergroup === 'Reference') {
       layers.unshift(def);
+    } else {
+      layers.splice(lastReferenceLayerIndex, 0, def);
     }
   } else {
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
@@ -586,6 +624,18 @@ export function isRenderable(id, layers, date, bLayers, state) {
   );
   return !obscured;
 }
+
+export const findEventLayers = (originalLayers, newLayers) => {
+  const uniqueLayers = [];
+
+  newLayers.forEach((newLayer) => {
+    if (!originalLayers.some((originalLayer) => originalLayer.id === newLayer.id)) {
+      uniqueLayers.push(newLayer.id);
+    }
+  });
+
+  return uniqueLayers;
+};
 
 export function activateLayersForEventCategory(state, category) {
   const {

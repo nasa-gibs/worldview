@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,14 +17,22 @@ import {
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
+import {
+  addLayer as addLayerAction,
+  removeGroup as removeGroupAction,
+  toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
+} from '../../modules/layers/actions';
 import util from '../../util/util';
 import { formatDisplayDate } from '../../modules/date/util';
 
 function Events(props) {
   const {
+    defaultEventLayer,
     eventsData,
     sources,
     isLoading,
+    layers,
     selectEvent,
     selected,
     openFilterModal,
@@ -40,6 +47,10 @@ function Events(props) {
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
+    removeGroup,
+    eventLayers,
+    toggleVisibility,
+    toggleGroupVisibility,
   } = props;
 
   const filterControlHeight = 115;
@@ -54,7 +65,6 @@ function Events(props) {
     : hasRequestError
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
-
 
   const renderFilterControls = () => (
     <div className="filter-controls">
@@ -98,9 +108,15 @@ function Events(props) {
               event={event}
               selectEvent={(id, date) => selectEvent(id, date, isMobile)}
               deselectEvent={deselectEvent}
+              removeGroup={removeGroup}
+              eventLayers={eventLayers}
+              toggleVisibility={toggleVisibility}
+              toggleGroupVisibility={toggleGroupVisibility}
               isSelected={selected.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
+              defaultEventLayer={defaultEventLayer}
+              layers={layers}
             />
           ))}
         </ul>
@@ -119,7 +135,8 @@ function Events(props) {
       >
         <div id="wv-events">
           {isLoading || hasRequestError ? (
-            <div className="events-loading-text">
+            // notranslate included below to prevent Google Translate extension from crashing the page
+            <div className="events-loading-text notranslate">
               {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
               {errorOrLoadingText}
             </div>
@@ -150,14 +167,28 @@ const mapDispatchToProps = (dispatch) => ({
       timeout: 150,
     }));
   },
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleVisibilityAction(layerIds, visible));
+  },
+  removeGroup: (ids) => {
+    dispatch(removeGroupAction(ids));
+  },
+  toggleGroupVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
+  },
 });
 
 const mapStateToProps = (state) => {
   const {
     animation,
+    config,
     embed,
     events,
     screenSize,
+    layers,
   } = state;
 
   const {
@@ -166,10 +197,13 @@ const mapStateToProps = (state) => {
   const { isEmbedModeActive } = embed;
 
   return {
+    defaultEventLayer: config.naturalEvents.defaultLayer,
+    eventLayers: layers.eventLayers,
     isPlaying: animation.isPlaying,
     isMobile: screenSize.isMobileDevice,
     isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
+    layers: layers.active.layers,
     showAll,
     showDates: !!(selectedDates.start && selectedDates.end),
     selected,
@@ -185,14 +219,18 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
+  defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
+  eventLayers: PropTypes.array,
   eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  layers: PropTypes.array,
   openFilterModal: PropTypes.func,
+  removeGroup: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   showDates: PropTypes.bool,
@@ -202,4 +240,6 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
+  toggleGroupVisibility: PropTypes.func,
+  toggleVisibility: PropTypes.func,
 };

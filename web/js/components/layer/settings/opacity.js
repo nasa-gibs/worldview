@@ -4,6 +4,7 @@ import Slider from 'rc-slider';
 
 class OpacitySelect extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       value: props.start,
@@ -12,6 +13,7 @@ class OpacitySelect extends React.Component {
 
   render() {
     const { layer, setOpacity, start } = this.props;
+    console.log(`start: ${start}`);
     const { value } = this.state;
     return (
       <div className="layer-opacity-select settings-component">
@@ -19,6 +21,8 @@ class OpacitySelect extends React.Component {
         <Slider
           defaultValue={start}
           onChange={(val) => {
+            console.log(`val: ${val}`);
+            console.log(`layer.id: ${layer.id}`);
             setOpacity(layer.id, (val / 100).toFixed(2));
             this.setState({ value: val });
           }}

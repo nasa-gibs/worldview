@@ -29,11 +29,6 @@ export function getVectorStyleAttributeArray(layer) {
         id: obj.key === 'custom' ? 'style' : obj.key,
         value: obj.value,
       });
-    } else if (obj.isActive) {
-      attrArray.push({
-        id: obj.key === 'custom' ? 'style' : obj.key,
-        value: '',
-      });
     }
   });
   return attrArray;

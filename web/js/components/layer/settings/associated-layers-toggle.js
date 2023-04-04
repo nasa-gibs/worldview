@@ -9,7 +9,7 @@ import {
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import { getActiveLayersMap } from '../../../modules/layers/selectors';
 
-const AssociatedLayersToggle = (props) => {
+function AssociatedLayersToggle(props) {
   const {
     associatedLayers,
     addLayer,
@@ -47,7 +47,7 @@ const AssociatedLayersToggle = (props) => {
       }) }
     </div>
   );
-};
+}
 
 const mapStateToProps = (state, ownProps) => {
   const { config: { layers } } = state;

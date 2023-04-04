@@ -1,0 +1,1 @@
+Mount Taranaki in New Zealand is a dormant stratovolcano. Visible in the imagery is a protected area, in dark green, around the summit. Egmont National Park is a mostly circular area with a radius of six miles from the summit and includes older volcanic remnants of Pouakai and Kaitake. Beyond the boundaries of the park are intensively farmed dairy pastures.

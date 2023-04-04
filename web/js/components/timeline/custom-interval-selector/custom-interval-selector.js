@@ -10,7 +10,6 @@ import {
 } from '../../../modules/date/constants';
 import {
   toggleCustomModal,
-  selectInterval as selectIntervalAction,
   changeCustomInterval as changeCustomIntervalAction,
 } from '../../../modules/date/actions';
 
@@ -23,30 +22,11 @@ import {
 class CustomIntervalSelector extends PureComponent {
   componentDidUpdate(prevProps) {
     const {
-      changeCustomInterval,
-      customInterval,
-      customSelected,
-      hasSubdailyLayers,
-      interval,
-      selectInterval,
       modalOpen,
     } = this.props;
 
     if (modalOpen && !prevProps.modalOpen) {
       this.customIntervalWidget.focus();
-    }
-
-    const subdailyAdded = hasSubdailyLayers && !prevProps.hasSubdailyLayers;
-    const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
-    const subdailyInterval = customInterval > 3 || interval > 3;
-
-    if (subdailyRemoved && subdailyInterval) {
-      changeCustomInterval();
-      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
-    }
-
-    if (subdailyAdded && !customSelected) {
-      changeCustomInterval(10, TIME_SCALE_TO_NUMBER.minute);
     }
   }
 
@@ -57,19 +37,19 @@ class CustomIntervalSelector extends PureComponent {
     if (value >= 0 && value <= 1000) {
       changeCustomInterval(value, customInterval);
     }
-  }
+  };
 
   changeZoomLevel = (zoomLevel) => {
     const { changeCustomInterval, customDelta } = this.props;
     changeCustomInterval(customDelta, TIME_SCALE_TO_NUMBER[zoomLevel]);
-  }
+  };
 
-  handleKeyPress= (e) => {
+  handleKeyPress = (e) => {
     const { closeModal } = this.props;
     if (e.key === 'Escape') {
       closeModal();
     }
-  }
+  };
 
   render() {
     const {
@@ -111,9 +91,6 @@ const mapDispatchToProps = (dispatch) => ({
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
   },
-  selectInterval: (delta, timeScale, customSelected) => {
-    dispatch(selectIntervalAction(delta, timeScale, customSelected));
-  },
 });
 
 const mapStateToProps = (state) => {
@@ -139,9 +116,6 @@ CustomIntervalSelector.propTypes = {
   closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
-  customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
-  interval: PropTypes.number,
-  selectInterval: PropTypes.func,
   modalOpen: PropTypes.bool,
 };
