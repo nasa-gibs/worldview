@@ -33,24 +33,29 @@ export default function EventIcon ({
       wrappedText = 10;
     }
 
+    let divTooltipRect = divTooltip.getBoundingClientRect();
     if (isSelected) {
       tooltipTop = `${containerRect.y - containerRect.height / 2 - wrappedText}px`;
-      tooltipLeft = `${containerRect.x - containerRect.width / 2 - 30}px`;
+      tooltipLeft = `${containerRect.x - divTooltipRect.width / 2 + 25}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
-      const divTooltipRect = divTooltip.getBoundingClientRect();
-      arrowTop = `${divTooltipRect.y + 5 - wrappedText}px`;
+      divTooltipRect = divTooltip.getBoundingClientRect();
+      if (wrappedText > 0) {
+        arrowTop = `${divTooltipRect.y + 5 + wrappedText + 3}px`;
+      } else {
+        arrowTop = `${divTooltipRect.y + 5 + wrappedText}px`;
+      }
       arrowLeft = `${divTooltipRect.x + divTooltipRect.width / 2 - 10}px`;
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     } else {
       tooltipTop = `${containerRect.y - containerRect.height / 2 - 20 - wrappedText}px`;
-      tooltipLeft = `${containerRect.x - containerRect.width / 2 - 54}px`;
+      tooltipLeft = `${containerRect.x - divTooltipRect.width / 2 + 13}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
-      const divTooltipRect = divTooltip.getBoundingClientRect();
+      divTooltipRect = divTooltip.getBoundingClientRect();
       if (wrappedText > 0) {
         arrowTop = `${divTooltipRect.y + 5 + wrappedText + 3}px`;
       } else {
@@ -77,7 +82,7 @@ export default function EventIcon ({
     const divTooltip = document.createElement('div');
     divTooltip.setAttribute('id', tooltipId);
     divTooltip.innerHTML = title || category;
-    divTooltip.style.setProperty('width', '160px');
+    divTooltip.style.setProperty('max-width', '160px');
     divTooltip.style.setProperty('background', 'black');
     divTooltip.style.setProperty('color', 'white');
     divTooltip.style.setProperty('position', 'fixed');
