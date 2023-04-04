@@ -45,8 +45,8 @@ export default function EventIcon ({
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     } else {
-      tooltipTop = (containerRect.y - containerRect.height / 2 - 20 - wrappedText) + 'px';
-      tooltipLeft = (containerRect.x - containerRect.width / 2 - 54) + 'px';
+      tooltipTop = `${containerRect.y - containerRect.height / 2 - 20 - wrappedText}px`;
+      tooltipLeft = `${containerRect.x - containerRect.width / 2 - 54}px`;
       divTooltip.style.setProperty('top', tooltipTop);
       divTooltip.style.setProperty('left', tooltipLeft);
 
@@ -56,14 +56,14 @@ export default function EventIcon ({
       } else {
         arrowTop = `${divTooltipRect.y + 5 + wrappedText}px`;
       }
-      arrowLeft = `${divTooltipRect.x + divTooltipRect.width/2 - 10}px`;
+      arrowLeft = `${divTooltipRect.x + divTooltipRect.width / 2 - 10}px`;
       divTooltipArrow.style.setProperty('top', arrowTop);
       divTooltipArrow.style.setProperty('left', arrowLeft);
     }
 
     divTooltip.style.setProperty('visibility', 'visible');
     divTooltipArrow.style.setProperty('visibility', 'visible');
-  }
+  };
 
   const handleLeave = (e) => {
     const divTooltip = document.getElementById(tooltipId);
@@ -71,7 +71,7 @@ export default function EventIcon ({
 
     const divTooltipArrow = document.getElementById(tooltipArrowId);
     divTooltipArrow.style.setProperty('visibility', 'hidden');
-  }
+  };
 
   useEffect(() => {
     const divTooltip = document.createElement('div');
