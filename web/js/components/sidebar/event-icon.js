@@ -103,8 +103,15 @@ export default function EventIcon ({
     divTooltipArrow.style.setProperty('position', 'fixed');
     divTooltipArrow.style.setProperty('visibility', 'hidden');
 
-    document.body.appendChild(divTooltipArrow);
-    document.body.appendChild(divTooltip);
+    let markerContainer = document.getElementById('marker-container');
+    if (markerContainer === null) {
+      markerContainer = document.createElement('div');
+      markerContainer.setAttribute('id', 'marker-container');
+      document.body.appendChild(markerContainer);
+    }
+    markerContainer.appendChild(divTooltipArrow);
+    markerContainer.appendChild(divTooltip);
+
     return () => {
       divTooltip.remove();
       divTooltipArrow.remove();
