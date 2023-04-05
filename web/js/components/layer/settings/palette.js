@@ -39,6 +39,10 @@ function PaletteSelect (props) {
     );
   };
 
+  /**
+   * Clears the custom palette if Id is set to __default
+   * @param {String} id | colormap Id
+   */
   const onChangePalette = (id) => {
     if (id === '__default') {
       clearCustomPalette(layer.id, index, groupName);
@@ -48,6 +52,11 @@ function PaletteSelect (props) {
     setActivePalette(id);
   };
 
+  /**
+   * Renders as renderSelectorItemScale or renderSelectorItemSingle depending on if
+   * the source type is continuous or discrete.
+   * @param {String} id | colormap Id
+   */
   const customLegend = (id) => {
     const source = getDefaultLegend(layer.id, index);
     const target = getCustomPalette(id);
@@ -73,6 +82,13 @@ function PaletteSelect (props) {
     }
   };
 
+  /**
+   * Render customs palette options
+   * @param {Object} palette | Palette object
+   * @param {String} id | colormap Id
+   * @param {Object} legend | Legend Object
+   * @param {Boolean} isSelected | is this colormap active
+   */
   const renderSelectorItemScale = (palette, id, legend, isSelected) => {
     const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
@@ -99,6 +115,14 @@ function PaletteSelect (props) {
     );
   };
 
+  /**
+   * Render classification customs when there is only one
+   * Color in colormap
+   * @param {Object} palette | Palette object
+   * @param {String} id | colormap Id
+   * @param {String} description | Colormap name
+   * @param {Boolean} isSelected | is this colormap active
+   */
   const renderSelectorItemSingle = (palette, id, description, isSelected) => {
     const color = palette.classes
       ? palette.classes.colors[0]
