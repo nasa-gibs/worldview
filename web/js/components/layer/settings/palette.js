@@ -53,8 +53,8 @@ function PaletteSelect (props) {
     const target = getCustomPalette(id);
     const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if ((source.type === 'continuous' && targetType === 'continuous') ||
-        (source.type === 'discrete' && targetType === 'continuous')) {
+    if ((source.type === 'continuous' && targetType === 'continuous')
+       || (source.type === 'discrete' && targetType === 'continuous')) {
       const translated = palettesTranslate(source.colors, target.colors);
       return renderSelectorItemScale(
         translated,
