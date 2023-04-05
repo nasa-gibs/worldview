@@ -148,7 +148,7 @@ function MobileDatePicker(props) {
       </>
     )
   );
-};
+}
 
 MobileDatePicker.propTypes = {
   date: PropTypes.object,
