@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import lodashIndexOf from 'lodash/indexOf';
 import { drawPaletteOnCanvas } from '../../../modules/palettes/util';
 import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
@@ -166,7 +167,7 @@ function PaletteSelect (props) {
         {
           // eslint-disable-next-line array-callback-return
           paletteOrder.map((id) => {
-            if (recommended.indexOf(id) < 0) {
+            if (lodashIndexOf(recommended, id) < 0) {
               const item = customLegend(id);
               if (item) {
                 return item;
