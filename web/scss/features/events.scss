@@ -441,3 +441,26 @@
   padding-top: 5px;
   border-top: 0.5px solid rgb(250 250 250 / 50%);
 }
+
+.events-tooltip {
+  z-index: 1000;
+  visibility: hidden;
+  max-width: 160px;
+  background: black;
+  color: white;
+  position: fixed;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px;
+}
+
+.events-tooltip-arrow {
+  z-index: 1000;
+  position: fixed;
+  visibility: hidden;
+  background: black;
+  width: 20px;
+  height: 20px;
+  rotate: 45deg;
+  border-radius: 2px;
+}
