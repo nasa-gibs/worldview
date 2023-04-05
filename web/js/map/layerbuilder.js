@@ -21,8 +21,6 @@ import { Style, RegularShape } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import * as dat from 'dat.gui';
-// import { Point } from 'proj4';
-import Bluebird from 'bluebird';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -54,7 +52,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  const renderAnimation = false;
+  const renderParticleFlow = true;
   const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
 
   /**
@@ -508,7 +506,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const animateVectors = function(layerName, tileSource, selected, layer) {
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
 
-    if (animationAllowed && renderAnimation) {
+    if (animationAllowed && renderParticleFlow) {
       const canvasElem = document.querySelectorAll('canvas');
       if (canvasElem.length > 0) {
         // Add z-index property to existing OL canvas. This ensures that the visualization is on the top layer.
@@ -699,8 +697,8 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     let counter = 0;
-    // Creating a layer with arrows, modifying color, scale & direction
-    const vectorlayer = new LayerVectorTile({
+
+    const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
@@ -710,128 +708,95 @@ export default function mapLayerBuilder(config, cache, store) {
       style (feature, resolution) {
         // console.log(feature);
         counter += 1;
-        // Due to processing issues, I am only rendering every 15th feature
-        if (counter % 15 !== 0) return [];
+
+        // Due to the large number of points to render for OSCAR, I am only rendering every 25th feature
+        if (counter % 25 !== 0) return [];
 
         // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
-        let arrowColor;
-        const radianDirection = feature.get('direction');
-        const magnitude = feature.get('magnitude');
+        const radianDirection = feature.get('direction'); // was "dir"
+        const magnitude = feature.get('magnitude'); // was "speed"
+
+        // This returns an array, but doesn't render. Too slow??
+        const arrowColor = colorGradient(magnitude);
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
-          arrowColor = 'red';
+          // arrowColor = [255, 0, 0];
           arrowSizeMultiplier = 1;
         } else if (magnitude < 0.17) {
-          arrowColor = 'blue';
+          // arrowColor = [0, 0, 255];
           arrowSizeMultiplier = 1.25;
         } else {
-          arrowColor = 'green';
+          // arrowColor = [0, 255, 0];
           arrowSizeMultiplier = 1.5;
         }
 
-        // The arrow shaft
-        return [
-          new Style({
-            image: new RegularShape({
-              points: 2,
-              radius: 10 * arrowSizeMultiplier,
-              stroke: new Stroke({
-                width: 2,
-                color: arrowColor,
-              }),
-              angle: radianDirection,
-            }),
-          }),
-          // The arrow head
-          new Style({
-            image: new RegularShape({
-              points: 3,
-              radius: 5 * arrowSizeMultiplier,
-              angle: radianDirection,
-              fill: new Fill({
-                color: arrowColor,
-              }),
-            }),
-          }),
-        ];
-      },
-    });
-
-    // This is the style associated with misr_cloud from getCapabilities.
-    const misrStyle = [
-      new Style({
-        image: new RegularShape({
+        // https://openlayers.org/en/latest/examples/wind-arrows.html
+        const shaft = new RegularShape({
           points: 2,
-          radius: 10,
+          radius: 5,
           stroke: new Stroke({
-            width: 2,
-            color: 'red',
+            width: 4,
+            color: arrowColor,
           }),
-          angle: 45,
-        }),
-      }),
-    ];
+          rotateWithView: true,
+        });
 
-    // Creating a layer with cones, modifying color, scale & direction
-    const vectorlayerCones = new LayerVectorTile({
-      extent: layerExtent,
-      source: tileSource,
-      renderMode: 'vector',
-      preload: 0,
-      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
-      ...isMinBreakPoint && { minResolution: breakPointResolution },
-      style (feature, resolution) {
-        console.log(feature);
-        counter += 1;
-        // Due to processing issues, I am only rendering every 15th feature
-        if (counter % 15 !== 0) return [];
-
-        // This function styles each feature individually based on the feature specific data
-        let arrowSizeMultiplier;
-        let arrowColor;
-        const radianDirection = feature.get('direction');
-        const magnitude = feature.get('magnitude');
-
-        // If OSCAR/ASCAT we need to adjust the radian angle
-        // OSCAR/ASCAT are in 0-360 format while MISR is in -180 to 180, so we need to normalize
-        // if (layerName === 'ASCAT_Ocean_Surface_Wind_Speed' || layerName === 'OSCAR_Sea_Surface_Currents_Final') {
-        //   radianDirection -= 180;
-        // }
-
-        // Adjust color & arrow length based on magnitude
-        if (magnitude < 0.08) {
-          arrowColor = 'red';
-          arrowSizeMultiplier = 1;
-        } else if (magnitude < 0.17) {
-          arrowColor = 'blue';
-          arrowSizeMultiplier = 1.25;
-        } else {
-          arrowColor = 'green';
-          arrowSizeMultiplier = 1.5;
-        }
-
-        return [
-          // The Cone
-          new Style({
-            image: new RegularShape({
-              scale: [1, 4], // width, height
-              points: 3,
-              radius: 5 * arrowSizeMultiplier,
-              angle: radianDirection,
-              fill: new Fill({
-                color: arrowColor,
-              }),
-            }),
+        const head = new RegularShape({
+          points: 3,
+          radius: 8,
+          fill: new Fill({
+            color: arrowColor,
           }),
-        ];
+          rotateWithView: true,
+        });
+
+        const styles = [new Style({ image: shaft }), new Style({ image: head })];
+        const angle = ((radianDirection - 180) * Math.PI) / 180;
+        const scale = (magnitude + 1) * arrowSizeMultiplier;
+        shaft.setScale([1, scale]);
+        shaft.setRotation(angle);
+        head.setDisplacement([
+          0,
+          head.getRadius() / 2 + shaft.getRadius() * scale,
+        ]);
+        head.setRotation(angle);
+        return styles;
       },
     });
 
-    // Select the layer to load (vectorlayer, webGLLayer, vectorlayerCones)
-    const layer = vectorlayer;
-    console.log(layer);
+    function colorGradient(fadeFraction) {
+      const color1 = {
+        red: 0, green: 255, blue: 0,
+      };
+      const color2 = {
+        red: 255, green: 0, blue: 0,
+      };
+      // const color3 = {
+      //   red: 255, green: 0, blue: 0,
+      // };
+
+      const fade = fadeFraction;
+
+      // Find which interval to use and adjust the fade percentage
+      // if (fade >= 1) {
+      //   fade -= 1;
+      //   color1 = color2;
+      //   color2 = color3;
+      // }
+
+      const diffRed = color2.red - color1.red;
+      const diffGreen = color2.green - color1.green;
+      const diffBlue = color2.blue - color1.blue;
+
+      const gradient = {
+        red: parseInt(Math.floor(color1.red + (diffRed * fade)), 10),
+        green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
+        blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
+      };
+      return [gradient.red, gradient.green, gradient.blue];
+    }
 
     applyStyle(def, layer, state, layeroptions);
     console.log(layer);
@@ -840,7 +805,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     const animationAllowed = vectorLayers.indexOf(layerName) > -1;
-    if (animationAllowed && renderAnimation) {
+    if (animationAllowed && renderParticleFlow) {
       animateVectors(layerName, tileSource, selected, layer);
     }
 
