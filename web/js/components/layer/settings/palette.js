@@ -99,6 +99,7 @@ function PaletteSelect (props) {
       canvas.width,
       canvas.height,
     );
+    const dataURL = canvas.toDataURL('image/png');
     return (
       <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
@@ -108,7 +109,7 @@ function PaletteSelect (props) {
           onClick={() => onChangePalette(id)}
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
-          <img src={canvas.toDataURL('image/png')} />
+          <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
       </div>
