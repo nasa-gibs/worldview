@@ -65,7 +65,7 @@ const convertToLocalDateObject = (date) => {
   return dateLocal;
 };
 
-const MobileDatePicker = function (props) {
+function MobileDatePicker(props) {
   const {
     date,
     startDateLimit,
