@@ -17,7 +17,7 @@ function PaletteSelect (props) {
     paletteOrder,
     palettesTranslate,
     setCustomPalette,
-  } = props
+  } = props;
 
   const [activePalette, setActivePalette] = useState(initialActivePalette);
 
@@ -40,9 +40,11 @@ function PaletteSelect (props) {
   };
 
   const onChangePalette = (id) => {
-    id === '__default' ?
-      clearCustomPalette(layer.id, index, groupName) :
+    if (id === '__default') {
+      clearCustomPalette(layer.id, index, groupName);
+    } else {
       setCustomPalette(layer.id, id, index, groupName);
+    }
     setActivePalette(id);
   };
 
@@ -150,7 +152,7 @@ function PaletteSelect (props) {
       </Scrollbar>
     </div>
   );
-};
+}
 
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
