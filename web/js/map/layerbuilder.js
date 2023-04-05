@@ -623,20 +623,19 @@ export default function mapLayerBuilder(config, cache, store) {
         const magnitude = feature.get('magnitude'); // was "speed"
 
         // This returns an array, but doesn't render. Too slow??
-        let arrowColor = colorGradient(magnitude);
+        const arrowColor = colorGradient(magnitude);
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
-          arrowColor = [255, 0, 0];
+          // arrowColor = [255, 0, 0];
           arrowSizeMultiplier = 1;
         } else if (magnitude < 0.17) {
-          arrowColor = [0, 0, 255];
+          // arrowColor = [0, 0, 255];
           arrowSizeMultiplier = 1.25;
         } else {
-          arrowColor = [0, 255, 0];
+          // arrowColor = [0, 255, 0];
           arrowSizeMultiplier = 1.5;
         }
-        console.log(`arrowColor2: ${arrowColor}`);
 
         // https://openlayers.org/en/latest/examples/wind-arrows.html
         const shaft = new RegularShape({
@@ -674,12 +673,23 @@ export default function mapLayerBuilder(config, cache, store) {
 
     function colorGradient(fadeFraction) {
       const color1 = {
-        red: 19, green: 233, blue: 19,
+        red: 0, green: 255, blue: 0,
       };
       const color2 = {
-        red: 255, green: 255, blue: 0,
+        red: 255, green: 0, blue: 0,
       };
+      // const color3 = {
+      //   red: 255, green: 0, blue: 0,
+      // };
+
       const fade = fadeFraction;
+
+      // Find which interval to use and adjust the fade percentage
+      // if (fade >= 1) {
+      //   fade -= 1;
+      //   color1 = color2;
+      //   color2 = color3;
+      // }
 
       const diffRed = color2.red - color1.red;
       const diffGreen = color2.green - color1.green;
@@ -690,7 +700,6 @@ export default function mapLayerBuilder(config, cache, store) {
         green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
         blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
       };
-      console.log('returning');
       return [gradient.red, gradient.green, gradient.blue];
     }
 
