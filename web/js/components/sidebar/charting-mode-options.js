@@ -273,7 +273,7 @@ function ChartingModeOptions (props) {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
       type: timeSpanSelection === 'range' ? 'series' : 'date',
-      steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
+      steps: 6, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
