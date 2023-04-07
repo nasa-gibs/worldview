@@ -304,9 +304,9 @@ const getParameters = function(config, parameters) {
         serializeNeedsGlobalState: true,
         serialize: (boo, state) => {
           const isKioskModeActive = get(state, 'ui.isKioskModeActive');
-          return isKioskModeActive ? boo: undefined;
-        }
-      }
+          return isKioskModeActive ? boo : undefined;
+        },
+      },
     },
     em: {
       stateKey: 'embed.isEmbedModeActive',

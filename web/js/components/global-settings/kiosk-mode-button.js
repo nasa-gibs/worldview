@@ -2,20 +2,27 @@ import React from 'react';
 import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { toggleKioskMode as toggleKioskModeAction } from '../../modules/ui/actions';
+import toggleDistractionFreeModeAction, {
+  toggleKioskMode as toggleKioskModeAction,
+} from '../../modules/ui/actions';
 
 function KioskModeButtons () {
   const dispatch = useDispatch();
-  const toggleKioskMode = (isActive) => { dispatch(toggleKioskModeAction(isActive)); };
+  const toggleKioskMode = (kioskIsActive) => { dispatch(toggleKioskModeAction(kioskIsActive)); };
+  const toggleDistractionFreeMode = () => { dispatch(toggleDistractionFreeModeAction()); };
 
-  const { isKioskModeActive } = useSelector((state) => ({
+  const { isKioskModeActive, isDistractionFreeModeActive } = useSelector((state) => ({
     isKioskModeActive: state.ui.isKioskModeActive,
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
   }));
 
-  const handleButtonSelect = (isActive) => {
-    if (isActive && isKioskModeActive) return;
-    if (!isActive && !isKioskModeActive) return;
-    toggleKioskMode(isActive);
+  const handleButtonSelect = (kioskIsActive, distractionFree) => {
+    if (!distractionFree) {
+      toggleKioskMode(kioskIsActive);
+    } else {
+      toggleKioskMode(kioskIsActive);
+      toggleDistractionFreeMode(distractionFree);
+    }
   };
 
   const headerText = 'Kiosk Mode  ';
@@ -39,16 +46,25 @@ function KioskModeButtons () {
           outline
           className="setting-button"
           active={isKioskModeActive}
-          onClick={() => handleButtonSelect(true)}
+          onClick={() => handleButtonSelect(true, false)}
         >
-          ON
+          Kiosk Mode Only
+        </Button>
+        <Button
+          aria-label="Kiosk mode & distraction free mode on"
+          outline
+          className="setting-button"
+          active={isKioskModeActive && isDistractionFreeModeActive}
+          onClick={() => handleButtonSelect(true, true)}
+        >
+          Kiosk & Distraction Free
         </Button>
         <Button
           aria-label="Kiosk mode off"
           outline
           className="setting-button"
           active={!isKioskModeActive}
-          onClick={() => handleButtonSelect(false)}
+          onClick={() => handleButtonSelect(false, false)}
         >
           OFF
         </Button>
