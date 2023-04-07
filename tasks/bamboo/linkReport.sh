@@ -1,6 +1,16 @@
 #!/bin/bash
 
-# TODO: this is a placeholder for the link-check ci/cd plan (to be built) that
-# will run once a month
-npm ci --production=false --ignore-scripts
-node $BASE/tasks/link-check/index.js
+# This script installs NODE, builds Worldview, & runs the linkcheck
+
+set -e -x
+
+# Install node.js
+NODE_VERSION=v18.15.0
+curl -O https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz
+tar xf node-${NODE_VERSION}-linux-x64.tar.gz &&
+export PATH=$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}
+
+# builds project and runs tests
+npm install
+npm run build
+npm run linkcheck
