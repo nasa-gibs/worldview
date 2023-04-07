@@ -204,9 +204,9 @@
     "reselect": "^4.1.7",
     "rgbcolor": "^1.0.1",
     "simplebar": "^6.2.2",
-    "simplebar-react": "^3.2.2",
+    "simplebar-react": "^3.2.3",
     "stackblur": "^1.0.0",
-    "supercluster": "7.1.5",
+    "supercluster": "^7.1.5",
     "url-template": "^3.1.0",
     "what-input": "^5.2.12"
   },
