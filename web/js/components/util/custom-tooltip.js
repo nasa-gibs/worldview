@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-export default function CustomTooltip (props) {
+const CustomTooltip = function (props) {
   const {
     id,
     text,
@@ -43,12 +43,10 @@ export default function CustomTooltip (props) {
     const divTooltip = document.getElementById(tooltipId);
     const divTooltipArrow = document.getElementById(tooltipArrowId);
 
-    let wrappedText = 0;
-    if (divTooltip.getBoundingClientRect().height > 30) {
-      wrappedText = 10;
-    }
+    if (divTooltip === null) return;
 
     let divTooltipRect = divTooltip.getBoundingClientRect();
+    const wrappedText = divTooltipRect.height > 30 ? 10 : 0;
     let tooltipTop = `${containerRect.y - containerRect.height / 2 - 20 - wrappedText}px`;
     let tooltipLeft = `${containerRect.x - divTooltipRect.width / 2 + 13}px`;
     if (isSelected) {
@@ -71,6 +69,7 @@ export default function CustomTooltip (props) {
 
   const handleOnLeave = () => {
     const divTooltip = document.getElementById(tooltipId);
+    if (divTooltip === null) return;
     divTooltip.style.setProperty('visibility', 'hidden');
 
     const divTooltipArrow = document.getElementById(tooltipArrowId);
@@ -99,7 +98,7 @@ export default function CustomTooltip (props) {
       {children}
     </div>
   );
-}
+};
 
 CustomTooltip.propTypes = {
   id: PropTypes.string,
@@ -107,3 +106,5 @@ CustomTooltip.propTypes = {
   hideTooltip: PropTypes.bool,
   isSelected: PropTypes.bool,
 };
+
+export default CustomTooltip;
