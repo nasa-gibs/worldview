@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-const CustomTooltip = function (props) {
+function CustomTooltip (props) {
   const {
     id,
     text,
@@ -10,7 +10,6 @@ const CustomTooltip = function (props) {
     children,
   } = props;
   const tooltipContainerRef = useRef();
-  const [tooltipHide, setTooltipHide] = useState(hideTooltip);
   const tooltipId = `tooltip-${id}`;
   const tooltipArrowId = `arrow-${tooltipId}`;
 
@@ -37,7 +36,7 @@ const CustomTooltip = function (props) {
   };
 
   const handleOnEnter = () => {
-    if (tooltipHide) return;
+    if (hideTooltip) return;
 
     const containerRect = tooltipContainerRef.current.getBoundingClientRect();
     const divTooltip = document.getElementById(tooltipId);
@@ -85,10 +84,6 @@ const CustomTooltip = function (props) {
     };
   }, []);
 
-  useEffect(() => {
-    setTooltipHide(hideTooltip);
-  }, [hideTooltip]);
-
   return (
     <div
       ref={tooltipContainerRef}
@@ -98,7 +93,7 @@ const CustomTooltip = function (props) {
       {children}
     </div>
   );
-};
+}
 
 CustomTooltip.propTypes = {
   id: PropTypes.string,

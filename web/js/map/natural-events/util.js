@@ -122,7 +122,7 @@ export const getTrackLines = function(map, trackCoords) {
     map.getPixelFromCoordinate(end),
     map.getPixelFromCoordinate(start),
   ]);
-  if (pixelCoords.length === 0) return;
+  if (!pixelCoords.length) return;
   const first = pixelCoords[0][0];
   const last = pixelCoords[pixelCoords.length - 1][0];
   const topLeft = [first[0], first[1]];
