@@ -1,6 +1,6 @@
 import googleTagManager from 'googleTagManager';
 
-import { TOGGLE_DISTRACTION_FREE_MODE } from './constants';
+import { TOGGLE_DISTRACTION_FREE_MODE, TOGGLE_KIOSK_MODE } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
 export default function toggleDistractionFreeMode() {
@@ -21,4 +21,8 @@ export default function toggleDistractionFreeMode() {
       dispatch({ type: CLOSE_MODAL });
     }
   };
+}
+
+export function toggleKioskMode() {
+  return { type: TOGGLE_KIOSK_MODE }
 }
