@@ -23,6 +23,10 @@ export default function toggleDistractionFreeMode() {
   };
 }
 
-export function toggleKioskMode() {
-  return { type: TOGGLE_KIOSK_MODE }
+// this can probably be changed back to truthy/falsy but I would like to control isActive manually for now
+export function toggleKioskMode(isActive) {
+  return {
+    type: TOGGLE_KIOSK_MODE,
+    isActive,
+  };
 }

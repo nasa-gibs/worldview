@@ -12,10 +12,10 @@ export default function uiReducers(state = uiState, action) {
       return lodashAssign({}, state, {
         isDistractionFreeModeActive: !state.isDistractionFreeModeActive,
       });
-      case TOGGLE_KIOSK_MODE:
-        return lodashAssign({}, state, {
-          isKioskModeActive: !state.isKioskModeActive,
-        });
+    case TOGGLE_KIOSK_MODE:
+      return lodashAssign({}, state, {
+        isKioskModeActive: action.isActive,
+      });
     default:
       return state;
   }
