@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import { pick, some } from 'lodash';
 
 // https://stackoverflow.com/a/13139830
@@ -93,8 +93,8 @@ function Crop(props) {
     }
   };
 
-  return (
-    <Portal node={document && document.getElementById('wv-content')}>
+  return createPortal(
+    <>
       {showCoordinates && (
         <RenderCoordinates
           coordinates={coordinates}
@@ -116,7 +116,8 @@ function Crop(props) {
       >
         <img src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
       </ReactCrop>
-    </Portal>
+    </>,
+    document.getElementById('wv-content'),
   );
 }
 export default Crop;
