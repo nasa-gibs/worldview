@@ -330,8 +330,8 @@ function LayerRow (props) {
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
-      ? ['far', 'eye-slash']
-      : ['far', 'eye'];
+      ? ['fas', 'eye-slash']
+      : ['fas', 'eye'];
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
