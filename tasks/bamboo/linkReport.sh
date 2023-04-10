@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# This script installs NODE, builds Worldview, & runs the linkcheck
-
+# This script, for use in bamboo, installs NODE, checkous out & builds Worldview, & then runs the linkcheck test
+# This script runs monthly
+# The resulting report is emailed to recipients specified in Bamboo
 set -e -x
 
 # Install node.js
