@@ -22,6 +22,7 @@ import { getGranuleTileLayerExtent } from './granule/util';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
+import { setErrorTiles } from '../modules/ui/actions';
 import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -44,7 +45,8 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  // let errorTiles = []
+  // array to keep track of each tile that returned an error
+  const errorTiles = [];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -103,9 +105,31 @@ export default function mapLayerBuilder(config, cache, store) {
     store.dispatch(updateLayerCollection(id));
   };
 
+  function extractDateFromURL(url) {
+    const regex = /TIME=([\d-]+)T/;
+    const match = url.match(regex);
+
+    if (match && match[1]) {
+      return match[1];
+    }
+    console.error('Date not found in the URL.');
+    return null;
+  }
+
+  // tile load function calls this when a tile returns an error
+  // extract needed information about tile and push to errorTiles array
   const handleTileError = (tile, layerId, sourceURL) => {
     console.log(`Error loading tile for layer '${layerId}' from '${sourceURL}':`, tile);
     // Handle the error, e.g., display an error message, log the missing tile, etc.
+    const date = extractDateFromURL(sourceURL);
+    const matrixColRow = tile.tileCoord;
+    const errorObj = {
+      layerId,
+      date,
+      matrixColRow,
+      sourceURL,
+    };
+    errorTiles.push(errorObj);
   };
 
 
@@ -473,7 +497,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceURL = def.sourceOverride || configSource.url;
-    console.log('sourceOptions');
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
@@ -494,6 +517,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
+    // push error tiles to store.. ui.errorTiles
+    store.dispatch(setErrorTiles(errorTiles));
     return new OlLayerTile({
       extent: polygon ? granuleExtent : extent,
       preload: 0,
