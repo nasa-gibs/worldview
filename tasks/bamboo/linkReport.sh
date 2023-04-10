@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script, for use in bamboo, installs NODE, checkous out & builds Worldview, & then runs the linkcheck test
-# This script runs monthly
+# This script runs monthly as specified in Bamboo
 # The resulting report is emailed to recipients specified in Bamboo
 set -e -x
 
