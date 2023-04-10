@@ -193,3 +193,12 @@
     color: #333;
   }
 }
+
+.modal-dialog.light .modal-body {
+  background: #eee;
+}
+
+.modal-backdrop.show {
+  opacity: 0 !important;
+  background-color: transparent !important;
+}
