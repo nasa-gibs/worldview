@@ -119,7 +119,7 @@ export default function mapLayerBuilder(config, cache, store) {
   // tile load function calls this when a tile returns an error
   // extract needed information about tile and push to errorTiles array
   const handleTileError = (tile, layerId, sourceURL) => {
-    console.log(`Error loading tile for layer '${layerId}' from '${sourceURL}':`, tile);
+    // console.log(`Error loading tile for layer '${layerId}' from '${sourceURL}':`, tile);
     // Handle the error, e.g., display an error message, log the missing tile, etc.
     const date = extractDateFromURL(sourceURL);
     const matrixColRow = tile.tileCoord;

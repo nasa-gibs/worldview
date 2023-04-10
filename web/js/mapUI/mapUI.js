@@ -16,6 +16,7 @@ import UpdateOpacity from './components/update-opacity/updateOpacity';
 import UpdateProjection from './components/update-projection/updateProjection';
 import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
+import TileErrorsHandler from './components/tile-errors/tile-errors-handler';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -44,6 +45,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
+import { SET_ERROR_TILES } from '../modules/ui/constants';
 
 const { events } = util;
 
@@ -90,6 +92,7 @@ function MapUI(props) {
   const [quickAnimateAction, setQuickAnimateAction] = useState({});
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
+  const [tileErrorAction, setTileErrorAction] = useState({});
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -154,6 +157,8 @@ function MapUI(props) {
       case dateConstants.ARROW_DOWN:
         setQuickAnimateAction(action);
         break;
+      case SET_ERROR_TILES:
+        return setTileErrorAction(action);
       default:
         break;
     }
@@ -389,6 +394,7 @@ function MapUI(props) {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
+      <TileErrorsHandler tileErrorAction={tileErrorAction} />
     </>
   );
 }
