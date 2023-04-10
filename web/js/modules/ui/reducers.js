@@ -1,9 +1,14 @@
 import { assign as lodashAssign } from 'lodash';
-import { TOGGLE_DISTRACTION_FREE_MODE, TOGGLE_KIOSK_MODE } from './constants';
+import {
+  TOGGLE_DISTRACTION_FREE_MODE,
+  TOGGLE_KIOSK_MODE,
+  SET_ERROR_TILES,
+} from './constants';
 
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
+  errorTiles: [],
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -16,6 +21,11 @@ export default function uiReducers(state = uiState, action) {
       return lodashAssign({}, state, {
         isKioskModeActive: action.isActive,
       });
+    case SET_ERROR_TILES:
+      return {
+        ...state,
+        errorTiles: action.tiles,
+      };
     default:
       return state;
   }

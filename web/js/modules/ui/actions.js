@@ -1,6 +1,10 @@
 import googleTagManager from 'googleTagManager';
 
-import { TOGGLE_DISTRACTION_FREE_MODE, TOGGLE_KIOSK_MODE } from './constants';
+import {
+  TOGGLE_DISTRACTION_FREE_MODE,
+  TOGGLE_KIOSK_MODE,
+  SET_ERROR_TILES,
+} from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
 export default function toggleDistractionFreeMode() {
@@ -28,5 +32,19 @@ export function toggleKioskMode(isActive) {
   return {
     type: TOGGLE_KIOSK_MODE,
     isActive,
+  };
+}
+
+export function setErrorTiles(tiles) {
+  return {
+    type: SET_ERROR_TILES,
+    tiles,
+  };
+}
+
+export function clearErrorTiles() {
+  return {
+    type: SET_ERROR_TILES,
+    tiles: [],
   };
 }

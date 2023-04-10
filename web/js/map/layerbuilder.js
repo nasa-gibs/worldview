@@ -44,6 +44,7 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  // let errorTiles = []
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -102,6 +103,12 @@ export default function mapLayerBuilder(config, cache, store) {
     store.dispatch(updateLayerCollection(id));
   };
 
+  const handleTileError = (tile, layerId, sourceURL) => {
+    console.log(`Error loading tile for layer '${layerId}' from '${sourceURL}':`, tile);
+    // Handle the error, e.g., display an error message, log the missing tile, etc.
+  };
+
+
   /**
    * We define our own tile loading function in order to capture custom header values
    *
@@ -135,9 +142,11 @@ export default function mapLayerBuilder(config, cache, store) {
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
+        handleTileError(tile, layer.id, src);
         tile.setState(TileState.ERROR);
       }
     } catch (e) {
+      handleTileError(tile, layer.id, src);
       tile.setState(TileState.ERROR);
     }
   };
@@ -464,6 +473,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceURL = def.sourceOverride || configSource.url;
+    console.log('sourceOptions');
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
