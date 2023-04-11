@@ -3,7 +3,7 @@ import * as constants from './constants';
 import { defaultRequestState } from '../core/reducers';
 
 describe('shortLink reducer', () => {
-  test('should return the initial state', () => {
+  test('should return the initial state [link-reducer-initial-state]', () => {
     expect(shortLink([], {})).toEqual(defaultRequestState);
   });
   test('Should set isLoading to true on Request Start', () => {
@@ -18,7 +18,7 @@ describe('shortLink reducer', () => {
       type: null,
     });
   });
-  test('Should return response upon request success ', () => {
+  test('Should return response upon request success [link-reducer-success-response]', () => {
     expect(
       shortLink([], {
         type: constants.REQUEST_SHORT_LINK_SUCCESS,
@@ -33,12 +33,12 @@ describe('shortLink reducer', () => {
   });
 });
 describe('linkReducer', () => {
-  test('should return the initial state', () => {
+  test('should return the initial state [link-reducer-return-initial-state]', () => {
     expect(linkReducer(undefined, {})).toEqual(defaultLinkState);
   });
   test(
     `${constants.UPDATE_PERMALINK
-    }action type should return object containing sorted mock object`,
+    }action type should return object containing sorted mock object [link-reducer-mock-object]`,
     () => {
       const testString = 'thisIsATestString';
       expect(

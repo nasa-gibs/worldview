@@ -8,7 +8,7 @@ import { UncontrolledTooltip } from 'reactstrap';
  * @class LoopButton
  * @extends React.Component
  */
-const LoopButton = ({ looping, onLoop, isMobile }) => {
+function LoopButton({ looping, onLoop, isMobile }) {
   const labelText = looping ? 'Disable animation loop' : 'Enable animation loop';
   const buttonId = 'loop-button';
   return (
@@ -35,7 +35,7 @@ const LoopButton = ({ looping, onLoop, isMobile }) => {
       <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" />
     </a>
   );
-};
+}
 
 LoopButton.propTypes = {
   looping: PropTypes.bool,

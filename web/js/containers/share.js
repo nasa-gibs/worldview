@@ -16,7 +16,9 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
+import {
+  getPermalink, getShareLink, wrapWithObject,
+} from '../modules/link/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -87,7 +89,7 @@ class ShareLinkContainer extends Component {
     const link = this.getPermalink();
     const location = getShortenRequestString(mock, link);
     return requestShortLinkAction(location);
-  }
+  };
 
   onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
@@ -106,7 +108,7 @@ class ShareLinkContainer extends Component {
         isShort: !isShort,
       });
     }
-  }
+  };
 
   copyToClipboard = (url) => {
     const { activeTab } = this.state;
@@ -121,13 +123,13 @@ class ShareLinkContainer extends Component {
       });
     };
     copy(url, options);
-  }
+  };
 
   getPermalink = (isEmbed) => {
     const { queryString } = this.state;
     const { selectedDate } = this.props;
     return getPermalink(queryString, selectedDate, isEmbed);
-  }
+  };
 
   onLinkClick = (type) => {
     const permalink = this.getPermalink();
@@ -155,11 +157,11 @@ class ShareLinkContainer extends Component {
     } else {
       window.open(shareLink, '_blank');
     }
-  }
+  };
 
   setActiveTab = (activeTab) => {
     this.setState({ activeTab });
-  }
+  };
 
   renderNavTabs = () => {
     const { embedDisableNavLink, isMobile } = this.props;
@@ -195,7 +197,7 @@ class ShareLinkContainer extends Component {
         })}
       </Nav>
     );
-  }
+  };
 
   renderInputGroup = (value, type) => (
     <InputGroup>
@@ -218,7 +220,7 @@ class ShareLinkContainer extends Component {
         </Button>
       </InputGroupAddon>
     </InputGroup>
-  )
+  );
 
   renderLinkTab = () => {
     const { shortLink, urlShortening } = this.props;
@@ -262,14 +264,14 @@ class ShareLinkContainer extends Component {
         )}
       </TabPane>
     );
-  }
+  };
 
   renderEmbedTab = () => {
     const {
       activeTab,
     } = this.state;
     const embedValue = this.getPermalink(true);
-    const embedIframeHTMLCode = wrapWithIframe(embedValue);
+    const embedIframeHTMLCode = wrapWithObject(embedValue);
 
     return (
       <TabPane tabId="embed" className="share-tab-embed">
@@ -287,7 +289,7 @@ class ShareLinkContainer extends Component {
         )}
       </TabPane>
     );
-  }
+  };
 
   renderSocialTab = () => {
     const { isMobile } = this.props;
@@ -310,7 +312,7 @@ class ShareLinkContainer extends Component {
         )}
       </TabPane>
     );
-  }
+  };
 
   render() {
     const {
@@ -320,23 +322,21 @@ class ShareLinkContainer extends Component {
     } = this.state;
 
     return (
-      <>
-        <div className="share-body">
-          <ShareToolTips
-            activeTab={activeTab}
-            tooltipErrorTime={tooltipErrorTime}
-            tooltipToggleTime={tooltipToggleTime}
-          />
-          <div className="share-nav-container">
-            {this.renderNavTabs()}
-            <TabContent activeTab={activeTab}>
-              {this.renderLinkTab()}
-              {/* {this.renderEmbedTab()} */}
-              {this.renderSocialTab()}
-            </TabContent>
-          </div>
+      <div className="share-body">
+        <ShareToolTips
+          activeTab={activeTab}
+          tooltipErrorTime={tooltipErrorTime}
+          tooltipToggleTime={tooltipToggleTime}
+        />
+        <div className="share-nav-container">
+          {this.renderNavTabs()}
+          <TabContent activeTab={activeTab}>
+            {this.renderLinkTab()}
+            {/* {this.renderEmbedTab()} */}
+            {this.renderSocialTab()}
+          </TabContent>
         </div>
-      </>
+      </div>
     );
   }
 }

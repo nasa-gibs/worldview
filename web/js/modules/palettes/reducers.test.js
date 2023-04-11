@@ -13,7 +13,7 @@ import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 
 const config = fixtures.config();
 
-test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object', () => {
+test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object [palettes-reducer-threshold]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
     type: SET_THRESHOLD_RANGE_AND_SQUASH,
@@ -25,7 +25,7 @@ test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object', () =
   expect(response.active['terra-aod']).toBeDefined();
 });
 
-test('CLEAR_CUSTOM action updates active palette Object', () => {
+test('CLEAR_CUSTOM action updates active palette Object [palettes-reducer-clear-custom]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
     type: CLEAR_CUSTOM,
@@ -36,7 +36,7 @@ test('CLEAR_CUSTOM action updates active palette Object', () => {
   expect(initialPaletteState.active['terra-aod']).toEqual(undefined);
   expect(response.active['terra-aod']).toBeDefined();
 });
-test('SET_CUSTOM action updates active palette Object', () => {
+test('SET_CUSTOM action updates active palette Object [palettes-reducer-set-custom]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
     type: SET_CUSTOM,
@@ -47,7 +47,7 @@ test('SET_CUSTOM action updates active palette Object', () => {
   expect(initialPaletteState.active['terra-aod']).toEqual(undefined);
   expect(response.active['terra-aod']).toBeDefined();
 });
-test('INIT_SECOND_LAYER_GROUP action updates active palette Object', () => {
+test('INIT_SECOND_LAYER_GROUP action updates active palette Object [palettes-reducer-second-layer-group]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const previousState = update(initialPaletteState, {
     active: { $set: { test: 'tests' } },
@@ -61,7 +61,7 @@ test('INIT_SECOND_LAYER_GROUP action updates active palette Object', () => {
   expect(previousState.activeB.test).toBeUndefined();
   expect(response.activeB.test).toEqual('tests');
 });
-test('REQUEST_PALETTE_START action updates active palette Object', () => {
+test('REQUEST_PALETTE_START action updates active palette Object [palettes-reducer-request-palette]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
     type: REQUEST_PALETTE_START,
@@ -70,7 +70,7 @@ test('REQUEST_PALETTE_START action updates active palette Object', () => {
   expect(initialPaletteState.isLoading.test).toBeUndefined();
   expect(response.isLoading.test).toBeTruthy();
 });
-test('REQUEST_PALETTE_SUCCESS action updates active palette Object', () => {
+test('REQUEST_PALETTE_SUCCESS action updates active palette Object [palettes-reducer-success]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
     type: REQUEST_PALETTE_SUCCESS,
@@ -81,7 +81,7 @@ test('REQUEST_PALETTE_SUCCESS action updates active palette Object', () => {
   expect(response.rendered.test).toEqual('test-response');
 });
 
-test('BULK_PALETTE_RENDERING_SUCCESS action merges rendered palettes with new palettes from action', () => {
+test('BULK_PALETTE_RENDERING_SUCCESS action merges rendered palettes with new palettes from action [palettes-reducer-bulk-render]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const updatedState = update(initialPaletteState, {
     rendered: { $set: { 'test-1': 'test-1' } },

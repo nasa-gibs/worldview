@@ -8,7 +8,7 @@ import {
 import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 
-const UpdateOpacity = (props) => {
+function UpdateOpacity(props) {
   const {
     action,
     activeLayers,
@@ -69,15 +69,20 @@ const UpdateOpacity = (props) => {
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
+      // find the layer in each projection
       const layerGroup = findLayer(def, activeString);
-      layerGroup.getLayersArray().forEach((l) => {
+      // get an array of layers from each projection
+      const layerGroupLayers = layerGroup.getLayersArray();
+      // need to set opacity for layerGroup and each individual layer
+      layerGroup.setOpacity(opacity);
+      layerGroupLayers.forEach((l) => {
         l.setOpacity(opacity);
       });
     }
     updateLayerVisibilities();
   };
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const { compare } = state;

@@ -18,7 +18,7 @@ import MapUI from './mapUI';
 
 const { events } = util;
 
-const CombineUI = (props) => {
+function CombineUI(props) {
   const {
     models,
     config,
@@ -114,18 +114,16 @@ const CombineUI = (props) => {
   }, [ui]);
 
   return (
-    <>
-      <MapUI
-        models={models}
-        compareMapUi={compareMapUi}
-        config={config}
-        ui={ui}
-        setUI={setUI}
-        layerQueue={layerQueue}
-      />
-    </>
+    <MapUI
+      models={models}
+      compareMapUi={compareMapUi}
+      config={config}
+      ui={ui}
+      setUI={setUI}
+      layerQueue={layerQueue}
+    />
   );
-};
+}
 
 export default CombineUI;
 

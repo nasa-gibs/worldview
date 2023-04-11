@@ -53,7 +53,7 @@ import {
 } from '../modules/animation/actions';
 import GifButton from '../components/animation-widget/gif-button';
 
-const RangeHandle = (props) => {
+function RangeHandle(props) {
   const {
     value, offset, dragging, ...restProps
   } = props;
@@ -76,7 +76,7 @@ const RangeHandle = (props) => {
       />
     </>
   );
-};
+}
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
@@ -206,39 +206,39 @@ class AnimationWidget extends React.Component {
     }
   }
 
-    onMobileDateChangeStart = (date) => {
-      const { onUpdateStartDate } = this.props;
-      const dateObj = new Date(date);
-      this.debounceDateUpdate(dateObj);
-      onUpdateStartDate(dateObj);
+  onMobileDateChangeStart = (date) => {
+    const { onUpdateStartDate } = this.props;
+    const dateObj = new Date(date);
+    this.debounceDateUpdate(dateObj);
+    onUpdateStartDate(dateObj);
+  };
+
+  onMobileDateChangeEnd = (date) => {
+    const { onUpdateEndDate } = this.props;
+    const dateObj = new Date(date);
+    this.debounceDateUpdate(dateObj);
+    onUpdateEndDate(dateObj);
+  };
+
+  onIntervalSelect(timeScale, openModal) {
+    let delta;
+    const { onIntervalSelect, customInterval, customDelta } = this.props;
+    const customSelected = timeScale === 'custom';
+
+    if (openModal) {
+      this.toggleCustomIntervalModal(openModal);
+      return;
     }
 
-    onMobileDateChangeEnd = (date) => {
-      const { onUpdateEndDate } = this.props;
-      const dateObj = new Date(date);
-      this.debounceDateUpdate(dateObj);
-      onUpdateEndDate(dateObj);
+    if (customSelected && customInterval && customDelta) {
+      timeScale = customInterval;
+      delta = customDelta;
+    } else {
+      timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
+      delta = 1;
     }
-
-    onIntervalSelect(timeScale, openModal) {
-      let delta;
-      const { onIntervalSelect, customInterval, customDelta } = this.props;
-      const customSelected = timeScale === 'custom';
-
-      if (openModal) {
-        this.toggleCustomIntervalModal(openModal);
-        return;
-      }
-
-      if (customSelected && customInterval && customDelta) {
-        timeScale = customInterval;
-        delta = customDelta;
-      } else {
-        timeScale = Number(TIME_SCALE_TO_NUMBER[timeScale]);
-        delta = 1;
-      }
-      onIntervalSelect(delta, timeScale, customSelected);
-    }
+    onIntervalSelect(delta, timeScale, customSelected);
+  }
 
   onPushPlay = () => {
     const {
@@ -251,7 +251,7 @@ class AnimationWidget extends React.Component {
     } = this.zeroDates();
     onUpdateStartAndEndDate(startDate, endDate);
     onPushPlay();
-  }
+  };
 
   /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
@@ -288,7 +288,7 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate,
     };
-  }
+  };
 
   toggleCustomIntervalModal = (isOpen) => {
     const { toggleCustomModal } = this.props;

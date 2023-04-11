@@ -37,19 +37,19 @@ class CustomIntervalSelector extends PureComponent {
     if (value >= 0 && value <= 1000) {
       changeCustomInterval(value, customInterval);
     }
-  }
+  };
 
   changeZoomLevel = (zoomLevel) => {
     const { changeCustomInterval, customDelta } = this.props;
     changeCustomInterval(customDelta, TIME_SCALE_TO_NUMBER[zoomLevel]);
-  }
+  };
 
-  handleKeyPress= (e) => {
+  handleKeyPress = (e) => {
     const { closeModal } = this.props;
     if (e.key === 'Escape') {
       closeModal();
     }
-  }
+  };
 
   render() {
     const {

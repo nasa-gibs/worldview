@@ -5,7 +5,7 @@ import Checkbox from '../util/checkbox';
 
 const GLOBAL_LAT_LONG_EXTENT = [-180, -90, 180, 90];
 
-const GlobalSelectCheckbox = (props) => {
+function GlobalSelectCheckbox(props) {
   const {
     onLatLongChange, geoLatLong, proj, map,
   } = props;
@@ -38,7 +38,7 @@ const GlobalSelectCheckbox = (props) => {
       />
     </div>
   );
-};
+}
 GlobalSelectCheckbox.propTypes = {
   onLatLongChange: PropTypes.func,
   geoLatLong: PropTypes.array,

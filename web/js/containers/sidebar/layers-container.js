@@ -25,6 +25,7 @@ import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 function LayersContainer (props) {
+  console.log('LayersContainer');
   const {
     activeLayersMap,
     baselayers,
@@ -70,6 +71,7 @@ function LayersContainer (props) {
 
   const renderLayerList = (group, idx) => {
     const { groupName, layers, collapsed } = group;
+    console.log(layers);
     const layersForGroup = layers.map((id) => activeLayersMap[id]);
     return layers && (
       <Draggable

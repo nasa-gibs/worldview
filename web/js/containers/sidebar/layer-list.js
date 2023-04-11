@@ -18,7 +18,7 @@ import {
 } from '../../modules/layers/selectors';
 import {
   reorderLayers as reorderLayersAction,
-  removeLayer as removeLayerAction,
+  removeGroup as removeGroupAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 
@@ -48,6 +48,7 @@ function LayerList(props) {
     removeLayers,
     reorderLayers,
     title,
+    removeGroup,
     toggleVisibility,
     toggleCollapse,
     zots,
@@ -135,7 +136,7 @@ function LayerList(props) {
         <DropdownItem id="hide-all" onClick={() => toggleVisibility(groupLayerIds, false)}>
           Hide All Layers
         </DropdownItem>
-        <DropdownItem id="remove-group" onClick={() => removeLayers(groupLayerIds)}>
+        <DropdownItem id="remove-group" onClick={() => removeGroup(groupLayerIds)}>
           Remove Group
         </DropdownItem>
       </DropdownMenu>
@@ -253,10 +254,8 @@ const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
     dispatch(reorderLayersAction(newLayerArray));
   },
-  removeLayers: (layerIds) => {
-    layerIds.forEach((id) => {
-      dispatch(removeLayerAction(id));
-    });
+  removeGroup: (layerIds) => {
+    dispatch(removeGroupAction(layerIds));
   },
   toggleVisibility: (layerIds, visible) => {
     dispatch(toggleGroupVisibilityAction(layerIds, visible));

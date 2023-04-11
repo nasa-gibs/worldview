@@ -159,7 +159,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
+  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
 
   calcBufferSize() {
     const { numberOfFrames, speed } = this.props;
@@ -269,7 +269,7 @@ class PlayQueue extends React.Component {
     this.bufferObject = {};
     this.bufferArray = [];
     this.inQueueObject = {};
-  }
+  };
 
   nextDate(date) {
     const { interval, delta } = this.props;

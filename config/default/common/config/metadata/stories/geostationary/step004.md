@@ -1,1 +1,1 @@
-The Geostationary Operational Environmental Satellites (GOES)-West satellite (currently, GOES-S/GOES-17) is centered on 137.2 degrees West, covering most of the Pacific Ocean, the USA, most of Canada, Central America, the western half of South America, and parts of Australasia.
+The Geostationary Operational Environmental Satellites (GOES)-West satellite (currently, GOES-T/GOES-18) is centered on 137.2 degrees West, covering most of the Pacific Ocean, the USA, most of Canada, Central America, the western half of South America, and parts of Australasia.
