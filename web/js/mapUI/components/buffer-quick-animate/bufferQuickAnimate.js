@@ -35,7 +35,9 @@ function BufferQuickAnimate(props) {
     }
 
     const currentDate = preloaded ? lastPreloadDate : selectedDate;
+    console.log('bufferAnim', currentDate)
     const direction = arrowDown === 'right' ? 1 : -1;
+    console.log('direction', direction)
     let nextDate = getNextDateTime(dateCompareState, direction, currentDate);
 
     for (let step = 1; step <= BUFFER_SIZE; step += 1) {
