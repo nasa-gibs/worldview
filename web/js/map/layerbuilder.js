@@ -14,7 +14,6 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -116,22 +115,38 @@ export default function mapLayerBuilder(config, cache, store) {
     return null;
   }
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   // tile load function calls this when a tile returns an error
   // extract needed information about tile and push to errorTiles array
   const handleTileError = (tile, layerId, sourceURL) => {
-    // console.log(`Error loading tile for layer '${layerId}' from '${sourceURL}':`, tile);
-    // Handle the error, e.g., display an error message, log the missing tile, etc.
-    const date = extractDateFromURL(sourceURL);
-    const matrixColRow = tile.tileCoord;
-    const errorObj = {
-      layerId,
-      date,
-      matrixColRow,
-      sourceURL,
-    };
-    errorTiles.push(errorObj);
-  };
+    const state = store.getState();
+    // we check this here again because we don't want to push tiles for other dates
+    const { selected } = state.date;
+    const { isKioskModeActive } = state.ui;
+    if (isKioskModeActive) {
+      const currentDate = formatDate(selected);
+      const date = extractDateFromURL(sourceURL);
 
+      if (currentDate === date) {
+        const matrixColRow = tile.tileCoord;
+        const errorObj = {
+          layerId,
+          date,
+          matrixColRow,
+          sourceURL,
+        };
+        errorTiles.push(errorObj);
+      }
+    }
+  };
 
   /**
    * We define our own tile loading function in order to capture custom header values
@@ -260,6 +275,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
+    const { ui: { isKioskModeActive } } = state;
     options.group = options.group || activeString;
 
     const {
@@ -274,6 +290,11 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
+
+    // dispatch action to keep track of error tiles
+    if (errorTiles.length && isKioskModeActive) {
+      store.dispatch(setErrorTiles(errorTiles));
+    }
 
     return layer;
   };
@@ -517,8 +538,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
-    // push error tiles to store.. ui.errorTiles
-    store.dispatch(setErrorTiles(errorTiles));
     return new OlLayerTile({
       extent: polygon ? granuleExtent : extent,
       preload: 0,
@@ -727,6 +746,8 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isWMS = true;
     return layer;
   };
+
+
 
   return {
     layerKey,
