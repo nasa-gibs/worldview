@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-import { Draw as OlInteractionDraw } from 'ol/interaction';
-import { createBox } from 'ol/interaction/Draw.js';
-import { Vector as OlVectorLayer } from 'ol/layer';
-import { transform } from 'ol/proj';
+// import { Draw as OlInteractionDraw } from 'ol/interaction';
+// import { createBox } from 'ol/interaction/Draw.js';
+// import { Vector as OlVectorLayer } from 'ol/layer';
+// import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
 import {
   toggleChartingAOIOnOff,
@@ -18,53 +17,51 @@ import {
   updateRequestStatusMessageAction,
 } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
-import { CRS } from '../../modules/map/constants';
-import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+// import { CRS } from '../../modules/map/constants';
+// import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info.js';
 import SimpleStatistics from '../charting/simple-statistics.js';
 import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
-import {
-  drawStyles, vectorStyles,
-} from '../charting/charting-area-of-interest-style.js';
+// import {
+//   drawStyles, vectorStyles,
+// } from '../charting/charting-area-of-interest-style.js';
 import { getSentinelHubToken, getSentinelHubRequestParams, getSentinelHubRequestData } from '../../modules/charting/sentinelHubScripts.js';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
 const sources = {};
 let init = false;
-let draw;
+// let draw;
 
 function ChartingModeOptions (props) {
   const {
-    activeLayer,
-    activeLayers,
+    // activeLayer,
+    // activeLayers,
     chartRequestInProgress,
-    toggleAreaOfInterestActive,
-    toggleAreaOfInterestSelected,
-    updateAOICoordinates,
+    // toggleAreaOfInterestActive,
+    // toggleAreaOfInterestSelected,
+    // updateAOICoordinates,
     updateRequestInProgress,
     updateRequestStatusMessage,
     openChartingInfoModal,
-    onChartDateButtonClick,
-    displaySimpleStats,
     displayChart,
-    openChartingDateModal,
-    olMap,
+    // openChartingDateModal,
+    // olMap,
     requestStatusMessage,
-    crs,
-    proj,
+    // crs,
+    // proj,
     projections,
     isChartingActive,
     isMobile,
-    aoiSelected,
-    aoiActive,
-    aoiCoordinates,
-    timeSpanSelection,
-    timeSpanStartDate,
-    timeSpanEndDate,
-    timelineStartDate,
-    timelineEndDate,
+    // aoiSelected,
+    // aoiActive,
+    // aoiCoordinates,
+    // timeSpanSelection,
+    // timeSpanStartDate,
+    // timeSpanEndDate,
+    // timelineStartDate,
+    // timelineEndDate,
   } = props;
 
   useEffect(() => {
@@ -78,131 +75,131 @@ function ChartingModeOptions (props) {
     }
   }, [projections]);
 
-  useEffect(() => {
-    resetAreaOfInterest();
-    endDrawingAreaOfInterest();
-  }, [isChartingActive]);
+  // useEffect(() => {
+  //   resetAreaOfInterest();
+  //   endDrawingAreaOfInterest();
+  // }, [isChartingActive]);
 
-  const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
-  const primaryDate = formatDateString(initialStartDate);
-  const secondaryDate = formatDateString(initialEndDate);
+  // const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
+  // const primaryDate = formatDateString(initialStartDate);
+  // const secondaryDate = formatDateString(initialEndDate);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
    * @param {Date} start
    * @param {Date} end
    */
-  function initializeDates(start, end) {
-    const startDate = start === undefined ? timelineStartDate : start;
-    const endDate = end === undefined ? timelineEndDate : end;
-    return { initialStartDate: startDate, initialEndDate: endDate };
-  }
+  // function initializeDates(start, end) {
+  //   const startDate = start === undefined ? timelineStartDate : start;
+  //   const endDate = end === undefined ? timelineEndDate : end;
+  //   return { initialStartDate: startDate, initialEndDate: endDate };
+  // }
 
-  const onAreaOfInterestButtonClick = (evt) => {
-    toggleAreaOfInterestActive();
-    if (!aoiActive) {
-      beginDrawingAOI();
-    } else {
-      endDrawingAreaOfInterest();
-    }
-  };
+  // const onAreaOfInterestButtonClick = (evt) => {
+  //   toggleAreaOfInterestActive();
+  //   if (!aoiActive) {
+  //     beginDrawingAOI();
+  //   } else {
+  //     endDrawingAreaOfInterest();
+  //   }
+  // };
 
-  function beginDrawingAOI () {
-    resetAreaOfInterest();
-    draw = new OlInteractionDraw({
-      source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
-      type: 'Circle', // Geometry type of the geometries being drawn with this instance.
-      style: drawStyles, // Style used to indicate Area of Interest
-      // This is from measurement tool; validate area selected
-      condition(e) {
-        const pixel = [e.originalEvent.x, e.originalEvent.y];
-        const coord = olMap.getCoordinateFromPixel(pixel);
-        const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
-        return areCoordinatesWithinExtent(proj, tCoord);
-      },
-      geometryFunction: createBox(), // Function that is called when a geometry's coordinates are updated.
+  // function beginDrawingAOI () {
+  //   resetAreaOfInterest();
+  //   draw = new OlInteractionDraw({
+  //     source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
+  //     type: 'Circle', // Geometry type of the geometries being drawn with this instance.
+  //     style: drawStyles, // Style used to indicate Area of Interest
+  //     // This is from measurement tool; validate area selected
+  //     condition(e) {
+  //       const pixel = [e.originalEvent.x, e.originalEvent.y];
+  //       const coord = olMap.getCoordinateFromPixel(pixel);
+  //       const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
+  //       return areCoordinatesWithinExtent(proj, tCoord);
+  //     },
+  //     geometryFunction: createBox(), // Function that is called when a geometry's coordinates are updated.
 
-    });
-    olMap.addInteraction(draw);
-    draw.on('drawend', drawEndCallback);
+  //   });
+  //   olMap.addInteraction(draw);
+  //   draw.on('drawend', drawEndCallback);
 
-    if (!vectorLayers[crs]) {
-      vectorLayers[crs] = new OlVectorLayer({
-        source: sources[crs],
-        style: vectorStyles,
-        map: olMap,
-      });
-    }
-  }
+  //   if (!vectorLayers[crs]) {
+  //     vectorLayers[crs] = new OlVectorLayer({
+  //       source: sources[crs],
+  //       style: vectorStyles,
+  //       map: olMap,
+  //     });
+  //   }
+  // }
 
-  const drawEndCallback = ({ feature }) => {
-    // Add the draw feature to the collection
-    AOIFeatureObj[crs][feature.ol_uid] = {
-      feature,
-    };
-    endDrawingAreaOfInterest();
-    toggleAreaOfInterestActive();
-    toggleAreaOfInterestSelected();
-    getAreaOfInterestCoordinates(feature.getGeometry());
-  };
+  // const drawEndCallback = ({ feature }) => {
+  //   // Add the draw feature to the collection
+  //   AOIFeatureObj[crs][feature.ol_uid] = {
+  //     feature,
+  //   };
+  //   endDrawingAreaOfInterest();
+  //   toggleAreaOfInterestActive();
+  //   toggleAreaOfInterestSelected();
+  //   getAreaOfInterestCoordinates(feature.getGeometry());
+  // };
 
-  function endDrawingAreaOfInterest () {
-    if (draw) {
-      olMap.removeInteraction(draw);
-    }
-  }
+  // function endDrawingAreaOfInterest () {
+  //   if (draw) {
+  //     olMap.removeInteraction(draw);
+  //   }
+  // }
 
-  function resetAreaOfInterest() {
-    Object.values(AOIFeatureObj[crs]).forEach(
-      ({ feature }) => {
-        sources[crs].removeFeature(feature);
-      },
-    );
+  // function resetAreaOfInterest() {
+  //   Object.values(AOIFeatureObj[crs]).forEach(
+  //     ({ feature }) => {
+  //       sources[crs].removeFeature(feature);
+  //     },
+  //   );
 
-    if (vectorLayers[crs]) {
-      vectorLayers[crs].setMap(null);
-      vectorLayers[crs] = null;
-    }
+  //   if (vectorLayers[crs]) {
+  //     vectorLayers[crs].setMap(null);
+  //     vectorLayers[crs] = null;
+  //   }
 
-    toggleAreaOfInterestSelected(false);
-    updateAOICoordinates(null);
-  }
+  //   toggleAreaOfInterestSelected(false);
+  //   updateAOICoordinates(null);
+  // }
 
-  function getAreaOfInterestCoordinates(geometry) {
-    updateAOICoordinates(geometry.getExtent());
-  }
+  // function getAreaOfInterestCoordinates(geometry) {
+  //   updateAOICoordinates(geometry.getExtent());
+  // }
 
-  function getActiveChartingLayer() {
-    const liveLayers = getLiveLayers();
-    const filteredLayerList = liveLayers.filter((layer) => layer.id === activeLayer);
-    if (filteredLayerList.length > 0) {
-      return filteredLayerList[0];
-    }
-    return null;
-  }
+  // function getActiveChartingLayer() {
+  //   const liveLayers = getLiveLayers();
+  //   const filteredLayerList = liveLayers.filter((layer) => layer.id === activeLayer);
+  //   if (filteredLayerList.length > 0) {
+  //     return filteredLayerList[0];
+  //   }
+  //   return null;
+  // }
 
   /**
    * Filters the layers array & returns those with visible set to 'true'.
    */
-  function getLiveLayers() {
-    return activeLayers.filter((obj) => obj.visible === true);
-  }
+  // function getLiveLayers() {
+  //   return activeLayers.filter((obj) => obj.visible === true);
+  // }
 
-  function formatDateString(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
-    return `${year} ${month} ${day}`;
-  }
+  // function formatDateString(dateObj) {
+  //   const date = new Date(dateObj);
+  //   const year = date.getFullYear();
+  //   const month = date.toLocaleString('default', { month: 'short' });
+  //   const day = `0${date.getDate()}`.slice(-2);
+  //   return `${year} ${month} ${day}`;
+  // }
 
-  function formatDateForImageStat(dateStr) {
-    const dateParts = dateStr.split(' ');
-    const year = dateParts[0];
-    const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
-    const day = dateParts[2];
-    return `${year}-${month}-${day}`;
-  }
+  // function formatDateForImageStat(dateStr) {
+  //   const dateParts = dateStr.split(' ');
+  //   const year = dateParts[0];
+  //   const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
+  //   const day = dateParts[2];
+  //   return `${year}-${month}-${day}`;
+  // }
 
   async function onChartOrStatsButtonClick() {
     // chartRequestInProgress
@@ -269,53 +266,53 @@ function ChartingModeOptions (props) {
    * Provides a default AOI of the entire map if unspecified, and modifies the Openlayers coordinates for use with imageStat API
    * @param {Object} aoi (Area Of Interest)
    */
-  function convertOLcoordsForImageStat(aoi) {
-    if (aoi == null) {
-      return [-90, -180, 90, 180];
-    }
-    // lat/lon needs to be lon/lat; swap index 0 & 1, and index 2 & 3
-    return [aoi[1], aoi[0], aoi[3], aoi[2]];
-  }
+  // function convertOLcoordsForImageStat(aoi) {
+  //   if (aoi == null) {
+  //     return [-90, -180, 90, 180];
+  //   }
+  //   // lat/lon needs to be lon/lat; swap index 0 & 1, and index 2 & 3
+  //   return [aoi[1], aoi[0], aoi[3], aoi[2]];
+  // }
 
   /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpanSelection) {
-    const startDateForImageStat = formatDateForImageStat(primaryDate);
-    const endDateForImageStat = formatDateForImageStat(secondaryDate);
-    const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
-    return {
-      timestamp: startDateForImageStat, // start date
-      endTimestamp: endDateForImageStat, // end date
-      type: timeSpanSelection === 'range' ? 'series' : 'date',
-      steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
-      layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
-      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
-      areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
-      bins: 10, // Number of bins to used in returned histogram. e.g. 10
-      scale: 1, // unused
-    };
-  }
+  // function getImageStatRequestParameters(layerInfo, timeSpanSelection) {
+  //   const startDateForImageStat = formatDateForImageStat(primaryDate);
+  //   const endDateForImageStat = formatDateForImageStat(secondaryDate);
+  //   const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
+  //   return {
+  //     timestamp: startDateForImageStat, // start date
+  //     endTimestamp: endDateForImageStat, // end date
+  //     type: timeSpanSelection === 'range' ? 'series' : 'date',
+  //     steps: 10, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
+  //     layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
+  //     colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
+  //     areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
+  //     bins: 10, // Number of bins to used in returned histogram. e.g. 10
+  //     scale: 1, // unused
+  //   };
+  // }
 
-  function getImageStatStatsRequestURL(uriParameters) {
-    const {
-      type,
-      timestamp,
-      endTimestamp,
-      steps,
-      layer,
-      colormap,
-      areaOfInterestCoords,
-      bins,
-    } = uriParameters;
-    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
-    if (type !== 'date') {
-      requestURL += `&end_timestamp=${endTimestamp}`;
-    }
-    return requestURL;
-  }
+  // function getImageStatStatsRequestURL(uriParameters) {
+  //   const {
+  //     type,
+  //     timestamp,
+  //     endTimestamp,
+  //     steps,
+  //     layer,
+  //     colormap,
+  //     areaOfInterestCoords,
+  //     bins,
+  //   } = uriParameters;
+  //   let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+  //   if (type !== 'date') {
+  //     requestURL += `&end_timestamp=${endTimestamp}`;
+  //   }
+  //   return requestURL;
+  // }
 
   /**
    * Execute the Sentinel Hub API request
@@ -353,79 +350,79 @@ function ChartingModeOptions (props) {
    * Execute the ImageStat API request
    * @param {String} simpleStatsURI
    */
-  async function getImageStatData(simpleStatsURI) {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
+  // async function getImageStatData(simpleStatsURI) {
+  //   const requestOptions = {
+  //     method: 'GET',
+  //     redirect: 'follow',
+  //   };
 
-    try {
-      const response = await fetch(simpleStatsURI, requestOptions);
-      const data = await response.text();
-      // This is the response when the imageStat server fails
-      if (data === 'Internal Server Error') {
-        return {
-          ok: false,
-          body: data,
-        };
-      }
+  //   try {
+  //     const response = await fetch(simpleStatsURI, requestOptions);
+  //     const data = await response.text();
+  //     // This is the response when the imageStat server fails
+  //     if (data === 'Internal Server Error') {
+  //       return {
+  //         ok: false,
+  //         body: data,
+  //       };
+  //     }
 
-      return {
-        ok: true,
-        body: JSON.parse(data),
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
-    }
-  }
+  //     return {
+  //       ok: true,
+  //       body: JSON.parse(data),
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       ok: false,
+  //       error,
+  //     };
+  //   }
+  // }
 
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
    * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
    */
-  function formatGIBSDataForRecharts(data) {
-    const xAxisNames = getKeysFromObj(data.min);
-    const rechartsData = [];
-    for (let i = 0; i < xAxisNames.length; i += 1) {
-      const name = xAxisNames[i];
-      const entry = {
-        name: name.split('T')[0], // Remove the time element from the date string
-        min: data.min[name],
-        max: data.max[name],
-        mean: data.mean[name],
-        median: data.median[name],
-        stddev: data.stdev[name],
-      };
-      rechartsData.push(entry);
-    }
-    return rechartsData;
-  }
+  // function formatGIBSDataForRecharts(data) {
+  //   const xAxisNames = getKeysFromObj(data.min);
+  //   const rechartsData = [];
+  //   for (let i = 0; i < xAxisNames.length; i += 1) {
+  //     const name = xAxisNames[i];
+  //     const entry = {
+  //       name: name.split('T')[0], // Remove the time element from the date string
+  //       min: data.min[name],
+  //       max: data.max[name],
+  //       mean: data.mean[name],
+  //       median: data.median[name],
+  //       stddev: data.stdev[name],
+  //     };
+  //     rechartsData.push(entry);
+  //   }
+  //   return rechartsData;
+  // }
 
-  function getKeysFromObj(data) {
-    return Object.keys(data);
-  }
-  function getSentinelHubKeysFromObj(data) {
-    const arr = [];
-    for (let i = 0; i < data.length; i += 1) {
-      arr.push(data[i].interval.from);
-    }
-    return arr;
-  }
+  // function getKeysFromObj(data) {
+  //   return Object.keys(data);
+  // }
+  // function getSentinelHubKeysFromObj(data) {
+  //   const arr = [];
+  //   for (let i = 0; i < data.length; i += 1) {
+  //     arr.push(data[i].interval.from);
+  //   }
+  //   return arr;
+  // }
 
-  function onDateIconClick() {
-    const layerInfo = getActiveChartingLayer();
-    const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-    const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
-    openChartingDateModal({ layerStartDate, layerEndDate });
-  }
+  // function onDateIconClick() {
+  //   const layerInfo = getActiveChartingLayer();
+  //   const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
+  //   const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
+  //   openChartingDateModal({ layerStartDate, layerEndDate });
+  // }
 
-  const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
-  const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
-  const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
-  const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
+  // const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
+  // const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
+  // const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
+  // const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   const chartRequestMessage = chartRequestInProgress ? 'In progress...' : '';
 
   return (

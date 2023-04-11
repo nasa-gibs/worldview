@@ -70,7 +70,7 @@ function evaluatePixel(samples) {
     }
 }`;
 
-const stats_request = {
+const statsRequest = {
   input: {
     bounds: {
       geometry: {
@@ -127,10 +127,10 @@ const stats_request = {
   },
 };
 
-const requestOptions = {
-  method: 'GET',
-  redirect: 'follow',
-};
+// const requestOptions = {
+//   method: 'GET',
+//   redirect: 'follow',
+// };
 
 const sentinelHubApiUrl = 'https://services.sentinel-hub.com/api/v1/statistics';
 
@@ -141,7 +141,7 @@ const getSentinelHubRequestParams = (token) => ({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   },
-  body: JSON.stringify(stats_request),
+  body: JSON.stringify(statsRequest),
 });
 
 async function getSentinelHubRequestData(requestParams) {

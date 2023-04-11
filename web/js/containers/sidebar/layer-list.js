@@ -45,7 +45,7 @@ function LayerList(props) {
     layers,
     numVisible,
     projId,
-    removeLayers,
+    // removeLayers,
     reorderLayers,
     title,
     removeGroup,
