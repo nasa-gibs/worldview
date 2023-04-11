@@ -90,7 +90,7 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
     dispatch({
       type: SET_MARKER,
       coordinates: {
-        id: Math.floor(longitude + latitude),
+        id: Math.floor(longitude * 1000 + latitude * 1000 + Math.random() * 1000),
         longitude,
         latitude,
       },
