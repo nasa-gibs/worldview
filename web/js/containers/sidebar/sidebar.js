@@ -351,7 +351,6 @@ class Sidebar extends React.Component {
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="layers">
                   {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
-                  {/* {this.getProductsToRender(activeTab, isCompareMode)} */}
                 </TabPane>
                 {naturalEvents && activeTab === 'events' && (
                 <TabPane tabId="events">
