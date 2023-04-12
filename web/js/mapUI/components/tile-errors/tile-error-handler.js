@@ -7,12 +7,18 @@ import { getNextDateTime } from '../../../modules/date/util';
 import { subdailyLayersActive } from '../../../modules/layers/selectors';
 
 
-function formatDate(dateString) {
+function formatDate(dateString, hasSubdailyLayers) {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
 
+  if (hasSubdailyLayers) {
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  }
   return `${year}-${month}-${day}`;
 }
 
@@ -45,7 +51,7 @@ function TileErrorHandler({ action }) {
   }, [action]);
 
   const handleErrorTiles = () => {
-    const currentDate = formatDate(selectedDate);
+    const currentDate = formatDate(selectedDate, false);
     const errorTilesOnCurrentDate = errorTiles.filter((tile) => currentDate === tile.date).length;
     console.log('There are ', errorTilesOnCurrentDate, ' on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
@@ -60,8 +66,9 @@ function TileErrorHandler({ action }) {
   };
 
   const handleErrorTilesSubdaily = () => {
-    const currentDate = formatDate(selectedDate);
+    const currentDate = formatDate(selectedDate, true);
     console.log(currentDate);
+    console.log(errorTiles);
   };
 
   return null;

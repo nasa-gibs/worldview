@@ -18,7 +18,13 @@ import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
 import { getGranuleTileLayerExtent } from './granule/util';
-import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
+import {
+  createVectorUrl,
+  getGeographicResolutionWMS,
+  mergeBreakpointLayerAttributes,
+  formatReduxDate,
+  extractDateFromTileErrorURL,
+} from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
 import { setErrorTiles } from '../modules/ui/actions';
@@ -104,78 +110,23 @@ export default function mapLayerBuilder(config, cache, store) {
     store.dispatch(updateLayerCollection(id));
   };
 
-  function extractDateFromURL(url, hasSubdailyLayers) {
-    const regex = hasSubdailyLayers ? /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/ : /TIME=([\d-]+)T/;
-    const match = url.match(regex);
-
-    if (match && match[1]) {
-      return match[1];
-    }
-    console.error('Date not found in the URL.');
-    return null;
-  }
-
-  function formatDate(dateString, hasSubdailyLayers) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    if (hasSubdailyLayers) {
-      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    }
-    return `${year}-${month}-${day}`;
-  }
-
-  function updateReduxDateTimezone(reduxDate, urlDate) {
-    const parsedReduxDate = new Date(reduxDate);
-    const parsedUrlDate = new Date(urlDate);
-    // Get the timezone offset in minutes and convert it to milliseconds
-    const timezoneOffsetMillis = parsedUrlDate.getTimezoneOffset() * 60 * 1000;
-    // Apply the timezone offset to the reduxDate
-    const adjustedReduxDate = new Date(parsedReduxDate.getTime() + timezoneOffsetMillis);
-    // Set the hour of the adjustedReduxDate to match the hour of the urlDate
-    adjustedReduxDate.setHours(parsedUrlDate.getHours());
-    // Round down the minutes to the nearest multiple of 10
-    const roundedMinutes = Math.floor(parsedUrlDate.getMinutes() / 10) * 10;
-    // Set the rounded minutes
-    adjustedReduxDate.setMinutes(roundedMinutes);
-    // Format the updated reduxDate back to a string
-    const year = adjustedReduxDate.getFullYear();
-    const month = String(adjustedReduxDate.getMonth() + 1).padStart(2, '0');
-    const day = String(adjustedReduxDate.getDate()).padStart(2, '0');
-    const hours = String(adjustedReduxDate.getHours()).padStart(2, '0');
-    const minutes = String(adjustedReduxDate.getMinutes()).padStart(2, '0');
-
-    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
-  }
-
-  // tile load function calls this when a tile returns an error
-  // extract needed information about tile and push to errorTiles array
+  // called from tileLoadFunction() when a tile returns an error
   const handleTileError = (tile, layerId, sourceURL) => {
     const state = store.getState();
     const hasSubdailyLayers = subdailyLayersActive(state);
-    // we check this here again because we don't want to push tiles for other dates
-    const { selected } = state.date;
+    const { selected: reduxDate } = state.date;
     const { isKioskModeActive } = state.ui;
+
     if (isKioskModeActive) {
-      const currentDate = formatDate(selected, hasSubdailyLayers);
-      const date = extractDateFromURL(sourceURL, hasSubdailyLayers);
-      let timezoneAdjustedDate;
-      if (hasSubdailyLayers) {
-        timezoneAdjustedDate = updateReduxDateTimezone(currentDate, date);
-      }
+      const urlDate = extractDateFromTileErrorURL(sourceURL, hasSubdailyLayers);
+      const currentDate = formatReduxDate(reduxDate, urlDate, hasSubdailyLayers);
 
-      const comparisonDate = hasSubdailyLayers ? timezoneAdjustedDate : currentDate;
-
-      if (date === comparisonDate) {
+      // we don't want to store cached dates in the error tiles
+      if (urlDate === currentDate) {
         const matrixColRow = tile.tileCoord;
         const errorObj = {
           layerId,
-          date,
+          date: urlDate,
           matrixColRow,
           sourceURL,
         };
@@ -782,8 +733,6 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isWMS = true;
     return layer;
   };
-
-
 
   return {
     layerKey,
