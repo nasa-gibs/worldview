@@ -263,10 +263,21 @@
   background-position: -14px;
 }
 
-.distraction-free-active .wv-map-zoom,
+.distraction-free-active .wv-map-zoom {
+  display: none;
+}
+
 .distraction-free-active .wv-map-scale-imperial,
 .distraction-free-active .wv-map-scale-metric {
-  display: none;
+  right: 15px;
+}
+
+.distraction-free-active .wv-map-scale-imperial {
+  bottom: 28px;
+}
+
+.distraction-free-active .wv-map-scale-metric {
+  bottom: 45px;
 }
 
 .dateline-text {
