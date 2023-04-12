@@ -111,11 +111,13 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   // called from tileLoadFunction() when a tile returns an error
-  const handleTileError = (tile, layerId, sourceURL) => {
+  const handleTileError = (tile, layer, sourceURL) => {
     const state = store.getState();
     const hasSubdailyLayers = subdailyLayersActive(state);
     const { selected: reduxDate } = state.date;
     const { isKioskModeActive } = state.ui;
+
+    const { id, layerPeriod } = layer;
 
     if (isKioskModeActive) {
       const urlDate = extractDateFromTileErrorURL(sourceURL, hasSubdailyLayers);
@@ -125,7 +127,8 @@ export default function mapLayerBuilder(config, cache, store) {
       if (urlDate === currentDate) {
         const matrixColRow = tile.tileCoord;
         const errorObj = {
-          layerId,
+          id,
+          layerPeriod,
           date: urlDate,
           matrixColRow,
           sourceURL,
@@ -168,11 +171,11 @@ export default function mapLayerBuilder(config, cache, store) {
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
-        handleTileError(tile, layer.id, src);
+        handleTileError(tile, layer, src);
         tile.setState(TileState.ERROR);
       }
     } catch (e) {
-      handleTileError(tile, layer.id, src);
+      handleTileError(tile, layer, src);
       tile.setState(TileState.ERROR);
     }
   };
