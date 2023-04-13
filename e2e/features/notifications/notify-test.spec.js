@@ -20,7 +20,7 @@ test.beforeAll(async ({ browser }) => {
   selectors = createSelectors(page)
   infoButtonIcon = page.locator('#wv-info-button svg.svg-inline--fa')
   infoMenu = page.locator('#toolbar_info')
-  notificationsListItem = page.locator('#notifications_info_item .fa-exclamation-circle')
+  notificationsListItem = page.locator('#notifications_info_item .fa-circle-exclamation')
   tooltipSelector = page.locator('.tooltip-inner div')
 })
 
@@ -67,7 +67,7 @@ test('Alert, outage, and message content is highlighted and found in modal', asy
 
 test('Verify that the user is only alerted if they have not already stored all items in localStorage', async () => {
   const hideButton = await page.locator('#wv-info-button.wv-status-hide')
-  await page.locator('#notification_list_modal .close').click()
+  await page.locator('.modal-close-btn').click()
   await expect(hideButton).toBeVisible()
 })
 

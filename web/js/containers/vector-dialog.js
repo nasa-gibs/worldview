@@ -51,10 +51,14 @@ class VectorDialog extends React.Component {
       i += 1;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
-
+    const closeBtn = (
+      <button onClick={toggleWithClose} type="button" className="vector-close-btn">
+        &times;
+      </button>
+    );
     return (
       <div className="draggable-modal-content">
-        <ModalHeader toggle={toggleWithClose}>
+        <ModalHeader toggle={toggleWithClose} close={closeBtn}>
           <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
             {navArray}
           </Nav>

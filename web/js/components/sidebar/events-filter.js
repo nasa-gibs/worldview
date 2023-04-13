@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
 import {
@@ -39,6 +39,11 @@ function EventFilterModalBody (props) {
   const parsedEndDate = selectedEndDate && new Date(moment(selectedEndDate).valueOf());
   const [dateRange, setDateRange] = useState([parsedStartDate, parsedEndDate]);
   const [startDate, endDate] = dateRange || [];
+  const [modalFooterNode, setModalFooterNode] = useState(null);
+
+  useEffect(() => {
+    setModalFooterNode(document.querySelector(`#${parentId} .modal-footer`));
+  }, []);
 
   const toggleCategory = (category) => {
     const isActive = categories.some(({ id }) => id === category.id);
@@ -87,6 +92,8 @@ function EventFilterModalBody (props) {
   const mobileStyle = isMobile ? {
     fontSize: '14px',
   } : null;
+
+
 
   return (
     <div className="events-filter">
@@ -167,24 +174,27 @@ function EventFilterModalBody (props) {
         show for a selected event.
       </UncontrolledTooltip>
 
-      <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>
-        <Button
-          id="filter-apply-btn"
-          color="primary"
-          onClick={applyFilter}
-          disabled={disableApply}
-          title={getDisableApplyMsg()}
-        >
-          Apply
-        </Button>
-        <Button
-          id="filter-cancel-btn"
-          color="secondary"
-          onClick={closeModal}
-        >
-          Cancel
-        </Button>
-      </Portal>
+      {modalFooterNode && createPortal(
+        <>
+          <Button
+            id="filter-apply-btn"
+            color="primary"
+            onClick={applyFilter}
+            disabled={disableApply}
+            title={getDisableApplyMsg()}
+          >
+            Apply
+          </Button>
+          <Button
+            id="filter-cancel-btn"
+            color="secondary"
+            onClick={closeModal}
+          >
+            Cancel
+          </Button>
+        </>,
+        modalFooterNode,
+      )}
     </div>
   );
 }

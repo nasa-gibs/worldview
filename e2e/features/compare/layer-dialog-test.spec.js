@@ -39,7 +39,7 @@ test('Layer option features work in A|B mode', async () => {
 })
 
 test('Layer info dialog work in A|B mode', async () => {
-  await page.locator('#layer_options_modal-modis_terra_aerosol .modal-header .close').click()
+  await page.locator('.modal-close-btn').click()
   await aerosolLayer.hover()
   await page.locator('#layer-info-btn-MODIS_Terra_Aerosol').click()
   await expect(AodInfoPanel).toContainText('The Aerosol Optical Depth layer is useful for studying aerosol optical depth')
@@ -47,7 +47,7 @@ test('Layer info dialog work in A|B mode', async () => {
 
 test('Expect clicking A|B button to close options dialog', async () => {
   const { compareButton } = selectors
-  await page.locator('.layer_info_modal-modis_terra_aerosol .close').click()
+  await page.locator('.modal-close-btn').click()
   await compareButton.click()
   await expect(AodOptionsPanelBody).not.toBeVisible()
 })
@@ -62,7 +62,7 @@ test('Layer option features after exiting A|B mode', async () => {
 })
 
 test('Layer info dialog works after exiting A|B mode', async () => {
-  await page.locator('#layer_options_modal-modis_terra_aerosol .modal-header .close').click()
+  await page.locator('.modal-close-btn').click()
   await aerosolLayer.hover()
   await page.locator('#layer-info-btn-MODIS_Terra_Aerosol').click()
   await expect(AodInfoPanel).toContainText('The Aerosol Optical Depth layer is useful for studying aerosol optical depth')
@@ -70,10 +70,10 @@ test('Layer info dialog works after exiting A|B mode', async () => {
 
 test('Expect reactivating A|B to close options dialog and activate B state', async () => {
   const { compareButton, bTab } = selectors
-  await page.locator('.layer_info_modal-modis_terra_aerosol .close').click()
+  await page.locator('.modal-close-btn').click()
   await aerosolLayer.hover()
   await page.locator('#active-MODIS_Terra_Aerosol .wv-layers-options').click()
-  await page.locator('#layer_options_modal-modis_terra_aerosol .modal-header .close').click()
+  await page.locator('.modal-close-btn').click()
   await compareButton.click()
   await expect(AodOptionsPanelBody).not.toBeVisible()
   await bTab.click()
@@ -90,7 +90,7 @@ test('Layer option features work in B state', async () => {
 })
 
 test('Layer info dialog works after clicking into B mode', async () => {
-  await page.locator('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header .close').click()
+  await page.locator('.modal-close-btn').click()
   await correctedReflectanceBLayer.hover()
   await page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor .wv-layers-info').click()
   await expect(correctedReflectanceInfoPanel).toContainText('These images are called true-color or natural color because this combination of wavelengths is similar to what the human eye')

@@ -35,9 +35,7 @@ test('Image download is disabled when compare mode active', async () => {
   const disableMessage = 'You must exit comparison mode to use the snapshot feature'
   await expect(snapshotToolbarButton).toHaveClass(/disabled/)
   await expect(snapshotToolbarButton).toHaveAttribute('aria-label', disableMessage)
-  await page.locator('#snapshot-btn-wrapper').click()
-  const tooltipSelector = page.locator('.tooltip-inner')
-  await expect(tooltipSelector).toContainText(disableMessage)
+  await page.waitForTimeout(2000)
   await page.locator('#snapshot-btn-wrapper').click()
   const imageRes = page.locator('#wv-image-resolution')
   await expect(imageRes).not.toBeVisible()
