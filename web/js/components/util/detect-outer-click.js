@@ -16,6 +16,11 @@ export default class OutsideAlerter extends Component {
   componentDidMount() {
     document.addEventListener('touchstart', this.handleClickOutside);
     document.addEventListener('mousedown', this.handleClickOutside);
+    // temp work-around for closing modal with latest version of reactstrap/bootstrap
+    const mapElement = document.getElementById('wv-map');
+    if (mapElement) {
+      mapElement.addEventListener('mousedown', this.handleClickOutside);
+    }
   }
 
   componentWillUnmount() {

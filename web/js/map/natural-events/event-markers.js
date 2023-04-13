@@ -197,6 +197,8 @@ class EventMarkers extends React.Component {
         map.removeOverlay(marker.pin);
       }
     });
+    const markerContainer = document.getElementById('marker-container');
+    markerContainer.remove();
     this.setState({ markers: [] });
   }
 
@@ -213,6 +215,7 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
       title,
       id,
       hideTooltip,
+      isSelected,
     }),
     overlayEl,
   );

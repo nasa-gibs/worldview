@@ -1,0 +1,20 @@
+{
+  "measurements": {
+      "Surface Water Extent - Featured": {
+          "id": "featured-surface-water-extent",
+          "title":    "Surface Water Extent",
+          "subtitle": "DSWx-HLS",
+          "sources": {
+            "DSWx-HLS": {
+                "id": "dswx-hls",
+                "title": "DSWx-HLS",
+                "description": "",
+                "image": "",
+                "settings": [
+                    "OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional"
+                ]
+            }
+          }
+      }
+  }
+}

@@ -75,6 +75,11 @@
     background: #00457b;
     border-color: #00457b;
     color: #fff;
+    height: 32px;
+  }
+
+  .nav-item a:hover {
+    color: #fff !important;
   }
 
   .layer-list-placeholder {
@@ -88,6 +93,7 @@
   .nav-item {
     color: #fff;
     cursor: pointer;
+    height: 31px;
   }
 
   .layer-container {
@@ -252,37 +258,6 @@ footer .compare-toggle-button {
         box-shadow: none;
       }
     }
-
-    .dropdown-menu {
-      margin: 0;
-      background-color: #3a3a3a;
-      color: #eee;
-      border-radius: 0;
-      box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
-    }
-
-    .dropdown-item {
-      color: #eee;
-      font-size: 14px;
-      padding: 6px 12px;
-
-      @media (max-width: $mobile-max-width) {
-        font-size: 18px;
-        padding: 12px 14px;
-      }
-
-      &:hover {
-        color: #fff;
-        background-color: #d54e21;
-      }
-
-      &:active,
-      &.active {
-        background: #d54e21;
-        color: #fff;
-        text-shadow: 1px 1px 0 #000;
-      }
-    }
   }
 
   .layer-group-more-options {
@@ -323,6 +298,38 @@ footer .compare-toggle-button {
 
   .layer-group-visibility {
     margin: 0 5px;
+  }
+}
+
+/* override bootstrap 5 dropdown menu */
+.layer-options-dropdown-menu {
+  margin: 0;
+  background-color: #3a3a3a;
+  color: #eee;
+  border-radius: 0;
+  box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
+}
+
+.layer-options-dropdown-item {
+  color: #eee;
+  font-size: 14px;
+  padding: 6px 12px;
+
+  @media (max-width: $mobile-max-width) {
+    font-size: 18px;
+    padding: 12px 14px;
+  }
+
+  &:hover {
+    color: #fff;
+    background-color: #d54e21;
+  }
+
+  &:active,
+  &.active {
+    background: #d54e21;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
   }
 }
 
@@ -491,10 +498,7 @@ footer .compare-toggle-button {
 .sidebar-modal {
   margin-left: auto;
   margin-right: auto;
-  top: 0;
-  left: 298px;
-  right: auto;
-  bottom: auto;
+  inset: 0 auto auto 298px;
   border-radius: 6px;
   position: absolute;
   max-width: 100vw;
@@ -645,7 +649,7 @@ footer .compare-toggle-button {
   }
 
   .layer-threshold-select {
-    height: 58px;
+    margin-bottom: 3rem;
   }
 
   .wv-label-opacity,
