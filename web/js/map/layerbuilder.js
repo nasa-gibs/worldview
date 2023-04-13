@@ -46,7 +46,6 @@ import {
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
-import { subdailyLayersActive } from '../modules/layers/selectors';
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
@@ -113,15 +112,16 @@ export default function mapLayerBuilder(config, cache, store) {
   // called from tileLoadFunction() when a tile returns an error
   const handleTileError = (tile, layer, sourceURL) => {
     const state = store.getState();
-    const hasSubdailyLayers = subdailyLayersActive(state);
     const { selected: reduxDate } = state.date;
     const { isKioskModeActive } = state.ui;
 
     const { id, layerPeriod } = layer;
 
+    const isSubdailyLayer = layerPeriod === 'Subdaily';
+
     if (isKioskModeActive) {
-      const urlDate = extractDateFromTileErrorURL(sourceURL, hasSubdailyLayers);
-      const currentDate = formatReduxDate(reduxDate, urlDate, hasSubdailyLayers);
+      const urlDate = extractDateFromTileErrorURL(sourceURL);
+      const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
 
       // we don't want to store cached dates in the error tiles
       if (urlDate === currentDate) {

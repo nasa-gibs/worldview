@@ -244,7 +244,7 @@ export function updateReduxDateTimezone(reduxDate, urlDate) {
 
 // Used in layerbuilder and TileErrorHandler
 // Formats the selected date in redux to match the date url parameter from error tiles
-export function formatReduxDate(reduxDate, urlDate, hasSubdailyLayers) {
+export function formatReduxDate(reduxDate, urlDate, isSubdailyLayer) {
   const date = new Date(reduxDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -253,17 +253,18 @@ export function formatReduxDate(reduxDate, urlDate, hasSubdailyLayers) {
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  if (hasSubdailyLayers) {
+  if (isSubdailyLayer) {
     const formattedReduxDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     const timezoneAdjustedReduxDate = updateReduxDateTimezone(formattedReduxDate, urlDate);
     return timezoneAdjustedReduxDate;
   }
-  return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}T00:00:00`;
 }
 
 // Used in layerbuilder to extract date param from tile error url
-export function extractDateFromTileErrorURL(url, hasSubdailyLayers) {
-  const regex = hasSubdailyLayers ? /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/ : /TIME=([\d-]+)T/;
+export function extractDateFromTileErrorURL(url) {
+  // const regex = hasSubdailyLayers ? /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/ : /TIME=([\d-]+)T/;
+  const regex = /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/
   const match = url.match(regex);
 
   if (match && match[1]) {

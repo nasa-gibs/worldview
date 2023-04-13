@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearErrorTiles as clearErrorTilesAction } from '../../../modules/ui/actions';
-import { selectDate as selectDateAction } from '../../../modules/date/actions';
+import {
+  selectDate as selectDateAction,
+  selectInterval as selectIntervalAction,
+} from '../../../modules/date/actions';
 import { getNextDateTime } from '../../../modules/date/util';
 import { subdailyLayersActive } from '../../../modules/layers/selectors';
 
@@ -26,7 +29,6 @@ function convertTimestamp(timestamp) {
   return `${year}-${month}-${day}T${hours}:${minutes}:00`;
 }
 
-
 function formatDate(dateString, hasSubdailyLayers) {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -41,16 +43,15 @@ function formatDate(dateString, hasSubdailyLayers) {
     const adjustedTimezone = convertTimestamp(timestamp);
     return adjustedTimezone;
   }
-  return `${year}-${month}-${day}`;
 
-  // for when there are daily & subdaily tiles?
-  // return `${year}-${month}-${day}T00:00:00`;
+  return `${year}-${month}-${day}T00:00:00`;
 }
 
 function TileErrorHandler({ action }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
+  const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected))}
 
   const {
     isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading,
@@ -64,7 +65,6 @@ function TileErrorHandler({ action }) {
   }));
 
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
-  console.log(hasSubdailyLayers);
 
   useEffect(() => {
     if (isKioskModeActive && errorTiles.length && !isLoading) {
@@ -77,7 +77,7 @@ function TileErrorHandler({ action }) {
     const subdailyTiles = [];
 
     errorTiles.forEach((tile) => {
-      if (tile.layerPeriod === 'Daily') {
+      if (tile.layerPeriod !== 'Subdaily') {
         dailyTiles.push(tile);
       } else if (tile.layerPeriod === 'Subdaily') {
         subdailyTiles.push(tile);
@@ -91,35 +91,29 @@ function TileErrorHandler({ action }) {
     }
   }
 
-
   const handleErrorTilesDaily = (dailyTiles, subdailyTiles) => {
     const currentDate = formatDate(selectedDate, false);
-    console.log(currentDate, ' vs ', dailyTiles[0].date);
     const errorTilesOnCurrentDate = dailyTiles.filter((tile) => currentDate === tile.date).length;
     console.log('There are ', errorTilesOnCurrentDate, 'daily tiles on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
+      if (hasSubdailyLayers) {
+        selectInterval(1, 3, false)
+      }
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
       clearErrorTiles();
       selectDate(prevDateObj);
-    } else if (subdailyTiles.length) {
-      handleErrorTilesSubdaily(subdailyTiles);
     } else {
-      clearErrorTiles();
+      handleErrorTilesSubdaily(subdailyTiles)
     }
   };
 
-  // how are we going to do this when there are daily & subdaily layers?
-  // can we add property in layerBuilder to the redux object that specifies if layer is daily/subdaily?
   const handleErrorTilesSubdaily = (subdailyTiles) => {
     const currentDate = formatDate(selectedDate, true);
-
     const errorTilesOnCurrentDate = subdailyTiles.filter((tile) => currentDate === tile.date).length;
     console.log('There are ', errorTilesOnCurrentDate, 'subdaily tiles on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
-      // console.log('redux date', currentDate);
-      // console.log('errortileDate ', errorTiles[0].date);
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
