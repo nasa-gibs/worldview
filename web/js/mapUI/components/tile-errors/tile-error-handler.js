@@ -42,6 +42,9 @@ function formatDate(dateString, hasSubdailyLayers) {
     return adjustedTimezone;
   }
   return `${year}-${month}-${day}`;
+
+  // for when there are daily & subdaily tiles?
+  // return `${year}-${month}-${day}T00:00:00`;
 }
 
 function TileErrorHandler({ action }) {
@@ -61,27 +64,47 @@ function TileErrorHandler({ action }) {
   }));
 
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
+  console.log(hasSubdailyLayers);
 
   useEffect(() => {
     if (isKioskModeActive && errorTiles.length && !isLoading) {
-      if (hasSubdailyLayers) {
-        handleErrorTilesSubdaily();
-      } else {
-        handleErrorTiles();
-      }
+      sortErrorTiles();
     }
   }, [action]);
 
-  const handleErrorTiles = () => {
+  function sortErrorTiles() {
+    const dailyTiles = [];
+    const subdailyTiles = [];
+
+    errorTiles.forEach((tile) => {
+      if (tile.layerPeriod === 'Daily') {
+        dailyTiles.push(tile);
+      } else if (tile.layerPeriod === 'Subdaily') {
+        subdailyTiles.push(tile);
+      }
+    });
+
+    if (dailyTiles.length) {
+      handleErrorTilesDaily(dailyTiles, subdailyTiles);
+    } else {
+      handleErrorTilesSubdaily(subdailyTiles);
+    }
+  }
+
+
+  const handleErrorTilesDaily = (dailyTiles, subdailyTiles) => {
     const currentDate = formatDate(selectedDate, false);
-    const errorTilesOnCurrentDate = errorTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, ' on ', selectedDate);
+    console.log(currentDate, ' vs ', dailyTiles[0].date);
+    const errorTilesOnCurrentDate = dailyTiles.filter((tile) => currentDate === tile.date).length;
+    console.log('There are ', errorTilesOnCurrentDate, 'daily tiles on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
       clearErrorTiles();
       selectDate(prevDateObj);
+    } else if (subdailyTiles.length) {
+      handleErrorTilesSubdaily(subdailyTiles);
     } else {
       clearErrorTiles();
     }
@@ -89,14 +112,14 @@ function TileErrorHandler({ action }) {
 
   // how are we going to do this when there are daily & subdaily layers?
   // can we add property in layerBuilder to the redux object that specifies if layer is daily/subdaily?
-  const handleErrorTilesSubdaily = () => {
+  const handleErrorTilesSubdaily = (subdailyTiles) => {
     const currentDate = formatDate(selectedDate, true);
 
-    const errorTilesOnCurrentDate = errorTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, ' on ', selectedDate);
+    const errorTilesOnCurrentDate = subdailyTiles.filter((tile) => currentDate === tile.date).length;
+    console.log('There are ', errorTilesOnCurrentDate, 'subdaily tiles on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
-      console.log('redux date', currentDate);
-      console.log('errortileDate ', errorTiles[0].date);
+      // console.log('redux date', currentDate);
+      // console.log('errortileDate ', errorTiles[0].date);
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
