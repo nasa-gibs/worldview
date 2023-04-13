@@ -12,7 +12,6 @@ import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
-
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
@@ -21,6 +20,7 @@ import { Style, RegularShape } from 'ol/style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import * as dat from 'dat.gui';
+import { colorGradient } from '../vectorflow/util';
 import WindTile from '../vectorflow/renderer.js';
 import { throttle } from '../vectorflow/util';
 import util from '../util/util';
@@ -706,29 +706,22 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
       style (feature, resolution) {
-        // console.log(feature);
         counter += 1;
 
         // Due to the large number of points to render for OSCAR, I am only rendering every 25th feature
         if (counter % 25 !== 0) return [];
 
-        // This function styles each feature individually based on the feature specific data
         let arrowSizeMultiplier;
         const radianDirection = feature.get('direction'); // was "dir"
         const magnitude = feature.get('magnitude'); // was "speed"
-
-        // This returns an array, but doesn't render. Too slow??
         const arrowColor = colorGradient(magnitude);
 
         // Adjust color & arrow length based on magnitude
         if (magnitude < 0.08) {
-          // arrowColor = [255, 0, 0];
           arrowSizeMultiplier = 1;
         } else if (magnitude < 0.17) {
-          // arrowColor = [0, 0, 255];
           arrowSizeMultiplier = 1.25;
         } else {
-          // arrowColor = [0, 255, 0];
           arrowSizeMultiplier = 1.5;
         }
 
@@ -765,38 +758,6 @@ export default function mapLayerBuilder(config, cache, store) {
         return styles;
       },
     });
-
-    function colorGradient(fadeFraction) {
-      const color1 = {
-        red: 0, green: 255, blue: 0,
-      };
-      const color2 = {
-        red: 255, green: 0, blue: 0,
-      };
-      // const color3 = {
-      //   red: 255, green: 0, blue: 0,
-      // };
-
-      const fade = fadeFraction;
-
-      // Find which interval to use and adjust the fade percentage
-      // if (fade >= 1) {
-      //   fade -= 1;
-      //   color1 = color2;
-      //   color2 = color3;
-      // }
-
-      const diffRed = color2.red - color1.red;
-      const diffGreen = color2.green - color1.green;
-      const diffBlue = color2.blue - color1.blue;
-
-      const gradient = {
-        red: parseInt(Math.floor(color1.red + (diffRed * fade)), 10),
-        green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
-        blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
-      };
-      return [gradient.red, gradient.green, gradient.blue];
-    }
 
     applyStyle(def, layer, state, layeroptions);
     console.log(layer);

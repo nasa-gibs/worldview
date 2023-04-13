@@ -43,3 +43,24 @@ export function throttle(fn, wait) {
     }
   };
 }
+
+export function colorGradient(fadeFraction) {
+  const color1 = {
+    red: 246, green: 219, blue: 160,
+  };
+  const color2 = {
+    red: 245, green: 165, blue: 157,
+  };
+
+  const fade = fadeFraction;
+  const diffRed = color2.red - color1.red;
+  const diffGreen = color2.green - color1.green;
+  const diffBlue = color2.blue - color1.blue;
+
+  const gradient = {
+    red: parseInt(Math.floor(color1.red + (diffRed * fade)), 10),
+    green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
+    blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
+  };
+  return [gradient.red, gradient.green, gradient.blue];
+}
