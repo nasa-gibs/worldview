@@ -51,7 +51,7 @@ function TileErrorHandler({ action }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
-  const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected))}
+  const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
 
   const {
     isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading,
@@ -98,14 +98,14 @@ function TileErrorHandler({ action }) {
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       if (hasSubdailyLayers) {
-        selectInterval(1, 3, false)
+        selectInterval(1, 3, false);
       }
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
       clearErrorTiles();
       selectDate(prevDateObj);
     } else {
-      handleErrorTilesSubdaily(subdailyTiles)
+      handleErrorTilesSubdaily(subdailyTiles);
     }
   };
 

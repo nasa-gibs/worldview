@@ -263,8 +263,7 @@ export function formatReduxDate(reduxDate, urlDate, isSubdailyLayer) {
 
 // Used in layerbuilder to extract date param from tile error url
 export function extractDateFromTileErrorURL(url) {
-  // const regex = hasSubdailyLayers ? /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/ : /TIME=([\d-]+)T/;
-  const regex = /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/
+  const regex = /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/;
   const match = url.match(regex);
 
   if (match && match[1]) {
