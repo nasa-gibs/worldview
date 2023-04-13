@@ -2,6 +2,8 @@ The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily glo
 
 Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
 
+As of January 12, 2023, a topographic filter has been applied to remove water detections from mountainous areas, greatly reducing the number of terrain shadow false-positives in such areas. These areas appear in all products as "Insufficient Data" (gray in default Worldview display).
+
 #### Current Issues
 - The flood layers are displaying a large number of flood pixels in the far north at present (generally above 60N). Most of these are false-positive detections, a result of the large number of overlapping images towards the poles in the source MODIS imagery (due to the nature of the spacecraft's polar orbit). During summer when such regions have long periods of daylight, even more observations are available, but this increases the chance that repeated cloud-shadow false-positives pass the compositing requirement, and contaminate the product. We are working on various adjustments to the algorithm to minimize this.
 
