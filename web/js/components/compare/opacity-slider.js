@@ -1,21 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
-import lodashDebounce from 'lodash/debounce';
 import MonospaceDate from '../util/monospace-date';
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
-const percentFormatter = function(v) {
-  return `${v} %`;
-};
-/*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class OpacitySlider
- * @extends React.Component
- */
-class OpacitySlider extends React.Component {
+// Opacity slider used in compare mode
+class OpacitySlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,21 +11,17 @@ class OpacitySlider extends React.Component {
     };
     this.onSlide = this.onSlide.bind(this);
     this.getDateTextOptions = this.getDateTextOptions.bind(this);
-    this.debounceOpacityUpdate = lodashDebounce(this.onSlide, 100);
   }
 
   /*
    * trigger onSlide Callback
-   *
    * @method onSlide
-   *
-   * @param {number} value - Value of the slider
-   *  selection
-   *
+   * @param {number} value - Value of the slider selection
    * @return {void}
    */
   onSlide(value) {
     const { onSlide } = this.props;
+    this.setState({ value });
     onSlide(value);
   }
 
@@ -74,12 +58,18 @@ class OpacitySlider extends React.Component {
             <MonospaceDate date={dateAText} />
           </h4>
         </label>
-        <div className="input-range ">
-          <SliderWithTooltip
+        <div className="input-range">
+          <div className="range-tooltip">
+            {value}
+            {' '}
+            %
+          </div>
+          <input
+            type="range"
+            className="form-range"
             defaultValue={value}
-            tipFormatter={percentFormatter}
-            onChange={this.debounceOpacityUpdate}
-            onAfterChange={this.onSlide}
+            onChange={(e) => this.onSlide(parseFloat(e.target.value))}
+            style={{ '--value-percent': `${value}%` }}
           />
         </div>
         <label className="wv-slider-label right" style={labelStyle}>
@@ -92,9 +82,7 @@ class OpacitySlider extends React.Component {
     );
   }
 }
-OpacitySlider.defaultProps = {
-  value: 50,
-};
+
 OpacitySlider.propTypes = {
   dateA: PropTypes.string,
   dateB: PropTypes.string,

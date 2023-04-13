@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';
@@ -52,138 +52,102 @@ const subDailyDateConfig = {
   },
 };
 
-class MobileDatePicker extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: '',
-      minDate: '',
-      maxDate: '',
-      isOpen: false,
-    };
-  }
+// change to UTC offset time for date picker controls
+const convertToUTCDateObject = (dateString) => {
+  const date = new Date(dateString);
+  const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+  return dateUTC;
+};
 
-  componentDidMount() {
-    this.setInitDates();
-  }
+// change to offset time used in parent component date setting functions
+const convertToLocalDateObject = (date) => {
+  const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+  return dateLocal;
+};
 
-  componentDidUpdate(prevProps) {
-    const { date, endDateLimit } = this.props;
-    // update on new endDateLimit or changed date
-    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
-      this.setInitDates();
-    }
-  }
+function MobileDatePicker(props) {
+  const {
+    date,
+    startDateLimit,
+    endDateLimit,
+    onDateChange,
+    hasSubdailyLayers,
+  } = props;
+  const [time, setTime] = useState(convertToUTCDateObject(date));
+  const [minDate, setMinDate] = useState(convertToUTCDateObject(startDateLimit));
+  const [maxDate, setMaxDate] = useState(convertToUTCDateObject(endDateLimit));
+  const [isOpen, setIsOpen] = useState(false);
 
-  handleClickDateButton = () => {
-    this.setState({
-      isOpen: true,
-    });
+  useEffect(() => {
+    setInitDates();
+  }, [endDateLimit, date]);
+
+  const handleClickDateButton = () => {
+    setIsOpen(true);
   };
 
-  handleCancel = () => {
-    const {
-      date,
-    } = this.props;
-    this.setState({
-      isOpen: false,
-      time: this.convertToUTCDateObject(date),
-    });
+  const handleCancel = () => {
+    setTime(convertToUTCDateObject(date));
+    setIsOpen(false);
   };
 
-  handleChange = (date) => {
-    this.setState({
-      time: date,
-    });
+  const handleChange = (date) => {
+    setTime(date);
   };
 
-  handleSelect = (time) => {
-    const { onDateChange } = this.props;
-    this.setState({
-      isOpen: false,
-      time,
-    });
+  const handleSelect = (time) => {
+    setIsOpen(false);
+    setTime(time);
+
     // convert date back to local time
-    const date = this.convertToLocalDateObject(time);
+    const date = convertToLocalDateObject(time);
     onDateChange(getISODateFormatted(date));
   };
 
-  // used for init mount
-  setInitDates = () => {
-    const {
-      date,
-      startDateLimit,
-      endDateLimit,
-    } = this.props;
-    this.setState({
-      time: this.convertToUTCDateObject(date),
-      minDate: this.convertToUTCDateObject(startDateLimit),
-      maxDate: this.convertToUTCDateObject(endDateLimit),
-    });
+  const setInitDates = () => {
+    setTime(convertToUTCDateObject(date));
+    setMinDate(convertToUTCDateObject(startDateLimit));
+    setMaxDate(convertToUTCDateObject(endDateLimit));
   };
 
-  // change to UTC offset time for date picker controls
-  convertToUTCDateObject = (dateString) => {
-    const date = new Date(dateString);
-    const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
-    return dateUTC;
-  };
-
-  // change to offset time used in parent component date setting functions
-  convertToLocalDateObject = (date) => {
-    const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-    return dateLocal;
-  };
-
-  getHeaderTime = (time, isSubdaily) => (
+  const getHeaderTime = (time, isSubdaily) => (
     <div className="datepicker-header">
-      {getDisplayDate(new Date(this.convertToLocalDateObject(time)), isSubdaily)}
+      {getDisplayDate(new Date(convertToLocalDateObject(time)), isSubdaily)}
     </div>
   );
 
-  render() {
-    const {
-      time,
-      minDate,
-      maxDate,
-      isOpen,
-    } = this.state;
-    const {
-      date,
-      hasSubdailyLayers,
-    } = this.props;
-    const displayDate = getDisplayDate(date, hasSubdailyLayers);
+  const displayDate = getDisplayDate(date, hasSubdailyLayers);
+  const headerTime = getHeaderTime(time, hasSubdailyLayers);
 
-    return (
-      time && (
-        <>
-          <div
-            className="mobile-date-picker-select-btn"
-            onClick={this.handleClickDateButton}
-          >
-            <div className="mobile-date-picker-select-btn-text">
-              <span>{displayDate}</span>
-            </div>
+  return (
+    time && (
+      <>
+        <div
+          className="mobile-date-picker-select-btn"
+          onClick={handleClickDateButton}
+        >
+          <div className="mobile-date-picker-select-btn-text">
+            <span>{displayDate}</span>
           </div>
-          <DatePicker
-            dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
-            showCaption
-            theme="android-dark"
-            customHeader={this.getHeaderTime(time, hasSubdailyLayers)}
-            confirmText="OK"
-            cancelText="CANCEL"
-            min={minDate}
-            max={maxDate}
-            value={time}
-            isOpen={isOpen}
-            onCancel={this.handleCancel}
-            onChange={this.handleChange}
-            onSelect={this.handleSelect}
-          />
-        </>
-      )
-    );
-  }
+        </div>
+        <DatePicker
+          dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
+          showCaption
+          theme="android-dark"
+          customHeader={headerTime}
+          confirmText="OK"
+          cancelText="CANCEL"
+          min={minDate}
+          max={maxDate}
+          value={time}
+          isOpen={isOpen}
+          onCancel={handleCancel}
+          onChange={handleChange}
+          onSelect={handleSelect}
+        />
+      </>
+    )
+  );
 }
 
 MobileDatePicker.propTypes = {

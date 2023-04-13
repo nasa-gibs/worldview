@@ -536,7 +536,7 @@ class SmartHandoff extends Component {
 
     return (
       <div style={containerStyle}>
-        <Spinner style={spinnerStyle} color="light" size="lg" />
+        <Spinner style={spinnerStyle} color="light" />
       </div>
     );
   };

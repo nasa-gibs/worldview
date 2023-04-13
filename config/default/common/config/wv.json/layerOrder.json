@@ -113,6 +113,7 @@
 		"GHRSST_L4_GAMSSA_GDS2_Sea_Ice_Concentration",
 		"VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
 		"VIIRS_SNPP_L2_Sea_Surface_Temp_Night",
+		"OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional",
 		"MODIS_Combined_Flood_2-Day",
 		"MODIS_Combined_Flood_3-Day",
 		"MODIS_Terra_Aerosol",

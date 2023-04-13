@@ -81,10 +81,14 @@ class ProductPicker extends React.Component {
       mode,
       width,
     } = this.props;
-
+    const closeBtn = (
+      <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? { top: '-10px' } : {}} type="button">
+        &times;
+      </button>
+    );
     return (
       <>
-        <ModalHeader toggle={() => closeModal()}>
+        <ModalHeader toggle={closeModal} close={closeBtn}>
           <ProductPickerHeader
             width={width}
             toggleFilterByAvailable={this.toggleFilterByAvailable}

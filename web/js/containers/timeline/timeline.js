@@ -515,7 +515,7 @@ class Timeline extends React.Component {
     const { isTimelineDragging } = this.state;
     const { hasSubdailyLayers, timeScale } = this.props;
     // prevent left/right arrows changing date within inputs
-    if (e.target.tagName !== 'INPUT' && e.target.className !== 'rc-slider-handle' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
+    if (e.target.tagName !== 'INPUT' && e.target.className !== 'form-range' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
       const timeScaleNumber = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
       if (e.keyCode === 38) {

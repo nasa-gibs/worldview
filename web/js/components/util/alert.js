@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /*
@@ -91,11 +91,7 @@ export default class AlertUtil extends React.Component {
     const { noPortal } = this.props;
     return noPortal
       ? this.renderAlert()
-      : (
-        <Portal node={document && document.getElementById('wv-alert-container')}>
-          {this.renderAlert()}
-        </Portal>
-      );
+      : createPortal(this.renderAlert(), document.getElementById('wv-alert-container'));
   }
 }
 
