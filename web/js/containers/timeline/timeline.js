@@ -1346,12 +1346,10 @@ class Timeline extends React.Component {
             <section id="timeline" className="timeline-inner clearfix">
               <div
                 id="distraction-free-timeline-header"
-                className={
-                  `distraction-free-timeline-header
-                  ${hasSubdailyLayers ? 'subdaily' : ''}
-                  ${isMobile ? 'mobile' : ''}
-                `}
-                style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
+                className={`distraction-free-timeline-header ${hasSubdailyLayers ? 'subdaily' : ''} ${isMobile ? 'mobile' : ''}`}
+                style={
+                  { marginRight: isTimelineHidden ? '20px' : '0' }
+                }
               >
                 {this.getStringFromDate(selectedDate)}
               </div>
