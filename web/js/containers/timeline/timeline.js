@@ -1354,7 +1354,7 @@ class Timeline extends React.Component {
               </div>
             </section>
           </ErrorBoundary>
-          )}
+        )}
       </div>
     );
   }
