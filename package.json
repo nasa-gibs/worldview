@@ -191,7 +191,7 @@
     "react-mobile-datepicker": "^4.0.2",
     "react-redux": "^8.0.5",
     "react-resizable": "^3.0.5",
-    "react-swipe-to-delete-component": "1.0.5",
+    "react-swipe-to-delete-component": "1.0.8",
     "react-visibility-sensor": "^5.1.1",
     "reactstrap": "9.1.x",
     "redux": "^4.2.1",
