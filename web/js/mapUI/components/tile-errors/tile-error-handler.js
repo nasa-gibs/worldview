@@ -47,6 +47,24 @@ function formatDate(dateString, hasSubdailyLayers) {
   return `${year}-${month}-${day}T00:00:00`;
 }
 
+// gets a week ago from real time date
+function weekAgo(realTimeDate) {
+  const inputDate = new Date(realTimeDate);
+  const oneWeekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+  const earlierDate = new Date(inputDate.getTime() - oneWeekInMilliseconds);
+  const earlierDateString = earlierDate.toString();
+  return earlierDateString;
+}
+
+// safe gaurd agaisnt stepping back too far, we only want to go back 7 days for daily and 24 hours for subdaily
+function compareDailyDates(lastDateToCheck, selectedDate) {
+  const lastDate = new Date(lastDateToCheck);
+  const selected = new Date(selectedDate);
+  lastDate.setHours(0, 0, 0, 0);
+  selected.setHours(0, 0, 0, 0);
+  return selected > lastDate;
+}
+
 function TileErrorHandler({ action }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
@@ -54,7 +72,7 @@ function TileErrorHandler({ action }) {
   const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
 
   const {
-    isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading,
+    isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading, realTimeDate,
   } = useSelector((state) => ({
     isKioskModeActive: state.ui.isKioskModeActive,
     errorTiles: state.ui.errorTiles,
@@ -62,16 +80,23 @@ function TileErrorHandler({ action }) {
     date: state.date,
     compare: state.compare,
     isLoading: state.loading.isLoading,
+    realTimeDate: state.date.appNow,
   }));
-
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
 
+  // 7 days ago from real time date
+  const lastDateToCheck = weekAgo(realTimeDate);
+
+  // true === safe (date is younger than last date to check)
+  const dateSafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
+
   useEffect(() => {
-    if (isKioskModeActive && errorTiles.length && !isLoading) {
+    if (isKioskModeActive && errorTiles.length && dateSafeguardCheck && !isLoading) {
       sortErrorTiles();
     }
   }, [action]);
 
+  // sorting tiles for daily & subdaily
   function sortErrorTiles() {
     const dailyTiles = [];
     const subdailyTiles = [];
@@ -79,7 +104,7 @@ function TileErrorHandler({ action }) {
     errorTiles.forEach((tile) => {
       if (tile.layerPeriod !== 'Subdaily') {
         dailyTiles.push(tile);
-      } else if (tile.layerPeriod === 'Subdaily') {
+      } else {
         subdailyTiles.push(tile);
       }
     });
@@ -94,7 +119,7 @@ function TileErrorHandler({ action }) {
   const handleErrorTilesDaily = (dailyTiles, subdailyTiles) => {
     const currentDate = formatDate(selectedDate, false);
     const errorTilesOnCurrentDate = dailyTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, 'daily tiles on ', selectedDate);
+    console.log('There are ', errorTilesOnCurrentDate, 'daily tile errors on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       if (hasSubdailyLayers) {
@@ -112,7 +137,7 @@ function TileErrorHandler({ action }) {
   const handleErrorTilesSubdaily = (subdailyTiles) => {
     const currentDate = formatDate(selectedDate, true);
     const errorTilesOnCurrentDate = subdailyTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, 'subdaily tiles on ', selectedDate);
+    console.log('There are ', errorTilesOnCurrentDate, 'subdaily tile errors on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');
