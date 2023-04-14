@@ -37,7 +37,7 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const SOCIAL_SHARE_TABS = ['link', 'social'];
+const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
