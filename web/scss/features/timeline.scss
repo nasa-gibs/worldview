@@ -21,6 +21,7 @@ button:focus {
   bottom: 10px;
 }
 
+#distraction-free-timeline-header,
 #timeline-header {
   margin-top: 2px;
   min-width: 310px;
@@ -811,6 +812,15 @@ button:focus {
 
 #timeline-header .button-action-group .now-btn-1:hover svg path {
   fill: #1a1a1a;
+}
+
+#distraction-free-timeline-header {
+  color: #fff;
+  font-family: Droid Sans Mono,monospace;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mobile-animate-button {
