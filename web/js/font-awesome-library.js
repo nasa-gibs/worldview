@@ -46,6 +46,8 @@ import {
   faExclamationCircle,
   faExclamationTriangle,
   faExternalLinkAlt,
+  faEye,
+  faEyeSlash,
   faFile,
   faFileVideo,
   faFilter,
@@ -81,7 +83,6 @@ import {
   faVideo,
 } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter, faRedditAlien } from '@fortawesome/free-brands-svg-icons';
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 library.add(

@@ -36,6 +36,20 @@
   }
 }
 
+.location-search-clear-button {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #fff;
+  border-left: 2px solid rgb(51 51 51 / 65%);
+}
+
+.location-search-clear-button:hover {
+  background: none;
+  border-left: 2px solid rgb(51 51 51 / 65%);
+}
+
 /* Autocomplete Input Submit Button */
 .location-search-input-group-addon {
   height: 38px;
@@ -54,6 +68,7 @@
     border-left: 2px solid rgb(51 51 51 / 65%);
     border-radius: 0;
     box-sizing: border-box;
+    height: 100%;
     width: 31px;
     box-shadow: none;
     cursor: default;

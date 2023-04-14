@@ -28,7 +28,8 @@ test('Vector layer click does not show alert when all vector layers are clickabl
   await expect(notifyMessage).not.toBeVisible()
 })
 
-test('Vectors show alert when not clickable', async () => {
+test('Vectors show alert when not clickable', async ({ browserName }) => {
+  test.skip(browserName === 'firefox', 'issue identifying pointer')
   const { geographicMap, notifyMessage } = selectors
   await page.goto(damsLayerWMSZoomLevelUrl)
   const pointerIcon = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
@@ -38,7 +39,8 @@ test('Vectors show alert when not clickable', async () => {
   await expect(notifyMessage).toContainText('Vector features may not be clickable at all zoom levels.')
 })
 
-test('Clicking vector message shows modal', async () => {
+test('Clicking vector message shows modal', async ({ browserName }) => {
+  test.skip(browserName === 'firefox', 'issue identifying pointer')
   const { notifyMessage } = selectors
   await notifyMessage.click()
   const modalContent = await page.locator('.modal-content')

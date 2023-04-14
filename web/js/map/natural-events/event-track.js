@@ -136,7 +136,7 @@ class EventTrack extends React.Component {
 
   addTrack = (map, { track, pointsAndArrows }) => {
     const { isAnimatingToEvent } = this.props;
-    if (!isAnimatingToEvent) {
+    if (!isAnimatingToEvent && typeof track !== 'undefined') {
       map.addOverlay(track);
       addPointOverlays(map, pointsAndArrows);
     }
