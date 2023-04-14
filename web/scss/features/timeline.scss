@@ -823,6 +823,10 @@ button:focus {
   align-items: center;
 }
 
+#distraction-free-timeline-header.mobile {
+  max-width: 390px;
+}
+
 .mobile-animate-button {
   position: absolute;
   background: $wv-transparent-black;

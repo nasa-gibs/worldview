@@ -1104,7 +1104,6 @@ class Timeline extends React.Component {
     const containerDisplayStyle = {
       display: isDistractionFreeModeActive ? 'block' : 'block',
     };
-    console.log(`isDistractionFreeModeActive: ${isDistractionFreeModeActive}`);
     return (
       <div
         className="timeline-container"
@@ -1347,7 +1346,11 @@ class Timeline extends React.Component {
             <section id="timeline" className="timeline-inner clearfix">
               <div
                 id="distraction-free-timeline-header"
-                className={`distraction-free--timeline-header-desktop ${hasSubdailyLayers ? 'subdaily' : ''}`}
+                className={
+                  `distraction-free-timeline-header
+                  ${hasSubdailyLayers ? 'subdaily' : ''}
+                  ${isMobile ? 'mobile' : ''}
+                `}
                 style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
               >
                 {this.getStringFromDate(selectedDate)}
