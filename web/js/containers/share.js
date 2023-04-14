@@ -329,7 +329,7 @@ class ShareLinkContainer extends Component {
           {this.renderNavTabs()}
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
-            {/* {this.renderEmbedTab()} */}
+            {this.renderEmbedTab()}
             {this.renderSocialTab()}
           </TabContent>
         </div>
