@@ -1343,7 +1343,7 @@ class Timeline extends React.Component {
         {initialLoadComplete && isDistractionFreeModeActive
         && (
           <ErrorBoundary>
-            <section id="timeline" className="timeline-inner clearfix">
+            <section id="distraction-free-timeline" className="distraction-free-timeline-inner clearfix">
               <div
                 id="distraction-free-timeline-header"
                 className={`distraction-free-timeline-header ${hasSubdailyLayers ? 'subdaily' : ''} ${isMobile ? 'mobile' : ''}`}

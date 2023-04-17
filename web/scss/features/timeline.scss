@@ -3,11 +3,21 @@ button:focus {
   outline: 0;
 }
 
+#distraction-free-timeline,
 #timeline {
   left: 0;
   z-index: 3;
 }
 
+.distraction-free-timeline-inner {
+  height: 50px;
+}
+
+.timeline-inner {
+  height: 67px;
+}
+
+.distraction-free-timeline-inner,
 .timeline-inner {
   position: absolute;
   border: $wv-dark-menu-border;
@@ -17,14 +27,22 @@ button:focus {
   flex-flow: row nowrap;
   margin-left: 10px;
   margin-right: 10px;
-  height: 67px;
   bottom: 10px;
 }
+
+#timeline-header {
+  min-width: 310px;
+}
+
+
+#distraction-free-timeline-header {
+  padding: 5px 15px;
+}
+
 
 #distraction-free-timeline-header,
 #timeline-header {
   margin-top: 2px;
-  min-width: 310px;
   display: inline-block;
 
   &.subdaily {
