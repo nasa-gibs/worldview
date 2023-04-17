@@ -4,6 +4,7 @@ import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
+  DISPLAY_STATIC_MAP,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -47,4 +48,10 @@ export function clearErrorTiles() {
     type: SET_ERROR_TILES,
     tiles: [],
   };
+}
+
+export function toggleStaticMap() {
+  return {
+    type: DISPLAY_STATIC_MAP,
+  }
 }

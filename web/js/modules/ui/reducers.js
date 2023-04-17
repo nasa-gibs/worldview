@@ -3,12 +3,14 @@ import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
+  DISPLAY_STATIC_MAP,
 } from './constants';
 
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
   errorTiles: [],
+  displayStaticMap: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -26,6 +28,11 @@ export default function uiReducers(state = uiState, action) {
         ...state,
         errorTiles: action.tiles,
       };
+    case DISPLAY_STATIC_MAP:
+      return {
+        ...state,
+        displayStaticMap: !state.displayStaticMap,
+      }
     default:
       return state;
   }
