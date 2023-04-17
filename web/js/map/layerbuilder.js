@@ -10,7 +10,8 @@ import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
-import Static from 'ol/source/ImageStatic.js'
+import ImageLayer from 'ol/layer/Image';
+import Static from 'ol/source/ImageStatic';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
@@ -266,8 +267,14 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const { ui: { isKioskModeActive } } = state;
+    const { ui: { isKioskModeActive, displayStaticMap } } = state;
     options.group = options.group || activeString;
+
+    // if gibs/dns failure, display static image layer
+    if (displayStaticMap && isKioskModeActive) {
+      const layer = await createStaticImageLayer();
+      return layer;
+    }
 
     const {
       closestDate,
@@ -454,6 +461,22 @@ export default function mapLayerBuilder(config, cache, store) {
       origin,
       extent: [minX, minY, maxX, maxY],
     };
+  };
+
+  const createStaticImageLayer = async() => {
+    const state = store.getState();
+    const { map: { extent } } = state;
+
+    // TO DO: Get proj.selected.crs from state and point to different png's based on state
+
+    const imageLayer = new ImageLayer({
+      source: new Static({
+        url: 'images/bluemarble.png',
+        projection: 'ESPG:4326',
+        extent,
+      }),
+    });
+    return imageLayer;
   };
 
   /**

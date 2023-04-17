@@ -32,7 +32,7 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         displayStaticMap: !state.displayStaticMap,
-      }
+      };
     default:
       return state;
   }

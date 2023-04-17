@@ -53,5 +53,5 @@ export function clearErrorTiles() {
 export function toggleStaticMap() {
   return {
     type: DISPLAY_STATIC_MAP,
-  }
+  };
 }
