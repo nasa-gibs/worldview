@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Cropper from 'react-image-crop';
-import { Portal } from 'react-portal';
+import ReactCrop from 'react-image-crop';
+import { createPortal } from 'react-dom';
 import { pick, some } from 'lodash';
 
 // https://stackoverflow.com/a/13139830
@@ -56,8 +56,9 @@ function Crop(props) {
     y,
     width,
     height,
+    unit: 'px',
   });
-  const [loading, setLoaded] = useState(true);
+  const prevCrop = useRef(crop);
 
   useEffect(() => {
     setCrop({
@@ -65,12 +66,12 @@ function Crop(props) {
       y,
       width,
       height,
+      unit: 'px',
     });
   }, [x, y, width, height]);
 
   const onFinishDrag = (cropBoundaries) => {
     const { width: cWidth, height: cHeight } = cropBoundaries;
-    if (loading) return setLoaded(false); // Hack -- prevent event from triggering onload
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
     const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
@@ -86,16 +87,14 @@ function Crop(props) {
   };
 
   const onDrag = (cropBoundaries) => {
-    if (loading) return;
     setCrop(cropBoundaries);
     if (cropBoundaries.width && cropBoundaries.height) {
       onChange(cropBoundaries);
     }
   };
-  const prevCrop = useRef(crop);
 
-  return (
-    <Portal node={document && document.getElementById('wv-content')}>
+  return createPortal(
+    <>
       {showCoordinates && (
         <RenderCoordinates
           coordinates={coordinates}
@@ -104,22 +103,21 @@ function Crop(props) {
         />
       )}
 
-      <Cropper
+      <ReactCrop
         crop={crop}
-        src={TRANSPARENT_GIF}
         style={{
           background: crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
           zIndex,
-        }}
-        imageStyle={{
-          width: maxWidth,
-          height: maxHeight,
+          height: '100%',
         }}
         keepSelection={keepSelection}
         onComplete={onFinishDrag}
         onChange={onDrag}
-      />
-    </Portal>
+      >
+        <img src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
+      </ReactCrop>
+    </>,
+    document.getElementById('wv-content'),
   );
 }
 export default Crop;

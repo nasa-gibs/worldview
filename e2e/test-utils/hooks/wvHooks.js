@@ -19,7 +19,7 @@ const clickDownload = async (page) => {
 }
 
 const closeImageDownloadPanel = async (page) => {
-  await page.locator('#toolbar_snapshot .close').click()
+  await page.locator('.modal-close-btn').click()
 }
 
 const zoomIn = async (page) => {
