@@ -120,8 +120,9 @@ export function mapLocationToLocationSearchState(
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
       : [];
 
+    const markerId = Math.floor(longitude * 1000 + latitude * 1000 + Math.random() * 1000);
     const validatedCoordinates = isValid && {
-      id: Math.floor(longitude + latitude),
+      id: markerId,
       latitude,
       longitude,
     };
