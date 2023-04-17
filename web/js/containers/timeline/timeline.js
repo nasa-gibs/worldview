@@ -936,16 +936,15 @@ class Timeline extends React.Component {
   };
 
   getStringFromDate = (dateObj, hasSubdailyLayers) => {
-    console.log(`dateObj: ${dateObj}`);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const day = dateObj.getDate().toString().padStart(2, '0');
     const month = months[dateObj.getMonth()];
     const year = dateObj.getFullYear().toString();
     const hours = dateObj.getUTCHours();
     const minutes = dateObj.getUTCMinutes();
-    const time = hasSubdailyLayers ? ` ${hours}:${minutes}` : '';
+    const timeString = hasSubdailyLayers ? ` ${`0${hours}`.slice(-2)}:${`0${minutes}`.slice(-2)}` : '';
 
-    return `${year} ${month} ${day}${time}`;
+    return `${year} ${month} ${day}${timeString}`;
   };
 
   renderDateChangeArrows = () => {

@@ -836,7 +836,8 @@ button:focus {
   padding: 5px;
 
   &.subdaily {
-    width: 350px;
+    width: unset;
+    min-width: 320px;
   }
 
   .mobile {
