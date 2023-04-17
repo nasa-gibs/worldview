@@ -10,16 +10,15 @@ import { getNextDateTime } from '../../../modules/date/util';
 import { subdailyLayersActive } from '../../../modules/layers/selectors';
 
 // updating timezone for subdaily times
-// do we also need to do this for daily dates since we are 4 hours behind??
 function convertTimestamp(timestamp) {
   const date = new Date(timestamp);
-  // Add 4 hours to the time
+  // add 4 hours to the time
   date.setHours(date.getHours() + 4);
-  // Set the seconds to 0
+  // set the seconds to 0
   date.setSeconds(0);
-  // Round down the minutes to the nearest multiple of 10
+  // round down the minutes to the nearest multiple of 10
   const roundedMinutes = Math.floor(date.getMinutes() / 10) * 10;
-  // Format the updated date back to a string
+  // format the updated date back to a string
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -65,6 +64,20 @@ function compareDailyDates(lastDateToCheck, selectedDate) {
   return selected > lastDate;
 }
 
+// safe gaurd agaisnt stepping back too far, we only want to go back 23 hours for subdaily
+function compareSubdailyDates(lastDateToCheck, selectedDate) {
+  const lastDate = new Date(lastDateToCheck);
+  const selected = new Date(selectedDate);
+  const lastDateHour = lastDate.getHours();
+  const selectedDateHour = selected.getHours();
+  // check if the hour value in selectedDate is exactly one hour more than lastDateToCheck
+  // also, handle the case where selectedDateHour is 0 and lastDateHour is 23
+  if (selectedDateHour === (lastDateHour + 1) % 24) {
+    return false;
+  }
+  return true;
+}
+
 function TileErrorHandler({ action }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
@@ -88,10 +101,11 @@ function TileErrorHandler({ action }) {
   const lastDateToCheck = weekAgo(realTimeDate);
 
   // true === safe (date is younger than last date to check)
-  const dateSafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
+  const dailySafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
+  const hourlySafeguardCheck = compareSubdailyDates(lastDateToCheck, selectedDate);
 
   useEffect(() => {
-    if (isKioskModeActive && errorTiles.length && dateSafeguardCheck && !isLoading) {
+    if (isKioskModeActive && errorTiles.length && dailySafeguardCheck && hourlySafeguardCheck && !isLoading) {
       sortErrorTiles();
     }
   }, [action]);
@@ -119,7 +133,6 @@ function TileErrorHandler({ action }) {
   const handleErrorTilesDaily = (dailyTiles, subdailyTiles) => {
     const currentDate = formatDate(selectedDate, false);
     const errorTilesOnCurrentDate = dailyTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, 'daily tile errors on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       if (hasSubdailyLayers) {
@@ -137,7 +150,6 @@ function TileErrorHandler({ action }) {
   const handleErrorTilesSubdaily = (subdailyTiles) => {
     const currentDate = formatDate(selectedDate, true);
     const errorTilesOnCurrentDate = subdailyTiles.filter((tile) => currentDate === tile.date).length;
-    console.log('There are ', errorTilesOnCurrentDate, 'subdaily tile errors on ', selectedDate);
     if (errorTilesOnCurrentDate > 1) {
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');

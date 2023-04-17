@@ -1,3 +1,4 @@
+// this component is not currently being used but can be used for debugging by rendering in gloabal-settings.js
 import React from 'react';
 import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
