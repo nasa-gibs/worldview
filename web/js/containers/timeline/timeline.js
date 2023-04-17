@@ -72,6 +72,7 @@ import {
 import util from '../../util/util';
 
 import MobileComparisonToggle from '../../components/compare/mobile-toggle';
+import { areCoordinatesAndPolygonExtentValid } from '../../map/granule/util';
 
 const preventDefaultFunc = (e) => {
   e.preventDefault();
@@ -935,12 +936,17 @@ class Timeline extends React.Component {
     };
   };
 
-  getStringFromDate = (dataObj) => {
+  getStringFromDate = (dateObj, hasSubdailyLayers) => {
+    console.log(`dateObj: ${dateObj}`);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const day = dataObj.getDate().toString().padStart(2, '0');
-    const month = months[dataObj.getMonth()];
-    const year = dataObj.getFullYear().toString();
-    return `${year} ${month} ${day}`;
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = months[dateObj.getMonth()];
+    const year = dateObj.getFullYear().toString();
+    const hours = dateObj.getUTCHours();
+    const minutes = dateObj.getUTCMinutes();
+    const time = hasSubdailyLayers ? ` ${hours}:${minutes}` : '';
+
+    return `${year} ${month} ${day}${time}`;
   };
 
   renderDateChangeArrows = () => {
@@ -1351,7 +1357,7 @@ class Timeline extends React.Component {
                   { marginRight: isTimelineHidden ? '20px' : '0' }
                 }
               >
-                {this.getStringFromDate(selectedDate)}
+                {this.getStringFromDate(selectedDate, hasSubdailyLayers)}
               </div>
             </section>
           </ErrorBoundary>

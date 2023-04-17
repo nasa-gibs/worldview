@@ -34,12 +34,6 @@ button:focus {
   min-width: 310px;
 }
 
-
-#distraction-free-timeline-header {
-  padding: 5px 15px;
-}
-
-
 #distraction-free-timeline-header,
 #timeline-header {
   margin-top: 2px;
@@ -289,6 +283,14 @@ button:focus {
 
   & .button-action-group:hover svg path {
     fill: #000;
+  }
+}
+
+#distraction-free-timeline-header {
+  padding: 5px;
+
+  &.subdaily {
+    width: 350px;
   }
 }
 
