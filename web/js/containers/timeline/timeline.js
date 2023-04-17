@@ -72,7 +72,6 @@ import {
 import util from '../../util/util';
 
 import MobileComparisonToggle from '../../components/compare/mobile-toggle';
-import { areCoordinatesAndPolygonExtentValid } from '../../map/granule/util';
 
 const preventDefaultFunc = (e) => {
   e.preventDefault();
@@ -1349,7 +1348,7 @@ class Timeline extends React.Component {
         {initialLoadComplete && isDistractionFreeModeActive
         && (
           <ErrorBoundary>
-            <section id="distraction-free-timeline" className="distraction-free-timeline-inner clearfix">
+            <section id="distraction-free-timeline" className="clearfix">
               <div
                 id="distraction-free-timeline-header"
                 className={`distraction-free-timeline-header ${hasSubdailyLayers ? 'subdaily' : ''} ${isMobile ? 'mobile' : ''}`}

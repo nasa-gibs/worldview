@@ -9,7 +9,7 @@ button:focus {
   z-index: 3;
 }
 
-.distraction-free-timeline-inner {
+#distraction-free-timeline {
   height: 50px;
 }
 
@@ -17,7 +17,7 @@ button:focus {
   height: 67px;
 }
 
-.distraction-free-timeline-inner,
+#distraction-free-timeline,
 .timeline-inner {
   position: absolute;
   border: $wv-dark-menu-border;
@@ -283,14 +283,6 @@ button:focus {
 
   & .button-action-group:hover svg path {
     fill: #000;
-  }
-}
-
-#distraction-free-timeline-header {
-  padding: 5px;
-
-  &.subdaily {
-    width: 350px;
   }
 }
 
@@ -841,10 +833,15 @@ button:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+  padding: 5px;
 
-#distraction-free-timeline-header.mobile {
-  max-width: 390px;
+  &.subdaily {
+    width: 350px;
+  }
+
+  .mobile {
+    max-width: 390px;
+  }
 }
 
 .mobile-animate-button {
