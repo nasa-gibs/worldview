@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
+import { Button } from 'reactstrap';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
 import CreateMap from './components/create-map/createMap';
@@ -46,6 +47,7 @@ import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { SET_ERROR_TILES } from '../modules/ui/constants';
+import { toggleStaticMap, toggleKioskMode } from '../modules/ui/actions';
 
 const { events } = util;
 
@@ -78,6 +80,8 @@ function MapUI(props) {
     updateMapExtent,
     vectorStyles,
     vectorStylesState,
+    toggleKioskMode,
+    toggleStaticMap,
   } = props;
 
   const [isMapSet, setMap] = useState(false);
@@ -336,8 +340,21 @@ function MapUI(props) {
     }
   }
 
+  const testFunction = () => {
+    toggleKioskMode(true);
+    // listen for this action and dispatch event to addLayer which clears all layers and adds this layer
+    toggleStaticMap();
+  };
+
+  const devButton = () => (
+    <div id="dev-block" className="d-flex justify-content-center">
+      <Button onClick={testFunction} style={{ zIndex: '999' }} color="success">Dev Button</Button>
+    </div>
+  );
+
   return (
     <>
+      {devButton()}
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}
@@ -456,6 +473,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setPreload: (preloaded, lastPreloadDate) => {
     dispatch(setPreload(preloaded, lastPreloadDate));
+  },
+  toggleStaticMap: () => {
+    dispatch(toggleStaticMap());
+  },
+  toggleKioskMode: (isActive) => {
+    dispatch(toggleKioskMode(isActive));
   },
 });
 
