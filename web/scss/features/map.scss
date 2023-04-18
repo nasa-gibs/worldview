@@ -266,7 +266,8 @@
 
 .distraction-free-active .wv-map-scale-imperial,
 .distraction-free-active .wv-map-scale-metric {
-  right: 15px;
+  display: none;
+  // right: 15px;
 }
 
 .distraction-free-active .wv-map-scale-imperial {
