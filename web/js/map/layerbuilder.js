@@ -11,7 +11,6 @@ import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 import ImageLayer from 'ol/layer/Image';
-import Projection from 'ol/proj/Projection';
 import Static from 'ol/source/ImageStatic';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
@@ -465,24 +464,20 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createStaticImageLayer = async() => {
-    const extent = [-180, -90, 180, 90];
-    const projection = new Projection({
-      code: 'xkcd-image',
-      units: 'pixels',
-      extent,
-    });
+    const state = store.getState();
+    const { proj: { selected: { id, crs, maxExtent } } } = state;
 
-    // TO DO: Get proj.selected.crs from state and point to different png's based on state
+    const projectionURL = `images/map/bluemarble-${id}.png`;
 
-    const imageLayer = new ImageLayer({
+    const layer = new ImageLayer({
       source: new Static({
-        url: 'images/map/bluemarble.png',
-        // projection: 'ESPG:4326',
-        projection,
-        imageExtent: extent,
+        url: projectionURL,
+        projection: crs,
+        imageExtent: maxExtent,
       }),
     });
-    return imageLayer;
+
+    return layer;
   };
 
   /**
