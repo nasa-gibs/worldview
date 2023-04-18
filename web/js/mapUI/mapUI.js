@@ -46,7 +46,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
-import { SET_ERROR_TILES } from '../modules/ui/constants';
+import { SET_ERROR_TILES, DISPLAY_STATIC_MAP } from '../modules/ui/constants';
 import { toggleStaticMap, toggleKioskMode } from '../modules/ui/actions';
 
 const { events } = util;
@@ -104,6 +104,7 @@ function MapUI(props) {
         return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
       case layerConstants.ADD_LAYER:
+      case DISPLAY_STATIC_MAP:
         return setAddLayerAction(action);
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
