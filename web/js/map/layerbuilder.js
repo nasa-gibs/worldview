@@ -467,7 +467,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { proj: { selected: { id, crs, maxExtent } } } = state;
 
-    const projectionURL = `images/map/bluemarble-${id}.png`;
+    const projectionURL = `images/map/bluemarble-${id}.jpg`;
 
     const layer = new ImageLayer({
       source: new Static({
