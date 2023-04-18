@@ -147,10 +147,10 @@ async function processEntries (colormap) {
         a = 255
       }
 
-      if (a === 0) {
-        refSkipList.push(entry._attributes.ref)
-        return
-      }
+      // if (a === 0) {
+      //   refSkipList.push(entry._attributes.ref)
+      //   return
+      // }
 
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
