@@ -143,14 +143,16 @@ async function processEntries (colormap) {
       const [r, g, b] = entry._attributes.rgb.split(',')
       let a = 0
 
-      if (entry._attributes.transparent === 'false') {
-        a = 255
-      }
-
-      // if (a === 0) {
-      //   refSkipList.push(entry._attributes.ref)
-      //   return
+      // This has been modified from 0 to 255 so the hidden colors are
+      // processed & visible in the layer info
+      // if (entry._attributes.transparent === 'false') {
+      a = 255
       // }
+
+      if (a === 0) {
+        refSkipList.push(entry._attributes.ref)
+        return
+      }
 
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
