@@ -112,14 +112,12 @@ export default function mapLayerBuilder(config, cache, store) {
   // called from tileLoadFunction() when a tile returns an error
   const handleTileError = (tile, layer, sourceURL) => {
     const state = store.getState();
-    const { selected: reduxDate } = state.date;
     const { isKioskModeActive } = state.ui;
 
-    const { id, layerPeriod } = layer;
-
-    const isSubdailyLayer = layerPeriod === 'Subdaily';
-
     if (isKioskModeActive) {
+      const { selected: reduxDate } = state.date;
+      const { id, layerPeriod } = layer;
+      const isSubdailyLayer = layerPeriod === 'Subdaily';
       const urlDate = extractDateFromTileErrorURL(sourceURL);
       const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
 

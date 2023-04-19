@@ -55,7 +55,7 @@ function weekAgo(realTimeDate) {
   return earlierDateString;
 }
 
-// safe gaurd agaisnt stepping back too far, we only want to go back 7 days for daily and 24 hours for subdaily
+// safe gaurd agaisnt stepping back too far, we only want to go back 7 days for daily layers
 function compareDailyDates(lastDateToCheck, selectedDate) {
   const lastDate = new Date(lastDateToCheck);
   const selected = new Date(selectedDate);
