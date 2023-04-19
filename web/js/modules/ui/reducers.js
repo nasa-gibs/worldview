@@ -3,6 +3,7 @@ import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
+  CLEAR_ERROR_TILES,
 } from './constants';
 
 export const uiState = {
@@ -30,6 +31,14 @@ export default function uiReducers(state = uiState, action) {
         errorTiles: {
           dailyTiles: action.errorTiles.dailyTiles,
           subdailyTiles: action.errorTiles.subdailyTiles,
+        },
+      };
+    case CLEAR_ERROR_TILES:
+      return {
+        ...state,
+        errorTiles: {
+          dailyTiles: [],
+          subdailyTiles: [],
         },
       };
     default:

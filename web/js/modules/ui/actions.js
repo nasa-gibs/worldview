@@ -4,6 +4,7 @@ import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
+  CLEAR_ERROR_TILES,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -47,10 +48,6 @@ export function setErrorTiles(errorTiles) {
 
 export function clearErrorTiles() {
   return {
-    type: SET_ERROR_TILES,
-    errorTiles: {
-      dailyTiles: [],
-      subdailyTiles: [],
-    },
+    type: CLEAR_ERROR_TILES,
   };
 }

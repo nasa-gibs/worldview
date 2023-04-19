@@ -113,7 +113,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   // called from tileLoadFunction() when a tile returns an error
-  const handleTileError = (tile, layer, sourceURL) => {
+  const handleTileError = async (tile, layer, sourceURL) => {
     const state = store.getState();
     const { isKioskModeActive } = state.ui;
 
@@ -286,7 +286,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
-
 
     // dispatch action to keep track of error tiles
     if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length) && isKioskModeActive) {
