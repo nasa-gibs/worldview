@@ -85,8 +85,6 @@ function AddLayer(props) {
     preloadNextTiles();
   };
 
-
-
   return null;
 }
 
