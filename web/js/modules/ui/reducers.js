@@ -8,7 +8,10 @@ import {
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
-  errorTiles: [],
+  errorTiles: {
+    dailyTiles: [],
+    subdailyTiles: [],
+  },
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -24,7 +27,10 @@ export default function uiReducers(state = uiState, action) {
     case SET_ERROR_TILES:
       return {
         ...state,
-        errorTiles: action.tiles,
+        errorTiles: {
+          dailyTiles: action.errorTiles.dailyTiles,
+          subdailyTiles: action.errorTiles.subdailyTiles,
+        },
       };
     default:
       return state;

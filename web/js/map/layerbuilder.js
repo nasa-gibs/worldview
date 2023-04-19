@@ -49,8 +49,11 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  // array to keep track of each tile that returned an error
-  const errorTiles = [];
+  // keep track of each tile that returned an error
+  const errorTiles = {
+    dailyTiles: [],
+    subdailyTiles: [],
+  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -131,7 +134,12 @@ export default function mapLayerBuilder(config, cache, store) {
           matrixColRow,
           sourceURL,
         };
-        errorTiles.push(errorObj);
+
+        if (isSubdailyLayer) {
+          errorTiles.subdailyTiles.push(errorObj);
+        } else {
+          errorTiles.dailyTiles.push(errorObj);
+        }
       }
     }
   };
@@ -279,10 +287,12 @@ export default function mapLayerBuilder(config, cache, store) {
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
+
     // dispatch action to keep track of error tiles
-    if (errorTiles.length && isKioskModeActive) {
+    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length) && isKioskModeActive) {
       store.dispatch(setErrorTiles(errorTiles));
     }
+
 
     return layer;
   };

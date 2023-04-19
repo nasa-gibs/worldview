@@ -35,16 +35,22 @@ export function toggleKioskMode(isActive) {
   };
 }
 
-export function setErrorTiles(tiles) {
+export function setErrorTiles(errorTiles) {
   return {
     type: SET_ERROR_TILES,
-    tiles,
+    errorTiles: {
+      dailyTiles: errorTiles.dailyTiles,
+      subdailyTiles: errorTiles.subdailyTiles,
+    },
   };
 }
 
 export function clearErrorTiles() {
   return {
     type: SET_ERROR_TILES,
-    tiles: [],
+    errorTiles: {
+      dailyTiles: [],
+      subdailyTiles: [],
+    },
   };
 }

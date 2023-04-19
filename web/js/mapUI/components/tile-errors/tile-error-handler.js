@@ -96,6 +96,7 @@ function TileErrorHandler({ action }) {
     realTimeDate: state.date.appNow,
   }));
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
+  const { dailyTiles, subdailyTiles } = errorTiles;
 
   // 7 days ago from real time date
   const lastDateToCheck = weekAgo(realTimeDate);
@@ -104,61 +105,31 @@ function TileErrorHandler({ action }) {
   const dailySafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
   const hourlySafeguardCheck = compareSubdailyDates(lastDateToCheck, selectedDate);
 
+  const errorTileCheck = dailyTiles.length || subdailyTiles.length;
+
   useEffect(() => {
-    if (isKioskModeActive && errorTiles.length && dailySafeguardCheck && hourlySafeguardCheck && !isLoading) {
-      sortErrorTiles();
+    if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && hourlySafeguardCheck && !isLoading) {
+      handleTileErrors();
     }
   }, [action]);
 
-  // sorting tiles for daily & subdaily
-  function sortErrorTiles() {
-    const dailyTiles = [];
-    const subdailyTiles = [];
-
-    errorTiles.forEach((tile) => {
-      if (tile.layerPeriod !== 'Subdaily') {
-        dailyTiles.push(tile);
-      } else {
-        subdailyTiles.push(tile);
-      }
-    });
-
-    if (dailyTiles.length) {
-      handleErrorTilesDaily(dailyTiles, subdailyTiles);
-    } else {
-      handleErrorTilesSubdaily(subdailyTiles);
-    }
-  }
-
-  const handleErrorTilesDaily = (dailyTiles, subdailyTiles) => {
-    const currentDate = formatDate(selectedDate, false);
-    const errorTilesOnCurrentDate = dailyTiles.filter((tile) => currentDate === tile.date).length;
-    if (errorTilesOnCurrentDate > 1) {
+  const handleTimeChange = (tiles, isSubdaily) => {
+    const currentDate = formatDate(selectedDate, isSubdaily);
+    const errorTilesOnCurrentDate = tiles.filter((tile) => currentDate === tile.date).length;
+    if (errorTilesOnCurrentDate) {
       const state = { date, compare };
-      if (hasSubdailyLayers) {
-        selectInterval(1, 3, false);
-      }
+      if (hasSubdailyLayers) selectInterval(1, 3, false);
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
       clearErrorTiles();
       selectDate(prevDateObj);
-    } else {
-      handleErrorTilesSubdaily(subdailyTiles);
     }
   };
 
-  const handleErrorTilesSubdaily = (subdailyTiles) => {
-    const currentDate = formatDate(selectedDate, true);
-    const errorTilesOnCurrentDate = subdailyTiles.filter((tile) => currentDate === tile.date).length;
-    if (errorTilesOnCurrentDate > 1) {
-      const state = { date, compare };
-      const prevDate = getNextDateTime(state, '-1');
-      const prevDateObj = new Date(prevDate);
-      clearErrorTiles();
-      selectDate(prevDateObj);
-    } else {
-      clearErrorTiles();
-    }
+  const handleTileErrors = () => {
+    if (dailyTiles.length) handleTimeChange(dailyTiles, false);
+    if (subdailyTiles.length) handleTimeChange(subdailyTiles, true);
+    clearErrorTiles();
   };
 
   return null;
