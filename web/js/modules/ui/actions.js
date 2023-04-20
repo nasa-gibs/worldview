@@ -5,6 +5,7 @@ import {
   TOGGLE_KIOSK_MODE,
   CLEAR_ERROR_TILES,
   SET_ERROR_TILES,
+  DISPLAY_STATIC_MAP,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 

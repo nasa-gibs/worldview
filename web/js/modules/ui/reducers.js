@@ -10,7 +10,6 @@ import {
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
-  errorTiles: [],
   displayStaticMap: false,
   errorTiles: {
     dailyTiles: [],
