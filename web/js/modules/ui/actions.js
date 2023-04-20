@@ -3,8 +3,8 @@ import googleTagManager from 'googleTagManager';
 import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
+  CLEAR_ERROR_TILES,
   SET_ERROR_TILES,
-  DISPLAY_STATIC_MAP,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -36,17 +36,19 @@ export function toggleKioskMode(isActive) {
   };
 }
 
-export function setErrorTiles(tiles) {
+export function setErrorTiles(errorTiles) {
   return {
     type: SET_ERROR_TILES,
-    tiles,
+    errorTiles: {
+      dailyTiles: errorTiles.dailyTiles,
+      subdailyTiles: errorTiles.subdailyTiles,
+    },
   };
 }
 
 export function clearErrorTiles() {
   return {
-    type: SET_ERROR_TILES,
-    tiles: [],
+    type: CLEAR_ERROR_TILES,
   };
 }
 

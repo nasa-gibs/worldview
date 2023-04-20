@@ -51,8 +51,11 @@ import {
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  // array to keep track of each tile that returned an error
-  const errorTiles = [];
+  // keep track of each tile that returned an error
+  const errorTiles = {
+    dailyTiles: [],
+    subdailyTiles: [],
+  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -112,16 +115,14 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   // called from tileLoadFunction() when a tile returns an error
-  const handleTileError = (tile, layer, sourceURL) => {
+  const handleTileError = async (tile, layer, sourceURL) => {
     const state = store.getState();
-    const { selected: reduxDate } = state.date;
     const { isKioskModeActive } = state.ui;
 
-    const { id, layerPeriod } = layer;
-
-    const isSubdailyLayer = layerPeriod === 'Subdaily';
-
     if (isKioskModeActive) {
+      const { selected: reduxDate } = state.date;
+      const { id, layerPeriod } = layer;
+      const isSubdailyLayer = layerPeriod === 'Subdaily';
       const urlDate = extractDateFromTileErrorURL(sourceURL);
       const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
 
@@ -135,7 +136,12 @@ export default function mapLayerBuilder(config, cache, store) {
           matrixColRow,
           sourceURL,
         };
-        errorTiles.push(errorObj);
+
+        if (isSubdailyLayer) {
+          errorTiles.subdailyTiles.push(errorObj);
+        } else {
+          errorTiles.dailyTiles.push(errorObj);
+        }
       }
     }
   };
@@ -290,9 +296,10 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     // dispatch action to keep track of error tiles
-    if (errorTiles.length && isKioskModeActive) {
+    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length) && isKioskModeActive) {
       store.dispatch(setErrorTiles(errorTiles));
     }
+
 
     return layer;
   };

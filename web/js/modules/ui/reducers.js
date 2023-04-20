@@ -4,6 +4,7 @@ import {
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
+  CLEAR_ERROR_TILES,
 } from './constants';
 
 export const uiState = {
@@ -11,6 +12,10 @@ export const uiState = {
   isKioskModeActive: false,
   errorTiles: [],
   displayStaticMap: false,
+  errorTiles: {
+    dailyTiles: [],
+    subdailyTiles: [],
+  },
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -26,7 +31,18 @@ export default function uiReducers(state = uiState, action) {
     case SET_ERROR_TILES:
       return {
         ...state,
-        errorTiles: action.tiles,
+        errorTiles: {
+          dailyTiles: action.errorTiles.dailyTiles,
+          subdailyTiles: action.errorTiles.subdailyTiles,
+        },
+      };
+    case CLEAR_ERROR_TILES:
+      return {
+        ...state,
+        errorTiles: {
+          dailyTiles: [],
+          subdailyTiles: [],
+        },
       };
     case DISPLAY_STATIC_MAP:
       return {
