@@ -344,7 +344,7 @@ function MapUI(props) {
   const testFunction = () => {
     toggleKioskMode(true);
     // listen for this action and dispatch event to addLayer which clears all layers and adds this layer
-    toggleStaticMap();
+    toggleStaticMap(true);
   };
 
   const devButton = () => (
@@ -412,7 +412,7 @@ function MapUI(props) {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
-      <TileErrorHandler action={tileErrorAction} />
+      <TileErrorHandler action={tileErrorAction} ui={ui} />
     </>
   );
 }
@@ -475,8 +475,8 @@ const mapDispatchToProps = (dispatch) => ({
   setPreload: (preloaded, lastPreloadDate) => {
     dispatch(setPreload(preloaded, lastPreloadDate));
   },
-  toggleStaticMap: () => {
-    dispatch(toggleStaticMap());
+  toggleStaticMap: (isActive) => {
+    dispatch(toggleStaticMap(isActive));
   },
   toggleKioskMode: (isActive) => {
     dispatch(toggleKioskMode(isActive));

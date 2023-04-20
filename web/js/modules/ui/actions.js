@@ -53,8 +53,9 @@ export function clearErrorTiles() {
   };
 }
 
-export function toggleStaticMap() {
+export function toggleStaticMap(isActive) {
   return {
     type: DISPLAY_STATIC_MAP,
+    isActive,
   };
 }

@@ -1,13 +1,22 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearErrorTiles as clearErrorTilesAction } from '../../../modules/ui/actions';
+import {
+  clearErrorTiles as clearErrorTilesAction,
+  toggleStaticMap,
+} from '../../../modules/ui/actions';
 import {
   selectDate as selectDateAction,
   selectInterval as selectIntervalAction,
 } from '../../../modules/date/actions';
 import { getNextDateTime } from '../../../modules/date/util';
-import { subdailyLayersActive } from '../../../modules/layers/selectors';
+import {
+  subdailyLayersActive,
+  getActiveLayers,
+  getActiveLayersMap,
+} from '../../../modules/layers/selectors';
+// import { removeGroup as removeGroupActtion } from '../../../modules/layers/actions';
+import { clearLayers } from '../util/util';
 
 // updating timezone for subdaily times
 function convertTimestamp(timestamp) {
@@ -90,11 +99,12 @@ function compareSubdailyDates(lastDateToCheck, selectedDate) {
   return true;
 }
 
-function TileErrorHandler({ action }) {
+function TileErrorHandler({ action, ui }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
   const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
+  const toggleStaticMapAction = (isActive) => { dispatch(toggleStaticMap(isActive)); };
 
   const {
     isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading, realTimeDate,
@@ -107,7 +117,11 @@ function TileErrorHandler({ action }) {
     isLoading: state.loading.isLoading,
     realTimeDate: state.date.appNow,
   }));
+  const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
+  const layersMap = useSelector((state) => getActiveLayersMap(state));
+  const activeLayers = useSelector((state) => getActiveLayers(state, activeString));
+
   const { dailyTiles, subdailyTiles } = errorTiles;
 
   // 7 days ago from real time date
@@ -123,8 +137,24 @@ function TileErrorHandler({ action }) {
   useEffect(() => {
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
       handleTileErrors();
+      // add isActive for static map to check if it is false
+    } else if (isKioskModeActive && errorTileCheck && !dailySafeguardCheck && !isLoading) {
+      handleStaticMap();
     }
   }, [action]);
+
+  const handleStaticMap = () => {
+    clearLayers(ui);
+    toggleStaticMapAction(true);
+
+    console.log('layersMap', layersMap);
+    console.log('activeLayers', activeLayers);
+
+    // const layersForGroup = layers.map((id) => activeLayersMap[id]);
+    // const groupLayerIds = layers.map(({ id }) => id);
+    // console.log('layersForGroup', layersForGroup)
+    // console.log('groupLayerIds', groupLayerIds)
+  };
 
   const handleTimeChange = (tiles, isSubdaily) => {
     const currentDate = formatDate(selectedDate, isSubdaily);

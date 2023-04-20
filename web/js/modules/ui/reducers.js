@@ -44,10 +44,9 @@ export default function uiReducers(state = uiState, action) {
         },
       };
     case DISPLAY_STATIC_MAP:
-      return {
-        ...state,
-        displayStaticMap: !state.displayStaticMap,
-      };
+      return lodashAssign({}, state, {
+        displayStaticMap: action.isActive,
+      });
     default:
       return state;
   }
