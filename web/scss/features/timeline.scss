@@ -828,7 +828,8 @@ button:focus {
 
 #distraction-free-timeline-header {
   color: #fff;
-  font-family: 'helvetica';
+  font-family: Helvetica, sans-serif;
+  letter-spacing: 0.125em;
   font-size: 24px;
   display: flex;
   justify-content: center;
