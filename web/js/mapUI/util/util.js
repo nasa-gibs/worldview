@@ -24,6 +24,7 @@ export const countTiles = (ui) => {
   const view = map.getView();
   const layerGroup = map.getLayers().item(0);
   const layers = layerGroup.getLayers().getArray();
+  const numberOfLayers = layers.length;
 
   let totalExpectedTileCount = 0;
   let totalLoadedTileCount = 0;
@@ -57,7 +58,7 @@ export const countTiles = (ui) => {
   });
 
   return {
-    totalExpectedTileCount: totalExpectedTileCount / 3,
+    totalExpectedTileCount: totalExpectedTileCount / numberOfLayers,
     totalLoadedTileCount,
   };
 };

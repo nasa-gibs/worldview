@@ -97,8 +97,10 @@ function TileErrorHandler({ action, ui }) {
   const handleTileErrors = () => {
     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
-    if (percentageOfLoadedTiles >= 75) return;
+    // right now this only checks the most base layer, does it need to check all of them
     console.log(totalExpectedTileCount, totalLoadedTileCount, percentageOfLoadedTiles, '%');
+    if (percentageOfLoadedTiles >= 75) return;
+
 
     if (dailyTiles.length) handleTimeChange(dailyTiles, false);
     if (subdailyTiles.length && hourlySafeguardCheck) handleTimeChange(subdailyTiles, true);
