@@ -48,6 +48,7 @@ import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { SET_ERROR_TILES, DISPLAY_STATIC_MAP } from '../modules/ui/constants';
 import { toggleStaticMap, toggleKioskMode } from '../modules/ui/actions';
+import { countTiles } from './components/util/util';
 
 const { events } = util;
 
@@ -80,8 +81,8 @@ function MapUI(props) {
     updateMapExtent,
     vectorStyles,
     vectorStylesState,
-    toggleKioskMode,
-    toggleStaticMap,
+    // toggleKioskMode,
+    // toggleStaticMap,
   } = props;
 
   const [isMapSet, setMap] = useState(false);
@@ -342,9 +343,11 @@ function MapUI(props) {
   }
 
   const testFunction = () => {
-    toggleKioskMode(true);
-    // listen for this action and dispatch event to addLayer which clears all layers and adds this layer
-    toggleStaticMap(true);
+    // toggleKioskMode(true);
+    // // listen for this action and dispatch event to addLayer which clears all layers and adds this layer
+    // toggleStaticMap(true);
+    const tileCount = countTiles(ui);
+    console.log(tileCount);
   };
 
   const devButton = () => (
