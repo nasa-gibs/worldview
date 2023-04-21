@@ -10,7 +10,7 @@ import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload } from '../../../modules/date/actions';
 import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
-import { clearLayers } from '../util/util';
+import { clearLayers } from '../../util/util';
 
 function AddLayer(props) {
   const {
