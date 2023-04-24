@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
@@ -97,6 +97,14 @@ function AnimationWidget (props) {
 
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
+  const autoplayAnimation = useSelector((state) => state.animation.autoplay);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!isPlaying && autoplayAnimation) {
+      dispatch(play());
+    }
+  }, [isPlaying]);
 
   // component did mount
   useEffect(() => {
@@ -201,6 +209,7 @@ function AnimationWidget (props) {
   };
 
   const onPushPlayFunc = () => {
+    console.log('onPushPlayFunc');
     const {
       startDate,
       endDate,
@@ -449,6 +458,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onClose());
   },
   onPushPlay: () => {
+    console.log('onPushPlay');
     dispatch(play());
   },
   onPushPause: () => {

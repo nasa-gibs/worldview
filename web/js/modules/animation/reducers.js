@@ -26,6 +26,7 @@ export const defaultState = {
   endDate: undefined,
   boundaries: undefined,
   isCollapsed: false,
+  autoplay: false,
 };
 export function getInitialState(config) {
   return {
