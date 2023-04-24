@@ -13,11 +13,9 @@ import { getNextDateTime } from '../../../modules/date/util';
 import {
   subdailyLayersActive,
   getActiveLayers,
-  getActiveLayersMap,
 } from '../../../modules/layers/selectors';
-// import { removeGroup as removeGroupActtion } from '../../../modules/layers/actions';
+import { removeGroup as removeGroupAction } from '../../../modules/layers/actions';
 import {
-  clearLayers,
   countTiles,
   formatDate,
   weekAgo,
@@ -32,6 +30,7 @@ function TileErrorHandler({ action, ui }) {
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
   const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
   const toggleStaticMapAction = (isActive) => { dispatch(toggleStaticMap(isActive)); };
+  const removeGroup = (ids) => { dispatch(removeGroupAction(ids)); };
 
   const {
     isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading, realTimeDate,
@@ -46,8 +45,7 @@ function TileErrorHandler({ action, ui }) {
   }));
   const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
-  const layersMap = useSelector((state) => getActiveLayersMap(state));
-  const activeLayers = useSelector((state) => getActiveLayers(state, activeString));
+  const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
 
   const { dailyTiles, subdailyTiles } = errorTiles;
 
@@ -69,16 +67,8 @@ function TileErrorHandler({ action, ui }) {
   }, [action]);
 
   const handleStaticMap = () => {
-    clearLayers(ui);
     toggleStaticMapAction(true);
-
-    console.log('layersMap', layersMap);
-    console.log('activeLayers', activeLayers);
-
-    // const layersForGroup = layers.map((id) => activeLayersMap[id]);
-    // const groupLayerIds = layers.map(({ id }) => id);
-    // console.log('layersForGroup', layersForGroup)
-    // console.log('groupLayerIds', groupLayerIds)
+    removeGroup(activeLayerIds);
   };
 
   const handleTimeChange = (tiles, isSubdaily) => {
@@ -98,9 +88,8 @@ function TileErrorHandler({ action, ui }) {
     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
     // right now this only checks the most base layer, does it need to check all of them
-    console.log(totalExpectedTileCount, totalLoadedTileCount, percentageOfLoadedTiles, '%');
+    // console.log(totalExpectedTileCount, totalLoadedTileCount, percentageOfLoadedTiles, '%');
     if (percentageOfLoadedTiles >= 75) return;
-
 
     if (dailyTiles.length) handleTimeChange(dailyTiles, false);
     if (subdailyTiles.length && hourlySafeguardCheck) handleTimeChange(subdailyTiles, true);

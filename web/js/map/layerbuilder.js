@@ -173,7 +173,8 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     try {
-      const response = await fetch(src);
+      const fakeSrc = 'https://gitc-b.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=2023-04-24T00:00:00Z&layer=VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate&style=default&tilematrixset=2km&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=0&TileCol=1&TileRow=0';
+      const response = await fetch(fakeSrc);
       const data = await response.blob();
       updateCollections(response.headers);
       if (data !== undefined) {

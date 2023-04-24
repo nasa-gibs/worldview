@@ -318,8 +318,10 @@ function MapUI(props) {
   async function preloadNextTiles(date, compareString) {
     const map = { ui };
     const state = {
-      proj, embed, layers, palettes, vectorStyles, compare, map,
+      proj, embed, layers, palettes, vectorStyles, compare, map, ui,
     };
+    const { dislayStaticMap } = ui;
+    if (dislayStaticMap) return;
     const useActiveString = compareString || activeString;
     const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(dateCompareState));
     const nextDate = getNextDateTime(dateCompareState, 1, useDate);
