@@ -60,7 +60,6 @@ export const mapLocationToState = (state, location) => {
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
-    console.log(stateFromLocation);
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
@@ -487,7 +486,7 @@ const getParameters = function(config, parameters) {
       initialState: false,
       options: {
         serialize: (boo) => (boo ? 'on' : undefined),
-        parse: (str) => str === 'on',
+        parse: (str) => str === 'true',
       },
     },
     abt: {
