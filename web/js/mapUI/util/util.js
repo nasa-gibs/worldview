@@ -24,7 +24,6 @@ export const countTiles = (ui) => {
   const view = map.getView();
   const layerGroup = map.getLayers().item(0);
   const layers = layerGroup.getLayers().getArray();
-  const numberOfLayers = layers.length;
 
   let totalExpectedTileCount = 0;
   let totalLoadedTileCount = 0;
@@ -45,9 +44,14 @@ export const countTiles = (ui) => {
       let loadedTileCount = 0;
 
       const tileCoordFunction = (tileCoord) => {
-        expectedTileCount += 1;
         const tile = source.getTile(tileCoord[0], tileCoord[1], tileCoord[2], 1, sourceProjection);
-        if (tile.getState() === 2) loadedTileCount += 1;
+        const tileState = tile.getState();
+        if (tileState === 2) {
+          loadedTileCount += 1;
+          expectedTileCount += 1;
+        } else if (tileState === 3) {
+          expectedTileCount += 1;
+        }
       };
 
       tileGrid.forEachTileCoord(transformedExtent, currentZ, tileCoordFunction);
@@ -58,7 +62,7 @@ export const countTiles = (ui) => {
   });
 
   return {
-    totalExpectedTileCount: totalExpectedTileCount / numberOfLayers,
+    totalExpectedTileCount,
     totalLoadedTileCount,
   };
 };
