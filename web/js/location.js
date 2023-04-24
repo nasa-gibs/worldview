@@ -60,6 +60,7 @@ export const mapLocationToState = (state, location) => {
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
+    console.log(stateFromLocation);
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
