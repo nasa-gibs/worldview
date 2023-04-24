@@ -35,6 +35,7 @@ import {
   changeEndDate,
   changeStartAndEndDate,
   toggleAnimationCollapse,
+  toggleAnimationAutoplay,
 } from '../../modules/animation/actions';
 import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
@@ -71,6 +72,7 @@ function AnimationWidget (props) {
     onPushPlay,
     onSlide,
     onToggleAnimationCollapse,
+    onToggleAnimationAutoplay,
     onUpdateEndDate,
     onUpdateStartDate,
     onUpdateStartAndEndDate,
@@ -103,6 +105,8 @@ function AnimationWidget (props) {
   useEffect(() => {
     if (!isPlaying && autoplayAnimation) {
       dispatch(play());
+      // disable autoplay
+      toggleAutoplay();
     }
   }, [isPlaying]);
 
@@ -146,6 +150,9 @@ function AnimationWidget (props) {
 
   const toggleCollapse = () => {
     onToggleAnimationCollapse();
+  };
+  const toggleAutoplay = () => {
+    onToggleAnimationAutoplay();
   };
 
   const onExpandedDrag = (e, position) => {
@@ -209,7 +216,6 @@ function AnimationWidget (props) {
   };
 
   const onPushPlayFunc = () => {
-    console.log('onPushPlayFunc');
     const {
       startDate,
       endDate,
@@ -458,7 +464,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onClose());
   },
   onPushPlay: () => {
-    console.log('onPushPlay');
     dispatch(play());
   },
   onPushPause: () => {
@@ -487,6 +492,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onToggleAnimationCollapse: () => {
     dispatch(toggleAnimationCollapse());
+  },
+  onToggleAnimationAutoplay: () => {
+    dispatch(toggleAnimationAutoplay());
   },
 });
 
@@ -518,6 +526,7 @@ AnimationWidget.propTypes = {
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
+  onToggleAnimationAutoplay: PropTypes.func,
   onClose: PropTypes.func,
   onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
