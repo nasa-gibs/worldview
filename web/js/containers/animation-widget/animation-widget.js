@@ -103,10 +103,10 @@ function AnimationWidget (props) {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!isPlaying && autoplayAnimation) {
-      dispatch(play());
-      // disable autoplay
-      toggleAutoplay();
+    if (autoplayAnimation) {
+      if (!isPlaying) {
+        dispatch(play());
+      }
     }
   }, [isPlaying]);
 
@@ -224,6 +224,7 @@ function AnimationWidget (props) {
     onPushPlay();
   };
 
+  console.log(`a-w | autoplayAnimation: ${autoplayAnimation}`);
   return isActive ? (
     <ErrorBoundary>
       {isPlaying && (
@@ -323,6 +324,7 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           widgetPosition={widgetPosition}
           zeroDates={zeroDates}
+          autoplayAnimation={autoplayAnimation}
         />
       )}
     </ErrorBoundary>
