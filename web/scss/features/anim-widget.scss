@@ -51,6 +51,10 @@
       bottom: 83px;
       left: 10px;
     }
+
+    &.autoplay {
+      bottom: 10px;
+    }
   }
 }
 
@@ -121,6 +125,10 @@
   background: #212121;
   color: #fff;
   padding: 1px 0;
+
+  &.autoplay {
+    height: auto;
+  }
 
   &.minimized {
     height: 52px;

@@ -58,10 +58,10 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className="wv-animation-widget-wrapper">
+      <div className={`wv-animation-widget-wrapper ${autoplayAnimation ? ' autoplay' : ''}`}>
         <div
           id="wv-animation-widget"
-          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
+          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${autoplayAnimation ? ' autoplay' : ''}`}
         >
           {!autoplayAnimation && (
             <>
