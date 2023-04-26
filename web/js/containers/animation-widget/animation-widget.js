@@ -56,6 +56,7 @@ function AnimationWidget (props) {
     isActive,
     isCollapsed,
     isEmbedModeActive,
+    isKioskModeActive,
     isLandscape,
     isMobile,
     isMobilePhone,
@@ -102,18 +103,14 @@ function AnimationWidget (props) {
   const autoplayAnimation = useSelector((state) => state.animation.autoplay);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (autoplayAnimation) {
-      if (!isPlaying) {
-        dispatch(play());
-      }
-    }
-  }, [isPlaying]);
 
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
+    }
+    if (!isPlaying && autoplayAnimation) {
+      dispatch(play());
     }
   }, []);
 
@@ -224,7 +221,6 @@ function AnimationWidget (props) {
     onPushPlay();
   };
 
-  console.log(`a-w | autoplayAnimation: ${autoplayAnimation}`);
   return isActive ? (
     <ErrorBoundary>
       {isPlaying && (
@@ -303,6 +299,7 @@ function AnimationWidget (props) {
           handleDragStart={handleDragStart}
           hasSubdailyLayers={hasSubdailyLayers}
           interval={interval}
+          isKioskModeActive={isKioskModeActive}
           isPlaying={isPlaying}
           looping={looping}
           maxDate={maxDate}
@@ -324,7 +321,6 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           widgetPosition={widgetPosition}
           zeroDates={zeroDates}
-          autoplayAnimation={autoplayAnimation}
         />
       )}
     </ErrorBoundary>
@@ -373,7 +369,7 @@ const mapStateToProps = (state) => {
     maxDate = appNow;
   }
 
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
     && lodashGet(map, 'ui.selected.frameState_')
@@ -424,6 +420,7 @@ const mapStateToProps = (state) => {
     startDate,
     endDate,
     isCollapsed,
+    isKioskModeActive,
     snappedCurrentDate,
     currentDate,
     minDate,

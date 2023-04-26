@@ -1,6 +1,6 @@
 import googleTagManager from 'googleTagManager';
 
-import { TOGGLE_DISTRACTION_FREE_MODE } from './constants';
+import { TOGGLE_DISTRACTION_FREE_MODE, TOGGLE_KIOSK_MODE } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
 export default function toggleDistractionFreeMode() {
@@ -20,5 +20,13 @@ export default function toggleDistractionFreeMode() {
     if (!isDistractionFreeModeActive && modalIsOpen) {
       dispatch({ type: CLOSE_MODAL });
     }
+  };
+}
+
+// this can probably be changed back to truthy/falsy but I would like to control isActive manually for now
+export function toggleKioskMode(isActive) {
+  return {
+    type: TOGGLE_KIOSK_MODE,
+    isActive,
   };
 }

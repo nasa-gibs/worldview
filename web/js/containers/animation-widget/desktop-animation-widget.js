@@ -12,12 +12,12 @@ import CustomIntervalSelector from '../../components/timeline/custom-interval-se
 function DesktopAnimationWidget(props) {
   const {
     animationCustomModalOpen,
-    autoplayAnimation,
     customModalType,
     endDate,
     handleDragStart,
     hasSubdailyLayers,
     interval,
+    isKioskModeActive,
     isPlaying,
     looping,
     maxDate,
@@ -48,7 +48,6 @@ function DesktopAnimationWidget(props) {
     onSlide(speed);
   };
 
-  console.log(`autoplayAnimation: ${autoplayAnimation}`);
   return (
     <Draggable
       bounds="body"
@@ -58,12 +57,12 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className={`wv-animation-widget-wrapper ${autoplayAnimation ? ' autoplay' : ''}`}>
+      <div className={`wv-animation-widget-wrapper ${isKioskModeActive ? ' kiosk' : ''}`}>
         <div
           id="wv-animation-widget"
-          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${autoplayAnimation ? ' autoplay' : ''}`}
+          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${isKioskModeActive ? ' kiosk' : ''}`}
         >
-          {!autoplayAnimation && (
+          {!isKioskModeActive && (
             <>
               <div className="wv-animation-widget-header">
                 {'Animate Map in '}
@@ -129,7 +128,7 @@ function DesktopAnimationWidget(props) {
             isDisabled={isPlaying}
           />
 
-          {!autoplayAnimation && (
+          {!isKioskModeActive && (
           <>
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
@@ -143,7 +142,7 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
-  autoplayAnimation: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   customModalType: PropTypes.object,
   endDate: PropTypes.object,
   handleDragStart: PropTypes.func,
