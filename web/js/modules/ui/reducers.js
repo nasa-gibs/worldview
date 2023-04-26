@@ -14,6 +14,7 @@ export const uiState = {
   errorTiles: {
     dailyTiles: [],
     subdailyTiles: [],
+    blankTiles: [],
   },
 };
 
@@ -33,6 +34,7 @@ export default function uiReducers(state = uiState, action) {
         errorTiles: {
           dailyTiles: action.errorTiles.dailyTiles,
           subdailyTiles: action.errorTiles.subdailyTiles,
+          blankTiles: action.errorTiles.blankTiles,
         },
       };
     case CLEAR_ERROR_TILES:
@@ -41,6 +43,7 @@ export default function uiReducers(state = uiState, action) {
         errorTiles: {
           dailyTiles: [],
           subdailyTiles: [],
+          blankTiles: [],
         },
       };
     case DISPLAY_STATIC_MAP:

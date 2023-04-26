@@ -43,6 +43,7 @@ export function setErrorTiles(errorTiles) {
     errorTiles: {
       dailyTiles: errorTiles.dailyTiles,
       subdailyTiles: errorTiles.subdailyTiles,
+      blankTiles: errorTiles.blankTiles,
     },
   };
 }

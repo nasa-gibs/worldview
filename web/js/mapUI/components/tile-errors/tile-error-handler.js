@@ -22,6 +22,7 @@ import {
   threeHoursAgo,
   compareDailyDates,
   compareSubdailyDates,
+  formatSelectedDate,
 } from '../../util/util';
 
 function TileErrorHandler({ action, ui }) {
@@ -47,7 +48,7 @@ function TileErrorHandler({ action, ui }) {
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
   const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
 
-  const { dailyTiles, subdailyTiles } = errorTiles;
+  const { dailyTiles, subdailyTiles, blankTiles } = errorTiles;
 
   const lastDateToCheck = weekAgo(realTimeDate);
   const lastTimeToCheck = threeHoursAgo(realTimeDate);
@@ -56,13 +57,15 @@ function TileErrorHandler({ action, ui }) {
   const hourlySafeguardCheck = compareSubdailyDates(lastTimeToCheck, selectedDate);
 
   const errorTileCheck = dailyTiles.length || subdailyTiles.length;
+  const blankTileCheck = blankTiles.length;
 
   useEffect(() => {
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
       handleTileErrors();
-      // add isActive for static map to check if it is false
     } else if (isKioskModeActive && errorTileCheck && !dailySafeguardCheck && !isLoading) {
       handleStaticMap();
+    } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
+      handleTimeChangeForBlankTiles();
     }
   }, [action]);
 
@@ -71,7 +74,22 @@ function TileErrorHandler({ action, ui }) {
     removeGroup(activeLayerIds);
   };
 
-  const handleTimeChange = (tiles, isSubdaily) => {
+  const handleTimeChangeForBlankTiles = () => {
+    const { totalExpectedTileCount } = countTiles(ui);
+    // console.log('totalExpectedTileCount', totalExpectedTileCount, 'blankTilesCount', blankTiles.length, 'percentage: ', (blankTiles.length / totalExpectedTileCount) * 100, '%', blankTiles[0].date)
+    const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
+    if (!blankTilesOnCurentDate) return;
+    const blankTilesPercentage = (blankTiles.length / totalExpectedTileCount) * 100;
+    if (blankTilesPercentage >= 50) {
+      const state = { date, compare };
+      const prevDate = getNextDateTime(state, '-1');
+      const prevDateObj = new Date(prevDate);
+      clearErrorTiles();
+      selectDate(prevDateObj);
+    }
+  };
+
+  const handleTimeChangeForErrors = (tiles, isSubdaily) => {
     const currentDate = formatDate(selectedDate, isSubdaily);
     const errorTilesOnCurrentDate = tiles.filter((tile) => currentDate === tile.date).length;
     if (errorTilesOnCurrentDate) {
@@ -88,11 +106,11 @@ function TileErrorHandler({ action, ui }) {
     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
     // right now this only checks the most base layer, does it need to check all of them
-    // console.log(totalExpectedTileCount, totalLoadedTileCount, percentageOfLoadedTiles, '%');
+    // console.log(totalExpectedTileCount, totalLoadedTileCount, percentageOfLoadedTiles, '%')
     if (percentageOfLoadedTiles >= 75) return;
 
-    if (dailyTiles.length) handleTimeChange(dailyTiles, false);
-    if (subdailyTiles.length && hourlySafeguardCheck) handleTimeChange(subdailyTiles, true);
+    if (dailyTiles.length) handleTimeChangeForErrors(dailyTiles, false);
+    if (subdailyTiles.length && hourlySafeguardCheck) handleTimeChangeForErrors(subdailyTiles, true);
     clearErrorTiles();
   };
 

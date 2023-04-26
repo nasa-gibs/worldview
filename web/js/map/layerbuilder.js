@@ -26,6 +26,7 @@ import {
   mergeBreakpointLayerAttributes,
   formatReduxDate,
   extractDateFromTileErrorURL,
+  formatAppNowDate,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
@@ -55,7 +56,11 @@ export default function mapLayerBuilder(config, cache, store) {
   const errorTiles = {
     dailyTiles: [],
     subdailyTiles: [],
+    blankTiles: [],
   };
+
+  // list of layer id's to check for blank tiles in blobs
+  const kioskLayerList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -153,12 +158,27 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} src
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
+    const state = store.getState();
+    const { ui: { isKioskModeActive }, date: { appNow } } = state;
+
+
     const date = layerDate.toISOString().split('T')[0];
-    let actualId;
+
+    const checkBlobTiles = (headers) => {
+      const formattedAppNowDate = formatAppNowDate(appNow);
+      if (isKioskModeActive && kioskLayerList.includes(layer.id) && formattedAppNowDate === date) {
+        const contentLength = headers.get('content-length');
+        if (parseInt(contentLength, 10) < 1500) {
+          // console.log('content-length: ', contentLength, 'date: ', date)
+          errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
+        }
+      }
+    };
 
     const updateCollections = (headers) => {
-      actualId = headers.get('layer-identifier-actual');
+      const actualId = headers.get('layer-identifier-actual');
       if (!actualId) return;
+
       const state = store.getState();
       const { layers } = state;
       const collectionCheck = getCollections(layers, date, layer);
@@ -176,6 +196,11 @@ export default function mapLayerBuilder(config, cache, store) {
       const response = await fetch(src);
       const data = await response.blob();
       updateCollections(response.headers);
+
+      if (isKioskModeActive && kioskLayerList.includes(layer.id)) {
+        checkBlobTiles(response.headers);
+      }
+
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
@@ -296,10 +321,9 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     // dispatch action to keep track of error tiles
-    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length) && isKioskModeActive) {
+    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length || errorTiles.blankTiles.length) && isKioskModeActive) {
       store.dispatch(setErrorTiles(errorTiles));
     }
-
 
     return layer;
   };
