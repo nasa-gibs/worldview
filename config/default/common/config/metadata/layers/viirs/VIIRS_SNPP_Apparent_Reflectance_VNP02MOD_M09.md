@@ -2,7 +2,7 @@ The VIIRS Apparent Reflectance (VNP02MOD, Band M09) layer is a direct measure of
 
 The Apparent Reflectance (VNP02MOD, Band M09) layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (CLDCR_L2_VIIRS_SNPP) for the daytime overpass. The sensor resolution is 750 m at nadir, imagery resolution is 750 m at nadir, and the temporal resolution is daily. Resolution is coarser toward both the left and the right edges of an imaging swath.
 
-Consult the [NASA VIIRS Suomi-NPP Level-2 Cirrus Reflectance Product User Guide](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/viirs/VIIRS_Cirrus_Refl_User_Guide_Oct_2020.pdf) for additional information.
+Consult the [NASA VIIRS Suomi-NPP Level-2 Cirrus Reflectance Product User Guide](https://ladsweb.modaps.eosdis.nasa.gov/api/v2/content/archives/Document%20Archive/Science%20Data%20Product%20Documentation/VIIRS_Cirrus_Refl_User_Guide_Oct_2020.pdf) for additional information.
 
 References: CLDCR_L2_VIIRS_SNPP.001 [doi:10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001](https://doi.org/10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001)
 
