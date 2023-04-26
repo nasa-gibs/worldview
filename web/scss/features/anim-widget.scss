@@ -108,9 +108,11 @@
   }
 }
 
-.wv-animation-widget .input-range.rc-slider-disabled {
+.wv-slider-case .input-range:disabled {
   cursor: default;
 }
+
+
 
 .wv-animation-widget {
   width: 334px;
@@ -215,9 +217,10 @@
 
   & .input-range {
     cursor: pointer;
-    height: 13px;
+    height: 16px;
     position: relative;
     width: 152px;
+    margin-bottom: 4px;
   }
 
   & svg.svg-inline--fa {
@@ -284,7 +287,7 @@ a .wv-animation-widget-icon {
 }
 
 .wv-animation-widget div .wv-slider-label {
-  font-size: 10px;
+  font-size: 12px;
   color: #fff;
   display: block;
   text-align: center;
@@ -508,10 +511,6 @@ a .wv-animation-widget-icon {
         text-align: center;
         margin: auto;
       }
-
-      & .rc-slider {
-        margin: auto;
-      }
     }
 
     & #warning-message-row {
@@ -580,10 +579,6 @@ a .wv-animation-widget-icon {
   & .wv-animation-widget {
     & #slider-case-row {
       margin-top: 1rem;
-
-      & .rc-slider {
-        width: 400px;
-      }
     }
   }
 }
@@ -615,10 +610,6 @@ a .wv-animation-widget-icon {
 
       & .wv-slider-case {
         margin-top: 1.5rem;
-
-        & .rc-slider {
-          width: 300px;
-        }
       }
 
       & span {
@@ -639,10 +630,6 @@ a .wv-animation-widget-icon {
 
   & .wv-minimize {
     top: 1px;
-  }
-
-  & .rc-slider {
-    width: 400px;
   }
 }
 

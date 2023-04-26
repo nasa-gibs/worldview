@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
-import { ContextMenu, MenuItem } from 'react-contextmenu';
 import copy from 'copy-to-clipboard';
 import { transform } from 'ol/proj';
+import { ContextMenu, MenuItem } from '../../util/context-menu';
 
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';

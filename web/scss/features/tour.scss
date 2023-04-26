@@ -19,6 +19,13 @@
   }
 }
 
+.tour-close-btn {
+  color: #eee;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+}
+
 .about-page-modal,
 .tour-start,
 .tour-complete {
@@ -212,12 +219,26 @@
 
 /* TOUR IN PROGRESS */
 .tour-in-progress {
+  .end-tour-close-btn {
+    color: #ddd;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    width: 1px;
+    height: 1px;
+    font-weight: bold;
+    -webkit-text-stroke: 1px black;
+  }
+
+  .end-tour-close-btn:hover {
+    color: #fff;
+  }
+
   .modal {
-    left: auto;
-    right: 0;
-    top: auto;
+    inset: auto 0 343px auto;
     width: 248px;
-    bottom: 343px;
     height: 200px;
     overflow: visible;
   }

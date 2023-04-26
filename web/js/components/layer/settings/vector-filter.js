@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import { Range as RangeInput } from 'rc-slider';
 
 class VectorFilter extends React.Component {
   constructor(props) {
@@ -62,11 +61,14 @@ class VectorFilter extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <RangeInput
-            defaultValue={[start, end]}
+          <input
+            type="range"
+            className="form-range"
+            defaultValue={end}
             min={min}
             max={max}
-            onChange={this.updateFilter}
+            onChange={(e) => this.updateFilter([start, parseInt(e.target.value, 10)])}
+            style={{ '--value-percent': `${index}%` }}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">
