@@ -25,7 +25,7 @@
 | `efc` | string | `id,id,id` | The event category ids for each category to be included in an event API request. |
 | `s` | string | *`coordinates`* | A pair of coordinates using Decimal Degrees format (`DDD.DDDD,DDD.DDDD`) to add a Location Search marker onto the map. To add more than one Location Search marker, separate coordinate pairs with a plus symbol. (`DDD.DDDD,DDD.DDDD+DDD.DDDD,DDD.DDDD`)|
 | `ab` | boolean | **`on`** | If set to "on", the animation widget will be shown. |
-| `aa` | boolean | **`false`** | If set to "true", the animation will play on load. |
+| `aa` | boolean | **`true`** | If set to "true", the animation will play on load. |
 | `as` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation start day & time.\*\* |
 | `ae` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation end day & time.\*\* |
 | `av` | number | <b>`1`</b> to <b>`10`</b> | The animation speed value from 1 to 10. 1 = slowest, 10 = fastest. |
@@ -39,6 +39,7 @@
 | `em` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, embed mode will be activated. Embed mode is disabled by default. |
 | `tr` | string | *`tour_id`* | The id of the tour story to load. Stories will load from step 1. |
 | `abt` | string | *`on`* | Indicates whether the about modal is open or not. Allows for permalinks that have the about page open |
+| `kiosk` | string | *`true`* | If set to "true", kiosk mode will be activated. |
 
 \* *1 = yearly, 2 = monthly, 3 = daily, 4 = hourly, and 5 = minutely. The subdaily zoom levels (4 & 5) will only be available when subdaily layers are active.*
 
