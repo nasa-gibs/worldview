@@ -17,6 +17,7 @@ function DesktopAnimationWidget(props) {
     handleDragStart,
     hasSubdailyLayers,
     interval,
+    isDistractionFreeModeActive,
     isKioskModeActive,
     isPlaying,
     looping,
@@ -57,12 +58,24 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className={`wv-animation-widget-wrapper ${isKioskModeActive ? ' kiosk' : ''}`}>
+      <div className={`wv-animation-widget-wrapper ${isDistractionFreeModeActive && isKioskModeActive ? ' kiosk' : ''}`}>
         <div
           id="wv-animation-widget"
-          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${isKioskModeActive ? ' kiosk' : ''}`}
+          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${isDistractionFreeModeActive && isKioskModeActive ? ' kiosk' : ''}`}
         >
-          {!isKioskModeActive && (
+          {(isKioskModeActive && isDistractionFreeModeActive) && (
+          <DateRangeSelector
+            idSuffix="animation-widget"
+            startDate={startDate}
+            endDate={endDate}
+            setDateRange={onDateChange}
+            minDate={minDate}
+            maxDate={maxDate}
+            subDailyMode={subDailyMode}
+            isDisabled={isPlaying}
+          />
+          )}
+          {(!isKioskModeActive || !isDistractionFreeModeActive) && (
             <>
               <div className="wv-animation-widget-header">
                 {'Animate Map in '}
@@ -115,24 +128,20 @@ function DesktopAnimationWidget(props) {
                 zeroDates={zeroDates}
                 numberOfFrames={numberOfFrames}
               />
-            </>
-          )}
-          <DateRangeSelector
-            idSuffix="animation-widget"
-            startDate={startDate}
-            endDate={endDate}
-            setDateRange={onDateChange}
-            minDate={minDate}
-            maxDate={maxDate}
-            subDailyMode={subDailyMode}
-            isDisabled={isPlaying}
-          />
+              <DateRangeSelector
+                idSuffix="animation-widget"
+                startDate={startDate}
+                endDate={endDate}
+                setDateRange={onDateChange}
+                minDate={minDate}
+                maxDate={maxDate}
+                subDailyMode={subDailyMode}
+                isDisabled={isPlaying}
+              />
 
-          {!isKioskModeActive && (
-          <>
-            <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
-            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
-          </>
+              <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
+              <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
+            </>
           )}
         </div>
       </div>
@@ -148,6 +157,7 @@ DesktopAnimationWidget.propTypes = {
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
+  isDistractionFreeModeActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,

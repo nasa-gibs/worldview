@@ -54,6 +54,7 @@ function AnimationWidget (props) {
     interval,
     isActive,
     isCollapsed,
+    isDistractionFreeModeActive,
     isEmbedModeActive,
     isKioskModeActive,
     isLandscape,
@@ -98,6 +99,8 @@ function AnimationWidget (props) {
 
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
+
+  // use *mapStateToProps*  instead !!!
   const autoplayAnimation = useSelector((state) => state.animation.autoplay);
 
   const dispatch = useDispatch();
@@ -108,6 +111,7 @@ function AnimationWidget (props) {
       setWidgetPosition({ x: 10, y: 0 });
     }
     if (!isPlaying && autoplayAnimation) {
+      // use mapDispatchToProps instead !!!
       dispatch(play());
     }
   }, []);
@@ -290,6 +294,7 @@ function AnimationWidget (props) {
         <DesktopAnimationWidget
           animationCustomModalOpen={animationCustomModalOpen}
           customModalType={customModalType}
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
           endDate={endDate}
           handleDragStart={handleDragStart}
           hasSubdailyLayers={hasSubdailyLayers}
