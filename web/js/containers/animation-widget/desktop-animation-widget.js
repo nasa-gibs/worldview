@@ -17,8 +17,6 @@ function DesktopAnimationWidget(props) {
     handleDragStart,
     hasSubdailyLayers,
     interval,
-    isDistractionFreeModeActive,
-    isKioskModeActive,
     isPlaying,
     looping,
     maxDate,
@@ -58,12 +56,62 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className={`wv-animation-widget-wrapper ${isDistractionFreeModeActive && isKioskModeActive ? ' kiosk' : ''}`}>
+      <div className="wv-animation-widget-wrapper">
         <div
           id="wv-animation-widget"
-          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''} ${isDistractionFreeModeActive && isKioskModeActive ? ' kiosk' : ''}`}
+          className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
         >
-          {(isKioskModeActive && isDistractionFreeModeActive) && (
+          <div className="wv-animation-widget-header">
+            {'Animate Map in '}
+            <TimeScaleIntervalChange
+              timeScaleChangeUnit={interval}
+              hasSubdailyLayers={hasSubdailyLayers}
+              modalType={customModalType.ANIMATION}
+              isDisabled={isPlaying}
+            />
+            {' Increments'}
+          </div>
+
+          <CustomIntervalSelector
+            modalOpen={animationCustomModalOpen}
+            hasSubdailyLayers={hasSubdailyLayers}
+          />
+
+          <PlayButton
+            playing={isPlaying}
+            play={onPushPlay}
+            pause={onPushPause}
+            isDisabled={playDisabled}
+          />
+          <LoopButton looping={looping} onLoop={onLoop} />
+
+          {/* FPS slider */}
+          <div className="wv-slider-case">
+            <div className="input-range-wrapper" style={{ position: 'relative' }}>
+              <input
+                type="range"
+                className="input-range form-range"
+                step={0.5}
+                max={10}
+                min={0.5}
+                value={speed}
+                onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
+                disabled={isPlaying}
+                style={{ '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%` }}
+              />
+            </div>
+            <span className="wv-slider-label mt-1">
+
+              {speed}
+              {' '}
+              {sliderLabel}
+            </span>
+          </div>
+
+          <GifButton
+            zeroDates={zeroDates}
+            numberOfFrames={numberOfFrames}
+          />
           <DateRangeSelector
             idSuffix="animation-widget"
             startDate={startDate}
@@ -74,75 +122,9 @@ function DesktopAnimationWidget(props) {
             subDailyMode={subDailyMode}
             isDisabled={isPlaying}
           />
-          )}
-          {(!isKioskModeActive || !isDistractionFreeModeActive) && (
-            <>
-              <div className="wv-animation-widget-header">
-                {'Animate Map in '}
-                <TimeScaleIntervalChange
-                  timeScaleChangeUnit={interval}
-                  hasSubdailyLayers={hasSubdailyLayers}
-                  modalType={customModalType.ANIMATION}
-                  isDisabled={isPlaying}
-                />
-                {' Increments'}
-              </div>
 
-              <CustomIntervalSelector
-                modalOpen={animationCustomModalOpen}
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
-
-              <PlayButton
-                playing={isPlaying}
-                play={onPushPlay}
-                pause={onPushPause}
-                isDisabled={playDisabled}
-              />
-              <LoopButton looping={looping} onLoop={onLoop} />
-
-              {/* FPS slider */}
-              <div className="wv-slider-case">
-                <div className="input-range-wrapper" style={{ position: 'relative' }}>
-                  <input
-                    type="range"
-                    className="input-range form-range"
-                    step={0.5}
-                    max={10}
-                    min={0.5}
-                    value={speed}
-                    onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
-                    disabled={isPlaying}
-                    style={{ '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%` }}
-                  />
-                </div>
-                <span className="wv-slider-label mt-1">
-
-                  {speed}
-                  {' '}
-                  {sliderLabel}
-                </span>
-              </div>
-
-              <GifButton
-                zeroDates={zeroDates}
-                numberOfFrames={numberOfFrames}
-              />
-              <DateRangeSelector
-                idSuffix="animation-widget"
-                startDate={startDate}
-                endDate={endDate}
-                setDateRange={onDateChange}
-                minDate={minDate}
-                maxDate={maxDate}
-                subDailyMode={subDailyMode}
-                isDisabled={isPlaying}
-              />
-
-              <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
-              <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
-            </>
-          )}
+          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
+          <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
         </div>
       </div>
     </Draggable>
@@ -151,13 +133,11 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
-  isKioskModeActive: PropTypes.bool,
   customModalType: PropTypes.object,
   endDate: PropTypes.object,
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
-  isDistractionFreeModeActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,

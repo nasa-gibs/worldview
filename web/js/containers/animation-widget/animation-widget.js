@@ -287,7 +287,7 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : (
+      ) : !isKioskModeActive ? (
         <DesktopAnimationWidget
           animationCustomModalOpen={animationCustomModalOpen}
           customModalType={customModalType}
@@ -319,7 +319,7 @@ function AnimationWidget (props) {
           widgetPosition={widgetPosition}
           zeroDates={zeroDates}
         />
-      )}
+      ) : null }
     </ErrorBoundary>
   ) : null;
 }

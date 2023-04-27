@@ -51,10 +51,6 @@
       bottom: 83px;
       left: 10px;
     }
-
-    &.kiosk {
-      bottom: 10px;
-    }
   }
 }
 
@@ -116,8 +112,6 @@
   cursor: default;
 }
 
-
-
 .wv-animation-widget {
   width: 334px;
   border-radius: 5px;
@@ -125,10 +119,6 @@
   background: #212121;
   color: #fff;
   padding: 1px 0;
-
-  &.kiosk {
-    height: auto;
-  }
 
   &.minimized {
     height: 52px;
