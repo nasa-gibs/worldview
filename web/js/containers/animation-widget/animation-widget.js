@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
@@ -103,8 +103,6 @@ function AnimationWidget (props) {
   // use *mapStateToProps*  instead !!!
   const autoplayAnimation = useSelector((state) => state.animation.autoplay);
 
-  const dispatch = useDispatch();
-
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
@@ -112,7 +110,8 @@ function AnimationWidget (props) {
     }
     if (!isPlaying && autoplayAnimation) {
       // use mapDispatchToProps instead !!!
-      dispatch(play());
+      // dispatch(play());
+      onPushPlay();
     }
   }, []);
 
@@ -511,6 +510,7 @@ AnimationWidget.propTypes = {
   isCollapsed: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
