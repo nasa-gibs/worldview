@@ -57,10 +57,11 @@ export default function mapLayerBuilder(config, cache, store) {
     dailyTiles: [],
     subdailyTiles: [],
     blankTiles: [],
+    kioskTileCount: 0,
   };
 
   // list of layer id's to check for blank tiles in blobs
-  const kioskLayerList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor'];
+  const kioskLayerList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -161,15 +162,14 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { ui: { isKioskModeActive }, date: { appNow } } = state;
 
-
     const date = layerDate.toISOString().split('T')[0];
 
     const checkBlobTiles = (headers) => {
       const formattedAppNowDate = formatAppNowDate(appNow);
       if (isKioskModeActive && kioskLayerList.includes(layer.id) && formattedAppNowDate === date) {
+        errorTiles.kioskTileCount += 1;
         const contentLength = headers.get('content-length');
-        if (parseInt(contentLength, 10) < 1500) {
-          // console.log('content-length: ', contentLength, 'date: ', date)
+        if (parseInt(contentLength, 10) < 20000) {
           errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
         }
       }

@@ -44,6 +44,7 @@ export function setErrorTiles(errorTiles) {
       dailyTiles: errorTiles.dailyTiles,
       subdailyTiles: errorTiles.subdailyTiles,
       blankTiles: errorTiles.blankTiles,
+      kioskTileCount: errorTiles.kioskTileCount,
     },
   };
 }
