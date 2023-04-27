@@ -169,7 +169,7 @@ export default function mapLayerBuilder(config, cache, store) {
       if (isKioskModeActive && kioskLayerList.includes(layer.id) && formattedAppNowDate === date) {
         errorTiles.kioskTileCount += 1;
         const contentLength = headers.get('content-length');
-        if (parseInt(contentLength, 10) < 20000) {
+        if (parseInt(contentLength, 10) < 1400) {
           errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
         }
       }
