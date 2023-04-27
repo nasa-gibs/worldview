@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
@@ -45,6 +45,7 @@ function AnimationWidget (props) {
   const {
     appNow,
     animationCustomModalOpen,
+    autoplay,
     breakpoints,
     currentDate,
     delta,
@@ -100,15 +101,12 @@ function AnimationWidget (props) {
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
 
-  // use *mapStateToProps*  instead !!!
-  const autoplayAnimation = useSelector((state) => state.animation.autoplay);
-
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
     }
-    if (!isPlaying && autoplayAnimation) {
+    if (!isPlaying && autoplay) {
       // use mapDispatchToProps instead !!!
       // dispatch(play());
       onPushPlay();
@@ -341,7 +339,7 @@ const mapStateToProps = (state) => {
     proj,
   } = state;
   const {
-    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed,
+    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
@@ -415,6 +413,7 @@ const mapStateToProps = (state) => {
   return {
     appNow,
     animationCustomModalOpen,
+    autoplay,
     customSelected,
     startDate,
     endDate,
