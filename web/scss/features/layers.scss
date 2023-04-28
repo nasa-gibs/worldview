@@ -1034,6 +1034,14 @@
   justify-content: space-between;
 }
 
+a[rel="noopener noreferrer"] {
+  text-decoration: none;
+}
+
+a[rel="noopener noreferrer"]:hover {
+  text-decoration: underline;
+}
+
 @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
   (max-width: $mobile-max-width) {
   .instrument-collection {
