@@ -107,8 +107,6 @@ function AnimationWidget (props) {
       setWidgetPosition({ x: 10, y: 0 });
     }
     if (!isPlaying && autoplay) {
-      // use mapDispatchToProps instead !!!
-      // dispatch(play());
       onPushPlay();
     }
   }, []);
