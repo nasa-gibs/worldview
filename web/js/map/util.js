@@ -156,7 +156,7 @@ export function fly (map, proj, endPoint, endZoom = 5, rotation = 0) {
   const line = new OlGeomLineString([startPoint, endPoint]);
   const distance = line.getLength(); // In map units, which is usually degrees
   const distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
-  let duration = Math.floor(distanceDuration * 20 + 1000); // approx 6 seconds to go 360 degrees
+  let duration = Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000)); // Minimum 5 seconds, approx 12 seconds to go 360 degrees
 
   const animationPromise = function(...args) {
     return new Promise((resolve, reject) => {

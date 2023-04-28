@@ -13,6 +13,7 @@ import {
   TOGGLE_GIF,
   KEY_PRESS_ACTION,
   COLLAPSE_ANIMATION,
+  TOGGLE_AUTOPLAY,
 } from './constants';
 
 export const defaultState = {
@@ -25,6 +26,8 @@ export const defaultState = {
   endDate: undefined,
   boundaries: undefined,
   isCollapsed: false,
+  autoplay: false,
+  isAutoplayMode: false,
 };
 export function getInitialState(config) {
   return {
@@ -104,6 +107,11 @@ export function animationReducer(state = defaultState, action) {
       return {
         ...state,
         isCollapsed: !state.isCollapsed,
+      };
+    case TOGGLE_AUTOPLAY:
+      return {
+        ...state,
+        autoplay: !state.autoplay,
       };
     case KEY_PRESS_ACTION:
       if (action.keyCode === 32 && state.isActive) {

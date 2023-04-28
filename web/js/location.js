@@ -493,6 +493,14 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
+    aa: {
+      stateKey: 'animation.autoplay',
+      initialState: false,
+      options: {
+        serialize: (boo) => (boo ? 'true' : undefined),
+        parse: (str) => str === 'true',
+      },
+    },
     abt: {
       stateKey: 'modalAbout.isOpen',
       initialState: false,

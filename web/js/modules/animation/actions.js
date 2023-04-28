@@ -11,6 +11,7 @@ import {
   UPDATE_CROP_BOUNDS,
   TOGGLE_GIF,
   COLLAPSE_ANIMATION,
+  TOGGLE_AUTOPLAY,
 } from './constants';
 import util from '../../util/util';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
@@ -105,5 +106,10 @@ export function toggleComponentGifActive() {
 export function toggleAnimationCollapse() {
   return {
     type: COLLAPSE_ANIMATION,
+  };
+}
+export function toggleAnimationAutoplay() {
+  return {
+    type: TOGGLE_AUTOPLAY,
   };
 }
