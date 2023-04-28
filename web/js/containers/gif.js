@@ -83,6 +83,15 @@ class GIF extends Component {
     };
   }
 
+  renderCloseBtn() {
+    const { onClose } = this.props;
+    return (
+      <button className="modal-close-btn" onClick={onClose} type="button">
+        &times;
+      </button>
+    );
+  }
+
   renderSelectableBox() {
     const {
       increment,
@@ -114,11 +123,8 @@ class GIF extends Component {
       isGeoProjection,
       proj.resolutions,
     );
-    const closeBtn = (
-      <button className="modal-close-btn" onClick={onClose} type="button">
-        &times;
-      </button>
-    );
+
+    const closeBtn = this.renderCloseBtn();
 
     return (
       <Modal
@@ -357,6 +363,8 @@ class GIF extends Component {
       left: '45%',
     };
 
+    const closeBtn = this.renderCloseBtn();
+
     if (isDownloading) {
       const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
@@ -365,13 +373,13 @@ class GIF extends Component {
           toggle={onClose}
           size={progress === 0 ? 'sm' : 'md'}
         >
-          <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
+          <ModalHeader close={closeBtn}>{headerText}</ModalHeader>
           <ModalBody>
             {progress > 0
               ? <Progress value={progress} />
               : (
                 <div style={spinnerStyle}>
-                  <Spinner color="#fff" />
+                  <Spinner color="light" />
                 </div>
               )}
           </ModalBody>
@@ -390,6 +398,7 @@ class GIF extends Component {
           boundaries={boundaries}
           screenWidth={screenWidth}
           screenHeight={screenHeight}
+          closeBtn={closeBtn}
         />
       );
     }
