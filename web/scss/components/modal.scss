@@ -122,7 +122,10 @@
   color: #ddd;
   background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: 400;
+  padding-bottom: 4px;
+  text-shadow: 1px 1px 1px #000;
 }
 
 .modal-close-btn:hover {
