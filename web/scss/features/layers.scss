@@ -1034,11 +1034,13 @@
   justify-content: space-between;
 }
 
-a[rel="noopener noreferrer"] {
+a[rel="noopener noreferrer"],
+a[rel="noreferrer"] {
   text-decoration: none;
 }
 
-a[rel="noopener noreferrer"]:hover {
+a[rel="noopener noreferrer"]:hover,
+a[rel="noreferrer"]:hover {
   text-decoration: underline;
 }
 

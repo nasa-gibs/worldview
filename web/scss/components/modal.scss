@@ -16,6 +16,11 @@
 
   a {
     color: #7bf;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 
   .modal-header {
