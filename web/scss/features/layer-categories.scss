@@ -103,6 +103,10 @@
     }
   }
 
+  & .nav-link:hover {
+    text-decoration: none;
+  }
+
   & .category-breadcrumb {
     height: 30px;
     line-height: 30px;
