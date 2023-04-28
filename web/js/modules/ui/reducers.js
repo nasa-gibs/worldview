@@ -17,7 +17,6 @@ export const uiState = {
     blankTiles: [],
     kioskTileCounter: 0,
   },
-  isKioskModeActive: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -53,10 +52,6 @@ export default function uiReducers(state = uiState, action) {
     case DISPLAY_STATIC_MAP:
       return lodashAssign({}, state, {
         displayStaticMap: action.isActive,
-      });
-    case TOGGLE_KIOSK_MODE:
-      return lodashAssign({}, state, {
-        isKioskModeActive: action.isActive,
       });
     default:
       return state;
