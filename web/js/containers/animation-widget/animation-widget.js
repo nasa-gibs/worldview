@@ -35,6 +35,7 @@ import {
   changeEndDate,
   changeStartAndEndDate,
   toggleAnimationCollapse,
+  toggleAnimationAutoplay,
 } from '../../modules/animation/actions';
 import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
@@ -73,6 +74,7 @@ function AnimationWidget (props) {
     onPushPause,
     onPushPlay,
     onSlide,
+    onToggleAnimationAutoplay,
     onToggleAnimationCollapse,
     onUpdateEndDate,
     onUpdateStartDate,
@@ -108,6 +110,7 @@ function AnimationWidget (props) {
     }
     if (!isPlaying && autoplay) {
       onPushPlay();
+      toggleAutoplay();
     }
   }, []);
 
@@ -144,6 +147,10 @@ function AnimationWidget (props) {
 
   const toggleCollapse = () => {
     onToggleAnimationCollapse();
+  };
+
+  const toggleAutoplay = () => {
+    onToggleAnimationAutoplay();
   };
 
   const onExpandedDrag = (e, position) => {
@@ -488,16 +495,18 @@ const mapDispatchToProps = (dispatch) => ({
   onToggleAnimationCollapse: () => {
     dispatch(toggleAnimationCollapse());
   },
+  onToggleAnimationAutoplay: () => {
+    dispatch(toggleAnimationAutoplay());
+  },
 });
 
 AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  autoplay: PropTypes.bool,
   breakpoints: PropTypes.object,
   snappedCurrentDate: PropTypes.object,
   currentDate: PropTypes.object,
-  customDelta: PropTypes.number,
-  customInterval: PropTypes.number,
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasFutureLayers: PropTypes.bool,
@@ -519,8 +528,8 @@ AnimationWidget.propTypes = {
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
+  onToggleAnimationAutoplay: PropTypes.func,
   onClose: PropTypes.func,
-  onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
   onPushPlay: PropTypes.func,
@@ -534,10 +543,9 @@ AnimationWidget.propTypes = {
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
-  speed: PropTypes.number,
+  speedRedux: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
-  toggleCustomModal: PropTypes.func,
 };
 
 export default connect(
