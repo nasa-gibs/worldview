@@ -1,0 +1,1 @@
+Before/after snowfall in the Sierras (true color)

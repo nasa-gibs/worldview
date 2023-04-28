@@ -1,0 +1,1 @@
+The 2022 - 2023 winter season brought storms with unrelenting precipitation to California. The storms came in the form of atmospheric rivers. These are flowing columns of condensed water vapor in the atmosphere that often bring water vapor from the tropics to the western United States. Strong atmopsheric rivers and can bring large amounts of rain and snow to the region.
