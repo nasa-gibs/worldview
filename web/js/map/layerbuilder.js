@@ -169,7 +169,9 @@ export default function mapLayerBuilder(config, cache, store) {
       if (isKioskModeActive && kioskLayerList.includes(layer.id) && formattedAppNowDate === date) {
         errorTiles.kioskTileCount += 1;
         const contentLength = headers.get('content-length');
-        if (parseInt(contentLength, 10) < 1400) {
+        const contentType = headers.get('content-type');
+        const sizeThreshold = contentType === 'image/png' ? 2000 : 5000;
+        if (parseInt(contentLength, 10) < sizeThreshold) {
           errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
         }
       }

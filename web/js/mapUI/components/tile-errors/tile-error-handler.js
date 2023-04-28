@@ -77,6 +77,7 @@ function TileErrorHandler({ action, ui }) {
   };
 
   const handleTimeChangeForBlankTiles = () => {
+    // console.log('kioskTileCount', kioskTileCount, 'blankTilesCount', blankTiles.length, 'percentage: ', (blankTiles.length / kioskTileCount) * 100, '%', 'firstDate', blankTiles[0].date, 'lastDate', blankTiles[blankTiles.length -1].date)
     const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
     if (!blankTilesOnCurentDate) return;
     const blankTilesPercentage = (blankTiles.length / kioskTileCount) * 100;
