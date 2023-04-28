@@ -114,6 +114,12 @@ class GIF extends Component {
       isGeoProjection,
       proj.resolutions,
     );
+    const closeBtn = (
+      <button className="modal-close-btn" onClick={onClose} type="button">
+        &times;
+      </button>
+    );
+
     return (
       <Modal
         backdrop={false}
@@ -123,7 +129,7 @@ class GIF extends Component {
         style={this.getStyle()}
         toggle={onClose}
       >
-        <ModalHeader toggle={onClose}>Create An Animated GIF</ModalHeader>
+        <ModalHeader close={closeBtn}>Create An Animated GIF</ModalHeader>
         <ModalBody>
           <GifPanel
             speed={speed}
