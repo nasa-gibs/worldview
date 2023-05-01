@@ -1,1 +1,1 @@
-Show precip with GPM IMERG Feb 24
+On Feb. 24, 2023, the atmospheric river brought rain, shown in shades of green to yellow, to coastal and the Central Valley regions. When the water vapor moved up and over the Sierra Nevada mountain ranges, it rapidly cooled to form snow, shown in shades of blue to purple.

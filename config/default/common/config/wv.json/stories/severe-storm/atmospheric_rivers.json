@@ -3,8 +3,8 @@
     "atmospheric_rivers": {
       "id": "atmospheric_rivers",
       "type": "severe-storm",
-      "title": "Atmospheric Rivers brings moisture to California",
-      "description": "Atmospheric Rivers brings moisture to California",
+      "title": "Atmospheric Rivers",
+      "description": "Atmospheric Rivers bring moisture to California",
       "backgroundImage": "",
       "backgroundImageHover": "",
       "readMoreLinks": [
@@ -21,7 +21,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-161.84882559970268,16.42698668057487,-85.30743125218422,52.526006177450554&l=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,IMERG_Precipitation_Rate(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2023-02-24-T10%3A00%3A00Z"
+          "stepLink": "v=-162.295938399713,16.42698668057487,-84.86031845217389,52.526006177450554&l=Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor&lg=true&t=2023-02-24-T10%3A00%3A00Z"
         },
         {
           "id": "002",
@@ -30,7 +30,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-161.84882559970268,16.42698668057487,-85.30743125218422,52.526006177450554&l=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,IMERG_Precipitation_Rate,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2023-02-24-T10%3A00%3A00Z"
+          "stepLink": "v=-162.295938399713,16.426986680574874,-84.86031845217389,52.526006177450554&l=Reference_Features_15m,Coastlines_15m,IMERG_Precipitation_Rate,VIIRS_SNPP_CorrectedReflectance_TrueColor&lg=true&t=2023-02-24-T10%3A00%3A00Z"
         },
         {
           "id": "003",
@@ -39,7 +39,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "v=-182.03938312097551,8.30360480254572,-79.63254254168083,56.60147768817666&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&ab=on&t=2023-02-25-T08%3A38%3A00Z"
+          "stepLink": "v=-182.63758765620688,8.303604802545728,-79.03433800644947,56.60147768817665&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&ab=on&t=2023-02-25-T08%3A38%3A00Z"
         },
         {
           "id": "004",
@@ -48,7 +48,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-127.62957948566776,34.391801512398075,-111.86987827722996,41.82450855984652&l=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,SMAP_L4_Snow_Mass(hidden,palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,SMAP_L4_Snow_Mass(hidden,palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=false&cv=52&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=true&cm=opacity&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
         },
         {
           "id": "005",
@@ -57,7 +57,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-127.62957948566776,34.391801512398075,-111.86987827722996,41.82450855984652&l=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,SMAP_L4_Snow_Mass(hidden,palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),MODIS_Terra_CorrectedReflectance_Bands721,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m,Coastlines_15m,SMAP_L4_Snow_Mass(hidden,palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),MODIS_Terra_CorrectedReflectance_Bands721,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=true&cv=48&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=false&cm=opacity&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
         },
         {
           "id": "006",
@@ -66,7 +66,17 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-128.7248459179848,34.09549728143241,-110.28397427190524,42.79271779545601&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),MODIS_Terra_L3_Snow_Extent_8Day(hidden),MODIS_Terra_NDSI_Snow_Cover(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=44&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),BlueMarble_ShadedRelief_Bathymetry&lg=true&l1=Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),BlueMarble_ShadedRelief_Bathymetry&lg1=true&ca=true&cm=opacity&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+        }
+        ,
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-149.2343104071579,26.61555273706992,-93.40895023395714,52.64027839533624&l=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg=true&l1=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg1=true&ca=true&cm=opacity&t=2022-11-19-T23%3A35%3A22Z&t1=2023-04-06-T21%3A35%3A22Z"
         }
       ]
     }
