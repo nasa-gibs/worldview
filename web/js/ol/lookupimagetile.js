@@ -68,27 +68,53 @@ const createPNG = () => {
   fetch('https://gibs-a.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=2023-03-20T00:00:00Z&layer=MODIS_Terra_L3_Sea_Ice_Daily&style=default&tilematrixset=1km&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=0&TileCol=0&TileRow=0')
     .then((response) => response.arrayBuffer())
     .then((buffer) => {
-      const originalImage = UPNG.decode(buffer);
+      // decode the buffer PNG file
+      const decodedPNG = UPNG.decode(buffer);
 
-      // Modify the alpha channel of the pixel data
-      for (let i = 3; i < originalImage.tabs.PLTE.length; i += 4) {
-        originalImage.tabs.PLTE[i] = 255; // set alpha to 255 for all pixels
+      // Create an array buffer matching the dimensions of the provided image
+      const bufferSize = decodedPNG.height * decodedPNG.width * 4;
+      const arrBuffer = new ArrayBuffer(bufferSize);
+
+      // Create a view into the array buffer
+      const arrBufferView = new Uint32Array(arrBuffer);
+
+      // iterate through the original image, re-drawing each pixel with the alpha channel set to 1
+      for (let i = 0; i < bufferSize; i += 1) {
+        arrBufferView[i] = Math.floor(Math.random() * 255) + 1;
       }
 
-      // Create a new PNG image using the modified pixel data and original image header
-      const newImage = UPNG.encode([originalImage], originalImage.width, originalImage.height, 0);
+      const encodedBufferImage = UPNG.encode([arrBufferView], decodedPNG.width, decodedPNG.height, 256);
 
-      // Convert the new PNG image to a Blob and create a URL for it
-      const blob = new Blob([buffer], { type: 'image/png' });
-      const url = URL.createObjectURL(blob);
+      // This creates a new buffer and assigns alternating colors
+      const testBuffer = new ArrayBuffer(10000 * 4); // 50x50 image, 4 bytes per pixel
+      const view = new Uint32Array(testBuffer);
 
-      // Display the new PNG image in an <img> tag
-      const img = document.createElement('img');
-      img.src = url;
-      const el = document.getElementById('wv-content');
-      el.appendChild(img);
+      // assign alternating colors to the buffer view
+      for (let i = 0; i < 10000; i += 1) {
+        if (i % 2 === 0) {
+          view[i] = 0xff0000ff; // red
+        } else {
+          view[i] = 0xFFFF00FF; // yellow
+        }
+      }
+
+      // Create a new PNG image using the modified pixel data and original image dimensions
+      const encodedImage = UPNG.encode([testBuffer], decodedPNG.width, decodedPNG.height, 256);
+
+      // passing the original "buffer" here shows the original image (as expected)
+      putItOnDom(encodedBufferImage);
     });
 };
+
+function putItOnDom(encodedImg) {
+  // Convert the new PNG image to a Blob and create a URL for it
+  const blob = new Blob([encodedImg], { type: 'image/png' });
+  const url = URL.createObjectURL(blob);
+  const img = document.createElement('img');
+  img.src = url;
+  const el = document.getElementById('wv-content');
+  el.appendChild(img);
+}
 
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
