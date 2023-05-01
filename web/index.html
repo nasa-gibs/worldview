@@ -23,6 +23,10 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (https://opensource.g
       })(window, document, 'script', 'dataLayer', '@GTM_ID@');
 
       window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '@GTM_ID@', { cookie_flags: 'SameSite=None;Secure' });
     }
   </script>
   <!-- End Google Tag Manager -->
