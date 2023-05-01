@@ -1,1 +1,1 @@
-Before/after snowfall in the Sierras (true color)
+This comparison of true-color corrected reflectance imagery from Feb. 15 and Mar. 2 show large amounts of snow that fell as a result of the strong atmospheric river over the western United States. Snow can be seen in white over the Sierra Nevada mountains and the state of Nevada.

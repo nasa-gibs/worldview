@@ -1,1 +1,1 @@
-Before/after snowfall in the Sierras SMAP Snow Mass
+Comparison of snow mass from Feb. 15 to Mar. 2 shows the incredible amount of snow, in kg/m<sup>2</sup>, that fell over the Sierra Nevadas.
