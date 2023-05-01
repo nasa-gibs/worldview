@@ -1,1 +1,1 @@
-Show flow with geostationary imagery animation of atmospheric river 19:00 Feb 24 - 23:00 Feb 25
+The atmospheric river can be seen funneling moisture through California, from south to north, in this GeoColor animation from the GOES-West geostationary satellite from 19:00 UTC/11:00 PST, Feb. 24 to 23:00 UTC/16:00 PST, Feb. 25, 2023.

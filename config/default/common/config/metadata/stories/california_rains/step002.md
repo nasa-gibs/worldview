@@ -1,0 +1,1 @@
+Tulare Lake in San Joaquin Valley, California was once a large body of freshwater but water from tributaries were diverted for irrigation and municipal water use. Subsequently, the dry lake bed was used to grow crops like almonds and tomaotoes. The lake filled as a result of the heavy rains this winter.

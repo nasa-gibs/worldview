@@ -1,0 +1,1 @@
+Previous superbloom Apr. 18, 2020 compared to current superbloom apr. 7, 2023 in Antelope Valley
