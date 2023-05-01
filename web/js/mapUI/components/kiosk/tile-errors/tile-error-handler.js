@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   clearErrorTiles as clearErrorTilesAction,
-  toggleStaticMap,
-} from '../../../modules/ui/actions';
+  toggleStaticMap as toggleStaticMapAction,
+  toggleReadyForAnimation as toggleReadyForAnimationAction,
+} from '../../../../modules/ui/actions';
 import {
   selectDate as selectDateAction,
   selectInterval as selectIntervalAction,
-} from '../../../modules/date/actions';
-import { getNextDateTime } from '../../../modules/date/util';
+} from '../../../../modules/date/actions';
+import { getNextDateTime } from '../../../../modules/date/util';
 import {
   subdailyLayersActive,
   getActiveLayers,
-} from '../../../modules/layers/selectors';
-import { removeGroup as removeGroupAction } from '../../../modules/layers/actions';
+} from '../../../../modules/layers/selectors';
+import { removeGroup as removeGroupAction } from '../../../../modules/layers/actions';
 import {
   countTiles,
   formatDate,
@@ -23,19 +24,33 @@ import {
   compareDailyDates,
   compareSubdailyDates,
   formatSelectedDate,
-} from '../../util/util';
+} from '../../../util/util';
 
 function TileErrorHandler({ action, ui }) {
   const dispatch = useDispatch();
   const clearErrorTiles = () => { dispatch(clearErrorTilesAction()); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
   const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
-  const toggleStaticMapAction = (isActive) => { dispatch(toggleStaticMap(isActive)); };
+  const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
   const removeGroup = (ids) => { dispatch(removeGroupAction(ids)); };
+  const toggleReadyForAnimation = (isActive) => { dispatch(toggleReadyForAnimationAction(isActive)); };
 
   const {
-    isKioskModeActive, errorTiles, selectedDate, date, compare, isLoading, realTimeDate,
+    autoplayAnimation,
+    isAnimationPlaying,
+    displayStaticMap,
+    isKioskModeActive,
+    errorTiles,
+    selectedDate,
+    date,
+    compare,
+    isLoading,
+    realTimeDate,
+    readyForAnimation,
   } = useSelector((state) => ({
+    autoplayAnimation: state.animation.autoplay,
+    displayStaticMap: state.ui.displayStaticMap,
+    isAnimationPlaying: state.animation.isPlaying,
     isKioskModeActive: state.ui.isKioskModeActive,
     errorTiles: state.ui.errorTiles,
     selectedDate: state.date.selected,
@@ -43,6 +58,7 @@ function TileErrorHandler({ action, ui }) {
     compare: state.compare,
     isLoading: state.loading.isLoading,
     realTimeDate: state.date.appNow,
+    readyForAnimation: state.ui.readyForAnimation,
   }));
   const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
@@ -71,23 +87,27 @@ function TileErrorHandler({ action, ui }) {
     }
   }, [action]);
 
+  useEffect(() => {
+    handleReadyForAnimation();
+  });
+
   const handleStaticMap = () => {
-    toggleStaticMapAction(true);
+    toggleStaticMap(true);
     removeGroup(activeLayerIds);
   };
 
   const handleTimeChangeForBlankTiles = () => {
     // console.log('kioskTileCount', kioskTileCount, 'blankTilesCount', blankTiles.length, 'percentage: ', (blankTiles.length / kioskTileCount) * 100, '%', 'firstDate', blankTiles[0].date, 'lastDate', blankTiles[blankTiles.length -1].date)
     const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
-    if (!blankTilesOnCurentDate) return;
+    if (!blankTilesOnCurentDate) return clearErrorTiles();
     const blankTilesPercentage = (blankTiles.length / kioskTileCount) * 100;
     if (blankTilesPercentage >= 50) {
       const state = { date, compare };
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
-      clearErrorTiles();
       selectDate(prevDateObj);
     }
+    clearErrorTiles();
   };
 
   const handleTimeChangeForErrors = (tiles, isSubdaily) => {
@@ -98,19 +118,31 @@ function TileErrorHandler({ action, ui }) {
       if (hasSubdailyLayers && !isSubdaily) selectInterval(1, 3, false);
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
-      clearErrorTiles();
       selectDate(prevDateObj);
     }
+    clearErrorTiles();
   };
 
   const handleTileErrors = () => {
     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
-    if (percentageOfLoadedTiles >= 75) return;
-
-    if (dailyTiles.length) handleTimeChangeForErrors(dailyTiles, false);
-    if (subdailyTiles.length && hourlySafeguardCheck) handleTimeChangeForErrors(subdailyTiles, true);
+    if (percentageOfLoadedTiles >= 75) return clearErrorTiles();
+    if (dailyTiles.length) return handleTimeChangeForErrors(dailyTiles, false);
+    if (subdailyTiles.length && hourlySafeguardCheck) return handleTimeChangeForErrors(subdailyTiles, true);
     clearErrorTiles();
+  };
+
+  const handleReadyForAnimation = () => {
+    // if map is loaded AND readyForAnimation not turned on yet AND autoplayAnimation is on AND kiosk mode is on AND animation is not playing AND static map is not displayed AND error tiles and blank tiles are empty
+    const animationCheck = ui.selected && !readyForAnimation && autoplayAnimation && isKioskModeActive && !isAnimationPlaying && !displayStaticMap && !errorTileCheck && !blankTileCheck;
+    if (animationCheck) {
+      const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
+      const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
+
+      if (percentageOfLoadedTiles >= 75) {
+        toggleReadyForAnimation(true);
+      }
+    }
   };
 
   return null;
@@ -120,4 +152,5 @@ export default TileErrorHandler;
 
 TileErrorHandler.propTypes = {
   action: PropTypes.object,
+  ui: PropTypes.object,
 };

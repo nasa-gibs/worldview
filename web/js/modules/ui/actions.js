@@ -6,6 +6,7 @@ import {
   CLEAR_ERROR_TILES,
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
+  TOGGLE_READY_FOR_ANIMATION,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -58,6 +59,13 @@ export function clearErrorTiles() {
 export function toggleStaticMap(isActive) {
   return {
     type: DISPLAY_STATIC_MAP,
+    isActive,
+  };
+}
+
+export function toggleReadyForAnimation(isActive) {
+  return {
+    type: TOGGLE_READY_FOR_ANIMATION,
     isActive,
   };
 }

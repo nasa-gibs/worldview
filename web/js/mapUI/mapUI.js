@@ -16,7 +16,8 @@ import UpdateOpacity from './components/update-opacity/updateOpacity';
 import UpdateProjection from './components/update-projection/updateProjection';
 import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
-import TileErrorHandler from './components/tile-errors/tile-error-handler';
+import TileErrorHandler from './components/kiosk/tile-errors/tile-error-handler';
+import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -398,6 +399,7 @@ function MapUI(props) {
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
       <TileErrorHandler action={tileErrorAction} ui={ui} />
+      <KioskAnimations />
     </>
   );
 }

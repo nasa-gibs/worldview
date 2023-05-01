@@ -108,7 +108,7 @@ function AnimationWidget (props) {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
     }
-    if (!isPlaying && autoplay) {
+    if (!isPlaying && autoplay && !isKioskModeActive) {
       onPushPlay();
       toggleAutoplay();
     }

@@ -5,6 +5,7 @@ import {
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   CLEAR_ERROR_TILES,
+  TOGGLE_READY_FOR_ANIMATION,
 } from './constants';
 
 export const uiState = {
@@ -17,6 +18,7 @@ export const uiState = {
     blankTiles: [],
     kioskTileCounter: 0,
   },
+  readyForAnimation: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -52,6 +54,10 @@ export default function uiReducers(state = uiState, action) {
     case DISPLAY_STATIC_MAP:
       return lodashAssign({}, state, {
         displayStaticMap: action.isActive,
+      });
+    case TOGGLE_READY_FOR_ANIMATION:
+      return lodashAssign({}, state, {
+        readyForAnimation: action.isActive,
       });
     default:
       return state;
