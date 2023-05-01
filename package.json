@@ -178,6 +178,7 @@
     "ol": "7.3.0",
     "ol-mapbox-style": "^10.4.0",
     "p-queue": "^7.3.4",
+    "pako": "^2.1.0",
     "proj4": "2.9.0",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
@@ -205,6 +206,7 @@
     "simplebar-react": "^3.2.3",
     "stackblur": "^1.0.0",
     "supercluster": "^7.1.5",
+    "upng-js": "^2.1.0",
     "url-template": "^3.1.0",
     "what-input": "^5.2.12"
   },
