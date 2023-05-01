@@ -1,1 +1,1 @@
-Before/after snowfall in the Sierras false color
+Snow is even easier to differentiate in these false-color images, where show is shown in cyan while clouds are white.
