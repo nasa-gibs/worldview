@@ -211,34 +211,34 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
 })
 
 test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
-  const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox, filterModalCancel } = selectors
+  const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox } = selectors
   await page.goto(backwardsCompatibleEventUrl)
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
   await expect(filterIcons).toHaveCount(8)
   await expect(mapExtentFilterCheckbox).not.toBeChecked()
-  await filterModalCancel.click()
+  await page.locator('.modal-close-btn').click()
 })
 
 test('No extent search checkbox in polar projections', async () => {
-  const { filterButton, mapExtentFilterCheckbox, filterModalCancel } = selectors
+  const { filterButton, mapExtentFilterCheckbox } = selectors
   await page.goto(extentsUrl)
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeVisible()
   await expect(mapExtentFilterCheckbox).toBeChecked()
-  await filterModalCancel.click()
+  await page.locator('.modal-close-btn').click()
   await switchProjections(page, 'arctic')
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).not.toBeVisible()
-  await filterModalCancel.click()
+  await page.locator('.modal-close-btn').click()
   await switchProjections(page, 'geographic')
   await page.waitForTimeout(5000)
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeChecked()
-  await filterModalCancel.click()
+  await page.locator('.modal-close-btn').click()
   await switchProjections(page, 'antarctic')
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).not.toBeVisible()
-  await filterModalCancel.click()
+  await page.locator('.modal-close-btn').click()
 })

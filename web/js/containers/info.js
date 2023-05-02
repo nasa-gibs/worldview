@@ -77,7 +77,7 @@ function InfoList (props) {
     return {
       text: isDistractionFreeModeActive ? 'Exit Distraction Free' : 'Distraction Free',
       iconClass: 'ui-icon',
-      iconName: ['far', 'eye'],
+      iconName: ['fas', 'eye'],
       id: 'distraction_free_info_item',
       onClick: () => {
         toggleDistractionFreeMode();

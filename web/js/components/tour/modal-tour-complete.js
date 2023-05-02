@@ -9,6 +9,11 @@ function ModalComplete(props) {
     currentStory, modalComplete, resetTour, endTour,
   } = props;
   const { readMoreLinks } = currentStory;
+  const closeBtn = (
+    <button className="tour-close-btn" onClick={endTour} type="button">
+      &times;
+    </button>
+  );
   let list;
   if (
     readMoreLinks
@@ -40,7 +45,7 @@ function ModalComplete(props) {
         fade={false}
         keyboard
       >
-        <ModalHeader toggle={endTour}>
+        <ModalHeader close={closeBtn}>
           Story Complete
         </ModalHeader>
         <ModalBody>

@@ -77,11 +77,12 @@ const MeasureMenu = function () {
   return (
     <>
       <Form>
-        <div className="measure-unit-toggle custom-control custom-switch">
+        <div className="measure-unit-toggle form-check form-switch">
           <input
             id="unit-toggle"
-            className="custom-control-input"
+            className="form-check-input"
             type="checkbox"
+            data-bs-toggle="switch"
             onChange={unitToggle}
             defaultChecked={unitOfMeasure === 'mi'}
           />

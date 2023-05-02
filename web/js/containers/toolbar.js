@@ -388,7 +388,7 @@ class toolbarContainer extends Component {
         style={mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
+        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} />
       </Button>
     );
   }

@@ -94,6 +94,15 @@
   color: #fff;
 }
 
+.nav-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+// .nav-item a:hover {
+//   color: #fff;
+// }
+
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
@@ -687,6 +696,11 @@
     background-color: #fff;
     margin-right: 10px;
   }
+
+  .breadcrumb {
+    padding: 10px;
+    border-radius: 0.25rem;
+  }
 }
 
 .granule-date-item {
@@ -1018,6 +1032,16 @@
   margin-top: 3px;
   display: flex;
   justify-content: space-between;
+}
+
+a[rel="noopener noreferrer"],
+a[rel="noreferrer"] {
+  text-decoration: none;
+}
+
+a[rel="noopener noreferrer"]:hover,
+a[rel="noreferrer"]:hover {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
