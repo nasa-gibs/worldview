@@ -56,7 +56,7 @@ if (fs.existsSync(layerOrderFile)) {
 const outputFile = argv.layerMetadata
 
 const metadataConfig = features.features.vismetadata
-const url = metadataConfig.url
+const url = metadataConfig.url || undefined
 const daacMap = metadataConfig.daacMap || {}
 const layerMetadata = {}
 
@@ -81,6 +81,7 @@ useKeys = [
 ]
 
 async function main (url) {
+  if (!url) return
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
