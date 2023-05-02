@@ -1,1 +1,1 @@
-Snow is even easier to differentiate in these false-color images, where show is shown in cyan while clouds are white.
+Snow is even easier to spot in these false-color images, where snow appears as bright turquoise while low clouds are white and high clouds are turquiose.

@@ -30,7 +30,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-120.32664595033344,35.67369591474056,-119.07005472101878,36.25949494776134&l=Reference_Features_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&cm=opacity&t=2023-03-02-T05%3A35%3A22Z&t1=2023-04-11-T09%3A35%3A22Z"
+          "stepLink": "v=-120.32664595033344,35.67369591474056,-119.07005472101878,36.25949494776134&l=Reference_Features_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&cm=opacity&t=2023-03-02-T05%3A35%3A22Z&t1=2023-04-11-T09%3A35%3A22Z"
         },
         {
           "id": "003",

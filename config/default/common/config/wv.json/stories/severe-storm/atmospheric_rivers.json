@@ -39,7 +39,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "v=-182.63758765620688,8.303604802545728,-79.03433800644947,56.60147768817665&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&ab=on&t=2023-02-25-T08%3A38%3A00Z"
+          "stepLink": "v=-182.63758765620688,-1.6004711120058772,-79.03433800644947,66.50555360272826&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&ab=on&t=2023-02-24-T19%3A00%3A00Z"
         },
         {
           "id": "004",
