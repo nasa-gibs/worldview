@@ -301,6 +301,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
+    const { animation: { isPlaying } } = state;
     options.group = options.group || activeString;
 
     // if gibs/dns failure, display static image layer
@@ -323,7 +324,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     // dispatch action to keep track of error tiles
-    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length || errorTiles.blankTiles.length) && isKioskModeActive) {
+    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length || errorTiles.blankTiles.length) && isKioskModeActive && !isPlaying) {
       store.dispatch(setErrorTiles(errorTiles));
     }
 

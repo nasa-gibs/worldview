@@ -87,10 +87,6 @@ function TileErrorHandler({ action, ui }) {
     }
   }, [action]);
 
-  useEffect(() => {
-    handleReadyForAnimation();
-  });
-
   const handleStaticMap = () => {
     toggleStaticMap(true);
     removeGroup(activeLayerIds);
@@ -126,7 +122,7 @@ function TileErrorHandler({ action, ui }) {
   const handleTileErrors = () => {
     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
-    if (percentageOfLoadedTiles >= 75) return clearErrorTiles();
+    if (percentageOfLoadedTiles >= 75) return handleReadyForAnimation();
     if (dailyTiles.length) return handleTimeChangeForErrors(dailyTiles, false);
     if (subdailyTiles.length && hourlySafeguardCheck) return handleTimeChangeForErrors(subdailyTiles, true);
     clearErrorTiles();
@@ -134,8 +130,10 @@ function TileErrorHandler({ action, ui }) {
 
   const handleReadyForAnimation = () => {
     // if map is loaded AND readyForAnimation not turned on yet AND autoplayAnimation is on AND kiosk mode is on AND animation is not playing AND static map is not displayed AND error tiles and blank tiles are empty
-    const animationCheck = ui.selected && !readyForAnimation && autoplayAnimation && isKioskModeActive && !isAnimationPlaying && !displayStaticMap && !errorTileCheck && !blankTileCheck;
+    // console.log('checking for readyForAnimation')
+    const animationCheck = ui.selected && !readyForAnimation && autoplayAnimation && isKioskModeActive && !isAnimationPlaying && !displayStaticMap;
     if (animationCheck) {
+      // console.log('handleReadyForAnimation')
       const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
       const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
 
