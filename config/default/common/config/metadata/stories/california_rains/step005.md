@@ -1,1 +1,1 @@
-Superblooms in Carrizo Plain National Monument area from the precipitation
+The rains and snow melt have also benefitted the flora of the region. Superblooms of wildflowers, seen in shades of yellow, have emerged this spring in Carrizo Plain National Monument area, west of Bakersfield.
