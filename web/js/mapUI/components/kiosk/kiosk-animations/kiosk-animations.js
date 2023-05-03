@@ -1,44 +1,43 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
-  play,
-  toggleLooping,
-  changeFrameRate,
-  changeStartAndEndDate,
   onActivate as initiateAnimationAction,
+  playKioskAnimation as playKioskAnimationAction,
 } from '../../../../modules/animation/actions';
-import {
-  selectInterval,
-} from '../../../../modules/date/actions';
+import { selectInterval } from '../../../../modules/date/actions';
+import { countTilesForSpecifiedLayers } from '../../../util/util';
 
-function KioskAnimations() {
+const kioskAnimationTilesList = ['GOES-East_ABI_GeoColor', 'GOES-West_ABI_GeoColor', 'Himawari_AHI_Band3_Red_Visible_1km'];
+
+function KioskAnimations({ ui }) {
   const dispatch = useDispatch();
-  const playAnimation = () => { dispatch(play()); };
-  const toggleLoop = () => { dispatch(toggleLooping()); };
-  const setFrameRate = (rate) => { dispatch(changeFrameRate(rate)); };
-  const setStartAndEndDate = (start, end) => { dispatch(changeStartAndEndDate(start, end)); };
   const setInterval = () => { dispatch(selectInterval(10, 5, true)); };
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
+  const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
 
   const {
-    selectedDate, isAnimationPlaying, animationTileCheck, isKioskModeActive, isAuotplayMode,
+    selectedDate, isAnimationPlaying, isKioskModeActive, autoplay,
   } = useSelector((state) => ({
     selectedDate: state.date.selected,
     loop: state.animation.loop,
     isAnimationPlaying: state.animation.isPlaying,
-    animationTileCheck: state.ui.animationTileCheck,
     isKioskModeActive: state.ui.isKioskModeActive,
-    isAuotplayMode: state.animation.autoplay,
+    autoplay: state.animation.autoplay,
   }));
 
   useEffect(() => {
-    if (isKioskModeActive && isAuotplayMode && !isAnimationPlaying) {
-      const { goesEast, goesWest, redVisible } = animationTileCheck;
-      if (goesEast && goesWest && redVisible) {
+    if (!ui.selected) return;
+    const animationPlayCheck = autoplay && !isAnimationPlaying && isKioskModeActive;
+    // nested if statements to protect agaisnt invoking countTilesForSpecifiedLayers since it is expensive
+    if (animationPlayCheck) {
+      const { totalExpectedTileCount, totalLoadedTileCount } = countTilesForSpecifiedLayers(ui, kioskAnimationTilesList);
+      // console.log(totalExpectedTileCount, totalLoadedTileCount , selectedDate)
+      if (totalExpectedTileCount === 28 && totalLoadedTileCount === 28) {
         handleAnimationSettings();
       }
     }
-  }, [animationTileCheck]);
+  });
 
   // zero dates for subdaily times
   const zeroDates = (start, end) => {
@@ -62,29 +61,27 @@ function KioskAnimations() {
   };
 
   const updateStartTime = (dateString) => {
-    // Parse the input date string into a Date object
     const date = new Date(dateString);
     // Subtract 3 hours (3 * 60 * 60 * 1000 milliseconds)
     date.setTime(date.getTime() - 6 * 60 * 60 * 1000);
-    // Return the updated date string
     return date.toString();
   };
 
   const handleAnimationSettings = () => {
-    // console.log('selectedDate', selectedDate);
     const start = updateStartTime(selectedDate);
     const end = selectedDate;
     const { startDate, endDate } = zeroDates(start, end);
 
     initiateAnimation();
     setInterval();
-    toggleLoop();
-    setFrameRate(6);
-    setStartAndEndDate(startDate, endDate);
-    playAnimation();
+    playKioskAnimation(startDate, endDate);
   };
 
   return null;
 }
+
+KioskAnimations.propTypes = {
+  ui: PropTypes.object,
+};
 
 export default KioskAnimations;

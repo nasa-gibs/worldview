@@ -30,7 +30,7 @@ import {
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
-import { setErrorTiles, setAnimationTileCheck } from '../modules/ui/actions';
+import { setErrorTiles } from '../modules/ui/actions';
 import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -62,7 +62,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
   // list of layer id's to check for blank tiles in blobs
   const kioskCheckForBlankTilesList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor'];
-  const kioskAnimationTilesList = ['GOES-East_ABI_GeoColor', 'GOES-West_ABI_GeoColor', 'Himawari_AHI_Band3_Red_Visible_1km'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -161,7 +160,7 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
     const state = store.getState();
-    const { ui: { isKioskModeActive, animationTileCheck }, date: { appNow } } = state;
+    const { ui: { isKioskModeActive }, date: { appNow } } = state;
 
     const date = layerDate.toISOString().split('T')[0];
 
@@ -195,31 +194,7 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     };
 
-    const updateAnimationTiles = (id, hasErrors) => {
-      // if one layer has errors, set all to false
-      if (hasErrors) {
-        return store.dispatch(setAnimationTileCheck({ goesEast: false, goesWest: false, redVisible: false }));
-      }
 
-      let layerName = '';
-
-      switch (id) {
-        case 'GOES-East_ABI_GeoColor':
-          layerName = 'goesEast';
-          break;
-        case 'GOES-West_ABI_GeoColor':
-          layerName = 'goesWest';
-          break;
-        case 'Himawari_AHI_Band3_Red_Visible_1km':
-          layerName = 'redVisible';
-          break;
-        default:
-          console.error('layer is not an animation layer');
-      }
-
-      // update the individual layer check to true
-      store.dispatch(setAnimationTileCheck({ ...animationTileCheck, [layerName]: true }));
-    };
 
     try {
       const response = await fetch(src);
@@ -231,18 +206,9 @@ export default function mapLayerBuilder(config, cache, store) {
         checkBlobTiles(response.headers);
       }
 
-      // updating tile status for animation layers in kiosk mode
-      if (data !== undefined && isKioskModeActive && kioskAnimationTilesList.includes(layer.id)) {
-        updateAnimationTiles(layer.id, false);
-      }
-
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
-        // updating tile status for animation layers in kiosk mode
-        if (isKioskModeActive && kioskAnimationTilesList.includes(layer.id)) {
-          updateAnimationTiles(layer.id, true);
-        }
         handleTileError(tile, layer, src);
         tile.setState(TileState.ERROR);
       }
@@ -337,8 +303,11 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const { ui: { isKioskModeActive, displayStaticMap } } = state;
-    const { animation: { isPlaying } } = state;
+    const {
+      ui: { isKioskModeActive, displayStaticMap },
+      animation: { isPlaying },
+    } = state;
+
     options.group = options.group || activeString;
 
     // if gibs/dns failure, display static image layer

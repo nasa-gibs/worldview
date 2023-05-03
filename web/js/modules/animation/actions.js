@@ -12,6 +12,7 @@ import {
   TOGGLE_GIF,
   COLLAPSE_ANIMATION,
   TOGGLE_AUTOPLAY,
+  PLAY_KIOSK_ANIMATIONS,
 } from './constants';
 import util from '../../util/util';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
@@ -111,5 +112,12 @@ export function toggleAnimationCollapse() {
 export function toggleAnimationAutoplay() {
   return {
     type: TOGGLE_AUTOPLAY,
+  };
+}
+export function playKioskAnimation(startDate, endDate) {
+  return {
+    type: PLAY_KIOSK_ANIMATIONS,
+    startDate,
+    endDate,
   };
 }

@@ -399,7 +399,7 @@ function MapUI(props) {
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
       <TileErrorHandler action={tileErrorAction} ui={ui} />
-      <KioskAnimations />
+      <KioskAnimations ui={ui} />
     </>
   );
 }

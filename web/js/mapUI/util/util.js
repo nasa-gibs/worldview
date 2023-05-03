@@ -75,6 +75,37 @@ export const countTiles = (ui) => {
   };
 };
 
+export const countTilesForSpecifiedLayers = (ui, layersToCheck) => {
+  const map = ui.selected;
+  const view = map.getView();
+  const layers = map.getLayers().getArray();
+  const matchingLayers = layers.filter((layer) => {
+    const layerId = layer.wv.id;
+    return layersToCheck.includes(layerId);
+  });
+
+  let totalExpectedTileCount = 0;
+  let totalLoadedTileCount = 0;
+
+  const processLayer = (layer) => {
+    if (layer instanceof TileLayer) {
+      const { expectedTileCount, loadedTileCount } = processTileLayer(layer, map, view);
+      totalExpectedTileCount += expectedTileCount;
+      totalLoadedTileCount += loadedTileCount;
+    } else if (layer.getLayers) {
+      const subLayers = layer.getLayers().getArray();
+      subLayers.forEach(processLayer);
+    }
+  };
+
+  matchingLayers.forEach(processLayer);
+
+  return {
+    totalExpectedTileCount,
+    totalLoadedTileCount,
+  };
+};
+
 /**
  * Formats redux date to match timezone of tile request urls.
  * Used in formatDate() when there are subdaily tiles

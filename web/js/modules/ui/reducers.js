@@ -5,7 +5,6 @@ import {
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   CLEAR_ERROR_TILES,
-  SET_ANIMATION_TILE_CHECK,
 } from './constants';
 
 export const uiState = {
@@ -59,15 +58,6 @@ export default function uiReducers(state = uiState, action) {
       return lodashAssign({}, state, {
         displayStaticMap: action.isActive,
       });
-    case SET_ANIMATION_TILE_CHECK:
-      return {
-        ...state,
-        animationTileCheck: {
-          goesEast: action.animationTileCheck.goesEast,
-          goesWest: action.animationTileCheck.goesWest,
-          redVisible: action.animationTileCheck.redVisible,
-        },
-      };
     default:
       return state;
   }

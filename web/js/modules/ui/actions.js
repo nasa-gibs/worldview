@@ -6,7 +6,6 @@ import {
   CLEAR_ERROR_TILES,
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
-  SET_ANIMATION_TILE_CHECK,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -60,17 +59,5 @@ export function toggleStaticMap(isActive) {
   return {
     type: DISPLAY_STATIC_MAP,
     isActive,
-  };
-}
-
-// check that each layer for the kiosk animation scenario has no tile errors
-export function setAnimationTileCheck(tileCheck) {
-  return {
-    type: SET_ANIMATION_TILE_CHECK,
-    tileCheck: {
-      goesEast: tileCheck.goesEast,
-      goesWest: tileCheck.goesWest,
-      redVisible: tileCheck.redVisible,
-    },
   };
 }
