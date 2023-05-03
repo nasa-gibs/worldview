@@ -145,7 +145,6 @@ const getBestZoom = function(distance, start, end, view) {
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
 export function fly (map, proj, endPoint, endZoom = 5, rotation = 0, isKioskModeActive) {
-  console.log(`isKioskModeActive: ${isKioskModeActive}`);
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar
   view.cancelAnimations();

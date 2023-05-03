@@ -49,7 +49,7 @@ class TourBox extends React.Component {
 
   render() {
     const {
-      index, story, storyId, storyOrder, className, title, description, selectTour,
+      index, story, storyId, storyOrder, className, title, description, selectTour, isKioskModeActive,
     } = this.props;
     const { styles } = this.state;
     let floatBox = '';
@@ -57,9 +57,11 @@ class TourBox extends React.Component {
       || storyOrder.length - (index + 2) === 0) {
       floatBox = ' tour-box-float';
     }
+    const slugParam = isKioskModeActive ? '#&kiosk=true' : '#';
+    console.log(`tour-box isKioskModeActive: ${isKioskModeActive}`);
     return (
       <a
-        href="#"
+        href={slugParam}
         style={styles}
         onMouseOver={(e) => this.onMouseOver(e)}
         onMouseOut={(e) => this.onMouseOut(e)}
@@ -80,14 +82,15 @@ class TourBox extends React.Component {
 }
 
 TourBox.propTypes = {
-  index: PropTypes.number.isRequired,
-  selectTour: PropTypes.func.isRequired,
-  story: PropTypes.object.isRequired,
-  storyId: PropTypes.string.isRequired,
   backgroundImage: PropTypes.string,
   backgroundImageHover: PropTypes.string,
   className: PropTypes.string,
   description: PropTypes.string,
+  index: PropTypes.number.isRequired,
+  isKioskModeActive: PropTypes.bool,
+  selectTour: PropTypes.func.isRequired,
+  story: PropTypes.object.isRequired,
+  storyId: PropTypes.string.isRequired,
   storyOrder: PropTypes.array,
   title: PropTypes.string,
 };

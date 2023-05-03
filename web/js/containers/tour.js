@@ -123,9 +123,10 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
     } = this.props;
     if (e) e.preventDefault();
+    const slugParam = isKioskModeActive ? '&kiosk=true' : '';
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -145,7 +146,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${slugParam}`,
       config,
       renderedPalettes,
     );
@@ -318,12 +319,14 @@ class Tour extends React.Component {
 
   renderTourStart() {
     const {
+      isKioskModeActive,
       stories,
       storyOrder,
       screenHeight,
     } = this.props;
     const { modalStart } = this.state;
     const checked = !!safeLocalStorage.getItem(HIDE_TOUR);
+    console.log(`tourStart isKioskModeActive: ${isKioskModeActive}`);
     return (
       <TourStart
         stories={stories}
@@ -338,6 +341,7 @@ class Tour extends React.Component {
         hideTour={this.hideTour}
         showTour={this.showTour}
         endTour={this.endTour}
+        isKioskModeActive={isKioskModeActive}
       />
     );
   }
@@ -519,10 +523,11 @@ const mapStateToProps = (state) => {
     screenSize, config, tour, palettes, models, compare, map,
   } = state;
   const { screenWidth, screenHeight } = screenSize;
-
+  const { isKioskModeActive } = state.ui;
   return {
     config,
     isActive: tour.active,
+    isKioskModeActive,
     map,
     models,
     compareState: compare,
@@ -558,6 +563,7 @@ Tour.propTypes = {
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,

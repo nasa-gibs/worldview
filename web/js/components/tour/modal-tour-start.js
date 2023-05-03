@@ -64,7 +64,7 @@ class ModalStart extends React.Component {
 
   render() {
     const {
-      modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour,
+      modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour, isKioskModeActive,
     } = this.props;
     const { checked } = this.state;
     const closeBtn = (
@@ -72,6 +72,7 @@ class ModalStart extends React.Component {
         &times;
       </button>
     );
+    console.log(`modal-tour-start isKioskModeActive: ${isKioskModeActive}`);
     return (
       <Modal
         isOpen={modalStart}
@@ -91,6 +92,7 @@ class ModalStart extends React.Component {
           <ModalBody>
             <TourIntro toggleModalStart={toggleModalStart} />
             <TourBoxes
+              isKioskModeActive={isKioskModeActive}
               stories={stories}
               storyOrder={storyOrder}
               selectTour={selectTour}
@@ -125,6 +127,7 @@ ModalStart.propTypes = {
   checked: PropTypes.bool.isRequired,
   endTour: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
+  isKioskModeActive: PropTypes.bool,
   modalStart: PropTypes.bool.isRequired,
   selectTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
