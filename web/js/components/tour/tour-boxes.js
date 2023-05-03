@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import TourBox from './tour-box';
 
 function TourBoxes(props) {
-  const {
-    stories, storyOrder, selectTour,
-  } = props;
+  const { stories, storyOrder, selectTour } = props;
   return (
     <div className="tour-box-container">
       <div className="tour-box-row">

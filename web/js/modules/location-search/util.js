@@ -26,7 +26,6 @@ export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActi
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  console.log('calling fly() from animateCoordinates');
   fly(map, proj, [x, y], zoom, isKioskModeActive);
 }
 

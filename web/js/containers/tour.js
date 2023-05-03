@@ -320,14 +320,12 @@ class Tour extends React.Component {
 
   renderTourStart() {
     const {
-      isKioskModeActive,
       stories,
       storyOrder,
       screenHeight,
     } = this.props;
     const { modalStart } = this.state;
     const checked = !!safeLocalStorage.getItem(HIDE_TOUR);
-    console.log(`tourStart isKioskModeActive: ${isKioskModeActive}`);
     return (
       <TourStart
         stories={stories}
@@ -342,7 +340,6 @@ class Tour extends React.Component {
         hideTour={this.hideTour}
         showTour={this.showTour}
         endTour={this.endTour}
-        isKioskModeActive={isKioskModeActive}
       />
     );
   }
