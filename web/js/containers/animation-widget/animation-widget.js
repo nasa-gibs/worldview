@@ -41,6 +41,7 @@ import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
 import MobileAnimationWidget from './mobile-animation-widget';
 import CollapsedAnimationWidget from './collapsed-animation-widget';
+import KioskAnimationWidget from './kiosk-animation-widget';
 
 function AnimationWidget (props) {
   const {
@@ -292,39 +293,42 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : (
-        <DesktopAnimationWidget
-          animationCustomModalOpen={animationCustomModalOpen}
-          customModalType={customModalType}
-          isDistractionFreeModeActive={isDistractionFreeModeActive}
-          endDate={endDate}
-          handleDragStart={handleDragStart}
-          hasSubdailyLayers={hasSubdailyLayers}
-          interval={interval}
-          isKioskModeActive={isKioskModeActive}
-          isPlaying={isPlaying}
-          looping={looping}
-          maxDate={maxDate}
-          minDate={minDate}
-          numberOfFrames={numberOfFrames}
-          onClose={onClose}
-          onDateChange={onDateChange}
-          onExpandedDrag={onExpandedDrag}
-          onLoop={onLoop}
-          onPushPause={onPushPause}
-          onPushPlay={onPushPlayFunc}
-          onSlide={onSlide}
-          playDisabled={playDisabled}
-          toggleCollapse={toggleCollapse}
-          setSpeed={setSpeed}
-          sliderLabel={sliderLabel}
-          speed={speed}
-          startDate={startDate}
-          subDailyMode={subDailyMode}
-          widgetPosition={widgetPosition}
-          zeroDates={zeroDates}
-        />
-      )}
+      ) : isKioskModeActive ? (
+        <KioskAnimationWidget startDate={startDate} endDate={endDate} />
+      )
+        : (
+          <DesktopAnimationWidget
+            animationCustomModalOpen={animationCustomModalOpen}
+            customModalType={customModalType}
+            isDistractionFreeModeActive={isDistractionFreeModeActive}
+            endDate={endDate}
+            handleDragStart={handleDragStart}
+            hasSubdailyLayers={hasSubdailyLayers}
+            interval={interval}
+            isKioskModeActive={isKioskModeActive}
+            isPlaying={isPlaying}
+            looping={looping}
+            maxDate={maxDate}
+            minDate={minDate}
+            numberOfFrames={numberOfFrames}
+            onClose={onClose}
+            onDateChange={onDateChange}
+            onExpandedDrag={onExpandedDrag}
+            onLoop={onLoop}
+            onPushPause={onPushPause}
+            onPushPlay={onPushPlayFunc}
+            onSlide={onSlide}
+            playDisabled={playDisabled}
+            toggleCollapse={toggleCollapse}
+            setSpeed={setSpeed}
+            sliderLabel={sliderLabel}
+            speed={speed}
+            startDate={startDate}
+            subDailyMode={subDailyMode}
+            widgetPosition={widgetPosition}
+            zeroDates={zeroDates}
+          />
+        )}
     </ErrorBoundary>
   ) : null;
 }

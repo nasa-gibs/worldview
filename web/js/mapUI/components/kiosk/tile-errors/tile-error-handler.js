@@ -16,7 +16,6 @@ import {
 } from '../../../../modules/layers/selectors';
 import { toggleGroupVisibility as toggleGroupVisiblityAction } from '../../../../modules/layers/actions';
 import {
-  // countTiles,
   formatDate,
   weekAgo,
   threeHoursAgo,
@@ -34,8 +33,6 @@ function TileErrorHandler({ action, ui }) {
   const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
 
   const {
-    // autoplayAnimation,
-    // isAnimationPlaying,
     displayStaticMap,
     isKioskModeActive,
     errorTiles,
@@ -89,7 +86,6 @@ function TileErrorHandler({ action, ui }) {
   };
 
   const handleTimeChangeForBlankTiles = () => {
-    // console.log('kioskTileCount', kioskTileCount, 'blankTilesCount', blankTiles.length, 'percentage: ', (blankTiles.length / kioskTileCount) * 100, '%', 'firstDate', blankTiles[0].date, 'lastDate', blankTiles[blankTiles.length -1].date)
     const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
     if (!blankTilesOnCurentDate) return clearErrorTiles();
     const blankTilesPercentage = (blankTiles.length / kioskTileCount) * 100;
@@ -105,7 +101,6 @@ function TileErrorHandler({ action, ui }) {
   const handleTimeChangeForErrors = (tiles, isSubdaily) => {
     const currentDate = formatDate(selectedDate, isSubdaily);
     const errorTilesOnCurrentDate = tiles.filter((tile) => currentDate === tile.date).length;
-    // console.log('errorTilesOnCurrentDate', errorTilesOnCurrentDate, 'currentDate', currentDate)
     if (errorTilesOnCurrentDate) {
       const state = { date, compare };
       if (hasSubdailyLayers && !isSubdaily) selectInterval(1, 3, false);
@@ -114,7 +109,6 @@ function TileErrorHandler({ action, ui }) {
       selectDate(prevDateObj);
     }
     clearErrorTiles();
-    // handleReadyForAnimation();
     if (!hourlySafeguardCheck || !dailySafeguardCheck) return handleStaticMap();
   };
 
@@ -123,20 +117,6 @@ function TileErrorHandler({ action, ui }) {
     if (subdailyTiles.length && hourlySafeguardCheck) return handleTimeChangeForErrors(subdailyTiles, true);
     if ((!hourlySafeguardCheck || !dailySafeguardCheck) && !displayStaticMap) return handleStaticMap();
   };
-
-  // dont call this unless autoplay animation is true
-  // const handleReadyForAnimation = () => {
-  //   // if map is loaded AND not turned on yet AND autoplayAnimation is on AND kiosk mode is on AND animation is not playing AND static map is not displayed AND error tiles and blank tiles are empty
-  //   const animationCheck = ui.selected  && autoplayAnimation && isKioskModeActive && !isAnimationPlaying && !displayStaticMap && !errorTileCheck;
-  //   if (animationCheck) {
-  //     const { totalExpectedTileCount, totalLoadedTileCount } = countTiles(ui);
-  //     const percentageOfLoadedTiles = (totalLoadedTileCount / totalExpectedTileCount) * 100;
-
-  //     if (percentageOfLoadedTiles >= 75) {
-
-  //     }
-  //   }
-  // };
 
   return null;
 }
