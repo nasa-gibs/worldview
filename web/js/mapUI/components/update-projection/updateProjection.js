@@ -131,8 +131,8 @@ function UpdateProjection(props) {
  * @method flyToNewExtent
  * @static
  *
- * @param {string} extent
- * @param {string} rotation
+ * @param {object} extent
+ * @param {number} rotation
  */
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
