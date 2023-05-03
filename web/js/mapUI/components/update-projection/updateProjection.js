@@ -142,7 +142,6 @@ function UpdateProjection(props) {
     const zoom = ui.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    console.log(`flyToNewExtent isKioskModeActive: ${isKioskModeActive}`);
     return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
   };
 

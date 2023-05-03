@@ -5,9 +5,8 @@ import TourBox from './tour-box';
 
 function TourBoxes(props) {
   const {
-    isKioskModeActive, stories, storyOrder, selectTour,
+    stories, storyOrder, selectTour,
   } = props;
-  console.log(`tourBoxes isKioskModeActive: ${isKioskModeActive}`);
   return (
     <div className="tour-box-container">
       <div className="tour-box-row">
@@ -27,7 +26,6 @@ function TourBoxes(props) {
               backgroundImageHover={story.backgroundImageHover}
               selectTour={selectTour}
               className={`tour-box ${story.type}`}
-              isKioskModeActive={isKioskModeActive}
             />
           );
         })}
@@ -37,7 +35,6 @@ function TourBoxes(props) {
 }
 
 TourBoxes.propTypes = {
-  isKioskModeActive: PropTypes.bool,
   selectTour: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,

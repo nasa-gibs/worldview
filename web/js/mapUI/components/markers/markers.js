@@ -104,7 +104,6 @@ function Markers(props) {
     const latestCoordinates = coordinatesObject && [longitude, latitude];
     const zoom = selectedMap.getView().getZoom();
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-    console.log(`flyToMarker isKioskModeActive: ${isKioskModeActive}`);
     animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom, isKioskModeActive);
   };
 

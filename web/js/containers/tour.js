@@ -126,7 +126,7 @@ class Tour extends React.Component {
       config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
     } = this.props;
     if (e) e.preventDefault();
-    const slugParam = isKioskModeActive ? '&kiosk=true' : '';
+    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -146,7 +146,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${slugParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
       config,
       renderedPalettes,
     );
@@ -226,9 +226,9 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive,
     } = this.props;
-
+    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
       this.fetchMetadata(currentStory, currentStep);
@@ -240,7 +240,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
         config,
         renderedPalettes,
       );
@@ -253,11 +253,12 @@ class Tour extends React.Component {
 
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
+    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
@@ -269,7 +270,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
         config,
         renderedPalettes,
       );

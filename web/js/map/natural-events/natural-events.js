@@ -175,7 +175,6 @@ class NaturalEvents extends React.Component {
     const category = event.categories[0].title;
     const zoom = isSameEventID ? map.getView().getZoom() : zoomLevelReference[category];
     const geometry = event.geometry.find((geom) => geom.date.split('T')[0] === date);
-    console.log(`zoomToEvent isKioskModeActive: ${isKioskModeActive}`);
     // check for polygon geometries and/or perform projection coordinate transform
     let coordinates;
     const transformCoords = (coords) => olProj.transform(coords, CRS.GEOGRAPHIC, crs);
