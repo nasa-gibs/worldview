@@ -21,19 +21,24 @@ function KioskAnimations() {
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
 
   const {
-    readyForAnimation, selectedDate, isAnimationPlaying,
+    selectedDate, isAnimationPlaying, animationTileCheck, isKioskModeActive, isAuotplayMode,
   } = useSelector((state) => ({
-    readyForAnimation: state.ui.readyForAnimation,
     selectedDate: state.date.selected,
     loop: state.animation.loop,
     isAnimationPlaying: state.animation.isPlaying,
+    animationTileCheck: state.ui.animationTileCheck,
+    isKioskModeActive: state.ui.isKioskModeActive,
+    isAuotplayMode: state.animation.autoplay,
   }));
 
   useEffect(() => {
-    if (readyForAnimation && !isAnimationPlaying) {
-      handleAnimationSettings();
+    if (isKioskModeActive && isAuotplayMode && !isAnimationPlaying) {
+      const { goesEast, goesWest, redVisible } = animationTileCheck;
+      if (goesEast && goesWest && redVisible) {
+        handleAnimationSettings();
+      }
     }
-  }, [readyForAnimation]);
+  }, [animationTileCheck]);
 
   // zero dates for subdaily times
   const zeroDates = (start, end) => {

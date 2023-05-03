@@ -10,7 +10,6 @@ import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload } from '../../../modules/date/actions';
 import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
-import { clearLayers } from '../../util/util';
 
 function AddLayer(props) {
   const {
@@ -41,7 +40,6 @@ function AddLayer(props) {
   // add static layer for kiosk mode in case of gibs/dns failure
   const addStaticLayer = async() => {
     const { createLayer } = ui;
-    clearLayers(ui);
     const newLayer = await createLayer();
     ui.selected.getLayers().insertAt(0, newLayer);
   };
