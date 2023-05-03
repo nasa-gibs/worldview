@@ -126,7 +126,7 @@ class Tour extends React.Component {
       config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
     } = this.props;
     if (e) e.preventDefault();
-    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
+    const kioskParam = this.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -228,7 +228,7 @@ class Tour extends React.Component {
     const {
       config, renderedPalettes, processStepLink, isKioskModeActive,
     } = this.props;
-    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
+    const kioskParam = this.getKioskParam(isKioskModeActive);
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
       this.fetchMetadata(currentStory, currentStep);
@@ -251,6 +251,10 @@ class Tour extends React.Component {
     }
   }
 
+  getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   decreaseStep(e) {
     const {
       config, renderedPalettes, processStepLink, isKioskModeActive,
@@ -258,7 +262,7 @@ class Tour extends React.Component {
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
-    const kioskParam = isKioskModeActive ? '&kiosk=true' : '';
+    const kioskParam = this.getKioskParam(isKioskModeActive);
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
