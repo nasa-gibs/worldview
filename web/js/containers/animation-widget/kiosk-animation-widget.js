@@ -1,28 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { formatKioskDate } from '../../components/kiosk/util';
 
-function formatDate(date) {
-  const adjustedDate = new Date(date);
-  // Add 4 hours to the adjustedDate
-  adjustedDate.setHours(adjustedDate.getHours() + 4);
+// format date and update to EST
+// function formatDate(date) {
+//   const options = {
+//     year: 'numeric',
+//     month: 'long',
+//     day: '2-digit',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     hour12: false,
+//     timeZone: 'America/New_York',
+//   };
 
-  const year = adjustedDate.getFullYear();
-  const month = adjustedDate.toLocaleString('en-US', { month: 'long' });
-  const day = adjustedDate.getDate().toString().padStart(2, '0');
-  const hours = adjustedDate.getHours().toString().padStart(2, '0');
-  const minutes = adjustedDate.getMinutes().toString().padStart(2, '0');
+//   const formatter = new Intl.DateTimeFormat('en-US', options);
+//   const dateParts = formatter.formatToParts(date);
 
-  return `${year} ${month} ${day} ${hours}:${minutes} Z`;
-}
+//   const year = dateParts.find(part => part.type === 'year').value;
+//   const month = dateParts.find(part => part.type === 'month').value;
+//   const day = dateParts.find(part => part.type === 'day').value;
+//   const hours = dateParts.find(part => part.type === 'hour').value;
+//   const minutes = dateParts.find(part => part.type === 'minute').value;
+
+//   return `${year} ${month} ${day} ${hours}:${minutes} EST`;
+// }
 
 function KioskAnimationWidget(props) {
   const {
     startDate,
     endDate,
+    hasSubdailyLayers,
   } = props;
 
-  const startDateString = formatDate(startDate);
-  const endDateString = formatDate(endDate);
+  const startDateString = formatKioskDate(startDate, hasSubdailyLayers);
+  const endDateString = formatKioskDate(endDate, hasSubdailyLayers);
   const middleText = ' to ';
 
   return (
@@ -41,6 +53,7 @@ function KioskAnimationWidget(props) {
 KioskAnimationWidget.propTypes = {
   startDate: PropTypes.object,
   endDate: PropTypes.object,
+  subDailyMode: PropTypes.bool,
 };
 
 export default KioskAnimationWidget;

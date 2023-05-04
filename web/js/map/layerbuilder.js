@@ -194,8 +194,6 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     };
 
-
-
     try {
       const response = await fetch(src);
       const data = await response.blob();

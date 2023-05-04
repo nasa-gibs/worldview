@@ -42,6 +42,7 @@ import DesktopAnimationWidget from './desktop-animation-widget';
 import MobileAnimationWidget from './mobile-animation-widget';
 import CollapsedAnimationWidget from './collapsed-animation-widget';
 import KioskAnimationWidget from './kiosk-animation-widget';
+import AnimationTileCheck from '../../components/kiosk/animation-tile-check/animation-tile-check';
 
 function AnimationWidget (props) {
   const {
@@ -100,6 +101,7 @@ function AnimationWidget (props) {
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
+  const [testMode, setTestMode] = useState(false);
 
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
@@ -225,7 +227,18 @@ function AnimationWidget (props) {
 
   return isActive ? (
     <ErrorBoundary>
-      {isPlaying && (
+      {
+        testMode && (
+          <AnimationTileCheck
+            startDate={startDate}
+            endDate={endDate}
+            interval={interval}
+            delta={delta}
+            isPlaying={isPlaying}
+          />
+        )
+      }
+      {isPlaying && !testMode && (
         <PlayQueue
           isMobile={isMobile}
           isLoopActive={looping}
@@ -293,8 +306,12 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : isKioskModeActive ? (
-        <KioskAnimationWidget startDate={startDate} endDate={endDate} />
+      ) : isKioskModeActive && !testMode ? (
+        <KioskAnimationWidget
+          startDate={startDate}
+          endDate={endDate}
+          hasSubdailyLayers={hasSubdailyLayers}
+        />
       )
         : (
           <DesktopAnimationWidget
