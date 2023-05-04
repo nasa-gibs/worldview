@@ -173,14 +173,14 @@
 
     &.active {
       background-color: #fff;
-
-      // Toggle layer icon color on hover by repositioning the SVG
-      &:hover > i {
-        background-position: 0 -10px;
-      }
     }
 
-    &:hover {
+    // Toggle layer icon color on hover by repositioning the SVG
+    &:not(.active):hover > i {
+      background-position: 0 -10px;
+    }
+
+    &:not(.active):hover {
       background-color: #404542;
     }
   }

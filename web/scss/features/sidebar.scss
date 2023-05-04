@@ -78,7 +78,7 @@
     height: 32px;
   }
 
-  .nav-item a:hover {
+  .nav-item a:not(.active):hover {
     color: #fff !important;
   }
 
