@@ -90,10 +90,9 @@ function TileErrorHandler({ action, ui }) {
     } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
       handleTimeChangeForBlankTiles();
     } else if ((lastCheckedDate !== null && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation)) {
-      console.log('scenario 000');
+      // console.log('scenario 000');
       readyForAnimation();
     } else {
-      console.log('shouldnt get here in animation mode');
       clearErrorTiles();
     }
   }, [action]);
@@ -104,7 +103,7 @@ function TileErrorHandler({ action, ui }) {
   };
 
   const readyForAnimation = () => {
-    console.log('2. ready for animation', selectedDate);
+    // console.log('2. ready for animation', selectedDate);
     toggleReadyForKioskAnimation(true);
     clearErrorTiles();
   };

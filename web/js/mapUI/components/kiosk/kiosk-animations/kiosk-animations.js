@@ -9,51 +9,42 @@ import { selectDate as selectDateAction } from '../../../../modules/date/actions
 
 function KioskAnimations({ ui }) {
   const dispatch = useDispatch();
-  // const setInterval = (delta, timeScale, customSelected) => { dispatch(selectInterval(delta, timeScale, customSelected)); };
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
   const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
   const {
-    selectedDate, isAnimationPlaying, isKioskModeActive, autoplay, eic, map,
+    selectedDate, isAnimationPlaying, isKioskModeActive, eic, map, readyForKioskAnimation,
   } = useSelector((state) => ({
     selectedDate: state.date.selected,
-    loop: state.animation.loop,
     isAnimationPlaying: state.animation.isPlaying,
     isKioskModeActive: state.ui.isKioskModeActive,
-    autoplay: state.animation.autoplay,
     eic: state.ui.eic,
-    date: state.date,
-    compare: state.compare,
     map: state.map,
+    readyForKioskAnimation: state.ui.readyForKioskAnimation,
   }));
 
   const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
 
   useEffect(() => {
-    if (!ui.selected) return;
+    if (!ui.selected || !isKioskModeActive) return;
     if (eic === 'sa' || eic === 'da') checkAnimationSettings();
-  }, [map]);
+  }, [map, readyForKioskAnimation]);
+
+  const subdailyPlayCheck = eic === 'sa' && subdailyAnimationDateUpdated && readyForKioskAnimation && !isAnimationPlaying;
+  const dailyPlayCheck = eic === 'da' && readyForKioskAnimation && !isAnimationPlaying;
 
   // if subdaily animation check that date moved back one day otherwise check if animation should play
   const checkAnimationSettings = () => {
     if (!ui.selected.frameState_) return;
-
-    if (isKioskModeActive && eic === 'sa' && !subdailyAnimationDateUpdated) {
+    if (eic === 'sa' && !subdailyAnimationDateUpdated) {
       const prevDayDate = new Date(selectedDate);
       prevDayDate.setDate(prevDayDate.getDate() - 1);
       selectDate(prevDayDate);
       setSubdailyAnimationDateUpdated(true);
-      return;
-    } if (isKioskModeActive && eic === 'sa' && subdailyAnimationDateUpdated && autoplay && !isAnimationPlaying) {
+    } else if (subdailyPlayCheck || dailyPlayCheck) {
       handleAnimationSettings();
     }
-
-    // const animationPlayCheck = autoplay && !isAnimationPlaying && isKioskModeActive;
-    // nested if statements to protect agaisnt invoking countTilesForSpecifiedLayers since it is expensive
-    // if (animationPlayCheck) {
-
-    // }
   };
 
   // zero dates for subdaily times
@@ -77,10 +68,17 @@ function KioskAnimations({ ui }) {
     };
   };
 
+  // start time to determine animation duration
   const updateStartTime = (dateString) => {
     const date = new Date(dateString);
-    // Subtract 3 hours (3 * 60 * 60 * 1000 milliseconds)
-    date.setTime(date.getTime() - 6 * 60 * 60 * 1000);
+    if (eic === 'sa') {
+      // Subtract 6 hours (6 * 60 * 60 * 1000 milliseconds) for subdaily animations
+      date.setTime(date.getTime() - 6 * 60 * 60 * 1000);
+    } else {
+      // Subtract 1 month for daily animations
+      date.setMonth(date.getMonth() - 1);
+    }
+
     return date.toString();
   };
 
@@ -90,8 +88,6 @@ function KioskAnimations({ ui }) {
     const { startDate, endDate } = zeroDates(start, end);
 
     initiateAnimation();
-    // 10 minute
-    // setInterval(10, 5, true);
     playKioskAnimation(startDate, endDate);
   };
 
