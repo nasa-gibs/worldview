@@ -11,16 +11,12 @@ export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
   displayStaticMap: false,
+  eic: '', // sa == subdaily-animation, da == daily-animation, ss== subdaily-static, ds == daily-static
   errorTiles: {
     dailyTiles: [],
     subdailyTiles: [],
     blankTiles: [],
     kioskTileCount: 0,
-  },
-  animationTileCheck: {
-    goesEast: false,
-    goesWest: false,
-    redVisible: false,
   },
 };
 

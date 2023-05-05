@@ -181,6 +181,20 @@ export function threeHoursAgo(date) {
 }
 
 /**
+ * Returns date string for 27 hours before a given date string
+ * @param {string} date
+ * @returns {string}
+ */
+ export function twentySevenHoursAgo(date) {
+  const inputDate = new Date(date);
+  const twentySevenHoursInMilliseconds = 27 * 60 * 60 * 1000;
+  const earlierDate = new Date(inputDate.getTime() - twentySevenHoursInMilliseconds);
+  const earlierDateString = earlierDate.toString();
+  return earlierDateString;
+}
+
+
+/**
  * Compares two dates and returns true if the selected date is younger than the last date to check
  * Used as a safeguard to prevent automatically stepping back farther than 1 week in kiosk mode
  * @param {string} lastDateToCheck

@@ -19,6 +19,7 @@ import {
   formatDate,
   weekAgo,
   threeHoursAgo,
+  twentySevenHoursAgo,
   compareDailyDates,
   compareSubdailyDates,
   formatSelectedDate,
@@ -41,6 +42,7 @@ function TileErrorHandler({ action, ui }) {
     compare,
     isLoading,
     realTimeDate,
+    eic,
   } = useSelector((state) => ({
     autoplayAnimation: state.animation.autoplay,
     displayStaticMap: state.ui.displayStaticMap,
@@ -52,6 +54,7 @@ function TileErrorHandler({ action, ui }) {
     compare: state.compare,
     isLoading: state.loading.isLoading,
     realTimeDate: state.date.appNow,
+    eic: state.ui.eic,
   }));
   const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
@@ -62,7 +65,7 @@ function TileErrorHandler({ action, ui }) {
   } = errorTiles;
 
   const lastDateToCheck = weekAgo(realTimeDate);
-  const lastTimeToCheck = threeHoursAgo(realTimeDate);
+  const lastTimeToCheck = eic === 'sa' ? twentySevenHoursAgo(realTimeDate) : threeHoursAgo(realTimeDate);
 
   const dailySafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
   const hourlySafeguardCheck = compareSubdailyDates(lastTimeToCheck, selectedDate);
@@ -71,14 +74,19 @@ function TileErrorHandler({ action, ui }) {
   const blankTileCheck = blankTiles.length;
 
   useEffect(() => {
+    if (!ui.selected) return;
+
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
+      console.log('1. errors')
       handleTileErrors();
     } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
       handleStaticMap();
     } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
       handleTimeChangeForBlankTiles();
+    } else if (isKioskModeActive){
+      console.log(ui)
     }
-  }, [action]);
+  }, [action, date] );
 
   const handleStaticMap = () => {
     toggleStaticMap(true);
