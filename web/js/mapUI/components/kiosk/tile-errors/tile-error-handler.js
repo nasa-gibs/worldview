@@ -83,14 +83,12 @@ function TileErrorHandler({ action, ui }) {
     if (!ui.selected || !map.rendered || readyForKioskAnimation) return;
 
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
-      console.log('1. errors tiles:', subdailyTiles.length);
       handleTileErrors();
     } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
       handleStaticMap();
     } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
       handleTimeChangeForBlankTiles();
-    } else if ((lastCheckedDate !== null && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation)) {
-      // console.log('scenario 000');
+    } else if ((!errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation)) {
       readyForAnimation();
     } else {
       clearErrorTiles();
@@ -103,7 +101,6 @@ function TileErrorHandler({ action, ui }) {
   };
 
   const readyForAnimation = () => {
-    // console.log('2. ready for animation', selectedDate);
     toggleReadyForKioskAnimation(true);
     clearErrorTiles();
   };

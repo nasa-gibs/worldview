@@ -193,7 +193,6 @@ export function twentySevenHoursAgo(date) {
   return earlierDateString;
 }
 
-
 /**
  * Compares two dates and returns true if the selected date is younger than the last date to check
  * Used as a safeguard to prevent automatically stepping back farther than 1 week in kiosk mode
@@ -224,10 +223,7 @@ export function compareSubdailyDates(lastDateToCheck, selectedDate) {
   // Calculate the hour difference, considering the 24-hour wraparound
   const hourDifference = (selectedDateHour - lastDateHour + 24) % 24;
   // Check if the hour value in selectedDate is exactly 3 hours behind lastDateToCheck
-  if (hourDifference > 3) {
-    return false;
-  }
-  return true;
+  return hourDifference <= 3;
 }
 
 // Updates the format of the selected date to a date format of YYYY-MM-DD

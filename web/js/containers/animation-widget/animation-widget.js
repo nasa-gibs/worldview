@@ -101,8 +101,6 @@ function AnimationWidget (props) {
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
-
-  // eslint-disable-next-line no-unused-vars
   const [testMode, setTestMode] = useState(false);
 
   const prevSubDailyMode = usePrevious(subDailyMode);
@@ -237,6 +235,7 @@ function AnimationWidget (props) {
             interval={interval}
             delta={delta}
             isPlaying={isPlaying}
+            setTestMode={setTestMode}
           />
         )
       }

@@ -184,7 +184,6 @@ export default function mapLayerBuilder(config, cache, store) {
       const actualId = headers.get('layer-identifier-actual');
       if (!actualId) return;
 
-      const state = store.getState();
       const { layers } = state;
       const collectionCheck = getCollections(layers, date, layer);
       // check if the collection & dates already exist for layer so we don't dispatch actions

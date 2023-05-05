@@ -78,7 +78,6 @@ function KioskAnimations({ ui }) {
       // Subtract 1 month for daily animations
       date.setMonth(date.getMonth() - 1);
     }
-
     return date.toString();
   };
 

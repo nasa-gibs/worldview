@@ -340,8 +340,6 @@ function MapUI(props) {
     }
   }
 
-
-
   return (
     <>
       <CreateMap
