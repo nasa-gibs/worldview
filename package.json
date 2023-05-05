@@ -204,7 +204,7 @@
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.3",
     "stackblur": "^1.0.0",
-    "supercluster": "^7.1.5",
+    "supercluster": "^8.0.1",
     "url-template": "^3.1.0",
     "what-input": "^5.2.12"
   },
