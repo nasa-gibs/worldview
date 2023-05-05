@@ -62,7 +62,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   // list of layer id's to check for blank tiles in blobs
-  const kioskCheckForBlankTilesList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor'];
+  const kioskCheckForBlankTilesList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor', 'IMERG_Precipitation_Rate', 'GHRSST_L4_MUR_Sea_Surface_Temperature', 'MODIS_Aqua_L3_Land_Surface_Temp_Daily_Day'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
