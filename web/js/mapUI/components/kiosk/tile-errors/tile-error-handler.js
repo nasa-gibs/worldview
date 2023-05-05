@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   clearErrorTiles as clearErrorTilesAction,
   toggleStaticMap as toggleStaticMapAction,
+  toggleReadyForKioskAnimation as toggleReadyForKioskAnimationAction,
 } from '../../../../modules/ui/actions';
 import {
   selectDate as selectDateAction,
@@ -32,6 +33,7 @@ function TileErrorHandler({ action, ui }) {
   const selectInterval = (delta, timeScale, customSelected) => { dispatch(selectIntervalAction(delta, timeScale, customSelected)); };
   const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
   const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
+  const toggleReadyForKioskAnimation = (toggleAnimation) => { dispatch(toggleReadyForKioskAnimationAction(toggleAnimation)); };
 
   const {
     displayStaticMap,
@@ -43,6 +45,8 @@ function TileErrorHandler({ action, ui }) {
     isLoading,
     realTimeDate,
     eic,
+    map,
+    readyForKioskAnimation,
   } = useSelector((state) => ({
     autoplayAnimation: state.animation.autoplay,
     displayStaticMap: state.ui.displayStaticMap,
@@ -55,13 +59,15 @@ function TileErrorHandler({ action, ui }) {
     isLoading: state.loading.isLoading,
     realTimeDate: state.date.appNow,
     eic: state.ui.eic,
+    map: state.map,
+    readyForKioskAnimation: state.ui.readyForKioskAnimation,
   }));
   const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
   const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
 
   const {
-    dailyTiles, subdailyTiles, blankTiles, kioskTileCount,
+    dailyTiles, subdailyTiles, blankTiles, kioskTileCount, lastCheckedDate,
   } = errorTiles;
 
   const lastDateToCheck = weekAgo(realTimeDate);
@@ -74,25 +80,36 @@ function TileErrorHandler({ action, ui }) {
   const blankTileCheck = blankTiles.length;
 
   useEffect(() => {
-    if (!ui.selected) return;
+    if (!ui.selected || !map.rendered || readyForKioskAnimation) return;
 
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
-      console.log('1. errors')
+      console.log('1. errors tiles:', subdailyTiles.length);
       handleTileErrors();
     } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
       handleStaticMap();
     } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
       handleTimeChangeForBlankTiles();
-    } else if (isKioskModeActive){
-      console.log(ui)
+    } else if ((lastCheckedDate !== null && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation)) {
+      console.log('scenario 000');
+      readyForAnimation();
+    } else {
+      console.log('shouldnt get here in animation mode');
+      clearErrorTiles();
     }
-  }, [action, date] );
+  }, [action]);
 
   const handleStaticMap = () => {
     toggleStaticMap(true);
     toggleGroupVisibility(activeLayerIds, false);
   };
 
+  const readyForAnimation = () => {
+    console.log('2. ready for animation', selectedDate);
+    toggleReadyForKioskAnimation(true);
+    clearErrorTiles();
+  };
+
+  // we don't need to include the readyForAnimation function here until we are checking a tile for blank tiles that we plan on animating
   const handleTimeChangeForBlankTiles = () => {
     const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
     if (!blankTilesOnCurentDate) return clearErrorTiles();
@@ -115,8 +132,12 @@ function TileErrorHandler({ action, ui }) {
       const prevDate = getNextDateTime(state, '-1');
       const prevDateObj = new Date(prevDate);
       selectDate(prevDateObj);
+    } else if ((lastCheckedDate === selectedDate && !readyForKioskAnimation && eic === 'da') || (eic === 'sa')) {
+      readyForAnimation();
+    } else {
+      clearErrorTiles();
     }
-    clearErrorTiles();
+
     if (!hourlySafeguardCheck || !dailySafeguardCheck) return handleStaticMap();
   };
 

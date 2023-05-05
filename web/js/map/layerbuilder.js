@@ -58,6 +58,7 @@ export default function mapLayerBuilder(config, cache, store) {
     subdailyTiles: [],
     blankTiles: [],
     kioskTileCount: 0,
+    lastCheckedDate: null,
   };
 
   // list of layer id's to check for blank tiles in blobs
@@ -131,6 +132,8 @@ export default function mapLayerBuilder(config, cache, store) {
       const isSubdailyLayer = layerPeriod === 'Subdaily';
       const urlDate = extractDateFromTileErrorURL(sourceURL);
       const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
+
+      errorTiles.lastCheckedDate = reduxDate;
 
       // we don't want to store cached dates in the error tiles
       if (urlDate === currentDate) {
@@ -304,6 +307,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const {
       ui: { isKioskModeActive, displayStaticMap },
       animation: { isPlaying },
+      map: { rendered },
     } = state;
 
     options.group = options.group || activeString;
@@ -327,10 +331,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
-    // dispatch action to keep track of error tiles
-    if ((errorTiles.dailyTiles.length || errorTiles.subdailyTiles.length || errorTiles.blankTiles.length) && isKioskModeActive && !isPlaying) {
-      store.dispatch(setErrorTiles(errorTiles));
-    }
+    if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
 
     return layer;
   };

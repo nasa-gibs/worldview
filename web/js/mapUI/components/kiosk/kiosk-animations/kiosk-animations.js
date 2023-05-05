@@ -5,21 +5,17 @@ import {
   onActivate as initiateAnimationAction,
   playKioskAnimation as playKioskAnimationAction,
 } from '../../../../modules/animation/actions';
-import { selectInterval, selectDate as selectDateAction, } from '../../../../modules/date/actions';
-import { countTilesForSpecifiedLayers } from '../../../util/util';
-
-
-const kioskAnimationTilesList = ['GOES-East_ABI_GeoColor', 'GOES-West_ABI_GeoColor', 'Himawari_AHI_Band3_Red_Visible_1km'];
+import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
 function KioskAnimations({ ui }) {
   const dispatch = useDispatch();
-  const setInterval = (delta, timeScale, customSelected) => { dispatch(selectInterval(delta, timeScale, customSelected)); };
+  // const setInterval = (delta, timeScale, customSelected) => { dispatch(selectInterval(delta, timeScale, customSelected)); };
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
   const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
   const {
-    selectedDate, isAnimationPlaying, isKioskModeActive, autoplay, eic, date, compare, map
+    selectedDate, isAnimationPlaying, isKioskModeActive, autoplay, eic, map,
   } = useSelector((state) => ({
     selectedDate: state.date.selected,
     loop: state.animation.loop,
@@ -36,34 +32,29 @@ function KioskAnimations({ ui }) {
 
   useEffect(() => {
     if (!ui.selected) return;
-    if (eic === 'sa' || eic === 'da') checkAnimationSettings()
+    if (eic === 'sa' || eic === 'da') checkAnimationSettings();
   }, [map]);
 
   // if subdaily animation check that date moved back one day otherwise check if animation should play
   const checkAnimationSettings = () => {
-    if (!ui.selected.frameState_) return
+    if (!ui.selected.frameState_) return;
 
-    if (isKioskModeActive && eic === 'sa' && !subdailyAnimationDateUpdated){
+    if (isKioskModeActive && eic === 'sa' && !subdailyAnimationDateUpdated) {
       const prevDayDate = new Date(selectedDate);
       prevDayDate.setDate(prevDayDate.getDate() - 1);
       selectDate(prevDayDate);
       setSubdailyAnimationDateUpdated(true);
-      return
-    } else if (isKioskModeActive && eic === 'sa' && subdailyAnimationDateUpdated && autoplay && !isAnimationPlaying){
-      console.log('else if')
-      handleAnimationSettings()
+      return;
+    } if (isKioskModeActive && eic === 'sa' && subdailyAnimationDateUpdated && autoplay && !isAnimationPlaying) {
+      handleAnimationSettings();
     }
 
-    const animationPlayCheck = autoplay && !isAnimationPlaying && isKioskModeActive;
+    // const animationPlayCheck = autoplay && !isAnimationPlaying && isKioskModeActive;
     // nested if statements to protect agaisnt invoking countTilesForSpecifiedLayers since it is expensive
-    if (animationPlayCheck) {
-      // const { totalExpectedTileCount, totalLoadedTileCount } = countTilesForSpecifiedLayers(ui, kioskAnimationTilesList);
-      // console.log(totalExpectedTileCount, totalLoadedTileCount , selectedDate)
-      // if (totalExpectedTileCount === 28 && totalLoadedTileCount === 28) {
-        // handleAnimationSettings();
-      // }
-    }
-  }
+    // if (animationPlayCheck) {
+
+    // }
+  };
 
   // zero dates for subdaily times
   const zeroDates = (start, end) => {

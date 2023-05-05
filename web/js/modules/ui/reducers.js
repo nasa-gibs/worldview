@@ -1,10 +1,10 @@
-import { assign as lodashAssign } from 'lodash';
 import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   CLEAR_ERROR_TILES,
+  READY_FOR_KIOSK_ANIMATION,
 } from './constants';
 
 export const uiState = {
@@ -17,44 +17,49 @@ export const uiState = {
     subdailyTiles: [],
     blankTiles: [],
     kioskTileCount: 0,
+    lastCheckedDate: null,
   },
+  readyForKioskAnimation: false,
 };
 
 export default function uiReducers(state = uiState, action) {
   switch (action.type) {
     case TOGGLE_DISTRACTION_FREE_MODE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isDistractionFreeModeActive: !state.isDistractionFreeModeActive,
-      });
+      };
     case TOGGLE_KIOSK_MODE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isKioskModeActive: action.isActive,
-      });
+      };
     case SET_ERROR_TILES:
       return {
         ...state,
         errorTiles: {
-          dailyTiles: action.errorTiles.dailyTiles,
-          subdailyTiles: action.errorTiles.subdailyTiles,
-          blankTiles: action.errorTiles.blankTiles,
-          kioskTileCount: action.errorTiles.kioskTileCount,
+          ...action.errorTiles,
         },
       };
     case CLEAR_ERROR_TILES:
       return {
         ...state,
         errorTiles: {
-          dailyTiles: [],
-          subdailyTiles: [],
-          blankTiles: [],
-          kioskTileCount: 0,
+          ...action.errorTiles,
         },
       };
     case DISPLAY_STATIC_MAP:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         displayStaticMap: action.isActive,
-      });
+      };
+    case READY_FOR_KIOSK_ANIMATION:
+      return {
+        ...state,
+        readyForKioskAnimation: action.toggleAnimation,
+      };
     default:
       return state;
   }
 }
+

@@ -185,7 +185,7 @@ export function threeHoursAgo(date) {
  * @param {string} date
  * @returns {string}
  */
- export function twentySevenHoursAgo(date) {
+export function twentySevenHoursAgo(date) {
   const inputDate = new Date(date);
   const twentySevenHoursInMilliseconds = 27 * 60 * 60 * 1000;
   const earlierDate = new Date(inputDate.getTime() - twentySevenHoursInMilliseconds);

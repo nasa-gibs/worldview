@@ -2,30 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { formatKioskDate } from '../../components/kiosk/util';
 
-// format date and update to EST
-// function formatDate(date) {
-//   const options = {
-//     year: 'numeric',
-//     month: 'long',
-//     day: '2-digit',
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     hour12: false,
-//     timeZone: 'America/New_York',
-//   };
-
-//   const formatter = new Intl.DateTimeFormat('en-US', options);
-//   const dateParts = formatter.formatToParts(date);
-
-//   const year = dateParts.find(part => part.type === 'year').value;
-//   const month = dateParts.find(part => part.type === 'month').value;
-//   const day = dateParts.find(part => part.type === 'day').value;
-//   const hours = dateParts.find(part => part.type === 'hour').value;
-//   const minutes = dateParts.find(part => part.type === 'minute').value;
-
-//   return `${year} ${month} ${day} ${hours}:${minutes} EST`;
-// }
-
 function KioskAnimationWidget(props) {
   const {
     startDate,
