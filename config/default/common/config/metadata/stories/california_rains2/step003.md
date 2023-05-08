@@ -1,1 +1,0 @@
-Tulare Lake has re-filled as a result of the heavy rains this past winter.
