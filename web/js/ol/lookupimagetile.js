@@ -14,47 +14,116 @@ LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = function() {
-  console.log('LookupImageTile.prototype.load');
+  // console.log('LookupImageTile.prototype.load');
   if (this.state === OlTileState.IDLE) {
     this.state = OlTileState.LOADING;
-    this.changed();
     const that = this;
+    this.changed();
+
+    console.log('this.image_');
+    const img = this;
+    console.log(img);
+    // -----Swap in opaque code block--------------------
+    let newSrc = '';
+    if (true) {
+      // fetch(this.src)
+      fetch('../../images/gibs-opaque.png')
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => {
+          // decode the buffer PNG file
+          const decodedPNG = UPNG.decode(buffer);
+          console.log(decodedPNG);
+
+          // Extract the colormap values, and make all colors opaque
+          const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
+
+          // Extract the data values, which are the colormap lookup values
+          const pixelData = decodedPNG.data;
+
+          // Create an array buffer matching the dimensions of the provided image
+          const bufferSize = decodedPNG.height * decodedPNG.width * 4;
+          const arrBuffer = new ArrayBuffer(bufferSize);
+
+          // Create a view into the array buffer
+          const arrBufferView = new Uint32Array(arrBuffer);
+
+          // iterate through the original image, re-drawing each pixel with the alpha channel set to 1
+          for (let i = 0; i < pixelData.length; i += 4) {
+            const lookupVal = pixelData[i] * 4;
+
+            arrBufferView[i] = colorMapArr[lookupVal]; // red channel
+            arrBufferView[i + 1] = colorMapArr[lookupVal + 1]; // green channel
+            arrBufferView[i + 2] = colorMapArr[lookupVal + 2]; // blue channel
+            arrBufferView[i + 3] = 255; // alpha channel
+          }
+
+          const encodedBufferImage = UPNG.encode([arrBufferView], decodedPNG.width, decodedPNG.height, 256);
+          // console.log(encodedBufferImage);
+
+          // const dataURL = `data:image/png;base64,${btoa(String.fromCharCode.apply(null, encodedBufferImage))}`;
+
+          const blob = new Blob([encodedBufferImage], { type: 'image/png' });
+          const dataURL = URL.createObjectURL(blob);
+          console.log(dataURL);
+
+          const img = new Image();
+          const { width, height } = decodedPNG;
+          console.log(`width: ${width} | height: ${height}`);
+          img.onload = function() {
+            that.canvas_ = document.createElement('canvas');
+            that.canvas_.width = width;
+            that.canvas_.height = height;
+            const g = that.canvas_.getContext('2d');
+            g.drawImage(img, 0, 0);
+            const imageData = g.getImageData(
+              0,
+              0,
+              that.canvas_.width,
+              that.canvas_.height,
+            );
+            const pixels = imageData.data;
+            const octets = that.canvas_.width * that.canvas_.height * 4;
+            for (let i = 0; i < octets; i += 4) {
+              const source = `${pixels[i + 0]},${
+                pixels[i + 1]},${
+                pixels[i + 2]},${
+                pixels[i + 3]}`;
+              const target = that.lookup_[source];
+
+              if (target) {
+                pixels[i + 0] = target.r;
+                pixels[i + 1] = target.g;
+                pixels[i + 2] = target.b;
+                pixels[i + 3] = target.a;
+              }
+            }
+            g.drawImage(img, 0, 0);
+          };
+          img.src = dataURL;
+
+          newSrc = img;
+          console.log('newSrc');
+          console.log(newSrc);
+          putItOnDom(encodedBufferImage);
+        });
+    }
+    // that.image_.src = newSrc;
+
+
     const onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
-      const octets = that.canvas_.width * that.canvas_.height * 4;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
-      const imageData = g.getImageData(
-        0,
-        0,
-        that.canvas_.width,
-        that.canvas_.height,
-      );
-      const pixels = imageData.data;
 
-      for (let i = 0; i < octets; i += 4) {
-        const source = `${pixels[i + 0]},${
-          pixels[i + 1]},${
-          pixels[i + 2]},${
-          pixels[i + 3]}`;
-        const target = that.lookup_[source];
-
-        if (target) {
-          pixels[i + 0] = target.r;
-          pixels[i + 1] = target.g;
-          pixels[i + 2] = target.b;
-          pixels[i + 3] = target.a;
-        }
-      }
-      g.putImageData(imageData, 0, 0);
       that.state = OlTileState.LOADED;
       that.changed();
       that.image_.removeEventListener('load', onImageLoad);
     };
-    this.image_.src = this.src_;
-    this.image_.addEventListener('load', onImageLoad);
+    // that.image_.src = this.src_;
+    that.image_.addEventListener('load', onImageLoad);
+    // console.log(that);
   }
 };
 
@@ -118,6 +187,14 @@ function getColormap(rawColormap) {
   return colorMapArr;
 }
 
+/**
+   * Create a new WMTS Layer
+   * @method lookupFactory
+   * @static
+   * @param {object} lookup - The layer palette
+   * @param {object} sourceOptions - Layer options
+   * @returns {object} function to create LookupImageTile
+   */
 export default function lookupFactory(lookup, sourceOptions) {
   console.log('lookupFactory');
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
