@@ -232,7 +232,7 @@ class PlayQueue extends React.Component {
     const {
       isLoopActive, startDate, togglePlaying, speed,
     } = this.props;
-    const loopDelay = speed === 0.5 ? 2000 : 1000 / speed;
+    const loopDelay = speed === 0.5 ? 2000 : 1500;
 
     if (isLoopActive) {
       this.playingDate = toString(startDate);
