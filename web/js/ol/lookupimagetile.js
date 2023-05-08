@@ -7,6 +7,8 @@ class LookupImageTile extends OlImageTile {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
     this.lookup_ = lookup;
     this.canvas_ = null;
+    // Store custom tileLoadFunction
+    this.customTileLoadFunction_ = tileLoadFunction;
   }
 }
 
@@ -116,7 +118,6 @@ LookupImageTile.prototype.load = function() {
       that.canvas_.height = that.image_.height;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
-
       that.state = OlTileState.LOADED;
       that.changed();
       that.image_.removeEventListener('load', onImageLoad);

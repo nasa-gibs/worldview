@@ -83,7 +83,7 @@ class PlayQueue extends React.Component {
   }
 
   /**
-   * Create an array of each date to be played
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
    */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
