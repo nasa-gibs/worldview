@@ -274,7 +274,7 @@ export function extractDateFromTileErrorURL(url) {
 }
 
 // Updates the format of the appNow date to a date format of YYYY-MM-DD
-export function formatAppNowDate(date) {
+export function formatSelectedDate(date) {
   const dateObj = new Date(date);
 
   const year = dateObj.getFullYear();
