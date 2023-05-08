@@ -16,15 +16,11 @@ LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = function() {
-  // console.log('LookupImageTile.prototype.load');
   if (this.state === OlTileState.IDLE) {
     this.state = OlTileState.LOADING;
     const that = this;
     this.changed();
 
-    console.log('this.image_');
-    const img = this;
-    console.log(img);
 
     const onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
@@ -38,10 +34,8 @@ LookupImageTile.prototype.load = function() {
     };
 
     // -----Swap in opaque code block--------------------
-    const newSrc = this.src_;
     if (true) {
-      // fetch(this.src)
-      fetch('../../images/gibs-opaque.png')
+      fetch(this.src_)
         .then((response) => response.arrayBuffer())
         .then((buffer) => {
           // decode the buffer PNG file
@@ -56,119 +50,31 @@ LookupImageTile.prototype.load = function() {
 
           // Create an array buffer matching the pixel dimensions of the provided image
           const bufferSize = height * width * 4;
-          const arrBuffer = new ArrayBuffer(bufferSize);
-          const arrBufferView = new Uint32Array(arrBuffer);
+          const arrBuffer = new Uint32Array(bufferSize);
 
           // iterate through the image, re-drawing each pixel with the alpha channel set to 1
           for (let i = 0; i < pixelData.length; i += 4) {
             const lookupVal = pixelData[i] * 4;
 
-            arrBufferView[i] = colorMapArr[lookupVal]; // red channel
-            arrBufferView[i + 1] = colorMapArr[lookupVal + 1]; // green channel
-            arrBufferView[i + 2] = colorMapArr[lookupVal + 2]; // blue channel
-            arrBufferView[i + 3] = 255; // alpha channel
+            arrBuffer[i] = colorMapArr[lookupVal]; // red channel
+            arrBuffer[i + 1] = colorMapArr[lookupVal + 1]; // green channel
+            arrBuffer[i + 2] = colorMapArr[lookupVal + 2]; // blue channel
+            arrBuffer[i + 3] = 255; // alpha channel
           }
 
           // Encode the image, creating a PNG file
-          const encodedBufferImage = UPNG.encode([arrBufferView], decodedPNG.width, decodedPNG.height, 256);
+          const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
           const blob = new Blob([encodedBufferImage], { type: 'image/png' });
-          const dataURL = URL.createObjectURL(blob);
-          console.log(`dataURL: ${dataURL}`);
+          const dataURL = `${URL.createObjectURL(blob)}`;
 
-          const opaqueImg = new Image();
-          opaqueImg.onload = function() {
-            that.canvas_ = document.createElement('canvas');
-            that.canvas_.width = width;
-            that.canvas_.height = height;
-            const g = that.canvas_.getContext('2d');
-            g.drawImage(opaqueImg, 0, 0);
-            const imageData = g.getImageData(
-              0,
-              0,
-              that.canvas_.width,
-              that.canvas_.height,
-            );
-            const pixels = imageData.data;
-            const octets = that.canvas_.width * that.canvas_.height * 4;
-            for (let i = 0; i < octets; i += 4) {
-              const source = `${pixels[i + 0]},${
-                pixels[i + 1]},${
-                pixels[i + 2]},${
-                pixels[i + 3]}`;
-              const target = that.lookup_[source];
-
-              if (target) {
-                pixels[i + 0] = target.r;
-                pixels[i + 1] = target.g;
-                pixels[i + 2] = target.b;
-                pixels[i + 3] = target.a;
-              }
-            }
-            g.drawImage(opaqueImg, 0, 0);
-          };
           that.image_.src = dataURL;
-
           that.image_.addEventListener('load', onImageLoad);
-          // newSrc = opaqueImg;
-          // putItOnDom(encodedBufferImage);
-          // that.image_.src = newSrc;
         });
-    } else {
-      that.image_.src = this.src_;
-      that.image_.addEventListener('load', onImageLoad);
-      // console.log(that);
     }
+    that.image_.src = this.src_;
+    that.image_.addEventListener('load', onImageLoad);
   }
 };
-
-const getOpaquePNG = () => {
-  fetch('https://gibs-a.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=2023-03-20T00:00:00Z&layer=MODIS_Terra_L3_Sea_Ice_Daily&style=default&tilematrixset=1km&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=0&TileCol=0&TileRow=0')
-    .then((response) => response.arrayBuffer())
-    .then((buffer) => {
-      // decode the buffer PNG file
-      const decodedPNG = UPNG.decode(buffer);
-      // console.log(decodedPNG.data);
-
-      // Extract the colormap values, and make all colors opaque
-      const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
-
-      // Extract the data values, which are the colormap lookup values
-      const pixelData = decodedPNG.data;
-
-      // Create an array buffer matching the dimensions of the provided image
-      const bufferSize = decodedPNG.height * decodedPNG.width * 4;
-      const arrBuffer = new ArrayBuffer(bufferSize);
-
-      // Create a view into the array buffer
-      const arrBufferView = new Uint32Array(arrBuffer);
-
-      // iterate through the original image, re-drawing each pixel with the alpha channel set to 1
-      for (let i = 0; i < pixelData.length; i += 4) {
-        const lookupVal = pixelData[i] * 4;
-        // console.log(`lookupVal: ${lookupVal}`);
-        // console.log(`colorMapArr[lookupVal]: ${colorMapArr[lookupVal]}`);
-
-        arrBufferView[i] = colorMapArr[lookupVal]; // red channel
-        arrBufferView[i + 1] = colorMapArr[lookupVal + 1]; // green channel
-        arrBufferView[i + 2] = colorMapArr[lookupVal + 2]; // blue channel
-        arrBufferView[i + 3] = 255; // alpha channel
-      }
-
-      const encodedBufferImage = UPNG.encode([arrBufferView], decodedPNG.width, decodedPNG.height, 256);
-      return encodedBufferImage;
-      // putItOnDom(encodedBufferImage);
-    });
-};
-
-function putItOnDom(encodedImg) {
-  // Convert the new PNG image to a Blob and create a URL for it
-  const blob = new Blob([encodedImg], { type: 'image/png' });
-  const url = URL.createObjectURL(blob);
-  const img = document.createElement('img');
-  img.src = url;
-  const el = document.getElementById('wv-content');
-  el.appendChild(img);
-}
 
 function getColormap(rawColormap) {
   const colorMapArr = [];
@@ -190,7 +96,6 @@ function getColormap(rawColormap) {
    * @returns {object} function to create LookupImageTile
    */
 export default function lookupFactory(lookup, sourceOptions) {
-  console.log('lookupFactory');
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
     return new LookupImageTile(
       lookup,
