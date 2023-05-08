@@ -86,9 +86,10 @@ function TileErrorHandler({ action, ui }) {
       handleTileErrors();
     } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
       handleStaticMap();
-    } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && !isLoading) {
+    } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && eic !== 'sa' && !isLoading) {
       handleTimeChangeForBlankTiles();
-    } else if ((!errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !blankTileCheck && !readyForKioskAnimation)) {
+      // reminder: we are NOT checking blank tiles when playing subdaily animations
+    } else if ((!errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !readyForKioskAnimation)) {
       readyForAnimation();
     } else {
       clearErrorTiles();
