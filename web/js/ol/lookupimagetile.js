@@ -25,8 +25,20 @@ LookupImageTile.prototype.load = function() {
     console.log('this.image_');
     const img = this;
     console.log(img);
+
+    const onImageLoad = function() {
+      that.canvas_ = document.createElement('canvas');
+      that.canvas_.width = that.image_.width;
+      that.canvas_.height = that.image_.height;
+      const g = that.canvas_.getContext('2d');
+      g.drawImage(that.image_, 0, 0);
+      that.state = OlTileState.LOADED;
+      that.changed();
+      that.image_.removeEventListener('load', onImageLoad);
+    };
+
     // -----Swap in opaque code block--------------------
-    let newSrc = '';
+    const newSrc = this.src_;
     if (true) {
       // fetch(this.src)
       fetch('../../images/gibs-opaque.png')
@@ -34,22 +46,20 @@ LookupImageTile.prototype.load = function() {
         .then((buffer) => {
           // decode the buffer PNG file
           const decodedPNG = UPNG.decode(buffer);
-          console.log(decodedPNG);
+          const { width, height } = decodedPNG;
 
           // Extract the colormap values, and make all colors opaque
           const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
-          // Extract the data values, which are the colormap lookup values
+          // Extract the data (colormap) lookup values
           const pixelData = decodedPNG.data;
 
-          // Create an array buffer matching the dimensions of the provided image
-          const bufferSize = decodedPNG.height * decodedPNG.width * 4;
+          // Create an array buffer matching the pixel dimensions of the provided image
+          const bufferSize = height * width * 4;
           const arrBuffer = new ArrayBuffer(bufferSize);
-
-          // Create a view into the array buffer
           const arrBufferView = new Uint32Array(arrBuffer);
 
-          // iterate through the original image, re-drawing each pixel with the alpha channel set to 1
+          // iterate through the image, re-drawing each pixel with the alpha channel set to 1
           for (let i = 0; i < pixelData.length; i += 4) {
             const lookupVal = pixelData[i] * 4;
 
@@ -59,24 +69,19 @@ LookupImageTile.prototype.load = function() {
             arrBufferView[i + 3] = 255; // alpha channel
           }
 
+          // Encode the image, creating a PNG file
           const encodedBufferImage = UPNG.encode([arrBufferView], decodedPNG.width, decodedPNG.height, 256);
-          // console.log(encodedBufferImage);
-
-          // const dataURL = `data:image/png;base64,${btoa(String.fromCharCode.apply(null, encodedBufferImage))}`;
-
           const blob = new Blob([encodedBufferImage], { type: 'image/png' });
           const dataURL = URL.createObjectURL(blob);
-          console.log(dataURL);
+          console.log(`dataURL: ${dataURL}`);
 
-          const img = new Image();
-          const { width, height } = decodedPNG;
-          console.log(`width: ${width} | height: ${height}`);
-          img.onload = function() {
+          const opaqueImg = new Image();
+          opaqueImg.onload = function() {
             that.canvas_ = document.createElement('canvas');
             that.canvas_.width = width;
             that.canvas_.height = height;
             const g = that.canvas_.getContext('2d');
-            g.drawImage(img, 0, 0);
+            g.drawImage(opaqueImg, 0, 0);
             const imageData = g.getImageData(
               0,
               0,
@@ -99,32 +104,20 @@ LookupImageTile.prototype.load = function() {
                 pixels[i + 3] = target.a;
               }
             }
-            g.drawImage(img, 0, 0);
+            g.drawImage(opaqueImg, 0, 0);
           };
-          img.src = dataURL;
+          that.image_.src = dataURL;
 
-          newSrc = img;
-          console.log('newSrc');
-          console.log(newSrc);
-          putItOnDom(encodedBufferImage);
+          that.image_.addEventListener('load', onImageLoad);
+          // newSrc = opaqueImg;
+          // putItOnDom(encodedBufferImage);
+          // that.image_.src = newSrc;
         });
+    } else {
+      that.image_.src = this.src_;
+      that.image_.addEventListener('load', onImageLoad);
+      // console.log(that);
     }
-    // that.image_.src = newSrc;
-
-
-    const onImageLoad = function() {
-      that.canvas_ = document.createElement('canvas');
-      that.canvas_.width = that.image_.width;
-      that.canvas_.height = that.image_.height;
-      const g = that.canvas_.getContext('2d');
-      g.drawImage(that.image_, 0, 0);
-      that.state = OlTileState.LOADED;
-      that.changed();
-      that.image_.removeEventListener('load', onImageLoad);
-    };
-    // that.image_.src = this.src_;
-    that.image_.addEventListener('load', onImageLoad);
-    // console.log(that);
   }
 };
 
