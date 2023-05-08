@@ -1,0 +1,2 @@
+<p>California, USA</p>
+<p>The 2022 - 2023 winter season brought unrelenting precipitation via exceptionally strong atmospheric rivers. These flowing, narrow sections of the atmopshere carry moisture from the tropics up to the poles.</p>

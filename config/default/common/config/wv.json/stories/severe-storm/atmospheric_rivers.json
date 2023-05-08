@@ -4,13 +4,21 @@
       "id": "atmospheric_rivers",
       "type": "severe-storm",
       "title": "Atmospheric Rivers",
-      "description": "Atmospheric Rivers bring moisture to California",
-      "backgroundImage": "",
+      "description": "Atmospheric rivers bring moisture to California.",
+      "backgroundImage": "atmo-rivers.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
           "title": "NASA Earth Observatory - A Boom Year for Sierra Nevada Snow ",
           "link": "https://earthobservatory.nasa.gov/images/151232/a-boom-year-for-sierra-nevada-snow"
+        },
+        {
+          "title": "NASA Earth Observatory - Tulare Lake Grows",
+          "link": "https://earthobservatory.nasa.gov/images/151284/tulare-lake-grows"
+        },
+        {
+          "title": "NASA Earth Observatory - A Flood of Wildflowers",
+          "link": "https://earthobservatory.nasa.gov/images/151192/a-flood-of-wildflowers"
         }
       ],
       "steps": [
@@ -77,6 +85,51 @@
             "action": ""
           },
           "stepLink": "v=-149.2343104071579,26.61555273706992,-93.40895023395714,52.64027839533624&l=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg=true&l1=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg1=true&ca=true&cm=opacity&t=2022-11-19-T23%3A35%3A22Z&t1=2023-04-06-T21%3A35%3A22Z"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-120.32664595033344,35.67369591474056,-119.07005472101878,36.25949494776134&l=Reference_Features_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&cm=opacity&t=2023-03-02-T05%3A35%3A22Z&t1=2023-04-11-T09%3A35%3A22Z"
+        },
+        {
+          "id": "009",
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-121.55756218602946,38.471499589321944,-120.70126583530936,38.96745403679784&l=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&cm=opacity&s=-119.751,36.0666&t=2022-11-20-T05%3A35%3A22Z&t1=2023-04-09-T09%3A35%3A22Z"
+        },
+        {
+          "id": "010",
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-122.06583991341911,39.245694471318245,-120.84924510836755,39.95032856655172&l=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&cm=opacity&s=-119.751,36.0666&t=2022-04-25-T20%3A12%3A08Z&t1=2023-04-20-T09%3A35%3A22Z"
+        },
+        {
+          "id": "011",
+          "description": "step011.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-120.44761788027125,34.70700065096058,-118.93130416508737,35.58522759912138&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden)&lg=true&l1=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&cm=opacity&t=2020-04-16-T14%3A00%3A00Z&t1=2023-04-11-T12%3A00%3A00Z"
+        },
+        {
+          "id": "012",
+          "description": "step012.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-118.57317550214069,34.59533637747795,-118.14026849136232,34.84606984978397&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&cm=opacity&t=2020-04-18-T02%3A00%3A00Z&t1=2023-04-07-T16%3A00%3A00Z"
         }
       ]
     }

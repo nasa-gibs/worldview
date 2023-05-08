@@ -1,13 +1,17 @@
 {
   "stories": {
-    "california_rains2": {
-      "id": "california_rains2",
+    "atmospheric_rivers_eic1": {
+      "id": "atmospheric_rivers_eic1",
       "type": "severe-storm",
       "title": "Atmospheric Rivers",
-      "description": "Impacts on California's flora",
-      "backgroundImage": "",
+      "description": "Impacts of heavy winter rains in California.",
+      "backgroundImage": "TulareLake.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
+        {
+          "title": "NASA Earth Observatory - Tulare Lake Grows",
+          "link": "https://earthobservatory.nasa.gov/images/151284/tulare-lake-grows"
+        },
         {
           "title": "NASA Earth Observatory - A Flood of Wildflowers",
           "link": "https://earthobservatory.nasa.gov/images/151192/a-flood-of-wildflowers"
@@ -30,7 +34,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-120.32664595033344,35.598892707062205,-119.07005472101878,36.3342981554397&l=Reference_Features_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&cm=opacity&t=2023-03-02-T05%3A35%3A22Z"
+          "stepLink": "v=-120.43905927817634,35.53708038374972,-118.95546982091805,36.390884003026564&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&cm=opacity&t=2023-03-02-T05%3A35%3A22Z"
         },
         {
           "id": "003",
@@ -39,7 +43,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-120.39017800704124,35.54034571551055,-119.00435109205316,36.387618671265734&l=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden)&lg=false&l1=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg1=false&ca=false&cm=opacity&cv=100&t=2023-04-26-T05%3A35%3A22Z&t1=2023-04-26-T09%3A35%3A22Z"
+          "stepLink": "v=-120.43905927817634,35.53708038374972,-118.95546982091805,36.390884003026564&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg=false&cm=opacity&t=2023-04-26-T09%3A35%3A22Z"
         },
         {
           "id": "004",
@@ -48,7 +52,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-120.15343258678986,34.83784767419576,-119.33331561317489,35.3178116247895&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&cm=opacity&t=2023-04-11-T12%3A00%3A00Z"
+          "stepLink": "v=-120.07815012472626,34.932340406224455,-119.5022455841766,35.287153388828045&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&t=2023-04-11-T12%3A00%3A00Z"
         }
       ]
     }
