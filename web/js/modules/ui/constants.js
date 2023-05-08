@@ -1,2 +1,6 @@
-// eslint-disable-next-line import/prefer-default-export
 export const TOGGLE_DISTRACTION_FREE_MODE = 'UI/TOGGLE_DISTRACTION_FREE_MODE';
+export const TOGGLE_KIOSK_MODE = 'UI/TOGGLE_KIOSK_MODE';
+export const SET_ERROR_TILES = 'UI/SET_ERROR_TILES';
+export const CLEAR_ERROR_TILES = 'UI/CLEAR_ERROR_TILES';
+export const DISPLAY_STATIC_MAP = 'UI/DISPLAY_STATIC_MAP';
+export const READY_FOR_KIOSK_ANIMATION = 'UI/READY_FOR_KIOSK_ANIMATION';

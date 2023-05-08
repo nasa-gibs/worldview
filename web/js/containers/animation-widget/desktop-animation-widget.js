@@ -72,7 +72,6 @@ function DesktopAnimationWidget(props) {
             {' Increments'}
           </div>
 
-          {/* Custom time interval selection */}
           <CustomIntervalSelector
             modalOpen={animationCustomModalOpen}
             hasSubdailyLayers={hasSubdailyLayers}
@@ -84,7 +83,6 @@ function DesktopAnimationWidget(props) {
             pause={onPushPause}
             isDisabled={playDisabled}
           />
-
           <LoopButton looping={looping} onLoop={onLoop} />
 
           {/* FPS slider */}
@@ -114,7 +112,6 @@ function DesktopAnimationWidget(props) {
             zeroDates={zeroDates}
             numberOfFrames={numberOfFrames}
           />
-
           <DateRangeSelector
             idSuffix="animation-widget"
             startDate={startDate}
@@ -128,7 +125,6 @@ function DesktopAnimationWidget(props) {
 
           <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
           <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
-
         </div>
       </div>
     </Draggable>
