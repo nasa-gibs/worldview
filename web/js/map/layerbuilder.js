@@ -530,7 +530,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   function createLayerWMTS (def, options, day, state) {
-    const { proj } = state;
+    const { proj, ui: { isKioskModeActive } } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
     } = def;
@@ -585,7 +585,8 @@ export default function mapLayerBuilder(config, cache, store) {
       style: typeof style === 'undefined' ? 'default' : style,
       tileLoadFunction: tileLoadFunction(def, layerDate),
     };
-    if (isPaletteActive(id, options.group, state)) {
+    // dont alter source for palette if kioskmode is active
+    if (isPaletteActive(id, options.group, state) && !isKioskModeActive) {
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
