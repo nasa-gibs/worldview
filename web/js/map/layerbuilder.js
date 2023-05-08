@@ -585,7 +585,6 @@ export default function mapLayerBuilder(config, cache, store) {
       style: typeof style === 'undefined' ? 'default' : style,
       tileLoadFunction: tileLoadFunction(def, layerDate),
     };
-    // dont alter source for palette if kioskmode is active
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
