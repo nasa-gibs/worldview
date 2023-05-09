@@ -19,14 +19,14 @@ const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
  * @param {Array} coordinates
  * @param {Number} zoom
  */
-export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActive) {
+export function animateCoordinates(map, proj, coordinates, zoom) {
   const { crs } = proj.selected;
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  fly(map, proj, [x, y], zoom, isKioskModeActive);
+  fly(map, proj, [x, y], zoom);
 }
 
 /**

@@ -123,10 +123,9 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
+      config, renderedPalettes, selectTour, processStepLink,
     } = this.props;
     if (e) e.preventDefault();
-    const kioskParam = this.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -146,7 +145,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}`,
       config,
       renderedPalettes,
     );
@@ -226,9 +225,9 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive,
+      config, renderedPalettes, processStepLink,
     } = this.props;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
       this.fetchMetadata(currentStory, currentStep);
@@ -240,7 +239,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
         config,
         renderedPalettes,
       );
@@ -251,18 +250,13 @@ class Tour extends React.Component {
     }
   }
 
-  getKioskParam(isKioskModeActive) {
-    return isKioskModeActive ? '&kiosk=true' : '';
-  }
-
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive,
+      config, renderedPalettes, processStepLink,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
@@ -274,7 +268,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
         config,
         renderedPalettes,
       );
@@ -525,11 +519,10 @@ const mapStateToProps = (state) => {
     screenSize, config, tour, palettes, models, compare, map,
   } = state;
   const { screenWidth, screenHeight } = screenSize;
-  const { isKioskModeActive } = state.ui;
+
   return {
     config,
     isActive: tour.active,
-    isKioskModeActive,
     map,
     models,
     compareState: compare,
@@ -565,7 +558,6 @@ Tour.propTypes = {
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
-  isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,
