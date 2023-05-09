@@ -41,7 +41,6 @@ import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
 import MobileAnimationWidget from './mobile-animation-widget';
 import CollapsedAnimationWidget from './collapsed-animation-widget';
-import KioskAnimationWidget from './kiosk-animation-widget';
 import AnimationTileCheck from '../../components/kiosk/animation-tile-check/animation-tile-check';
 
 function AnimationWidget (props) {
@@ -307,13 +306,9 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : isKioskModeActive && !testMode ? (
-        <KioskAnimationWidget
-          startDate={startDate}
-          endDate={endDate}
-          hasSubdailyLayers={hasSubdailyLayers}
-        />
-      )
+      ) : isKioskModeActive && !testMode
+        ? null
+
         : (
           <DesktopAnimationWidget
             animationCustomModalOpen={animationCustomModalOpen}
