@@ -572,6 +572,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceURL = def.sourceOverride || configSource.url;
+    console.log(sourceURL + urlParameters)
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,

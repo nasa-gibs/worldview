@@ -14,8 +14,10 @@ function AnimationTileCheck(props) {
     isPlaying,
   } = props;
 
-  const { activeString } = useSelector((state) => ({
+  const { activeString, config, proj } = useSelector((state) => ({
     activeString: state.compare.activeString,
+    config: state.config,
+    proj: state.proj.selected,
   }));
   const activeLayers = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer));
 
@@ -29,13 +31,15 @@ function AnimationTileCheck(props) {
   function determineFrameDates() {
     const getNextDate = (date) => util.dateAdd(date, interval, delta);
 
+
+
     const frameDatesArray = [];
     let frameDate = startDate;
-    // this puts an extra '.000Z' on the end of the date string
-    frameDatesArray.push(frameDate.toISOString());
+
+    frameDatesArray.push(frameDate);
     while (frameDate < endDate) {
       frameDate = getNextDate(frameDate);
-      frameDatesArray.push(frameDate.toISOString());
+      frameDatesArray.push(frameDate);
     }
     return frameDatesArray;
   }
@@ -46,7 +50,7 @@ function AnimationTileCheck(props) {
   }
 
   return (
-    <DateRangeTileCheck frameDates={frameDates} activeLayers={activeLayers} />
+    <DateRangeTileCheck frameDates={frameDates} activeLayers={activeLayers} config={config} proj={proj} />
   );
 }
 
