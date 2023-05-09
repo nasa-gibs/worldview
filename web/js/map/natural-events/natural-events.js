@@ -170,12 +170,11 @@ class NaturalEvents extends React.Component {
   }
 
   zoomToEvent = function(event, date, isSameEventID) {
-    const { proj, map } = this.props;
+    const { proj, map, isKioskModeActive } = this.props;
     const { crs } = proj.selected;
     const category = event.categories[0].title;
     const zoom = isSameEventID ? map.getView().getZoom() : zoomLevelReference[category];
     const geometry = event.geometry.find((geom) => geom.date.split('T')[0] === date);
-
     // check for polygon geometries and/or perform projection coordinate transform
     let coordinates;
     const transformCoords = (coords) => olProj.transform(coords, CRS.GEOGRAPHIC, crs);
@@ -186,7 +185,7 @@ class NaturalEvents extends React.Component {
     } else {
       coordinates = olProj.transform(geometry.coordinates, CRS.GEOGRAPHIC, crs);
     }
-    return fly(map, proj, coordinates, zoom, null);
+    return fly(map, proj, coordinates, zoom, null, isKioskModeActive);
   };
 
   render() {
@@ -203,18 +202,20 @@ const mapStateToProps = (state) => {
   const {
     map, proj, requestedEvents, layers, config,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const { active, selected } = state.events;
   const selectedMap = map.ui.selected;
   return {
+    defaultEventLayer: config.naturalEvents.defaultLayer,
     eventsActive: active,
+    eventsData: getFilteredEvents(state),
+    eventsDataIsLoading: requestedEvents.isLoading,
+    eventLayers: layers.eventLayers,
+    isKioskModeActive,
+    layers: layers.active.layers,
     map: selectedMap,
     proj,
-    eventsDataIsLoading: requestedEvents.isLoading,
-    eventsData: getFilteredEvents(state),
     selectedEvent: selected,
-    eventLayers: layers.eventLayers,
-    layers: layers.active.layers,
-    defaultEventLayer: config.naturalEvents.defaultLayer,
   };
 };
 
@@ -249,6 +250,7 @@ NaturalEvents.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   eventLayers: PropTypes.array,
+  isKioskModeActive: PropTypes.bool,
   layers: PropTypes.array,
   selectedEvent: PropTypes.object,
   selectEventFinished: PropTypes.func,
