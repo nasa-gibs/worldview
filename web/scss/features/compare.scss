@@ -165,6 +165,25 @@
   span {
     padding-bottom: 2px;
   }
+
+  &.nav-link {
+    &.first-tab, &.second-tab {
+      background-color: #28292a;
+    }
+
+    &.active {
+      background-color: #fff;
+    }
+
+    // Toggle layer icon color on hover by repositioning the SVG
+    &:not(.active):hover > i {
+      background-position: 0 -10px;
+    }
+
+    &:not(.active):hover {
+      background-color: #404542;
+    }
+  }
 }
 
 /* Mobile */
@@ -198,7 +217,7 @@
     border-bottom-right-radius: 5px;
   }
 
-  &:hover:not(.compare-btn-selected) {
+  .active.nav-link:not(.compare-btn-selected) {
     border-color: #fff;
   }
 }
