@@ -20,6 +20,7 @@ button:focus {
 .kiosk-year, .kiosk-month {
   min-width: 80px;
 }
+
 .kiosk-month {
   padding: 0 8px;
 }
@@ -40,8 +41,6 @@ button:focus {
 
 .timeline-inner {
   height: 67px;
-}
-.timeline-inner {
   position: absolute;
   border: $wv-dark-menu-border;
   background: $wv-transparent-black;
@@ -56,7 +55,7 @@ button:focus {
 #distraction-free-timeline {
   position: absolute;
   border: $wv-dark-menu-border;
-  background: rgba(35, 31, 32,.60);
+  background: rgba(35 31 32 / 60%);
   display: flex;
   flex-flow: row nowrap;
   margin: 0;
