@@ -13,6 +13,7 @@ export function kioskTimeStamp(date, subdaily) {
     timeZone: 'America/New_York',
   };
 
+  const isDaylightSavingsTime = getIsDaylightSavingsTime();
   const formatter = new Intl.DateTimeFormat('en-US', options);
   const dateParts = formatter.formatToParts(date);
 
@@ -21,17 +22,18 @@ export function kioskTimeStamp(date, subdaily) {
   const day = dateParts.find((part) => part.type === 'day').value;
   const hours = dateParts.find((part) => part.type === 'hour').value;
   const minutes = dateParts.find((part) => part.type === 'minute').value;
+  const timeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';
 
   return (
-    <div>
-      <div className="kiosk-year">
-        {year}
+    <>
+      <div className="kiosk-day">
+        {day}
       </div>
       <div className="kiosk-month">
         {month}
       </div>
-      <div className="kiosk-day">
-        {day}
+      <div className="kiosk-year">
+        {year}
       </div>
 
       {subdaily && (
@@ -52,10 +54,22 @@ export function kioskTimeStamp(date, subdaily) {
             00
           </div>
           <div className="kiosk-timezone">
-            EST
+            {timeZoneLabel}
           </div>
         </>
       )}
-    </div>
+    </>
   );
+}
+
+/**
+ * getIsDaylightSavingsTime()
+ *
+ * @returns bool indicating if it is daylight savings time on the US East coast
+ */
+function getIsDaylightSavingsTime() {
+  const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+  const dateObj = new Date(date);
+  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1).getTimezoneOffset();
+  return isDaylightSavingTime;
 }
