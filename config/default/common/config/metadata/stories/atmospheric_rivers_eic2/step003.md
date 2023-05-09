@@ -1,0 +1,1 @@
+Heavy rains caused the Tulare Lake area to flood and re-fill. Continued rising waters from the Sierra Nevada snowpack meltwater threaten to flood more of the area and town of Corcoran.
