@@ -7,6 +7,9 @@ import TileState from 'ol/TileState';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
+import {
+  LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN
+} from '../../../modules/map/constants';
 
 function DateRangeTileCheck(props) {
   const {
@@ -34,14 +37,23 @@ function DateRangeTileCheck(props) {
     const configSource = config.sources[projSource];
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
     const sourceURL = def.sourceOverride || configSource.url;
+    const configMatrixSet = configSource.matrixSets[projectionsAttributes.matrixSet];
+
+    console.log(configMatrixSet)
 
 
-    console.log(sourceURL + urlParameters)
+    const tileGridOptions = {
+      origin: RIGHT_WING_ORIGIN,
+      extent: RIGHT_WING_EXTENT,
+    }
 
 
     const wmtsSource = new OlSourceWMTS({
       url: sourceURL + urlParameters,
-      // layer: layer.id,
+      layer: id,
+      cacheSize: 4096,
+      crossOrigin: 'anonymous',
+      format,
       // matrixSet: layer.matrixSet,
       // format: layer.format,
       // projection: layer.projection,

@@ -557,6 +557,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    console.log(day)
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
@@ -572,7 +573,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceURL = def.sourceOverride || configSource.url;
-    console.log(sourceURL + urlParameters)
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
