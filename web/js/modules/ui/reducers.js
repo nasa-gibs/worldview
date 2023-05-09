@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-import { assign as lodashAssign } from 'lodash';
-import { TOGGLE_DISTRACTION_FREE_MODE, TOGGLE_KIOSK_MODE } from './constants';
-=======
 import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
@@ -10,13 +6,10 @@ import {
   CLEAR_ERROR_TILES,
   READY_FOR_KIOSK_ANIMATION,
 } from './constants';
->>>>>>> develop
 
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
-<<<<<<< HEAD
-=======
   displayStaticMap: false,
   eic: '', // sa == subdaily-animation, da == daily-animation, ss== subdaily-static, ds == daily-static
   errorTiles: {
@@ -27,7 +20,6 @@ export const uiState = {
     lastCheckedDate: null,
   },
   readyForKioskAnimation: false,
->>>>>>> develop
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -36,13 +28,6 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         isDistractionFreeModeActive: !state.isDistractionFreeModeActive,
-<<<<<<< HEAD
-      });
-    case TOGGLE_KIOSK_MODE:
-      return lodashAssign({}, state, {
-        isKioskModeActive: action.isActive,
-      });
-=======
       };
     case TOGGLE_KIOSK_MODE:
       return {
@@ -73,7 +58,6 @@ export default function uiReducers(state = uiState, action) {
         ...state,
         readyForKioskAnimation: action.toggleAnimation,
       };
->>>>>>> develop
     default:
       return state;
   }

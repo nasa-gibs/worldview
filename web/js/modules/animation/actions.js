@@ -12,10 +12,7 @@ import {
   TOGGLE_GIF,
   COLLAPSE_ANIMATION,
   TOGGLE_AUTOPLAY,
-<<<<<<< HEAD
-=======
   PLAY_KIOSK_ANIMATIONS,
->>>>>>> develop
 } from './constants';
 import util from '../../util/util';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
