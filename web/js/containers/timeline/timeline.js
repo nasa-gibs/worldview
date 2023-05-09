@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import { UncontrolledTooltip } from 'reactstrap';
-
 import {
   debounce as lodashDebounce,
   throttle as lodashThrottle,
@@ -12,7 +11,6 @@ import {
 } from 'lodash';
 import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
-
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
 import TimelineLayerCoveragePanel from '../../components/timeline/timeline-coverage/timeline-coverage';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/timescale-interval-change';
@@ -20,13 +18,12 @@ import DraggerContainer from '../../components/timeline/timeline-draggers/dragge
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
 import DateTooltip from '../../components/timeline/timeline-axis/date-tooltip/date-tooltip';
 import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
-
 import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
-
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 import TimelineRangeSelector from '../../components/range-selection/range-selection';
+import { formatKioskDate } from '../../components/kiosk/util';
 
 import {
   getIsBetween,
@@ -1355,7 +1352,7 @@ class Timeline extends React.Component {
                   { marginRight: isTimelineHidden ? '20px' : '0' }
                 }
               >
-                {this.getStringFromDate(selectedDate, hasSubdailyLayers)}
+                {formatKioskDate(selectedDate, hasSubdailyLayers)}
               </div>
             </section>
           </ErrorBoundary>

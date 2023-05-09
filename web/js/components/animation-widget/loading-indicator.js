@@ -25,6 +25,12 @@ export default function LoadingIndicator(props) {
     </div>
   );
 
+  const closeBtn = (
+    <button className="modal-close-btn" onClick={onClose} type="button">
+      &times;
+    </button>
+  );
+
   return (
     <Modal
       isOpen
@@ -33,7 +39,7 @@ export default function LoadingIndicator(props) {
       backdrop={false}
       wrapClassName="clickable-behind-modal"
     >
-      <ModalHeader toggle={onClose}>{title}</ModalHeader>
+      <ModalHeader close={closeBtn}>{title}</ModalHeader>
       <ModalBody>
         {bodyMsg && (
           <div style={msgStyle}>{bodyMsg}</div>

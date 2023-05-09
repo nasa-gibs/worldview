@@ -35,6 +35,7 @@ export default class GifResults extends Component {
       screenWidth,
       screenHeight,
       onClose,
+      closeBtn,
     } = this.props;
     const { blob } = gifObject;
     const { size } = gifObject;
@@ -57,7 +58,7 @@ export default class GifResults extends Component {
         className="dynamic-modal"
         toggle={onClose}
       >
-        <ModalHeader toggle={onClose}>GIF Results</ModalHeader>
+        <ModalHeader close={closeBtn}>GIF Results</ModalHeader>
         <ModalBody>
           <div className="gif-results-dialog-case clearfix">
             <img src={blobURL} width={imgElWidth} height={imgElHeight} />

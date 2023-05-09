@@ -6,6 +6,8 @@ class LookupImageTile extends OlImageTile {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
     this.lookup_ = lookup;
     this.canvas_ = null;
+    // Store custom tileLoadFunction
+    this.customTileLoadFunction_ = tileLoadFunction;
   }
 }
 LookupImageTile.prototype.getImage = function() {
@@ -46,6 +48,12 @@ LookupImageTile.prototype.load = function() {
         }
       }
       g.putImageData(imageData, 0, 0);
+
+      // uses the tileload function passed from layerbuilder
+      if (that.customTileLoadFunction_) {
+        that.customTileLoadFunction_(that, that.src_);
+      }
+
       that.state = OlTileState.LOADED;
       that.changed();
       that.image_.removeEventListener('load', onImageLoad);
