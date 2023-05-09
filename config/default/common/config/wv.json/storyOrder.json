@@ -2,6 +2,7 @@
     "storyOrder": [
         "atmospheric_rivers_eic",
         "atmospheric_rivers_eic1",
+        "atmospheric_rivers_eic2",
         "atmospheric_rivers",
         "flood-product",
         "black_marble_night_lights",
