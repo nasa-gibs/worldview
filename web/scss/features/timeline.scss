@@ -9,6 +9,35 @@ button:focus {
   z-index: 3;
 }
 
+.kiosk-year, .kiosk-month, .kiosk-day, .kiosk-hours, .kiosk-minutes, .kiosk-seconds, .kiosk-timezone {
+  font-family: Helvetica, sans-serif;
+  font-size: 24px;
+  letter-spacing: initial;
+  min-width: 30px;
+  text-align: center;
+}
+
+.kiosk-year, .kiosk-month {
+  min-width: 55px;
+}
+.kiosk-month {
+  padding: 0 5px;
+}
+
+.kiosk-hours {
+  padding-left: 5px;
+}
+
+.kiosk-colon {
+  font-family: Helvetica, sans-serif;
+  font-size: 24px;
+  letter-spacing: initial;
+}
+
+.kiosk-timezone {
+  padding-left: 5px;
+}
+
 #distraction-free-timeline {
   height: 50px;
 }
