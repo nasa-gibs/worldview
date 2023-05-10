@@ -9,16 +9,38 @@ button:focus {
   z-index: 3;
 }
 
-#distraction-free-timeline {
-  height: 50px;
+.kiosk-year, .kiosk-month, .kiosk-day, .kiosk-hours, .kiosk-minutes, .kiosk-seconds, .kiosk-timezone {
+  font-family: Helvetica, sans-serif;
+  font-size: 34px;
+  letter-spacing: initial;
+  min-width: 46px;
+  text-align: center;
+}
+
+.kiosk-year, .kiosk-month {
+  min-width: 80px;
+}
+
+.kiosk-month {
+  padding: 0 8px;
+}
+
+.kiosk-hours {
+  margin-left: 8px;
+}
+
+.kiosk-colon {
+  font-family: Helvetica, sans-serif;
+  font-size: 37px;
+  letter-spacing: initial;
+}
+
+.kiosk-timezone {
+  padding-left: 8px;
 }
 
 .timeline-inner {
   height: 67px;
-}
-
-#distraction-free-timeline,
-.timeline-inner {
   position: absolute;
   border: $wv-dark-menu-border;
   background: $wv-transparent-black;
@@ -30,13 +52,26 @@ button:focus {
   bottom: 10px;
 }
 
+#distraction-free-timeline {
+  position: absolute;
+  border: $wv-dark-menu-border;
+  background: rgba(35 31 32 / 60%);
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0;
+  border-top-right-radius: 15px;
+}
+
 #timeline-header {
   min-width: 310px;
+  margin-top: 2px;
 }
 
 #distraction-free-timeline-header,
 #timeline-header {
-  margin-top: 2px;
   display: inline-block;
 
   &.subdaily {
@@ -829,12 +864,11 @@ button:focus {
 #distraction-free-timeline-header {
   color: #fff;
   font-family: Helvetica, sans-serif;
-  letter-spacing: 0.125em;
-  font-size: 24px;
+  font-size: 37px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
+  padding: 33px 10px 34px 51px;
 
   &.subdaily {
     width: unset;
