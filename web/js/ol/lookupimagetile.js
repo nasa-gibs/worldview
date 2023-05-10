@@ -52,7 +52,6 @@ LookupImageTile.prototype.load = function() {
           const bufferSize = height * width * 4;
           const arrBuffer = new Uint32Array(bufferSize);
 
-          console.log(`pixelData.length: ${pixelData.length}`);
           // iterate through the image, re-drawing each pixel with the alpha channel set to 1
           for (let i = 0; i < pixelData.length; i += 1) {
             const arrBuffIndex = i * 4;
@@ -63,8 +62,6 @@ LookupImageTile.prototype.load = function() {
             arrBuffer[arrBuffIndex + 2] = colorMapArr[lookupVal + 2]; // blue channel
             arrBuffer[arrBuffIndex + 3] = 255; // alpha channel
           }
-
-          console.log(`arrBuffer.length: ${arrBuffer.length}`);
 
           // Encode the image, creating a PNG file
           const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
