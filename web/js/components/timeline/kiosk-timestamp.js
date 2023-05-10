@@ -1,8 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-/* eslint-disable import/prefer-default-export */
-// formats date for kiosk mode and updates to EST
-export function kioskTimeStamp(date, subdaily) {
+/**
+ * getIsDaylightSavingsTime()
+ *
+ * @returns bool indicating if it is daylight savings time on the US East coast
+ */
+function getIsDaylightSavingsTime() {
+  const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+  const dateObj = new Date(date);
+  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1).getTimezoneOffset();
+  return isDaylightSavingTime;
+}
+
+function KioskTimeStamp({ date, subdaily }) {
   const options = {
     year: 'numeric',
     month: 'long',
@@ -62,14 +73,9 @@ export function kioskTimeStamp(date, subdaily) {
   );
 }
 
-/**
- * getIsDaylightSavingsTime()
- *
- * @returns bool indicating if it is daylight savings time on the US East coast
- */
-function getIsDaylightSavingsTime() {
-  const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-  const dateObj = new Date(date);
-  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1).getTimezoneOffset();
-  return isDaylightSavingTime;
-}
+KioskTimeStamp.propTypes = {
+  date: PropTypes.object,
+  subdaily: PropTypes.bool,
+};
+
+export default KioskTimeStamp;

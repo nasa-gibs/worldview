@@ -23,7 +23,7 @@ import DateChangeArrows from '../../components/timeline/timeline-controls/date-c
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 import TimelineRangeSelector from '../../components/range-selection/range-selection';
-import { kioskTimeStamp } from './kiosk-timestamp';
+import KioskTimeStamp from '../../components/timeline/kiosk-timestamp';
 
 import {
   getIsBetween,
@@ -1352,7 +1352,7 @@ class Timeline extends React.Component {
                   { marginRight: isTimelineHidden ? '20px' : '0' }
                 }
               >
-                {kioskTimeStamp(selectedDate, hasSubdailyLayers)}
+                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} />
               </div>
             </section>
           </ErrorBoundary>
