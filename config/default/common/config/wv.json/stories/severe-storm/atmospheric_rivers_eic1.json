@@ -3,7 +3,7 @@
     "atmospheric_rivers_eic1": {
       "id": "atmospheric_rivers_eic1",
       "type": "severe-storm",
-      "title": "Atmospheric Rivers",
+      "title": "Atmospheric Rivers 1",
       "description": "Impacts of heavy winter rains in California.",
       "backgroundImage": "TulareLake.png",
       "backgroundImageHover": "",
