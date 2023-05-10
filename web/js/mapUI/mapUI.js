@@ -48,7 +48,9 @@ import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { SET_ERROR_TILES, DISPLAY_STATIC_MAP } from '../modules/ui/constants';
 import { Button } from 'reactstrap';
-import { countTiles } from './util/util'
+// import { countTiles } from './util/util'
+// import { countTiles } from './util/util'
+import { calculateExpectedTiles, countTiles } from '../components/kiosk/util'
 
 const { events } = util;
 
@@ -345,7 +347,14 @@ function MapUI(props) {
   const testFunction = () => {
     const tileCount = countTiles(ui)
     console.log(tileCount)
-    console.log(ui.selected.getView().getZoom())
+
+
+    const layers = ui.selected.getLayers().getArray()
+    const layer = layers[0]
+
+
+    const expectedTileCount = calculateExpectedTiles(ui, layer)
+    console.log('expected tile count: ', expectedTileCount)
   }
 
   const devButton = () => {

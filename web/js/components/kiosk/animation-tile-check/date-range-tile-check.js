@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
-import OlLayerTile from 'ol/layer/Tile';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN
 } from '../../../modules/map/constants';
+
+const contentLengthThresholds = {
+  'GOES-East_ABI_GeoColor': 170000
+}
 
 function DateRangeTileCheck(props) {
   const {
@@ -18,7 +21,7 @@ function DateRangeTileCheck(props) {
 
   useEffect(() => {
     if (frameDates.length){
-      parentFunction(activeLayers)
+      getAvailability(activeLayers)
     }
   }, [frameDates])
 
@@ -74,16 +77,11 @@ function DateRangeTileCheck(props) {
 
   const requestTilesWMTS = async (def, date) => {
     const {
-      id, layer, format, matrixIds, matrixSet, matrixSetLimits, projections, period, style, wrapadjacentdays, type,
+      id, format, matrixIds, matrixSetLimits, projections, style, type,
     } = def;
 
-    const tilesObject = {
-      date,
-      availableTiles: [],
-      unavailableTiles: [],
-    }
+    let contentLengthSum = 0;
 
-    const isSubdaily = period === 'subdaily';
     const isGranule = type === 'granule';
     const projectionsAttributes = projections[proj.id];
     const projSource = projectionsAttributes.source
@@ -97,8 +95,8 @@ function DateRangeTileCheck(props) {
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     const tileGridOptions = {
-      origin: RIGHT_WING_ORIGIN,
-      extent: RIGHT_WING_EXTENT,
+      origin: origin,
+      extent: extent,
       sizes,
       resolutions,
       matrixIds: matrixIds || resolutions.map((set, index) => index),
@@ -110,14 +108,13 @@ function DateRangeTileCheck(props) {
         try {
           const response = await fetch(src);
           const data = await response.blob();
+          const contentLength = response.headers.get('content-length');
 
           if (response.status === 200 && data !== undefined) {
-            tilesObject.availableTiles.push(tile);
-          } else {
-            tilesObject.unavailableTiles.push(tile);
+            contentLengthSum += parseInt(contentLength, 10);
           }
         } catch (e) {
-          tilesObject.unavailableTiles.push(tile);
+          console.error('Error loading tile', e)
         } finally {
           resolve();
         }
@@ -155,39 +152,29 @@ function DateRangeTileCheck(props) {
 
     await Promise.all(promises);
     return {
-      tilesObject,
+      date,
+      contentLengthSum
     }
-  }
-
-  // #3 child function that accepts an array of frame dates and a layer and returns availability for the range
-  async function checkTilesForDates(dates, layer) {
-    const availability = []
-
-    for (const date of dates) {
-      const tiles = await requestTilesWMTS(layer, date)
-      availability.push(tiles)
-    }
-
-    return availability;
   }
 
   // #2 child function that accepts one layer and returns results for that layer
   async function getAvailabilityForLayer(layer) {
+    const layerName = layer.id.toString()
+    const availability = {
+      layerName,
+      dates: []
+    }
 
-    const availability = await checkTilesForDates(frameDates, layer);
+    for (const date of frameDates) {
+      const tiles = await requestTilesWMTS(layer, date)
+      availability.dates.push(tiles)
+    }
 
-    const id = layer.id
-
-    const layerAvailability = {
-      [id]: availability,
-    };
-
-
-    return layerAvailability
+    return availability
   }
 
   // parent function that accepts activeLayers and returns final results
-  async function parentFunction(activeLayers) {
+  async function getAvailability(activeLayers) {
 
     const allLayersAvailability = activeLayers.map((layer) => {
       const layerAvailability = getAvailabilityForLayer(layer)
@@ -195,9 +182,24 @@ function DateRangeTileCheck(props) {
     })
 
     const resolvedAllLayersAvailability = await Promise.all(allLayersAvailability);
-    console.log(resolvedAllLayersAvailability);
-  }
 
+    const datesBelowThreshold = resolvedAllLayersAvailability.map((layer) => {
+    const threshold = contentLengthThresholds[layer.layerName]
+
+      return layer.dates.reduce((accumulator, date) => {
+        if (date.contentLengthSum < threshold) {
+          accumulator.push({
+            layerName: layer.layerName,
+            date: date.date,
+            threshold: date.contentLengthSum,
+          });
+        }
+        return accumulator;
+      }, []);
+    })
+
+    console.log(datesBelowThreshold);
+  }
 
   return null;
 }
