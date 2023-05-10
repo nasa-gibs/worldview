@@ -47,6 +47,8 @@ import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { SET_ERROR_TILES, DISPLAY_STATIC_MAP } from '../modules/ui/constants';
+import { Button } from 'reactstrap';
+import { countTiles } from './util/util'
 
 const { events } = util;
 
@@ -340,8 +342,23 @@ function MapUI(props) {
     }
   }
 
+  const testFunction = () => {
+    const tileCount = countTiles(ui)
+    console.log(tileCount)
+    console.log(ui.selected.getView().getZoom())
+  }
+
+  const devButton = () => {
+    return (
+      <div id="dev-block" className="d-flex justify-content-center">
+        <Button onClick={testFunction} style={ { zIndex: "999" } } color="success">Dev Button</Button>
+      </div>
+    )
+  }
+
   return (
     <>
+      {devButton()}
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}
