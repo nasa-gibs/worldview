@@ -3,7 +3,7 @@
     "atmospheric_rivers_eic2": {
       "id": "atmospheric_rivers_eic2",
       "type": "severe-storm",
-      "title": "Atmospheric Rivers",
+      "title": "Atmospheric Rivers 2",
       "description": "Impacts of heavy winter rains in California.",
       "backgroundImage": "TulareLake.png",
       "backgroundImageHover": "",
@@ -22,10 +22,10 @@
           "id": "001",
           "description": "step001.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
-          "stepLink": "v=-182.63758765620688,-1.6004711120058772,-79.03433800644947,66.50555360272826&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&ab=on&t=2023-02-24-T19%3A00%3A00Z"
+          "stepLink": "v=-167.4294319852893,16.62622795596455,-75.64999743213335,59.92869114276513&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T23%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,GOES-East_ABI_GeoColor,Land_Water_Map&lg=true&al=true&av=7.5&ab=on&t=2023-02-24-T19%3A00%3A15Z"
         },
         {
           "id": "002",
