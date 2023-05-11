@@ -129,10 +129,11 @@ async function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
+  const disabled = []
 
   // TODO: make this a separate function for entries?
   await Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async (entry, index) => {
       const legend = await matchLegend(entry, legends)
 
       if (legend === 'false') {
@@ -143,11 +144,13 @@ async function processEntries (colormap) {
       const [r, g, b] = entry._attributes.rgb.split(',')
       let a = 0
 
-      // This has been modified from 0 to 255 so the hidden colors are
-      // processed & visible in the layer info
-      // if (entry._attributes.transparent === 'false') {
-      a = 255
-      // }
+      // transparent === 'false' indicates that there is additional data embedded in
+      // the image. We force the alpha channel ON, which enables toggling in WV
+      // Also push this palette index into disabled array so we can initialize these colors OFF
+      if (entry._attributes.transparent === 'true') {
+        a = 255
+        disabled.push(index)
+      }
 
       if (a === 0) {
         refSkipList.push(entry._attributes.ref)
@@ -226,7 +229,6 @@ async function processEntries (colormap) {
       }
     })
   )
-
   const result = {
     type: mapType,
     entries: {
@@ -242,6 +244,11 @@ async function processEntries (colormap) {
       refs: idList
     }
   }
+
+  if (disabled.length > 0) {
+    result.legend.disabled = disabled
+  }
+
   if (mapType === 'continuous' || mapType === 'discrete') {
     result.entries.values = values
   }
@@ -294,6 +301,10 @@ async function processFile (id, xml) {
       maps
     }
 
+    if (Object.prototype.hasOwnProperty.call(data.maps[0].legend, 'disabled')) {
+      console.warn('data')
+      console.warn(data.maps[0].legend.disabled)
+    }
     const outputFile = path.join(outputDir, `${id}.json`)
     await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
   } catch (error) {

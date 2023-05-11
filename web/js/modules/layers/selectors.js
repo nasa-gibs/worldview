@@ -305,6 +305,14 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
     throw new Error(`No such layer: ${id}`);
   }
 
+  if (id === 'MODIS_Terra_L3_Sea_Ice_Daily') {
+    console.log('addLayer MODIS_Terra_L3_Sea_Ice_Daily - need to read disabled array here?');
+    console.log('spec.disabled tracks what layers are disabled by the user/session');
+    // disabled arr exists here but is undefined
+    // pushing as below resets to default settings
+    // def.disabled = ['0-1-2-6']; // goofy string format to populate the disabled key below
+  }
+
   // Set layer properties
   def.visible = spec.visible || true;
   def.min = spec.min || undefined;

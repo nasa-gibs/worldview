@@ -117,6 +117,7 @@ function render (config, legacyState) {
 // Document ready function
 window.onload = () => {
   const promise = fetch(configURI);
+  console.log(`configURI: ${configURI}`);
 
   promise
     .then((response) => {
@@ -126,6 +127,8 @@ window.onload = () => {
       return response.json();
     })
     .then((config) => {
+      console.log('config');
+      console.log(config.layers.MODIS_Terra_L3_Sea_Ice_Daily.palette);
       // Perform check to see if app was in the midst of a tour
       const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
       if (hasTour) {
