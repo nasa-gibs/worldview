@@ -100,7 +100,7 @@ function AnimationWidget (props) {
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
-  const [testMode, setTestMode] = useState(true);
+  const [testMode, setTestMode] = useState(false);
 
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);

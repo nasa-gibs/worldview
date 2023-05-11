@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
+import { Button } from 'reactstrap';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
 import CreateMap from './components/create-map/createMap';
@@ -47,10 +48,6 @@ import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { SET_ERROR_TILES, DISPLAY_STATIC_MAP } from '../modules/ui/constants';
-import { Button } from 'reactstrap';
-// import { countTiles } from './util/util'
-// import { countTiles } from './util/util'
-import { calculateExpectedTiles, countTiles } from '../components/kiosk/util'
 
 const { events } = util;
 
@@ -345,25 +342,25 @@ function MapUI(props) {
   }
 
   const testFunction = () => {
-    const tileCount = countTiles(ui)
-    console.log(tileCount)
+    // const tileCount = countTiles(ui)
+    // console.log(tileCount)
 
 
-    const layers = ui.selected.getLayers().getArray()
-    const layer = layers[0]
+    // const layers = ui.selected.getLayers().getArray()
+    // const layer = layers[0]
 
 
-    const expectedTileCount = calculateExpectedTiles(ui, layer)
-    console.log('expected tile count: ', expectedTileCount)
-  }
+    // const expectedTileCount = calculateExpectedTiles(ui, layer)
+    // console.log('expected tile count: ', expectedTileCount)
+    const zoom = ui.selected.getView().getZoom();
+    console.log('zoom: ', zoom);
+  };
 
-  const devButton = () => {
-    return (
-      <div id="dev-block" className="d-flex justify-content-center">
-        <Button onClick={testFunction} style={ { zIndex: "999" } } color="success">Dev Button</Button>
-      </div>
-    )
-  }
+  const devButton = () => (
+    <div id="dev-block" className="d-flex justify-content-center">
+      <Button onClick={testFunction} style={{ zIndex: '999' }} color="success">Dev Button</Button>
+    </div>
+  );
 
   return (
     <>

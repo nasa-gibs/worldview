@@ -14,12 +14,14 @@ function AnimationTileCheck(props) {
     isPlaying,
   } = props;
 
-  const { activeString, config, proj } = useSelector((state) => ({
-    activeString: state.compare.activeString,
+  const {
+    config, proj, zoom, activeLayers,
+  } = useSelector((state) => ({
     config: state.config,
     proj: state.proj.selected,
+    zoom: Math.floor(state.map.ui.selected.getView().getZoom()),
+    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
-  const activeLayers = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer));
 
   const [frameDates, setFrameDates] = useState([]);
 
@@ -30,8 +32,6 @@ function AnimationTileCheck(props) {
   // get an array of each frame date for duration of animation
   function determineFrameDates() {
     const getNextDate = (date) => util.dateAdd(date, interval, delta);
-
-
 
     const frameDatesArray = [];
     let frameDate = startDate;
@@ -50,7 +50,7 @@ function AnimationTileCheck(props) {
   }
 
   return (
-    <DateRangeTileCheck frameDates={frameDates} activeLayers={activeLayers} config={config} proj={proj} />
+    <DateRangeTileCheck frameDates={frameDates} activeLayers={activeLayers} config={config} proj={proj} zoom={zoom} />
   );
 }
 

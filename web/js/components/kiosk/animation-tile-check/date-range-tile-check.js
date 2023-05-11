@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import {
-  LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN
+  LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN,
 } from '../../../modules/map/constants';
 
 const contentLengthThresholds = {
-  'GOES-East_ABI_GeoColor': 170000
-}
+  'GOES-East_ABI_GeoColor': 160000,
+};
 
 function DateRangeTileCheck(props) {
   const {
     frameDates,
     activeLayers,
     config,
-    proj
+    proj,
+    zoom,
   } = props;
 
   useEffect(() => {
-    if (frameDates.length){
-      getAvailability(activeLayers)
+    if (frameDates.length) {
+      getAvailability();
     }
-  }, [frameDates])
+  }, [frameDates]);
 
-  const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
+  const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day) => {
     let extent;
     let origin;
 
@@ -84,42 +85,43 @@ function DateRangeTileCheck(props) {
 
     const isGranule = type === 'granule';
     const projectionsAttributes = projections[proj.id];
-    const projSource = projectionsAttributes.source
+    const projSource = projectionsAttributes.source;
     const configSource = config.sources[projSource];
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const configMatrixSet = configSource.matrixSets[projectionsAttributes.matrixSet];
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
-    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, null, proj);
+    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, null);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     const tileGridOptions = {
-      origin: origin,
-      extent: extent,
+      origin,
+      extent,
       sizes,
       resolutions,
       matrixIds: matrixIds || resolutions.map((set, index) => index),
       tileSize: tileSize[0],
-    }
+    };
 
-    const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
-      return new Promise(async (resolve) => {
-        try {
-          const response = await fetch(src);
-          const data = await response.blob();
-          const contentLength = response.headers.get('content-length');
-
-          if (response.status === 200 && data !== undefined) {
-            contentLengthSum += parseInt(contentLength, 10);
-          }
-        } catch (e) {
-          console.error('Error loading tile', e)
-        } finally {
-          resolve();
-        }
+    const tileLoadFunction = function(tile, src) {
+      return new Promise((resolve) => {
+        fetch(src)
+          .then((response) => response.blob().then((data) => [response, data]))
+          .then(([response, data]) => {
+            const contentLength = response.headers.get('content-length');
+            if (response.status === 200 && data !== undefined) {
+              contentLengthSum += parseInt(contentLength, 10);
+            }
+            resolve();
+          })
+          .catch((e) => {
+            console.error('Error loading tile', e);
+            resolve();
+          });
       });
     };
+
 
     const wmtsSource = new OlSourceWMTS({
       url: sourceURL + urlParameters,
@@ -132,16 +134,16 @@ function DateRangeTileCheck(props) {
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
-      tileLoadFunction: tileLoadFunction(def, date),
+      tileLoadFunction,
     });
 
-    const totalTiles = 3
-    const z = 0
-    const promises = []
+    const [matrixWidth, matrixHeight] = sizes[zoom];
 
-    for (let x = 0; x < totalTiles; x++) {
-      for (let y = 0; y < totalTiles; y++) {
-        const tileCoord = [z, x, y];
+    const promises = [];
+
+    for (let x = 0; x < matrixWidth; x += 1) {
+      for (let y = 0; y < matrixHeight; y += 1) {
+        const tileCoord = [zoom, x, y];
         const tileUrl = wmtsSource.tileUrlFunction(tileCoord, 1, proj);
         if (tileUrl !== undefined) {
           const promise = wmtsSource.getTileLoadFunction()(tileCoord, tileUrl);
@@ -153,38 +155,39 @@ function DateRangeTileCheck(props) {
     await Promise.all(promises);
     return {
       date,
-      contentLengthSum
-    }
-  }
+      contentLengthSum,
+    };
+  };
 
-  // #2 child function that accepts one layer and returns results for that layer
+  // child function that accepts one layer and returns results for that layer
   async function getAvailabilityForLayer(layer) {
-    const layerName = layer.id.toString()
+    const layerName = layer.id.toString();
+
+    // Start all the tile requests concurrently
+    const tilePromises = frameDates.map((date) => requestTilesWMTS(layer, date));
+
+    // Wait for all the requests to finish and gather the results
+    const tiles = await Promise.all(tilePromises);
+
     const availability = {
       layerName,
-      dates: []
-    }
+      dates: tiles,
+    };
 
-    for (const date of frameDates) {
-      const tiles = await requestTilesWMTS(layer, date)
-      availability.dates.push(tiles)
-    }
-
-    return availability
+    return availability;
   }
 
   // parent function that accepts activeLayers and returns final results
-  async function getAvailability(activeLayers) {
-
+  async function getAvailability() {
     const allLayersAvailability = activeLayers.map((layer) => {
-      const layerAvailability = getAvailabilityForLayer(layer)
+      const layerAvailability = getAvailabilityForLayer(layer);
       return layerAvailability;
-    })
+    });
 
     const resolvedAllLayersAvailability = await Promise.all(allLayersAvailability);
 
     const datesBelowThreshold = resolvedAllLayersAvailability.map((layer) => {
-    const threshold = contentLengthThresholds[layer.layerName]
+      const threshold = contentLengthThresholds[layer.layerName];
 
       return layer.dates.reduce((accumulator, date) => {
         if (date.contentLengthSum < threshold) {
@@ -196,12 +199,20 @@ function DateRangeTileCheck(props) {
         }
         return accumulator;
       }, []);
-    })
+    });
 
     console.log(datesBelowThreshold);
   }
 
   return null;
 }
+
+DateRangeTileCheck.propTypes = {
+  proj: PropTypes.object,
+  config: PropTypes.object,
+  activeLayers: PropTypes.array,
+  frameDates: PropTypes.array,
+  zoom: PropTypes.integer,
+};
 
 export default DateRangeTileCheck;
