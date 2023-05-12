@@ -69,6 +69,7 @@ class ShareLinkContainer extends Component {
     this.unlisten = history.listen((location, action) => {
       const newString = location.search;
       const { queryString } = this.state;
+      if (newString === undefined) { return; }
       if (queryString !== newString) {
         this.setState({
           queryString: newString,
