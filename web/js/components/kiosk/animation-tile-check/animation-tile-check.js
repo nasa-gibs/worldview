@@ -25,11 +25,13 @@ function AnimationTileCheck(props) {
 
   const [frameDates, setFrameDates] = useState([]);
 
+  // This component is only renered when kioskMode is active & eic is subdaily or daily animation
+  // This means we can listen to the animation play trigger once the tileError check has completed
   useEffect(() => {
     if (isPlaying) getFrameDates();
   }, [isPlaying]);
 
-  // get an array of each frame date for duration of animation
+  // Get an array of each frame date for duration of animation
   function determineFrameDates() {
     const getNextDate = (date) => util.dateAdd(date, interval, delta);
 

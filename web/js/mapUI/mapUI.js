@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
-import { Button } from 'reactstrap';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
 import CreateMap from './components/create-map/createMap';
@@ -341,30 +340,8 @@ function MapUI(props) {
     }
   }
 
-  const testFunction = () => {
-    // const tileCount = countTiles(ui)
-    // console.log(tileCount)
-
-
-    // const layers = ui.selected.getLayers().getArray()
-    // const layer = layers[0]
-
-
-    // const expectedTileCount = calculateExpectedTiles(ui, layer)
-    // console.log('expected tile count: ', expectedTileCount)
-    const zoom = ui.selected.getView().getZoom();
-    console.log('zoom: ', zoom);
-  };
-
-  const devButton = () => (
-    <div id="dev-block" className="d-flex justify-content-center">
-      <Button onClick={testFunction} style={{ zIndex: '999' }} color="success">Dev Button</Button>
-    </div>
-  );
-
   return (
     <>
-      {devButton()}
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}

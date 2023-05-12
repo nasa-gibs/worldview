@@ -2,13 +2,28 @@ import { useEffect } from 'react';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { toggleCheckedAnimationAvailability as toggleCheckedAnimationAvailabilityAction } from '../../../modules/ui/actions';
 import util from '../../../util/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN,
 } from '../../../modules/map/constants';
 
+// Layers to be checked for tile availability need to have manually determined content-length thresholds.
+// Any active layers that are not listed in this object will NOT be checked for tile availability.
+// This represents a TOTAL content-length for all tiles for a single date for a single layer
+// To find a good value for the total content-length:
+// 1. Find a visibly verifiabled date range where the layer has full tiles for the entire range
+// 2. Add the layer id to the contentLengthThresholds object below with a value of 1
+// 3. Place a console statement in getAvailability() for console.log(resolvedLayersAvailability)
+// 4. Create a permalink with the kiosk parameter with kiosk=true && (eic='sa' || eic='da')
+// 5. Use the permalink & open the console
+// 6. Look through the conentLengthSum values for each layer/date to find a good value
+// Currently can only be used for WMTS tiles.
 const contentLengthThresholds = {
   'GOES-East_ABI_GeoColor': 160000,
+  'GOES-West_ABI_GeoColor': 160000,
+  AMSRU2_Sea_Ice_Concentration_12km: 50000,
 };
 
 function DateRangeTileCheck(props) {
@@ -19,6 +34,9 @@ function DateRangeTileCheck(props) {
     proj,
     zoom,
   } = props;
+
+  const dispatch = useDispatch();
+  const toggleCheckedAnimationAvailability = (available) => { dispatch(toggleCheckedAnimationAvailabilityAction(available)); };
 
   useEffect(() => {
     if (frameDates.length) {
@@ -48,9 +66,6 @@ function DateRangeTileCheck(props) {
     const resolutionLen = matrixSet.resolutions.length;
     const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
 
-    // If number of set limits doesn't match sets, we are assuming this product
-    // crosses the anti-meridian and don't have a reliable way to calculate a single
-    // extent based on multiple set limits.
     if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {
       return { origin, extent };
     }
@@ -159,7 +174,8 @@ function DateRangeTileCheck(props) {
     };
   };
 
-  // child function that accepts one layer and returns results for that layer
+  // Invoked from getAvailability, accepts one layer and returns results for that layer
+  // Each layer will have a nested array of each frameDate with a content-length value
   async function getAvailabilityForLayer(layer) {
     const layerName = layer.id.toString();
 
@@ -177,31 +193,51 @@ function DateRangeTileCheck(props) {
     return availability;
   }
 
-  // parent function that accepts activeLayers and returns final results
+  // Parent function called when frameDates are calculated
   async function getAvailability() {
-    const allLayersAvailability = activeLayers.map((layer) => {
+    // An array of layers that are eligible to be checked
+    const layersToBeChecked = activeLayers.filter((layer) => contentLengthThresholds[layer.id]);
+
+    // Map through each eligible layer and request availability
+    const layersAvailability = layersToBeChecked.map((layer) => {
       const layerAvailability = getAvailabilityForLayer(layer);
       return layerAvailability;
     });
 
-    const resolvedAllLayersAvailability = await Promise.all(allLayersAvailability);
+    // Wait for all the requests to finish and gather the results with promise
+    const resolvedLayersAvailability = await Promise.all(layersAvailability);
 
-    const datesBelowThreshold = resolvedAllLayersAvailability.map((layer) => {
+    // Create a set of unique dates that are below the threshold
+    // The size of this set will determine how many frames are missing tiles
+    const uniqueDatesBelowThreshold = new Set();
+
+    resolvedLayersAvailability.forEach((layer) => {
       const threshold = contentLengthThresholds[layer.layerName];
 
-      return layer.dates.reduce((accumulator, date) => {
+      layer.dates.forEach((date) => {
         if (date.contentLengthSum < threshold) {
-          accumulator.push({
-            layerName: layer.layerName,
-            date: date.date,
-            threshold: date.contentLengthSum,
-          });
+          const dateStr = date.date.toISOString(); // Convert date to string for use as an object key
+          uniqueDatesBelowThreshold.add(dateStr); // Add the date to the set. If it's already there, it won't be added again.
         }
-        return accumulator;
-      }, []);
+      });
     });
 
-    console.log(datesBelowThreshold);
+    const framesWithMissingTiles = uniqueDatesBelowThreshold.size;
+
+    // Calculate how many frames are missing tiles as a percentage
+    const percentMissing = (framesWithMissingTiles / frameDates.length) * 100;
+
+    // If there are less than 40% of frames with missing tiles we dispatch action to allow animation to play
+    // Else we do not do anything which means we display static imagery of the first frame
+    // The imagery at this date should already be satisfactory because the errorTile process has already been completed
+    // The percentMissing conditional value is completely arbitrary and can be changed
+    if (percentMissing < 40) {
+      console.log('Good Check:', percentMissing, '% ', 'of dates with missing frames');
+      toggleCheckedAnimationAvailability(true);
+    } else {
+      // THIS ELSE BLOCK IS ONLY FOR TESTING
+      console.log('Bad Check: ', percentMissing, '% ', ' of dates with missing frames. Aborting animation.');
+    }
   }
 
   return null;
@@ -212,7 +248,7 @@ DateRangeTileCheck.propTypes = {
   config: PropTypes.object,
   activeLayers: PropTypes.array,
   frameDates: PropTypes.array,
-  zoom: PropTypes.integer,
+  zoom: PropTypes.number,
 };
 
 export default DateRangeTileCheck;
