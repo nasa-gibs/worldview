@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Reservoirs": {
+            "id": "reservoirs",
+            "title":    "Reservoirs",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "GRanD_Reservoirs"
+                    ]
+                }
+            }
+        }
+    }
+}

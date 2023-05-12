@@ -213,7 +213,7 @@ button:focus {
   & > .button-action-group:hover .arrow,
   & #zoom-buttons-group .button-action-group:hover .arrow {
     fill: #1a1a1a;
-    fill-opacity: 100%;
+    fill-opacity: 1;
     stroke: none;
   }
 
@@ -684,7 +684,7 @@ button:focus {
 .ab-group-case-active path {
   stroke: #515151;
   stroke-width: 1;
-  stroke-opacity: 100%;
+  stroke-opacity: 1;
 }
 
 .ab-group-case-active polygon,

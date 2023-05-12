@@ -106,21 +106,21 @@ export function getStampProps(
   return { stampHeight, dateStamp };
 }
 
-// export function svgToPng(svgURL, stampHeight) {
-//   const canvasEl = document.createElement('canvas');
-//   const canvgOptions = {
-//     log: false,
-//     ignoreMouse: true,
-//     scaleHeight: stampHeight,
-//   };
-//   canvg(canvasEl, svgURL, canvgOptions);
-//   const newImage = new Image();
-//   newImage.src = canvasEl.toDataURL('image/png');
-//   newImage.width = canvasEl.width;
-//   newImage.height = canvasEl.height;
+export function svgToPng(svgURL, stampHeight) {
+  const canvasEl = document.createElement('canvas');
+  const canvgOptions = {
+    log: false,
+    ignoreMouse: true,
+    scaleHeight: stampHeight,
+  };
+  canvg(canvasEl, svgURL, canvgOptions);
+  const newImage = new Image();
+  newImage.src = canvasEl.toDataURL('image/png');
+  newImage.width = canvasEl.width;
+  newImage.height = canvasEl.height;
 
-//   return newImage;
-// }
+  return newImage;
+}
 
 export function mapLocationToAnimationState(
   parameters,
