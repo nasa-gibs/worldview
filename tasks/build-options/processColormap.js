@@ -301,10 +301,6 @@ async function processFile (id, xml) {
       maps
     }
 
-    if (Object.prototype.hasOwnProperty.call(data.maps[0].legend, 'disabled')) {
-      console.warn('data')
-      console.warn(data.maps[0].legend.disabled)
-    }
     const outputFile = path.join(outputDir, `${id}.json`)
     await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
   } catch (error) {

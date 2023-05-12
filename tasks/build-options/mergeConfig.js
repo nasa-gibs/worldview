@@ -34,11 +34,11 @@ async function main () {
   await mergeFiles(inputDir)
 
   fs.writeFileSync(outputFile, JSON.stringify(conf, null, 2), 'utf-8')
-
   console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
 }
 
 async function mergeFiles (inputDir) {
+  console.log(`---------${inputDir}-------`)
   const files = fs.readdirSync(inputDir)
   for (const file of files) {
     try {

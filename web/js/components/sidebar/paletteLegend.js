@@ -327,6 +327,8 @@ class PaletteLegend extends React.Component {
    * @param {Number} index | Legend Index
    */
   renderClasses(legend, legendIndex) {
+    console.log('renderClasses');
+    console.log(legend);
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
       layer, parentLayer, compareState, getPalette,
