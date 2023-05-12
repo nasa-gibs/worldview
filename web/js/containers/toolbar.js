@@ -133,9 +133,7 @@ class toolbarContainer extends Component {
       {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
-          refreshStateAfterImageDownload(
-            hasCustomPalette ? paletteStore : undefined, rotation, nonDownloadableLayers,
-          );
+          refreshStateAfterImageDownload(hasCustomPalette ? paletteStore : undefined, rotation, nonDownloadableLayers);
         },
       },
     );
@@ -174,7 +172,7 @@ class toolbarContainer extends Component {
         target={buttonId}
       />
     );
-  }
+  };
 
   renderShareButton() {
     const {
@@ -291,7 +289,7 @@ class toolbarContainer extends Component {
         </Button>
       </div>
     );
-  }
+  };
 
   renderSnapshotsButton () {
     const {
@@ -390,7 +388,7 @@ class toolbarContainer extends Component {
         style={mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
+        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} />
       </Button>
     );
   }

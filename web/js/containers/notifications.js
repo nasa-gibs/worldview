@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import NotificationBlock from '../components/notifications/notification-block';
 import { getNumberOfTypeNotSeen } from '../modules/notifications/util';
 
-const Notifications = (props) => {
+function Notifications(props) {
   const { object } = props;
   const {
     messages, outages, alerts,
@@ -28,7 +28,7 @@ const Notifications = (props) => {
       />
     </div>
   );
-};
+}
 function mapStateToProps(state) {
   const { object } = state.notifications;
 

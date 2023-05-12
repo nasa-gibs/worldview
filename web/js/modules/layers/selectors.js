@@ -25,6 +25,16 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
+export const getCollections = (layers, date, layer) => {
+  if (!layers.collections[layer.id]) return;
+  const dateCollection = layers.collections[layer.id].dates;
+  for (let i = 0; i < dateCollection.length; i += 1) {
+    if (dateCollection[i].date === date) {
+      return dateCollection[i];
+    }
+  }
+};
+
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
@@ -321,10 +331,10 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
       let index = 0;
 
       layers.forEach((layer) => {
-        if (layer.layergroup === 'Reference') {
+        if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
+          index += 1;
         }
-        index += 1;
       });
       if (lastRefIndex === 0) {
         return lastRefIndex;

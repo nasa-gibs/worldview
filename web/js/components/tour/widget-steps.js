@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Steps = (props) => {
+function Steps(props) {
   const {
     currentStep, decreaseStep, incrementStep, totalSteps,
   } = props;
@@ -35,7 +35,7 @@ const Steps = (props) => {
       </a>
     </div>
   );
-};
+}
 
 Steps.propTypes = {
   currentStep: PropTypes.number.isRequired,

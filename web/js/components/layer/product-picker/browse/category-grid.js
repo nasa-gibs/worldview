@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashOrderBy from 'lodash/orderBy';
-import Masonry from 'react-masonry-component';
+import MasonryComponent from '../../../../util/masonry';
 import CategoryCell from './category-cell';
 import {
   showMeasurements as showMeasurementsAction,
@@ -17,18 +17,17 @@ import {
  * @class LayerList
  * @extends React.Component
  */
-const CategoryGrid = (props) => {
+function CategoryGrid(props) {
   const {
     categories,
     measurementConfig,
     showMeasurements,
     hasMeasurementSource,
     categoryType,
-    width,
   } = props;
   const masonryOptions = {
     transitionDuration: '0.6s',
-    columnWidth: width >= 630 ? 310 : width - 26,
+    columnWidth: 0,
     gutter: 10,
   };
   categories.forEach((item) => {
@@ -40,7 +39,7 @@ const CategoryGrid = (props) => {
     ['asc'],
   );
   return (
-    <Masonry className="category-masonry-case" options={masonryOptions}>
+    <MasonryComponent className="category-masonry-case" options={masonryOptions}>
       {orderedCategories.map((category) => (
         <CategoryCell
           key={category.id}
@@ -51,9 +50,9 @@ const CategoryGrid = (props) => {
           hasMeasurementSource={hasMeasurementSource}
         />
       ))}
-    </Masonry>
+    </MasonryComponent>
   );
-};
+}
 const mapDispatchToProps = (dispatch) => ({
   showMeasurements: (category, selectedMeasurement) => {
     dispatch(showMeasurementsAction({ category, selectedMeasurement }));
@@ -73,9 +72,8 @@ function mapStateToProps(state) {
     selectedMeasurementSourceIndex,
   } = productPicker;
   const categoryConfig = getCategoryConfig(state);
-
   return {
-    categories: Object.values(categoryConfig),
+    categories: typeof categoryConfig === 'undefined' ? [] : Object.values(categoryConfig),
     categoryType,
     category,
     measurementConfig: config.measurements,

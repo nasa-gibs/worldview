@@ -19,6 +19,7 @@
     color: #fff;
     overflow: hidden;
     z-index: 1;
+    text-decoration: none;
 
     & .layer-count {
       margin: 0 5px;
@@ -346,10 +347,7 @@ li.item.productsitem.inmotion,
   display: block;
   width: 1px;
   height: 19px;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  inset: 0;
   margin: auto;
   cursor: pointer;
 }
@@ -408,8 +406,8 @@ li.item.productsitem.inmotion,
 
 .wv-layers-info-icon {
   border: thin solid #333;
-  width: 1.1em !important;
-  height: 14px;
+  width: 10px !important;
+  height: 10px;
   text-align: center;
   border-radius: 50%;
   padding: 1px;
@@ -605,7 +603,8 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media (max-width: $mobile-max-width) {
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+  (max-width: $mobile-max-width) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;

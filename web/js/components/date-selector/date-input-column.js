@@ -59,7 +59,7 @@ class DateInputColumn extends Component {
     this.setState({
       size,
     });
-  }
+  };
 
   nextInput = () => {
     const { isLastPosition, unitCycle } = this.state;
@@ -88,7 +88,7 @@ class DateInputColumn extends Component {
     setTimeout(() => {
       document.querySelector(nextTarget).focus();
     }, 10);
-  }
+  };
 
   prevInput = () => {
     const { isFirstPosition, unitCycle } = this.state;
@@ -121,12 +121,12 @@ class DateInputColumn extends Component {
     setTimeout(() => {
       document.querySelector(prevTarget).focus();
     }, 10);
-  }
+  };
 
   updateValue = () => {
     const { value } = this.props;
     this.setState({ value });
-  }
+  };
 
   onKeyPress = (e) => {
     const { keyCode } = e;
@@ -138,7 +138,7 @@ class DateInputColumn extends Component {
       e.preventDefault();
       e.stopPropagation();
     }
-  }
+  };
 
   onKeyUp = (e) => {
     const { type } = this.props;
@@ -174,7 +174,7 @@ class DateInputColumn extends Component {
         this.nextInput();
       }
     }
-  }
+  };
 
   sanitizeInput = (value) => {
     const {
@@ -215,7 +215,7 @@ class DateInputColumn extends Component {
       updateTimeUnitInput(type, value);
     }
     return newDate;
-  }
+  };
 
   changeDate = (amt) => {
     const {
@@ -230,7 +230,7 @@ class DateInputColumn extends Component {
       maxDate,
     );
     updateDate(newDate, true);
-  }
+  };
 
   /**
    * Select all text on focus
@@ -242,7 +242,7 @@ class DateInputColumn extends Component {
     e.target.select();
     this.setState({ selected: true });
     onFocus(type);
-  }
+  };
 
   blur = (e) => {
     const { type, value } = this.props;
@@ -264,13 +264,13 @@ class DateInputColumn extends Component {
       value: newValue,
       selected: false,
     });
-  }
+  };
 
   onChange = (e) => {
     this.setState({
       value: e.target.value.toUpperCase(),
     });
-  }
+  };
 
   render() {
     const {

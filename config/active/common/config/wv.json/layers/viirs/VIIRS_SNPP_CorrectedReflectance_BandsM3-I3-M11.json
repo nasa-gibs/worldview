@@ -6,7 +6,8 @@
       "tags": "false color s-npp snpp 3-6-7",
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule"]
     }
   }
 }

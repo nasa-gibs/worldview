@@ -183,42 +183,4 @@
       <LegendEntry rgb="255,234,0" tooltip="74" id="74"/>
       <LegendEntry rgb="255,212,0" tooltip="75" id="75"/>
       <LegendEntry rgb="255,198,0" tooltip="76" id="76"/>
-      <LegendEntry rgb="255,177,0" tooltip="77" id="77"/>
-      <LegendEntry rgb="255,163,0" tooltip="78" id="78"/>
-      <LegendEntry rgb="255,149,0" tooltip="79" id="79"/>
-      <LegendEntry rgb="255,127,0" tooltip="80" showTick="true" showLabel="true" label="80" id="80"/>
-      <LegendEntry rgb="255,113,0" tooltip="81" id="81"/>
-      <LegendEntry rgb="255,99,0" tooltip="82" id="82"/>
-      <LegendEntry rgb="255,78,0" tooltip="83" id="83"/>
-      <LegendEntry rgb="255,64,0" tooltip="84" id="84"/>
-      <LegendEntry rgb="255,42,0" tooltip="85" id="85"/>
-      <LegendEntry rgb="255,28,0" tooltip="86" id="86"/>
-      <LegendEntry rgb="255,14,0" tooltip="87" id="87"/>
-      <LegendEntry rgb="255,9,9" tooltip="88" id="88"/>
-      <LegendEntry rgb="255,26,26" tooltip="89" id="89"/>
-      <LegendEntry rgb="255,51,51" tooltip="90" showTick="true" id="90"/>
-      <LegendEntry rgb="255,68,68" tooltip="91" id="91"/>
-      <LegendEntry rgb="255,85,85" tooltip="92" id="92"/>
-      <LegendEntry rgb="255,111,111" tooltip="93" id="93"/>
-      <LegendEntry rgb="255,128,128" tooltip="94" id="94"/>
-      <LegendEntry rgb="255,153,153" tooltip="95" id="95"/>
-      <LegendEntry rgb="255,170,170" tooltip="96" id="96"/>
-      <LegendEntry rgb="255,187,187" tooltip="97" id="97"/>
-      <LegendEntry rgb="255,213,213" tooltip="98" id="98"/>
-      <LegendEntry rgb="255,230,230" tooltip="99" id="99"/>
-      <LegendEntry rgb="255,255,255" tooltip="100" id="100"/>
-    </Legend>
-  </ColorMap>
-  <ColorMap title="No Data">
-    <Entries>
-      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="101"/>
-      <ColorMapEntry rgb="219,219,219" transparent="true" sourceValue="[110,160]" ref="102"/>
-      <ColorMapEntry rgb="146,146,146" transparent="true" sourceValue="120" ref="103"/>
-    </Entries>
-    <Legend type="classification">
-      <LegendEntry rgb="0,0,0" tooltip="No Data" id="101"/>
-      <LegendEntry rgb="219,219,219" tooltip="Flags/OOB" id="102"/>
-      <LegendEntry rgb="146,146,146" tooltip="Land" id="103"/>
-    </Legend>
-  </ColorMap>
-</ColorMaps>
+      <Le

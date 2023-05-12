@@ -9,7 +9,7 @@ import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../.
 import { getCompareDates } from '../../modules/compare/selectors';
 import MonospaceDate from '../../components/util/monospace-date';
 
-const CompareCase = (props) => {
+function CompareCase(props) {
   const {
     isActive,
     dateA,
@@ -76,7 +76,7 @@ const CompareCase = (props) => {
       </div>
     </div>
   );
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
   toggleActiveCompareState: () => {

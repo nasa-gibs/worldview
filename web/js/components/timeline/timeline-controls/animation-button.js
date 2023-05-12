@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 
-const AnimationButton = (props) => {
+function AnimationButton(props) {
   const {
     disabled,
     label,
@@ -46,6 +46,7 @@ const AnimationButton = (props) => {
         {isMobile ? null
           : (
             <UncontrolledTooltip
+              id="center-align-tooltip"
               placement="top"
               target={buttonId}
             >
@@ -56,7 +57,7 @@ const AnimationButton = (props) => {
       </div>
     </div>
   );
-};
+}
 
 AnimationButton.propTypes = {
   breakpoints: PropTypes.object,

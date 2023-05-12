@@ -13,12 +13,12 @@ class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
     const { decrementTimeScale } = this.props;
     decrementTimeScale();
-  }
+  };
 
   onClickDown = () => {
     const { incrementTimeScale } = this.props;
     incrementTimeScale();
-  }
+  };
 
   render() {
     const {

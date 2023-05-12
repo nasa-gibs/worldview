@@ -3,7 +3,7 @@
         "Flood": {
             "id": "flood",
             "title":    "Flood",
-            "subtitle": "Terra and Aqua/MODIS",
+            "subtitle": "Terra and Aqua/MODIS, DSWx-HLS",
             "sources": {
                 "Terra and Aqua/MODIS": {
                     "id": "terra-aqua-modis",
@@ -13,6 +13,18 @@
                     "settings": [
                         "MODIS_Combined_Flood_2-Day",
                         "MODIS_Combined_Flood_3-Day"
+                    ]
+                },
+                "DSWx-HLS": {
+                    "id": "dswx-hls",
+                    "title": "DSWx-HLS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional",
+                        "OrbitTracks_Landsat-8_Descending",
+                        "OrbitTracks_Sentinel-2A_Descending",
+                        "OrbitTracks_Sentinel-2B_Descending"
                     ]
                 }
             }

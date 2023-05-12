@@ -159,8 +159,15 @@ export default (function(self) {
       second = hhmmss[2] || 0;
       millisecond = hhmmss[3] || 0;
     }
-    const date = new Date(Date.UTC(year, month, day, hour, minute, second,
-      millisecond));
+    const date = new Date(Date.UTC(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      second,
+      millisecond,
+    ));
     // eslint-disable-next-line no-restricted-globals
     if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
@@ -465,7 +472,7 @@ export default (function(self) {
     const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
     // eslint-disable-next-line no-restricted-properties
-    return Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
+    return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
   };
 
   self.fetch = function(url, mimeType) {

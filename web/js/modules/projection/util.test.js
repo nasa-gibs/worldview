@@ -14,7 +14,7 @@ const config = {
     'some-test-projection': proj,
   },
 };
-test('getProjInitialState with given projeciton', () => {
+test('getProjInitialState with given projeciton [projection-initial-state]', () => {
   const response = {
     id: 'some-test-projection',
     selected: proj,
@@ -23,7 +23,7 @@ test('getProjInitialState with given projeciton', () => {
   expect(initialState.id).toBe(response.id);
   expect(initialState.selected.id).toBe(response.selected.id);
 });
-test('Default proj should be geographic', () => {
+test('Default proj should be geographic [projection-default-geographic]', () => {
   const emptyConfig = {
     defaults: {},
   };
@@ -34,7 +34,7 @@ test('Default proj should be geographic', () => {
   const initialState = getProjInitialState(emptyConfig);
   expect(initialState.id).toBe(response.id);
 });
-test('mapLocationToProjState: Update proj:id key onload', () => {
+test('mapLocationToProjState: Update proj:id key onload [projection-update-id]', () => {
   const state = {
     config,
     proj: {
@@ -48,7 +48,7 @@ test('mapLocationToProjState: Update proj:id key onload', () => {
   expect(newState.proj.id).toBe('some-test-projection');
 });
 
-test('legacy switch parameter for projection', () => {
+test('legacy switch parameter for projection [projection-legacy-switch]', () => {
   const param = {
     switch: 'some-test-projection',
   };

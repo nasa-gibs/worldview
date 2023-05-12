@@ -23,8 +23,9 @@ class CollapsedButton extends PureComponent {
           id={buttonId}
           aria-label={labelText}
           onClick={onclick}
+          className="sidebar-anchor"
         >
-          <UncontrolledTooltip placement="right" target={buttonId}>
+          <UncontrolledTooltip id="center-align-tooltip" placement="right" target={buttonId}>
             {labelText}
           </UncontrolledTooltip>
           <FontAwesomeIcon className="layer-icon" icon="layer-group" />

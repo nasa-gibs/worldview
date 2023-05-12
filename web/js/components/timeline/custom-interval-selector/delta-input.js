@@ -31,7 +31,7 @@ class DeltaInput extends PureComponent {
         this.setValue(value);
       }
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     let { value } = this.state;
@@ -49,11 +49,11 @@ class DeltaInput extends PureComponent {
         this.handleBlur();
       }
     }
-  }
+  };
 
   handleFocus = (e) => {
     e.target.select();
-  }
+  };
 
   handleBlur = () => {
     const { changeDelta } = this.props;
@@ -67,13 +67,13 @@ class DeltaInput extends PureComponent {
         valid: false,
       });
     }
-  }
+  };
 
   setValue = (value) => {
     this.setState({
       value,
     });
-  }
+  };
 
   render() {
     const {
