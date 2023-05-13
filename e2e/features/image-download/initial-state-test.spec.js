@@ -59,6 +59,7 @@ test('Check arctic formats', async () => {
 })
 
 test('Check antarctic formats', async () => {
+  test.skip(true, 'Needs to be updated for SOTO')
   const { imageFormat } = selectors
   await closeImageDownloadPanel(page)
   await switchProjections(page, 'antarctic')

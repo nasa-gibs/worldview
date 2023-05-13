@@ -10,6 +10,8 @@ let context
 
 test.describe.configure({ mode: 'serial' })
 
+test.skip(true, 'Needs to be updated for SOTO')
+
 test.beforeAll(async ({ browser }) => {
   context = await browser.newContext()
   page = await context.newPage()

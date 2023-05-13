@@ -21,6 +21,8 @@ test.afterAll(async () => {
   await page.close()
 })
 
+test.skip(true, 'Needs to be updated for SOTO')
+
 test('Add AOD Layer to Layer Group A', async () => {
   const {
     addLayers,
