@@ -7,6 +7,7 @@
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
       "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule"],
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"

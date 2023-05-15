@@ -87,10 +87,11 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
       });
     }
 
+    const markerId = Math.floor(longitude * 1000 + latitude * 1000 + Math.random() * 1000);
     dispatch({
       type: SET_MARKER,
       coordinates: {
-        id: Math.floor(longitude + latitude),
+        id: markerId,
         longitude,
         latitude,
       },

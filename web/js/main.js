@@ -27,7 +27,7 @@ import util from './util/util';
 import Brand from './brand';
 import combineModels from './combine-models';
 import parse from './parse';
-import combineUi from './combine-ui';
+import CombineUI from './mapUI/combineUI';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   layersParse12,
@@ -106,10 +106,11 @@ function render (config, legacyState) {
   ReactDOM.render(
     <Provider store={store}>
       <App models={models} store={store} />
+      <CombineUI models={models} config={config} store={store} />
     </Provider>,
     document.getElementById('app'),
   );
-  combineUi(models, config, store); // Legacy UI
+  // combineUi(models, config, store); // Legacy UI
   util.errorReport(errors);
 }
 
@@ -143,7 +144,9 @@ window.onload = () => {
 
       const pageLoadTime = new Date(config.pageLoadTime);
 
-      config.initialDate = new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1));
+      config.initialDate = config.pageLoadTime.getUTCHours() < 3
+        ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1))
+        : pageLoadTime;
 
       config.palettes = {
         rendered: {},

@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Form } from 'reactstrap';
 
-import { onToggle } from '../../modules/modal/actions';
+import { onToggle as onToggleAction } from '../../modules/modal/actions';
+import { changeUnits as changeUnitsAction } from '../../modules/measure/actions';
 import IconList from '../util/icon-list';
-import { changeUnits } from '../../modules/measure/actions';
 import util from '../../util/util';
 
 const { events } = util;
@@ -18,13 +17,7 @@ const DOWNLOAD_GEOJSON = {
   key: 'measure:download-geojson',
   className: 'measure-download',
 };
-// const DOWNLOAD_SHAPEFILE = {
-//   text: 'Download as Shapefiles',
-//   iconClass: 'ui-icon icon-large',
-//   iconName: 'download',
-//   id: 'download-shapefiles-button',
-//   key: 'measure:download-shapefile',
-// };
+
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
@@ -49,109 +42,62 @@ const OPTIONS_ARRAY = [
     hidden: true,
   },
   DOWNLOAD_GEOJSON,
-  // DOWNLOAD_SHAPEFILE,
 ];
 
-class MeasureMenu extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltipOpen: false,
-    };
-    this.tooltipToggle = this.tooltipToggle.bind(this);
-    this.triggerEvent = this.triggerEvent.bind(this);
-    this.unitToggle = this.unitToggle.bind(this);
-  }
+const MeasureMenu = function () {
+  const dispatch = useDispatch();
+  const onToggle = () => { dispatch(onToggleAction()); };
+  const changeUnits = (units) => { dispatch(changeUnitsAction(units)); };
 
-  triggerEvent(eventName) {
-    const { onCloseModal } = this.props;
+  const {
+    isMobile, isTouchDevice, unitOfMeasure, measurementsInProj,
+  } = useSelector((state) => ({
+    isMobile: state.screenSize.isMobileDevice,
+    isTouchDevice: state.modal.customProps.touchDevice,
+    unitOfMeasure: state.measure.unitOfMeasure,
+    measurementsInProj: !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length,
+  }), shallowEqual);
+
+  const listSize = isTouchDevice ? 'large' : 'small';
+  DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
+  const getRemoveOptionIndex = OPTIONS_ARRAY.findIndex((item) => item.text === 'Remove Measurements');
+  OPTIONS_ARRAY[getRemoveOptionIndex].hidden = !measurementsInProj;
+
+  const triggerEvent = (eventName) => {
     events.trigger(eventName);
-    onCloseModal();
-  }
+    onToggle();
+  };
 
-  unitToggle(evt) {
-    const { onToggleUnits } = this.props;
+  const unitToggle = (evt) => {
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    onToggleUnits(units);
-  }
-
-  tooltipToggle() {
-    this.setState((prevState) => ({
-      tooltipOpen: !prevState.tooltipOpen,
-    }));
-  }
-
-  render() {
-    const {
-      isTouchDevice, unitOfMeasure, measurementsInProj, isMobile,
-    } = this.props;
-    const listSize = isTouchDevice ? 'large' : 'small';
-    // DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
-    DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
-    const getRemoveOptionIndex = OPTIONS_ARRAY.findIndex((item) => item.text === 'Remove Measurements');
-    OPTIONS_ARRAY[getRemoveOptionIndex].hidden = !measurementsInProj;
-    return (
-      <>
-        <Form>
-          <div className="measure-unit-toggle custom-control custom-switch">
-            <input
-              id="unit-toggle"
-              className="custom-control-input"
-              type="checkbox"
-              onChange={this.unitToggle}
-              defaultChecked={unitOfMeasure === 'mi'}
-            />
-            <label className="custom-control-label" htmlFor="unit-toggle">
-              {unitOfMeasure}
-            </label>
-          </div>
-        </Form>
-        <IconList
-          list={OPTIONS_ARRAY}
-          onClick={this.triggerEvent}
-          size={listSize}
-        />
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  const {
-    modal, map, measure, proj, screenSize,
-  } = state;
-  const { unitOfMeasure, allMeasurements } = measure;
-  const { crs } = proj.selected;
-  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
-  return {
-    isMobile: screenSize.isMobileDevice,
-    isTouchDevice: modal.customProps.touchDevice,
-    map,
-    unitOfMeasure,
-    measurementsInProj,
+    changeUnits(units);
   };
+
+  return (
+    <>
+      <Form>
+        <div className="measure-unit-toggle form-check form-switch">
+          <input
+            id="unit-toggle"
+            className="form-check-input"
+            type="checkbox"
+            data-bs-toggle="switch"
+            onChange={unitToggle}
+            defaultChecked={unitOfMeasure === 'mi'}
+          />
+          <label className="custom-control-label" htmlFor="unit-toggle">
+            {unitOfMeasure}
+          </label>
+        </div>
+      </Form>
+      <IconList
+        list={OPTIONS_ARRAY}
+        onClick={triggerEvent}
+        size={listSize}
+      />
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  onToggleUnits: (unitOfMeasure) => {
-    dispatch(changeUnits(unitOfMeasure));
-  },
-  onCloseModal: (eventName) => {
-    dispatch(onToggle());
-  },
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MeasureMenu);
-
-MeasureMenu.propTypes = {
-  isMobile: PropTypes.bool,
-  isTouchDevice: PropTypes.bool,
-  measurementsInProj: PropTypes.bool,
-  onCloseModal: PropTypes.func,
-  onToggleUnits: PropTypes.func,
-  unitOfMeasure: PropTypes.string,
-};
+export default MeasureMenu;

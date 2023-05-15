@@ -168,6 +168,7 @@
             "Surface Albedo",
             "Surface Flux",
             "Surface Pressure",
+            "Surface Water Extent",
             "TOA Albedo",
             "TOA Flux",
             "Terrain Elevation",
@@ -290,7 +291,7 @@
         },
         "associatedLayers": {
           "description": "ID of an associated layers (e.g. a corresponding granule layer)",
-          "type": "string"
+          "type": "array"
         },
         "layer": {
           "type": "string"

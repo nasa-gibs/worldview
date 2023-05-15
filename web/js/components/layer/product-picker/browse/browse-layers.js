@@ -140,6 +140,7 @@ function BrowseLayers (props) {
       : (
         <div className="recent-layers-mobile-header">
           <Tooltip
+            id="center-align-tooltip"
             className="facet-tooltip-content"
             isOpen={tooltipVisible}
             target="recent-tooltip-target"
@@ -203,13 +204,13 @@ function BrowseLayers (props) {
     <>
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
-        isCategoryDisplay
-          ? (
-            <div className="product-outter-list-case">
-              <CategoryGrid width={width} />
-            </div>
-          ) : renderContent()
-        }
+      isCategoryDisplay
+        ? (
+          <div className="product-outter-list-case">
+            <CategoryGrid width={width} />
+          </div>
+        ) : renderContent()
+      }
     </>
   );
 }

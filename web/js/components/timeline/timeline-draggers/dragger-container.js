@@ -75,7 +75,7 @@ class DraggerContainer extends PureComponent {
     if (draggerName !== draggerSelected) {
       onChangeSelectedDragger(draggerName);
     }
-  }
+  };
 
   /**
   * @desc move draggerTimeState to inputTime
@@ -133,7 +133,7 @@ class DraggerContainer extends PureComponent {
 
     // update parent dragger positioning
     updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
-  }
+  };
 
   /**
   * @desc handle dragger dragging
@@ -230,7 +230,7 @@ class DraggerContainer extends PureComponent {
       // update parent dragger positioning
       updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
     });
-  }
+  };
 
   render() {
     const {

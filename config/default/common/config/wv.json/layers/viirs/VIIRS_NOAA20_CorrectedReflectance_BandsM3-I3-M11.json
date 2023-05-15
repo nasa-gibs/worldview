@@ -6,7 +6,8 @@
       "tags": "false color jpss1 3-6-7 jpss-1",
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule"]
     }
   }
 }

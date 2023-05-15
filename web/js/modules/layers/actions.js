@@ -31,6 +31,8 @@ import {
   UPDATE_GRANULE_LAYER_GEOMETRY,
   RESET_GRANULE_LAYER_OPTIONS,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+  UPDATE_LAYER_COLLECTION,
+  UPDATE_LAYER_DATE_COLLECTION,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -389,5 +391,26 @@ export function changeGranuleSatelliteInstrumentGroup(id, granulePlatform) {
       geometry,
       activeKey: activeString,
     });
+  };
+}
+
+export function updateLayerCollection(id) {
+  return (dispatch, getState) => {
+    const { layers } = getState();
+
+    const collections = layers.collections[id];
+    if (!collections) {
+      dispatch({
+        type: UPDATE_LAYER_COLLECTION,
+        id,
+      });
+    }
+  };
+}
+
+export function updateLayerDateCollection(layerInfo) {
+  return {
+    type: UPDATE_LAYER_DATE_COLLECTION,
+    ...layerInfo,
   };
 }

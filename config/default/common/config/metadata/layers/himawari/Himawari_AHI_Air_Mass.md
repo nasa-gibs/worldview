@@ -4,4 +4,4 @@ The Air Mass layer from the Himawari-8 Advanced Himawari Imager (AHI) is used pr
 
 The Himawari-8 satellite is centered on 140.7 degrees E, covering most of the Pacific Ocean, a portion of Eastern Asia, and parts of Australasia. The Himawari-8 AHI imagery is available on a rolling 90-day basis at 10 minute intervals. The sensor resolution is 2 km, the imagery resolution in Worldview/Global Imagery Browse Services (GIBS) is 2 km, the temporal resolution is 10 minutes, and the latency (time from satellite acqusition to availability in GIBS) is approximately 40 minutes.
 
-References: [GOES-R: Air Mass RGB Quick Guide](https://nasasporttraining.files.wordpress.com/2015/12/quickguide_airmassrgb_nasa_sport.pdf)
+References: [GOES-R: Air Mass RGB Quick Guide](https://rammb.cira.colostate.edu/training/visit/quick_guides/QuickGuide_GOESR_AirMassRGB_final.pdf)

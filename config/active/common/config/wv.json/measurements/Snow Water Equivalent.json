@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Snow Water Equivalent": {
+            "id": "snow-water-equivalent",
+            "title":    "Snow Water Equivalent",
+            "subtitle": "GCOM-W1/AMSR2",
+            "sources": {
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "amsr2/SnowWaterEquivalent",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Snow_Water_Equivalent_Daily",
+                        "AMSRU2_Snow_Water_Equivalent_5Day",
+                        "AMSRU2_Snow_Water_Equivalent_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

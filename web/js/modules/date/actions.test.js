@@ -57,25 +57,30 @@ const delta = 5;
 const interval = 3;
 
 describe('Date timescale changes', () => {
-  test(`changeTimeScale action returns ${CHANGE_TIME_SCALE} as type and ${interval} as value`,
+  test(
+    `changeTimeScale action returns ${CHANGE_TIME_SCALE} as type and ${interval} as value [date-action-time-scale]`,
     () => {
       const expectedAction = {
         type: CHANGE_TIME_SCALE,
         value: interval,
       };
       expect(changeTimeScale(interval)).toEqual(expectedAction);
-    });
+    },
+  );
 
-  test(`updateAppNow action returns ${UPDATE_APP_NOW} as type and ${mockDate} as value`,
+  test(
+    `updateAppNow action returns ${UPDATE_APP_NOW} as type and ${mockDate} as value [date-action-update-app-now]`,
     () => {
       const expectedAction = {
         type: UPDATE_APP_NOW,
         value: mockDate,
       };
       expect(updateAppNow(mockDate)).toEqual(expectedAction);
-    });
+    },
+  );
 
-  test(`selectDate action returns ${SELECT_DATE} as type, 'selected' as activeString, and ${mockDate} as value`,
+  test(
+    `selectDate action returns ${SELECT_DATE} as type, 'selected' as activeString, and ${mockDate} as value [date-action-select-date]`,
     () => {
       const expectedFirst = {
         type: CLEAR_PRELOAD,
@@ -113,9 +118,11 @@ describe('Date timescale changes', () => {
       store.dispatch(selectDate(mockDate));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    });
+    },
+  );
 
-  test(`selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value`,
+  test(
+    `selectDate action returns ${SELECT_DATE} as type and selectedB as activeString and ${mockDate} as value [date-action-select-date-b]`,
     () => {
       const prevDate = new Date('2021-01-01');
       const expectedFirst = {
@@ -154,9 +161,11 @@ describe('Date timescale changes', () => {
       store.dispatch(selectDate(mockDate));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    });
+    },
+  );
 
-  test(`changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${customInterval} as value and ${delta} as delta`,
+  test(
+    `changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${customInterval} as value and ${delta} as delta [date-action-custom-interval]`,
     () => {
       const store = mockStore({
         date: {},
@@ -179,9 +188,11 @@ describe('Date timescale changes', () => {
       store.dispatch(changeCustomInterval(delta, customInterval));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    });
+    },
+  );
 
-  test(`selectInterval action returns ${CHANGE_INTERVAL} as type and ${interval} as value and ${delta} as delta and true as customSelected`,
+  test(
+    `selectInterval action returns ${CHANGE_INTERVAL} as type and ${interval} as value and ${delta} as delta and true as customSelected [date-action-interval]`,
     () => {
       const store = mockStore({
         date: {},
@@ -205,5 +216,6 @@ describe('Date timescale changes', () => {
       store.dispatch(selectInterval(delta, interval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    });
+    },
+  );
 });

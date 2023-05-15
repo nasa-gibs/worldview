@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="No Data">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" sourceValue="[-9999,0)" value="[-9999,0)" nodata="true" ref="0"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="0 m" id="0"/>
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Elevation Mean Lowest Mode" units="m">
+    <Entries>
+      <ColorMapEntry rgb="0,117,39" transparent="false" sourceValue="[1,5)" value="[1,5)" ref="1"/>
+      <ColorMapEntry rgb="0,118,39" transparent="false" sourceValue="[6,10)" value="[6,10)" ref="2"/>
+      <ColorMapEntry rgb="0,119,40" transparent="false" sourceValue="[11,15)" value="[11,15)" ref="3"/>
+      <ColorMapEntry rgb="0,120,41" transparent="false" sourceValue="[16,20)" value="[16,20)" ref="4"/>
+      <ColorMapEntry rgb="0,121,42" transparent="false" sourceValue="[21,25)" value="[21,25)" ref="5"/>
+      <ColorMapEntry rgb="0,122,42" transparent="false" sourceValue="[26,30)" value="[26,30)" ref="6"/>
+      <ColorMapEntry rgb="0,123,43" transparent="false" sourceValue="[31,35)" value="[31,35)" ref="7"/>
+      <ColorMapEntry rgb="0,125,44" transparent="false" sourceValue="[36,40)" value="[36,40)" ref="8"/>
+      <ColorMapEntry rgb="0,126,45" transparent="false" sourceValue="[41,45)" value="[41,45)" ref="9"/>
+      <ColorMapEntry rgb="0,127,46" transparent="false" sourceValue="[46,50)" value="[46,50)" ref="10"/>
+      <ColorMapEntry rgb="0,128,46" transparent="false" sourceValue="[51,55)" value="[51,55)" ref="11"/>
+      <ColorMapEntry rgb="0,129,47" transparent="false" sourceValue="[56,60)" value="[56,60)" ref="12"/>
+      <ColorMapEntry rgb="0,130,48" transparent="false" sourceValue="[61,65)" value="[61,65)" ref="13"/>
+      <ColorMapEntry rgb="0,132,49" transparent="false" sourceValue="[66,70)" value="[66,70)" ref="14"/>
+      <ColorMapEntry rgb="0,133,49" transparent="false" sourceValue="[71,75)" value="[71,75)" ref="15"/>
+      <ColorMapEntry rgb="0,134,50" transparent="false" sourceValue="[76,80)" value="[76,80)" ref="16"/>
+      <ColorMapEntry rgb="0,135,51" transparent="false" sourceValue="[81,85)" value="[81,85)" ref="17"/>
+      <ColorMapEntry rgb="0,136,52" transparent="false" sourceValue="[86,90)" value="[86,90)" ref="18"/>
+      <ColorMapEntry rgb="0,137,53" transparent="false" sourceValue="[91,95)" value="[91,95)" ref="19"/>
+      <ColorMapEntry rgb="0,139,53" transparent="false" sourceValue="[96,100)" value="[96,100)" ref="20"/>
+      <ColorMapEntry rgb="0,140,54" transparent="false" sourceValue="[101,105)" value="[101,105)" ref="21"/>
+      <ColorMapEntry rgb="0,141,55" transparent="false" sourceValue="[106,110)" value="[106,110)" ref="22"/>
+      <ColorMapEntry rgb="0,142,56" transparent="false" sourceValue="[111,115)" value="[111,115)" ref="23"/>
+      <ColorMapEntry rgb="0,143,56" transparent="false" sourceValue="[116,120)" value="[116,120)" ref="24"/>
+      <ColorMapEntry rgb="0,144,57" transparent="false" sourceValue="[121,125)" value="[121,125)" ref="25"/>
+      <ColorMapEntry rgb="0,146,58" transparent="false" sourceValue="[126,130)" value="[126,130)" ref="26"/>
+      <ColorMapEntry rgb="0,147,59" transparent="false" sourceValue="[131,135)" value="[131,135)" ref="27"/>
+      <ColorMapEntry rgb="0,148,60" transparent="false" sourceValue="[136,140)" value="[136,140)" ref="28"/>
+      <ColorMapEntry rgb="0,149,60" transparent="false" sourceValue="[141,145)" value="[141,145)" ref="29"/>
+      <ColorMapEntry rgb="0,150,61" transparent="false" sourceValue="[146,150)" value="[146,150)" ref="30"/>
+      <ColorMapEntry rgb="0,151,62" transparent="false" sourceValue="[151,155)" value="[151,155)" ref="31"/>
+      <ColorMapEntry rgb="0,152,63" transparent="false" sourceValue="[156,160)" value="[156,160)" ref="32"/>
+      <ColorMapEntry rgb="0,154,63" transparent="false" sourceValue="[161,165)" value="[161,165)" ref="33"/>
+      <ColorMapEntry rgb="0,155,64" transparent="false" sourceValue="[166,170)" value="[166,170)" ref="34"/>
+      <ColorMapEntry rgb="0,156,65" transparent="false" sourceValue="[171,175)" value="[171,175)" ref="35"/>
+      <ColorMapEntry rgb="0,157,66" transparent="false" sourceValue="[176,180)" value="[176,180)" ref="36"/>
+      <ColorMapEntry rgb="0,158,67" transparent="false" sourceValue="[181,185)" value="[181,185)" ref="37"/>
+      <ColorMapEntry rgb="0,159,67" transparent="false" sourceValue="[186,190)" value="[186,190)" ref="38"/>
+      <ColorMapEntry rgb="0,161,68" transparent="false" sourceValue="[191,195)" value="[191,195)" ref="39"/>
+      <ColorMapEntry rgb="0,162,69" transparent="false" sourceValue="[196,200)" value="[196,200)" ref="40"/>
+      <ColorMapEntry rgb="0,163,70" transparent="false" sourceValue="[201,205)" value="[201,205)" ref="41"/>
+      <ColorMapEntry rgb="0,164,70" transparent="false" sourceValue="[206,210)" value="[206,210)" ref="42"/>
+      <ColorMapEntry rgb="0,165,71" transparent="false" sourceValue="[211,215)" value="[211,215)" ref="43"/>
+      <ColorMapEntry rgb="0,166,72" transparent="false" sourceValue="[216,220)" value="[216,220)" ref="44"/>
+      <ColorMapEntry rgb="0,168,73" transparent="false" sourceValue="[221,225)" value="[221,225)" ref="45"/>
+      <ColorMapEntry rgb="0,169,74" transparent="false" sourceValue="[226,230)" value="[226,230)" ref="46"/>
+      <ColorMapEntry rgb="0,170,74" transparent="false" sourceValue="[231,235)" value="[231,235)" ref="47"/>
+      <ColorMapEntry rgb="0,171,75" transparent="false" sourceValue="[236,240)" value="[236,240)" ref="48"/>
+      <ColorMapEntry rgb="0,172,76" transparent="false" sourceValue="[241,245)" value="[241,245)" ref="49"/>
+      <ColorMapEntry rgb="0,173,77" transparent="false" sourceValue="[246,250)" value="[246,250)" ref="50"/>
+      <ColorMapEntry rgb="0,175,78" transparent="false" sourceValue="[251,260)" value="[251,260)" ref="51"/>
+      <ColorMapEntry rgb="3,175,76" transparent="false" sourceValue="[261,270)" value="[261,270)" ref="52"/>
+      <ColorMapEntry rgb="6,176,75" transparent="false" sourceValue="[271,280)" value="[271,280)" ref="53"/>
+      <ColorMapEntry rgb="9,177,74" transparent="false" sourceValue="[281,290)" value="[281,290)" ref="54"/>
+      <ColorMapEntry rgb="12,178,73" transparent="false" sourceValue="[291,300)" value="[291,300)" ref="55"/>
+      <ColorMapEntry rgb="15,179,72" transparent="false" sourceValue="[301,310)" value="[301,310)" ref="56"/>
+      <ColorMapEntry rgb="18,179,71" transparent="false" sourceValue="[311,320)" value="[311,320)" ref="57"/>
+      <ColorMapEntry rgb="21,180,70" transparent="false" sourceValue="[321,330)" value="[321,330)" ref="58"/>
+      <ColorMapEntry rgb="24,181,69" transparent="false" sourceValue="[331,340)" value="[331,340)" ref="59"/>
+      <ColorMapEntry rgb="28,182,67" transparent="false" sourceValue="[341,350)" value="[341,350)" ref="60"/>
+      <ColorMapEntry rgb="31,183,66" transparent="false" sourceValue="[351,360)" value="[351,360)" ref="61"/>
+      <ColorMapEntry rgb="34,183,65" transparent="false" sourceValue="[361,370)" value="[361,370)" ref="62"/>
+      <ColorMapEntry rgb="37,184,64" transparent="false" sourceValue="[371,380)" value="[371,380)" ref="63"/>
+      <ColorMapEntry rgb="40,185,63" transparent="false" sourceValue="[381,390)" value="[381,390)" ref="64"/>
+      <ColorMapEntry rgb="43,186,62" transparent="false" sourceValue="[391,400)" value="[391,400)" ref="65"/>
+      <ColorMapEntry rgb="46,187,61" transparent="false" sourceValue="[401,410)" value="[401,410)" ref="66"/>
+      <ColorMapEntry rgb="49,187,60" transparent="false" sourceValue="[411,420)" value="[411,420)" ref="67"/>
+      <ColorMapEntry rgb="53,188,58" transparent="false" sourceValue="[421,430)" value="[421,430)" ref="68"/>
+      <ColorMapEntry rgb="56,189,57" transparent="false" sourceValue="[431,440)" value="[431,440)" ref="69"/>
+      <ColorMapEntry rgb="59,190,56" transparent="false" sourceValue="[441,450)" value="[441,450)" ref="70"/>
+      <ColorMapEntry rgb="62,191,55" transparent="false" sourceValue="[451,460)" value="[451,460)" ref="71"/>
+      <ColorMapEntry rgb="65,191,54" transparent="false" sourceValue="[461,470)" value="[461,470)" ref="72"/>
+      <ColorMapEntry rgb="68,192,53" transparent="false" sourceValue="[471,480)" value="[471,480)" ref="73"/>
+      <ColorMapEntry rgb="71,193,52" transparent="false" sourceValue="[481,490)" value="[481,490)" ref="74"/>
+      <ColorMapEntry rgb="74,194,51" transparent="false" sourceValue="[491,500)" value="[491,500)" ref="75"/>
+      <ColorMapEntry rgb="78,195,50" transparent="false" sourceValue="[501,510)" value="[501,510)" ref="76"/>
+      <ColorMapEntry rgb="82,196,48" transparent="false" sourceValue="[511,520)" value="[511,520)" ref="77"/>
+      <ColorMapEntry rgb="87,197,46" transparent="false" sourceValue="[521,530)" value="[521,530)" ref="78"/>
+      <ColorMapEntry rgb="91,198,45" transparent="false" sourceValue="[531,540)" value="[531,540)" ref="79"/>
+      <ColorMapEntry rgb="96,199,43" transparent="false" sourceValue="[541,550)" value="[541,550)" ref="80"/>
+      <ColorMapEntry rgb="100,200,42" transparent="false" sourceValue="[551,560)" value="[551,560)" ref="81"/>
+      <ColorMapEntry rgb="105,201,40" transparent="false" sourceValue="[561,570)" value="[561,570)" ref="82"/>
+      <ColorMapEntry rgb="109,202,39" transparent="false" sourceValue="[571,580)" value="[571,580)" ref="83"/>
+      <ColorMapEntry rgb="114,203,37" transparent="false" sourceValue="[581,590)" value="[581,590)" ref="84"/>
+      <ColorMapEntry rgb="118,205,36" transparent="false" sourceValue="[591,600)" value="[591,600)" ref="85"/>
+      <ColorMapEntry rgb="123,206,34" transparent="false" sourceValue="[601,610)" value="[601,610)" ref="86"/>
+      <ColorMapEntry rgb="127,207,33" transparent="false" sourceValue="[611,620)" value="[611,620)" ref="87"/>
+      <ColorMapEntry rgb="132,208,31" transparent="false" sourceValue="[621,630)" value="[621,630)" ref="88"/>
+      <ColorMapEntry rgb="136,209,30" transparent="false" sourceValue="[631,640)" value="[631,640)" ref="89"/>
+      <ColorMapEntry rgb="141,210,28" transparent="false" sourceValue="[641,650)" value="[641,650)" ref="90"/>
+      <ColorMapEntry rgb="145,211,27" transparent="false" sourceValue="[651,660)" value="[651,660)" ref="91"/>
+      <ColorMapEntry rgb="150,212,25" transparent="false" sourceValue="[661,670)" value="[661,670)" ref="92"/>
+      <ColorMapEntry rgb="154,214,24" transparent="false" sourceValue="[671,680)" value="[671,680)" ref="93"/>
+      <ColorMapEntry rgb="159,215,22" transparent="false" sourceValue="[681,690)" value="[681,690)" ref="94"/>
+      <ColorMapEntry rgb="163,216,21" transparent="false" sourceValue="[691,700)" value="[691,700)" ref="95"/>
+      <ColorMapEntry rgb="168,217,19" transparent="false" sourceValue="[701,710)" value="[701,710)" ref="96"/>
+      <ColorMapEntry rgb="172,218,18" transparent="false" sourceValue="[711,720)" value="[711,720)" ref="97"/>
+      <ColorMapEntry rgb="177,219,16" transparent="false" sourceValue="[721,730)" value="[721,730)" ref="98"/>
+      <ColorMapEntry rgb="181,220,15" transparent="false" sourceValue="[731,740)" value="[731,740)" ref="99"/>
+      <ColorMapEntry rgb="186,221,13" transparent="false" sourceValue="[741,750)" value="[741,750)" ref="100"/>
+      <ColorMapEntry rgb="191,223,12" transparent="false" sourceValue="[751,775)" value="[751,775)" ref="101"/>
+      <ColorMapEntry rgb="191,222,11" transparent="false" sourceValue="[776,800)" value="[776,800)" ref="102"/>
+      <ColorMapEntry rgb="192,221,11" transparent="false" sourceValue="[801,825)" value="[801,825)" ref="103"/>
+      <ColorMapEntry rgb="192,220,11" transparent="false" sourceValue="[826,850)" value="[826,850)" ref="104"/>
+      <ColorMapEntry rgb="193,219,11" transparent="false" sourceValue="[851,875)" value="[851,875)" ref="105"/>
+      <ColorMapEntry rgb="193,218,11" transparent="false" sourceValue="[876,900)" value="[876,900)" ref="106"/>
+      <ColorMapEntry rgb="194,217,11" transparent="false" sourceValue="[901,925)" value="[901,925)" ref="107"/>
+      <ColorMapEntry rgb="195,216,11" transparent="false" sourceValue="[926,950)" value="[926,950)" ref="108"/>
+      <ColorMapEntry rgb="195,215,11" transparent="false" sourceValue="[951,975)" value="[951,975)" ref="109"/>
+      <ColorMapEntry rgb="196,214,11" transparent="false" sourceValue="[976,1000)" value="[976,1000)" ref="110"/>
+      <ColorMapEntry rgb="196,213,11" transparent="false" sourceValue="[1001,1025)" value="[1001,1025)" ref="111"/>
+      <ColorMapEntry rgb="197,212,11" transparent="false" sourceValue="[1026,1050)" value="[1026,1050)" ref="112"/>
+      <ColorMapEntry rgb="197,211,11" transparent="false" sourceValue="[1051,1075)" value="[1051,1075)" ref="113"/>
+      <ColorMapEntry rgb="198,210,11" transparent="false" sourceValue="[1076,1100)" value="[1076,1100)" ref="114"/>
+      <ColorMapEntry rgb="199,209,11" transparent="false" sourceValue="[1101,1125)" value="[1101,1125)" ref="115"/>
+      <ColorMapEntry rgb="199,208,11" transparent="false" sourceValue="[1126,1150)" value="[1126,1150)" ref="116"/>
+      <ColorMapEntry rgb="200,207,11" transparent="false" sourceValue="[1151,1175)" value="[1151,1175)" ref="117"/>
+      <ColorMapEntry rgb="200,206,11" transparent="false" sourceValue="[1176,1200)" value="[1176,1200)" ref="118"/>
+      <ColorMapEntry rgb="201,205,11" transparent="false" sourceValue="[1201,1225)" value="[1201,1225)" ref="119"/>
+      <ColorMapEntry rgb="201,204,11" transparent="false" sourceValue="[1226,1250)" value="[1226,1250)" ref="120"/>
+      <ColorMapEntry rgb="202,204,11" transparent="false" sourceValue="[1251,1275)" value="[1251,1275)" ref="121"/>
+      <ColorMapEntry rgb="203,203,10" transparent="false" sourceValue="[1276,1300)" value="[1276,1300)" ref="122"/>
+      <ColorMapEntry rgb="203,202,10" transparent="false" sourceValue="[1301,1325)" value="[1301,1325)" ref="123"/>
+      <ColorMapEntry rgb="204,201,10" transparent="false" sourceValue="[1326,1350)" value="[1326,1350)" ref="124"/>
+      <ColorMapEntry rgb="204,200,10" transparent="false" sourceValue="[1351,1375)" value="[1351,1375)" ref="125"/>
+      <ColorMapEntry rgb="205,199,10" transparent="false" sourceValue="[1376,1400)" value="[1376,1400)" ref="126"/>
+      <ColorMapEntry rgb="205,198,10" transparent="false" sourceValue="[1401,1425)" value="[1401,1425)" ref="127"/>
+      <ColorMapEntry rgb="206,197,10" transparent="false" sourceValue="[1426,1450)" value="[1426,1450)" ref="128"/>
+      <ColorMapEntry rgb="207,196,10" transparent="false" sourceValue="[1451,1475)" value="[1451,1475)" ref="129"/>
+      <ColorMapEntry rgb="207,195,10" transparent="false" sourceValue="[1476,1500)" value="[1476,1500)" ref="130"/>
+      <ColorMapEntry rgb="208,194,10" transparent="false" sourceValue="[1501,1525)" value="[1501,1525)" ref="131"/>
+      <ColorMapEntry rgb="208,193,10" transparent="false" sourceValue="[1526,1550)" value="[1526,1550)" ref="132"/>
+      <ColorMapEntry rgb="209,192,10" transparent="false" sourceValue="[1551,1575)" value="[1551,1575)" ref="133"/>
+      <ColorMapEntry rgb="209,191,10" transparent="false" sourceValue="[1576,1600)" value="[1576,1600)" ref="134"/>
+      <ColorMapEntry rgb="210,190,10" transparent="false" sourceValue="[1601,1625)" value="[1601,1625)" ref="135"/>
+      <ColorMapEntry rgb="211,189,10" transparent="false" sourceValue="[1626,1650)" value="[1626,1650)" ref="136"/>
+      <ColorMapEntry rgb="211,188,10" transparent="false" sourceValue="[1651,1675)" value="[1651,1675)" ref="137"/>
+      <ColorMapEntry rgb="212,187,10" transparent="false" sourceValue="[1676,1700)" value="[1676,1700)" ref="138"/>
+      <ColorMapEntry rgb="212,186,10" transparent="false" sourceValue="[1701,1725)" value="[1701,1725)" ref="139"/>
+      <ColorMapEntry rgb="213,185,10" transparent="false" sourceValue="[1726,1750)" value="[1726,1750)" ref="140"/>
+      <ColorMapEntry rgb="214,185,10" transparent="false" sourceValue="[1751,1775)" value="[1751,1775)" ref="141"/>
+      <ColorMapEntry rgb="213,182,10" transparent="false" sourceValue="[1776,1800)" value="[1776,1800)" ref="142"/>
+      <ColorMapEntry rgb="212,180,10" transparent="false" sourceValue="[1801,1825)" value="[1801,1825)" ref="143"/>
+      <ColorMapEntry rgb="211,177,11" transparent="false" sourceValue="[1826,1850)" value="[1826,1850)" ref="144"/>
+      <ColorMapEntry rgb="210,175,11" transparent="false" sourceValue="[1851,1875)" value="[1851,1875)" ref="145"/>
+      <ColorMapEntry rgb="209,172,12" transparent="false" sourceValue="[1876,1900)" value="[1876,1900)" ref="146"/>
+      <ColorMapEntry rgb="208,170,12" transparent="false" sourceValue="[1901,1925)" value="[1901,1925)" ref="147"/>
+      <ColorMapEntry rgb="207,168,13" transparent="false" sourceValue="[1926,1950)" value="[1926,1950)" ref="148"/>
+      <ColorMapEntry rgb="206,165,13" transparent="false" sourceValue="[1951,1975)" value="[1951,1975)" ref="149"/>
+      <ColorMapEntry rgb="205,163,14" transparent="false" sourceValue="[1976,2000)" value="[1976,2000)" ref="150"/>
+      <ColorMapEntry rgb="204,160,14" transparent="false" sourceValue="[2001,2025)" value="[2001,2025)" ref="151"/>
+      <ColorMapEntry rgb="203,158,15" transparent="false" sourceValue="[2026,2050)" value="[2026,2050)" ref="152"/>
+      <ColorMapEntry rgb="202,155,15" transparent="false" sourceValue="[2051,2075)" value="[2051,2075)" ref="153"/>
+      <ColorMapEntry rgb="201,153,16" transparent="false" sourceValue="[2076,2100)" value="[2076,2100)" ref="154"/>
+      <ColorMapEntry rgb="200,151,16" transparent="false" sourceValue="[2101,2125)" value="[2101,2125)" ref="155"/>
+      <ColorMapEntry rgb="199,148,17" transparent="false" sourceValue="[2126,2150)" value="[2126,2150)" ref="156"/>
+      <ColorMapEntry rgb="198,146,17" transparent="false" sourceValue="[2151,2175)" value="[2151,2175)" ref="157"/>
+      <ColorMapEntry rgb="197,143,18" transparent="false" sourceValue="[2176,2200)" value="[2176,2200)" ref="158"/>
+      <ColorMapEntry rgb="196,141,18" transparent="false" sourceValue="[2201,2225)" value="[2201,2225)" ref="159"/>
+      <ColorMapEntry rgb="195,138,19" transparent="false" sourceValue="[2226,2250)" value="[2226,2250)" ref="160"/>
+      <ColorMapEntry rgb="194,136,19" transparent="false" sourceValue="[2251,2275)" value="[2251,2275)" ref="161"/>
+      <ColorMapEntry rgb="193,134,19" transparent="false" sourceValue="[2276,2300)" value="[2276,2300)" ref="162"/>
+      <ColorMapEntry rgb="192,131,20" transparent="false" sourceValue="[2301,2325)" value="[2301,2325)" ref="163"/>
+      <ColorMapEntry rgb="191,129,20" transparent="false" sourceValue="[2326,2350)" value="[2326,2350)" ref="164"/>
+      <ColorMapEntry rgb="190,126,21" transparent="false" sourceValue="[2351,2375)" value="[2351,2375)" ref="165"/>
+      <ColorMapEntry rgb="189,124,21" transparent="false" sourceValue="[2376,2400)" value="[2376,2400)" ref="166"/>
+      <ColorMapEntry rgb="188,121,22" transparent="false" sourceValue="[2401,2425)" value="[2401,2425)" ref="167"/>
+      <ColorMapEntry rgb="187,119,22" transparent="false" sourceValue="[2426,2450)" value="[2426,2450)" ref="168"/>
+      <ColorMapEntry rgb="186,117,23" transparent="false" sourceValue="[2451,2475)" value="[2451,2475)" ref="169"/>
+      <ColorMapEntry rgb="185,114,23" transparent="false" sourceValue="[2476,2500)" value="[2476,2500)" ref="170"/>
+      <ColorMapEntry rgb="184,112,24" transparent="false" sourceValue="[2501,2525)" value="[2501,2525)" ref="171"/>
+      <ColorMapEntry rgb="183,109,24" transparent="false" sourceValue="[2526,2550)" value="[2526,2550)" ref="172"/>
+      <ColorMapEntry rgb="182,107,25" transparent="false" sourceValue="[2551,2575)" value="[2551,2575)" ref="173"/>
+      <ColorMapEntry rgb="181,104,25" transparent="false" sourceValue="[2576,2600)" value="[2576,2600)" ref="174"/>
+      <ColorMapEntry rgb="180,102,26" transparent="false" sourceValue="[2601,2625)" value="[2601,2625)" ref="175"/>
+      <ColorMapEntry rgb="179,100,26" transparent="false" sourceValue="[2626,2650)" value="[2626,2650)" ref="176"/>
+      <ColorMapEntry rgb="178,97,27" transparent="false" sourceValue="[2651,2675)" value="[2651,2675)" ref="177"/>
+      <ColorMapEntry rgb="177,95,27" transparent="false" sourceValue="[2676,2700)" value="[2676,2700)" ref="178"/>
+      <ColorMapEntry rgb="176,92,28" transparent="false" sourceValue="[2701,2725)" value="[2701,2725)" ref="179"/>
+      <ColorMapEntry rgb="175,90,28" transparent="false" sourceValue="[2726,2750)" value="[2726,2750)" ref="180"/>
+      <ColorMapEntry rgb="175,88,29" transparent="false" sourceValue="[2751,2800)" value="[2751,2800)" ref="181"/>
+      <ColorMapEntry rgb="174,88,32" transparent="false" sourceValue="[2801,2850)" value="[2801,2850)" ref="182"/>
+      <ColorMapEntry rgb="174,89,36" transparent="false" sourceValue="[2851,2900)" value="[2851,2900)" ref="183"/>
+      <ColorMapEntry rgb="174,90,40" transparent="false" sourceValue="[2901,2950)" value="[2901,2950)" ref="184"/>
+      <ColorMapEntry rgb="174,91,44" transparent="false" sourceValue="[2951,3000)" value="[2951,3000)" ref="185"/>
+      <ColorMapEntry rgb="173,92,48" transparent="false" sourceValue="[3001,3050)" value="[3001,3050)" ref="186"/>
+      <ColorMapEntry rgb="173,93,52" transparent="false" sourceValue="[3051,3100)" value="[3051,3100)" ref="187"/>
+      <ColorMapEntry rgb="173,94,55" transparent="false" sourceValue="[3101,3150)" value="[3101,3150)" ref="188"/>
+      <ColorMapEntry rgb="173,95,59" transparent="false" sourceValue="[3151,3200)" value="[3151,3200)" ref="189"/>
+      <ColorMapEntry rgb="172,96,63" transparent="false" sourceValue="[3201,3250)" value="[3201,3250)" ref="190"/>
+      <ColorMapEntry rgb="172,97,67" transparent="false" sourceValue="[3251,3300)" value="[3251,3300)" ref="191"/>
+      <ColorMapEntry rgb="172,97,71" transparent="false" sourceValue="[3301,3350)" value="[3301,3350)" ref="192"/>
+      <ColorMapEntry rgb="172,98,75" transparent="false" sourceValue="[3351,3400)" value="[3351,3400)" ref="193"/>
+      <ColorMapEntry rgb="171,99,79" transparent="false" sourceValue="[3401,3450)" value="[3401,3450)" ref="194"/>
+      <ColorMapEntry rgb="171,100,82" transparent="false" sourceValue="[3451,3500)" value="[3451,3500)" ref="195"/>
+      <ColorMapEntry rgb="171,101,86" transparent="false" sourceValue="[3501,3550)" value="[3501,3550)" ref="196"/>
+      <ColorMapEntry rgb="171,102,90" transparent="false" sourceValue="[3551,3600)" value="[3551,3600)" ref="197"/>
+      <ColorMapEntry rgb="170,103,94" transparent="false" sourceValue="[3601,3650)" value="[3601,3650)" ref="198"/>
+      <ColorMapEntry rgb="170,104,98" transparent="false" sourceValue="[3651,3700)" value="[3651,3700)" ref="199"/>
+      <ColorMapEntry rgb="170,105,102" transparent="false" sourceValue="[3701,3750)" value="[3701,3750)" ref="200"/>
+      <ColorMapEntry rgb="170,106,106" transparent="false" sourceValue="[3751,3800)" value="[3751,3800)" ref="201"/>
+      <ColorMapEntry rgb="170,109,109" transparent="false" sourceValue="[3801,3850)" value="[3801,3850)" ref="202"/>
+      <ColorMapEntry rgb="171,112,112" transparent="false" sourceValue="[3851,3900)" value="[3851,3900)" ref="203"/>
+      <ColorMapEntry rgb="171,115,115" transparent="false" sourceValue="[3901,3950)" value="[3901,3950)" ref="204"/>
+      <ColorMapEntry rgb="172,118,118" transparent="false" sourceValue="[3951,4000)" value="[3951,4000)" ref="205"/>
+      <ColorMapEntry rgb="173,121,121" transparent="false" sourceValue="[4001,4050)" value="[4001,4050)" ref="206"/>
+      <ColorMapEntry rgb="173,124,124" transparent="false" sourceValue="[4051,4100)" value="[4051,4100)" ref="207"/>
+      <ColorMapEntry rgb="174,128,128" transparent="false" sourceValue="[4101,4150)" value="[4101,4150)" ref="208"/>
+      <ColorMapEntry rgb="174,131,131" transparent="false" sourceValue="[4151,4200)" value="[4151,4200)" ref="209"/>
+      <ColorMapEntry rgb="175,134,134" transparent="false" sourceValue="[4201,4250)" value="[4201,4250)" ref="210"/>
+      <ColorMapEntry rgb="176,137,137" transparent="false" sourceValue="[4251,4300)" value="[4251,4300)" ref="211"/>
+      <ColorMapEntry rgb="176,140,140" transparent="false" sourceValue="[4301,4350)" value="[4301,4350)" ref="212"/>
+      <ColorMapEntry rgb="177,143,143" transparent="false" sourceValue="[4351,4400)" value="[4351,4400)" ref="213"/>
+      <ColorMapEntry rgb="177,147,147" transparent="false" sourceValue="[4401,4450)" value="[4401,4450)" ref="214"/>
+      <ColorMapEntry rgb="178,150,150" transparent="false" sourceValue="[4451,4500)" value="[4451,4500)" ref="215"/>
+      <ColorMapEntry rgb="179,153,153" transparent="false" sourceValue="[4501,4550)" value="[4501,4550)" ref="216"/>
+      <ColorMapEntry rgb="179,156,156" transparent="false" sourceValue="[4551,4600)" value="[4551,4600)" ref="217"/>
+      <ColorMapEntry rgb="180,159,159" transparent="false" sourceValue="[4601,4660)" value="[4601,4650)" ref="218"/>
+      <ColorMapEntry rgb="180,162,162" transparent="false" sourceValue="[4651,4700)" value="[4651,4700)" ref="219"/>
+      <ColorMapEntry rgb="181,166,166" transparent="false" sourceValue="[4701,4750)" value="[4701,4750)" ref="220"/>
+      <ColorMapEntry rgb="182,169,169" transparent="false" sourceValue="[4751,4800)" value="[4751,4800)" ref="221"/>
+      <ColorMapEntry rgb="182,172,172" transparent="false" sourceValue="[4801,4850)" value="[4801,4850)" ref="222"/>
+      <ColorMapEntry rgb="183,175,175" transparent="false" sourceValue="[4851,4900)" value="[4851,4900)" ref="223"/>
+      <ColorMapEntry rgb="183,178,178" transparent="false" sourceValue="[4901,4950)" value="[4901,4950)" ref="224"/>
+      <ColorMapEntry rgb="184,181,181" transparent="false" sourceValue="[4951,5000)" value="[4951,5000)" ref="225"/>
+      <ColorMapEntry rgb="185,185,185" transparent="false" sourceValue="[5001,5100)" value="[5001,5100)" ref="226"/>
+      <ColorMapEntry rgb="187,187,187" transparent="false" sourceValue="[5101,5200)" value="[5101,5200)" ref="227"/>
+      <ColorMapEntry rgb="189,189,189" transparent="false" sourceValue="[5201,5300)" value="[5201,5300)" ref="228"/>
+      <ColorMapEntry rgb="192,192,192" transparent="false" sourceValue="[5301,5400)" value="[5301,5400)" ref="229"/>
+      <ColorMapEntry rgb="194,194,194" transparent="false" sourceValue="[5401,5500)" value="[5401,5500)" ref="230"/>
+      <ColorMapEntry rgb="197,197,197" transparent="false" sourceValue="[5501,5600)" value="[5501,5600)" ref="231"/>
+      <ColorMapEntry rgb="199,199,199" transparent="false" sourceValue="[5601,5700)" value="[5601,5700)" ref="232"/>
+      <ColorMapEntry rgb="201,201,201" transparent="false" sourceValue="[5701,5800)" value="[5701,5800)" ref="233"/>
+      <ColorMapEntry rgb="204,204,204" transparent="false" sourceValue="[5801,5900)" value="[5801,5900)" ref="234"/>
+      <ColorMapEntry rgb="206,206,206" transparent="false" sourceValue="[5901,6000)" value="[5901,6000)" ref="235"/>
+      <ColorMapEntry rgb="209,209,209" transparent="false" sourceValue="[6001,6100)" value="[6001,6100)" ref="236"/>
+      <ColorMapEntry rgb="211,211,211" transparent="false" sourceValue="[6101,6200)" value="[6101,6200)" ref="237"/>
+      <ColorMapEntry rgb="213,213,213" transparent="false" sourceValue="[6201,6300)" value="[6201,6300)" ref="238"/>
+      <ColorMapEntry rgb="216,216,216" transparent="false" sourceValue="[6301,6400)" value="[6301,6400)" ref="239"/>
+      <ColorMapEntry rgb="218,218,218" transparent="false" sourceValue="[6401,6500)" value="[6401,6500)" ref="240"/>
+      <ColorMapEntry rgb="221,221,221" transparent="false" sourceValue="[6501,6600)" value="[6501,6600)" ref="241"/>
+      <ColorMapEntry rgb="223,223,223" transparent="false" sourceValue="[6601,6700)" value="[6601,6700)" ref="242"/>
+      <ColorMapEntry rgb="226,226,226" transparent="false" sourceValue="[6701,6800)" value="[6701,6800)" ref="243"/>
+      <ColorMapEntry rgb="228,228,228" transparent="false" sourceValue="[6801,6900)" value="[6801,6900)" ref="244"/>
+      <ColorMapEntry rgb="230,230,230" transparent="false" sourceValue="[6901,7000)" value="[6901,7000)" ref="245"/>
+      <ColorMapEntry rgb="233,233,233" transparent="false" sourceValue="[7001,7100)" value="[7001,7100)" ref="246"/>
+      <ColorMapEntry rgb="235,235,235" transparent="false" sourceValue="[7101,7200)" value="[7101,7200)" ref="247"/>
+      <ColorMapEntry rgb="238,238,238" transparent="false" sourceValue="[7201,7300)" value="[7201,7300)" ref="248"/>
+      <ColorMapEntry rgb="240,240,240" transparent="false" sourceValue="[7301,7400)" value="[7301,7400)" ref="249"/>
+      <ColorMapEntry rgb="242,242,242" transparent="false" sourceValue="[7401,7600)" value="[7401,7600)" ref="250"/>
+      <ColorMapEntry rgb="245,245,245" transparent="false" sourceValue="[7601,7800)" value="[7601,7800)" ref="251"/>
+      <ColorMapEntry rgb="247,247,247" transparent="false" sourceValue="[7801,8000)" value="[7801,8000)" ref="252"/>
+      <ColorMapEntry rgb="250,250,250" transparent="false" sourceValue="[8001,8200)" value="[8001,8200)" ref="253"/>
+      <ColorMapEntry rgb="252,252,252" transparent="false" sourceValue="[8201,8400)" value="[8201,8400)" ref="254"/>
+      <ColorMapEntry rgb="255,255,255" transparent="false" sourceValue="[8401,8401)" value="[8401,+INF)" ref="255"/>
+    </Entries>
+    <Legend type="continuous" minLabel="1" maxLabel="&gt; 8400">
+      <LegendEntry rgb="0,117,39" tooltip="5" id="1"/>
+      <LegendEntry rgb="0,118,39" tooltip="10" id="2"/>
+      <LegendEntry rgb="0,119,40" tooltip="15" id="3"/>
+      <LegendEntry rgb="0,120,41" tooltip="20" id="4"/>
+      <LegendEntry rgb="0,121,42" tooltip="25" id="5"/>
+      <LegendEntry rgb="0,122,42" tooltip="30" id="6"/>
+      <LegendEntry rgb="0,123,43" tooltip="35" id="7"/>
+      <LegendEntry rgb="0,125,44" tooltip="40" id="8"/>
+      <LegendEntry rgb="0,126,45" tooltip="45" id="9"/>
+      <LegendEntry rgb="0,127,46" tooltip="50" id="10"/>
+      <LegendEntry rgb="0,128,46" tooltip="55" id="11"/>
+      <LegendEntry rgb="0,129,47" tooltip="60" id="12"/>
+      <LegendEntry rgb="0,130,48" tooltip="65" id="13"/>
+      <LegendEntry rgb="0,132,49" tooltip="70" id="14"/>
+      <LegendEntry rgb="0,133,49" tooltip="75" id="15"/>
+      <LegendEntry rgb="0,134,50" tooltip="80" id="16"/>
+      <LegendEntry rgb="0,135,51" tooltip="85" id="17"/>
+      <LegendEntry rgb="0,136,52" tooltip="90" id="18"/>
+      <LegendEntry rgb="0,137,53" tooltip="95" id="19"/>
+      <LegendEntry rgb="0,139,53" tooltip="100" id="20"/>
+      <LegendEntry rgb="0,140,54" tooltip="105" id="21"/>
+      <LegendEntry rgb="0,141,55" tooltip="110" id="22"/>
+      <LegendEntry rgb="0,142,56" tooltip="115" id="23"/>
+      <LegendEntry rgb="0,143,56" tooltip="120" id="24"/>
+      <LegendEntry rgb="0,144,57" tooltip="125" id="25"/>
+      <LegendEntry rgb="0,146,58" tooltip="130" id="26"/>
+      <LegendEntry rgb="0,147,59" tooltip="135" id="27"/>
+      <LegendEntry rgb="0,148,60" tooltip="140" id="28"/>
+      <LegendEntry rgb="0,149,60" tooltip="145" id="29"/>
+      <LegendEntry rgb="0,150,61" tooltip="150" id="30"/>
+      <LegendEntry rgb="0,151,62" tooltip="155" id="31"/>
+      <LegendEntry rgb="0,152,63" tooltip="160" id="32"/>
+      <LegendEntry rgb="0,154,63" tooltip="165" id="33"/>
+      <LegendEntry rgb="0,155,64" tooltip="170" id="34"/>
+      <LegendEntry rgb="0,156,65" tooltip="175" id="35"/>
+      <LegendEntry rgb="0,157,66" tooltip="180" id="36"/>
+      <LegendEntry rgb="0,158,67" tooltip="185" id="37"/>
+      <LegendEntry rgb="0,159,67" tooltip="190" id="38"/>
+      <LegendEntry rgb="0,161,68" tooltip="195" id="39"/>
+      <LegendEntry rgb="0,162,69" tooltip="200" showTick="true" showLabel="true" label="200" id="40"/>
+      <LegendEntry rgb="0,163,70" tooltip="205" id="41"/>
+      <LegendEntry rgb="0,164,70" tooltip="210" id="42"/>
+      <LegendEntry rgb="0,165,71" tooltip="215" id="43"/>
+      <LegendEntry rgb="0,166,72" tooltip="220" id="44"/>
+      <LegendEntry rgb="0,168,73" tooltip="225" id="45"/>
+      <LegendEntry rgb="0,169,74" tooltip="230" id="46"/>
+      <LegendEntry rgb="0,170,74" tooltip="235" id="47"/>
+      <LegendEntry rgb="0,171,75" tooltip="240" id="48"/>
+      <LegendEntry rgb="0,172,76" tooltip="245" id="49"/>
+      <LegendEntry rgb="0,173,77" tooltip="250" id="50"/>
+      <LegendEntry rgb="0,175,78" tooltip="260" id="51"/>
+      <LegendEntry rgb="3,175,76" tooltip="270" id="52"/>
+      <LegendEntry rgb="6,176,75" tooltip="280" id="53"/>
+      <LegendEntry rgb="9,177,74" tooltip="290" id="54"/>
+      <LegendEntry rgb="12,178,73" tooltip="300" id="55"/>
+      <LegendEntry rgb="15,179,72" tooltip="310" id="56"/>
+      <LegendEntry rgb="18,179,71" tooltip="320" id="57"/>
+      <LegendEntry rgb="21,180,70" tooltip="330" id="58"/>
+      <LegendEntry rgb="24,181,69" tooltip="340" id="59"/>
+      <LegendEntry rgb="28,182,67" tooltip="350" id="60"/>
+      <LegendEntry rgb="31,183,66" tooltip="360" id="61"/>
+      <LegendEntry rgb="34,183,65" tooltip="370" id="62"/>
+      <LegendEntry rgb="37,184,64" tooltip="380" id="63"/>
+      <LegendEntry rgb="40,185,63" tooltip="390" id="64"/>
+      <LegendEntry rgb="43,186,62" tooltip="400" showTick="true" id="65"/>
+      <LegendEntry rgb="46,187,61" tooltip="410" id="66"/>
+      <LegendEntry rgb="49,187,60" tooltip="420" id="67"/>
+      <LegendEntry rgb="53,188,58" tooltip="430" id="68"/>
+      <LegendEntry rgb="56,189,57" tooltip="440" id="69"/>
+      <LegendEntry rgb="59,190,56" tooltip="450" id="70"/>
+      <LegendEntry rgb="62,191,55" tooltip="460" id="71"/>
+      <LegendEntry rgb="65,191,54" tooltip="470" id="72"/>
+      <LegendEntry rgb="68,192,53" tooltip="480" id="73"/>
+      <LegendEntry rgb="71,193,52" tooltip="490" id="74"/>
+      <LegendEntry rgb="74,194,51" tooltip="500" id="75"/>
+      <LegendEntry rgb="78,195,50" tooltip="510" id="76"/>
+      <LegendEntry rgb="82,196,48" tooltip="520" id="77"/>
+      <LegendEntry rgb="87,197,46" tooltip="530" id="78"/>
+      <LegendEntry rgb="91,198,45" tooltip="540" id="79"/>
+      <LegendEntry rgb="96,199,43" tooltip="550" id="80"/>
+      <LegendEntry rgb="100,200,42" tooltip="560" id="81"/>
+      <LegendEntry rgb="105,201,40" tooltip="570" id="82"/>
+      <LegendEntry rgb="109,202,39" tooltip="580" id="83"/>
+      <LegendEntry rgb="114,203,37" tooltip="590" id="84"/>
+      <LegendEntry rgb="118,205,36" tooltip="600" showTick="true" showLabel="true" label="600" id="85"/>
+      <LegendEntry rgb="123,206,34" tooltip="610" id="86"/>
+      <LegendEntry rgb="127,207,33" tooltip="620" id="87"/>
+      <LegendEntry rgb="132,208,31" tooltip="630" id="88"/>
+      <LegendEntry rgb="136,209,30" tooltip="640" id="89"/>
+      <LegendEntry rgb="141,210,28" tooltip="650" id="90"/>
+      <LegendEntry rgb="145,211,27" tooltip="660" id="91"/>
+      <LegendEntry rgb="150,212,25" tooltip="670" id="92"/>
+      <LegendEntry rgb="154,214,24" tooltip="680" id="93"/>
+      <LegendEntry rgb="159,215,22" tooltip="690" id="94"/>
+      <LegendEntry rgb="163,216,21" tooltip="700" id="95"/>
+      <LegendEntry rgb="168,217,19" tooltip="710" id="96"/>
+      <LegendEntry rgb="172,218,18" tooltip="720" id="97"/>
+      <LegendEntry rgb="177,219,16" tooltip="730" id="98"/>
+      <LegendEntry rgb="181,220,15" tooltip="740" id="99"/>
+      <LegendEntry rgb="186,221,13" tooltip="750" id="100"/>
+      <LegendEntry rgb="191,223,12" tooltip="775" id="101"/>
+      <LegendEntry rgb="191,222,11" tooltip="800" showTick="true" id="102"/>
+      <LegendEntry rgb="192,221,11" tooltip="825" id="103"/>
+      <LegendEntry rgb="192,220,11" tooltip="850" id="104"/>
+      <LegendEntry rgb="193,219,11" tooltip="875" id="105"/>
+      <LegendEntry rgb="193,218,11" tooltip="900" id="106"/>
+      <LegendEntry rgb="194,217,11" tooltip="925" id="107"/>
+      <LegendEntry rgb="195,216,11" tooltip="950" id="108"/>
+      <LegendEntry rgb="195,215,11" tooltip="975" id="109"/>
+      <LegendEntry rgb="196,214,11" tooltip="1000" showTick="true" showLabel="true" label="1000" id="110"/>
+      <LegendEntry rgb="196,213,11" tooltip="1025" id="111"/>
+      <LegendEntry rgb="197,212,11" tooltip="1050" id="112"/>
+      <LegendEntry rgb="197,211,11" tooltip="1075" id="113"/>
+      <LegendEntry rgb="198,210,11" tooltip="1100" id="114"/>
+      <LegendEntry rgb="199,209,11" tooltip="1125" id="115"/>
+      <LegendEntry rgb="199,208,11" tooltip="1150" id="116"/>
+      <LegendEntry rgb="200,207,11" tooltip="1175" id="117"/>
+      <LegendEntry rgb="200,206,11" tooltip="1200" id="118"/>
+      <LegendEntry rgb="201,205,11" tooltip="1225" id="119"/>
+      <LegendEntry rgb="201,204,11" tooltip="1250" id="120"/>
+      <LegendEntry rgb="202,204,11" tooltip="1275" id="121"/>
+      <LegendEntry rgb="203,203,10" tooltip="1300" id="122"/>
+      <LegendEntry rgb="203,202,10" tooltip="1325" id="123"/>
+      <LegendEntry rgb="204,201,10" tooltip="1350" id="124"/>
+      <LegendEntry rgb="204,200,10" tooltip="1375" id="125"/>
+      <LegendEntry rgb="205,199,10" tooltip="1400" id="126"/>
+      <LegendEntry rgb="205,198,10" tooltip="1425" id="127"/>
+      <LegendEntry rgb="206,197,10" tooltip="1450" id="128"/>
+      <LegendEntry rgb="207,196,10" tooltip="1475" id="129"/>
+      <LegendEntry rgb="207,195,10" tooltip="1500" showTick="true" id="130"/>
+      <LegendEntry rgb="208,194,10" tooltip="1525" id="131"/>
+      <LegendEntry rgb="208,193,10" tooltip="1550" id="132"/>
+      <LegendEntry rgb="209,192,10" tooltip="1575" id="133"/>
+      <LegendEntry rgb="209,191,10" tooltip="1600" id="134"/>
+      <LegendEntry rgb="210,190,10" tooltip="1625" id="135"/>
+      <LegendEntry rgb="211,189,10" tooltip="1650" id="136"/>
+      <LegendEntry rgb="211,188,10" tooltip="1675" id="137"/>
+      <LegendEntry rgb="212,187,10" tooltip="1700" id="138"/>
+      <LegendEntry rgb="212,186,10" tooltip="1725" id="139"/>
+      <LegendEntry rgb="213,185,10" tooltip="1750" id="140"/>
+      <LegendEntry rgb="214,185,10" tooltip="1775" id="141"/>
+      <LegendEntry rgb="213,182,10" tooltip="1800" id="142"/>
+      <LegendEntry rgb="212,180,10" tooltip="1825" id="143"/>
+      <LegendEntry rgb="211,177,11" tooltip="1850" id="144"/>
+      <LegendEntry rgb="210,175,11" tooltip="1875" id="145"/>
+      <LegendEntry rgb="209,172,12" tooltip="1900" id="146"/>
+      <LegendEntry rgb="208,170,12" tooltip="1925" id="147"/>
+      <LegendEntry rgb="207,168,13" tooltip="1950" id="148"/>
+      <LegendEntry rgb="206,165,13" tooltip="1975" id="149"/>
+      <LegendEntry rgb="205,163,14" tooltip="2000" showTick="true" showLabel="true" label="2000" id="150"/>
+      <LegendEntry rgb="204,160,14" tooltip="2025" id="151"/>
+      <LegendEntry rgb="203,158,15" tooltip="2050" id="152"/>
+      <LegendEntry rgb="202,155,15" tooltip="2075" id="153"/>
+      <LegendEntry rgb="201,153,16" tooltip="2100" id="154"/>
+      <LegendEntry rgb="200,151,16" tooltip="2125" id="155"/>
+      <LegendEntry rgb="199,148,17" tooltip="2150" id="156"/>
+      <LegendEntry rgb="198,146,17" tooltip="2175" id="157"/>
+      <LegendEntry rgb="197,143,18" tooltip="2200" id="158"/>
+      <LegendEntry rgb="196,141,18" tooltip="2225" id="159"/>
+      <LegendEntry rgb="195,138,19" tooltip="2250" id="160"/>
+      <LegendEntry rgb="194,136,19" tooltip="2275" id="161"/>
+      <LegendEntry rgb="193,134,19" tooltip="2300" id="162"/>
+      <LegendEntry rgb="192,131,20" tooltip="2325" id="163"/>
+      <LegendEntry rgb="191,129,20" tooltip="2350" id="164"/>
+      <LegendEntry rgb="190,126,21" tooltip="2375" id="165"/>
+      <LegendEntry rgb="189,124,21" tooltip="2400" id="166"/>
+      <LegendEntry rgb="188,121,22" tooltip="2425" id="167"/>
+      <LegendEntry rgb="187,119,22" tooltip="2450" id="168"/>
+      <LegendEntry rgb="186,117,23" tooltip="2475" id="169"/>
+      <LegendEntry rgb="185,114,23" tooltip="2500" showTick="true" id="170"/>
+      <LegendEntry rgb="184,112,24" tooltip="2525" id="171"/>
+      <LegendEntry rgb="183,109,24" tooltip="2550" id="172"/>
+      <LegendEntry rgb="182,107,25" tooltip="2575" id="173"/>
+      <LegendEntry rgb="181,104,25" tooltip="2600" id="174"/>
+      <LegendEntry rgb="180,102,26" tooltip="2625" id="175"/>
+      <LegendEntry rgb="179,100,26" tooltip="2650" id="176"/>
+      <LegendEntry rgb="178,97,27" tooltip="2675" id="177"/>
+      <LegendEntry rgb="177,95,27" tooltip="2700" id="178"/>
+      <LegendEntry rgb="176,92,28" tooltip="2725" id="179"/>
+      <LegendEntry rgb="175,90,28" tooltip="2750" id="180"/>
+      <LegendEntry rgb="175,88,29" tooltip="2800" id="181"/>
+      <LegendEntry rgb="174,88,32" tooltip="2850" id="182"/>
+      <LegendEntry rgb="174,89,36" tooltip="2900" id="183"/>
+      <LegendEntry rgb="174,90,40" tooltip="2950" id="184"/>
+      <LegendEntry rgb="174,91,44" tooltip="3000" showTick="true" showLabel="true" label="3000" id="185"/>
+      <LegendEntry rgb="173,92,48" tooltip="3050" id="186"/>
+      <LegendEntry rgb="173,93,52" tooltip="3100" id="187"/>
+      <LegendEntry rgb="173,94,55" tooltip="3150" id="188"/>
+      <LegendEntry rgb="173,95,59" tooltip="3200" id="189"/>
+      <LegendEntry rgb="172,96,63" tooltip="3250" id="190"/>
+      <LegendEntry rgb="172,97,67" tooltip="3300" id="191"/>
+      <LegendEntry rgb="172,97,71" tooltip="3350" id="192"/>
+      <LegendEntry rgb="172,98,75" tooltip="3400" id="193"/>
+      <LegendEntry rgb="171,99,79" tooltip="3450" id="194"/>
+      <LegendEntry rgb="171,100,82" tooltip="3500" id="195"/>
+      <LegendEntry rgb="171,101,86" tooltip="3550" id="196"/>
+      <LegendEntry rgb="171,102,90" tooltip="3600" id="197"/>
+      <LegendEntry rgb="170,103,94" tooltip="3650" id="198"/>
+      <LegendEntry rgb="170,104,98" tooltip="3700" id="199"/>
+      <LegendEntry rgb="170,105,102" tooltip="3750" id="200"/>
+      <LegendEntry rgb="170,106,106" tooltip="3800" id="201"/>
+      <LegendEntry rgb="170,109,109" tooltip="3850" id="202"/>
+      <LegendEntry rgb="171,112,112" tooltip="3900" id="203"/>
+      <LegendEntry rgb="171,115,115" tooltip="3950" id="204"/>
+      <LegendEntry rgb="172,118,118" tooltip="4000" showTick="true" id="205"/>
+      <LegendEntry rgb="173,121,121" tooltip="4050" id="206"/>
+      <LegendEntry rgb="173,124,124" tooltip="4100" id="207"/>
+      <LegendEntry rgb="174,128,128" tooltip="4150" id="208"/>
+      <LegendEntry rgb="174,131,131" tooltip="4200" id="209"/>
+      <LegendEntry rgb="175,134,134" tooltip="4250" id="210"/>
+      <LegendEntry rgb="176,137,137" tooltip="4300" id="211"/>
+      <LegendEntry rgb="176,140,140" tooltip="4350" id="212"/>
+      <LegendEntry rgb="177,143,143" tooltip="4400" id="213"/>
+      <LegendEntry rgb="177,147,147" tooltip="4450" id="214"/>
+      <LegendEntry rgb="178,150,150" tooltip="4500" id="215"/>
+      <LegendEntry rgb="179,153,153" tooltip="4550" id="216"/>
+      <LegendEntry rgb="179,156,156" tooltip="4600" id="217"/>
+      <LegendEntry rgb="180,159,159" tooltip="4650" id="218"/>
+      <LegendEntry rgb="180,162,162" tooltip="4700" id="219"/>
+      <LegendEntry rgb="181,166,166" tooltip="4750" id="220"/>
+      <LegendEntry rgb="182,169,169" tooltip="4800" id="221"/>
+      <LegendEntry rgb="182,172,172" tooltip="4850" id="222"/>
+      <LegendEntry rgb="183,175,175" tooltip="4900" id="223"/>
+      <LegendEntry rgb="183,178,178" tooltip="4950" id="224"/>
+      <LegendEntry rgb="184,181,181" tooltip="5000" showTick="true" showLabel="true" label="5000" id="225"/>
+      <LegendEntry rgb="185,185,185" tooltip="5100" id="226"/>
+      <LegendEntry rgb="187,187,187" tooltip="5200" id="227"/>
+      <LegendEntry rgb="189,189,189" tooltip="5300" id="228"/>
+      <LegendEntry rgb="192,192,192" tooltip="5400" id="229"/>
+      <LegendEntry rgb="194,194,194" tooltip="5500" id="230"/>
+      <LegendEntry rgb="197,197,197" tooltip="5600" id="231"/>
+      <LegendEntry rgb="199,199,199" tooltip="5700" id="232"/>
+      <LegendEntry rgb="201,201,201" tooltip="5800" id="233"/>
+      <LegendEntry rgb="204,204,204" tooltip="5900" id="234"/>
+      <LegendEntry rgb="206,206,206" tooltip="6000" showTick="true" id="235"/>
+      <LegendEntry rgb="209,209,209" tooltip="6100" id="236"/>
+      <LegendEntry rgb="211,211,211" tooltip="6200" id="237"/>
+      <LegendEntry rgb="213,213,213" tooltip="6300" id="238"/>
+      <LegendEntry rgb="216,216,216" tooltip="6400" id="239"/>
+      <LegendEntry rgb="218,218,218" tooltip="6500" id="240"/>
+      <LegendEntry rgb="221,221,221" tooltip="6600" id="241"/>
+      <LegendEntry rgb="223,223,223" tooltip="6700" id="242"/>
+      <LegendEntry rgb="226,226,226" tooltip="6800" id="243"/>
+      <LegendEntry rgb="228,228,228" tooltip="6900" id="244"/>
+      <LegendEntry rgb="230,230,230" tooltip="7000" showTick="true" id="245"/>
+      <LegendEntry rgb="233,233,233" tooltip="7100" id="246"/>
+      <LegendEntry rgb="235,235,235" tooltip="7200" id="247"/>
+      <LegendEntry rgb="238,238,238" tooltip="7300" id="248"/>
+      <LegendEntry rgb="240,240,240" tooltip="7400" id="249"/>
+      <LegendEntry rgb="242,242,242" tooltip="7600" id="250"/>
+      <LegendEntry rgb="245,245,245" tooltip="7800" id="251"/>
+      <LegendEntry rgb="247,247,247" tooltip="8000" id="252"/>
+      <LegendEntry rgb="250,250,250" tooltip="8200" id="253"/>
+      <LegendEntry rgb="252,252,252" tooltip="8400" id="254"/>
+      <LegendEntry rgb="255,255,255" tooltip="&gt; 8400" id="255"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

@@ -7,7 +7,7 @@ describe('main modalReducer', () => {
   test('should return the initial state', () => {
     expect(modalReducer(undefined, {})).toEqual(modalState);
   });
-  test(`${constants.TOGGLE}action type should toggle open value`, () => {
+  test(`${constants.TOGGLE}action type should toggle open value [modal-reducer-toggle]`, () => {
     const modalToggledOpenObj = { isOpen: true };
     expect(
       modalReducer([], {
@@ -16,7 +16,7 @@ describe('main modalReducer', () => {
     ).toEqual(modalToggledOpenObj);
   });
   test(
-    `${constants.OPEN_BASIC}action type should update various modal props`,
+    `${constants.OPEN_BASIC}action type should update various modal props [modal-reducer-open]`,
     () => {
       const basicOpenModalObject = {
         isOpen: true,
@@ -39,7 +39,7 @@ describe('main modalReducer', () => {
     },
   );
   test(
-    `${constants.OPEN_CUSTOM} action type should update various modal props`,
+    `${constants.OPEN_CUSTOM} action type should update various modal props [modal-reducer-open-custom]`,
     () => {
       const customProps = { id: 'tester' };
       const modalCustomObject = lodashAssign({}, modalState, {
@@ -60,7 +60,7 @@ describe('main modalReducer', () => {
   );
   test(
     `${constants.RENDER_TEMPLATE
-    } action type should update various modal props`,
+    } action type should update various modal props [modal-reducer-render-template]`,
     () => {
       const template = '<html>';
       const modalCustomObject = lodashAssign({}, modalState, {

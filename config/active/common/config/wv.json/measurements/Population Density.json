@@ -1,0 +1,24 @@
+{
+    "measurements": {
+        "Population Density": {
+            "id": "population-density",
+            "title": "Population Density",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/PopulationDensity",
+                    "image": "",
+                    "settings": [
+                        "GPW_Population_Density_2000",
+                        "GPW_Population_Density_2005",
+                        "GPW_Population_Density_2010",
+                        "GPW_Population_Density_2015",
+                        "GPW_Population_Density_2020"
+                    ]
+                }
+            }
+        }
+    }
+}

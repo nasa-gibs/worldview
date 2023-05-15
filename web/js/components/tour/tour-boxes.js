@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TourBox from './tour-box';
 
-const TourBoxes = (props) => {
+function TourBoxes(props) {
   const { stories, storyOrder, selectTour } = props;
   return (
     <div className="tour-box-container">
@@ -30,7 +30,7 @@ const TourBoxes = (props) => {
       </div>
     </div>
   );
-};
+}
 
 TourBoxes.propTypes = {
   selectTour: PropTypes.func.isRequired,

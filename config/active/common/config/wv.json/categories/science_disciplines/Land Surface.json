@@ -9,6 +9,7 @@
                 "measurements": [
                     "Blue Marble",
                     "Corrected Reflectance",
+                    "Radiance",
                     "Soil Moisture",
                     "Terrain Elevation"
                 ]

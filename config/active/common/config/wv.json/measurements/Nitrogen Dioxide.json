@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Nitrogen Dioxide": {
+            "id": "nitrogen-dioxide",
+            "title":    "Nitrogen Dioxide",
+            "subtitle": "Aura/OMI, SEDAC",
+            "sources": {
+                "Aura/MLS": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/NitrogenDioxide",
+                    "image": "",
+                    "settings": [
+                        "OMI_Nitrogen_Dioxide_Tropo_Column",
+                        "OrbitTracks_Aura_Ascending"
+                    ]
+                },
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/NitrogenDioxide",
+                    "image": "",
+                    "settings": [
+                        "Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_1996-1998",
+                        "Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_2010-2012"
+                    ]
+                }
+            }
+        }
+    }
+}

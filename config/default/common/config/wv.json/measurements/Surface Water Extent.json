@@ -1,0 +1,23 @@
+{
+  "measurements": {
+      "Surface Water Extent": {
+          "id": "surface-water-extent",
+          "title":    "Surface Water Extent",
+          "subtitle": "DSWx-HLS",
+          "sources": {
+            "DSWx-HLS": {
+                "id": "dswx-hls",
+                "title": "DSWx-HLS",
+                "description": "",
+                "image": "",
+                "settings": [
+                    "OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional",
+                    "OrbitTracks_Landsat-8_Descending",
+                    "OrbitTracks_Sentinel-2A_Descending",
+                    "OrbitTracks_Sentinel-2B_Descending"
+                ]
+            }
+          }
+      }
+  }
+}

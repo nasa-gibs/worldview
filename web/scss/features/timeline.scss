@@ -114,8 +114,6 @@ button:focus {
     position: absolute;
     top: -15px;
     height: 30px;
-
-    // width: 100%;
     max-width: inherit;
   }
 
@@ -215,7 +213,7 @@ button:focus {
   & > .button-action-group:hover .arrow,
   & #zoom-buttons-group .button-action-group:hover .arrow {
     fill: #1a1a1a;
-    fill-opacity: 100%;
+    fill-opacity: 1;
     stroke: none;
   }
 
@@ -397,10 +395,6 @@ button:focus {
   left: 85px;
   color: #fff;
   border-bottom: thin solid #444;
-
-  &.subdaily {
-    left: 189px;
-  }
 }
 
 .custom-interval-widget svg.svg-inline--fa {
@@ -690,7 +684,7 @@ button:focus {
 .ab-group-case-active path {
   stroke: #515151;
   stroke-width: 1;
-  stroke-opacity: 100%;
+  stroke-opacity: 1;
 }
 
 .ab-group-case-active polygon,

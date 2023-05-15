@@ -94,6 +94,15 @@
   color: #fff;
 }
 
+.nav-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+// .nav-item a:hover {
+//   color: #fff;
+// }
+
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
@@ -424,7 +433,7 @@
 
     & .product-outter-list-case {
       width: 100%;
-      padding: 6px 4px;
+      padding: 0 4px;
     }
   }
 
@@ -687,6 +696,11 @@
     background-color: #fff;
     margin-right: 10px;
   }
+
+  .breadcrumb {
+    padding: 10px;
+    border-radius: 0.25rem;
+  }
 }
 
 .granule-date-item {
@@ -853,10 +867,6 @@
     }
   }
 
-  .category-masonry-case .layer-category {
-    width: 100%;
-  }
-
   .category-background-cover {
     background-size: cover;
   }
@@ -882,6 +892,18 @@
       height: 30px;
       width: 30px;
     }
+  }
+}
+
+@media (max-width: $mobile-max-width) {
+  .layer-category {
+    width: 100%;
+  }
+}
+
+@media (max-width: $desktop-min-width) and (min-width: $mobile-max-width) {
+  .layer-category {
+    width: 48%;
   }
 }
 
@@ -963,7 +985,7 @@
     }
   }
 
-  .category-masonry-case .layer-category {
+  .category-masonry-case {
     width: 100%;
   }
 
@@ -1002,11 +1024,31 @@
   }
 }
 
-/** React-Swipe-To-Delete Overrides */
-.swipe-to-delete .js-content:first-child {
-  position: relative !important;
+.collection-title {
+  margin-right: 4px;
 }
 
-.layers-all .swipe-to-delete .js-delete {
-  margin-top: 5px;
+.instrument-collection {
+  margin-top: 3px;
+  display: flex;
+  justify-content: space-between;
+}
+
+a[rel="noopener noreferrer"],
+a[rel="noreferrer"] {
+  text-decoration: none;
+}
+
+a[rel="noopener noreferrer"]:hover,
+a[rel="noreferrer"]:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+  (max-width: $mobile-max-width) {
+  .instrument-collection {
+    h6 {
+      margin-right: 20px;
+    }
+  }
 }

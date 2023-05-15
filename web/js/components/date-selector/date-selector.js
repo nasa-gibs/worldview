@@ -68,11 +68,11 @@ class DateSelector extends Component {
     this.setState({
       [timeUnit]: input,
     }, this.updateDate);
-  }
+  };
 
   setFocus = (type) => {
     this.setState({ focusedUnit: type });
-  }
+  };
 
   /**
   * @desc check valid date with potential temporarily invalid dates
@@ -254,7 +254,7 @@ class DateSelector extends Component {
       }
     }
     return false;
-  }
+  };
 
   /**
   * @desc update date with newDate if valid from check and then reset temp time values
@@ -273,7 +273,7 @@ class DateSelector extends Component {
       // clear the pending timeunit inputs and reset validation
       this.clearTimeValuesAndValidation();
     }
-  }
+  };
 
   /**
   * @desc clear temp time values and reset time validation booleans
@@ -293,7 +293,7 @@ class DateSelector extends Component {
       hourValid: true,
       minuteValid: true,
     });
-  }
+  };
 
   render() {
     const {

@@ -1,0 +1,21 @@
+{
+  "measurements": {
+    "Particulate Matter": {
+      "id": "particulate-matter",
+      "title": "Particulate Matter",
+      "subtitle": "SEDAC",
+      "sources": {
+        "SEDAC": {
+          "id": "sedac",
+          "title": "SEDAC",
+          "description": "sedac/ParticulateMatter",
+          "image": "",
+          "settings": [
+            "Particulate_Matter_Below_2.5micrometers_2001-2010",
+            "Particulate_Matter_Below_2.5micrometers_2010-2012"
+          ]
+        }
+      }
+    }
+  }
+}
