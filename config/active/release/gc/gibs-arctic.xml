@@ -271,7 +271,7 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-04-21</Default>
+             <Default>2023-05-01</Default>
              <Current>false</Current>
              <Value>2012-07-05/2012-12-27/P5D</Value>
              <Value>2013-01-01/2013-12-27/P5D</Value>
@@ -288,7 +288,7 @@
              <Value>2020-03-02/2020-12-27/P5D</Value>
              <Value>2021-01-01/2021-12-27/P5D</Value>
              <Value>2022-01-01/2022-12-27/P5D</Value>
-             <Value>2023-01-01/2023-04-21/P5D</Value>
+             <Value>2023-01-01/2023-05-01/P5D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -319,9 +319,9 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2012-07-02/2023-05-04/P1D</Value>
+             <Value>2012-07-02/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -352,10 +352,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-03-01</Default>
+             <Default>2023-04-01</Default>
              <Current>false</Current>
              <Value>2012-07-02/2012-07-31/P1M</Value>
-             <Value>2012-08-01/2023-03-01/P1M</Value>
+             <Value>2012-08-01/2023-04-01/P1M</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -386,9 +386,9 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2012-07-02/2023-05-04/P1D</Value>
+             <Value>2012-07-02/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -419,9 +419,9 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2012-07-02/2023-05-04/P1D</Value>
+             <Value>2012-07-02/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -452,9 +452,9 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2012-07-02/2023-05-04/P1D</Value>
+             <Value>2012-07-02/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -485,9 +485,9 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2012-07-02/2023-05-04/P1D</Value>
+             <Value>2012-07-02/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -634,12 +634,12 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
              <Value>2002-07-04/2020-08-16/P1D</Value>
              <Value>2020-09-02/2023-02-24/P1D</Value>
-             <Value>2023-02-27/2023-05-04/P1D</Value>
+             <Value>2023-02-27/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -671,13 +671,13 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
              <Value>2002-07-04/2020-08-16/P1D</Value>
              <Value>2020-09-02/2023-02-24/P1D</Value>
              <Value>2023-02-27/2023-02-27/P1D</Value>
-             <Value>2023-03-01/2023-05-04/P1D</Value>
+             <Value>2023-03-01/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -709,12 +709,12 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
              <Value>2002-07-04/2020-08-16/P1D</Value>
              <Value>2020-09-02/2023-02-24/P1D</Value>
-             <Value>2023-02-27/2023-05-04/P1D</Value>
+             <Value>2023-02-27/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -746,10 +746,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
-             <Value>2002-07-04/2023-05-04/P1D</Value>
+             <Value>2002-07-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -781,10 +781,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
-             <Value>2002-07-04/2023-05-04/P1D</Value>
+             <Value>2002-07-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -816,10 +816,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2002-06-17/2002-06-17/P1D</Value>
-             <Value>2002-07-04/2023-05-04/P1D</Value>
+             <Value>2002-07-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -851,10 +851,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2020-01-01/2023-02-24/P1D</Value>
-             <Value>2023-02-26/2023-05-04/P1D</Value>
+             <Value>2023-02-26/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -886,10 +886,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2020-01-01/2023-02-24/P1D</Value>
-             <Value>2023-02-26/2023-05-04/P1D</Value>
+             <Value>2023-02-26/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -921,10 +921,10 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2020-07-27/2023-02-24/P1D</Value>
-             <Value>2023-02-26/2023-05-04/P1D</Value>
+             <Value>2023-02-26/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -956,13 +956,13 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2012-01-20/2012-03-24/P1D</Value>
              <Value>2012-03-26/2022-07-26/P1D</Value>
              <Value>2022-08-23/2022-12-24/P1D</Value>
              <Value>2022-12-26/2023-02-02/P1D</Value>
-             <Value>2023-02-04/2023-05-04/P1D</Value>
+             <Value>2023-02-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -994,7 +994,7 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2015-11-26/2016-04-07/P1D</Value>
              <Value>2016-04-11/2020-01-15/P1D</Value>
@@ -1002,7 +1002,7 @@
              <Value>2020-02-17/2022-07-26/P1D</Value>
              <Value>2022-08-23/2022-12-24/P1D</Value>
              <Value>2022-12-26/2023-02-02/P1D</Value>
-             <Value>2023-02-04/2023-05-04/P1D</Value>
+             <Value>2023-02-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -1034,7 +1034,7 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2015-11-26/2016-04-07/P1D</Value>
              <Value>2016-04-11/2020-01-15/P1D</Value>
@@ -1042,7 +1042,7 @@
              <Value>2020-02-17/2022-07-26/P1D</Value>
              <Value>2022-08-23/2022-12-24/P1D</Value>
              <Value>2022-12-26/2023-02-02/P1D</Value>
-             <Value>2023-02-04/2023-05-04/P1D</Value>
+             <Value>2023-02-04/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -1074,11 +1074,11 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2000-11-01/2022-10-10/P1D</Value>
              <Value>2022-10-23/2022-10-24/P1D</Value>
-             <Value>2022-10-28/2023-05-04/P1D</Value>
+             <Value>2022-10-28/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1110,11 +1110,11 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2000-11-01/2022-10-10/P1D</Value>
              <Value>2022-10-23/2022-10-24/P1D</Value>
-             <Value>2022-10-28/2023-05-04/P1D</Value>
+             <Value>2022-10-28/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1146,11 +1146,11 @@
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
              <Value>2000-11-01/2022-10-10/P1D</Value>
              <Value>2022-10-23/2022-10-24/P1D</Value>
-             <Value>2022-10-28/2023-05-04/P1D</Value>
+             <Value>2022-10-28/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1297,9 +1297,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1330,9 +1330,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1363,9 +1363,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1396,9 +1396,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1429,9 +1429,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1462,9 +1462,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1495,9 +1495,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1528,9 +1528,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1561,9 +1561,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1594,9 +1594,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1627,9 +1627,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1660,9 +1660,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1693,9 +1693,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1726,9 +1726,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1759,9 +1759,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1792,9 +1792,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1825,9 +1825,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1858,9 +1858,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1891,9 +1891,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1924,9 +1924,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1957,9 +1957,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -1990,9 +1990,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2023,9 +2023,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2056,9 +2056,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2089,9 +2089,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2122,9 +2122,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2155,9 +2155,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2188,9 +2188,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2221,9 +2221,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2254,9 +2254,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-10</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-03/P1D</Value>
+             <Value>2000-02-24/2023-05-10/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2287,9 +2287,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -2442,9 +2442,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2475,9 +2475,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2508,9 +2508,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2637,9 +2637,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>250m</TileMatrixSet>
@@ -2667,9 +2667,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>250m</TileMatrixSet>
@@ -2697,9 +2697,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2000-02-24/2023-05-04/P1D</Value>
+             <Value>2000-02-24/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>250m</TileMatrixSet>
@@ -2730,9 +2730,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2763,9 +2763,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2796,9 +2796,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2829,9 +2829,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2862,9 +2862,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2895,9 +2895,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2928,9 +2928,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2961,9 +2961,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -2994,9 +2994,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3027,9 +3027,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3060,9 +3060,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3093,9 +3093,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3126,9 +3126,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3159,9 +3159,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3192,9 +3192,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3225,9 +3225,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3258,9 +3258,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3291,9 +3291,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3324,9 +3324,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3357,9 +3357,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3390,9 +3390,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3423,9 +3423,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3456,9 +3456,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3489,9 +3489,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3522,9 +3522,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3555,9 +3555,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3588,9 +3588,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3621,9 +3621,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3654,9 +3654,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3687,9 +3687,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-02</Default>
+             <Default>2023-05-11</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-02/P1D</Value>
+             <Value>2002-07-03/2023-05-11/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3720,9 +3720,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>500m</TileMatrixSet>
@@ -3874,9 +3874,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3907,9 +3907,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -3940,9 +3940,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4069,9 +4069,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>250m</TileMatrixSet>
@@ -4099,9 +4099,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-04</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2002-07-03/2023-05-04/P1D</Value>
+             <Value>2002-07-03/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>250m</TileMatrixSet>
@@ -4133,9 +4133,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2002-07-07/2023-05-05/P1D</Value>
+             <Value>2002-07-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4167,9 +4167,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2002-07-07/2023-05-05/P1D</Value>
+             <Value>2002-07-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4201,9 +4201,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2004-07-15/2023-05-05/P1D</Value>
+             <Value>2004-07-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4235,9 +4235,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2004-07-15/2023-05-05/P1D</Value>
+             <Value>2004-07-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4269,9 +4269,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-04-28/2023-05-05/P1D</Value>
+             <Value>2006-04-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4303,9 +4303,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-04-28/2023-05-05/P1D</Value>
+             <Value>2006-04-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4337,9 +4337,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-04-28/2023-05-05/P1D</Value>
+             <Value>2006-04-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4371,9 +4371,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-04-28/2023-05-05/P1D</Value>
+             <Value>2006-04-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4405,9 +4405,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-12-23/2023-05-05/P1D</Value>
+             <Value>2017-12-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4439,9 +4439,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-12-23/2023-05-05/P1D</Value>
+             <Value>2017-12-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4473,9 +4473,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2012-05-17/2023-05-05/P1D</Value>
+             <Value>2012-05-17/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4507,9 +4507,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2012-05-17/2023-05-05/P1D</Value>
+             <Value>2012-05-17/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4541,9 +4541,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-10-29/2023-05-05/P1D</Value>
+             <Value>2018-10-29/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4575,9 +4575,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-10-29/2023-05-05/P1D</Value>
+             <Value>2018-10-29/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4609,9 +4609,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2009-01-23/2023-05-05/P1D</Value>
+             <Value>2009-01-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4643,9 +4643,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2009-01-23/2023-05-05/P1D</Value>
+             <Value>2009-01-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4677,9 +4677,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-02-27/2023-05-05/P1D</Value>
+             <Value>2014-02-27/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4711,9 +4711,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-02-27/2023-05-05/P1D</Value>
+             <Value>2014-02-27/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4745,9 +4745,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-09-15/2023-05-05/P1D</Value>
+             <Value>2018-09-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4779,9 +4779,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-09-15/2023-05-05/P1D</Value>
+             <Value>2018-09-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4813,9 +4813,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1998-11-20/2023-05-05/P1D</Value>
+             <Value>1998-11-20/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4847,9 +4847,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1998-11-20/2023-05-05/P1D</Value>
+             <Value>1998-11-20/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4881,9 +4881,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1999-04-15/2023-05-05/P1D</Value>
+             <Value>1999-04-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4915,9 +4915,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1999-04-15/2023-05-05/P1D</Value>
+             <Value>1999-04-15/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4949,9 +4949,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2013-02-11/2023-05-05/P1D</Value>
+             <Value>2013-02-11/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -4983,9 +4983,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2013-02-11/2023-05-05/P1D</Value>
+             <Value>2013-02-11/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5017,9 +5017,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2021-09-27/2023-05-05/P1D</Value>
+             <Value>2021-09-27/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5051,9 +5051,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2021-09-27/2023-05-05/P1D</Value>
+             <Value>2021-09-27/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5085,9 +5085,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-10-19/2023-05-05/P1D</Value>
+             <Value>2006-10-19/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5119,9 +5119,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2006-10-19/2023-05-05/P1D</Value>
+             <Value>2006-10-19/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5153,9 +5153,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2012-09-17/2023-05-05/P1D</Value>
+             <Value>2012-09-17/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5187,9 +5187,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2012-09-17/2023-05-05/P1D</Value>
+             <Value>2012-09-17/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5221,9 +5221,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-11-07/2023-05-05/P1D</Value>
+             <Value>2018-11-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5255,9 +5255,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-11-07/2023-05-05/P1D</Value>
+             <Value>2018-11-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5289,9 +5289,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-11-18/2023-05-05/P1D</Value>
+             <Value>2017-11-18/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5323,9 +5323,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-11-18/2023-05-05/P1D</Value>
+             <Value>2017-11-18/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5357,9 +5357,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-07-02/2023-05-05/P1D</Value>
+             <Value>2014-07-02/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5391,9 +5391,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-07-02/2023-05-05/P1D</Value>
+             <Value>2014-07-02/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5425,9 +5425,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-10-08/2023-05-05/P1D</Value>
+             <Value>2018-10-08/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5459,9 +5459,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2018-10-08/2023-05-05/P1D</Value>
+             <Value>2018-10-08/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5493,9 +5493,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-04-03/2023-05-05/P1D</Value>
+             <Value>2014-04-03/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5527,9 +5527,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-04-03/2023-05-05/P1D</Value>
+             <Value>2014-04-03/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5561,9 +5561,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2016-04-25/2023-05-05/P1D</Value>
+             <Value>2016-04-25/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5595,9 +5595,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2016-04-25/2023-05-05/P1D</Value>
+             <Value>2016-04-25/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5629,9 +5629,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-06-23/2023-05-05/P1D</Value>
+             <Value>2014-06-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5663,9 +5663,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2014-06-23/2023-05-05/P1D</Value>
+             <Value>2014-06-23/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5697,9 +5697,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-03-07/2023-05-05/P1D</Value>
+             <Value>2017-03-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5731,9 +5731,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-03-07/2023-05-05/P1D</Value>
+             <Value>2017-03-07/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5765,9 +5765,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-10-13/2023-05-05/P1D</Value>
+             <Value>2017-10-13/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5799,9 +5799,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2017-10-13/2023-05-05/P1D</Value>
+             <Value>2017-10-13/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5833,9 +5833,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2015-01-31/2023-05-05/P1D</Value>
+             <Value>2015-01-31/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5867,9 +5867,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2015-01-31/2023-05-05/P1D</Value>
+             <Value>2015-01-31/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5901,9 +5901,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2011-10-28/2023-05-05/P1D</Value>
+             <Value>2011-10-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5935,9 +5935,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>2011-10-28/2023-05-05/P1D</Value>
+             <Value>2011-10-28/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -5969,9 +5969,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1999-12-18/2023-05-05/P1D</Value>
+             <Value>1999-12-18/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -6003,9 +6003,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-05</Default>
+             <Default>2023-05-16</Default>
              <Current>false</Current>
-             <Value>1999-12-18/2023-05-05/P1D</Value>
+             <Value>1999-12-18/2023-05-16/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -6104,7 +6104,7 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          </TileMatrixSetLink>
          <ResourceURL format="image/png" resourceType="tile" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/Reference_Labels/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
       </Layer>
-b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Active, Day, Radar, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Active_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2015-07-07</Default><Current>false</Current><Value>2015-04-13/2015-07-07/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive, Day, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-24/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive Enhanced, Day, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-23/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive Enhanced, Night, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-23/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive, Night, Radiometer, v4, Standard, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Night_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-24/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'      <Layer>
+b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Active, Day, Radar, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Active_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2015-07-07</Default><Current>false</Current><Value>2015-04-13/2015-07-07/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Active_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive, Day, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-13</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-24/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-13/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive Enhanced, Day, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-13</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-23/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-13/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive Enhanced, Night, Radiometer, Best Available, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-13</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-23/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-13/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Freeze/Thaw (L3, Passive, Night, Radiometer, v4, Standard, SMAP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>SMAP_L3_Passive_Night_Freeze_Thaw</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/SMAP_Freeze_Thaw.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="270" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="288" xlink:href="https://gibs.earthdata.nasa.gov/legends/SMAP_Freeze_Thaw_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="135" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-13</Default><Current>false</Current><Value>2015-04-13/2015-05-12/P1D</Value><Value>2015-05-14/2015-12-15/P1D</Value><Value>2015-12-17/2016-04-30/P1D</Value><Value>2016-05-02/2016-09-26/P1D</Value><Value>2016-09-28/2019-06-19/P1D</Value><Value>2019-07-23/2021-08-24/P1D</Value><Value>2021-10-09/2022-08-06/P1D</Value><Value>2022-10-07/2022-11-16/P1D</Value><Value>2022-11-18/2023-05-13/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>1km</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SMAP_L3_Passive_Night_Freeze_Thaw/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'      <Layer>
          <ows:Title xml:lang="en">Sea Ice Concentration and Snow Extent (DMSP 5D-3 F17 / SSMIS)</ows:Title>
          <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84">
             <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
@@ -6128,9 +6128,9 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          <Dimension>
              <ows:Identifier>Time</ows:Identifier>
              <ows:UOM>ISO8601</ows:UOM>
-             <Default>2023-05-03</Default>
+             <Default>2023-05-15</Default>
              <Current>false</Current>
-             <Value>2009-08-17/2023-05-03/P1D</Value>
+             <Value>2009-08-17/2023-05-15/P1D</Value>
          </Dimension>
          <TileMatrixSetLink>
              <TileMatrixSet>1km</TileMatrixSet>
@@ -6171,7 +6171,7 @@ b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/
          </TileMatrixSetLink>
          <ResourceURL format="image/png" resourceType="tile" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/SSMIS_Sea_Ice_Concentration/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
       </Layer>
-b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (Band I5, Day, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_Brightness_Temp_BandI5_Day</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2020-04-25/2022-01-04/P1D</Value><Value>2022-01-25/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (Band I5, Night, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_Brightness_Temp_BandI5_Night</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2020-04-25/2022-01-04/P1D</Value><Value>2022-01-25/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T12:12:00Z</Default><Current>false</Current><Value>2023-04-04T12:12:00Z/2023-05-04T12:12:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (Band M11-I2-I1, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T10:30:00Z</Default><Current>false</Current><Value>2023-04-04T10:30:00Z/2023-05-04T10:30:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (Band M3-I3-M11, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T12:12:00Z</Default><Current>false</Current><Value>2023-04-04T12:12:00Z/2023-05-04T12:12:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_TrueColor</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (BandI5, Day, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_Brightness_Temp_BandI5_Day</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2017-09-17/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (BandI5, Night, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_Brightness_Temp_BandI5_Night</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2017-09-17/2020-11-18/P1D</Value><Value>2020-11-20/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T11:24:00Z</Default><Current>false</Current><Value>2023-04-04T11:24:00Z/2023-05-04T11:24:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T11:24:00Z</Default><Current>false</Current><Value>2023-04-04T11:24:00Z/2023-05-04T11:24:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04T11:24:00Z</Default><Current>false</Current><Value>2023-04-04T11:24:00Z/2023-05-04T11:24:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_TrueColor</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-04</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2020-12-25/P1D</Value><Value>2020-12-27/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-04/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast, Suomi NPP, VIIRS)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_DayNightBand_ENCC</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_SNPP_DayNightBand_ENCC_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_SNPP_DayNightBand_ENCC_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2016-11-30/2016-12-22/P1D</Value><Value>2016-12-26/2020-12-23/P1D</Value><Value>2021-01-09/2022-05-20/P1D</Value><Value>2022-05-23/2022-07-26/P1D</Value><Value>2022-08-10/2022-08-13/P1D</Value><Value>2022-08-16/2022-08-19/P1D</Value><Value>2022-08-21/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>500m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'  <TileMatrixSet>
+b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (Band I5, Day, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_Brightness_Temp_BandI5_Day</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2020-04-25/2022-01-04/P1D</Value><Value>2022-01-25/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Day/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (Band I5, Night, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_Brightness_Temp_BandI5_Night</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2020-04-25/2022-01-04/P1D</Value><Value>2022-01-25/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_Brightness_Temp_BandI5_Night/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T17:12:00Z</Default><Current>false</Current><Value>2023-04-15T17:12:00Z/2023-05-15T17:12:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (Band M11-I2-I1, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T17:12:00Z</Default><Current>false</Current><Value>2023-04-15T17:12:00Z/2023-05-15T17:12:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (Band M3-I3-M11, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Granules, Best, VIIRS, NOAA20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T17:12:00Z</Default><Current>false</Current><Value>2023-04-15T17:12:00Z/2023-05-15T17:12:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Best Available, VIIRS, NOAA-20)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_NOAA20_CorrectedReflectance_TrueColor</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2020-04-25/2021-12-31/P1D</Value><Value>2022-01-25/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (BandI5, Day, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_Brightness_Temp_BandI5_Day</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2017-09-17/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Day/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Brightness Temperature (BandI5, Night, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_Brightness_Temp_BandI5_Night</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_Brightness_Temp_BandI5.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_Brightness_Temp_BandI5_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2017-09-17/2020-11-18/P1D</Value><Value>2020-11-20/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_Brightness_Temp_BandI5_Night/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T16:18:00Z</Default><Current>false</Current><Value>2023-04-15T16:18:00Z/2023-05-15T16:18:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M11-I2-I1, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T16:18:00Z</Default><Current>false</Current><Value>2023-04-15T16:18:00Z/2023-05-15T16:18:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (M3-I3-M11, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, Granules, Best, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15T16:18:00Z</Default><Current>false</Current><Value>2023-04-15T16:18:00Z/2023-05-15T16:18:00Z/PT6M</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Corrected Reflectance (True Color, VIIRS, SNPP)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_CorrectedReflectance_TrueColor</ows:Identifier><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-15</Default><Current>false</Current><Value>2015-11-24/2017-03-29/P1D</Value><Value>2017-04-02/2020-12-25/P1D</Value><Value>2020-12-27/2022-07-26/P1D</Value><Value>2022-08-23/2023-05-15/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>250m</TileMatrixSet></TileMatrixSetLink><Format>image/jpeg</Format><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/><ResourceURL format="image/jpeg" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg" resourceType="tile"/></Layer>'b'<Layer xmlns="http://www.opengis.net/wmts/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml"><ows:Title xml:lang="en">Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast, Suomi NPP, VIIRS)</ows:Title><ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84"><ows:LowerCorner>-180 38.807151</ows:LowerCorner><ows:UpperCorner>180 90</ows:UpperCorner></ows:WGS84BoundingBox><ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413"><ows:LowerCorner>-4194304 -4194304</ows:LowerCorner><ows:UpperCorner>4194304 4194304</ows:UpperCorner></ows:BoundingBox><ows:Identifier>VIIRS_SNPP_DayNightBand_ENCC</ows:Identifier><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.0/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.0" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><ows:Metadata xlink:href="https://gibs.earthdata.nasa.gov/colormaps/v1.3/VIIRS_SNPP_DayNightBand_ENCC.xml" xlink:role="http://earthdata.nasa.gov/gibs/metadata-type/colormap/" xlink:title="GIBS Color Map: Data - RGB Mapping" xlink:type="simple"/><Style isDefault="true"><ows:Title xml:lang="en">default</ows:Title><ows:Identifier>default</ows:Identifier><LegendURL width="378" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_SNPP_DayNightBand_ENCC_H.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/horizontal" height="85.5" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Horizontal" xlink:type="simple"/><LegendURL width="135" xlink:href="https://gibs.earthdata.nasa.gov/legends/VIIRS_SNPP_DayNightBand_ENCC_V.svg" xlink:role="http://earthdata.nasa.gov/gibs/legend-type/vertical" height="288" format="image/svg+xml" xlink:title="GIBS Color Map Legend: Vertical" xlink:type="simple"/></Style><Dimension><ows:Identifier>Time</ows:Identifier><ows:UOM>ISO8601</ows:UOM><Default>2023-05-02</Default><Current>false</Current><Value>2016-11-30/2016-12-22/P1D</Value><Value>2016-12-26/2020-12-23/P1D</Value><Value>2021-01-09/2022-05-20/P1D</Value><Value>2022-05-23/2022-07-26/P1D</Value><Value>2022-08-10/2022-08-13/P1D</Value><Value>2022-08-16/2022-08-19/P1D</Value><Value>2022-08-21/2023-05-02/P1D</Value></Dimension><TileMatrixSetLink><TileMatrixSet>500m</TileMatrixSet></TileMatrixSetLink><Format>image/png</Format><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/><ResourceURL format="image/png" template="https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/VIIRS_SNPP_DayNightBand_ENCC/default/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png" resourceType="tile"/></Layer>'  <TileMatrixSet>
       <ows:Identifier>1km</ows:Identifier>
       <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3413</ows:SupportedCRS>
       <TileMatrix>
