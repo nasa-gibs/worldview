@@ -116,6 +116,7 @@
     "jest": "^29.5.0",
     "jest-canvas-mock": "^2.5.0",
     "jest-environment-jsdom": "^29.5.0",
+    "jest-junit": "^16.0.0",
     "mini-css-extract-plugin": "^2.7.5",
     "node-dir": "^0.1.17",
     "node-fetch": "2.6.9",
