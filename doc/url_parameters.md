@@ -25,6 +25,7 @@
 | `efc` | string | `id,id,id` | The event category ids for each category to be included in an event API request. |
 | `s` | string | *`coordinates`* | A pair of coordinates using Decimal Degrees format (`DDD.DDDD,DDD.DDDD`) to add a Location Search marker onto the map. To add more than one Location Search marker, separate coordinate pairs with a plus symbol. (`DDD.DDDD,DDD.DDDD+DDD.DDDD,DDD.DDDD`)|
 | `ab` | boolean | **`on`** | If set to "on", the animation widget will be shown. |
+| `aa` | boolean | **`false`** | If set to "true", the animation will play on load. NOTE: The URL also requires valid animation parameters (ab, av, etc.). |
 | `as` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation start day & time.\*\* |
 | `ae` | date | *`YYYY-MM-DDThh:mm:ssZ`* | The animation end day & time.\*\* |
 | `av` | number | <b>`1`</b> to <b>`10`</b> | The animation speed value from 1 to 10. 1 = slowest, 10 = fastest. |

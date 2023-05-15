@@ -83,7 +83,7 @@ class PlayQueue extends React.Component {
   }
 
   /**
-   * Create an array of each date to be played
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
    */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
@@ -232,7 +232,7 @@ class PlayQueue extends React.Component {
     const {
       isLoopActive, startDate, togglePlaying, speed,
     } = this.props;
-    const loopDelay = speed === 0.5 ? 2000 : 1000 / speed;
+    const loopDelay = speed === 0.5 ? 2000 : 1500;
 
     if (isLoopActive) {
       this.playingDate = toString(startDate);

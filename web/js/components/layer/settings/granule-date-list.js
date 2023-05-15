@@ -90,7 +90,6 @@ class GranuleDateList extends PureComponent {
 
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
-    console.log('uhh');
     e.preventDefault();
     const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(

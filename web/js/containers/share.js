@@ -16,7 +16,7 @@ import {
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
 import {
-  getPermalink, getShareLink, wrapWithObject,
+  getPermalink, getShareLink, wrapWithIframe,
 } from '../modules/link/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
@@ -69,6 +69,7 @@ class ShareLinkContainer extends Component {
     this.unlisten = history.listen((location, action) => {
       const newString = location.search;
       const { queryString } = this.state;
+      if (newString === undefined) { return; }
       if (queryString !== newString) {
         this.setState({
           queryString: newString,
@@ -268,7 +269,7 @@ class ShareLinkContainer extends Component {
       activeTab,
     } = this.state;
     const embedValue = this.getPermalink(true);
-    const embedIframeHTMLCode = wrapWithObject(embedValue);
+    const embedIframeHTMLCode = wrapWithIframe(embedValue);
 
     return (
       <TabPane tabId="embed" className="share-tab-embed">

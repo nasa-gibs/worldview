@@ -78,7 +78,7 @@
     height: 32px;
   }
 
-  .nav-item a:hover {
+  .nav-item a:not(.active):hover {
     color: #fff !important;
   }
 
@@ -88,6 +88,7 @@
 
   .tab-content .nav-tabs {
     border-bottom: 3px solid #dee2e6;
+    padding-bottom: 4px;
   }
 
   .nav-item {

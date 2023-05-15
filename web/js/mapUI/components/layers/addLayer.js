@@ -9,6 +9,7 @@ import {
 import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload } from '../../../modules/date/actions';
+import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
 
 function AddLayer(props) {
   const {
@@ -31,8 +32,17 @@ function AddLayer(props) {
       }
       clearPreload();
       addLayer(def);
+    } else if (action.type === DISPLAY_STATIC_MAP) {
+      addStaticLayer();
     }
   }, [action]);
+
+  // add static layer for kiosk mode in case of gibs/dns failure
+  const addStaticLayer = async() => {
+    const { createLayer } = ui;
+    const newLayer = await createLayer();
+    ui.selected.getLayers().insertAt(0, newLayer);
+  };
 
   const granuleLayerAdd = (def) => {
     ui.processingPromise = new Promise((resolve) => {
@@ -72,6 +82,7 @@ function AddLayer(props) {
     updateLayerVisibilities();
     preloadNextTiles();
   };
+
   return null;
 }
 
