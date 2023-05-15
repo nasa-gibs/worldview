@@ -213,6 +213,7 @@ class PaletteLegend extends React.Component {
     const {
       isRunningData, colorHex, isHoveringLegend,
     } = this.state;
+    console.log(`index: ${index}`);
     const palette = getPalette(layer.id, index);
     let percent;
     let textWidth;
@@ -327,8 +328,6 @@ class PaletteLegend extends React.Component {
    * @param {Number} index | Legend Index
    */
   renderClasses(legend, legendIndex) {
-    console.log('renderClasses');
-    console.log(legend);
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
       layer, parentLayer, compareState, getPalette,

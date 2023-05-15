@@ -119,7 +119,6 @@ export function addLayer(id) {
     const {
       layers, compare, proj, config,
     } = state;
-    console.log(layers);
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
     const activeLayers = getActiveLayersSelector(state);

@@ -37,8 +37,8 @@ async function main () {
   console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
 }
 
+// inputDir refers to build\options-build\config\wv.json\*.*
 async function mergeFiles (inputDir) {
-  console.log(`---------${inputDir}-------`)
   const files = fs.readdirSync(inputDir)
   for (const file of files) {
     try {

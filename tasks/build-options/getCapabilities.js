@@ -121,9 +121,9 @@ async function processLayer (layer) {
       Object.values(layer['ows:Metadata']).forEach((item) => {
         const schemaVersion = item._attributes['xlink:role']
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
-          const colormapLink = item._attributes['xlink:href']
-          const colormapFile = path.basename(colormapLink)
-          const colormapId = path.parse(colormapFile).name
+          const colormapLink = item._attributes['xlink:href'] // i.e. https://gibs.earthdata.nasa.gov/colormaps/v1.3/MODIS_VIIRS_Cloud_Top_Height.xml
+          const colormapFile = path.basename(colormapLink) // i.e. MODIS_VIIRS_Cloud_Top_Height.xml
+          const colormapId = path.parse(colormapFile).name // i.e. MODIS_VIIRS_Cloud_Top_Height
           colormaps[colormapId] = colormapLink
         } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
           const vectorStyleLink = item._attributes['xlink:href']

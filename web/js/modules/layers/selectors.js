@@ -13,6 +13,7 @@ import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
+import { getPalette } from '../palettes/selectors';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
@@ -312,6 +313,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
     // pushing as below resets to default settings
     // def.disabled = ['0-1-2-6']; // goofy string format to populate the disabled key below
   }
+  // const t = getPalette(id, 0, 'active', {});
 
   // Set layer properties
   def.visible = spec.visible || true;
