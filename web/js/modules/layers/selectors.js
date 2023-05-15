@@ -307,13 +307,15 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   }
 
   if (id === 'MODIS_Terra_L3_Sea_Ice_Daily') {
-    console.log('addLayer MODIS_Terra_L3_Sea_Ice_Daily - need to read disabled array here?');
+    console.log('addLayer MODIS_Terra_L3_Sea_Ice_Daily - need to access palette for disabled array here');
     console.log('spec.disabled tracks what layers are disabled by the user/session');
-    // disabled arr exists here but is undefined
+    // const palette = getPalette(id, 0, 'active', null);
+    // console.log(palette);
+
+    // Want to read the palette here & load settings into def.disabled
     // pushing as below resets to default settings
     // def.disabled = ['0-1-2-6']; // goofy string format to populate the disabled key below
   }
-  // const t = getPalette(id, 0, 'active', {});
 
   // Set layer properties
   def.visible = spec.visible || true;
