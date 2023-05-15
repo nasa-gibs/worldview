@@ -48,3 +48,4 @@ config/default/release/layer-metadata
 /.npm/
 /.idea
 .bash_history
+/junit.xml
