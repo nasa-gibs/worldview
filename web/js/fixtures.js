@@ -9,6 +9,7 @@ import { defaultState as initialAnimationState } from './modules/animation/reduc
 import { defaultAlertState } from './modules/alerts/reducer';
 import { getInitialEventsState } from './modules/natural-events/reducers';
 import { sidebarState as initialSidebarState } from './modules/sidebar/reducers';
+import { uiState as initialUiState } from './modules/ui/reducers';
 import util from './util/util';
 
 const mockBaseCmrApi = 'mock.cmr.api/';
@@ -35,6 +36,7 @@ fixtures.getState = function() {
     map: fixtures.map(),
     animation: initialAnimationState,
     sidebar: initialSidebarState,
+    ui: initialUiState,
     proj: {
       selected: {
         id: 'geographic',
