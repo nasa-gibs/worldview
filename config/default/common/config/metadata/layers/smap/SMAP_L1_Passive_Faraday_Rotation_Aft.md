@@ -4,4 +4,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 Data field: `faraday_rotation_angle`
 
-References: SPL1BTB [doi:10.5067/ZHHBN1KQLI20](https://doi.org/10.5067/ZHHBN1KQLI20)
+References: SPL1BTB_NRT [doi:10.5067/UH70WUPQKCFR](https://doi.org/10.5067/UH70WUPQKCFR); SPL1BTB [doi:10.5067/ZHHBN1KQLI20](https://doi.org/10.5067/ZHHBN1KQLI20)
