@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Updated to 4.4.0 upstream version
+- Set initial start date back an extra day
+- Enable blue marble base layer by default
 
 ## [0.2.4]
 - Updated to 3.39.0 upstream version
