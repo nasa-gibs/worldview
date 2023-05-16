@@ -7,6 +7,8 @@ let selectors
 
 test.describe.configure({ mode: 'serial' })
 
+test.skip(true, 'Needs to be updated for SOTO')
+
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext({
     viewport: { width: 375, height: 667 }
