@@ -200,6 +200,7 @@ module.exports = (page) => ({
   projToolbarButton: page.locator('#wv-proj-button'),
   snapshotToolbarButton: page.locator('#wv-image-button'),
   infoToolbarButton: page.locator('#wv-info-button'),
+  distractionFreeExitBtn: page.locator('#wv-exit-distraction-free-mode-button'),
 
   // share
   shareToolbar: page.locator('#toolbar_share'),
