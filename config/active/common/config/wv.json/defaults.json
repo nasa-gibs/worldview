@@ -3,7 +3,10 @@
         "projection": "geographic",
         "startingLayers": [
             {
-                "id": "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "id": "BlueMarble_ShadedRelief"
+            },
+            {
+                "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                 "hidden": "true"
             },
             {
@@ -18,7 +21,8 @@
                 "hidden": "true"
             },
             {
-                "id": "Coastlines_15m"
+                "id": "Coastlines_15m",
+                "hidden": "true"
             },
             {
                 "id": "Reference_Features_15m",

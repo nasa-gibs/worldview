@@ -145,8 +145,8 @@ window.onload = () => {
       const pageLoadTime = new Date(config.pageLoadTime);
 
       config.initialDate = config.pageLoadTime.getUTCHours() < 3
-        ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1))
-        : pageLoadTime;
+        ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 3))
+        : new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 2));
 
       config.palettes = {
         rendered: {},
