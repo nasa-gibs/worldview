@@ -312,6 +312,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
 }
 
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
+  console.log('updateVectorSelection');
   const { config: { vectorStyles } } = state;
   const vectorLayers = getVectorLayers(state);
 

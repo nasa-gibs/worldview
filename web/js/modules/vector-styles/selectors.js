@@ -97,12 +97,18 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  // console.log('-----setStyleFunction-----');
+  // console.trace();
+  // initial load has a vectorStyle key
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
   const { selected } = state.vectorStyles;
   const { resolutions } = proj.selected;
   const layerId = def.id;
+
+  // resolves to "GRanD_Reservoirs" on first pass (2nd condition, vectorStyleId)
+  // resolves to "blue_light" on the 2nd pass (2nd condition, vectorStyleId) (this is AFTER custom palette selection)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
@@ -216,18 +222,19 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 export const applyStyle = (def, olVectorLayer, state) => {
   const { config } = state;
   const { vectorStyles } = config;
-  const activeLayers = getActiveLayers(state) || [];
-  const layerName = def.layer || def.id;
-  let vectorStyleId = def.vectorStyle.id;
+  // const activeLayers = getActiveLayers(state) || [];
+  // const layerName = def.layer || def.id;
+  const vectorStyleId = def.vectorStyle.id;
 
   if (!vectorStyles || !vectorStyleId) {
     return;
   }
 
-  activeLayers.forEach((layer) => {
-    if (layer.id === layerName && layer.custom) {
-      vectorStyleId = layer.custom;
-    }
-  });
+  // This block of code is never called; delete?
+  // activeLayers.forEach((layer) => {
+  //   if (layer.id === layerName && layer.custom) {
+  //     vectorStyleId = layer.custom;
+  //   }
+  // });
   setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };

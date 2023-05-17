@@ -14,7 +14,6 @@ LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = function() {
-  console.log('LookupImageTile');
   if (this.state === OlTileState.IDLE) {
     this.state = OlTileState.LOADING;
     this.changed();
