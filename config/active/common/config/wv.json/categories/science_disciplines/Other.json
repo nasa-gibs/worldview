@@ -7,10 +7,13 @@
                 "placement": "last",
                 "description": "",
                 "measurements": [
+                    "Areas of No Data (mask)",
                     "Blue Marble",
                     "Latitude-Longitude Lines",
+                    "Orbital Track",
                     "Reference Map",
-                    "Terrain Elevation"
+                    "Terrain Elevation",
+                    "Water Bodies"
                 ]
             }
         }

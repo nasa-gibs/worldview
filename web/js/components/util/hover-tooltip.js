@@ -9,13 +9,14 @@ import {
  * @class HoverTooltip
  * @extends React.Component
  */
-const HoverTooltip = (props) => {
+function HoverTooltip(props) {
   const {
     delay, fade, innerClassName, isMobile, labelText, placement, target,
   } = props;
 
   return !isMobile && (
     <UncontrolledTooltip
+      id="center-align-tooltip"
       trigger="hover"
       target={target}
       boundariesElement="window"
@@ -27,7 +28,7 @@ const HoverTooltip = (props) => {
       {labelText}
     </UncontrolledTooltip>
   );
-};
+}
 
 HoverTooltip.defaultProps = {
   placement: 'bottom',

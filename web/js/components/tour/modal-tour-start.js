@@ -20,32 +20,7 @@ class ModalStart extends React.Component {
     this.state = {
       checked: props.checked,
     };
-
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  // Set a reference to the inner div for checking clicks outside of the scrollbar
-  setWrapperRef(node) {
-    this.wrapperRef = node;
-  }
-
-  // Use custom clickOutside function since we contained the clickable area with
-  // CSS to have a cleaner looking scrollbar
-  handleClickOutside(e) {
-    const { toggleModalStart } = this.props;
-    if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
-      toggleModalStart(e);
-    }
   }
 
   // Handle the show/hide checkbox state
@@ -67,6 +42,11 @@ class ModalStart extends React.Component {
       modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour,
     } = this.props;
     const { checked } = this.state;
+    const closeBtn = (
+      <button className="tour-close-btn" onClick={endTour} type="button">
+        &times;
+      </button>
+    );
     return (
       <Modal
         isOpen={modalStart}
@@ -76,9 +56,8 @@ class ModalStart extends React.Component {
         backdrop
         fade={false}
         keyboard={false}
-        innerRef={this.setWrapperRef}
       >
-        <ModalHeader toggle={endTour}>
+        <ModalHeader toggle={endTour} close={closeBtn}>
           Welcome to @NAME@!
         </ModalHeader>
 

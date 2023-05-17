@@ -29,7 +29,9 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
-import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
+import {
+  getActiveLayers, makeGetDescription, getCollections,
+} from '../../modules/layers/selectors';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 
@@ -48,6 +50,7 @@ function LayerRow (props) {
     compare,
     layer,
     compareState,
+    collections,
     paletteLegends,
     getPalette,
     palette,
@@ -82,6 +85,7 @@ function LayerRow (props) {
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
+  const collectionIdentifierDescription = 'Dataset version and the source of data processing, Near Real-Time (NRT) or Standard (STD)';
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
@@ -185,11 +189,11 @@ function LayerRow (props) {
           icon="ellipsis-v"
         />
       </DropdownToggle>
-      <DropdownMenu positionFixed>
+      <DropdownMenu container="body" className="layer-options-dropdown-menu">
         <DropdownItem
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
-          className="button wv-layers-info"
+          className="button wv-layers-info layer-options-dropdown-item"
           onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
           {layerInfoBtnTitle}
@@ -197,7 +201,7 @@ function LayerRow (props) {
         <DropdownItem
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
-          className="button wv-layers-options"
+          className="button wv-layers-options layer-options-dropdown-item"
           onClick={() => onOptionsClick(layer, title)}
         >
           {layerOptionsBtnTitle}
@@ -205,6 +209,7 @@ function LayerRow (props) {
         <DropdownItem
           id={removeLayerBtnId}
           onClick={() => onRemoveClick(layer.id)}
+          className="button wv-layers-options layer-options-dropdown-item"
         >
           {removeLayerBtnTitle}
         </DropdownItem>
@@ -221,7 +226,7 @@ function LayerRow (props) {
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
         onClick={() => onRemoveClick(layer.id)}
       >
-        <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={removeLayerBtnId}>
           {removeLayerBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="times" fixedWidth />
@@ -233,7 +238,7 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={() => onOptionsClick(layer, title)}
       >
-        <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerOptionsBtnId}>
           {layerOptionsBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
@@ -245,10 +250,10 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
       >
-        <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
+        <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" />
       </a>
     </>
   );
@@ -269,7 +274,7 @@ function LayerRow (props) {
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
-        <UncontrolledTooltip placement="top" target={layerVectorBtnId}>
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerVectorBtnId}>
           {title}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="hand-pointer" fixedWidth />
@@ -325,8 +330,10 @@ function LayerRow (props) {
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
-      ? ['far', 'eye-slash']
-      : ['far', 'eye'];
+      ? ['fas', 'eye-slash']
+      : ['fas', 'eye'];
+
+  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
   const renderLayerRow = () => (
     <>
@@ -339,6 +346,7 @@ function LayerRow (props) {
         >
           {!isAnimating && (
           <UncontrolledTooltip
+            id="center-align-tooltip"
             placement="right"
             target={`hide${encodedLayerId}`}
           >
@@ -357,7 +365,21 @@ function LayerRow (props) {
             {showButtons && renderControls()}
           </div>
           <h4 title={names.title}>{names.title}</h4>
-          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          <div className="instrument-collection">
+            <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+
+            {collections && isVisible ? (
+              <h6>
+                <span id="collection-identifier" className={collectionClass}>
+                  {collections.version} {collections.type}
+                  <UncontrolledTooltip id="center-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+                    {collectionIdentifierDescription}
+                  </UncontrolledTooltip>
+                </span>
+              </h6>
+            ) : ''}
+          </div>
+
           {hasPalette ? getPaletteLegend() : ''}
         </div>
         {isVectorLayer && isVisible ? renderVectorIcon() : null}
@@ -417,7 +439,7 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation,
+      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation, layers, date,
     } = state;
     const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
@@ -436,10 +458,14 @@ const makeMapStateToProps = () => {
     const tracksForLayer = getActiveLayers(state).filter(
       (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
     );
+    const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
+    const convertedDate = activeDate.toISOString().split('T')[0];
+    const collections = getCollections(layers, convertedDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
     return {
       compare,
+      collections,
       tracksForLayer,
       measurementDescriptionPath,
       globalTemperatureUnit,
@@ -545,6 +571,7 @@ LayerRow.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
+  collections: PropTypes.object,
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,

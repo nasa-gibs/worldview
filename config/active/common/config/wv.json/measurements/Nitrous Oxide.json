@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Nitrous Oxide": {
+            "id": "nitrous-oxide",
+            "title":    "Nitrous Oxide",
+            "subtitle": "Aura/MLS",
+            "sources": {
+                "Aura/MLS": {
+                    "id": "aura-mls",
+                    "title": "Aura/MLS",
+                    "description": "mls/N2O",
+                    "image": "",
+                    "settings": [
+                        "MLS_N2O_46hPa_Day",
+                        "MLS_N2O_46hPa_Night",
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

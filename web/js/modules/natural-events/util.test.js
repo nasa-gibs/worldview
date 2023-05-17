@@ -41,24 +41,24 @@ const updateProjState = (newState, state) => ({
   },
 });
 
-test('Request URL with grographic proj and no bbox', () => {
+test('Request URL with grographic proj and no bbox [naturalevents-geo-proj-no-bbox]', () => {
   const requestURL = getEventsRequestURL(initialState);
   expect(requestURL).toBe('fake.eonet.url/api/events?status=all&limit=50&bbox=-180%2C90%2C180%2C-90&start=2020-01-01&end=2021-01-01&category=snow%2Cwildfires%2Cmanmade');
 });
 
-test('Request URL with grographic proj and bbox set', () => {
+test('Request URL with grographic proj and bbox set [naturalevents-geo-proj-bbox]', () => {
   const state = updateEventState({ showAll: false }, initialState);
   const requestURL = getEventsRequestURL(state);
   expect(requestURL).toBe('fake.eonet.url/api/events?status=all&limit=50&bbox=-15.06%2C27.16%2C13.32%2C56.06&start=2020-01-01&end=2021-01-01&category=snow%2Cwildfires%2Cmanmade');
 });
 
-test('Request URL doesn\'t include categories param if none set', () => {
+test('Request URL doesn\'t include categories param if none set [naturalevents-categories-param]', () => {
   const state = updateEventState({ selectedCategories: [] }, initialState);
   const requestURL = getEventsRequestURL(state);
   expect(requestURL).toBe('fake.eonet.url/api/events?status=all&limit=50&bbox=-180%2C90%2C180%2C-90&start=2020-01-01&end=2021-01-01');
 });
 
-test('Uses mock events if mockEvents param is present', () => {
+test('Uses mock events if mockEvents param is present [naturalevents-mock-events]', () => {
   const state = {
     ...initialState,
     config: {
@@ -72,7 +72,7 @@ test('Uses mock events if mockEvents param is present', () => {
   expect(requestURL).toBe('mock/events_data.json');
 });
 
-test('Request URL with polar proj uses default bbox', () => {
+test('Request URL with polar proj uses default bbox [naturalevents-polar-proj]', () => {
   let state = updateProjState(mockProj.arctic, initialState);
   state = updateEventState({
     showAll: false,

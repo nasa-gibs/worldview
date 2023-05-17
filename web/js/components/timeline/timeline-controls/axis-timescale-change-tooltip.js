@@ -38,73 +38,71 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
   render() {
     const { timeScale, toolTipHovered, hasSubdailyLayers } = this.props;
     return (
-      <>
-        <div id="zoom-btn-container-axis">
-          <span
-            id="current-zoom"
-            className={
+      <div id="zoom-btn-container-axis">
+        <span
+          id="current-zoom"
+          className={
               `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
             }
-          >
-            {timeScale}
-          </span>
-          <div
-            className="wv-zoom-tooltip"
-            style={{ display: toolTipHovered ? 'block' : 'none' }}
-          >
-            <div id="timeline-zoom" className="timeline-zoom">
-              <label
-                style={{
-                  textDecoration: 'underline',
-                  paddingBottom: '4px',
-                  color: '#fff',
-                }}
-              >
-                TIMESCALE
-              </label>
-              <span
-                id="zoom-years"
-                className="zoom-btn zoom-years"
-                onClick={this.changeTimeScaleYear}
-              >
-                YEAR
-              </span>
-              <span
-                id="zoom-months"
-                className="zoom-btn zoom-months"
-                onClick={this.changeTimeScaleMonth}
-              >
-                MONTH
-              </span>
-              <span
-                id="zoom-days"
-                className="zoom-btn zoom-days"
-                onClick={this.changeTimeScaleDay}
-              >
-                DAY
-              </span>
-              {hasSubdailyLayers ? (
-                <>
-                  <span
-                    id="zoom-hours"
-                    className="zoom-btn zoom-hours"
-                    onClick={this.changeTimeScaleHour}
-                  >
-                    HOUR
-                  </span>
-                  <span
-                    id="zoom-minutes"
-                    className="zoom-btn zoom-minutes"
-                    onClick={this.changeTimeScaleMinute}
-                  >
-                    MINUTE
-                  </span>
-                </>
-              ) : null}
-            </div>
+        >
+          {timeScale}
+        </span>
+        <div
+          className="wv-zoom-tooltip"
+          style={{ display: toolTipHovered ? 'block' : 'none' }}
+        >
+          <div id="timeline-zoom" className="timeline-zoom">
+            <label
+              style={{
+                textDecoration: 'underline',
+                paddingBottom: '4px',
+                color: '#fff',
+              }}
+            >
+              TIMESCALE
+            </label>
+            <span
+              id="zoom-years"
+              className="zoom-btn zoom-years"
+              onClick={this.changeTimeScaleYear}
+            >
+              YEAR
+            </span>
+            <span
+              id="zoom-months"
+              className="zoom-btn zoom-months"
+              onClick={this.changeTimeScaleMonth}
+            >
+              MONTH
+            </span>
+            <span
+              id="zoom-days"
+              className="zoom-btn zoom-days"
+              onClick={this.changeTimeScaleDay}
+            >
+              DAY
+            </span>
+            {hasSubdailyLayers ? (
+              <>
+                <span
+                  id="zoom-hours"
+                  className="zoom-btn zoom-hours"
+                  onClick={this.changeTimeScaleHour}
+                >
+                  HOUR
+                </span>
+                <span
+                  id="zoom-minutes"
+                  className="zoom-btn zoom-minutes"
+                  onClick={this.changeTimeScaleMinute}
+                >
+                  MINUTE
+                </span>
+              </>
+            ) : null}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

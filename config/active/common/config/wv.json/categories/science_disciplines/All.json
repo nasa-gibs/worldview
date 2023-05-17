@@ -13,6 +13,7 @@
                   "Latitude-Longitude Lines",
                   "Liquid Water Equivalent",
                   "Precipitation Rate",
+                  "Radiance",
                   "Reference Map",
                   "Sea Ice",
                   "Sea Surface Height Anomalies",
@@ -20,7 +21,9 @@
                   "Sea Surface Temperature",
                   "Sea Surface Temperature Anomalies",
                   "Soil Moisture",
+                  "Surface Water Extent",
                   "Terrain Elevation",
+                  "Water Bodies",
                   "Wind Speed"
                 ]
             }

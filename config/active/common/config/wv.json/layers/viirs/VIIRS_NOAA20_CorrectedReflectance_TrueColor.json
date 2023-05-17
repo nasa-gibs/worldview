@@ -6,7 +6,8 @@
       "tags": "natural color cr jpss1 jpss-1",
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule"]
     }
   }
 }

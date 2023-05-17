@@ -31,7 +31,7 @@ class AxisTimeScaleChange extends PureComponent {
         toolTipHovered: true,
       });
     }
-  }
+  };
 
   // TimeScale select tooltip off
   toolTipHoverOff = () => {
@@ -39,7 +39,7 @@ class AxisTimeScaleChange extends PureComponent {
     this.setState({
       toolTipHovered: false,
     });
-  }
+  };
 
   // Toggle visibility of map scales
   disableMapScales = (disable) => {
@@ -49,7 +49,7 @@ class AxisTimeScaleChange extends PureComponent {
     for (const el of [...imperialMapScale, ...metricMapScale]) {
       el.style.opacity = opacity;
     }
-  }
+  };
 
   // ex: month(2) to day(3)
   incrementTimeScale = () => {
@@ -63,7 +63,7 @@ class AxisTimeScaleChange extends PureComponent {
     if (timeScaleNumber < maxTimeScaleNumber) {
       changeTimeScale(timeScaleNumber + 1);
     }
-  }
+  };
 
   // ex: day(3) to month(2)
   decrementTimeScale = () => {
@@ -75,7 +75,7 @@ class AxisTimeScaleChange extends PureComponent {
     if (timeScaleNumber > 1) {
       changeTimeScale(timeScaleNumber - 1);
     }
-  }
+  };
 
   render() {
     const {

@@ -26,7 +26,7 @@ export default class DateRanges extends React.Component {
           <ListItemEndDate />
         </ListGroupItem>
       );
-    })
+    });
 
   render() {
     const { layer } = this.props;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Dynamic Surface Water Extent">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="255" />
+      <ColorMapEntry rgb="255,255,255" transparent="false" sourceValue="0" ref="0" />
+      <ColorMapEntry rgb="0,0,255" transparent="false" sourceValue="1" ref="1" />
+      <ColorMapEntry rgb="180,213,244" transparent="false" sourceValue="2" ref="2" />
+      <ColorMapEntry rgb="0,255,255" transparent="false" sourceValue="3" ref="3" />
+      <ColorMapEntry rgb="175,175,175" transparent="false" sourceValue="4" ref="4" />
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="255"/>
+      <LegendEntry rgb="255,255,255" tooltip="Not Water" id="0" />
+      <LegendEntry rgb="0,0,255" tooltip="Open Water" id="1" />
+      <LegendEntry rgb="180,213,244" tooltip="Partial Surface Water" id="2" />
+      <LegendEntry rgb="0,255,255" tooltip="Snow/Ice" id="3" />
+      <LegendEntry rgb="175,175,175" tooltip="Cloud" id="4" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

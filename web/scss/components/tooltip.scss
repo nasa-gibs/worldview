@@ -205,6 +205,26 @@
   }
 }
 
+/* bootstrap overrides */
+#center-align-tooltip {
+  padding: 7px !important;
+  border-radius: 5px !important;
+}
+
+#coordinate-setting-tooltip {
+  width: 80%;
+  position: relative;
+  right: -40px;
+  top: 10px;
+}
+
+#temperature-setting-tooltip {
+  width: 70%;
+  padding: 4px;
+  position: relative;
+  top: 10px;
+}
+
 @media (max-width: $mobile-max-width) {
   .tooltip-custom-black {
     &.tooltip-coordinates-container {

@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Precipitation Estimate": {
+            "id": "precipitation-estimate",
+            "title":    "Precipitation Estimate",
+            "subtitle": "Aqua/AIRS",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/PrecipitationEstimate",
+                    "image": "",
+                    "settings": [
+                        "AIRS_Precipitation_Day",
+                        "AIRS_Precipitation_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

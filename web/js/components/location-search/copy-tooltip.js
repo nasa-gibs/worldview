@@ -37,13 +37,14 @@ class CopyClipboardTooltip extends PureComponent {
     this.setState({
       showCopiedToolTip: true,
     });
-  }
+  };
 
   render() {
     const { showCopiedToolTip } = this.state;
     const { placement } = this.props;
     return (
       <Tooltip
+        id="center-align-tooltip"
         placement={placement}
         isOpen={showCopiedToolTip}
         hideArrow

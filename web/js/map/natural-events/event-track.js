@@ -132,15 +132,15 @@ class EventTrack extends React.Component {
       const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
       this.setState({ trackDetails: newTrackDetails });
     }
-  }
+  };
 
   addTrack = (map, { track, pointsAndArrows }) => {
     const { isAnimatingToEvent } = this.props;
-    if (!isAnimatingToEvent) {
+    if (!isAnimatingToEvent && typeof track !== 'undefined') {
       map.addOverlay(track);
       addPointOverlays(map, pointsAndArrows);
     }
-  }
+  };
 
   removeTrack = function(map) {
     const { trackDetails } = this.state;
@@ -158,7 +158,7 @@ class EventTrack extends React.Component {
       map.removeOverlay(track);
       removePointOverlays(map, pointsAndArrows);
     });
-  }
+  };
 
   updateAllTracks = () => {
     const {
@@ -198,7 +198,7 @@ class EventTrack extends React.Component {
     });
 
     this.setState({ allTrackDetails: allTracks });
-  }
+  };
 
   /**
    * Update track

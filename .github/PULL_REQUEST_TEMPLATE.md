@@ -31,4 +31,8 @@ This is simply a reminder of what we are going to look for before merging your c
 - I have added tests that prove my fix is effective or that my feature works (if applicable)
 - Any dependent changes have been merged and published in downstream modules (if applicable)
 
+## Merging
+
+Please use the `squash and merge` commit method unless each commit in your branch is vital to the commit history of main.
+
 @nasa-gibs/worldview

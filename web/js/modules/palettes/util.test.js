@@ -13,21 +13,21 @@ const LAYER_STRING = 'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,sq
 const layerArrayFromPermalinkString = layersParse12(LAYER_STRING, config);
 const PERMALINK_STATE = { l: LAYER_STRING };
 
-test('hasCustomTypePalette func determines if custom palette is in string', () => {
+test('hasCustomTypePalette func determines if custom palette is in string [palettes-custom-palette-string-1.1]', () => {
   const bool = hasCustomTypePalette(
     'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)',
   );
   expect(bool).toBeTruthy();
 });
 
-test('hasCustomTypePalette func determines if custom palette is in string', () => {
+test('hasCustomTypePalette func determines if custom palette is in string [palettes-custom-palette-string-1.2', () => {
   const bool = hasCustomTypePalette(
     'some-layer(disabled(;0-2)',
   );
   expect(bool).toBeTruthy();
 });
 
-test('loadPalettes func updates state with correct palette attributes', () => {
+test('loadPalettes func updates state with correct palette attributes [palettes-load-palettes]', () => {
   const updatedState = update(state, {
     layers: {
       active: {
@@ -45,7 +45,7 @@ test('loadPalettes func updates state with correct palette attributes', () => {
 });
 
 describe('permalink 1.1', () => {
-  test('parses palette for valid layer', () => {
+  test('parses palette for valid layer [palettes-parse-permalink]', () => {
     const parameters = {
       l: 'terra-aod',
       palettes: 'terra-aod,blue-1',
@@ -69,7 +69,7 @@ describe('permalink 1.1', () => {
     expect(layer.custom).toBe('blue-1');
   });
 
-  test('parses palette for two valid layers', () => {
+  test('parses palette for two valid layers [palettes-parse-palette]', () => {
     const parameters = {
       l: 'terra-aod,aqua-aod',
       palettes: 'terra-aod,blue-1~aqua-aod,red-1',
@@ -97,7 +97,7 @@ describe('permalink 1.1', () => {
     expect(layer2.custom).toBe('red-1');
   });
 
-  test('disregard palettes value if palette assigned to a layer that is not active', () => {
+  test('disregard palettes value if palette assigned to a layer that is not active [palettes-ignore-palettes]', () => {
     const parameters = {
       l: 'terra-aod',
       palettes: 'aqua-aod,red-1',

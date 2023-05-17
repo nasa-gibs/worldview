@@ -48,7 +48,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   );
 
   function dispathCMRErrorDialog (title) {
-    const bodyText = `The Common Metadata Repository(CMR) service that
+    const bodyText = `The Common Metadata Repository (CMR) service that
                       provides metadata for this granule layer, ${title}, is currently unavailable.
                       Please try again later.`;
     const modalHeader = 'Granules unavailable at this time.';
