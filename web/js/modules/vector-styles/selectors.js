@@ -11,13 +11,13 @@ import { stylefunction } from 'ol-mapbox-style';
 import {
   getMinValue, getMaxValue, selectedStyleFunction,
 } from './util';
-import {
-  getActiveLayers,
-} from '../layers/selectors';
+// import {
+//   getActiveLayers,
+// } from '../layers/selectors';
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
- * layer definiteions. NOTE: This currently also will include the associate WMS
+ * layer definitions. NOTE: This currently also will include the associate WMS
  * breakpoint layers as well.
  *
  * @param {*} state
