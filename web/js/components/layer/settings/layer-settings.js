@@ -207,10 +207,12 @@ class LayerSettings extends React.Component {
       toggleAllClassifications,
       screenHeight,
     } = this.props;
+    console.log('renderCustomPalettes');
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
     const len = paletteLegends.length;
     const palette = getPalette(layer.id, 0);
+    console.log(palette); // from state.palettes.rendered.NAME.maps
     const legend = getPaletteLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
@@ -269,6 +271,7 @@ class LayerSettings extends React.Component {
    * Render Opacity, threshold, and custom palette options
    */
   renderVectorStyles() {
+    console.log('renderVectorStyles');
     const {
       setStyle,
       clearStyle,
@@ -277,6 +280,8 @@ class LayerSettings extends React.Component {
       vectorStyles,
     } = this.props;
     let customStyle;
+    console.log('----layer');
+    console.log(layer);
     if (layer.custom && layer.custom[0]) {
       [customStyle] = layer.custom;
     }
@@ -341,14 +346,18 @@ class LayerSettings extends React.Component {
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
 
+    console.log(`layer.id: ${layer.id} | layer.type: ${layer.type}`);
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
         : '';
     } else {
-      renderCustomizations = ''; // this.renderVectorStyles(); for future
+      // renderCustomizations = ''; // this.renderVectorStyles(); for future
+      // renderCustomizations = this.renderVectorStyles();
+      renderCustomizations = this.renderCustomPalettes();
     }
-
+    console.log('renderCustomizations');
+    console.log(renderCustomizations);
     if (!layer.id) return '';
     return (
       <>

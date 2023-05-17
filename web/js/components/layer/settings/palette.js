@@ -24,6 +24,8 @@ function PaletteSelect (props) {
 
   const renderDefault = () => {
     const legend = getDefaultLegend(layer.id, index);
+    console.log('legend');
+    console.log(legend);
     if (legend.type === 'continuous' || legend.type === 'discrete') {
       return renderSelectorItemScale(
         legend.colors,
@@ -32,6 +34,7 @@ function PaletteSelect (props) {
         activePalette === '__default',
       );
     }
+    // legend.type === "classification"
     return renderSelectorItemSingle(
       legend,
       '__default',
@@ -91,6 +94,7 @@ function PaletteSelect (props) {
    * @param {Boolean} isSelected | is this colormap active
    */
   const renderSelectorItemScale = (palette, id, legend, isSelected) => {
+    console.log('renderSelectorItemScale');
     const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     const ctx = canvas.getContext('2d');
@@ -126,6 +130,7 @@ function PaletteSelect (props) {
    * @param {Boolean} isSelected | is this colormap active
    */
   const renderSelectorItemSingle = (palette, id, description, isSelected) => {
+    console.log('renderSelectorItemSingle');
     const color = palette.classes
       ? palette.classes.colors[0]
       : palette.colors[0];
