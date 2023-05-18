@@ -34,17 +34,27 @@ LookupImageTile.prototype.load = function() {
       const pixels = imageData.data;
 
       for (let i = 0; i < octets; i += 4) {
-        const source = `${pixels[i + 0]},${
+        // This is the RGBA value of the pixel being processed
+        let pixelColor = `${pixels[i + 0]},${
           pixels[i + 1]},${
           pixels[i + 2]},${
           pixels[i + 3]}`;
-        const target = that.lookup_[source];
 
-        if (target) {
-          pixels[i + 0] = target.r;
-          pixels[i + 1] = target.g;
-          pixels[i + 2] = target.b;
-          pixels[i + 3] = target.a;
+        // If the pixel color is not black, we force it to the palette color
+        // This catches all variants of color
+        if (pixelColor !== '0,0,0,0') {
+          pixelColor = Object.keys(that.lookup_)[0];
+        }
+
+        // We check to see if the pixelColor exists in the lookup table
+        const targetColor = that.lookup_[pixelColor];
+
+        if (targetColor) {
+        // if (pixelColor !== '0,0,0,0') {
+          pixels[i + 0] = targetColor.r;
+          pixels[i + 1] = targetColor.g;
+          pixels[i + 2] = targetColor.b;
+          pixels[i + 3] = targetColor.a;
         }
       }
       g.putImageData(imageData, 0, 0);
