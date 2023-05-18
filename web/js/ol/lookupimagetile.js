@@ -41,8 +41,9 @@ LookupImageTile.prototype.load = function() {
           pixels[i + 3]}`;
 
         // If the pixel color is not black, we force it to the palette color
-        // This catches all variants of color
+        // This catches all variations of default palette color
         if (pixelColor !== '0,0,0,0') {
+          // eslint-disable-next-line prefer-destructuring
           pixelColor = Object.keys(that.lookup_)[0];
         }
 
