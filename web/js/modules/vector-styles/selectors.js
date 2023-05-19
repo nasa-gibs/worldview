@@ -11,6 +11,8 @@ import { stylefunction } from 'ol-mapbox-style';
 import {
   getMinValue, getMaxValue, selectedStyleFunction,
 } from './util';
+import util from '../../util/util';
+
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
@@ -100,8 +102,23 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { selected } = state.vectorStyles;
   const { resolutions } = proj.selected;
   const layerId = def.id;
+  const customPalette = def.custom;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
+
+  // if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
+  // If change color while viewing WMS vector points are updated correctly.
+  // If change color while viewing vector, color does not update
+  if (customPalette) {
+    const hexColor = state.palettes.custom[customPalette].colors[0];
+    const rgbPalette = util.hexToRGBA(hexColor);
+
+    // update all glStyle properties
+    for (let i = 0; i < glStyle.layers.length; i += 1) {
+      glStyle.layers[i].paint['circle-color'] = rgbPalette;
+      glStyle.layers[i].paint['fill-color'] = rgbPalette;
+    }
+  }
 
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
