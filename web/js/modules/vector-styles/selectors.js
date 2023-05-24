@@ -96,6 +96,7 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('setStyleFunction');
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -106,10 +107,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
 
-  // if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
-  // If change color while viewing WMS vector points are updated correctly.
-  // If change color while viewing vector, color does not update
-  if (customPalette) {
+  if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
 
@@ -128,6 +126,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
+  // provided args appear the same (except for the color)
+  // returned styleFunction is the same on each palette update!
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
@@ -194,6 +194,7 @@ export function isActive(layerId, group, state) {
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('clearStyleFunction');
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -228,6 +229,11 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
+  console.log('applystyle');
+  // console.log(def);
+  // console.log(olVectorLayer);
+  // console.log(state);
+
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;

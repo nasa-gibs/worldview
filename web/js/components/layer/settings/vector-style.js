@@ -16,6 +16,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(vectorStyleId) {
+    console.log('onChangeVectorStyle');
     const {
       layer, clearStyle, setStyle, groupName,
     } = this.props;

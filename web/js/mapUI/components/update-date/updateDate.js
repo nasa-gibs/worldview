@@ -77,6 +77,7 @@ function UpdateDate(props) {
       });
     }
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
+    console.log('updateVectorStyles complete');
   }
 
   async function updateCompareLayer (def, index, layerCollection) {
