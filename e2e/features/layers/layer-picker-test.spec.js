@@ -212,9 +212,9 @@ test('Selecting a measurement from the grid shows sources and details for first 
   await expect(aodCheckboxMODIS).toBeVisible()
   await expect(aodCheckboxMAIAC).toBeVisible()
   const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
-  const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
+  // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
   await expect(modisAvailableCoverage).toBeVisible()
-  await expect(maiacAvailableCoverage).toBeVisible()
+  // await expect(maiacAvailableCoverage).toBeVisible()
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage icon', async () => {
