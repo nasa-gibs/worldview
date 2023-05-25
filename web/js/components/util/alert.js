@@ -89,18 +89,9 @@ export default class AlertUtil extends React.Component {
 
   render() {
     const { noPortal } = this.props;
-    console.log(`noportal: ${noPortal}`);
-    // This was the working code prior to commit df8e5a4944 which updated many dependencies
-    // It also eliminated the Portal component...
-    // return noPortal
-    // : (
-    //   <Portal node={document && document.getElementById('wv-alert-container')}>
-    //     {this.renderAlert()}
-    //   </Portal>
-    // );
     return noPortal
-      ? this.renderAlert()
-      : createPortal(this.renderAlert(), document.getElementById('wv-alert-container'));
+      ? createPortal(this.renderAlert(), document.getElementById('wv-alert-container'))
+      : this.renderAlert();
   }
 }
 
