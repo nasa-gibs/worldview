@@ -103,7 +103,7 @@
         <li>Natural events database is provided by the <a href="https://eonet.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>.</li>
         <li>User-selectable color palettes are primarily derived from:<ul>
-                        <li><a href="https://neo.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">NEO</a>
+                        <li><a href="https://neo.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">NEO</a>
                         </li>
                         <li><a href="https://arxiv.org/abs/1509.03700" target="_blank" rel="noopener noreferrer">Peter
                                         Kovesi.

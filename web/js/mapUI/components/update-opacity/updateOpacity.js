@@ -69,15 +69,8 @@ function UpdateOpacity(props) {
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
-      // find the layer in each projection
-      const layerGroup = findLayer(def, activeString);
-      // get an array of layers from each projection
-      const layerGroupLayers = layerGroup.getLayersArray();
-      // need to set opacity for layerGroup and each individual layer
-      layerGroup.setOpacity(opacity);
-      layerGroupLayers.forEach((l) => {
-        l.setOpacity(opacity);
-      });
+      const layer = findLayer(def, activeString);
+      layer.setOpacity(opacity);
     }
     updateLayerVisibilities();
   };
