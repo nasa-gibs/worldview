@@ -191,6 +191,7 @@ function MapUI(props) {
   }, [preloadAction]);
 
   const updateVectorSelections = () => {
+    console.log('updateVectorSelections');
     const type = 'selection';
     const newSelection = vectorActions.payload;
     updateVectorSelection(

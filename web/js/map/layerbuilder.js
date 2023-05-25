@@ -333,7 +333,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
 
-    console.log(layer);
+    console.log(layer.wv.def.custom);
     return layer;
   };
 

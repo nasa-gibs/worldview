@@ -210,13 +210,12 @@ function UpdateProjection(props) {
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
-    console.log('reloadLayers');
     const mapUI = ui.selected;
     const { createLayer } = ui;
 
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
-      if (compareMapDestroyed) {
+      if (compareMapDestroyed) { // false on the first palette update
         compareMapUi.destroy();
       }
       clearLayers();
@@ -226,6 +225,7 @@ function UpdateProjection(props) {
         return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);
+      console.log('createdLayers', createdLayers);
       lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];

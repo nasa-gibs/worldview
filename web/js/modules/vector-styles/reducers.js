@@ -15,9 +15,11 @@ export const defaultVectorStyleState = {
 export function getInitialVectorStyleState(config) {
   console.log('getInitialVectorStyleState');
   const custom = lodashGet(config, 'vectorStyles') || {};
-  return lodashAssign({}, defaultVectorStyleState, {
+  const x = lodashAssign({}, defaultVectorStyleState, {
     custom,
   });
+  console.log('x', x);
+  return x;
 }
 
 export function vectorStyleReducer(state = defaultVectorStyleState, action) {
