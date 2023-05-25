@@ -1052,3 +1052,9 @@ a[rel="noreferrer"]:hover {
     }
   }
 }
+
+.scrollable-layer-container {
+  overflow-y: scroll;
+  max-height: calc(100vh - 95px);
+  height: auto;
+}
