@@ -194,7 +194,6 @@ export function isActive(layerId, group, state) {
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  console.log('clearStyleFunction');
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -229,11 +228,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
-  console.log('applystyle');
-  // console.log(def);
-  // console.log(olVectorLayer);
-  // console.log(state);
-
+  console.log('applyStyle');
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;

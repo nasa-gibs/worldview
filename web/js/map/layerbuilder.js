@@ -609,6 +609,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVector = function(def, options, day, state, attributes) {
+    console.log('createLayerVector');
     const { proj, animation } = state;
     let date;
     let gridExtent;

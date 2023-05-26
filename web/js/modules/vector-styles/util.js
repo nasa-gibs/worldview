@@ -312,7 +312,6 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
 }
 
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  console.log('updateVectorSelection');
   const { config: { vectorStyles } } = state;
   const vectorLayers = getVectorLayers(state);
 
@@ -321,14 +320,12 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
-    console.log('updateVectorSelection');
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
-    console.log('updateVectorSelection 2');
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
   }
 }

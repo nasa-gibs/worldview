@@ -225,7 +225,6 @@ function UpdateProjection(props) {
         return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);
-      console.log('createdLayers', createdLayers);
       lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
