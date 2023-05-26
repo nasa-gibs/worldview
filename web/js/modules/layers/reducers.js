@@ -159,12 +159,11 @@ export function layerReducer(state = initialState, action) {
       };
 
     case TOGGLE_LAYER_VISIBILITY:
-      const index = getLayerIndex();
-      if (index === -1) return state;
+      if (getLayerIndex() === -1) return state;
       return update(state, {
         [compareState]: {
           layers: {
-            [index]: {
+            [getLayerIndex()]: {
               visible: {
                 $set: action?.visible,
               },
