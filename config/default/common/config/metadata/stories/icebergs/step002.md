@@ -1,0 +1,1 @@
+Twenty years later, the B22-A iceberg remained relatively close to the Thwaites Glacier, moving only 100 km from the calving site as it was grounded in a relatively shallow part of the Amundsen Sea.

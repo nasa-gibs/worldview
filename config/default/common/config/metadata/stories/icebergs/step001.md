@@ -1,0 +1,1 @@
+The B22 Iceberg broke off the Thwaites Glacier in Antarctica in early 2002.

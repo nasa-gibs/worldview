@@ -1,0 +1,1 @@
+By May 24, 2023, Iceberg B22-A moved further along, as seen in this brightness temperature image.
