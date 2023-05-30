@@ -90,7 +90,7 @@ function BrowseLayers (props) {
       : (
         <div className="search-layers-container browse">
           <div className="layer-list-container browse">
-            <div className="product-outter-list-case">
+            <div className="product-outer-list-case">
               <BrowseLayerList />
             </div>
           </div>
@@ -206,7 +206,7 @@ function BrowseLayers (props) {
       {
       isCategoryDisplay
         ? (
-          <div className={isMobile ? 'product-outter-list-case scrollable-layer-container' : 'product-outter-list-case'}>
+          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : 'product-outer-list-case'}>
             <CategoryGrid width={width} />
           </div>
         ) : renderContent()
