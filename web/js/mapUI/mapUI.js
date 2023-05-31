@@ -216,7 +216,6 @@ function MapUI(props) {
 
   const updateLayerVisibilities = () => {
     const layerGroup = ui.selected.getLayers();
-
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
       const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';

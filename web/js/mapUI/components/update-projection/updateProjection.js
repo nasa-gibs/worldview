@@ -66,6 +66,7 @@ function UpdateProjection(props) {
   }, [projectionTrigger]);
 
   const actionSwitch = () => {
+    console.log('actionSwitch', action.type);
     switch (action.type) {
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
@@ -210,6 +211,7 @@ function UpdateProjection(props) {
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
+    console.log('reloadLayers');
     const mapUI = ui.selected;
     const { createLayer } = ui;
 

@@ -96,7 +96,6 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  console.log('setStyleFunction');
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -228,7 +227,6 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
-  console.log('applyStyle');
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;

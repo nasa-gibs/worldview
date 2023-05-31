@@ -332,8 +332,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
-
-    console.log(layer.wv.def.custom);
     return layer;
   };
 
@@ -609,7 +607,6 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVector = function(def, options, day, state, attributes) {
-    console.log('createLayerVector');
     const { proj, animation } = state;
     let date;
     let gridExtent;
