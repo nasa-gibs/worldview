@@ -81,6 +81,7 @@ function KioskAnimations({ ui }) {
     return date.toString();
   };
 
+  // Invoked after tileError check is complete, this will trigger the animation availability check
   const handleAnimationSettings = () => {
     const start = updateStartTime(selectedDate);
     const end = selectedDate;
