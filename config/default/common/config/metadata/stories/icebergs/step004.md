@@ -1,1 +1,1 @@
-By May 24, 2023, Iceberg B22-A moved further along, as seen in this brightness temperature image.
+Switching to the brightness temperature image due to polar winter darkness, Iceberg B22-A has moved further away from Thwaites Glacier.
