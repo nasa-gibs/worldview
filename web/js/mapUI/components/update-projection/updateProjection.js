@@ -280,7 +280,8 @@ function UpdateProjection(props) {
  * @returns {void}
  */
   function showMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'block';
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'block';
   }
 
   /**
@@ -294,7 +295,8 @@ function UpdateProjection(props) {
  * @returns {void}
  */
   function hideMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'none';
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'none';
   }
 
 
