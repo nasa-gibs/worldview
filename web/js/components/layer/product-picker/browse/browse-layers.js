@@ -206,7 +206,7 @@ function BrowseLayers (props) {
       {
       isCategoryDisplay
         ? (
-          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : 'product-outer-list-case'}>
+          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
             <CategoryGrid width={width} />
           </div>
         ) : renderContent()
