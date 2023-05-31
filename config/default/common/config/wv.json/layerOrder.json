@@ -288,6 +288,7 @@
 		"MODIS_Aqua_L4_Gross_Primary_Productivity_8Day",
 		"MODIS_Terra_L4_Net_Photosynthesis_8Day",
 		"MODIS_Aqua_L4_Net_Photosynthesis_8Day",
+		"MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day",
 		"MODIS_Terra_L3_SST_MidIR_4km_Night_Daily",
 		"MODIS_Terra_L3_SST_MidIR_4km_Night_8Day",
 		"MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
