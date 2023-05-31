@@ -96,6 +96,7 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('setStyleFunction');
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -193,6 +194,7 @@ export function isActive(layerId, group, state) {
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  console.log('clearStyleFunction');
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');

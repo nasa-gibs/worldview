@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
+import { Button } from 'reactstrap';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
 import CreateMap from './components/create-map/createMap';
@@ -340,8 +341,20 @@ function MapUI(props) {
     }
   }
 
+  const testFunction = () => {
+    console.log(ui.selected.getLayers().getArray());
+    // getSource().getFeatures()
+  };
+
+  const devButton = () => (
+    <div id="dev-block" className="d-flex justify-content-center">
+      <Button onClick={testFunction} style={{ zIndex: '999' }} color="success">Dev Button</Button>
+    </div>
+  );
+
   return (
     <>
+      {devButton()}
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}
