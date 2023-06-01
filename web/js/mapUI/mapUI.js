@@ -343,12 +343,8 @@ function MapUI(props) {
   }
 
   const testFunction = () => {
-    // console.log(ui.selected.getLayers().getArray());
-    // getSource().getFeatures()
     const myLayerGroup = ui.selected.getLayers().getArray()[0];
     const layerGroupLayers = myLayerGroup.getLayers().getArray();
-    // const layerOpacities = layerGroupLayers.map((layer) => layer.changed());
-    console.log(layerGroupLayers);
     console.log(layerGroupLayers[0].wv.def.custom);
     console.log(layerGroupLayers[1].wv.def.custom);
   };

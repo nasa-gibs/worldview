@@ -267,7 +267,6 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
       if (!isGranule) {
-        console.log(`def.type/; ${def.type}`);
         switch (def.type) {
           case 'wmts':
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
@@ -275,7 +274,7 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'vector':
             console.log('createLayerVector');
             layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            console.log(layer);
+            console.log('vector layer', layer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
@@ -291,11 +290,9 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
     layer.setOpacity(opacity || 1.0);
-    // if (breakPointLayer) {
-    //   layer.getLayersArray().forEach(l) => {
-    //     l.setOpacity(opacity || 1.0);
-    //   }
-    // }
+
+    console.log('ttttttttttttttttttttttt');
+    layer.background_ = '#1a2b39';
     return layer;
   };
 
@@ -687,6 +684,7 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     const layer = new LayerVectorTile({
+      background: getRandomHexColor(),
       extent: layerExtent, // the bounding extent
       source: tileSource,
       renderMode: 'vector', // everything is rendered as vector
@@ -707,7 +705,7 @@ export default function mapLayerBuilder(config, cache, store) {
       });
       wmsLayer.wv = attributes;
 
-      // The returned layerGroup only differs by the color & OL IDs
+      // The returned layerGroup only differs by the color & OL IDs!
       return layerGroup;
     }
 
@@ -721,6 +719,19 @@ export default function mapLayerBuilder(config, cache, store) {
 
     return layer;
   };
+
+
+  function getRandomHexColor() {
+    const hexChars = '0123456789ABCDEF';
+    let color = '#';
+
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * hexChars.length);
+      color += hexChars[randomIndex];
+    }
+
+    return color;
+  }
 
   /**
    * Create a new WMS Layer
