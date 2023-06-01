@@ -725,7 +725,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const hexChars = '0123456789ABCDEF';
     let color = '#';
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i += 1) {
       const randomIndex = Math.floor(Math.random() * hexChars.length);
       color += hexChars[randomIndex];
     }
