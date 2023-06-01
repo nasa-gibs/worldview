@@ -64,6 +64,7 @@ function UpdateDate(props) {
   }
 
   function updateVectorStyles (def) {
+    console.log('=====updateVectorStyles=====');
     const { vectorStyles } = config;
     const layerName = def.layer || def.id;
     let vectorStyleId;
@@ -77,7 +78,6 @@ function UpdateDate(props) {
       });
     }
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
-    console.log('updateVectorStyles complete');
   }
 
   async function updateCompareLayer (def, index, layerCollection) {

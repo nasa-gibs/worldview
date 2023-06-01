@@ -192,7 +192,6 @@ function MapUI(props) {
   }, [preloadAction]);
 
   const updateVectorSelections = () => {
-    console.log('updateVectorSelections');
     const type = 'selection';
     const newSelection = vectorActions.payload;
     updateVectorSelection(
@@ -216,6 +215,7 @@ function MapUI(props) {
   };
 
   const updateLayerVisibilities = () => {
+    console.log('updateLayerVisibilities');
     const layerGroup = ui.selected.getLayers();
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
@@ -232,6 +232,7 @@ function MapUI(props) {
 
       // Not in A|B
       if (layer.wv && !granule) {
+        console.log('setRenderable');
         setRenderable(layer);
 
       // If in A|B layer-group will have a 'group' string
@@ -342,8 +343,14 @@ function MapUI(props) {
   }
 
   const testFunction = () => {
-    console.log(ui.selected.getLayers().getArray());
+    // console.log(ui.selected.getLayers().getArray());
     // getSource().getFeatures()
+    const myLayerGroup = ui.selected.getLayers().getArray()[0];
+    const layerGroupLayers = myLayerGroup.getLayers().getArray();
+    // const layerOpacities = layerGroupLayers.map((layer) => layer.changed());
+    console.log(layerGroupLayers);
+    console.log(layerGroupLayers[0].wv.def.custom);
+    console.log(layerGroupLayers[1].wv.def.custom);
   };
 
   const devButton = () => (

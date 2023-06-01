@@ -211,7 +211,6 @@ function UpdateProjection(props) {
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
-    console.log('reloadLayers');
     const mapUI = ui.selected;
     const { createLayer } = ui;
 

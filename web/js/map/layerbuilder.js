@@ -263,7 +263,6 @@ export default function mapLayerBuilder(config, cache, store) {
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
-
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
@@ -273,7 +272,9 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
+            console.log('createLayerVector');
             layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            console.log(layer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
@@ -289,6 +290,11 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
     layer.setOpacity(opacity || 1.0);
+    // if (breakPointLayer) {
+    //   layer.getLayersArray().forEach(l) => {
+    //     l.setOpacity(opacity || 1.0);
+    //   }
+    // }
     return layer;
   };
 
@@ -679,12 +685,12 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     const layer = new LayerVectorTile({
-      extent: layerExtent,
+      extent: layerExtent, // the bounding extent
       source: tileSource,
-      renderMode: 'vector',
-      preload: 0,
-      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
-      ...isMinBreakPoint && { minResolution: breakPointResolution },
+      renderMode: 'vector', // everything is rendered as vector
+      preload: 0, // disable preloading
+      ...isMaxBreakPoint && { maxResolution: breakPointResolution }, // max resolution to show this layer
+      ...isMinBreakPoint && { minResolution: breakPointResolution }, // min resolution to show this layer
     });
     applyStyle(def, layer, state, options);
     layer.wrap = day;
@@ -698,6 +704,8 @@ export default function mapLayerBuilder(config, cache, store) {
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
+
+      // The returned layerGroup only differs by the color & OL IDs
       return layerGroup;
     }
 
