@@ -215,6 +215,7 @@ function MapUI(props) {
   };
 
   const updateLayerVisibilities = () => {
+    console.log('updateLayerVisibilities');
     const layerGroup = ui.selected.getLayers();
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;

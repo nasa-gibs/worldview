@@ -268,6 +268,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
       if (!isGranule) {
+        console.log(`def.type/; ${def.type}`);
         switch (def.type) {
           case 'wmts':
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
@@ -332,6 +333,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
+    console.log(layer);
     return layer;
   };
 
