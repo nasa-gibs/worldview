@@ -118,6 +118,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     }
   }
 
+  console.log('glStyle', glStyle);
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
   }
@@ -129,6 +130,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   // provided args appear the same (except for the color)
   // returned styleFunction is the same on each palette update!
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
+  console.log(styleFunction.toString());
   const selectedFeatures = selected[layerId];
 
   // Process style of feature selected/clicked in UI
