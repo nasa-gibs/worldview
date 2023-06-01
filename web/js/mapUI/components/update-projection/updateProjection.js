@@ -54,6 +54,7 @@ function UpdateProjection(props) {
   } = props;
 
   useEffect(() => {
+    console.log('useeffect actionswitch');
     actionSwitch();
   }, [action]);
 
@@ -66,7 +67,6 @@ function UpdateProjection(props) {
   }, [projectionTrigger]);
 
   const actionSwitch = () => {
-    console.log('actionSwitch', action.type);
     switch (action.type) {
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
