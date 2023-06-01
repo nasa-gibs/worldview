@@ -69,8 +69,11 @@ function UpdateOpacity(props) {
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
-      const layer = findLayer(def, activeString);
-      layer.setOpacity(opacity);
+      const layerGroup = findLayer(def, activeString);
+      layerGroup.setOpacity(opacity);
+      layerGroup.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity);
+      });
     }
     updateLayerVisibilities();
   };
