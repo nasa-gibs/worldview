@@ -53,7 +53,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
       textEl.className = 'track-marker-date';
     }, 5000);
   } else {
-    textEl.className = 'track-marker-date'
+    textEl.className = 'track-marker-date';
     textEl.style.top = hasMagnitude ? '-40px' : '-28px';
   }
   circleEl.className = `track-marker track-marker-${date}`;
