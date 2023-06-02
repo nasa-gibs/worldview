@@ -47,10 +47,13 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   };
   textEl.appendChild(content);
   textEl.appendChild(magnitudeContent);
-  textEl.className = isSelected
-    ? 'track-marker-date track-marker-date-selected'
-    : 'track-marker-date';
-  if (!isSelected) {
+  if (isSelected) {
+    textEl.className = 'track-marker-date track-marker-date-selected';
+    setTimeout(() => {
+      textEl.className = 'track-marker-date';
+    }, 5000);
+  } else {
+    textEl.className = 'track-marker-date'
     textEl.style.top = hasMagnitude ? '-40px' : '-28px';
   }
   circleEl.className = `track-marker track-marker-${date}`;
