@@ -75,8 +75,10 @@ export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
  * @param {String} groupName | layer group string
  */
 export function setCustomPalette(layerId, paletteId, index, groupName) {
+  console.log('setCustomPalette action');
   return (dispatch, getState) => {
     const state = getState();
+    console.log(state);
     const newActivePalettesObj = setCustomSelector(
       layerId,
       paletteId,
@@ -102,7 +104,6 @@ export function setCustomPalette(layerId, paletteId, index, groupName) {
  * @param {String} groupName | layer group string
  */
 export function clearCustomPalette(layerId, index, groupName) {
-  console.log('clearCustomPalette action');
   return (dispatch, getState) => {
     const state = getState();
     const { palettes } = state;

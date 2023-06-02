@@ -34,6 +34,8 @@ import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import {
   vectorStyleReducer,
   getInitialVectorStyleState,
+  vectorStyleDefaultReducer,
+  getInitialVectorStyleDefaultState,
 } from './vector-styles/reducers';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
@@ -81,6 +83,7 @@ export function getInitialState(models, config, parameters) {
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),
+    vectorStylesDefaults: getInitialVectorStyleDefaultState(config),
   };
 }
 const locationReducer = (state = { key: '' }, action) => {
@@ -126,6 +129,7 @@ const reducers = {
   tour: tourReducer,
   ui: uiReducers,
   vectorStyles: vectorStyleReducer,
+  vectorStylesDefaults: vectorStyleDefaultReducer,
 };
 const appReducer = combineReducers(reducers);
 

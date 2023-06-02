@@ -215,7 +215,6 @@ function MapUI(props) {
   };
 
   const updateLayerVisibilities = () => {
-    console.log('updateLayerVisibilities');
     const layerGroup = ui.selected.getLayers();
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
@@ -232,7 +231,6 @@ function MapUI(props) {
 
       // Not in A|B
       if (layer.wv && !granule) {
-        console.log('setRenderable');
         setRenderable(layer);
 
       // If in A|B layer-group will have a 'group' string

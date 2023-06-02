@@ -104,8 +104,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const layerId = def.id;
   const customPalette = def.custom;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
-  const glStyle = vectorStyles[styleId];
 
+  // the retrieved glStyle contains the previous style (i.e. custom color Palette value)
+  let glStyle = vectorStyles[styleId];
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
@@ -126,9 +127,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         thisPaintObj['line-width'] = 2;
       }
     }
+  } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStylesDefaults')) {
+    // reset to default palette values
+    glStyle = state.vectorStylesDefaults.custom[styleId];
   }
 
   // This is required to bust the openlayers functionCache
+  console.log('deleting glStyle ID');
   delete glStyle.id;
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile

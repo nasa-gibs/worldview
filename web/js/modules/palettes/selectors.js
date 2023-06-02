@@ -307,6 +307,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
 }
 
 export function setCustomSelector(layerId, paletteId, index, groupName, state) {
+  console.log('setCustomSelector');
   const { config, palettes } = state;
   if (!config.layers[layerId]) {
     throw new Error(`Invalid layer: ${layerId}`);
