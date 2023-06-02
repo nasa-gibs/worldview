@@ -1,1 +1,1 @@
-Switching to the brightness temperature image due to polar winter darkness, Iceberg B22-A has moved further away from Thwaites Glacier.
+Austral winter descends on this area around mid-April and Antarctica recieves no sunlight making it completely dark. This brightness temperature image "sees" in the dark and B22-A has visibly moved further away from the glacier, about 300 km (about 180 miles).
