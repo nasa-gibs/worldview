@@ -96,7 +96,6 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  console.log('setStyleFunction');
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -113,12 +112,24 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
 
     // update all glStyle properties
     for (let i = 0; i < glStyle.layers.length; i += 1) {
-      glStyle.layers[i].paint['circle-color'] = rgbPalette;
-      glStyle.layers[i].paint['fill-color'] = rgbPalette;
+      const thisPaintObj = glStyle.layers[i].paint;
+      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
+        thisPaintObj['line-color'] = rgbPalette;
+      }
+      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
+        thisPaintObj['circle-color'] = rgbPalette;
+      }
+      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
+        thisPaintObj['fill-color'] = rgbPalette;
+      }
+      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
+        thisPaintObj['line-width'] = 2;
+      }
     }
   }
 
-  console.log('glStyle', glStyle);
+  // This is required to bust the openlayers functionCache
+  delete glStyle.id;
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile
   }
@@ -127,10 +138,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
-  // provided args appear the same (except for the color)
-  // returned styleFunction is the same on each palette update!
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
-  console.log(styleFunction.toString());
   const selectedFeatures = selected[layerId];
 
   // Process style of feature selected/clicked in UI
@@ -229,7 +237,6 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
-  console.log('applyStyle');
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;

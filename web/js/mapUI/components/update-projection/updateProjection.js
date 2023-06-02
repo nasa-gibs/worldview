@@ -54,7 +54,6 @@ function UpdateProjection(props) {
   } = props;
 
   useEffect(() => {
-    console.log('useeffect actionswitch');
     actionSwitch();
   }, [action]);
 

@@ -272,9 +272,7 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
-            console.log('createLayerVector');
             layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            console.log('vector layer', layer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
@@ -290,9 +288,6 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
     layer.setOpacity(opacity || 1.0);
-
-    console.log('ttttttttttttttttttttttt');
-    layer.background_ = '#1a2b39';
     return layer;
   };
 
@@ -336,7 +331,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
-    console.log(layer);
     return layer;
   };
 
@@ -684,7 +678,6 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     const layer = new LayerVectorTile({
-      background: getRandomHexColor(),
       extent: layerExtent, // the bounding extent
       source: tileSource,
       renderMode: 'vector', // everything is rendered as vector
@@ -719,19 +712,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     return layer;
   };
-
-
-  function getRandomHexColor() {
-    const hexChars = '0123456789ABCDEF';
-    let color = '#';
-
-    for (let i = 0; i < 6; i += 1) {
-      const randomIndex = Math.floor(Math.random() * hexChars.length);
-      color += hexChars[randomIndex];
-    }
-
-    return color;
-  }
 
   /**
    * Create a new WMS Layer
