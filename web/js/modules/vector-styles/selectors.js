@@ -95,15 +95,15 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
   const { selected } = state.vectorStyles;
   const { resolutions } = proj.selected;
   const layerId = def.id;
-  const customPalette = def.custom;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
+  const customPalette = def.custom;
 
   let glStyle = vectorStyles[styleId];
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
@@ -126,7 +126,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         thisPaintObj['line-width'] = 2;
       }
     }
-  } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStyles')) {
+  } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStyles') && !styleSelection) {
     glStyle = state.vectorStyles.customDefault[def.id];
   }
 
