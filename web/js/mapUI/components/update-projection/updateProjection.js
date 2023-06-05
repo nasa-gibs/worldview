@@ -215,7 +215,7 @@ function UpdateProjection(props) {
 
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
-      if (compareMapDestroyed) { // false on the first palette update
+      if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
       clearLayers();

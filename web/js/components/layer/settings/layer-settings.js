@@ -347,6 +347,7 @@ class LayerSettings extends React.Component {
         : '';
     } else {
       renderCustomizations = this.renderCustomPalettes();
+      // renderCustomizations = this.renderVectorStyles();
     }
 
     if (!layer.id) return '';

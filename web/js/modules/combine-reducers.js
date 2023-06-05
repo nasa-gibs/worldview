@@ -65,7 +65,6 @@ function lastAction(state = null, action) {
  * @param {Object} parameters | parameters parsed from permalink
  */
 export function getInitialState(models, config, parameters) {
-  console.log('getInitialState');
   return {
     parameters,
     config,

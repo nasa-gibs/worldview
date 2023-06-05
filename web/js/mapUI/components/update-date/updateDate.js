@@ -64,7 +64,6 @@ function UpdateDate(props) {
   }
 
   function updateVectorStyles (def) {
-    console.log('=====updateVectorStyles=====');
     const { vectorStyles } = config;
     const layerName = def.layer || def.id;
     let vectorStyleId;

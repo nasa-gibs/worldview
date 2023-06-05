@@ -45,7 +45,6 @@ function PaletteSelect (props) {
    * @param {String} id | colormap Id
    */
   const onChangePalette = (id) => {
-    console.log('Color Palette Selected [onChangePalette]');
     if (id === '__default') {
       clearCustomPalette(layer.id, index, groupName);
     } else {
@@ -140,7 +139,7 @@ function PaletteSelect (props) {
           id={`wv-palette-radio-${id}`}
           type="radio"
           name="wv-palette-radio"
-          onClick={() => onChangePalette(id, palette.colors[0])}
+          onClick={() => onChangePalette(id)}
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
           <span

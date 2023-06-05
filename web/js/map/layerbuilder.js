@@ -263,6 +263,7 @@ export default function mapLayerBuilder(config, cache, store) {
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
+
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
@@ -331,6 +332,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
+
     return layer;
   };
 
@@ -678,12 +680,12 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     const layer = new LayerVectorTile({
-      extent: layerExtent, // the bounding extent
+      extent: layerExtent,
       source: tileSource,
-      renderMode: 'vector', // everything is rendered as vector
-      preload: 0, // disable preloading
-      ...isMaxBreakPoint && { maxResolution: breakPointResolution }, // max resolution to show this layer
-      ...isMinBreakPoint && { minResolution: breakPointResolution }, // min resolution to show this layer
+      renderMode: 'vector',
+      preload: 0,
+      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
     applyStyle(def, layer, state, options);
     layer.wrap = day;
@@ -697,8 +699,6 @@ export default function mapLayerBuilder(config, cache, store) {
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
-
-      // The returned layerGroup only differs by the color & OL IDs!
       return layerGroup;
     }
 

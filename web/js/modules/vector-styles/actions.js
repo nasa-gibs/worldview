@@ -45,7 +45,6 @@ export function setFilterRange(layerId, props, index, groupName) {
  * @param {String} groupName | layer group string
  */
 export function setStyle(layer, vectorStyleId, groupName) {
-  console.log('setStyle');
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setStyleFunction( // should probably place this inside map.ui as it is a rendering
@@ -73,7 +72,6 @@ export function setStyle(layer, vectorStyleId, groupName) {
  * @param {String} groupName | layer group string
  */
 export function clearStyle(layer, vectorStyleId, groupName) {
-  console.log('clearStyle');
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setStyleFunction(
