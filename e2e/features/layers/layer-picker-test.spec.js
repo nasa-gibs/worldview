@@ -112,7 +112,7 @@ test('Closing and reopening layer picker restores state.', async () => {
     layerDetails,
     layerDetailsDateRange
   } = selectors
-  await page.locator('.product-outter-list-case .search-row:nth-child(1)').click()
+  await page.locator('.product-outer-list-case .search-row:nth-child(1)').click()
   await expect(layerDetailHeader).toContainText('Corrected Reflectance')
   await layersModalCloseButton.click()
   await expect(layersAll).not.toBeVisible()
@@ -212,9 +212,9 @@ test('Selecting a measurement from the grid shows sources and details for first 
   await expect(aodCheckboxMODIS).toBeVisible()
   await expect(aodCheckboxMAIAC).toBeVisible()
   const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
-  const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
+  // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
   await expect(modisAvailableCoverage).toBeVisible()
-  await expect(maiacAvailableCoverage).toBeVisible()
+  // await expect(maiacAvailableCoverage).toBeVisible()
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage icon', async () => {

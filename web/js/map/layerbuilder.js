@@ -289,6 +289,11 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
     layer.setOpacity(opacity || 1.0);
+    if (breakPointLayer) {
+      layer.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity || 1.0);
+      });
+    }
     return layer;
   };
 

@@ -49,6 +49,7 @@ function AnimationWidget (props) {
     animationCustomModalOpen,
     autoplay,
     breakpoints,
+    checkAnimationAvailability,
     currentDate,
     delta,
     endDate,
@@ -100,7 +101,6 @@ function AnimationWidget (props) {
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
-  const [testMode, setTestMode] = useState(false);
 
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
@@ -227,36 +227,34 @@ function AnimationWidget (props) {
   return isActive ? (
     <ErrorBoundary>
       {
-        testMode && (
+        checkAnimationAvailability ? (
           <AnimationTileCheck
             startDate={startDate}
             endDate={endDate}
             interval={interval}
             delta={delta}
             isPlaying={isPlaying}
-            setTestMode={setTestMode}
           />
-        )
+        ) : isPlaying ? (
+          <PlayQueue
+            isMobile={isMobile}
+            isLoopActive={looping}
+            isPlaying={isPlaying}
+            numberOfFrames={numberOfFrames}
+            snappedCurrentDate={snappedCurrentDate}
+            currentDate={currentDate}
+            startDate={startDate}
+            endDate={endDate}
+            interval={interval}
+            delta={delta}
+            speed={speed}
+            selectDate={selectDate}
+            togglePlaying={onPushPause}
+            promiseImageryForTime={promiseImageryForTime}
+            onClose={onPushPause}
+          />
+        ) : null
       }
-      {isPlaying && !testMode && (
-        <PlayQueue
-          isMobile={isMobile}
-          isLoopActive={looping}
-          isPlaying={isPlaying}
-          numberOfFrames={numberOfFrames}
-          snappedCurrentDate={snappedCurrentDate}
-          currentDate={currentDate}
-          startDate={startDate}
-          endDate={endDate}
-          interval={interval}
-          delta={delta}
-          speed={speed}
-          selectDate={selectDate}
-          togglePlaying={onPushPause}
-          promiseImageryForTime={promiseImageryForTime}
-          onClose={onPushPause}
-        />
-      )}
       {isCollapsed ? (
         <CollapsedAnimationWidget
           hasSubdailyLayers={hasSubdailyLayers}
@@ -306,9 +304,8 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : isKioskModeActive && !testMode
+      ) : isKioskModeActive
         ? null
-
         : (
           <DesktopAnimationWidget
             animationCustomModalOpen={animationCustomModalOpen}
@@ -388,7 +385,10 @@ const mapStateToProps = (state) => {
     maxDate = appNow;
   }
 
-  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
+  const {
+    isDistractionFreeModeActive, isKioskModeActive, animationAvailabilityChecked, eic,
+  } = ui;
+  const checkAnimationAvailability = (eic === 'sa' || eic === 'da') && !animationAvailabilityChecked && isKioskModeActive && isPlaying;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
     && lodashGet(map, 'ui.selected.frameState_')
@@ -436,6 +436,7 @@ const mapStateToProps = (state) => {
     appNow,
     animationCustomModalOpen,
     autoplay,
+    checkAnimationAvailability,
     customSelected,
     startDate,
     endDate,
@@ -522,6 +523,7 @@ AnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
   breakpoints: PropTypes.object,
+  checkAnimationAvailability: PropTypes.bool,
   snappedCurrentDate: PropTypes.object,
   currentDate: PropTypes.object,
   delta: PropTypes.number,
