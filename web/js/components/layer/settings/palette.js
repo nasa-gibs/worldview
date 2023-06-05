@@ -45,6 +45,7 @@ function PaletteSelect (props) {
    * @param {String} id | colormap Id
    */
   const onChangePalette = (id) => {
+    console.log('Color Palette Selected [onChangePalette]');
     if (id === '__default') {
       clearCustomPalette(layer.id, index, groupName);
     } else {

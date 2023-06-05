@@ -133,7 +133,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   }
 
   // This is required to bust the openlayers functionCache
-  console.log('deleting glStyle ID');
   delete glStyle.id;
   if (!layer || layer.isWMS) {
     return; // WMS breakpoint tile

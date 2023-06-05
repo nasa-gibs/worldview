@@ -34,8 +34,6 @@ import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import {
   vectorStyleReducer,
   getInitialVectorStyleState,
-  vectorStyleDefaultReducer,
-  getInitialVectorStyleDefaultState,
 } from './vector-styles/reducers';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
@@ -67,6 +65,7 @@ function lastAction(state = null, action) {
  * @param {Object} parameters | parameters parsed from permalink
  */
 export function getInitialState(models, config, parameters) {
+  console.log('getInitialState');
   return {
     parameters,
     config,
@@ -83,7 +82,6 @@ export function getInitialState(models, config, parameters) {
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),
-    vectorStylesDefaults: getInitialVectorStyleDefaultState(config),
   };
 }
 const locationReducer = (state = { key: '' }, action) => {
@@ -129,7 +127,6 @@ const reducers = {
   tour: tourReducer,
   ui: uiReducers,
   vectorStyles: vectorStyleReducer,
-  vectorStylesDefaults: vectorStyleDefaultReducer,
 };
 const appReducer = combineReducers(reducers);
 

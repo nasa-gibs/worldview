@@ -20,7 +20,6 @@ export function getInitialVectorStyleState(config) {
 }
 
 export function vectorStyleReducer(state = defaultVectorStyleState, action) {
-  console.log('vectorStyleReducer');
   const groupName = action.groupName || 'active';
   switch (action.type) {
     case SET_FILTER_RANGE:
@@ -42,15 +41,4 @@ export function vectorStyleReducer(state = defaultVectorStyleState, action) {
     default:
       return state;
   }
-}
-
-export function getInitialVectorStyleDefaultState(config) {
-  const custom = lodashGet(config, 'vectorStyles') || {};
-  return lodashAssign({}, defaultVectorStyleState, {
-    custom,
-  });
-}
-
-export function vectorStyleDefaultReducer(state = {}, action) {
-  return state;
 }

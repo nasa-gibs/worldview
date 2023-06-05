@@ -211,9 +211,7 @@ export function layerReducer(state = initialState, action) {
     }
 
     case SET_CUSTOM_PALETTE: {
-      console.log('SET_CUSTOM_PALETTE');
-      console.log('state', state);
-      const x = update(state, {
+      return update(state, {
         [compareState]: {
           layers: {
             [getLayerIndex()]: {
@@ -224,8 +222,6 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
-      console.log('x', x);
-      return x;
     }
 
     case SET_FILTER_RANGE: {
