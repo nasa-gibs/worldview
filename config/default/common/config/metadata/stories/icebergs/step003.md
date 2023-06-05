@@ -1,1 +1,1 @@
-By October 2022, Iceberg B-22A became dislodged from the sea floor and began to drift northwest.
+By January 2023, Iceberg B-22A became dislodged from the sea floor and began to drift northwest.

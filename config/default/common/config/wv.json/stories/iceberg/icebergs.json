@@ -40,10 +40,10 @@
           "id": "003",
           "description": "step003.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
-          "stepLink": "v=-2367696.2817231934,-966598.3231360409,-1139340.868951634,-400358.00713867444&p=antarctic&z=2&as=2022-10-24-T00%3A00%3A00Z&ae=2023-03-26-T00%3A00%3A00Z&l=Graticule_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&al=true&av=9.5&ab=on&t=2022-10-24-T16%3A00%3A00Z&df=true&kiosk=true"
+          "stepLink": "v=-2367696.2817231934,-966598.3231360409,-1139340.868951634,-400358.00713867444&p=antarctic&z=2&as=2023-01-07-T00%3A00%3A00Z&ae=2023-03-26-T00%3A00%3A00Z&l=Graticule_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&al=false&av=8&ab=on&t=2023-01-07-T16%3A00%3A00Z&df=true&kiosk=true"
         },
         {
           "id": "004",
