@@ -130,9 +130,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     glStyle = state.vectorStyles.customDefault[def.id];
   }
 
-  delete glStyle.id; // This is required to bust the openlayers functionCache
-  if (!layer || layer.isWMS) {
-    return; // WMS breakpoint tile
+  if (!layer || layer.isWMS || glStyle === undefined) {
+    return;
+  }
+
+  // This is required to bust the openlayers functionCache
+  if (Object.prototype.hasOwnProperty.call(glStyle, 'id')) {
+    delete glStyle.id;
   }
 
   layer = layer.getLayers
