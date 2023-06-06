@@ -5,13 +5,14 @@ import {
   DISPLAY_STATIC_MAP,
   CLEAR_ERROR_TILES,
   READY_FOR_KIOSK_ANIMATION,
+  CHECK_ANIMATION_AVAILABILITY,
 } from './constants';
 
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
   displayStaticMap: false,
-  eic: '', // sa == subdaily-animation, da == daily-animation, ss== subdaily-static, ds == daily-static
+  eic: '', // 'sa' == subdaily-animation, 'da' == daily-animation
   errorTiles: {
     dailyTiles: [],
     subdailyTiles: [],
@@ -20,6 +21,7 @@ export const uiState = {
     lastCheckedDate: null,
   },
   readyForKioskAnimation: false,
+  animationAvailabilityChecked: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -58,8 +60,12 @@ export default function uiReducers(state = uiState, action) {
         ...state,
         readyForKioskAnimation: action.toggleAnimation,
       };
+    case CHECK_ANIMATION_AVAILABILITY:
+      return {
+        ...state,
+        animationAvailabilityChecked: action.toggleCheck,
+      };
     default:
       return state;
   }
 }
-

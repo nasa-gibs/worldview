@@ -314,6 +314,12 @@
   display: block;
 }
 
+@media (any-hover: none) {
+  .track-marker-date-selected {
+    display: block;
+  }
+}
+
 .cluster-marker:hover ~ .cluster-track-marker-date {
   display: block;
 }

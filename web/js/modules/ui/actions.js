@@ -7,6 +7,7 @@ import {
   SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   READY_FOR_KIOSK_ANIMATION,
+  CHECK_ANIMATION_AVAILABILITY,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -30,6 +31,8 @@ export default function toggleDistractionFreeMode() {
   };
 }
 
+// Keeping this action for testing purposes.
+// Kiosk mode should always be activated through the permalink parameters.
 export function toggleKioskMode(isActive) {
   return {
     type: TOGGLE_KIOSK_MODE,
@@ -37,6 +40,7 @@ export function toggleKioskMode(isActive) {
   };
 }
 
+// Layerbuilder tracks tile requests that return errors or blank tiles and dispatches this action for specific layers.
 export function setErrorTiles(errorTiles) {
   return {
     type: SET_ERROR_TILES,
@@ -50,6 +54,8 @@ export function setErrorTiles(errorTiles) {
   };
 }
 
+// After each tile request we call this to clear the error tiles for the current date.
+// We want to preserve the lastCheckedDate value from the previous dispatched setErrorTiles action.
 export function clearErrorTiles() {
   return (dispatch, getState) => {
     const { ui: { errorTiles: { lastCheckedDate } } } = getState();
@@ -74,6 +80,8 @@ export function clearErrorTiles() {
   };
 }
 
+// Dispatched when maximum date/time threshold is met when checking for error/blank tiles.
+// Displays a static image map stored locally in repo.
 export function toggleStaticMap(isActive) {
   return {
     type: DISPLAY_STATIC_MAP,
@@ -81,9 +89,21 @@ export function toggleStaticMap(isActive) {
   };
 }
 
+// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once we step the date back to full imagery.
+// This signals that the animation availability to ready to be checked.
 export function toggleReadyForKioskAnimation(toggleAnimation) {
   return {
     type: READY_FOR_KIOSK_ANIMATION,
     toggleAnimation,
+  };
+}
+
+// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once the animation has been triggered.
+// Once availability is measured and passes the threshold metric this action will dispatch.
+// This signals that the animation is ready to be played.
+export function toggleCheckedAnimationAvailability(toggleCheck) {
+  return {
+    type: CHECK_ANIMATION_AVAILABILITY,
+    toggleCheck,
   };
 }
