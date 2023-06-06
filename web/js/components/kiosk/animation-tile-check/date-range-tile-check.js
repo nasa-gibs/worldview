@@ -24,7 +24,7 @@ import {
 const contentLengthThresholds = {
   'GOES-East_ABI_GeoColor': 160000,
   'GOES-West_ABI_GeoColor': 160000,
-  'AMSRU2_Sea_Ice_Concentration_12km': 50000,
+  'AMSRU2_Sea_Ice_Concentration_12km': 10000,
 };
 
 function DateRangeTileCheck(props) {
