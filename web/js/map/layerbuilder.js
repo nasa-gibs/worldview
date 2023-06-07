@@ -26,7 +26,6 @@ import {
   mergeBreakpointLayerAttributes,
   formatReduxDate,
   extractDateFromTileErrorURL,
-  formatSelectedDate,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
@@ -163,14 +162,12 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
     const state = store.getState();
-    const { ui: { isKioskModeActive }, date: { selected } } = state;
+    const { ui: { isKioskModeActive } } = state;
 
     const date = layerDate.toISOString().split('T')[0];
 
     const checkBlobTiles = (headers) => {
-      // recently changed from appNow date to selected date, was previously only checking current day
-      const formattedSelectedDate = formatSelectedDate(selected);
-      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id) && formattedSelectedDate === date) {
+      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id)) {
         errorTiles.kioskTileCount += 1;
         const contentLength = headers.get('content-length');
         const contentType = headers.get('content-type');
