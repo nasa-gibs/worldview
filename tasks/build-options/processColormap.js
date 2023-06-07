@@ -91,6 +91,8 @@ function toList (v) {
 async function matchLegend (entry, legends) {
   try {
     let matched = 'false'
+
+    // Iterate through each legend from the XML
     for (const legend of legends) {
       if (!legend._attributes.id) {
         throw new Error('No legend IDs')
@@ -106,14 +108,18 @@ async function matchLegend (entry, legends) {
 }
 
 async function processEntries (colormap) {
+  // Convert the XML data into a JSON object
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
+
+  // confirm each entry has transparent set to true/false, matching XML source
   for (const entry of entries) {
     if (entry._attributes.transparent === 'false') {
       transparentMap = 'false'
     }
   }
   if (transparentMap === 'true') {
+    console.warn('returning transparent')
     return 'transparent'
   }
 
@@ -148,8 +154,8 @@ async function processEntries (colormap) {
       // the image. We force the alpha channel ON, which enables toggling in WV
       // Also push this palette index into disabled array so we can initialize these colors OFF
       if (entry._attributes.transparent === 'true') {
-        a = 255
-        disabled.push(index)
+        a = 0
+        // disabled.push(index)
       }
 
       if (a === 0) {
@@ -266,7 +272,14 @@ async function readFileAsync (file) {
   return { id, xml }
 }
 
+/*
+ * id  | The layer identifier
+ * xml | The xml file associated with the layer. Contains colormap entries & legend
+*/
 async function processFile (id, xml) {
+  if (id === 'MODIS_Flood') {
+    console.warn('HERE')
+  }
   let document
   let colormaps = []
   try {
@@ -278,6 +291,7 @@ async function processFile (id, xml) {
     for (const colormap of colormaps) {
       const result = await processEntries(colormap)
       if (result === 'transparent') {
+      // This colormap entry is "transparent" so stop processing
         continue
       }
       result.title = colormap._attributes.title

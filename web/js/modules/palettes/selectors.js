@@ -111,6 +111,7 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
 }
 
 const useLookup = function(layerId, palettesObj, state) {
+  console.log('useLookup');
   let use = false;
   const active = palettesObj[layerId].maps;
   lodashEach(active, (palette, index) => {
