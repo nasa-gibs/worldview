@@ -146,7 +146,7 @@ class PaletteLegend extends React.Component {
         if (this[ctxStr]) {
           const newWidth = this[ctxStr].current.getBoundingClientRect().width;
           // eslint-disable-next-line react/destructuring-assignment
-          if (newWidth !== this.state.width) {
+          if (newWidth && newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });

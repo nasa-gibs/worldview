@@ -1,5 +1,5 @@
-/* eslint-disable import/prefer-default-export */
 // formats date for kiosk mode and updates to EST
+// eslint-disable-next-line import/prefer-default-export
 export function formatKioskDate(date, subdaily) {
   const options = {
     year: 'numeric',
@@ -24,3 +24,5 @@ export function formatKioskDate(date, subdaily) {
 
   return formattedDate;
 }
+
+
