@@ -152,7 +152,7 @@ class SearchLayerList extends React.Component {
           useWindow={false}
           getScrollParent={() => this.scrollParent}
         >
-          <div className="product-outter-list-case layers-all">
+          <div className="product-outer-list-case layers-all">
             {visibleItems.map((layer) => (isMobile && recentLayerMode
               ? (
                 <SwipeToDelete

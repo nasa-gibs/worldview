@@ -112,7 +112,7 @@ test('Closing and reopening layer picker restores state.', async () => {
     layerDetails,
     layerDetailsDateRange
   } = selectors
-  await page.locator('.product-outter-list-case .search-row:nth-child(1)').click()
+  await page.locator('.product-outer-list-case .search-row:nth-child(1)').click()
   await expect(layerDetailHeader).toContainText('Corrected Reflectance')
   await layersModalCloseButton.click()
   await expect(layersAll).not.toBeVisible()
