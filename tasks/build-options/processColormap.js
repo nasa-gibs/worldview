@@ -91,8 +91,6 @@ function toList (v) {
 async function matchLegend (entry, legends) {
   try {
     let matched = 'false'
-
-    // Iterate through each legend from the XML
     for (const legend of legends) {
       if (!legend._attributes.id) {
         throw new Error('No legend IDs')
@@ -108,18 +106,19 @@ async function matchLegend (entry, legends) {
 }
 
 async function processEntries (colormap) {
-  // Convert the XML data into a JSON object
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
 
-  // confirm each entry has transparent set to true/false, matching XML source
+  // Check to see if there is at least one non-transparent entry.
   for (const entry of entries) {
     if (entry._attributes.transparent === 'false') {
       transparentMap = 'false'
+      break
     }
   }
+
+  // Early return if layer is compeletely transparent
   if (transparentMap === 'true') {
-    console.warn('returning transparent')
     return 'transparent'
   }
 
@@ -135,11 +134,10 @@ async function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
-  const disabled = []
 
   // TODO: make this a separate function for entries?
   await Promise.all(
-    entries.map(async (entry, index) => {
+    entries.map(async (entry) => {
       const legend = await matchLegend(entry, legends)
 
       if (legend === 'false') {
@@ -148,14 +146,11 @@ async function processEntries (colormap) {
       }
 
       const [r, g, b] = entry._attributes.rgb.split(',')
-      let a = 0
 
-      // transparent === 'false' indicates that there is additional data embedded in
-      // the image. We force the alpha channel ON, which enables toggling in WV
-      // Also push this palette index into disabled array so we can initialize these colors OFF
-      if (entry._attributes.transparent === 'true') {
-        a = 0
-        // disabled.push(index)
+      // Identify transparent entries & exclude their reference
+      let a = 0
+      if (entry._attributes.transparent === 'false') {
+        a = 255
       }
 
       if (a === 0) {
@@ -235,6 +230,7 @@ async function processEntries (colormap) {
       }
     })
   )
+
   const result = {
     type: mapType,
     entries: {
@@ -250,11 +246,6 @@ async function processEntries (colormap) {
       refs: idList
     }
   }
-
-  if (disabled.length > 0) {
-    result.legend.disabled = disabled
-  }
-
   if (mapType === 'continuous' || mapType === 'discrete') {
     result.entries.values = values
   }
@@ -273,12 +264,16 @@ async function readFileAsync (file) {
 }
 
 /*
- * id  | The layer identifier
- * xml | The xml file associated with the layer. Contains colormap entries & legend
+ * processFile: Process provided xml file, determine relevant data & write data
+ * This determines the colormap & Palette legend data used in WV Layer window
+ *
+ * Parameters:
+ * id  [string] representing this product's layer name
+ * xml [string] represention of this product's xml colormap file (served from GIBS)
 */
 async function processFile (id, xml) {
   if (id === 'MODIS_Flood') {
-    console.warn('HERE')
+    console.warn('MODIS_Flood')
   }
   let document
   let colormaps = []
@@ -291,7 +286,7 @@ async function processFile (id, xml) {
     for (const colormap of colormaps) {
       const result = await processEntries(colormap)
       if (result === 'transparent') {
-      // This colormap entry is "transparent" so stop processing
+        // There are no visible colors in the colormap so stop processing
         continue
       }
       result.title = colormap._attributes.title
