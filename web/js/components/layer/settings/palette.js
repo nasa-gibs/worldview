@@ -155,6 +155,7 @@ function PaletteSelect (props) {
   };
 
   const recommended = layer.palette.recommended || [];
+
   return (
     <div
       className="wv-palette-selector settings-component noselect"

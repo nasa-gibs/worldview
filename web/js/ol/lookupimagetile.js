@@ -34,32 +34,19 @@ LookupImageTile.prototype.load = function() {
       const pixels = imageData.data;
 
       for (let i = 0; i < octets; i += 4) {
-        // This is the RGBA value of the pixel being processed
         const pixelColor = `${pixels[i + 0]},${
           pixels[i + 1]},${
           pixels[i + 2]},${
           pixels[i + 3]}`;
 
-        // If the pixel color is not black, we force it to the palette color
-        // This catches all variations of default palette color
-        // if (pixelColor !== '0,0,0,0') {
-        //   // eslint-disable-next-line prefer-destructuring
-        //   pixelColor = Object.keys(that.lookup_)[0];
-        // }
-
-        // We check to see if the pixelColor exists in the lookup table
         const targetColor = that.lookup_[pixelColor];
 
         if (targetColor) {
-        // if (pixelColor !== '0,0,0,0') {
           pixels[i + 0] = targetColor.r;
           pixels[i + 1] = targetColor.g;
           pixels[i + 2] = targetColor.b;
           pixels[i + 3] = targetColor.a;
         } else {
-          // check deviation from targetColor & apply same differential to new palette color???
-          // .
-          // .
           // just make everything else black/transparent
           pixels[i + 0] = 0;
           pixels[i + 1] = 0;
