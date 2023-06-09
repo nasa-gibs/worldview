@@ -53,15 +53,16 @@ class PaletteLegend extends React.Component {
   componentDidMount() {
     // Check if there are default disabled refs for this palette
     console.log('PaletteLegend did mount');
-    const { getPalette, layer, toggleAllClassifications } = this.props;
+    const {
+      getPalette, layer, compareState, toggleAllClassifications,
+    } = this.props;
 
     if (layer.disabled === undefined) {
       // There is not a previous instance, so check the palette defaults
       const palette = getPalette();
       if (palette.disabled && palette.disabled.length > 0) {
-        console.log('This layer has default disabled palette item(s)');
-        // Is there a disabled array on the state.palette? If so, apply those refs to be OFF
-        toggleAllClassifications(layer.id, [0, 1], 0, 'active');
+        const disabledIntArr = palette.disabled.map((str) => Number(str));
+        toggleAllClassifications(layer.id, disabledIntArr, 0, compareState);
       }
     }
 
