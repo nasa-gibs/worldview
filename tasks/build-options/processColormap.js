@@ -88,6 +88,15 @@ function toList (v) {
   return Array.isArray(v) ? v : [v]
 }
 
+/*
+ * matchLegend: Determines if the given entry has a matching legend.id
+ *
+ * Parameters:
+ * entry   [object] Single ColorMapEntry Object for this product
+ * legends [object] collection of legends for this product
+ *
+ * Returns the matching legend if found
+*/
 async function matchLegend (entry, legends) {
   try {
     let matched = 'false'
@@ -134,9 +143,11 @@ async function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
+  const initializeDisabled = []
 
   // TODO: make this a separate function for entries?
   await Promise.all(
+    // Iterate through each ColorMapEntry
     entries.map(async (entry) => {
       const legend = await matchLegend(entry, legends)
 
@@ -151,8 +162,13 @@ async function processEntries (colormap) {
       let a = 0
       if (entry._attributes.transparent === 'false') {
         a = 255
+      } else {
+        // Force alpha value to 255 even if transparent === 'true'
+        a = 255
+        initializeDisabled.push(entry._attributes.ref)
       }
 
+      // This will never be true so can be deleted
       if (a === 0) {
         refSkipList.push(entry._attributes.ref)
         return
@@ -244,7 +260,8 @@ async function processEntries (colormap) {
       tooltips,
       ticks,
       refs: idList
-    }
+    },
+    disabled: initializeDisabled
   }
   if (mapType === 'continuous' || mapType === 'discrete') {
     result.entries.values = values
