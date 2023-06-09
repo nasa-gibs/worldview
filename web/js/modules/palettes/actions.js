@@ -162,6 +162,7 @@ export function loadedCustomPalettes(customs) {
   };
 }
 export function setToggledClassification(layerId, classIndex, index, groupName) {
+  console.log('setToggledClassification');
   return (dispatch, getState) => {
     const state = getState();
     const newActivePalettesObj = setDisabledSelector(
@@ -185,6 +186,7 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
     };
     const layerIndex = state.layers[groupName].layers[getLayerIndex()];
     if (layerIndex) {
+      console.log('SET_DISABLED_CLASSIFICATION');
       dispatch({
         type: SET_DISABLED_CLASSIFICATION,
         groupName,

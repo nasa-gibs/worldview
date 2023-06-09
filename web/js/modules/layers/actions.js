@@ -110,6 +110,7 @@ export function toggleOverlayGroups() {
 }
 
 export function addLayer(id) {
+  console.log('addLayer');
   googleTagManager.pushEvent({
     event: 'layer_added',
     layers: { id },
@@ -119,6 +120,7 @@ export function addLayer(id) {
     const {
       layers, compare, proj, config,
     } = state;
+
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
     const activeLayers = getActiveLayersSelector(state);

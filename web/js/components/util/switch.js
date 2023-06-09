@@ -26,6 +26,7 @@ function Switch(props) {
   }, [active]);
 
   function toggleSwitch() {
+    console.log('toggleSwitch');
     // wait for css animation to complete before firing action
     setTimeout(toggle, 200);
     toggleActive(!isActive);

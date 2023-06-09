@@ -4,6 +4,7 @@ import lodashIsNumber from 'lodash/isNumber';
 import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
 import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
+import { connect } from 'react-redux';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import {
   drawSidebarPaletteOnCanvas,
@@ -14,6 +15,10 @@ import {
   convertPaletteValue,
 } from '../../modules/settings/util';
 import util from '../../util/util';
+import {
+  setToggledClassification,
+  refreshDisabledClassification,
+} from '../../modules/palettes/actions';
 
 /**
    * @param {Number} xOffset | X px Location of running-data
@@ -46,6 +51,20 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidMount() {
+    // Check if there are default disabled refs for this palette
+    console.log('PaletteLegend did mount');
+    const { getPalette, layer, toggleAllClassifications } = this.props;
+
+    if (layer.disabled === undefined) {
+      // There is not a previous instance, so check the palette defaults
+      const palette = getPalette();
+      if (palette.disabled && palette.disabled.length > 0) {
+        console.log('This layer has default disabled palette item(s)');
+        // Is there a disabled array on the state.palette? If so, apply those refs to be OFF
+        toggleAllClassifications(layer.id, [0, 1], 0, 'active');
+      }
+    }
+
     this.updateCanvas();
     this.setState(() => ({
       scrollContainerEl: document.querySelector('#layers-scroll-container'),
@@ -460,6 +479,23 @@ PaletteLegend.propTypes = {
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,
   width: PropTypes.number,
+  toggleAllClassifications: PropTypes.func,
 };
 
-export default PaletteLegend;
+const mapDispatchToProps = (dispatch) => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName),
+    );
+  },
+  toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
+    dispatch(
+      refreshDisabledClassification(layerId, disabledArray, index, groupName),
+    );
+  },
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(PaletteLegend);
