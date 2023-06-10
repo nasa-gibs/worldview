@@ -3,13 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { getDates } from './util';
 import { fetchWMSImage } from './api-calls';
-
-const layersToMeasure = [
-  'VIIRS_SNPP_Thermal_Anomalies_375m_Day',
-  'GOES-East_ABI_GeoColor',
-  'GOES-West_ABI_GeoColor',
-  'Himawari_AHI_Band3_Red_Visible_1km',
-]
+import calculatePixels from './calculate-pixels'
+import { layersToMeasure, layerPixelData } from './layer-data-eic';
 
 function TileMeasurement() {
   const {
@@ -31,11 +26,11 @@ function TileMeasurement() {
     }
   })
 
-  // #2 We filter all of the active layers that are also in the layersToMeasure array
+  // #2 Filter all of the active layers that are also in the layersToMeasure array
   const findLayersToMeasure = () => {
     setMeasurementsStarted(true)
     const measurementLayersExtra = activeLayers.filter(layer => layersToMeasure.includes(layer.id))
-    console.log(measurementLayersExtra)
+    // console.log(measurementLayersExtra)
     // condense this step into the above filter later
     const measurementLayers = measurementLayersExtra.map(layer => ({  id: layer.id, period: layer.period }))
     // console.log(measurementLayers)
@@ -43,7 +38,7 @@ function TileMeasurement() {
     return measurementLayers;
   }
 
-  // #3 Then we find the date range for each layer depending on the period (daily or subdaily)
+  // #3 Find the date range for each layer depending on the period (daily or subdaily)
   const findDateRange = (measurementLayers) => {
     // there should be no situation where there are multiple layers with different periods
     const datePeriod = measurementLayers[0].period
@@ -51,25 +46,30 @@ function TileMeasurement() {
     return dates
   }
 
-  const getWMSImages = (layers, dates) => {
+  // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
+  const findFullImageryDate = async (layers, dates) => {
 
-    return null;
+    const wmsImage = await fetchWMSImage(layers[0].id, dates[0])
+    console.log(wmsImage)
+
+    const blackPixelRatio = await calculatePixels(wmsImage)
+    console.log(blackPixelRatio)
   }
 
   // #1 Parent function that is called from useEffect.
   const calculateMeasurements = async () => {
-    const measurementLayers = findLayersToMeasure();
-    const dateRange = findDateRange(measurementLayers);
-    console.log(measurementLayers)
-    console.log(dateRange)
+    try {
+      const measurementLayers = findLayersToMeasure();
+      const dateRange = findDateRange(measurementLayers);
+      console.log(measurementLayers)
+      console.log(dateRange)
 
-    const wmsImage = await fetchWMSImage(measurementLayers[0].id, dateRange[0])
+      const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange)
 
-    console.log(wmsImage)
-
-
-
-    setMeasurementsCompleted(true)
+      setMeasurementsCompleted(true)
+    } catch (error) {
+      console.error("Error calculating measurements:", error);
+    }
   }
 
   return null;
