@@ -19,6 +19,7 @@ import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAni
 import TileErrorHandler from './components/kiosk/tile-errors/tile-error-handler';
 import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
+import TileImagePixelTest from './components/kiosk/tile-measurement/tile-image-test-mode/tile-image-test-mode';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -95,6 +96,8 @@ function MapUI(props) {
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
   const [tileErrorAction, setTileErrorAction] = useState({});
+
+  const [tileImageTestMode, setTileImageTestMode] = useState(true);
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -402,6 +405,8 @@ function MapUI(props) {
       <TileErrorHandler action={tileErrorAction} ui={ui} />
       <KioskAnimations ui={ui} />
       <TileMeasurement />
+      {tileImageTestMode && <TileImagePixelTest />}
+
     </>
   );
 }

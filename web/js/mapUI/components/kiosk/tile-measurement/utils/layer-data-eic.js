@@ -9,6 +9,7 @@ export const layersToMeasure = [
 
 // Object that contains the black pixel % threshold for each layer
 export const layerPixelData = {
-  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: 30 }
+  // full imagery threshold
+  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: .31 }
 
 }

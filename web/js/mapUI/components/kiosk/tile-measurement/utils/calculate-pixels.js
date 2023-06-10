@@ -22,6 +22,9 @@ export default function calculateBlackPixelRatio(blobUrl) {
       const blackPixelRatio = blackPixelsCount / totalPixels;
       resolve(blackPixelRatio);
     };
-    img.onerror = reject;
+    img.onerror = (e) => {
+      console.error("Image loading error:", e);
+      reject(e);
+    };
   });
 }

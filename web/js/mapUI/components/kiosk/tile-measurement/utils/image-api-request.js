@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
-export async function fetchWMSImage(layer, date) {
+export async function fetchWMSImage(layer, date, testMode) {
   const baseUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi';
   const params = {
     version: '1.3.0',
@@ -24,10 +24,12 @@ export async function fetchWMSImage(layer, date) {
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
     const imageSrc = URL.createObjectURL(blob);
 
-    // Save the file for debugging purposes
-    // Make sure to remove this before going to prod!
-    const file = new Blob([response.data], { type: 'image/png' });
-    saveAs(file, `${layer}.png`);
+    // Save the file for debugging purposes in test mode
+    // This should open image in a seperate tab in the browser, may have to allow popups
+    if (testMode) {
+      const file = new Blob([response.data], { type: 'image/png' });
+      saveAs(file, `${layer}.png`);
+    }
 
     return imageSrc;
   } catch (error) {

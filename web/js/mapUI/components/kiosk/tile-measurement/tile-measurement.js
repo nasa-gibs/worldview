@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
-import { getDates } from './util';
-import { fetchWMSImage } from './api-calls';
-import calculatePixels from './calculate-pixels'
-import { layersToMeasure, layerPixelData } from './layer-data-eic';
+import { getDates } from './utils/date-util';
+import { fetchWMSImage } from './utils/image-api-request';
+import calculatePixels from './utils/calculate-pixels'
+import { layersToMeasure, layerPixelData } from './utils/layer-data-eic';
 
 function TileMeasurement() {
   const {
@@ -48,12 +48,32 @@ function TileMeasurement() {
 
   // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
   const findFullImageryDate = async (layers, dates) => {
+    // #1 Loop through dates starting with the current date
+    for (let i = 0; i < dates.length; i++) {
+      // Keep track of how many layers meet pixel threshold requirements for date
+      // This value should be equal to the number of layers being measured to determine a date
+      let layersMeetingThresholdForDate = 0;
 
-    const wmsImage = await fetchWMSImage(layers[0].id, dates[0])
-    console.log(wmsImage)
-
-    const blackPixelRatio = await calculatePixels(wmsImage)
-    console.log(blackPixelRatio)
+      // #2 Loop through each layer that we want to measure and fetch the image for the i'th date
+      for (let j = 0; j < layers.length; j++) {
+        const wmsImage = await fetchWMSImage(layers[j].id, dates[i])
+        const blackPixelRatio = await calculatePixels(wmsImage)
+        // Find the pixel threshold for the current layer
+        const threshold = layerPixelData[layers[j].id].threshold
+        // If the amount of black pixels is less than the threshold, increment count, otherwise break loop
+        if (blackPixelRatio < threshold) {
+          layersMeetingThresholdForDate += 1;
+        } else {
+          break;
+        }
+      }
+      // #3 After inner loop, check if count is equal to number of layers being measured
+      if (layersMeetingThresholdForDate === layers.length) {
+        return dates[i]
+      } else {
+        layersMeetingThresholdForDate = 0;
+      }
+    }
   }
 
   // #1 Parent function that is called from useEffect.
@@ -65,6 +85,7 @@ function TileMeasurement() {
       console.log(dateRange)
 
       const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange)
+      console.log(fullImageryDate)
 
       setMeasurementsCompleted(true)
     } catch (error) {

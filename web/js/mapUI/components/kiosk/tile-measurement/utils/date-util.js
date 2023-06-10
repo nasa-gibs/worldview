@@ -33,6 +33,7 @@ function formatDailyDate (date) {
 }
 
 // Return an array of subdaily dates for the past 2 hours in ten minute intervals
+// The current date is rounded down to the nearest ten minutes
 // Accepts redux selectedDate value
 function getSubdailyDates (selectedDate) {
   const currentDate = new Date(selectedDate);
@@ -50,7 +51,29 @@ function getSubdailyDates (selectedDate) {
 
 // format a single subdaily date
 // accepts a date object
-const formatSubdailyDate = (date) => {
+function formatSubdailyDate (date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hour = date.getHours().toString().padStart(2, '0');
+  const minute = date.getMinutes().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
+}
+
+// Format a daily redux date to be used in the WMS request
+export function formatReduxDailyDate(selectedDate) {
+  const date = new Date(selectedDate);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+// Format a subdaily redux date rounded down to ten minute interval to be used in the WMS request
+export function formatReduxSubdailyDate(selectedDate) {
+  const date = new Date(selectedDate);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
