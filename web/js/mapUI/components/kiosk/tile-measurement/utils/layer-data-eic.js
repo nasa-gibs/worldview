@@ -8,8 +8,11 @@ export const layersToMeasure = [
 ]
 
 // Object that contains the black pixel % threshold for each layer
+// Threshold values represent the amount of black pixels as a percentage that CAN be present in an image
 export const layerPixelData = {
   // full imagery threshold
-  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: .31 }
-
+  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: .31 },
+  'GOES-East_ABI_GeoColor': { threshold: .75 },
+  'GOES-West_ABI_GeoColor': { threshold: .75 },
+  'Himawari_AHI_Band3_Red_Visible_1km': { threshold: .75 },
 }

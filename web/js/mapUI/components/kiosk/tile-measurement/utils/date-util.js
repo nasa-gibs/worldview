@@ -11,7 +11,11 @@ export function getDates(selectedDate, period) {
 // Return an array of daily dates for the past 7 days
 // Accepts redux selectedDate value
 function getDailyDates (selectedDate) {
-  const currentDate = new Date(selectedDate);
+  // Get the date as a string in UTC
+  const utcDateString = selectedDate.toLocaleString("en-US", { timeZone: "UTC" });
+  // Convert the UTC string back to a Date object
+  const currentDate = new Date(utcDateString);
+
   const prevDates = [formatDailyDate(currentDate)]
 
   for (let i = 1; i < 7; i++) {
@@ -36,17 +40,21 @@ function formatDailyDate (date) {
 // The current date is rounded down to the nearest ten minutes
 // Accepts redux selectedDate value
 function getSubdailyDates (selectedDate) {
-  const currentDate = new Date(selectedDate);
-    // Round minutes down to nearest ten and seconds and milliseconds to zero
-    currentDate.setMinutes(Math.floor(currentDate.getMinutes() / 10) * 10, 0, 0);
-    const prevDates = [formatSubdailyDate(currentDate)];
+  // Get the date as a string in UTC
+  const utcDateString = selectedDate.toLocaleString("en-US", { timeZone: "UTC" });
+  // Convert the UTC string back to a Date object
+  const currentDate = new Date(utcDateString);
 
-    // Add 12 more dates in ten-minute intervals (for the past two hours)
-    for (let i = 1; i <= 12; i++) {
-      const previousDate = new Date(currentDate.getTime() - i * 10 * 60 * 1000); // subtracts i*10 minutes
-      prevDates.push(formatSubdailyDate(previousDate));
-    }
-    return prevDates;
+  // Round minutes down to nearest ten and seconds and milliseconds to zero
+  currentDate.setMinutes(Math.floor(currentDate.getMinutes() / 10) * 10, 0, 0);
+  const prevDates = [formatSubdailyDate(currentDate)];
+
+  // Add 12 more dates in ten-minute intervals (for the past two hours)
+  for (let i = 1; i <= 12; i++) {
+    const previousDate = new Date(currentDate.getTime() - i * 10 * 60 * 1000); // subtracts i*10 minutes
+    prevDates.push(formatSubdailyDate(previousDate));
+  }
+  return prevDates;
 }
 
 // format a single subdaily date
@@ -63,7 +71,8 @@ function formatSubdailyDate (date) {
 
 // Format a daily redux date to be used in the WMS request
 export function formatReduxDailyDate(selectedDate) {
-  const date = new Date(selectedDate);
+  const utcDateString = selectedDate.toLocaleString("en-US", { timeZone: "UTC" });
+  const date = new Date(utcDateString);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
@@ -73,7 +82,8 @@ export function formatReduxDailyDate(selectedDate) {
 
 // Format a subdaily redux date rounded down to ten minute interval to be used in the WMS request
 export function formatReduxSubdailyDate(selectedDate) {
-  const date = new Date(selectedDate);
+  const utcDateString = selectedDate.toLocaleString("en-US", { timeZone: "UTC" });
+  const date = new Date(utcDateString);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Button,
 } from 'reactstrap';
 
 function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelection }) {
