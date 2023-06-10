@@ -80,7 +80,7 @@ function TileErrorHandler({ action, ui }) {
   const blankTileCheck = blankTiles.length;
 
   useEffect(() => {
-    if (!ui.selected || !map.rendered || readyForKioskAnimation) return;
+    if (!ui.selected || !map.rendered || readyForKioskAnimation || eic === 'alt') return;
 
     if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
       handleTileErrors();
