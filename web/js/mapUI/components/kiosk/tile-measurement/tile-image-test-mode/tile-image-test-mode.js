@@ -34,21 +34,36 @@ function TileImagePixelTest() {
     }
   }
 
-  const  makeMeasurementRequest = async () => {
-    const formattedDate = formatDate()
-    const wmsImage = await fetchWMSImage(layerSelection.id, formattedDate, true)
-    if (!wmsImage) {
-      console.error('No image returned from WMS request')
-      return;
+  const makeMeasurementRequest = async () => {
+    const formattedDate = formatDate();
+    try {
+      const wmsImage = await fetchWMSImage(layerSelection.id, formattedDate, true);
+
+      // Create an image and handle its loading and error events
+      let img = new Image();
+
+      img.onload = async () => {
+        // Process the loaded image here
+        const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
+        const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
+
+        const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `
+        const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`
+
+        console.log(pixelMessage + thresholdMessage);
+      };
+
+      img.onerror = error => {
+        console.error(`No image available for ${layerSelection.id} on ${formattedDate}: `, error);
+      };
+
+      // Try to load the image
+      img.src = wmsImage;
+    } catch (error) {
+      console.error(`No image available for ${layerSelection.id} on ${formattedDate}: `, error);
     }
-    const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
+  };
 
-    const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold ?? null;
-
-    const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `
-    const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`
-    console.log(pixelMessage + thresholdMessage)
-  }
 
   return (
     <div id="dev-block" className="d-flex justify-content-center">
