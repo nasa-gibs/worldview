@@ -47,6 +47,7 @@ function TileErrorHandler({ action, ui }) {
     eic,
     map,
     readyForKioskAnimation,
+    eicMeasurementComplete,
   } = useSelector((state) => ({
     autoplayAnimation: state.animation.autoplay,
     displayStaticMap: state.ui.displayStaticMap,
@@ -61,6 +62,7 @@ function TileErrorHandler({ action, ui }) {
     eic: state.ui.eic,
     map: state.map,
     readyForKioskAnimation: state.ui.readyForKioskAnimation,
+    eicMeasurementComplete: state.ui.eicMeasurementComplete,
   }));
   const { activeString } = compare;
   const hasSubdailyLayers = useSelector((state) => subdailyLayersActive(state));
@@ -70,26 +72,17 @@ function TileErrorHandler({ action, ui }) {
     dailyTiles, subdailyTiles, kioskTileCount, lastCheckedDate,
   } = errorTiles;
 
-  const lastDateToCheck = weekAgo(realTimeDate);
-  const lastTimeToCheck = eic === 'sa' ? twentySevenHoursAgo(realTimeDate) : threeHoursAgo(realTimeDate);
-
-  const dailySafeguardCheck = compareDailyDates(lastDateToCheck, selectedDate);
-  const hourlySafeguardCheck = compareSubdailyDates(lastTimeToCheck, selectedDate);
-
   const errorTileCheck = dailyTiles.length || subdailyTiles.length;
 
   useEffect(() => {
-    if (!ui.selected || !map.rendered || readyForKioskAnimation || eic === 'alt') return;
+    if (!ui.selected || !map.rendered || !eicMeasurementComplete || readyForKioskAnimation || eic === 'si') return;
 
-    if (isKioskModeActive && errorTileCheck && dailySafeguardCheck && !isLoading) {
+    if (errorTileCheck) {
       handleTileErrors();
-    } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
-      handleStaticMap();
     } else if ((!errorTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !readyForKioskAnimation)) {
       readyForAnimation();
-    } else {
-      clearErrorTiles();
     }
+    // replace this with eicMeasurementComplete???
   }, [action]);
 
   const handleStaticMap = () => {
@@ -102,28 +95,10 @@ function TileErrorHandler({ action, ui }) {
     clearErrorTiles();
   };
 
-  const handleTimeChangeForErrors = (tiles, isSubdaily) => {
-    const currentDate = formatDate(selectedDate, isSubdaily);
-    const errorTilesOnCurrentDate = tiles.filter((tile) => currentDate === tile.date).length;
-    if (errorTilesOnCurrentDate) {
-      const state = { date, compare };
-      if (hasSubdailyLayers && !isSubdaily) selectInterval(1, 3, false);
-      const prevDate = getNextDateTime(state, '-1');
-      const prevDateObj = new Date(prevDate);
-      selectDate(prevDateObj);
-    } else if ((lastCheckedDate === selectedDate && !readyForKioskAnimation && eic === 'da') || (eic === 'sa')) {
-      readyForAnimation();
-    } else {
-      clearErrorTiles();
-    }
-
-    if (!hourlySafeguardCheck || !dailySafeguardCheck) return handleStaticMap();
-  };
-
+  // need to write new functions here
+  // no more time changing
   const handleTileErrors = () => {
-    if (dailyTiles.length) return handleTimeChangeForErrors(dailyTiles, false);
-    if (subdailyTiles.length && hourlySafeguardCheck) return handleTimeChangeForErrors(subdailyTiles, true);
-    if ((!hourlySafeguardCheck || !dailySafeguardCheck) && !displayStaticMap) return handleStaticMap();
+
   };
 
   return null;

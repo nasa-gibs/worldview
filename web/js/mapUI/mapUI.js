@@ -132,6 +132,7 @@ function MapUI(props) {
       case layerConstants.REMOVE_LAYER:
         return setRemoveLayersAction(action);
       case dateConstants.SELECT_DATE:
+      case dateConstants.SELECT_EIC_DATE:
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
         return setDateAction(action);

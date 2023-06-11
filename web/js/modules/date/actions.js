@@ -11,6 +11,7 @@ import {
   ARROW_UP,
   SET_PRELOAD,
   CLEAR_PRELOAD,
+  SELECT_EIC_DATE
 } from './constants';
 import { getSelectedDate } from './selectors';
 import { getMaxActiveLayersDate, outOfStepChange } from './util';
@@ -140,5 +141,30 @@ export function setPreload (preloaded, lastPreloadDate) {
 export function clearPreload () {
   return {
     type: CLEAR_PRELOAD,
+  };
+}
+
+export function selectEICDate (date) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { lastArrowDirection, preloaded } = state.date;
+    const activeString = state.compare.isCompareA ? 'selected' : 'selectedB';
+    const prevDate = getSelectedDate(state);
+    const maxDate = getMaxActiveLayersDate(state);
+    const selectedDate = date > maxDate ? maxDate : date;
+    const direction = selectedDate > prevDate ? 'right' : 'left';
+    const directionChange = direction && lastArrowDirection !== direction;
+    const outOfStep = outOfStepChange(state, selectedDate);
+
+    if (preloaded && directionChange) {
+      dispatch(clearPreload());
+    }
+    dispatch({
+      type: SELECT_EIC_DATE,
+      activeString,
+      value: selectedDate,
+      lastArrowDirection: direction,
+      outOfStep,
+    });
   };
 }

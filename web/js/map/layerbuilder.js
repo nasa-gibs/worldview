@@ -26,6 +26,7 @@ import {
   mergeBreakpointLayerAttributes,
   formatReduxDate,
   extractDateFromTileErrorURL,
+  compareDates,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
@@ -282,7 +283,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, options = {}) => {
+  const createLayer = async (def, options = {}, eic) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
     const {
@@ -292,6 +293,7 @@ export default function mapLayerBuilder(config, cache, store) {
     } = state;
 
     options.group = options.group || activeString;
+    options.eic = eic;
 
     // if gibs/dns failure, display static image layer
     if (displayStaticMap && isKioskModeActive) {
@@ -313,6 +315,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
+    // console.log(errorTiles)
 
     return layer;
   };
@@ -500,6 +503,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+
   /**
    * Create a new WMTS Layer
    * @method createLayerWMTS
@@ -511,7 +515,8 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   function createLayerWMTS (def, options, day, state) {
-    const { proj } = state;
+    const { proj, date: { selected, eicDateSelected } } = state;
+    const reduxDate = selected;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
     } = def;
@@ -571,6 +576,44 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
+
+    const layerDateMatchesActiveDate = compareDates(reduxDate, layerDate, isSubdaily)
+
+    if (layerDateMatchesActiveDate && eicDateSelected) {
+
+      // move this function to top of file later...
+      function updateLoadingStatus(loading, totalTiles, tileErrors) {
+        if (loading === 0) {
+          console.log(`All tiles finished loading for ${id}... There were ${totalTiles} total tiles and ${tileErrors} returned errors for date ${layerDate}`);
+          // You might dispatch your action here
+          // Only dispatch action if total tiles is greater than 0???
+        } else {
+          // console.log(`Loading... ${loading} tiles remaining`);
+        }
+      }
+
+      let loading = 0; // Counter to track loading tiles
+      let totalTiles = 0; // Total number of tiles requested
+      let tileErrors = 0; // Total number of tiles that errored
+
+      // Increment the loading counter when a tile load starts
+      tileSource.on('tileloadstart', function() {
+        if(loading > totalTiles) totalTiles = loading;
+        loading+=1;
+        updateLoadingStatus(loading, totalTiles, tileErrors);
+      });
+      // Decrement the loading counter when a tile load ends or errors
+      tileSource.on('tileloadend', function() {
+        loading-=1;
+        updateLoadingStatus(loading, totalTiles, tileErrors);
+      });
+      tileSource.on('tileloaderror', function() {
+        loading-=1;
+        tileErrors+=1;
+        updateLoadingStatus(loading, totalTiles, tileErrors);
+      });
+    }
+
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({

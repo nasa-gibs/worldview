@@ -286,3 +286,23 @@ export function formatSelectedDate(date) {
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 }
+
+export function compareDates(layerDate, reduxDate, isSubdaily) {
+  if (isSubdaily) {
+    return (
+      layerDate.getDate() === reduxDate.getDate() &&
+      layerDate.getMonth() === reduxDate.getMonth() &&
+      layerDate.getFullYear() === reduxDate.getFullYear() &&
+      layerDate.getHours() === reduxDate.getHours() &&
+      layerDate.getMinutes() === reduxDate.getMinutes()
+    );
+  } else {
+    return (
+      layerDate.getDate() === reduxDate.getDate() &&
+      layerDate.getMonth() === reduxDate.getMonth() &&
+      layerDate.getFullYear() === reduxDate.getFullYear()
+    );
+  }
+
+}
+

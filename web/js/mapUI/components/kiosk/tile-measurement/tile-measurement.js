@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
-import { selectDate as selectDateAction } from '../../../../modules/date/actions';
+import { selectEICDate as selectEICDateAction } from '../../../../modules/date/actions';
 import { setEICMeasurementComplete as setEICMeasurementCompleteAction } from '../../../../modules/ui/actions';
 import { getDates } from './utils/date-util';
 import { fetchWMSImage } from './utils/image-api-request';
@@ -10,7 +10,8 @@ import { layersToMeasure, layerPixelData, bestDates } from './utils/layer-data-e
 
 function TileMeasurement() {
   const dispatch = useDispatch();
-  const selectDate = (date) => { dispatch(selectDateAction(date)); };
+  const selectEICDate = (date) => { dispatch(selectEICDateAction(date)); };
+  // Probably won't need this...
   const setEICMeasurementComplete = () => { dispatch(setEICMeasurementCompleteAction()); };
   const {
     activeLayers,
@@ -25,7 +26,7 @@ function TileMeasurement() {
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
   useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic === 'alt') {
+    if (!measurementsStarted && activeLayers && eic === 'si') {
       calculateMeasurements();
     }
   })
@@ -95,9 +96,9 @@ function TileMeasurement() {
       let day = parts[2];
 
       let date = new Date(year, month, day, 12, 0, 0);
-      console.log('fullImageryDate', fullImageryDate);
-      console.log('date', date);
-      selectDate(date);
+      console.log('fullImageryDate UTC', fullImageryDate);
+      console.log('Final Date EDT', date);
+      selectEICDate(date);
     } else {
       console.log('Part #5: Attempting to format fullImageryDate: ', fullImageryDate);
 
@@ -116,7 +117,7 @@ function TileMeasurement() {
       let date = new Date(Date.UTC(year, month, day, +hour, +minute, +second));
       console.log('fullImageryDate UTC', fullImageryDate);
       console.log('Final Date EDT', date);
-      selectDate(date);
+      selectEICDate(date);
     }
   }
 
@@ -149,6 +150,8 @@ function TileMeasurement() {
       updateDate(fullImageryDate, layerPeriod)
 
       setEICMeasurementComplete()
+
+
       // console.log(fullImageryDate)
     } catch (error) {
       console.error("Error calculating measurements:", error);

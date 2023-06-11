@@ -11,6 +11,7 @@ import {
   ARROW_UP,
   SET_PRELOAD,
   CLEAR_PRELOAD,
+  SELECT_EIC_DATE,
 } from './constants';
 import util from '../../util/util';
 
@@ -28,6 +29,7 @@ export const dateReducerState = {
   timelineCustomModalOpen: false,
   animationCustomModalOpen: false,
   testNow: undefined,
+  eicDateSelected: false,
 };
 
 export function getInitialState(config) {
@@ -112,6 +114,13 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         appNow: action.value,
+      };
+    case SELECT_EIC_DATE:
+      return {
+        ...state,
+        [action.activeString]: action.value,
+        lastArrowDirection: action.lastArrowDirection,
+        eicDateSelected: true,
       };
     default:
       return state;
