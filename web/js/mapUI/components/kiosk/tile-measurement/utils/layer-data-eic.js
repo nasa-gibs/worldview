@@ -16,3 +16,9 @@ export const layerPixelData = {
   'GOES-West_ABI_GeoColor': { threshold: .75 },
   'Himawari_AHI_Band3_Red_Visible_1km': { threshold: .75 },
 }
+
+export const bestDates = {
+  'GOES-East_ABI_GeoColor': { date: '2023-06-10T12:35:00.000Z' },
+  'GOES-West_ABI_GeoColor': { date: '2023-06-10T12:35:00.000Z' },
+  'Himawari_AHI_Band3_Red_Visible_1km': { date: '2023-06-10T12:35:00.000Z' },
+}

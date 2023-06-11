@@ -4,7 +4,7 @@ import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { getDates } from './utils/date-util';
 import { fetchWMSImage } from './utils/image-api-request';
 import calculatePixels from './utils/calculate-pixels'
-import { layersToMeasure, layerPixelData } from './utils/layer-data-eic';
+import { layersToMeasure, layerPixelData, bestDates } from './utils/layer-data-eic';
 import {
   selectDate as selectDateAction,
   selectInterval as selectIntervalAction,
@@ -17,10 +17,12 @@ function TileMeasurement() {
     activeLayers,
     eic,
     selectedDate,
+    realTime,
   } = useSelector((state) => ({
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
     eic: state.ui.eic,
     selectedDate: state.date.selected,
+    realTime: state.date.appNow,
   }));
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
@@ -45,7 +47,8 @@ function TileMeasurement() {
 
   // #3 Find the date range for each layer depending on the period (daily or subdaily)
   const findDateRange = (layerPeriod) => {
-    const dates = getDates(selectedDate, layerPeriod)
+    // const dates = getDates(selectedDate, layerPeriod)
+    const dates = getDates(realTime, layerPeriod)
     return dates
   }
 
@@ -69,9 +72,9 @@ function TileMeasurement() {
         // If the amount of black pixels is less than the threshold, increment count, otherwise break loop
         if (blackPixelRatio < threshold) {
           layersMeetingThresholdForDate += 1;
-          console.log(`${layers[j].id} is under the threshold of ${threshold} for ${dates[i]} with a black pixel % of ${blackPixelRatio}. This is ${layersMeetingThresholdForDate} of ${layers.length} needed for this date.`)
+          console.log(`${layers[j].id} is BELOW the threshold of ${threshold} for ${dates[i]} with a black pixel % of ${blackPixelRatio}. This is ${layersMeetingThresholdForDate} of ${layers.length} needed for this date.`)
         } else {
-          console.log(`${layers[j].id} is over the threshold of ${threshold} for -- ${dates[i]} -- with a black pixel % of ${blackPixelRatio}.`)
+          console.log(`${layers[j].id} is BREAKING the threshold of ${threshold} for -- ${dates[i]} -- with a black pixel % of ${blackPixelRatio}.`)
           break;
         }
       }
@@ -83,8 +86,9 @@ function TileMeasurement() {
         layersMeetingThresholdForDate = 0;
       }
     }
-    console.error("No date found that satisfies the full imagery thresholds.");
-    return null;
+    const firstLayerBestDate = bestDates[layers[0].id].date
+    console.error(`No date found that satisfies the full imagery thresholds.  Returning best date for ${layers[0].id} on ${firstLayerBestDate}.`);
+    return firstLayerBestDate;
   }
 
   // #5 Update the date of the map to the date that satisfies the full imagery threshold
