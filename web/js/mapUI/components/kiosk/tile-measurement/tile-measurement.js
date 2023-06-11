@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { selectDate as selectDateAction } from '../../../../modules/date/actions';
+import { setEICMeasurementComplete as setEICMeasurementCompleteAction } from '../../../../modules/ui/actions';
 import { getDates } from './utils/date-util';
 import { fetchWMSImage } from './utils/image-api-request';
 import calculatePixels from './utils/calculate-pixels'
 import { layersToMeasure, layerPixelData, bestDates } from './utils/layer-data-eic';
-import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
 function TileMeasurement() {
   const dispatch = useDispatch();
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
+  const setEICMeasurementComplete = () => { dispatch(setEICMeasurementCompleteAction()); };
   const {
     activeLayers,
     eic,
@@ -21,10 +23,9 @@ function TileMeasurement() {
   }));
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
-  const [measurementsCompleted, setMeasurementsCompleted] = useState(false);
 
   useEffect(() => {
-    if (!measurementsCompleted && !measurementsStarted && activeLayers && eic === 'alt') {
+    if (!measurementsStarted && activeLayers && eic === 'alt') {
       calculateMeasurements();
     }
   })
@@ -147,8 +148,7 @@ function TileMeasurement() {
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod)
 
-      setMeasurementsCompleted(true)
-
+      setEICMeasurementComplete()
       // console.log(fullImageryDate)
     } catch (error) {
       console.error("Error calculating measurements:", error);

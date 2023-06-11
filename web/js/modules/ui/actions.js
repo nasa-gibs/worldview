@@ -8,6 +8,7 @@ import {
   DISPLAY_STATIC_MAP,
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
+  SET_EIC_MEASUREMENT_COMPLETE,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -47,7 +48,6 @@ export function setErrorTiles(errorTiles) {
     errorTiles: {
       dailyTiles: errorTiles.dailyTiles,
       subdailyTiles: errorTiles.subdailyTiles,
-      blankTiles: errorTiles.blankTiles,
       kioskTileCount: errorTiles.kioskTileCount,
       lastCheckedDate: errorTiles.lastCheckedDate,
     },
@@ -62,7 +62,6 @@ export function clearErrorTiles() {
     const errorTiles = {
       dailyTiles: [],
       subdailyTiles: [],
-      blankTiles: [],
       kioskTileCount: 0,
       lastCheckedDate,
     };
@@ -72,7 +71,6 @@ export function clearErrorTiles() {
       errorTiles: {
         dailyTiles: errorTiles.dailyTiles,
         subdailyTiles: errorTiles.subdailyTiles,
-        blankTiles: errorTiles.blankTiles,
         kioskTileCount: errorTiles.kioskTileCount,
         lastCheckedDate: errorTiles.lastCheckedDate,
       },
@@ -105,5 +103,12 @@ export function toggleCheckedAnimationAvailability(toggleCheck) {
   return {
     type: CHECK_ANIMATION_AVAILABILITY,
     toggleCheck,
+  };
+}
+
+// This action is dispatched when tile image measurements are complete in TileMeasurement component
+export function setEICMeasurementComplete() {
+  return {
+    type: SET_EIC_MEASUREMENT_COMPLETE,
   };
 }

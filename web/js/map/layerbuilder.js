@@ -55,13 +55,9 @@ export default function mapLayerBuilder(config, cache, store) {
   const errorTiles = {
     dailyTiles: [],
     subdailyTiles: [],
-    blankTiles: [],
     kioskTileCount: 0,
     lastCheckedDate: null,
   };
-
-  // list of layer id's to check for blank tiles in blobs
-  const kioskCheckForBlankTilesList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor', 'IMERG_Precipitation_Rate', 'GHRSST_L4_MUR_Sea_Surface_Temperature', 'MODIS_Aqua_L3_Land_Surface_Temp_Daily_Day'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -166,18 +162,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const date = layerDate.toISOString().split('T')[0];
 
-    const checkBlobTiles = (headers) => {
-      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id)) {
-        errorTiles.kioskTileCount += 1;
-        const contentLength = headers.get('content-length');
-        const contentType = headers.get('content-type');
-        const sizeThreshold = contentType === 'image/png' ? 2000 : 5000;
-        if (parseInt(contentLength, 10) < sizeThreshold) {
-          errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
-        }
-      }
-    };
-
     const updateCollections = (headers) => {
       const actualId = headers.get('layer-identifier-actual');
       if (!actualId) return;
@@ -198,11 +182,6 @@ export default function mapLayerBuilder(config, cache, store) {
       const response = await fetch(src);
       const data = await response.blob();
       updateCollections(response.headers);
-
-      // checking for blank tiles in kiosk mode for predefined layers
-      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id)) {
-        checkBlobTiles(response.headers);
-      }
 
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);

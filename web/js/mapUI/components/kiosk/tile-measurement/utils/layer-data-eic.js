@@ -16,8 +16,9 @@ export const layersToMeasure = [
 // Threshold values represent the amount of black pixels as a percentage that CAN be present in an image
 export const layerPixelData = {
   // full imagery threshold
-  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: .50 },
-  'VIIRS_SNPP_DayNightBand_At_Sensor_Radiance': { threshold: .50 },
+  'MODIS_Terra_CorrectedReflectance_TrueColor': { threshold: .70 },
+  'VIIRS_SNPP_DayNightBand_At_Sensor_Radiance': { threshold: .70 },
+  // I think we want to keep this threshold higher since it's using the fires layer
   'VIIRS_SNPP_CorrectedReflectance_TrueColor': { threshold: .50 },
   'IMERG_Precipitation_Rate': { threshold: .95 },
   'GHRSST_L4_MUR_Sea_Surface_Temperature': { threshold: .65 },

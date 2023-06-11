@@ -67,7 +67,7 @@ function TileErrorHandler({ action, ui }) {
   const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
 
   const {
-    dailyTiles, subdailyTiles, blankTiles, kioskTileCount, lastCheckedDate,
+    dailyTiles, subdailyTiles, kioskTileCount, lastCheckedDate,
   } = errorTiles;
 
   const lastDateToCheck = weekAgo(realTimeDate);
@@ -77,7 +77,6 @@ function TileErrorHandler({ action, ui }) {
   const hourlySafeguardCheck = compareSubdailyDates(lastTimeToCheck, selectedDate);
 
   const errorTileCheck = dailyTiles.length || subdailyTiles.length;
-  const blankTileCheck = blankTiles.length;
 
   useEffect(() => {
     if (!ui.selected || !map.rendered || readyForKioskAnimation || eic === 'alt') return;
@@ -86,10 +85,7 @@ function TileErrorHandler({ action, ui }) {
       handleTileErrors();
     } else if (isKioskModeActive && errorTileCheck && (!dailySafeguardCheck || !hourlySafeguardCheck) && !isLoading) {
       handleStaticMap();
-    } else if (isKioskModeActive && blankTileCheck && dailySafeguardCheck && eic !== 'sa' && !isLoading) {
-      handleTimeChangeForBlankTiles();
-      // reminder: we are NOT checking blank tiles when playing subdaily animations
-    } else if ((!errorTileCheck && !blankTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !readyForKioskAnimation)) {
+    } else if ((!errorTileCheck && !readyForKioskAnimation) || (eic === 'sa' && !errorTileCheck && !readyForKioskAnimation)) {
       readyForAnimation();
     } else {
       clearErrorTiles();
@@ -103,20 +99,6 @@ function TileErrorHandler({ action, ui }) {
 
   const readyForAnimation = () => {
     toggleReadyForKioskAnimation(true);
-    clearErrorTiles();
-  };
-
-  // we don't need to include the readyForAnimation function here until we are checking a tile for blank tiles that we plan on animating
-  const handleTimeChangeForBlankTiles = () => {
-    const blankTilesOnCurentDate = blankTiles.filter((tile) => tile.date === formatSelectedDate(selectedDate)).length;
-    if (!blankTilesOnCurentDate) return clearErrorTiles();
-    const blankTilesPercentage = (blankTiles.length / kioskTileCount) * 100;
-    if (blankTilesPercentage >= 50) {
-      const state = { date, compare };
-      const prevDate = getNextDateTime(state, '-1');
-      const prevDateObj = new Date(prevDate);
-      selectDate(prevDateObj);
-    }
     clearErrorTiles();
   };
 
