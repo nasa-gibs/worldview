@@ -12,8 +12,8 @@ function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelec
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
   const handleSelection = (layer) => {
-    setLayerSelection(layer)
-  }
+    setLayerSelection(layer);
+  };
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>

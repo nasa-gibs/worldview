@@ -3,8 +3,6 @@ import googleTagManager from 'googleTagManager';
 import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
-  CLEAR_ERROR_TILES,
-  SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
@@ -38,43 +36,6 @@ export function toggleKioskMode(isActive) {
   return {
     type: TOGGLE_KIOSK_MODE,
     isActive,
-  };
-}
-
-// Layerbuilder tracks tile requests that return errors or blank tiles and dispatches this action for specific layers.
-export function setErrorTiles(errorTiles) {
-  return {
-    type: SET_ERROR_TILES,
-    errorTiles: {
-      dailyTiles: errorTiles.dailyTiles,
-      subdailyTiles: errorTiles.subdailyTiles,
-      kioskTileCount: errorTiles.kioskTileCount,
-      lastCheckedDate: errorTiles.lastCheckedDate,
-    },
-  };
-}
-
-// After each tile request we call this to clear the error tiles for the current date.
-// We want to preserve the lastCheckedDate value from the previous dispatched setErrorTiles action.
-export function clearErrorTiles() {
-  return (dispatch, getState) => {
-    const { ui: { errorTiles: { lastCheckedDate } } } = getState();
-    const errorTiles = {
-      dailyTiles: [],
-      subdailyTiles: [],
-      kioskTileCount: 0,
-      lastCheckedDate,
-    };
-
-    dispatch({
-      type: CLEAR_ERROR_TILES,
-      errorTiles: {
-        dailyTiles: errorTiles.dailyTiles,
-        subdailyTiles: errorTiles.subdailyTiles,
-        kioskTileCount: errorTiles.kioskTileCount,
-        lastCheckedDate: errorTiles.lastCheckedDate,
-      },
-    });
   };
 }
 

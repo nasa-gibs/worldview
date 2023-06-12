@@ -1,7 +1,8 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
-export async function fetchWMSImage(layer, date, testMode) {
+export default async function fetchWMSImage(layer, date, testMode) {
   const baseUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi';
   const params = {
     version: '1.3.0',

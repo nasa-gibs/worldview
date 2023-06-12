@@ -33,7 +33,6 @@ function UpdateDate(props) {
     ui,
     updateLayerVisibilities,
     vectorStyleState,
-    eicMeasurementComplete
   } = props;
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function UpdateDate(props) {
   }, [action]);
 
   const actionSwitch = () => {
-    if (action.type === dateConstants.SELECT_DATE || action.type === dateConstants.SELECT_EIC_DATE) {
+    if (action.type === dateConstants.SELECT_DATE) {
       if (ui.processingPromise) {
         return new Promise((resolve) => {
           resolve(ui.processingPromise);
@@ -105,7 +104,7 @@ function UpdateDate(props) {
         .map(({ wv }) => lodashGet(wv, 'def.id'))
         .includes(id),
     ).filter(({ visible }) => visible);
-    console.log('UPDATING DATE FROM DATECHANGE', eicMeasurementComplete)
+
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
       const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
@@ -120,8 +119,7 @@ function UpdateDate(props) {
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(granuleState, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
-
-          const updatedLayer = await createLayer(def, layerOptions, eicMeasurementComplete);
+          const updatedLayer = await createLayer(def, layerOptions);
           mapLayerCollection.setAt(index, updatedLayer);
         }
       }
@@ -141,7 +139,7 @@ function UpdateDate(props) {
 
 const mapStateToProps = (state) => {
   const {
-    compare, date, layers, proj, vectorStyles, config, map, ui,
+    compare, date, layers, proj, vectorStyles, config, map,
   } = state;
   const dateCompareState = { date, compare };
   const { activeString } = compare;
@@ -150,7 +148,6 @@ const mapStateToProps = (state) => {
   const granuleState = { compare, layers };
   const layerState = { compare, map };
   const vectorStyleState = { proj, vectorStyles, config };
-  const eicMeasurementComplete = ui.eicMeasurementComplete;
 
   return {
     activeLayers,
@@ -161,7 +158,6 @@ const mapStateToProps = (state) => {
     layerState,
     state,
     vectorStyleState,
-    eicMeasurementComplete
   };
 };
 

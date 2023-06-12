@@ -24,13 +24,9 @@ import {
   createVectorUrl,
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
-  formatReduxDate,
-  extractDateFromTileErrorURL,
-  compareDates,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
-import { setErrorTiles } from '../modules/ui/actions';
 import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -43,22 +39,13 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import {
-  nearestInterval,
-} from '../modules/layers/util';
+import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  // keep track of each tile that returned an error
-  const errorTiles = {
-    dailyTiles: [],
-    subdailyTiles: [],
-    kioskTileCount: 0,
-    lastCheckedDate: null,
-  };
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -117,40 +104,6 @@ export default function mapLayerBuilder(config, cache, store) {
     store.dispatch(updateLayerCollection(id));
   };
 
-  // called from tileLoadFunction() when a tile returns an error
-  const handleTileError = async (tile, layer, sourceURL) => {
-    const state = store.getState();
-    const { isKioskModeActive } = state.ui;
-
-    if (isKioskModeActive) {
-      const { selected: reduxDate } = state.date;
-      const { id, layerPeriod } = layer;
-      const isSubdailyLayer = layerPeriod === 'Subdaily';
-      const urlDate = extractDateFromTileErrorURL(sourceURL);
-      const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
-
-      errorTiles.lastCheckedDate = reduxDate;
-
-      // we don't want to store cached dates in the error tiles
-      if (urlDate === currentDate) {
-        const matrixColRow = tile.tileCoord;
-        const errorObj = {
-          id,
-          layerPeriod,
-          date: urlDate,
-          matrixColRow,
-          sourceURL,
-        };
-
-        if (isSubdailyLayer) {
-          errorTiles.subdailyTiles.push(errorObj);
-        } else {
-          errorTiles.dailyTiles.push(errorObj);
-        }
-      }
-    }
-  };
-
   /**
    * We define our own tile loading function in order to capture custom header values
    *
@@ -159,7 +112,6 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
     const state = store.getState();
-    const { ui: { isKioskModeActive } } = state;
 
     const date = layerDate.toISOString().split('T')[0];
 
@@ -187,11 +139,9 @@ export default function mapLayerBuilder(config, cache, store) {
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
-        handleTileError(tile, layer, src);
         tile.setState(TileState.ERROR);
       }
     } catch (e) {
-      handleTileError(tile, layer, src);
       tile.setState(TileState.ERROR);
     }
   };
@@ -283,17 +233,12 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, options = {}, eic) => {
+  const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const {
-      ui: { isKioskModeActive, displayStaticMap },
-      animation: { isPlaying },
-      map: { rendered },
-    } = state;
+    const { ui: { isKioskModeActive, displayStaticMap } } = state;
 
     options.group = options.group || activeString;
-    options.eic = eic;
 
     // if gibs/dns failure, display static image layer
     if (displayStaticMap && isKioskModeActive) {
@@ -313,9 +258,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
-
-    if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
-    // console.log(errorTiles)
 
     return layer;
   };
@@ -515,8 +457,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   function createLayerWMTS (def, options, day, state) {
-    const { proj, date: { selected, eicDateSelected } } = state;
-    const reduxDate = selected;
+    const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
     } = def;
@@ -576,43 +517,6 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-
-    const layerDateMatchesActiveDate = compareDates(reduxDate, layerDate, isSubdaily)
-
-    if (layerDateMatchesActiveDate && eicDateSelected) {
-
-      // move this function to top of file later...
-      function updateLoadingStatus(loading, totalTiles, tileErrors) {
-        if (loading === 0) {
-          console.log(`All tiles finished loading for ${id}... There were ${totalTiles} total tiles and ${tileErrors} returned errors for date ${layerDate}`);
-          // You might dispatch your action here
-          // Only dispatch action if total tiles is greater than 0???
-        } else {
-          // console.log(`Loading... ${loading} tiles remaining`);
-        }
-      }
-
-      let loading = 0; // Counter to track loading tiles
-      let totalTiles = 0; // Total number of tiles requested
-      let tileErrors = 0; // Total number of tiles that errored
-
-      // Increment the loading counter when a tile load starts
-      tileSource.on('tileloadstart', function() {
-        if(loading > totalTiles) totalTiles = loading;
-        loading+=1;
-        updateLoadingStatus(loading, totalTiles, tileErrors);
-      });
-      // Decrement the loading counter when a tile load ends or errors
-      tileSource.on('tileloadend', function() {
-        loading-=1;
-        updateLoadingStatus(loading, totalTiles, tileErrors);
-      });
-      tileSource.on('tileloaderror', function() {
-        loading-=1;
-        tileErrors+=1;
-        updateLoadingStatus(loading, totalTiles, tileErrors);
-      });
-    }
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 

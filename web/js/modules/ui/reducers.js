@@ -14,12 +14,6 @@ export const uiState = {
   isKioskModeActive: false,
   displayStaticMap: false,
   eic: '', // 'sa' == subdaily-animation, 'da' == daily-animation 'si' == static-imagery
-  errorTiles: {
-    dailyTiles: [],
-    subdailyTiles: [],
-    kioskTileCount: 0,
-    lastCheckedDate: null,
-  },
   readyForKioskAnimation: false,
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,

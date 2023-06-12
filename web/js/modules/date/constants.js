@@ -9,7 +9,6 @@ export const ARROW_DOWN = 'DATE/ARROW_DOWN';
 export const ARROW_UP = 'DATE/ARROW_UP';
 export const SET_PRELOAD = 'DATE/SET_PRELOAD';
 export const CLEAR_PRELOAD = 'DATE/CLEAR_PRELOAD';
-export const SELECT_EIC_DATE = 'DATE/SELECT_EIC_DATE';
 
 export const MONTH_STRING_ARRAY = [
   'JAN',
