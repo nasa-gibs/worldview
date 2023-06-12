@@ -16,10 +16,8 @@ export const layersToMeasure = [
 // Object that contains the black pixel % threshold for each layer
 // Threshold values represent the amount of black pixels as a percentage that CAN be present in an image
 export const layerPixelData = {
-  // full imagery threshold
   MODIS_Terra_CorrectedReflectance_TrueColor: { threshold: 0.70 },
   VIIRS_SNPP_DayNightBand_At_Sensor_Radiance: { threshold: 0.70 },
-  // I think we want to keep this threshold higher since it's using the fires layer
   VIIRS_SNPP_CorrectedReflectance_TrueColor: { threshold: 0.65 },
   IMERG_Precipitation_Rate: { threshold: 0.95 },
   GHRSST_L4_MUR_Sea_Surface_Temperature: { threshold: 0.65 },
@@ -33,9 +31,15 @@ export const layerPixelData = {
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
 // TO DO: These layers will eventually need to be prioritized if a scenario has layers from multiple best dates
-// Right now it just returns the first layer's best date
 export const bestDates = {
-  'GOES-East_ABI_GeoColor': { date: '2023-06-10T12:35:00.000Z' },
-  'GOES-West_ABI_GeoColor': { date: '2023-06-10T12:35:00.000Z' },
-  Himawari_AHI_Band3_Red_Visible_1km: { date: '2023-06-10T12:35:00.000Z' },
+  'GOES-East_ABI_GeoColor': { date: '2023-06-10T23:50:00.000Z' },
+  'GOES-West_ABI_GeoColor': { date: '2023-06-10T23:50:00.000Z' },
+  Himawari_AHI_Band3_Red_Visible_1km: { date: '2023-06-10T23:50:00.000Z' },
+  MODIS_Terra_CorrectedReflectance_TrueColor: { date: '2023-06-10T12:00:00.000Z' },
+  VIIRS_SNPP_DayNightBand_At_Sensor_Radiance: { date: '2023-06-10T12:00:00.000Z' },
+  VIIRS_SNPP_CorrectedReflectance_TrueColor: { date: '2023-06-10T12:00:00.000Z' },
+  IMERG_Precipitation_Rate: { date: '2023-06-10T12:00:00.000Z' },
+  GHRSST_L4_MUR_Sea_Surface_Temperature: { date: '2023-06-10T12:00:00.000Z' },
+  MODIS_Aqua_Land_Surface_Temp_Day: { date: '2023-06-10T12:00:00.000Z' },
+  MODIS_Aqua_CorrectedReflectance_TrueColor: { date: '2023-06-10T12:00:00.000Z' },
 };
