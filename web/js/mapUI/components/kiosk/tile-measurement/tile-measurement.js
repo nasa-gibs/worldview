@@ -133,6 +133,9 @@ function TileMeasurement({ ui }) {
     console.log('Verifying tiles on map...');
     const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
     const loadedTiles = tileCount.totalLoadedTileCount > 0;
+    if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
+      setEICMeasurementComplete();
+    }
     if (loadedTiles && !abortProceedure) {
       setEICMeasurementComplete();
       console.log('Tile verified... EIC measure process complete...');
