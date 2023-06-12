@@ -127,7 +127,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
       }
     }
   } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStyles') && !styleSelection) {
-    glStyle = state.vectorStyles.customDefault[def.id];
+    const customDefaultStyle = state.vectorStyles.customDefault[def.id];
+    if (customDefaultStyle !== undefined) {
+      glStyle = customDefaultStyle;
+    }
   }
 
   if (!layer || layer.isWMS || glStyle === undefined) {
