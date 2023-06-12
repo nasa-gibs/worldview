@@ -10,6 +10,7 @@ export const layersToMeasure = [
   'GOES-East_ABI_GeoColor',
   'GOES-West_ABI_GeoColor',
   'Himawari_AHI_Band3_Red_Visible_1km',
+  'AMSRU2_Sea_Ice_Concentration_12km',
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -19,7 +20,7 @@ export const layerPixelData = {
   MODIS_Terra_CorrectedReflectance_TrueColor: { threshold: 0.70 },
   VIIRS_SNPP_DayNightBand_At_Sensor_Radiance: { threshold: 0.70 },
   // I think we want to keep this threshold higher since it's using the fires layer
-  VIIRS_SNPP_CorrectedReflectance_TrueColor: { threshold: 0.50 },
+  VIIRS_SNPP_CorrectedReflectance_TrueColor: { threshold: 0.65 },
   IMERG_Precipitation_Rate: { threshold: 0.95 },
   GHRSST_L4_MUR_Sea_Surface_Temperature: { threshold: 0.65 },
   MODIS_Aqua_Land_Surface_Temp_Day: { threshold: 0.80 },
@@ -27,6 +28,7 @@ export const layerPixelData = {
   'GOES-East_ABI_GeoColor': { threshold: 0.75 },
   'GOES-West_ABI_GeoColor': { threshold: 0.75 },
   Himawari_AHI_Band3_Red_Visible_1km: { threshold: 0.75 },
+  AMSRU2_Sea_Ice_Concentration_12km: { threshold: 0.85 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold

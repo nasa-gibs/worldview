@@ -274,33 +274,3 @@ export function extractDateFromTileErrorURL(url) {
   console.error('Date not found in the URL.');
   return null;
 }
-
-// Updates the format of the appNow date to a date format of YYYY-MM-DD
-export function formatSelectedDate(date) {
-  const dateObj = new Date(date);
-
-  const year = dateObj.getFullYear();
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(dateObj.getDate()).padStart(2, '0');
-
-  const formattedDate = `${year}-${month}-${day}`;
-  return formattedDate;
-}
-
-export function compareDates(layerDate, reduxDate, isSubdaily) {
-  if (isSubdaily) {
-    return (
-      layerDate.getDate() === reduxDate.getDate()
-      && layerDate.getMonth() === reduxDate.getMonth()
-      && layerDate.getFullYear() === reduxDate.getFullYear()
-      && layerDate.getHours() === reduxDate.getHours()
-      && layerDate.getMinutes() === reduxDate.getMinutes()
-    );
-  }
-  return (
-    layerDate.getDate() === reduxDate.getDate()
-      && layerDate.getMonth() === reduxDate.getMonth()
-      && layerDate.getFullYear() === reduxDate.getFullYear()
-  );
-}
-

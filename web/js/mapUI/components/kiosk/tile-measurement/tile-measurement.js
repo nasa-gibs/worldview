@@ -26,7 +26,7 @@ function TileMeasurement() {
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
   useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic === 'si') {
+    if (!measurementsStarted && activeLayers && eic) {
       calculateMeasurements();
     }
   });
