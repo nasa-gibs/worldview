@@ -400,7 +400,7 @@ function MapUI(props) {
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
       <KioskAnimations ui={ui} />
-      <TileMeasurement />
+      <TileMeasurement ui={ui} />
       {tileImageTestMode && <TileImagePixelTest />}
 
     </>

@@ -377,8 +377,6 @@ const mapStateToProps = (state) => {
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
 
-  const isAntarctic = proj.id === 'arctic';
-
   const minDate = new Date(config.startDate);
   let maxDate;
   if (layerDateRange && layerDateRange.end > appNow) {
@@ -390,7 +388,7 @@ const mapStateToProps = (state) => {
   const {
     isDistractionFreeModeActive, isKioskModeActive, animationAvailabilityChecked, eic,
   } = ui;
-  const checkAnimationAvailability = (eic === 'sa' || eic === 'da') && !animationAvailabilityChecked && isKioskModeActive && isPlaying && !isAntarctic;
+  const checkAnimationAvailability = (eic === 'sa' || eic === 'da') && !animationAvailabilityChecked && isKioskModeActive && isPlaying;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
     && lodashGet(map, 'ui.selected.frameState_')

@@ -3,17 +3,28 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
-import { setEICMeasurementComplete as setEICMeasurementCompleteAction } from '../../../../modules/ui/actions';
+import {
+  setEICMeasurementComplete as setEICMeasurementCompleteAction,
+  setEICMeasurementAborted as setEICMeasurementAbortedAction,
+  toggleStaticMap as toggleStaticMapAction,
+} from '../../../../modules/ui/actions';
+import { toggleGroupVisibility as toggleGroupVisiblityAction } from '../../../../modules/layers/actions';
 import { getDates } from './utils/date-util';
 import fetchWMSImage from './utils/image-api-request';
 import calculatePixels from './utils/calculate-pixels';
 import { layersToMeasure, layerPixelData, bestDates } from './utils/layer-data-eic';
+import countTilesForSpecifiedLayers from './utils/verify-map-tiles';
 
-function TileMeasurement() {
+function TileMeasurement({ ui }) {
   const dispatch = useDispatch();
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
   const setEICMeasurementComplete = () => { dispatch(setEICMeasurementCompleteAction()); };
+  const setEICMeasurementAborted = () => { dispatch(setEICMeasurementAbortedAction()); };
+  const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
+  const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
+
   const {
+    activeString,
     activeLayers,
     eic,
     realTime,
@@ -21,7 +32,9 @@ function TileMeasurement() {
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
     eic: state.ui.eic,
     realTime: state.date.appNow,
+    activeString: state.compare.activeString,
   }));
+  const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
@@ -116,6 +129,25 @@ function TileMeasurement() {
     }
   };
 
+  const verifyTilesAndHandleErrors = (abortProceedure) => {
+    console.log('Verifying tiles on map...');
+    const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
+    const loadedTiles = tileCount.totalLoadedTileCount > 0;
+    if (loadedTiles && !abortProceedure) {
+      setEICMeasurementComplete();
+      console.log('Tile verified... EIC measure process complete...');
+    } else if (loadedTiles && abortProceedure) {
+      console.log('EIC measure process aborted... Loaded map tiles found... Leaving map as is...');
+      setEICMeasurementAborted();
+    } else if (!loadedTiles && abortProceedure) {
+      console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
+      toggleStaticMap(true);
+      toggleGroupVisibility(activeLayerIds, false);
+      setEICMeasurementAborted();
+    }
+  };
+
+
   // #1 Parent function that is called from useEffect.
   const calculateMeasurements = async () => {
     try {
@@ -126,7 +158,7 @@ function TileMeasurement() {
       const measurementLayers = findLayersToMeasure();
       if (!measurementLayers) {
         console.error('No layers found to be measured... Aborting...');
-        return;
+        return verifyTilesAndHandleErrors(true);
       }
 
       const layersIncludeSubdaily = measurementLayers.some((layer) => layer.period === 'subdaily');
@@ -135,19 +167,19 @@ function TileMeasurement() {
       const dateRange = findDateRange(layerPeriod);
       if (!dateRange) {
         console.error('No date range found... Aborting..');
-        return;
+        return verifyTilesAndHandleErrors(true);
       }
 
       const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange);
-      if (!fullImageryDate) return;
+      if (!fullImageryDate) return verifyTilesAndHandleErrors(true);
 
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod);
 
-      setEICMeasurementComplete();
-      console.log('EIC measure process complete...');
+      verifyTilesAndHandleErrors();
     } catch (error) {
       console.error('Error calculating measurements:', error);
+      verifyTilesAndHandleErrors(true);
     }
   };
 

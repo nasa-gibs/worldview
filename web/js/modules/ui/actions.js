@@ -7,6 +7,7 @@ import {
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
+  SET_EIC_MEASUREMENT_ABORTED,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -71,5 +72,12 @@ export function toggleCheckedAnimationAvailability(toggleCheck) {
 export function setEICMeasurementComplete() {
   return {
     type: SET_EIC_MEASUREMENT_COMPLETE,
+  };
+}
+
+// This action is dispatched when the EIC measurement process is aborted in TileMeasurement component
+export function setEICMeasurementAborted() {
+  return {
+    type: SET_EIC_MEASUREMENT_ABORTED,
   };
 }

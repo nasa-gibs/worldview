@@ -7,6 +7,7 @@ import {
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
+  SET_EIC_MEASUREMENT_ABORTED,
 } from './constants';
 
 export const uiState = {
@@ -17,6 +18,7 @@ export const uiState = {
   readyForKioskAnimation: false,
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,
+  eicMeasurementAborted: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -64,6 +66,11 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         eicMeasurementComplete: true,
+      };
+    case SET_EIC_MEASUREMENT_ABORTED:
+      return {
+        ...state,
+        eicMeasurementAborted: true,
       };
     default:
       return state;

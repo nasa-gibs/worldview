@@ -21,6 +21,7 @@ function KioskAnimations({ ui }) {
     map,
     eicAnimationMode,
     eicMeasurementComplete,
+    eicMeasurementAborted,
   } = useSelector((state) => ({
     selectedDate: state.date.selected,
     isAnimationPlaying: state.animation.isPlaying,
@@ -29,12 +30,13 @@ function KioskAnimations({ ui }) {
     eicAnimationMode: state.ui.eic === 'sa' || state.ui.eic === 'da',
     map: state.map,
     eicMeasurementComplete: state.ui.eicMeasurementComplete,
+    eicMeasurementAborted: state.ui.eicMeasurementAborted,
   }));
 
   const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
 
   useEffect(() => {
-    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode) return;
+    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
     checkAnimationSettings();
   }, [map, eicMeasurementComplete]);
 
