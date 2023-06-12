@@ -25,9 +25,9 @@ export const layerPixelData = {
   GHRSST_L4_MUR_Sea_Surface_Temperature: { threshold: 0.65 },
   MODIS_Aqua_Land_Surface_Temp_Day: { threshold: 0.80 },
   MODIS_Aqua_CorrectedReflectance_TrueColor: { threshold: 0.50 },
-  'GOES-East_ABI_GeoColor': { threshold: 0.75 },
-  'GOES-West_ABI_GeoColor': { threshold: 0.75 },
-  Himawari_AHI_Band3_Red_Visible_1km: { threshold: 0.75 },
+  'GOES-East_ABI_GeoColor': { threshold: 0.76 },
+  'GOES-West_ABI_GeoColor': { threshold: 0.76 },
+  Himawari_AHI_Band3_Red_Visible_1km: { threshold: 0.76 },
   AMSRU2_Sea_Ice_Concentration_12km: { threshold: 0.85 },
 };
 
