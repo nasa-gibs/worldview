@@ -29,30 +29,6 @@ LookupImageTile.prototype.load = function() {
       // const octets = that.canvas_.width * that.canvas_.height * 4;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
-      // const imageData = g.getImageData(
-      //   0,
-      //   0,
-      //   that.canvas_.width,
-      //   that.canvas_.height,
-      // );
-      // const pixels = imageData.data;
-
-      // for (let i = 0; i < octets; i += 4) {
-      //   const source = `${pixels[i + 0]},${
-      //     pixels[i + 1]},${
-      //     pixels[i + 2]},${
-      //     pixels[i + 3]}`;
-      //   const target = that.lookup_[source];
-
-      //   if (target) {
-      //     pixels[i + 0] = target.r;
-      //     pixels[i + 1] = target.g;
-      //     pixels[i + 2] = target.b;
-      //     pixels[i + 3] = target.a;
-      //   }
-      // }
-      // g.putImageData(imageData, 0, 0);
-
       // uses the tileload function passed from layerbuilder
       if (that.customTileLoadFunction_) {
         that.customTileLoadFunction_(that, that.src_);
@@ -63,65 +39,63 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // -----Swap in opaque code block--------------------
-    if (true) {
-      console.log('fetching');
-      fetch(this.src_)
-        .then((response) => response.arrayBuffer())
-        .then((buffer) => {
-          // decode the buffer PNG file
-          const decodedPNG = UPNG.decode(buffer);
-          const { width, height } = decodedPNG;
+    // We need to re-fetch
+    // Determine if this re-fetch is necessary...?
+    fetch(this.src_)
+      .then((response) => response.arrayBuffer())
+      .then((buffer) => {
+        // decode the buffer PNG file
+        const decodedPNG = UPNG.decode(buffer);
+        const { width, height } = decodedPNG;
 
-          // Create an array buffer matching the pixel dimensions of the provided image
-          const bufferSize = height * width * 4;
-          const arrBuffer = new Uint32Array(bufferSize);
+        // Create an array buffer matching the pixel dimensions of the provided image
+        const bufferSize = height * width * 4;
+        const arrBuffer = new Uint32Array(bufferSize);
 
-          // Extract the colormap values. This is an array of integers representing rgba values.
-          // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = g, etc.)
-          const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
+        // Extract the colormap values. This is an array of integers representing rgba values.
+        // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = g, etc.)
+        const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
-          // Extract the pixel data. This is an array of integers corresponding to the colormap
-          // i.e. if pixelData[0] == 5, this pixel is the color of the 5th value in the colormap
-          const pixelData = decodedPNG.data;
+        // Extract the pixel data. This is an array of integers corresponding to the colormap
+        // i.e. if pixelData[0] == 5, this pixel is the color of the 5th value in the colormap
+        const pixelData = decodedPNG.data;
 
-          // iterate through the pixelData, drawing each pixel using the appropriate color
-          for (let i = 0; i < pixelData.length; i += 1) {
-            const arrBuffIndex = i * 4;
-            const lookupIndex = pixelData[i] * 4;
+        // iterate through the pixelData, drawing each pixel using the appropriate color
+        for (let i = 0; i < pixelData.length; i += 1) {
+          const arrBuffIndex = i * 4;
+          const lookupIndex = pixelData[i] * 4;
 
-            // Determine desired RGBA for this pixel
-            const r = colorMapArr[lookupIndex];
-            const g = colorMapArr[lookupIndex + 1];
-            const b = colorMapArr[lookupIndex + 2];
-            const a = 255;
+          // Determine desired RGBA for this pixel
+          const r = colorMapArr[lookupIndex];
+          const g = colorMapArr[lookupIndex + 1];
+          const b = colorMapArr[lookupIndex + 2];
+          const a = 255;
 
-            // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
-            const rgbaStr = `${r},${g},${b},${a}`;
-            const drawThisColor = pixelsToDisplay[rgbaStr];
+          // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
+          const rgbaStr = `${r},${g},${b},${a}`;
+          const drawThisColor = pixelsToDisplay[rgbaStr];
 
-            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
-            if (drawThisColor !== undefined) {
-              arrBuffer[arrBuffIndex + 0] = r;
-              arrBuffer[arrBuffIndex + 1] = g;
-              arrBuffer[arrBuffIndex + 2] = b;
-              arrBuffer[arrBuffIndex + 3] = a;
-            } else {
-              arrBuffer[arrBuffIndex] = 0;
-              arrBuffer[arrBuffIndex + 1] = 0;
-              arrBuffer[arrBuffIndex + 2] = 0;
-              arrBuffer[arrBuffIndex + 3] = 0;
-            }
+          // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
+          if (drawThisColor !== undefined) {
+            arrBuffer[arrBuffIndex + 0] = r;
+            arrBuffer[arrBuffIndex + 1] = g;
+            arrBuffer[arrBuffIndex + 2] = b;
+            arrBuffer[arrBuffIndex + 3] = a;
+          } else {
+            arrBuffer[arrBuffIndex] = 0;
+            arrBuffer[arrBuffIndex + 1] = 0;
+            arrBuffer[arrBuffIndex + 2] = 0;
+            arrBuffer[arrBuffIndex + 3] = 0;
           }
+        }
 
-          // Encode the image, creating a new PNG file
-          const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
-          const blob = new Blob([encodedBufferImage], { type: 'image/png' });
-          const dataURL = `${URL.createObjectURL(blob)}`;
-          that.image_.src = dataURL;
-          that.image_.addEventListener('load', onImageLoad);
-        });
-    }
+        // Encode the image, creating a new PNG file
+        const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
+        const blob = new Blob([encodedBufferImage], { type: 'image/png' });
+        const dataURL = `${URL.createObjectURL(blob)}`;
+        that.image_.src = dataURL;
+        that.image_.addEventListener('load', onImageLoad);
+      });
   }
 };
 

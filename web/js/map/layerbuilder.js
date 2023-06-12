@@ -199,6 +199,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
     try {
       const response = await fetch(src);
+      // This is where the image is initially fetched
+      // Do my transparent layer manipulation here...?
+      //
+      //
+      //
+
+
+
       const data = await response.blob();
       updateCollections(response.headers);
 
