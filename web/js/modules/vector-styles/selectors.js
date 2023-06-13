@@ -114,6 +114,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     console.log('update all glStyle properties');
     console.log(`rgbPalette: ${rgbPalette}`);
     // update all glStyle properties
+    if (customPalette == 'blue_dark') {
+      return;
+    }
+
     for (let i = 0; i < glStyle.layers.length; i += 1) {
       const thisPaintObj = glStyle.layers[i].paint;
       if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
