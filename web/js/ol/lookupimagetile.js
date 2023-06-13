@@ -39,8 +39,7 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // We need to re-fetch
-    // Determine if this re-fetch is necessary...?
+    // Can this re-fetch b avoided...?
     fetch(this.src_)
       .then((response) => response.arrayBuffer())
       .then((buffer) => {
@@ -53,11 +52,11 @@ LookupImageTile.prototype.load = function() {
         const arrBuffer = new Uint32Array(bufferSize);
 
         // Extract the colormap values. This is an array of integers representing rgba values.
-        // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = g, etc.)
+        // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = b, etc.)
         const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
         // Extract the pixel data. This is an array of integers corresponding to the colormap
-        // i.e. if pixelData[0] == 5, this pixel is the color of the 5th value in the colormap
+        // i.e. if pixelData[0] == 5, this pixel is the color of the 5th entry in the colormap
         const pixelData = decodedPNG.data;
 
         // iterate through the pixelData, drawing each pixel using the appropriate color

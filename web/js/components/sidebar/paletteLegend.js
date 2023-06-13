@@ -51,8 +51,6 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidMount() {
-    // Check if there are default disabled refs for this palette
-    console.log('PaletteLegend did mount');
     const {
       getPalette, layer, compareState, toggleAllClassifications,
     } = this.props;

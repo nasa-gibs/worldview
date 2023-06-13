@@ -402,13 +402,11 @@ function mapStateToProps(state, ownProps) {
 }
 const mapDispatchToProps = (dispatch) => ({
   toggleClassification: (layerId, classIndex, index, groupName) => {
-    console.log('toggleClassification');
     dispatch(
       setToggledClassification(layerId, classIndex, index, groupName),
     );
   },
   toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
-    console.log('toggleAllClassifications)');
     dispatch(
       refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
@@ -424,7 +422,6 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
-    console.log('setCustomPalette');
     dispatch(setCustomPalette(layerId, paletteId, index, groupName));
   },
   clearCustomPalette: (layerId, index, groupName) => {
