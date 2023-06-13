@@ -117,6 +117,7 @@ function render (config, legacyState) {
 // Document ready function
 window.onload = () => {
   const promise = fetch(configURI);
+
   promise
     .then((response) => {
       if (!response.ok) {

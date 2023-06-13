@@ -126,7 +126,6 @@ async function processEntries (colormap) {
     }
   }
 
-  // Early return if layer is compeletely transparent
   if (transparentMap === 'true') {
     return 'transparent'
   }
@@ -147,7 +146,6 @@ async function processEntries (colormap) {
 
   // TODO: make this a separate function for entries?
   await Promise.all(
-    // Iterate through each ColorMapEntry
     entries.map(async (entry) => {
       const legend = await matchLegend(entry, legends)
 
@@ -158,20 +156,12 @@ async function processEntries (colormap) {
 
       const [r, g, b] = entry._attributes.rgb.split(',')
 
-      // Identify transparent entries & exclude their reference
-      let a = 0
-      if (entry._attributes.transparent === 'false') {
-        a = 255
-      } else {
-        // Force alpha value to 255 even if transparent === 'true'
-        a = 255
-        initializeDisabled.push(entry._attributes.ref)
-      }
+      // Force alpha value to 255 always
+      const a = 255
 
-      // This will never be true so can be deleted
-      if (a === 0) {
-        refSkipList.push(entry._attributes.ref)
-        return
+      // If entry is served transparent, add it to the disabled array
+      if (entry._attributes.transparent !== 'false') {
+        initializeDisabled.push(entry._attributes.ref)
       }
 
       if (!entry._attributes.ref) {
@@ -289,9 +279,6 @@ async function readFileAsync (file) {
  * xml [string] represention of this product's xml colormap file (served from GIBS)
 */
 async function processFile (id, xml) {
-  if (id === 'MODIS_Flood') {
-    console.warn('MODIS_Flood')
-  }
   let document
   let colormaps = []
   try {

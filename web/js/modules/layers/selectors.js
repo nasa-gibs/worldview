@@ -311,8 +311,8 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
-  def.count = spec.count || undefined;
   def.disabled = spec.disabled || undefined;
+  def.count = spec.count || undefined;
 
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
