@@ -284,8 +284,8 @@ function promiseLayerGroup(layerGroup, map) {
  * @return {object} Promise
  */
 export async function promiseImageryForTime(state, date, activeString) {
-  const { map } = state;
-  if (!map.ui.proj) return;
+  const { map, ui: { eic } } = state;
+  if (!map.ui.proj || eic === 'si') return;
   const {
     cache, selected, createLayer, layerKey,
   } = map.ui;
