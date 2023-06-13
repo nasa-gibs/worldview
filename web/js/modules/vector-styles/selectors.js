@@ -95,6 +95,7 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
+// This is running twice, once for 'active' & again for 'activeb'. It seems like activeB is applied to both...?
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
@@ -110,6 +111,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
 
+    console.log('update all glStyle properties');
+    console.log(`rgbPalette: ${rgbPalette}`);
     // update all glStyle properties
     for (let i = 0; i < glStyle.layers.length; i += 1) {
       const thisPaintObj = glStyle.layers[i].paint;

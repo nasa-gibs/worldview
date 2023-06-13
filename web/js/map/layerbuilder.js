@@ -692,6 +692,7 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
+    console.log(`layer: ${layer.ol_uid}`);
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;
