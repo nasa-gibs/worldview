@@ -14,25 +14,34 @@ function KioskAnimations({ ui }) {
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
   const {
-    selectedDate, isAnimationPlaying, isKioskModeActive, eic, map, readyForKioskAnimation,
+    selectedDate,
+    isAnimationPlaying,
+    isKioskModeActive,
+    eic,
+    map,
+    eicAnimationMode,
+    eicMeasurementComplete,
+    eicMeasurementAborted,
   } = useSelector((state) => ({
     selectedDate: state.date.selected,
     isAnimationPlaying: state.animation.isPlaying,
     isKioskModeActive: state.ui.isKioskModeActive,
     eic: state.ui.eic,
+    eicAnimationMode: state.ui.eic === 'sa' || state.ui.eic === 'da',
     map: state.map,
-    readyForKioskAnimation: state.ui.readyForKioskAnimation,
+    eicMeasurementComplete: state.ui.eicMeasurementComplete,
+    eicMeasurementAborted: state.ui.eicMeasurementAborted,
   }));
 
   const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
 
   useEffect(() => {
-    if (!ui.selected || !isKioskModeActive) return;
-    if (eic === 'sa' || eic === 'da') checkAnimationSettings();
-  }, [map, readyForKioskAnimation]);
+    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
+    checkAnimationSettings();
+  }, [map, eicMeasurementComplete]);
 
-  const subdailyPlayCheck = eic === 'sa' && subdailyAnimationDateUpdated && readyForKioskAnimation && !isAnimationPlaying;
-  const dailyPlayCheck = eic === 'da' && readyForKioskAnimation && !isAnimationPlaying;
+  const subdailyPlayCheck = eic === 'sa' && subdailyAnimationDateUpdated && !isAnimationPlaying;
+  const dailyPlayCheck = eic === 'da' && !isAnimationPlaying;
 
   // if subdaily animation check that date moved back one day otherwise check if animation should play
   const checkAnimationSettings = () => {
