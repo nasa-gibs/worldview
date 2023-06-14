@@ -24,12 +24,9 @@ import {
   createVectorUrl,
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
-  formatReduxDate,
-  extractDateFromTileErrorURL,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
-import { setErrorTiles } from '../modules/ui/actions';
 import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -42,26 +39,13 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import {
-  nearestInterval,
-} from '../modules/layers/util';
+import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
 export default function mapLayerBuilder(config, cache, store) {
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-  // keep track of each tile that returned an error
-  const errorTiles = {
-    dailyTiles: [],
-    subdailyTiles: [],
-    blankTiles: [],
-    kioskTileCount: 0,
-    lastCheckedDate: null,
-  };
-
-  // list of layer id's to check for blank tiles in blobs
-  const kioskCheckForBlankTilesList = ['VIIRS_SNPP_DayNightBand_At_Sensor_Radiance', 'VIIRS_SNPP_CorrectedReflectance_TrueColor', 'MODIS_Terra_CorrectedReflectance_TrueColor', 'IMERG_Precipitation_Rate', 'GHRSST_L4_MUR_Sea_Surface_Temperature', 'MODIS_Aqua_L3_Land_Surface_Temp_Daily_Day'];
 
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -120,40 +104,6 @@ export default function mapLayerBuilder(config, cache, store) {
     store.dispatch(updateLayerCollection(id));
   };
 
-  // called from tileLoadFunction() when a tile returns an error
-  const handleTileError = async (tile, layer, sourceURL) => {
-    const state = store.getState();
-    const { isKioskModeActive } = state.ui;
-
-    if (isKioskModeActive) {
-      const { selected: reduxDate } = state.date;
-      const { id, layerPeriod } = layer;
-      const isSubdailyLayer = layerPeriod === 'Subdaily';
-      const urlDate = extractDateFromTileErrorURL(sourceURL);
-      const currentDate = formatReduxDate(reduxDate, urlDate, isSubdailyLayer);
-
-      errorTiles.lastCheckedDate = reduxDate;
-
-      // we don't want to store cached dates in the error tiles
-      if (urlDate === currentDate) {
-        const matrixColRow = tile.tileCoord;
-        const errorObj = {
-          id,
-          layerPeriod,
-          date: urlDate,
-          matrixColRow,
-          sourceURL,
-        };
-
-        if (isSubdailyLayer) {
-          errorTiles.subdailyTiles.push(errorObj);
-        } else {
-          errorTiles.dailyTiles.push(errorObj);
-        }
-      }
-    }
-  };
-
   /**
    * We define our own tile loading function in order to capture custom header values
    *
@@ -162,21 +112,8 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
     const state = store.getState();
-    const { ui: { isKioskModeActive } } = state;
 
     const date = layerDate.toISOString().split('T')[0];
-
-    const checkBlobTiles = (headers) => {
-      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id)) {
-        errorTiles.kioskTileCount += 1;
-        const contentLength = headers.get('content-length');
-        const contentType = headers.get('content-type');
-        const sizeThreshold = contentType === 'image/png' ? 2000 : 5000;
-        if (parseInt(contentLength, 10) < sizeThreshold) {
-          errorTiles.blankTiles.push({ id: layer.id, contentLength, date });
-        }
-      }
-    };
 
     const updateCollections = (headers) => {
       const actualId = headers.get('layer-identifier-actual');
@@ -199,19 +136,12 @@ export default function mapLayerBuilder(config, cache, store) {
       const data = await response.blob();
       updateCollections(response.headers);
 
-      // checking for blank tiles in kiosk mode for predefined layers
-      if (isKioskModeActive && kioskCheckForBlankTilesList.includes(layer.id)) {
-        checkBlobTiles(response.headers);
-      }
-
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
-        handleTileError(tile, layer, src);
         tile.setState(TileState.ERROR);
       }
     } catch (e) {
-      handleTileError(tile, layer, src);
       tile.setState(TileState.ERROR);
     }
   };
@@ -306,11 +236,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const {
-      ui: { isKioskModeActive, displayStaticMap },
-      animation: { isPlaying },
-      map: { rendered },
-    } = state;
+    const { ui: { isKioskModeActive, displayStaticMap } } = state;
 
     options.group = options.group || activeString;
 
@@ -332,8 +258,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
     const layer = await createLayerWrapper(def, key, options, dateOptions);
-
-    if (isKioskModeActive && !isPlaying && rendered) store.dispatch(setErrorTiles(errorTiles));
 
     return layer;
   };
@@ -521,6 +445,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+
   /**
    * Create a new WMTS Layer
    * @method createLayerWMTS
@@ -592,6 +517,7 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
+
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({

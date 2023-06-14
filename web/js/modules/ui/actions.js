@@ -3,11 +3,11 @@ import googleTagManager from 'googleTagManager';
 import {
   TOGGLE_DISTRACTION_FREE_MODE,
   TOGGLE_KIOSK_MODE,
-  CLEAR_ERROR_TILES,
-  SET_ERROR_TILES,
   DISPLAY_STATIC_MAP,
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
+  SET_EIC_MEASUREMENT_COMPLETE,
+  SET_EIC_MEASUREMENT_ABORTED,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -40,46 +40,6 @@ export function toggleKioskMode(isActive) {
   };
 }
 
-// Layerbuilder tracks tile requests that return errors or blank tiles and dispatches this action for specific layers.
-export function setErrorTiles(errorTiles) {
-  return {
-    type: SET_ERROR_TILES,
-    errorTiles: {
-      dailyTiles: errorTiles.dailyTiles,
-      subdailyTiles: errorTiles.subdailyTiles,
-      blankTiles: errorTiles.blankTiles,
-      kioskTileCount: errorTiles.kioskTileCount,
-      lastCheckedDate: errorTiles.lastCheckedDate,
-    },
-  };
-}
-
-// After each tile request we call this to clear the error tiles for the current date.
-// We want to preserve the lastCheckedDate value from the previous dispatched setErrorTiles action.
-export function clearErrorTiles() {
-  return (dispatch, getState) => {
-    const { ui: { errorTiles: { lastCheckedDate } } } = getState();
-    const errorTiles = {
-      dailyTiles: [],
-      subdailyTiles: [],
-      blankTiles: [],
-      kioskTileCount: 0,
-      lastCheckedDate,
-    };
-
-    dispatch({
-      type: CLEAR_ERROR_TILES,
-      errorTiles: {
-        dailyTiles: errorTiles.dailyTiles,
-        subdailyTiles: errorTiles.subdailyTiles,
-        blankTiles: errorTiles.blankTiles,
-        kioskTileCount: errorTiles.kioskTileCount,
-        lastCheckedDate: errorTiles.lastCheckedDate,
-      },
-    });
-  };
-}
-
 // Dispatched when maximum date/time threshold is met when checking for error/blank tiles.
 // Displays a static image map stored locally in repo.
 export function toggleStaticMap(isActive) {
@@ -105,5 +65,19 @@ export function toggleCheckedAnimationAvailability(toggleCheck) {
   return {
     type: CHECK_ANIMATION_AVAILABILITY,
     toggleCheck,
+  };
+}
+
+// This action is dispatched when tile image measurements are complete in TileMeasurement component
+export function setEICMeasurementComplete() {
+  return {
+    type: SET_EIC_MEASUREMENT_COMPLETE,
+  };
+}
+
+// This action is dispatched when the EIC measurement process is aborted in TileMeasurement component
+export function setEICMeasurementAborted() {
+  return {
+    type: SET_EIC_MEASUREMENT_ABORTED,
   };
 }
