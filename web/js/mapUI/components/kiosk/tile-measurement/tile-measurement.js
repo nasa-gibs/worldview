@@ -89,7 +89,17 @@ function TileMeasurement({ ui }) {
       layersMeetingThresholdForDate = 0;
     }
     // returns the date of the first layer that has a best date
-    const firstLayerWithBestDate = layers.find((layer) => bestDates[layer.id]?.date);
+    function findBestDate(layers, bestDates) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const layer of layers) {
+        if (bestDates[layer.id]) {
+          return bestDates[layer.id].date;
+        }
+      }
+    }
+
+    const firstLayerWithBestDate = findBestDate(layers, bestDates);
+
     if (!firstLayerWithBestDate) {
       console.error(`No date found that satisfies the full imagery thresholds. There is no best date selected for ${layers[0].id}.`);
       // display static map??
