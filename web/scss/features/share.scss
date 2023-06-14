@@ -45,19 +45,18 @@
   background-color: #505050;
 }
 
-.share-body {
-  height: 175px;
-}
-
 .share-nav-container {
-  .input-group {
-    padding-top: 10px;
+  img.share-img-preview {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
   }
 
-  .share-tab-link {
-    p {
-      padding: 20px 1px;
-    }
+  .link-parent {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    align-items: center;
   }
 
   .share-tab-embed {
@@ -101,9 +100,9 @@
     }
   }
 
-  .wv-checkbox {
-    position: absolute;
-    right: 12px;
-    bottom: 14px;
-  }
+  // .wv-checkbox {
+  //   position: absolute;
+  //   right: 12px;
+  //   bottom: 14px;
+  // }
 }

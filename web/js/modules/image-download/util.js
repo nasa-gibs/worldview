@@ -149,7 +149,6 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     params.push(`MARKER=${coords.join(',')}`);
   }
   const imgURL = `${url}?${params.join('&')}&ts=${Date.now()}`;
-  console.log('imgURL:', imgURL);
   return imgURL;
 }
 
