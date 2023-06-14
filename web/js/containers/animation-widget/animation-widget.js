@@ -246,6 +246,7 @@ function AnimationWidget (props) {
             startDate={startDate}
             endDate={endDate}
             interval={interval}
+            isKioskModeActive={isKioskModeActive}
             delta={delta}
             speed={speed}
             selectDate={selectDate}
