@@ -148,7 +148,9 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     }, []);
     params.push(`MARKER=${coords.join(',')}`);
   }
-  return `${url}?${params.join('&')}&ts=${Date.now()}`;
+  const imgURL = `${url}?${params.join('&')}&ts=${Date.now()}`;
+  console.log('imgURL:', imgURL);
+  return imgURL;
 }
 
 /*

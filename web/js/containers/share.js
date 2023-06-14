@@ -23,6 +23,12 @@ import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
+import {
+  getDownloadUrl,
+} from '../modules/image-download/util';
+import {
+  getLayers,
+} from '../modules/layers/selectors';
 
 const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
@@ -49,6 +55,7 @@ class ShareLinkContainer extends Component {
       tooltipToggleTime: 0,
       tooltipErrorTime: 0,
       queryString: history.location.search || '',
+      downloadUrl: '',
     };
   }
 
@@ -77,6 +84,173 @@ class ShareLinkContainer extends Component {
           shortLinkKey: '',
         });
       }
+    });
+
+    const {
+      bbox, height, imageDownload, locationSearch, proj, width, selectedDate,
+    } = this.props;
+    const { isWorldfile, fileType } = imageDownload;
+    const markerCoordinates = locationSearch.coordinates;
+    const url = 'https://wvs.earthdata.nasa.gov/api/v1/snapshot';
+    console.log(this.state);
+    const lonlats = [
+      [bbox[0], bbox[1]],
+      [bbox[2], bbox[3]],
+    ];
+
+    // Static values to test image insertion
+    // \web\js\containers\image-download.js for reference
+    // getLayers()
+    const layerDefs = [
+      {
+        id: 'MODIS_Terra_CorrectedReflectance_TrueColor',
+        type: 'wmts',
+        format: 'image/jpeg',
+        period: 'daily',
+        startDate: '2000-02-24T00:00:00Z',
+        dateRanges: [
+          {
+            startDate: '2000-02-24T00:00:00Z',
+            endDate: '2023-06-13T00:00:00Z',
+            dateInterval: [
+              '1',
+            ],
+          },
+        ],
+        projections: {
+          antarctic: {
+            source: 'GIBS:antarctic',
+            matrixSet: '250m',
+          },
+          geographic: {
+            source: 'GIBS:geographic',
+            matrixSet: '250m',
+          },
+          arctic: {
+            source: 'GIBS:arctic',
+            matrixSet: '250m',
+          },
+        },
+        title: 'Corrected Reflectance (True Color)',
+        subtitle: 'Terra / MODIS',
+        ongoing: true,
+        daynight: [
+          'day',
+        ],
+        conceptIds: [
+          {
+            type: 'NRT',
+            value: 'C1426414410-LANCEMODIS',
+            shortName: 'MOD021KM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 1km - NRT',
+            version: '6.1NRT',
+          },
+          {
+            type: 'NRT',
+            value: 'C1426415307-LANCEMODIS',
+            shortName: 'MOD02HKM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 500m - NRT',
+            version: '6.1NRT',
+          },
+          {
+            type: 'NRT',
+            value: 'C1426416980-LANCEMODIS',
+            shortName: 'MOD02QKM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 250m - NRT',
+            version: '6.1NRT',
+          },
+          {
+            type: 'NRT',
+            value: 'C1426422512-LANCEMODIS',
+            shortName: 'MOD03',
+            title: 'MODIS/Terra Geolocation Fields 5-Min L1A Swath 1km - NRT',
+            version: '6.1NRT',
+          },
+          {
+            type: 'STD',
+            value: 'C1378579425-LAADS',
+            shortName: 'MOD02QKM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 250m',
+            version: '6.1',
+          },
+          {
+            type: 'STD',
+            value: 'C1378577630-LAADS',
+            shortName: 'MOD02HKM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 500m',
+            version: '6.1',
+          },
+          {
+            type: 'STD',
+            value: 'C1378227407-LAADS',
+            shortName: 'MOD021KM',
+            title: 'MODIS/Terra Calibrated Radiances 5-Min L1B Swath 1km',
+            version: '6.1',
+          },
+        ],
+        orbitTracks: [
+          'OrbitTracks_Terra_Descending',
+        ],
+        orbitDirection: [
+          'descending',
+        ],
+        layerPeriod: 'Daily',
+        dataCenter: [
+          'MODAPS SIPS',
+          'LAADS DAAC',
+        ],
+        description: 'modis/terra/MODIS_Terra_CorrectedReflectance_TrueColor',
+        tags: 'natural color cr',
+        group: 'baselayers',
+        wrapadjacentdays: true,
+        layergroup: 'Corrected Reflectance',
+        disableSmartHandoff: true,
+        visible: true,
+        opacity: 1,
+      },
+      {
+        title: 'Coastlines',
+        subtitle: 'Reference',
+        ongoing: false,
+        id: 'Coastlines_15m',
+        description: 'reference/Coastlines_15m',
+        group: 'overlays',
+        format: 'image/png',
+        layergroup: 'Reference',
+        noTransition: true,
+        projections: {
+          antarctic: {
+            id: 'Coastlines',
+            subtitle: 'SCAR Antarctic Digital Database / Coastlines',
+            tags: 'borders reference',
+            source: 'GIBS:antarctic',
+            matrixSet: '250m',
+          },
+          geographic: {
+            subtitle: '&copy; OpenStreetMap contributors',
+            tags: 'borders reference osm',
+            source: 'GIBS:geographic',
+            matrixSet: '15.625m',
+          },
+          arctic: {
+            id: 'Coastlines',
+            subtitle: '&copy; OpenStreetMap contributors',
+            tags: 'borders reference osm',
+            source: 'GIBS:arctic',
+            matrixSet: '250m',
+          },
+        },
+        wrapX: true,
+        type: 'wmts',
+        visible: true,
+        opacity: 1,
+      },
+    ];
+    // End static values
+
+    const downloadURL = getDownloadUrl(url, proj, layerDefs, lonlats, { width, height }, selectedDate, fileType, isWorldfile, markerCoordinates);
+    this.setState({
+      downloadUrl: downloadURL,
     });
   }
 
@@ -164,7 +338,7 @@ class ShareLinkContainer extends Component {
   };
 
   renderNavTabs = () => {
-    const { embedDisableNavLink, isMobile } = this.props;
+    const { embedDisableNavLink, isMobileDevice } = this.props;
     const { activeTab } = this.state;
     const isDisabled = {
       embed: embedDisableNavLink,
@@ -184,7 +358,7 @@ class ShareLinkContainer extends Component {
               >
                 {isDisabled[type] && (
                   <HoverTooltip
-                    isMobile={isMobile}
+                    isMobileDevice={isMobileDevice}
                     labelText={navDisabledMessage}
                     target={`.${navTitleClass}`}
                     placement="top"
@@ -225,6 +399,7 @@ class ShareLinkContainer extends Component {
     const {
       activeTab,
       isShort,
+      downloadUrl,
     } = this.state;
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
@@ -240,15 +415,17 @@ class ShareLinkContainer extends Component {
     const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
 
     return (
-      <TabPane tabId="link" className="share-tab-link">
-        {activeTab === 'link' && (
+      <>
+        <TabPane tabId="link" className="share-tab-link">
+          {activeTab === 'link' && (
           <>
             {this.renderInputGroup(value, 'link')}
-            <p>
-              Copy URL to share link.
-            </p>
-            {' '}
-            {urlShortening && (
+            <div className="link-parent">
+              <p>
+                Copy URL to share link.
+              </p>
+              {' '}
+              {urlShortening && (
               <Checkbox
                 label="Shorten link"
                 id="wv-link-shorten"
@@ -257,10 +434,13 @@ class ShareLinkContainer extends Component {
                 disabled={isDisabled}
                 title={tooltipText}
               />
-            )}
+              )}
+            </div>
           </>
-        )}
-      </TabPane>
+          )}
+        </TabPane>
+        <p><img className="share-img-preview" src={downloadUrl} /></p>
+      </>
     );
   };
 
@@ -290,7 +470,7 @@ class ShareLinkContainer extends Component {
   };
 
   renderSocialTab = () => {
-    const { isMobile } = this.props;
+    const { isMobileDevice } = this.props;
     const {
       activeTab,
     } = this.state;
@@ -300,7 +480,7 @@ class ShareLinkContainer extends Component {
         {activeTab === 'social' && (
           <>
             <ShareLinks
-              isMobile={isMobile}
+              isMobileDevice={isMobileDevice}
               onClick={this.onLinkClick}
             />
             <p>
@@ -341,19 +521,26 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, config, shortLink, sidebar, tour,
+    screenSize, config, imageDownload, locationSearch, map, proj, shortLink, sidebar, tour,
   } = state;
+  console.log(state);
 
+  const bbox = map.extent;
   const { features: { urlShortening } } = config;
-  const isMobile = screenSize.isMobileDevice;
+  const { isMobileDevice, screenHeight: height, screenWidth: width } = screenSize;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
-
   return {
-    urlShortening,
+    bbox,
     embedDisableNavLink,
-    isMobile,
-    shortLink,
+    height,
+    imageDownload,
+    isMobileDevice,
+    locationSearch,
+    proj,
     selectedDate: getSelectedDate(state),
+    shortLink,
+    urlShortening,
+    width,
     mock:
       config.parameters && config.parameters.shorten
         ? config.parameters.shorten
@@ -372,10 +559,16 @@ export default connect(
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {
+  bbox: PropTypes.array,
   embedDisableNavLink: PropTypes.bool,
-  isMobile: PropTypes.bool,
+  imageDownload: PropTypes.object,
+  isMobileDevice: PropTypes.bool,
   mock: PropTypes.string,
+  locationSearch: PropTypes.object,
+  proj: PropTypes.object,
   requestShortLinkAction: PropTypes.func,
+  height: PropTypes.number,
+  width: PropTypes.number,
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
   urlShortening: PropTypes.bool,

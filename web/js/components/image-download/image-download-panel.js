@@ -45,6 +45,7 @@ export default class ImageDownloadPanel extends React.Component {
   }
 
   onDownload(width, height) {
+    console.log('downloading image');
     const {
       getLayers, url, lonlats, projection, date, markerCoordinates,
     } = this.props;
