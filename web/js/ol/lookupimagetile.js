@@ -26,7 +26,6 @@ LookupImageTile.prototype.load = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
-      // const octets = that.canvas_.width * that.canvas_.height * 4;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
       // uses the tileload function passed from layerbuilder
@@ -39,7 +38,7 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // Can this re-fetch b avoided...?
+    // Can this re-fetch be avoided...?
     fetch(this.src_)
       .then((response) => response.arrayBuffer())
       .then((buffer) => {
