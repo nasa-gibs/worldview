@@ -6,22 +6,19 @@ import {
   CLEAR_ERROR_TILES,
   READY_FOR_KIOSK_ANIMATION,
   CHECK_ANIMATION_AVAILABILITY,
+  SET_EIC_MEASUREMENT_COMPLETE,
+  SET_EIC_MEASUREMENT_ABORTED,
 } from './constants';
 
 export const uiState = {
   isDistractionFreeModeActive: false,
   isKioskModeActive: false,
   displayStaticMap: false,
-  eic: '', // 'sa' == subdaily-animation, 'da' == daily-animation
-  errorTiles: {
-    dailyTiles: [],
-    subdailyTiles: [],
-    blankTiles: [],
-    kioskTileCount: 0,
-    lastCheckedDate: null,
-  },
+  eic: '', // 'sa' == subdaily-animation, 'da' == daily-animation 'si' == static-imagery
   readyForKioskAnimation: false,
   animationAvailabilityChecked: false,
+  eicMeasurementComplete: false,
+  eicMeasurementAborted: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -64,6 +61,16 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         animationAvailabilityChecked: action.toggleCheck,
+      };
+    case SET_EIC_MEASUREMENT_COMPLETE:
+      return {
+        ...state,
+        eicMeasurementComplete: true,
+      };
+    case SET_EIC_MEASUREMENT_ABORTED:
+      return {
+        ...state,
+        eicMeasurementAborted: true,
       };
     default:
       return state;

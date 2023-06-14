@@ -435,7 +435,7 @@ class PlayQueue extends React.Component {
 
   render() {
     const { isAnimating } = this.state;
-    const { onClose, isMobile } = this.props;
+    const { onClose, isMobile, isKioskModeActive } = this.props;
     const loadedItems = util.objectLength(this.bufferObject);
     const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
     const mobileProgressStyle = {
@@ -459,6 +459,7 @@ class PlayQueue extends React.Component {
           onClose={onClose}
           loadedItems={loadedItems}
           totalItems={this.minBufferLength || 100}
+          isKioskModeActive={isKioskModeActive}
         />
       );
   }
@@ -480,6 +481,7 @@ PlayQueue.propTypes = {
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
   snappedCurrentDate: PropTypes.object,
+  isKioskModeActive: PropTypes.bool,
 };
 
 export default PlayQueue;
