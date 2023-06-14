@@ -42,7 +42,11 @@ function getSubdailyDates (selectedDate) {
   // Get the date as a string in UTC
   const utcDateString = selectedDate.toLocaleString('en-US', { timeZone: 'UTC' });
   // Convert the UTC string back to a Date object
-  const currentDate = new Date(utcDateString);
+  let currentDate = new Date(utcDateString);
+
+  // Subtract 30 minutes to start half an hour before the selectedDate
+  // This is a performance improvement for EIC mode since most of the time, no full imagery is found in the first 30 minutes
+  currentDate = new Date(currentDate.getTime() - 30 * 60 * 1000);
 
   // Round minutes down to nearest ten and seconds and milliseconds to zero
   currentDate.setMinutes(Math.floor(currentDate.getMinutes() / 10) * 10, 0, 0);
