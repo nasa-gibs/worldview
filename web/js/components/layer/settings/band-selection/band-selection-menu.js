@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Dropdown,
@@ -6,14 +7,21 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  UncontrolledTooltip,
 } from 'reactstrap';
-import { connect } from 'react-redux';
-import { updateBandCombination, removeLayer } from '../../../../modules/layers/actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  updateBandCombination as updateBandCombinationAction,
+  removeLayer as removeLayerAction,
+} from '../../../../modules/layers/actions';
 import { onClose } from '../../../../modules/modal/actions';
 
-function BandSelection({
-  layer, updateBandCombination, removeLayer, closeModal,
-}) {
+export default function BandSelection({ layer }) {
+  const dispatch = useDispatch();
+  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo)); };
+  const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
+  const closeModal = () => { dispatch(onClose()); };
+
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
@@ -57,22 +65,44 @@ function BandSelection({
     );
   }
 
+  const rwbInfo = (
+    <div className="band-selection-rwb-info">
+      <p>Resolution = 10m/px</p>
+      <p>Wavelength = 490nm</p>
+      <p>Bandwidth = 65nm</p>
+    </div>
+  );
+
   return (
-    <div className="d-flex justify-content-center align-items-center flex-column">
-      <h3>Select a band combination</h3>
-      <div className="d-flex justify-content-between align-items-center mt-4 categories-dropdown-header">
-        <p className="mr-2">R:</p>
+    <div className="customize-bands-container">
+      <div className="band-selection-title-row">
+        <h3>Select a band for each channel:</h3>
+        <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
+        <UncontrolledTooltip
+          id="band-selection-title-tooltip"
+          target="band-selection-title-info-icon"
+          placement="right"
+        >
+          Apply custom band combinations
+        </UncontrolledTooltip>
+      </div>
+
+      <div className="band-selection-row">
+        <p className="band-selection-color-header">R:</p>
         <DropdownComponent channel="r" />
+        {rwbInfo}
       </div>
-      <div className="d-flex justify-content-between align-items-center mt-4">
-        <p className="mr-2">G:</p>
+      <div className="band-selection-row">
+        <p className="band-selection-color-header">G:</p>
         <DropdownComponent channel="g" />
+        {rwbInfo}
       </div>
-      <div className="d-flex justify-content-between align-items-center mt-4">
-        <p className="mr-2">B:</p>
+      <div className="band-selection-row">
+        <p className="band-selection-color-header">B:</p>
         <DropdownComponent channel="b" />
+        {rwbInfo}
       </div>
-      <div className="mt-4">
+      <div className="band-selection-button-row">
         <Button
           id="confirm-band-selection"
           aria-label="Confirm band selection"
@@ -87,23 +117,6 @@ function BandSelection({
     </div>
   );
 }
-
-const mapDispatchToProps = (dispatch) => ({
-  updateBandCombination: (id, bandCombo) => {
-    dispatch(updateBandCombination(id, bandCombo));
-  },
-  removeLayer: (id) => {
-    dispatch(removeLayer(id));
-  },
-  closeModal: () => {
-    dispatch(onClose());
-  },
-});
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(BandSelection);
 
 BandSelection.propTypes = {
   layer: PropTypes.object,

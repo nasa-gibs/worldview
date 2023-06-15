@@ -25,3 +25,40 @@
         }
     }
 }
+
+.customize-bands-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .band-selection-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .band-selection-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 1.5rem;
+
+        p {
+            margin-right: .75rem;
+        }
+
+        .band-selection-rwb-info {
+            margin-left: .75rem;
+        }
+
+        .band-selection-color-header {
+            font-weight: bold;
+        }
+    }
+
+    .band-selection-button-row {
+        margin-top: 1.5rem;
+    }
+}
