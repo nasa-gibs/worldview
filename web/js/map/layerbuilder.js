@@ -43,13 +43,7 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-<<<<<<< HEAD
-import {
-  nearestInterval,
-} from '../modules/layers/util';
-=======
 import { nearestInterval } from '../modules/layers/util';
->>>>>>> develop
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
