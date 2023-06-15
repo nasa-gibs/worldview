@@ -12,6 +12,11 @@
       "type": "ttiler",
       "period": "daily",
       "associatedLayers": ["OrbitTracks_Landsat-7_Descending"],
+      "bandCombo": {
+        "r": "BO7",
+        "g": "BO5",
+        "b": "B04"
+      },
       "wrapX": false,
       "projections": {
         "geographic": {

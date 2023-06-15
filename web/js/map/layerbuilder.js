@@ -748,6 +748,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
+    // I dont think a band combo is even necessary here
     const bandCombo = ['B07', 'B05', 'B04'];
 
     // This will need to be reworked once we decide on layer definitions
