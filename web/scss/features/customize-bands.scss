@@ -1,0 +1,27 @@
+.customize-bands-parent-info {
+    margin-bottom: 12px;
+
+    hr {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.5;
+    }
+
+    .current-band-info {
+        margin-left: 10px;
+        margin-bottom: 10px;
+
+        div {
+            line-height: 1.5;
+        }
+
+        .band-color {
+            display: inline-block;
+            min-width: 50px;
+            font-weight: bold;
+        }
+    }
+}

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
-  Button, TabContent, TabPane, Nav, NavItem, NavLink,
+  TabContent, TabPane, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
-import BandSelection from './band-selection';
+import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
@@ -53,7 +53,6 @@ import {
   setOpacity,
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
-import { toggleCustomContent } from '../../../modules/modal/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -332,25 +331,6 @@ class LayerSettings extends React.Component {
       ) : null;
   };
 
-  renderCustomizeBandSelectionButton = () => {
-    const {
-      layer,
-      onCustomizeBandClick,
-    } = this.props;
-    return (
-      <Button
-        id="customize-bands"
-        aria-label="Customize band selection"
-        className="wv-button red"
-        onClick={() => onCustomizeBandClick(layer)}
-      >
-        <span className="button-text">
-          Customize Band Selection
-        </span>
-      </Button>
-    );
-  };
-
   render() {
     let renderCustomizations;
     const {
@@ -381,8 +361,8 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
+        {ttilerLayer && <BandSelection layer={layer} />}
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
-        {ttilerLayer && this.renderCustomizeBandSelectionButton()}
       </>
     );
   }
@@ -464,24 +444,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
-  },
-  onCustomizeBandClick: (layer) => {
-    const key = `BAND_SELECTION_MODAL_${layer.id}`;
-    const title = `Customize Bands for the ${layer.title} layer`;
-    dispatch(
-      toggleCustomContent(key, {
-        headerText: title,
-        backdrop: false,
-        bodyComponent: BandSelection,
-        wrapClassName: 'clickable-behind-modal',
-        modalClassName: 'sidebar-modal layer-settings-modal', // TO-DO replace class name
-        timeout: 150,
-        size: 'lg',
-        bodyComponentProps: {
-          layer,
-        },
-      }),
-    );
   },
 });
 

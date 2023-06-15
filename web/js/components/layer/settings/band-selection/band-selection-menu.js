@@ -8,8 +8,8 @@ import {
   Button,
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { updateBandCombination, removeLayer } from '../../../modules/layers/actions';
-import { onClose } from '../../../modules/modal/actions';
+import { updateBandCombination, removeLayer } from '../../../../modules/layers/actions';
+import { onClose } from '../../../../modules/modal/actions';
 
 function BandSelection({
   layer, updateBandCombination, removeLayer, closeModal,
