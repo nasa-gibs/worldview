@@ -248,7 +248,6 @@ class ShareLinkContainer extends Component {
     const {
       activeTab,
       isShort,
-      downloadUrl,
     } = this.state;
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
@@ -264,9 +263,8 @@ class ShareLinkContainer extends Component {
     const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
 
     return (
-      <>
-        <TabPane tabId="link" className="share-tab-link">
-          {activeTab === 'link' && (
+      <TabPane tabId="link" className="share-tab-link">
+        {activeTab === 'link' && (
           <>
             {this.renderInputGroup(value, 'link')}
             <div className="link-parent">
@@ -286,10 +284,8 @@ class ShareLinkContainer extends Component {
               )}
             </div>
           </>
-          )}
-        </TabPane>
-        <div className="share-img-preview-container"><img className="share-img-preview" src={downloadUrl} /></div>
-      </>
+        )}
+      </TabPane>
     );
   };
 
@@ -344,9 +340,12 @@ class ShareLinkContainer extends Component {
   render() {
     const {
       activeTab,
+      downloadUrl,
       tooltipErrorTime,
       tooltipToggleTime,
     } = this.state;
+    const { isMobileDevice } = this.props;
+    const previewClass = isMobileDevice ? 'share-img-preview mobile' : 'share-img-preview desktop';
 
     return (
       <div className="share-body">
@@ -362,6 +361,7 @@ class ShareLinkContainer extends Component {
             {/* {this.renderEmbedTab()} */}
             {this.renderSocialTab()}
           </TabContent>
+          <div className="share-img-preview-container"><img className={previewClass} src={downloadUrl} /></div>
         </div>
       </div>
     );
