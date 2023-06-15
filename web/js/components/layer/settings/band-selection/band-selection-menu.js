@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-  UncontrolledTooltip,
-} from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import BandsDropdown from './menu-components/band-dropdown';
+import PresetOptions from './menu-components/preset-options';
 import {
   updateBandCombination as updateBandCombinationAction,
   removeLayer as removeLayerAction,
@@ -34,37 +29,6 @@ export default function BandSelection({ layer }) {
     closeModal();
   };
 
-  // eslint-disable-next-line react/prop-types
-  function DropdownComponent({ channel }) {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(!dropdownOpen);
-    const bandValue = bandSelection[channel] || layer.bandCombo[0];
-
-    const bandChoices = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B10', 'B11', 'B12'];
-
-    const handleSelection = (band) => {
-      setBandSelection({
-        ...bandSelection,
-        [channel]: band,
-      });
-    };
-
-    return (
-      <Dropdown isOpen={dropdownOpen} toggle={toggle} size="sm">
-        <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
-          {bandValue}
-        </DropdownToggle>
-        <DropdownMenu style={{ transform: 'translate3d(-30px, 0px, 0px)' }}>
-          {bandChoices.map((band) => (
-            <DropdownItem key={band} onClick={() => handleSelection(band)}>
-              {band}
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    );
-  }
-
   const rwbInfo = (
     <div className="band-selection-rwb-info">
       <p>Resolution = 10m/px</p>
@@ -75,6 +39,7 @@ export default function BandSelection({ layer }) {
 
   return (
     <div className="customize-bands-container">
+      <PresetOptions />
       <div className="band-selection-title-row">
         <h3>Select a band for each channel:</h3>
         <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
@@ -89,17 +54,32 @@ export default function BandSelection({ layer }) {
 
       <div className="band-selection-row">
         <p className="band-selection-color-header">R:</p>
-        <DropdownComponent channel="r" />
+        <BandsDropdown
+          channel="r"
+          bandSelection={bandSelection}
+          setBandSelection={setBandSelection}
+          layer={layer}
+        />
         {rwbInfo}
       </div>
       <div className="band-selection-row">
         <p className="band-selection-color-header">G:</p>
-        <DropdownComponent channel="g" />
+        <BandsDropdown
+          channel="g"
+          bandSelection={bandSelection}
+          setBandSelection={setBandSelection}
+          layer={layer}
+        />
         {rwbInfo}
       </div>
       <div className="band-selection-row">
         <p className="band-selection-color-header">B:</p>
-        <DropdownComponent channel="b" />
+        <BandsDropdown
+          channel="b"
+          bandSelection={bandSelection}
+          setBandSelection={setBandSelection}
+          layer={layer}
+        />
         {rwbInfo}
       </div>
       <div className="band-selection-button-row">
@@ -120,7 +100,4 @@ export default function BandSelection({ layer }) {
 
 BandSelection.propTypes = {
   layer: PropTypes.object,
-  updateBandCombination: PropTypes.func,
-  removeLayer: PropTypes.func,
-  closeModal: PropTypes.func,
 };
