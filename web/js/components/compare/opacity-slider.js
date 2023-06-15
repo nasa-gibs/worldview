@@ -1,48 +1,26 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
-import lodashDebounce from 'lodash/debounce';
 import MonospaceDate from '../util/monospace-date';
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
-const percentFormatter = function(v) {
-  return `${v} %`;
-};
-/*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class OpacitySlider
- * @extends React.Component
- */
-class OpacitySlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value,
-    };
-    this.onSlide = this.onSlide.bind(this);
-    this.getDateTextOptions = this.getDateTextOptions.bind(this);
-    this.debounceOpacityUpdate = lodashDebounce(this.onSlide, 100);
-  }
-
+function OpacitySlider ({
+  value,
+  onSlide,
+  dateA,
+  dateB,
+}) {
+  const [currentValue, setValue] = useState(value);
   /*
    * trigger onSlide Callback
-   *
    * @method onSlide
-   *
-   * @param {number} value - Value of the slider
-   *  selection
-   *
+   * @param {number} value - Value of the slider selection
    * @return {void}
    */
-  onSlide(value) {
-    const { onSlide } = this.props;
-    onSlide(value);
-  }
+  const handleSlide = (val) => {
+    setValue(val);
+    onSlide(val);
+  };
 
-  getDateTextOptions() {
-    const { dateA, dateB } = this.props;
+  const getDateTextOptions = (dateA, dateB) => {
     const isSameDate = dateA === dateB;
     let dateAText = '';
     let dateBText = '';
@@ -58,43 +36,48 @@ class OpacitySlider extends React.Component {
       caseStyle,
       labelStyle,
     };
-  }
+  };
 
-  render() {
-    const { value } = this.state;
-    const {
-      dateAText, dateBText, caseStyle, labelStyle,
-    } = this.getDateTextOptions();
+  const options = useMemo(
+    () => getDateTextOptions(dateA, dateB),
+    [dateA, dateB],
+  );
+  const {
+    dateAText, dateBText, caseStyle, labelStyle,
+  } = options;
 
-    return (
-      <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
-        <label className="wv-slider-label left" style={labelStyle}>
-          <h4 className="left">
-            <span>A</span>
-            <MonospaceDate date={dateAText} />
-          </h4>
-        </label>
-        <div className="input-range ">
-          <SliderWithTooltip
-            defaultValue={value}
-            tipFormatter={percentFormatter}
-            onChange={this.debounceOpacityUpdate}
-            onAfterChange={this.onSlide}
-          />
+  return (
+    <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
+      <label className="wv-slider-label left" style={labelStyle}>
+        <h4 className="left">
+          <span>A</span>
+          <MonospaceDate date={dateAText} />
+        </h4>
+      </label>
+      <div className="input-range">
+        <div className="range-tooltip">
+          {currentValue}
+          {' '}
+          %
         </div>
-        <label className="wv-slider-label right" style={labelStyle}>
-          <h4 className="right">
-            <span>B</span>
-            <MonospaceDate date={dateBText} />
-          </h4>
-        </label>
+        <input
+          type="range"
+          className="form-range"
+          defaultValue={currentValue}
+          onChange={(e) => handleSlide(parseFloat(e.target.value))}
+          style={{ '--value-percent': `${currentValue}%` }}
+        />
       </div>
-    );
-  }
+      <label className="wv-slider-label right" style={labelStyle}>
+        <h4 className="right">
+          <span>B</span>
+          <MonospaceDate date={dateBText} />
+        </h4>
+      </label>
+    </div>
+  );
 }
-OpacitySlider.defaultProps = {
-  value: 50,
-};
+
 OpacitySlider.propTypes = {
   dateA: PropTypes.string,
   dateB: PropTypes.string,

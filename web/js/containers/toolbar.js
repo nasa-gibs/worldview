@@ -388,19 +388,20 @@ class toolbarContainer extends Component {
         style={mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
+        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} />
       </Button>
     );
   }
 
   render() {
+    const { isKioskModeActive } = this.props;
     return (
       <ErrorBoundary>
         <ButtonToolbar
           id="wv-toolbar"
           className="wv-toolbar"
         >
-          {this.renderDistractionFreeExitButton()}
+          {!isKioskModeActive && this.renderDistractionFreeExitButton()}
           {this.renderLocationSearchButtonComponent()}
           {this.renderShareButton()}
           {this.renderProjectionButton()}
@@ -429,7 +430,7 @@ const mapStateToProps = (state) => {
     sidebar,
     ui,
   } = state;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { number, type } = notifications;
   const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
@@ -472,6 +473,7 @@ const mapStateToProps = (state) => {
     visibleLayersForProj,
     isRotated: Boolean(map.rotation !== 0),
     isDistractionFreeModeActive,
+    isKioskModeActive,
   };
 };
 
@@ -565,6 +567,7 @@ toolbarContainer.propTypes = {
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isMobile: PropTypes.bool,

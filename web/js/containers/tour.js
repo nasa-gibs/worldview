@@ -35,7 +35,7 @@ import {
   startTour as startTourAction,
 } from '../modules/tour/actions';
 import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
-
+import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
@@ -123,9 +123,10 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
     } = this.props;
     if (e) e.preventDefault();
+    const kioskParam = this.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -145,7 +146,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
       config,
       renderedPalettes,
     );
@@ -225,8 +226,11 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab,
     } = this.props;
+    const kioskParam = this.getKioskParam(isKioskModeActive);
+
+    if (activeTab === 'events') changeTab('layers');
 
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
@@ -239,7 +243,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
         config,
         renderedPalettes,
       );
@@ -250,13 +254,21 @@ class Tour extends React.Component {
     }
   }
 
+  getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
+    const kioskParam = this.getKioskParam(isKioskModeActive);
+
+    if (activeTab === 'events') changeTab('layers');
+
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
@@ -268,7 +280,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
         config,
         renderedPalettes,
       );
@@ -512,17 +524,21 @@ const mapDispatchToProps = (dispatch) => ({
   resetProductPicker: () => {
     dispatch(resetProductPickerStateAction());
   },
+  changeTab: (str) => {
+    dispatch(changeTabAction(str));
+  },
 });
 
 const mapStateToProps = (state) => {
   const {
-    screenSize, config, tour, palettes, models, compare, map,
+    screenSize, config, tour, palettes, models, compare, map, sidebar,
   } = state;
   const { screenWidth, screenHeight } = screenSize;
-
+  const { isKioskModeActive } = state.ui;
   return {
     config,
     isActive: tour.active,
+    isKioskModeActive,
     map,
     models,
     compareState: compare,
@@ -532,6 +548,7 @@ const mapStateToProps = (state) => {
     screenWidth,
     screenHeight,
     renderedPalettes: palettes.rendered,
+    activeTab: sidebar.activeTab,
   };
 };
 
@@ -550,6 +567,8 @@ export default connect(
 )(Tour);
 
 Tour.propTypes = {
+  activeTab: PropTypes.string,
+  changeTab: PropTypes.func,
   config: PropTypes.object.isRequired,
   map: PropTypes.object,
   selectTour: PropTypes.func.isRequired,
@@ -558,6 +577,7 @@ Tour.propTypes = {
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,

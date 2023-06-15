@@ -23,7 +23,11 @@ class ModalInProgress extends React.Component {
       decreaseStep,
       incrementStep,
     } = this.props;
-
+    const closeBtn = (
+      <button className="end-tour-close-btn" onClick={endTour} type="button">
+        &times;
+      </button>
+    );
     return (
       <div>
         <Modal
@@ -36,7 +40,7 @@ class ModalInProgress extends React.Component {
           backdrop={false}
           keyboard={false}
         >
-          <ModalHeader toggle={endTour}>
+          <ModalHeader toggle={endTour} close={closeBtn} style={{ display: 'flex', alignItems: 'baseline' }}>
             {currentStory.title}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>

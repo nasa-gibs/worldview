@@ -7,7 +7,6 @@ import {
   startCase as lodashStartCase,
 } from 'lodash';
 import {
-  InputGroupAddon,
   Input,
   InputGroup,
   Button,
@@ -16,7 +15,9 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
+import {
+  getPermalink, getShareLink, wrapWithIframe,
+} from '../modules/link/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -68,6 +69,7 @@ class ShareLinkContainer extends Component {
     this.unlisten = history.listen((location, action) => {
       const newString = location.search;
       const { queryString } = this.state;
+      if (newString === undefined) { return; }
       if (queryString !== newString) {
         this.setState({
           queryString: newString,
@@ -208,15 +210,13 @@ class ShareLinkContainer extends Component {
           e.preventDefault();
         }}
       />
-      <InputGroupAddon addonType="append">
-        <Button
-          id={`copy-to-clipboard-button-${type}`}
-          onClick={() => this.copyToClipboard(value)}
-          onTouchEnd={() => this.copyToClipboard(value)}
-        >
-          COPY
-        </Button>
-      </InputGroupAddon>
+      <Button
+        id={`copy-to-clipboard-button-${type}`}
+        onClick={() => this.copyToClipboard(value)}
+        onTouchEnd={() => this.copyToClipboard(value)}
+      >
+        COPY
+      </Button>
     </InputGroup>
   );
 

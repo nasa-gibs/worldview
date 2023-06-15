@@ -4,7 +4,7 @@ import { initialCompareState } from './reducers';
 const stateFromLocation = { compare: initialCompareState };
 const PERMALINK_STATE = { ca: '' };
 
-test('mapLocationToCompareState sets compare as active is ca is defined permalink', () => {
+test('mapLocationToCompareState sets compare as active is ca is defined permalink [compare-permalink]', () => {
   const response = mapLocationToCompareState(
     PERMALINK_STATE,
     stateFromLocation,

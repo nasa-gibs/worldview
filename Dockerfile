@@ -19,7 +19,7 @@ RUN dnf install -y epel-release && \
     xz
 RUN mkdir -p /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=18.14.0
+ENV NODE_VERSION=18.16.0
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
@@ -28,17 +28,14 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
+FROM mcr.microsoft.com/playwright:focal
+
 WORKDIR /build
-# Only what is needed to run the development server and run the Selenium tests
+
 RUN mkdir -p /build/node_modules && \
     npm install \
-    chromedriver \
-    express \
-    geckodriver \
-    selenium-server-standalone-jar \
-    nightwatch
-
-VOLUME /build/node_modules
+    @playwright/test \
+    playwright-firefox
 
 EXPOSE 80
 CMD  tail -f /dev/null

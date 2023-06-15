@@ -70,6 +70,7 @@ function UpdateOpacity(props) {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
       const layerGroup = findLayer(def, activeString);
+      layerGroup.setOpacity(opacity);
       layerGroup.getLayersArray().forEach((l) => {
         l.setOpacity(opacity);
       });

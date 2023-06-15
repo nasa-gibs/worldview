@@ -24,9 +24,11 @@ options
 \#*
 .vagrant
 *.log
-# Nightwatch stuff
+# Playwright stuff
 e2e/reports
 e2e/screens
+playwright-report/
+playwright/.cache/
 *.jar
 # Config
 /config/*
@@ -36,3 +38,5 @@ config/default/release/layer-metadata
 # Jest
 /coverage
 /tasks/temp
+/test-results/
+

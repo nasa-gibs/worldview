@@ -1,4 +1,5 @@
 import * as olExtent from 'ol/extent';
+import ImageLayer from 'ol/layer/Image';
 import {
   each as lodashEach,
   isUndefined as lodashIsUndefined,
@@ -266,7 +267,7 @@ function promiseLayerGroup(layerGroup, map) {
 
     const layerPromiseArray = layers.map((layer) => {
       // TODO #3688 figure out why vector layers cause preloadinig issues
-      if (layer.isVector) return Promise.resolve();
+      if (layer.isVector || layer instanceof ImageLayer) return Promise.resolve();
       const layerExtent = layer.getExtent();
       const extent = calculateExtent(layerExtent, map);
       return promiseTileLayer(layer, extent, map);

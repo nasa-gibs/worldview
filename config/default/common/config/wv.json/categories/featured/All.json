@@ -8,6 +8,7 @@
               "description": "",
               "measurements": [
                 "Land Surface Reflectance - Featured",
+                "Surface Water Extent - Featured",
                 "Aboveground Biomass",
                 "Land Surface Metrics - Featured",
                 "Geostationary",

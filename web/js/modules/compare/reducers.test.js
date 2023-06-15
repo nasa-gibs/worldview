@@ -1,7 +1,7 @@
 import { initialCompareState, compareReducer } from './reducers';
 import * as CONSTANTS from './constants';
 
-test('CHANGE_STATE update active state and activeString', () => {
+test('CHANGE_STATE update active state and activeString [compare-reducer-change-state]', () => {
   const response = compareReducer(initialCompareState, {
     type: CONSTANTS.CHANGE_STATE,
   });
@@ -11,7 +11,7 @@ test('CHANGE_STATE update active state and activeString', () => {
   expect(response.isCompareA).toBeFalsy();
 });
 
-test('TOGGLE_ON_OFF toggles compare feature on and off', () => {
+test('TOGGLE_ON_OFF toggles compare feature on and off [compare-reducer-toggle]', () => {
   const response = compareReducer(initialCompareState, {
     type: CONSTANTS.TOGGLE_ON_OFF,
   });
@@ -19,7 +19,7 @@ test('TOGGLE_ON_OFF toggles compare feature on and off', () => {
   expect(response.active).toBeTruthy();
 });
 
-test('CHANGE_MODE updates mode', () => {
+test('CHANGE_MODE updates mode [compare-reducer-change-mode]', () => {
   const response = compareReducer(initialCompareState, {
     type: CONSTANTS.CHANGE_MODE,
     mode: 'new-mode',

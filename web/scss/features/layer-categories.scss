@@ -97,6 +97,14 @@
     padding: 1px 15px;
     vertical-align: middle;
     float: left;
+
+    a:hover {
+      color: #000 !important;
+    }
+  }
+
+  & .nav-link:hover {
+    text-decoration: none;
   }
 
   & .category-breadcrumb {
@@ -139,6 +147,7 @@
       padding: 10px;
       color: #fff;
       background: $wv-transparent-black;
+      text-decoration: none;
     }
 
     & .layer-category-name:hover {
@@ -158,6 +167,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       box-sizing: border-box;
+      text-decoration: none;
     }
 
     & .layer-category-name:hover {
@@ -248,7 +258,7 @@
   }
 
   &:hover {
-    color: #eee;
+    // color: #eee;
     background: #504d4d;
   }
 
@@ -338,4 +348,17 @@
   &.up {
     line-height: 23px;
   }
+}
+
+.layer-btn-close {
+  position: relative;
+  border: none;
+  font-weight: bold;
+  color: #666;
+  background: none;
+  font-size: 30px;
+}
+
+.layer-btn-close:hover {
+  color: black;
 }

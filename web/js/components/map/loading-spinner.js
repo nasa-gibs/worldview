@@ -1,9 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
+import { useSelector } from 'react-redux';
 
-function LoadingIndicator({ msg, isLoading, isMobile }) {
+function LoadingIndicator() {
+  const {
+    msg,
+    shouldSpinnerShow,
+    isMobile,
+  } = useSelector((state) => ({
+    msg: state.loading.msg,
+    shouldSpinnerShow: state.loading.isLoading && !state.ui.isKioskModeActive,
+    isMobile: state.screenSize.isMobileDevice,
+  }));
+
   const spinnerStyle = isMobile ? {
     position: 'absolute',
     top: 10,
@@ -17,26 +26,12 @@ function LoadingIndicator({ msg, isLoading, isMobile }) {
       zIndex: 999,
     };
 
-  return isLoading && (
+  return shouldSpinnerShow && (
     <div style={spinnerStyle}>
       <Spinner color="light" size="sm" />
       {msg}
     </div>
   );
 }
-LoadingIndicator.propTypes = {
-  msg: PropTypes.string,
-  isLoading: PropTypes.bool,
-  isMobile: PropTypes.bool,
-};
 
-const mapStateToProps = (state) => {
-  const { screenSize, loading } = state;
-  const { msg, isLoading } = loading;
-  return {
-    isLoading,
-    isMobile: screenSize.isMobileDevice,
-    msg,
-  };
-};
-export default connect(mapStateToProps)(LoadingIndicator);
+export default LoadingIndicator;

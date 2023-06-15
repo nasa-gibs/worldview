@@ -168,7 +168,11 @@ class ModalContainer extends Component {
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-
+    const closeBtn = (
+      <button className="modal-close-btn" onClick={toggleFunction} type="button">
+        &times;
+      </button>
+    );
     return (
       <ErrorBoundary>
         <InteractionWrap
@@ -227,7 +231,7 @@ class ModalContainer extends Component {
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                    <ModalHeader toggle={toggleFunction}>
+                    <ModalHeader toggle={toggleFunction} close={closeBtn}>
                       {headerComponent ? <headerComponent /> : headerText || ''}
                     </ModalHeader>
                   )}

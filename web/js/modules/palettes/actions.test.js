@@ -31,7 +31,7 @@ const state = fixtures.getState();
 const config = fixtures.config();
 const ERROR_MESSAGE = 'There was an error';
 
-describe('Palette terra-aod fetching with requestPalette action', () => {
+describe('Palette terra-aod fetching with requestPalette action [palettes-actions-request-palette]', () => {
   const mockStore = configureMockStore(middlewares);
   afterEach(() => {
     fetchMock.restore();
@@ -59,7 +59,7 @@ describe('Palette terra-aod fetching with requestPalette action', () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
-  test(`Test ${REQUEST_PALETTE_FAILURE}`, () => {
+  test(`Test ${REQUEST_PALETTE_FAILURE} [palettes-actions-failure]`, () => {
     fetchMock.mock(loc, {
       throws: ERROR_MESSAGE,
     });
@@ -77,7 +77,7 @@ describe('Palette terra-aod fetching with requestPalette action', () => {
     });
   });
 });
-describe('Test lookup actions', () => {
+describe('Test lookup actions [palettes-actions-lookup]', () => {
   const mockStore = configureMockStore(middlewares);
   let layers = addLayer('terra-aod', {}, [], config.layers, 0);
   layers = addLayer('aqua-cr', {}, layers, config.layers, 1);
@@ -109,7 +109,7 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['min-1'],
     );
   });
-  test(`test ${setThresholdRangeAndSquash} action with squash and max`, () => {
+  test(`test ${setThresholdRangeAndSquash} action with squash and max [palettes-actions-threshold]`, () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(
       setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active'),
@@ -132,7 +132,7 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['max-1-squashed'],
     );
   });
-  test(`test ${setCustomPalette} action with red-1 fixture palette`, () => {
+  test(`test ${setCustomPalette} action with red-1 fixture palette [palettes-actions-set-custom]`, () => {
     const expectedLegendColors = config.palettes.custom['red-1'].colors;
     const store = mockStore(stateWithLayers);
     store.dispatch(setCustomPalette('terra-aod', 'red-1', 0, 'active'));
@@ -151,7 +151,7 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['red-1'],
     );
   });
-  test(`test ${clearCustomPalette} action when no threshold applied`, () => {
+  test(`test ${clearCustomPalette} action when no threshold applied [palettes-actions-clear-custom]`, () => {
     let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
     terraAOD = update(terraAOD, {
       lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] },
@@ -191,7 +191,7 @@ describe('Test lookup actions', () => {
     expect(response.activeString).toEqual('active');
   });
   test(
-    `test ${clearCustomPalette} action with threshold and squash applied`,
+    `test ${clearCustomPalette} action with threshold and squash applied [palettes-actions-clear-custom-threshold]`,
     () => {
       let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
       terraAOD = update(terraAOD, {

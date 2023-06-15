@@ -14,6 +14,8 @@ import axios from 'axios';
 import qs from 'qs';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import ImageLayer from 'ol/layer/Image';
+import Static from 'ol/source/ImageStatic';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
@@ -22,7 +24,11 @@ import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
 import { getGranuleTileLayerExtent } from './granule/util';
-import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
+import {
+  createVectorUrl,
+  getGeographicResolutionWMS,
+  mergeBreakpointLayerAttributes,
+} from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
 import { getCollections } from '../modules/layers/selectors';
@@ -37,9 +43,13 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
+<<<<<<< HEAD
 import {
   nearestInterval,
 } from '../modules/layers/util';
+=======
+import { nearestInterval } from '../modules/layers/util';
+>>>>>>> develop
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -111,13 +121,14 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} src
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
+    const state = store.getState();
+
     const date = layerDate.toISOString().split('T')[0];
-    let actualId;
 
     const updateCollections = (headers) => {
-      actualId = headers.get('layer-identifier-actual');
+      const actualId = headers.get('layer-identifier-actual');
       if (!actualId) return;
-      const state = store.getState();
+
       const { layers } = state;
       const collectionCheck = getCollections(layers, date, layer);
       // check if the collection & dates already exist for layer so we don't dispatch actions
@@ -134,6 +145,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const response = await fetch(src);
       const data = await response.blob();
       updateCollections(response.headers);
+
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
       } else {
@@ -217,6 +229,11 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
     layer.setOpacity(opacity || 1.0);
+    if (breakPointLayer) {
+      layer.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity || 1.0);
+      });
+    }
     return layer;
   };
 
@@ -232,7 +249,15 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
+    const { ui: { isKioskModeActive, displayStaticMap } } = state;
+
     options.group = options.group || activeString;
+
+    // if gibs/dns failure, display static image layer
+    if (displayStaticMap && isKioskModeActive) {
+      const layer = await createStaticImageLayer();
+      return layer;
+    }
 
     const {
       closestDate,
@@ -416,6 +441,24 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
+  const createStaticImageLayer = async() => {
+    const state = store.getState();
+    const { proj: { selected: { id, crs, maxExtent } } } = state;
+
+    const projectionURL = `images/map/bluemarble-${id}.jpg`;
+
+    const layer = new ImageLayer({
+      source: new Static({
+        url: projectionURL,
+        projection: crs,
+        imageExtent: maxExtent,
+      }),
+    });
+
+    return layer;
+  };
+
+
   /**
    * Create a new WMTS Layer
    * @method createLayerWMTS
@@ -487,6 +530,7 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
+
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({

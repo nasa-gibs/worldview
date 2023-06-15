@@ -27,65 +27,65 @@ const config = fixtures.config();
 const PALETTE_LAYER_STRING = 'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true),mask';
 const VECTOR_LAYER_STRING = 'OrbitTracks_Aqua_Ascending(hidden,opacity=0.46,style=yellow1),mask';
 
-test('Layer parser, retrieves correct number of palette layers from permalink string', () => {
+test('Layer parser, retrieves correct number of palette layers from permalink string [layers-palette-layers]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   expect(layers.length).toBe(2);
 });
-test('Layer parser, gets correct palette layer ID', () => {
+test('Layer parser, gets correct palette layer ID [layers-palette-layer-id]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.id).toBe('AMSRE_Brightness_Temp_89H_Night');
 });
-test('Layer parser, gets correct custom palette id from permalink string', () => {
+test('Layer parser, gets correct custom palette id from permalink string [layers-custom-palette-id]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.custom[0]).toBe('red_2');
 });
-test('Layer parser, gets squashed boolean from permalink string', () => {
+test('Layer parser, gets squashed boolean from permalink string [layers-squashed-boolean]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.squash[0]).toBe(true);
 });
-test('Layer parser, gets correct min value from permalink string', () => {
+test('Layer parser, gets correct min value from permalink string [layers-min-value]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.min[0]).toBe(224);
 });
-test('Layer parser, gets correct max value from permalink string', () => {
+test('Layer parser, gets correct max value from permalink string [layers-max-value]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.max[0]).toBe(294);
 });
-test('Layer parser, gets correct max value from permalink string', () => {
+test('Layer parser, gets correct max value from permalink string [layers-opacity-value]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.opacity).toBe(0.54);
 });
-test('Layer parser, retrieves hidden palette layer from permalink string', () => {
+test('Layer parser, retrieves hidden palette layer from permalink string [layers-hidden-palette-layer]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.opacity).toBe(0.54);
 });
-test('Layer parser, retrieves correct number of vector layers from permalink string', () => {
+test('Layer parser, retrieves correct number of vector layers from permalink string [layers-vector-layers]', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
   expect(layers.length).toBe(2);
 });
-test('Layer parser, gets correct vector layer ID', () => {
+test('Layer parser, gets correct vector layer ID [layers-vector-layer-id]', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.id).toBe('OrbitTracks_Aqua_Ascending');
 });
-test('Layer parser, gets correct custom vector style id from permalink string', () => {
+test('Layer parser, gets correct custom vector style id from permalink string [layers-vector-style-id]', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.custom[0]).toBe('yellow1');
 });
-test('Layer parser, retrieves hidden vector layer from permalink string', () => {
+test('Layer parser, retrieves hidden vector layer from permalink string [layers-hidden-vector-layer]', () => {
   const layers = layersParse12(VECTOR_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.opacity).toBe(0.46);
 });
-test('serialize layers and palettes', () => {
+test('serialize layers and palettes [layers-serialize]', () => {
   const terraAodLayer = config.layers['terra-aod'];
   const paletteState = {
     palettes: {
@@ -116,7 +116,7 @@ describe('permalink 1.0', () => {
       },
     };
   });
-  test('supports old style period delimiters', () => {
+  test('supports old style period delimiters [layers-old-style-delimiters]', () => {
     const parameters = {
       products: 'baselayers.terra-cr~overlays.terra-aod.aqua-aod',
     };
@@ -149,7 +149,7 @@ describe('permalink 1.1', () => {
     };
   });
 
-  test('parses only one baselayer', () => {
+  test('parses only one baselayer [layers-parse-one-baselayer]', () => {
     const parameters = {
       products: 'baselayers,terra-cr',
     };
@@ -162,7 +162,7 @@ describe('permalink 1.1', () => {
     );
     expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-cr');
   });
-  test('parses only one overlay', () => {
+  test('parses only one overlay [layers-parse-one-overlay]', () => {
     const parameters = {
       products: 'overlays,terra-aod',
     };
@@ -175,7 +175,7 @@ describe('permalink 1.1', () => {
 
     expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-aod');
   });
-  test('parses multiple layers', () => {
+  test('parses multiple layers [layers-parse-multiple-layers]', () => {
     const parameters = {
       products: 'baselayers,terra-cr~overlays,terra-aod,aqua-aod',
     };
@@ -190,7 +190,7 @@ describe('permalink 1.1', () => {
     expect(activeLayers.find((x) => x.id === 'terra-aod')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
-  test('empty layer list', () => {
+  test('empty layer list [layers-empty-list]', () => {
     const parameters = {
       products: 'baselayers~overlays',
     };
@@ -203,7 +203,7 @@ describe('permalink 1.1', () => {
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
   });
-  test('skips invalid layers and records an error', () => {
+  test('skips invalid layers and records an error [layers-skip-invalid-layers]', () => {
     const parameters = {
       products: 'baselayers,terra-cr~overlays,layerx,aqua-aod',
     };
@@ -217,7 +217,7 @@ describe('permalink 1.1', () => {
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
-  test('no layers if no groups found', () => {
+  test('no layers if no groups found [layers-no-group-found]', () => {
     const parameters = {
       products: 'layerx,layery',
     };
@@ -230,7 +230,7 @@ describe('permalink 1.1', () => {
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
   });
-  test('hidden layers', () => {
+  test('hidden layers [layers-hidden-layers]', () => {
     const parameters = {
       products: 'baselayers,!terra-cr',
     };
@@ -261,7 +261,7 @@ describe('Date range building', () => {
     };
   });
 
-  test('test active multi-day layers are extending beyond known GC end date using adjustActiveDateRanges', () => {
+  test('test active multi-day layers are extending beyond known GC end date using adjustActiveDateRanges [layers-adjust-date-ranges]', () => {
     const parameters = {
       products: 'MODIS_Combined_L4_LAI_4Day',
     };
@@ -278,7 +278,7 @@ describe('Date range building', () => {
     expect(dateRanges.length).toBe(4);
     expect(dateRanges[3].endDate).toBe('2021-04-30T16:00:00Z');
   });
-  test('test limited date range returned for layer with single date range and interval', () => {
+  test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -293,7 +293,7 @@ describe('Date range building', () => {
     const dates = datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
     expect(dates.length).toBe(3);
   });
-  test('test only next date returned (out of range past)', () => {
+  test('test only next date returned (out of range past) [layers-out-of-range-past]', () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -308,7 +308,7 @@ describe('Date range building', () => {
     const dates = datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
     expect(dates.length).toBe(1);
   });
-  test('test no dates returned (out of range future)', () => {
+  test('test no dates returned (out of range future) [layers-out-of-range-future]', () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -323,7 +323,7 @@ describe('Date range building', () => {
     const dates = datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
     expect(dates.length).toBe(0);
   });
-  test('test date range returned from given start/end date range for layer coverage panel', () => {
+  test('test date range returned from given start/end date range for layer coverage panel [layers-coverage-panel]', () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -362,7 +362,7 @@ describe('Vector layers', () => {
       breakPointLayer,
     },
   ];
-  test('isVectorLayerClickable func', () => {
+  test('isVectorLayerClickable func [layers-vector-layer-clickable]', () => {
     const false1 = isVectorLayerClickable({
       type: 'vector',
     }, null, 'geographic');
@@ -393,14 +393,14 @@ describe('Vector layers', () => {
     expect(trueArctic).toBe(true);
     expect(true1).toBe(true);
   });
-  test('hasNonClickableVectorLayer func', () => {
+  test('hasNonClickableVectorLayer func [layers-nonclickable-vector-layer]', () => {
     const false1 = hasNonClickableVectorLayer(layers, 0.1, 'geographic');
     const true1 = hasNonClickableVectorLayer(layers, 0.3, 'geographic');
 
     expect(false1).toBe(false);
     expect(true1).toBe(true);
   });
-  test('hasVectorLayers func', () => {
+  test('hasVectorLayers func [layers-has-vector-layers]', () => {
     const false1 = hasVectorLayers([{ type: 'wms', visible: true }], 0.1);
     const false2 = hasVectorLayers([{ type: 'vector', visible: false }], 0.1);
     const true1 = hasVectorLayers(layers);

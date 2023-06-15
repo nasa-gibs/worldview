@@ -58,7 +58,7 @@ class DateChangeArrows extends PureComponent {
   handleKeyDown = (e) => {
     const { arrowDown } = this.props;
     const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
-    if (e.target.tagName === 'INPUT' || e.target.className === 'rc-slider-handle' || e.ctrlKey || e.metaKey) {
+    if (e.target.tagName === 'INPUT' || e.target.className === 'form-range' || e.ctrlKey || e.metaKey) {
       return;
     }
     if (direction) {

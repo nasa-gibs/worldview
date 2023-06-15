@@ -47,14 +47,14 @@ async function processTemporalLayer (wvLayer, value) {
         }
         if (end) {
           endDate = moment(end, dateFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
-          dateRangeEnd.push(endDate)
         }
         if (interval !== 'P1D') {
-          endDate = moment(endDate).add(moment.duration(interval))
+          endDate = moment(endDate).add(moment.duration(interval)).format('YYYY-MM-DDTHH:mm:ss[Z]')
         }
         const regex = new RegExp(/\d+/g)
         const match = regex.exec(interval)
         rangeInterval.push(match)
+        dateRangeEnd.push(endDate)
       } else {
         // Subdaily Layers
         startDate = moment(start, dateTimeFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')

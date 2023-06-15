@@ -1,4 +1,3 @@
-
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
@@ -145,7 +144,7 @@ if (!argv.dist) {
   }
 
   shell.exec('npm run build', options)
-  shell.exec('node ./tasks/dist.js', options)
+  shell.exec('node ./tasks/util/dist.js', options)
 }
 
 upload()

@@ -168,6 +168,7 @@
             "Surface Albedo",
             "Surface Flux",
             "Surface Pressure",
+            "Surface Water Extent",
             "TOA Albedo",
             "TOA Flux",
             "Terrain Elevation",

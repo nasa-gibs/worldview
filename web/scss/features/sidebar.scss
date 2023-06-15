@@ -28,13 +28,15 @@
     border-right: 1px solid #333;
     border-left: 1px solid #333;
 
-    @media (max-width: $mobile-max-width) {
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
       &.nav-tabs {
         height: $wv-mob-sb-tabs-height;
 
         .nav-item {
           width: 120px;
           margin-right: 15px;
+          font-size: 12px;
 
           a.nav-link {
             height: $wv-mob-sb-tabs-height - 2;
@@ -73,6 +75,11 @@
     background: #00457b;
     border-color: #00457b;
     color: #fff;
+    height: 32px;
+  }
+
+  .nav-item a:not(.active):hover {
+    color: #fff !important;
   }
 
   .layer-list-placeholder {
@@ -81,11 +88,13 @@
 
   .tab-content .nav-tabs {
     border-bottom: 3px solid #dee2e6;
+    padding-bottom: 4px;
   }
 
   .nav-item {
     color: #fff;
     cursor: pointer;
+    height: 31px;
   }
 
   .layer-container {
@@ -223,6 +232,11 @@ footer .compare-toggle-button {
     font-size: 12px;
     max-width: 232px;
     line-height: 15px;
+
+    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
+      (max-width: $mobile-max-width) {
+      font-size: 16px;
+    }
   }
 
   .dropdown {
@@ -243,37 +257,6 @@ footer .compare-toggle-button {
 
       &:focus {
         box-shadow: none;
-      }
-    }
-
-    .dropdown-menu {
-      margin: 0;
-      background-color: #3a3a3a;
-      color: #eee;
-      border-radius: 0;
-      box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
-    }
-
-    .dropdown-item {
-      color: #eee;
-      font-size: 14px;
-      padding: 6px 12px;
-
-      @media (max-width: $mobile-max-width) {
-        font-size: 18px;
-        padding: 12px 14px;
-      }
-
-      &:hover {
-        color: #fff;
-        background-color: #d54e21;
-      }
-
-      &:active,
-      &.active {
-        background: #d54e21;
-        color: #fff;
-        text-shadow: 1px 1px 0 #000;
       }
     }
   }
@@ -319,6 +302,38 @@ footer .compare-toggle-button {
   }
 }
 
+/* override bootstrap 5 dropdown menu */
+.layer-options-dropdown-menu {
+  margin: 0;
+  background-color: #3a3a3a;
+  color: #eee;
+  border-radius: 0;
+  box-shadow: 1px 1px 20px rgb(0 0 0 / 75%);
+}
+
+.layer-options-dropdown-item {
+  color: #eee;
+  font-size: 14px;
+  padding: 6px 12px;
+
+  @media (max-width: $mobile-max-width) {
+    font-size: 18px;
+    padding: 12px 14px;
+  }
+
+  &:hover {
+    color: #fff;
+    background-color: #d54e21;
+  }
+
+  &:active,
+  &.active {
+    background: #d54e21;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+  }
+}
+
 @media (max-width: $mobile-max-width) {
   .layer-group-case .layer-group-header {
     min-height: 32px;
@@ -359,7 +374,7 @@ footer .compare-toggle-button {
   }
 
   #products-holder footer .product-buttons {
-    height: 120px;
+    height: 70px;
   }
 }
 
@@ -484,10 +499,7 @@ footer .compare-toggle-button {
 .sidebar-modal {
   margin-left: auto;
   margin-right: auto;
-  top: 0;
-  left: 298px;
-  right: auto;
-  bottom: auto;
+  inset: 0 auto auto 298px;
   border-radius: 6px;
   position: absolute;
   max-width: 100vw;
@@ -638,7 +650,7 @@ footer .compare-toggle-button {
   }
 
   .layer-threshold-select {
-    height: 58px;
+    margin-bottom: 3rem;
   }
 
   .wv-label-opacity,

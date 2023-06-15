@@ -87,7 +87,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
         />
       ) : (
         <div id="layer-metadata" className="layer-metadata">
-          <p>Loading MetaData...</p>
+          <p>Loading Layer Description...</p>
         </div>
       )}
 
