@@ -17,6 +17,7 @@ export default function BandSelection({ layer }) {
   const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
   const closeModal = () => { dispatch(onClose()); };
 
+  const [selectedPreset, setSelectedPreset] = useState(null);
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
@@ -39,7 +40,11 @@ export default function BandSelection({ layer }) {
 
   return (
     <div className="customize-bands-container">
-      <PresetOptions />
+      <PresetOptions
+        selectedPreset={selectedPreset}
+        setSelectedPreset={setSelectedPreset}
+        setBandSelection={setBandSelection}
+      />
       <div className="band-selection-title-row">
         <h3>Select a band for each channel:</h3>
         <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
@@ -58,6 +63,7 @@ export default function BandSelection({ layer }) {
           channel="r"
           bandSelection={bandSelection}
           setBandSelection={setBandSelection}
+          setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
         {rwbInfo}
@@ -68,6 +74,7 @@ export default function BandSelection({ layer }) {
           channel="g"
           bandSelection={bandSelection}
           setBandSelection={setBandSelection}
+          setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
         {rwbInfo}
@@ -78,6 +85,7 @@ export default function BandSelection({ layer }) {
           channel="b"
           bandSelection={bandSelection}
           setBandSelection={setBandSelection}
+          setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
         {rwbInfo}

@@ -6,9 +6,11 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-export default function BandsDropdown({
-  channel, bandSelection, setBandSelection, layer,
-}) {
+export default function BandsDropdown(props) {
+  const {
+    channel, bandSelection, setBandSelection, layer, setSelectedPreset,
+  } = props;
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
   const bandValue = bandSelection[channel] || layer.bandCombo[0];
@@ -20,6 +22,7 @@ export default function BandsDropdown({
       ...bandSelection,
       [channel]: band,
     });
+    setSelectedPreset(null);
   };
 
   return (
