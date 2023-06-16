@@ -1,7 +1,9 @@
 {
 	"layerOrder": [
-		"HLSL30_FIRMS",
-		"HLSS30_FIRMS",
+		"HLS_Customizable_Landsat",
+		"HLS_Customizable_Sentinel",
+		"HLS_Natural_Color_Landsat",
+		"HLS_Color_Infrared_Landsat",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule",

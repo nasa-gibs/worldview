@@ -1,20 +1,20 @@
 {
   "layers": {
-    "HLSL30_FIRMS": {
-      "id": "HLSL30_FIRMS",
-      "title": "HLSL30 FIRMS",
-      "subtitle": "FIRMS API",
-      "description": "HLSL30_FIRMS",
-      "tags": "corrected surface landsat oli sentinel msi s30",
+    "HLS_Customizable_Landsat": {
+      "id": "HLS_Customizable_Landsat",
+      "title": "HLS Customizable Landsat",
+      "subtitle": "Customizable HLS Landsat",
+      "description": "A customizable HLS Landsat layer",
+      "tags": "corrected surface landsat oli msi s30",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "associatedLayers": ["OrbitTracks_Landsat-7_Descending"],
+      "associatedLayers": ["OrbitTracks_Landsat-8_Descending"],
       "bandCombo": {
-        "r": "BO7",
-        "g": "BO5",
+        "r": "B07",
+        "g": "B05",
         "b": "B04"
       },
       "wrapX": false,

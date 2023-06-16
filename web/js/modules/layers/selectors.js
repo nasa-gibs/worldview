@@ -292,7 +292,7 @@ export const subdailyLayersActive = createSelector(
   (layers) => hasSubDaily(layers),
 );
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandCombo) {
+export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
@@ -313,10 +313,6 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
-
-  if (def.type === 'ttiler') {
-    def.bandCombo = bandCombo || { r: 'B07', g: 'B05', b: 'B04' };
-  }
 
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;

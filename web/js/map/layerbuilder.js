@@ -748,11 +748,11 @@ export default function mapLayerBuilder(config, cache, store) {
     const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    // I dont think a band combo is even necessary here
-    const bandCombo = ['B07', 'B05', 'B04'];
+    const { r, g, b } = def.bandCombo;
+    const bandCombo = [r, g, b];
 
     // This will need to be reworked once we decide on layer definitions
-    const collectionID = layerID === 'HLSS30_FIRMS' ? 'HLSS30' : 'HLSL30';
+    const collectionID = layerID === 'HLS_Customizable_Sentinel' ? 'HLSS30' : 'HLSL30';
 
     const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
 

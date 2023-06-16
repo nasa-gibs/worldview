@@ -1,0 +1,34 @@
+{
+  "layers": {
+    "HLS_Natural_Color_Landsat": {
+      "id": "HLS_Natural_Color_Landsat",
+      "title": "HLS Natural Color Landsat",
+      "subtitle": "HLS Natural Color Landsat",
+      "description": "HLS Natural Color Landsat",
+      "tags": "corrected surface oli sentinel msi s30",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "associatedLayers": ["OrbitTracks_Landsat-8_Descending"],
+      "bandCombo": {
+        "r": "B04",
+        "g": "B03",
+        "b": "B02"
+      },
+      "wrapX": false,
+      "projections": {
+        "geographic": {
+          "source": "FIRMS"
+        },
+        "arctic": {
+          "source": "FIRMS"
+        },
+        "antarctic": {
+          "source": "FIRMS"
+        }
+      }
+    }
+  }
+}
