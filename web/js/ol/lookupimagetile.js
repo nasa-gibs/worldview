@@ -21,13 +21,43 @@ LookupImageTile.prototype.load = function() {
     const that = this;
     this.changed();
     const pixelsToDisplay = getPixelColorsToDisplay(this.lookup_);
+    let pixelsProcessed = false;
 
     const onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
       const g = that.canvas_.getContext('2d');
+      const octets = that.canvas_.width * that.canvas_.height * 4;
       g.drawImage(that.image_, 0, 0);
+
+      // If pixels were not processed already, we skip this palette swap loop
+      if (!pixelsProcessed) {
+        const imageData = g.getImageData(
+          0,
+          0,
+          that.canvas_.width,
+          that.canvas_.height,
+        );
+        const pixels = imageData.data;
+
+        for (let i = 0; i < octets; i += 4) {
+          const source = `${pixels[i + 0]},${
+            pixels[i + 1]},${
+            pixels[i + 2]},${
+            pixels[i + 3]}`;
+          const target = that.lookup_[source];
+
+          if (target) {
+            pixels[i + 0] = target.r;
+            pixels[i + 1] = target.g;
+            pixels[i + 2] = target.b;
+            pixels[i + 3] = target.a;
+          }
+        }
+        g.putImageData(imageData, 0, 0);
+      }
+
       // uses the tileload function passed from layerbuilder
       if (that.customTileLoadFunction_) {
         that.customTileLoadFunction_(that, that.src_);
@@ -38,62 +68,70 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // Can this re-fetch be avoided...?
-    fetch(this.src_)
-      .then((response) => response.arrayBuffer())
-      .then((buffer) => {
+    // We only want to process images with limited palettes, not continuous palettes
+    // Almost certainly a better way to implement this condition
+    if (Object.keys(pixelsToDisplay).length < 50) {
+      pixelsProcessed = true;
+      fetch(this.src_)
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => {
         // decode the buffer PNG file
-        const decodedPNG = UPNG.decode(buffer);
-        const { width, height } = decodedPNG;
+          const decodedPNG = UPNG.decode(buffer);
+          const { width, height } = decodedPNG;
 
-        // Create an array buffer matching the pixel dimensions of the provided image
-        const bufferSize = height * width * 4;
-        const arrBuffer = new Uint32Array(bufferSize);
+          // Create an array buffer matching the pixel dimensions of the provided image
+          const bufferSize = height * width * 4;
+          const arrBuffer = new Uint32Array(bufferSize);
 
-        // Extract the colormap values. This is an array of integers representing rgba values.
-        // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = b, etc.)
-        const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
+          // Extract the colormap values. This is an array of integers representing rgba values.
+          // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = b, etc.)
+          // colorMapArr assumes a max of 256 colors
+          const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
-        // Extract the pixel data. This is an array of integers corresponding to the colormap
-        // i.e. if pixelData[0] == 5, this pixel is the color of the 5th entry in the colormap
-        const pixelData = decodedPNG.data;
+          // Extract the pixel data. This is an array of integers corresponding to the colormap
+          // i.e. if pixelData[0] == 5, this pixel is the color of the 5th entry in the colormap
+          const pixelData = decodedPNG.data;
 
-        // iterate through the pixelData, drawing each pixel using the appropriate color
-        for (let i = 0; i < pixelData.length; i += 1) {
-          const arrBuffIndex = i * 4;
-          const lookupIndex = pixelData[i] * 4;
+          // iterate through the pixelData, drawing each pixel using the appropriate color
+          for (let i = 0; i < pixelData.length; i += 1) {
+            const arrBuffIndex = i * 4;
+            const lookupIndex = pixelData[i] * 4;
 
-          // Determine desired RGBA for this pixel
-          const r = colorMapArr[lookupIndex];
-          const g = colorMapArr[lookupIndex + 1];
-          const b = colorMapArr[lookupIndex + 2];
-          const a = 255;
+            // Determine desired RGBA for this pixel
+            const r = colorMapArr[lookupIndex];
+            const g = colorMapArr[lookupIndex + 1];
+            const b = colorMapArr[lookupIndex + 2];
+            const a = 255;
+            // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
+            const rgbaStr = `${r},${g},${b},${a}`;
+            const drawThisColor = pixelsToDisplay[rgbaStr];
 
-          // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
-          const rgbaStr = `${r},${g},${b},${a}`;
-          const drawThisColor = pixelsToDisplay[rgbaStr];
-
-          // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
-          if (drawThisColor !== undefined) {
-            arrBuffer[arrBuffIndex + 0] = r;
-            arrBuffer[arrBuffIndex + 1] = g;
-            arrBuffer[arrBuffIndex + 2] = b;
-            arrBuffer[arrBuffIndex + 3] = a;
-          } else {
-            arrBuffer[arrBuffIndex] = 0;
-            arrBuffer[arrBuffIndex + 1] = 0;
-            arrBuffer[arrBuffIndex + 2] = 0;
-            arrBuffer[arrBuffIndex + 3] = 0;
+            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
+            if (drawThisColor !== undefined) {
+              arrBuffer[arrBuffIndex + 0] = r;
+              arrBuffer[arrBuffIndex + 1] = g;
+              arrBuffer[arrBuffIndex + 2] = b;
+              arrBuffer[arrBuffIndex + 3] = a;
+            } else {
+            // console.log('drawThisColor undefined, rgbaStr:', rgbaStr);
+              arrBuffer[arrBuffIndex] = 0;
+              arrBuffer[arrBuffIndex + 1] = 0;
+              arrBuffer[arrBuffIndex + 2] = 0;
+              arrBuffer[arrBuffIndex + 3] = 0;
+            }
           }
-        }
 
-        // Encode the image, creating a new PNG file
-        const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
-        const blob = new Blob([encodedBufferImage], { type: 'image/png' });
-        const dataURL = `${URL.createObjectURL(blob)}`;
-        that.image_.src = dataURL;
-        that.image_.addEventListener('load', onImageLoad);
-      });
+          // Encode the image, creating a new PNG file
+          const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
+          const blob = new Blob([encodedBufferImage], { type: 'image/png' });
+          const dataURL = `${URL.createObjectURL(blob)}`;
+          this.image_.src = dataURL;
+          this.image_.addEventListener('load', onImageLoad);
+        });
+    } else {
+      this.image_.src = this.src_;
+      this.image_.addEventListener('load', onImageLoad);
+    }
   }
 };
 
