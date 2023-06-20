@@ -314,8 +314,13 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || undefined;
 
-  // only exists when updating a layer through the updateBandCombo action
-  if (bandComboParam) {
+  if (spec.bandCombo) {
+    def.bandCombo = {
+      r: spec.bandCombo[0],
+      g: spec.bandCombo[1],
+      b: spec.bandCombo[2],
+    };
+  } else if (bandComboParam) {
     def.bandCombo = bandComboParam;
   }
 
