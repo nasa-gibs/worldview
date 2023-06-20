@@ -751,8 +751,15 @@ export default function mapLayerBuilder(config, cache, store) {
     const { r, g, b } = def.bandCombo;
     const bandCombo = [r, g, b];
 
-    // This will need to be reworked once we decide on layer definitions
-    const collectionID = layerID === 'HLS_Customizable_Sentinel' ? 'HLSS30' : 'HLSL30';
+    const landsatLayers = [
+      'HLS_Customizable_Landsat',
+      'HLS_Color_Infrared_Landsat',
+      'HLS_False_Color_Urban_Landsat',
+      'HLS_False_Color_Vegetation_Landsat',
+      'HLS_Shortwave_Infrared_Landsat',
+    ];
+
+    const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
 
     const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
 

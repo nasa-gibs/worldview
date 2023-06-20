@@ -148,13 +148,7 @@ function UpdateDate(props) {
       if (isCompareActive && layers.length) {
         await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
       } else if (temporalLayer) {
-        if (def.type === 'ttiler' && !skipTtiler) {
-          handleTtilerLayer(def, index, createLayer, layers)
-            .then((createdTtilerLayer) => {
-              ui.selected.addLayer(createdTtilerLayer);
-            // mapLayerCollection.setAt(index, createdTtilerLayer);
-            });
-        } else if (index !== undefined && index !== -1) {
+        if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'
             ? { granuleCount: getGranuleCount(granuleState, id) }
