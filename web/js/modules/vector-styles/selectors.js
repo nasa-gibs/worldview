@@ -106,6 +106,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
 
+  console.log('glStyle');
   let glStyle = vectorStyles[styleId];
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
