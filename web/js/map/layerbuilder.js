@@ -445,6 +445,7 @@ export default function mapLayerBuilder(config, cache, store) {
       style = getPaletteKeys(def.id, undefined, state);
     }
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
+      console.log('isVectorStyleActive');
       style = getVectorStyleKeys(def.id, undefined, state);
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
@@ -692,7 +693,6 @@ export default function mapLayerBuilder(config, cache, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
-    console.log(`layer: ${layer.ol_uid}`);
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;

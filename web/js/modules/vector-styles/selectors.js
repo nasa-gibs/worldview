@@ -3,6 +3,7 @@ import {
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   find as lodashFind,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 
 import update from 'immutability-helper';
@@ -95,7 +96,6 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
-// This is running twice, once for 'active' & again for 'activeb'. It seems like activeB is applied to both...?
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
@@ -110,29 +110,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
-
-    console.log('update all glStyle properties');
-    console.log(`rgbPalette: ${rgbPalette}`);
-    // update all glStyle properties
-    if (customPalette == 'blue_dark') {
-      return;
-    }
-
-    for (let i = 0; i < glStyle.layers.length; i += 1) {
-      const thisPaintObj = glStyle.layers[i].paint;
-      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
-        thisPaintObj['line-color'] = rgbPalette;
-      }
-      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
-        thisPaintObj['circle-color'] = rgbPalette;
-      }
-      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
-        thisPaintObj['fill-color'] = rgbPalette;
-      }
-      if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
-        thisPaintObj['line-width'] = 2;
-      }
-    }
+    glStyle = updateGlStylePalette(glStyle, rgbPalette);
   } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStyles') && !styleSelection) {
     const customDefaultStyle = state.vectorStyles.customDefault[def.id];
     if (customDefaultStyle !== undefined) {
@@ -153,6 +131,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
+  // De-reference the glState object prior to apply the palette to the layer
+  glStyle = lodashCloneDeep(vectorStyles[styleId]);
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
@@ -190,6 +170,25 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
     : feature.getGeometry().getFlatCoordinates();
   if (containsCoordinate(acceptableExtent, midpoint)) return true;
   return false;
+};
+
+const updateGlStylePalette = (glStyle, rgbPalette) => {
+  for (let i = 0; i < glStyle.layers.length; i += 1) {
+    const thisPaintObj = glStyle.layers[i].paint;
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
+      thisPaintObj['line-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
+      thisPaintObj['circle-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
+      thisPaintObj['fill-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
+      thisPaintObj['line-width'] = 2;
+    }
+  }
+  return glStyle;
 };
 
 export function getKey(layerId, groupStr, state) {
@@ -263,3 +262,5 @@ export const applyStyle = (def, olVectorLayer, state) => {
 
   setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };
+
+

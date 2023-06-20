@@ -174,8 +174,6 @@ function UpdateProjection(props) {
         return createLayer(def, options);
       });
     const compareLayerGroup = await Promise.all(layers);
-    console.log('compareLayerGroup', compareLayerGroup);
-    console.log('compareActiveString', compareActiveString);
 
     return new OlLayerGroup({
       layers: compareLayerGroup,
@@ -212,7 +210,6 @@ function UpdateProjection(props) {
    * @returns {void}
    */
   async function reloadLayers(granuleOptions) {
-    console.log('reloadLayers');
     const mapUI = ui.selected;
     const { createLayer } = ui;
 
