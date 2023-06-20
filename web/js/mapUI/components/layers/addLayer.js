@@ -56,7 +56,6 @@ function AddLayer(props) {
  * @returns {void}
  */
   const addLayer = async function(def, layerDate, activeLayersParam) {
-    console.log('addLayer');
     const { createLayer } = ui;
     const date = layerDate || compareDate;
     const activeLayers = activeLayersParam || activeLayersState;

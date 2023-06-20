@@ -17,6 +17,7 @@ LookupImageTile.prototype.getImage = function() {
 };
 LookupImageTile.prototype.load = function() {
   if (this.state === OlTileState.IDLE) {
+    console.log(this);
     this.state = OlTileState.LOADING;
     const that = this;
     this.changed();
@@ -68,9 +69,8 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // We only want to process images with limited palettes, not continuous palettes
-    // Almost certainly a better way to implement this condition
-    if (Object.keys(pixelsToDisplay).length < 50) {
+    // We only want to process images with category palettes, not continuous palettes
+    if (Object.keys(this.lookup_).length < 25) {
       pixelsProcessed = true;
       fetch(this.src_)
         .then((response) => response.arrayBuffer())
