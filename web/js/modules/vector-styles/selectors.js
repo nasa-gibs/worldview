@@ -96,6 +96,15 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
+/** Sets the Style Function for the layer (this styles vector features)
+ *
+ * @param {Object} def | Layer definition
+ * @param {String} vectorStyleId | ID to lookup the vector style in the state
+ * @param {Object} vectorStyles | Contains styles of all vector products
+ * @param {Object} layer | OL layer object
+ * @param {Object} state | The entire state of the application
+ * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
+ */
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
@@ -111,7 +120,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
     glStyle = updateGlStylePalette(glStyle, rgbPalette);
-  } else {
+  } else if (!styleSelection) {
     const customDefaultStyle = state.vectorStyles.customDefault[def.vectorStyle.id];
     if (customDefaultStyle !== undefined) {
       glStyle = customDefaultStyle;

@@ -445,7 +445,6 @@ export default function mapLayerBuilder(config, cache, store) {
       style = getPaletteKeys(def.id, undefined, state);
     }
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
-      console.log('isVectorStyleActive');
       style = getVectorStyleKeys(def.id, undefined, state);
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
