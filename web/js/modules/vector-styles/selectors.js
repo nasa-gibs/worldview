@@ -106,14 +106,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
 
-  console.log('glStyle');
   let glStyle = vectorStyles[styleId];
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
     glStyle = updateGlStylePalette(glStyle, rgbPalette);
-  } else if (Object.prototype.hasOwnProperty.call(state, 'vectorStyles') && !styleSelection) {
-    const customDefaultStyle = state.vectorStyles.customDefault[def.id];
+  } else {
+    const customDefaultStyle = state.vectorStyles.customDefault[def.vectorStyle.id];
     if (customDefaultStyle !== undefined) {
       glStyle = customDefaultStyle;
     }
@@ -132,8 +131,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
-  // De-reference the glState object prior to apply the palette to the layer
-  glStyle = lodashCloneDeep(vectorStyles[styleId]);
+  // De-reference the glState object prior to applying the palette to the layer
+  glStyle = lodashCloneDeep(glStyle);
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
