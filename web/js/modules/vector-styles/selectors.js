@@ -271,5 +271,3 @@ export const applyStyle = (def, olVectorLayer, state) => {
 
   setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };
-
-

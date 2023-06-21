@@ -223,7 +223,6 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
   };
 }
 export function refreshPalettes(activePalettes) {
-  console.log('refreshPalettes');
   return (dispatch, getState) => {
     const groupName = getState().compare.activeString;
     lodashForOwn(activePalettes, (value, key) => {
