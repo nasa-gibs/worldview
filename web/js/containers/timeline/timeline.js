@@ -515,17 +515,23 @@ class Timeline extends React.Component {
     if (e.target.tagName !== 'INPUT' && e.target.className !== 'form-range' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
       const timeScaleNumber = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
-      if (e.keyCode === 38) {
+      if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (timeScaleNumber > 1) {
           this.changeTimeScale(timeScaleNumber - 1);
         }
       // down arrow
-      } else if (e.keyCode === 40) {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         if (timeScaleNumber < maxTimeScaleNumber) {
           this.changeTimeScale(timeScaleNumber + 1);
         }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.handleArrowDateChange(-1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.handleArrowDateChange(1);
       }
     }
   };
