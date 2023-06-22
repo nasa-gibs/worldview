@@ -1,7 +1,6 @@
 {
 	"layerOrder": [
 		"HLS_Customizable_Landsat",
-		"HLS_Customizable_Sentinel",
 		"HLS_Natural_Color_Landsat",
 		"HLS_Color_Infrared_Landsat",
 		"HLS_False_Color_Vegetation_Landsat",
