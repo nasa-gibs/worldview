@@ -14,6 +14,7 @@ import {
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
+import usePrevious from '../../util/customHooks';
 
 import {
   getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
@@ -59,7 +60,7 @@ const updateSelection = function(newDate) {
  * @param {Function} callback
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback, showAllTracks) {
+const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks) {
   const pointsAndArrows = [];
   const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
@@ -95,7 +96,7 @@ const getTracksAndPoints = function(eventObj, proj, map, selectedDate, callback,
   };
 };
 
-function addOverlayIfIsVisible(map, overlay) {
+function addOverlayIfIsVisible (map, overlay) {
   const extent = map.getView().calculateExtent();
   const position = overlay.getPosition();
   if (olExtent.containsCoordinate(extent, position)) {
@@ -140,6 +141,7 @@ function EventTrack (props) {
   };
 
   const removeTrack = (map) => {
+    if (!map) return;
     const { track, pointsAndArrows } = trackDetails;
     map.removeOverlay(track);
     removePointOverlays(map, pointsAndArrows);
@@ -285,41 +287,47 @@ function EventTrack (props) {
   const {
     isPlaying, map, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracks,
   } = props;
+  const prevSelectedDate = usePrevious(selectedDate);
+  const prevSelectedEvent = usePrevious(selectedEvent);
+  const prevIsAnimatingToEvent = usePrevious(isAnimatingToEvent);
+  const prevEventsData = usePrevious(eventsData);
+  const prevMap = usePrevious(map);
+  const prevExtent = usePrevious(extent);
+  const prevShowAllTracks = usePrevious(showAllTracks);
 
   useEffect(
     () => {
-      if (map) {
-        update(null);
-        removeTrack(map);
-        removePointOverlays(map, trackDetails.pointsAndArrows);
-        if (showAllTracks) {
-          removeAllTracks(map);
+      const selectedDateChange = (selectedDate && selectedDate.valueOf())
+        !== (prevSelectedDate && prevSelectedDate?.valueOf());
+      const eventDeselect = (selectedEvent !== prevSelectedEvent?.id) && !selectedEvent?.id;
+      const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevIsAnimatingToEvent);
+      const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevEventsData);
+      const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
+
+      if (map !== prevMap) {
+        if (prevMap) {
+          update(null);
+          removeTrack(prevMap);
+          removePointOverlays(prevMap, trackDetails.pointsAndArrows);
+          if (showAllTracks) {
+            removeAllTracks(prevMap);
+          }
         }
+        initialize();
       }
-      initialize();
-    },
-    [map],
-  );
-
-  useEffect(
-    () => {
-      const selectedDateChange = selectedDate && selectedDate.valueOf();
-      const eventDeselect = !selectedEvent.id;
-      const finishedAnimating = !isAnimatingToEvent;
-      const eventsLoaded = eventsData && eventsData.length;
 
       // remove all tracks when deselecting option
-      if (!showAllTracks) {
+      if (!showAllTracks && prevShowAllTracks !== showAllTracks) {
         removeAllTracks(map);
       }
 
       // show all tracks when selecting as option
-      if (showAllTracks && !isPlaying && (selectedDateChange || finishedAnimating || eventsLoaded)) {
+      if (showAllTracks && !isPlaying && (prevShowAllTracks !== showAllTracks || selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
         debouncedUpdateAllTracks();
       }
 
       // show only selected track if show all tracks is not selected
-      if (!isPlaying && !showAllTracks && (selectedDateChange || finishedAnimating || eventsLoaded)) {
+      if (!isPlaying && !showAllTracks && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
         debouncedTrackUpdate();
       }
 
@@ -328,7 +336,7 @@ function EventTrack (props) {
         removeTrack(map);
       }
     },
-    [isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracks],
+    [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracks],
   );
 
   return null;
