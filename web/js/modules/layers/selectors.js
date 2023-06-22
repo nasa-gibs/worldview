@@ -527,8 +527,6 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
       range = true;
       const end = util.parseDateUTC(endDate).getTime();
       max = Math.max(max, end);
-      // maxDates.push(new Date(max).toUTCString());
-      console.log('new Date(max)', new Date(max));
       maxDates.push(new Date(max));
     } else if (endDate) {
       range = true;
@@ -555,7 +553,6 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
       maxDates.push(max);
     }
     const maxDate = Math.max.apply(max, maxDates);
-    // console.log(`start: ${new Date(min)} | end: ${new Date(maxDate)}`);
     return {
       start: new Date(min),
       end: new Date(maxDate),
