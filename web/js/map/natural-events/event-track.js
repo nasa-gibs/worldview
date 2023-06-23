@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 import {
   each as lodashEach,
   debounce as lodashDebounce,
 } from 'lodash';
-
+import { useSelector, useDispatch } from 'react-redux';
 import {
   getClusters,
 } from './cluster';
@@ -104,10 +102,31 @@ function addOverlayIfIsVisible (map, overlay) {
   }
 }
 
-function EventTrack (props) {
+function EventTrack () {
+  const dispatch = useDispatch();
+  const selectEvent = (id, date) => dispatch(selectEventAction(id, date));
   const {
-    proj, map, eventsData, selectEvent, selectedEvent, showAllTracks, isAnimatingToEvent, isPlaying, extent, selectedDate,
-  } = props;
+    eventsData,
+    isAnimatingToEvent,
+    isPlaying,
+    map,
+    extent,
+    proj,
+    selectedDate,
+    selectedEvent,
+    showAllTracks,
+  } = useSelector((state) => ({
+    eventsData: getFilteredEvents(state),
+    isAnimatingToEvent: state.animation.isAnimatingToEvent,
+    isPlaying: state.animation.isPlaying,
+    map: state.map.ui.selected,
+    extent: state.map.extent,
+    proj: state.proj,
+    selectedDate: state.date.selected,
+    selectedEvent: state.events.selected,
+    showAllTracks: state.events.showAllTracks,
+  }));
+
   const [trackDetails, setTrackDetails] = useState({});
   const [allTrackDetails, setAllTrackDetails] = useState([]);
   const trackDetailsRef = useRef();
@@ -270,8 +289,6 @@ function EventTrack (props) {
     }
   };
 
-
-
   useEffect(
     () => {
       initialize();
@@ -342,47 +359,5 @@ function EventTrack (props) {
   return null;
 }
 
-const mapStateToProps = (state) => {
-  const {
-    map, proj, events, date, animation,
-  } = state;
-  const { isAnimatingToEvent } = events;
-  const { isPlaying } = animation;
-  return {
-    eventsData: getFilteredEvents(state),
-    isAnimatingToEvent,
-    isPlaying,
-    map: map.ui.selected,
-    extent: map.extent,
-    proj,
-    selectedDate: date.selected,
-    selectedEvent: events.selected,
-    showAllTracks: events.showAllTracks,
-    isActive: events.active,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  selectEvent: (id, date) => {
-    dispatch(selectEventAction(id, date));
-  },
-});
-
-EventTrack.propTypes = {
-  eventsData: PropTypes.array,
-  isAnimatingToEvent: PropTypes.bool,
-  isPlaying: PropTypes.bool,
-  map: PropTypes.object,
-  extent: PropTypes.array,
-  proj: PropTypes.object,
-  selectEvent: PropTypes.func,
-  selectedEvent: PropTypes.object,
-  selectedDate: PropTypes.object,
-  showAllTracks: PropTypes.bool,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EventTrack);
+export default EventTrack;
 
