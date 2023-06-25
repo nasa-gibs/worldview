@@ -7,8 +7,8 @@ import DevTestModal from './dev-test-modal';
 function DevTestButton () {
   const dispatch = useDispatch();
   const openTestMenu = () => {
-    const key = 'TILE_IMAGE_TEST_MENU';
-    const title = 'Tile Image Test Menu';
+    const key = 'DEV_TEST_MENU';
+    const title = 'Dev Test Menu';
     dispatch(
       toggleCustomContent(key, {
         headerText: title,
