@@ -18,7 +18,7 @@ import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
 import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
-import TileImagePixelTest from './components/kiosk/tile-measurement/tile-image-test-mode/tile-image-test-mode';
+import DevTestButton from './components/dev-test-mode/dev-test-button';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -96,7 +96,7 @@ function MapUI(props) {
   const [preloadAction, setPreloadAction] = useState({});
 
   // eslint-disable-next-line no-unused-vars
-  const [tileImageTestMode, setTileImageTestMode] = useState(false);
+  const [tileImageTestMode, setTileImageTestMode] = useState(true);
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -403,7 +403,7 @@ function MapUI(props) {
       <BufferQuickAnimate action={quickAnimateAction} />
       <KioskAnimations ui={ui} />
       <TileMeasurement ui={ui} />
-      {tileImageTestMode && <TileImagePixelTest />}
+      {tileImageTestMode && <DevTestButton />}
 
     </>
   );

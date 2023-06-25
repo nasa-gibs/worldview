@@ -16,7 +16,7 @@ function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelec
   };
 
   return (
-    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+    <Dropdown isOpen={dropdownOpen} toggle={toggle} className="mb-3">
       <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
         {layerSelection.id}
       </DropdownToggle>
