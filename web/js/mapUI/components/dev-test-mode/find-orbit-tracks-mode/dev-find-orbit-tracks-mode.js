@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { transformExtent } from 'ol/proj';
 import DropdownSelector from '../pixel-test-mode/tile-image-test-dropdown-selection';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
-import { formatReduxDailyDate } from '../../kiosk/tile-measurement/utils/date-util';
+import { formatReduxDailyDate, getOrbitalDates } from '../../kiosk/tile-measurement/utils/date-util';
 import fetchWMSImageExperimental from '../utils/image-api-request-experimental';
 import calculatePixels from '../../kiosk/tile-measurement/utils/calculate-pixels';
 import { layerPixelData } from '../../kiosk/tile-measurement/utils/layer-data-eic';
@@ -17,22 +17,30 @@ function FindOrbitTracksMode () {
     currentExtent,
     orbitalLayers,
     selectedDate,
+    latestDate,
   } = useSelector((state) => ({
     currentExtent: state.map.ui.selected.getView().calculateExtent(state.map.ui.selected.getSize()),
     orbitalLayers: getActiveLayers(state, state.compare.activeString).filter((layer) => layer.layergroup === 'Orbital Track'),
     selectedDate: state.date.selected,
+    latestDate: state.date.appNow,
   }));
 
   const placeHolderLayerSelection = { id: 'Select Layer', period: 'daily' };
   const [layerSelection, setLayerSelection] = useState(placeHolderLayerSelection);
-  const [searchMethod, setSearchMethod] = useState('');
+  const [searchMethod, setSearchMethod] = useState(0);
+
+  const buttonDisabled = layerSelection.id === 'Select Layer' || searchMethod === 0;
 
   const makeMeasurementRequest = async () => {
-    const formattedDate = formatReduxDailyDate(selectedDate);
+    const formattedSelectedDate = formatReduxDailyDate(selectedDate);
+    const formattedLatestDate = formatReduxDailyDate(latestDate);
     const mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
 
+    const dateRange = getOrbitalDates(formattedSelectedDate, formattedLatestDate, searchMethod);
+    console.log(dateRange);
+
     try {
-      const wmsImage = await fetchWMSImageExperimental(layerSelection.id, formattedDate, mercatorExtent);
+      const wmsImage = await fetchWMSImageExperimental(layerSelection.id, formattedSelectedDate, mercatorExtent);
 
       // Create an image and handle its loading and error events
       const img = new Image();
@@ -43,20 +51,20 @@ function FindOrbitTracksMode () {
         // eslint-disable-next-line no-unsafe-optional-chaining
         const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
 
-        const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `;
+        const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedSelectedDate}... `;
         const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`;
 
         console.log(pixelMessage + thresholdMessage);
       };
 
       img.onerror = (error) => {
-        console.error(`No image available for ${layerSelection.id} on ${formattedDate}: `, error);
+        console.error(`No image available for ${layerSelection.id} on ${formattedSelectedDate}: `, error);
       };
 
       // Try to load the image
       img.src = wmsImage;
     } catch (error) {
-      console.error(`No image available for ${layerSelection.id} on ${formattedDate}: `, error);
+      console.error(`No image available for ${layerSelection.id} on ${formattedSelectedDate}: `, error);
     }
   };
 
@@ -83,7 +91,6 @@ function FindOrbitTracksMode () {
         <Label for="searchMethod"><h4>Select a date search method</h4></Label>
       </FormGroup>
       <FormGroup className="d-flex justify-content-center">
-
         <ButtonGroup>
           <Button
             color="primary"
@@ -115,6 +122,7 @@ function FindOrbitTracksMode () {
         color="primary"
         onClick={makeMeasurementRequest}
         className="mb-3"
+        disabled={buttonDisabled}
       >
         Pixel Test
       </Button>
