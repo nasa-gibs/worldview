@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, UncontrolledTooltip } from 'reactstrap';
+import {
+  Button, ButtonGroup, UncontrolledTooltip, FormGroup, Label,
+} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { transformExtent } from 'ol/proj';
 import DropdownSelector from '../pixel-test-mode/tile-image-test-dropdown-selection';
@@ -23,6 +25,7 @@ function FindOrbitTracksMode () {
 
   const placeHolderLayerSelection = { id: 'Select Layer', period: 'daily' };
   const [layerSelection, setLayerSelection] = useState(placeHolderLayerSelection);
+  const [searchMethod, setSearchMethod] = useState('');
 
   const makeMeasurementRequest = async () => {
     const formattedDate = formatReduxDailyDate(selectedDate);
@@ -76,6 +79,38 @@ function FindOrbitTracksMode () {
         layerSelection={layerSelection}
         setLayerSelection={setLayerSelection}
       />
+      <FormGroup className="d-flex justify-content-center">
+        <Label for="searchMethod"><h4>Select a date search method</h4></Label>
+      </FormGroup>
+      <FormGroup className="d-flex justify-content-center">
+
+        <ButtonGroup>
+          <Button
+            color="primary"
+            outline
+            onClick={() => setSearchMethod(1)}
+            active={searchMethod === 1}
+          >
+            Forwards
+          </Button>
+          <Button
+            color="primary"
+            outline
+            onClick={() => setSearchMethod(2)}
+            active={searchMethod === 2}
+          >
+            Backwards
+          </Button>
+          <Button
+            color="primary"
+            outline
+            onClick={() => setSearchMethod(3)}
+            active={searchMethod === 3}
+          >
+            Both
+          </Button>
+        </ButtonGroup>
+      </FormGroup>
       <Button
         color="primary"
         onClick={makeMeasurementRequest}
