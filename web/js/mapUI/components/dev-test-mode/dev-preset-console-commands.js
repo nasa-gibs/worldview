@@ -23,10 +23,10 @@ function PresetConsoleCommands () {
 
   const getVisibleExtent = () => {
     const extent = map.getView().calculateExtent(map.getSize());
-    console.log('------ESPG:3857------');
-    console.table(extent);
-    const extentLonLat = transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
     console.log('------ESPG:4326------');
+    console.table(extent);
+    const extentLonLat = transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+    console.log('------ESPG:3857------');
     console.table(extentLonLat);
   };
 
