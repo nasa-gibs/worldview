@@ -9,7 +9,7 @@ function ConsoleTest () {
   const {
     map,
   } = useSelector((state) => ({
-    map: state.map.ui,
+    map: state.map.ui.selected,
   }));
 
   const consoleResponse = () => {

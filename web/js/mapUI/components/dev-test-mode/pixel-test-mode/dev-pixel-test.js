@@ -65,7 +65,7 @@ function PixelTestMode () {
   };
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center">
+    <div className="d-flex flex-column justify-content-center align-items-center mt-3">
       <div className="d-flex flex-row justify-content-center align-items-center">
         <h5 className="h5 fw-bold me-1">Pixel Test Mode</h5>
         <span><FontAwesomeIcon id="pixel-test-info-icon" icon="info-circle" className="pb-2" /></span>
