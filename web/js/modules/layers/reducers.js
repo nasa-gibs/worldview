@@ -22,6 +22,7 @@ import {
   REMOVE_GROUP,
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
+  UPDATE_DDV_LAYER,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -352,7 +353,6 @@ export function layerReducer(state = initialState, action) {
             },
           },
         },
-
       });
 
     case UPDATE_LAYER_DATE_COLLECTION:
@@ -368,8 +368,27 @@ export function layerReducer(state = initialState, action) {
             },
           },
         },
-
       });
+
+      // This is required because to update band combinations we need to actually remove and re-add these layers
+      // This case sets the ddv layer back to its original index before being removed and added again
+    case UPDATE_DDV_LAYER: {
+      const { layerIndex, id, layers } = action;
+      const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);
+      const [layerToMove] = layers.splice(indexToMove, 1);
+      layers.splice(layerIndex, 0, layerToMove);
+
+      return update(state, {
+        [compareState]: {
+          $merge: {
+            layers,
+            overlayGroups: getOverlayGroups(layers, getPrevOverlayGroups()),
+            prevLayers: [],
+            layerIndex: action.layerIndex,
+          },
+        },
+      });
+    }
 
     default:
       return state;

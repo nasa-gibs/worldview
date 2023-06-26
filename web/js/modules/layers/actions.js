@@ -33,6 +33,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
+  UPDATE_DDV_LAYER,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -415,7 +416,7 @@ export function updateLayerDateCollection(layerInfo) {
   };
 }
 
-export function updateBandCombination(id, bandCombo) {
+export function updateBandCombination(id, bandCombo, layerIndex) {
   return (dispatch, getState) => {
     const state = getState();
     const {
@@ -438,10 +439,11 @@ export function updateBandCombination(id, bandCombo) {
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);
     dispatch({
-      type: ADD_LAYER,
+      type: UPDATE_DDV_LAYER,
       id,
       activeString: compare.activeString,
       layers: newLayers,
+      layerIndex,
     });
   };
 }

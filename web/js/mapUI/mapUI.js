@@ -96,7 +96,7 @@ function MapUI(props) {
   const [preloadAction, setPreloadAction] = useState({});
 
   // eslint-disable-next-line no-unused-vars
-  const [tileImageTestMode, setTileImageTestMode] = useState(true);
+  const [tileImageTestMode, setTileImageTestMode] = useState(false);
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -104,6 +104,7 @@ function MapUI(props) {
         return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
       case layerConstants.ADD_LAYER:
+      case layerConstants.UPDATE_DDV_LAYER:
       case DISPLAY_STATIC_MAP:
         return setAddLayerAction(action);
       case STOP_ANIMATION:

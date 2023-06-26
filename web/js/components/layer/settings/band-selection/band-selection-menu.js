@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,13 +9,19 @@ import {
   updateBandCombination as updateBandCombinationAction,
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
+import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { onClose } from '../../../../modules/modal/actions';
 
 export default function BandSelection({ layer }) {
   const dispatch = useDispatch();
-  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo)); };
+  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo, layerIndex)); };
   const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
   const closeModal = () => { dispatch(onClose()); };
+  const { activeLayers } = useSelector((state) => ({
+    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
+  }));
+
+  const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
 
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [bandSelection, setBandSelection] = useState({
@@ -26,6 +32,7 @@ export default function BandSelection({ layer }) {
 
   const confirmSelection = () => {
     removeLayer(layer.id);
+    console.log('dispatching action with layer index of: ', layerIndex);
     updateBandCombination(layer.id, bandSelection);
     closeModal();
   };
