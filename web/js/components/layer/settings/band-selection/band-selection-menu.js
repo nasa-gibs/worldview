@@ -32,7 +32,6 @@ export default function BandSelection({ layer }) {
 
   const confirmSelection = () => {
     removeLayer(layer.id);
-    console.log('dispatching action with layer index of: ', layerIndex);
     updateBandCombination(layer.id, bandSelection);
     closeModal();
   };
@@ -45,12 +44,15 @@ export default function BandSelection({ layer }) {
     </div>
   );
 
+  const presetOptions = layer.id === 'HLS_customizable_Landsat' ? 'landsat' : 'sentinel'
+
   return (
     <div className="customize-bands-container">
       <PresetOptions
         selectedPreset={selectedPreset}
         setSelectedPreset={setSelectedPreset}
         setBandSelection={setBandSelection}
+        presetOptions={presetOptions}
       />
       <div className="band-selection-title-row">
         <h3>Select a band for each channel:</h3>

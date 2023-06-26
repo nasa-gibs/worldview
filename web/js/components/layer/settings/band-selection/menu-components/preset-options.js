@@ -7,48 +7,84 @@ const imgPath = 'images/band-combination-presets/';
 
 const landsatPresets = [
   {
-    id: 'naturalColor',
+    id: 'naturalColor_landsat',
     title: 'Natural Color',
     r: 'B04',
     g: 'B03',
     b: 'B02',
-    img: 'naturalColor.png',
+    img: 'naturalColor_landsat.png',
   },
   {
-    id: 'colorInfrared',
+    id: 'colorInfrared_landsat',
     title: 'Color Infrared (CIR)',
     r: 'B05',
     g: 'B04',
     b: 'B03',
-    img: 'colorInfrared.png',
+    img: 'colorInfrared_landsat.png',
   },
   {
-    id: 'falseColorUrban',
+    id: 'falseColorUrban_landsat',
     title: 'False Color (Urban)',
     r: 'B07',
     g: 'B06',
     b: 'B04',
-    img: 'falseColorUrban.png',
+    img: 'falseColorUrban_landsat.png',
   },
   {
-    id: 'FalseColorVegetation',
+    id: 'FalseColorVegetation_landsat',
     title: 'False Color (Vegetation)',
     r: 'B06',
     g: 'B05',
     b: 'B04',
-    img: 'FalseColorVegetation.png',
+    img: 'FalseColorVegetation_landsat.png',
   },
   {
-    id: 'shortwaveInfrared',
+    id: 'shortwaveInfrared_landsat',
     title: 'Shortwave Infrared',
     r: 'B07',
     g: 'B05',
     b: 'B04',
-    img: 'shortwaveInfrared.png',
+    img: 'shortwaveInfrared_landsat.png',
   },
 ];
 
-export default function PresetOptions({ setBandSelection, selectedPreset, setSelectedPreset }) {
+const sentinelPresets = [
+  {
+    id: 'trueColor_sentinel',
+    title: 'True Color',
+    r: 'B04',
+    g: 'B03',
+    b: 'B02',
+    img: 'trueColor_sentinel.png',
+  },
+  {
+    id: 'falseColor_sentinel',
+    title: 'False Color',
+    r: 'B08',
+    g: 'B04',
+    b: 'B03',
+    img: 'falseColor_sentinel.png',
+  },
+  {
+    id: 'falseColorUrban_sentinel',
+    title: 'False Color Urban',
+    r: 'B12',
+    g: 'B11',
+    b: 'B4',
+    img: 'falseColorUrban_sentinel.png',
+  },
+  {
+    id: 'SWIR_sentinel',
+    title: 'SWIR',
+    r: 'B12',
+    g: 'B8A',
+    b: 'B04',
+    img: 'SWIR_sentinel.png',
+  },
+];
+
+export default function PresetOptions(props) {
+  const { setBandSelection, selectedPreset, setSelectedPreset, presestOptions } = props;
   const handlePresetSelect = (preset) => {
     setSelectedPreset(preset);
     setBandSelection({
@@ -58,13 +94,15 @@ export default function PresetOptions({ setBandSelection, selectedPreset, setSel
     });
   };
 
+  const presets = presestOptions === 'landsat' ? landsatPresets : sentinelPresets;
+
   return (
     <div className="band-selection-presets-container">
       <div className="band-selection-presets-title-row">
         <p>Other selectable presets (optional):</p>
       </div>
       <div className="band-selection-presets-scrollable">
-        {landsatPresets.map((preset) => (
+        {presets.map((preset) => (
           <Card
             key={preset.id}
             onClick={() => handlePresetSelect(preset)}
