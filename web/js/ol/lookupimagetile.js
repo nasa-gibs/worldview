@@ -19,6 +19,8 @@ LookupImageTile.prototype.load = function() {
     this.changed();
     const that = this;
     const onImageLoad = function() {
+      console.log('that.lookup_');
+      console.log(that.lookup_);
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
@@ -32,26 +34,44 @@ LookupImageTile.prototype.load = function() {
         that.canvas_.height,
       );
       const pixels = imageData.data;
-
+      const colorLookupObj = that.lookup_;
+      const defaultColor = Object.keys(that.lookup_)[0];
+      const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
       for (let i = 0; i < octets; i += 4) {
         const pixelColor = `${pixels[i + 0]},${
           pixels[i + 1]},${
           pixels[i + 2]},${
           pixels[i + 3]}`;
 
-        const targetColor = that.lookup_[pixelColor];
+        const targetColor = colorLookupObj[pixelColor];
 
         if (targetColor) {
           pixels[i + 0] = targetColor.r;
           pixels[i + 1] = targetColor.g;
           pixels[i + 2] = targetColor.b;
           pixels[i + 3] = targetColor.a;
-        } else {
-          // just make everything else black/transparent
+        } else if (pixelColor === '0,0,0,0') {
           pixels[i + 0] = 0;
           pixels[i + 1] = 0;
           pixels[i + 2] = 0;
           pixels[i + 3] = 0;
+        } else {
+          // the color of the pixel being processed
+          const pixelColorArr = pixelColor.split(',');
+
+          // The default color to compare with
+          const defaultColorArr = defaultColor.split(',');
+
+          // Determine difference of pixel from default to mimick anti-aliasing
+          const rDifference = pixelColorArr[0] - defaultColorArr[0];
+          const gDifference = pixelColorArr[1] - defaultColorArr[1];
+          const bDifference = pixelColorArr[2] - defaultColorArr[2];
+
+          // anti-aliased pixels
+          pixels[i + 0] = paletteColor.r + rDifference;
+          pixels[i + 1] = paletteColor.g + gDifference;
+          pixels[i + 2] = paletteColor.b + bDifference;
+          pixels[i + 3] = pixelColorArr[3];
         }
       }
       g.putImageData(imageData, 0, 0);
