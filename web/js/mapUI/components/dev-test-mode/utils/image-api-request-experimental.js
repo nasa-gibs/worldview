@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
@@ -18,7 +18,6 @@ export default async function fetchWMSImage(layer, date, extent) {
     request: 'GetMap',
     format: 'image/png',
     STYLE: 'default',
-    // web mercator bounds
     bbox: boundingBox,
     CRS: 'EPSG:3857',
     HEIGHT: '256',
@@ -29,16 +28,15 @@ export default async function fetchWMSImage(layer, date, extent) {
 
   try {
     const response = await axios.get(baseUrl, { params, responseType: 'arraybuffer' });
-
     // Convert the response data to a Blob which can be used as image src
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
     const imageSrc = URL.createObjectURL(blob);
 
     // Save the file for debugging purposes in test mode
     // This should open image in a seperate tab in the browser, may have to allow popups
-    const file = new Blob([response.data], { type: 'image/png' });
-    saveAs(file, `${layer}.png`);
 
+    // const file = new Blob([response.data], { type: 'image/png' });
+    // saveAs(file, `${layer}.png`);
 
     return imageSrc;
   } catch (error) {
