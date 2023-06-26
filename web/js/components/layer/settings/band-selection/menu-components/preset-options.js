@@ -84,7 +84,9 @@ const sentinelPresets = [
 ];
 
 export default function PresetOptions(props) {
-  const { setBandSelection, selectedPreset, setSelectedPreset, presestOptions } = props;
+  const {
+    setBandSelection, selectedPreset, setSelectedPreset, presestOptions,
+  } = props;
   const handlePresetSelect = (preset) => {
     setSelectedPreset(preset);
     setBandSelection({

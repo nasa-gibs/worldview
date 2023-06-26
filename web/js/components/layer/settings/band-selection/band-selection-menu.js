@@ -44,7 +44,7 @@ export default function BandSelection({ layer }) {
     </div>
   );
 
-  const presetOptions = layer.id === 'HLS_customizable_Landsat' ? 'landsat' : 'sentinel'
+  const presetOptions = layer.id === 'HLS_customizable_Landsat' ? 'landsat' : 'sentinel';
 
   return (
     <div className="customize-bands-container">
