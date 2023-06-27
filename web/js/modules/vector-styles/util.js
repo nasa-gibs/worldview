@@ -319,13 +319,13 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
   }
 }
