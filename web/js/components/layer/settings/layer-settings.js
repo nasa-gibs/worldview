@@ -342,13 +342,16 @@ class LayerSettings extends React.Component {
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
     const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const layerGroup = layer.layergroup;
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
         : '';
-    } else {
-      renderCustomizations = ''; // this.renderVectorStyles(); for future
+    } else if (layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+      // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
+      // Reference (MGRS/HLS Grid) has no need for palettes
+      renderCustomizations = this.renderCustomPalettes();
     }
 
     if (!layer.id) return '';
