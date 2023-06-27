@@ -346,9 +346,8 @@ class LayerSettings extends React.Component {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
         : '';
-    } else if (layerGroup !== 'Orbital Track' && layer.title !== 'Settlements' && layerGroup !== 'Reference') {
-      // Orbital Tracks palette swap looks bad at WMS zoom levels (anti-aliasing & text stamps)
-      // Settlements palette swap looks bad at WMS zoom levels (default style has opacity)
+    } else if (layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+      // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
       // Reference (MGRS/HLS Grid) has no need for palettes
       renderCustomizations = this.renderCustomPalettes();
     }

@@ -37,6 +37,14 @@ LookupImageTile.prototype.load = function() {
       const defaultColor = Object.keys(that.lookup_)[0];
       const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
 
+      // Load black/transparent into the lookup
+      colorLookupObj['0,0,0,0'] = {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0,
+      };
+
       for (let i = 0; i < octets; i += 4) {
         const pixelColor = `${pixels[i + 0]},${
           pixels[i + 1]},${
@@ -44,8 +52,6 @@ LookupImageTile.prototype.load = function() {
           pixels[i + 3]}`;
 
         if (!colorLookupObj[pixelColor]) {
-          const isTransparent = pixelColor === '0,0,0,0';
-
           // Handle non-transparent pixels that do not match the palette exactly
           const defaultColorArr = defaultColor.split(',');
           const pixelColorArr = pixelColor.split(',');
@@ -58,10 +64,10 @@ LookupImageTile.prototype.load = function() {
 
           // Store the resulting pair of pixel color & anti-aliased adjusted color
           colorLookupObj[pixelColor] = {
-            r: isTransparent ? 0 : paletteColor.r + rDifference,
-            g: isTransparent ? 0 : paletteColor.g + gDifference,
-            b: isTransparent ? 0 : paletteColor.b + bDifference,
-            a: isTransparent ? 0 : alphaValue,
+            r: paletteColor.r + rDifference,
+            g: paletteColor.g + gDifference,
+            b: paletteColor.b + bDifference,
+            a: alphaValue,
           };
         }
 
