@@ -134,6 +134,10 @@ function EventTrack () {
   const allTrackDetailsRef = useRef();
   allTrackDetailsRef.current = allTrackDetails;
   const showAllTracksRef = useRef(showAllTracks);
+  const mapRef = useRef(map);
+  useEffect(() => {
+    mapRef.current = map;
+  }, [map]);
   useEffect(() => {
     showAllTracksRef.current = showAllTracks;
   }, [showAllTracks]);
@@ -151,37 +155,37 @@ function EventTrack () {
   const onPropertyChange = (e) => {
     if (showAllTracksRef.current && !allTrackDetailsRef.current.length) return;
     if (showAllTracksRef.current && (e.key === 'resolution' || e.key === 'rotation')) {
-      removeAllTracks(map);
+      removeAllTracks(mapRef.current);
     }
     if (!trackDetails.id) return;
     if (e.key === 'resolution' || e.key === 'rotation') {
-      const newTrackDetails = trackDetails.id ? removeTrack(map) : {};
+      const newTrackDetails = trackDetails.id ? removeTrack(mapRef.current) : {};
       setTrackDetails(newTrackDetails);
     }
   };
 
-  const addTrack = (map, { track, pointsAndArrows }) => {
+  const addTrack = (mapArg, { track, pointsAndArrows }) => {
     if (!isAnimatingToEvent && typeof track !== 'undefined') {
-      map.addOverlay(track);
-      addPointOverlays(map, pointsAndArrows);
+      mapArg.addOverlay(track);
+      addPointOverlays(mapArg, pointsAndArrows);
     }
   };
 
-  const removeTrack = (map) => {
-    if (!map) return;
+  const removeTrack = (mapArg) => {
+    if (!mapArg) return;
     const { track, pointsAndArrows } = trackDetailsRef.current;
-    map.removeOverlay(track);
-    removePointOverlays(map, pointsAndArrows);
+    mapArg.removeOverlay(track);
+    removePointOverlays(mapArg, pointsAndArrows);
 
     return {};
   };
 
-  const removeAllTracks = (map) => {
+  const removeAllTracks = (mapArg) => {
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      map.removeOverlay(track);
-      removePointOverlays(map, pointsAndArrows);
+      mapArg.removeOverlay(track);
+      removePointOverlays(mapArg, pointsAndArrows);
     });
   };
 
@@ -193,7 +197,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, map, eventDate, selectEvent, showAllTracksRef.current);
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, showAllTracksRef.current);
 
       newTrackDetails = {
         id: eventID,
@@ -203,11 +207,11 @@ function EventTrack () {
         hidden: false,
       };
       allTracks.push({ newTrackDetails });
-      addTrack(map, newTrackDetails);
+      addTrack(mapRef.current, newTrackDetails);
     };
 
     if (allTrackDetailsRef.current.length) {
-      removeAllTracks(map);
+      removeAllTracks(mapRef.current);
     }
 
     eventsData.forEach((event) => {
@@ -231,7 +235,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, map, date, selectEvent);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent);
 
       newTrackDetails = {
         id: event.id,
@@ -240,17 +244,17 @@ function EventTrack () {
         pointsAndArrows,
         hidden: false,
       };
-      addTrack(map, newTrackDetails);
+      addTrack(mapRef.current, newTrackDetails);
     };
 
     if (!event || event.geometry.length < 2) {
-      newTrackDetails = trackDetailsRef.current.id ? removeTrack(map) : {};
+      newTrackDetails = trackDetailsRef.current.id ? removeTrack(mapRef.current) : {};
     } else if (trackDetailsRef.current.id) {
       if (sameEvent && !sameDate) {
         const isClusteredSelection = !document.getElementById(`track-marker-${date}`);
         // If New Date is in cluster build new track
         if (isClusteredSelection) {
-          newTrackDetails = removeTrack(map);
+          newTrackDetails = removeTrack(mapRef.current);
           createAndAddTrack();
         } else {
           // Just update classNames
@@ -260,7 +264,7 @@ function EventTrack () {
         }
       } else {
         // Remove old DOM Elements
-        newTrackDetails = removeTrack(map);
+        newTrackDetails = removeTrack(mapRef.current);
         createAndAddTrack();
       }
     } else {
@@ -281,11 +285,11 @@ function EventTrack () {
   const debouncedUpdateAllTracks = lodashDebounce(updateAllTracks, 50);
 
   const initialize = () => {
-    if (!map) return;
-    map.getView().on('propertychange', debouncedOnPropertyChange);
-    map.once('postrender', () => { debouncedTrackUpdate(); });
+    if (!mapRef.current) return;
+    mapRef.current.getView().on('propertychange', debouncedOnPropertyChange);
+    mapRef.current.once('postrender', () => { debouncedTrackUpdate(); });
     if (showAllTracksRef.current) {
-      map.once('postrender', () => { debouncedUpdateAllTracks(); });
+      mapRef.current.once('postrender', () => { debouncedUpdateAllTracks(); });
     }
   };
 
@@ -295,9 +299,9 @@ function EventTrack () {
 
       return () => {
         update(null);
-        map?.getView()?.un('propertychange', debouncedOnPropertyChange);
+        mapRef.current?.getView()?.un('propertychange', debouncedOnPropertyChange);
         if (showAllTracksRef.current) {
-          removeAllTracks(map);
+          removeAllTracks(mapRef.current);
         }
       };
     },
@@ -308,7 +312,7 @@ function EventTrack () {
   const prevSelectedEvent = usePrevious(selectedEvent);
   const prevIsAnimatingToEvent = usePrevious(isAnimatingToEvent);
   const prevEventsData = usePrevious(eventsData);
-  const prevMap = usePrevious(map);
+  const prevMap = usePrevious(mapRef.current);
   const prevExtent = usePrevious(extent);
   const prevShowAllTracks = usePrevious(showAllTracks);
 
@@ -321,7 +325,7 @@ function EventTrack () {
       const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevEventsData);
       const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
 
-      if (map !== prevMap) {
+      if (mapRef.current !== prevMap) {
         if (prevMap) {
           update(null);
           removeTrack(prevMap);
@@ -335,7 +339,7 @@ function EventTrack () {
 
       // remove all tracks when deselecting option
       if (!showAllTracksRef.current && prevShowAllTracks !== showAllTracks) {
-        removeAllTracks(map);
+        removeAllTracks(mapRef.current);
       }
 
       // show all tracks when selecting as option
@@ -350,7 +354,7 @@ function EventTrack () {
 
       // only remove selected track when event is deselected
       if (eventDeselect && !showAllTracksRef.current) {
-        removeTrack(map);
+        removeTrack(mapRef.current);
       }
     },
     [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracksRef.current],
