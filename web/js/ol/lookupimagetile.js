@@ -1,5 +1,6 @@
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
+import { cloneDeep as lodashCloneDeep } from 'lodash';
 
 class LookupImageTile extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions) {
@@ -19,8 +20,6 @@ LookupImageTile.prototype.load = function() {
     this.changed();
     const that = this;
     const onImageLoad = function() {
-      console.log('that.lookup_');
-      console.log(that.lookup_);
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
@@ -34,9 +33,10 @@ LookupImageTile.prototype.load = function() {
         that.canvas_.height,
       );
       const pixels = imageData.data;
-      const colorLookupObj = that.lookup_;
+      const colorLookupObj = lodashCloneDeep(that.lookup_);
       const defaultColor = Object.keys(that.lookup_)[0];
       const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
+
       for (let i = 0; i < octets; i += 4) {
         const pixelColor = `${pixels[i + 0]},${
           pixels[i + 1]},${
@@ -56,22 +56,28 @@ LookupImageTile.prototype.load = function() {
           pixels[i + 2] = 0;
           pixels[i + 3] = 0;
         } else {
-          // the color of the pixel being processed
+          // Handle non-transparent pixels that do not match the palette exactly
+          const defaultColorArr = defaultColor.split(',');
           const pixelColorArr = pixelColor.split(',');
 
-          // The default color to compare with
-          const defaultColorArr = defaultColor.split(',');
-
-          // Determine difference of pixel from default to mimick anti-aliasing
+          // Determine difference of pixel from default to replciate anti-aliasing
           const rDifference = pixelColorArr[0] - defaultColorArr[0];
           const gDifference = pixelColorArr[1] - defaultColorArr[1];
           const bDifference = pixelColorArr[2] - defaultColorArr[2];
+          const alphaValue = pixelColorArr[3];
 
-          // anti-aliased pixels
-          pixels[i + 0] = paletteColor.r + rDifference;
-          pixels[i + 1] = paletteColor.g + gDifference;
-          pixels[i + 2] = paletteColor.b + bDifference;
-          pixels[i + 3] = pixelColorArr[3];
+          // Store the resulting pair of pixel color & anti-aliased adjusted color for future lookups
+          colorLookupObj[pixelColorArr] = {
+            r: paletteColor.r + rDifference,
+            g: paletteColor.g + gDifference,
+            b: paletteColor.b + bDifference,
+            a: alphaValue,
+          };
+
+          pixels[i + 0] = colorLookupObj[pixelColorArr].r;
+          pixels[i + 1] = colorLookupObj[pixelColorArr].g;
+          pixels[i + 2] = colorLookupObj[pixelColorArr].b;
+          pixels[i + 3] = colorLookupObj[pixelColorArr].a;
         }
       }
       g.putImageData(imageData, 0, 0);
