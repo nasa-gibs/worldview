@@ -50,6 +50,10 @@ async function processTemporalLayer (wvLayer, value) {
         }
         if (interval !== 'P1D') {
           endDate = moment.utc(endDate).add(moment.duration(interval)).format('YYYY-MM-DDTHH:mm:ss[Z]')
+          // For monthly products subtract 1 day
+          if (wvLayer.period === 'monthly') {
+            endDate = moment.utc(endDate).subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]')
+          }
         }
         const regex = new RegExp(/\d+/g)
         const match = regex.exec(interval)
