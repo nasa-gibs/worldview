@@ -43,42 +43,33 @@ LookupImageTile.prototype.load = function() {
           pixels[i + 2]},${
           pixels[i + 3]}`;
 
-        const targetColor = colorLookupObj[pixelColor];
+        if (!colorLookupObj[pixelColor]) {
+          const isTransparent = pixelColor === '0,0,0,0';
 
-        if (targetColor) {
-          pixels[i + 0] = targetColor.r;
-          pixels[i + 1] = targetColor.g;
-          pixels[i + 2] = targetColor.b;
-          pixels[i + 3] = targetColor.a;
-        } else if (pixelColor === '0,0,0,0') {
-          pixels[i + 0] = 0;
-          pixels[i + 1] = 0;
-          pixels[i + 2] = 0;
-          pixels[i + 3] = 0;
-        } else {
           // Handle non-transparent pixels that do not match the palette exactly
           const defaultColorArr = defaultColor.split(',');
           const pixelColorArr = pixelColor.split(',');
 
-          // Determine difference of pixel from default to replciate anti-aliasing
+          // Determine difference of pixel from default to replicate anti-aliasing
           const rDifference = pixelColorArr[0] - defaultColorArr[0];
           const gDifference = pixelColorArr[1] - defaultColorArr[1];
           const bDifference = pixelColorArr[2] - defaultColorArr[2];
           const alphaValue = pixelColorArr[3];
 
-          // Store the resulting pair of pixel color & anti-aliased adjusted color for future lookups
-          colorLookupObj[pixelColorArr] = {
-            r: paletteColor.r + rDifference,
-            g: paletteColor.g + gDifference,
-            b: paletteColor.b + bDifference,
-            a: alphaValue,
+          // Store the resulting pair of pixel color & anti-aliased adjusted color
+          colorLookupObj[pixelColor] = {
+            r: isTransparent ? 0 : paletteColor.r + rDifference,
+            g: isTransparent ? 0 : paletteColor.g + gDifference,
+            b: isTransparent ? 0 : paletteColor.b + bDifference,
+            a: isTransparent ? 0 : alphaValue,
           };
-
-          pixels[i + 0] = colorLookupObj[pixelColorArr].r;
-          pixels[i + 1] = colorLookupObj[pixelColorArr].g;
-          pixels[i + 2] = colorLookupObj[pixelColorArr].b;
-          pixels[i + 3] = colorLookupObj[pixelColorArr].a;
         }
+
+        // set the pixel color
+        pixels[i + 0] = colorLookupObj[pixelColor].r;
+        pixels[i + 1] = colorLookupObj[pixelColor].g;
+        pixels[i + 2] = colorLookupObj[pixelColor].b;
+        pixels[i + 3] = colorLookupObj[pixelColor].a;
       }
       g.putImageData(imageData, 0, 0);
 
