@@ -85,7 +85,7 @@ const sentinelPresets = [
 
 export default function PresetOptions(props) {
   const {
-    setBandSelection, selectedPreset, setSelectedPreset, presestOptions,
+    setBandSelection, selectedPreset, setSelectedPreset, presetOptions,
   } = props;
   const handlePresetSelect = (preset) => {
     setSelectedPreset(preset);
@@ -96,7 +96,7 @@ export default function PresetOptions(props) {
     });
   };
 
-  const presets = presestOptions === 'landsat' ? landsatPresets : sentinelPresets;
+  const presets = presetOptions === 'landsat' ? landsatPresets : sentinelPresets;
 
   return (
     <div className="band-selection-presets-container">

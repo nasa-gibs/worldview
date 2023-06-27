@@ -96,7 +96,7 @@ function MapUI(props) {
   const [preloadAction, setPreloadAction] = useState({});
 
   // eslint-disable-next-line no-unused-vars
-  const [tileImageTestMode, setTileImageTestMode] = useState(true);
+  const [tileImageTestMode, setTileImageTestMode] = useState(false);
 
   const subscribeToStore = function(action) {
     switch (action.type) {
