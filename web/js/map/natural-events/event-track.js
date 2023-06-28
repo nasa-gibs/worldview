@@ -52,10 +52,12 @@ const updateSelection = function(newDate) {
 /**
  * Loop through clustered point array and create elements
  *
- * @param {Array} clusters Array of cluster objects
+ * @param {Object} eventObj
+ * @param {Object} proj
  * @param {Object} map OpenLayers map Object
  * @param {String} selectedDate
  * @param {Function} callback
+ * @param {Function} showAllTracks
  * @return {Object} Object Containing track info and elements
  */
 const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks) {
@@ -268,7 +270,7 @@ function EventTrack () {
         createAndAddTrack();
       }
     } else {
-      // If no track element currenlty exists,
+      // If no track element currently exists,
       // but there is a multiday event, build a new track
       createAndAddTrack();
     }
