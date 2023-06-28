@@ -54,7 +54,7 @@ shell.sed('-i', /@BUILD_VERSION@/g, pkg.version, applyTo)
 
 // replace google tag manager id
 const googleTagManagerID = GTM_ID || ''
-shell.sed('-i', /@_ID@/g, googleTagManagerID, applyTo)
+shell.sed('-i', /@GTM_ID@/g, googleTagManagerID, applyTo)
 
 const dist = 'dist/worldview.tar.gz'
 console.log(`Creating distribution: ${dist}`)
