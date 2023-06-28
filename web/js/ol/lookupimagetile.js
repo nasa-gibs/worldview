@@ -72,6 +72,7 @@ LookupImageTile.prototype.load = function() {
     // We only want to process images with category palettes, not continuous palettes
     if (Object.keys(this.lookup_).length < 25) {
       pixelsProcessed = true;
+      // try??
       fetch(this.src_)
         .then((response) => response.arrayBuffer())
         .then((buffer) => {
@@ -127,6 +128,9 @@ LookupImageTile.prototype.load = function() {
           const dataURL = `${URL.createObjectURL(blob)}`;
           this.image_.src = dataURL;
           this.image_.addEventListener('load', onImageLoad);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
         });
     } else {
       this.image_.src = this.src_;

@@ -1,6 +1,7 @@
 import {
   forOwn as lodashForOwn,
   findIndex as lodashFindIndex,
+  isEmpty as lodashIsEmpty,
 } from 'lodash';
 import { requestAction } from '../core/actions';
 import {
@@ -209,6 +210,7 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
       state,
     );
     let hasDisabled = false;
+    if (lodashIsEmpty(newActivePalettesObj)) return;
     newActivePalettesObj[layerId].maps.forEach((colorMap) => {
       if (colorMap.disabled && colorMap.disabled.length) {
         hasDisabled = true;
