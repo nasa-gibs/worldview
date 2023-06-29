@@ -1,0 +1,34 @@
+{
+  "layers": {
+    "HLS_False_Color_Sentinel": {
+      "id": "HLS_False_Color_Sentinel",
+      "title": "HLS False Color Sentinel",
+      "subtitle": "HLS False Color Sentinel",
+      "description": "HLS False Color Sentinel",
+      "tags": "corrected surface oli sentinel msi s30",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "associatedLayers": ["OrbitTracks_Sentinel-2B_Descending"],
+      "bandCombo": {
+        "r": "B08",
+        "g": "B04",
+        "b": "B03"
+      },
+      "wrapX": false,
+      "projections": {
+        "geographic": {
+          "source": "FIRMS"
+        },
+        "arctic": {
+          "source": "FIRMS"
+        },
+        "antarctic": {
+          "source": "FIRMS"
+        }
+      }
+    }
+  }
+}
