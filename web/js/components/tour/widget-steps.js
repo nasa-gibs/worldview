@@ -7,7 +7,6 @@ function Steps(props) {
     currentStep, decreaseStep, incrementStep, totalSteps, isKioskModeActive,
   } = props;
 
-
   const handleKeyDown = (event) => {
     switch (event.key) {
       case 'q':
@@ -22,6 +21,8 @@ function Steps(props) {
   };
 
   useEffect(() => {
+    if (!isKioskModeActive) return;
+
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {

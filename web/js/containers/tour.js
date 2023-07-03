@@ -195,6 +195,7 @@ class Tour extends React.Component {
   }
 
   toggleModalInProgress(e) {
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalInProgress: !prevState.modalInProgress,
@@ -203,6 +204,7 @@ class Tour extends React.Component {
 
   toggleModalComplete(e) {
     const { currentStoryId } = this.state;
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalComplete: !prevState.modalComplete,
