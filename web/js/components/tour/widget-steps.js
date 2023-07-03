@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Steps(props) {
   const {
-    currentStep, decreaseStep, incrementStep, totalSteps,
+    currentStep, decreaseStep, incrementStep, totalSteps, isKioskModeActive,
   } = props;
+
+
+  const handleKeyDown = (event) => {
+    switch (event.key) {
+      case 'q':
+        decreaseStep();
+        break;
+      case 'w':
+        incrementStep();
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <div className="step-container">
       <a
-        className="step-previous"
+        className={isKioskModeActive ? 'd-none' : 'step-previous'}
         aria-label="Previous"
         onClick={decreaseStep}
       >
@@ -25,7 +48,7 @@ function Steps(props) {
         </p>
       </div>
       <a
-        className="step-next"
+        className={isKioskModeActive ? 'd-none' : 'step-next'}
         aria-label="Next"
         onClick={incrementStep}
       >
@@ -42,6 +65,7 @@ Steps.propTypes = {
   decreaseStep: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
   totalSteps: PropTypes.number.isRequired,
+  isKioskModeActive: PropTypes.bool.isRequired,
 };
 
 export default Steps;

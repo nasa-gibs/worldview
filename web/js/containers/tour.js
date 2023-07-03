@@ -358,6 +358,7 @@ class Tour extends React.Component {
     const {
       stories,
       config,
+      isKioskModeActive,
     } = this.props;
     const {
       modalInProgress,
@@ -391,6 +392,7 @@ class Tour extends React.Component {
         metaLoaded={metaLoaded}
         isLoadingMeta={isLoadingMeta}
         description={description}
+        isKioskModeActive={isKioskModeActive}
       />
     );
   }
