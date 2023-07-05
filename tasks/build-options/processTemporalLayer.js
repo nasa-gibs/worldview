@@ -49,11 +49,18 @@ async function processTemporalLayer (wvLayer, value) {
           endDate = moment(end, dateFormat).format('YYYY-MM-DDTHH:mm:ss[Z]')
         }
         if (interval !== 'P1D') {
-          endDate = moment(endDate).add(moment.duration(interval)).format('YYYY-MM-DDTHH:mm:ss[Z]')
+          endDate = moment.utc(endDate).add(moment.duration(interval)).format('YYYY-MM-DDTHH:mm:ss[Z]')
+          // For monthly products subtract 1 day
+          if (wvLayer.period === 'monthly') {
+            endDate = moment.utc(endDate).subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]')
+          }
         }
         const regex = new RegExp(/\d+/g)
         const match = regex.exec(interval)
         rangeInterval.push(match)
+        if (endDate.endsWith('T00:00:00Z')) {
+          endDate = endDate.replace('T00:00:00Z', 'T23:59:59Z')
+        }
         dateRangeEnd.push(endDate)
       } else {
         // Subdaily Layers
