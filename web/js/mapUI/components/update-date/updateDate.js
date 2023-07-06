@@ -24,7 +24,6 @@ function UpdateDate(props) {
     compareMapUi,
     config,
     dateCompareState,
-    findLayer,
     getGranuleOptions,
     granuleState,
     isCompareActive,
@@ -83,46 +82,16 @@ function UpdateDate(props) {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
   }
 
-  const handleTtilerLayer = async (def, index, createLayer, layers, options, compareLayerGroup) => {
-    const layer = findLayer(def, activeString);
-    if (compareLayerGroup) {
-      const compareLayers = compareLayerGroup.getLayers();
-      compareLayers.remove(layer);
-    } else {
-      ui.selected.removeLayer(layer);
-    }
-
-    const layerOptions = options || layers[index];
-    return createLayer(def, layerOptions);
-  };
-
-  async function updateCompareLayer (def, index, mapLayerCollection, layers, skipTtiler) {
+  async function updateCompareLayer (def, index, mapLayerCollection) {
     const { createLayer } = ui;
     const options = {
       group: activeString,
       date: getSelectedDate(dateCompareState),
       ...getGranuleOptions(granuleState, def, activeString),
     };
-
-    if (def.type === 'ttiler') {
-      if (skipTtiler) return;
-
-      const mapLayers = ui.selected.getLayers().getArray();
-      const firstLayer = mapLayers[0];
-      const compareLayerGroup = firstLayer.get('group') === activeString
-        ? firstLayer
-        : mapLayers[1];
-
-      handleTtilerLayer(def, index, createLayer, layers, options, compareLayerGroup)
-        .then((createdTtilerLayer) => {
-          compareLayerGroup.getLayers().insertAt(index, createdTtilerLayer);
-          compareMapUi.update(activeString);
-        });
-    } else {
-      const updatedLayer = await createLayer(def, options);
-      mapLayerCollection.setAt(index, updatedLayer);
-      compareMapUi.update(activeString);
-    }
+    const updatedLayer = await createLayer(def, options);
+    mapLayerCollection.setAt(index, updatedLayer);
+    compareMapUi.update(activeString);
   }
 
   async function updateDate(outOfStepChange, skipTtiler) {

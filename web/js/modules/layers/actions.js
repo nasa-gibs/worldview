@@ -438,6 +438,7 @@ export function updateBandCombination(id, bandCombo, layerIndex) {
     );
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);
+
     dispatch({
       type: UPDATE_DDV_LAYER,
       id,
