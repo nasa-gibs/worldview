@@ -11,7 +11,8 @@
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "associatedLayers": ["OrbitTracks_Landsat-8_Descending"],
+      "orbitTracks": ["OrbitTracks_Landsat-8_Descending"],
+      "orbitDirection": ["descending"],
       "bandCombo": {
         "r": "B07",
         "g": "B05",

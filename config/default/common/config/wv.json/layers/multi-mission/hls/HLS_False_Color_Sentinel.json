@@ -11,7 +11,8 @@
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "associatedLayers": ["OrbitTracks_Sentinel-2B_Descending"],
+      "orbitTracks": ["OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending"],
       "bandCombo": {
         "r": "B08",
         "g": "B04",
