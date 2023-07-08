@@ -20,13 +20,8 @@
       "wrapX": false,
       "projections": {
         "geographic": {
-          "source": "FIRMS"
-        },
-        "arctic": {
-          "source": "FIRMS"
-        },
-        "antarctic": {
-          "source": "FIRMS"
+          "source": "DDV",
+          "matrixSet": "2km"
         }
       }
     }
