@@ -2,25 +2,18 @@
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
-export default async function fetchWMSImage(layer, date, extent, testMode) {
-  const baseUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi';
-  const boundingBox = `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`;
-  const fullExtentBBox = '-20037508.34,-20048966.1,20037508.34,20048966.1';
-  let bbox;
-  // when we are zoomed out too far, the bounding box will include NaN
-  if (boundingBox.includes('NaN')) {
-    bbox = fullExtentBBox;
-  } else {
-    bbox = boundingBox;
-  }
+// NEED TO DEAL WITH BBOX FOR ARCTIC/ANTARCTIC WHEN ZOOMED OUT!!
 
+export default async function fetchWMSImage(layer, date, testMode) {
+  console.log('---- date -----', date)
+  const baseUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi';
   const params = {
     version: '1.3.0',
     service: 'WMS',
     request: 'GetMap',
     format: 'image/png',
     STYLE: 'default',
-    bbox,
+    bbox: '-20037508.34,-20048966.1,20037508.34,20048966.1',
     CRS: 'EPSG:3857',
     HEIGHT: '256',
     WIDTH: '256',

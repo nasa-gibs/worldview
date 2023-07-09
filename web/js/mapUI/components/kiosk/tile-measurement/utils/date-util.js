@@ -95,3 +95,11 @@ export function formatReduxSubdailyDate(selectedDate) {
 
   return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }
+
+export function arrayOfDateObjectsToDateStrings(dates, period) {
+  if (period === 'daily'){
+    return dates.map(date => formatDailyDate(date));
+  } else {
+    return dates.map(date => formatSubdailyDate(date));
+  }
+}
