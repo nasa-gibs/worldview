@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 import {
@@ -23,18 +23,9 @@ function TileMeasurement({ ui }) {
   const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
   const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
 
-  const {
-    activeString,
-    activeLayers,
-    eic,
-    realTime,
-  } = useSelector((state) => ({
-    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
-    eic: state.ui.eic,
-    realTime: state.date.appNow,
-    activeString: state.compare.activeString,
-  }));
-  const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
+  const eic = useSelector((state) => state.ui.eic);
+  const realTime = useSelector((state) => state.date.appNow);
+  const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
@@ -155,6 +146,7 @@ function TileMeasurement({ ui }) {
     } else if (!loadedTiles && abortProceedure) {
       console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
       toggleStaticMap(true);
+      const activeLayerIds = activeLayers.map((layer) => layer.id);
       toggleGroupVisibility(activeLayerIds, false);
       setEICMeasurementAborted();
     }

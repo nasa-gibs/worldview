@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   onActivate as initiateAnimationAction,
@@ -13,25 +13,15 @@ function KioskAnimations({ ui }) {
   const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
-  const {
-    selectedDate,
-    isAnimationPlaying,
-    isKioskModeActive,
-    eic,
-    map,
-    eicAnimationMode,
-    eicMeasurementComplete,
-    eicMeasurementAborted,
-  } = useSelector((state) => ({
-    selectedDate: state.date.selected,
-    isAnimationPlaying: state.animation.isPlaying,
-    isKioskModeActive: state.ui.isKioskModeActive,
-    eic: state.ui.eic,
-    eicAnimationMode: state.ui.eic === 'sa' || state.ui.eic === 'da',
-    map: state.map,
-    eicMeasurementComplete: state.ui.eicMeasurementComplete,
-    eicMeasurementAborted: state.ui.eicMeasurementAborted,
-  }));
+  const selectedDate = useSelector((state) => state.date.selected);
+  const isAnimationPlaying = useSelector((state) => state.animation.isPlaying);
+  const isKioskModeActive = useSelector((state) => state.ui.isKioskModeActive);
+  const eic = useSelector((state) => state.ui.eic);
+  const map = useSelector((state) => state.map, shallowEqual);
+  const eicMeasurementComplete = useSelector((state) => state.ui.eicMeasurementComplete);
+  const eicMeasurementAborted = useSelector((state) => state.ui.eicMeasurementAborted);
+
+  const eicAnimationMode = eic === 'sa' || eic === 'da';
 
   const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
 
