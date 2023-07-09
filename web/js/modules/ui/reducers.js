@@ -8,6 +8,7 @@ import {
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
+  SET_ANIMATION_DATES,
 } from './constants';
 
 export const uiState = {
@@ -19,6 +20,7 @@ export const uiState = {
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,
   eicMeasurementAborted: false,
+  animationDates: [],
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -71,6 +73,11 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         eicMeasurementAborted: true,
+      };
+    case SET_ANIMATION_DATES:
+      return {
+        ...state,
+        animationDates: action.animationDates,
       };
     default:
       return state;

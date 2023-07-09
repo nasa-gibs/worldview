@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { transformExtent } from 'ol/proj';
-import { toggleCheckedAnimationAvailability as toggleCheckedAnimationAvailabilityAction } from '../../../modules/ui/actions';
+import {
+  toggleCheckedAnimationAvailability as toggleCheckedAnimationAvailabilityAction,
+  setAnimationDates as setAnimationDatesAction,
+} from '../../../modules/ui/actions';
 import fetchWMSImage from '../../../mapUI/components/kiosk/tile-measurement/utils/image-api-request';
 import calculatePixels from '../../../mapUI/components/kiosk/tile-measurement/utils/calculate-pixels';
 import { layersToMeasure, layerPixelData } from '../../../mapUI/components/kiosk/tile-measurement/utils/layer-data-eic';
@@ -15,8 +18,13 @@ function DateRangeTileCheckVersionTwo(props) {
     proj,
     measurementStarted,
     setMeasurementStarted,
+    setMeasurementFinished,
+    measurementFinished,
     zoom,
   } = props;
+  const dispatch = useDispatch();
+
+  const setAnimationDates = (dates) => { dispatch(setAnimationDatesAction(dates)); };
 
   const map = useSelector((state) => state.map.ui.selected);
 
@@ -92,6 +100,11 @@ function DateRangeTileCheckVersionTwo(props) {
     console.log('#2-2: measurementLayers: ', measurementLayers);
     const datesWithFullyImagery = await checkImagery(measurementLayers);
     console.log('#3-1: datesWithFullyImagery: ', datesWithFullyImagery);
+    const isoStringDates = datesWithFullyImagery.map((date) => date.toISOString());
+    console.log('#3-2: isoStringDates: ', isoStringDates);
+
+    setAnimationDates(isoStringDates);
+
 
   };
 

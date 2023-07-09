@@ -23,27 +23,17 @@ function KioskAnimations({ ui }) {
 
   const eicAnimationMode = eic === 'sa' || eic === 'da';
 
-  const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
-
   useEffect(() => {
     if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
     checkAnimationSettings();
   }, [map, eicMeasurementComplete]);
 
-  const subdailyPlayCheck = eic === 'sa' && subdailyAnimationDateUpdated && !isAnimationPlaying;
-  const dailyPlayCheck = eic === 'da' && !isAnimationPlaying;
+  const shouldPlayCheck = (eic == 'sa' || eic == 'da') && !isAnimationPlaying;
 
   // if subdaily animation check that date moved back one day otherwise check if animation should play
   const checkAnimationSettings = () => {
     if (!ui.selected.frameState_) return;
-    if (eic === 'sa' && !subdailyAnimationDateUpdated) {
-      const prevDayDate = new Date(selectedDate);
-      prevDayDate.setDate(prevDayDate.getDate() - 1);
-      selectDate(prevDayDate);
-      setSubdailyAnimationDateUpdated(true);
-    } else if (subdailyPlayCheck || dailyPlayCheck) {
-      handleAnimationSettings();
-    }
+    if (shouldPlayCheck) handleAnimationSettings();
   };
 
   // zero dates for subdaily times

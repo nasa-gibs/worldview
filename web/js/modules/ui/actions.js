@@ -8,6 +8,7 @@ import {
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
+  SET_ANIMATION_DATES,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -79,5 +80,12 @@ export function setEICMeasurementComplete() {
 export function setEICMeasurementAborted() {
   return {
     type: SET_EIC_MEASUREMENT_ABORTED,
+  };
+}
+
+export function setAnimationDates(animationDates) {
+  return {
+    type: SET_ANIMATION_DATES,
+    animationDates,
   };
 }

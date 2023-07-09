@@ -27,6 +27,7 @@ function TileMeasurement({ ui }) {
   const eic = useSelector((state) => state.ui.eic);
   const realTime = useSelector((state) => state.date.appNow);
   const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
+  const crs = useSelector((state) => state.proj.selected.crs);
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
@@ -138,9 +139,9 @@ function TileMeasurement({ ui }) {
     const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
     const loadedTiles = tileCount.totalLoadedTileCount > 0;
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
+      console.log('Tile verified... EIC measure process complete... Proceeding to animation check');
       setEICMeasurementComplete();
-    }
-    if (loadedTiles && !abortProceedure) {
+    } else if (loadedTiles && !abortProceedure) {
       setEICMeasurementComplete();
       console.log('Tile verified... EIC measure process complete...');
     } else if (loadedTiles && abortProceedure) {

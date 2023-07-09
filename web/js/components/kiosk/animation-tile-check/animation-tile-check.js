@@ -57,6 +57,8 @@ function AnimationTileCheck(props) {
       <DateRangeTileCheckVersionTwo
       setMeasurementStarted={setMeasurementStarted}
       measurementStarted={measurementStarted}
+      measurementFinished={measurementFinished}
+      setMeasurementFinished={setMeasurementFinished}
       frameDates={frameDates}
       activeLayers={activeLayers}
       config={config}
