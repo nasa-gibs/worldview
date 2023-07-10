@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 import {
