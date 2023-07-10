@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { transformExtent } from 'ol/proj';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 import {
@@ -26,10 +27,12 @@ function TileMeasurement({ ui }) {
   const {
     activeString,
     activeLayers,
+    map,
     eic,
     realTime,
   } = useSelector((state) => ({
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
+    map: state.map,
     eic: state.ui.eic,
     realTime: state.date.appNow,
     activeString: state.compare.activeString,
@@ -39,7 +42,7 @@ function TileMeasurement({ ui }) {
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
   useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic) {
+    if (!measurementsStarted && activeLayers && eic && map.ui.selected) {
       calculateMeasurements();
     }
   });
@@ -67,7 +70,9 @@ function TileMeasurement({ ui }) {
       console.log(`-----Loop #${i + 1} for date ${dates[i]}-----`);
       for (let j = 0; j < layers.length; j += 1) {
         try {
-          const wmsImage = await fetchWMSImage(layers[j].id, dates[i]);
+          const currentExtent = map.ui.selected.getView().calculateExtent(map.ui.selected.getSize());
+          const mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
+          const wmsImage = await fetchWMSImage(layers[j].id, dates[i], mercatorExtent);
           const blackPixelRatio = await calculatePixels(wmsImage);
           const { threshold } = layerPixelData[layers[j].id];
           if (blackPixelRatio < threshold) {
