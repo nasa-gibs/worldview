@@ -135,14 +135,14 @@ async function processEntries (colormap) {
   }
   const mapType = colormap.Legend._attributes.type
   const legends = toList(colormap.Legend.LegendEntry)
-  const colors = []
+  let colors = []
   const values = []
   const ticks = []
-  const tooltips = []
-  const legendColors = []
+  let tooltips = []
+  let legendColors = []
   const refsList = []
   const refSkipList = []
-  const initializeDisabled = []
+  let initializeDisabled = []
 
   // TODO: make this a separate function for entries?
   await Promise.all(
@@ -237,19 +237,52 @@ async function processEntries (colormap) {
     })
   )
 
+  const numDisabled = initializeDisabled.length
+  const totalEntries = colors.length
+  if (numDisabled > 0) {
+    console.warn('initializeDisabled')
+    const disabledColorsArr = []
+    const disabledLegendsArr = []
+    const disabledTooltipsArr = []
+    for (let i = numDisabled - 1; i >= 0; i -= 1) {
+      const thisIndex = initializeDisabled[i]
+
+      // push color to temp array & delete from colors
+      disabledColorsArr.push(colors[thisIndex])
+      colors.splice(thisIndex, 1)
+
+      // adjust order in "legendColors" object
+      disabledLegendsArr.push(legendColors[thisIndex])
+      legendColors.splice(thisIndex, 1)
+
+      // adjust order in "tooltips" object
+      disabledTooltipsArr.push(tooltips[thisIndex])
+      tooltips.splice(thisIndex, 1)
+    }
+    colors = colors.concat(disabledColorsArr)
+    legendColors = legendColors.concat(disabledLegendsArr)
+    tooltips = tooltips.concat(disabledTooltipsArr)
+
+    // update indices listed in initializeDisabled
+    initializeDisabled = []
+    for (let j = 0; j < numDisabled; j += 1) {
+      initializeDisabled[j] = totalEntries - numDisabled + j
+    }
+  }
+
   const result = {
     type: mapType,
     entries: {
       type: mapType,
-      colors,
-      refs: refsList
+      colors, // hex color values
+      refs: refsList // ID Numbers, starting at 1
     },
     legend: {
-      colors: legendColors,
+      colors: legendColors, // hex color values
       type: mapType,
-      tooltips,
+      tooltips, // labels shown within legend
       ticks,
-      refs: idList
+      refs: idList // ID Numbers, starting at 1
     },
     disabled: initializeDisabled
   }
