@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 import {
   each as lodashEach,
   debounce as lodashDebounce,
 } from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
   getClusters,
 } from './cluster';
@@ -107,27 +107,16 @@ function addOverlayIfIsVisible (map, overlay) {
 function EventTrack () {
   const dispatch = useDispatch();
   const selectEvent = (id, date) => dispatch(selectEventAction(id, date));
-  const {
-    eventsData,
-    isAnimatingToEvent,
-    isPlaying,
-    map,
-    extent,
-    proj,
-    selectedDate,
-    selectedEvent,
-    showAllTracks,
-  } = useSelector((state) => ({
-    eventsData: getFilteredEvents(state),
-    isAnimatingToEvent: state.animation.isAnimatingToEvent,
-    isPlaying: state.animation.isPlaying,
-    map: state.map.ui.selected,
-    extent: state.map.extent,
-    proj: state.proj,
-    selectedDate: state.date.selected,
-    selectedEvent: state.events.selected,
-    showAllTracks: state.events.showAllTracks,
-  }));
+
+  const eventsData = useSelector((state) => getFilteredEvents(state), shallowEqual);
+  const isAnimatingToEvent = useSelector((state) => state.animation.isAnimatingToEvent);
+  const isPlaying = useSelector((state) => state.animation.isPlaying);
+  const map = useSelector((state) => state.map.ui.selected, shallowEqual);
+  const extent = useSelector((state) => state.map.extent, shallowEqual);
+  const proj = useSelector((state) => state.proj, shallowEqual);
+  const selectedDate = useSelector((state) => state.date.selected, shallowEqual);
+  const selectedEvent = useSelector((state) => state.events.selected, shallowEqual);
+  const showAllTracks = useSelector((state) => state.events.showAllTracks);
 
   const [trackDetails, setTrackDetails] = useState({});
   const [allTrackDetails, setAllTrackDetails] = useState([]);
