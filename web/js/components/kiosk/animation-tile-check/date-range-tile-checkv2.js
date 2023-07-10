@@ -9,7 +9,6 @@ import calculatePixels from '../../../mapUI/components/kiosk/tile-measurement/ut
 import { layersToMeasure, layerPixelData } from '../../../mapUI/components/kiosk/tile-measurement/utils/layer-data-eic';
 import { arrayOfDateObjectsToDateStrings } from '../../../mapUI/components/kiosk/tile-measurement/utils/date-util';
 import EICPlayQueue from '../../animation-widget/eic-play-queue';
-import EICPlayQueueTwo from '../../animation-widget/eic-play-queue-2';
 
 function DateRangeTileCheckVersionTwo(props) {
   const {
@@ -95,14 +94,14 @@ function DateRangeTileCheckVersionTwo(props) {
     const measurementLayers = findLayersToMeasure();
     console.log('#2-2: measurementLayers: ', measurementLayers);
     const datesWithFullyImagery = await checkImagery(measurementLayers);
-    console.log('#3-1: datesWithFullyImagery: ', datesWithFullyImagery);
+    // console.log('#3-1: datesWithFullyImagery: ', datesWithFullyImagery);
     const isoStringDates = datesWithFullyImagery.map((date) => date.toISOString());
-    console.log('#3-2: isoStringDates: ', isoStringDates);
+    // console.log('#3-2: isoStringDates: ', isoStringDates);
     setAnimationDates(isoStringDates);
     setMeasurementFinished(true);
   };
 
-  return measurementFinished && <EICPlayQueueTwo />;
+  return measurementFinished && <EICPlayQueue />;
 }
 
 export default DateRangeTileCheckVersionTwo;

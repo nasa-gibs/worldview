@@ -117,7 +117,11 @@ class PlayQueue extends React.Component {
     let currentDate = toDate(this.playingDate);
     const currentBufferSize = util.objectLength(this.bufferObject);
     const queueLength = currentBufferSize || this.initialBufferSize;
-
+    // console.log('currentDate', currentDate)
+    // console.log('currentBufferSize', currentBufferSize)
+    // console.log('queueLength', queueLength)
+    // console.log('this.initialBufferSize', this.initialBufferSize)
+    // console.log('bufferObject', this.bufferObject)
     let i = 1;
     while (i < queueLength) {
       if (this.nextDate(currentDate) > endDate) {
@@ -144,6 +148,11 @@ class PlayQueue extends React.Component {
     } = this.props;
     let currentDate = animStartDate;
     const lastInQueue = this.getLastInQueue();
+    // console.log('currentDate', currentDate)
+    // console.log('numberOfFrames', numberOfFrames)
+    // console.log('startDate', startDate)
+    // console.log('lastInQueue', lastInQueue)
+    // console.log('this.initialBufferSize', this.initialBufferSize)
     if (numberOfFrames <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
@@ -313,6 +322,11 @@ class PlayQueue extends React.Component {
     }
     this.inQueueObject[strDate] = date;
     this.bufferArray.push(strDate);
+    console.log('inQueueObject[strDate]', this.inQueueObject[strDate])
+    console.log('this.bufferObject[strDate]', this.bufferObject[strDate])
+    console.log('loadedItems', loadedItems)
+    console.log('date', date)
+    console.log('initialLoad', initialLoad)
 
     await this.queue.add(async () => {
       const startTime = Date.now();
@@ -329,6 +343,7 @@ class PlayQueue extends React.Component {
     delete this.inQueueObject[strDate];
     const currentBufferSize = util.objectLength(this.bufferObject);
 
+    // we shouldn't need this since ours is always going to be initial load?
     if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();
