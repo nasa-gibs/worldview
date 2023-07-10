@@ -1,29 +1,26 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { transformExtent } from 'ol/proj';
 import {
-  toggleCheckedAnimationAvailability as toggleCheckedAnimationAvailabilityAction,
   setAnimationDates as setAnimationDatesAction,
 } from '../../../modules/ui/actions';
 import fetchWMSImage from '../../../mapUI/components/kiosk/tile-measurement/utils/image-api-request';
 import calculatePixels from '../../../mapUI/components/kiosk/tile-measurement/utils/calculate-pixels';
 import { layersToMeasure, layerPixelData } from '../../../mapUI/components/kiosk/tile-measurement/utils/layer-data-eic';
 import { arrayOfDateObjectsToDateStrings } from '../../../mapUI/components/kiosk/tile-measurement/utils/date-util';
+import EICPlayQueue from '../../animation-widget/eic-play-queue';
+import EICPlayQueueTwo from '../../animation-widget/eic-play-queue-2';
 
 function DateRangeTileCheckVersionTwo(props) {
   const {
     frameDates,
     activeLayers,
-    config,
-    proj,
     measurementStarted,
     setMeasurementStarted,
     setMeasurementFinished,
     measurementFinished,
-    zoom,
   } = props;
   const dispatch = useDispatch();
-
   const setAnimationDates = (dates) => { dispatch(setAnimationDatesAction(dates)); };
 
   const map = useSelector((state) => state.map.ui.selected);
@@ -93,7 +90,6 @@ function DateRangeTileCheckVersionTwo(props) {
     return frameDates;
   }
 
-
   const calculateMeasurements = async () => {
     console.log('#1 calculating animation measurements...');
     const measurementLayers = findLayersToMeasure();
@@ -102,14 +98,11 @@ function DateRangeTileCheckVersionTwo(props) {
     console.log('#3-1: datesWithFullyImagery: ', datesWithFullyImagery);
     const isoStringDates = datesWithFullyImagery.map((date) => date.toISOString());
     console.log('#3-2: isoStringDates: ', isoStringDates);
-
     setAnimationDates(isoStringDates);
-
-
+    setMeasurementFinished(true);
   };
 
-
-  return null;
+  return measurementFinished && <EICPlayQueueTwo />;
 }
 
 export default DateRangeTileCheckVersionTwo;
