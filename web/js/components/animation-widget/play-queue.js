@@ -137,11 +137,7 @@ class PlayQueue extends React.Component {
     return toString(currentDate);
   };
 
-  /**
-  * Queue up initial dates to create a minimum buffer
-  * @param {Date} animStartDate | 1-Day prior to the Animation Start Date
-  * @return {void}
-  */
+  // DONE??
   initialPreload(animStartDate) {
     const {
       numberOfFrames, selectDate, togglePlaying, startDate,
@@ -153,6 +149,7 @@ class PlayQueue extends React.Component {
     // console.log('startDate', startDate)
     // console.log('lastInQueue', lastInQueue)
     // console.log('this.initialBufferSize', this.initialBufferSize)
+
     if (numberOfFrames <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
@@ -282,6 +279,9 @@ class PlayQueue extends React.Component {
 
   nextDate(date) {
     const { interval, delta } = this.props;
+    // console.log('interval', interval)
+    // console.log('delta', delta)
+    // console.log('date', date)
     return util.dateAdd(date, interval, delta);
   }
 
@@ -290,6 +290,8 @@ class PlayQueue extends React.Component {
     const strDate = this.bufferArray[this.bufferArray.length - 1];
     const lastInBuffer = toDate(strDate);
     const nextDate = this.nextDate(lastInBuffer);
+    console.log('STARTDATE', startDate)
+    console.log('startDateTypeOf', typeof startDate)
     if (lastInBuffer >= endDate || nextDate > endDate) {
       return startDate;
     }
@@ -310,9 +312,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  /**
-   * Gets next date based on current increments
-   */
+  // DONE??
   async addDate(date, initialLoad) {
     const { promiseImageryForTime } = this.props;
     let { loadedItems } = this.state;
@@ -322,11 +322,11 @@ class PlayQueue extends React.Component {
     }
     this.inQueueObject[strDate] = date;
     this.bufferArray.push(strDate);
-    console.log('inQueueObject[strDate]', this.inQueueObject[strDate])
-    console.log('this.bufferObject[strDate]', this.bufferObject[strDate])
-    console.log('loadedItems', loadedItems)
-    console.log('date', date)
-    console.log('initialLoad', initialLoad)
+    // console.log('inQueueObject[strDate]', this.inQueueObject[strDate])
+    // console.log('this.bufferObject[strDate]', this.bufferObject[strDate])
+    // console.log('loadedItems', loadedItems)
+    // console.log('date', date)
+    // console.log('initialLoad', initialLoad)
 
     await this.queue.add(async () => {
       const startTime = Date.now();
