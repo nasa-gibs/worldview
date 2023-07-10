@@ -135,11 +135,11 @@ async function processEntries (colormap) {
   }
   const mapType = colormap.Legend._attributes.type
   const legends = toList(colormap.Legend.LegendEntry)
-  let colors = []
+  const colors = []
   const values = []
   const ticks = []
-  let tooltips = []
-  let legendColors = []
+  const tooltips = []
+  const legendColors = []
   const refsList = []
   const refSkipList = []
   let initializeDisabled = []
@@ -237,37 +237,35 @@ async function processEntries (colormap) {
     })
   )
 
+  // Make sure that all disabled colormap entries are included at the END
   const numDisabled = initializeDisabled.length
-  const totalEntries = colors.length
   if (numDisabled > 0) {
-    console.warn('initializeDisabled')
+    const totalEntries = colors.length
     const disabledColorsArr = []
     const disabledLegendsArr = []
     const disabledTooltipsArr = []
+
+    // Iterate backwards to maintain early indices
     for (let i = numDisabled - 1; i >= 0; i -= 1) {
       const thisIndex = initializeDisabled[i]
 
-      // push color to temp array & delete from colors
       disabledColorsArr.push(colors[thisIndex])
-      colors.splice(thisIndex, 1)
-
-      // adjust order in "legendColors" object
       disabledLegendsArr.push(legendColors[thisIndex])
-      legendColors.splice(thisIndex, 1)
-
-      // adjust order in "tooltips" object
       disabledTooltipsArr.push(tooltips[thisIndex])
+
+      colors.splice(thisIndex, 1)
+      legendColors.splice(thisIndex, 1)
       tooltips.splice(thisIndex, 1)
     }
-    colors = colors.concat(disabledColorsArr)
-    legendColors = legendColors.concat(disabledLegendsArr)
-    tooltips = tooltips.concat(disabledTooltipsArr)
 
-    // update indices listed in initializeDisabled
-    initializeDisabled = []
-    for (let j = 0; j < numDisabled; j += 1) {
-      initializeDisabled[j] = totalEntries - numDisabled + j
-    }
+    colors.push(...disabledColorsArr)
+    legendColors.push(...disabledLegendsArr)
+    tooltips.push(...disabledTooltipsArr)
+
+    const firstDisabledIndex = totalEntries - numDisabled
+    initializeDisabled = Array.from({
+      length: numDisabled
+    }, (item, index) => firstDisabledIndex + index)
   }
 
   const result = {
