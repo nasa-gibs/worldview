@@ -272,6 +272,8 @@ class PlayQueue extends React.Component {
   // DONE??
   nextDate(date) {
     const { interval, delta } = this.props;
+    console.log('delta', delta)
+    console.log('interval', interval)
     return util.dateAdd(date, interval, delta);
   }
 
@@ -420,7 +422,6 @@ class PlayQueue extends React.Component {
       this.checkQueue();
     };
     const animIntervalMS = speed === 0.5 ? 2000 : 1000 / speed;
-    console.log('animIntervalMS', animIntervalMS)
     this.animationInterval(animIntervalMS, player);
   }
 

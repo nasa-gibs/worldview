@@ -10,6 +10,25 @@ const CONCURRENT_REQUESTS = 3;
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
 
+const testDatesSubdaily = [
+  "2023-07-11T01:30:00Z",
+  "2023-07-11T02:10:00Z",
+  "2023-07-11T02:40:00Z",
+  "2023-07-11T06:10:00Z",
+  "2023-07-11T07:00:00Z",
+  "2023-07-11T07:30:00Z"
+]
+
+const testDatesDaily = [
+  "2023-06-11T10:10:00Z",
+  "2023-06-12T10:10:00Z",
+  "2023-06-22T10:10:00Z",
+  "2023-06-23T10:10:00Z",
+  "2023-07-03T10:10:00Z",
+  "2023-07-09T10:10:00Z",
+  "2023-07-11T10:10:00Z"
+]
+
 function EICPlayQueue () {
   // actions
   const dispatch = useDispatch();
@@ -17,11 +36,15 @@ function EICPlayQueue () {
   const playAnimation = () => { dispatch(playAnimationAction()); };
   // redux state
   const animationDatesAsStrings = useSelector((state) => state.ui.animationDates);
+  // FOR TESTING
+  // const animationDatesAsStrings = testDatesSubdaily;
+  // const animationDatesAsStrings = testDatesDaily;
   const animationDatesAsDateObjects = animationDatesAsStrings.map(toDate);
   const numberOfFrames = animationDatesAsStrings.length;
   const startDateAsObject = animationDatesAsDateObjects[0];
   const endDateAsObject = animationDatesAsDateObjects[numberOfFrames - 1];
   const isPlaying = useSelector((state) => state.animation.isPlaying);
+  const eicMode = useSelector((state) => state.ui.eic);
   const state = useSelector((state) => state);
   // component state & refs
   const [animationStarted, setAnimationStarted] = useState(false);
@@ -74,18 +97,36 @@ function EICPlayQueue () {
 
   // accepts a date object
   function getNextDate(date) {
-    // NEED TO UNHARDCODE THESE VARIABLES
-    const interval = 'day';
-    const delta = 1;
+    // const interval = eicMode === 'da' ? 'day' : 'minute';
+    // const delta = eicMode === 'da' ? 1 : 10;
+    // console.log('getting next date for', date)
 
-    return util.dateAdd(date, interval, delta);
+    // return util.dateAdd(date, interval, delta);
+
+    const currentIndex = animationDatesAsDateObjects.findIndex(function(dateObject) {
+      // Compare the date parameter with each date object in the array
+      return dateObject.getTime() === date.getTime();
+    });
+
+    // if the date is not found, we find the next date so we can compare correctly in getNextBufferDate()
+    if (animationDatesAsDateObjects[currentIndex + 1] === undefined){
+      const interval = eicMode === 'da' ? 'day' : 'minute';
+      const delta = eicMode === 'da' ? 1 : 10;
+
+      return util.dateAdd(date, interval, delta);
+    }
+
+    console.log('currentIndex', currentIndex)
+    console.log('animationDatesAsDateObjects[currentIndex + 1]', animationDatesAsDateObjects[currentIndex + 1])
+
+    return animationDatesAsDateObjects[currentIndex + 1];
   }
 
   function getNextBufferDate() {
     const strDate = bufferArray.current[bufferArray.current.length - 1];
     const lastInBuffer = toDate(strDate)
     const nextDate = getNextDate(lastInBuffer)
-    if ((lastInBuffer >= endDateAsObject) || (nextDate > endDateAsObject)) {
+    if ((lastInBuffer >= endDateAsObject) || (nextDate > endDateAsObject) || (nextDate === undefined)) {
       return startDateAsObject;
     }
     return nextDate;
@@ -106,16 +147,11 @@ function EICPlayQueue () {
 
   function checkQueue() {
     console.log('Checking queue...')
-    if(!preloadComplete.current){
-      initialPreload();
-      return;
-    }
+    if(!preloadComplete.current) return initialPreload();
 
     const nextInQueue = toString(getNextBufferDate());
 
-    if (!bufferObject.current[nextInQueue] && !inQueueObject.current[nextInQueue]) {
-      addItemToQueue();
-    }
+    if (!bufferObject.current[nextInQueue] && !inQueueObject.current[nextInQueue]) addItemToQueue();
   }
 
   function play() {
@@ -128,6 +164,8 @@ function EICPlayQueue () {
 
   function isPreloadSufficient() {
     console.log('Checking preload sufficiency...')
+    // if we want to change the min buffer amount from all dates to something else (half, 1/4, etc...)
+    // we can change this variable
     const bufferedLastDate = bufferObject.current[toString(endDateAsObject)]
 
     if (bufferedLastDate){
