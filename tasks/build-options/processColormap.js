@@ -237,7 +237,8 @@ async function processEntries (colormap) {
     })
   )
 
-  // Make sure that all disabled colormap entries are included at the END
+  // Ensure all disabled colormap entries are included at the END
+  // Update colors, legendColors & tooltips arrays accordingly
   const numDisabled = initializeDisabled.length
   if (numDisabled > 0) {
     const totalEntries = colors.length
@@ -272,15 +273,15 @@ async function processEntries (colormap) {
     type: mapType,
     entries: {
       type: mapType,
-      colors, // hex color values
-      refs: refsList // ID Numbers, starting at 1
+      colors,
+      refs: refsList
     },
     legend: {
-      colors: legendColors, // hex color values
+      colors: legendColors,
       type: mapType,
-      tooltips, // labels shown within legend
+      tooltips,
       ticks,
-      refs: idList // ID Numbers, starting at 1
+      refs: idList
     },
     disabled: initializeDisabled
   }
