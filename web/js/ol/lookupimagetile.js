@@ -12,106 +12,80 @@ class LookupImageTile extends OlImageTile {
     this.customTileLoadFunction_ = tileLoadFunction;
   }
 }
-
 LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = function() {
   if (this.state === OlTileState.IDLE) {
-    console.log(this);
     this.state = OlTileState.LOADING;
     const that = this;
     this.changed();
-    const pixelsToDisplay = getPixelColorsToDisplay(this.lookup_);
-    let pixelsProcessed = false;
+    let imageProcessed = false;
 
     const onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
-      const g = that.canvas_.getContext('2d');
       const octets = that.canvas_.width * that.canvas_.height * 4;
+      const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
 
-      // wv-2622 changes!
+      // If pixels were processed already, we skip this transformation
+      if (!imageProcessed) {
+        const imageData = g.getImageData(
+          0,
+          0,
+          that.canvas_.width,
+          that.canvas_.height,
+        );
 
-      // If pixels were not processed already, we skip this palette swap loop
-      // if (!pixelsProcessed) {
-      //   const imageData = g.getImageData(
-      //     0,
-      //     0,
-      //     that.canvas_.width,
-      //     that.canvas_.height,
-      //   );
-      //   const pixels = imageData.data;
+        // Process each pixel to color-swap single color palettes
+        const pixels = imageData.data;
+        const colorLookupObj = lodashCloneDeep(that.lookup_);
+        const defaultColor = Object.keys(that.lookup_)[0];
+        const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
 
-      //   for (let i = 0; i < octets; i += 4) {
-      //     const source = `${pixels[i + 0]},${
-      //       pixels[i + 1]},${
-      //       pixels[i + 2]},${
-      //       pixels[i + 3]}`;
-      //     const target = that.lookup_[source];
+        // Load black/transparent into the lookup object
+        colorLookupObj['0,0,0,0'] = {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0,
+        };
 
-      //     if (target) {
-      //       pixels[i + 0] = target.r;
-      //       pixels[i + 1] = target.g;
-      //       pixels[i + 2] = target.b;
-      //       pixels[i + 3] = target.a;
-      //     }
-      //   }
-      //   g.putImageData(imageData, 0, 0);
+        for (let i = 0; i < octets; i += 4) {
+          const pixelColor = `${pixels[i + 0]},${
+            pixels[i + 1]},${
+            pixels[i + 2]},${
+            pixels[i + 3]}`;
 
-
-      const imageData = g.getImageData(
-        0,
-        0,
-        that.canvas_.width,
-        that.canvas_.height,
-      );
-      const pixels = imageData.data;
-      const colorLookupObj = lodashCloneDeep(that.lookup_);
-      const defaultColor = Object.keys(that.lookup_)[0];
-      const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
-
-      // Load black/transparent into the lookup
-      colorLookupObj['0,0,0,0'] = {
-        r: 0,
-        g: 0,
-        b: 0,
-        a: 0,
-      };
-
-      for (let i = 0; i < octets; i += 4) {
-        const pixelColor = `${pixels[i + 0]},${
-          pixels[i + 1]},${
-          pixels[i + 2]},${
-          pixels[i + 3]}`;
-
-        if (!colorLookupObj[pixelColor]) {
+          if (!colorLookupObj[pixelColor]) {
           // Handle non-transparent pixels that do not match the palette exactly
-          const defaultColorArr = defaultColor.split(',');
-          const pixelColorArr = pixelColor.split(',');
+            const defaultColorArr = defaultColor.split(',');
+            const pixelColorArr = pixelColor.split(',');
 
-          // Determine difference of pixel from default to replicate anti-aliasing
-          const rDifference = pixelColorArr[0] - defaultColorArr[0];
-          const gDifference = pixelColorArr[1] - defaultColorArr[1];
-          const bDifference = pixelColorArr[2] - defaultColorArr[2];
-          const alphaValue = pixelColorArr[3];
+            // Determine difference of pixel from default to replicate anti-aliasing
+            const rDifference = pixelColorArr[0] - defaultColorArr[0];
+            const gDifference = pixelColorArr[1] - defaultColorArr[1];
+            const bDifference = pixelColorArr[2] - defaultColorArr[2];
+            const alphaValue = pixelColorArr[3];
 
-          // Store the resulting pair of pixel color & anti-aliased adjusted color
-          colorLookupObj[pixelColor] = {
-            r: paletteColor.r + rDifference,
-            g: paletteColor.g + gDifference,
-            b: paletteColor.b + bDifference,
-            a: alphaValue,
-          };
+            // Store the resulting pair of pixel color & anti-aliased adjusted color
+            colorLookupObj[pixelColor] = {
+              r: paletteColor.r + rDifference,
+              g: paletteColor.g + gDifference,
+              b: paletteColor.b + bDifference,
+              a: alphaValue,
+            };
+          }
+
+          // set the pixel color
+          pixels[i + 0] = colorLookupObj[pixelColor].r;
+          pixels[i + 1] = colorLookupObj[pixelColor].g;
+          pixels[i + 2] = colorLookupObj[pixelColor].b;
+          pixels[i + 3] = colorLookupObj[pixelColor].a;
         }
-
-        // set the pixel color
-        pixels[i + 0] = colorLookupObj[pixelColor].r;
-        pixels[i + 1] = colorLookupObj[pixelColor].g;
-        pixels[i + 2] = colorLookupObj[pixelColor].b;
-        pixels[i + 3] = colorLookupObj[pixelColor].a;
+        g.putImageData(imageData, 0, 0);
       }
 
       // uses the tileload function passed from layerbuilder
@@ -124,14 +98,15 @@ LookupImageTile.prototype.load = function() {
       that.image_.removeEventListener('load', onImageLoad);
     };
 
-    // We only want to process images with category palettes, not continuous palettes
-    if (Object.keys(this.lookup_).length < 25) {
-      pixelsProcessed = true;
-      // try??
+    // Process images with category palettes, not continuous palettes
+    const lookupCount = Object.keys(this.lookup_).length;
+    if (lookupCount > 1 && lookupCount < 25) {
+      imageProcessed = true;
+      const pixelsToDisplay = getPixelColorsToDisplay(this.lookup_);
       fetch(this.src_)
         .then((response) => response.arrayBuffer())
         .then((buffer) => {
-        // decode the buffer PNG file
+          // decode the buffer PNG file
           const decodedPNG = UPNG.decode(buffer);
           const { width, height } = decodedPNG;
 
@@ -221,14 +196,6 @@ function getColormap(rawColormap) {
   return colorMapArr;
 }
 
-/**
- * Create a new WMTS Layer
- * @method lookupFactory
- * @static
- * @param {object} lookup - The layer palette
- * @param {object} sourceOptions - Layer options
- * @returns {object} function to create LookupImageTile
- */
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
     return new LookupImageTile(
