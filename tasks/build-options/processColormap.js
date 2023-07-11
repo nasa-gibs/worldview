@@ -115,6 +115,9 @@ async function matchLegend (entry, legends) {
 }
 
 async function processEntries (colormap) {
+  if (colormap._attributes.title === 'Dynamic Surface Water Extent') {
+    console.warn('this!!')
+  }
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
 
@@ -146,7 +149,7 @@ async function processEntries (colormap) {
 
   // TODO: make this a separate function for entries?
   await Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async (entry, index) => {
       const legend = await matchLegend(entry, legends)
 
       if (legend === 'false') {
@@ -161,14 +164,14 @@ async function processEntries (colormap) {
 
       // If entry is served transparent, add it to the disabled array
       if (entry._attributes.transparent !== 'false') {
-        initializeDisabled.push(entry._attributes.ref)
+        initializeDisabled.push(index)
       }
 
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
       }
 
-      refsList.push(entry._attributes.ref)
+      refsList.push(index)
       const rHex = parseInt(r).toString(16).padStart(2, '0')
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
