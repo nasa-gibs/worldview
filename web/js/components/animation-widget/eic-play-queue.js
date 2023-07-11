@@ -1,23 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PQueue from 'p-queue';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectDate as selectDateAction } from '../../modules/date/actions'
 import { play as playAnimationAction } from '../../modules/animation/actions';
-// requires (state, date)
 import { promiseImageryForTime } from '../../modules/map/util'
 import util from '../../util/util';
 
-const MIN_REQUEST_TIME_MS = 200;
 const CONCURRENT_REQUESTS = 3;
 const toString = (date) => util.toISOStringSeconds(date);
 const toDate = (dateString) => util.parseDateUTC(dateString);
-const speed = 6;
-
-const getInitialBufferSize = (numberOfFrames, speed) => {
-  const defaultSize = 10;
-  const buffer = defaultSize + (speed * 1.5);
-  return numberOfFrames < buffer ? numberOfFrames : buffer;
-};
 
 function EICPlayQueue () {
   // actions
@@ -25,27 +16,22 @@ function EICPlayQueue () {
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
   const playAnimation = () => { dispatch(playAnimationAction()); };
   // redux state
-  // as iso strings
   const animationDatesAsStrings = useSelector((state) => state.ui.animationDates);
   const animationDatesAsDateObjects = animationDatesAsStrings.map(toDate);
   const numberOfFrames = animationDatesAsStrings.length;
   const startDateAsObject = animationDatesAsDateObjects[0];
   const endDateAsObject = animationDatesAsDateObjects[numberOfFrames - 1];
-  const isLoopActive = useSelector((state) => state.animation.loop);
   const isPlaying = useSelector((state) => state.animation.isPlaying);
   const state = useSelector((state) => state);
-  // component state
+  // component state & refs
   const [animationStarted, setAnimationStarted] = useState(false);
-  // refs
   const playingDateObj = useRef(startDateAsObject);
-  const abortController = useRef(null);
   const inQueueObject = useRef({});
   const bufferObject = useRef({});
-  // string dates
   const bufferArray = useRef([]);
   const preloadComplete = useRef(false);
-  // local variables
-  const initialBufferSize = getInitialBufferSize(numberOfFrames, speed);
+  const animationIsPlaying = useRef(false);
+
   const queue = new PQueue({
     concurrency: CONCURRENT_REQUESTS,
     timeout: 3000,
@@ -86,8 +72,7 @@ function EICPlayQueue () {
     preloadComplete.current = true;
   }
 
-  // called from getNextBufferDate
-  // accepts a date object!!!
+  // accepts a date object
   function getNextDate(date) {
     // NEED TO UNHARDCODE THESE VARIABLES
     const interval = 'day';
@@ -134,9 +119,8 @@ function EICPlayQueue () {
   }
 
   function play() {
-    if (!animationStarted && preloadComplete.current) {
+    if (preloadComplete.current) {
       console.log('Playing...')
-      setAnimationStarted(true);
       playAnimation()
       animate()
     }
@@ -144,39 +128,34 @@ function EICPlayQueue () {
 
   function isPreloadSufficient() {
     console.log('Checking preload sufficiency...')
-    const currentBufferSize = util.objectLength(bufferObject.current);
-    if (currentBufferSize === numberOfFrames){
-      return true;
+    const bufferedLastDate = bufferObject.current[toString(endDateAsObject)]
+
+    if (bufferedLastDate){
+      console.log('preload sufficient!')
+    } else {
+      console.log('preload insufficient!')
     }
-    if (currentBufferSize < initialBufferSize){
-      return false;
-    }
+
+    return bufferedLastDate
   }
 
   function checkShouldPlay() {
     console.log('Checking should play...')
-    const restartLoop = playingDateObj.current.getTime() === startDateAsObject.getTime();
     const preloadSufficient = isPreloadSufficient();
-
-    if (restartLoop || preloadSufficient){
+    if (preloadSufficient){
+      animationIsPlaying.current = true;
       return play()
+    } else {
+      // recursively check if preload is sufficient in 1 second intervals
+      setTimeout(() => {
+        checkShouldPlay();
+      } , 1000)
     }
-  }
-
-  // we don't really need this. We can just move the playingDateObj.current line to
-  async function continueLoop() {
-    console.log('Continuing loop...')
-    const loopDelay = 1500;
-    playingDateObj.current = startDateAsObject;
-    setTimeout(() => {
-      checkQueue();
-    }, loopDelay)
   }
 
   function animationInterval(ms, player) {
     const start = document.timeline.currentTime;
     const frame = (time) => {
-      if (abortController.current?.signal?.aborted) return;
       player(time);
       scheduleFrame(time)
     }
@@ -190,7 +169,7 @@ function EICPlayQueue () {
       const nextDateAsDateObject =  getNextDate(currentDateObj);
       let delay = targetNext - performance.now();
       if ((nextDateAsDateObject > endDateAsObject)) {
-        console.log('nextDateAsObject', nextDateAsDateObject, 'vs endDateAsObject', endDateAsObject, 'vs currentDateObj', currentDateObj)
+        // delay for end of loop...
         delay = 1500
       }
       setTimeout(() => requestAnimationFrame(frame), delay);
@@ -205,13 +184,13 @@ function EICPlayQueue () {
     let nextDateAsString;
 
     const player = () => {
-      if (abortController.current?.signal?.aborted) return;
       const currentDateObj = playingDateObj.current;
       nextDateAsDateObject =  getNextDate(currentDateObj);
       nextDateAsString = toString(nextDateAsDateObject);
 
       if (nextDateAsDateObject > endDateAsObject) {
-        continueLoop();
+        // looping...
+        playingDateObj.current = startDateAsObject;
         return;
       }
 
@@ -220,9 +199,10 @@ function EICPlayQueue () {
       currentDateStr = nextDateAsString;
       playingDateObj.current = nextDateAsDateObject;
 
-      if(!bufferObject.current[nextDateAsString]){
-        console.log('Playback caught up with buffer :(')
-      }
+      // leaving this incase we don't want to preload all dates
+      // if(!bufferObject.current[nextDateAsString]){
+      //   console.log('Playback caught up with buffer :(')
+      // }
     }
 
     const animIntervalMS = 166;
