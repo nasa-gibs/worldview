@@ -3,15 +3,11 @@ import { Spinner } from 'reactstrap';
 import { useSelector } from 'react-redux';
 
 function LoadingIndicator() {
-  const {
-    msg,
-    shouldSpinnerShow,
-    isMobile,
-  } = useSelector((state) => ({
-    msg: state.loading.msg,
-    shouldSpinnerShow: state.loading.isLoading && !state.ui.isKioskModeActive,
-    isMobile: state.screenSize.isMobileDevice,
-  }));
+  const msg = useSelector((state) => state.loading.msg);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
+  const isLoading = useSelector((state) => state.loading.isLoading);
+  const isKioskModeActive = useSelector((state) => state.ui.isKioskModeActive);
+  const shouldSpinnerShow = isLoading && !isKioskModeActive;
 
   const spinnerStyle = isMobile ? {
     position: 'absolute',
