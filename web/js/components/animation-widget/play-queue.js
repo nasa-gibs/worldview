@@ -82,7 +82,9 @@ class PlayQueue extends React.Component {
     }
   }
 
-// shouldn't need this
+  /**
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
+   */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
     let frameDate = startDate;
@@ -94,7 +96,9 @@ class PlayQueue extends React.Component {
     }
   }
 
-  // shouldn't need this
+  /**
+   * Determines whether to start at current date or the selected start date
+   */
   getStartDate() {
     const { startDate, endDate, snappedCurrentDate } = this.props;
     const nextDate = this.nextDate(snappedCurrentDate);
@@ -105,17 +109,15 @@ class PlayQueue extends React.Component {
     return toString(startDate);
   }
 
-  // shouldn't need this
+  /**
+   * Gets the last date that should be added to the queue
+   */
   getLastInQueue = function() {
     const { isLoopActive, startDate, endDate } = this.props;
     let currentDate = toDate(this.playingDate);
     const currentBufferSize = util.objectLength(this.bufferObject);
     const queueLength = currentBufferSize || this.initialBufferSize;
-    // console.log('currentDate', currentDate)
-    // console.log('currentBufferSize', currentBufferSize)
-    // console.log('queueLength', queueLength)
-    // console.log('this.initialBufferSize', this.initialBufferSize)
-    // console.log('bufferObject', this.bufferObject)
+
     let i = 1;
     while (i < queueLength) {
       if (this.nextDate(currentDate) > endDate) {
@@ -131,19 +133,17 @@ class PlayQueue extends React.Component {
     return toString(currentDate);
   };
 
-  // DONE??
+  /**
+  * Queue up initial dates to create a minimum buffer
+  * @param {Date} animStartDate | 1-Day prior to the Animation Start Date
+  * @return {void}
+  */
   initialPreload(animStartDate) {
     const {
       numberOfFrames, selectDate, togglePlaying, startDate,
     } = this.props;
     let currentDate = animStartDate;
     const lastInQueue = this.getLastInQueue();
-    // console.log('currentDate', currentDate)
-    // console.log('numberOfFrames', numberOfFrames)
-    // console.log('startDate', startDate)
-    // console.log('lastInQueue', lastInQueue)
-    // console.log('this.initialBufferSize', this.initialBufferSize)
-
     if (numberOfFrames <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
@@ -246,7 +246,9 @@ class PlayQueue extends React.Component {
     }
   }
 
-  // DONE??
+  /**
+   * Either do inital preload or queue next item
+   */
   checkQueue() {
     if (!this.bufferArray[0] && !this.inQueueObject[this.playingDate]) {
       const currentDate = toDate(this.playingDate);
@@ -269,15 +271,11 @@ class PlayQueue extends React.Component {
     this.inQueueObject = {};
   };
 
-  // DONE??
   nextDate(date) {
     const { interval, delta } = this.props;
-    console.log('delta', delta)
-    console.log('interval', interval)
     return util.dateAdd(date, interval, delta);
   }
 
-  // DONE??
   getNextBufferDate() {
     const { startDate, endDate } = this.props;
     const strDate = this.bufferArray[this.bufferArray.length - 1];
@@ -289,7 +287,9 @@ class PlayQueue extends React.Component {
     return nextDate;
   }
 
-  // DONE??
+  /**
+   * Add next date to the queue
+   */
   addItemToQueue() {
     const { startDate, endDate } = this.props;
     const nextDate = this.getNextBufferDate();
@@ -301,7 +301,9 @@ class PlayQueue extends React.Component {
     }
   }
 
-  // DONE??
+  /**
+   * Gets next date based on current increments
+   */
   async addDate(date, initialLoad) {
     const { promiseImageryForTime } = this.props;
     let { loadedItems } = this.state;
@@ -311,11 +313,6 @@ class PlayQueue extends React.Component {
     }
     this.inQueueObject[strDate] = date;
     this.bufferArray.push(strDate);
-    // console.log('inQueueObject[strDate]', this.inQueueObject[strDate])
-    // console.log('this.bufferObject[strDate]', this.bufferObject[strDate])
-    // console.log('loadedItems', loadedItems)
-    // console.log('date', date)
-    // console.log('initialLoad', initialLoad)
 
     await this.queue.add(async () => {
       const startTime = Date.now();
@@ -332,7 +329,6 @@ class PlayQueue extends React.Component {
     delete this.inQueueObject[strDate];
     const currentBufferSize = util.objectLength(this.bufferObject);
 
-    // we shouldn't need this since ours is always going to be initial load?
     if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
       this.checkQueue();
       this.checkShouldPlay();

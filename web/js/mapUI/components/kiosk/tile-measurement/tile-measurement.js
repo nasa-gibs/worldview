@@ -27,7 +27,6 @@ function TileMeasurement({ ui }) {
   const eic = useSelector((state) => state.ui.eic);
   const realTime = useSelector((state) => state.date.appNow);
   const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
-  const crs = useSelector((state) => state.proj.selected.crs);
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 

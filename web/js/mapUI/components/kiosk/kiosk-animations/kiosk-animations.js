@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   onActivate as initiateAnimationAction,
   playKioskAnimation as playKioskAnimationAction,
 } from '../../../../modules/animation/actions';
-import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
 function KioskAnimations({ ui }) {
   const dispatch = useDispatch();
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
   const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
-  const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
   const selectedDate = useSelector((state) => state.date.selected);
   const isAnimationPlaying = useSelector((state) => state.animation.isPlaying);
@@ -28,7 +26,7 @@ function KioskAnimations({ ui }) {
     checkAnimationSettings();
   }, [map, eicMeasurementComplete]);
 
-  const shouldPlayCheck = (eic == 'sa' || eic == 'da') && !isAnimationPlaying;
+  const shouldPlayCheck = (eic === 'sa' || eic === 'da') && !isAnimationPlaying;
 
   // if subdaily animation check that date moved back one day otherwise check if animation should play
   const checkAnimationSettings = () => {

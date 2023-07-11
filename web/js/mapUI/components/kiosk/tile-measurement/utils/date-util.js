@@ -97,9 +97,8 @@ export function formatReduxSubdailyDate(selectedDate) {
 }
 
 export function arrayOfDateObjectsToDateStrings(dates, period) {
-  if (period === 'daily'){
-    return dates.map(date => formatDailyDate(date));
-  } else {
-    return dates.map(date => formatSubdailyDate(date));
+  if (period === 'daily') {
+    return dates.map((date) => formatDailyDate(date));
   }
+  return dates.map((date) => formatSubdailyDate(date));
 }
