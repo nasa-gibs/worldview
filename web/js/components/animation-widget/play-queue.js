@@ -82,9 +82,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  /**
-   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
-   */
+// shouldn't need this
   determineFrameDates() {
     const { startDate, endDate } = this.props;
     let frameDate = startDate;
@@ -96,9 +94,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  /**
-   * Determines whether to start at current date or the selected start date
-   */
+  // shouldn't need this
   getStartDate() {
     const { startDate, endDate, snappedCurrentDate } = this.props;
     const nextDate = this.nextDate(snappedCurrentDate);
@@ -109,9 +105,7 @@ class PlayQueue extends React.Component {
     return toString(startDate);
   }
 
-  /**
-   * Gets the last date that should be added to the queue
-   */
+  // shouldn't need this
   getLastInQueue = function() {
     const { isLoopActive, startDate, endDate } = this.props;
     let currentDate = toDate(this.playingDate);
@@ -252,9 +246,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  /**
-   * Either do inital preload or queue next item
-   */
+  // DONE??
   checkQueue() {
     if (!this.bufferArray[0] && !this.inQueueObject[this.playingDate]) {
       const currentDate = toDate(this.playingDate);
@@ -277,30 +269,25 @@ class PlayQueue extends React.Component {
     this.inQueueObject = {};
   };
 
+  // DONE??
   nextDate(date) {
     const { interval, delta } = this.props;
-    // console.log('interval', interval)
-    // console.log('delta', delta)
-    // console.log('date', date)
     return util.dateAdd(date, interval, delta);
   }
 
+  // DONE??
   getNextBufferDate() {
     const { startDate, endDate } = this.props;
     const strDate = this.bufferArray[this.bufferArray.length - 1];
     const lastInBuffer = toDate(strDate);
     const nextDate = this.nextDate(lastInBuffer);
-    console.log('STARTDATE', startDate)
-    console.log('startDateTypeOf', typeof startDate)
     if (lastInBuffer >= endDate || nextDate > endDate) {
       return startDate;
     }
     return nextDate;
   }
 
-  /**
-   * Add next date to the queue
-   */
+  // DONE??
   addItemToQueue() {
     const { startDate, endDate } = this.props;
     const nextDate = this.getNextBufferDate();
@@ -433,6 +420,7 @@ class PlayQueue extends React.Component {
       this.checkQueue();
     };
     const animIntervalMS = speed === 0.5 ? 2000 : 1000 / speed;
+    console.log('animIntervalMS', animIntervalMS)
     this.animationInterval(animIntervalMS, player);
   }
 
