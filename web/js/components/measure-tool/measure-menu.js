@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form } from 'reactstrap';
 
 import { onToggle as onToggleAction } from '../../modules/modal/actions';
@@ -49,14 +49,10 @@ const MeasureMenu = function () {
   const onToggle = () => { dispatch(onToggleAction()); };
   const changeUnits = (units) => { dispatch(changeUnitsAction(units)); };
 
-  const {
-    isMobile, isTouchDevice, unitOfMeasure, measurementsInProj,
-  } = useSelector((state) => ({
-    isMobile: state.screenSize.isMobileDevice,
-    isTouchDevice: state.modal.customProps.touchDevice,
-    unitOfMeasure: state.measure.unitOfMeasure,
-    measurementsInProj: !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length,
-  }), shallowEqual);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
+  const isTouchDevice = useSelector((state) => state.modal.customProps.touchDevice);
+  const unitOfMeasure = useSelector((state) => state.measure.unitOfMeasure);
+  const measurementsInProj = useSelector((state) => !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length);
 
   const listSize = isTouchDevice ? 'large' : 'small';
   DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import { getActiveLayers } from '../../../modules/layers/selectors';
@@ -14,14 +14,10 @@ function AnimationTileCheck(props) {
     isPlaying,
   } = props;
 
-  const {
-    config, proj, zoom, activeLayers,
-  } = useSelector((state) => ({
-    config: state.config,
-    proj: state.proj.selected,
-    zoom: Math.floor(state.map.ui.selected.getView().getZoom()),
-    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
-  }));
+  const config = useSelector((state) => state.config, shallowEqual);
+  const proj = useSelector((state) => state.proj.selected, shallowEqual);
+  const zoom = useSelector((state) => Math.floor(state.map.ui.selected.getView().getZoom()));
+  const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
 
   const [frameDates, setFrameDates] = useState([]);
 

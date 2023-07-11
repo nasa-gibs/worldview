@@ -173,6 +173,7 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       state,
     );
     let hasDisabled = false;
+
     if (newActivePalettesObj[layerId] !== undefined) {
       newActivePalettesObj[layerId].maps.forEach((colorMap) => {
         if (colorMap.disabled && colorMap.disabled.length) {
@@ -180,6 +181,7 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
         }
       });
     }
+
     // sometimes an active palette will be related to layers that we already removed during the
     // tour process. need to check if the layer is active to prevent errors when dispatching
     const getLayerIndex = () => {
