@@ -382,7 +382,7 @@ class PaletteLegend extends React.Component {
               let legendColor = color;
               const customColor = palette.custom;
               if (palette.custom !== undefined) {
-                legendColor = palettes.custom[customColor].colors[0];
+                [legendColor] = palettes.custom[customColor].colors;
               }
 
               return (
