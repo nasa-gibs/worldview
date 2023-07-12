@@ -55,6 +55,7 @@ class PaletteLegend extends React.Component {
       getPalette, layer, compareState, toggleAllClassifications,
     } = this.props;
 
+    console.log('componentDidMount');
     if (layer.disabled === undefined) {
       // There is not a previous instance, so check the palette defaults
       const palette = getPalette();
