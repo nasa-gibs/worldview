@@ -54,8 +54,6 @@ class PaletteLegend extends React.Component {
     const {
       getPalette, layer, compareState, toggleAllClassifications,
     } = this.props;
-
-    console.log('componentDidMount');
     if (layer.disabled === undefined) {
       // There is not a previous instance, so check the palette defaults
       const palette = getPalette();
@@ -348,7 +346,7 @@ class PaletteLegend extends React.Component {
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
-      layer, parentLayer, compareState, getPalette,
+      layer, parentLayer, compareState, getPalette, palettes,
     } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
@@ -381,13 +379,19 @@ class PaletteLegend extends React.Component {
                 : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
+              let legendColor = color;
+              const customColor = palette.custom;
+              if (palette.custom !== undefined) {
+                legendColor = palettes.custom[customColor].colors[0];
+              }
+
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
-                    style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
-                    onMouseMove={this.onMove.bind(this, color)}
+                    style={isInvisible ? null : { backgroundColor: util.hexToRGBA(legendColor) }}
+                    onMouseMove={this.onMove.bind(this, legendColor)}
                     onMouseEnter={this.onMouseEnter.bind(this)}
                     onMouseLeave={this.hideValue.bind(this)}
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
@@ -476,6 +480,7 @@ PaletteLegend.propTypes = {
   compareState: PropTypes.string,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
+  palettes: PropTypes.object,
   parentLayer: PropTypes.object,
   width: PropTypes.number,
   toggleAllClassifications: PropTypes.func,
