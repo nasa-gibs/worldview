@@ -7,12 +7,13 @@ import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } 
 import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
-const Markers = (props) => {
+function Markers(props) {
   const {
     action,
     activeLayers,
     config,
     coordinates,
+    isKioskModeActive,
     isMobileDevice,
     selectedMap,
     selectedMapMarkers,
@@ -103,7 +104,7 @@ const Markers = (props) => {
     const latestCoordinates = coordinatesObject && [longitude, latitude];
     const zoom = selectedMap.getView().getZoom();
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-    animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom);
+    animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom, isKioskModeActive);
   };
 
   /**
@@ -151,12 +152,13 @@ const Markers = (props) => {
   }, [ui]);
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {
     locationSearch, proj, screenSize, map,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const { coordinates } = locationSearch;
   const { isMobileDevice } = screenSize;
   const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
@@ -165,6 +167,7 @@ const mapStateToProps = (state) => {
   return {
     activeLayers,
     coordinates,
+    isKioskModeActive,
     isMobileDevice,
     selectedMap,
     selectedMapMarkers,
@@ -192,6 +195,7 @@ Markers.propTypes = {
   action: PropTypes.object,
   config: PropTypes.object,
   coordinates: PropTypes.array,
+  isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
   proj: PropTypes.object,
   removeMarker: PropTypes.func,

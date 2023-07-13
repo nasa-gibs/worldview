@@ -9,16 +9,17 @@ import {
 import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload } from '../../../modules/date/actions';
+import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
 
-const AddLayer = (props) => {
+function AddLayer(props) {
   const {
     action,
     activeLayersState,
     activeString,
+    compareDate,
     compareMapUi,
     mode,
     preloadNextTiles,
-    selected,
     updateLayerVisibilities,
     ui,
   } = props;
@@ -31,8 +32,17 @@ const AddLayer = (props) => {
       }
       clearPreload();
       addLayer(def);
+    } else if (action.type === DISPLAY_STATIC_MAP) {
+      addStaticLayer();
     }
   }, [action]);
+
+  // add static layer for kiosk mode in case of gibs/dns failure
+  const addStaticLayer = async() => {
+    const { createLayer } = ui;
+    const newLayer = await createLayer();
+    ui.selected.getLayers().insertAt(0, newLayer);
+  };
 
   const granuleLayerAdd = (def) => {
     ui.processingPromise = new Promise((resolve) => {
@@ -47,7 +57,7 @@ const AddLayer = (props) => {
  */
   const addLayer = async function(def, layerDate, activeLayersParam) {
     const { createLayer } = ui;
-    const date = layerDate || selected;
+    const date = layerDate || compareDate;
     const activeLayers = activeLayersParam || activeLayersState;
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const index = lodashFindIndex(reverseLayers, { id: def.id });
@@ -72,19 +82,21 @@ const AddLayer = (props) => {
     updateLayerVisibilities();
     preloadNextTiles();
   };
+
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const { compare, date } = state;
   const { activeString, mode } = compare;
-  const { selected } = date;
+  const { selected, selectedB } = date;
   const activeLayersState = getActiveLayers(state);
+  const compareDate = compare.active && activeString === 'activeB' ? selectedB : selected;
   return {
     activeLayersState,
+    compareDate,
     activeString,
     mode,
-    selected,
   };
 };
 

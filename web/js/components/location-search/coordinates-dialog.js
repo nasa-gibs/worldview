@@ -66,7 +66,7 @@ class CoordinatesDialog extends Component {
       showTooltips: false,
     });
     removeMarker();
-  }
+  };
 
   // minimize dialog (destroy component)
   minimizeDialog = () => {
@@ -75,13 +75,13 @@ class CoordinatesDialog extends Component {
       showTooltips: false,
     });
     removeCoordinatesDialog();
-  }
+  };
 
   clearCopyToClipboardTooltip = () => {
     this.setState({
       isCopyToClipboardTooltipVisible: false,
     });
-  }
+  };
 
   // render minimize and remove dialog button controls
   renderDialogButtonControls = () => {
@@ -140,7 +140,7 @@ class CoordinatesDialog extends Component {
         </span>
       </>
     );
-  }
+  };
 
   // render copy to clipboard button
   renderCopyToClipboardButton = () => {
@@ -171,7 +171,7 @@ class CoordinatesDialog extends Component {
         <FontAwesomeIcon icon="copy" fixedWidth />
       </div>
     );
-  }
+  };
 
   render() {
     const {

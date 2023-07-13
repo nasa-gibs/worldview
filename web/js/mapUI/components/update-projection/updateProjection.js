@@ -27,7 +27,7 @@ import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/const
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette } from '../../../modules/palettes/actions';
 
-const UpdateProjection = (props) => {
+function UpdateProjection(props) {
   const {
     action,
     activeLayers,
@@ -38,6 +38,7 @@ const UpdateProjection = (props) => {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
+    isKioskModeActive,
     isMobile,
     layerState,
     map,
@@ -124,6 +125,15 @@ const UpdateProjection = (props) => {
     }
   };
 
+  /**
+ * Collect information required & initiate a "fly" map transition
+ * Used in Tour Stories.
+ * @method flyToNewExtent
+ * @static
+ *
+ * @param {object} extent
+ * @param {number} rotation
+ */
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -132,7 +142,7 @@ const UpdateProjection = (props) => {
     const zoom = ui.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation);
+    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
   };
 
   /**
@@ -270,7 +280,8 @@ const UpdateProjection = (props) => {
  * @returns {void}
  */
   function showMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'block';
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'block';
   }
 
   /**
@@ -284,7 +295,8 @@ const UpdateProjection = (props) => {
  * @returns {void}
  */
   function hideMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'none';
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'none';
   }
 
 
@@ -351,12 +363,13 @@ const UpdateProjection = (props) => {
   };
 
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const {
     proj, map, screenSize, layers, compare, date,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
   const isMobile = screenSize.isMobileDevice;
   const dateCompareState = { date, compare };
@@ -367,6 +380,7 @@ const mapStateToProps = (state) => {
     compare,
     compareMode,
     dateCompareState,
+    isKioskModeActive,
     isMobile,
     layerState,
     proj,
@@ -401,6 +415,7 @@ UpdateProjection.propTypes = {
   dateCompareState: PropTypes.object,
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerState: PropTypes.object,
   map: PropTypes.object,

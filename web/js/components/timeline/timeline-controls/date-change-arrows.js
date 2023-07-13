@@ -27,11 +27,6 @@ class DateChangeArrows extends PureComponent {
     };
   }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-    document.addEventListener('keyup', this.handleKeyUp);
-  }
-
   componentDidUpdate (prevProps) {
     const { tilesPreloaded, arrowDown } = this.props;
     const notAnimating = !intervals.left && !intervals.right;
@@ -45,34 +40,12 @@ class DateChangeArrows extends PureComponent {
   componentWillUnmount() {
     clearInterval(intervals.left);
     clearInterval(intervals.right);
-    document.removeEventListener('keydown', this.handleKeyDown);
-    document.removeEventListener('keyup', this.handleKeyUp);
   }
 
   clickAndHold = (direction) => {
     const { setArrowDown } = this.props;
     setArrowDown(direction);
     arrowDownCheckTimer = null;
-  }
-
-  handleKeyDown = (e) => {
-    const { arrowDown } = this.props;
-    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
-    if (e.target.tagName === 'INPUT' || e.target.className === 'rc-slider-handle' || e.ctrlKey || e.metaKey) {
-      return;
-    }
-    if (direction) {
-      e.preventDefault();
-      if (!arrowDown) this.onArrowDown(direction);
-    }
-  }
-
-  handleKeyUp = (e) => {
-    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
-    if (direction) {
-      e.preventDefault();
-      this.onArrowUp(direction);
-    }
   };
 
   onArrowDown = (direction) => {
@@ -80,7 +53,7 @@ class DateChangeArrows extends PureComponent {
     arrowDownCheckTimer = setTimeout(() => {
       this.clickAndHold(direction);
     }, CLICK_HOLD_DELAY);
-  }
+  };
 
   onArrowUp = (direction) => {
     const { setArrowUp, arrowDown } = this.props;
@@ -90,7 +63,7 @@ class DateChangeArrows extends PureComponent {
     clearInterval(intervals[direction]);
     intervals[direction] = 0;
     if (arrowDown) setArrowUp();
-  }
+  };
 
   render() {
     const {

@@ -2,10 +2,7 @@
   position: absolute;
   margin: 0;
   padding: 0;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 0;
 }
 
@@ -263,10 +260,21 @@
   background-position: -14px;
 }
 
-.distraction-free-active .wv-map-zoom,
+.distraction-free-active .wv-map-zoom {
+  display: none;
+}
+
 .distraction-free-active .wv-map-scale-imperial,
 .distraction-free-active .wv-map-scale-metric {
   display: none;
+}
+
+.distraction-free-active .wv-map-scale-imperial {
+  bottom: 28px;
+}
+
+.distraction-free-active .wv-map-scale-metric {
+  bottom: 45px;
 }
 
 .dateline-text {

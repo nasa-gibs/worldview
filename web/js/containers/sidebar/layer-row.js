@@ -196,11 +196,11 @@ function LayerRow (props) {
           icon="ellipsis-v"
         />
       </DropdownToggle>
-      <DropdownMenu positionFixed>
+      <DropdownMenu container="body" className="layer-options-dropdown-menu">
         <DropdownItem
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
-          className="button wv-layers-info"
+          className="button wv-layers-info layer-options-dropdown-item"
           onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
           {layerInfoBtnTitle}
@@ -208,7 +208,7 @@ function LayerRow (props) {
         <DropdownItem
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
-          className="button wv-layers-options"
+          className="button wv-layers-options layer-options-dropdown-item"
           onClick={() => onOptionsClick(layer, title)}
         >
           {layerOptionsBtnTitle}
@@ -216,6 +216,7 @@ function LayerRow (props) {
         <DropdownItem
           id={removeLayerBtnId}
           onClick={() => onRemoveClick(layer.id)}
+          className="button wv-layers-options layer-options-dropdown-item"
         >
           {removeLayerBtnTitle}
         </DropdownItem>
@@ -261,7 +262,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
+        <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" />
       </a>
     </>
   );
@@ -338,10 +339,11 @@ function LayerRow (props) {
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible
-      ? ['far', 'eye-slash']
-      : ['far', 'eye'];
+      ? ['fas', 'eye-slash']
+      : ['fas', 'eye'];
 
-  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge badge-pill badge-secondary' : 'collection-title badge badge-pill badge-light';
+  const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
+
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (

@@ -47,8 +47,13 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   };
   textEl.appendChild(content);
   textEl.appendChild(magnitudeContent);
-  textEl.className = 'track-marker-date';
-  if (!isSelected) {
+  if (isSelected) {
+    textEl.className = 'track-marker-date track-marker-date-selected';
+    setTimeout(() => {
+      textEl.className = 'track-marker-date';
+    }, 5000);
+  } else {
+    textEl.className = 'track-marker-date';
     textEl.style.top = hasMagnitude ? '-40px' : '-28px';
   }
   circleEl.className = `track-marker track-marker-${date}`;
@@ -122,6 +127,7 @@ export const getTrackLines = function(map, trackCoords) {
     map.getPixelFromCoordinate(end),
     map.getPixelFromCoordinate(start),
   ]);
+  if (!pixelCoords.length) return;
   const first = pixelCoords[0][0];
   const last = pixelCoords[pixelCoords.length - 1][0];
   const topLeft = [first[0], first[1]];

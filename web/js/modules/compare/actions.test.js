@@ -14,7 +14,7 @@ import { INIT_SECOND_DATE, CLEAR_PRELOAD } from '../date/constants';
 const middlewares = [thunk];
 const state = fixtures.getState();
 
-test('toggleCompareOnOff dispatches two actions', () => {
+test('toggleCompareOnOff dispatches two actions [compare-action-toggle-return-actions]', () => {
   const mockStore = configureMockStore(middlewares);
   const store = mockStore(state);
   store.dispatch(toggleCompareOnOff());
@@ -28,7 +28,7 @@ test('toggleCompareOnOff dispatches two actions', () => {
 });
 
 test(
-  `toggleActiveCompareState returns ${CONSTANTS.CHANGE_STATE} action type`,
+  `toggleActiveCompareState returns ${CONSTANTS.CHANGE_STATE} action type [compare-action-toggle]`,
   () => {
     const mockStore = configureMockStore(middlewares);
     const store = mockStore(state);
@@ -42,7 +42,7 @@ test(
   },
 );
 test(
-  `setValue returns ${CONSTANTS.CHANGE_VALUE} action type and value`,
+  `setValue returns ${CONSTANTS.CHANGE_VALUE} action type and value [compare-action-set-value]`,
   () => {
     const expectedAction = {
       type: CONSTANTS.CHANGE_VALUE,
@@ -53,7 +53,7 @@ test(
 );
 
 test(
-  `changeMode returns ${CONSTANTS.CHANGE_MODE} action type and mode value`,
+  `changeMode returns ${CONSTANTS.CHANGE_MODE} action type and mode value [compare-action-change-mode]`,
   () => {
     const expectedAction = {
       type: CONSTANTS.CHANGE_MODE,

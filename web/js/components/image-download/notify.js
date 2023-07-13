@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ModalFooter } from 'reactstrap';
 import Button from '../util/button';
 
-const Notify = (props) => {
+function Notify(props) {
   const { bodyText, cancel, accept } = props;
   return (
     <>
@@ -16,7 +16,7 @@ const Notify = (props) => {
       </ModalFooter>
     </>
   );
-};
+}
 
 Notify.propTypes = {
   accept: PropTypes.func,

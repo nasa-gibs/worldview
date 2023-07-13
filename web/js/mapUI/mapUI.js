@@ -16,6 +16,9 @@ import UpdateOpacity from './components/update-opacity/updateOpacity';
 import UpdateProjection from './components/update-projection/updateProjection';
 import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
+import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
+import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
+import TileImagePixelTest from './components/kiosk/tile-measurement/tile-image-test-mode/tile-image-test-mode';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -44,10 +47,11 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
+import { DISPLAY_STATIC_MAP } from '../modules/ui/constants';
 
 const { events } = util;
 
-const MapUI = (props) => {
+function MapUI(props) {
   const {
     activeLayers,
     activeLayersState,
@@ -59,6 +63,7 @@ const MapUI = (props) => {
     config,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     layerQueue,
     lastPreloadDate,
@@ -91,12 +96,16 @@ const MapUI = (props) => {
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
 
+  // eslint-disable-next-line no-unused-vars
+  const [tileImageTestMode, setTileImageTestMode] = useState(false);
+
   const subscribeToStore = function(action) {
     switch (action.type) {
       case CHANGE_PROJECTION: {
         return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
       case layerConstants.ADD_LAYER:
+      case DISPLAY_STATIC_MAP:
         return setAddLayerAction(action);
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
@@ -312,8 +321,10 @@ const MapUI = (props) => {
   async function preloadNextTiles(date, compareString) {
     const map = { ui };
     const state = {
-      proj, embed, layers, palettes, vectorStyles, compare, map,
+      proj, embed, layers, palettes, vectorStyles, compare, map, ui,
     };
+    const { dislayStaticMap } = ui;
+    if (dislayStaticMap) return;
     const useActiveString = compareString || activeString;
     const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(dateCompareState));
     const nextDate = getNextDateTime(dateCompareState, 1, useDate);
@@ -359,7 +370,6 @@ const MapUI = (props) => {
       />
       <RemoveLayer
         action={removeLayersAction}
-        compareMapUi={compareMapUi}
         updateLayerVisibilities={updateLayerVisibilities}
         findLayer={findLayer}
         ui={ui}
@@ -390,13 +400,21 @@ const MapUI = (props) => {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
+      { isEICModeActive
+      && (
+      <>
+        <KioskAnimations ui={ui} />
+        <TileMeasurement ui={ui} />
+      </>
+      )}
+      {tileImageTestMode && <TileImagePixelTest />}
     </>
   );
-};
+}
 
 const mapStateToProps = (state) => {
   const {
-    compare, config, date, embed, layers, map, palettes, proj, vectorStyles,
+    compare, config, date, embed, layers, map, palettes, proj, vectorStyles, ui,
   } = state;
   const {
     arrowDown, lastArrowDirection, lastPreloadDate, preloaded, selected, selectedB,
@@ -417,6 +435,7 @@ const mapStateToProps = (state) => {
   const useDate = selectedDate || (preloaded ? lastPreloadDate : getSelectedDate(state));
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
+  const isEICModeActive = ui.eic !== '';
 
   return {
     activeLayers,
@@ -426,6 +445,7 @@ const mapStateToProps = (state) => {
     compare,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     lastPreloadDate,
     layers,
@@ -470,6 +490,7 @@ MapUI.propTypes = {
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
+  isEICModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,

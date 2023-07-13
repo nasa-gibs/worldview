@@ -2,8 +2,8 @@
 
 The following scripts are available for working with Docker images and containers.
 
-- `npm run docker:image` - Create the Docker image. Also run this script to update the image when the Dockerfile changes.
-- `npm run docker:reimage` - Create the Docker image from scratch.
+- `npm run docker:build` - Create the Docker image. Also run this script to update the image when the Dockerfile changes.
+- `npm run docker:rebuild` - Create the Docker image from scratch.
 - `npm run docker:start` - Start the Docker container. Once the application is built, it can be found at http://localhost:3128
 - `npm run docker:stop` - Stop the Docker container
 - `npm run docker:restart` - Restart the Docker container

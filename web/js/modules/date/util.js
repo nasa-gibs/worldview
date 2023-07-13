@@ -84,6 +84,7 @@ export function tryCatchDate(str, initialState) {
  * @returns {String | undefined} serialized time string OR undefined
  */
 export function serializeDateWrapper(currentItemState, state, prev) {
+  if (state.animation.isPlaying) return;
   const prevParams = Object.keys(prev).length > 0;
   const initialDate = get(state, 'config.initialDate');
   const initialDateString = util.toISOStringSeconds(initialDate);
@@ -363,20 +364,19 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
 
     case 'yearly':
-      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
-      dateString = moment(parsedDate).format('YYYY');
+      if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear());
+      dateString = moment.utc(parsedDate).format('YYYY');
       break;
 
     case 'monthly':
-      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
-      dateString = moment(parsedDate).format('YYYY MMM').toUpperCase();
+      if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth());
+      dateString = moment.utc(parsedDate).format('YYYY MMM').toUpperCase();
       break;
 
     default:
       dateString = formatDisplayDate(parsedDate);
       break;
   }
-
   return (<MonospaceDate date={dateString} />);
 };
 

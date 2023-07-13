@@ -468,7 +468,7 @@ class TimelineAxis extends Component {
       hitRightBound: false,
       updatedTimeScale: true,
     }, updatePositioning(updatePositioningArguments, isYearOrMonth ? hoverTime : hoverTimeString));
-  }
+  };
 
   /**
   * @desc update dates in range based on dragging axis
@@ -519,7 +519,7 @@ class TimelineAxis extends Component {
       timelineEndDateLimit,
     );
     return timeRangeArray;
-  }
+  };
 
   /**
   * @desc update dates in range based on dragging axis
@@ -622,7 +622,7 @@ class TimelineAxis extends Component {
       newDraggerPosition,
       newDraggerPositionB,
     };
-  }
+  };
 
   /**
   * @desc helper function used in updateTimeRangeFromDrag
@@ -660,7 +660,7 @@ class TimelineAxis extends Component {
       newDraggerPosition: updatedDraggerPosition,
       isVisible: false,
     };
-  }
+  };
 
 
   /**
@@ -696,7 +696,7 @@ class TimelineAxis extends Component {
         }
       }
     }
-  }
+  };
 
   /**
    * @desc check if selectedDate will be within acceptable visible axis width
@@ -751,7 +751,7 @@ class TimelineAxis extends Component {
       withinRange: newDraggerWithinRangeCheck,
       newDateInThePast,
     };
-  }
+  };
 
   /**
   * @desc helper used in componentDidUpdate
@@ -766,7 +766,7 @@ class TimelineAxis extends Component {
       ? 0.25
       : 0.75;
     this.updateScale(date, timeScale, leftOffsetFixedCoefficient);
-  }
+  };
 
   // #### Drag/mouse handlers ####
   /**
@@ -786,7 +786,7 @@ class TimelineAxis extends Component {
         showHoverOn();
       }
     }
-  }
+  };
 
   /**
   * @desc determine wheel type function of scroll or pan
@@ -813,7 +813,7 @@ class TimelineAxis extends Component {
     } else if (xTypeChangePan) {
       this.handleWheelPan(e);
     }
-  }
+  };
 
   /**
   * @desc changes timeScale with wheel pan
@@ -911,7 +911,7 @@ class TimelineAxis extends Component {
     this.setState({
       clientXOnDrag: clientX,
     });
-  }
+  };
 
   /**
   * @desc move dragger on axis click - calculated based on hover
@@ -952,7 +952,7 @@ class TimelineAxis extends Component {
       }
       updateDraggerDatePosition(hoverTime, draggerSelected, null, true, otherDraggerVisible, false);
     }
-  }
+  };
 
   /**
   * @desc move dragger on axis click - calculated based on pageX vs. hover used for mouse
@@ -1029,7 +1029,7 @@ class TimelineAxis extends Component {
       }
       updateDraggerDatePosition(newDraggerTime, draggerSelected, null, true, otherDraggerVisible, false);
     }
-  }
+  };
 
   /**
   * @desc handle start drag of axis sets dragging state
@@ -1043,7 +1043,7 @@ class TimelineAxis extends Component {
     if (!isTimelineDragging) {
       updateTimelineMoveAndDrag(true);
     }
-  }
+  };
 
   /**
   * @desc drag axis - will update date range if dragged into past/future past dragSentinelChangeNumber
@@ -1381,7 +1381,7 @@ class TimelineAxis extends Component {
       leftOffset,
       width,
     };
-  }
+  };
 
   /**
   * @desc get DOM coverage line
@@ -1442,19 +1442,18 @@ class TimelineAxis extends Component {
     const axisWidthStr = `${axisWidth}px`;
 
     return (
-      <>
-        <div
-          className="timeline-axis-container"
-          style={{ width: axisWidthStr }}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.setLineTime}
-          onWheel={this.handleWheelType}
-          onMouseOver={this.showHoverOn}
-          onMouseLeave={showHoverOff}
-          onTouchStart={this.handleMouseDown}
-          onTouchEnd={this.setLineTimeTouch}
-        >
-          {currentTimeRange
+      <div
+        className="timeline-axis-container"
+        style={{ width: axisWidthStr }}
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.setLineTime}
+        onWheel={this.handleWheelType}
+        onMouseOver={this.showHoverOn}
+        onMouseLeave={showHoverOff}
+        onTouchStart={this.handleMouseDown}
+        onTouchEnd={this.setLineTimeTouch}
+      >
+        {currentTimeRange
             && (
               <svg
                 className="timeline-axis-svg"
@@ -1531,8 +1530,7 @@ class TimelineAxis extends Component {
                 </Draggable>
               </svg>
             )}
-        </div>
-      </>
+      </div>
     );
   }
 }

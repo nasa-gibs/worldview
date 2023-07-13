@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import { Range as RangeInput } from 'rc-slider';
 import Checkbox from '../../util/checkbox';
 import {
   checkTemperatureUnitConversion, convertPaletteValue,
@@ -50,8 +49,8 @@ class PaletteThreshold extends React.Component {
       layerId, index, groupName, palette, legend,
     } = this.props;
     const { start, end, squashed } = this.state;
-    const newStart = Math.ceil(Number(thresholdArray[0]));
-    const newEnd = Math.ceil(Number(thresholdArray[1]));
+    const newStart = parseInt(thresholdArray[0], 10);
+    const newEnd = parseInt(thresholdArray[1], 10);
     const startRef = legend.refs[newStart];
     const endRef = legend.refs[newEnd];
 
@@ -87,6 +86,18 @@ class PaletteThreshold extends React.Component {
     );
   }
 
+  updateStartThreshold(value) {
+    const { end } = this.state;
+    const clampedValue = Math.min(value, end - 1);
+    this.updateThreshold([clampedValue, end]);
+  }
+
+  updateEndThreshold(value) {
+    const { start } = this.state;
+    const clampedValue = Math.max(value, start + 1);
+    this.updateThreshold([start, clampedValue]);
+  }
+
   render() {
     const {
       start, end, squashed,
@@ -113,6 +124,9 @@ class PaletteThreshold extends React.Component {
       endLabel += ` ${units}`;
     }
 
+    const startPercent = ((start - min) / (max - min)) * 100;
+    const endPercent = ((end - min) / (max - min)) * 100;
+
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>
@@ -131,13 +145,31 @@ class PaletteThreshold extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <RangeInput
-            defaultValue={[start, end]}
-            min={min}
-            max={max}
-            onChange={this.updateThreshold}
-          />
-          <div className="wv-label">
+          <div className="flex align-items-center">
+            <span className="me-2">MIN:</span>
+            <input
+              type="range"
+              className="form-range start-range palette-threshold-range"
+              value={start}
+              min={min}
+              max={max}
+              onChange={(e) => this.updateStartThreshold(parseInt(e.target.value, 10))}
+              style={{ '--value-percent': `${startPercent}%` }}
+            />
+          </div>
+          <div className="flex align-items-center mt-2">
+            <span className="me-2">MAX:</span>
+            <input
+              type="range"
+              className="form-range end-range palette-threshold-range"
+              value={end}
+              min={min}
+              max={max}
+              onChange={(e) => this.updateEndThreshold(parseInt(e.target.value, 10))}
+              style={{ '--value-percent': `${endPercent}%` }}
+            />
+          </div>
+          <div className="wv-label mt-3">
             <span className="wv-label-range-min wv-label-range">
               {startLabel}
             </span>

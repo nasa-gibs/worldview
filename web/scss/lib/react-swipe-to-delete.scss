@@ -1,0 +1,84 @@
+/*!
+ * React-swipe-to-delete-component v1.0.8
+ * A simple React component implement 'swipe to delete' UI-pattern.
+ * https://github.com/gaer87/react-swipe-to-delete-component
+
+ * Copyright 2022, Fedotov Alexander
+ * Released under the MIT license.
+ */
+.swipe-to-delete {
+  position: relative !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.swipe-to-delete .js-delete {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  z-index: 1 !important;
+}
+
+/* stylelint-disable property-no-vendor-prefix */
+.swipe-to-delete .js-content {
+  position: relative !important;
+  z-index: 2 !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+/* stylelint-enable property-no-vendor-prefix */
+
+.swipe-to-delete .js-content:first-child {
+  position: relative !important;
+}
+
+.swipe-to-delete .js-transition-delete-right,
+.swipe-to-delete .js-transition-delete-left,
+.swipe-to-delete .js-transition-cancel {
+  transition-property: left !important;
+  transition-duration: 0.5s;
+}
+
+.swipe-to-delete .js-transition-delete-right {
+  left: 100% !important;
+}
+
+.swipe-to-delete .js-transition-delete-left {
+  left: -100% !important;
+}
+
+.swipe-to-delete .js-transition-cancel {
+  left: 0 !important;
+}
+
+.swipe-to-delete .js-delete {
+  background: #ff5f58;
+}
+
+.swipe-to-delete .js-delete svg {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  margin-top: -13px;
+  width: 25px;
+  height: 25px;
+}
+
+.swipe-to-delete .js-delete svg:first-child {
+  left: auto;
+  right: 17px;
+}
+
+.swipe-to-delete .js-content :first-child {
+  cursor: pointer;
+}
+
+.swipe-to-delete .js-transition-delete-right,
+.swipe-to-delete .js-transition-delete-left,
+.swipe-to-delete .js-transition-cancel {
+  transition-duration: 0.7s;
+  transition-timing-function: ease-in-out;
+}

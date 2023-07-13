@@ -375,9 +375,7 @@ class Sidebar extends React.Component {
                   ref={(el) => { this.footerElement = el; }}
                   tabTypes={tabTypes}
                   activeTab={activeTab}
-                  chartingModeAccessible={chartingModeAccessible}
                 />
-
               </TabContent>
             </>
             )}

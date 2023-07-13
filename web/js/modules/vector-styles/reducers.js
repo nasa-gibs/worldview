@@ -1,4 +1,4 @@
-import { assign as lodashAssign, get as lodashGet } from 'lodash';
+import { assign as lodashAssign, get as lodashGet, cloneDeep as lodashCloneDeep } from 'lodash';
 import {
   CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
@@ -14,9 +14,9 @@ export const defaultVectorStyleState = {
 };
 export function getInitialVectorStyleState(config) {
   const custom = lodashGet(config, 'vectorStyles') || {};
-  return lodashAssign({}, defaultVectorStyleState, {
-    custom,
-  });
+  const customDefault = lodashCloneDeep(custom);
+
+  return lodashAssign({}, defaultVectorStyleState, { custom, customDefault });
 }
 
 export function vectorStyleReducer(state = defaultVectorStyleState, action) {

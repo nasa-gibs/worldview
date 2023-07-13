@@ -86,11 +86,10 @@ class GranuleDateList extends PureComponent {
     this.setState({
       lastMovedItem: result.draggableId, // granule date
     });
-  }
+  };
 
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
-    console.log('uhh');
     e.preventDefault();
     const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
@@ -101,7 +100,7 @@ class GranuleDateList extends PureComponent {
     this.setState({
       lastMovedItem: granuleDate,
     });
-  }
+  };
 
   // move granule item to top of list
   moveDown = (e, sourceIndex, granuleDate) => {
@@ -115,7 +114,7 @@ class GranuleDateList extends PureComponent {
     this.setState({
       lastMovedItem: granuleDate,
     });
-  }
+  };
 
   // reorder granule items based on source and target index
   reorderItems = (sourceIndex, destinationIndex) => {
@@ -126,7 +125,7 @@ class GranuleDateList extends PureComponent {
       destinationIndex,
     );
     return reorderedItems;
-  }
+  };
 
   // reset granule order
   onClickReset = (e) => {
@@ -136,14 +135,14 @@ class GranuleDateList extends PureComponent {
     this.setState({
       lastMovedItem: null,
     });
-  }
+  };
 
   // set local granule item state
   setItems = (items) => {
     this.setState({
       items,
     });
-  }
+  };
 
   // handle mouse over item
   handleMouseOverItem = (granuleDate) => {
@@ -152,7 +151,7 @@ class GranuleDateList extends PureComponent {
     this.setState({
       hoveredItem: granuleDate,
     });
-  }
+  };
 
   // handle mouse leave item
   handleMouseLeaveItem = () => {
@@ -161,7 +160,7 @@ class GranuleDateList extends PureComponent {
     this.setState({
       hoveredItem: null,
     });
-  }
+  };
 
   // determine if grnaule dates are in order - used for RESET button toggle
   checkGranuleDateSorting = (granuleDates) => {
@@ -178,7 +177,7 @@ class GranuleDateList extends PureComponent {
         sorted: isSorted,
       });
     }
-  }
+  };
 
   renderDraggableGranule = (date, index) => {
     const {
@@ -238,7 +237,7 @@ class GranuleDateList extends PureComponent {
         )}
       </Draggable>
     );
-  }
+  };
 
   render() {
     const { items, sorted } = this.state;
@@ -289,12 +288,10 @@ class GranuleDateList extends PureComponent {
 
           )
           : (
-            <>
-              <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
-                <p className="granule-date-item-no-granules-available">No granules available.</p>
-                <br />
-              </div>
-            </>
+            <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
+              <p className="granule-date-item-no-granules-available">No granules available.</p>
+              <br />
+            </div>
           )}
       </div>
     );

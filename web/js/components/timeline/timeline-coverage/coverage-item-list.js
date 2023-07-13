@@ -46,7 +46,7 @@ class CoverageItemList extends Component {
 
   layerHoverCallback = (id, active) => {
     this.setState({ hoveredLayer: active ? id : undefined });
-  }
+  };
 
   /**
   * @desc get layer header with title, subtitle, and full date range
@@ -72,42 +72,40 @@ class CoverageItemList extends Component {
     );
 
     return (
-      <>
-        <div className="layer-coverage-item-header">
-          <div
-            className="layer-coverage-item-title"
+      <div className="layer-coverage-item-header">
+        <div
+          className="layer-coverage-item-title"
+          style={{
+            color: titleColor,
+          }}
+        >
+          {title}
+          {' '}
+          <span
+            className="layer-coverage-item-subtitle"
             style={{
-              color: titleColor,
-            }}
-          >
-            {title}
-            {' '}
-            <span
-              className="layer-coverage-item-subtitle"
-              style={{
-                color: textColor,
-              }}
-            >
-              {subtitle}
-            </span>
-          </div>
-          <div
-            className="layer-coverage-item-date-range"
-            style={{
-              background: layerItemBackground,
               color: textColor,
-              float: 'left',
-              width: inactiveLayers || formattedEndDate ? '205px' : '175px',
             }}
           >
-            <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />
-            {' -  '}
-            <MonospaceDate style={getStyle(formattedEndDate)} date={formattedEndDate || ' Present '} />
-          </div>
+            {subtitle}
+          </span>
         </div>
-      </>
+        <div
+          className="layer-coverage-item-date-range"
+          style={{
+            background: layerItemBackground,
+            color: textColor,
+            float: 'left',
+            width: inactiveLayers || formattedEndDate ? '205px' : '175px',
+          }}
+        >
+          <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />
+          {' -  '}
+          <MonospaceDate style={getStyle(formattedEndDate)} date={formattedEndDate || ' Present '} />
+        </div>
+      </div>
     );
-  }
+  };
 
   /**
   * @desc get formatted time period name
@@ -120,7 +118,7 @@ class CoverageItemList extends Component {
       ? 'month'
       : period === 'yearly'
         ? 'year'
-        : 'minute')
+        : 'minute');
 
   /**
   * @desc get range date end with added interval based on period
@@ -176,7 +174,7 @@ class CoverageItemList extends Component {
       }
     }
     return new Date(rangeDateEnd).toISOString();
-  }
+  };
 
   /**
   * @desc get endDateLimit based on axis and appNow
@@ -210,7 +208,7 @@ class CoverageItemList extends Component {
     }
 
     return endDateLimit;
-  }
+  };
 
   /**
   * @desc get array of dates for layer
@@ -277,7 +275,7 @@ class CoverageItemList extends Component {
       }
     }
     return dateIntervalStartDates;
-  }
+  };
 
   /**
   * @desc get conditional styling for layer container and coverage line
@@ -316,7 +314,7 @@ class CoverageItemList extends Component {
       layerItemBackground,
       layerItemOutline,
     };
-  }
+  };
 
   /**
   * @desc get empty layers message DOM element
@@ -329,7 +327,7 @@ class CoverageItemList extends Component {
         <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
       </div>
     </div>
-  )
+  );
 
   render() {
     const {

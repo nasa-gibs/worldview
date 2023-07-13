@@ -38,9 +38,11 @@ class VectorStyleSelect extends React.Component {
     const description = styleLayerObject['source-description'] || styleLayerObject.id;
     const isConditionalStyling = styleLayerObject.paint ? isConditional(styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']) : false;
 
-    return isConditionalStyling ? this.renderLegendMultiItem(styleLayerObject,
+    return isConditionalStyling ? this.renderLegendMultiItem(
+      styleLayerObject,
       styleLayerObject.id,
-      description)
+      description,
+    )
       : this.renderSelectorItemSingle(
         styleLayerObject,
         styleLayerObject.id,

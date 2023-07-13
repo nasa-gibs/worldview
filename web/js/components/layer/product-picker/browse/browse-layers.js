@@ -90,7 +90,7 @@ function BrowseLayers (props) {
       : (
         <div className="search-layers-container browse">
           <div className="layer-list-container browse">
-            <div className="product-outter-list-case">
+            <div className="product-outer-list-case">
               <BrowseLayerList />
             </div>
           </div>
@@ -204,13 +204,13 @@ function BrowseLayers (props) {
     <>
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
-        isCategoryDisplay
-          ? (
-            <div className="product-outter-list-case">
-              <CategoryGrid width={width} />
-            </div>
-          ) : renderContent()
-        }
+      isCategoryDisplay
+        ? (
+          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
+            <CategoryGrid width={width} />
+          </div>
+        ) : renderContent()
+      }
     </>
   );
 }

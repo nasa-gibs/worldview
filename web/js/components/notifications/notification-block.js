@@ -10,7 +10,7 @@ const listIcons = {
   outage: 'exclamation-circle',
 };
 
-const NotificationBlock = (props) => {
+function NotificationBlock(props) {
   const { arr, type, numberNotSeen } = props;
   return (
     <ul>
@@ -35,7 +35,7 @@ const NotificationBlock = (props) => {
       })}
     </ul>
   );
-};
+}
 
 export default NotificationBlock;
 

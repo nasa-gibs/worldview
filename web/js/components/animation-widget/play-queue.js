@@ -83,7 +83,7 @@ class PlayQueue extends React.Component {
   }
 
   /**
-   * Create an array of each date to be played
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
    */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
@@ -159,7 +159,7 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length
+  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
 
   calcBufferSize() {
     const { numberOfFrames, speed } = this.props;
@@ -232,7 +232,7 @@ class PlayQueue extends React.Component {
     const {
       isLoopActive, startDate, togglePlaying, speed,
     } = this.props;
-    const loopDelay = speed === 0.5 ? 2000 : 1000 / speed;
+    const loopDelay = speed === 0.5 ? 2000 : 1500;
 
     if (isLoopActive) {
       this.playingDate = toString(startDate);
@@ -269,7 +269,7 @@ class PlayQueue extends React.Component {
     this.bufferObject = {};
     this.bufferArray = [];
     this.inQueueObject = {};
-  }
+  };
 
   nextDate(date) {
     const { interval, delta } = this.props;
@@ -435,7 +435,7 @@ class PlayQueue extends React.Component {
 
   render() {
     const { isAnimating } = this.state;
-    const { onClose, isMobile } = this.props;
+    const { onClose, isMobile, isKioskModeActive } = this.props;
     const loadedItems = util.objectLength(this.bufferObject);
     const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
     const mobileProgressStyle = {
@@ -459,6 +459,7 @@ class PlayQueue extends React.Component {
           onClose={onClose}
           loadedItems={loadedItems}
           totalItems={this.minBufferLength || 100}
+          isKioskModeActive={isKioskModeActive}
         />
       );
   }
@@ -480,6 +481,7 @@ PlayQueue.propTypes = {
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
   snappedCurrentDate: PropTypes.object,
+  isKioskModeActive: PropTypes.bool,
 };
 
 export default PlayQueue;

@@ -29,18 +29,16 @@ import './font-awesome-library';
 // actions
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
-import AnimationWidget from './containers/animation-widget';
+import AnimationWidget from './containers/animation-widget/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
 
 // Dependency CSS
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../../node_modules/ol/ol.css';
-import '../../node_modules/rc-slider/dist/rc-slider.min.css';
-import '../../node_modules/simplebar/dist/simplebar.min.css';
-import '../../node_modules/react-swipe-to-delete-component/dist/swipe-to-delete.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'ol/ol.css';
+import 'simplebar/dist/simplebar.min.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import 'react-resizable/css/styles.css';
 // App CSS
@@ -74,7 +72,7 @@ class App extends React.Component {
   setVhCSSProperty = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
+  };
 
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
@@ -86,7 +84,7 @@ class App extends React.Component {
   getScreenInfo = () => {
     const { setScreenInfoAction } = this.props;
     setScreenInfoAction();
-  }
+  };
 
   onload() {
     const self = this;
@@ -145,9 +143,9 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
+          {isTourActive ? <Tour /> : null}
         </div>
         <Sidebar />
-        {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="eventsHolder" />

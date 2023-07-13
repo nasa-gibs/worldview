@@ -171,7 +171,7 @@ const mockLayerDefsSubdaily = [
   },
 ];
 
-test('bboxWMS13', () => {
+test('bboxWMS13 [imagedownload-bbox]', () => {
   const coords = [[11, 22], [33, 44]];
   const bboxGeo = bboxWMS13(coords, 'EPSG:4326');
   expect(bboxGeo).toBe('22,11,44,33');
@@ -179,27 +179,27 @@ test('bboxWMS13', () => {
   expect(bboxArctic).toBe('11,22,33,44');
 });
 
-test('Default km resolution Calculation', () => {
+test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
   const zoom = 5;
   const isGeo = true;
   expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
 });
 
-test('Date time snapping when no subdaily layers present', () => {
+test('Date time snapping when no subdaily layers present [imagedownload-time-snap-no-subdaily]', () => {
   const mockDate = new Date('2019-09-15T18:32:40Z');
   const expectedTime = new Date('2019-09-15T00:00:00Z');
   const snappedDateTime = getLatestIntervalTime(mockLayerDefs, mockDate);
   expect(snappedDateTime.getTime()).toBe(expectedTime.getTime());
 });
 
-test('Date time snapping with subdaily layers present', () => {
+test('Date time snapping with subdaily layers present [imagedownload-time-snap-subdaily]', () => {
   const mockDate = new Date('2019-09-15T18:32:40Z');
   const expectedTime = new Date('2019-09-15T18:30:00Z');
   const snappedDateTime = getLatestIntervalTime(mockLayerDefsSubdaily, mockDate);
   expect(snappedDateTime.getTime()).toBe(expectedTime.getTime());
 });
 
-test('Download URL', () => {
+test('Download URL [imagedownload-url]', () => {
   const url = 'http://localhost:3002/api/v1/snapshot';
   const proj = {
     id: 'geographic',

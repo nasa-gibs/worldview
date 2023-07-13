@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Autocomplete from 'react-autocomplete';
-import { Button, InputGroupAddon, UncontrolledTooltip } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Autocomplete from '../../util/reactAutocomplete';
 
 class SearchBox extends Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class SearchBox extends Component {
         onSelect(firstSuggestion.text, firstSuggestion);
       }
     }
-  }
+  };
 
   // handle key press to use ENTER key to select
   handleKeyPress = (e) => {
@@ -68,14 +68,14 @@ class SearchBox extends Component {
         onCoordinateInputSelect();
       }
     }
-  }
+  };
 
   // render search result menu item container
   renderMenu = (children) => (
     <div className="location-search-results-menu">
       {children}
     </div>
-  )
+  );
 
   // render individual menu items with conditional styling
   renderItem = (item, isHighlighted) => {
@@ -94,7 +94,7 @@ class SearchBox extends Component {
         {item.text}
       </div>
     );
-  }
+  };
 
   // render submit button
   renderSubmitButton = () => {
@@ -109,10 +109,7 @@ class SearchBox extends Component {
     const tooltipVisibilityCondition = inputValue && !isMobile;
 
     return (
-      <InputGroupAddon
-        className="location-search-input-group-addon submit-group"
-        addonType="prepend"
-      >
+      <div className="location-search-input-group-addon submit-group location-search-icon">
         <Button
           id={buttonId}
           style={buttonStyle}
@@ -133,9 +130,9 @@ class SearchBox extends Component {
           )}
           <FontAwesomeIcon icon="search-location" size="1x" />
         </Button>
-      </InputGroupAddon>
+      </div>
     );
-  }
+  };
 
   // render alert icon
   renderAlertIcon = () => {
@@ -145,16 +142,12 @@ class SearchBox extends Component {
 
     return (
       activeAlert && (
-      <InputGroupAddon
-        className="location-search-input-group-addon location-search-input-alert-icon"
-        addonType="append"
-        title="The entered location is not available."
-      >
-        <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
-      </InputGroupAddon>
+        <div className="location-search-input-group-addon location-search-input-alert-icon">
+          <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
+        </div>
       )
     );
-  }
+  };
 
   // render clear input X
   renderClearInput = () => {
@@ -164,17 +157,14 @@ class SearchBox extends Component {
     const buttonId = 'location-search-clear-button';
     const labelText = 'Clear search text';
     const tooltipVisibilityCondition = inputValue && !isMobile;
-
+    const positionStyle = isMobile ? { left: '-21px' } : { left: '-34px' };
     return (
       inputValue && (
-      <InputGroupAddon
-        className="location-search-input-group-addon location-search-input-clear-container"
-        addonType="append"
-      >
         <Button
           id={buttonId}
           onClick={clearInput}
           className={buttonId}
+          style={positionStyle}
         >
           {tooltipVisibilityCondition && (
           <UncontrolledTooltip
@@ -189,10 +179,9 @@ class SearchBox extends Component {
           )}
           <FontAwesomeIcon icon="times" size="1x" />
         </Button>
-      </InputGroupAddon>
       )
     );
-  }
+  };
 
   // conditional autocomplete wrapper styling
   getWrapperStyle = () => {
@@ -213,7 +202,7 @@ class SearchBox extends Component {
       width: isMobile ? '90%' : '298px',
       paddingRight: paddingRightStyle,
     };
-  }
+  };
 
   render() {
     const {
@@ -229,12 +218,14 @@ class SearchBox extends Component {
       : 'Search for places or enter coordinates';
 
     const mobileStyle = isMobile ? {
-      width: '100%',
-    } : null;
+      width: '100%', display: 'flex',
+    } : {
+      display: 'flex', width: '85%',
+    };
     return (
       <div
         className="location-search-input-container"
-        onKeyPress={this.handleKeyPress}
+        onKeyDown={this.handleKeyPress}
         style={mobileStyle}
       >
         <Autocomplete

@@ -108,7 +108,7 @@
   }
 }
 
-.wv-animation-widget .input-range.rc-slider-disabled {
+.wv-slider-case .input-range:disabled {
   cursor: default;
 }
 
@@ -215,9 +215,10 @@
 
   & .input-range {
     cursor: pointer;
-    height: 13px;
+    height: 16px;
     position: relative;
     width: 152px;
+    margin-bottom: 4px;
   }
 
   & svg.svg-inline--fa {
@@ -284,7 +285,7 @@ a .wv-animation-widget-icon {
 }
 
 .wv-animation-widget div .wv-slider-label {
-  font-size: 10px;
+  font-size: 12px;
   color: #fff;
   display: block;
   text-align: center;
@@ -508,10 +509,6 @@ a .wv-animation-widget-icon {
         text-align: center;
         margin: auto;
       }
-
-      & .rc-slider {
-        margin: auto;
-      }
     }
 
     & #warning-message-row {
@@ -580,10 +577,6 @@ a .wv-animation-widget-icon {
   & .wv-animation-widget {
     & #slider-case-row {
       margin-top: 1rem;
-
-      & .rc-slider {
-        width: 400px;
-      }
     }
   }
 }
@@ -615,10 +608,6 @@ a .wv-animation-widget-icon {
 
       & .wv-slider-case {
         margin-top: 1.5rem;
-
-        & .rc-slider {
-          width: 300px;
-        }
       }
 
       & span {
@@ -639,10 +628,6 @@ a .wv-animation-widget-icon {
 
   & .wv-minimize {
     top: 1px;
-  }
-
-  & .rc-slider {
-    width: 400px;
   }
 }
 
@@ -705,4 +690,55 @@ a .wv-animation-widget-icon {
   & .mobile-timescale-dropdown {
     border: 0;
   }
+}
+
+.wv-kiosk-animation-wrapper {
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 70px;
+}
+
+.wv-kiosk-animation-widget {
+  border: $wv-dark-menu-border;
+  background: $wv-transparent-black;
+  border-radius: $wv-menu-border-radius;
+  color: #fff;
+  display: flex;
+  flex-flow: row nowrap;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 20px;
+}
+
+.kiosk-animation-widget-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kiosk-animation-widget-label {
+  font-size: 24px;
+  color: #fff;
+  display: block;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
+  letter-spacing: 0.125em;
+}
+
+#kiosk-animation-widget-middle-label {
+  margin-left: 8px;
+  margin-right: 8px;
+  font-size: 24px;
+  color: #fff;
+  display: block;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
+  letter-spacing: 0.125em;
+  font-style: italic;
 }

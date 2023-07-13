@@ -8,7 +8,7 @@ import {
 import { getActiveLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 
-const UpdateOpacity = (props) => {
+function UpdateOpacity(props) {
   const {
     action,
     activeLayers,
@@ -70,6 +70,7 @@ const UpdateOpacity = (props) => {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
       const layerGroup = findLayer(def, activeString);
+      layerGroup.setOpacity(opacity);
       layerGroup.getLayersArray().forEach((l) => {
         l.setOpacity(opacity);
       });
@@ -77,7 +78,7 @@ const UpdateOpacity = (props) => {
     updateLayerVisibilities();
   };
   return null;
-};
+}
 
 const mapStateToProps = (state) => {
   const { compare } = state;
