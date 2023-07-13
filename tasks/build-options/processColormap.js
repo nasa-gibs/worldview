@@ -115,9 +115,6 @@ async function matchLegend (entry, legends) {
 }
 
 async function processEntries (colormap) {
-  if (colormap._attributes.title === 'Dynamic Surface Water Extent') {
-    console.warn('this!!')
-  }
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
 
@@ -171,7 +168,11 @@ async function processEntries (colormap) {
         throw new Error('No ref in legend')
       }
 
-      refsList.push(index)
+      if (mapType === 'classification') {
+        refsList.push(index)
+      } else {
+        refsList.push(entry._attributes.ref)
+      }
       const rHex = parseInt(r).toString(16).padStart(2, '0')
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
@@ -242,34 +243,36 @@ async function processEntries (colormap) {
 
   // Ensure all disabled colormap entries are included at the END
   // Update colors, legendColors & tooltips arrays accordingly
-  const numDisabled = initializeDisabled.length
-  if (numDisabled > 0) {
-    const totalEntries = colors.length
-    const disabledColorsArr = []
-    const disabledLegendsArr = []
-    const disabledTooltipsArr = []
+  if (mapType === 'classification') {
+    const numDisabled = initializeDisabled.length
+    if (numDisabled > 0) {
+      const totalEntries = colors.length
+      const disabledColorsArr = []
+      const disabledLegendsArr = []
+      const disabledTooltipsArr = []
 
-    // Iterate backwards to maintain early indices
-    for (let i = numDisabled - 1; i >= 0; i -= 1) {
-      const thisIndex = initializeDisabled[i]
+      // Iterate backwards to maintain early indices
+      for (let i = numDisabled - 1; i >= 0; i -= 1) {
+        const thisIndex = initializeDisabled[i]
 
-      disabledColorsArr.push(colors[thisIndex])
-      disabledLegendsArr.push(legendColors[thisIndex])
-      disabledTooltipsArr.push(tooltips[thisIndex])
+        disabledColorsArr.push(colors[thisIndex])
+        disabledLegendsArr.push(legendColors[thisIndex])
+        disabledTooltipsArr.push(tooltips[thisIndex])
 
-      colors.splice(thisIndex, 1)
-      legendColors.splice(thisIndex, 1)
-      tooltips.splice(thisIndex, 1)
+        colors.splice(thisIndex, 1)
+        legendColors.splice(thisIndex, 1)
+        tooltips.splice(thisIndex, 1)
+      }
+
+      colors.push(...disabledColorsArr)
+      legendColors.push(...disabledLegendsArr)
+      tooltips.push(...disabledTooltipsArr)
+
+      const firstDisabledIndex = totalEntries - numDisabled
+      initializeDisabled = Array.from({
+        length: numDisabled
+      }, (item, index) => firstDisabledIndex + index)
     }
-
-    colors.push(...disabledColorsArr)
-    legendColors.push(...disabledLegendsArr)
-    tooltips.push(...disabledTooltipsArr)
-
-    const firstDisabledIndex = totalEntries - numDisabled
-    initializeDisabled = Array.from({
-      length: numDisabled
-    }, (item, index) => firstDisabledIndex + index)
   }
 
   const result = {
