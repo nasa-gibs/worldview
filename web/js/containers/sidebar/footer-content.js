@@ -36,6 +36,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCharting,
     toggleCompare,
   } = props;
+  console.log(`chartingModeAccessible: ${chartingModeAccessible}`);
 
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
@@ -139,7 +140,7 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
-
+  console.log(state);
   return {
     isMobile: screenSize.isMobileDevice,
     breakpoints: screenSize.breakpoints,
