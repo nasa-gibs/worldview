@@ -76,7 +76,7 @@ const mapStateToProps = (state, ownProps) => {
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.filter((layer) => layer.hasOwnProperty('palette'));
+  const activeLayersWithPalettes = overlays.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette'));
 
   return {
     isAnimating: animation.isPlaying,

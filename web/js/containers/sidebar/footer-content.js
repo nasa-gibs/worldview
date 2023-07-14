@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import {
@@ -36,7 +36,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCharting,
     toggleCompare,
   } = props;
-  console.log(`chartingModeAccessible: ${chartingModeAccessible}`);
 
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

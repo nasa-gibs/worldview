@@ -395,7 +395,8 @@ footer .product-buttons .layers-add-container {
   }
 }
 
-.wv-ab-mode-selection-case, .wv-charting-mode-container {
+.wv-ab-mode-selection-case,
+.wv-charting-mode-container {
   margin: 5px;
   color: #fff;
 }
@@ -423,95 +424,118 @@ footer .product-buttons .layers-add-container {
   justify-content: space-between;
   width: 80%;
   margin: 10px;
+
   svg {
     font-size: 1.4em;
   }
+
   h3 {
     line-height: 1.4em;
   }
 }
+
 .charting-date-row {
   display: flex;
   justify-content: space-around;
 }
+
 .charting-timespan-container,
 .charting-date-container {
   display: flex;
   justify-content: space-around;
 }
+
 .charting-timespan-container {
   align-items: center;
   margin: 10px;
+
   div > .btn-active {
     background: #d54e21;
     border-color: #d54e21;
   }
+
   svg {
     font-size: 1.4em;
   }
 }
-.charting-info-container, .charting-calendar-container {
+
+.charting-info-container,
+.charting-calendar-container {
   text-align: center;
   font-size: 1.4em;
   margin-right: 10px;
 }
+
 .charting-icons {
   display: flex;
 }
+
 .charting-statistics-label {
   font-weight: bolder;
   min-width: 40%;
 }
+
 .charting-statistics-row {
   display: flex;
-  margin: 0 0 1em 0;
-  padding: .25em;
+  margin: 0 0 1em;
+  padding: 0.25em;
 }
+
 .charting-buttons {
   font-size: 1.5em;
   margin-top: 1em;
   display: flex;
   justify-content: space-around;
 }
+
 .charting-indicator {
   font-size: 1.5em;
   margin: 0;
   position: absolute;
   top: 50%;
-  -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
 #charting-chart {
   max-width: 800px;
 }
+
 button#charting-simple-stats-button {
   border-right: 3px solid black;
 }
-.charting-info, .charting-disclaimer {
+
+.charting-info,
+.charting-disclaimer {
   text-align: left;
   margin-bottom: 12px;
 }
+
 .charting-chart-container {
   display: flex;
   justify-content: space-between;
 }
+
 .charting-stat-text {
   float: left;
   margin-left: 20px;
 }
+
 .charting-request-status {
   text-align: center;
   margin-top: 10px;
 }
+
 p.recharts-tooltip-label {
   color: black;
   font-weight: bold;
 }
+
 #products-holder footer p {
   color: #ccc;
   margin: 3px 0 8px;
   line-height: 1.4em;
 }
+
 #products-holder footer .action {
   display: block;
   border-color: transparent;
