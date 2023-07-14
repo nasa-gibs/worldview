@@ -34,6 +34,7 @@ function KioskTimeStamp({ date, subdaily }) {
   const hours = dateParts.find((part) => part.type === 'hour').value;
   const minutes = dateParts.find((part) => part.type === 'minute').value;
   const timeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';
+
   return (
     <>
       <div className="kiosk-day">
