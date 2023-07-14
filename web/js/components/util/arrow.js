@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 /*
  * @function Arrow Up/Down
  */
-function Arrow({ onClick, type, direction }) {
+function Arrow({
+  onClick, type, direction, isKioskModeActive,
+}) {
   const containerClassName = `date-arrows date-arrow-${direction}`;
   const arrowClassName = `${direction}arrow`;
 
   return (
     <div
       onClick={onClick}
-      className={containerClassName}
+      className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
       <svg width="25" height="8">
@@ -25,6 +27,7 @@ Arrow.propTypes = {
   direction: PropTypes.string,
   onClick: PropTypes.func,
   type: PropTypes.string,
+  isKioskModeActive: PropTypes.bool,
 };
 
 export default Arrow;

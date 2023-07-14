@@ -306,6 +306,7 @@ class DateSelector extends Component {
       isStartDate,
       isEndDate,
       isDisabled,
+      isKioskModeActive,
     } = this.props;
     const {
       year,
@@ -347,6 +348,7 @@ class DateSelector extends Component {
           value={yearValue}
           isValid={yearValid}
           isDisabled={isDisabled}
+          isKioskModeActive={isKioskModeActive}
         />
         <DateInputColumn
           {...sharedProps}
@@ -354,6 +356,7 @@ class DateSelector extends Component {
           value={monthValue}
           isValid={monthValid}
           isDisabled={isDisabled}
+          isKioskModeActive={isKioskModeActive}
         />
         <DateInputColumn
           {...sharedProps}
@@ -361,6 +364,7 @@ class DateSelector extends Component {
           value={dayValue}
           isValid={dayValid}
           isDisabled={isDisabled}
+          isKioskModeActive={isKioskModeActive}
         />
         { subDailyMode && (
           <>
@@ -370,16 +374,18 @@ class DateSelector extends Component {
               value={hourValue}
               isValid={hourValid}
               isDisabled={isDisabled}
+              isKioskModeActive={isKioskModeActive}
             />
-            <div className="input-time-divider">:</div>
+            <div className={isKioskModeActive ? 'input-time-divider-kiosk' : 'input-time-divider'}>:</div>
             <DateInputColumn
               {...sharedProps}
               type="minute"
               value={minuteValue}
               isValid={minuteValid}
               isDisabled={isDisabled}
+              isKioskModeActive={isKioskModeActive}
             />
-            <div className="input-time-zmark">Z</div>
+            <div className={isKioskModeActive ? 'input-time-zmark-kiosk' : 'input-time-zmark'}>Z</div>
           </>
         )}
       </div>

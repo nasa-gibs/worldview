@@ -280,6 +280,7 @@ class DateInputColumn extends Component {
       isStartDate,
       isEndDate,
       isDisabled,
+      isKioskModeActive,
       type,
     } = this.props;
     const {
@@ -308,6 +309,7 @@ class DateInputColumn extends Component {
           direction="up"
           onClick={isDisabled ? () => {} : () => this.changeDate(1)}
           type={type}
+          isKioskModeActive={isKioskModeActive}
         />
         <input
           id={inputId}
@@ -330,6 +332,7 @@ class DateInputColumn extends Component {
           direction="down"
           onClick={isDisabled ? () => {} : () => this.changeDate(-1)}
           type={type}
+          isKioskModeActive={isKioskModeActive}
         />
       </div>
     );
