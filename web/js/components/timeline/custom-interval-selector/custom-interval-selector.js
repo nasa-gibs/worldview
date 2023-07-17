@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import usePrevious from '../../../util/customHooks';
 import DeltaInput from './delta-input';
 import IntervalSelect from './interval-select';
 import {
@@ -28,17 +27,15 @@ function CustomIntervalSelector(props) {
 
   let customIntervalWidget;
 
-  const prevModalOpen = usePrevious(modalOpen);
-
   const customDelta = useSelector((state) => state.date.customDelta || 1);
   const customInterval = useSelector((state) => state.date.customInterval || state.date.interval);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (modalOpen && !prevModalOpen) {
+    if (modalOpen) {
       customIntervalWidget.focus();
     }
-  });
+  }, [modalOpen]);
 
   const changeDelta = (value) => {
     if (value >= 0 && value <= 1000) {
