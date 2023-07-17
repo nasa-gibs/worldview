@@ -1,7 +1,6 @@
 import {
   forOwn as lodashForOwn,
   findIndex as lodashFindIndex,
-  isEmpty as lodashIsEmpty,
 } from 'lodash';
 import { requestAction } from '../core/actions';
 import {
