@@ -64,6 +64,7 @@ async function getCapabilities () {
   // Download each GC xml using the "from" attribute and put it in the "to" location
   if (Object.prototype.hasOwnProperty.call(config, 'wv-options-fetch')) {
     const fetchValues = config['wv-options-fetch']
+    // Perform fetchConfigs and processGetCapabilities seperately so that each batch can be done in parallel
     await Promise.all(fetchValues.map(async (value) => {
       const inputFile = value.from
       const outputFile = `${outputDir}/${value.to}`
