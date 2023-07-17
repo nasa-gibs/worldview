@@ -212,7 +212,7 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
       state,
     );
     let hasDisabled = false;
-    if (lodashIsEmpty(newActivePalettesObj)) return;
+    if (!Object.prototype.hasOwnProperty.call(newActivePalettesObj, layerId)) return;
     newActivePalettesObj[layerId].maps.forEach((colorMap) => {
       if (colorMap.disabled && colorMap.disabled.length) {
         hasDisabled = true;
