@@ -88,9 +88,6 @@ async function main (url) {
   await Promise.all(layerOrder.map((layerId) => {
     return getMetadata(layerId, url)
   }))
-  // for (layerId of layerOrder) {
-  //   await getMetadata(layerId, url)
-  // }
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
