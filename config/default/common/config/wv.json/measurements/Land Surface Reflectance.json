@@ -3,8 +3,32 @@
         "Land Surface Reflectance": {
             "id": "land-surface-reflectance",
             "title":    "Land Surface Reflectance",
-            "subtitle": "Aqua & Terra/MODIS, Aqua/MODIS, Harmonized Landsat Sentinel-2 (HLS), Terra/MODIS, Terra/MISR",
+            "subtitle": "Aqua & Terra/MODIS, Aqua/MODIS, Harmonized Landsat Sentinel-2 (HLS), NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, Terra/MISR",
             "sources": {
+                "Suomi NPP/VIIRS": {
+                    "id": "suominpp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/LandSurfaceReflectance",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
+                        "VIIRS_SNPP_SurfaceReflectance_BandsM11-M7-M5",
+                        "VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1",
+                        "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/LandSurfaceReflectance",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_SurfaceReflectance_BandsM5-M4-M3",
+                        "VIIRS_NOAA20_SurfaceReflectance_BandsM11-M7-M5",
+                        "VIIRS_NOAA20_SurfaceReflectance_BandsI1-I2-I1",
+                        "OrbitTracks_NOAA20_Ascending"
+                    ]
+                },
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
