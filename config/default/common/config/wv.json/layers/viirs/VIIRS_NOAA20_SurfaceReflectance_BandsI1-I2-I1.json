@@ -6,12 +6,7 @@
       "tags": "false color lsr noaa-20 jpss 1 jpss-1",
       "layergroup": "Land Surface Reflectance",
       "group": "baselayers",
-      "wrapadjacentdays": true,
-      "projections": {
-        "geographic": {
-          "source": "GIBS:geographic"
-        }
-      }
+      "wrapadjacentdays": true
     }
   }
 }

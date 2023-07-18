@@ -3,8 +3,26 @@
         "Sea Ice": {
             "id": "sea-ice",
             "title":    "Sea Ice",
-            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
             "sources": {
+                "Suomi NPP/VIIRS": {
+                    "id": "suominpp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/SeaIce",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Sea_Ice"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/SeaIce",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Sea_Ice"
+                    ]
+                },
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
