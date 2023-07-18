@@ -26,7 +26,7 @@
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM5-M4-M3",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM11-M7-M5",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsI1-I2-I1",
-                        "OrbitTracks_NOAA20_Ascending"
+                        "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
                 "Aqua/MODIS": {
