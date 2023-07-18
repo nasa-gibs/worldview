@@ -29,7 +29,10 @@ function CustomIntervalSelector(props) {
 
   const customDelta = useSelector((state) => state.date.customDelta || 1);
   const customInterval = useSelector((state) => state.date.customInterval || state.date.interval);
+
   const dispatch = useDispatch();
+  const closeModal = () => dispatch(toggleCustomModal(false, undefined));
+  const changeCustomInterval = (delta, timeScale) => dispatch(changeCustomIntervalAction(delta, timeScale));
 
   useEffect(() => {
     if (modalOpen) {
@@ -51,14 +54,6 @@ function CustomIntervalSelector(props) {
     if (e.key === 'Escape') {
       closeModal();
     }
-  };
-
-  const closeModal = () => {
-    dispatch(toggleCustomModal(false, undefined));
-  };
-
-  const changeCustomInterval = (delta, timeScale) => {
-    dispatch(changeCustomIntervalAction(delta, timeScale));
   };
 
   return modalOpen && (
