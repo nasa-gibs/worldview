@@ -26,6 +26,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     activeTab,
     changeCompareMode,
     chartingModeAccessible,
+    chartFeature,
     compareMode,
     compareFeature,
     eventsData,
@@ -67,7 +68,7 @@ const FooterContent = React.forwardRef((props, ref) => {
             id="chart-toggle-button"
             aria-label={chartBtnText}
             className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!compareFeature ? { display: 'none' } : null}
+            style={!chartFeature ? { display: 'none' } : null}
             onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
             text={chartBtnText}
           />
@@ -139,17 +140,17 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
-  console.log(state);
   return {
-    isMobile: screenSize.isMobileDevice,
     breakpoints: screenSize.breakpoints,
-    screenWidth: screenSize.screenWidth,
-    isPlaying,
-    compareFeature: config.features.compare,
-    isCompareActive: compare.active,
-    isChartingActive: charting.active,
+    chartFeature: config.features.charting,
     compareMode: compare.mode,
+    compareFeature: config.features.compare,
     eventsData,
+    isChartingActive: charting.active,
+    isCompareActive: compare.active,
+    isMobile: screenSize.isMobileDevice,
+    isPlaying,
+    screenWidth: screenSize.screenWidth,
   };
 };
 
@@ -203,6 +204,7 @@ export default connect(
 FooterContent.propTypes = {
   activeTab: PropTypes.string,
   changeCompareMode: PropTypes.func,
+  chartFeature: PropTypes.bool,
   chartingModeAccessible: PropTypes.bool,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
