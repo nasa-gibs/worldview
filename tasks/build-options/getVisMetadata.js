@@ -85,9 +85,9 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  await Promise.all(layerOrder.map((layerId) => {
-    return getMetadata(layerId, url)
-  }))
+  for (layerId of layerOrder) {
+    await getMetadata(layerId, url)
+  }
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {

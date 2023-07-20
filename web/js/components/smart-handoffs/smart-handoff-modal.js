@@ -105,7 +105,7 @@ function SmartHandoffModal({
           {STD_NRT_MAP[type] + (version ? ` - v${version}` : '')}
           <br />
           <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-            {`${title || 'Details'}`}
+            {title || 'Details'}
           </a>
         </div>
 
