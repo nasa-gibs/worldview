@@ -4,13 +4,14 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { debounce } from 'lodash';
 import { saveRotation } from '../../map/util';
 import HoverTooltip from '../util/hover-tooltip';
+import { refreshRotation } from '../../modules/map/actions';
 
 const duration = 500;
 
 function Rotation() {
   const [intervalId, setIntervalId] = useState(null);
 
-  const map = useSelector((state) => state.map, shallowEqual);
+  const map = useSelector((state) => state.map.ui.selected, shallowEqual);
   const proj = useSelector((state) => state.proj, shallowEqual);
   const rotation = useSelector((state) => state.map.rotation);
   const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
@@ -22,10 +23,7 @@ function Rotation() {
 
   const dispatch = useDispatch();
   const updateRotationState = (radians) => debounce(() => {
-    dispatch({
-      type: 'MAP/UPDATE_ROTATION',
-      rotation: radians,
-    });
+    dispatch(refreshRotation(radians));
   }, 100);
 
   const clearIntervalRotation = () => {
@@ -33,7 +31,7 @@ function Rotation() {
   };
 
   const rotate = (degrees) => {
-    const mapView = map.ui.selected.getView();
+    const mapView = map.getView();
     const currentDeg = mapView.getRotation() * (180.0 / Math.PI);
     const newRotation = mapView.getRotation() - Math.PI / degrees;
     saveRotation(currentDeg, mapView);
@@ -51,7 +49,7 @@ function Rotation() {
 
   const resetRotation = () => {
     clearIntervalRotation();
-    map.ui.selected.getView().animate({
+    map.getView().animate({
       duration: 500,
       rotation: 0,
     });
