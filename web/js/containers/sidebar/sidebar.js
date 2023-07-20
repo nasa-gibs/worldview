@@ -263,6 +263,7 @@ class Sidebar extends React.Component {
       isEmbedModeActive,
       isLoadingEvents,
       isMobile,
+      isKioskModeActive,
       numberOfLayers,
       onTabClick,
       screenHeight,
@@ -354,13 +355,15 @@ class Sidebar extends React.Component {
                   />
                 </TabPane>
                 )}
-
-                <FooterContent
-                  ref={(el) => { this.footerElement = el; }}
-                  tabTypes={tabTypes}
-                  activeTab={activeTab}
-                />
-
+                {
+                  !isKioskModeActive && (
+                    <FooterContent
+                      ref={(el) => { this.footerElement = el; }}
+                      tabTypes={tabTypes}
+                      activeTab={activeTab}
+                    />
+                  )
+                }
               </TabContent>
             </>
             )}
@@ -396,7 +399,7 @@ const mapStateToProps = (state) => {
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = screenSize;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
@@ -425,6 +428,7 @@ const mapStateToProps = (state) => {
     isDataDisabled: events.isAnimatingToEvent,
     isDistractionFreeModeActive,
     isEmbedModeActive,
+    isKioskModeActive,
     isLoadingEvents,
     isMobile,
     selectedMap,

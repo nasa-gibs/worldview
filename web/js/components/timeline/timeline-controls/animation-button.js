@@ -10,6 +10,7 @@ function AnimationButton(props) {
     clickAnimationButton,
     breakpoints,
     screenWidth,
+    isKioskModeActive,
     isLandscape,
     isPortrait,
     isMobilePhone,
@@ -39,7 +40,7 @@ function AnimationButton(props) {
   return (
     <div
       onClick={clickAnimationButton}
-      className={disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
@@ -65,6 +66,7 @@ AnimationButton.propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
   screenWidth: PropTypes.number,
+  isKioskModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
   isPortrait: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
