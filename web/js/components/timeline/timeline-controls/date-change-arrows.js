@@ -74,6 +74,7 @@ class DateChangeArrows extends PureComponent {
       rightArrowDisabled,
       arrowDown,
       tilesPreloaded,
+      isKioskModeActive,
     } = this.props;
 
     const leftArrowDown = () => this.onArrowDown('left');
@@ -92,7 +93,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* LEFT ARROW */}
         <div
-          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''}`}
+          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
           id="left-arrow-group"
           onMouseDown={leftArrowDown}
           onMouseUp={leftArrowUp}
@@ -115,7 +116,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''}`}
+          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
           id="right-arrow-group"
           onMouseDown={rightArrowDown}
           onMouseUp={rightArrowUp}
@@ -138,7 +139,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* NOW BUTTON */}
         <div
-          className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''}`}
+          className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
           id="now-button-group"
           onClick={handleSelectNowButton}
           aria-disabled={nowButtonDisabled}
@@ -163,9 +164,11 @@ class DateChangeArrows extends PureComponent {
 
 const mapStateToProps = (state) => {
   const { date } = state;
+  const { ui: { isKioskModeActive } } = state;
   return {
     tilesPreloaded: date.preloaded,
     arrowDown: date.arrowDown,
+    isKioskModeActive,
   };
 };
 
@@ -183,6 +186,7 @@ DateChangeArrows.propTypes = {
   arrowDown: PropTypes.string,
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,
   rightArrowDisabled: PropTypes.bool,

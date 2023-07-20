@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { transformExtent } from 'ol/proj';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 import {
@@ -23,23 +24,14 @@ function TileMeasurement({ ui }) {
   const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
   const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
 
-  const {
-    activeString,
-    activeLayers,
-    eic,
-    realTime,
-  } = useSelector((state) => ({
-    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
-    eic: state.ui.eic,
-    realTime: state.date.appNow,
-    activeString: state.compare.activeString,
-  }));
-  const activeLayerIds = useSelector((state) => getActiveLayers(state, activeString).map((layer) => layer.id));
+  const eic = useSelector((state) => state.ui.eic);
+  const realTime = useSelector((state) => state.date.appNow);
+  const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
   useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic) {
+    if (!measurementsStarted && activeLayers && eic && ui.selected) {
       calculateMeasurements();
     }
   });
@@ -67,7 +59,9 @@ function TileMeasurement({ ui }) {
       console.log(`-----Loop #${i + 1} for date ${dates[i]}-----`);
       for (let j = 0; j < layers.length; j += 1) {
         try {
-          const wmsImage = await fetchWMSImage(layers[j].id, dates[i]);
+          const currentExtent = ui.selected.getView().calculateExtent(ui.selected.getSize());
+          const mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
+          const wmsImage = await fetchWMSImage(layers[j].id, dates[i], mercatorExtent);
           const blackPixelRatio = await calculatePixels(wmsImage);
           const { threshold } = layerPixelData[layers[j].id];
           if (blackPixelRatio < threshold) {
@@ -102,7 +96,6 @@ function TileMeasurement({ ui }) {
 
     if (!firstLayerWithBestDate) {
       console.error(`No date found that satisfies the full imagery thresholds. There is no best date selected for ${layers[0].id}.`);
-      // display static map??
       return dates[0];
     }
     console.error(`No date found that satisfies imagery thresholds. Returning best date for ${layers[0].id} on ${firstLayerWithBestDate}.`);
@@ -155,6 +148,7 @@ function TileMeasurement({ ui }) {
     } else if (!loadedTiles && abortProceedure) {
       console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
       toggleStaticMap(true);
+      const activeLayerIds = activeLayers.map((layer) => layer.id);
       toggleGroupVisibility(activeLayerIds, false);
       setEICMeasurementAborted();
     }
