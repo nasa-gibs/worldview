@@ -44,11 +44,11 @@ export default class Coordinates extends React.Component {
         onClick={this.changeFormat}
       >
         <span className="map-coord">
-          {`${coords}`}
+          {coords}
         </span>
         <div className="map-coord-format">
           <span className="map-coord">
-            {`${crs}`}
+            {crs}
           </span>
           <div aria-label="Change coordinates format" className="coord-btn">
             <i className="coord-switch" />
