@@ -2,17 +2,17 @@
   "layers": {
     "HLS_Customizable_Landsat": {
       "id": "HLS_Customizable_Landsat",
-      "title": "HLS Customizable Landsat",
-      "subtitle": "Customizable HLS Landsat",
-      "description": "A customizable HLS Landsat layer",
-      "tags": "corrected surface landsat oli msi s30",
+      "title": "HLS Customizable Landsat *BETA*",
+      "subtitle": "Landsat 8 & 9 / OLI",
+      "description": "multi-mission/hls/HLS_Customizable_Landsat",
+      "tags": "corrected surface landsat oli l30",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "orbitTracks": ["OrbitTracks_Landsat-8_Descending"],
-      "orbitDirection": ["descending"],
+      "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
+      "orbitDirection": ["descending", "descending"],
       "bandCombo": {
         "r": "B07",
         "g": "B05",

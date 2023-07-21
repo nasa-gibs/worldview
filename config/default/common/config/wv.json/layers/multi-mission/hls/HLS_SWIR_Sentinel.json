@@ -2,17 +2,17 @@
   "layers": {
     "HLS_SWIR_Sentinel": {
       "id": "HLS_SWIR_Sentinel",
-      "title": "HLS SWIR Sentinel",
-      "subtitle": "HLS SWIR Sentinel",
-      "description": "HLS SWIR Sentinel",
-      "tags": "corrected surface oli sentinel msi s30",
+      "title": "Reflectance (Bands 12-8A-4, Shortwave Infrared) *BETA*",
+      "subtitle": "Sentinel 2A & 2B / MSI",
+      "description": "multi-mission/hls/HLS_SWIR_Sentinel",
+      "tags": "corrected surface oli sentinel msi s30 swir",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "orbitTracks": ["OrbitTracks_Sentinel-2B_Descending"],
-      "orbitDirection": ["descending"],
+      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending", "descending"],
       "bandCombo": {
         "r": "B12",
         "g": "B8A",

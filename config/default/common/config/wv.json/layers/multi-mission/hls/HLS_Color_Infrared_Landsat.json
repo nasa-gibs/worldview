@@ -2,17 +2,17 @@
   "layers": {
     "HLS_Color_Infrared_Landsat": {
       "id": "HLS_Color_Infrared_Landsat",
-      "title": "HLS Color Infrared Landsat",
-      "subtitle": "HLS Color Infrared Landsat",
-      "description": "HLS Color Infrared Landsat",
-      "tags": "corrected surface oli sentinel msi s30",
+      "title": "Reflectance (Bands 5-4-3, Color Infrared) *BETA*",
+      "subtitle": "Landsat 8 & 9 / OLI",
+      "description": "multi-mission/hls/HLS_Color_Infrared_Landsat",
+      "tags": "corrected surface oli l30 cir false color",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "ttiler",
       "period": "daily",
-      "orbitTracks": ["OrbitTracks_Landsat-8_Descending"],
-      "orbitDirection": ["descending"],
+      "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
+      "orbitDirection": ["descending", "descending"],
       "bandCombo": {
         "r": "B05",
         "g": "B04",
