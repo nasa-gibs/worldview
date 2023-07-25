@@ -61,27 +61,7 @@ const FooterContent = React.forwardRef((props, ref) => {
   };
 
   const renderLayersFooter = () => (
-    <>
-      <div className="product-buttons">
-        <div className="compare-chart-container">
-          <Button
-            id="chart-toggle-button"
-            aria-label={chartBtnText}
-            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!chartFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-            text={chartBtnText}
-          />
-          <Button
-            id="compare-toggle-button"
-            aria-label={compareBtnText}
-            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
-            style={!compareFeature ? { display: 'none' } : null}
-            onClick={!isChartingActive ? onClickToggleCompare : null}
-            text={compareBtnText}
-          />
-        </div>
-      </div>
+    <div className="product-buttons">
       <CompareModeOptions
         isActive={isCompareActive}
         isMobile={isMobile}
@@ -92,7 +72,31 @@ const FooterContent = React.forwardRef((props, ref) => {
         isChartingActive={isChartingActive}
         isMobile={isMobile}
       />
-    </>
+      <div className="compare-chart-container">
+        {!isCompareActive
+          && (
+          <Button
+            id="chart-toggle-button"
+            aria-label={chartBtnText}
+            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+            style={!chartFeature ? { display: 'none' } : null}
+            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+            text={chartBtnText}
+          />
+          )}
+        {!isChartingActive
+          && (
+          <Button
+            id="compare-toggle-button"
+            aria-label={compareBtnText}
+            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
+            style={!compareFeature ? { display: 'none' } : null}
+            onClick={!isChartingActive ? onClickToggleCompare : null}
+            text={compareBtnText}
+          />
+          )}
+      </div>
+    </div>
   );
 
   const renderEventsFooter = () => {
