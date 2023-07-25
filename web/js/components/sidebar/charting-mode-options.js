@@ -363,7 +363,7 @@ function ChartingModeOptions (props) {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
     const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
-    openChartingDateModal({ layerStartDate, layerEndDate });
+    openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
   const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
@@ -504,7 +504,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  openChartingDateModal: (dateObj) => {
+  openChartingDateModal: (dateObj, timeSpanSelection) => {
     dispatch(
       openCustomContent('CHARTING_DATE_MODAL', {
         headerText: 'Charting Mode Date Selection',
@@ -515,6 +515,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           layerStartDate: dateObj.layerStartDate,
           layerEndDate: dateObj.layerEndDate,
+          timeSpanSelection,
         },
       }),
     );

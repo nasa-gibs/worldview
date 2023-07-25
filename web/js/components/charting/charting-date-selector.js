@@ -2,19 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DateRangeSelector from '../date-selector/date-range-selector';
+import DateSelector from '../date-selector/date-selector';
 import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
-// import { offsetLineStringStyle } from '../../modules/vector-styles/util';
 
 function ChartingDateSelector (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, date, layerStartDate, layerEndDate,
+    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, timeSpanSelection, date, layerStartDate, layerEndDate,
   } = props;
-  // console.log(`layerStartDate: ${layerStartDate}`);
-  // console.log(`layerEndDate: ${layerEndDate}`);
-
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
   const endDate = timeSpanEndDate == null ? selectedB : timeSpanEndDate;
@@ -33,18 +30,41 @@ function ChartingDateSelector (props) {
     }
   }
 
+  function onSingleDateChange(newStartDate) {
+    if (newStartDate !== timeSpanStartDate) {
+      onUpdateStartDate(newStartDate);
+    }
+  }
+
   return (
     <div className="charting-date-container">
-      <DateRangeSelector
-        idSuffix="charting-date-picker"
-        startDate={validStartDate}
-        endDate={validEndDate}
-        setDateRange={onDateChange}
-        minDate={layerStartDate}
-        maxDate={layerEndDate}
-        subDailyMode={false}
-        isDisabled={false}
-      />
+      {/* single date mode */}
+      {timeSpanSelection === 'date'
+        ? (
+          <DateSelector
+            idSuffix="charting-date-picker"
+            date={validStartDate}
+            onDateChange={onSingleDateChange}
+            maxDate={layerEndDate}
+            minDate={layerStartDate}
+            subDailyMode={false}
+            isDisabled={false}
+            isEndDate
+          />
+        )
+        : (
+          <DateRangeSelector
+            idSuffix="charting-date-picker"
+            startDate={validStartDate}
+            endDate={validEndDate}
+            setDateRange={onDateChange}
+            minDate={layerStartDate}
+            maxDate={layerEndDate}
+            subDailyMode={false}
+            isDisabled={false}
+          />
+        )}
+
     </div>
   );
 }
@@ -74,6 +94,7 @@ ChartingDateSelector.propTypes = {
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   date: PropTypes.object,
+  timeSpanSelection: PropTypes.string,
 };
 
 export default connect(
