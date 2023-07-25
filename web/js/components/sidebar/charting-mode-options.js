@@ -428,6 +428,7 @@ function ChartingModeOptions (props) {
           <Button
             id="charting-create-chart-button"
             className="charting-button"
+            disabled={chartRequestInProgress}
             onClick={() => onChartOrStatsButtonClick()}
           >
             Request Chart
