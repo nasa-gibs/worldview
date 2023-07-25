@@ -38,32 +38,33 @@ function ChartingModeOptions (props) {
   const {
     activeLayer,
     activeLayers,
+    aoiActive,
+    aoiCoordinates,
+    aoiSelected,
     chartRequestInProgress,
+    crs,
+    displayChart,
+    displaySimpleStats,
+    isChartingActive,
+    isMobile,
+    onChartDateButtonClick,
+    openChartingDateModal,
+    openChartingInfoModal,
+    olMap,
+    proj,
+    projections,
+    renderedPalettes,
+    requestStatusMessage,
+    timelineStartDate,
+    timelineEndDate,
+    timeSpanEndDate,
+    timeSpanSelection,
+    timeSpanStartDate,
     toggleAreaOfInterestActive,
     toggleAreaOfInterestSelected,
     updateAOICoordinates,
     updateRequestInProgress,
     updateRequestStatusMessage,
-    openChartingInfoModal,
-    onChartDateButtonClick,
-    displaySimpleStats,
-    displayChart,
-    openChartingDateModal,
-    olMap,
-    requestStatusMessage,
-    crs,
-    proj,
-    projections,
-    isChartingActive,
-    isMobile,
-    aoiSelected,
-    aoiActive,
-    aoiCoordinates,
-    timeSpanSelection,
-    timeSpanStartDate,
-    timeSpanEndDate,
-    timelineStartDate,
-    timelineEndDate,
   } = props;
 
   useEffect(() => {
@@ -203,8 +204,7 @@ function ChartingModeOptions (props) {
     return `${year}-${month}-${day}`;
   }
 
-  async function onChartOrStatsButtonClick() {
-    // chartRequestInProgress
+  async function onRequestChartClick() {
     updateChartRequestStatus(true);
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
@@ -222,16 +222,27 @@ function ChartingModeOptions (props) {
         return;
       }
 
+      // unit determination: renderedPalettes
+      const paletteName = layerInfo.palette.id;
+      const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
+      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `(${paletteLegend.units})` : '';
+      console.log(unitOfMeasure);
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
+        unit: unitOfMeasure,
         ...data.body,
         ...uriParameters,
       };
 
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        displayChart({ title: dataToRender.title, subtitle: dataToRender.subtitle, data: rechartsData });
+        displayChart({
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          data: rechartsData,
+        });
         updateChartRequestStatus(false, 'Success');
       } else {
         displaySimpleStats(dataToRender);
@@ -429,7 +440,7 @@ function ChartingModeOptions (props) {
             id="charting-create-chart-button"
             className="charting-button"
             disabled={chartRequestInProgress}
-            onClick={() => onChartOrStatsButtonClick()}
+            onClick={() => onRequestChartClick()}
           >
             Request Chart
           </Button>
@@ -447,8 +458,9 @@ function ChartingModeOptions (props) {
 
 const mapStateToProps = (state) => {
   const {
-    charting, map, proj, config, layers, date,
+    charting, map, proj, config, layers, date, palettes,
   } = state;
+  const renderedPalettes = palettes.rendered;
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
   const {
@@ -468,6 +480,7 @@ const mapStateToProps = (state) => {
     olMap: map.ui.selected,
     proj,
     projections,
+    renderedPalettes,
     requestStatusMessage,
     timeSpanSelection,
     timeSpanEndDate,
@@ -541,7 +554,7 @@ const mapDispatchToProps = (dispatch) => ({
   displayChart: (liveData) => {
     dispatch(
       openCustomContent('CHARTING-CHART', {
-        headerText: `${liveData.title} - ${liveData.subtitle}`,
+        headerText: `${liveData.title} - ${liveData.subtitle} ${liveData.unit}`,
         backdrop: false,
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',
@@ -585,6 +598,7 @@ ChartingModeOptions.propTypes = {
   olMap: PropTypes.object,
   crs: PropTypes.string,
   proj: PropTypes.object,
+  renderedPalettes: PropTypes.object,
   projections: PropTypes.array,
   aoiActive: PropTypes.bool,
   timelineStartDate: PropTypes.instanceOf(Date),

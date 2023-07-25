@@ -17,18 +17,18 @@ function ChartComponent (props) {
 
   /**
    * Process the data & determine the min & max MEAN values to establish the Y Axis Scale
-   * @param {Object} data
+   * @param {Object} axisData
    */
-  function getYAxisValues(data) {
+  function getYAxisValues(axisData) {
     let lowestMin;
     let highestMax;
-    for (let i = 0; i < data.length; i += 1) {
+    for (let i = 0; i < axisData.length; i += 1) {
       // Establish mean min & max values for chart rendering
-      if (data[i].mean < lowestMin || lowestMin === undefined) {
-        lowestMin = data[i].mean;
+      if (axisData[i].mean < lowestMin || lowestMin === undefined) {
+        lowestMin = axisData[i].mean;
       }
-      if (data[i].mean > highestMax || highestMax === undefined) {
-        highestMax = data[i].mean;
+      if (axisData[i].mean > highestMax || highestMax === undefined) {
+        highestMax = axisData[i].mean;
       }
     }
 
@@ -78,20 +78,20 @@ function ChartComponent (props) {
    * Processes each date in the chart data, computes & returns the averages as "quick statistics"
    * @param {Object} chartData
    */
-  function getQuickStatistics(data) {
-    const count = data.length;
+  function getQuickStatistics(chartData) {
+    const count = chartData.length;
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
     let medianTotal = 0;
     let stddevTotal = 0;
 
-    for (let i = 0; i < data.length; i += 1) {
-      meanTotal += data[i].mean;
-      minTotal += data[i].min;
-      maxTotal += data[i].max;
-      medianTotal += data[i].median;
-      stddevTotal += data[i].stddev;
+    for (let i = 0; i < chartData.length; i += 1) {
+      meanTotal += chartData[i].mean;
+      minTotal += chartData[i].min;
+      maxTotal += chartData[i].max;
+      medianTotal += chartData[i].median;
+      stddevTotal += chartData[i].stddev;
     }
 
     return (
@@ -152,26 +152,24 @@ function ChartComponent (props) {
   }
 
   return (
-    <>
-      <div className="charting-chart-container">
-        <div className="charting-chart-text">
-          <LineChart width={600} height={300} data={data}>
-            <Tooltip />
-            {' '}
-            <Legend />
-            {getLineChart(data)}
-            <XAxis dataKey="name" />
-            <YAxis type="number" domain={yAxisValuesArr} />
-            <Legend />
-          </LineChart>
-        </div>
-        <div className="charting-stat-text">
-          <h3>Average Statistics</h3>
-          <br />
-          {getQuickStatistics(data)}
-        </div>
+    <div className="charting-chart-container">
+      <div className="charting-chart-text">
+        <LineChart width={600} height={300} data={data}>
+          <Tooltip />
+          {' '}
+          <Legend />
+          {getLineChart(data)}
+          <XAxis dataKey="name" />
+          <YAxis type="number" domain={yAxisValuesArr} />
+          <Legend />
+        </LineChart>
       </div>
-    </>
+      <div className="charting-stat-text">
+        <h3>Average Statistics</h3>
+        <br />
+        {getQuickStatistics(data)}
+      </div>
+    </div>
   );
 }
 
