@@ -420,13 +420,13 @@ function ChartingModeOptions (props) {
           {dateRangeValue}
         </div>
         <div className="charting-icons">
-          <div className="charting-calendar-container">
+          <div id="charting-calendar-container" className="charting-calendar-container">
             <FontAwesomeIcon
               icon={faCalendarDay}
               onClick={onDateIconClick}
             />
           </div>
-          <div className="charting-info-container">
+          <div id="charting-info-container" className="charting-info-container">
             <FontAwesomeIcon
               icon="info-circle"
               onClick={openChartingInfoModal}
