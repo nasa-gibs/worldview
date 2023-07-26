@@ -28,8 +28,9 @@
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "build": "run-s clean getcapabilities build:config build:dev",
+    "build:verbose": "run-s clean getcapabilities:verbose build:config build:dev",
     "build:ci": "run-s getcapabilities build:config build:prod",
-    "build:options": "bash -c 'tasks/buildOptions.sh'",
+    "build:options": "bash tasks/buildOptions.sh",
     "build:config": "run-s build:options && node ./tasks/util/config.js",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
@@ -47,6 +48,7 @@
     "docker:stop": "docker stop -t 1 worldview ; true",
     "e2e": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-ci.sh ; npm run docker:stop",
     "getcapabilities": "bash -c 'FETCH_GC=1 npm run build:options'",
+    "getcapabilities:verbose": "bash -c 'FETCH_GC=1 npm run build:options -- -v'",
     "generatePreviews": "node ./tasks/build-options/fetchPreviewSnapshots.py",
     "linkcheck": "node ./tasks/link-check",
     "lint": "run-s lint:js lint:scss",
