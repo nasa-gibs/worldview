@@ -26,12 +26,6 @@ const options = yargs
     type: 'string',
     description: 'layer-metadata/all.json file'
   })
-  .option('mode', {
-    demandOption: true,
-    alias: 'm',
-    type: 'string',
-    description: 'mode'
-  })
   .epilog('Creates a layer-metadata file containing all layers')
 
 const { argv } = options
@@ -103,7 +97,6 @@ async function main (url) {
     {}
   )
 
-  if (argv.mode === 'verbose') console.warn(`${prog}: Writing layer-metadata file to ${outputFile}`)
   await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
   console.warn(`${prog}: Combined all layer-metadata files into ${path.parse(outputFile).base}`)
 }
