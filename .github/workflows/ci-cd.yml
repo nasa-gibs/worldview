@@ -1,10 +1,8 @@
-
-name: CI
+name: CI-CD
 
 on: [push]
 
 jobs:
-
   build:
     runs-on: ${{matrix.os}}
     name: ${{matrix.os}}, Node ${{matrix.node}}
@@ -50,5 +48,3 @@ jobs:
           npx playwright install firefox &
           sleep 10
           npx playwright test --project=firefox --reporter=list
-
-
