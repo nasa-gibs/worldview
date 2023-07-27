@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './date-input-column';
@@ -230,7 +229,6 @@ function DateSelector(props) {
     const dateWithinRange = dateTime >= minDateTime && dateTime <= maxDateTime;
 
     // updateDate at this stage can still be invalid with pending timeunit changes
-    // eslint-disable-next-line react/destructuring-assignment
     const updatedDate = newDate.getTime() !== date.getTime();
     const newDateWithinRange = dateWithinRange && updatedDate;
     if (validDate && (isRollDate || newDateWithinRange)) {
@@ -260,7 +258,6 @@ function DateSelector(props) {
   * @param {Boolean} isRollDate
   * @returns {void}
   */
-  // eslint-disable-next-line react/destructuring-assignment
   const updateDate = (dateIn = date, isRollDate = false) => {
     const newDate = updateDateCheck(dateIn, isRollDate);
 
