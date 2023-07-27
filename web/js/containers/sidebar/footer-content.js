@@ -73,7 +73,7 @@ const FooterContent = React.forwardRef((props, ref) => {
         isMobile={isMobile}
       />
       <div className="compare-chart-container">
-        {!isCompareActive
+        {!isCompareActive && chartFeature
           && (
           <Button
             id="chart-toggle-button"
