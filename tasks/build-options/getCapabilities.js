@@ -108,8 +108,10 @@ async function handleException (error, link, dir, ext, count) {
 }
 
 async function processVectorData (layer) {
-  const ident = layer['ows:Identifier']._text
-  if (argv.mode === 'verbose') console.warn(`Processing vector data for ${ident}:`)
+  if (argv.mode === 'verbose') {
+    const ident = layer['ows:Identifier']._text
+    console.warn(`Processing vector data for ${ident}:`)
+  }
   if (layer['ows:Metadata']) {
     Object.values(layer['ows:Metadata']).forEach((item) => {
       const schemaVersion = item._attributes['xlink:role']
