@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
@@ -30,25 +30,38 @@ const RESOLUTION_KEY = {
  * @class resolutionSelection
  * @extends React.Component
  */
-export default class ImageDownloadPanel extends React.Component {
-  constructor(props) {
-    super(props);
+function ImageDownloadPanel(props) {
+  const {
+    fileType,
+    isWorldfile,
+    resolution,
+    getLayers,
+    url,
+    lonlats,
+    projection,
+    date,
+    markerCoordinates,
+    onPanelChange,
+    fileTypeOptions,
+    fileTypes,
+    secondLabel,
+    worldFileOptions,
+    datelineMessage,
+    map,
+    viewExtent,
+    resolutions,
+    maxImageSize,
+    firstLabel,
+    geoLatLong,
+    onLatLongChange,
+  } = props;
 
-    this.state = {
-      fileType: props.fileType,
-      isWorldfile: props.isWorldfile,
-      resolution: props.resolution,
-      debugUrl: '',
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.onDownload = this.onDownload.bind(this);
-  }
+  const [currFileType, setFileType] = useState(fileType);
+  const [currIsWorldfile, setIsWorldfile] = useState(isWorldfile);
+  const [currResolution, setResolution] = useState(resolution);
+  const [debugUrl, setDebugUrl] = useState('');
 
-  onDownload(width, height) {
-    const {
-      getLayers, url, lonlats, projection, date, markerCoordinates,
-    } = this.props;
-    const { fileType, isWorldfile, resolution } = this.state;
+  const onDownload = (width, height) => {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
@@ -59,15 +72,13 @@ export default class ImageDownloadPanel extends React.Component {
       lonlats,
       { width, height },
       time,
-      fileType,
-      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile,
+      currFileType,
+      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
       markerCoordinates,
     );
 
     if (url) {
       window.open(dlURL, '_blank');
-    } else {
-      console.log(url);
     }
     googleTagManager.pushEvent({
       event: 'image_download',
@@ -75,60 +86,48 @@ export default class ImageDownloadPanel extends React.Component {
         activeCount: layerList.length,
       },
       image: {
-        resolution: RESOLUTION_KEY[resolution],
-        format: fileType,
-        worldfile: isWorldfile,
+        resolution: RESOLUTION_KEY[currResolution],
+        format: currFileType,
+        worldfile: currIsWorldfile,
       },
     });
-    this.setState({ debugUrl: dlURL });
-  }
+    setDebugUrl(dlURL);
+  };
 
-  handleChange(type, value) {
-    const { onPanelChange } = this.props;
+  const handleChange = (type, value) => {
     if (type === 'resolution') {
-      this.setState({
-        resolution: value,
-      });
+      setResolution(value);
     } else if (type === 'worldfile') {
-      value = Boolean(Number(value));
-      this.setState({
-        isWorldfile: value,
-      });
+      setIsWorldfile(Boolean(Number(value)));
     } else {
-      this.setState({
-        fileType: value,
-      });
+      setFileType(value);
     }
     onPanelChange(type, value);
-  }
+  };
 
-  _renderFileTypeSelect() {
-    const { fileTypeOptions, fileTypes, secondLabel } = this.props;
-    const { fileType } = this.state;
+  const _renderFileTypeSelect = () => {
     if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-format"
             optionName="filetype"
-            value={fileType}
+            value={currFileType}
             optionArray={fileTypes}
-            onChange={this.handleChange}
+            onChange={handleChange}
           />
           {secondLabel}
         </div>
       );
     }
-  }
+  };
 
-  _renderWorldfileSelect() {
-    const { worldFileOptions } = this.props;
-    const { isWorldfile, fileType } = this.state;
+  const _renderWorldfileSelect = () => {
     if (worldFileOptions) {
-      const value = isWorldfile ? 1 : 0;
+      const value = currIsWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {fileType === 'application/vnd.google-earth.kmz' ? (
+          {currFileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
@@ -136,7 +135,7 @@ export default class ImageDownloadPanel extends React.Component {
             <select
               id="wv-image-worldfile"
               value={value}
-              onChange={(e) => this.handleChange('worldfile', e.target.value)}
+              onChange={(e) => handleChange('worldfile', e.target.value)}
             >
               <option value={0}>No</option>
               <option value={1}>Yes</option>
@@ -146,80 +145,72 @@ export default class ImageDownloadPanel extends React.Component {
         </div>
       );
     }
-  }
+  };
 
-  crossesDatelineAlert() {
-    const { datelineMessage } = this.props;
-    return datelineMessage && (
-      <AlertUtil
-        id="snapshot-dateline-alert"
-        isOpen
-        title="Crosses Dateline Alert"
-        message={datelineMessage}
-      />
-    );
-  }
+  const crossesDatelineAlert = () => datelineMessage && (
+    <AlertUtil
+      id="snapshot-dateline-alert"
+      isOpen
+      title="Crosses Dateline Alert"
+      message={datelineMessage}
+    />
+  );
 
-  render() {
-    const {
-      map, getLayers, viewExtent, projection, lonlats, resolutions, maxImageSize, firstLabel, geoLatLong, onLatLongChange,
-    } = this.props;
-    const { crs } = projection.selected;
-    const { resolution, debugUrl } = this.state;
-    const dimensions = getDimensions(projection.id, lonlats, resolution);
-    const { height } = dimensions;
-    const { width } = dimensions;
-    const filetypeSelect = this._renderFileTypeSelect();
-    const worldfileSelect = this._renderWorldfileSelect();
-    const layerList = getLayers();
+  const { crs } = projection.selected;
+  const dimensions = getDimensions(projection.id, lonlats, currResolution);
+  const { height } = dimensions;
+  const { width } = dimensions;
+  const filetypeSelect = _renderFileTypeSelect();
+  const worldfileSelect = _renderWorldfileSelect();
+  const layerList = getLayers();
 
-    return (
-      <>
-        {this.crossesDatelineAlert()}
-        <div className="wv-re-pick-wrapper wv-image">
-          <div
-            id="wv-image-download-url"
-            style={{ display: 'none' }}
-            url={debugUrl}
+  return (
+    <>
+      {crossesDatelineAlert()}
+      <div className="wv-re-pick-wrapper wv-image">
+        <div
+          id="wv-image-download-url"
+          style={{ display: 'none' }}
+          // eslint-disable-next-line react/no-unknown-property
+          url={debugUrl}
+        />
+        <div className="wv-image-header">
+          <SelectionList
+            id="wv-image-resolution"
+            optionArray={resolutions}
+            value={currResolution}
+            optionName="resolution"
+            onChange={handleChange}
           />
-          <div className="wv-image-header">
-            <SelectionList
-              id="wv-image-resolution"
-              optionArray={resolutions}
-              value={resolution}
-              optionName="resolution"
-              onChange={this.handleChange}
-            />
-            {firstLabel}
-          </div>
-          {filetypeSelect}
-          {worldfileSelect}
-          <LatLongSelect
-            viewExtent={viewExtent}
-            geoLatLong={projection.id === 'geographic' ? lonlats : geoLatLong}
-            onLatLongChange={onLatLongChange}
-            crs={crs}
-          />
-          <GlobalSelectCheckbox
-            viewExtent={viewExtent}
-            geoLatLong={geoLatLong}
-            onLatLongChange={onLatLongChange}
-            proj={projection.id}
-            map={map}
-          />
-          <ResTable
-            width={width}
-            height={height}
-            fileSize={((width * height * 24) / 8388608).toFixed(2)}
-            maxImageSize={maxImageSize}
-            validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
-            validLayers={layerList.length > 0}
-            onClick={this.onDownload}
-          />
+          {firstLabel}
         </div>
-      </>
-    );
-  }
+        {filetypeSelect}
+        {worldfileSelect}
+        <LatLongSelect
+          viewExtent={viewExtent}
+          geoLatLong={projection.id === 'geographic' ? lonlats : geoLatLong}
+          onLatLongChange={onLatLongChange}
+          crs={crs}
+        />
+        <GlobalSelectCheckbox
+          viewExtent={viewExtent}
+          geoLatLong={geoLatLong}
+          onLatLongChange={onLatLongChange}
+          proj={projection.id}
+          map={map}
+        />
+        <ResTable
+          width={width}
+          height={height}
+          fileSize={((width * height * 24) / 8388608).toFixed(2)}
+          maxImageSize={maxImageSize}
+          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          validLayers={layerList.length > 0}
+          onClick={onDownload}
+        />
+      </div>
+    </>
+  );
 }
 
 ImageDownloadPanel.defaultProps = {
@@ -234,7 +225,6 @@ ImageDownloadPanel.defaultProps = {
 };
 
 ImageDownloadPanel.propTypes = {
-  date: PropTypes.object,
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
@@ -248,6 +238,7 @@ ImageDownloadPanel.propTypes = {
   markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,
+  date: PropTypes.object,
   resolution: PropTypes.string,
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
@@ -257,3 +248,5 @@ ImageDownloadPanel.propTypes = {
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
 };
+
+export default ImageDownloadPanel;
