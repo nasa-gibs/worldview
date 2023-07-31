@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import * as olProj from 'ol/proj';
 import { containsExtent, isEmpty } from 'ol/extent';
 import { fromExtent } from 'ol/geom/Polygon';
 import PropTypes from 'prop-types';
