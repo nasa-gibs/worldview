@@ -185,11 +185,26 @@ button:focus {
     margin-top: 23px;
   }
 
+  & .input-time-divider-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    width: 13px;
+    margin-top: 13px;
+  }
+
   & .input-time-zmark {
     font-family: $wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
+  }
+
+  & .input-time-zmark-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    margin-top: 15px;
   }
 
   & .date-arrows {

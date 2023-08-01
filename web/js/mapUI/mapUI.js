@@ -63,6 +63,7 @@ function MapUI(props) {
     config,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     layerQueue,
     lastPreloadDate,
@@ -402,9 +403,14 @@ function MapUI(props) {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
-      <KioskAnimations ui={ui} />
-      <TileMeasurement ui={ui} />
-      {tileImageTestMode && <DevTestButton />}
+      { isEICModeActive
+      && (
+      <>
+        <KioskAnimations ui={ui} />
+        <TileMeasurement ui={ui} />
+      </>
+      )}
+      {tileImageTestMode && <TileImagePixelTest />}
 
     </>
   );
@@ -412,7 +418,7 @@ function MapUI(props) {
 
 const mapStateToProps = (state) => {
   const {
-    compare, config, date, embed, layers, map, palettes, proj, vectorStyles,
+    compare, config, date, embed, layers, map, palettes, proj, vectorStyles, ui,
   } = state;
   const {
     arrowDown, lastArrowDirection, lastPreloadDate, preloaded, selected, selectedB,
@@ -433,6 +439,7 @@ const mapStateToProps = (state) => {
   const useDate = selectedDate || (preloaded ? lastPreloadDate : getSelectedDate(state));
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
+  const isEICModeActive = ui.eic !== '';
 
   return {
     activeLayers,
@@ -442,6 +449,7 @@ const mapStateToProps = (state) => {
     compare,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     lastPreloadDate,
     layers,
@@ -486,6 +494,7 @@ MapUI.propTypes = {
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
+  isEICModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,
