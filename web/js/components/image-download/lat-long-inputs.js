@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import * as olProj from 'ol/proj';
-import {
-  clone as lodashClone,
-} from 'lodash';
 import { containsExtent, isEmpty } from 'ol/extent';
+import { fromExtent } from 'ol/geom/Polygon';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CRS } from '../../modules/map/constants';
@@ -27,9 +24,11 @@ function Input({
   const update = () => {
     try {
       const newInputValue = Number(inputValue);
-      const newArray = lodashClone(boundingBoxArray);
+      const newArray = structuredClone(boundingBoxArray);
       newArray[index] = newInputValue;
-      const crsCorrectedExtent = olProj.transformExtent(newArray, CRS.GEOGRAPHIC, crs);
+      const extentPolygon = fromExtent(newArray);
+      const crsCorrectedExtentPolygon = extentPolygon.transform(CRS.GEOGRAPHIC, crs);
+      const crsCorrectedExtent = crsCorrectedExtentPolygon.getExtent();
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
       && isValidExtent(newArray)
