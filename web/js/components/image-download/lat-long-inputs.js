@@ -26,7 +26,6 @@ function Input({
       const newInputValue = Number(inputValue);
       const newArray = structuredClone(boundingBoxArray);
       newArray[index] = newInputValue;
-      // Due to a bug (ol v7.4.0) in transformExtent, we need to create a polygon before transforming it.
       const extentPolygon = fromExtent(newArray);
       const crsCorrectedExtentPolygon = extentPolygon.transform(CRS.GEOGRAPHIC, crs);
       const crsCorrectedExtent = crsCorrectedExtentPolygon.getExtent();
