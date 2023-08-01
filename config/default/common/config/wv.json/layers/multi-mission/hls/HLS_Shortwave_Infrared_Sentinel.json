@@ -1,10 +1,10 @@
 {
   "layers": {
-    "HLS_SWIR_Sentinel": {
-      "id": "HLS_SWIR_Sentinel",
+    "HLS_Shortwave_Infrared_Sentinel": {
+      "id": "HLS_Shortwave_Infrared_Sentinel",
       "title": "Reflectance (Bands 12-8A-4, Shortwave Infrared) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
-      "description": "multi-mission/hls/HLS_SWIR_Sentinel",
+      "description": "multi-mission/hls/HLS_Shortwave_Infrared_Sentinel",
       "tags": "corrected surface oli sentinel msi s30 swir",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
