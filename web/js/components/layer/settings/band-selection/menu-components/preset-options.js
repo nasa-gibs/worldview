@@ -3,7 +3,7 @@ import {
   Card, CardImg, CardBody, CardTitle, CardText,
 } from 'reactstrap';
 
-const imgPath = 'images/band-combination-presets/';
+const imgPath = 'images/layers/previews/geographic/';
 
 const landsatPresets = [
   {
@@ -12,23 +12,23 @@ const landsatPresets = [
     r: 'B04',
     g: 'B03',
     b: 'B02',
-    img: 'naturalColor_landsat.png',
+    img: 'HLS_Natural_Color_Landsat.jpg',
   },
   {
-    id: 'colorInfrared_landsat',
+    id: 'HLS_Color_Infrared_Landsat',
     title: 'Color Infrared (CIR)',
     r: 'B05',
     g: 'B04',
     b: 'B03',
-    img: 'colorInfrared_landsat.png',
+    img: 'HLS_Color_Infrared_Landsat.jpg',
   },
   {
-    id: 'falseColorUrban_landsat',
+    id: 'HLS_False_Color_Urban_Landsat',
     title: 'False Color (Urban)',
     r: 'B07',
     g: 'B06',
     b: 'B04',
-    img: 'falseColorUrban_landsat.png',
+    img: 'HLS_False_Color_Urban_Landsat.jpg',
   },
   {
     id: 'FalseColorVegetation_landsat',
@@ -36,50 +36,58 @@ const landsatPresets = [
     r: 'B06',
     g: 'B05',
     b: 'B04',
-    img: 'FalseColorVegetation_landsat.png',
+    img: 'HLS_False_Color_Vegetation_Landsat.jpg',
   },
   {
-    id: 'shortwaveInfrared_landsat',
+    id: 'HLS_Shortwave_Infrared_Landsat.jpg',
     title: 'Shortwave Infrared',
     r: 'B07',
     g: 'B05',
     b: 'B04',
-    img: 'shortwaveInfrared_landsat.png',
+    img: 'HLS_Shortwave_Infrared_Landsat.jpg',
   },
 ];
 
 const sentinelPresets = [
   {
-    id: 'trueColor_sentinel',
-    title: 'True Color',
+    id: 'HLS_Natural_Color_Sentinel',
+    title: 'Natural Color',
     r: 'B04',
     g: 'B03',
     b: 'B02',
-    img: 'trueColor_sentinel.png',
+    img: 'HLS_Natural_Color_Sentinel.jpg',
   },
   {
-    id: 'falseColor_sentinel',
+    id: 'HLS_False_Color_Sentinel',
     title: 'False Color',
     r: 'B08',
     g: 'B04',
     b: 'B03',
-    img: 'falseColor_sentinel.png',
+    img: 'HLS_False_Color_Sentinel.jpg',
   },
   {
-    id: 'falseColorUrban_sentinel',
+    id: 'HLS_False_Color_Urban_Sentinel',
     title: 'False Color Urban',
     r: 'B12',
     g: 'B11',
     b: 'B4',
-    img: 'falseColorUrban_sentinel.png',
+    img: 'HLS_False_Color_Urban_Sentinel.jpg',
   },
   {
-    id: 'SWIR_sentinel',
-    title: 'SWIR',
+    id: 'HLS_False_Color_Vegetation_Sentinel',
+    title: 'False Color Vegetation',
+    r: 'B11',
+    g: 'B8A',
+    b: 'B04',
+    img: 'HLS_False_Color_Vegetation_Sentinel.jpg',
+  },
+  {
+    id: 'HLS_SWIR_Sentinel',
+    title: 'Shortwave Infrared',
     r: 'B12',
     g: 'B8A',
     b: 'B04',
-    img: 'SWIR_sentinel.png',
+    img: 'HLS_SWIR_Sentinel.jpg',
   },
 ];
 
