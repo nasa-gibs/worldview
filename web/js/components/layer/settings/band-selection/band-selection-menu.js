@@ -36,6 +36,7 @@ export default function BandSelection({ layer }) {
     closeModal();
   };
 
+  // eslint-disable-next-line no-unused-vars
   const rwbInfo = (
     <div className="band-selection-rwb-info">
       <p>Resolution = 10m/px</p>
@@ -75,7 +76,7 @@ export default function BandSelection({ layer }) {
           setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
-        {rwbInfo}
+        {/* {rwbInfo} */}
       </div>
       <div className="band-selection-row">
         <p className="band-selection-color-header">G:</p>
@@ -86,7 +87,7 @@ export default function BandSelection({ layer }) {
           setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
-        {rwbInfo}
+        {/* {rwbInfo} */}
       </div>
       <div className="band-selection-row">
         <p className="band-selection-color-header">B:</p>
@@ -97,7 +98,7 @@ export default function BandSelection({ layer }) {
           setSelectedPreset={setSelectedPreset}
           layer={layer}
         />
-        {rwbInfo}
+        {/* {rwbInfo} */}
       </div>
       <div className="band-selection-button-row">
         <Button
