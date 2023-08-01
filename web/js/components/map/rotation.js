@@ -1,154 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { debounce } from 'lodash';
-import PropTypes from 'prop-types';
 import { saveRotation } from '../../map/util';
 import HoverTooltip from '../util/hover-tooltip';
+import { refreshRotation } from '../../modules/map/actions';
 
 const duration = 500;
 
-class Rotation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      intervalId: null,
-    };
-    this.rotateOnClick = this.rotateOnClick.bind(this);
-    this.clearInterval = this.clearInterval.bind(this);
-    this.resetRotation = this.resetRotation.bind(this);
-  }
+function Rotation() {
+  const [intervalId, setIntervalId] = useState(null);
 
-  clearInterval() {
-    const { intervalId } = this.state;
+  const map = useSelector((state) => state.map.ui.selected, shallowEqual);
+  const proj = useSelector((state) => state.proj, shallowEqual);
+  const rotation = useSelector((state) => state.map.rotation);
+  const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
+
+  const currentRotation = Number(rotation * (180 / Math.PI)).toFixed();
+  const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
+  const rotationButtonClass = isMobile ? 'wv-rotation-buttons-mobile' : 'wv-rotation-buttons';
+
+  const dispatch = useDispatch();
+  const updateRotationState = (radians) => debounce(() => {
+    dispatch(refreshRotation(radians));
+  }, 100);
+
+  const clearIntervalRotation = () => {
     clearInterval(intervalId);
-  }
-
-  rotate(degrees) {
-    const { map, updateRotationState } = this.props;
-    const mapView = map.ui.selected.getView();
-    const currentDeg = mapView.getRotation() * (180.0 / Math.PI);
-    const rotation = mapView.getRotation() - Math.PI / degrees;
-    saveRotation(currentDeg, mapView);
-    mapView.animate({ rotation, duration });
-    updateRotationState(rotation);
-  }
-
-  rotateOnClick = (radians) => {
-    const newIntervalId = setInterval(() => {
-      this.rotate(radians);
-    }, duration);
-    this.rotate(radians);
-    this.setState({ intervalId: newIntervalId });
   };
 
-  resetRotation() {
-    const { map } = this.props;
-    this.clearInterval();
-    map.ui.selected.getView().animate({
+  const rotate = (degrees) => {
+    const mapView = map.getView();
+    const currentDeg = mapView.getRotation() * (180.0 / Math.PI);
+    const newRotation = mapView.getRotation() - Math.PI / degrees;
+    saveRotation(currentDeg, mapView);
+    mapView.animate({ rotation: newRotation, duration });
+    updateRotationState(newRotation);
+  };
+
+  const rotateOnClick = (radians) => {
+    const newIntervalId = setInterval(() => {
+      rotate(radians);
+    }, duration);
+    rotate(radians);
+    setIntervalId(newIntervalId);
+  };
+
+  const resetRotation = () => {
+    clearIntervalRotation();
+    map.getView().animate({
       duration: 500,
       rotation: 0,
     });
-  }
+  };
 
-  render() {
-    const {
-      rotation, proj, isDistractionFreeModeActive, isMobile,
-    } = this.props;
-    const currentRotation = Number(rotation * (180 / Math.PI)).toFixed();
-    const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const rotationButtonClass = isMobile ? 'wv-rotation-buttons-mobile' : 'wv-rotation-buttons';
+  return !isDistractionFreeModeActive && isPolarProj && (
+    <div className={rotationButtonClass}>
+      <button
+        type="button"
+        className="wv-map-rotate-left wv-map-zoom"
+        onMouseDown={() => { rotateOnClick(10); }}
+        onMouseUp={clearIntervalRotation}
+        onMouseOut={clearIntervalRotation}
+        onMouseMove={(e) => { e.stopPropagation(); }}
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Rotate counterclockwise"
+          placement="left"
+          target=".wv-map-rotate-left"
+        />
+        <FontAwesomeIcon icon="undo" className="cursor-pointer" />
+      </button>
 
-    return !isDistractionFreeModeActive && isPolarProj && (
-      <div className={rotationButtonClass}>
-        <button
-          type="button"
-          className="wv-map-rotate-left wv-map-zoom"
-          onMouseDown={() => { this.rotateOnClick(10); }}
-          onMouseUp={this.clearInterval}
-          onMouseOut={this.clearInterval}
-          onMouseMove={(e) => { e.stopPropagation(); }}
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Rotate counterclockwise"
-            placement="left"
-            target=".wv-map-rotate-left"
-          />
-          <FontAwesomeIcon icon="undo" className="cursor-pointer" />
-        </button>
+      <button
+        type="button"
+        className="wv-map-reset-rotation wv-map-zoom"
+        onMouseDown={resetRotation}
+        onMouseUp={clearIntervalRotation}
+        onMouseOut={clearIntervalRotation}
+        onMouseMove={(e) => { e.stopPropagation(); }}
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Reset rotation"
+          placement="left"
+          target=".wv-map-reset-rotation"
+        />
+        {currentRotation}
+      </button>
 
-        <button
-          type="button"
-          className="wv-map-reset-rotation wv-map-zoom"
-          onMouseDown={this.resetRotation}
-          onMouseUp={this.clearInterval}
-          onMouseOut={this.clearInterval}
-          onMouseMove={(e) => { e.stopPropagation(); }}
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Reset rotation"
-            placement="left"
-            target=".wv-map-reset-rotation"
-          />
-          {currentRotation}
-        </button>
-
-        <button
-          type="button"
-          className="wv-map-rotate-right wv-map-zoom"
-          onMouseDown={() => { this.rotateOnClick(-10); }}
-          onMouseUp={this.clearInterval}
-          onMouseOut={this.clearInterval}
-          onMouseMove={(e) => { e.stopPropagation(); }}
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Rotate clockwise"
-            placement="left"
-            target=".wv-map-rotate-right"
-          />
-          <FontAwesomeIcon icon="redo" className="cursor-pointer" />
-        </button>
-      </div>
-    );
-  }
+      <button
+        type="button"
+        className="wv-map-rotate-right wv-map-zoom"
+        onMouseDown={() => { rotateOnClick(-10); }}
+        onMouseUp={clearIntervalRotation}
+        onMouseOut={clearIntervalRotation}
+        onMouseMove={(e) => { e.stopPropagation(); }}
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Rotate clockwise"
+          placement="left"
+          target=".wv-map-rotate-right"
+        />
+        <FontAwesomeIcon icon="redo" className="cursor-pointer" />
+      </button>
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => {
-  const {
-    screenSize, map, proj, ui,
-  } = state;
-  const isMobile = screenSize.isMobileDevice;
-  return {
-    map,
-    proj,
-    rotation: map.rotation,
-    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
-    isMobile,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  updateRotationState: debounce((radians) => {
-    dispatch({
-      type: 'MAP/UPDATE_ROTATION',
-      rotation: radians,
-    });
-  }, 100),
-});
-
-Rotation.propTypes = {
-  map: PropTypes.object,
-  rotation: PropTypes.number,
-  isDistractionFreeModeActive: PropTypes.bool,
-  isMobile: PropTypes.bool,
-  proj: PropTypes.object,
-  updateRotationState: PropTypes.func,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Rotation);
+export default Rotation;
