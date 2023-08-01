@@ -15,7 +15,7 @@
       "orbitDirection": ["descending", "descending"],
       "bandCombo": {
         "r": "B11",
-        "g": "B08A",
+        "g": "B8A",
         "b": "B04"
       },
       "wrapX": false,
