@@ -410,7 +410,7 @@ function MapUI(props) {
         <TileMeasurement ui={ui} />
       </>
       )}
-      {tileImageTestMode && <TileImagePixelTest />}
+      {tileImageTestMode && <DevTestButton />}
 
     </>
   );
