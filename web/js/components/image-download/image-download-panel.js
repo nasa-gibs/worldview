@@ -23,13 +23,7 @@ const RESOLUTION_KEY = {
   20: '5km',
   40: '10km',
 };
-/*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class resolutionSelection
- * @extends React.Component
- */
+
 function ImageDownloadPanel(props) {
   const {
     fileType,
@@ -77,9 +71,7 @@ function ImageDownloadPanel(props) {
       markerCoordinates,
     );
 
-    if (url) {
-      window.open(dlURL, '_blank');
-    }
+    window.open(dlURL, '_blank');
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
@@ -95,14 +87,16 @@ function ImageDownloadPanel(props) {
   };
 
   const handleChange = (type, value) => {
+    let valueIn = value;
     if (type === 'resolution') {
-      setResolution(value);
+      setResolution(valueIn);
     } else if (type === 'worldfile') {
-      setIsWorldfile(Boolean(Number(value)));
+      valueIn = Boolean(Number(value));
+      setIsWorldfile(valueIn);
     } else {
-      setFileType(value);
+      setFileType(valueIn);
     }
-    onPanelChange(type, value);
+    onPanelChange(type, valueIn);
   };
 
   const _renderFileTypeSelect = () => {
@@ -137,8 +131,8 @@ function ImageDownloadPanel(props) {
               value={value}
               onChange={(e) => handleChange('worldfile', e.target.value)}
             >
-              <option value={0}>No</option>
-              <option value={1}>Yes</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
             </select>
           )}
           Worldfile (.zip)
@@ -217,7 +211,7 @@ ImageDownloadPanel.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
-  isWorldfile: 'false',
+  isWorldfile: false,
   maxImageSize: '8200px x 8200px',
   resolution: '1',
   secondLabel: 'Format',
