@@ -19,6 +19,7 @@
         "b": "B03"
       },
       "wrapX": false,
+      "disableSnapshot": true,
       "projections": {
         "geographic": {
           "source": "DDV",

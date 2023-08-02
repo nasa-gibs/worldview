@@ -18,6 +18,7 @@
         "g": "B05",
         "b": "B04"
       },
+      "disableSnapshot": true,
       "wrapX": false,
       "projections": {
         "geographic": {
