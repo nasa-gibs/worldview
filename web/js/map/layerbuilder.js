@@ -753,6 +753,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const landsatLayers = [
       'HLS_Customizable_Landsat',
+      'HLS_Natural_Color_Landsat',
       'HLS_Color_Infrared_Landsat',
       'HLS_False_Color_Urban_Landsat',
       'HLS_False_Color_Vegetation_Landsat',
