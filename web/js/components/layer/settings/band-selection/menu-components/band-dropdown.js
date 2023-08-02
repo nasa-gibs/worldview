@@ -15,7 +15,9 @@ export default function BandsDropdown(props) {
   const toggle = () => setDropdownOpen(!dropdownOpen);
   const bandValue = bandSelection[channel] || layer.bandCombo[0];
 
-  const bandChoices = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B10', 'B11', 'B12'];
+  const sentinelBandChoices = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B10', 'B11', 'B12'];
+  const landsatBandChoices = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09'];
+  const activeBandChoices = layer.title.includes('Landsat') ? landsatBandChoices : sentinelBandChoices;
 
   const handleSelection = (band) => {
     setBandSelection({
@@ -31,7 +33,7 @@ export default function BandsDropdown(props) {
         {bandValue}
       </DropdownToggle>
       <DropdownMenu style={{ transform: 'translate3d(-30px, 0px, 0px)' }}>
-        {bandChoices.map((band) => (
+        {activeBandChoices.map((band) => (
           <DropdownItem key={band} onClick={() => handleSelection(band)}>
             {band}
           </DropdownItem>
