@@ -1,9 +1,9 @@
+import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import { assign, cloneDeep } from 'lodash';
 import update from 'immutability-helper';
-import { TextEncoder, TextDecoder } from 'util';
 import {
   requestPalette,
   setThresholdRangeAndSquash,

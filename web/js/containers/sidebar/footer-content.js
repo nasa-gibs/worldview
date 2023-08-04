@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
+import googleTagManager from 'googleTagManager';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
