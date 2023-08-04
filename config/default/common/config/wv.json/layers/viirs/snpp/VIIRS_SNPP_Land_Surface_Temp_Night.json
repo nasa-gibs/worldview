@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Land_Surface_Temp_Night": {
+      "id": "VIIRS_SNPP_Land_Surface_Temp_Night",
+      "description": "viirs/snpp/VIIRS_SNPP_Land_Surface_Temp_Night",
+      "tags": "suomi npp",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature"
+    }
+  }
+}

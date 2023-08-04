@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Brightness_Temp_BandI5_Day": {
+      "id": "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+      "description": "viirs/snpp/VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

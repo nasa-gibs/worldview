@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night": {
+      "id": "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
+      "description": "viirs/snpp/VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature"
+    }
+  }
+}
