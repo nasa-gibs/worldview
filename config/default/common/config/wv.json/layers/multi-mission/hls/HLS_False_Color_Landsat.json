@@ -1,11 +1,11 @@
 {
   "layers": {
-    "HLS_Natural_Color_Landsat": {
-      "id": "HLS_Natural_Color_Landsat",
-      "title": "Reflectance (Bands 4-3-2, True Color) *BETA*",
+    "HLS_False_Color_Landsat": {
+      "id": "HLS_False_Color_Landsat",
+      "title": "Reflectance (Bands 5-4-3, False Color) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
-      "description": "multi-mission/hls/HLS_Natural_Color_Landsat",
-      "tags": "corrected surface oli sentinel msi s30",
+      "description": "multi-mission/hls/HLS_False_Color_Landsat",
+      "tags": "corrected surface oli l30 cir false color",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
@@ -14,9 +14,9 @@
       "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
       "orbitDirection": ["descending", "descending"],
       "bandCombo": {
-        "r": "B04",
-        "g": "B03",
-        "b": "B02"
+        "r": "B05",
+        "g": "B04",
+        "b": "B03"
       },
       "wrapX": false,
       "disableSnapshot": true,
