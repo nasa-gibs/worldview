@@ -8,8 +8,8 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import {
   addLayer,
   getStartingLayers,
