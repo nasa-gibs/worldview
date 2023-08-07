@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
+import { isMobileOnly, isTablet } from 'react-device-detect';
+import googleTagManager from 'googleTagManager';
 import LayerList from './layer-list';
 import {
   getAllActiveOverlaysBaselayers,
@@ -17,6 +19,10 @@ import {
 } from '../../modules/layers/actions';
 import Checkbox from '../../components/util/checkbox';
 import util from '../../util/util';
+import Button from '../../components/util/button';
+import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
+import { openCustomContent } from '../../modules/modal/actions';
+import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 function LayersContainer (props) {
   const {
@@ -33,6 +39,11 @@ function LayersContainer (props) {
     reorderOverlayGroups,
     toggleCollapse,
     toggleOverlayGroups,
+    isMobile,
+    breakpoints,
+    screenWidth,
+    isPlaying,
+    addLayers,
   } = props;
 
   const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);
@@ -87,6 +98,12 @@ function LayersContainer (props) {
         )}
       </Draggable>
     );
+  };
+
+  const onClickAddLayers = (e) => {
+    e.stopPropagation();
+    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
+    googleTagManager.pushEvent({ event: 'add_layers' });
   };
 
   const renderOverlayGroups = () => (
@@ -158,13 +175,22 @@ function LayersContainer (props) {
           )}
         </div>
       </div>
-      <div className="group-overlays-checkbox">
-        <Checkbox
-          id="group-overlays-checkbox"
-          checked={groupOverlays}
-          onCheck={toggleOverlayGroups}
-          label="Group Similar Layers"
-        />
+      <div className="product-buttons">
+        <div className="layers-add-container">
+          <Button
+            id="layers-add"
+            aria-label="Add layers"
+            className="layers-add red"
+            text="+ Add Layers"
+            onClick={onClickAddLayers}
+          />
+          <Checkbox
+            id="group-overlays-checkbox"
+            checked={groupOverlays}
+            onCheck={toggleOverlayGroups}
+            label="Group Similar Layers"
+          />
+        </div>
       </div>
     </>
   );
@@ -173,9 +199,10 @@ function LayersContainer (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    compare, embed, layers, animation, screenSize,
+    compare, charting, embed, layers, animation, screenSize,
   } = state;
   const isCompareActive = compare.active;
+  const isChartingActive = charting.active;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const { groupOverlays } = layers[compareState];
@@ -192,6 +219,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isAnimating: animation.isPlaying,
     isCompareActive,
+    isChartingActive,
     isEmbedModeActive,
     isMobile,
     baselayers,
@@ -214,6 +242,21 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCollapse: (groupName, collapsed) => {
     dispatch(toggleGroupCollapsedAction(groupName, collapsed));
   },
+  addLayers: (isPlaying) => {
+    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
+    if (isPlaying) {
+      dispatch(stopAnimationAction());
+    }
+    dispatch(
+      openCustomContent('LAYER_PICKER_COMPONENT', {
+        headerText: null,
+        modalClassName,
+        backdrop: true,
+        CompletelyCustomModal: SearchUiProvider,
+        wrapClassName: '',
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -230,6 +273,7 @@ LayersContainer.propTypes = {
   isActive: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,
@@ -237,4 +281,8 @@ LayersContainer.propTypes = {
   reorderOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
   toggleOverlayGroups: PropTypes.func,
+  breakpoints: PropTypes.object,
+  isPlaying: PropTypes.bool,
+  screenWidth: PropTypes.number,
+  addLayers: PropTypes.func,
 };
