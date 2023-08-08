@@ -103,3 +103,29 @@
     width: 85% ;
     padding-top: 8px;
   }
+
+.double-range {
+  &.start-range::-webkit-slider-runnable-track {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: linear-gradient(
+      to right,
+      #ccc 0%,
+      #ccc var(--min-range-percent),
+      #ABE2FB var(--min-range-percent),
+      #ABE2FB 100%
+    );
+  }
+
+  &.end-range::-webkit-slider-runnable-track {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: linear-gradient(
+      to right,
+      #ABE2FB 0%,
+      #ABE2FB var(--max-range-percent),
+      #ccc var(--max-range-percent),
+      #ccc 100%
+    );
+  }
+}

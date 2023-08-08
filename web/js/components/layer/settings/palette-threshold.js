@@ -6,6 +6,9 @@ import {
   checkTemperatureUnitConversion, convertPaletteValue,
 } from '../../../modules/settings/util';
 
+const sliderWidth = 264;
+const thumbsize = 22;
+
 class PaletteThreshold extends React.Component {
   constructor(props) {
     super(props);
@@ -14,10 +17,22 @@ class PaletteThreshold extends React.Component {
       start,
       end,
       squashed,
+      avg: 0,
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
     this.updateSquash = this.updateSquash.bind(this);
     this.updateThreshold = this.updateThreshold.bind(this);
+  }
+
+  componentDidUpdate() {
+    const {
+      start, end, avg,
+    } = this.state;
+    if (avg !== Math.round((start + end) / 2)) {
+      this.setState({
+        avg: Math.round((start + end) / 2),
+      });
+    }
   }
 
   updateSquash() {
@@ -100,11 +115,12 @@ class PaletteThreshold extends React.Component {
 
   render() {
     const {
-      start, end, squashed,
+      start, end, squashed, avg,
     } = this.state;
     const {
       index, min, max, legend, globalTemperatureUnit,
     } = this.props;
+
     const units = legend.units || '';
     const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let startLabel = start === 0 && legend.minLabel
@@ -124,8 +140,22 @@ class PaletteThreshold extends React.Component {
       endLabel += ` ${units}`;
     }
 
-    const startPercent = ((start - min) / (max - min)) * 100;
-    const endPercent = ((end - min) / (max - min)) * 100;
+    const minWidth = thumbsize + ((avg - min) / (max - min)) * (sliderWidth - (2 * thumbsize));
+    const maxWidth = thumbsize + ((max - avg) / (max - min)) * (sliderWidth - (2 * thumbsize));
+    const minPercent = ((start - min) / (avg - min)) * 100;
+    const maxPercent = ((end - avg) / (max - avg)) * 100;
+    const styles = {
+      min: {
+        width: minWidth,
+        left: 0,
+        '--min-range-percent': `${minPercent}%`,
+      },
+      max: {
+        width: maxWidth,
+        left: minWidth,
+        '--max-range-percent': `${maxPercent}%`,
+      },
+    };
 
     return (
       <div className="layer-threshold-select settings-component">
@@ -145,30 +175,26 @@ class PaletteThreshold extends React.Component {
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
-          <div className="flex align-items-center">
-            <span className="me-2">MIN:</span>
-            <input
-              type="range"
-              className="form-range start-range palette-threshold-range"
-              value={start}
-              min={min}
-              max={max}
-              onChange={(e) => this.updateStartThreshold(parseInt(e.target.value, 10))}
-              style={{ '--value-percent': `${startPercent}%` }}
-            />
-          </div>
-          <div className="flex align-items-center mt-2">
-            <span className="me-2">MAX:</span>
-            <input
-              type="range"
-              className="form-range end-range palette-threshold-range"
-              value={end}
-              min={min}
-              max={max}
-              onChange={(e) => this.updateEndThreshold(parseInt(e.target.value, 10))}
-              style={{ '--value-percent': `${endPercent}%` }}
-            />
-          </div>
+          <input
+            className="double-range form-range start-range palette-threshold-range"
+            style={styles.min}
+            name="min"
+            type="range"
+            min={min}
+            max={avg}
+            value={start}
+            onChange={(e) => this.updateStartThreshold(Math.ceil(parseFloat(e.target.value, 10)))}
+          />
+          <input
+            className="double-range form-range end-range palette-threshold-range"
+            style={styles.max}
+            name="max"
+            type="range"
+            min={avg}
+            max={max}
+            value={end}
+            onChange={(e) => this.updateEndThreshold(Math.ceil(parseFloat(e.target.value, 10)))}
+          />
           <div className="wv-label mt-3">
             <span className="wv-label-range-min wv-label-range">
               {startLabel}
