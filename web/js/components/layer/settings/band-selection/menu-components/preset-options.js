@@ -46,6 +46,15 @@ const landsatPresets = [
     b: 'B04',
     img: 'HLS_Shortwave_Infrared_Landsat.jpg',
   },
+  {
+    id: 'HLS_NDVI_Landsat.jpg',
+    title: 'NDVI',
+    assets: ['B05', 'B04'],
+    expression: '(B05-B04)/(B05+B04)',
+    rescale: '-1,1',
+    colormap_name: 'rdylgn',
+    img: 'HLS_NDVI_Landsat.jpg',
+  },
 ];
 
 const sentinelPresets = [
@@ -89,6 +98,16 @@ const sentinelPresets = [
     b: 'B04',
     img: 'HLS_SWIR_Sentinel.jpg',
   },
+  {
+    id: 'HLS_NDVI_Sentinel.jpg',
+    title: 'NDVI',
+    assets: ['B08', 'B04'],
+    expression: '(B08-B04)/(B08+B04)',
+    rescale: '0,1',
+    colormap_name: 'rdylgn',
+    asset_as_band: true,
+    img: 'HLS_NDVI_Sentinel.jpg',
+  },
 ];
 
 export default function PresetOptions(props) {
@@ -101,6 +120,11 @@ export default function PresetOptions(props) {
       r: preset.r,
       g: preset.g,
       b: preset.b,
+      assets: preset.assets,
+      expression: preset.expression,
+      rescale: preset.rescale,
+      colormap_name: preset.colormap_name,
+      asset_as_band: preset.asset_as_band,
     });
   };
 
@@ -121,7 +145,11 @@ export default function PresetOptions(props) {
             <CardImg top className="band-selection-preset-image" src={imgPath + preset.img} alt={preset.title} />
             <CardBody>
               <CardTitle tag="h5">{preset.title}</CardTitle>
-              <CardText>{`R: ${preset.r}, G: ${preset.g}, B: ${preset.b}`}</CardText>
+              {
+                !preset.expression
+                  ? <CardText>{`R: ${preset.r}, G: ${preset.g}, B: ${preset.b}`}</CardText>
+                  : <CardText>{preset.expression}</CardText>
+              }
             </CardBody>
           </Card>
         ))}

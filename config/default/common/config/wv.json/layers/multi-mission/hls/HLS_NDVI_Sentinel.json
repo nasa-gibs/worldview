@@ -1,0 +1,32 @@
+{
+    "layers": {
+      "HLS_NDVI_Sentinel": {
+        "id": "HLS_NDVI_Sentinel",
+        "title": "NDVI ((B05-B04)/(B05+B04)) Sentinel *BETA*",
+        "subtitle": "Sentinel 8 & 9 / OLI",
+        "description": "multi-mission/hls/HLS_NDVI_Sentinel",
+        "tags": "corrected surface Sentinel oli l30 ndvi",
+        "group": "overlays",
+        "layergroup": "Land Surface Reflectance",
+        "format": "image/png",
+        "type": "ttiler",
+        "period": "daily",
+        "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+        "orbitDirection": ["descending", "descending"],
+        "bandCombo": {
+            "assets": ["B08", "B04"],
+            "expression": "(B08-B04)/(B08+B04)",
+            "rescale": "0,1",
+            "colormap_name": "rdylgn"
+        },
+        "disableSnapshot": true,
+        "wrapX": false,
+        "projections": {
+          "geographic": {
+            "source": "DDV",
+            "matrixSet": "31.25m"
+          }
+        }
+      }
+    }
+  }

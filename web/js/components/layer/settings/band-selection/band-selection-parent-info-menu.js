@@ -25,38 +25,60 @@ export default function BandSelectionParentInfoMenu({ layer }) {
     );
   };
 
-  const { r, g, b } = layer.bandCombo;
+  const {
+    r,
+    g,
+    b,
+    expression,
+  } = layer.bandCombo;
+
+  const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
 
   return (
     <div className="customize-bands-parent-info">
       <hr />
       <p>Channels and bands assigned:</p>
-      <div className="current-band-info">
-        <div>
-          <span className="band-color">Red:</span>
-          <span className="band-name">
-            Band
-            {' '}
-            {r}
-          </span>
-        </div>
-        <div>
-          <span className="band-color">Green:</span>
-          <span className="band-name">
-            Band
-            {' '}
-            {g}
-          </span>
-        </div>
-        <div>
-          <span className="band-color">Blue:</span>
-          <span className="band-name">
-            Band
-            {' '}
-            {b}
-          </span>
-        </div>
-      </div>
+      {
+        isValidBandSelection()
+          ? (
+            <div className="current-band-info">
+              <div>
+                <span className="band-color">Red:</span>
+                <span className="band-name">
+                  Band
+                  {' '}
+                  {r}
+                </span>
+              </div>
+              <div>
+                <span className="band-color">Green:</span>
+                <span className="band-name">
+                  Band
+                  {' '}
+                  {g}
+                </span>
+              </div>
+              <div>
+                <span className="band-color">Blue:</span>
+                <span className="band-name">
+                  Band
+                  {' '}
+                  {b}
+                </span>
+              </div>
+            </div>
+          )
+          : (
+            <div className="current-band-info">
+              <div>
+                <span className="band-color">Expression:</span>
+                <span className="band-name">
+                  {expression}
+                </span>
+              </div>
+            </div>
+          )
+      }
       <div className="customize-bands-button-container">
         <Button
           id="customize-bands-button"

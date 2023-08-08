@@ -12,6 +12,8 @@
 		"HLS_False_Color_Vegetation_Landsat",
 		"HLS_False_Color_Urban_Landsat",
 		"HLS_Shortwave_Infrared_Landsat",
+		"HLS_NDVI_Landsat",
+		"HLS_NDVI_Sentinel",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule",

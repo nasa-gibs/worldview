@@ -16,7 +16,6 @@ import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
-import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
@@ -191,7 +190,7 @@ export default function mapLayerBuilder(config, cache, store) {
         nextDate,
         previousDate,
       };
-      def = lodashCloneDeep(def);
+      def = structuredClone(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
@@ -748,8 +747,14 @@ export default function mapLayerBuilder(config, cache, store) {
     const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    const { r, g, b } = def.bandCombo;
-    const bandCombo = [r, g, b];
+    const {
+      r,
+      g,
+      b,
+      expression,
+      assets = [],
+    } = def.bandCombo;
+    const bandCombo = [r, g, b, ...assets].filter((band) => band);
 
     const landsatLayers = [
       'HLS_Customizable_Landsat',
@@ -758,6 +763,7 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_False_Color_Urban_Landsat',
       'HLS_False_Color_Vegetation_Landsat',
       'HLS_Shortwave_Infrared_Landsat',
+      'HLS_NDVI_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
@@ -797,6 +803,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const params = {
       post_process: 'swir',
       assets: bandCombo,
+      expression,
     };
 
     const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
@@ -826,7 +833,16 @@ export default function mapLayerBuilder(config, cache, store) {
       const x = tileCoord[1];
       const y = tileCoord[2];
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&assets=${r}&assets=${g}&assets=${b}`;
+      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+
+      const params = assets.map((asset) => `assets=${asset}`);
+      params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
+      params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
+      params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
+      params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
+
+      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+
       return source.url + urlParams;
     };
 
