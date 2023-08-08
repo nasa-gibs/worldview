@@ -57,23 +57,24 @@ class PaletteThreshold extends React.Component {
     const newEnd = parseInt(thresholdArray[1], 10);
     const startRef = legend.refs[newStart];
     const endRef = legend.refs[newEnd];
+    const newAvg = Math.round((newStart + newEnd) / 2);
 
     // Update local state on every range-selector change but debounce threshold model update
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
         end: newEnd,
-        avg: Math.round((newStart + newEnd) / 2),
+        avg: newAvg,
       });
     } else if (newStart !== start) {
       this.setState({
         start: newStart,
-        avg: Math.round((newStart + end) / 2),
+        avg: newAvg,
       });
     } else if (newEnd !== end) {
       this.setState({
         end: newEnd,
-        avg: Math.round((start + newEnd) / 2),
+        avg: newAvg,
       });
     } else {
       return;
