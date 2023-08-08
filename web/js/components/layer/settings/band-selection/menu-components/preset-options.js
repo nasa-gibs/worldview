@@ -55,6 +55,34 @@ const landsatPresets = [
     colormap_name: 'rdylgn',
     img: 'HLS_NDVI_Landsat.jpg',
   },
+  {
+    id: 'HLS_NDWI_Landsat.jpg',
+    title: 'NDWI',
+    assets: ['B05', 'B03'],
+    expression: '(B03-B05)/(B03+B05)',
+    rescale: '-1,1',
+    colormap_name: 'cool',
+    img: 'HLS_NDWI_Landsat.jpg',
+  },
+  {
+    id: 'HLS_NDSI_Landsat.jpg',
+    title: 'NDSI',
+    assets: ['B03', 'B06'],
+    expression: '(B03-B06)/(B03+B06)',
+    rescale: '-1,1',
+    colormap_name: 'winter_r',
+    img: 'HLS_NDSI_Landsat.jpg',
+  },
+  {
+    id: 'HLS_Moisture_Index_Landsat.jpg',
+    title: 'Moisture Index',
+    assets: ['B05', 'B06'],
+    expression: '(B05-B06)/(B05+B06)',
+    rescale: '-1,1',
+    colormap_name: 'bwr_r',
+    img: 'HLS_Moisture_Index_Landsat.jpg',
+  },
+
 ];
 
 const sentinelPresets = [
@@ -107,6 +135,36 @@ const sentinelPresets = [
     colormap_name: 'rdylgn',
     asset_as_band: true,
     img: 'HLS_NDVI_Sentinel.jpg',
+  },
+  {
+    id: 'HLS_NDWI_Sentinel.jpg',
+    title: 'NDWI',
+    assets: ['B08', 'B03'],
+    expression: '(B03-B08)/(B03+B08)',
+    rescale: '0,1',
+    colormap_name: 'cool',
+    asset_as_band: true,
+    img: 'HLS_NDWI_Sentinel.jpg',
+  },
+  {
+    id: 'HLS_NDSI_Sentinel.jpg',
+    title: 'NDSI',
+    assets: ['B03', 'B11'],
+    expression: '(B03-B11)/(B03+B11)',
+    rescale: '0,1',
+    colormap_name: 'winter_r',
+    asset_as_band: true,
+    img: 'HLS_NDSI_Sentinel.jpg',
+  },
+  {
+    id: 'HLS_Moisture_Index_Sentinel.jpg',
+    title: 'Moisture Index',
+    assets: ['B8A', 'B11'],
+    expression: '(B8A-B11)/(B8A+B11)',
+    rescale: '0,1',
+    colormap_name: 'bwr_r',
+    asset_as_band: true,
+    img: 'HLS_Moisture_Index_Sentinel.jpg',
   },
 ];
 
