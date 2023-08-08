@@ -24,17 +24,6 @@ class PaletteThreshold extends React.Component {
     this.updateThreshold = this.updateThreshold.bind(this);
   }
 
-  componentDidUpdate() {
-    const {
-      start, end, avg,
-    } = this.state;
-    if (avg !== Math.round((start + end) / 2)) {
-      this.setState({
-        avg: Math.round((start + end) / 2),
-      });
-    }
-  }
-
   updateSquash() {
     const {
       setRange, layerId, index, groupName, palette, legend,
@@ -74,14 +63,17 @@ class PaletteThreshold extends React.Component {
       this.setState({
         start: newStart,
         end: newEnd,
+        avg: Math.round((newStart + newEnd) / 2),
       });
     } else if (newStart !== start) {
       this.setState({
         start: newStart,
+        avg: Math.round((newStart + end) / 2),
       });
     } else if (newEnd !== end) {
       this.setState({
         end: newEnd,
+        avg: Math.round((start + newEnd) / 2),
       });
     } else {
       return;
