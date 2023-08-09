@@ -116,7 +116,19 @@ export function getPermalink(queryString, selectedDate, isEmbed) {
     }
   }
 
+  // Check for 'eic=' and remove it along with the next two characters
+  const eicPattern = /eic=../g;
+  permalink = permalink.replace(eicPattern, '');
+
+  // Handle cases where removing `eic=..` might leave behind '&'
+  if (permalink.endsWith('&')) {
+    permalink = permalink.slice(0, -1);
+  } else if (permalink.includes('&&')) {
+    permalink = permalink.replace('&&', '&');
+  }
+
   return permalink;
 }
+
 
 export function wrapWithIframe(value) { return `<iframe src="${value}" role="application" sandbox="allow-modals allow-scripts allow-same-origin allow-forms allow-popups" width="100%" height="100%" allow="fullscreen; autoplay;" loading="lazy"></iframe>`; }
