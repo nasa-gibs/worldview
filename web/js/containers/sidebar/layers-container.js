@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import { isMobileOnly, isTablet } from 'react-device-detect';
-import googleTagManager from 'googleTagManager';
 import LayerList from './layer-list';
 import {
   getAllActiveOverlaysBaselayers,
@@ -19,7 +18,6 @@ import {
 } from '../../modules/layers/actions';
 import Checkbox from '../../components/util/checkbox';
 import util from '../../util/util';
-import Button from '../../components/util/button';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
@@ -39,11 +37,6 @@ function LayersContainer (props) {
     reorderOverlayGroups,
     toggleCollapse,
     toggleOverlayGroups,
-    isMobile,
-    breakpoints,
-    screenWidth,
-    isPlaying,
-    addLayers,
   } = props;
 
   const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);
@@ -98,12 +91,6 @@ function LayersContainer (props) {
         )}
       </Draggable>
     );
-  };
-
-  const onClickAddLayers = (e) => {
-    e.stopPropagation();
-    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
-    googleTagManager.pushEvent({ event: 'add_layers' });
   };
 
   const renderOverlayGroups = () => (
@@ -183,13 +170,6 @@ function LayersContainer (props) {
             onCheck={toggleOverlayGroups}
             label="Group Similar Layers"
           />
-          {/* <Button
-            id="layers-add"
-            aria-label="Add layers"
-            className="layers-add red"
-            text="+ Add Layers"
-            onClick={onClickAddLayers}
-          /> */}
         </div>
       </div>
     </>
