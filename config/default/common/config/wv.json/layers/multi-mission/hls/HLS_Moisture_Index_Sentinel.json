@@ -1,11 +1,11 @@
 {
     "layers": {
-      "HLS_NDVI_Sentinel": {
-        "id": "HLS_NDVI_Sentinel",
-        "title": "NDVI ((B08-B04)/(B08+B04)) Sentinel *BETA*",
+      "HLS_Moisture_Index_Sentinel": {
+        "id": "HLS_Moisture_Index_Sentinel",
+        "title": "Moisture Index ((B8A-B11)/(B8A+B11)) Sentinel *BETA*",
         "subtitle": "Sentinel 8 & 9 / OLI",
-        "description": "multi-mission/hls/HLS_NDVI_Sentinel",
-        "tags": "corrected surface Sentinel oli l30 ndvi",
+        "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
+        "tags": "corrected surface Sentinel oli l30 ndsi",
         "group": "overlays",
         "layergroup": "Land Surface Reflectance",
         "format": "image/png",
@@ -14,10 +14,10 @@
         "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
         "orbitDirection": ["descending", "descending"],
         "bandCombo": {
-            "assets": ["B08", "B04"],
-            "expression": "(B08-B04)/(B08+B04)",
+            "assets": ["B8A", "B11"],
+            "expression": "(B8A-B11)/(B8A+B11)",
             "rescale": "0,1",
-            "colormap_name": "greens"
+            "colormap_name": "jet"
         },
         "disableSnapshot": true,
         "wrapX": false,

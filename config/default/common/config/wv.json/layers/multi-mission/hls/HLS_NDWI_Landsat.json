@@ -1,11 +1,11 @@
 {
     "layers": {
-      "HLS_NDVI_Landsat": {
-        "id": "HLS_NDVI_Landsat",
-        "title": "NDVI ((B05-B04)/(B05+B04)) Landsat *BETA*",
+      "HLS_NDWI_Landsat": {
+        "id": "HLS_NDWI_Landsat",
+        "title": "NDWI ((B03-B05)/(B03+B05)) Landsat *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
-        "description": "multi-mission/hls/HLS_NDVI_Landsat",
-        "tags": "corrected surface landsat oli l30 ndvi",
+        "description": "multi-mission/hls/HLS_NDWI_Landsat",
+        "tags": "corrected surface landsat oli l30 ndwi",
         "group": "overlays",
         "layergroup": "Land Surface Reflectance",
         "format": "image/png",
@@ -14,10 +14,10 @@
         "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
         "orbitDirection": ["descending", "descending"],
         "bandCombo": {
-            "assets": ["B05", "B04"],
-            "expression": "(B05-B04)/(B05+B04)",
+            "assets": ["B05", "B03"],
+            "expression": "(B03-B05)/(B03+B05)",
             "rescale": "-1,1",
-            "colormap_name": "greens"
+            "colormap_name": "gnbu"
         },
         "disableSnapshot": true,
         "wrapX": false,
