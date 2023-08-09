@@ -17,7 +17,7 @@ class PaletteThreshold extends React.Component {
       start,
       end,
       squashed,
-      avg: 0,
+      avg: Math.round((start + end) / 2),
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
     this.updateSquash = this.updateSquash.bind(this);
