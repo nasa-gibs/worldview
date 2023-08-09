@@ -14,9 +14,15 @@
 }
 
 .wv-button span {
-  padding: 3px 6px;
+  padding: 6px 13px 7px;
   display: block;
   font-size: 13px;
+}
+
+#compare-toggle-button.wv-button > span.button-text{
+    display: block;
+    font-size: 13px;
+    padding: 3px 13px 4px;
 }
 
 .wv-button.red {
@@ -28,7 +34,8 @@
   background: #212121;
 }
 
-.wv-button:hover {
+.wv-button:hover,
+#compare-toggle-button:hover {
   border-color: #eee;
   background-color: #eee;
   transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;

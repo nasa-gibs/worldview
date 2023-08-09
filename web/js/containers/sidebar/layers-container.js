@@ -177,19 +177,19 @@ function LayersContainer (props) {
       </div>
       <div className="product-buttons">
         <div className="layers-add-container">
-          <Button
-            id="layers-add"
-            aria-label="Add layers"
-            className="layers-add red"
-            text="+ Add Layers"
-            onClick={onClickAddLayers}
-          />
           <Checkbox
             id="group-overlays-checkbox"
             checked={groupOverlays}
             onCheck={toggleOverlayGroups}
             label="Group Similar Layers"
           />
+          {/* <Button
+            id="layers-add"
+            aria-label="Add layers"
+            className="layers-add red"
+            text="+ Add Layers"
+            onClick={onClickAddLayers}
+          /> */}
         </div>
       </div>
     </>
