@@ -75,6 +75,7 @@ class DateChangeArrows extends PureComponent {
       arrowDown,
       tilesPreloaded,
       isKioskModeActive,
+      isEmbedModeActive,
     } = this.props;
 
     const leftArrowDown = () => this.onArrowDown('left');
@@ -93,7 +94,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* LEFT ARROW */}
         <div
-          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
+          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="left-arrow-group"
           onMouseDown={leftArrowDown}
           onMouseUp={leftArrowUp}
@@ -116,7 +117,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
+          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="right-arrow-group"
           onMouseDown={rightArrowDown}
           onMouseUp={rightArrowUp}
@@ -163,12 +164,12 @@ class DateChangeArrows extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const { date } = state;
-  const { ui: { isKioskModeActive } } = state;
+  const { date, embed, ui } = state;
   return {
     tilesPreloaded: date.preloaded,
     arrowDown: date.arrowDown,
-    isKioskModeActive,
+    isKioskModeActive: ui.isKioskModeActive,
+    isEmbedModeActive: embed.isEmbedModeActive,
   };
 };
 

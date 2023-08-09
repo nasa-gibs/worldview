@@ -983,6 +983,7 @@ class Timeline extends React.Component {
       selectedDate,
       timelineEndDateLimit,
       timelineStartDateLimit,
+      isKioskModeActive,
     } = this.props;
 
     return (
@@ -1016,6 +1017,7 @@ class Timeline extends React.Component {
             isPortrait={isPortrait}
             clickAnimationButton={this.clickAnimationButton}
             hasSubdailyLayers={hasSubdailyLayers}
+            isKioskModeActive={isKioskModeActive}
             disabled={animationDisabled}
             label={
                     isCompareModeActive
