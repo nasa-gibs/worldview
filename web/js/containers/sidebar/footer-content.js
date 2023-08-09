@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
@@ -17,9 +18,11 @@ import {
 import { openCustomContent } from '../../modules/modal/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
+import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import {
   toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
+import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
@@ -36,6 +39,10 @@ const FooterContent = React.forwardRef((props, ref) => {
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
+    breakpoints,
+    screenWidth,
+    isPlaying,
+    addLayers,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -60,30 +67,37 @@ const FooterContent = React.forwardRef((props, ref) => {
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
 
+  const onClickAddLayers = (e) => {
+    e.stopPropagation();
+    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
+    googleTagManager.pushEvent({ event: 'add_layers' });
+  };
+
   const renderLayersFooter = () => (
-    <div className="product-buttons">
-      <CompareModeOptions
-        isActive={isCompareActive}
-        isMobile={isMobile}
-        selected={compareMode}
-        onclick={changeCompareMode}
-      />
-      <ChartingModeOptions
-        isChartingActive={isChartingActive}
-        isMobile={isMobile}
-      />
-      <div className="compare-chart-container">
-        {!isCompareActive && chartFeature
-          && (
-          <Button
-            id="chart-toggle-button"
-            aria-label={chartBtnText}
-            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!chartFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-            text={chartBtnText}
-          />
-          )}
+    <>
+      <div>
+        <CompareModeOptions
+          isActive={isCompareActive}
+          isMobile={isMobile}
+          selected={compareMode}
+          onclick={changeCompareMode}
+        />
+        <ChartingModeOptions
+          isChartingActive={isChartingActive}
+          isMobile={isMobile}
+        />
+      </div>
+      <div className="product-buttons">
+        {!isChartingActive
+        && (
+        <Button
+          id="layers-add"
+          aria-label="Add layers"
+          className="layers-add red"
+          text="+ Add Layers"
+          onClick={onClickAddLayers}
+        />
+        )}
         {!isChartingActive
           && (
           <Button
@@ -96,7 +110,20 @@ const FooterContent = React.forwardRef((props, ref) => {
           />
           )}
       </div>
-    </div>
+      <div className="charting-button">
+        {!isMobile && !isCompareActive && chartFeature
+          && (
+          <Button
+            id="chart-toggle-button"
+            aria-label={chartBtnText}
+            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+            style={!chartFeature ? { display: 'none' } : null}
+            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+            text={chartBtnText}
+          />
+          )}
+      </div>
+    </>
   );
 
   const renderEventsFooter = () => {
@@ -196,6 +223,21 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  addLayers: (isPlaying) => {
+    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
+    if (isPlaying) {
+      dispatch(stopAnimationAction());
+    }
+    dispatch(
+      openCustomContent('LAYER_PICKER_COMPONENT', {
+        headerText: null,
+        modalClassName,
+        backdrop: true,
+        CompletelyCustomModal: SearchUiProvider,
+        wrapClassName: '',
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -219,4 +261,8 @@ FooterContent.propTypes = {
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
+  breakpoints: PropTypes.object,
+  isPlaying: PropTypes.bool,
+  screenWidth: PropTypes.number,
+  addLayers: PropTypes.func,
 };

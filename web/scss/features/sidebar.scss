@@ -193,11 +193,21 @@
   margin-bottom: 10px;
 }
 
-footer .product-buttons .layers-add-container {
+footer .product-buttons {
   height: 47px;
-  display: flex;
+  width: auto;
   padding: 10px;
-  justify-content: space-around;
+}
+
+.wv-button {
+  background-image: linear-gradient(#555,#666);
+  border: 1px solid #666;
+  color: #eee;
+  font-family: "Open Sans Bold",sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0;
+  border-radius: 0;
 }
 
 .compare-chart-container {
@@ -205,10 +215,29 @@ footer .product-buttons .layers-add-container {
   justify-content: space-around;
 }
 
-.layers-add-container {
+.charting-button {
   display: flex;
   justify-content: space-around;
-  margin: 10px 0;
+}
+
+#compare-toggle-button {
+  background-image: linear-gradient(#555,#666);
+  border: 1px solid #666;
+  color: #eee;
+  font-family: "Open Sans Bold",sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0;
+}
+
+footer .compare-toggle-button {
+  border-bottom: none;
+  position: absolute;
+  right: 10px;
+}
+
+div#group-overlays-checkbox-case {
+  margin: 4px 0 0 4px;
 }
 
 .layer-group-baselayers {
