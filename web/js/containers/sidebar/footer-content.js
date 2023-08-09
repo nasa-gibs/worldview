@@ -88,6 +88,8 @@ const FooterContent = React.forwardRef((props, ref) => {
         />
       </div>
       <div className="product-buttons">
+        {!isChartingActive
+        && (
         <Button
           id="layers-add"
           aria-label="Add layers"
@@ -95,17 +97,7 @@ const FooterContent = React.forwardRef((props, ref) => {
           text="+ Add Layers"
           onClick={onClickAddLayers}
         />
-        {!isCompareActive && chartFeature
-          && (
-          <Button
-            id="chart-toggle-button"
-            aria-label={chartBtnText}
-            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!chartFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-            text={chartBtnText}
-          />
-          )}
+        )}
         {!isChartingActive
           && (
           <Button
@@ -115,6 +107,19 @@ const FooterContent = React.forwardRef((props, ref) => {
             style={!compareFeature ? { display: 'none' } : null}
             onClick={!isChartingActive ? onClickToggleCompare : null}
             text={compareBtnText}
+          />
+          )}
+      </div>
+      <div className="charting-button">
+        {!isMobile && !isCompareActive && chartFeature
+          && (
+          <Button
+            id="chart-toggle-button"
+            aria-label={chartBtnText}
+            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+            style={!chartFeature ? { display: 'none' } : null}
+            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+            text={chartBtnText}
           />
           )}
       </div>

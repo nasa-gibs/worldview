@@ -19,7 +19,8 @@
   font-size: 13px;
 }
 
-#compare-toggle-button.wv-button > span.button-text{
+#compare-toggle-button.wv-button > span.button-text,
+#chart-toggle-button.wv-button > span.button-text{
     display: block;
     font-size: 13px;
     padding: 3px 13px 4px;
