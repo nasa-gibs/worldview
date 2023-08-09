@@ -165,13 +165,6 @@ function LayersContainer (props) {
       { !isEmbedModeActive && (
         <div className="product-buttons">
           <div className="layers-add-container">
-            {/* <Button
-              id="layers-add"
-              aria-label="Add layers"
-              className="layers-add red"
-              text="+ Add Layers"
-              onClick={onClickAddLayers}
-            /> */}
             <Checkbox
               id="group-overlays-checkbox"
               checked={groupOverlays}
