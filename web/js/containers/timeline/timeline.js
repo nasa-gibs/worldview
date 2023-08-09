@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import { UncontrolledTooltip } from 'reactstrap';
 import {
   debounce as lodashDebounce,
   throttle as lodashThrottle,
   get as lodashGet,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';

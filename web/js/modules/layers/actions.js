@@ -1,8 +1,8 @@
 import {
   findIndex as lodashFindIndex,
 } from 'lodash';
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import {
   addLayer as addLayerSelector,
   getLayers as getLayersSelector,
