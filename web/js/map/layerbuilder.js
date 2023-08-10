@@ -764,6 +764,9 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_False_Color_Vegetation_Landsat',
       'HLS_Shortwave_Infrared_Landsat',
       'HLS_NDVI_Landsat',
+      'HLS_NDWI_Landsat',
+      'HLS_NDSI_Landsat',
+      'HLS_Moisture_Index_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
