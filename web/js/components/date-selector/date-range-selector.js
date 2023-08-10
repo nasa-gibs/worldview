@@ -20,8 +20,8 @@ export default function DateRangeSelector (props) {
   return (
     <div className={className}>
       <DateSelector
-        idSuffix={idSuffix}
         date={startDate}
+        idSuffix={idSuffix}
         onDateChange={setStartDate}
         minDate={minDate}
         maxDate={endDate}

@@ -1,5 +1,17 @@
 {
 	"layerOrder": [
+		"HLS_Customizable_Landsat",
+		"HLS_Customizable_Sentinel",
+		"HLS_True_Color_Sentinel",
+		"HLS_False_Color_Sentinel",
+		"HLS_False_Color_Urban_Sentinel",
+		"HLS_False_Color_Vegetation_Sentinel",
+		"HLS_Shortwave_Infrared_Sentinel",
+		"HLS_True_Color_Landsat",
+		"HLS_False_Color_Landsat",
+		"HLS_False_Color_Vegetation_Landsat",
+		"HLS_False_Color_Urban_Landsat",
+		"HLS_Shortwave_Infrared_Landsat",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule",

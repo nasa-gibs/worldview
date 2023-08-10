@@ -95,3 +95,79 @@ export function formatReduxSubdailyDate(selectedDate) {
 
   return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }
+
+export function getOrbitalDates (selectedDate, latestDate, searchMethod) {
+  if (searchMethod === 1) {
+    return getOrbitalDatesForwards(selectedDate, latestDate);
+  } if (searchMethod === 2) {
+    return getOrbitalDatesBackwards(selectedDate);
+  } if (searchMethod === 3) {
+    return getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate);
+  }
+}
+
+export function getOrbitalDatesBackwards (selectedDate) {
+  // Get the date as a string in UTC
+  const utcDateString = selectedDate.toLocaleString('en-US', { timeZone: 'UTC' });
+  // Convert the UTC string back to a Date object
+  const currentDate = new Date(utcDateString);
+
+  const prevDates = [formatDailyDate(currentDate)];
+
+  for (let i = 1; i < 14; i += 1) {
+    const previousDate = new Date(currentDate);
+    previousDate.setDate(previousDate.getDate() - i);
+    prevDates.push(formatDailyDate(previousDate));
+  }
+  return prevDates;
+}
+
+export function getOrbitalDatesForwards(selectedDate, latestDate) {
+  // Get the date as a string in UTC
+  const utcDateString = selectedDate.toLocaleString('en-US', { timeZone: 'UTC' });
+  // Convert the UTC string back to a Date object
+  const currentDate = new Date(utcDateString);
+
+  const nextDates = [formatDailyDate(currentDate)];
+
+  for (let i = 1; i < 14; i += 1) {
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(nextDate.getDate() + i);
+
+    // Stop adding dates if we've reached or exceeded the latestDate
+    if (nextDate > new Date(latestDate)) {
+      break;
+    }
+
+    nextDates.push(formatDailyDate(nextDate));
+  }
+  return nextDates;
+}
+
+export function getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate) {
+  // Get the date as a string in UTC
+  const utcDateString = selectedDate.toLocaleString('en-US', { timeZone: 'UTC' });
+  // Convert the UTC string back to a Date object
+  const currentDate = new Date(utcDateString);
+
+  const mixedDates = [formatDailyDate(currentDate)];
+
+  for (let i = 1; i < 14; i += 1) {
+    const nextDate = new Date(currentDate);
+    const prevDate = new Date(currentDate);
+
+    // Add future date if it does not exceed the latestDate
+    nextDate.setDate(nextDate.getDate() + i);
+    if (nextDate <= new Date(latestDate)) {
+      mixedDates.push(formatDailyDate(nextDate));
+    }
+
+    // If we haven't reached the max of 14 dates, add a previous date
+    if (mixedDates.length < 14) {
+      prevDate.setDate(prevDate.getDate() - i);
+      mixedDates.push(formatDailyDate(prevDate));
+    }
+  }
+  // Trim the array down to 14 elements in case we've added too many
+  return mixedDates.slice(0, 14);
+}

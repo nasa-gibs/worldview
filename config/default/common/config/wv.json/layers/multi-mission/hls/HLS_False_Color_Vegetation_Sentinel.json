@@ -1,0 +1,31 @@
+{
+  "layers": {
+    "HLS_False_Color_Vegetation_Sentinel": {
+      "id": "HLS_False_Color_Vegetation_Sentinel",
+      "title": "Reflectance (Bands 11-8A-4, Vegetative Analysis False Color) *BETA*",
+      "subtitle": "Sentinel 2A & 2B / MSI",
+      "description": "multi-mission/hls/HLS_False_Color_Vegetation_Sentinel",
+      "tags": "corrected surface oli sentinel msi s30",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending", "descending"],
+      "bandCombo": {
+        "r": "B11",
+        "g": "B8A",
+        "b": "B04"
+      },
+      "wrapX": false,
+      "disableSnapshot": true,
+      "projections": {
+        "geographic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
+        }
+      }
+    }
+  }
+}

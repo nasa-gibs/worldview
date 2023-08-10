@@ -25,7 +25,7 @@ function AddLayer(props) {
   } = props;
 
   useEffect(() => {
-    if (action.type === layerConstants.ADD_LAYER) {
+    if (action.type === layerConstants.ADD_LAYER || action.type === layerConstants.UPDATE_DDV_LAYER) {
       const def = lodashFind(action.layers, { id: action.id });
       if (def.type === 'granule') {
         return granuleLayerAdd(def);

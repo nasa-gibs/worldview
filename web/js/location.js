@@ -24,6 +24,7 @@ import {
   parseEventFilterDates,
 } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
+import { mapLocationToChartingState } from './modules/charting/util';
 import {
   mapLocationToProjState,
   parseProjection,
@@ -82,6 +83,10 @@ export const mapLocationToState = (state, location) => {
       state,
     );
     stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation,
+    );
+    stateFromLocation = mapLocationToChartingState(
       parameters,
       stateFromLocation,
     );

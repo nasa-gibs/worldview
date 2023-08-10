@@ -1,5 +1,5 @@
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import safeLocalStorage from '../../util/local-storage';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;

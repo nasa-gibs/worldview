@@ -22,6 +22,12 @@ const options = yargs
     type: 'string',
     description: 'layer-config.json schema'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Validates layers using a JSON schema')
 
 const { argv } = options
@@ -47,6 +53,7 @@ async function main () {
     validateFile(filePath)
   }
   if (invalidJsonFiles.length) {
+    if (argv.mode === 'verbose') console.warn(`${prog}: Invalid JSON files: ${invalidJsonFiles}`)
     throw new Error(`${prog}: FAILED: ${invalidJsonFiles.length} layer configs failed validation.`)
   } else {
     console.warn(`${prog}: PASSED: All layer configs passed validation!`)
@@ -54,6 +61,7 @@ async function main () {
 }
 
 async function validateFile (filePath) {
+  if (argv.mode === 'verbose') console.warn(`${prog}: Validating ${filePath}`)
   const layerFile = fs.readFileSync(filePath)
   const layer = JSON.parse(layerFile)
   const valid = validate(layer)
