@@ -16,7 +16,7 @@
         "bandCombo": {
             "assets": ["B08", "B03"],
             "expression": "(B03-B08)/(B03+B08)",
-            "rescale": "0,1",
+            "rescale": "-1,1",
             "colormap_name": "gnbu"
         },
         "disableSnapshot": true,
