@@ -68,6 +68,10 @@ async function main () {
   for (const file of files) {
     try {
       const { id, xml } = await readFileAsync(file)
+      if (id === 'MODIS_Water_Mask') {
+        console.warn(`------Processing ${id}`)
+        console.warn(file)
+      }
       await processFile(id, xml)
       fileCount += 1
     } catch (error) {
@@ -317,6 +321,10 @@ async function readFileAsync (file) {
  * xml [string] represention of this product's xml colormap file (served from GIBS)
 */
 async function processFile (id, xml) {
+  if (id === 'MODIS_Water_Mask') {
+    console.warn(`Processing ${id}`)
+    console.warn(xml)
+  }
   let document
   let colormaps = []
   try {
