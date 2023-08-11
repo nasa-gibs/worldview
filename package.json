@@ -201,7 +201,7 @@
     "redux-location-state": "^2.8.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "regenerator-runtime": "^0.13.11",
+    "regenerator-runtime": "^0.14.0",
     "reselect": "^4.1.8",
     "rgbcolor": "^1.0.1",
     "simplebar": "^6.2.5",
