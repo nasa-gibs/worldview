@@ -973,6 +973,8 @@ class Timeline extends React.Component {
       hasSubdailyLayers,
       isCompareModeActive,
       isDataDownload,
+      isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isMobilePhone,
       isMobileTablet,
@@ -983,7 +985,6 @@ class Timeline extends React.Component {
       selectedDate,
       timelineEndDateLimit,
       timelineStartDateLimit,
-      isKioskModeActive,
     } = this.props;
 
     return (
@@ -995,6 +996,7 @@ class Timeline extends React.Component {
           onDateChange={this.onDateChange}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
+          isEmbedModeActive={isEmbedModeActive}
         />
         <MobileComparisonToggle />
         <div

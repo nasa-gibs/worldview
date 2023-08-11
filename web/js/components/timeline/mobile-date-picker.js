@@ -68,6 +68,7 @@ const convertToLocalDateObject = (date) => {
 function MobileDatePicker(props) {
   const {
     date,
+    isEmbedModeActive,
     startDateLimit,
     endDateLimit,
     onDateChange,
@@ -83,7 +84,9 @@ function MobileDatePicker(props) {
   }, [endDateLimit, date]);
 
   const handleClickDateButton = () => {
-    setIsOpen(true);
+    if (!isEmbedModeActive) {
+      setIsOpen(true);
+    }
   };
 
   const handleCancel = () => {
@@ -119,11 +122,13 @@ function MobileDatePicker(props) {
   const displayDate = getDisplayDate(date, hasSubdailyLayers);
   const headerTime = getHeaderTime(time, hasSubdailyLayers);
 
+  console.log(isEmbedModeActive)
+
   return (
     time && (
       <>
         <div
-          className="mobile-date-picker-select-btn"
+          className={"mobile-date-picker-select-btn"}
           onClick={handleClickDateButton}
         >
           <div className="mobile-date-picker-select-btn-text">
