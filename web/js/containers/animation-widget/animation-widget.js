@@ -282,6 +282,7 @@ function AnimationWidget (props) {
           breakpoints={breakpoints}
           endDate={endDate}
           hasSubdailyLayers={hasSubdailyLayers}
+          isEmbedModeActive={isEmbedModeActive}
           isLandscape={isLandscape}
           isMobile={isMobile}
           isMobilePhone={isMobilePhone}
