@@ -109,6 +109,7 @@ function AnimationWidget (props) {
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
+      toggleCollapse();
     }
     if (!isPlaying && autoplay && !isKioskModeActive) {
       onPushPlay();
