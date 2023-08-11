@@ -105,9 +105,30 @@ export function getPermalink(queryString, selectedDate, isEmbed) {
     permalink = permalink.replace('em=true', 'em=false');
   }
 
+  // Remove 'kiosk=true'
+  if (permalink.includes('kiosk=true')) {
+    if (permalink.includes('?kiosk=true&')) {
+      permalink = permalink.replace('?kiosk=true&', '?');
+    } else if (permalink.includes('&kiosk=true')) {
+      permalink = permalink.replace('&kiosk=true', '');
+    } else if (permalink.includes('?kiosk=true')) {
+      permalink = permalink.replace('?kiosk=true', '');
+    }
+  }
+
+  // Check for 'eic=' and remove it along with the next two characters
+  const eicPattern = /eic=../g;
+  permalink = permalink.replace(eicPattern, '');
+
+  // Handle cases where removing `eic=..` might leave behind '&'
+  if (permalink.endsWith('&')) {
+    permalink = permalink.slice(0, -1);
+  } else if (permalink.includes('&&')) {
+    permalink = permalink.replace('&&', '&');
+  }
+
   return permalink;
 }
 
-export function wrapWithIframe(value) { return `<iframe src="${value}" role="application" sandbox="allow-modals allow-scripts allow-same-origin allow-forms allow-popups" width="100%" height="100%" allow="fullscreen; autoplay;" loading="lazy"></iframe>`; }
 
-export function wrapWithObject(value) { return `<object type="text/html" data="${value}" width="100%" height="100%" role="application"></object>`; }
+export function wrapWithIframe(value) { return `<iframe src="${value}" role="application" sandbox="allow-modals allow-scripts allow-same-origin allow-forms allow-popups" width="100%" height="100%" allow="fullscreen; autoplay;" loading="lazy"></iframe>`; }

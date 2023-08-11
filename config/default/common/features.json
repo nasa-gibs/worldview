@@ -4,6 +4,7 @@
         "urlShortening": true,
         "customPalettes": true,
         "compare": true,
+        "charting": false,
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,

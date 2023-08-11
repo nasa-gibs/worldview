@@ -65,10 +65,10 @@ skipLayers = [
   'Land_Water_Map',
   'Land_Mask',
   'World_Database_on_Protected_Areas',
-  'HLS_Natural_Color_Sentinel',
+  'HLS_True_Color_Sentinel',
   'HLS_Shortwave_Infrared_Sentinel',
   'HLS_Shortwave_Infrared_Landsat',
-  'HLS_Natural_Color_Landsat',
+  'HLS_True_Color_Landsat',
   'HLS_False_Color_Vegetation_Landsat',
   'HLS_False_Color_Vegetation_Sentinel',
   'HLS_False_Color_Urban_Sentinel',
@@ -76,7 +76,6 @@ skipLayers = [
   'HLS_False_Color_Sentinel',
   'HLS_Customizable_Sentinel',
   'HLS_Customizable_Landsat',
-  'HLS_Color_Infrared_Landsat',
   'HLS_NDVI_Landsat',
   'HLS_NDWI_Landsat',
   'HLS_NDSI_Landsat',
@@ -85,6 +84,7 @@ skipLayers = [
   'HLS_NDWI_Sentinel',
   'HLS_NDSI_Sentinel',
   'HLS_Moisture_Index_Sentinel'
+  'HLS_False_Color_Landsat'
 ]
 
 // NOTE: Only using these properties at this time

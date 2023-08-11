@@ -14,9 +14,7 @@ import { onClose } from '../../../../modules/modal/actions';
 
 export default function BandSelection({ layer }) {
   const dispatch = useDispatch();
-  const updateBandCombination = (id, bandCombo) => {
-    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex));
-  };
+  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo, layerIndex)); };
   const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
   const closeModal = () => { dispatch(onClose()); };
   const { activeLayers } = useSelector((state) => ({
@@ -48,7 +46,6 @@ export default function BandSelection({ layer }) {
   );
 
   const presetOptions = layer.id === 'HLS_Customizable_Landsat' ? 'landsat' : 'sentinel';
-
 
   const isValidBandSelection = () => (bandSelection.r !== 'undefined' && bandSelection.r !== undefined) && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
 

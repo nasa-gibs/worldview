@@ -23,7 +23,7 @@
       "projections": {
         "geographic": {
           "source": "DDV",
-          "matrixSet": "2km"
+          "matrixSet": "31.25m"
         }
       }
     }

@@ -34,6 +34,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
 
   const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
 
+
   return (
     <div className="customize-bands-parent-info">
       <hr />
