@@ -61,7 +61,7 @@ const landsatPresets = [
     assets: ['B05', 'B03'],
     expression: '(B03-B05)/(B03+B05)',
     rescale: '-1,1',
-    colormap_name: 'gnbu',
+    colormap_name: 'ocean',
     img: 'HLS_NDWI_Landsat.jpg',
   },
   {
@@ -142,7 +142,7 @@ const sentinelPresets = [
     assets: ['B08', 'B03'],
     expression: '(B03-B08)/(B03+B08)',
     rescale: '0,1',
-    colormap_name: 'gnbu',
+    colormap_name: 'ocean',
     asset_as_band: true,
     img: 'HLS_NDWI_Sentinel.jpg',
   },

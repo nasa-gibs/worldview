@@ -811,11 +811,10 @@ export function serializeLayers(layers, state, groupName) {
       });
     }
     if (def.bandCombo) {
-      const { r, g, b } = def.bandCombo;
-      const bands = `${r};${g};${b}`;
+      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>');
       item.attributes.push({
-        id: 'bands',
-        value: bands,
+        id: 'bandCombo',
+        value: encodeURIComponent(bandComboString),
       });
     }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
@@ -1182,6 +1181,8 @@ const createLayerArrayFromState = function(layers, config) {
       console.warn(`No such layer: ${layerDef.id}`);
       return;
     }
+    const bandComboString = decodeURIComponent(layerDef.attributes.find((attr) => attr.id === 'bandCombo')?.value).replaceAll('>', ')').replaceAll('<', '(');
+    const bandCombo = bandComboString !== 'undefined' ? JSON.parse(bandComboString) : null;
     layerArray = addLayer(
       layerDef.id,
       getLayerSpec(layerDef.attributes),
@@ -1189,6 +1190,8 @@ const createLayerArrayFromState = function(layers, config) {
       config.layers,
       null,
       projection,
+      null,
+      bandCombo,
     );
   });
   return layerArray;
