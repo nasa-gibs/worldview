@@ -928,7 +928,7 @@ class Timeline extends React.Component {
       mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 60;
+        mobileBottom = 56;
       }
     }
 
