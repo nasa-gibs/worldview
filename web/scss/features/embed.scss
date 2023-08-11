@@ -80,6 +80,7 @@
 
   #wv-sidebar {
     transform: scale(0.75);
+    transform-origin: left center;
 
     #download-sidebar-tab {
       display: none;

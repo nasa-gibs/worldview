@@ -88,7 +88,7 @@ function MobileAnimationWidget (props) {
           aria-label="Close"
           onClick={toggleCollapse}
           id="mobile-animation-close"
-          >
+        >
           <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
         </span>
       </div>
