@@ -122,13 +122,11 @@ function MobileDatePicker(props) {
   const displayDate = getDisplayDate(date, hasSubdailyLayers);
   const headerTime = getHeaderTime(time, hasSubdailyLayers);
 
-  console.log(isEmbedModeActive)
-
   return (
     time && (
       <>
         <div
-          className={"mobile-date-picker-select-btn"}
+          className="mobile-date-picker-select-btn"
           onClick={handleClickDateButton}
         >
           <div className="mobile-date-picker-select-btn-text">
