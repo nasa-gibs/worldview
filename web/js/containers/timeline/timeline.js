@@ -1020,6 +1020,7 @@ class Timeline extends React.Component {
             clickAnimationButton={this.clickAnimationButton}
             hasSubdailyLayers={hasSubdailyLayers}
             isKioskModeActive={isKioskModeActive}
+            isEmbedModeActive={isEmbedModeActive}
             disabled={animationDisabled}
             label={
                     isCompareModeActive
