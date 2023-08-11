@@ -83,7 +83,7 @@ skipLayers = [
   'HLS_NDVI_Sentinel',
   'HLS_NDWI_Sentinel',
   'HLS_NDSI_Sentinel',
-  'HLS_Moisture_Index_Sentinel'
+  'HLS_Moisture_Index_Sentinel',
   'HLS_False_Color_Landsat'
 ]
 
