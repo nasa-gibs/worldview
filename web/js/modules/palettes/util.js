@@ -250,7 +250,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
       const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values'))
         || lodashSize(lodashGet(paletteDef, 'entries.colors'));
       const maxValue = paletteDef.max
-        ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',').slice(-1)
+        ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',', 1)
         : undefined;
       const minValue = paletteDef.min
         ? lodashSplit(paletteDef.entries.values[paletteDef.min || 0], ',', 1)
@@ -372,7 +372,6 @@ export function loadPalettes(permlinkState, state) {
               min.push(
                 findPaletteExtremeIndex(
                   layerId,
-                  'min',
                   value,
                   index,
                   stateObj.groupStr,
@@ -390,7 +389,6 @@ export function loadPalettes(permlinkState, state) {
               max.push(
                 findPaletteExtremeIndex(
                   layerId,
-                  'max',
                   value,
                   index,
                   stateObj.groupStr,
