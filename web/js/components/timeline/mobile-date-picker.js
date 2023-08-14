@@ -68,6 +68,7 @@ const convertToLocalDateObject = (date) => {
 function MobileDatePicker(props) {
   const {
     date,
+    isEmbedModeActive,
     startDateLimit,
     endDateLimit,
     onDateChange,
@@ -83,7 +84,9 @@ function MobileDatePicker(props) {
   }, [endDateLimit, date]);
 
   const handleClickDateButton = () => {
-    setIsOpen(true);
+    if (!isEmbedModeActive) {
+      setIsOpen(true);
+    }
   };
 
   const handleCancel = () => {

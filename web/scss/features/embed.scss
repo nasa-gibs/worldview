@@ -1,3 +1,10 @@
+#embed-mode-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: all;
+}
+
 .embed-overlay-bg {
   position: absolute;
   top: 0;
@@ -80,6 +87,7 @@
 
   #wv-sidebar {
     transform: scale(0.75);
+    transform-origin: left center;
 
     #download-sidebar-tab {
       display: none;
@@ -154,7 +162,7 @@
   .comparison-mobile-select-toggle {
     transform-origin: bottom left;
     transform: scale(0.75);
-    bottom: 50px;
+    bottom: 56px;
   }
 
   .ab-swipe-dragger {
