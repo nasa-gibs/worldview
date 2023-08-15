@@ -251,10 +251,12 @@ export const makeGetDescription = () => createSelector(
  *
  */
 export function hasMeasurementSetting(current, source, config, projId) {
+  console.log("source", source)
   let hasSetting;
   Object.values(source.settings).forEach((setting) => {
     const layer = config.layers[setting];
-    if (layer) {
+    // ADDED ADDITIONAL CHECK FOR PROJECTIONS PROPERTY
+    if (layer && layer.projections) {
       const proj = layer.projections;
       if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
         if (layer.layergroup === 'Orbital Track') {
