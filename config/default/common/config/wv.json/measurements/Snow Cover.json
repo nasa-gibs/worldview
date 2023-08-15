@@ -8,7 +8,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/SnowCover",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_NDSI_Snow_Cover",
@@ -18,7 +18,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/SnowCover",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_NDSI_Snow_Cover",

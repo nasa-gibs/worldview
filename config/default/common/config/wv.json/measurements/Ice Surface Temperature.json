@@ -8,7 +8,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/IceSurfaceTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Ice_Surface_Temp_Day",
@@ -20,7 +20,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/IceSurfaceTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Ice_Surface_Temp_Day",

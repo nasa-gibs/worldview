@@ -8,7 +8,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/LandSurfaceReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
@@ -20,7 +20,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/LandSurfaceReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM5-M4-M3",
