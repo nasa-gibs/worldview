@@ -113,7 +113,6 @@ class PaletteThreshold extends React.Component {
     let endLabel = end === legend.tooltips.length - 1 && legend.maxLabel
       ? legend.maxLabel
       : legend.tooltips[end];
-    console.log(`endLabel: ${endLabel}`);
 
     if (needsConversion) {
       const parsedMin = convertPaletteValue(startLabel, legendTempUnit, globalTemperatureUnit);
