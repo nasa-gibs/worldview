@@ -73,11 +73,10 @@ function isDateTimeFormat (input) {
 if (tolerant) warn('Validation enforcement disabled')
 
 let startDate = moment.max()
-let layersWithoutProjections = 0;
+let layersWithoutProjections = 0
 
 async function main () {
   for (const layerId of Object.keys(wv.layers)) {
-
     let layer = wv.layers[layerId]
     if (layerId !== layer.id) {
       error(`[${layerId}] layer id does not match id of ${layer.id}`)
@@ -93,7 +92,7 @@ async function main () {
         continue
       }
     }
-    if (!layer.projections){
+    if (!layer.projections) {
       removeLayer(wv, layerId)
       layersWithoutProjections++
       console.warn(`The layer ${layer.id} does not have a projections property!!`)
