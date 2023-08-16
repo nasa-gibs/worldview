@@ -73,7 +73,7 @@ module.exports = {
     },
     static: path.join(__dirname, 'web'),
     compress: true,
-    port: 3001,
+    port: 3000,
     hot: true,
     historyApiFallback: true
   },
