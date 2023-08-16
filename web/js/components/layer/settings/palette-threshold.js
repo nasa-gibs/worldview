@@ -36,7 +36,7 @@ class PaletteThreshold extends React.Component {
     setRange(
       layerId,
       parseFloat(palette.entries.refs.indexOf(startIndex)),
-      parseFloat(palette.entries.refs.indexOf(endIndex)),
+      parseFloat(palette.entries.refs.lastIndexOf(endIndex)),
       isSquashed,
       index,
       groupName,
