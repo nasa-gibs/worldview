@@ -189,9 +189,9 @@ async function gatherProcess (type, typeStr, dir, ext) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  Object.values(type).forEach(async (link) => {
-    await processMetadata(link, dir, ext)
-  })
+  await Promise.all(Object.values(type).map((link) => {
+    return processMetadata(link, dir, ext)
+  }))
 }
 
 main().catch((err) => {
