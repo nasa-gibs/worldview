@@ -42,28 +42,34 @@ function MeasurementMetadataDetail (props) {
     return () => (controller ? controller.abort() : null);
   }, [source]);
 
-  const renderMetadataForLayers = () => layers
-    .filter(({ projections }) => !!projections[selectedProjection])
-    .map((l) => (
-      <div className="layer-description" key={l.id}>
-        <h3>{l.title}</h3>
-        {showPreviewImage && (
-        <div className="text-center">
-          <a
-            href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <img
-              className="img-fluid layer-preview"
-              src={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
-            />
-          </a>
+  const renderMetadataForLayers = () => {
+    // First, filter layers that have the 'projection' property
+    const layersWithProjection = layers.filter((layer) => layer !== undefined);
+
+    // Then, filter those layers based on the 'selectedProjection'
+    return layersWithProjection
+      .filter(({ projections }) => !!projections[selectedProjection])
+      .map((l) => (
+        <div className="layer-description" key={l.id}>
+          <h3>{l.title}</h3>
+          {showPreviewImage && (
+            <div className="text-center">
+              <a
+                href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img
+                  className="img-fluid layer-preview"
+                  src={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
+                />
+              </a>
+            </div>
+          )}
+          <LayerInfo key={l.id} layer={l} />
         </div>
-        )}
-        <LayerInfo key={l.id} layer={l} />
-      </div>
-    ));
+      ));
+  };
 
   const renderMobile = () => {
     const sourceTextLong = metadataForSource && metadataForSource.length >= 1000;
