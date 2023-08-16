@@ -48,7 +48,6 @@ import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
 import { DISPLAY_STATIC_MAP } from '../modules/ui/constants';
-import { Button } from 'reactstrap';
 
 const { events } = util;
 
@@ -345,37 +344,8 @@ function MapUI(props) {
     }
   }
 
-  const testFunction = () => {
-    let layersWithoutProjections = [];
-    const layers = config.layers;
-
-    console.log(layers);
-
-    // Iterate over the object keys
-    for (let key in layers) {
-      if (layers.hasOwnProperty(key) && !layers[key].projections) {
-        layersWithoutProjections.push(layers[key]);
-      }
-    }
-
-    let layerCount = layersWithoutProjections.length;
-
-    console.log(layersWithoutProjections);
-    console.log(layerCount);
-  }
-
-
-  const devButton = () => {
-    return (
-      <div id="dev-block" className="d-flex justify-content-center">
-        <Button onClick={testFunction} style={ { zIndex: "999" } } color="success">Dev Button</Button>
-      </div>
-    )
-  }
-
   return (
     <>
-      {devButton()}
       <CreateMap
         compareMapUi={compareMapUi}
         isMapSet={isMapSet}

@@ -251,7 +251,7 @@ export const makeGetDescription = () => createSelector(
  *
  */
 export function hasMeasurementSetting(current, source, config, projId) {
-  console.log("source", source)
+  console.log('source', source);
   let hasSetting;
   Object.values(source.settings).forEach((setting) => {
     const layer = config.layers[setting];
