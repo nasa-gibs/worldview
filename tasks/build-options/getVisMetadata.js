@@ -156,7 +156,8 @@ async function getMetadata (layerId, baseUrl, count) {
 async function handleException (error, layerId, url, count) {
   if (!count) count = 0
   count++
-  if (count <= 5) {
+  // TEMP CHANGE TO MAKE THIS PART QUICKER
+  if (count <= 0) {
     await getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
