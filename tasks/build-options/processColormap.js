@@ -88,6 +88,15 @@ function toList (v) {
   return Array.isArray(v) ? v : [v]
 }
 
+/*
+ * matchLegend: Determines if the given entry has a matching legend.id
+ *
+ * Parameters:
+ * entry   [object] Single ColorMapEntry Object for this product
+ * legends [object] collection of legends for this product
+ *
+ * Returns the matching legend if found
+*/
 async function matchLegend (entry, legends) {
   try {
     let matched = 'false'
@@ -108,11 +117,15 @@ async function matchLegend (entry, legends) {
 async function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
+
+  // Check to see if there is at least one non-transparent entry.
   for (const entry of entries) {
     if (entry._attributes.transparent === 'false') {
       transparentMap = 'false'
+      break
     }
   }
+
   if (transparentMap === 'true') {
     return 'transparent'
   }
@@ -129,10 +142,11 @@ async function processEntries (colormap) {
   const legendColors = []
   const refsList = []
   const refSkipList = []
+  let initializeDisabled = []
 
   // TODO: make this a separate function for entries?
   await Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async (entry, index) => {
       const legend = await matchLegend(entry, legends)
 
       if (legend === 'false') {
@@ -141,22 +155,24 @@ async function processEntries (colormap) {
       }
 
       const [r, g, b] = entry._attributes.rgb.split(',')
-      let a = 0
 
-      if (entry._attributes.transparent === 'false') {
-        a = 255
-      }
+      // Force alpha value to 255 always
+      const a = 255
 
-      if (a === 0) {
-        refSkipList.push(entry._attributes.ref)
-        return
+      // If entry is served transparent, add it to the disabled array
+      if (entry._attributes.transparent !== 'false') {
+        initializeDisabled.push(index)
       }
 
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
       }
 
-      refsList.push(entry._attributes.ref)
+      if (mapType === 'classification') {
+        refsList.push(index)
+      } else {
+        refsList.push(entry._attributes.ref)
+      }
       const rHex = parseInt(r).toString(16).padStart(2, '0')
       const gHex = parseInt(g).toString(16).padStart(2, '0')
       const bHex = parseInt(b).toString(16).padStart(2, '0')
@@ -225,6 +241,40 @@ async function processEntries (colormap) {
     })
   )
 
+  // Ensure all disabled colormap entries are included at the END
+  // Update colors, legendColors & tooltips arrays accordingly
+  if (mapType === 'classification') {
+    const numDisabled = initializeDisabled.length
+    if (numDisabled > 0) {
+      const totalEntries = colors.length
+      const disabledColorsArr = []
+      const disabledLegendsArr = []
+      const disabledTooltipsArr = []
+
+      // Iterate backwards to maintain early indices
+      for (let i = numDisabled - 1; i >= 0; i -= 1) {
+        const thisIndex = initializeDisabled[i]
+
+        disabledColorsArr.push(colors[thisIndex])
+        disabledLegendsArr.push(legendColors[thisIndex])
+        disabledTooltipsArr.push(tooltips[thisIndex])
+
+        colors.splice(thisIndex, 1)
+        legendColors.splice(thisIndex, 1)
+        tooltips.splice(thisIndex, 1)
+      }
+
+      colors.push(...disabledColorsArr)
+      legendColors.push(...disabledLegendsArr)
+      tooltips.push(...disabledTooltipsArr)
+
+      const firstDisabledIndex = totalEntries - numDisabled
+      initializeDisabled = Array.from({
+        length: numDisabled
+      }, (item, index) => firstDisabledIndex + index)
+    }
+  }
+
   const result = {
     type: mapType,
     entries: {
@@ -238,7 +288,8 @@ async function processEntries (colormap) {
       tooltips,
       ticks,
       refs: idList
-    }
+    },
+    disabled: initializeDisabled
   }
   if (mapType === 'continuous' || mapType === 'discrete') {
     result.entries.values = values
@@ -257,6 +308,14 @@ async function readFileAsync (file) {
   return { id, xml }
 }
 
+/*
+ * processFile: Process provided xml file, determine relevant data & write data
+ * This determines the colormap & Palette legend data used in WV Layer window
+ *
+ * Parameters:
+ * id  [string] representing this product's layer name
+ * xml [string] represention of this product's xml colormap file (served from GIBS)
+*/
 async function processFile (id, xml) {
   let document
   let colormaps = []
@@ -269,6 +328,7 @@ async function processFile (id, xml) {
     for (const colormap of colormaps) {
       const result = await processEntries(colormap)
       if (result === 'transparent') {
+        // There are no visible colors in the colormap so stop processing
         continue
       }
       result.title = colormap._attributes.title

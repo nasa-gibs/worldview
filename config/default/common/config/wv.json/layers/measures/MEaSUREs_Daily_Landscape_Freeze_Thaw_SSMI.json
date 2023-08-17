@@ -6,7 +6,7 @@
       "group": "overlays",
       "layergroup": "Freeze/Thaw",
       "palette": {
-        "immutable": true
+        "immutable": false
       }
     }
   }

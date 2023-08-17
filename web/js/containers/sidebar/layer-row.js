@@ -83,6 +83,7 @@ function LayerRow (props) {
     isVectorLayer,
     measurementDescriptionPath,
     isAnimating,
+    palettes,
     isChartingActive,
     activeChartingLayer,
     updateActiveChartingLayer,
@@ -144,6 +145,7 @@ function LayerRow (props) {
           isDistractionFreeModeActive={isDistractionFreeModeActive}
           isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
+          palettes={palettes}
         />
       );
     }
@@ -524,6 +526,7 @@ const makeMapStateToProps = () => {
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
       paletteLegends,
+      palettes,
       renderedPalette: renderedPalettes[paletteName],
     };
   };
@@ -626,6 +629,7 @@ LayerRow.propTypes = {
   onRemoveClick: PropTypes.func,
   updateActiveChartingLayer: PropTypes.func,
   palette: PropTypes.object,
+  palettes: PropTypes.object,
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
