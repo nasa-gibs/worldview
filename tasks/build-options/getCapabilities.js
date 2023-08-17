@@ -70,18 +70,15 @@ async function getCapabilities () {
   // Download each GC xml using the "from" attribute and put it in the "to" location
   if (Object.prototype.hasOwnProperty.call(config, 'wv-options-fetch')) {
     const fetchValues = config['wv-options-fetch']
-    // Perform fetchConfigs and processGetCapabilities seperately so that each batch can be done in parallel
-    await Promise.all(fetchValues.map(async (value) => {
+    for (const value of fetchValues) {
       const inputFile = value.from
       const outputFile = `${outputDir}/${value.to}`
+
       if (argv.mode === 'verbose') console.warn(`Fetching config for ${inputFile} to ${outputFile}...`)
-      return fetchConfigs(inputFile, outputFile)
-    }))
-    await Promise.all(fetchValues.map(async (value) => {
-      const outputFile = `${outputDir}/${value.to}`
+      await fetchConfigs(inputFile, outputFile)
       if (argv.mode === 'verbose') console.warn(`Processing capabilities for ${outputFile}...`)
-      return processGetCapabilities(outputFile)
-    }))
+      await processGetCapabilities(outputFile)
+    }
   }
 }
 
@@ -192,9 +189,9 @@ async function gatherProcess (type, typeStr, dir, ext) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  await Promise.all(Object.values(type).map((link) => {
-    return processMetadata(link, dir, ext)
-  }))
+  Object.values(type).forEach(async (link) => {
+    await processMetadata(link, dir, ext)
+  })
 }
 
 main().catch((err) => {
