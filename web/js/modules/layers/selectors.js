@@ -254,7 +254,6 @@ export function hasMeasurementSetting(current, source, config, projId) {
   let hasSetting;
   Object.values(source.settings).forEach((setting) => {
     const layer = config.layers[setting];
-    // ADDED ADDITIONAL CHECK FOR PROJECTIONS PROPERTY
     if (layer && layer.projections) {
       const proj = layer.projections;
       if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {

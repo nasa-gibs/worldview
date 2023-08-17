@@ -81,10 +81,10 @@ async function main () {
     if (layerId !== layer.id) {
       error(`[${layerId}] layer id does not match id of ${layer.id}`)
     }
-    // console.warn('SHOW ME THIS LAYER', layer)
     if (!wv.layerOrder.includes(layerId)) {
       if (opt.layerOrderExceptions && opt.layerOrderExceptions.includes(layerId)) {
         removeLayer(wv, layerId)
+        continue
       } else if (tolerant || opt.ignoreLayerOrder) {
         wv.layerOrder.push(layerId)
       } else {
@@ -92,13 +92,6 @@ async function main () {
         continue
       }
     }
-    // if (!layer.projections) {
-    //   removeLayer(wv, layerId)
-    //   layersWithoutProjections++
-    //   console.warn(`The layer ${layer.id} does not have a projections property!!`)
-    //   console.warn(`This is layer number ${layersWithoutProjections} that has no projection property!!`)
-    //   continue
-    // }
     if (layer.vectorStyle && !layer.vectorStyle.id) {
       error(`[${layerId}] No vectorStyle definition`)
     }
