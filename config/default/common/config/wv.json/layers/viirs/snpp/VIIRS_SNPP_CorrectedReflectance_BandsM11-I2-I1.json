@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1": {
+      "id": "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+      "description": "viirs/snpp/VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+      "tags": "false color s-npp snpp 7-2-1",
+      "layergroup": "Corrected Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule"]
+    }
+  }
+}

@@ -60,6 +60,8 @@ class CategoryLayerRow extends React.Component {
     let orbitTitle = '';
 
     source.settings.forEach((layerId) => {
+      if (!layerConfig[layerId].projections) return;
+
       const layer = layerConfig[layerId];
       const inProjection = Object.keys(layer.projections).indexOf(projection) > -1;
 

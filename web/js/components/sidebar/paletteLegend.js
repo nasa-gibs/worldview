@@ -4,6 +4,7 @@ import lodashIsNumber from 'lodash/isNumber';
 import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
 import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
+import { connect } from 'react-redux';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import {
   drawSidebarPaletteOnCanvas,
@@ -14,6 +15,10 @@ import {
   convertPaletteValue,
 } from '../../modules/settings/util';
 import util from '../../util/util';
+import {
+  setToggledClassification,
+  refreshDisabledClassification,
+} from '../../modules/palettes/actions';
 
 /**
    * @param {Number} xOffset | X px Location of running-data
@@ -46,6 +51,18 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidMount() {
+    const {
+      getPalette, layer, compareState, toggleAllClassifications,
+    } = this.props;
+    if (layer.disabled === undefined) {
+      // There is not a previous instance, so check the palette defaults
+      const palette = getPalette();
+      if (palette.disabled && palette.disabled.length > 0) {
+        const disabledIntArr = palette.disabled.map((str) => Number(str));
+        toggleAllClassifications(layer.id, disabledIntArr, 0, compareState);
+      }
+    }
+
     this.updateCanvas();
     this.setState(() => ({
       scrollContainerEl: document.querySelector('#layers-scroll-container'),
@@ -329,7 +346,7 @@ class PaletteLegend extends React.Component {
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
-      layer, parentLayer, compareState, getPalette,
+      layer, parentLayer, compareState, getPalette, palettes,
     } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
@@ -362,13 +379,19 @@ class PaletteLegend extends React.Component {
                 : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
+              let legendColor = color;
+              const customColor = palette.custom;
+              if (palette.custom !== undefined) {
+                [legendColor] = palettes.custom[customColor].colors;
+              }
+
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
-                    style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
-                    onMouseMove={this.onMove.bind(this, color)}
+                    style={isInvisible ? null : { backgroundColor: util.hexToRGBA(legendColor) }}
+                    onMouseMove={this.onMove.bind(this, legendColor)}
                     onMouseEnter={this.onMouseEnter.bind(this)}
                     onMouseLeave={this.hideValue.bind(this)}
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
@@ -457,8 +480,26 @@ PaletteLegend.propTypes = {
   compareState: PropTypes.string,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
+  palettes: PropTypes.object,
   parentLayer: PropTypes.object,
   width: PropTypes.number,
+  toggleAllClassifications: PropTypes.func,
 };
 
-export default PaletteLegend;
+const mapDispatchToProps = (dispatch) => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName),
+    );
+  },
+  toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
+    dispatch(
+      refreshDisabledClassification(layerId, disabledArray, index, groupName),
+    );
+  },
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(PaletteLegend);

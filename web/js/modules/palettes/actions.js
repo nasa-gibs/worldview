@@ -172,14 +172,15 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       state,
     );
     let hasDisabled = false;
-    console.log('setToggledClassification');
-    // if (Object.prototype.hasOwnProperty.call(newActivePalettesObj, layerId)) {
-    newActivePalettesObj[layerId].maps.forEach((colorMap) => {
-      if (colorMap.disabled && colorMap.disabled.length) {
-        hasDisabled = true;
-      }
-    });
-    // }
+
+    if (newActivePalettesObj[layerId] !== undefined) {
+      newActivePalettesObj[layerId].maps.forEach((colorMap) => {
+        if (colorMap.disabled && colorMap.disabled.length) {
+          hasDisabled = true;
+        }
+      });
+    }
+
     // sometimes an active palette will be related to layers that we already removed during the
     // tour process. need to check if the layer is active to prevent errors when dispatching
     const getLayerIndex = () => {
@@ -210,6 +211,7 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
       state,
     );
     let hasDisabled = false;
+    if (!Object.prototype.hasOwnProperty.call(newActivePalettesObj, layerId)) return;
     newActivePalettesObj[layerId].maps.forEach((colorMap) => {
       if (colorMap.disabled && colorMap.disabled.length) {
         hasDisabled = true;

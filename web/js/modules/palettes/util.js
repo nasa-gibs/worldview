@@ -372,7 +372,6 @@ export function loadPalettes(permlinkState, state) {
               min.push(
                 findPaletteExtremeIndex(
                   layerId,
-                  'min',
                   value,
                   index,
                   stateObj.groupStr,
@@ -390,7 +389,6 @@ export function loadPalettes(permlinkState, state) {
               max.push(
                 findPaletteExtremeIndex(
                   layerId,
-                  'max',
                   value,
                   index,
                   stateObj.groupStr,

@@ -8,8 +8,8 @@ import {
   isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import {
   addLayer,
   getStartingLayers,
@@ -810,6 +810,14 @@ export function serializeLayers(layers, state, groupName) {
         value: def.opacity,
       });
     }
+    if (def.bandCombo) {
+      const { r, g, b } = def.bandCombo;
+      const bands = `${r};${g};${b}`;
+      item.attributes.push({
+        id: 'bands',
+        value: bands,
+      });
+    }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
@@ -1062,6 +1070,7 @@ const getLayerSpec = (attributes) => {
   let custom;
   let disabled;
   let count;
+  let bandCombo;
 
   lodashEach(attributes, (attr) => {
     if (attr.id === 'hidden') {
@@ -1076,6 +1085,7 @@ const getLayerSpec = (attributes) => {
       const values = util.toArray(attr.value.split(';'));
       disabled = values;
     }
+
     if (attr.id === 'max' && typeof attr.value === 'string') {
       const maxArray = [];
       const values = util.toArray(attr.value.split(';'));
@@ -1124,6 +1134,12 @@ const getLayerSpec = (attributes) => {
         squash = squashArray.length ? squashArray : undefined;
       }
     }
+
+    if (attr.id === 'bands') {
+      const values = util.toArray(attr.value.split(';'));
+      bandCombo = values;
+    }
+
     if (attr.id === 'palette') {
       const values = util.toArray(attr.value.split(';'));
       custom = values;
@@ -1142,6 +1158,8 @@ const getLayerSpec = (attributes) => {
     hidden,
     opacity,
     count,
+    bandCombo,
+
     // only include palette attributes if Array.length condition
     // is true: https://stackoverflow.com/a/40560953/4589331
     ...isArray(custom) && { custom },
