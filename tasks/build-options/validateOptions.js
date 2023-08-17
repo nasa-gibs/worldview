@@ -73,7 +73,6 @@ function isDateTimeFormat (input) {
 if (tolerant) warn('Validation enforcement disabled')
 
 let startDate = moment.max()
-// let layersWithoutProjections = 0
 
 async function main () {
   for (const layerId of Object.keys(wv.layers)) {
