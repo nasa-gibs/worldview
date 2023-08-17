@@ -43,8 +43,8 @@ function MeasurementMetadataDetail (props) {
   }, [source]);
 
   const renderMetadataForLayers = () => {
-    // First, filter layers that have the 'projection' property
-    const layersWithProjection = layers.filter((layer) => layer !== undefined);
+    // eslint-disable-next-line no-prototype-builtins
+    const layersWithProjection = layers.filter((layer) => layer.hasOwnProperty('projections'));
 
     // Then, filter those layers based on the 'selectedProjection'
     return layersWithProjection

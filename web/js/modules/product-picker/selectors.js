@@ -18,7 +18,6 @@ export const getLayersForProjection = createSelector(
   (config, projection, selectedDate) => {
     const layersWithFacetProps = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
-      // UPDATED THIS TO CHECK IF LAYER HAS PROJECTIONS PROPERTY
       .filter((layer) => layer.projections && layer.projections[projection])
       .map((layer) => {
         // If there is metadata for the current projection, use that
@@ -45,6 +44,7 @@ export const getSourcesForProjection = createSelector(
     const sourcesForProj = sources && sources.filter(
       (source) => source.settings.some((layerId) => {
         const { projections, layergroup } = config.layers[layerId];
+        if (!projections) return;
         const isOrbitTrack = layergroup === 'Orbital Track';
         const inProj = !!projections[projection];
         return trackGroup ? inProj : !isOrbitTrack && inProj;
