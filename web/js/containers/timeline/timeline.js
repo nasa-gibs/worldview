@@ -928,7 +928,7 @@ class Timeline extends React.Component {
       mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 60;
+        mobileBottom = 56;
       }
     }
 
@@ -973,6 +973,8 @@ class Timeline extends React.Component {
       hasSubdailyLayers,
       isCompareModeActive,
       isDataDownload,
+      isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isMobilePhone,
       isMobileTablet,
@@ -983,7 +985,6 @@ class Timeline extends React.Component {
       selectedDate,
       timelineEndDateLimit,
       timelineStartDateLimit,
-      isKioskModeActive,
     } = this.props;
 
     return (
@@ -995,6 +996,7 @@ class Timeline extends React.Component {
           onDateChange={this.onDateChange}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
+          isEmbedModeActive={isEmbedModeActive}
         />
         <MobileComparisonToggle />
         <div
@@ -1018,6 +1020,7 @@ class Timeline extends React.Component {
             clickAnimationButton={this.clickAnimationButton}
             hasSubdailyLayers={hasSubdailyLayers}
             isKioskModeActive={isKioskModeActive}
+            isEmbedModeActive={isEmbedModeActive}
             disabled={animationDisabled}
             label={
                     isCompareModeActive

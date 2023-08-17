@@ -12,25 +12,25 @@
         "vismetadata": {
             "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
             "daacMap": {
+                "ASIPS": "Atmosphere SIPS",
                 "GES_DISC":	"GES DISC",
-                "LANCEMODIS": "MODAPS SIPS",
                 "GHRC_DAAC": "GHRC DAAC",
-                "NSIDC_ECS": "NSIDC DAAC",
                 "LAADS": "LAADS DAAC",
-                "PODAAC": "PO.DAAC",
-                "POCLOUD": "PO.DAAC",
-                "LPDAAC_ECS": "LP DAAC",
-                "SEDAC": "SEDAC",
+                "LANCEAMSR2": "AMSR2 SIPS",
+                "LANCEMODIS": "MODAPS SIPS",
                 "LARC_ASDC": "ASDC",
                 "LARC":	"ASDC",
-                "LANCEAMSR2": "AMSR2 SIPS",
+                "LPDAAC_ECS": "LP DAAC",
+                "LPCLOUD":	"LP DAAC",
+                "MOPITT": "MOPITT SIPS",
+                "NSIDC_ECS": "NSIDC DAAC",
                 "OB_DAAC": "OB.DAAC",
                 "OMINRT": "OMI/Ozone SIPS",
-                "ASIPS": "Atmosphere SIPS",
-                "LPCLOUD":	"LPDAAC",
                 "ORNL_DAAC": "ORNL DAAC",
                 "ORNL_CLOUD": "ORNL DAAC",
-                "MOPITT": "MOPITT SIPS"
+                "PODAAC": "PO.DAAC",
+                "POCLOUD": "PO.DAAC",
+                "SEDAC": "SEDAC"
             }
         },
         "cmr": {

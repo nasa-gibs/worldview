@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule": {
+          "id":       "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule",
+          "description": "viirs/noaa20/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule",
+          "tags":     "subdaily",
+          "group":    "overlays",
+          "layergroup": "Granules",
+          "type": "granule",
+          "period": "subdaily",
+          "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11"],
+          "availability": {
+            "rollingWindow": 30
+          },
+          "disableSnapshot": true
+      }
+  }
+}

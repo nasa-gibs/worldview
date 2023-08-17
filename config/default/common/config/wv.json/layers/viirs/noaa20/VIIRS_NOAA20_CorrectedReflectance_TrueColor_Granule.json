@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule": {
+          "id":       "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule",
+          "description": "viirs/noaa20/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule",
+          "tags":     "subdaily",
+          "group":    "overlays",
+          "layergroup": "Granules",
+          "type": "granule",
+          "period": "subdaily",
+          "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_TrueColor"],
+          "availability": {
+            "rollingWindow": 30
+          },
+          "disableSnapshot": true
+      }
+  }
+}

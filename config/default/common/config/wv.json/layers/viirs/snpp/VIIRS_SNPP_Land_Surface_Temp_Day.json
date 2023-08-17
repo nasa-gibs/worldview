@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Land_Surface_Temp_Day": {
+      "id": "VIIRS_SNPP_Land_Surface_Temp_Day",
+      "description": "viirs/snpp/VIIRS_SNPP_Land_Surface_Temp_Day",
+      "tags": "suomi npp",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

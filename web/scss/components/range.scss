@@ -120,6 +120,7 @@
   &.start-range::-moz-range-track {
     height: 4px;
     border: solid 1px #ccc;
+    border-left: none;
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -148,6 +149,7 @@
     height: 4px;
     border: solid 1px #ccc;
     border-left: none;
+    border-right: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     background: linear-gradient(
