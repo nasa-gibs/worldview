@@ -7,7 +7,7 @@ import {
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import update from 'immutability-helper';
-import { getMinValue, getMaxValue } from './util';
+import { getMinValue } from './util';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -287,18 +287,13 @@ const toggleLookup = function(layerId, palettesObj, state) {
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
 
-export function findIndex(layerId, type, value, index, groupStr, state) {
+export function findIndex(layerId, value, index, groupStr, state) {
   index = index || 0;
   const { values } = getPalette(layerId, index, groupStr, state).entries;
   let result;
   lodashEach(values, (check, index) => {
     const min = getMinValue(check);
-    const max = getMaxValue(check);
-    if (type === 'min' && value === min) {
-      result = index;
-      return false;
-    }
-    if (type === 'max' && value === max) {
+    if (value === min) {
       result = index;
       return false;
     }

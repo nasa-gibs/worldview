@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_Black_Marble": {
+      "id": "VIIRS_Black_Marble",
+      "description": "viirs/snpp/VIIRS_Black_Marble",
+      "tags": "night s-npp snpp night lights city urban nighttime",
+      "layergroup": "Earth at Night",
+      "group": "baselayers",
+      "wrapX": true
+    }
+  }
+}

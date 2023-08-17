@@ -14,6 +14,7 @@ function MobileAnimationWidget (props) {
     breakpoints,
     endDate,
     hasSubdailyLayers,
+    isEmbedModeActive,
     isLandscape,
     isMobile,
     isMobilePhone,
@@ -82,8 +83,12 @@ function MobileAnimationWidget (props) {
 
   return (
     <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
-      <div className="mobile-animation-header">
-        <span aria-label="Close" onClick={toggleCollapse} id="mobile-animation-close">
+      <div className="mobile-animation-header" style={{ justifyContent: isEmbedModeActive ? 'flex-start' : 'flex-end' }}>
+        <span
+          aria-label="Close"
+          onClick={toggleCollapse}
+          id="mobile-animation-close"
+        >
           <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
         </span>
       </div>
@@ -175,6 +180,7 @@ MobileAnimationWidget.propTypes = {
   breakpoints: PropTypes.object,
   endDate: PropTypes.object,
   hasSubdailyLayers: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,

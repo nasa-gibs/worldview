@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import googleTagManager from 'googleTagManager';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
@@ -9,6 +8,7 @@ import {
   isEmpty as lodashIsEmpty,
 } from 'lodash';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 
 import JoyrideWrapper from '../components/tour/joyride-wrapper';
 import TourStart from '../components/tour/modal-tour-start';
@@ -195,6 +195,7 @@ class Tour extends React.Component {
   }
 
   toggleModalInProgress(e) {
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalInProgress: !prevState.modalInProgress,
@@ -203,6 +204,7 @@ class Tour extends React.Component {
 
   toggleModalComplete(e) {
     const { currentStoryId } = this.state;
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalComplete: !prevState.modalComplete,
@@ -358,6 +360,7 @@ class Tour extends React.Component {
     const {
       stories,
       config,
+      isKioskModeActive,
     } = this.props;
     const {
       modalInProgress,
@@ -391,6 +394,7 @@ class Tour extends React.Component {
         metaLoaded={metaLoaded}
         isLoadingMeta={isLoadingMeta}
         description={description}
+        isKioskModeActive={isKioskModeActive}
       />
     );
   }

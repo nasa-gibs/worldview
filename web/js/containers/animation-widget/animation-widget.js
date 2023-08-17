@@ -109,6 +109,7 @@ function AnimationWidget (props) {
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
+      toggleCollapse();
     }
     if (!isPlaying && autoplay && !isKioskModeActive) {
       onPushPlay();
@@ -281,6 +282,7 @@ function AnimationWidget (props) {
           breakpoints={breakpoints}
           endDate={endDate}
           hasSubdailyLayers={hasSubdailyLayers}
+          isEmbedModeActive={isEmbedModeActive}
           isLandscape={isLandscape}
           isMobile={isMobile}
           isMobilePhone={isMobilePhone}

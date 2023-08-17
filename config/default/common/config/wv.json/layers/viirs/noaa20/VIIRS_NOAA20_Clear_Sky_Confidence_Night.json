@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Clear_Sky_Confidence_Night": {
+      "id": "VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+      "tags": "cloud mask jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Clear Sky Confidence"
+    }
+  }
+}

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import { UncontrolledTooltip } from 'reactstrap';
 import {
   debounce as lodashDebounce,
   throttle as lodashThrottle,
   get as lodashGet,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
@@ -928,7 +928,7 @@ class Timeline extends React.Component {
       mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 60;
+        mobileBottom = 56;
       }
     }
 
@@ -973,6 +973,8 @@ class Timeline extends React.Component {
       hasSubdailyLayers,
       isCompareModeActive,
       isDataDownload,
+      isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isMobilePhone,
       isMobileTablet,
@@ -994,6 +996,7 @@ class Timeline extends React.Component {
           onDateChange={this.onDateChange}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
+          isEmbedModeActive={isEmbedModeActive}
         />
         <MobileComparisonToggle />
         <div
@@ -1016,6 +1019,8 @@ class Timeline extends React.Component {
             isPortrait={isPortrait}
             clickAnimationButton={this.clickAnimationButton}
             hasSubdailyLayers={hasSubdailyLayers}
+            isKioskModeActive={isKioskModeActive}
+            isEmbedModeActive={isEmbedModeActive}
             disabled={animationDisabled}
             label={
                     isCompareModeActive
@@ -1053,6 +1058,7 @@ class Timeline extends React.Component {
       isDataDownload,
       isDistractionFreeModeActive,
       isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isTourActive,
       parentOffset,
@@ -1131,7 +1137,7 @@ class Timeline extends React.Component {
                     style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
                   >
                     {/* Date Selector, Interval, Arrow Controls */}
-                    <div id="date-selector-main">
+                    <div id="date-selector-main" className={isKioskModeActive ? 'date-selector-kiosk' : ''}>
                       <DateSelector
                         id={draggerSelected}
                         idSuffix="timeline"
@@ -1140,10 +1146,11 @@ class Timeline extends React.Component {
                         maxDate={new Date(timelineEndDateLimit)}
                         minDate={new Date(timelineStartDateLimit)}
                         subDailyMode={hasSubdailyLayers}
+                        isKioskModeActive={isKioskModeActive}
                         fontSize={24}
                       />
                     </div>
-                    <div id="zoom-buttons-group">
+                    <div id="zoom-buttons-group" className={isKioskModeActive ? 'd-none' : ''}>
 
                       <TimeScaleIntervalChange
                         timeScaleChangeUnit={timeScaleChangeUnit}
@@ -1156,6 +1163,7 @@ class Timeline extends React.Component {
                     <AnimationButton
                       clickAnimationButton={this.clickAnimationButton}
                       disabled={animationDisabled}
+                      isKioskModeActive={isKioskModeActive}
                       screenWidth={screenWidth}
                       breakpoints={breakpoints}
                       label={
@@ -1398,7 +1406,7 @@ function mapStateToProps(state) {
   } = date;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const {
@@ -1522,6 +1530,7 @@ function mapStateToProps(state) {
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
     isEmbedModeActive,
+    isKioskModeActive,
   };
 }
 
@@ -1617,6 +1626,7 @@ Timeline.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,

@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Ice_Surface_Temp_Night": {
+      "id": "VIIRS_NOAA20_Ice_Surface_Temp_Night",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Ice_Surface_Temp_Night",
+      "tags": "jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Ice Surface Temperature"
+    }
+  }
+}

@@ -204,4 +204,3 @@ Markers.propTypes = {
   ui: PropTypes.object,
 };
 
-

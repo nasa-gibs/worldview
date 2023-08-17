@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -9,92 +9,73 @@ import PropTypes from 'prop-types';
  */
 const regex = /^[0-9\b]+$/;
 
-class DeltaInput extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      valid: true,
-    };
-  }
+function DeltaInput(props) {
+  const {
+    deltaValue,
+    changeDelta,
+  } = props;
 
-  componentDidMount() {
-    const { deltaValue } = this.props;
-    this.setValue(deltaValue);
-  }
+  const [value, setValue] = useState('');
+  const [valid, setValid] = useState(true);
 
-  onKeyInput = (e) => {
-    let { value } = e.target;
-    if (value === '' || regex.test(value)) {
-      value = Number(value);
-      if (value < 1000) {
-        this.setValue(value);
+  useEffect(() => {
+    setValue(deltaValue);
+  }, []);
+
+  const onKeyInput = (e) => {
+    let inputValue = e.target.value;
+    if (inputValue === '' || regex.test(inputValue)) {
+      inputValue = Number(inputValue);
+      if (inputValue < 1000) {
+        setValue(inputValue);
       }
     }
   };
 
-  handleKeyPress = (e) => {
-    let { value } = this.state;
+  const handleKeyPress = (e) => {
     if (value === '' || regex.test(value)) {
-      value = Number(value);
+      const numberValue = Number(value);
       if (e.key === 'ArrowUp') {
-        if (value < 1000) {
-          this.setValue(value + 1);
+        if (numberValue < 1000) {
+          setValue(numberValue + 1);
         }
       } else if (e.key === 'ArrowDown') {
-        if (value > 1) {
-          this.setValue(value - 1);
+        if (numberValue > 1) {
+          setValue(numberValue - 1);
         }
       } else if (e.key === 'Enter') {
-        this.handleBlur();
+        handleBlur();
       }
     }
   };
 
-  handleFocus = (e) => {
+  const handleFocus = (e) => {
     e.target.select();
   };
 
-  handleBlur = () => {
-    const { changeDelta } = this.props;
-    const { value } = this.state;
+  const handleBlur = () => {
     if (value >= 1 && value < 1000) {
-      this.setState({
-        valid: true,
-      }, changeDelta(value));
+      setValid(true);
+      changeDelta(value);
     } else {
-      this.setState({
-        valid: false,
-      });
+      setValid(false);
     }
   };
 
-  setValue = (value) => {
-    this.setState({
-      value,
-    });
-  };
-
-  render() {
-    const {
-      value,
-      valid,
-    } = this.state;
-    return (
-      <input
-        className="custom-interval-delta-input no-drag"
-        type="text"
-        style={valid ? {} : { borderColor: '#ff0000' }}
-        min="1"
-        step="1"
-        value={value}
-        onFocus={this.handleFocus}
-        onBlur={this.handleBlur}
-        onKeyDown={this.handleKeyPress}
-        onChange={this.onKeyInput}
-      />
-    );
-  }
+  return (
+    <input
+      className="custom-interval-delta-input no-drag"
+      type="text"
+      style={valid ? {} : { borderColor: '#ff0000' }}
+      min="1"
+      step="1"
+      value={value}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyPress}
+      onChange={onKeyInput}
+    />
+  );
 }
 
 DeltaInput.propTypes = {

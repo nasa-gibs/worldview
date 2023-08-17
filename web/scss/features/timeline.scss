@@ -185,11 +185,26 @@ button:focus {
     margin-top: 23px;
   }
 
+  & .input-time-divider-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    width: 13px;
+    margin-top: 13px;
+  }
+
   & .input-time-zmark {
     font-family: $wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
+  }
+
+  & .input-time-zmark-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    margin-top: 15px;
   }
 
   & .date-arrows {
@@ -894,6 +909,12 @@ button:focus {
   bottom: 75px;
 }
 
+.animate-button-phone-portrait-embed {
+  left: 100px;
+  bottom: 52px;
+  transform: scale(.75);
+}
+
 .animate-button-phone-portrait-subdaily {
   left: 140px;
   bottom: 75px;
@@ -912,6 +933,18 @@ button:focus {
 .animate-button-tablet-portrait {
   left: 325px;
   bottom: 20px;
+}
+
+.animate-button-tablet-portrait-embed {
+  left: 235px;
+  bottom: 15px;
+  transform: scale(.75);
+}
+
+.animate-button-tablet-portrait-subdaily-embed {
+  left: 315px;
+  bottom: 15px;
+  transform: scale(.75);
 }
 
 .animate-button-tablet-portrait-subdaily {

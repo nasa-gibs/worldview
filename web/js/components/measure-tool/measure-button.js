@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import googleTagManager from 'googleTagManager';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';

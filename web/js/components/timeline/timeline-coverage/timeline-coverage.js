@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import {
   isEqual as lodashIsEqual,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import { timeScaleOptions } from '../../../modules/date/constants';
 import {
   filterProjLayersWithStartDate,
