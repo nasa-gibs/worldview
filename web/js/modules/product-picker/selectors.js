@@ -43,8 +43,8 @@ export const getSourcesForProjection = createSelector(
     const trackGroup = currentMeasurement && currentMeasurement.id === 'orbital-track';
     const sourcesForProj = sources && sources.filter(
       (source) => source.settings.some((layerId) => {
+        if (!config.layers[layerId].projections) return;
         const { projections, layergroup } = config.layers[layerId];
-        if (!projections) return;
         const isOrbitTrack = layergroup === 'Orbital Track';
         const inProj = !!projections[projection];
         return trackGroup ? inProj : !isOrbitTrack && inProj;
