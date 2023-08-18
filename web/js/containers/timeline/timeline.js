@@ -1366,7 +1366,7 @@ class Timeline extends React.Component {
                   { marginRight: isTimelineHidden ? '20px' : '0' }
                 }
               >
-                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} />
+                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} isKioskModeActive={isKioskModeActive} />
               </div>
             </section>
           </ErrorBoundary>
