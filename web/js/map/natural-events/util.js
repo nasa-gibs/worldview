@@ -118,7 +118,7 @@ export const getArrows = function(lineSegmentCoords, map) {
   });
 };
 
-export const getTrackLines = function(map, trackCoords) {
+export const getTrackLines = function(map, trackCoords, isHighlighted) {
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
   const outlineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
@@ -159,13 +159,13 @@ export const getTrackLines = function(map, trackCoords) {
   });
 
   lineEl.style.fill = 'transparent';
-  lineEl.style.stroke = 'white';
-  lineEl.style.strokeWidth = '1px';
+  lineEl.style.stroke = isHighlighted ? 'yellow' : 'white';
+  lineEl.style.strokeWidth = isHighlighted ? '2px' : '1px';
   lineEl.setAttribute('points', lineString);
 
   outlineEl.style.fill = 'transparent';
   outlineEl.style.stroke = 'rgba(0,0,0,0.5)';
-  outlineEl.style.strokeWidth = '3px';
+  outlineEl.style.strokeWidth = isHighlighted ? '5px' : '3px';
   outlineEl.setAttribute('points', lineString);
 
   return new OlOverlay({

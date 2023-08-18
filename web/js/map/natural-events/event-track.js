@@ -60,7 +60,7 @@ const updateSelection = function(newDate) {
  * @param {Function} showAllTracks
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks) {
+const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks, selectedEvent) {
   const pointsAndArrows = [];
   const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
@@ -91,7 +91,7 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
     pointsAndArrows.push(point);
   });
   return {
-    track: getTrackLines(map, trackSegments),
+    track: getTrackLines(map, trackSegments, eventObj.id === selectedEvent.id),
     pointsAndArrows,
   };
 };
@@ -188,7 +188,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, showAllTracksRef.current);
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, showAllTracksRef.current, selectedEvent);
 
       newTrackDetails = {
         id: eventID,
@@ -226,7 +226,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, selectedEvent);
 
       newTrackDetails = {
         id: event.id,
