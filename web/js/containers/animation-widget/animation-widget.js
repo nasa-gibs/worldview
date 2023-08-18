@@ -259,6 +259,7 @@ function AnimationWidget (props) {
       }
       {isCollapsed ? (
         <CollapsedAnimationWidget
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
           isPlaying={isPlaying}

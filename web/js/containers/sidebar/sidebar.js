@@ -300,7 +300,7 @@ class Sidebar extends React.Component {
       position: 'static',
     } : null;
 
-    const productsHolderStyle = isDistractionFreeModeActive ? {
+    const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
       display: 'none',
     } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
       cssFloat: 'left',

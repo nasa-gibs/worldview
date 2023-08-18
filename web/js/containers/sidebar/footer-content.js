@@ -82,10 +82,12 @@ const FooterContent = React.forwardRef((props, ref) => {
           selected={compareMode}
           onclick={changeCompareMode}
         />
+        {isChartingActive && (
         <ChartingModeOptions
           isChartingActive={isChartingActive}
           isMobile={isMobile}
         />
+        )}
       </div>
       <div className="product-buttons">
         {!isChartingActive
