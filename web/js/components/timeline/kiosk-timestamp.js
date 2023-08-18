@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import util from '../../util/util';
+import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 
 /**
  * getIsDaylightSavingsTime()
@@ -13,7 +15,7 @@ function getIsDaylightSavingsTime() {
   return isDaylightSavingTime;
 }
 
-function KioskTimeStamp({ date, subdaily }) {
+function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
   const options = {
     year: 'numeric',
     month: 'long',
@@ -28,10 +30,21 @@ function KioskTimeStamp({ date, subdaily }) {
   const formatter = new Intl.DateTimeFormat('en-US', options);
   const dateParts = formatter.formatToParts(date);
 
-  const year = dateParts.find((part) => part.type === 'year').value;
-  const month = dateParts.find((part) => part.type === 'month').value.slice(0, 3);
-  const day = dateParts.find((part) => part.type === 'day').value;
-  const hours = dateParts.find((part) => part.type === 'hour').value;
+  const kioskYear = dateParts.find((part) => part.type === 'year').value;
+  const kioskMonth = dateParts.find((part) => part.type === 'month').value.slice(0, 3);
+  const kioskDay = dateParts.find((part) => part.type === 'day').value;
+  const kioskHour = dateParts.find((part) => part.type === 'hour').value;
+
+  const dfYear = date.getUTCFullYear();
+  const dfMonth = MONTH_STRING_ARRAY[date.getUTCMonth()];
+  const dfDay = util.pad(date.getUTCDate(), 2, '0');
+  const dfHour = util.pad(date.getUTCHours(), 2, '0');
+
+  const year = isKioskModeActive ? kioskYear : dfYear;
+  const month = isKioskModeActive ? kioskMonth : dfMonth;
+  const day = isKioskModeActive ? kioskDay : dfDay;
+  const hour = isKioskModeActive ? kioskHour : dfHour;
+
   const minutes = dateParts.find((part) => part.type === 'minute').value;
   const timeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';
 
@@ -50,7 +63,7 @@ function KioskTimeStamp({ date, subdaily }) {
       {subdaily && (
         <>
           <div className="kiosk-hours">
-            {hours}
+            {hour}
           </div>
           <div className="kiosk-colon">
             :
@@ -75,6 +88,7 @@ function KioskTimeStamp({ date, subdaily }) {
 
 KioskTimeStamp.propTypes = {
   date: PropTypes.object,
+  isKioskModeActive: PropTypes.bool,
   subdaily: PropTypes.bool,
 };
 
