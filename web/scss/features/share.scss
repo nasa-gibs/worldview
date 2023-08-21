@@ -107,3 +107,14 @@
     bottom: 14px;
   }
 }
+
+#feedback-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: #7bf;
+}
+
+#feedback-link:hover {
+  text-decoration: underline;
+  color: #7bf !important;
+}

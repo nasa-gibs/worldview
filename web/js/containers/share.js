@@ -289,7 +289,7 @@ class ShareLinkContainer extends Component {
             <p>
               Please
               {' '}
-              <a onClick={this.openFeedback} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'lightblue' }}>contact us</a>
+              <a onClick={this.openFeedback} id="feedback-link">contact us</a>
               {' '}
               to enable Worldview embedding on your website.
             </p>
