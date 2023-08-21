@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { containsExtent, isEmpty } from 'ol/extent';
-import { fromExtent } from 'ol/geom/Polygon';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CRS } from '../../modules/map/constants';
+import * as olProj from 'ol/proj';
 
 const isValidExtent = (extent) => {
   if (extent.length !== 4) return false;
@@ -24,11 +24,15 @@ function Input({
   const update = () => {
     try {
       const newInputValue = Number(inputValue);
-      const newArray = structuredClone(boundingBoxArray);
+      const newArray = structuredClone(boundingBoxArray)
       newArray[index] = newInputValue;
-      const extentPolygon = fromExtent(newArray);
-      const crsCorrectedExtentPolygon = extentPolygon.transform(CRS.GEOGRAPHIC, crs);
-      const crsCorrectedExtent = crsCorrectedExtentPolygon.getExtent();
+      const minX = Math.min(newArray[0], newArray[2]);
+      const minY = Math.min(newArray[1], newArray[3]);
+      const maxX = Math.max(newArray[0], newArray[2]);
+      const maxY = Math.max(newArray[1], newArray[3]);  
+      const validExtent = [minX, minY, maxX, maxY];
+
+      const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs)
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
       && isValidExtent(newArray)
