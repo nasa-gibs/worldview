@@ -19,6 +19,7 @@ import {
   getPermalink, getShareLink, wrapWithIframe,
 } from '../modules/link/util';
 import onClickFeedback from '../modules/feedback/util';
+import initFeedback from '../modules/feedback/actions';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -167,10 +168,11 @@ class ShareLinkContainer extends Component {
   openFeedback = () => {
     const {
       isMobile,
-      isInitiated,
+      feedbackIsInitiated,
       feedbackEnabled,
+      sendFeedback,
     } = this.props;
-    if (feedbackEnabled) onClickFeedback(isInitiated, isMobile);
+    if (feedbackEnabled) sendFeedback(feedbackIsInitiated, isMobile);
   };
 
   renderNavTabs = () => {
@@ -377,6 +379,12 @@ const mapDispatchToProps = (dispatch) => ({
   requestShortLinkAction: (location, options) => dispatch(
     requestShortLink(location, 'application/json', null, options),
   ),
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
+    if (!isInitiated) {
+      dispatch(initFeedback());
+    }
+  },
 });
 
 export default connect(
@@ -386,12 +394,13 @@ export default connect(
 
 ShareLinkContainer.propTypes = {
   embedDisableNavLink: PropTypes.bool,
-  isInitiated: PropTypes.bool,
+  feedbackIsInitiated: PropTypes.bool,
   feedbackEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
+  sendFeedback: PropTypes.func,
   shortLink: PropTypes.object,
   urlShortening: PropTypes.bool,
 };

@@ -94,6 +94,7 @@ function InfoList (props) {
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
       : {
         onClick: () => {
+          console.log('feedbackIsInititated: ', feedbackIsInitiated);
           sendFeedback(feedbackIsInitiated, isMobile);
         },
       };
