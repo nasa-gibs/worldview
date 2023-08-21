@@ -48,7 +48,7 @@ async function processTemporalLayer (wvLayer, value) {
             endDate = moment.utc(endDate).subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]')
           }
         }
-        const regex = new RegExp(/\d+/g)
+        const regex = /\d+/g
         const match = regex.exec(interval)
         rangeInterval.push(match)
         if (endDate.endsWith('T00:00:00Z')) {

@@ -14,10 +14,9 @@
     {
       "files": ["*.js"],
       "rules": {
-        // "no-undef": "off",
         "n/no-unpublished-require": "off",
         "no-unused-expressions": "off",
-        "prefer-regex-literals": "warn"
+        // "prefer-regex-literals": "warn"
       }
     }
   ]
