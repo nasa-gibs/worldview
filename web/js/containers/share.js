@@ -19,7 +19,6 @@ import {
   getPermalink, getShareLink, wrapWithIframe,
 } from '../modules/link/util';
 import onClickFeedback from '../modules/feedback/util';
-import initFeedback from '../modules/feedback/actions';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -169,9 +168,9 @@ class ShareLinkContainer extends Component {
     const {
       isMobile,
       isInitiated,
-      feedbackEnabled
+      feedbackEnabled,
     } = this.props;
-    if (feedbackEnabled) onClickFeedback(isInitiated, isMobile)
+    if (feedbackEnabled) onClickFeedback(isInitiated, isMobile);
   };
 
   renderNavTabs = () => {
@@ -288,7 +287,11 @@ class ShareLinkContainer extends Component {
           <>
             {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
             <p>
-              Please <a onClick={this.openFeedback} style={{cursor: 'pointer', textDecoration: 'underline', color: 'lightblue'}}>contact us</a> to enable Worldview embedding on your website.
+              Please
+              {' '}
+              <a onClick={this.openFeedback} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'lightblue' }}>contact us</a>
+              {' '}
+              to enable Worldview embedding on your website.
             </p>
           </>
         )}
@@ -374,12 +377,6 @@ const mapDispatchToProps = (dispatch) => ({
   requestShortLinkAction: (location, options) => dispatch(
     requestShortLink(location, 'application/json', null, options),
   ),
-  sendFeedback: (isInitiated, isMobile) => {
-    onClickFeedback(isInitiated, isMobile);
-    if (!isInitiated) {
-      dispatch(initFeedback());
-    }
-  },
 });
 
 export default connect(
@@ -389,6 +386,8 @@ export default connect(
 
 ShareLinkContainer.propTypes = {
   embedDisableNavLink: PropTypes.bool,
+  isInitiated: PropTypes.bool,
+  feedbackEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
