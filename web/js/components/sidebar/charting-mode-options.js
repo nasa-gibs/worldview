@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { Draw as OlInteractionDraw } from 'ol/interaction';
-import { createBox } from 'ol/interaction/Draw.js';
+import { createBox } from 'ol/interaction/Draw';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
@@ -20,13 +20,13 @@ import {
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
-import ChartingInfo from '../charting/charting-info.js';
-import SimpleStatistics from '../charting/simple-statistics.js';
+import ChartingInfo from '../charting/charting-info';
+import SimpleStatistics from '../charting/simple-statistics';
 import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
 import {
   drawStyles, vectorStyles,
-} from '../charting/charting-area-of-interest-style.js';
+} from '../charting/charting-area-of-interest-style';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
