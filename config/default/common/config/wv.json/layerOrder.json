@@ -1,5 +1,7 @@
 {
 	"layerOrder": [
+		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
 		"HLS_Customizable_Sentinel",
 		"HLS_True_Color_Sentinel",
@@ -51,8 +53,6 @@
 		"MODIS_Terra_L3_SurfaceReflectance_Bands121_8Day",
 		"MODIS_Aqua_L3_SurfaceReflectance_Bands121_8Day",
 		"MODIS_Combined_L3_Nadir-BRDF_Daily",
-		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
-		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"BlueMarble_NextGeneration",
 		"BlueMarble_ShadedRelief",
 		"BlueMarble_ShadedRelief_Bathymetry",
