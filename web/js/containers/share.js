@@ -39,7 +39,8 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
+const DESKTOP_SHARE_TABS = ['link', 'embed', 'social'];
+const MOBILE_SHARE_TABS = ['link', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -181,9 +182,10 @@ class ShareLinkContainer extends Component {
     const isDisabled = {
       embed: embedDisableNavLink,
     };
+    const shareTabs = isMobile ? MOBILE_SHARE_TABS : DESKTOP_SHARE_TABS;
     return (
       <Nav tabs>
-        {SOCIAL_SHARE_TABS.map((type) => {
+        {shareTabs.map((type) => {
           const navTitle = lodashStartCase(type);
           const navDisabledMessage = `${navTitle} is not available when the current application features are in use.`;
           const navTitleClass = `${type}-share-nav`;

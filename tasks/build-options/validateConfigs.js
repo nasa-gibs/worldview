@@ -68,8 +68,7 @@ async function validateFile (filePath) {
     for (const error of validate.errors) {
       invalidJsonFiles.push(error)
       console.error(`${prog}: ERROR: ${error.instancePath} ${error.message}`)
-      // TOD: Add verbose mode with the full error:
-      // console.error(error)
+      if (argv.mode === 'verbose') console.error(error)
     }
   }
 }
