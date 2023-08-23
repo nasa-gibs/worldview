@@ -25,11 +25,8 @@ import util from '../../util/util';
 import { parseDate } from '../date/util';
 
 export function getOrbitTrackTitle(def) {
-  console.log('getOrbitTrackTitle');
   const { track } = def;
   const daynightValue = lodashGet(def, 'daynight[0]');
-  console.log(`track: ${track}`);
-  console.log(`daynightValue: ${daynightValue}`);
   if (track && daynightValue) {
     return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}`;
   } if (track) {
