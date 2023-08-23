@@ -97,9 +97,9 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  for (layerId of layerOrder) {
-    await getMetadata(layerId, url)
-  }
+  await Promise.all(layerOrder.map((layerId) => {
+    return getMetadata(layerId, url)
+  }))
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -156,7 +156,7 @@ async function getMetadata (layerId, baseUrl, count) {
 async function handleException (error, layerId, url, count) {
   if (!count) count = 0
   count++
-  if (count <= 5) {
+  if (count <= 1) {
     await getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
