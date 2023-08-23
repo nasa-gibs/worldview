@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import googleTagManager from 'googleTagManager';
 import copy from 'copy-to-clipboard';
 import {
   startCase as lodashStartCase,
@@ -13,6 +12,7 @@ import {
   Nav, NavItem, NavLink,
   TabContent, TabPane,
 } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
 import {

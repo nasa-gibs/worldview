@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1": {
+      "id": "VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1",
+      "description": "viirs/snpp/VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1",
+      "tags": "false color lsr s-npp snpp",
+      "layergroup": "Land Surface Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true
+    }
+  }
+}

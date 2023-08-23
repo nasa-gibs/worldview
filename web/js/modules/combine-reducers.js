@@ -20,6 +20,7 @@ import {
 } from './notifications/reducers';
 import { getProjInitialState } from './projection/util';
 import { compareReducer } from './compare/reducers';
+import { chartingReducer } from './charting/reducers';
 import sidebarReducer from './sidebar/reducers';
 import {
   layerReducer,
@@ -95,6 +96,7 @@ const reducers = {
   animation: animationReducer,
   config: defaultReducer,
   compare: compareReducer,
+  charting: chartingReducer,
   date: dateReducer,
   embed: embedReducers,
   events: eventsReducer,

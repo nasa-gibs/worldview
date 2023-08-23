@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Cloud_Effective_Radius": {
+      "id": "VIIRS_NOAA20_Cloud_Effective_Radius",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Cloud_Effective_Radius",
+      "tags": "jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Cloud Effective Radius",
+      "wrapadjacentdays": true
+    }
+  }
+}

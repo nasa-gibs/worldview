@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
-import googleTagManager from 'googleTagManager';
 import {
   cloneDeep as lodashCloneDeep,
   filter as lodashFilter,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import GifContainer from '../../containers/gif';
 import {
   toggleComponentGifActive,

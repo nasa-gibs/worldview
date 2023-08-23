@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_DayNightBand_ENCC": {
+      "id": "VIIRS_SNPP_DayNightBand_ENCC",
+      "description": "viirs/snpp/VIIRS_SNPP_DayNightBand_ENCC",
+      "tags": "dnb night s-npp snpp night city urban lights nighttime",
+      "layergroup": "Earth at Night",
+      "group": "overlays"
+    }
+  }
+}

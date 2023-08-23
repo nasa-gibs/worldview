@@ -8,8 +8,8 @@ import {
   debounce as lodashDebounce,
   get as lodashGet,
 } from 'lodash';
-import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import googleTagManager from 'googleTagManager';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
 import HoverTooltip from '../util/hover-tooltip';

@@ -64,7 +64,19 @@ const layerMetadata = {}
 skipLayers = [
   'Land_Water_Map',
   'Land_Mask',
-  'World_Database_on_Protected_Areas'
+  'World_Database_on_Protected_Areas',
+  'HLS_True_Color_Sentinel',
+  'HLS_Shortwave_Infrared_Sentinel',
+  'HLS_Shortwave_Infrared_Landsat',
+  'HLS_True_Color_Landsat',
+  'HLS_False_Color_Vegetation_Landsat',
+  'HLS_False_Color_Vegetation_Sentinel',
+  'HLS_False_Color_Urban_Sentinel',
+  'HLS_False_Color_Urban_Landsat',
+  'HLS_False_Color_Sentinel',
+  'HLS_Customizable_Sentinel',
+  'HLS_Customizable_Landsat',
+  'HLS_False_Color_Landsat'
 ]
 
 // NOTE: Only using these properties at this time
