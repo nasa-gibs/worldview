@@ -6,7 +6,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Spinner
+  Spinner,
 } from 'reactstrap';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
@@ -24,16 +24,14 @@ export default function ImagerySearch({ layer }) {
     const response = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&sort_key=-start_date&pageSize=10`);
     const granules = await response.json();
     setGranulesStatus('loaded');
-    const dates = granules.feed.entry.map((granule) => {
-      return new Date(granule.time_start).toString();
-    });
-    setGranuleDates(dates)
-  }
+    const dates = granules.feed.entry.map((granule) => new Date(granule.time_start).toString());
+    setGranuleDates(dates);
+  };
 
   const handleSelection = (date) => {
     selectDate(new Date(date));
     setDropdownOpen(false);
-  }
+  };
 
   return (
     <div className="imagery-search-container">
@@ -51,7 +49,8 @@ export default function ImagerySearch({ layer }) {
       </div>
       {
         granulesStatus === 'loaded'
-          ? <Dropdown isOpen={dropdownOpen} toggle={toggle} size="sm">
+          ? (
+            <Dropdown isOpen={dropdownOpen} toggle={toggle} size="sm">
               <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
                 Select Date
               </DropdownToggle>
@@ -63,6 +62,7 @@ export default function ImagerySearch({ layer }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
+          )
           : granulesStatus && <Spinner>Loading...</Spinner>
       }
     </div>
