@@ -62,7 +62,16 @@ function OlMeasureTool (props) {
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
   } = props;
-  const previousCrs = usePrevious(crs);
+
+  const areaBgFill = new OlStyleFill({
+    color: 'rgba(213, 78, 33, 0.1)',
+  });
+
+  const solidBlackLineStroke = new OlStyleStroke({
+    color: 'rgba(0, 0, 0, 1)',
+    lineJoin: 'round',
+    width: 5,
+  });
 
   function usePrevious(data) {
     const ref = useRef();
@@ -71,6 +80,8 @@ function OlMeasureTool (props) {
     }, [data]);
     return ref.current;
   }
+
+  const previousCrs = usePrevious(crs);
 
   /**
    * End the current measurement interaction & remove the visual representation from the map
@@ -84,73 +95,6 @@ function OlMeasureTool (props) {
     OlObservableUnByKey(twoFingerTouchListener);
     events.trigger(MAP_ENABLE_CLICK_ZOOM);
   };
-
-  const initDistanceMeasurement = () => initMeasurement('distance');
-  const initAreaMeasurement = () => initMeasurement('area');
-
-  // Monitor for projection change & terminate any incomplete measurement from the previous projection
-  useEffect(() => {
-    if (olMap != null) {
-      const regionFromCrs = {
-        [CRS.GEOGRAPHIC]: 'geographic',
-        [CRS.ARCTIC]: 'arctic',
-        [CRS.ANTARCTIC]: 'antarctic',
-      };
-
-      const geographyToTerminate = regionFromCrs[previousCrs];
-      terminateDraw(map.ui.proj[geographyToTerminate]);
-
-      if (document.getElementsByClassName('tooltip-active').length > 0) {
-        map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
-      }
-    }
-  }, [crs]);
-
-  useEffect(() => {
-    if (!init) {
-      projections.forEach((key) => {
-        allMeasurements[key] = {};
-        vectorLayers[key] = null;
-        sources[key] = new OlVectorSource({ wrapX: false });
-      });
-      init = true;
-    }
-  }, [projections]);
-
-  useEffect(() => {
-    const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
-
-    if (map && map.rendered) {
-      events.on(MEASURE_DISTANCE, initDistanceMeasurement);
-      events.on(MEASURE_AREA, initAreaMeasurement);
-      events.on(MEASURE_CLEAR, clearMeasurements);
-      events.on(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
-    }
-    return () => {
-      if (map && map.rendered) {
-        events.off(MEASURE_DISTANCE, initDistanceMeasurement);
-        events.off(MEASURE_AREA, initAreaMeasurement);
-        events.off(MEASURE_CLEAR, clearMeasurements);
-        events.off(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
-      }
-    };
-  }, [map, unitOfMeasure]);
-
-  useEffect(recalculateAllMeasurements, [unitOfMeasure]);
-
-  useEffect(recalculateAllMeasurements, [crs]);
-
-  // we need this to make sure we have the latest version of olMap in renderToolTip()
-  useEffect(recalculateAllMeasurements, [olMap]);
-
-  const areaBgFill = new OlStyleFill({
-    color: 'rgba(213, 78, 33, 0.1)',
-  });
-  const solidBlackLineStroke = new OlStyleStroke({
-    color: 'rgba(0, 0, 0, 1)',
-    lineJoin: 'round',
-    width: 5,
-  });
 
   /**
    * Call the appropriate transform function to add great circle arcs to
@@ -167,6 +111,22 @@ function OlMeasureTool (props) {
     }
     return geometry;
   };
+
+  const vectorStyles = [
+    new OlStyle({
+      fill: areaBgFill,
+      stroke: solidBlackLineStroke,
+      geometry: styleGeometryFn,
+    }),
+    new OlStyle({
+      stroke: new OlStyleStroke({
+        color: '#fff',
+        lineJoin: 'round',
+        width: 2,
+      }),
+      geometry: styleGeometryFn,
+    }),
+  ];
 
   const drawStyles = [
     new OlStyle({
@@ -189,22 +149,6 @@ function OlMeasureTool (props) {
         fill: new OlStyleFill({
           color: 'rgba(255, 255, 255, 0.3)',
         }),
-      }),
-      geometry: styleGeometryFn,
-    }),
-  ];
-
-  const vectorStyles = [
-    new OlStyle({
-      fill: areaBgFill,
-      stroke: solidBlackLineStroke,
-      geometry: styleGeometryFn,
-    }),
-    new OlStyle({
-      stroke: new OlStyleStroke({
-        color: '#fff',
-        lineJoin: 'round',
-        width: 2,
       }),
       geometry: styleGeometryFn,
     }),
@@ -308,21 +252,8 @@ function OlMeasureTool (props) {
     });
   }
 
-  /**
-   * Go through every tooltip and recalculate the measurement based on
-   * current settings of unit of measurement
-   */
-  function recalculateAllMeasurements() {
-    Object.values(allMeasurements).forEach((measurementsForProj) => {
-      Object.values(measurementsForProj).forEach(
-        ({ feature, overlay }) => {
-          renderTooltip(feature, overlay);
-          feature.getGeometry().changed();
-          overlay.setOffset([0, -7]);
-        },
-      );
-    });
-  }
+  const initDistanceMeasurement = () => initMeasurement('distance');
+  const initAreaMeasurement = () => initMeasurement('area');
 
   /**
    * Clear all existing measurements on the current map projection
@@ -344,6 +275,77 @@ function OlMeasureTool (props) {
       vectorLayers[crs] = null;
     }
   }
+
+  // Monitor for projection change & terminate any incomplete measurement from the previous projection
+  useEffect(() => {
+    if (olMap != null) {
+      const regionFromCrs = {
+        [CRS.GEOGRAPHIC]: 'geographic',
+        [CRS.ARCTIC]: 'arctic',
+        [CRS.ANTARCTIC]: 'antarctic',
+      };
+
+      const geographyToTerminate = regionFromCrs[previousCrs];
+      terminateDraw(map.ui.proj[geographyToTerminate]);
+
+      if (document.getElementsByClassName('tooltip-active').length > 0) {
+        map.ui.proj[geographyToTerminate].removeOverlay(tooltipOverlay);
+      }
+    }
+  }, [crs]);
+
+  useEffect(() => {
+    if (!init) {
+      projections.forEach((key) => {
+        allMeasurements[key] = {};
+        vectorLayers[key] = null;
+        sources[key] = new OlVectorSource({ wrapX: false });
+      });
+      init = true;
+    }
+  }, [projections]);
+
+  useEffect(() => {
+    const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
+
+    if (map && map.rendered) {
+      events.on(MEASURE_DISTANCE, initDistanceMeasurement);
+      events.on(MEASURE_AREA, initAreaMeasurement);
+      events.on(MEASURE_CLEAR, clearMeasurements);
+      events.on(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
+    }
+    return () => {
+      if (map && map.rendered) {
+        events.off(MEASURE_DISTANCE, initDistanceMeasurement);
+        events.off(MEASURE_AREA, initAreaMeasurement);
+        events.off(MEASURE_CLEAR, clearMeasurements);
+        events.off(MEASURE_DOWNLOAD_GEOJSON, dlGeoJSON);
+      }
+    };
+  }, [map, unitOfMeasure]);
+
+  /**
+   * Go through every tooltip and recalculate the measurement based on
+   * current settings of unit of measurement
+   */
+  function recalculateAllMeasurements() {
+    Object.values(allMeasurements).forEach((measurementsForProj) => {
+      Object.values(measurementsForProj).forEach(
+        ({ feature, overlay }) => {
+          renderTooltip(feature, overlay);
+          feature.getGeometry().changed();
+          overlay.setOffset([0, -7]);
+        },
+      );
+    });
+  }
+
+  useEffect(recalculateAllMeasurements, [unitOfMeasure]);
+
+  useEffect(recalculateAllMeasurements, [crs]);
+
+  // we need this to make sure we have the latest version of olMap in renderToolTip()
+  useEffect(recalculateAllMeasurements, [olMap]);
 
   return null;
 }

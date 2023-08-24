@@ -41,19 +41,20 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     dataType: 'json',
     timeout: 30 * 1000,
   };
+
+  function dispathCMRErrorDialog (title) {
+    const bodyText = `The Common Metadata Repository (CMR) service that
+    provides metadata for this granule layer, ${title}, is currently unavailable.
+    Please try again later.`;
+    const modalHeader = 'Granules unavailable at this time.';
+    store.dispatch(openBasicContent(modalHeader, bodyText));
+  }
+
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
     CMR_AJAX_OPTIONS.timeout,
     { leading: true, trailing: false },
   );
-
-  function dispathCMRErrorDialog (title) {
-    const bodyText = `The Common Metadata Repository (CMR) service that
-                      provides metadata for this granule layer, ${title}, is currently unavailable.
-                      Please try again later.`;
-    const modalHeader = 'Granules unavailable at this time.';
-    store.dispatch(openBasicContent(modalHeader, bodyText));
-  }
 
   const showLoading = () => {
     store.dispatch(startLoading(LOADING_GRANULES));

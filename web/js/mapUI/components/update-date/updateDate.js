@@ -35,29 +35,6 @@ function UpdateDate(props) {
     vectorStyleState,
   } = props;
 
-  const actionSwitch = () => {
-    if (action.type === dateConstants.SELECT_DATE) {
-      if (ui.processingPromise) {
-        return new Promise((resolve) => {
-          resolve(ui.processingPromise);
-        }).then(() => {
-          ui.processingPromise = null;
-          return updateDate(action.outOfStep);
-        });
-      }
-      return updateDate(action.outOfStep);
-    } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
-      const outOfStep = false;
-      // if date not changing we do not want to recreate ttiler layer
-      const skipTtiler = true;
-      return updateDate(outOfStep, skipTtiler);
-    }
-  };
-
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
-
   function findLayerIndex({ id }) {
     const layerGroup = getActiveLayerGroup(layerState);
     const layers = layerGroup.getLayers().getArray();
@@ -136,6 +113,29 @@ function UpdateDate(props) {
       preloadNextTiles();
     }
   }
+
+  const actionSwitch = () => {
+    if (action.type === dateConstants.SELECT_DATE) {
+      if (ui.processingPromise) {
+        return new Promise((resolve) => {
+          resolve(ui.processingPromise);
+        }).then(() => {
+          ui.processingPromise = null;
+          return updateDate(action.outOfStep);
+        });
+      }
+      return updateDate(action.outOfStep);
+    } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
+      const outOfStep = false;
+      // if date not changing we do not want to recreate ttiler layer
+      const skipTtiler = true;
+      return updateDate(outOfStep, skipTtiler);
+    }
+  };
+
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
 
   return null;
 }

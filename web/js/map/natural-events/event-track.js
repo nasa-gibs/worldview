@@ -26,6 +26,14 @@ const removePointOverlays = (map, pointsAndArrows) => {
   });
 };
 
+function addOverlayIfIsVisible (map, overlay) {
+  const extent = map.getView().calculateExtent();
+  const position = overlay.getPosition();
+  if (olExtent.containsCoordinate(extent, position)) {
+    map.addOverlay(overlay);
+  }
+}
+
 const addPointOverlays = (map, pointOverlayArray) => {
   lodashEach(pointOverlayArray, (pointOverlay) => {
     addOverlayIfIsVisible(map, pointOverlay);
@@ -95,14 +103,6 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
     pointsAndArrows,
   };
 };
-
-function addOverlayIfIsVisible (map, overlay) {
-  const extent = map.getView().calculateExtent();
-  const position = overlay.getPosition();
-  if (olExtent.containsCoordinate(extent, position)) {
-    map.addOverlay(overlay);
-  }
-}
 
 function EventTrack () {
   const dispatch = useDispatch();

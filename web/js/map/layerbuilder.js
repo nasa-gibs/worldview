@@ -49,8 +49,6 @@ import {
 } from '../modules/map/constants';
 
 export default function mapLayerBuilder(config, cache, store) {
-  const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
-
   /**
    * Return a layer, or layergroup, created with the supplied function
    * @param {*} createLayerFunc
@@ -452,6 +450,8 @@ export default function mapLayerBuilder(config, cache, store) {
       source: tileSource,
     });
   }
+
+  const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
   /**
    * Create a new WMS Layer

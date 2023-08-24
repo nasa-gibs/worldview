@@ -53,6 +53,101 @@ function UpdateProjection(props) {
     requestPalette,
   } = props;
 
+  /**
+  * Remove Layers from map
+  *
+  * @method clearLayers
+  * @static
+  *
+  * @returns {void}
+  */
+  const clearLayers = function() {
+    const activeLayersUI = ui.selected
+      .getLayers()
+      .getArray()
+      .slice(0);
+    lodashEach(activeLayersUI, (mapLayer) => {
+      ui.selected.removeLayer(mapLayer);
+    });
+    ui.cache.clear();
+  };
+
+  /**
+ * Create a Layergroup given the date and layerGroups when compare mode is activated and
+ * the group similar layers option is selected.
+ *
+ * @method getCompareLayerGroup
+ * @static
+ *
+ * @param {string} compareActiveString
+ * @param {string} compareDateString
+ * @param {object} state object representing the layers, compare, & proj properties from global state
+ * @param {object} granuleOptions object representing selected granule layer options
+ */
+  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+    const { createLayer } = ui;
+    const compareSideLayers = getActiveLayers(state, compareActiveString);
+    const layers = getLayers(state, { reverse: true }, compareSideLayers)
+      .map(async (def) => {
+        const options = {
+          ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
+          date: getSelectedDate(dateCompareState, compareDateString),
+          group: compareActiveString,
+        };
+        // Check if the layer contains a palette & load if necessary
+        if (def.palette) {
+          requestPalette(def.id);
+        }
+        return createLayer(def, options);
+      });
+    const compareLayerGroup = await Promise.all(layers);
+
+    return new OlLayerGroup({
+      layers: compareLayerGroup,
+      date: getSelectedDate(dateCompareState, compareDateString),
+      group: compareActiveString,
+    });
+  }
+
+  /**
+   * @method reloadLayers
+   *
+   * @param {Object} granuleOptions (optional: only used for granule layers)
+   *   @param {Boolean} granuleDates - array of granule dates
+   *   @param {Boolean} id - layer id
+   * @returns {void}
+   */
+  async function reloadLayers(granuleOptions) {
+    const mapUI = ui.selected;
+    const { createLayer } = ui;
+
+    if (!config.features.compare || !compare.active) {
+      const compareMapDestroyed = !compare.active && compareMapUi.active;
+      if (compareMapDestroyed) {
+        compareMapUi.destroy();
+      }
+      clearLayers();
+      const defs = getLayers(layerState, { reverse: true });
+      const layerPromises = defs.map((def) => {
+        const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
+        return createLayer(def, options);
+      });
+      const createdLayers = await Promise.all(layerPromises);
+      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
+    } else {
+      const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
+      if (compare && !compare.isCompareA && compare.mode === 'spy') {
+        stateArray.reverse(); // Set Layer order based on active A|B group
+      }
+      clearLayers();
+      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
+      const compareLayerGroups = await Promise.all(stateArrayGroups);
+      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
+      compareMapUi.create(mapUI, compare.mode);
+    }
+    updateLayerVisibilities();
+  }
+
   const onStopAnimation = function() {
     const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
     if (needsRefresh) {
@@ -62,6 +157,55 @@ function UpdateProjection(props) {
       setTimeout(reloadLayers, 100);
     }
   };
+
+  /**
+ * Hide Map
+ *
+ * @method hideMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function hideMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'none';
+  }
+
+  /**
+ * Show Map
+ *
+ * @method showMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function showMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'block';
+  }
+
+  /**
+ * When page is resized set for mobile or desktop
+ *
+ * @method onResize
+ * @static
+ *
+ * @returns {void}
+ */
+  function onResize() {
+    const mapUI = ui.selected;
+    if (isMobile) {
+      mapUI.removeControl(mapUI.wv.scaleImperial);
+      mapUI.removeControl(mapUI.wv.scaleMetric);
+    } else {
+      mapUI.addControl(mapUI.wv.scaleImperial);
+      mapUI.addControl(mapUI.wv.scaleMetric);
+    }
+  }
 
   const updateProjection = (start) => {
     if (ui.selected) {
@@ -216,150 +360,6 @@ function UpdateProjection(props) {
       updateProjection();
     }
   }, [projectionTrigger]);
-
-  /**
- * Create a Layergroup given the date and layerGroups when compare mode is activated and
- * the group similar layers option is selected.
- *
- * @method getCompareLayerGroup
- * @static
- *
- * @param {string} compareActiveString
- * @param {string} compareDateString
- * @param {object} state object representing the layers, compare, & proj properties from global state
- * @param {object} granuleOptions object representing selected granule layer options
- */
-  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
-    const { createLayer } = ui;
-    const compareSideLayers = getActiveLayers(state, compareActiveString);
-    const layers = getLayers(state, { reverse: true }, compareSideLayers)
-      .map(async (def) => {
-        const options = {
-          ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
-          date: getSelectedDate(dateCompareState, compareDateString),
-          group: compareActiveString,
-        };
-        // Check if the layer contains a palette & load if necessary
-        if (def.palette) {
-          requestPalette(def.id);
-        }
-        return createLayer(def, options);
-      });
-    const compareLayerGroup = await Promise.all(layers);
-
-    return new OlLayerGroup({
-      layers: compareLayerGroup,
-      date: getSelectedDate(dateCompareState, compareDateString),
-      group: compareActiveString,
-    });
-  }
-
-  /**
-  * Remove Layers from map
-  *
-  * @method clearLayers
-  * @static
-  *
-  * @returns {void}
-  */
-  const clearLayers = function() {
-    const activeLayersUI = ui.selected
-      .getLayers()
-      .getArray()
-      .slice(0);
-    lodashEach(activeLayersUI, (mapLayer) => {
-      ui.selected.removeLayer(mapLayer);
-    });
-    ui.cache.clear();
-  };
-
-  /**
-   * @method reloadLayers
-   *
-   * @param {Object} granuleOptions (optional: only used for granule layers)
-   *   @param {Boolean} granuleDates - array of granule dates
-   *   @param {Boolean} id - layer id
-   * @returns {void}
-   */
-  async function reloadLayers(granuleOptions) {
-    const mapUI = ui.selected;
-    const { createLayer } = ui;
-
-    if (!config.features.compare || !compare.active) {
-      const compareMapDestroyed = !compare.active && compareMapUi.active;
-      if (compareMapDestroyed) {
-        compareMapUi.destroy();
-      }
-      clearLayers();
-      const defs = getLayers(layerState, { reverse: true });
-      const layerPromises = defs.map((def) => {
-        const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
-        return createLayer(def, options);
-      });
-      const createdLayers = await Promise.all(layerPromises);
-      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
-    } else {
-      const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
-      if (compare && !compare.isCompareA && compare.mode === 'spy') {
-        stateArray.reverse(); // Set Layer order based on active A|B group
-      }
-      clearLayers();
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
-      const compareLayerGroups = await Promise.all(stateArrayGroups);
-      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
-      compareMapUi.create(mapUI, compare.mode);
-    }
-    updateLayerVisibilities();
-  }
-
-  /**
- * When page is resized set for mobile or desktop
- *
- * @method onResize
- * @static
- *
- * @returns {void}
- */
-  function onResize() {
-    const mapUI = ui.selected;
-    if (isMobile) {
-      mapUI.removeControl(mapUI.wv.scaleImperial);
-      mapUI.removeControl(mapUI.wv.scaleMetric);
-    } else {
-      mapUI.addControl(mapUI.wv.scaleImperial);
-      mapUI.addControl(mapUI.wv.scaleMetric);
-    }
-  }
-
-  /**
- * Show Map
- *
- * @method showMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function showMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
-    if (el) el.style.display = 'block';
-  }
-
-  /**
- * Hide Map
- *
- * @method hideMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function hideMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
-    if (el) el.style.display = 'none';
-  }
 
   return null;
 }

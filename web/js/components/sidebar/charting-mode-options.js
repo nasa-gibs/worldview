@@ -67,25 +67,27 @@ function ChartingModeOptions (props) {
     updateRequestStatusMessage,
   } = props;
 
-  useEffect(() => {
-    if (!init) {
-      projections.forEach((key) => {
-        AOIFeatureObj[key] = {};
-        vectorLayers[key] = null;
-        sources[key] = new OlVectorSource({ wrapX: false });
-      });
-      init = true;
+  function endDrawingAreaOfInterest () {
+    if (draw) {
+      olMap.removeInteraction(draw);
     }
-  }, [projections]);
+  }
 
-  useEffect(() => {
-    resetAreaOfInterest();
-    endDrawingAreaOfInterest();
-  }, [isChartingActive]);
+  function resetAreaOfInterest() {
+    Object.values(AOIFeatureObj[crs]).forEach(
+      ({ feature }) => {
+        sources[crs].removeFeature(feature);
+      },
+    );
 
-  const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
-  const primaryDate = formatDateString(initialStartDate);
-  const secondaryDate = formatDateString(initialEndDate);
+    if (vectorLayers[crs]) {
+      vectorLayers[crs].setMap(null);
+      vectorLayers[crs] = null;
+    }
+
+    toggleAreaOfInterestSelected(false);
+    updateAOICoordinates(null);
+  }
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
@@ -98,14 +100,24 @@ function ChartingModeOptions (props) {
     return { initialStartDate: startDate, initialEndDate: endDate };
   }
 
-  const onAreaOfInterestButtonClick = (evt) => {
-    toggleAreaOfInterestActive();
-    if (!aoiActive) {
-      beginDrawingAOI();
-    } else {
-      endDrawingAreaOfInterest();
-    }
-  };
+  /**
+   * Filters the layers array & returns those with visible set to 'true'.
+   */
+  function getLiveLayers() {
+    return activeLayers.filter((obj) => obj.visible === true);
+  }
+
+  function formatDateString(dateObj) {
+    const date = new Date(dateObj);
+    const year = date.getFullYear();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const day = `0${date.getDate()}`.slice(-2);
+    return `${year} ${month} ${day}`;
+  }
+
+  function getAreaOfInterestCoordinates(geometry) {
+    updateAOICoordinates(geometry.getExtent());
+  }
 
   const drawEndCallback = ({ feature }) => {
     // Add the draw feature to the collection
@@ -146,31 +158,35 @@ function ChartingModeOptions (props) {
     }
   }
 
-  function endDrawingAreaOfInterest () {
-    if (draw) {
-      olMap.removeInteraction(draw);
+  useEffect(() => {
+    if (!init) {
+      projections.forEach((key) => {
+        AOIFeatureObj[key] = {};
+        vectorLayers[key] = null;
+        sources[key] = new OlVectorSource({ wrapX: false });
+      });
+      init = true;
     }
-  }
+  }, [projections]);
 
-  function resetAreaOfInterest() {
-    Object.values(AOIFeatureObj[crs]).forEach(
-      ({ feature }) => {
-        sources[crs].removeFeature(feature);
-      },
-    );
+  useEffect(() => {
+    resetAreaOfInterest();
+    endDrawingAreaOfInterest();
+  }, [isChartingActive]);
 
-    if (vectorLayers[crs]) {
-      vectorLayers[crs].setMap(null);
-      vectorLayers[crs] = null;
+  const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
+  const primaryDate = formatDateString(initialStartDate);
+  const secondaryDate = formatDateString(initialEndDate);
+
+  const onAreaOfInterestButtonClick = (evt) => {
+    toggleAreaOfInterestActive();
+    if (!aoiActive) {
+      beginDrawingAOI();
+    } else {
+      endDrawingAreaOfInterest();
     }
+  };
 
-    toggleAreaOfInterestSelected(false);
-    updateAOICoordinates(null);
-  }
-
-  function getAreaOfInterestCoordinates(geometry) {
-    updateAOICoordinates(geometry.getExtent());
-  }
 
   function getActiveChartingLayer() {
     const liveLayers = getLiveLayers();
@@ -181,77 +197,12 @@ function ChartingModeOptions (props) {
     return null;
   }
 
-  /**
-   * Filters the layers array & returns those with visible set to 'true'.
-   */
-  function getLiveLayers() {
-    return activeLayers.filter((obj) => obj.visible === true);
-  }
-
-  function formatDateString(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
-    return `${year} ${month} ${day}`;
-  }
-
   function formatDateForImageStat(dateStr) {
     const dateParts = dateStr.split(' ');
     const year = dateParts[0];
     const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
     const day = dateParts[2];
     return `${year}-${month}-${day}`;
-  }
-
-  async function onRequestChartClick() {
-    updateChartRequestStatus(true);
-    const layerInfo = getActiveChartingLayer();
-    if (layerInfo == null) {
-      updateChartRequestStatus(false, 'No valid layer detected for request.');
-      return;
-    }
-    const requestedLayerSource = layerInfo.projections.geographic.source;
-    if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
-
-      if (!data.ok) {
-        updateChartRequestStatus(false, 'Chart request failed.');
-        return;
-      }
-
-      // unit determination: renderedPalettes
-      const paletteName = layerInfo.palette.id;
-      const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
-      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `(${paletteLegend.units})` : '';
-      console.log(unitOfMeasure);
-      const dataToRender = {
-        title: layerInfo.title,
-        subtitle: layerInfo.subtitle,
-        unit: unitOfMeasure,
-        ...data.body,
-        ...uriParameters,
-      };
-
-      if (timeSpanSelection === 'range') {
-        const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        displayChart({
-          title: dataToRender.title,
-          subtitle: dataToRender.subtitle,
-          unit: dataToRender.unit,
-          data: rechartsData,
-        });
-        updateChartRequestStatus(false, 'Success');
-      } else {
-        displaySimpleStats(dataToRender);
-        updateChartRequestStatus(false, 'Success');
-      }
-    } else {
-      // handle requests for layers outside of GIBS here!
-      updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
-    }
   }
 
   function updateChartRequestStatus(status, message = '') {
@@ -276,14 +227,14 @@ function ChartingModeOptions (props) {
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpanSelection) {
+  function getImageStatRequestParameters(layerInfo, timeSpan) {
     const startDateForImageStat = formatDateForImageStat(primaryDate);
     const endDateForImageStat = formatDateForImageStat(secondaryDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
-      type: timeSpanSelection === 'range' ? 'series' : 'date',
+      type: timeSpan === 'range' ? 'series' : 'date',
       steps: 6, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
@@ -344,6 +295,10 @@ function ChartingModeOptions (props) {
     }
   }
 
+  function getKeysFromObj(data) {
+    return Object.keys(data);
+  }
+
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
    * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
@@ -366,8 +321,54 @@ function ChartingModeOptions (props) {
     return rechartsData;
   }
 
-  function getKeysFromObj(data) {
-    return Object.keys(data);
+  async function onRequestChartClick() {
+    updateChartRequestStatus(true);
+    const layerInfo = getActiveChartingLayer();
+    if (layerInfo == null) {
+      updateChartRequestStatus(false, 'No valid layer detected for request.');
+      return;
+    }
+    const requestedLayerSource = layerInfo.projections.geographic.source;
+    if (requestedLayerSource === 'GIBS:geographic') {
+      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
+      const requestURI = getImageStatStatsRequestURL(uriParameters);
+      const data = await getImageStatData(requestURI);
+
+      if (!data.ok) {
+        updateChartRequestStatus(false, 'Chart request failed.');
+        return;
+      }
+
+      // unit determination: renderedPalettes
+      const paletteName = layerInfo.palette.id;
+      const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
+      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `(${paletteLegend.units})` : '';
+      console.log(unitOfMeasure);
+      const dataToRender = {
+        title: layerInfo.title,
+        subtitle: layerInfo.subtitle,
+        unit: unitOfMeasure,
+        ...data.body,
+        ...uriParameters,
+      };
+
+      if (timeSpanSelection === 'range') {
+        const rechartsData = formatGIBSDataForRecharts(dataToRender);
+        displayChart({
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          data: rechartsData,
+        });
+        updateChartRequestStatus(false, 'Success');
+      } else {
+        displaySimpleStats(dataToRender);
+        updateChartRequestStatus(false, 'Success');
+      }
+    } else {
+      // handle requests for layers outside of GIBS here!
+      updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
+    }
   }
 
   function onDateIconClick() {

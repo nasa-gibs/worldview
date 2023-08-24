@@ -100,6 +100,13 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
 }
 
 /**
+ * @return {Boolean} is Location Search local storage set to 'collapsed'
+ */
+export function getLocalStorageCollapseState() {
+  return safeLocalStorage.getItem(LOCATION_SEARCH_COLLAPSED) === 'collapsed';
+}
+
+/**
  *
  * @param {Object} parameters
  * @param {Object} stateFromLocation
@@ -159,13 +166,6 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
-}
-
-/**
- * @return {Boolean} is Location Search local storage set to 'collapsed'
- */
-export function getLocalStorageCollapseState() {
-  return safeLocalStorage.getItem(LOCATION_SEARCH_COLLAPSED) === 'collapsed';
 }
 
 /**

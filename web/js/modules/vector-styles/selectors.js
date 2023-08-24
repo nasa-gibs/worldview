@@ -34,6 +34,21 @@ export function getVectorLayers(state) {
   }, []);
 }
 
+export function getAllVectorStyles(layerId, index, state) {
+  const { config, vectorStyles } = state;
+  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
+  let vectorStyle = vectorStyles.custom[name];
+  if (!vectorStyle) {
+    throw new Error(`${name} Is not a rendered vectorStyle`);
+  }
+  if (!lodashIsUndefined(index)) {
+    if (vectorStyle.layers) {
+      vectorStyle = vectorStyle.layers[index];
+    }
+  }
+  return vectorStyle;
+}
+
 /**
  * Gets a single colormap (entries / legend combo)
  *
@@ -53,21 +68,6 @@ export function getVectorStyle(layerId, index, groupStr, state) {
     return renderedVectorStyle;
   }
   return getAllVectorStyles(layerId, index, state);
-}
-
-export function getAllVectorStyles(layerId, index, state) {
-  const { config, vectorStyles } = state;
-  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
-  let vectorStyle = vectorStyles.custom[name];
-  if (!vectorStyle) {
-    throw new Error(`${name} Is not a rendered vectorStyle`);
-  }
-  if (!lodashIsUndefined(index)) {
-    if (vectorStyle.layers) {
-      vectorStyle = vectorStyle.layers[index];
-    }
-  }
-  return vectorStyle;
 }
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
@@ -200,6 +200,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   return vectorStyleId;
 }
 
+export function isActive(layerId, group, state) {
+  group = group || state.compare.activeString;
+  if (state.vectorStyles.custom[layerId]) {
+    return state.vectorStyles[group][layerId];
+  }
+}
+
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
@@ -217,13 +224,6 @@ export function getKey(layerId, groupStr, state) {
     keys.push(`max=${def.max}`);
   }
   return keys.join(',');
-}
-
-export function isActive(layerId, group, state) {
-  group = group || state.compare.activeString;
-  if (state.vectorStyles.custom[layerId]) {
-    return state.vectorStyles[group][layerId];
-  }
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {

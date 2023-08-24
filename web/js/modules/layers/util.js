@@ -104,6 +104,28 @@ export function prevDateInDateRange(def, date, dateArray) {
   return { previous, next };
 }
 
+export function getOverlayGroups(layers, prevGroups = []) {
+  const allGroupsMap = {};
+  layers.forEach(({ id, group, layergroup }) => {
+    if (group !== 'overlays') {
+      return;
+    }
+    if (allGroupsMap[layergroup]) {
+      allGroupsMap[layergroup].push(id);
+    } else {
+      allGroupsMap[layergroup] = [id];
+    }
+  });
+  return Object.keys(allGroupsMap).map((groupName) => {
+    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
+    return {
+      groupName,
+      layers: allGroupsMap[groupName],
+      collapsed: prevGroup ? prevGroup.collapsed : false,
+    };
+  });
+}
+
 /**
  * Return revised maxEndDate based on given start/end date limits
  *
@@ -1557,28 +1579,6 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
     layers[targetLayerId].futureTime = mockFutureTime;
   }
-}
-
-export function getOverlayGroups(layers, prevGroups = []) {
-  const allGroupsMap = {};
-  layers.forEach(({ id, group, layergroup }) => {
-    if (group !== 'overlays') {
-      return;
-    }
-    if (allGroupsMap[layergroup]) {
-      allGroupsMap[layergroup].push(id);
-    } else {
-      allGroupsMap[layergroup] = [id];
-    }
-  });
-  return Object.keys(allGroupsMap).map((groupName) => {
-    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
-    return {
-      groupName,
-      layers: allGroupsMap[groupName],
-      collapsed: prevGroup ? prevGroup.collapsed : false,
-    };
-  });
 }
 
 export function getLayersFromGroups (state, groups) {
