@@ -96,6 +96,34 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
+const updateGlStylePalette = (glStyle, rgbPalette) => {
+  for (let i = 0; i < glStyle.layers.length; i += 1) {
+    const thisPaintObj = glStyle.layers[i].paint;
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
+      thisPaintObj['line-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
+      thisPaintObj['circle-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
+      thisPaintObj['fill-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
+      thisPaintObj['line-width'] = 2;
+    }
+  }
+  return glStyle;
+};
+
+const shouldRenderFeature = (feature, acceptableExtent) => {
+  if (!acceptableExtent) return true;
+  const midpoint = feature.getFlatCoordinates
+    ? feature.getFlatCoordinates()
+    : feature.getGeometry().getFlatCoordinates();
+  if (containsCoordinate(acceptableExtent, midpoint)) return true;
+  return false;
+};
+
 /** Sets the Style Function for the layer (this styles vector features)
  *
  * @param {Object} def | Layer definition
@@ -171,34 +199,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
   return vectorStyleId;
 }
-
-const shouldRenderFeature = (feature, acceptableExtent) => {
-  if (!acceptableExtent) return true;
-  const midpoint = feature.getFlatCoordinates
-    ? feature.getFlatCoordinates()
-    : feature.getGeometry().getFlatCoordinates();
-  if (containsCoordinate(acceptableExtent, midpoint)) return true;
-  return false;
-};
-
-const updateGlStylePalette = (glStyle, rgbPalette) => {
-  for (let i = 0; i < glStyle.layers.length; i += 1) {
-    const thisPaintObj = glStyle.layers[i].paint;
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
-      thisPaintObj['line-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
-      thisPaintObj['circle-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
-      thisPaintObj['fill-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
-      thisPaintObj['line-width'] = 2;
-    }
-  }
-  return glStyle;
-};
 
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;

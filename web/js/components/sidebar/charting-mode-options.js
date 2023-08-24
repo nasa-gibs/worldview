@@ -107,6 +107,17 @@ function ChartingModeOptions (props) {
     }
   };
 
+  const drawEndCallback = ({ feature }) => {
+    // Add the draw feature to the collection
+    AOIFeatureObj[crs][feature.ol_uid] = {
+      feature,
+    };
+    endDrawingAreaOfInterest();
+    toggleAreaOfInterestActive();
+    toggleAreaOfInterestSelected();
+    getAreaOfInterestCoordinates(feature.getGeometry());
+  };
+
   function beginDrawingAOI () {
     resetAreaOfInterest();
     draw = new OlInteractionDraw({
@@ -134,17 +145,6 @@ function ChartingModeOptions (props) {
       });
     }
   }
-
-  const drawEndCallback = ({ feature }) => {
-    // Add the draw feature to the collection
-    AOIFeatureObj[crs][feature.ol_uid] = {
-      feature,
-    };
-    endDrawingAreaOfInterest();
-    toggleAreaOfInterestActive();
-    toggleAreaOfInterestSelected();
-    getAreaOfInterestCoordinates(feature.getGeometry());
-  };
 
   function endDrawingAreaOfInterest () {
     if (draw) {

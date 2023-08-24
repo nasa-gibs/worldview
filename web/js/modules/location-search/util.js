@@ -43,6 +43,33 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
 }
 
 /**
+ * Create Ol vector layer map pin
+ * @param {Array} coordinates
+ * @param {Object} pinProps
+ * @param {Number} id
+ */
+const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
+  const overlayEl = document.createElement('div');
+  const removeMarker = () => {
+    ReactDOM.unmountComponentAtNode(overlayEl);
+    removeMarkerPin();
+  };
+  ReactDOM.render(
+    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
+    overlayEl,
+  );
+  const markerPin = new OlOverlay({
+    element: overlayEl,
+    position: coordinates,
+    positioning: 'bottom-center',
+    stopEvent: false,
+    id,
+  });
+
+  return markerPin;
+};
+
+/**
  * Get coordinates marker
  * @param {Object} map
  * @param {Object} config
@@ -71,33 +98,6 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   const marker = createPin(transformedCoords, pinProps, id, removeMarker);
   return marker;
 }
-
-/**
- * Create Ol vector layer map pin
- * @param {Array} coordinates
- * @param {Object} pinProps
- * @param {Number} id
- */
-const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
-  const overlayEl = document.createElement('div');
-  const removeMarker = () => {
-    ReactDOM.unmountComponentAtNode(overlayEl);
-    removeMarkerPin();
-  };
-  ReactDOM.render(
-    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
-    overlayEl,
-  );
-  const markerPin = new OlOverlay({
-    element: overlayEl,
-    position: coordinates,
-    positioning: 'bottom-center',
-    stopEvent: false,
-    id,
-  });
-
-  return markerPin;
-};
 
 /**
  *

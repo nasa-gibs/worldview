@@ -151,122 +151,34 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
-   * Create a new OpenLayers Layer
-   * @param {object} def
-   * @param {object} key
-   * @param {object} options
-   * @param {object} dateOptions
-   * @param {object} granuleAttributes
-   * @returns {object} Openlayers TileLayer or LayerGroup
-   */
-  const createLayerWrapper = async (def, key, options, dateOptions) => {
-    const state = store.getState();
-    const { sidebar: { activeTab } } = state;
-    const proj = state.proj.selected;
-    const {
-      breakPointLayer,
-      id,
-      opacity,
-      period,
-      projections,
-      type,
-      wrapadjacentdays,
-      wrapX,
-    } = def;
-    const { nextDate, previousDate } = dateOptions;
-    let { date } = dateOptions;
-    let layer = cache.getItem(key);
-    const isGranule = type === 'granule';
-
-    if (!layer || isGranule || def.type === 'ttiler') {
-      if (!date) date = options.date || getSelectedDate(state);
-      const cacheOptions = getCacheOptions(period, date);
-      const attributes = {
-        id,
-        key,
-        date,
-        proj: proj.id,
-        def,
-        group: options.group,
-        nextDate,
-        previousDate,
-      };
-      def = lodashCloneDeep(def);
-      lodashMerge(def, projections[proj.id]);
-      if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
-      const isDataDownloadTabActive = activeTab === 'download';
-      const wrapDefined = wrapadjacentdays === true || wrapX;
-      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
-
-      if (!isGranule) {
-        switch (def.type) {
-          case 'wmts':
-            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-            break;
-          case 'vector':
-            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            break;
-          case 'wms':
-            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-            break;
-          case 'ttiler':
-            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
-            break;
-          default:
-            throw new Error(`Unknown layer type: ${type}`);
-        }
-        layer.wv = attributes;
-        cache.setItem(key, layer, cacheOptions);
-        if (def.type !== 'ttiler') layer.setVisible(false);
-      } else {
-        layer = await getGranuleLayer(def, attributes, options);
-      }
-    }
-    layer.setOpacity(opacity || 1.0);
-    if (breakPointLayer) {
-      layer.getLayersArray().forEach((l) => {
-        l.setOpacity(opacity || 1.0);
-      });
-    }
-    return layer;
-  };
-
-  /**
-   * Create a new OpenLayers Layer
+   * Create a layer key
    *
-   * @method createLayer
+   * @function layerKey
    * @static
-   * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
-   * @returns {object} OpenLayers layer
+   * @param {Object} def - Layer properties
+   * @param {number} options - Layer options
+   * @param {boolean} precache
+   * @returns {object} layer key Object
    */
-  const createLayer = async (def, options = {}) => {
-    const state = store.getState();
-    const { compare: { activeString } } = state;
-    const { ui: { isKioskModeActive, displayStaticMap } } = state;
+  const layerKey = (def, options, state) => {
+    const { compare } = state;
+    let date;
+    const layerId = def.id;
+    const projId = state.proj.id;
+    let style = '';
+    const activeGroupStr = options.group ? options.group : compare.activeString;
 
-    options.group = options.group || activeString;
-
-    // if gibs/dns failure, display static image layer
-    if (displayStaticMap && isKioskModeActive) {
-      const layer = await createStaticImageLayer();
-      return layer;
+    // Don't key by time if this is a static layer
+    if (def.period) {
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
-
-    const {
-      closestDate,
-      nextDate,
-      previousDate,
-    } = getRequestDates(def, options);
-    const date = closestDate;
-    if (date) {
-      options.date = date;
+    if (isPaletteActive(def.id, activeGroupStr, state)) {
+      style = getPaletteKeys(def.id, undefined, state);
     }
-    const dateOptions = { date, nextDate, previousDate };
-    const key = layerKey(def, options, state);
-    const layer = await createLayerWrapper(def, key, options, dateOptions);
-
-    return layer;
+    if (isVectorStyleActive(def.id, activeGroupStr, state)) {
+      style = getVectorStyleKeys(def.id, undefined, state);
+    }
+    return [layerId, projId, date, style, activeGroupStr].join(':');
   };
 
   /**
@@ -347,35 +259,60 @@ export default function mapLayerBuilder(config, cache, store) {
     return { closestDate, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
-  /**
-   * Create a layer key
-   *
-   * @function layerKey
-   * @static
-   * @param {Object} def - Layer properties
-   * @param {number} options - Layer options
-   * @param {boolean} precache
-   * @returns {object} layer key Object
-   */
-  const layerKey = (def, options, state) => {
-    const { compare } = state;
-    let date;
-    const layerId = def.id;
-    const projId = state.proj.id;
-    let style = '';
-    const activeGroupStr = options.group ? options.group : compare.activeString;
+  const createStaticImageLayer = async() => {
+    const state = store.getState();
+    const { proj: { selected: { id, crs, maxExtent } } } = state;
 
-    // Don't key by time if this is a static layer
-    if (def.period) {
-      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
+    const projectionURL = `images/map/bluemarble-${id}.jpg`;
+
+    const layer = new ImageLayer({
+      source: new Static({
+        url: projectionURL,
+        projection: crs,
+        imageExtent: maxExtent,
+      }),
+    });
+
+    return layer;
+  };
+
+  /**
+   * Create a new OpenLayers Layer
+   *
+   * @method createLayer
+   * @static
+   * @param {object} def - Layer Specs
+   * @param {object} options - Layer options
+   * @returns {object} OpenLayers layer
+   */
+  const createLayer = async (def, options = {}) => {
+    const state = store.getState();
+    const { compare: { activeString } } = state;
+    const { ui: { isKioskModeActive, displayStaticMap } } = state;
+
+    options.group = options.group || activeString;
+
+    // if gibs/dns failure, display static image layer
+    if (displayStaticMap && isKioskModeActive) {
+      const layer = await createStaticImageLayer();
+      return layer;
     }
-    if (isPaletteActive(def.id, activeGroupStr, state)) {
-      style = getPaletteKeys(def.id, undefined, state);
+
+    const {
+      closestDate,
+      nextDate,
+      previousDate,
+    } = getRequestDates(def, options);
+    const date = closestDate;
+    if (date) {
+      options.date = date;
     }
-    if (isVectorStyleActive(def.id, activeGroupStr, state)) {
-      style = getVectorStyleKeys(def.id, undefined, state);
-    }
-    return [layerId, projId, date, style, activeGroupStr].join(':');
+    const dateOptions = { date, nextDate, previousDate };
+    const key = layerKey(def, options, state);
+    // eslint-disable-next-line no-use-before-define
+    const layer = await createLayerWrapper(def, key, options, dateOptions);
+
+    return layer;
   };
 
   /**
@@ -434,24 +371,6 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: [minX, minY, maxX, maxY],
     };
   };
-
-  const createStaticImageLayer = async() => {
-    const state = store.getState();
-    const { proj: { selected: { id, crs, maxExtent } } } = state;
-
-    const projectionURL = `images/map/bluemarble-${id}.jpg`;
-
-    const layer = new ImageLayer({
-      source: new Static({
-        url: projectionURL,
-        projection: crs,
-        imageExtent: maxExtent,
-      }),
-    });
-
-    return layer;
-  };
-
 
   /**
    * Create a new WMTS Layer
@@ -533,6 +452,94 @@ export default function mapLayerBuilder(config, cache, store) {
       source: tileSource,
     });
   }
+
+  /**
+   * Create a new WMS Layer
+   *
+   * @method createLayerWMS
+   * @static
+   * @param {object} def - Layer Specs
+   * @param {object} options - Layer options
+   * @returns {object} OpenLayers WMS layer
+   */
+  const createLayerWMS = function(def, options, day, state) {
+    const { proj } = state;
+    const selectedProj = proj.selected;
+    let urlParameters;
+    let date;
+    let extent;
+    let start;
+    let res;
+
+    const source = config.sources[def.source];
+    extent = selectedProj.maxExtent;
+    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
+    res = selectedProj.resolutions;
+    if (!source) {
+      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+    }
+
+    const transparent = def.format === 'image/png';
+    if (selectedProj.id === 'geographic') {
+      res = getGeographicResolutionWMS(def.tileSize);
+    }
+    if (day) {
+      if (day === 1) {
+        extent = LEFT_WING_EXTENT;
+        start = LEFT_WING_ORIGIN;
+      } else {
+        extent = RIGHT_WING_EXTENT;
+        start = RIGHT_WING_ORIGIN;
+      }
+    }
+    const parameters = {
+      LAYERS: def.layer || def.id,
+      FORMAT: def.format,
+      TRANSPARENT: transparent,
+      VERSION: '1.1.1',
+    };
+    if (def.styles) {
+      parameters.STYLES = def.styles;
+    }
+
+    urlParameters = '';
+
+    date = options.date || getSelectedDate(state);
+    if (day && def.wrapadjacentdays) {
+      date = util.dateAdd(date, 'day', day);
+    }
+    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+
+    const sourceOptions = {
+      url: source.url + urlParameters,
+      cacheSize: 4096,
+      wrapX: true,
+      style: 'default',
+      crossOrigin: 'anonymous',
+      params: parameters,
+      transition: 0,
+      tileGrid: new OlTileGridTileGrid({
+        origin: start,
+        resolutions: res,
+        tileSize: def.tileSize || [512, 512],
+      }),
+    };
+    if (isPaletteActive(def.id, options.group, state)) {
+      const lookup = getPaletteLookup(def.id, options.group, state);
+      sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
+    }
+    const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+    const tileSource = new OlSourceTileWMS(sourceOptions);
+
+    const layer = new OlLayerTile({
+      preload: 0,
+      extent,
+      ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
+      source: tileSource,
+    });
+    layer.isWMS = true;
+    return layer;
+  };
 
   /**
     *
@@ -648,94 +655,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  /**
-   * Create a new WMS Layer
-   *
-   * @method createLayerWMS
-   * @static
-   * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
-   * @returns {object} OpenLayers WMS layer
-   */
-  const createLayerWMS = function(def, options, day, state) {
-    const { proj } = state;
-    const selectedProj = proj.selected;
-    let urlParameters;
-    let date;
-    let extent;
-    let start;
-    let res;
-
-    const source = config.sources[def.source];
-    extent = selectedProj.maxExtent;
-    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
-    res = selectedProj.resolutions;
-    if (!source) {
-      throw new Error(`${def.id}: Invalid source: ${def.source}`);
-    }
-
-    const transparent = def.format === 'image/png';
-    if (selectedProj.id === 'geographic') {
-      res = getGeographicResolutionWMS(def.tileSize);
-    }
-    if (day) {
-      if (day === 1) {
-        extent = LEFT_WING_EXTENT;
-        start = LEFT_WING_ORIGIN;
-      } else {
-        extent = RIGHT_WING_EXTENT;
-        start = RIGHT_WING_ORIGIN;
-      }
-    }
-    const parameters = {
-      LAYERS: def.layer || def.id,
-      FORMAT: def.format,
-      TRANSPARENT: transparent,
-      VERSION: '1.1.1',
-    };
-    if (def.styles) {
-      parameters.STYLES = def.styles;
-    }
-
-    urlParameters = '';
-
-    date = options.date || getSelectedDate(state);
-    if (day && def.wrapadjacentdays) {
-      date = util.dateAdd(date, 'day', day);
-    }
-    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
-
-    const sourceOptions = {
-      url: source.url + urlParameters,
-      cacheSize: 4096,
-      wrapX: true,
-      style: 'default',
-      crossOrigin: 'anonymous',
-      params: parameters,
-      transition: 0,
-      tileGrid: new OlTileGridTileGrid({
-        origin: start,
-        resolutions: res,
-        tileSize: def.tileSize || [512, 512],
-      }),
-    };
-    if (isPaletteActive(def.id, options.group, state)) {
-      const lookup = getPaletteLookup(def.id, options.group, state);
-      sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
-    }
-    const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
-    const tileSource = new OlSourceTileWMS(sourceOptions);
-
-    const layer = new OlLayerTile({
-      preload: 0,
-      extent,
-      ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
-      source: tileSource,
-    });
-    layer.isWMS = true;
-    return layer;
-  };
-
   const registerSearch = async (def, options, state) => {
     const { date } = state;
     let requestDate;
@@ -848,6 +767,87 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: maxExtent,
     });
 
+    return layer;
+  };
+
+  /**
+   * Create a new OpenLayers Layer
+   * @param {object} def
+   * @param {object} key
+   * @param {object} options
+   * @param {object} dateOptions
+   * @param {object} granuleAttributes
+   * @returns {object} Openlayers TileLayer or LayerGroup
+   */
+  const createLayerWrapper = async (def, key, options, dateOptions) => {
+    const state = store.getState();
+    const { sidebar: { activeTab } } = state;
+    const proj = state.proj.selected;
+    const {
+      breakPointLayer,
+      id,
+      opacity,
+      period,
+      projections,
+      type,
+      wrapadjacentdays,
+      wrapX,
+    } = def;
+    const { nextDate, previousDate } = dateOptions;
+    let { date } = dateOptions;
+    let layer = cache.getItem(key);
+    const isGranule = type === 'granule';
+
+    if (!layer || isGranule || def.type === 'ttiler') {
+      if (!date) date = options.date || getSelectedDate(state);
+      const cacheOptions = getCacheOptions(period, date);
+      const attributes = {
+        id,
+        key,
+        date,
+        proj: proj.id,
+        def,
+        group: options.group,
+        nextDate,
+        previousDate,
+      };
+      def = lodashCloneDeep(def);
+      lodashMerge(def, projections[proj.id]);
+      if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
+      const isDataDownloadTabActive = activeTab === 'download';
+      const wrapDefined = wrapadjacentdays === true || wrapX;
+      const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
+
+      if (!isGranule) {
+        switch (def.type) {
+          case 'wmts':
+            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            break;
+          case 'vector':
+            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            break;
+          case 'wms':
+            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            break;
+          case 'ttiler':
+            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+            break;
+          default:
+            throw new Error(`Unknown layer type: ${type}`);
+        }
+        layer.wv = attributes;
+        cache.setItem(key, layer, cacheOptions);
+        if (def.type !== 'ttiler') layer.setVisible(false);
+      } else {
+        layer = await getGranuleLayer(def, attributes, options);
+      }
+    }
+    layer.setOpacity(opacity || 1.0);
+    if (breakPointLayer) {
+      layer.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity || 1.0);
+      });
+    }
     return layer;
   };
 

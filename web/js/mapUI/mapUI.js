@@ -169,6 +169,19 @@ function MapUI(props) {
     }
   };
 
+  const updateVectorSelections = () => {
+    const type = 'selection';
+    const newSelection = vectorActions.payload;
+    updateVectorSelection(
+      vectorActions.payload,
+      ui.selectedVectors,
+      activeLayers,
+      type,
+      vectorStylesState,
+    );
+    ui.selectedVectors = newSelection;
+  };
+
   events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
   window.addEventListener('orientationchange', () => {
     setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
@@ -192,19 +205,6 @@ function MapUI(props) {
       preloadNextTiles();
     }
   }, [preloadAction]);
-
-  const updateVectorSelections = () => {
-    const type = 'selection';
-    const newSelection = vectorActions.payload;
-    updateVectorSelection(
-      vectorActions.payload,
-      ui.selectedVectors,
-      activeLayers,
-      type,
-      vectorStylesState,
-    );
-    ui.selectedVectors = newSelection;
-  };
 
   const updateExtent = () => {
     const map = ui.selected;

@@ -94,7 +94,6 @@
           {
             "functions": false,
             "classes": true,
-            "variables": false
           }
         ],
         // Import rules overrides

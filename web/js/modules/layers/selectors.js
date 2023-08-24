@@ -37,6 +37,16 @@ export const getCollections = (layers, date, layer) => {
 
 /**
  * Return a list of layers for the currently active compare state
+ * regardless of projection (no hidden layers)
+ */
+const getActiveLayersEmbed = (state, activeString) => {
+  const { compare, layers } = state;
+  const activeLayers = layers[activeString || compare.activeString].layers;
+  return activeLayers.filter((layer) => layer.visible);
+};
+
+/**
+ * Return a list of layers for the currently active compare state
  * regardless of projection
  */
 export const getActiveLayers = (state, activeString) => {
@@ -79,6 +89,12 @@ export const getGranuleCount = (state, id) => {
   return layer ? layer.count : 20;
 };
 
+export const getGranulePlatform = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granulePlatform } = layers[activeString || compare.activeString];
+  return granulePlatform;
+};
+
 export const getActiveGranuleFootPrints = (state) => {
   const { layers, compare: { activeString } } = state;
   const granuleLayers = getActiveGranuleLayers(state);
@@ -94,12 +110,6 @@ export const getActiveGranuleFootPrints = (state) => {
   return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
 };
 
-export const getGranulePlatform = (state, activeString) => {
-  const { compare, layers } = state;
-  const { granulePlatform } = layers[activeString || compare.activeString];
-  return granulePlatform;
-};
-
 export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
   const activeLayersArray = Object.entries(activeLayers);
   const platformLayers = [];
@@ -112,34 +122,16 @@ export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
 };
 
 /**
- * Return an array of overlay groups for the currently active compare state
- * that are available for the currently active projection
+ * Return a map of active layers where key is layer id
  */
-export const getActiveOverlayGroups = (state) => {
-  const {
-    embed, compare, layers, proj,
-  } = state;
-  const { overlayGroups } = layers[compare.activeString];
-  if (embed && embed.isEmbedModeActive) {
-    return getActiveOverlayGroupsEmbed(state);
-  }
-  const activeLayersMap = getActiveLayersMap(state);
-  return (overlayGroups || []).filter(
-    (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id].projections[proj.id],
-    ).length,
-  );
-};
-
-/**
- * Return a list of layers for the currently active compare state
- * regardless of projection (no hidden layers)
- */
-const getActiveLayersEmbed = (state, activeString) => {
-  const { compare, layers } = state;
-  const activeLayers = layers[activeString || compare.activeString].layers;
-  return activeLayers.filter((layer) => layer.visible);
-};
+export const getActiveLayersMap = createSelector(
+  [getActiveLayers],
+  (activeLayers) => {
+    const activeLayerMap = {};
+    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
+    return activeLayerMap;
+  },
+);
 
 /**
  * Return an array of filtered overlay groups for the currently active compare state
@@ -163,6 +155,26 @@ const getActiveOverlayGroupsEmbed = (state) => {
 };
 
 /**
+ * Return an array of overlay groups for the currently active compare state
+ * that are available for the currently active projection
+ */
+export const getActiveOverlayGroups = (state) => {
+  const {
+    embed, compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveOverlayGroupsEmbed(state);
+  }
+  const activeLayersMap = getActiveLayersMap(state);
+  return (overlayGroups || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id].projections[proj.id],
+    ).length,
+  );
+};
+
+/**
  * Return a list of layer groups that filter out removed, hidden layers
  */
 export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
@@ -177,18 +189,6 @@ export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
       return filteredGroup;
     });
 };
-
-/**
- * Return a map of active layers where key is layer id
- */
-export const getActiveLayersMap = createSelector(
-  [getActiveLayers],
-  (activeLayers) => {
-    const activeLayerMap = {};
-    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
-    return activeLayerMap;
-  },
-);
 
 export const getAllActiveLayers = createSelector(
   [getProjState, getCompareState, getLayerState],

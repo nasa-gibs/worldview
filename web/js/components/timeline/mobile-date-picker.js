@@ -79,6 +79,12 @@ function MobileDatePicker(props) {
   const [maxDate, setMaxDate] = useState(convertToUTCDateObject(endDateLimit));
   const [isOpen, setIsOpen] = useState(false);
 
+  const setInitDates = () => {
+    setTime(convertToUTCDateObject(date));
+    setMinDate(convertToUTCDateObject(startDateLimit));
+    setMaxDate(convertToUTCDateObject(endDateLimit));
+  };
+
   useEffect(() => {
     setInitDates();
   }, [endDateLimit, date]);
@@ -105,12 +111,6 @@ function MobileDatePicker(props) {
     // convert date back to local time
     const date = convertToLocalDateObject(time);
     onDateChange(getISODateFormatted(date));
-  };
-
-  const setInitDates = () => {
-    setTime(convertToUTCDateObject(date));
-    setMinDate(convertToUTCDateObject(startDateLimit));
-    setMaxDate(convertToUTCDateObject(endDateLimit));
   };
 
   const getHeaderTime = (time, isSubdaily) => (

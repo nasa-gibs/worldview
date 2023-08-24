@@ -35,10 +35,6 @@ function UpdateDate(props) {
     vectorStyleState,
   } = props;
 
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
-
   const actionSwitch = () => {
     if (action.type === dateConstants.SELECT_DATE) {
       if (ui.processingPromise) {
@@ -57,6 +53,10 @@ function UpdateDate(props) {
       return updateDate(outOfStep, skipTtiler);
     }
   };
+
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
 
   function findLayerIndex({ id }) {
     const layerGroup = getActiveLayerGroup(layerState);

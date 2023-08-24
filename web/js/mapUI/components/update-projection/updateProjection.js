@@ -53,17 +53,97 @@ function UpdateProjection(props) {
     requestPalette,
   } = props;
 
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
-
-  useEffect(() => {
-    if (projectionTrigger === 1) {
-      updateProjection(true);
-    } else if (projectionTrigger > 1) {
-      updateProjection();
+  const onStopAnimation = function() {
+    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
+    if (needsRefresh) {
+      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
+      // try to modify map layers asynchronously so we need to set a timeout to allow
+      // the updateDate() function to complete before trying to call reloadLayers() here
+      setTimeout(reloadLayers, 100);
     }
-  }, [projectionTrigger]);
+  };
+
+  const updateProjection = (start) => {
+    if (ui.selected) {
+      // Keep track of center point on projection switch
+      ui.selected.previousCenter = ui.selected.center;
+      hideMap(ui.selected);
+    }
+    ui.selected = ui.proj[proj.id];
+    const map = ui.selected;
+
+    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
+    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
+    const rotation = start ? rotationStart : currentRotation;
+
+    updateMapUI(ui, rotation);
+
+    reloadLayers();
+
+    // If the browser was resized, the inactive map was not notified of
+    // the event. Force the update no matter what and reposition the center
+    // using the previous value.
+    showMap(map);
+
+    map.updateSize();
+
+    if (ui.selected.previousCenter) {
+      ui.selected.setCenter(ui.selected.previousCenter);
+    }
+
+    if (start) {
+      const projId = proj.selected.id;
+      let extent = null;
+      let callback = null;
+      if (models.map.extent) {
+        extent = models.map.extent;
+      } else if (!models.map.extent && projId === 'geographic') {
+        extent = getLeadingExtent(config.pageLoadTime);
+        callback = () => {
+          const view = map.getView();
+          const extent = view.calculateExtent(map.getSize());
+          fitToLeadingExtent(extent);
+        };
+      }
+      if (projId !== 'geographic') {
+        callback = () => {
+          const view = map.getView();
+          view.setRotation(rotationStart);
+        };
+      }
+      if (extent) {
+        map.getView().fit(extent, {
+          constrainResolution: false,
+          callback,
+        });
+      } else if (rotationStart && projId !== 'geographic') {
+        callback();
+      }
+    }
+    updateExtent();
+    onResize();
+  };
+
+  /**
+ * Collect information required & initiate a "fly" map transition
+ * Used in Tour Stories.
+ * @method flyToNewExtent
+ * @static
+ *
+ * @param {object} extent
+ * @param {number} rotation
+ */
+  const flyToNewExtent = function(extent, rotation) {
+    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+    const coordinates = [coordinateX, coordinateY];
+    const resolution = ui.selected.getView().getResolutionForExtent(extent);
+    const zoom = ui.selected.getView().getZoomForResolution(resolution);
+    // Animate to extent, zoom & rotate:
+    // Don't animate when an event is selected (Event selection already animates)
+    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
+  };
 
   const actionSwitch = () => {
     switch (action.type) {
@@ -125,25 +205,17 @@ function UpdateProjection(props) {
     }
   };
 
-  /**
- * Collect information required & initiate a "fly" map transition
- * Used in Tour Stories.
- * @method flyToNewExtent
- * @static
- *
- * @param {object} extent
- * @param {number} rotation
- */
-  const flyToNewExtent = function(extent, rotation) {
-    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
-    const coordinates = [coordinateX, coordinateY];
-    const resolution = ui.selected.getView().getResolutionForExtent(extent);
-    const zoom = ui.selected.getView().getZoomForResolution(resolution);
-    // Animate to extent, zoom & rotate:
-    // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
-  };
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
+
+  useEffect(() => {
+    if (projectionTrigger === 1) {
+      updateProjection(true);
+    } else if (projectionTrigger > 1) {
+      updateProjection();
+    }
+  }, [projectionTrigger]);
 
   /**
  * Create a Layergroup given the date and layerGroups when compare mode is activated and
@@ -240,16 +312,6 @@ function UpdateProjection(props) {
     updateLayerVisibilities();
   }
 
-  const onStopAnimation = function() {
-    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
-    if (needsRefresh) {
-      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
-      // try to modify map layers asynchronously so we need to set a timeout to allow
-      // the updateDate() function to complete before trying to call reloadLayers() here
-      setTimeout(reloadLayers, 100);
-    }
-  };
-
   /**
  * When page is resized set for mobile or desktop
  *
@@ -298,69 +360,6 @@ function UpdateProjection(props) {
     const el = document.getElementById(`${map.getTarget()}`);
     if (el) el.style.display = 'none';
   }
-
-
-  const updateProjection = (start) => {
-    if (ui.selected) {
-      // Keep track of center point on projection switch
-      ui.selected.previousCenter = ui.selected.center;
-      hideMap(ui.selected);
-    }
-    ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
-
-    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
-    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
-    const rotation = start ? rotationStart : currentRotation;
-
-    updateMapUI(ui, rotation);
-
-    reloadLayers();
-
-    // If the browser was resized, the inactive map was not notified of
-    // the event. Force the update no matter what and reposition the center
-    // using the previous value.
-    showMap(map);
-
-    map.updateSize();
-
-    if (ui.selected.previousCenter) {
-      ui.selected.setCenter(ui.selected.previousCenter);
-    }
-
-    if (start) {
-      const projId = proj.selected.id;
-      let extent = null;
-      let callback = null;
-      if (models.map.extent) {
-        extent = models.map.extent;
-      } else if (!models.map.extent && projId === 'geographic') {
-        extent = getLeadingExtent(config.pageLoadTime);
-        callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
-          fitToLeadingExtent(extent);
-        };
-      }
-      if (projId !== 'geographic') {
-        callback = () => {
-          const view = map.getView();
-          view.setRotation(rotationStart);
-        };
-      }
-      if (extent) {
-        map.getView().fit(extent, {
-          constrainResolution: false,
-          callback,
-        });
-      } else if (rotationStart && projId !== 'geographic') {
-        callback();
-      }
-    }
-    updateExtent();
-    onResize();
-  };
 
   return null;
 }

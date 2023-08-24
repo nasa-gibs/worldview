@@ -355,17 +355,18 @@ class PlayQueue extends React.Component {
 
   animationInterval(ms, callback) {
     const start = document.timeline.currentTime;
-    const frame = (time) => {
-      if (this.abortController.signal.aborted) return;
-      callback(time);
-      scheduleFrame(time);
-    };
     const scheduleFrame = (time) => {
       const elapsedTime = time - start;
       const roundedElapsedTime = Math.round(elapsedTime / ms) * ms;
       const targetNext = start + roundedElapsedTime + ms;
       const delay = targetNext - performance.now();
+      // eslint-disable-next-line no-use-before-define
       setTimeout(() => requestAnimationFrame(frame), delay);
+    };
+    const frame = (time) => {
+      if (this.abortController.signal.aborted) return;
+      callback(time);
+      scheduleFrame(time);
     };
     scheduleFrame(start);
   }

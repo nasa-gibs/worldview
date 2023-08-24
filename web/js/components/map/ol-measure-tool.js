@@ -72,6 +72,22 @@ function OlMeasureTool (props) {
     return ref.current;
   }
 
+  /**
+   * End the current measurement interaction & remove the visual representation from the map
+   */
+  const terminateDraw = (olMapToTerminate = olMap) => {
+    tooltipElement = null;
+    toggleMeasureActive(false);
+    olMapToTerminate.removeInteraction(draw);
+    OlObservableUnByKey(drawChangeListener);
+    OlObservableUnByKey(rightClickListener);
+    OlObservableUnByKey(twoFingerTouchListener);
+    events.trigger(MAP_ENABLE_CLICK_ZOOM);
+  };
+
+  const initDistanceMeasurement = () => initMeasurement('distance');
+  const initAreaMeasurement = () => initMeasurement('area');
+
   // Monitor for projection change & terminate any incomplete measurement from the previous projection
   useEffect(() => {
     if (olMap != null) {
@@ -217,19 +233,6 @@ function OlMeasureTool (props) {
     );
   };
 
-  /**
-   * End the current measurement interaction & remove the visual representation from the map
-   */
-  const terminateDraw = (olMapToTerminate = olMap) => {
-    tooltipElement = null;
-    toggleMeasureActive(false);
-    olMapToTerminate.removeInteraction(draw);
-    OlObservableUnByKey(drawChangeListener);
-    OlObservableUnByKey(rightClickListener);
-    OlObservableUnByKey(twoFingerTouchListener);
-    events.trigger(MAP_ENABLE_CLICK_ZOOM);
-  };
-
   const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
     events.trigger(MAP_DISABLE_CLICK_ZOOM);
@@ -304,8 +307,6 @@ function OlMeasureTool (props) {
       olMap.removeOverlay(tooltipOverlay);
     });
   }
-  const initDistanceMeasurement = () => initMeasurement('distance');
-  const initAreaMeasurement = () => initMeasurement('area');
 
   /**
    * Go through every tooltip and recalculate the measurement based on
@@ -353,6 +354,9 @@ OlMeasureTool.propTypes = {
   crs: PropTypes.string,
   toggleMeasureActive: PropTypes.func,
   unitOfMeasure: PropTypes.string,
+  updateMeasurements: PropTypes.func,
+  projections: PropTypes.array,
+  proj: PropTypes.object,
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -208,16 +208,12 @@ function promiseTileLayer(layer, extent, map) {
     currentZ = tileGrid.getZForResolution(resolution, zDirection);
     i = 0;
 
-    const complete = function () {
-      tileSource.un('tileloadend', onLoad);
-      tileSource.un('tileloaderror', onLoad);
-      resolve();
-    };
 
     const onLoad = function onLoad (e) {
       if (e.type === 'tileloadend') {
         i -= 1;
         if (i === 0) {
+          // eslint-disable-next-line no-use-before-define
           complete();
         }
       } else {
@@ -225,8 +221,15 @@ function promiseTileLayer(layer, extent, map) {
         console.error(`No response for tile request ${layer.wv.key}`);
         // some gibs data is not accurate and rejecting here
         // will break the animation if tile doesn't exist
+        // eslint-disable-next-line no-use-before-define
         complete();
       }
+    };
+
+    const complete = function () {
+      tileSource.un('tileloadend', onLoad);
+      tileSource.un('tileloaderror', onLoad);
+      resolve();
     };
 
     const loadTile = function ([one, two, three]) {
