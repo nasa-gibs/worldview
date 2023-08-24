@@ -2,6 +2,7 @@
   "layers": {
     "HLS_Customizable_Sentinel": {
       "id": "HLS_Customizable_Sentinel",
+      "collection_concept_id": "C2021957295-LPCLOUD",
       "title": "HLS Customizable Sentinel *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Customizable_Sentinel",
