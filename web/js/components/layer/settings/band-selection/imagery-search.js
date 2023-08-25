@@ -20,7 +20,7 @@ export default function ImagerySearch({ layer }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const parseGranuleTimestamp = (granule) => new Date(granule.time_start).toDateString()
+  const parseGranuleTimestamp = (granule) => new Date(granule.time_start).toDateString();
 
   const searchForImagery = async (layer) => {
     setGranulesStatus('loading');
