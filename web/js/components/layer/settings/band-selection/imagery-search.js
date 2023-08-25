@@ -24,7 +24,7 @@ export default function ImagerySearch({ layer }) {
     const response = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&sort_key=-start_date&pageSize=60`);
     const granules = await response.json();
     setGranulesStatus('loaded');
-    const datesArray = granules.feed.entry.map((granule) => new Date(granule.time_start).toDateString())
+    const datesArray = granules.feed.entry.map((granule) => new Date(granule.time_start).toDateString());
     const dates = [...new Set(datesArray)];
     setGranuleDates(dates);
   };
