@@ -41,15 +41,14 @@ const schemaRaw = fs.readFileSync(schemaFile)
 const schema = JSON.parse(schemaRaw)
 const validate = ajv.compile(schema)
 
-layerConfigFiles = []
-invalidJsonFiles = []
+const invalidJsonFiles = []
 
 console.warn(`${prog}: Validating layer configs...`)
 
 async function main () {
   let files = globSync(inputDirectory + '/**/*')
   files = files.filter(file => file.endsWith('.json'))
-  for (filePath of files) {
+  for (const filePath of files) {
     validateFile(filePath)
   }
   if (invalidJsonFiles.length) {
@@ -66,7 +65,7 @@ async function validateFile (filePath) {
   const layer = JSON.parse(layerFile)
   const valid = validate(layer)
   if (!valid) {
-    for (error of validate.errors) {
+    for (const error of validate.errors) {
       invalidJsonFiles.push(error)
       console.error(`${prog}: ERROR: ${error.instancePath} ${error.message}`)
       if (argv.mode === 'verbose') console.error(error)
