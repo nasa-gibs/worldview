@@ -13,19 +13,25 @@ import { selectDate as selectDateAction } from '../../../../modules/date/actions
 export default function ImagerySearch({ layer }) {
   const dispatch = useDispatch();
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
+  const selectedDate = useSelector((state) => state.date.selected);
   const map = useSelector((state) => state.map);
   const [granulesStatus, setGranulesStatus] = useState(undefined);
   const [granuleDates, setGranuleDates] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
+  const parseGranuleTimestamp = (granule) => new Date(granule.time_start).toDateString()
+
   const searchForImagery = async (layer) => {
     setGranulesStatus('loading');
-    const response = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&sort_key=-start_date&pageSize=60`);
-    const granules = await response.json();
+    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${selectedDate.toISOString()}&sort_key=-start_date&pageSize=20`);
+    const olderGranules = await olderResponse.json();
+    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${selectedDate.toISOString()},&sort_key=-start_date&pageSize=20`);
+    const newerGranules = await newerResponse.json();
     setGranulesStatus('loaded');
-    const datesArray = granules.feed.entry.map((granule) => new Date(granule.time_start).toDateString());
-    const dates = [...new Set(datesArray)];
+    const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
+    const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
+    const dates = [...new Set([...olderDates, ...newerDates])];
     setGranuleDates(dates);
   };
 
