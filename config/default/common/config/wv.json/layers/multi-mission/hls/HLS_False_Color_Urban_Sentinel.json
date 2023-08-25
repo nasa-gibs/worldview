@@ -2,6 +2,7 @@
   "layers": {
     "HLS_False_Color_Urban_Sentinel": {
       "id": "HLS_False_Color_Urban_Sentinel",
+      "collection_concept_id": "C2021957295-LPCLOUD",
       "title": "Reflectance (Bands 12-11-4, Urban False Color) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_False_Color_Urban_Sentinel",

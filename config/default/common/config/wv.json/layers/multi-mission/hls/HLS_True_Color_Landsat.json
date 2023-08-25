@@ -2,6 +2,7 @@
   "layers": {
     "HLS_True_Color_Landsat": {
       "id": "HLS_True_Color_Landsat",
+      "collection_concept_id": "C2021957657-LPCLOUD",
       "title": "Reflectance (Bands 4-3-2, True Color) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_True_Color_Landsat",

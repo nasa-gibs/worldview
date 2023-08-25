@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 import BandSelectionMenu from './band-selection-menu';
-import ImagerySearch from './imagery-search';
 import { toggleCustomContent } from '../../../../modules/modal/actions';
 
 export default function BandSelectionParentInfoMenu({ layer }) {
@@ -70,7 +69,6 @@ export default function BandSelectionParentInfoMenu({ layer }) {
           </span>
         </Button>
       </div>
-      <ImagerySearch layer={layer} />
       <hr />
     </div>
   );

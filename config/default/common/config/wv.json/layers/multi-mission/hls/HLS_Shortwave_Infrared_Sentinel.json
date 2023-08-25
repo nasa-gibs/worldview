@@ -2,6 +2,7 @@
   "layers": {
     "HLS_Shortwave_Infrared_Sentinel": {
       "id": "HLS_Shortwave_Infrared_Sentinel",
+      "collection_concept_id": "C2021957295-LPCLOUD",
       "title": "Reflectance (Bands 12-8A-4, Shortwave Infrared) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Sentinel",

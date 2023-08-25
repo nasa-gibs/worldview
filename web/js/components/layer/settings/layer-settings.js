@@ -15,6 +15,8 @@ import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
 import safeLocalStorage from '../../../util/local-storage';
+import ImagerySearch from './band-selection/imagery-search';
+
 
 import {
   palettesTranslate,
@@ -342,6 +344,7 @@ class LayerSettings extends React.Component {
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
     const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const granuleMetadata = Object.hasOwn(layer, 'collection_concept_id')
     const layerGroup = layer.layergroup;
 
     if (layer.type !== 'vector') {
@@ -365,6 +368,7 @@ class LayerSettings extends React.Component {
         {this.renderGranuleSettings()}
         {renderCustomizations}
         {ttilerLayer && <BandSelection layer={layer} />}
+        {granuleMetadata && <ImagerySearch layer={layer} /> }
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>
     );
