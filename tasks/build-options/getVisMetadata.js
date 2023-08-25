@@ -61,7 +61,7 @@ const daacMap = metadataConfig.daacMap || {}
 const layerMetadata = {}
 
 // These are alias or otherwise layers that don't exist in GIBS
-skipLayers = [
+const skipLayers = [
   'Land_Water_Map',
   'Land_Mask',
   'World_Database_on_Protected_Areas',
@@ -80,7 +80,7 @@ skipLayers = [
 ]
 
 // NOTE: Only using these properties at this time
-useKeys = [
+const useKeys = [
   'conceptIds',
   'dataCenter',
   'daynight',
@@ -97,7 +97,7 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  for (layerId of layerOrder) {
+  for (const layerId of layerOrder) {
     await getMetadata(layerId, url)
   }
 
@@ -117,7 +117,7 @@ async function getDAAC (metadata) {
   if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
     return metadata
   }
-  for (collection of metadata.conceptIds) {
+  for (const collection of metadata.conceptIds) {
     const origDataCenter = collection.dataCenter
     const dataCenter = daacMap[origDataCenter]
     if (!dataCenter) {
@@ -141,11 +141,11 @@ async function getMetadata (layerId, baseUrl, count) {
     responseType: 'json',
     timeout: 10000
   }).then(async (response) => {
-    metadata = response.data
+    const metadata = response.data
     layerMetadata[layerId] = await getDAAC(metadata)
-    metadataKeys = Object.keys(layerMetadata[layerId])
+    let metadataKeys = Object.keys(layerMetadata[layerId])
     metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
-    for (key of metadataKeys) {
+    for (const key of metadataKeys) {
       delete layerMetadata[layerId][key]
     }
   }).catch((error) => {

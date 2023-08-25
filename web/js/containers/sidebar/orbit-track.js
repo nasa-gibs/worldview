@@ -27,6 +27,7 @@ function OrbitTrack(props) {
 
   const containerClasses = `wv-orbit-track ${!trackLayer.visible ? 'not-visible' : ''}`;
   const [palette, setPalette] = useState();
+  const satelliteName = trackLayer.title.split(' - ')[0];
 
   useEffect(() => {
     if (hasPalette && !isLoading && !renderedPalette) {
@@ -50,7 +51,7 @@ function OrbitTrack(props) {
       {palette}
       <FontAwesomeIcon icon="satellite" />
       <span className="wv-orbit-track-label">
-        {getOrbitTrackTitle(trackLayer)}
+        {`${getOrbitTrackTitle(trackLayer)} (${satelliteName})`}
       </span>
     </div>
   );
