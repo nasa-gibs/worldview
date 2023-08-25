@@ -32,6 +32,7 @@ function AssociatedLayersToggle(props) {
       <h2 className="wv-header"> Associated Layers </h2>
       { associatedLayers.map((layer) => {
         const { id } = layer;
+        const satelliteName = layer.title.split(' - ')[0];
         const isEnabled = !!activeLayers[id];
         const onCheck = () => (isEnabled ? removeLayer(id) : addLayer(id));
         return (
@@ -41,7 +42,7 @@ function AssociatedLayersToggle(props) {
             title="Enable/disable this layer"
             checked={isEnabled}
             onCheck={onCheck}
-            label={getTitle(layer)}
+            label={`${getTitle(layer)} (${satelliteName})`}
           />
         );
       }) }
