@@ -21,277 +21,6 @@ const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
-export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
-
-export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
-
-export const getCollections = (layers, date, layer) => {
-  if (!layers.collections[layer.id]) return;
-  const dateCollection = layers.collections[layer.id].dates;
-  for (let i = 0; i < dateCollection.length; i += 1) {
-    if (dateCollection[i].date === date) {
-      return dateCollection[i];
-    }
-  }
-};
-
-/**
- * Return a list of layers for the currently active compare state
- * regardless of projection
- */
-export const getActiveLayers = (state, activeString) => {
-  const { embed, compare, layers } = state;
-  if (embed && embed.isEmbedModeActive) {
-    return getActiveLayersEmbed(state, activeString);
-  }
-  return layers[activeString || compare.activeString].layers;
-};
-
-export const getActiveLayerGroup = (state) => {
-  const { compare, map } = state;
-  const { active, activeString } = compare || {};
-  if (active) {
-    const layerGroups = map.ui.selected.getLayers().getArray();
-    if (layerGroups.length > 1) {
-      return layerGroups[0].get('group') === activeString
-        ? layerGroups[0]
-        : layerGroups[1].get('group') === activeString
-          ? layerGroups[1]
-          : null;
-    }
-  }
-  return map.ui.selected;
-};
-
-export const getActiveGranuleLayers = (state, activeString) => {
-  const { compare, layers } = state;
-  const { granuleLayers } = layers[activeString || compare.activeString] || {};
-  return granuleLayers;
-};
-
-export const getGranuleLayer = (state, id, activeString) => {
-  const granuleLayers = getActiveGranuleLayers(state, activeString);
-  return granuleLayers ? granuleLayers[id] : false;
-};
-
-export const getGranuleCount = (state, id) => {
-  const layer = getGranuleLayer(state, id);
-  return layer ? layer.count : 20;
-};
-
-export const getActiveGranuleFootPrints = (state) => {
-  const { layers, compare: { activeString } } = state;
-  const granuleLayers = getActiveGranuleLayers(state);
-  const { granuleFootprints } = layers[activeString];
-  const granulePlatform = getGranulePlatform(state);
-
-  const isActiveGranuleVisible = getActiveLayers(state).filter((layer) => {
-    const { visible, type, subtitle } = layer;
-    const isGranule = type === 'granule';
-    return visible && isGranule && subtitle === granulePlatform;
-  });
-
-  return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
-};
-
-export const getGranulePlatform = (state, activeString) => {
-  const { compare, layers } = state;
-  const { granulePlatform } = layers[activeString || compare.activeString];
-  return granulePlatform;
-};
-
-export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
-  const activeLayersArray = Object.entries(activeLayers);
-  const platformLayers = [];
-  activeLayersArray.forEach(([key, value]) => {
-    if (value.granulePlatform === platform) {
-      platformLayers.push(key);
-    }
-  });
-  return platformLayers;
-};
-
-/**
- * Return an array of overlay groups for the currently active compare state
- * that are available for the currently active projection
- */
-export const getActiveOverlayGroups = (state) => {
-  const {
-    embed, compare, layers, proj,
-  } = state;
-  const { overlayGroups } = layers[compare.activeString];
-  if (embed && embed.isEmbedModeActive) {
-    return getActiveOverlayGroupsEmbed(state);
-  }
-  const activeLayersMap = getActiveLayersMap(state);
-  return (overlayGroups || []).filter(
-    (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id].projections[proj.id],
-    ).length,
-  );
-};
-
-/**
- * Return a list of layers for the currently active compare state
- * regardless of projection (no hidden layers)
- */
-const getActiveLayersEmbed = (state, activeString) => {
-  const { compare, layers } = state;
-  const activeLayers = layers[activeString || compare.activeString].layers;
-  return activeLayers.filter((layer) => layer.visible);
-};
-
-/**
- * Return an array of filtered overlay groups for the currently active compare state
- * that are available for the currently active projection (no hidden or reference layers)
- *
- * @param {Object} state
- */
-const getActiveOverlayGroupsEmbed = (state) => {
-  const {
-    compare, layers, proj,
-  } = state;
-  const { overlayGroups } = layers[compare.activeString];
-  const activeLayersMap = getActiveLayersMap(state);
-  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
-  return (overlayGroupsFiltered || []).filter(
-    (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
-          && !!activeLayersMap[id].visible,
-    ).length,
-  );
-};
-
-/**
- * Return a list of layer groups that filter out removed, hidden layers
- */
-export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
-  const overlaysLayerIds = overlays.map((layer) => layer.id);
-  // remove reference layers and revise overlay layers group
-  return overlayGroups
-    .filter((group) => group.groupName !== 'Reference')
-    .map((group) => {
-      const filteredLayers = group.layers.filter((layer) => overlaysLayerIds.includes(layer));
-      const filteredGroup = { ...group };
-      filteredGroup.layers = filteredLayers;
-      return filteredGroup;
-    });
-};
-
-/**
- * Return a map of active layers where key is layer id
- */
-export const getActiveLayersMap = createSelector(
-  [getActiveLayers],
-  (activeLayers) => {
-    const activeLayerMap = {};
-    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
-    return activeLayerMap;
-  },
-);
-
-export const getAllActiveLayers = createSelector(
-  [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}),
-);
-
-export const getAllActiveOverlaysBaselayers = createSelector(
-  [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
-);
-
-export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
-  const { proj } = state;
-  const layers = getActiveLayers(state, activeString);
-  const baseLayers = layers.filter(({ group }) => group === 'baselayers');
-  return layers.filter(
-    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
-  );
-};
-
-export function hasMeasurementSource(current, config, projId) {
-  let hasSource;
-  Object.values(current.sources).forEach((source) => {
-    if (hasMeasurementSetting(current, source, config, projId)) {
-      hasSource = true;
-    }
-  });
-  return hasSource;
-}
-
-/**
- * Look up the measurement description path for a given layer
- * so that metadata can be shown in the layer info modal.  Ignore
- * Orbital Track layers since they will be in multiple measurements.
- */
-export const makeGetDescription = () => createSelector(
-  [getConfig, getLayerId],
-  ({ layers, measurements }, layerId) => {
-    if (!layerId) return;
-    const { layergroup } = layers[layerId];
-    if (layergroup === 'Orbital Track') {
-      return;
-    }
-    const [setting] = Object.keys(measurements)
-      .filter((key) => !key.includes('Featured'))
-      .map((key) => measurements[key])
-      .flatMap(({ sources }) => Object.values(sources))
-      .filter(({ settings }) => settings.find((id) => id === layerId));
-    return (setting || {}).description;
-  },
-);
-
-/**
- * var hasMeasurementSetting - Checks the (current) measurement's source
- *  for a setting and returns true if present.
- *
- * @param  {string} current The current config.measurements measurement.
- * @param  {string} source  The current measurement source.
- * @return {boolean}         Return true if the source contains settings.
- *
- */
-export function hasMeasurementSetting(current, source, config, projId) {
-  let hasSetting;
-  Object.values(source.settings).forEach((setting) => {
-    const layer = config.layers[setting];
-    if (layer && layer.projections) {
-      const proj = layer.projections;
-      if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
-        if (layer.layergroup === 'Orbital Track') {
-          if (current.id === 'orbital-track') {
-            hasSetting = true;
-          }
-          // Don't output sources with only orbit tracks
-        } else {
-          hasSetting = true;
-        }
-      }
-    }
-  });
-  return hasSetting;
-}
-
-/**
- * See if an array of layers has a subdaily
- * product in it
- * @param {Array} layers
- */
-export function hasSubDaily(layers) {
-  if (layers && layers.length) {
-    for (let i = 0; i < layers.length; i += 1) {
-      if (layers[i].period === 'subdaily') {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-export const subdailyLayersActive = createSelector(
-  [getActiveLayers],
-  (layers) => hasSubDaily(layers),
-);
-
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
@@ -385,83 +114,174 @@ export function resetLayers(config) {
   return layers;
 }
 
-/**
- *
- * @param {*} config
- * @param {*} layerId
- * @param {*} projId
- */
-export function getTitles(config, layerId, projId) {
-  try {
-    let title;
-    let subtitle;
-    let tags;
-    const forProj = lodashGet(
-      config,
-      `layers.${layerId}.projections.${projId}`,
-    );
-    if (forProj) {
-      title = forProj.title;
-      subtitle = forProj.subtitle;
-      tags = forProj.tags;
+export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
+
+export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
+
+export const getCollections = (layers, date, layer) => {
+  if (!layers.collections[layer.id]) return;
+  const dateCollection = layers.collections[layer.id].dates;
+  for (let i = 0; i < dateCollection.length; i += 1) {
+    if (dateCollection[i].date === date) {
+      return dateCollection[i];
     }
-    const forLayer = config.layers[layerId];
-    title = title || forLayer.title || `[${layerId}]`;
-    subtitle = subtitle || forLayer.subtitle || '';
-    tags = tags || forLayer.tags || '';
-    return {
-      title,
-      subtitle,
-      tags,
-    };
-  } catch (err) {
-    throw new Error(`error in layer ${layerId}: ${err}`);
   }
-}
+};
 
 /**
- *
- * @param {*} layers
- * @param {*} spec
- * @param {*} state
+ * Return a list of layers for the currently active compare state
+ * regardless of projection (no hidden layers)
  */
-export function getLayers(state, spec = {}, layersParam) {
-  const layers = layersParam || getActiveLayers(state);
-  const baselayers = forGroup('baselayers', spec, layers, state);
-  const overlays = forGroup('overlays', spec, layers, state);
-  if (spec.group === 'baselayers') {
-    return baselayers;
-  }
-  if (spec.group === 'overlays') {
-    return overlays;
-  }
-  if (spec.group === 'all') {
-    return { baselayers, overlays };
-  }
-  if (spec.group) {
-    throw new Error(`Invalid layer group: ${spec.group}`);
-  }
-  return baselayers.concat(overlays);
-}
+const getActiveLayersEmbed = (state, activeString) => {
+  const { compare, layers } = state;
+  const activeLayers = layers[activeString || compare.activeString].layers;
+  return activeLayers.filter((layer) => layer.visible);
+};
 
-function forGroup(group, spec = {}, activeLayers, state) {
-  const projId = state.proj.id;
-  let results = [];
-  const defs = lodashFilter(activeLayers, { group });
-  lodashEach(defs, (def) => {
-    const notInProj = !def.projections[projId];
-    const notRenderable = spec.renderable
-      && !isRenderable(def.id, activeLayers, spec.date, null, state);
-    if (notInProj || notRenderable) {
-      return;
+/**
+ * Return a list of layers for the currently active compare state
+ * regardless of projection
+ */
+export const getActiveLayers = (state, activeString) => {
+  const { embed, compare, layers } = state;
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveLayersEmbed(state, activeString);
+  }
+  return layers[activeString || compare.activeString].layers;
+};
+
+export const getActiveLayerGroup = (state) => {
+  const { compare, map } = state;
+  const { active, activeString } = compare || {};
+  if (active) {
+    const layerGroups = map.ui.selected.getLayers().getArray();
+    if (layerGroups.length > 1) {
+      return layerGroups[0].get('group') === activeString
+        ? layerGroups[0]
+        : layerGroups[1].get('group') === activeString
+          ? layerGroups[1]
+          : null;
     }
-    results.push(def);
+  }
+  return map.ui.selected;
+};
+
+export const getActiveGranuleLayers = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granuleLayers } = layers[activeString || compare.activeString] || {};
+  return granuleLayers;
+};
+
+export const getGranuleLayer = (state, id, activeString) => {
+  const granuleLayers = getActiveGranuleLayers(state, activeString);
+  return granuleLayers ? granuleLayers[id] : false;
+};
+
+export const getGranuleCount = (state, id) => {
+  const layer = getGranuleLayer(state, id);
+  return layer ? layer.count : 20;
+};
+
+export const getGranulePlatform = (state, activeString) => {
+  const { compare, layers } = state;
+  const { granulePlatform } = layers[activeString || compare.activeString];
+  return granulePlatform;
+};
+
+export const getActiveGranuleFootPrints = (state) => {
+  const { layers, compare: { activeString } } = state;
+  const granuleLayers = getActiveGranuleLayers(state);
+  const { granuleFootprints } = layers[activeString];
+  const granulePlatform = getGranulePlatform(state);
+
+  const isActiveGranuleVisible = getActiveLayers(state).filter((layer) => {
+    const { visible, type, subtitle } = layer;
+    const isGranule = type === 'granule';
+    return visible && isGranule && subtitle === granulePlatform;
   });
-  if (spec.reverse) {
-    results = results.reverse();
+
+  return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
+};
+
+export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
+  const activeLayersArray = Object.entries(activeLayers);
+  const platformLayers = [];
+  activeLayersArray.forEach(([key, value]) => {
+    if (value.granulePlatform === platform) {
+      platformLayers.push(key);
+    }
+  });
+  return platformLayers;
+};
+
+/**
+ * Return a map of active layers where key is layer id
+ */
+export const getActiveLayersMap = createSelector(
+  [getActiveLayers],
+  (activeLayers) => {
+    const activeLayerMap = {};
+    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
+    return activeLayerMap;
+  },
+);
+
+/**
+ * Return an array of filtered overlay groups for the currently active compare state
+ * that are available for the currently active projection (no hidden or reference layers)
+ *
+ * @param {Object} state
+ */
+const getActiveOverlayGroupsEmbed = (state) => {
+  const {
+    compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  const activeLayersMap = getActiveLayersMap(state);
+  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
+  return (overlayGroupsFiltered || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
+          && !!activeLayersMap[id].visible,
+    ).length,
+  );
+};
+
+/**
+ * Return an array of overlay groups for the currently active compare state
+ * that are available for the currently active projection
+ */
+export const getActiveOverlayGroups = (state) => {
+  const {
+    embed, compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveOverlayGroupsEmbed(state);
   }
-  return results;
-}
+  const activeLayersMap = getActiveLayersMap(state);
+  return (overlayGroups || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id].projections[proj.id],
+    ).length,
+  );
+};
+
+/**
+ * Return a list of layer groups that filter out removed, hidden layers
+ */
+export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
+  const overlaysLayerIds = overlays.map((layer) => layer.id);
+  // remove reference layers and revise overlay layers group
+  return overlayGroups
+    .filter((group) => group.groupName !== 'Reference')
+    .map((group) => {
+      const filteredLayers = group.layers.filter((layer) => overlaysLayerIds.includes(layer));
+      const filteredGroup = { ...group };
+      filteredGroup.layers = filteredLayers;
+      return filteredGroup;
+    });
+};
 
 /**
  * Build end date for future layer
@@ -585,14 +405,49 @@ export function available(id, date, layers, parameters) {
   return true;
 }
 
+function forGroup(group, spec = {}, activeLayers, state) {
+  const projId = state.proj.id;
+  let results = [];
+  const defs = lodashFilter(activeLayers, { group });
+  lodashEach(defs, (def) => {
+    const notInProj = !def.projections[projId];
+    // eslint-disable-next-line no-use-before-define
+    const notRenderable = spec.renderable && !isRenderable(def.id, activeLayers, spec.date, null, state);
+    if (notInProj || notRenderable) {
+      return;
+    }
+    results.push(def);
+  });
+  if (spec.reverse) {
+    results = results.reverse();
+  }
+  return results;
+}
+
 /**
- * Determine if a given layer is available
- * @param {*} id - the layer id
+ *
+ * @param {*} layers
+ * @param {*} spec
+ * @param {*} state
  */
-export const memoizedAvailable = createSelector(
-  [getSelectedDate, getActiveLayers, getConfigParameters],
-  (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
-);
+export function getLayers(state, spec = {}, layersParam) {
+  const layers = layersParam || getActiveLayers(state);
+  const baselayers = forGroup('baselayers', spec, layers, state);
+  const overlays = forGroup('overlays', spec, layers, state);
+  if (spec.group === 'baselayers') {
+    return baselayers;
+  }
+  if (spec.group === 'overlays') {
+    return overlays;
+  }
+  if (spec.group === 'all') {
+    return { baselayers, overlays };
+  }
+  if (spec.group) {
+    throw new Error(`Invalid layer group: ${spec.group}`);
+  }
+  return baselayers.concat(overlays);
+}
 
 /**
  * Determine if a layer should be rendered if it would be visible
@@ -634,6 +489,151 @@ export function isRenderable(id, layers, date, bLayers, state) {
   );
   return !obscured;
 }
+
+export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const { proj } = state;
+  const layers = getActiveLayers(state, activeString);
+  const baseLayers = layers.filter(({ group }) => group === 'baselayers');
+  return layers.filter(
+    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+  );
+};
+
+/**
+ * var hasMeasurementSetting - Checks the (current) measurement's source
+ *  for a setting and returns true if present.
+ *
+ * @param  {string} current The current config.measurements measurement.
+ * @param  {string} source  The current measurement source.
+ * @return {boolean}         Return true if the source contains settings.
+ *
+ */
+export function hasMeasurementSetting(current, source, config, projId) {
+  let hasSetting;
+  Object.values(source.settings).forEach((setting) => {
+    const layer = config.layers[setting];
+    if (layer && layer.projections) {
+      const proj = layer.projections;
+      if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
+        if (layer.layergroup === 'Orbital Track') {
+          if (current.id === 'orbital-track') {
+            hasSetting = true;
+          }
+          // Don't output sources with only orbit tracks
+        } else {
+          hasSetting = true;
+        }
+      }
+    }
+  });
+  return hasSetting;
+}
+
+export function hasMeasurementSource(current, config, projId) {
+  let hasSource;
+  Object.values(current.sources).forEach((source) => {
+    if (hasMeasurementSetting(current, source, config, projId)) {
+      hasSource = true;
+    }
+  });
+  return hasSource;
+}
+
+/**
+ * Look up the measurement description path for a given layer
+ * so that metadata can be shown in the layer info modal.  Ignore
+ * Orbital Track layers since they will be in multiple measurements.
+ */
+export const makeGetDescription = () => createSelector(
+  [getConfig, getLayerId],
+  ({ layers, measurements }, layerId) => {
+    if (!layerId) return;
+    const { layergroup } = layers[layerId];
+    if (layergroup === 'Orbital Track') {
+      return;
+    }
+    const [setting] = Object.keys(measurements)
+      .filter((key) => !key.includes('Featured'))
+      .map((key) => measurements[key])
+      .flatMap(({ sources }) => Object.values(sources))
+      .filter(({ settings }) => settings.find((id) => id === layerId));
+    return (setting || {}).description;
+  },
+);
+
+/**
+ * See if an array of layers has a subdaily
+ * product in it
+ * @param {Array} layers
+ */
+export function hasSubDaily(layers) {
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      if (layers[i].period === 'subdaily') {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+export const subdailyLayersActive = createSelector(
+  [getActiveLayers],
+  (layers) => hasSubDaily(layers),
+);
+
+/**
+ *
+ * @param {*} config
+ * @param {*} layerId
+ * @param {*} projId
+ */
+export function getTitles(config, layerId, projId) {
+  try {
+    let title;
+    let subtitle;
+    let tags;
+    const forProj = lodashGet(
+      config,
+      `layers.${layerId}.projections.${projId}`,
+    );
+    if (forProj) {
+      title = forProj.title;
+      subtitle = forProj.subtitle;
+      tags = forProj.tags;
+    }
+    const forLayer = config.layers[layerId];
+    title = title || forLayer.title || `[${layerId}]`;
+    subtitle = subtitle || forLayer.subtitle || '';
+    tags = tags || forLayer.tags || '';
+    return {
+      title,
+      subtitle,
+      tags,
+    };
+  } catch (err) {
+    throw new Error(`error in layer ${layerId}: ${err}`);
+  }
+}
+
+export const getAllActiveLayers = createSelector(
+  [getProjState, getCompareState, getLayerState],
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}),
+);
+
+export const getAllActiveOverlaysBaselayers = createSelector(
+  [getProjState, getCompareState, getLayerState],
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
+);
+
+/**
+ * Determine if a given layer is available
+ * @param {*} id - the layer id
+ */
+export const memoizedAvailable = createSelector(
+  [getSelectedDate, getActiveLayers, getConfigParameters],
+  (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
+);
 
 export const findEventLayers = (originalLayers, newLayers) => {
   const uniqueLayers = [];
@@ -743,6 +743,23 @@ export function replaceSubGroup(
   return pushToBottom(layerId, layers, layerSplit);
 }
 
+function getZoomLevel(layer, zoom, proj, sources) {
+  // Account for offset between the map's top zoom level and the
+  // lowest-resolution TileMatrix in polar layers
+  const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
+  const { matrixSet } = layer.projections[proj];
+
+  if (matrixSet !== undefined && layer.type !== 'vector') {
+    const { source } = layer.projections[proj];
+    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+    if (zoom > zoomLimit) {
+      const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
+      return overZoomValue;
+    }
+  }
+  return null;
+}
+
 export function getZotsForActiveLayers(state) {
   const {
     config, proj, map, notifications,
@@ -764,23 +781,6 @@ export function getZotsForActiveLayers(state) {
     }
   });
   return zotObj;
-}
-
-function getZoomLevel(layer, zoom, proj, sources) {
-  // Account for offset between the map's top zoom level and the
-  // lowest-resolution TileMatrix in polar layers
-  const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
-  const { matrixSet } = layer.projections[proj];
-
-  if (matrixSet !== undefined && layer.type !== 'vector') {
-    const { source } = layer.projections[proj];
-    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
-    if (zoom > zoomLimit) {
-      const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
-      return overZoomValue;
-    }
-  }
-  return null;
 }
 
 export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {

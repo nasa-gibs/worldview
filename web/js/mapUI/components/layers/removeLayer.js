@@ -13,12 +13,6 @@ function RemoveLayer(props) {
     updateLayerVisibilities,
   } = props;
 
-  useEffect(() => {
-    if (action.layersToRemove) {
-      removeLayer(action.layersToRemove);
-    }
-  }, [action]);
-
   const removeLayer = (layersToRemove) => {
     layersToRemove.forEach((def) => {
       const layer = findLayer(def, compare.activeString);
@@ -31,6 +25,12 @@ function RemoveLayer(props) {
     });
     updateLayerVisibilities();
   };
+
+  useEffect(() => {
+    if (action.layersToRemove) {
+      removeLayer(action.layersToRemove);
+    }
+  }, [action]);
 
   return null;
 }

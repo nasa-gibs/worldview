@@ -125,6 +125,21 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
+const getModalWidth = function(width) {
+  const availableWidth = width - width * 0.15;
+  const gridItemWidth = 310;
+  let sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
+  if (sizeMultiplier < 1) {
+    sizeMultiplier = 1;
+  }
+  if (sizeMultiplier > 3) {
+    sizeMultiplier = 3;
+  }
+  const gutterSpace = (sizeMultiplier - 1) * 10;
+  const modalPadding = 26;
+  return gridItemWidth * sizeMultiplier + gutterSpace + modalPadding;
+};
+
 const mapStateToProps = (state) => {
   const {
     screenSize,
@@ -153,18 +168,3 @@ export default withSearch(
   mapStateToProps,
   mapDispatchToProps,
 )(ProductPicker));
-
-const getModalWidth = function(width) {
-  const availableWidth = width - width * 0.15;
-  const gridItemWidth = 310;
-  let sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
-  if (sizeMultiplier < 1) {
-    sizeMultiplier = 1;
-  }
-  if (sizeMultiplier > 3) {
-    sizeMultiplier = 3;
-  }
-  const gutterSpace = (sizeMultiplier - 1) * 10;
-  const modalPadding = 26;
-  return gridItemWidth * sizeMultiplier + gutterSpace + modalPadding;
-};

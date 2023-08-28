@@ -4,6 +4,35 @@ import GifWriter from '../../lib/gifwriter';
 import NeuQuant from '../../lib/neuquant';
 
 Promise.config({ cancellation: true });
+
+// part of neuquant conversion
+function componentizedPaletteToArray(paletteRGB) {
+  const paletteArray = [];
+  let r;
+  let g;
+  let b;
+  for (let i = 0; i < paletteRGB.length; i += 3) {
+    r = paletteRGB[i];
+    g = paletteRGB[i + 1];
+    b = paletteRGB[i + 2];
+    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
+  }
+  return paletteArray;
+}
+// part of neuquant conversion
+function dataToRGB(data, width, height) {
+  let i = 0;
+  const length = width * height * 4;
+  const rgb = [];
+  while (i < length) {
+    rgb.push(data[i++]);
+    rgb.push(data[i++]);
+    rgb.push(data[i++]);
+    i++;
+  }
+  return rgb;
+}
+
 export default class GifStream {
   constructor() {
     this.canvas = null;
@@ -116,9 +145,6 @@ export default class GifStream {
     if (options.images.length < 1) {
       throw new Error('No images found');
     }
-    options.images.forEach((imageObj) => {
-      imagePromiseArray.push(this.getImagePromise(imageObj).catch(returnError));
-    });
     function returnError(e) {
       const callbackObj = {
         blob: null,
@@ -126,6 +152,9 @@ export default class GifStream {
       };
       callback(callbackObj);
     }
+    options.images.forEach((imageObj) => {
+      imagePromiseArray.push(this.getImagePromise(imageObj).catch(returnError));
+    });
     function returnCancel() {
       console.warn('GIF creation has been cancelled');
       const callbackObj = {
@@ -259,32 +288,4 @@ export default class GifStream {
       loop: options.loop || 0, // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
     });
   }
-}
-
-// part of neuquant conversion
-function componentizedPaletteToArray(paletteRGB) {
-  const paletteArray = [];
-  let r;
-  let g;
-  let b;
-  for (let i = 0; i < paletteRGB.length; i += 3) {
-    r = paletteRGB[i];
-    g = paletteRGB[i + 1];
-    b = paletteRGB[i + 2];
-    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
-  }
-  return paletteArray;
-}
-// part of neuquant conversion
-function dataToRGB(data, width, height) {
-  let i = 0;
-  const length = width * height * 4;
-  const rgb = [];
-  while (i < length) {
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    i++;
-  }
-  return rgb;
 }

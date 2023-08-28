@@ -104,6 +104,28 @@ export function prevDateInDateRange(def, date, dateArray) {
   return { previous, next };
 }
 
+export function getOverlayGroups(layers, prevGroups = []) {
+  const allGroupsMap = {};
+  layers.forEach(({ id, group, layergroup }) => {
+    if (group !== 'overlays') {
+      return;
+    }
+    if (allGroupsMap[layergroup]) {
+      allGroupsMap[layergroup].push(id);
+    } else {
+      allGroupsMap[layergroup] = [id];
+    }
+  });
+  return Object.keys(allGroupsMap).map((groupName) => {
+    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
+    return {
+      groupName,
+      layers: allGroupsMap[groupName],
+      collapsed: prevGroup ? prevGroup.collapsed : false,
+    };
+  });
+}
+
 /**
  * Return revised maxEndDate based on given start/end date limits
  *
@@ -876,6 +898,139 @@ export function serializeGroupOverlays (groupOverlays, state, activeString) {
   return groupOverlays;
 }
 
+const getLayerSpec = (attributes) => {
+  let hidden = false;
+  let opacity = 1.0;
+  let max;
+  let min;
+  let squash;
+  let custom;
+  let disabled;
+  let count;
+  let bandCombo;
+
+  lodashEach(attributes, (attr) => {
+    if (attr.id === 'hidden') {
+      hidden = true;
+    }
+    if (attr.id === 'opacity') {
+      opacity = util.clamp(parseFloat(attr.value), 0, 1);
+      // eslint-disable-next-line no-restricted-globals
+      if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+    }
+    if (attr.id === 'disabled') {
+      const values = util.toArray(attr.value.split(';'));
+      disabled = values;
+    }
+
+    if (attr.id === 'max' && typeof attr.value === 'string') {
+      const maxArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          maxArray.push(undefined);
+          return;
+        }
+        const maxValue = parseFloat(value);
+        if (lodashIsNaN(maxValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid max value: ${value}`);
+        } else {
+          maxArray.push(maxValue);
+        }
+      });
+      max = maxArray.length ? maxArray : undefined;
+    }
+    if (attr.id === 'min' && typeof attr.value === 'string') {
+      const minArray = [];
+      const values = util.toArray(attr.value.split(';'));
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          minArray.push(undefined);
+          return;
+        }
+        const minValue = parseFloat(value);
+        if (lodashIsNaN(minValue)) {
+          // eslint-disable-next-line no-console
+          console.warn(`Invalid min value: ${value}`);
+        } else {
+          minArray.push(minValue);
+        }
+      });
+      min = minArray.length ? minArray : undefined;
+    }
+    if (attr.id === 'squash') {
+      if (attr.value === true) {
+        squash = [true];
+      } else if (typeof attr.value === 'string') {
+        const squashArray = [];
+        const values = util.toArray(attr.value.split(';'));
+        lodashEach(values, (value) => {
+          squashArray.push(value === 'true');
+        });
+        squash = squashArray.length ? squashArray : undefined;
+      }
+    }
+
+    if (attr.id === 'bands') {
+      const values = util.toArray(attr.value.split(';'));
+      bandCombo = values;
+    }
+
+    if (attr.id === 'palette') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    if (attr.id === 'style') {
+      const values = util.toArray(attr.value.split(';'));
+      custom = values;
+    }
+    // granule specific count (defaults to 20 if no param)
+    if (attr.id === 'count') {
+      count = Number(attr.value);
+    }
+  });
+
+  return {
+    hidden,
+    opacity,
+    count,
+    bandCombo,
+
+    // only include palette attributes if Array.length condition
+    // is true: https://stackoverflow.com/a/40560953/4589331
+    ...isArray(custom) && { custom },
+    ...isArray(min) && { min },
+    ...isArray(squash) && { squash },
+    ...isArray(max) && { max },
+    ...isArray(disabled) && { disabled },
+  };
+};
+
+const createLayerArrayFromState = function(layers, config) {
+  let layerArray = [];
+  if (lodashIsUndefined(layers)) {
+    return layerArray;
+  }
+  const projection = lodashGet(config, 'parameters.p') || 'geographic';
+  layers.reverse().forEach((layerDef) => {
+    if (!config.layers[layerDef.id]) {
+      // eslint-disable-next-line no-console
+      console.warn(`No such layer: ${layerDef.id}`);
+      return;
+    }
+    layerArray = addLayer(
+      layerDef.id,
+      getLayerSpec(layerDef.attributes),
+      layerArray,
+      config.layers,
+      null,
+      projection,
+    );
+  });
+  return layerArray;
+};
+
 // this function takes an array of date ranges in this format:
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
@@ -1060,139 +1215,6 @@ export function layersParse12(stateObj, config) {
     return resetLayers(config);
   }
 }
-
-const getLayerSpec = (attributes) => {
-  let hidden = false;
-  let opacity = 1.0;
-  let max;
-  let min;
-  let squash;
-  let custom;
-  let disabled;
-  let count;
-  let bandCombo;
-
-  lodashEach(attributes, (attr) => {
-    if (attr.id === 'hidden') {
-      hidden = true;
-    }
-    if (attr.id === 'opacity') {
-      opacity = util.clamp(parseFloat(attr.value), 0, 1);
-      // eslint-disable-next-line no-restricted-globals
-      if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
-    }
-    if (attr.id === 'disabled') {
-      const values = util.toArray(attr.value.split(';'));
-      disabled = values;
-    }
-
-    if (attr.id === 'max' && typeof attr.value === 'string') {
-      const maxArray = [];
-      const values = util.toArray(attr.value.split(';'));
-      lodashEach(values, (value, index) => {
-        if (value === '') {
-          maxArray.push(undefined);
-          return;
-        }
-        const maxValue = parseFloat(value);
-        if (lodashIsNaN(maxValue)) {
-          // eslint-disable-next-line no-console
-          console.warn(`Invalid max value: ${value}`);
-        } else {
-          maxArray.push(maxValue);
-        }
-      });
-      max = maxArray.length ? maxArray : undefined;
-    }
-    if (attr.id === 'min' && typeof attr.value === 'string') {
-      const minArray = [];
-      const values = util.toArray(attr.value.split(';'));
-      lodashEach(values, (value, index) => {
-        if (value === '') {
-          minArray.push(undefined);
-          return;
-        }
-        const minValue = parseFloat(value);
-        if (lodashIsNaN(minValue)) {
-          // eslint-disable-next-line no-console
-          console.warn(`Invalid min value: ${value}`);
-        } else {
-          minArray.push(minValue);
-        }
-      });
-      min = minArray.length ? minArray : undefined;
-    }
-    if (attr.id === 'squash') {
-      if (attr.value === true) {
-        squash = [true];
-      } else if (typeof attr.value === 'string') {
-        const squashArray = [];
-        const values = util.toArray(attr.value.split(';'));
-        lodashEach(values, (value) => {
-          squashArray.push(value === 'true');
-        });
-        squash = squashArray.length ? squashArray : undefined;
-      }
-    }
-
-    if (attr.id === 'bands') {
-      const values = util.toArray(attr.value.split(';'));
-      bandCombo = values;
-    }
-
-    if (attr.id === 'palette') {
-      const values = util.toArray(attr.value.split(';'));
-      custom = values;
-    }
-    if (attr.id === 'style') {
-      const values = util.toArray(attr.value.split(';'));
-      custom = values;
-    }
-    // granule specific count (defaults to 20 if no param)
-    if (attr.id === 'count') {
-      count = Number(attr.value);
-    }
-  });
-
-  return {
-    hidden,
-    opacity,
-    count,
-    bandCombo,
-
-    // only include palette attributes if Array.length condition
-    // is true: https://stackoverflow.com/a/40560953/4589331
-    ...isArray(custom) && { custom },
-    ...isArray(min) && { min },
-    ...isArray(squash) && { squash },
-    ...isArray(max) && { max },
-    ...isArray(disabled) && { disabled },
-  };
-};
-
-const createLayerArrayFromState = function(layers, config) {
-  let layerArray = [];
-  if (lodashIsUndefined(layers)) {
-    return layerArray;
-  }
-  const projection = lodashGet(config, 'parameters.p') || 'geographic';
-  layers.reverse().forEach((layerDef) => {
-    if (!config.layers[layerDef.id]) {
-      // eslint-disable-next-line no-console
-      console.warn(`No such layer: ${layerDef.id}`);
-      return;
-    }
-    layerArray = addLayer(
-      layerDef.id,
-      getLayerSpec(layerDef.attributes),
-      layerArray,
-      config.layers,
-      null,
-      projection,
-    );
-  });
-  return layerArray;
-};
 
 export function mapLocationToLayerState(
   parameters,
@@ -1557,28 +1579,6 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
     layers[targetLayerId].futureTime = mockFutureTime;
   }
-}
-
-export function getOverlayGroups(layers, prevGroups = []) {
-  const allGroupsMap = {};
-  layers.forEach(({ id, group, layergroup }) => {
-    if (group !== 'overlays') {
-      return;
-    }
-    if (allGroupsMap[layergroup]) {
-      allGroupsMap[layergroup].push(id);
-    } else {
-      allGroupsMap[layergroup] = [id];
-    }
-  });
-  return Object.keys(allGroupsMap).map((groupName) => {
-    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
-    return {
-      groupName,
-      layers: allGroupsMap[groupName],
-      collapsed: prevGroup ? prevGroup.collapsed : false,
-    };
-  });
 }
 
 export function getLayersFromGroups (state, groups) {

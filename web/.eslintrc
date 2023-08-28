@@ -91,14 +91,6 @@
             "props": false
           }
         ],
-        "no-use-before-define": [     // 238 errors across 56 files
-          "error",
-          {
-            "functions": false,
-            "classes": true,
-            "variables": false
-          }
-        ],
         // Import rules overrides
         "import/no-cycle": "warn",
         // Accesibility rules overrides

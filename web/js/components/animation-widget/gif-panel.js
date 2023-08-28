@@ -9,6 +9,16 @@ import { getDimensions } from '../../modules/image-download/util';
 const MAX_GIF_SIZE = 250;
 const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
+const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
+  return (
+    requestSize < MAX_GIF_SIZE
+    && imgHeight !== 0
+    && imgWidth !== 0
+    && imgHeight <= MAX_IMAGE_DIMENSION_SIZE
+    && imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+  );
+};
+
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -119,13 +129,4 @@ GifPanel.propTypes = {
   showDates: PropTypes.bool,
   speed: PropTypes.number,
   startDate: PropTypes.string,
-};
-const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
-  return (
-    requestSize < MAX_GIF_SIZE
-    && imgHeight !== 0
-    && imgWidth !== 0
-    && imgHeight <= MAX_IMAGE_DIMENSION_SIZE
-    && imgWidth <= MAX_IMAGE_DIMENSION_SIZE
-  );
 };

@@ -221,6 +221,24 @@ export function parseLegacyPalettes(
   return stateFromLocation;
 }
 
+const createPaletteAttributeObject = function(def, value, attrObj, count) {
+  const { key } = attrObj;
+  const attrArray = attrObj.array;
+  let hasAtLeastOnePair = attrObj.isActive;
+  value = isArray(value) ? value.join(',') : value;
+  if (def[key] && value) {
+    attrArray.push(value);
+    hasAtLeastOnePair = true;
+  } else if (count > 1) {
+    attrArray.push('');
+  }
+  return lodashAssign({}, attrObj, {
+    array: attrArray,
+    isActive: hasAtLeastOnePair,
+    value: attrArray.join(';'),
+  });
+};
+
 /**
  * Serialize palette info for layer
  *
@@ -306,24 +324,6 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     return [];
   }
 }
-
-const createPaletteAttributeObject = function(def, value, attrObj, count) {
-  const { key } = attrObj;
-  const attrArray = attrObj.array;
-  let hasAtLeastOnePair = attrObj.isActive;
-  value = isArray(value) ? value.join(',') : value;
-  if (def[key] && value) {
-    attrArray.push(value);
-    hasAtLeastOnePair = true;
-  } else if (count > 1) {
-    attrArray.push('');
-  }
-  return lodashAssign({}, attrObj, {
-    array: attrArray,
-    isActive: hasAtLeastOnePair,
-    value: attrArray.join(';'),
-  });
-};
 
 /**
  * Initiate palette from layer information that was derived from the

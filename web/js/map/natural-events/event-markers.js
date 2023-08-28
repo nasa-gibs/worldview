@@ -32,6 +32,59 @@ const icons = [
   'Wildfires',
 ];
 
+const createPin = function(id, category, isSelected, title, hideTooltip) {
+  const overlayEl = document.createElement('div');
+  ReactDOM.render(
+    React.createElement(EventIcon, {
+      category: category.title,
+      title,
+      id,
+      hideTooltip,
+      isSelected,
+    }),
+    overlayEl,
+  );
+  return new OlOverlay({
+    element: overlayEl,
+    positioning: 'bottom-center',
+    stopEvent: false,
+    className: isSelected ? 'marker selected' : 'marker',
+    id,
+  });
+};
+
+const createBoundingBox = function(coordinates, title, proj = CRS.GEOGRAPHIC) {
+  const lightStroke = new OlStyleStyle({
+    stroke: new OlStyleStroke({
+      color: [255, 255, 255, 0.6],
+      width: 2,
+      lineDash: [8, 12],
+      lineDashOffset: 6,
+    }),
+  });
+  const darkStroke = new OlStyleStyle({
+    stroke: new OlStyleStroke({
+      color: [0, 0, 0, 0.6],
+      width: 2,
+      lineDash: [8, 12],
+    }),
+  });
+  const boxPolygon = new OlGeomPolygon(coordinates).transform(CRS.GEOGRAPHIC, proj);
+  const boxFeature = new OlFeature({
+    geometry: boxPolygon,
+    name: title,
+  });
+  const vectorSource = new OlSourceVector({
+    features: [boxFeature],
+    wrapX: false,
+  });
+
+  return new OlLayerVector({
+    source: vectorSource,
+    style: [lightStroke, darkStroke],
+  });
+};
+
 class EventMarkers extends React.Component {
   constructor(props) {
     super(props);
@@ -206,59 +259,6 @@ class EventMarkers extends React.Component {
     return null;
   }
 }
-
-const createPin = function(id, category, isSelected, title, hideTooltip) {
-  const overlayEl = document.createElement('div');
-  ReactDOM.render(
-    React.createElement(EventIcon, {
-      category: category.title,
-      title,
-      id,
-      hideTooltip,
-      isSelected,
-    }),
-    overlayEl,
-  );
-  return new OlOverlay({
-    element: overlayEl,
-    positioning: 'bottom-center',
-    stopEvent: false,
-    className: isSelected ? 'marker selected' : 'marker',
-    id,
-  });
-};
-
-const createBoundingBox = function(coordinates, title, proj = CRS.GEOGRAPHIC) {
-  const lightStroke = new OlStyleStyle({
-    stroke: new OlStyleStroke({
-      color: [255, 255, 255, 0.6],
-      width: 2,
-      lineDash: [8, 12],
-      lineDashOffset: 6,
-    }),
-  });
-  const darkStroke = new OlStyleStyle({
-    stroke: new OlStyleStroke({
-      color: [0, 0, 0, 0.6],
-      width: 2,
-      lineDash: [8, 12],
-    }),
-  });
-  const boxPolygon = new OlGeomPolygon(coordinates).transform(CRS.GEOGRAPHIC, proj);
-  const boxFeature = new OlFeature({
-    geometry: boxPolygon,
-    name: title,
-  });
-  const vectorSource = new OlSourceVector({
-    features: [boxFeature],
-    wrapX: false,
-  });
-
-  return new OlLayerVector({
-    source: vectorSource,
-    style: [lightStroke, darkStroke],
-  });
-};
 
 const mapStateToProps = (state) => {
   const {

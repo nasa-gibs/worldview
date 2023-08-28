@@ -39,12 +39,6 @@ function DateRangeTileCheck(props) {
   const dispatch = useDispatch();
   const toggleCheckedAnimationAvailability = (available) => { dispatch(toggleCheckedAnimationAvailabilityAction(available)); };
 
-  useEffect(() => {
-    if (frameDates.length) {
-      getAvailability();
-    }
-  }, [frameDates]);
-
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day) => {
     let extent;
     let origin;
@@ -240,6 +234,12 @@ function DateRangeTileCheck(props) {
       console.log('Bad Check: ', percentMissing, '% ', ' of dates with missing frames. Aborting animation.');
     }
   }
+
+  useEffect(() => {
+    if (frameDates.length) {
+      getAvailability();
+    }
+  }, [frameDates]);
 
   return null;
 }

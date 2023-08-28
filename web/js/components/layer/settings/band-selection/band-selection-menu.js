@@ -14,14 +14,16 @@ import { onClose } from '../../../../modules/modal/actions';
 
 export default function BandSelection({ layer }) {
   const dispatch = useDispatch();
-  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo, layerIndex)); };
-  const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
-  const closeModal = () => { dispatch(onClose()); };
   const { activeLayers } = useSelector((state) => ({
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
-
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
+  const updateBandCombination = (id, bandCombo) => {
+    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex));
+  };
+  const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
+  const closeModal = () => { dispatch(onClose()); };
+
 
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [bandSelection, setBandSelection] = useState({

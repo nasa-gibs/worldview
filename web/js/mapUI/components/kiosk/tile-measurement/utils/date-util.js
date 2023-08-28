@@ -1,10 +1,11 @@
-// Return an array of dates based on the period (daily or subdaily)
-// Accepts redux selectedDate value and period
-export function getDates(selectedDate, period) {
-  if (period === 'daily') {
-    return getDailyDates(selectedDate);
-  }
-  return getSubdailyDates(selectedDate);
+// format a single daily date
+// Accepts a date object
+function formatDailyDate (date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 // Return an array of daily dates for the past 7 days
@@ -25,14 +26,16 @@ function getDailyDates (selectedDate) {
   return prevDates;
 }
 
-// format a single daily date
-// Accepts a date object
-function formatDailyDate (date) {
+// format a single subdaily date
+// accepts a date object
+function formatSubdailyDate (date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
+  const hour = date.getHours().toString().padStart(2, '0');
+  const minute = date.getMinutes().toString().padStart(2, '0');
 
-  return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }
 
 // Return an array of subdaily dates for the past 2 hours in ten minute intervals
@@ -60,16 +63,13 @@ function getSubdailyDates (selectedDate) {
   return prevDates;
 }
 
-// format a single subdaily date
-// accepts a date object
-function formatSubdailyDate (date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hour = date.getHours().toString().padStart(2, '0');
-  const minute = date.getMinutes().toString().padStart(2, '0');
-
-  return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
+// Return an array of dates based on the period (daily or subdaily)
+// Accepts redux selectedDate value and period
+export function getDates(selectedDate, period) {
+  if (period === 'daily') {
+    return getDailyDates(selectedDate);
+  }
+  return getSubdailyDates(selectedDate);
 }
 
 // Format a daily redux date to be used in the WMS request
@@ -94,16 +94,6 @@ export function formatReduxSubdailyDate(selectedDate) {
   const minute = date.getMinutes().toString().padStart(2, '0');
 
   return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
-}
-
-export function getOrbitalDates (selectedDate, latestDate, searchMethod) {
-  if (searchMethod === 1) {
-    return getOrbitalDatesForwards(selectedDate, latestDate);
-  } if (searchMethod === 2) {
-    return getOrbitalDatesBackwards(selectedDate);
-  } if (searchMethod === 3) {
-    return getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate);
-  }
 }
 
 export function getOrbitalDatesBackwards (selectedDate) {
@@ -170,4 +160,14 @@ export function getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate) {
   }
   // Trim the array down to 14 elements in case we've added too many
   return mixedDates.slice(0, 14);
+}
+
+export function getOrbitalDates (selectedDate, latestDate, searchMethod) {
+  if (searchMethod === 1) {
+    return getOrbitalDatesForwards(selectedDate, latestDate);
+  } if (searchMethod === 2) {
+    return getOrbitalDatesBackwards(selectedDate);
+  } if (searchMethod === 3) {
+    return getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate);
+  }
 }
