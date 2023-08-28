@@ -24,12 +24,12 @@ function Input({
   const update = () => {
     try {
       const newInputValue = Number(inputValue);
-      const newArray = structuredClone(boundingBoxArray);
-      newArray[index] = newInputValue;
-      const minX = Math.min(newArray[0], newArray[2]);
-      const minY = Math.min(newArray[1], newArray[3]);
-      const maxX = Math.max(newArray[0], newArray[2]);
-      const maxY = Math.max(newArray[1], newArray[3]);
+      const clonedBBoxArray = structuredClone(boundingBoxArray);
+      clonedBBoxArray[index] = newInputValue;
+      const minX = Math.min(clonedBBoxArray[0], clonedBBoxArray[2]);
+      const minY = Math.min(clonedBBoxArray[1], clonedBBoxArray[3]);
+      const maxX = Math.max(clonedBBoxArray[0], clonedBBoxArray[2]);
+      const maxY = Math.max(clonedBBoxArray[1], clonedBBoxArray[3]);
       const validExtent = [minX, minY, maxX, maxY];
 
       const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
