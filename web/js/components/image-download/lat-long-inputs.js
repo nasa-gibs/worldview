@@ -35,10 +35,10 @@ function Input({
       const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
-      && isValidExtent(newArray)
+      && isValidExtent(clonedBBoxArray)
       && !isEmpty(crsCorrectedExtent)
       && !Number.isNaN(newInputValue)) {
-        onLatLongChange(newArray);
+        onLatLongChange(clonedBBoxArray);
         setInputInvalid(false);
       } else {
         setInputValue(boundingBoxArray[index].toFixed(4));
