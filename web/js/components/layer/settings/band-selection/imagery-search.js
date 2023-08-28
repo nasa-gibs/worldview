@@ -26,12 +26,12 @@ export default function ImagerySearch({ layer }) {
     setGranulesStatus('loading');
     const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${selectedDate.toISOString()}&sort_key=-start_date&pageSize=20`);
     const olderGranules = await olderResponse.json();
-    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${selectedDate.toISOString()},&sort_key=-start_date&pageSize=20`);
+    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${selectedDate.toISOString()},&sort_key=start_date&pageSize=20`);
     const newerGranules = await newerResponse.json();
     setGranulesStatus('loaded');
     const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
-    const dates = [...new Set([...olderDates, ...newerDates])];
+    const dates = [...new Set([...olderDates, ...newerDates])].sort((a, b) => Date.parse(b) - Date.parse(a));
     setGranuleDates(dates);
   };
 
@@ -42,7 +42,7 @@ export default function ImagerySearch({ layer }) {
 
   return (
     <div className="imagery-search-container">
-      <div className="customize-bands-button-container">
+      <div>
         <Button
           id="search-for-imagery"
           aria-label="Search for Imagery"
@@ -57,7 +57,7 @@ export default function ImagerySearch({ layer }) {
       {
         granulesStatus === 'loaded'
           ? (
-            <Dropdown isOpen={dropdownOpen} toggle={toggle} size="sm">
+            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
                 Select Date
               </DropdownToggle>
