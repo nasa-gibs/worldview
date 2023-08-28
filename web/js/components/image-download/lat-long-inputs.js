@@ -120,7 +120,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={3}
-                    title="max Latitude"
+                    title="Latitude"
                   />
                   <Input
                     crs={crs}
@@ -129,7 +129,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={2}
-                    title="max Longitude"
+                    title="Longitude"
                   />
                 </div>
               </div>
@@ -147,7 +147,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={1}
-                    title="min Latitude"
+                    title="Latitude"
                   />
                   <Input
                     crs={crs}
@@ -156,7 +156,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={0}
-                    title="min Longitude"
+                    title="Longitude"
                   />
                 </div>
               </div>
