@@ -7,14 +7,6 @@ const imgPath = 'images/layers/previews/geographic/';
 
 const landsatPresets = [
   {
-    id: 'HLS_True_Color_Landsat',
-    title: 'True Color',
-    r: 'B04',
-    g: 'B03',
-    b: 'B02',
-    img: 'HLS_True_Color_Landsat.jpg',
-  },
-  {
     id: 'HLS_False_Color_Landsat',
     title: 'False Color',
     r: 'B05',
@@ -49,14 +41,6 @@ const landsatPresets = [
 ];
 
 const sentinelPresets = [
-  {
-    id: 'HLS_True_Color_Sentinel',
-    title: 'True Color',
-    r: 'B04',
-    g: 'B03',
-    b: 'B02',
-    img: 'HLS_True_Color_Sentinel.jpg',
-  },
   {
     id: 'HLS_False_Color_Sentinel',
     title: 'False Color',
