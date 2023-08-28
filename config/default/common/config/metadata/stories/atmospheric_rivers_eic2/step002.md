@@ -1,2 +1,0 @@
-<p>Tulare Lake, San Joaquin Valley</p>
-<p>Once the largest freshwater lake west of the Mississippi River, feeder rivers were diverted for irrigation and municipal water use. Since the 1920s, the dry lakebed has been used to grow crops like almonds and tomatoes.</p>
