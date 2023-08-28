@@ -31,7 +31,6 @@
                     "settings": [
                         "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
                         "HLS_Customizable_Landsat",
-                        "HLS_True_Color_Landsat",
 	                    "HLS_False_Color_Landsat",
                         "HLS_False_Color_Urban_Landsat",
 		                "HLS_False_Color_Vegetation_Landsat",
