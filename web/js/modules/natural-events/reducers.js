@@ -11,6 +11,7 @@ import {
   DESELECT_EVENT,
   SET_EVENTS_FILTER,
   FINISHED_ANIMATING_TO_EVENT,
+  HIGHLIGHT_EVENT,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
@@ -42,6 +43,10 @@ const eventsReducerState = {
     date: null,
     eventObject: null,
     geometryForDate: null,
+  },
+  highlighted: {
+    id: '',
+    date: null,
   },
   active: false,
   showAll: true,
@@ -113,6 +118,18 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         isAnimatingToEvent: false,
       };
+    case HIGHLIGHT_EVENT: {
+      const {
+        id, date,
+      } = action;
+      return {
+        ...state,
+        highlighted: {
+          id,
+          date,
+        },
+      };
+    }
     default:
       return state;
   }

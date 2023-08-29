@@ -9,10 +9,12 @@ import { CRS } from '../../modules/map/constants';
 *
 * @param  {Object} clusterPoint
 * @param  {Boolean} isSelected
+* @param  {Boolean} isHighlighted
 * @param  {Function} callback
+* @param  {Function} callbackHighlight
 * @return {Object} Openlayers overlay object
 */
-export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) {
+export const getTrackPoint = function(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight) {
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
@@ -45,9 +47,15 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   overlayEl.onclick = function() {
     callback(eventID, date);
   };
+  overlayEl.onmouseenter = function() {
+    callbackHighlight(eventID, date);
+  };
+  overlayEl.onmouseleave = function() {
+    callbackHighlight('', null);
+  };
   textEl.appendChild(content);
   textEl.appendChild(magnitudeContent);
-  if (isSelected) {
+  if (isHighlighted) {
     textEl.className = 'track-marker-date track-marker-date-selected';
     setTimeout(() => {
       textEl.className = 'track-marker-date';
@@ -58,6 +66,9 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
   }
   circleEl.className = `track-marker track-marker-${date}`;
   circleEl.id = `track-marker-${date}`;
+  circleEl.style.height = isHighlighted ? '13px' : '';
+  circleEl.style.width = isHighlighted ? '13px' : '';
+  circleEl.style.borderRadius = isHighlighted ? '7px' : '';
   overlayEl.appendChild(circleEl);
   overlayEl.appendChild(textEl);
 
@@ -77,9 +88,10 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, callback) 
  *
  * @param  {Array} lineSegmentCoords Start and end points of line in Lat/long
  * @param  {Object} map OpenLayers map Object
+ * @param  {Boolean} isHighlighted If the event is highlighted
  * @return {Object} Openlayers overlay Object
  */
-export const getArrows = function(lineSegmentCoords, map) {
+export const getArrows = function(lineSegmentCoords, map, isHighlighted) {
   const currentRotation = map.getView().getRotation();
   const overlayEl = document.createElement('div');
   const arrowEl = document.createElement('div');
@@ -103,6 +115,7 @@ export const getArrows = function(lineSegmentCoords, map) {
   arrowEl.style.width = `${lengthOfArrowDiv}px`;
   arrowEl.style.height = '16px';
   arrowEl.style.transform = `translate(${-(lengthOfArrowDiv / 2)}px, -8px)`;
+  arrowEl.style.backgroundSize = isHighlighted ? '200px' : '';
 
   overlayEl.appendChild(arrowEl);
   overlayEl.style.width = '1px';
@@ -118,10 +131,19 @@ export const getArrows = function(lineSegmentCoords, map) {
   });
 };
 
-export const getTrackLines = function(map, trackCoords, isHighlighted) {
+/**
+* Create event tracklines
+*
+* @param  {Object} trackCoords
+* @param  {Boolean} isHighlighted
+* @param  {String} eventID
+* @param  {String} date
+* @param  {Function} callback
+* @param  {Function} callbackHighlight
+* @return {Object} Openlayers overlay object
+*/
+export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, date, callback, callbackHighlight) {
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-  const outlineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
   let lineString = '';
   const pixelCoords = trackCoords.map(([start, end]) => [
     map.getPixelFromCoordinate(end),
@@ -149,27 +171,47 @@ export const getTrackLines = function(map, trackCoords, isHighlighted) {
   svgEl.style.width = `${width + 5}px`;
   svgEl.setAttribute('height', height.toFixed(0));
   svgEl.setAttribute('width', width.toFixed(0));
-  svgEl.appendChild(outlineEl);
-  svgEl.appendChild(lineEl);
 
   pixelCoords.forEach(([[x1, y1], [x2, y2]], index) => {
     const newEnd = `${(x1 - minX).toFixed(0)},${(y1 - minY).toFixed(0)}`;
     const newStart = `${(x2 - minX).toFixed(0)},${(y2 - minY).toFixed(0)}`;
-    lineString += `${newStart} ${newEnd} `;
+    lineString = `${newStart} ${newEnd} `;
+
+    const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    lineEl.style.fill = 'transparent';
+    lineEl.style.stroke = isHighlighted ? 'yellow' : 'white';
+    lineEl.style.strokeWidth = isHighlighted ? '2px' : '1px';
+    lineEl.setAttribute('points', lineString);
+
+    const outlineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    outlineEl.style.fill = 'transparent';
+    outlineEl.style.stroke = 'rgba(0,0,0,0.5)';
+    outlineEl.style.strokeWidth = isHighlighted ? '5px' : '3px';
+    outlineEl.setAttribute('points', lineString);
+
+    const clickEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    clickEl.style.fill = 'transparent';
+    clickEl.style.stroke = 'transparent';
+    clickEl.style.strokeWidth = '10px';
+    clickEl.setAttribute('points', lineString);
+    clickEl.classList.add('clickable-track-line');
+    clickEl.onclick = function() {
+      callback(eventID, date);
+    };
+    clickEl.onmouseover = function() {
+      callbackHighlight(eventID, date);
+    };
+    clickEl.onmouseleave = function() {
+      callbackHighlight('', null);
+    };
+
+    svgEl.appendChild(outlineEl);
+    svgEl.appendChild(clickEl);
+    svgEl.appendChild(lineEl);
   });
 
-  lineEl.style.fill = 'transparent';
-  lineEl.style.stroke = isHighlighted ? 'yellow' : 'white';
-  lineEl.style.strokeWidth = isHighlighted ? '2px' : '1px';
-  lineEl.setAttribute('points', lineString);
-
-  outlineEl.style.fill = 'transparent';
-  outlineEl.style.stroke = 'rgba(0,0,0,0.5)';
-  outlineEl.style.strokeWidth = isHighlighted ? '5px' : '3px';
-  outlineEl.setAttribute('points', lineString);
-
   return new OlOverlay({
-    className: 'event-track-line',
+    className: !isHighlighted ? 'event-track-line' : 'event-track-line highlighted-track-line',
     position: map.getCoordinateFromPixel(topLeft),
     positioning: 'top-left',
     insertFirst: true,
@@ -185,7 +227,6 @@ export const getTrackLines = function(map, trackCoords, isHighlighted) {
  * @param  {Object} clusterPoint
  * @param  {Object} map Openlayers map object
  * @param  {Object} pointClusterObj supercluster object
- * @param  {Function} callback
  * @return {Object} Openlayers overlay object
  */
 export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) {

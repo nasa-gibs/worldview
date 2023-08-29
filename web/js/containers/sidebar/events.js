@@ -13,6 +13,7 @@ import Scrollbars from '../../components/util/scrollbar';
 import {
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
+  highlightEvent as highlightEventActionCreator,
 } from '../../modules/natural-events/actions';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
@@ -34,7 +35,9 @@ function Events(props) {
     isLoading,
     layers,
     selectEvent,
+    highlightEvent,
     selected,
+    highlighted,
     openFilterModal,
     height,
     deselectEvent,
@@ -108,11 +111,13 @@ function Events(props) {
               event={event}
               selectEvent={(id, date) => selectEvent(id, date, isMobile)}
               deselectEvent={deselectEvent}
+              highlightEvent={(id, date) => highlightEvent(id, date)}
               removeGroup={removeGroup}
               eventLayers={eventLayers}
               toggleVisibility={toggleVisibility}
               toggleGroupVisibility={toggleGroupVisibility}
               isSelected={selected.id === event.id}
+              isHighlighted={highlighted.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
               defaultEventLayer={defaultEventLayer}
@@ -157,6 +162,9 @@ const mapDispatchToProps = (dispatch) => ({
   deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
+  highlightEvent: (id, dateStr) => {
+    dispatch(highlightEventActionCreator(id, dateStr));
+  },
   openFilterModal: () => {
     dispatch(toggleCustomContent('events-filter', {
       headerText: 'Filter Events',
@@ -192,7 +200,7 @@ const mapStateToProps = (state) => {
   } = state;
 
   const {
-    selected, showAll, selectedDates, selectedCategories,
+    selected, highlighted, showAll, selectedDates, selectedCategories,
   } = events;
   const { isEmbedModeActive } = embed;
 
@@ -207,6 +215,7 @@ const mapStateToProps = (state) => {
     showAll,
     showDates: !!(selectedDates.start && selectedDates.end),
     selected,
+    highlighted,
     selectedCategories,
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
@@ -232,12 +241,14 @@ Events.propTypes = {
   openFilterModal: PropTypes.func,
   removeGroup: PropTypes.func,
   selected: PropTypes.object,
+  highlighted: PropTypes.object,
   selectedDate: PropTypes.string,
   showDates: PropTypes.bool,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   selectedCategories: PropTypes.array,
   selectEvent: PropTypes.func,
+  highlightEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
   toggleGroupVisibility: PropTypes.func,

@@ -14,7 +14,10 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
-import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import {
+  selectEvent as selectEventAction,
+  highlightEvent as highlightEventAction
+} from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
@@ -140,7 +143,7 @@ class EventMarkers extends React.Component {
   }
 
   addInteractions(marker, event, date, isSelected) {
-    const { selectEvent, mapUi } = this.props;
+    const { selectEvent, highlightEvent, mapUi } = this.props;
     const category = event.categories[0];
     let willSelect = true;
     let moveCount = 0;
@@ -169,6 +172,12 @@ class EventMarkers extends React.Component {
         });
       }
     };
+    const onMouseEnter = (e) => {
+      highlightEvent(event.id, date);
+    };
+    const onMouseLeave = (e) => {
+      highlightEvent('', null);
+    };
 
     ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
       pinEl.addEventListener(type, onMouseDownTouchStart, options);
@@ -178,6 +187,12 @@ class EventMarkers extends React.Component {
     });
     ['pointermove', 'mousemove'].forEach((type) => {
       pinEl.addEventListener(type, onMouseMove, options);
+    });
+    ['mouseenter'].forEach((type) => {
+      pinEl.addEventListener(type, onMouseEnter, options);
+    });
+    ['mouseleave'].forEach((type) => {
+      pinEl.addEventListener(type, onMouseLeave, options);
     });
   }
 
@@ -283,6 +298,9 @@ const mapDispatchToProps = (dispatch) => ({
   selectEvent: (id, date) => {
     dispatch(selectEventAction(id, date));
   },
+  highlightEvent: (id, date) => {
+    dispatch(highlightEventAction(id, date));
+  },
 });
 
 EventMarkers.propTypes = {
@@ -295,6 +313,7 @@ EventMarkers.propTypes = {
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
+  highlightEvent: PropTypes.func,
 };
 
 export default connect(

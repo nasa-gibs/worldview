@@ -9,8 +9,12 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
   getClusters,
 } from './cluster';
-import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import {
+  selectEvent as selectEventAction,
+  highlightEvent as highlightEventAction,
+} from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
+import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { CRS } from '../../modules/map/constants';
 import usePrevious from '../../util/customHooks';
 
@@ -60,7 +64,7 @@ const updateSelection = function(newDate) {
  * @param {Function} showAllTracks
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks, selectedEvent) {
+const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, callbackHighlight, showAllTracks, isHighlighted) {
   const pointsAndArrows = [];
   const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
@@ -81,17 +85,17 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
         nextCoordinates = olProj.transform(nextCoordinates, CRS.GEOGRAPHIC, crs);
       }
       const lineSegmentArray = [prevCoordinates, nextCoordinates];
-      const arrowOverlay = getArrows(lineSegmentArray, map);
+      const arrowOverlay = getArrows(lineSegmentArray, map, isHighlighted);
       pointsAndArrows.push(arrowOverlay);
       trackSegments.push(lineSegmentArray);
     }
     const point = clusterPoint.properties.cluster
       ? getClusterPointEl(proj, clusterPoint, map, pointClusterObj, callback)
-      : getTrackPoint(proj, clusterPoint, isSelected, callback);
+      : getTrackPoint(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight);
     pointsAndArrows.push(point);
   });
   return {
-    track: getTrackLines(map, trackSegments, eventObj.id === selectedEvent.id),
+    track: getTrackLines(map, trackSegments, isHighlighted, eventObj.id, getDefaultEventDate(eventObj), callback, callbackHighlight),
     pointsAndArrows,
   };
 };
@@ -107,6 +111,7 @@ function addOverlayIfIsVisible (map, overlay) {
 function EventTrack () {
   const dispatch = useDispatch();
   const selectEvent = (id, date) => dispatch(selectEventAction(id, date));
+  const highlightEvent = (id, date) => dispatch(highlightEventAction(id, date));
 
   const eventsData = useSelector((state) => getFilteredEvents(state), shallowEqual);
   const isAnimatingToEvent = useSelector((state) => state.animation.isAnimatingToEvent);
@@ -117,6 +122,7 @@ function EventTrack () {
   const selectedDate = useSelector((state) => state.date.selected, shallowEqual);
   const selectedEvent = useSelector((state) => state.events.selected, shallowEqual);
   const showAllTracks = useSelector((state) => state.events.showAllTracks);
+  const highlightedEvent = useSelector((state) => state.events.highlighted, shallowEqual);
 
   const [trackDetails, setTrackDetails] = useState({});
   const [allTrackDetails, setAllTrackDetails] = useState([]);
@@ -188,7 +194,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, showAllTracksRef.current, selectedEvent);
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, showAllTracksRef.current, singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id);
 
       newTrackDetails = {
         id: eventID,
@@ -226,7 +232,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, selectedEvent);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, event.id === selectedEvent.id || event.id === highlightedEvent.id);
 
       newTrackDetails = {
         id: event.id,
@@ -302,10 +308,10 @@ function EventTrack () {
   const prevSelectedDate = usePrevious(selectedDate);
   const prevSelectedEvent = usePrevious(selectedEvent);
   const prevIsAnimatingToEvent = usePrevious(isAnimatingToEvent);
-  const prevEventsData = usePrevious(eventsData);
   const prevMap = usePrevious(mapRef.current);
   const prevExtent = usePrevious(extent);
   const prevShowAllTracks = usePrevious(showAllTracks);
+  const prevHighlightedEvent = usePrevious(highlightedEvent);
 
   useEffect(
     () => {
@@ -313,8 +319,9 @@ function EventTrack () {
         !== (prevSelectedDate && prevSelectedDate?.valueOf());
       const eventDeselect = (selectedEvent !== prevSelectedEvent?.id) && !selectedEvent?.id;
       const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevIsAnimatingToEvent);
-      const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevEventsData);
+      const eventsLoaded = eventsData && eventsData.length;
       const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
+      const highlightedEventChange = (highlightedEvent?.id !== prevHighlightedEvent?.id);
 
       if (mapRef.current !== prevMap) {
         if (prevMap) {
@@ -334,7 +341,7 @@ function EventTrack () {
       }
 
       // show all tracks when selecting as option
-      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current || selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current || selectedDateChange || finishedAnimating || eventsLoaded || extentChange || highlightedEventChange)) {
         debouncedUpdateAllTracks();
       }
 
@@ -348,7 +355,7 @@ function EventTrack () {
         removeTrack(mapRef.current);
       }
     },
-    [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracksRef.current],
+    [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracksRef.current, highlightedEvent],
   );
 
   return null;

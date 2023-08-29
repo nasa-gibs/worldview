@@ -16,23 +16,25 @@ function Event (props) {
     event,
     eventLayers,
     isSelected,
+    isHighlighted,
     layers,
     removeGroup,
     selectedDate,
     selectEvent,
+    highlightEvent,
     sources,
     toggleGroupVisibility,
     toggleVisibility,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
-  const itemClass = isSelected
+  const itemClass = isSelected || isHighlighted
     ? 'item-selected event item'
     : 'event item';
 
   const elRef = useRef();
   useLayoutEffect(() => {
     setTimeout(() => {
-      if (!elRef || !elRef.current || !isSelected) return;
+      if (!elRef || !elRef.current || !isHighlighted) return;
       elRef.current.scrollIntoView();
     });
   }, [isSelected]);
@@ -65,6 +67,15 @@ function Event (props) {
           category: event.categories[0].title,
         },
       });
+    }
+  }
+
+  function onEventHighlight(isHighlighting) {
+    if (!isHighlighting) {
+      highlightEvent(0, null);
+    } else {
+      const selectedEventDate = getDefaultEventDate(event);
+      highlightEvent(event.id, selectedEventDate);
     }
   }
 
@@ -174,6 +185,12 @@ function Event (props) {
         e.stopPropagation();
         onEventSelect();
       }}
+      onMouseEnter={(e) => {
+        onEventHighlight(true);
+      }}
+      onMouseLeave={(e) => {
+        onEventHighlight(false);
+      }}
     >
       <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
       <h4
@@ -199,6 +216,7 @@ Event.propTypes = {
   event: PropTypes.object,
   eventLayers: PropTypes.array,
   isSelected: PropTypes.bool,
+  isHighlighted: PropTypes.bool,
   layers: PropTypes.array,
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
