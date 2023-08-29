@@ -75,7 +75,7 @@ class SkipException extends Error {
  * @throws {SkipException}
  */
 async function main () {
-  for (entry of entries) {
+  for (const entry of entries) {
     wv.layers = {}
     wv.sources = {}
     wvMatrixSets = {}
@@ -143,20 +143,21 @@ async function processEntry (entry) {
     } catch (error) {
       if (error instanceof SkipException) {
         warningCount += 1
-        console.warn(`${prog}: WARNING: [${id}] Skipping\n`)
+        console.warn(`${prog}: WARNING: [${gcId}] Skipping\n`)
       } else {
         errorCount += 1
         console.error(error.stack)
-        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${e}\n`)
+        const ident = gcLayer['ows:Identifier']._text
+        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${error}\n`)
       }
     }
   }
 
   if (gcContents.TileMatrixSet === 'Object') {
-    processMatrixSet(gcContents.TileMatrixSet)
+    processMatrixSet(gcContents.TileMatrixSet, entry)
   } else {
     gcContents.TileMatrixSet.forEach(gcMatrixSet => {
-      processMatrixSet(gcMatrixSet)
+      processMatrixSet(gcMatrixSet, entry)
     })
   }
 
@@ -278,7 +279,7 @@ async function processLayer (gcLayer, wvLayers, entry) {
   }
 }
 
-function processMatrixSet (gcMatrixSet) {
+function processMatrixSet (gcMatrixSet, entry) {
   const tileMatrixArr = gcMatrixSet.TileMatrix
   const ident = gcMatrixSet['ows:Identifier']._text
   const zoomLevels = tileMatrixArr.length

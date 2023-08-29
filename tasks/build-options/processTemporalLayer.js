@@ -4,13 +4,6 @@ function toList (val) {
   return val instanceof Array ? val : [val]
 }
 
-class ValueError extends Error {
-  constructor (message) {
-    super(message)
-    this.name = 'ValueError'
-  }
-}
-
 async function processTemporalLayer (wvLayer, value) {
   const dateFormat = 'YYYY-MM-DD'
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
@@ -55,7 +48,7 @@ async function processTemporalLayer (wvLayer, value) {
             endDate = moment.utc(endDate).subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]')
           }
         }
-        const regex = new RegExp(/\d+/g)
+        const regex = /\d+/g
         const match = regex.exec(interval)
         rangeInterval.push(match)
         if (endDate.endsWith('T00:00:00Z')) {
@@ -89,9 +82,6 @@ async function processTemporalLayer (wvLayer, value) {
       }
     }
   } catch (e) {
-    if (e instanceof ValueError) {
-      throw new Error(`Invalid time: ${range}`)
-    }
     throw new Error(`Error processing temporal layer: ${e}`)
   }
   return wvLayer

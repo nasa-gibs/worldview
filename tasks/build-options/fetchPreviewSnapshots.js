@@ -249,6 +249,7 @@ async function getSnapshots (layer) {
         params,
         responseType: 'stream'
       })
+      let statusText
       if (imageReq.status === 200) {
         statusText = 'SUCCESS'
         totalSuccessCount += 1
@@ -270,7 +271,6 @@ async function getSnapshots (layer) {
       console.warn(`${prog}: URL: ${imageReq.config.url}`)
     } catch (e) {
       totalFailureCount += 1
-      statusText = 'ERROR'
       console.error(`${prog} ERROR: Unable to fetch layer: ${wvLayerId} proj:${projection}`)
       // console.error(`${prog} Error: ${e}`)
     }

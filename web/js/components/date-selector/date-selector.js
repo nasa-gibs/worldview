@@ -43,27 +43,6 @@ function DateSelector(props) {
 
   const prevDate = usePrevious(date);
 
-  useEffect(() => {
-    // parent arrow clicks should override any temporary values within date selector
-    if (!prevDate || prevDate.getTime() !== date.getTime()) {
-      clearTimeValuesAndValidation();
-    }
-  }, [date]);
-
-  useEffect(() => {
-    const {
-      year,
-      month,
-      day,
-      hour,
-      minute,
-    } = dateObj;
-    const anyPendingTimeUnits = year || month || day || hour || minute;
-    if (anyPendingTimeUnits) {
-      updateDate();
-    }
-  }, [dateObj.year, dateObj.month, dateObj.day, dateObj.hour, dateObj.minute]);
-
   /**
   * @desc add individual timeunit input
   *
@@ -253,23 +232,6 @@ function DateSelector(props) {
   };
 
   /**
-  * @desc update date with newDate if valid from check and then reset temp time values
-  *
-  * @param {String} dateIn
-  * @param {Boolean} isRollDate
-  * @returns {void}
-  */
-  const updateDate = (dateIn = date, isRollDate = false) => {
-    const newDate = updateDateCheck(dateIn, isRollDate);
-
-    if (newDate) {
-      onDateChange(newDate);
-      // clear the pending timeunit inputs and reset validation
-      clearTimeValuesAndValidation();
-    }
-  };
-
-  /**
   * @desc clear temp time values and reset time validation booleans
   *
   * @returns {void}
@@ -288,6 +250,44 @@ function DateSelector(props) {
       minuteValid: true,
     });
   };
+
+  useEffect(() => {
+    // parent arrow clicks should override any temporary values within date selector
+    if (!prevDate || prevDate.getTime() !== date.getTime()) {
+      clearTimeValuesAndValidation();
+    }
+  }, [date]);
+
+  /**
+  * @desc update date with newDate if valid from check and then reset temp time values
+  *
+  * @param {String} dateIn
+  * @param {Boolean} isRollDate
+  * @returns {void}
+  */
+  const updateDate = (dateIn = date, isRollDate = false) => {
+    const newDate = updateDateCheck(dateIn, isRollDate);
+
+    if (newDate) {
+      onDateChange(newDate);
+      // clear the pending timeunit inputs and reset validation
+      clearTimeValuesAndValidation();
+    }
+  };
+
+  useEffect(() => {
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+    } = dateObj;
+    const anyPendingTimeUnits = year || month || day || hour || minute;
+    if (anyPendingTimeUnits) {
+      updateDate();
+    }
+  }, [dateObj.year, dateObj.month, dateObj.day, dateObj.hour, dateObj.minute]);
 
   const {
     year,

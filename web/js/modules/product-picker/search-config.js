@@ -67,39 +67,6 @@ function updateFacetCounts(facetField, layer) {
   });
 }
 
-function updateAllFacetCounts(currentFilters, searchTerm) {
-  resetFacetCounts();
-  facetFields.forEach((facetField) => {
-    // Start with a filtered result array that has all OTHER facets applied
-    const otherFilters = currentFilters.filter((f) => f.field !== facetField);
-    layersMatchCriteria(otherFilters, searchTerm)
-      .forEach((layer) => {
-        updateFacetCounts(facetField, layer);
-      });
-  });
-}
-
-function layerMatchesFilters(layer, filters) {
-  return filters.every(({ field, values }) => {
-    let fieldVal = layer[field];
-    fieldVal = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
-    const noneSelected = values.includes('None');
-    const matches = values.some((value) => fieldVal.includes(value));
-    return matches || (noneSelected && !fieldVal[0]);
-  });
-}
-
-function layersMatchCriteria(currentFilters, searchTerm) {
-  const val = searchTerm.toLowerCase();
-  const terms = val.split(/ +/);
-
-  return initialLayersArray.filter((layer) => {
-    const filterMatches = layerMatchesFilters(layer, currentFilters);
-    const searchMatches = val.length === 0 ? true : !filterSearch(layer, val, terms);
-    return filterMatches && searchMatches;
-  });
-}
-
 // Check for search term match
 function filterSearch (layer, val, terms) {
   if (!val) {
@@ -123,6 +90,39 @@ function filterSearch (layer, val, terms) {
     if (isFilteredOut) return false;
   });
   return isFilteredOut;
+}
+
+function layerMatchesFilters(layer, filters) {
+  return filters.every(({ field, values }) => {
+    let fieldVal = layer[field];
+    fieldVal = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
+    const noneSelected = values.includes('None');
+    const matches = values.some((value) => fieldVal.includes(value));
+    return matches || (noneSelected && !fieldVal[0]);
+  });
+}
+
+function layersMatchCriteria(currentFilters, searchTerm) {
+  const val = searchTerm.toLowerCase();
+  const terms = val.split(/ +/);
+
+  return initialLayersArray.filter((layer) => {
+    const filterMatches = layerMatchesFilters(layer, currentFilters);
+    const searchMatches = val.length === 0 ? true : !filterSearch(layer, val, terms);
+    return filterMatches && searchMatches;
+  });
+}
+
+function updateAllFacetCounts(currentFilters, searchTerm) {
+  resetFacetCounts();
+  facetFields.forEach((facetField) => {
+    // Start with a filtered result array that has all OTHER facets applied
+    const otherFilters = currentFilters.filter((f) => f.field !== facetField);
+    layersMatchCriteria(otherFilters, searchTerm)
+      .forEach((layer) => {
+        updateFacetCounts(facetField, layer);
+      });
+  });
 }
 
 /**

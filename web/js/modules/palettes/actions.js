@@ -121,6 +121,47 @@ export function clearCustomPalette(layerId, index, groupName) {
     });
   };
 }
+
+export function setToggledClassification(layerId, classIndex, index, groupName) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = setDisabledSelector(
+      layerId,
+      classIndex,
+      index,
+      state.palettes[groupName],
+      state,
+    );
+    let hasDisabled = false;
+
+    if (newActivePalettesObj[layerId] !== undefined) {
+      newActivePalettesObj[layerId].maps.forEach((colorMap) => {
+        if (colorMap.disabled && colorMap.disabled.length) {
+          hasDisabled = true;
+        }
+      });
+    }
+
+    // sometimes an active palette will be related to layers that we already removed during the
+    // tour process. need to check if the layer is active to prevent errors when dispatching
+    const getLayerIndex = () => {
+      const activeLayers = state.layers[groupName].layers;
+      return lodashFindIndex(activeLayers, { id: layerId });
+    };
+    const layerIndex = state.layers[groupName].layers[getLayerIndex()];
+    if (layerIndex) {
+      dispatch({
+        type: SET_DISABLED_CLASSIFICATION,
+        groupName,
+        activeString: groupName,
+        layerId,
+        palettes: newActivePalettesObj,
+        props: { disabled: hasDisabled },
+      });
+    }
+  };
+}
+
 /**
  * Action to remove custom palettes
  *
@@ -161,45 +202,7 @@ export function loadedCustomPalettes(customs) {
     custom: customs,
   };
 }
-export function setToggledClassification(layerId, classIndex, index, groupName) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const newActivePalettesObj = setDisabledSelector(
-      layerId,
-      classIndex,
-      index,
-      state.palettes[groupName],
-      state,
-    );
-    let hasDisabled = false;
 
-    if (newActivePalettesObj[layerId] !== undefined) {
-      newActivePalettesObj[layerId].maps.forEach((colorMap) => {
-        if (colorMap.disabled && colorMap.disabled.length) {
-          hasDisabled = true;
-        }
-      });
-    }
-
-    // sometimes an active palette will be related to layers that we already removed during the
-    // tour process. need to check if the layer is active to prevent errors when dispatching
-    const getLayerIndex = () => {
-      const activeLayers = state.layers[groupName].layers;
-      return lodashFindIndex(activeLayers, { id: layerId });
-    };
-    const layerIndex = state.layers[groupName].layers[getLayerIndex()];
-    if (layerIndex) {
-      dispatch({
-        type: SET_DISABLED_CLASSIFICATION,
-        groupName,
-        activeString: groupName,
-        layerId,
-        palettes: newActivePalettesObj,
-        props: { disabled: hasDisabled },
-      });
-    }
-  };
-}
 export function refreshDisabledClassification(layerId, disabledArray, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();

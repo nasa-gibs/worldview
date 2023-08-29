@@ -17,12 +17,6 @@ function BufferQuickAnimate(props) {
     setPreload,
   } = props;
 
-  useEffect(() => {
-    if (action.value) {
-      bufferQuickAnimate(action.value);
-    }
-  }, [action]);
-
   async function bufferQuickAnimate(arrowDown) {
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
@@ -47,6 +41,12 @@ function BufferQuickAnimate(props) {
     await Promise.all(preloadPromises);
     setPreload(true, nextDate);
   }
+
+  useEffect(() => {
+    if (action.value) {
+      bufferQuickAnimate(action.value);
+    }
+  }, [action]);
 
   return null;
 }

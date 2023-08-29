@@ -32,6 +32,19 @@ function DeltaInput(props) {
     }
   };
 
+  const handleBlur = () => {
+    if (value >= 1 && value < 1000) {
+      setValid(true);
+      changeDelta(value);
+    } else {
+      setValid(false);
+    }
+  };
+
+  const handleFocus = (e) => {
+    e.target.select();
+  };
+
   const handleKeyPress = (e) => {
     if (value === '' || regex.test(value)) {
       const numberValue = Number(value);
@@ -46,19 +59,6 @@ function DeltaInput(props) {
       } else if (e.key === 'Enter') {
         handleBlur();
       }
-    }
-  };
-
-  const handleFocus = (e) => {
-    e.target.select();
-  };
-
-  const handleBlur = () => {
-    if (value >= 1 && value < 1000) {
-      setValid(true);
-      changeDelta(value);
-    } else {
-      setValid(false);
     }
   };
 

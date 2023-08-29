@@ -34,6 +34,21 @@ export function getVectorLayers(state) {
   }, []);
 }
 
+export function getAllVectorStyles(layerId, index, state) {
+  const { config, vectorStyles } = state;
+  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
+  let vectorStyle = vectorStyles.custom[name];
+  if (!vectorStyle) {
+    throw new Error(`${name} Is not a rendered vectorStyle`);
+  }
+  if (!lodashIsUndefined(index)) {
+    if (vectorStyle.layers) {
+      vectorStyle = vectorStyle.layers[index];
+    }
+  }
+  return vectorStyle;
+}
+
 /**
  * Gets a single colormap (entries / legend combo)
  *
@@ -53,21 +68,6 @@ export function getVectorStyle(layerId, index, groupStr, state) {
     return renderedVectorStyle;
   }
   return getAllVectorStyles(layerId, index, state);
-}
-
-export function getAllVectorStyles(layerId, index, state) {
-  const { config, vectorStyles } = state;
-  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
-  let vectorStyle = vectorStyles.custom[name];
-  if (!vectorStyle) {
-    throw new Error(`${name} Is not a rendered vectorStyle`);
-  }
-  if (!lodashIsUndefined(index)) {
-    if (vectorStyle.layers) {
-      vectorStyle = vectorStyle.layers[index];
-    }
-  }
-  return vectorStyle;
 }
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
@@ -95,6 +95,34 @@ export function setRange(layerId, props, index, palettes, state) {
     layerId, props, index, palettes, state,
   };
 }
+
+const updateGlStylePalette = (glStyle, rgbPalette) => {
+  for (let i = 0; i < glStyle.layers.length; i += 1) {
+    const thisPaintObj = glStyle.layers[i].paint;
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
+      thisPaintObj['line-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
+      thisPaintObj['circle-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
+      thisPaintObj['fill-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
+      thisPaintObj['line-width'] = 2;
+    }
+  }
+  return glStyle;
+};
+
+const shouldRenderFeature = (feature, acceptableExtent) => {
+  if (!acceptableExtent) return true;
+  const midpoint = feature.getFlatCoordinates
+    ? feature.getFlatCoordinates()
+    : feature.getGeometry().getFlatCoordinates();
+  if (containsCoordinate(acceptableExtent, midpoint)) return true;
+  return false;
+};
 
 /** Sets the Style Function for the layer (this styles vector features)
  *
@@ -172,33 +200,12 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   return vectorStyleId;
 }
 
-const shouldRenderFeature = (feature, acceptableExtent) => {
-  if (!acceptableExtent) return true;
-  const midpoint = feature.getFlatCoordinates
-    ? feature.getFlatCoordinates()
-    : feature.getGeometry().getFlatCoordinates();
-  if (containsCoordinate(acceptableExtent, midpoint)) return true;
-  return false;
-};
-
-const updateGlStylePalette = (glStyle, rgbPalette) => {
-  for (let i = 0; i < glStyle.layers.length; i += 1) {
-    const thisPaintObj = glStyle.layers[i].paint;
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
-      thisPaintObj['line-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
-      thisPaintObj['circle-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
-      thisPaintObj['fill-color'] = rgbPalette;
-    }
-    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
-      thisPaintObj['line-width'] = 2;
-    }
+export function isActive(layerId, group, state) {
+  group = group || state.compare.activeString;
+  if (state.vectorStyles.custom[layerId]) {
+    return state.vectorStyles[group][layerId];
   }
-  return glStyle;
-};
+}
 
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
@@ -217,13 +224,6 @@ export function getKey(layerId, groupStr, state) {
     keys.push(`max=${def.max}`);
   }
   return keys.join(',');
-}
-
-export function isActive(layerId, group, state) {
-  group = group || state.compare.activeString;
-  if (state.vectorStyles.custom[layerId]) {
-    return state.vectorStyles[group][layerId];
-  }
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
