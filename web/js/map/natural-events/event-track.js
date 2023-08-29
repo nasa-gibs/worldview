@@ -321,7 +321,7 @@ function EventTrack () {
       const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevIsAnimatingToEvent);
       const eventsLoaded = eventsData && eventsData.length;
       const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
-      const highlightedEventChange = (highlightedEvent?.id !== prevHighlightedEvent?.id);
+      const highlightedEventChange = highlightedEvent?.id !== prevHighlightedEvent?.id;
 
       if (mapRef.current !== prevMap) {
         if (prevMap) {

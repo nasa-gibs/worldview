@@ -16,7 +16,7 @@ import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
 import {
   selectEvent as selectEventAction,
-  highlightEvent as highlightEventAction
+  highlightEvent as highlightEventAction,
 } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
