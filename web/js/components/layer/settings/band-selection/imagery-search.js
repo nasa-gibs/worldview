@@ -10,6 +10,13 @@ import {
 } from 'reactstrap';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
+const dateOptions = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+};
+const parseGranuleTimestamp = (granule) => new Date(granule.time_start).toLocaleDateString('en-US', dateOptions);
+
 export default function ImagerySearch({ layer }) {
   const dispatch = useDispatch();
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
@@ -18,9 +25,8 @@ export default function ImagerySearch({ layer }) {
   const [granulesStatus, setGranulesStatus] = useState(undefined);
   const [granuleDates, setGranuleDates] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [lastSelectedDate, setLastSelectedDate] = useState(undefined)
   const toggle = () => setDropdownOpen(!dropdownOpen);
-
-  const parseGranuleTimestamp = (granule) => new Date(granule.time_start).toDateString();
 
   const searchForImagery = async (layer) => {
     setGranulesStatus('loading');
@@ -33,16 +39,18 @@ export default function ImagerySearch({ layer }) {
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
     const dates = [...new Set([...olderDates, ...newerDates])].sort((a, b) => Date.parse(b) - Date.parse(a));
     setGranuleDates(dates);
+    setLastSelectedDate(undefined);
   };
 
   const handleSelection = (date) => {
     selectDate(new Date(date));
     setDropdownOpen(false);
+    setLastSelectedDate(date)
   };
 
   return (
     <div className="imagery-search-container">
-      <div>
+      <div style={{ paddingBottom: '3px' }}>
         <Button
           id="search-for-imagery"
           aria-label="Search for Imagery"
@@ -59,9 +67,9 @@ export default function ImagerySearch({ layer }) {
           ? (
             <Dropdown className="wv-button red" isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
-                Select Date
+                {lastSelectedDate || 'Select Date'}
               </DropdownToggle>
-              <DropdownMenu style={{ transform: 'translate3d(-30px, 0px, 0px)' }}>
+              <DropdownMenu style={{ 'font-family': 'monospace', transform: 'translate3d(-30px, 0px, 0px)' }}>
                 {granuleDates.map((date) => (
                   <DropdownItem key={date} onClick={() => handleSelection(date)}>
                     {date}
