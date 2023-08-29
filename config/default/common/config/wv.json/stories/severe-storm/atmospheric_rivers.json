@@ -4,7 +4,7 @@
       "id": "atmospheric_rivers",
       "type": "severe-storm",
       "title": "Atmospheric Rivers",
-      "description": "Atmospheric rivers bring moisture to California.",
+      "description": "Wintertime atmospheric rivers brought moisture to California.",
       "backgroundImage": "atmo-rivers.png",
       "backgroundImageHover": "",
       "readMoreLinks": [

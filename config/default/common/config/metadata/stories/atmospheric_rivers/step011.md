@@ -1,1 +1,1 @@
-The rains and snow melt have also benefitted the flora of the region. Superblooms of wildflowers, seen in shades of yellow, have emerged this spring in Carrizo Plain National Monument area, west of Bakersfield.
+The rains and snow melt also benefitted the flora of the region. Superblooms of desert wildflowers, in shades of yellow, orange, and red/purple emerged in the Carrizo Plain National Monument area, west of Bakersfield. The reddish patch in the eastern portion of the map are Great Valley phacelia flowers.
