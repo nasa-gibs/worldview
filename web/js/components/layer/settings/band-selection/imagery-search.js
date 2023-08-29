@@ -25,7 +25,7 @@ export default function ImagerySearch({ layer }) {
   const [granulesStatus, setGranulesStatus] = useState(undefined);
   const [granuleDates, setGranuleDates] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [lastSelectedDate, setLastSelectedDate] = useState(undefined)
+  const [lastSelectedDate, setLastSelectedDate] = useState(undefined);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
   const searchForImagery = async (layer) => {
@@ -45,7 +45,7 @@ export default function ImagerySearch({ layer }) {
   const handleSelection = (date) => {
     selectDate(new Date(date));
     setDropdownOpen(false);
-    setLastSelectedDate(date)
+    setLastSelectedDate(date);
   };
 
   return (
