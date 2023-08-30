@@ -1,5 +1,7 @@
 ## Create an Embedded Worldview
 
+NOTE: Worldview embedding on non-NASA sites is disabled by default; please contact us at [support@earthdata.nasa.gov](mailto:support@earthdata.nasa.gov?subject=Embed%20Worldview) to request the ability to enable embedding on your site.
+
 To embed NASA Worldview into a web page, StoryMap, or other web-based product, use the following steps:
 
 1. Go to Worldview: [worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
