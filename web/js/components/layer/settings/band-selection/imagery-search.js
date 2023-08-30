@@ -69,7 +69,7 @@ export default function ImagerySearch({ layer }) {
               <DropdownToggle style={{ backgroundColor: '#d54e21' }} caret>
                 {lastSelectedDate || 'Select Date'}
               </DropdownToggle>
-              <DropdownMenu style={{ 'font-family': 'monospace', transform: 'translate3d(-30px, 0px, 0px)' }}>
+              <DropdownMenu style={{ fontFamily: 'monospace', transform: 'translate3d(-30px, 0px, 0px)' }}>
                 {granuleDates.map((date) => (
                   <DropdownItem key={date} onClick={() => handleSelection(date)}>
                     {date}
