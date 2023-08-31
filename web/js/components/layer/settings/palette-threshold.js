@@ -6,8 +6,7 @@ import {
   checkTemperatureUnitConversion, convertPaletteValue,
 } from '../../../modules/settings/util';
 
-const sliderWidth = 264;
-const thumbsize = 22;
+const thumbsize = 26;
 
 class PaletteThreshold extends React.Component {
   constructor(props) {
@@ -18,10 +17,19 @@ class PaletteThreshold extends React.Component {
       end,
       squashed,
       avg: Math.round((start + end) / 2),
+      sliderWidth: 264,
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
     this.updateSquash = this.updateSquash.bind(this);
     this.updateThreshold = this.updateThreshold.bind(this);
+    this.slider = React.createRef();
+  }
+
+  componentDidUpdate() {
+    const { sliderWidth } = this.state;
+    if (sliderWidth !== this.slider.current.offsetWidth && this.slider.current.offsetWidth > 0) {
+      this.setState({ sliderWidth: this.slider.current.offsetWidth });
+    }
   }
 
   updateSquash() {
@@ -36,7 +44,7 @@ class PaletteThreshold extends React.Component {
     setRange(
       layerId,
       parseFloat(palette.entries.refs.indexOf(startIndex)),
-      parseFloat(palette.entries.refs.indexOf(endIndex)),
+      parseFloat(palette.entries.refs.lastIndexOf(endIndex)),
       isSquashed,
       index,
       groupName,
@@ -108,7 +116,7 @@ class PaletteThreshold extends React.Component {
 
   render() {
     const {
-      start, end, squashed, avg,
+      start, end, squashed, avg, sliderWidth,
     } = this.state;
     const {
       index, min, max, legend, globalTemperatureUnit,
@@ -167,6 +175,7 @@ class PaletteThreshold extends React.Component {
         <div
           id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
+          ref={this.slider}
         >
           <input
             className="double-range form-range start-range palette-threshold-range"

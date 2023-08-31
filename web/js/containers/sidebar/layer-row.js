@@ -83,6 +83,7 @@ function LayerRow (props) {
     isVectorLayer,
     measurementDescriptionPath,
     isAnimating,
+    palettes,
     isChartingActive,
     activeChartingLayer,
     updateActiveChartingLayer,
@@ -144,6 +145,7 @@ function LayerRow (props) {
           isDistractionFreeModeActive={isDistractionFreeModeActive}
           isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
+          palettes={palettes}
         />
       );
     }
@@ -344,6 +346,12 @@ function LayerRow (props) {
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
+  const makeActiveForCharting = (layer) => {
+    if (layer !== activeChartingLayer) {
+      updateActiveChartingLayer(layer);
+    }
+  };
+
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (
@@ -436,11 +444,6 @@ function LayerRow (props) {
     </>
   );
 
-  const makeActiveForCharting = (layer) => {
-    if (layer !== activeChartingLayer) {
-      updateActiveChartingLayer(layer);
-    }
-  };
   return (
     <Draggable
       isDragDisabled={isEmbedModeActive || isAnimating}
@@ -524,6 +527,7 @@ const makeMapStateToProps = () => {
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
       paletteLegends,
+      palettes,
       renderedPalette: renderedPalettes[paletteName],
     };
   };
@@ -626,6 +630,7 @@ LayerRow.propTypes = {
   onRemoveClick: PropTypes.func,
   updateActiveChartingLayer: PropTypes.func,
   palette: PropTypes.object,
+  palettes: PropTypes.object,
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,

@@ -8,7 +8,7 @@ import {
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import LayersContainer from './layers-container';
-import ChartingLayerMenu from './charting.js';
+import ChartingLayerMenu from './charting';
 import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
@@ -300,7 +300,7 @@ class Sidebar extends React.Component {
       position: 'static',
     } : null;
 
-    const productsHolderStyle = isDistractionFreeModeActive ? {
+    const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
       display: 'none',
     } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
       cssFloat: 'left',

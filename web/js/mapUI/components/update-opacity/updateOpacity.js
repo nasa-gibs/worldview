@@ -20,12 +20,6 @@ function UpdateOpacity(props) {
     updateLayerVisibilities,
   } = props;
 
-  useEffect(() => {
-    if (action.type === layerConstants.UPDATE_OPACITY) {
-      updateOpacity(action);
-    }
-  }, [action]);
-
   const updateGranuleLayerOpacity = (def, activeString, opacity, compare) => {
     const { id } = def;
     const layers = ui.selected.getLayers().getArray();
@@ -77,6 +71,13 @@ function UpdateOpacity(props) {
     }
     updateLayerVisibilities();
   };
+
+  useEffect(() => {
+    if (action.type === layerConstants.UPDATE_OPACITY) {
+      updateOpacity(action);
+    }
+  }, [action]);
+
   return null;
 }
 

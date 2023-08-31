@@ -277,6 +277,13 @@ export function mapLocationToDateState(
   return stateFromLocation;
 }
 
+export const formatDisplayDate = (date, subdaily) => {
+  if (!date) return;
+  const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
+  const dateString = moment.utc(date).format(format);
+  return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;
+};
+
 /**
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
@@ -378,13 +385,6 @@ export const coverageDateFormatter = (dateType, date, period) => {
       break;
   }
   return (<MonospaceDate date={dateString} />);
-};
-
-export const formatDisplayDate = (date, subdaily) => {
-  if (!date) return;
-  const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
-  const dateString = moment.utc(date).format(format);
-  return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;
 };
 
 export const formatISODate = (date) => moment(date).format('YYYY-MM-DD');

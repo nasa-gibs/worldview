@@ -20,31 +20,10 @@ function KioskAnimations({ ui }) {
   const map = useSelector((state) => state.map, shallowEqual);
   const eicMeasurementComplete = useSelector((state) => state.ui.eicMeasurementComplete);
   const eicMeasurementAborted = useSelector((state) => state.ui.eicMeasurementAborted);
-
-  const eicAnimationMode = eic === 'sa' || eic === 'da';
-
   const [subdailyAnimationDateUpdated, setSubdailyAnimationDateUpdated] = useState(false);
-
-  useEffect(() => {
-    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
-    checkAnimationSettings();
-  }, [map, eicMeasurementComplete]);
-
+  const eicAnimationMode = eic === 'sa' || eic === 'da';
   const subdailyPlayCheck = eic === 'sa' && subdailyAnimationDateUpdated && !isAnimationPlaying;
   const dailyPlayCheck = eic === 'da' && !isAnimationPlaying;
-
-  // if subdaily animation check that date moved back one day otherwise check if animation should play
-  const checkAnimationSettings = () => {
-    if (!ui.selected.frameState_) return;
-    if (eic === 'sa' && !subdailyAnimationDateUpdated) {
-      const prevDayDate = new Date(selectedDate);
-      prevDayDate.setDate(prevDayDate.getDate() - 1);
-      selectDate(prevDayDate);
-      setSubdailyAnimationDateUpdated(true);
-    } else if (subdailyPlayCheck || dailyPlayCheck) {
-      handleAnimationSettings();
-    }
-  };
 
   // zero dates for subdaily times
   const zeroDates = (start, end) => {
@@ -89,6 +68,24 @@ function KioskAnimations({ ui }) {
     initiateAnimation();
     playKioskAnimation(startDate, endDate);
   };
+
+  // if subdaily animation check that date moved back one day otherwise check if animation should play
+  const checkAnimationSettings = () => {
+    if (!ui.selected.frameState_) return;
+    if (eic === 'sa' && !subdailyAnimationDateUpdated) {
+      const prevDayDate = new Date(selectedDate);
+      prevDayDate.setDate(prevDayDate.getDate() - 1);
+      selectDate(prevDayDate);
+      setSubdailyAnimationDateUpdated(true);
+    } else if (subdailyPlayCheck || dailyPlayCheck) {
+      handleAnimationSettings();
+    }
+  };
+
+  useEffect(() => {
+    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
+    checkAnimationSettings();
+  }, [map, eicMeasurementComplete]);
 
   return null;
 }

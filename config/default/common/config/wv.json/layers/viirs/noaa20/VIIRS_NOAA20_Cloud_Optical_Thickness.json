@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Cloud_Optical_Thickness": {
+      "id": "VIIRS_NOAA20_Cloud_Optical_Thickness",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Cloud_Optical_Thickness",
+      "tags": "jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Cloud Optical Thickness",
+      "wrapadjacentdays": true
+    }
+  }
+}

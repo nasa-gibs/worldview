@@ -59,6 +59,11 @@ export function initSecondDate() {
     type: INIT_SECOND_DATE,
   };
 }
+export function clearPreload () {
+  return {
+    type: CLEAR_PRELOAD,
+  };
+}
 export function selectDate(date) {
   return (dispatch, getState) => {
     const state = getState();
@@ -135,10 +140,5 @@ export function setPreload (preloaded, lastPreloadDate) {
     type: SET_PRELOAD,
     preloaded,
     lastPreloadDate,
-  };
-}
-export function clearPreload () {
-  return {
-    type: CLEAR_PRELOAD,
   };
 }

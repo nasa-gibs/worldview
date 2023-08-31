@@ -8,6 +8,35 @@ export const CRS_WGS_84 = 'EPSG:4326';
 
 export const CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
 
+/**
+ * Determines if an exent object contains valid values.
+ *
+ * @method isExtentValid
+ * @static
+ *
+ * @param extent {OpenLayers.Bound} The extent to check.
+ *
+ * @return {boolean} False if any of the values is NaN, otherwise returns
+ * true.
+ */
+export function mapIsExtentValid(extent) {
+  if (lodashIsUndefined(extent)) {
+    return false;
+  }
+  let valid = true;
+  if (extent.toArray) {
+    extent = extent.toArray();
+  }
+  lodashEach(extent, (value) => {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(value)) {
+      valid = false;
+      return false;
+    }
+  });
+  return valid;
+}
+
 /*
  * Checks to see if an extents string is found. If it exist
  * then it is changed from a string to an array which is then
@@ -42,35 +71,6 @@ export function mapParser(state, errors) {
       state.v = extent;
     }
   }
-}
-
-/**
- * Determines if an exent object contains valid values.
- *
- * @method isExtentValid
- * @static
- *
- * @param extent {OpenLayers.Bound} The extent to check.
- *
- * @return {boolean} False if any of the values is NaN, otherwise returns
- * true.
- */
-export function mapIsExtentValid(extent) {
-  if (lodashIsUndefined(extent)) {
-    return false;
-  }
-  let valid = true;
-  if (extent.toArray) {
-    extent = extent.toArray();
-  }
-  lodashEach(extent, (value) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(value)) {
-      valid = false;
-      return false;
-    }
-  });
-  return valid;
 }
 
 /**

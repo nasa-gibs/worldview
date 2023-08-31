@@ -169,30 +169,6 @@ function MapUI(props) {
     }
   };
 
-  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-  window.addEventListener('orientationchange', () => {
-    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
-  });
-
-  // Initial hook that initiates the map after it has been created in CreateMap.js
-  useEffect(() => {
-    if (document.getElementById('app')) {
-      setProjectionTrigger(1);
-    }
-  }, [ui]);
-
-  useEffect(() => {
-    if (vectorActions.type === vectorStyleConstants.SET_SELECTED_VECTORS) {
-      updateVectorSelections();
-    }
-  }, [vectorActions]);
-
-  useEffect(() => {
-    if (preloadAction.type === dateConstants.CHANGE_INTERVAL) {
-      preloadNextTiles();
-    }
-  }, [preloadAction]);
-
   const updateVectorSelections = () => {
     const type = 'selection';
     const newSelection = vectorActions.payload;
@@ -205,6 +181,11 @@ function MapUI(props) {
     );
     ui.selectedVectors = newSelection;
   };
+
+  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
+  });
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -313,13 +294,6 @@ function MapUI(props) {
     };
   };
 
-  function preloadForCompareMode() {
-    preloadNextTiles(selectedDate, 'active');
-    if (compare.active) {
-      preloadNextTiles(selectedDateB, 'activeB');
-    }
-  }
-
   async function preloadNextTiles(date, compareString) {
     const map = { ui };
     const state = {
@@ -343,6 +317,32 @@ function MapUI(props) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
   }
+
+  function preloadForCompareMode() {
+    preloadNextTiles(selectedDate, 'active');
+    if (compare.active) {
+      preloadNextTiles(selectedDateB, 'activeB');
+    }
+  }
+
+  // Initial hook that initiates the map after it has been created in CreateMap.js
+  useEffect(() => {
+    if (document.getElementById('app')) {
+      setProjectionTrigger(1);
+    }
+  }, [ui]);
+
+  useEffect(() => {
+    if (vectorActions.type === vectorStyleConstants.SET_SELECTED_VECTORS) {
+      updateVectorSelections();
+    }
+  }, [vectorActions]);
+
+  useEffect(() => {
+    if (preloadAction.type === dateConstants.CHANGE_INTERVAL) {
+      preloadNextTiles();
+    }
+  }, [preloadAction]);
 
   return (
     <>

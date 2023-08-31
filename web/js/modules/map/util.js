@@ -12,6 +12,75 @@ import Promise from 'bluebird';
 import { encode } from '../link/util';
 import { getActiveVisibleLayersAtDate } from '../layers/selectors';
 
+/*
+ * Set default extent according to time of day:
+ *
+ * at 00:00 UTC, start at far eastern edge of
+ * map: "20.6015625,-46.546875,179.9296875,53.015625"
+ *
+ * at 23:00 UTC, start at far western edge of map:
+ * "-179.9296875,-46.546875,-20.6015625,53.015625"
+ *
+ * @method getLeadingExtent
+ * @static
+ * @param {Object} Time
+ *
+ * @returns {object} Extent Array
+ */
+export function getLeadingExtent(loadtime) {
+  let curHour = loadtime.getUTCHours();
+
+  // For earlier hours when data is still being filled in, force a far eastern perspective
+  if (curHour < 3) {
+    curHour = 23;
+  } else if (curHour < 9) {
+    curHour = 0;
+  }
+
+  // Compute east/west bounds
+  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
+  const maxLon = minLon + 159.328125;
+
+  const minLat = -46.546875;
+  const maxLat = 53.015625;
+
+  return [minLon, minLat, maxLon, maxLat];
+}
+
+export function getRotatedExtent(map) {
+  const view = map.getView();
+  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
+}
+
+/**
+ * Determines if an exent object contains valid values.
+ *
+ * @method isExtentValid
+ * @static
+ *
+ * @param extent {OpenLayers.Bound} The extent to check.
+ *
+ * @return {boolean} False if any of the values is NaN, otherwise returns
+ * true.
+ */
+export function mapIsExtentValid(extent) {
+  if (lodashIsUndefined(extent)) {
+    return false;
+  }
+  let valid = true;
+  if (extent.toArray) {
+    extent = extent.toArray();
+  }
+  lodashEach(extent, (value) => {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(value)) {
+      valid = false;
+      return false;
+    }
+  });
+  return valid;
+}
+
 export function getMapParameterSetup(
   parameters,
   config,
@@ -74,75 +143,6 @@ export function getMapParameterSetup(
       },
     },
   };
-}
-
-export function getRotatedExtent(map) {
-  const view = map.getView();
-  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
-}
-
-/**
- * Determines if an exent object contains valid values.
- *
- * @method isExtentValid
- * @static
- *
- * @param extent {OpenLayers.Bound} The extent to check.
- *
- * @return {boolean} False if any of the values is NaN, otherwise returns
- * true.
- */
-export function mapIsExtentValid(extent) {
-  if (lodashIsUndefined(extent)) {
-    return false;
-  }
-  let valid = true;
-  if (extent.toArray) {
-    extent = extent.toArray();
-  }
-  lodashEach(extent, (value) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(value)) {
-      valid = false;
-      return false;
-    }
-  });
-  return valid;
-}
-
-/*
- * Set default extent according to time of day:
- *
- * at 00:00 UTC, start at far eastern edge of
- * map: "20.6015625,-46.546875,179.9296875,53.015625"
- *
- * at 23:00 UTC, start at far western edge of map:
- * "-179.9296875,-46.546875,-20.6015625,53.015625"
- *
- * @method getLeadingExtent
- * @static
- * @param {Object} Time
- *
- * @returns {object} Extent Array
- */
-export function getLeadingExtent(loadtime) {
-  let curHour = loadtime.getUTCHours();
-
-  // For earlier hours when data is still being filled in, force a far eastern perspective
-  if (curHour < 3) {
-    curHour = 23;
-  } else if (curHour < 9) {
-    curHour = 0;
-  }
-
-  // Compute east/west bounds
-  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
-  const maxLon = minLon + 159.328125;
-
-  const minLat = -46.546875;
-  const maxLat = 53.015625;
-
-  return [minLon, minLat, maxLon, maxLat];
 }
 
 /**
@@ -208,16 +208,12 @@ function promiseTileLayer(layer, extent, map) {
     currentZ = tileGrid.getZForResolution(resolution, zDirection);
     i = 0;
 
-    const complete = function () {
-      tileSource.un('tileloadend', onLoad);
-      tileSource.un('tileloaderror', onLoad);
-      resolve();
-    };
 
     const onLoad = function onLoad (e) {
       if (e.type === 'tileloadend') {
         i -= 1;
         if (i === 0) {
+          // eslint-disable-next-line no-use-before-define
           complete();
         }
       } else {
@@ -225,8 +221,15 @@ function promiseTileLayer(layer, extent, map) {
         console.error(`No response for tile request ${layer.wv.key}`);
         // some gibs data is not accurate and rejecting here
         // will break the animation if tile doesn't exist
+        // eslint-disable-next-line no-use-before-define
         complete();
       }
+    };
+
+    const complete = function () {
+      tileSource.un('tileloadend', onLoad);
+      tileSource.un('tileloaderror', onLoad);
+      resolve();
     };
 
     const loadTile = function ([one, two, three]) {

@@ -105,10 +105,19 @@ function AnimationWidget (props) {
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
 
+  const toggleCollapse = () => {
+    onToggleAnimationCollapse();
+  };
+
+  const toggleAutoplay = () => {
+    onToggleAnimationAutoplay();
+  };
+
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
+      toggleCollapse();
     }
     if (!isPlaying && autoplay && !isKioskModeActive) {
       onPushPlay();
@@ -145,14 +154,6 @@ function AnimationWidget (props) {
     ];
     const { classList } = e.target;
     return draggableTargets.some((tClass) => classList.contains(tClass));
-  };
-
-  const toggleCollapse = () => {
-    onToggleAnimationCollapse();
-  };
-
-  const toggleAutoplay = () => {
-    onToggleAnimationAutoplay();
   };
 
   const onExpandedDrag = (e, position) => {
@@ -258,6 +259,7 @@ function AnimationWidget (props) {
       }
       {isCollapsed ? (
         <CollapsedAnimationWidget
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
           isPlaying={isPlaying}
@@ -281,6 +283,7 @@ function AnimationWidget (props) {
           breakpoints={breakpoints}
           endDate={endDate}
           hasSubdailyLayers={hasSubdailyLayers}
+          isEmbedModeActive={isEmbedModeActive}
           isLandscape={isLandscape}
           isMobile={isMobile}
           isMobilePhone={isMobilePhone}

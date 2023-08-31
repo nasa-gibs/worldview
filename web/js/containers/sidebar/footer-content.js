@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import googleTagManager from 'googleTagManager';
-import ChartingInfo from '../../components/charting/charting-info.js';
+import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import ChartingModeOptions from '../../components/sidebar/charting-mode-options';
@@ -83,10 +83,12 @@ const FooterContent = React.forwardRef((props, ref) => {
           selected={compareMode}
           onclick={changeCompareMode}
         />
+        {isChartingActive && (
         <ChartingModeOptions
           isChartingActive={isChartingActive}
           isMobile={isMobile}
         />
+        )}
       </div>
       <div className="product-buttons">
         {!isChartingActive

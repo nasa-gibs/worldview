@@ -10,6 +10,7 @@ function CollapsedAnimationWidget (props) {
     collapsedWidgetPosition,
     handleDragStart,
     hasSubdailyLayers,
+    isDistractionFreeModeActive,
     isLandscape,
     isMobile,
     isMobilePhone,
@@ -34,7 +35,9 @@ function CollapsedAnimationWidget (props) {
   const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
   const getWidgetIDs = () => {
-    if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+    if (isDistractionFreeModeActive && screenWidth < 670 && isPortrait) {
+      return '-phone-portrait-distraction-free';
+    } if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
       return `-phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `-phone-landscape${subdailyID}`;

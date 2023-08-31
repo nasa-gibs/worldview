@@ -77,45 +77,38 @@
           For rules set to "off": consider setting to "warn" to identify non-compliance in new code
           For rules set to "warn": consider removing to throw errors on existing and future code
         */
+
+        /* Error Counts compiled 8/22/2023 */
+
         // Base rule overrides
-        "no-nested-ternary": "off", // 58 errors
-        "no-shadow": "warn", // 136 errors
-        "max-len": "off",
-        "consistent-return": "off", // 73 errors
-        "no-underscore-dangle": "off",
-        "func-names": "off",
-        "no-param-reassign": [ // 329 errors
+        "no-nested-ternary": "off",    // 164 errors across 40 files
+        "no-shadow": "warn",           // 110 errors across 40 files
+        "max-len": "off",              // 315 errors across 109 files
+        "consistent-return": "off",    // 95 errors across 58 files
+        "no-underscore-dangle": "off", // 40 errors across 7 files
+        "no-param-reassign": [         // 198 errors across 46 files
           "warn",
           {
             "props": false
           }
         ],
-        "no-use-before-define": [
-          "error",
-          {
-            "functions": false,
-            "classes": true,
-            "variables": false
-          }
-        ],
         // Import rules overrides
         "import/no-cycle": "warn",
         // Accesibility rules overrides
-        "jsx-a11y/no-noninteractive-tabindex": "off",
-        "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "jsx-a11y/anchor-has-content": "off",
-        "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/anchor-is-valid": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "jsx-a11y/alt-text": "off",
-        "jsx-a11y/mouse-events-have-key-events": "off",
-        "jsx-a11y/tabindex-no-positive": "off",
-        "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-noninteractive-tabindex": "off",             // 2 errors across 2 files
+        "jsx-a11y/no-noninteractive-element-interactions": "off", // 5 errors across 5 files
+        "jsx-a11y/anchor-has-content": "off",                     // 1 error across 1 files
+        "jsx-a11y/control-has-associated-label": "off",           // 1 error across 1 files
+        "jsx-a11y/anchor-is-valid": "off",                        // 24 errors across 13 files
+        "jsx-a11y/label-has-associated-control": "off",           // 5 errors across 4 files
+        "jsx-a11y/alt-text": "off",                               // 15 errors across 10 files
+        "jsx-a11y/mouse-events-have-key-events": "off",           // 7 errors across 4 files
+        "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
+        "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files
         // React rules overrides
-        "react/jsx-props-no-spreading": "warn", // 17 errors
-        "react/jsx-filename-extension": "off",
-        "react/jsx-no-bind": "warn",
+        "react/jsx-props-no-spreading": "warn",                   // 6 errors across 2 files
+        "react/jsx-filename-extension": "off",                    // 206 errors across 206 files
+        "react/jsx-no-bind": "warn",                              // 9 errors across 5 files
         "react/sort-comp": [
           "error",
           {
@@ -156,18 +149,18 @@
             }
           }
         ],
-        "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off", // 965 errors,
-        "class-methods-use-this": "warn",
-        "react/no-unused-class-component-methods": "warn",
-        "react/no-unknown-property": "warn",
-        "react/jsx-no-useless-fragment": "warn",
-        "react/no-unstable-nested-components": "warn",
-        "react/prop-types": "warn",
-        "react/no-unused-prop-types": "warn",
-        "default-param-last": "warn",
-        "prefer-regex-literals": "warn",
-        "no-promise-executor-return": "warn"
+        "react/forbid-prop-types": "off",                  // 411 errors across 139 files
+        "react/require-default-props": "off",              // 1644 errors across > 80 files
+        "class-methods-use-this": "warn",                  // 15 errors across 13 files
+        "react/no-unused-class-component-methods": "warn", // 8 errors across 7 files
+        "react/no-unknown-property": "warn",               // 2 errors across 2 files
+        "react/jsx-no-useless-fragment": "warn",           // 3 errors across 3 files
+        "react/no-unstable-nested-components": "warn",     // 1 error across 1 file
+        "react/prop-types": "warn",                        // 58 errors across 22 files
+        "react/no-unused-prop-types": "warn",              // 9 errors across 9 files
+        "default-param-last": "warn",                      // 42 errors across 34 files
+        "prefer-regex-literals": "warn",                   // 3 errors across 1 file
+        "no-promise-executor-return": "warn"               // 1 error across 1 file
       }
     }
   ]

@@ -42,6 +42,15 @@ import util from '../util/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
+const getTransitionAttr = function(transition) {
+  if (!transition) return '';
+  const { element, action } = transition;
+  if (element === 'animation' && action === 'play') {
+    return '&playanim=true';
+  }
+  return '';
+};
+
 class Tour extends React.Component {
   constructor(props) {
     super(props);
@@ -554,15 +563,6 @@ const mapStateToProps = (state) => {
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
   };
-};
-
-const getTransitionAttr = function(transition) {
-  if (!transition) return '';
-  const { element, action } = transition;
-  if (element === 'animation' && action === 'play') {
-    return '&playanim=true';
-  }
-  return '';
 };
 
 export default connect(

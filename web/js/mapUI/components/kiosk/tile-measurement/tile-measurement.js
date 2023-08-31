@@ -30,12 +30,6 @@ function TileMeasurement({ ui }) {
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
-  useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic && ui.selected) {
-      calculateMeasurements();
-    }
-  });
-
   // #2 Filter all of the active layers that are also in the layersToMeasure array
   const findLayersToMeasure = () => {
     const measurementLayersExtra = activeLayers.filter((layer) => layersToMeasure.includes(layer.id));
@@ -154,7 +148,6 @@ function TileMeasurement({ ui }) {
     }
   };
 
-
   // #1 Parent function that is called from useEffect.
   const calculateMeasurements = async () => {
     try {
@@ -189,6 +182,12 @@ function TileMeasurement({ ui }) {
       verifyTilesAndHandleErrors(true);
     }
   };
+
+  useEffect(() => {
+    if (!measurementsStarted && activeLayers && eic && ui.selected) {
+      calculateMeasurements();
+    }
+  });
 
   return null;
 }

@@ -7,7 +7,23 @@ import {
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import update from 'immutability-helper';
-import { getMinValue, getMaxValue } from './util';
+import { getMinValue } from './util';
+
+
+export function getRenderedPalette(layerId, index, state) {
+  const { config, palettes } = state;
+  const name = lodashGet(config, `layers['${layerId}'].palette.id`);
+  let palette = palettes.rendered[name];
+  if (!palette) {
+    throw new Error(`${name} Is not a rendered palette`);
+  }
+  if (!lodashIsUndefined(index)) {
+    if (palette.maps) {
+      palette = palette.maps[index];
+    }
+  }
+  return lodashCloneDeep(palette);
+}
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -41,29 +57,6 @@ export function getPalette(layerId, index, groupStr, state) {
   return getRenderedPalette(layerId, index, state);
 }
 
-export function getRenderedPalette(layerId, index, state) {
-  const { config, palettes } = state;
-  const name = lodashGet(config, `layers['${layerId}'].palette.id`);
-  let palette = palettes.rendered[name];
-  if (!palette) {
-    throw new Error(`${name} Is not a rendered palette`);
-  }
-  if (!lodashIsUndefined(index)) {
-    if (palette.maps) {
-      palette = palette.maps[index];
-    }
-  }
-  return lodashCloneDeep(palette);
-}
-
-export function getPaletteLegends(layerId, groupName, state) {
-  const paletteLegends = [];
-  const count = getCount(layerId, state);
-  for (let i = 0; i < count; i += 1) {
-    paletteLegends.push(getPaletteLegend(layerId, i, groupName, state));
-  }
-  return paletteLegends;
-}
 /**
  * Gets the legend of a colormap
  *
@@ -79,6 +72,7 @@ export function getPaletteLegend(layerId, index, groupStr, state) {
   const value = getPalette(layerId, index, groupStr, state);
   return value.legend || value.entries;
 }
+
 export function getCount(layerId, state) {
   const renderedPalette = getRenderedPalette(layerId, undefined, state);
   if (renderedPalette && renderedPalette.maps) {
@@ -86,6 +80,16 @@ export function getCount(layerId, state) {
   }
   return 0;
 }
+
+export function getPaletteLegends(layerId, groupName, state) {
+  const paletteLegends = [];
+  const count = getCount(layerId, state);
+  for (let i = 0; i < count; i += 1) {
+    paletteLegends.push(getPaletteLegend(layerId, i, groupName, state));
+  }
+  return paletteLegends;
+}
+
 /**
  * Gets the legend of a colormap
  *
@@ -287,23 +291,36 @@ const toggleLookup = function(layerId, palettesObj, state) {
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
 
-export function findIndex(layerId, type, value, index, groupStr, state) {
+export function findIndex(layerId, value, index, groupStr, state) {
   index = index || 0;
   const { values } = getPalette(layerId, index, groupStr, state).entries;
   let result;
   lodashEach(values, (check, index) => {
     const min = getMinValue(check);
-    const max = getMaxValue(check);
-    if (type === 'min' && value === min) {
-      result = index;
-      return false;
-    }
-    if (type === 'max' && value === max) {
+    if (value === min) {
       result = index;
       return false;
     }
   });
   return result;
+}
+
+function prepare(layerId, palettesObj, state) {
+  let newPalettes = lodashCloneDeep(palettesObj);
+  if (!newPalettes[layerId]) newPalettes[layerId] = {};
+  const active = newPalettes[layerId];
+  active.maps = active.maps || [];
+  lodashEach(getRenderedPalette(layerId, undefined, state).maps, (
+    palette,
+    index,
+  ) => {
+    if (!active.maps[index]) {
+      newPalettes = update(newPalettes, {
+        [layerId]: { maps: { [index]: { $set: palette } } },
+      });
+    }
+  });
+  return newPalettes;
 }
 
 export function setCustomSelector(layerId, paletteId, index, groupName, state) {
@@ -320,6 +337,11 @@ export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   }
   palette.custom = paletteId;
   return updateLookup(layerId, newPalettes, state);
+}
+
+export function isActive(layerId, group, state) {
+  group = group || state.compare.activeString;
+  return state.palettes[group][layerId];
 }
 
 export function getKey(layerId, groupStr, state) {
@@ -342,11 +364,6 @@ export function getKey(layerId, groupStr, state) {
     keys.push('squash');
   }
   return keys.join(',');
-}
-
-export function isActive(layerId, group, state) {
-  group = group || state.compare.activeString;
-  return state.palettes[group][layerId];
 }
 
 export function refreshDisabledSelector(
@@ -477,24 +494,6 @@ export function clearCustomSelector(layerId, index, palettes, state) {
     [layerId]: { maps: { [index]: { $set: palette } } },
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
-}
-
-function prepare(layerId, palettesObj, state) {
-  let newPalettes = lodashCloneDeep(palettesObj);
-  if (!newPalettes[layerId]) newPalettes[layerId] = {};
-  const active = newPalettes[layerId];
-  active.maps = active.maps || [];
-  lodashEach(getRenderedPalette(layerId, undefined, state).maps, (
-    palette,
-    index,
-  ) => {
-    if (!active.maps[index]) {
-      newPalettes = update(newPalettes, {
-        [layerId]: { maps: { [index]: { $set: palette } } },
-      });
-    }
-  });
-  return newPalettes;
 }
 
 export function isPaletteAllowed(layerId, config) {
