@@ -828,7 +828,7 @@ export default function mapLayerBuilder(config, cache, store) {
         nextDate,
         previousDate,
       };
-      def = lodashCloneDeep(def);
+      def = structuredClone(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
