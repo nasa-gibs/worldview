@@ -232,7 +232,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, event.id === selectedEvent.id || event.id === highlightedEvent.id);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, null, event.id === selectedEvent.id || event.id === highlightedEvent.id);
 
       newTrackDetails = {
         id: event.id,

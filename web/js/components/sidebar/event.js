@@ -34,7 +34,7 @@ function Event (props) {
   const elRef = useRef();
   useLayoutEffect(() => {
     setTimeout(() => {
-      if (!elRef || !elRef.current || !isHighlighted) return;
+      if (!elRef || !elRef.current || !isSelected) return;
       elRef.current.scrollIntoView();
     });
   }, [isSelected]);
@@ -221,6 +221,7 @@ Event.propTypes = {
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
+  highlightEvent: PropTypes.func,
   sources: PropTypes.array,
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,

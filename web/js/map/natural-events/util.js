@@ -7,6 +7,7 @@ import { CRS } from '../../modules/map/constants';
 /**
 * Create event point
 *
+* @param  {Object} proj
 * @param  {Object} clusterPoint
 * @param  {Boolean} isSelected
 * @param  {Boolean} isHighlighted
@@ -62,8 +63,8 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, isHighligh
     }, 5000);
   } else {
     textEl.className = 'track-marker-date';
-    textEl.style.top = hasMagnitude ? '-40px' : '-28px';
   }
+  textEl.style.top = hasMagnitude ? '-40px' : '-28px';
   circleEl.className = `track-marker track-marker-${date}`;
   circleEl.id = `track-marker-${date}`;
   circleEl.style.height = isHighlighted ? '13px' : '';
@@ -134,6 +135,7 @@ export const getArrows = function(lineSegmentCoords, map, isHighlighted) {
 /**
 * Create event tracklines
 *
+* @param  {Object} map
 * @param  {Object} trackCoords
 * @param  {Boolean} isHighlighted
 * @param  {String} eventID
@@ -224,6 +226,7 @@ export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, 
 /**
  * Create cluster point
  *
+ * @param  {Object} proj
  * @param  {Object} clusterPoint
  * @param  {Object} map Openlayers map object
  * @param  {Object} pointClusterObj supercluster object
