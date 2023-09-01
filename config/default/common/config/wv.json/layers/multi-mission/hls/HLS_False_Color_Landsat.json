@@ -2,7 +2,7 @@
   "layers": {
     "HLS_False_Color_Landsat": {
       "id": "HLS_False_Color_Landsat",
-      "title": "Reflectance (Bands 5-4-3, Color Infrared) *BETA*",
+      "title": "Reflectance (Color Infrared, Bands 5-4-3) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Landsat",
       "tags": "corrected surface oli l30 cir false color",
