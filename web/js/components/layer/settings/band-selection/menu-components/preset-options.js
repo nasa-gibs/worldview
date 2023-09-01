@@ -8,7 +8,7 @@ const imgPath = 'images/layers/previews/geographic/';
 const landsatPresets = [
   {
     id: 'HLS_False_Color_Landsat',
-    title: 'False Color',
+    title: 'Color Infrared',
     r: 'B05',
     g: 'B04',
     b: 'B03',
@@ -80,7 +80,7 @@ const landsatPresets = [
 const sentinelPresets = [
   {
     id: 'HLS_False_Color_Sentinel',
-    title: 'False Color',
+    title: 'Color Infrared',
     r: 'B08',
     g: 'B04',
     b: 'B03',
