@@ -2,10 +2,10 @@
     "layers": {
       "HLS_Moisture_Index_Sentinel": {
         "id": "HLS_Moisture_Index_Sentinel",
-        "title": "Moisture Index ((B8A-B11)/(B8A+B11)) Sentinel *BETA*",
-        "subtitle": "Sentinel 8 & 9 / OLI",
+        "title": "Moisture Index (NDMI) (B8A-B11)/(B8A+B11) *BETA*",
+        "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
-        "tags": "corrected surface Sentinel oli l30 ndsi",
+        "tags": "corrected surface Sentinel msi s30 ndmi",
         "group": "overlays",
         "layergroup": "Land Surface Reflectance",
         "format": "image/png",
@@ -17,7 +17,7 @@
             "assets": ["B8A", "B11"],
             "expression": "(B8A-B11)/(B8A+B11)",
             "rescale": "-1,1",
-            "colormap_name": "jet"
+            "colormap_name": "jet_r"
         },
         "disableSnapshot": true,
         "wrapX": false,

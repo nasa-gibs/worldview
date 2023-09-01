@@ -1,6 +1,6 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Reflectance (Bands 8-4-3, False Color) imagery layer is a false color composite that is used to gauge plant health and assess plant density. Plants reflect in near infrared and green light, while absorbing in red. reas with better vegetation health appear red, and denser plant growth is a darker red. Cities, urban areas, and exposed ground appear grey or tan and water is blue or black.
+The dynamically generated Normalized Difference Moisture Index (NDMI) (B8A-B11)/(B8A+B11) imagery layer is an index to determine vegetation water content and monitor drought. It is calculated using near infrared and shortwave infrared (SWIR) wavelengths. On the rainbow color scale, darker blue colors represent high canopy without water stress, and greenish to yellow colors area areas approaching water stress.
 
 The Reflectance imagery layer from Sentinel 2A and 2B/MSI product (S30) is available through the HLS project from the Multi-Spectral Instrument (MSI) aboard the European Union’s Copernicus Sentinel-2A and Sentinel-2B satellites. The sensor resolution is 10, 20, and 60 m, imagery resolution is resampled to 30 m, and the temporal resolution is daily with a 5 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Landsat 8 and 9 imagery layer available.
 

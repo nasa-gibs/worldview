@@ -2,10 +2,10 @@
     "layers": {
       "HLS_NDSI_Sentinel": {
         "id": "HLS_NDSI_Sentinel",
-        "title": "NDSI ((B03-B11)/(B03+B11)) Sentinel *BETA*",
-        "subtitle": "Sentinel 8 & 9 / OLI",
+        "title": "Snow Index (NDSI) (B3-B11)/(B3+B11) *BETA*",
+        "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDSI_Sentinel",
-        "tags": "corrected surface Sentinel oli l30 ndsi",
+        "tags": "corrected surface Sentinel msi s30 ndsi",
         "group": "overlays",
         "layergroup": "Land Surface Reflectance",
         "format": "image/png",

@@ -2,10 +2,10 @@
     "layers": {
       "HLS_NDWI_Sentinel": {
         "id": "HLS_NDWI_Sentinel",
-        "title": "NDWI ((B03-B08)/(B03+B08)) Sentinel *BETA*",
-        "subtitle": "Sentinel 8 & 9 / OLI",
+        "title": "Water Index (NDWI) (B03-B08)/(B03+B08) *BETA*",
+        "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDWI_Sentinel",
-        "tags": "corrected surface Sentinel oli l30 ndwi",
+        "tags": "corrected surface Sentinel msi s30 ndwi",
         "group": "overlays",
         "layergroup": "Land Surface Reflectance",
         "format": "image/png",

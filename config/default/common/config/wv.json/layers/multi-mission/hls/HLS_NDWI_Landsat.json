@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDWI_Landsat": {
         "id": "HLS_NDWI_Landsat",
-        "title": "NDWI ((B03-B05)/(B03+B05)) Landsat *BETA*",
+        "title": "Water Index (NDWI) (B3-B5)/(B3+B5) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDWI_Landsat",
         "tags": "corrected surface landsat oli l30 ndwi",
