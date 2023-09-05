@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDVI_Landsat": {
         "id": "HLS_NDVI_Landsat",
-        "title": "Vegetation Index (NDVI) (B5-B4)/(B5+B4) *BETA*",
+        "title": "Vegetation Index (NDVI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDVI_Landsat",
         "tags": "corrected surface landsat oli l30 ndvi",

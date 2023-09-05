@@ -2,7 +2,7 @@
     "layers": {
       "HLS_Moisture_Index_Sentinel": {
         "id": "HLS_Moisture_Index_Sentinel",
-        "title": "Moisture Index (NDMI) (B8A-B11)/(B8A+B11) *BETA*",
+        "title": "Moisture Index (NDMI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
         "tags": "corrected surface Sentinel msi s30 ndmi",

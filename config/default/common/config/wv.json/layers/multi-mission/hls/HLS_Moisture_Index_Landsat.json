@@ -2,7 +2,7 @@
     "layers": {
       "HLS_Moisture_Index_Landsat": {
         "id": "HLS_Moisture_Index_Landsat",
-        "title": "Moisture Index (NDMI) (B05-B06)/(B05+B06) *BETA*",
+        "title": "Moisture Index (NDMI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_Moisture_Index_Landsat",
         "tags": "corrected surface landsat oli l30 ndmi",

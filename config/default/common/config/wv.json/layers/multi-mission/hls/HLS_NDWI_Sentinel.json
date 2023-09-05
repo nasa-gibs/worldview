@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDWI_Sentinel": {
         "id": "HLS_NDWI_Sentinel",
-        "title": "Water Index (NDWI) (B03-B08)/(B03+B08) *BETA*",
+        "title": "Water Index (NDWI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDWI_Sentinel",
         "tags": "corrected surface Sentinel msi s30 ndwi",

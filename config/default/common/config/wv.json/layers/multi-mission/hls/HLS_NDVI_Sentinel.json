@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDVI_Sentinel": {
         "id": "HLS_NDVI_Sentinel",
-        "title": "Vegetation Index (NDVI) (B8-B4)/(B8+B4) *BETA*",
+        "title": "Vegetation Index (NDVI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDVI_Sentinel",
         "tags": "corrected surface Sentinel msi s30 ndvi",

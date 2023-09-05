@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDSI_Landsat": {
         "id": "HLS_NDSI_Landsat",
-        "title": "Snow Index (NDSI) (B3-B6)/(B3+B6) *BETA*",
+        "title": "Snow Index (NDSI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDSI_Landsat",
         "tags": "corrected surface landsat oli l30 ndsi",

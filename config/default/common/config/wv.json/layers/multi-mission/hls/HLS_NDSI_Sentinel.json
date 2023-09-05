@@ -2,7 +2,7 @@
     "layers": {
       "HLS_NDSI_Sentinel": {
         "id": "HLS_NDSI_Sentinel",
-        "title": "Snow Index (NDSI) (B3-B11)/(B3+B11) *BETA*",
+        "title": "Snow Index (NDSI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDSI_Sentinel",
         "tags": "corrected surface Sentinel msi s30 ndsi",
