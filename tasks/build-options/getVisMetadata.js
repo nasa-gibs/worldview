@@ -74,6 +74,14 @@ const skipLayers = [
   'HLS_False_Color_Sentinel',
   'HLS_Customizable_Sentinel',
   'HLS_Customizable_Landsat',
+  'HLS_NDVI_Landsat',
+  'HLS_NDWI_Landsat',
+  'HLS_NDSI_Landsat',
+  'HLS_Moisture_Index_Landsat',
+  'HLS_NDVI_Sentinel',
+  'HLS_NDWI_Sentinel',
+  'HLS_NDSI_Sentinel',
+  'HLS_Moisture_Index_Sentinel',
   'HLS_False_Color_Landsat'
 ]
 
