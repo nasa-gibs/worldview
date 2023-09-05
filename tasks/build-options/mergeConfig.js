@@ -47,7 +47,7 @@ async function mergeFiles (inputDir) {
         const data = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8'))
         await dictMerge(conf, data)
       } else if (fs.existsSync(path.join(inputDir, file)) && fs.lstatSync(path.join(inputDir, file)).isDirectory()) {
-        subDir = path.join(inputDir, file)
+        const subDir = path.join(inputDir, file)
         await mergeFiles(subDir)
       }
     } catch (error) {

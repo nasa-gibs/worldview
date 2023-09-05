@@ -33,18 +33,17 @@ function FindOrbitTracksMode () {
   }));
 
   const prevDate = usePrevious(selectedDate);
+  const placeHolderLayerSelection = { id: 'Select Layer', period: 'daily' };
+  const [layerSelection, setLayerSelection] = useState(placeHolderLayerSelection);
+  const [searchMethod, setSearchMethod] = useState(0);
+  const [dateFound, setDateFound] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedDate !== prevDate && dateFound !== null) {
       setDateFound(null);
     }
   });
-
-  const placeHolderLayerSelection = { id: 'Select Layer', period: 'daily' };
-  const [layerSelection, setLayerSelection] = useState(placeHolderLayerSelection);
-  const [searchMethod, setSearchMethod] = useState(0);
-  const [dateFound, setDateFound] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const buttonDisabled = layerSelection.id === 'Select Layer' || searchMethod === 0 || zoom < 7 || isLoading;
 
@@ -83,29 +82,6 @@ function FindOrbitTracksMode () {
     return dateRange;
   };
 
-  const findOrbitalImagery = async () => {
-    setIsLoading(true);
-    const verifyQuery = verifyExtent();
-    if (!verifyQuery) {
-      setIsLoading(false);
-      return;
-    }
-    const dateRange = getOrbitalDateRange();
-    for (let i = 0; i < dateRange.length; i += 1) {
-      const date = dateRange[i];
-      // eslint-disable-next-line no-await-in-loop
-      const imageryRequest = await makeMeasurementRequest(date);
-      if (imageryRequest === 100 || !imageryRequest) {
-        console.log('No imagery found for ', date);
-      } else {
-        setIsLoading(false);
-        console.log('Imagery found for ', date, ' with ', imageryRequest, '% black pixels');
-        return setDateFound(date);
-      }
-    }
-    setIsLoading(false);
-  };
-
   const makeMeasurementRequest = async (date) => {
     const mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
     try {
@@ -136,6 +112,29 @@ function FindOrbitTracksMode () {
     } catch (error) {
       console.error(`No image available for ${layerSelection.id} on ${date}: `, error);
     }
+  };
+
+  const findOrbitalImagery = async () => {
+    setIsLoading(true);
+    const verifyQuery = verifyExtent();
+    if (!verifyQuery) {
+      setIsLoading(false);
+      return;
+    }
+    const dateRange = getOrbitalDateRange();
+    for (let i = 0; i < dateRange.length; i += 1) {
+      const date = dateRange[i];
+      // eslint-disable-next-line no-await-in-loop
+      const imageryRequest = await makeMeasurementRequest(date);
+      if (imageryRequest === 100 || !imageryRequest) {
+        console.log('No imagery found for ', date);
+      } else {
+        setIsLoading(false);
+        console.log('Imagery found for ', date, ' with ', imageryRequest, '% black pixels');
+        return setDateFound(date);
+      }
+    }
+    setIsLoading(false);
   };
 
   const orangeStyle = { backgroundColor: '#d54e21' };

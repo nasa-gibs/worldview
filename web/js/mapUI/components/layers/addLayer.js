@@ -24,32 +24,6 @@ function AddLayer(props) {
     ui,
   } = props;
 
-  useEffect(() => {
-    if (action.type === layerConstants.ADD_LAYER || action.type === layerConstants.UPDATE_DDV_LAYER) {
-      const def = lodashFind(action.layers, { id: action.id });
-      if (def.type === 'granule') {
-        return granuleLayerAdd(def);
-      }
-      clearPreload();
-      addLayer(def);
-    } else if (action.type === DISPLAY_STATIC_MAP) {
-      addStaticLayer();
-    }
-  }, [action]);
-
-  // add static layer for kiosk mode in case of gibs/dns failure
-  const addStaticLayer = async() => {
-    const { createLayer } = ui;
-    const newLayer = await createLayer();
-    ui.selected.getLayers().insertAt(0, newLayer);
-  };
-
-  const granuleLayerAdd = (def) => {
-    ui.processingPromise = new Promise((resolve) => {
-      resolve(addLayer(def));
-    });
-  };
-
   /**
  * Initiates the adding of a layer
  * @param {object} def - layer Specs
@@ -82,6 +56,32 @@ function AddLayer(props) {
     updateLayerVisibilities();
     preloadNextTiles();
   };
+
+  const granuleLayerAdd = (def) => {
+    ui.processingPromise = new Promise((resolve) => {
+      resolve(addLayer(def));
+    });
+  };
+
+  // add static layer for kiosk mode in case of gibs/dns failure
+  const addStaticLayer = async() => {
+    const { createLayer } = ui;
+    const newLayer = await createLayer();
+    ui.selected.getLayers().insertAt(0, newLayer);
+  };
+
+  useEffect(() => {
+    if (action.type === layerConstants.ADD_LAYER || action.type === layerConstants.UPDATE_DDV_LAYER) {
+      const def = lodashFind(action.layers, { id: action.id });
+      if (def.type === 'granule') {
+        return granuleLayerAdd(def);
+      }
+      clearPreload();
+      addLayer(def);
+    } else if (action.type === DISPLAY_STATIC_MAP) {
+      addStaticLayer();
+    }
+  }, [action]);
 
   return null;
 }

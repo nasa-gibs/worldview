@@ -838,6 +838,8 @@ p.recharts-tooltip-label {
 
   .layer-orbit-tracks .wv-checkbox {
     margin: 10px 0 10px 10px;
+    display: flex;
+    align-items: center;
 
     & label {
       display: inline;

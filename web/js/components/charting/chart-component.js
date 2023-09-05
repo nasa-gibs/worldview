@@ -10,10 +10,24 @@ function ChartComponent (props) {
   } = props;
 
   const { data } = liveData;
-  const yAxisValuesArr = getYAxisValues(data);
 
   // Arbitrary array of colors to use
   const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+
+  function formatToThreeDigits(str) {
+    return parseFloat(str).toFixed(3);
+  }
+
+  /**
+   * Return an array of provided min & max values buffered by 10%
+   * @param {number} min | the lowest mean value of the collected data
+   * @param {number} max | the highest mean value of the collected data
+   */
+  function bufferYAxisMinAndMax(min, max) {
+    const yAxisMin = Math.floor(min * 4) / 4;
+    const yAxisMax = Math.ceil(max * 4) / 4;
+    return [yAxisMin - yAxisMin * 0.1, yAxisMax + yAxisMax * 0.1];
+  }
 
   /**
    * Process the data & determine the min & max MEAN values to establish the Y Axis Scale
@@ -35,15 +49,16 @@ function ChartComponent (props) {
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
+  const yAxisValuesArr = getYAxisValues(data);
+
   /**
-   * Return an array of provided min & max values buffered by 10%
-   * @param {number} min | the lowest mean value of the collected data
-   * @param {number} max | the highest mean value of the collected data
+   * Extracts each key from the provided object & returns the list, removing 'name' from the collection
+   * @param {Object} chartData
    */
-  function bufferYAxisMinAndMax(min, max) {
-    const yAxisMin = Math.floor(min * 4) / 4;
-    const yAxisMax = Math.ceil(max * 4) / 4;
-    return [yAxisMin - yAxisMin * 0.1, yAxisMax + yAxisMax * 0.1];
+  function getLineNames(obj) {
+    // Add additional fields to the chart here!!
+    const linesToInclude = ['mean'];
+    return Object.keys(obj[0]).filter((val) => linesToInclude.indexOf(val) > -1);
   }
 
   /**
@@ -62,16 +77,6 @@ function ChartComponent (props) {
       />
     ));
     return chartLinesArr;
-  }
-
-  /**
-   * Extracts each key from the provided object & returns the list, removing 'name' from the collection
-   * @param {Object} chartData
-   */
-  function getLineNames(obj) {
-    // Add additional fields to the chart here!!
-    const linesToInclude = ['mean'];
-    return Object.keys(obj[0]).filter((val) => linesToInclude.indexOf(val) > -1);
   }
 
   /**
@@ -145,10 +150,6 @@ function ChartComponent (props) {
         </div>
       </>
     );
-  }
-
-  function formatToThreeDigits(str) {
-    return parseFloat(str).toFixed(3);
   }
 
   return (

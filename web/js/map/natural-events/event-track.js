@@ -26,6 +26,14 @@ const removePointOverlays = (map, pointsAndArrows) => {
   });
 };
 
+function addOverlayIfIsVisible (map, overlay) {
+  const extent = map.getView().calculateExtent();
+  const position = overlay.getPosition();
+  if (olExtent.containsCoordinate(extent, position)) {
+    map.addOverlay(overlay);
+  }
+}
+
 const addPointOverlays = (map, pointOverlayArray) => {
   lodashEach(pointOverlayArray, (pointOverlay) => {
     addOverlayIfIsVisible(map, pointOverlay);
@@ -96,14 +104,6 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
   };
 };
 
-function addOverlayIfIsVisible (map, overlay) {
-  const extent = map.getView().calculateExtent();
-  const position = overlay.getPosition();
-  if (olExtent.containsCoordinate(extent, position)) {
-    map.addOverlay(overlay);
-  }
-}
-
 function EventTrack () {
   const dispatch = useDispatch();
   const selectEvent = (id, date) => dispatch(selectEventAction(id, date));
@@ -133,14 +133,22 @@ function EventTrack () {
     showAllTracksRef.current = showAllTracks;
   }, [showAllTracks]);
 
+  const removeAllTracks = (mapArg) => {
+    allTrackDetailsRef.current?.forEach((trackDetail) => {
+      const { pointsAndArrows } = trackDetail.newTrackDetails;
+      const { track } = trackDetail.newTrackDetails;
+      mapArg.removeOverlay(track);
+      removePointOverlays(mapArg, pointsAndArrows);
+    });
+  };
 
-  // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
-  const updateCurrentTrack = () => {
-    const { id, date } = selectedEvent;
-    if (!selectedEvent.id || !selectedEvent.date) return;
-    const event = (eventsData || []).find((e) => e.id === id);
-    if (!event) return;
-    update(event, date);
+  const removeTrack = (mapArg) => {
+    if (!mapArg) return;
+    const { track, pointsAndArrows } = trackDetailsRef.current;
+    mapArg.removeOverlay(track);
+    removePointOverlays(mapArg, pointsAndArrows);
+
+    return {};
   };
 
   const onPropertyChange = (e) => {
@@ -160,24 +168,6 @@ function EventTrack () {
       mapArg.addOverlay(track);
       addPointOverlays(mapArg, pointsAndArrows);
     }
-  };
-
-  const removeTrack = (mapArg) => {
-    if (!mapArg) return;
-    const { track, pointsAndArrows } = trackDetailsRef.current;
-    mapArg.removeOverlay(track);
-    removePointOverlays(mapArg, pointsAndArrows);
-
-    return {};
-  };
-
-  const removeAllTracks = (mapArg) => {
-    allTrackDetailsRef.current?.forEach((trackDetail) => {
-      const { pointsAndArrows } = trackDetail.newTrackDetails;
-      const { track } = trackDetail.newTrackDetails;
-      mapArg.removeOverlay(track);
-      removePointOverlays(mapArg, pointsAndArrows);
-    });
   };
 
   const updateAllTracks = () => {
@@ -215,7 +205,6 @@ function EventTrack () {
 
     setAllTrackDetails(allTracks);
   };
-
 
   const update = (event, date) => {
     let newTrackDetails;
@@ -264,6 +253,15 @@ function EventTrack () {
       createAndAddTrack();
     }
     setTrackDetails(newTrackDetails);
+  };
+
+  // $$$ This function merely gets the selected event data from the events data and calls the update() function with that data, will likely not need it $$$
+  const updateCurrentTrack = () => {
+    const { id, date } = selectedEvent;
+    if (!selectedEvent.id || !selectedEvent.date) return;
+    const event = (eventsData || []).find((e) => e.id === id);
+    if (!event) return;
+    update(event, date);
   };
 
   // debounce delays the function call by a set amount of time. in this case 50 milliseconds

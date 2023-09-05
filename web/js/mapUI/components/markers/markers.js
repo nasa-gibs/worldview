@@ -23,25 +23,6 @@ function Markers(props) {
     ui,
   } = props;
 
-  useEffect(() => {
-    switch (action.type) {
-      case 'LOCATION_SEARCH/REMOVE_MARKER': {
-        return removeCoordinatesMarker(action.coordinates);
-      }
-      case 'LOCATION_SEARCH/SET_MARKER': {
-        if (action.flyToExistingMarker) {
-          return flyToMarker(action.coordinates);
-        }
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
-      }
-      case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
-        return addMarkerAndUpdateStore(false);
-      }
-      default:
-        break;
-    }
-  }, [action]);
-
   /**
    * Remove coordinates marker from all projections
    *
@@ -76,27 +57,6 @@ function Markers(props) {
     });
   };
 
-  /**
-   * Handle reverse geocode and add map marker with results
-   *
-   * @method handleActiveMapMarker
-   * @static
-   *
-   * @returns {void}
-   */
-  const handleActiveMapMarker = () => {
-    removeAllCoordinatesMarkers();
-    if (coordinates && coordinates.length > 0) {
-      coordinates.forEach((coordinatesObject) => {
-        const { longitude, latitude } = coordinatesObject;
-        const coord = [longitude, latitude];
-        if (!areCoordinatesWithinExtent(proj, coord)) return;
-        reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
-          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
-        });
-      });
-    }
-  };
 
   const flyToMarker = (coordinatesObject) => {
     const { sources } = config;
@@ -147,9 +107,50 @@ function Markers(props) {
     setGeocodeResults(geocodeResults);
   };
 
+  /**
+   * Handle reverse geocode and add map marker with results
+   *
+   * @method handleActiveMapMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const handleActiveMapMarker = () => {
+    removeAllCoordinatesMarkers();
+    if (coordinates && coordinates.length > 0) {
+      coordinates.forEach((coordinatesObject) => {
+        const { longitude, latitude } = coordinatesObject;
+        const coord = [longitude, latitude];
+        if (!areCoordinatesWithinExtent(proj, coord)) return;
+        reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
+          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
+        });
+      });
+    }
+  };
+
   useEffect(() => {
     handleActiveMapMarker();
   }, [ui]);
+
+  useEffect(() => {
+    switch (action.type) {
+      case 'LOCATION_SEARCH/REMOVE_MARKER': {
+        return removeCoordinatesMarker(action.coordinates);
+      }
+      case 'LOCATION_SEARCH/SET_MARKER': {
+        if (action.flyToExistingMarker) {
+          return flyToMarker(action.coordinates);
+        }
+        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
+      }
+      case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
+        return addMarkerAndUpdateStore(false);
+      }
+      default:
+        break;
+    }
+  }, [action]);
 
   return null;
 }
