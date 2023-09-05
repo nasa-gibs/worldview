@@ -12,6 +12,7 @@ import {
 import {
   selectEvent as selectEventAction,
   highlightEvent as highlightEventAction,
+  unHighlightEvent as unHighlightEventAction,
 } from '../../modules/natural-events/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
@@ -64,7 +65,7 @@ const updateSelection = function(newDate) {
  * @param {Function} showAllTracks
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, callbackHighlight, showAllTracks, isHighlighted) {
+const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, callbackHighlight, callbackUnhighlight, showAllTracks, isHighlighted) {
   const pointsAndArrows = [];
   const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
@@ -91,11 +92,11 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
     }
     const point = clusterPoint.properties.cluster
       ? getClusterPointEl(proj, clusterPoint, map, pointClusterObj, callback)
-      : getTrackPoint(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight);
+      : getTrackPoint(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight, callbackUnhighlight);
     pointsAndArrows.push(point);
   });
   return {
-    track: getTrackLines(map, trackSegments, isHighlighted, eventObj.id, getDefaultEventDate(eventObj), callback, callbackHighlight),
+    track: getTrackLines(map, trackSegments, isHighlighted, eventObj.id, getDefaultEventDate(eventObj), callback, callbackHighlight, callbackUnhighlight),
     pointsAndArrows,
   };
 };
@@ -112,6 +113,7 @@ function EventTrack () {
   const dispatch = useDispatch();
   const selectEvent = (id, date) => dispatch(selectEventAction(id, date));
   const highlightEvent = (id, date) => dispatch(highlightEventAction(id, date));
+  const unHighlightEvent = () => dispatch(unHighlightEventAction());
 
   const eventsData = useSelector((state) => getFilteredEvents(state), shallowEqual);
   const isAnimatingToEvent = useSelector((state) => state.animation.isAnimatingToEvent);
@@ -194,7 +196,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, showAllTracksRef.current, singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id);
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, unHighlightEvent, showAllTracksRef.current, singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id);
 
       newTrackDetails = {
         id: eventID,
@@ -232,7 +234,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, null, event.id === selectedEvent.id || event.id === highlightedEvent.id);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, unHighlightEvent, null, event.id === selectedEvent.id || event.id === highlightedEvent.id);
 
       newTrackDetails = {
         id: event.id,

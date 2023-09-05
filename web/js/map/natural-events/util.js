@@ -13,9 +13,10 @@ import { CRS } from '../../modules/map/constants';
 * @param  {Boolean} isHighlighted
 * @param  {Function} callback
 * @param  {Function} callbackHighlight
+* @param  {Function} callbackUnhighlight
 * @return {Object} Openlayers overlay object
 */
-export const getTrackPoint = function(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight) {
+export const getTrackPoint = function(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight, callbackUnhighlight) {
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const textEl = document.createElement('span');
@@ -52,7 +53,7 @@ export const getTrackPoint = function(proj, clusterPoint, isSelected, isHighligh
     callbackHighlight(eventID, date);
   };
   overlayEl.onmouseleave = function() {
-    callbackHighlight('', null);
+    callbackUnhighlight();
   };
   textEl.appendChild(content);
   textEl.appendChild(magnitudeContent);
@@ -142,9 +143,10 @@ export const getArrows = function(lineSegmentCoords, map, isHighlighted) {
 * @param  {String} date
 * @param  {Function} callback
 * @param  {Function} callbackHighlight
+* @param  {Function} callbackUnhighlight
 * @return {Object} Openlayers overlay object
 */
-export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, date, callback, callbackHighlight) {
+export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, date, callback, callbackHighlight, callbackUnhighlight) {
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   let lineString = '';
   const pixelCoords = trackCoords.map(([start, end]) => [
@@ -204,7 +206,7 @@ export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, 
       callbackHighlight(eventID, date);
     };
     clickEl.onmouseleave = function() {
-      callbackHighlight('', null);
+      callbackUnhighlight();
     };
 
     svgEl.appendChild(outlineEl);

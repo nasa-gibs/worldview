@@ -15,16 +15,17 @@ function Event (props) {
     deselectEvent,
     event,
     eventLayers,
+    highlightEvent,
     isSelected,
     isHighlighted,
     layers,
     removeGroup,
     selectedDate,
     selectEvent,
-    highlightEvent,
     sources,
     toggleGroupVisibility,
     toggleVisibility,
+    unHighlightEvent,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
   const itemClass = isSelected || isHighlighted
@@ -72,7 +73,7 @@ function Event (props) {
 
   function onEventHighlight(isHighlighting) {
     if (!isHighlighting) {
-      highlightEvent(0, null);
+      unHighlightEvent();
     } else {
       const selectedEventDate = getDefaultEventDate(event);
       highlightEvent(event.id, selectedEventDate);
@@ -215,16 +216,17 @@ Event.propTypes = {
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
   eventLayers: PropTypes.array,
+  highlightEvent: PropTypes.func,
   isSelected: PropTypes.bool,
   isHighlighted: PropTypes.bool,
   layers: PropTypes.array,
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
-  highlightEvent: PropTypes.func,
   sources: PropTypes.array,
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
+  unHighlightEvent: PropTypes.func,
 };
 
 export default Event;

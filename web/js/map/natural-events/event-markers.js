@@ -17,6 +17,7 @@ import EventIcon from '../../components/sidebar/event-icon';
 import {
   selectEvent as selectEventAction,
   highlightEvent as highlightEventAction,
+  unHighlightEvent as unHighlightEventAction,
 } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
@@ -143,7 +144,9 @@ class EventMarkers extends React.Component {
   }
 
   addInteractions(marker, event, date, isSelected) {
-    const { selectEvent, highlightEvent, mapUi } = this.props;
+    const {
+      selectEvent, highlightEvent, unHighlightEvent, mapUi,
+    } = this.props;
     const category = event.categories[0];
     let willSelect = true;
     let moveCount = 0;
@@ -176,7 +179,7 @@ class EventMarkers extends React.Component {
       highlightEvent(event.id, date);
     };
     const onMouseLeave = (e) => {
-      highlightEvent('', null);
+      unHighlightEvent();
     };
 
     ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
@@ -301,11 +304,15 @@ const mapDispatchToProps = (dispatch) => ({
   highlightEvent: (id, date) => {
     dispatch(highlightEventAction(id, date));
   },
+  unHighlightEvent: () => {
+    dispatch(unHighlightEventAction());
+  },
 });
 
 EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  highlightEvent: PropTypes.func,
   isAnimatingToEvent: PropTypes.bool,
   isMobile: PropTypes.bool,
   map: PropTypes.object,
@@ -313,7 +320,7 @@ EventMarkers.propTypes = {
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
-  highlightEvent: PropTypes.func,
+  unHighlightEvent: PropTypes.func,
 };
 
 export default connect(
