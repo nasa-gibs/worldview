@@ -148,6 +148,15 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
+          {true && (
+            <AlertUtil
+              isOpen
+              noPortal
+              icon="info-circle"
+              message="Testing a default alert"
+              onDismiss={() => {}}
+            />
+          )}
 
         </>
       );

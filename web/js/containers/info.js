@@ -40,6 +40,7 @@ function InfoList (props) {
   } = props;
 
   function getNotificationListItem() {
+    console.log('getNotificationListItem');
     const { numberUnseen, type, object } = notifications;
     return {
       text: 'Notifications',
