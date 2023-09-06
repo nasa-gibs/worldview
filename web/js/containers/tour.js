@@ -132,7 +132,7 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive,
     } = this.props;
     if (e) e.preventDefault();
     const kioskParam = this.getKioskParam(isKioskModeActive);
@@ -155,7 +155,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
       config,
       renderedPalettes,
     );
@@ -237,7 +237,7 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const kioskParam = this.getKioskParam(isKioskModeActive);
 
@@ -254,7 +254,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
         renderedPalettes,
       );
@@ -271,7 +271,7 @@ class Tour extends React.Component {
 
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
@@ -291,7 +291,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
         renderedPalettes,
       );
@@ -548,9 +548,11 @@ const mapStateToProps = (state) => {
   } = state;
   const { screenWidth, screenHeight } = screenSize;
   const { isKioskModeActive } = state.ui;
+  const { isEmbedModeActive } = state.embed;
   return {
     config,
     isActive: tour.active,
+    isEmbedModeActive,
     isKioskModeActive,
     map,
     models,
