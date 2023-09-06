@@ -116,7 +116,7 @@ function EventTrack () {
   const unHighlightEvent = () => dispatch(unHighlightEventAction());
 
   const eventsData = useSelector((state) => getFilteredEvents(state), shallowEqual);
-  const isAnimatingToEvent = useSelector((state) => state.animation.isAnimatingToEvent);
+  const isAnimatingToEvent = useSelector((state) => state.events.isAnimatingToEvent);
   const isPlaying = useSelector((state) => state.animation.isPlaying);
   const map = useSelector((state) => state.map.ui.selected, shallowEqual);
   const extent = useSelector((state) => state.map.extent, shallowEqual);
@@ -196,7 +196,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, unHighlightEvent, showAllTracksRef.current, singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id);
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, unHighlightEvent, showAllTracksRef.current, showAllTracks && (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id));
 
       newTrackDetails = {
         id: eventID,
@@ -216,7 +216,7 @@ function EventTrack () {
     eventsData.forEach((event) => {
       const eventID = event.id;
       const eventDate = event.geometry[0].date.slice(0, 10);
-      if (event.geometry.length > 1 && eventID !== trackDetailsRef.current.id) {
+      if (event.geometry.length > 1) {
         createAndAddTrack(event, eventID, eventDate);
       }
     });
@@ -234,7 +234,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, unHighlightEvent, null, event.id === selectedEvent.id || event.id === highlightedEvent.id);
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, unHighlightEvent, null, showAllTracks && (event.id === selectedEvent.id || event.id === highlightedEvent.id));
 
       newTrackDetails = {
         id: event.id,
@@ -286,10 +286,6 @@ function EventTrack () {
   const initialize = () => {
     if (!mapRef.current) return;
     mapRef.current.getView().on('propertychange', debouncedOnPropertyChange);
-    mapRef.current.once('postrender', () => { debouncedTrackUpdate(); });
-    if (showAllTracksRef.current) {
-      mapRef.current.once('postrender', () => { debouncedUpdateAllTracks(); });
-    }
   };
 
   useEffect(
@@ -324,8 +320,9 @@ function EventTrack () {
       const eventsLoaded = eventsData && eventsData.length;
       const extentChange = prevExtent && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
       const highlightedEventChange = highlightedEvent?.id !== prevHighlightedEvent?.id;
+      const allTracksChange = showAllTracks !== prevShowAllTracks;
 
-      if (mapRef.current !== prevMap) {
+      if (mapRef.current !== prevMap || allTracksChange) {
         if (prevMap) {
           update(null);
           removeTrack(prevMap);
@@ -338,7 +335,7 @@ function EventTrack () {
       }
 
       // remove all tracks when deselecting option
-      if (!showAllTracksRef.current && prevShowAllTracks !== showAllTracks) {
+      if (!showAllTracksRef.current && allTracksChange) {
         removeAllTracks(mapRef.current);
       }
 
@@ -348,7 +345,7 @@ function EventTrack () {
       }
 
       // show only selected track if show all tracks is not selected
-      if (!isPlaying && !showAllTracksRef.current && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      if (!showAllTracks && !isPlaying && (!showAllTracksRef.current || allTracksChange) && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
         debouncedTrackUpdate();
       }
 
@@ -357,7 +354,7 @@ function EventTrack () {
         removeTrack(mapRef.current);
       }
     },
-    [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracksRef.current, highlightedEvent],
+    [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent, showAllTracksRef.current, highlightedEvent, showAllTracks],
   );
 
   return null;
