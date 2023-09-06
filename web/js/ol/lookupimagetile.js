@@ -3,6 +3,33 @@ import OlTileState from 'ol/TileState';
 import UPNG from 'upng-js';
 import { cloneDeep as lodashCloneDeep } from 'lodash';
 
+/**
+   * @method getPixelColorsToDisplay
+   * @static
+   * @param obj {object} - The Colormap for this product
+   *
+   * @returns {object} Colormap containing only active colors
+   */
+function getPixelColorsToDisplay(obj) {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    if (!(value.r === 0 && value.g === 0 && value.b === 0 && value.a === 0)) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+}
+
+function getColormap(rawColormap) {
+  const colorMapArr = [];
+  for (let i = 0; i < rawColormap.length; i += 3) {
+    colorMapArr.push(rawColormap[i]);
+    colorMapArr.push(rawColormap[i + 1]);
+    colorMapArr.push(rawColormap[i + 2]);
+    colorMapArr.push(255);
+  }
+  return colorMapArr;
+}
+
 class LookupImageTile extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions) {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
@@ -168,33 +195,6 @@ LookupImageTile.prototype.load = function() {
     }
   }
 };
-
-/**
-   * @method getPixelColorsToDisplay
-   * @static
-   * @param obj {object} - The Colormap for this product
-   *
-   * @returns {object} Colormap containing only active colors
-   */
-function getPixelColorsToDisplay(obj) {
-  return Object.entries(obj).reduce((acc, [key, value]) => {
-    if (!(value.r === 0 && value.g === 0 && value.b === 0 && value.a === 0)) {
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
-}
-
-function getColormap(rawColormap) {
-  const colorMapArr = [];
-  for (let i = 0; i < rawColormap.length; i += 3) {
-    colorMapArr.push(rawColormap[i]);
-    colorMapArr.push(rawColormap[i + 1]);
-    colorMapArr.push(rawColormap[i + 2]);
-    colorMapArr.push(255);
-  }
-  return colorMapArr;
-}
 
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {

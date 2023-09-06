@@ -74,6 +74,96 @@ const preventDefaultFunc = (e) => {
   e.preventDefault();
 };
 
+// get axisWidth and parentOffset for axis, footer, and leftOffset calculations
+const getOffsetValues = (innerWidth, hasSubDaily) => {
+  const parentOffset = (hasSubDaily ? 414 : 310) + 10;
+  const width = innerWidth - parentOffset - 88;
+  return { width, parentOffset };
+};
+
+// check if left arrow should be disabled on predicted decrement
+const checkLeftArrowDisabled = (
+  date,
+  delta,
+  timeScaleChangeUnit,
+  timelineStartDateLimit,
+) => {
+  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
+  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
+
+  const nextDecrementDateTime = nextDecrementDate.getTime();
+  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
+  return nextDecrementDateTime <= minMinusDeltaDateTime;
+};
+
+// check if right arrow should be disabled on predicted increment
+const checkRightArrowDisabled = (
+  date,
+  delta,
+  timeScaleChangeUnit,
+  timelineEndDateLimit,
+) => {
+  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
+  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
+
+  const nextIncrementDateTime = nextIncrementDate.getTime();
+  const maxPlusDeltaDateTime = new Date(timelineEndDateLimit).getTime();
+  return nextIncrementDateTime > maxPlusDeltaDateTime;
+};
+
+const checkNowButtonDisabled = (
+  date,
+  timelineEndDateLimit,
+  hasFutureLayers,
+  nowOverride,
+  appNow,
+) => {
+  const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
+  let maxDateMoment;
+  if (nowOverride || hasFutureLayers) {
+    maxDateMoment = new Date(moment.utc(appNow).seconds(0).format());
+  } else {
+    maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
+  }
+  return dateTimeMoment.getTime() === maxDateMoment.getTime();
+};
+
+// get timelineEndDateLimit based on potential future layers
+const getTimelineEndDateLimit = (state) => {
+  const {
+    date, layers, compare, proj,
+  } = state;
+  const { appNow } = date;
+  const activeLayers = getActiveLayers(state);
+
+  let layerDateRange;
+  if (compare.active) {
+    // use all layers to keep timeline axis range consistent when switching between A/B
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
+  } else {
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    layerDateRange = getDateRange({}, activeLayersFiltered);
+  }
+
+  let timelineEndDateLimit;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
+    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
+    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
+      // if layerDateRange.end is after the set rounded quarter hour time, then update
+      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
+    }
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
+  return timelineEndDateLimit;
+};
+
+
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
@@ -1656,93 +1746,4 @@ Timeline.propTypes = {
   toggleCustomModal: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
-};
-
-// get axisWidth and parentOffset for axis, footer, and leftOffset calculations
-const getOffsetValues = (innerWidth, hasSubDaily) => {
-  const parentOffset = (hasSubDaily ? 414 : 310) + 10;
-  const width = innerWidth - parentOffset - 88;
-  return { width, parentOffset };
-};
-
-// check if left arrow should be disabled on predicted decrement
-const checkLeftArrowDisabled = (
-  date,
-  delta,
-  timeScaleChangeUnit,
-  timelineStartDateLimit,
-) => {
-  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
-  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
-  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
-
-  const nextDecrementDateTime = nextDecrementDate.getTime();
-  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
-  return nextDecrementDateTime <= minMinusDeltaDateTime;
-};
-
-// check if right arrow should be disabled on predicted increment
-const checkRightArrowDisabled = (
-  date,
-  delta,
-  timeScaleChangeUnit,
-  timelineEndDateLimit,
-) => {
-  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
-  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
-
-  const nextIncrementDateTime = nextIncrementDate.getTime();
-  const maxPlusDeltaDateTime = new Date(timelineEndDateLimit).getTime();
-  return nextIncrementDateTime > maxPlusDeltaDateTime;
-};
-
-const checkNowButtonDisabled = (
-  date,
-  timelineEndDateLimit,
-  hasFutureLayers,
-  nowOverride,
-  appNow,
-) => {
-  const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
-  let maxDateMoment;
-  if (nowOverride || hasFutureLayers) {
-    maxDateMoment = new Date(moment.utc(appNow).seconds(0).format());
-  } else {
-    maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
-  }
-  return dateTimeMoment.getTime() === maxDateMoment.getTime();
-};
-
-// get timelineEndDateLimit based on potential future layers
-const getTimelineEndDateLimit = (state) => {
-  const {
-    date, layers, compare, proj,
-  } = state;
-  const { appNow } = date;
-  const activeLayers = getActiveLayers(state);
-
-  let layerDateRange;
-  if (compare.active) {
-    // use all layers to keep timeline axis range consistent when switching between A/B
-    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
-    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
-    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
-  } else {
-    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
-    layerDateRange = getDateRange({}, activeLayersFiltered);
-  }
-
-  let timelineEndDateLimit;
-  if (layerDateRange && layerDateRange.end > appNow) {
-    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
-    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
-    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
-      // if layerDateRange.end is after the set rounded quarter hour time, then update
-      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
-    }
-  } else {
-    timelineEndDateLimit = getISODateFormatted(appNow);
-  }
-  return timelineEndDateLimit;
 };

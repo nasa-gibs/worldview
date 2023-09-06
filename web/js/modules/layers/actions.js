@@ -283,26 +283,6 @@ export function showLayers(layers) {
   };
 }
 
-export function updateGranuleLayerState(layer) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const {
-      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
-    } = layer.wv;
-
-    const mostRecentGranuleDate = granuleDates[0];
-    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
-    const granuleFootprints = getGranuleFootprints(layer);
-    const existingLayer = getGranuleLayer(state, id);
-
-    if (existingLayer) {
-      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
-    }
-    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
-  };
-}
-
 function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
@@ -344,6 +324,26 @@ function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
       granulePlatform,
       count,
     });
+  };
+}
+
+export function updateGranuleLayerState(layer) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
+    } = layer.wv;
+
+    const mostRecentGranuleDate = granuleDates[0];
+    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
+    const granuleFootprints = getGranuleFootprints(layer);
+    const existingLayer = getGranuleLayer(state, id);
+
+    if (existingLayer) {
+      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
+    }
+    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
   };
 }
 

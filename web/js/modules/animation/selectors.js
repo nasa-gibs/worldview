@@ -9,6 +9,39 @@ import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
 import { formatDisplayDate } from '../date/util';
 
 /*
+ * retrieves renderable layers
+ *
+ * @method getProducts
+ * @private
+ *
+ * @returns {array} array of layer objects
+ *
+ */
+function getProducts(date, state) {
+  const layersArray = [];
+  const products = getLayers(
+    state,
+    {
+      reverse: true,
+      renderable: true,
+      date,
+    },
+  );
+  lodashEach(products, (layer) => {
+    const layerDate = new Date(date);
+    if (layer.endDate) {
+      if (layerDate > new Date(layer.endDate)) return;
+    }
+    if (layer.visible && new Date(layer.startDate) <= layerDate) {
+      layersArray.push(layer);
+    } else if (!layer.startDate) {
+      layersArray.push(layer);
+    }
+  });
+  return layersArray;
+}
+
+/*
  * loops through dates and created image
  * download urls and pushs them to an
  * array
@@ -69,36 +102,4 @@ export default function getImageArray(
     }
   }
   return a;
-}
-/*
- * retrieves renderable layers
- *
- * @method getProducts
- * @private
- *
- * @returns {array} array of layer objects
- *
- */
-function getProducts(date, state) {
-  const layersArray = [];
-  const products = getLayers(
-    state,
-    {
-      reverse: true,
-      renderable: true,
-      date,
-    },
-  );
-  lodashEach(products, (layer) => {
-    const layerDate = new Date(date);
-    if (layer.endDate) {
-      if (layerDate > new Date(layer.endDate)) return;
-    }
-    if (layer.visible && new Date(layer.startDate) <= layerDate) {
-      layersArray.push(layer);
-    } else if (!layer.startDate) {
-      layersArray.push(layer);
-    }
-  });
-  return layersArray;
 }

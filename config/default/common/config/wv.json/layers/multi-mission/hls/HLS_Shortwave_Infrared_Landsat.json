@@ -2,7 +2,7 @@
   "layers": {
     "HLS_Shortwave_Infrared_Landsat": {
       "id": "HLS_Shortwave_Infrared_Landsat",
-      "title": "Reflectance (Bands 7-5-4, Shortwave Infrared) *BETA*",
+      "title": "Reflectance (Shortwave Infrared, Bands 7-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Landsat",
       "tags": "corrected surface oli l30 swir",

@@ -346,6 +346,12 @@ function LayerRow (props) {
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
+  const makeActiveForCharting = (layer) => {
+    if (layer !== activeChartingLayer) {
+      updateActiveChartingLayer(layer);
+    }
+  };
+
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (
@@ -438,11 +444,6 @@ function LayerRow (props) {
     </>
   );
 
-  const makeActiveForCharting = (layer) => {
-    if (layer !== activeChartingLayer) {
-      updateActiveChartingLayer(layer);
-    }
-  };
   return (
     <Draggable
       isDragDisabled={isEmbedModeActive || isAnimating}

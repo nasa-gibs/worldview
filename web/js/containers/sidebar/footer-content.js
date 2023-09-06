@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isMobileOnly, isTablet } from 'react-device-detect';
+
 import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMobileOnly, isTablet } from 'react-device-detect';
 import googleTagManager from 'googleTagManager';
-import ChartingInfo from '../../components/charting/charting-info.js';
+import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
 import ChartingModeOptions from '../../components/sidebar/charting-mode-options';

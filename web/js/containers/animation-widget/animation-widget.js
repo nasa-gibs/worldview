@@ -105,6 +105,14 @@ function AnimationWidget (props) {
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
 
+  const toggleCollapse = () => {
+    onToggleAnimationCollapse();
+  };
+
+  const toggleAutoplay = () => {
+    onToggleAnimationAutoplay();
+  };
+
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
@@ -146,14 +154,6 @@ function AnimationWidget (props) {
     ];
     const { classList } = e.target;
     return draggableTargets.some((tClass) => classList.contains(tClass));
-  };
-
-  const toggleCollapse = () => {
-    onToggleAnimationCollapse();
-  };
-
-  const toggleAutoplay = () => {
-    onToggleAnimationAutoplay();
   };
 
   const onExpandedDrag = (e, position) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { containsExtent, isEmpty } from 'ol/extent';
-import { fromExtent } from 'ol/geom/Polygon';
+import * as olProj from 'ol/proj';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CRS } from '../../modules/map/constants';
@@ -24,17 +24,21 @@ function Input({
   const update = () => {
     try {
       const newInputValue = Number(inputValue);
-      const newArray = structuredClone(boundingBoxArray);
-      newArray[index] = newInputValue;
-      const extentPolygon = fromExtent(newArray);
-      const crsCorrectedExtentPolygon = extentPolygon.transform(CRS.GEOGRAPHIC, crs);
-      const crsCorrectedExtent = crsCorrectedExtentPolygon.getExtent();
+      const clonedBBoxArray = structuredClone(boundingBoxArray);
+      clonedBBoxArray[index] = newInputValue;
+      const minX = Math.min(clonedBBoxArray[0], clonedBBoxArray[2]);
+      const minY = Math.min(clonedBBoxArray[1], clonedBBoxArray[3]);
+      const maxX = Math.max(clonedBBoxArray[0], clonedBBoxArray[2]);
+      const maxY = Math.max(clonedBBoxArray[1], clonedBBoxArray[3]);
+      const validExtent = [minX, minY, maxX, maxY];
+
+      const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
 
       if (containsExtent(viewExtent, crsCorrectedExtent)
-      && isValidExtent(newArray)
+      && isValidExtent(clonedBBoxArray)
       && !isEmpty(crsCorrectedExtent)
       && !Number.isNaN(newInputValue)) {
-        onLatLongChange(newArray);
+        onLatLongChange(clonedBBoxArray);
         setInputInvalid(false);
       } else {
         setInputValue(boundingBoxArray[index].toFixed(4));
@@ -116,7 +120,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={3}
-                    title="max Latitude"
+                    title="Latitude"
                   />
                   <Input
                     crs={crs}
@@ -125,7 +129,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={2}
-                    title="max Longitude"
+                    title="Longitude"
                   />
                 </div>
               </div>
@@ -143,7 +147,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={1}
-                    title="min Latitude"
+                    title="Latitude"
                   />
                   <Input
                     crs={crs}
@@ -152,7 +156,7 @@ function LatLongSelect(props) {
                     boundingBoxArray={boundingBoxArray}
                     onLatLongChange={onLatLongChange}
                     index={0}
-                    title="min Longitude"
+                    title="Longitude"
                   />
                 </div>
               </div>
