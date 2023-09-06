@@ -4,7 +4,6 @@ import { UncontrolledTooltip } from 'reactstrap';
 import util from '../../util/util';
 
 export default function Zot (props) {
-  console.log('zot');
   const { zot, layer, isMobile } = props;
   let className = 'zot';
   let tooltipString = '';

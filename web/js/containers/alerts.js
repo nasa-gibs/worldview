@@ -74,6 +74,7 @@ class DismissableAlerts extends React.Component {
       isAnimationActive,
       isVectorZoomAlertPresent,
       isVectorExceededAlertPresent,
+      layerNotices,
       openAlertModal,
     } = this.props;
     const {
@@ -91,6 +92,8 @@ class DismissableAlerts extends React.Component {
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
     const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
     const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
+    const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
+    console.log(layerOutages);
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -148,16 +151,15 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {true && (
+          {layerOutages && layerOutages.map((outage, index) => (
             <AlertUtil
               isOpen
               noPortal
               icon="info-circle"
-              message="Testing a default alert"
+              message={outage.message}
               onDismiss={() => {}}
             />
-          )}
-
+          ))}
         </>
       );
   }
@@ -169,10 +171,12 @@ const mapDispatchToProps = (dispatch) => ({
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
 });
+
 const mapStateToProps = (state) => {
   const {
-    embed, events, sidebar, compare, alerts, ui, animation, screenSize,
+    embed, events, sidebar, compare, alerts, ui, animation, screenSize, notifications,
   } = state;
+  const { layerNotices } = notifications.object;
   const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
   const activeLayers = getActiveLayers(state);
   const hasActiveVectorLayers = hasVectorLayers(activeLayers);
@@ -188,6 +192,7 @@ const mapStateToProps = (state) => {
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
     isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,
     hasSubdailyLayers: subdailyLayersActive(state),
+    layerNotices,
   };
 };
 export default connect(
@@ -208,5 +213,6 @@ DismissableAlerts.propTypes = {
   isMobile: PropTypes.bool,
   isVectorZoomAlertPresent: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
+  layerNotices: PropTypes.array,
   openAlertModal: PropTypes.func,
 };
