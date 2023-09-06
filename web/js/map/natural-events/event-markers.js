@@ -52,7 +52,7 @@ class EventMarkers extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       proj, eventsDataIsLoading, isAnimatingToEvent, selectedEvent,
     } = this.props;

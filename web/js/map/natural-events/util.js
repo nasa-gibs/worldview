@@ -229,7 +229,7 @@ export const getTrackLines = function(map, trackCoords, isHighlighted, eventID, 
  * Create cluster point
  *
  * @param  {Object} proj
- * @param  {Object} clusterPoint
+ * @param  {Object} cluster
  * @param  {Object} map Openlayers map object
  * @param  {Object} pointClusterObj supercluster object
  * @return {Object} Openlayers overlay object

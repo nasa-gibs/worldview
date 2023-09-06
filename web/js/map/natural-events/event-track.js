@@ -62,7 +62,10 @@ const updateSelection = function(newDate) {
  * @param {Object} map OpenLayers map Object
  * @param {String} selectedDate
  * @param {Function} callback
+ * @param {Function} callbackHighlight
+ * @param {Function} callbackUnhighlight
  * @param {Function} showAllTracks
+ * @param {Boolean} isHighlighted
  * @return {Object} Object Containing track info and elements
  */
 const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, callbackHighlight, callbackUnhighlight, showAllTracks, isHighlighted) {

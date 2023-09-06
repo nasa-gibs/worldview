@@ -43,8 +43,6 @@ function Event (props) {
   /**
    *
    * @param {String} date | Date of event clicked
-   * @param {Boolean} isSelected | Is this event already selected
-   * @param {Object} e | Event Object
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
@@ -71,6 +69,10 @@ function Event (props) {
     }
   }
 
+  /**
+   *
+   * @param {String} isHighlighting | Is the action to highlight
+   */
   function onEventHighlight(isHighlighting) {
     if (!isHighlighting) {
       unHighlightEvent();
