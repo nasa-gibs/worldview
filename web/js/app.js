@@ -129,10 +129,20 @@ class App extends React.Component {
       isEmbedModeActive,
       isMobile,
       isTourActive,
+      layerNotices,
+      layerNoticesUnseen,
       locationKey,
       modalId,
       parameters,
     } = this.props;
+    const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
+    const nonOutageNotificationCount = layerOutages ? layerNotices.length - layerOutages.length : null;
+    const hasSeenOutageAlerts = nonOutageNotificationCount >= layerNoticesUnseen;
+    // console.log('app.js: layerNoticesUnseen', layerNoticesUnseen);
+    // console.log('app.js: layerOutages', layerOutages);
+    // console.log('app.js: layerNotices', layerNotices);
+    console.log('app.js hasSeenOutageAlerts', hasSeenOutageAlerts);
+
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
       <div className={appClass} id="wv-content" data-role="content">
@@ -143,7 +153,7 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
-          {isTourActive ? <Tour /> : null}
+          {isTourActive && hasSeenOutageAlerts ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
@@ -166,12 +176,17 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { notifications } = state;
+  const { numberUnseen: layerNoticesUnseen } = notifications;
+  const { layerNotices } = notifications.object;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
+    layerNotices,
+    layerNoticesUnseen,
     tour: state.tour,
     config: state.config,
     parameters: state.parameters,
@@ -199,8 +214,10 @@ App.propTypes = {
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
-  setScreenInfoAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
+  layerNotices: PropTypes.array,
+  layerNoticesUnseen: PropTypes.number,
   parameters: PropTypes.object,
+  setScreenInfoAction: PropTypes.func,
 };

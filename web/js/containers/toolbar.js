@@ -546,7 +546,6 @@ const mapDispatchToProps = (dispatch) => ({
     promise.then((data) => {
       const obj = JSON.parse(data);
       if (obj.notifications) {
-        console.log('setting notification in state');
         dispatch(setNotifications(obj.notifications));
       }
     });

@@ -133,8 +133,6 @@ export function getNumberOfTypeNotSeen(type, arra) {
   for (let i = 0; i < len; i += 1) {
     if (new Date(storageItem) < new Date(arra[i].created_at)) {
       count += 1;
-    } else {
-      return count;
     }
   }
 
@@ -154,10 +152,9 @@ export function getCount(notifications, unseenOnly) {
   } = notifications;
 
   if (unseenOnly) {
-    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
-    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
-    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
-
+    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, notifications.layerNotices.filter((obj) => obj.notification_type === 'message'));
+    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, notifications.layerNotices.filter((obj) => obj.notification_type === 'alert'));
+    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, notifications.layerNotices.filter((obj) => obj.notification_type === 'outage'));
     return messageCount + outageCount + alertCount;
   }
   return messages.length + alerts.length + outages.length;
