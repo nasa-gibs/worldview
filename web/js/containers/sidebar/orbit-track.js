@@ -51,7 +51,7 @@ function OrbitTrack(props) {
       {palette}
       <FontAwesomeIcon icon="satellite" />
       <span className="wv-orbit-track-label">
-        {`${getOrbitTrackTitle(trackLayer)} (${satelliteName})`}
+        {getOrbitTrackTitle(trackLayer)}
       </span>
     </div>
   );

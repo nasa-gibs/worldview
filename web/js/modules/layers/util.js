@@ -24,15 +24,22 @@ import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
 import { parseDate } from '../date/util';
 
-export function getOrbitTrackTitle(def) {
+/**
+ * Given a layer definition, returns formatted string
+ * @param {object} def | Layer definition
+ * @param {bool} includeSatName | Optionally exclude the satellite name from the output
+ * @return {string}
+ */
+export function getOrbitTrackTitle(def, includeSatName = true) {
+  const satelliteName = includeSatName ? ` (${def.title.split(' - ')[0]})` : '';
   const { track } = def;
   const daynightValue = lodashGet(def, 'daynight[0]');
   if (track && daynightValue) {
-    return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}`;
+    return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}${satelliteName}`;
   } if (track) {
-    return lodashStartCase(track);
+    return `${lodashStartCase(track)}${satelliteName}`;
   } if (daynightValue) {
-    return lodashStartCase(daynightValue);
+    return `${lodashStartCase(daynightValue)}${satelliteName}`;
   }
 }
 
