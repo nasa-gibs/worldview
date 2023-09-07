@@ -172,6 +172,8 @@ export default function PresetOptions(props) {
 
   const presets = presetOptions === 'landsat' ? landsatPresets : sentinelPresets;
 
+  const currentlySelectedPreset = selectedPreset || presets[0];
+
   return (
     <div className="band-selection-presets-container">
       <div className="band-selection-presets-title-row">
@@ -182,7 +184,7 @@ export default function PresetOptions(props) {
           <Card
             key={preset.id}
             onClick={() => handlePresetSelect(preset)}
-            className={`band-selection-preset-card ${preset.id === selectedPreset?.id ? 'selected-preset' : ''}`}
+            className={`band-selection-preset-card ${preset.id === currentlySelectedPreset?.id ? 'selected-preset' : ''}`}
           >
             <CardImg top className="band-selection-preset-image" src={imgPath + preset.img} alt={preset.title} />
             <CardBody>
