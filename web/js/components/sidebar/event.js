@@ -71,7 +71,7 @@ function Event (props) {
 
   /**
    *
-   * @param {String} isHighlighting | Is the action to highlight
+   * @param {Boolean} isHighlighting | Is the action to highlight
    */
   function onEventHighlight(isHighlighting) {
     if (!isHighlighting) {
