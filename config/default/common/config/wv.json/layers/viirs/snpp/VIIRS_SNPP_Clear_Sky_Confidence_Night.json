@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Clear_Sky_Confidence_Night": {
+      "id": "VIIRS_SNPP_Clear_Sky_Confidence_Night",
+      "description": "viirs/snpp/VIIRS_SNPP_Clear_Sky_Confidence_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Clear Sky Confidence"
+    }
+  }
+}

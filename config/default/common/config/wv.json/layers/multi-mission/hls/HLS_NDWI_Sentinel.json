@@ -1,0 +1,32 @@
+{
+    "layers": {
+      "HLS_NDWI_Sentinel": {
+        "id": "HLS_NDWI_Sentinel",
+        "title": "Water Index (NDWI) *BETA*",
+        "subtitle": "Sentinel 2A & 2B / MSI",
+        "description": "multi-mission/hls/HLS_NDWI_Sentinel",
+        "tags": "corrected surface Sentinel msi s30 ndwi",
+        "group": "overlays",
+        "layergroup": "Land Surface Reflectance",
+        "format": "image/png",
+        "type": "ttiler",
+        "period": "daily",
+        "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+        "orbitDirection": ["descending", "descending"],
+        "bandCombo": {
+            "assets": ["B08", "B03"],
+            "expression": "(B03-B08)/(B03+B08)",
+            "rescale": "-1,1",
+            "colormap_name": "gnbu"
+        },
+        "disableSnapshot": true,
+        "wrapX": false,
+        "projections": {
+          "geographic": {
+            "source": "DDV",
+            "matrixSet": "31.25m"
+          }
+        }
+      }
+    }
+  }

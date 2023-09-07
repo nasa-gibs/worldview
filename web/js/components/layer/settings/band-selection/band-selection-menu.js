@@ -14,14 +14,16 @@ import { onClose } from '../../../../modules/modal/actions';
 
 export default function BandSelection({ layer }) {
   const dispatch = useDispatch();
-  const updateBandCombination = (id, bandCombo) => { dispatch(updateBandCombinationAction(id, bandCombo, layerIndex)); };
-  const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
-  const closeModal = () => { dispatch(onClose()); };
   const { activeLayers } = useSelector((state) => ({
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
-
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
+  const updateBandCombination = (id, bandCombo) => {
+    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex));
+  };
+  const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
+  const closeModal = () => { dispatch(onClose()); };
+
 
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [bandSelection, setBandSelection] = useState({
@@ -47,6 +49,8 @@ export default function BandSelection({ layer }) {
 
   const presetOptions = layer.id === 'HLS_Customizable_Landsat' ? 'landsat' : 'sentinel';
 
+  const isValidBandSelection = () => (bandSelection.r !== 'undefined' && bandSelection.r !== undefined) && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
+
   return (
     <div className="customize-bands-container">
       <PresetOptions
@@ -55,51 +59,55 @@ export default function BandSelection({ layer }) {
         setBandSelection={setBandSelection}
         presetOptions={presetOptions}
       />
-      <div className="band-selection-title-row">
-        <h3>Select a band for each channel:</h3>
-        <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
-        <UncontrolledTooltip
-          id="band-selection-title-tooltip"
-          target="band-selection-title-info-icon"
-          placement="right"
-        >
-          Apply custom band combinations
-        </UncontrolledTooltip>
-      </div>
+      {isValidBandSelection() && (
+      <div>
+        <div className="band-selection-title-row">
+          <h3>Select a band for each channel:</h3>
+          <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
+          <UncontrolledTooltip
+            id="band-selection-title-tooltip"
+            target="band-selection-title-info-icon"
+            placement="right"
+          >
+            Apply custom band combinations
+          </UncontrolledTooltip>
+        </div>
 
-      <div className="band-selection-row">
-        <p className="band-selection-color-header">R:</p>
-        <BandsDropdown
-          channel="r"
-          bandSelection={bandSelection}
-          setBandSelection={setBandSelection}
-          setSelectedPreset={setSelectedPreset}
-          layer={layer}
-        />
-        {/* {rwbInfo} */}
+        <div className="band-selection-row">
+          <p className="band-selection-color-header">R:</p>
+          <BandsDropdown
+            channel="r"
+            bandSelection={bandSelection}
+            setBandSelection={setBandSelection}
+            setSelectedPreset={setSelectedPreset}
+            layer={layer}
+          />
+          {/* {rwbInfo} */}
+        </div>
+        <div className="band-selection-row">
+          <p className="band-selection-color-header">G:</p>
+          <BandsDropdown
+            channel="g"
+            bandSelection={bandSelection}
+            setBandSelection={setBandSelection}
+            setSelectedPreset={setSelectedPreset}
+            layer={layer}
+          />
+          {/* {rwbInfo} */}
+        </div>
+        <div className="band-selection-row">
+          <p className="band-selection-color-header">B:</p>
+          <BandsDropdown
+            channel="b"
+            bandSelection={bandSelection}
+            setBandSelection={setBandSelection}
+            setSelectedPreset={setSelectedPreset}
+            layer={layer}
+          />
+          {/* {rwbInfo} */}
+        </div>
       </div>
-      <div className="band-selection-row">
-        <p className="band-selection-color-header">G:</p>
-        <BandsDropdown
-          channel="g"
-          bandSelection={bandSelection}
-          setBandSelection={setBandSelection}
-          setSelectedPreset={setSelectedPreset}
-          layer={layer}
-        />
-        {/* {rwbInfo} */}
-      </div>
-      <div className="band-selection-row">
-        <p className="band-selection-color-header">B:</p>
-        <BandsDropdown
-          channel="b"
-          bandSelection={bandSelection}
-          setBandSelection={setBandSelection}
-          setSelectedPreset={setSelectedPreset}
-          layer={layer}
-        />
-        {/* {rwbInfo} */}
-      </div>
+      )}
       <div className="band-selection-button-row">
         <Button
           id="confirm-band-selection"

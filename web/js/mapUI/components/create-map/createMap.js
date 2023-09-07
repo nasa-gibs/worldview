@@ -61,18 +61,6 @@ function CreateMap(props) {
     duration: animationDuration,
   });
 
-  useEffect(() => {
-    if (isMapSet) return;
-    setMap(true);
-    const uiCopy = ui;
-    lodashForOwn(projections, (proj) => {
-      const map = mapCreation(proj, uiCopy);
-      uiCopy.proj[proj.id] = map;
-    });
-    setGranuleFootprints(granuleFootprintsObj);
-    setUI(uiCopy);
-  });
-
   /**
    * Create map object
    *
@@ -235,6 +223,18 @@ function CreateMap(props) {
     });
     return map;
   };
+
+  useEffect(() => {
+    if (isMapSet) return;
+    setMap(true);
+    const uiCopy = ui;
+    lodashForOwn(projections, (proj) => {
+      const map = mapCreation(proj, uiCopy);
+      uiCopy.proj[proj.id] = map;
+    });
+    setGranuleFootprints(granuleFootprintsObj);
+    setUI(uiCopy);
+  });
 
   return null;
 }

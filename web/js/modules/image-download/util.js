@@ -93,62 +93,10 @@ const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opaciti
   };
 };
 
-/**
- * Get the snapshots URL to download an image
- * @param {String} url
- * @param {Object} proj
- * @param {Array} layer(s) objects
- * @param {Array} lonlats
- * @param {Object} dimensions
- * @param {Date} dateTime
- * @param {String/Boolean} fileType (false for default 'image/jpeg')
- * @param {Boolean} isWorldfile
- * @param {Array} markerCoordinates
- */
-export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
-  const { crs } = proj.selected;
-  const {
-    layersArray,
-    layerWraps,
-    opacities,
-  } = imageUtilProcessWrap(
-    fileType,
-    imageUtilGetLayers(layerDefs, proj.id),
-    imageUtilGetLayerWrap(layerDefs),
-    imageUtilGetLayerOpacities(layerDefs),
-  );
-
-  const imgFormat = fileType || 'image/jpeg';
-  const { height, width } = dimensions;
-  const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
-  const params = [
-    'REQUEST=GetSnapshot',
-    `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
-    `BBOX=${bboxWMS13(bbox, crs)}`,
-    `CRS=${crs}`,
-    `LAYERS=${layersArray.join(',')}`,
-    `WRAP=${layerWraps.join(',')}`,
-    `FORMAT=${imgFormat}`,
-    `WIDTH=${width}`,
-    `HEIGHT=${height}`,
-  ];
-  if (opacities.length > 0) {
-    params.push(`OPACITIES=${opacities.join(',')}`);
-  }
-  if (isWorldfile) {
-    params.push('WORLDFILE=true');
-  }
-
-  // handle adding coordinates marker
-  if (markerCoordinates.length > 0) {
-    const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
-      const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
-      // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
-      return validCoords.concat([mCoord[0], mCoord[1]]);
-    }, []);
-    params.push(`MARKER=${coords.join(',')}`);
-  }
-  return `${url}?${params.join('&')}&ts=${Date.now()}`;
+export function imageUtilEstimateResolution(resolution, isGeoProjection) {
+  return isGeoProjection
+    ? resolution / POLAR_ESTIMATION_CONSTANT
+    : resolution / GEO_ESTIMATION_CONSTANT;
 }
 
 /*
@@ -288,10 +236,79 @@ export function imageUtilGetLayerWrap(layers) {
   }) || [];
 }
 
-export function imageUtilEstimateResolution(resolution, isGeoProjection) {
-  return isGeoProjection
-    ? resolution / POLAR_ESTIMATION_CONSTANT
-    : resolution / GEO_ESTIMATION_CONSTANT;
+/**
+ * Given a bounding box as an array of a lower left coordinate pair
+ * and an upper right coordinate pair, return the BBOX parameter value
+ * suitable in a WMS 1.3 call. For EPSG:4326, the coordinates are in
+ * Y,X order, otherwise in X,Y order.
+ */
+export function bboxWMS13(lonlats, crs) {
+  if (crs === CRS.GEOGRAPHIC) {
+    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
+      lonlats[1][0]
+    }`;
+  }
+  return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
+    lonlats[1][1]
+  }`;
+}
+
+/**
+ * Get the snapshots URL to download an image
+ * @param {String} url
+ * @param {Object} proj
+ * @param {Array} layer(s) objects
+ * @param {Array} lonlats
+ * @param {Object} dimensions
+ * @param {Date} dateTime
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
+ * @param {Boolean} isWorldfile
+ * @param {Array} markerCoordinates
+ */
+export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
+  const { crs } = proj.selected;
+  const {
+    layersArray,
+    layerWraps,
+    opacities,
+  } = imageUtilProcessWrap(
+    fileType,
+    imageUtilGetLayers(layerDefs, proj.id),
+    imageUtilGetLayerWrap(layerDefs),
+    imageUtilGetLayerOpacities(layerDefs),
+  );
+
+  const imgFormat = fileType || 'image/jpeg';
+  const { height, width } = dimensions;
+  const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
+  const params = [
+    'REQUEST=GetSnapshot',
+    `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
+    `BBOX=${bboxWMS13(bbox, crs)}`,
+    `CRS=${crs}`,
+    `LAYERS=${layersArray.join(',')}`,
+    `WRAP=${layerWraps.join(',')}`,
+    `FORMAT=${imgFormat}`,
+    `WIDTH=${width}`,
+    `HEIGHT=${height}`,
+  ];
+  if (opacities.length > 0) {
+    params.push(`OPACITIES=${opacities.join(',')}`);
+  }
+  if (isWorldfile) {
+    params.push('WORLDFILE=true');
+  }
+
+  // handle adding coordinates marker
+  if (markerCoordinates.length > 0) {
+    const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
+      const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
+      // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
+      return validCoords.concat([mCoord[0], mCoord[1]]);
+    }, []);
+    params.push(`MARKER=${coords.join(',')}`);
+  }
+  return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
 
 export function imageUtilGetConversionFactor(proj) {
@@ -322,23 +339,6 @@ export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
     x2: Math.round(x2),
     y2: Math.round(y2),
   };
-}
-
-/**
- * Given a bounding box as an array of a lower left coordinate pair
- * and an upper right coordinate pair, return the BBOX parameter value
- * suitable in a WMS 1.3 call. For EPSG:4326, the coordinates are in
- * Y,X order, otherwise in X,Y order.
- */
-export function bboxWMS13(lonlats, crs) {
-  if (crs === CRS.GEOGRAPHIC) {
-    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
-      lonlats[1][0]
-    }`;
-  }
-  return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
-    lonlats[1][1]
-  }`;
 }
 
 export function imageSizeValid(imgHeight, imgWidth, maxSize) {

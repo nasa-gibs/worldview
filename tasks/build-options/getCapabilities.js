@@ -89,7 +89,7 @@ async function fetchConfigs (inputFile, outputFile) {
     method: 'get',
     url: inputFile,
     responseType: 'stream',
-    timeout: 10000
+    timeout: 100000
   }).then(async (response) => {
     if (argv.mode === 'verbose') console.warn(`Writing ${outputFile}...`)
     await response.data.pipe(writer)

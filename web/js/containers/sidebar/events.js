@@ -85,7 +85,7 @@ function Events(props) {
       </div>
       <Button
         id="event-filter-button"
-        className="filter-button"
+        className={isEmbedModeActive ? 'filter-button-hidden' : 'filter-button'}
         aria-label="Filtered layer search"
         onClick={openFilterModal}
         color="primary"

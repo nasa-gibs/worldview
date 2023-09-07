@@ -2,7 +2,7 @@
   "layers": {
     "HLS_False_Color_Urban_Landsat": {
       "id": "HLS_False_Color_Urban_Landsat",
-      "title": "Reflectance (Bands 7-6-4, Urban False Color) *BETA*",
+      "title": "Reflectance (Urban False Color, Bands 7-6-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Urban_Landsat",
       "tags": "corrected surface oli sentinel msi s30",

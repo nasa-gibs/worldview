@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import update from 'immutability-helper';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
   uniqBy,
   isEmpty as lodashIsEmpty,
 } from 'lodash';
-import update from 'immutability-helper';
 import googleTagManager from 'googleTagManager';
 
 import JoyrideWrapper from '../components/tour/joyride-wrapper';
@@ -41,6 +41,15 @@ import history from '../main';
 import util from '../util/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
+
+const getTransitionAttr = function(transition) {
+  if (!transition) return '';
+  const { element, action } = transition;
+  if (element === 'animation' && action === 'play') {
+    return '&playanim=true';
+  }
+  return '';
+};
 
 class Tour extends React.Component {
   constructor(props) {
@@ -554,15 +563,6 @@ const mapStateToProps = (state) => {
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
   };
-};
-
-const getTransitionAttr = function(transition) {
-  if (!transition) return '';
-  const { element, action } = transition;
-  if (element === 'animation' && action === 'play') {
-    return '&playanim=true';
-  }
-  return '';
 };
 
 export default connect(

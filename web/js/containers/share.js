@@ -18,6 +18,8 @@ import ShareToolTips from '../components/toolbar/share/tooltips';
 import {
   getPermalink, getShareLink, wrapWithIframe,
 } from '../modules/link/util';
+import onClickFeedback from '../modules/feedback/util';
+import initFeedback from '../modules/feedback/actions';
 import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
@@ -37,7 +39,8 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const SOCIAL_SHARE_TABS = ['link', 'social'];
+const DESKTOP_SHARE_TABS = ['link', 'embed', 'social'];
+const MOBILE_SHARE_TABS = ['link', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -163,15 +166,26 @@ class ShareLinkContainer extends Component {
     this.setState({ activeTab });
   };
 
+  openFeedback = () => {
+    const {
+      isMobile,
+      feedbackIsInitiated,
+      feedbackEnabled,
+      sendFeedback,
+    } = this.props;
+    if (feedbackEnabled) sendFeedback(feedbackIsInitiated, isMobile);
+  };
+
   renderNavTabs = () => {
     const { embedDisableNavLink, isMobile } = this.props;
     const { activeTab } = this.state;
     const isDisabled = {
       embed: embedDisableNavLink,
     };
+    const shareTabs = isMobile ? MOBILE_SHARE_TABS : DESKTOP_SHARE_TABS;
     return (
       <Nav tabs>
-        {SOCIAL_SHARE_TABS.map((type) => {
+        {shareTabs.map((type) => {
           const navTitle = lodashStartCase(type);
           const navDisabledMessage = `${navTitle} is not available when the current application features are in use.`;
           const navTitleClass = `${type}-share-nav`;
@@ -277,11 +291,11 @@ class ShareLinkContainer extends Component {
           <>
             {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
             <p>
-              Embed @NAME@ in your website. See our
+              Please
               {' '}
-              <a id="share-embed-doc-link" className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
+              <a onClick={this.openFeedback} id="feedback-url">contact us</a>
               {' '}
-              for a guide.
+              to enable Worldview embedding on your website.
             </p>
           </>
         )}
@@ -330,7 +344,7 @@ class ShareLinkContainer extends Component {
           {this.renderNavTabs()}
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
-            {/* {this.renderEmbedTab()} */}
+            {this.renderEmbedTab()}
             {this.renderSocialTab()}
           </TabContent>
         </div>
@@ -341,14 +355,17 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, config, shortLink, sidebar, tour,
+    screenSize, config, shortLink, sidebar, tour, feedback,
   } = state;
 
   const { features: { urlShortening } } = config;
   const isMobile = screenSize.isMobileDevice;
   const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
+  const { features: { feedback: feedbackEnabled } } = config;
 
   return {
+    feedbackEnabled,
+    feedbackIsInitiated: feedback.isInitiated,
     urlShortening,
     embedDisableNavLink,
     isMobile,
@@ -364,6 +381,12 @@ const mapDispatchToProps = (dispatch) => ({
   requestShortLinkAction: (location, options) => dispatch(
     requestShortLink(location, 'application/json', null, options),
   ),
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
+    if (!isInitiated) {
+      dispatch(initFeedback());
+    }
+  },
 });
 
 export default connect(
@@ -373,10 +396,13 @@ export default connect(
 
 ShareLinkContainer.propTypes = {
   embedDisableNavLink: PropTypes.bool,
+  feedbackIsInitiated: PropTypes.bool,
+  feedbackEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
+  sendFeedback: PropTypes.func,
   shortLink: PropTypes.object,
   urlShortening: PropTypes.bool,
 };

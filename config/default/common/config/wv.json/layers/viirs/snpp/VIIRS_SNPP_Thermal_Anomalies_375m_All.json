@@ -1,0 +1,40 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Thermal_Anomalies_375m_All": {
+      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
+      "description": "viirs/snpp/VIIRS_SNPP_Thermal_Anomalies_375m_All",
+      "tags": "hotspots s-npp snpp vectors",
+      "layergroup": "Fires and Thermal Anomalies",
+      "group": "overlays",
+      "type": "vector",
+      "period": "daily",
+      "vectorStyle": {
+        "id": "FIRMS_VIIRS_Thermal_Anomalies",
+        "arctic": {
+          "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
+        }
+      },
+      "transition": true,
+      "palette": {
+        "id": "VIIRS_All_Thermal_Anomalies",
+        "immutable": true
+      },
+      "breakPointLayer": {
+        "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "resolutionBreakPoint": 0.017578125,
+            "source": "GIBS:wms"
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
+          }
+        }
+      }
+    }
+  }
+}

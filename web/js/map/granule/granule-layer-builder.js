@@ -41,19 +41,20 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     dataType: 'json',
     timeout: 30 * 1000,
   };
+
+  function dispathCMRErrorDialog (title) {
+    const bodyText = `The Common Metadata Repository (CMR) service that
+    provides metadata for this granule layer, ${title}, is currently unavailable.
+    Please try again later.`;
+    const modalHeader = 'Granules unavailable at this time.';
+    store.dispatch(openBasicContent(modalHeader, bodyText));
+  }
+
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
     CMR_AJAX_OPTIONS.timeout,
     { leading: true, trailing: false },
   );
-
-  function dispathCMRErrorDialog (title) {
-    const bodyText = `The Common Metadata Repository (CMR) service that
-                      provides metadata for this granule layer, ${title}, is currently unavailable.
-                      Please try again later.`;
-    const modalHeader = 'Granules unavailable at this time.';
-    store.dispatch(openBasicContent(modalHeader, bodyText));
-  }
 
   const showLoading = () => {
     store.dispatch(startLoading(LOADING_GRANULES));
@@ -191,6 +192,62 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
+   * Get granuleCount number of granules that have visible imagery based on
+   * predetermined longitude bounds.
+   *
+   * @param {Array} availableGranules - available granules to be filtered
+   * @param {number} granuleCount - number of granules to filter down to
+   * @param {Date} leadingEdgeDate - timeline date
+   * @returns {array}
+  */
+  const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate) => {
+    const { proj: { selected: { crs } } } = store.getState();
+    const granules = [];
+    const availableCount = availableGranules.length;
+    if (!availableCount) return granules;
+    const count = granuleCount > availableCount ? availableCount : granuleCount;
+
+    for (let i = 0; granules.length < count; i += 1) {
+      const item = availableGranules[i];
+      if (!item) break;
+      const { date } = item;
+      if (new Date(date) <= leadingEdgeDate && isWithinBounds(crs, item)) {
+        granules.unshift(item);
+      }
+    }
+
+    if (granules.length < granuleCount) {
+      console.warn('Could not find enough matching granules', `${granules.length}/${granuleCount}`);
+    }
+    return granules;
+  };
+
+  /**
+   * @method getGranuleAttributes
+   * @param {object} def
+   * @param {object} options
+   * @returns {object} granuleAttributes
+   */
+  const getGranuleAttributes = async (def, options) => {
+    const state = store.getState();
+    const { proj: { selected: { crs } } } = state;
+    const { granuleCount, date, group } = options;
+    const { count: currentCount } = getGranuleLayer(state, def.id) || {};
+    const count = currentCount || granuleCount || DEFAULT_NUM_GRANULES;
+
+    // get granule dates waiting for CMR query and filtering (if necessary)
+    const availableGranules = await getQueriedGranuleDates(def, date, group);
+    const visibleGranules = getVisibleGranules(availableGranules, count, date);
+    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
+
+    return {
+      count,
+      granuleDates: transformedGranules.map((g) => g.date),
+      visibleGranules: transformedGranules,
+    };
+  };
+
+  /**
    * @method createGranuleLayer
    * @param {object} def - Layer specs
    * @param {object} attributes
@@ -232,62 +289,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     return granuleLayer;
-  };
-
-  /**
-   * @method getGranuleAttributes
-   * @param {object} def
-   * @param {object} options
-   * @returns {object} granuleAttributes
-   */
-  const getGranuleAttributes = async (def, options) => {
-    const state = store.getState();
-    const { proj: { selected: { crs } } } = state;
-    const { granuleCount, date, group } = options;
-    const { count: currentCount } = getGranuleLayer(state, def.id) || {};
-    const count = currentCount || granuleCount || DEFAULT_NUM_GRANULES;
-
-    // get granule dates waiting for CMR query and filtering (if necessary)
-    const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const visibleGranules = getVisibleGranules(availableGranules, count, date);
-    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
-
-    return {
-      count,
-      granuleDates: transformedGranules.map((g) => g.date),
-      visibleGranules: transformedGranules,
-    };
-  };
-
-  /**
-   * Get granuleCount number of granules that have visible imagery based on
-   * predetermined longitude bounds.
-   *
-   * @param {Array} availableGranules - available granules to be filtered
-   * @param {number} granuleCount - number of granules to filter down to
-   * @param {Date} leadingEdgeDate - timeline date
-   * @returns {array}
-  */
-  const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate) => {
-    const { proj: { selected: { crs } } } = store.getState();
-    const granules = [];
-    const availableCount = availableGranules.length;
-    if (!availableCount) return granules;
-    const count = granuleCount > availableCount ? availableCount : granuleCount;
-
-    for (let i = 0; granules.length < count; i += 1) {
-      const item = availableGranules[i];
-      if (!item) break;
-      const { date } = item;
-      if (new Date(date) <= leadingEdgeDate && isWithinBounds(crs, item)) {
-        granules.unshift(item);
-      }
-    }
-
-    if (granules.length < granuleCount) {
-      console.warn('Could not find enough matching granules', `${granules.length}/${granuleCount}`);
-    }
-    return granules;
   };
 
   return {

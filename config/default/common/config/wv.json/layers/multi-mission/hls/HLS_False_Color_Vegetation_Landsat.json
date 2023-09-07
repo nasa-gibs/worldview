@@ -2,7 +2,7 @@
   "layers": {
     "HLS_False_Color_Vegetation_Landsat": {
       "id": "HLS_False_Color_Vegetation_Landsat",
-      "title": "Reflectance (Bands 6-5-4, Vegetative Analysis False Color) *BETA*",
+      "title": "Reflectance (Vegetative Analysis False Color, Bands 6-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Vegetation_Landsat",
       "tags": "corrected surface oli l30",

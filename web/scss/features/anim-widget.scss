@@ -8,6 +8,11 @@
   left: 190px;
 }
 
+#collapsed-animate-widget-phone-portrait-distraction-free {
+  bottom: 20px;
+  left: 300px;
+}
+
 #collapsed-animate-widget-phone-portrait-subdaily {
   bottom: 75px;
   left: 210px;
@@ -530,6 +535,7 @@ a .wv-animation-widget-icon {
         display: flex;
         justify-content: center;
         align-items: center;
+
 
         & .mobile-date-picker-select-btn-text {
           display: flex;
