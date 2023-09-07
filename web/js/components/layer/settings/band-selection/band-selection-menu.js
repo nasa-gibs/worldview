@@ -8,6 +8,7 @@ import PresetOptions from './menu-components/preset-options';
 import {
   updateBandCombination as updateBandCombinationAction,
   removeLayer as removeLayerAction,
+  updateSelectedPreset as updateSelectedPresetAction,
 } from '../../../../modules/layers/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { onClose } from '../../../../modules/modal/actions';
@@ -18,14 +19,16 @@ export default function BandSelection({ layer }) {
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
+  const currentSelectedPreset = useSelector((state) => state.layers.active.layers[layerIndex].selectedPreset);
   const updateBandCombination = (id, bandCombo) => {
-    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex));
+    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex, selectedPreset));
   };
+
   const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
   const closeModal = () => { dispatch(onClose()); };
 
 
-  const [selectedPreset, setSelectedPreset] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
@@ -50,6 +53,8 @@ export default function BandSelection({ layer }) {
   const presetOptions = layer.id === 'HLS_Customizable_Landsat' ? 'landsat' : 'sentinel';
 
   const isValidBandSelection = () => (bandSelection.r !== 'undefined' && bandSelection.r !== undefined) && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
+
+  console.log({ selectedPreset });
 
   return (
     <div className="customize-bands-container">
