@@ -8,7 +8,6 @@ import PresetOptions from './menu-components/preset-options';
 import {
   updateBandCombination as updateBandCombinationAction,
   removeLayer as removeLayerAction,
-  updateSelectedPreset as updateSelectedPresetAction,
 } from '../../../../modules/layers/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { onClose } from '../../../../modules/modal/actions';
@@ -20,6 +19,7 @@ export default function BandSelection({ layer }) {
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
   const currentSelectedPreset = useSelector((state) => state.layers.active.layers[layerIndex].selectedPreset);
+  const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const updateBandCombination = (id, bandCombo) => {
     dispatch(updateBandCombinationAction(id, bandCombo, layerIndex, selectedPreset));
   };
@@ -28,7 +28,6 @@ export default function BandSelection({ layer }) {
   const closeModal = () => { dispatch(onClose()); };
 
 
-  const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
