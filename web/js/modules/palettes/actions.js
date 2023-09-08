@@ -56,7 +56,6 @@ export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
       state.palettes[groupName],
       state,
     );
-
     dispatch({
       type: SET_THRESHOLD_RANGE_AND_SQUASH,
       groupName,
