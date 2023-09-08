@@ -314,7 +314,7 @@ fixtures.config = function() {
             ],
           },
         },
-        url: 'https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi',
+        url: 'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi',
       },
     },
     layers: {
