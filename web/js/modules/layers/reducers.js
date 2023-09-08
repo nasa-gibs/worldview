@@ -187,10 +187,12 @@ export function layerReducer(state = initialState, action) {
 
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
       return update(state, {
         [compareState]: {
           layers: {
-            [getLayerIndex()]: {
+            [layerIndex]: {
               $merge: action.props,
             },
           },
@@ -199,10 +201,12 @@ export function layerReducer(state = initialState, action) {
     }
 
     case CLEAR_CUSTOM_PALETTE: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) { return state; }
       return update(state, {
         [compareState]: {
           layers: {
-            [getLayerIndex()]: {
+            [layerIndex]: {
               custom: {
                 $set: undefined,
               },
