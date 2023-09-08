@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import update from 'immutability-helper';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
   uniqBy,
   isEmpty as lodashIsEmpty,
 } from 'lodash';
-import update from 'immutability-helper';
 import googleTagManager from 'googleTagManager';
 
 import JoyrideWrapper from '../components/tour/joyride-wrapper';

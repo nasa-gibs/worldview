@@ -17,6 +17,10 @@
 		                "HLS_False_Color_Urban_Sentinel",
 		                "HLS_False_Color_Vegetation_Sentinel",
 		                "HLS_Shortwave_Infrared_Sentinel",
+                        "HLS_NDVI_Sentinel",
+                        "HLS_NDWI_Sentinel",
+                        "HLS_NDSI_Sentinel",
+                        "HLS_Moisture_Index_Sentinel",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Sentinel-2A_Descending",
                         "OrbitTracks_Sentinel-2B_Descending"
@@ -34,6 +38,10 @@
                         "HLS_False_Color_Urban_Landsat",
 		                "HLS_False_Color_Vegetation_Landsat",
 		                "HLS_Shortwave_Infrared_Landsat",
+                        "HLS_NDVI_Landsat",
+                        "HLS_NDWI_Landsat",
+                        "HLS_NDSI_Landsat",
+                        "HLS_Moisture_Index_Landsat",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Landsat-8_Descending",
                         "OrbitTracks_Landsat-9_Descending"
