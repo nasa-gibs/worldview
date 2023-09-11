@@ -51,12 +51,16 @@ const { events } = util;
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      hasMounted: false,
+    };
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
 
   componentDidMount() {
+    this.setState({ hasMounted: true });
     document.addEventListener('keydown', this.handleKeyPress);
     window.addEventListener('resize', this.setVhCSSProperty);
     window.addEventListener('orientationchange', this.setVhCSSProperty);
@@ -133,6 +137,7 @@ class App extends React.Component {
       modalId,
       parameters,
     } = this.props;
+    const { hasMounted } = this.state;
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
       <div className={appClass} id="wv-content" data-role="content">
@@ -143,7 +148,7 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
-          {isTourActive ? <Tour /> : null}
+          {isTourActive && hasMounted ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />

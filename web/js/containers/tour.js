@@ -88,10 +88,16 @@ class Tour extends React.Component {
   }
 
   componentDidMount() {
-    const { currentStory, currentStoryIndex, currentStoryId } = this.state;
+    const {
+      currentStory, currentStoryIndex, currentStoryId, modalStart, modalInProgress, modalComplete,
+    } = this.state;
     // If app loads with tour link at step other than 1, restart that tour story
     if (currentStory && currentStoryIndex !== -1) {
       this.selectTour(null, currentStory, 1, currentStoryId);
+    }
+
+    if (!modalStart && !modalInProgress && !modalComplete) {
+      this.setState({ modalStart: true });
     }
   }
 
@@ -427,25 +433,18 @@ class Tour extends React.Component {
     const {
       map,
       stories,
-      screenHeight,
-      screenWidth,
       isActive,
-      endTour,
       resetProductPicker,
     } = this.props;
     const {
       currentStory,
       currentStep,
       modalInProgress,
-      modalComplete,
       modalStart,
       showSupportAlert,
       showDisabledAlert,
       tourEnded,
     } = this.state;
-    if (screenWidth < 740 || screenHeight < 450) {
-      endTour();
-    }
     if (showDisabledAlert && tourEnded) return this.renderDisableAlert();
 
     if (showSupportAlert) {
@@ -454,9 +453,7 @@ class Tour extends React.Component {
     if (!stories && !isActive) {
       return null;
     }
-    if (!modalStart && !modalInProgress && !modalComplete) {
-      this.setState({ modalStart: true });
-    }
+
     return (
       <ErrorBoundary>
         <div>
