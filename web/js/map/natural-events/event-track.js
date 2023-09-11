@@ -62,16 +62,15 @@ const updateSelection = function(newDate) {
  * @param {Object} map OpenLayers map Object
  * @param {String} selectedDate
  * @param {Function} callback
- * @param {Function} callbackHighlight
- * @param {Function} callbackUnhighlight
  * @param {Function} showAllTracks
- * @param {Boolean} isHighlighted
+ * @param {Object} highlightOptions
  * @return {Object} Object Containing track info and elements
  */
-const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, callbackHighlight, callbackUnhighlight, showAllTracks, isHighlighted) {
+const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback, showAllTracks, highlightOptions) {
   const pointsAndArrows = [];
   const trackSegments = [];
   const { clusters, firstClusterObj, secondClusterObj } = getClusters(eventObj, proj, selectedDate, map, showAllTracks);
+  const { isHighlighted } = highlightOptions;
 
   clusters.forEach((clusterPoint, index) => {
     const date = clusterPoint.properties.date || clusterPoint.properties.startDate;
@@ -95,11 +94,11 @@ const getTracksAndPoints = function (eventObj, proj, map, selectedDate, callback
     }
     const point = clusterPoint.properties.cluster
       ? getClusterPointEl(proj, clusterPoint, map, pointClusterObj, callback)
-      : getTrackPoint(proj, clusterPoint, isSelected, isHighlighted, callback, callbackHighlight, callbackUnhighlight);
+      : getTrackPoint(proj, clusterPoint, isSelected, callback, highlightOptions);
     pointsAndArrows.push(point);
   });
   return {
-    track: getTrackLines(map, trackSegments, isHighlighted, eventObj.id, getDefaultEventDate(eventObj), callback, callbackHighlight, callbackUnhighlight),
+    track: getTrackLines(map, trackSegments, eventObj.id, getDefaultEventDate(eventObj), callback, highlightOptions),
     pointsAndArrows,
   };
 };
@@ -199,7 +198,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, highlightEvent, unHighlightEvent, showAllTracksRef.current, showAllTracks && (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id));
+      } = getTracksAndPoints(singleEvent, proj, mapRef.current, eventDate, selectEvent, showAllTracksRef.current, { callbackHighlight: highlightEvent, callbackUnhighlight: unHighlightEvent, isHighlighted: showAllTracks && (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id) });
 
       newTrackDetails = {
         id: eventID,
@@ -237,7 +236,7 @@ function EventTrack () {
       const {
         track,
         pointsAndArrows,
-      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, highlightEvent, unHighlightEvent, null, showAllTracks && (event.id === selectedEvent.id || event.id === highlightedEvent.id));
+      } = getTracksAndPoints(event, proj, mapRef.current, date, selectEvent, null, { callbackHighlight: highlightEvent, callbackUnhighlight: unHighlightEvent, isHighlighted: showAllTracks && (event.id === selectedEvent.id || event.id === highlightedEvent.id) });
 
       newTrackDetails = {
         id: event.id,

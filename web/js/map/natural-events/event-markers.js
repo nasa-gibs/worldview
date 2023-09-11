@@ -175,10 +175,10 @@ class EventMarkers extends React.Component {
         });
       }
     };
-    const onMouseEnter = (e) => {
+    const onMouseEnter = () => {
       highlightEvent(event.id, date);
     };
-    const onMouseLeave = (e) => {
+    const onMouseLeave = () => {
       unHighlightEvent();
     };
 
@@ -191,12 +191,8 @@ class EventMarkers extends React.Component {
     ['pointermove', 'mousemove'].forEach((type) => {
       pinEl.addEventListener(type, onMouseMove, options);
     });
-    ['mouseenter'].forEach((type) => {
-      pinEl.addEventListener(type, onMouseEnter, options);
-    });
-    ['mouseleave'].forEach((type) => {
-      pinEl.addEventListener(type, onMouseLeave, options);
-    });
+    pinEl.addEventListener('mouseenter', onMouseEnter, options);
+    pinEl.addEventListener('mouseleave', onMouseLeave, options);
   }
 
   remove() {
