@@ -53,8 +53,6 @@ export default function BandSelection({ layer }) {
 
   const isValidBandSelection = () => (bandSelection.r !== 'undefined' && bandSelection.r !== undefined) && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
 
-  console.log({ selectedPreset });
-
   return (
     <div className="customize-bands-container">
       <PresetOptions
