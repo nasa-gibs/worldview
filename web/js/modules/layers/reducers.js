@@ -199,17 +199,27 @@ export function layerReducer(state = initialState, action) {
     }
 
     case CLEAR_CUSTOM_PALETTE: {
-      return update(state, {
-        [compareState]: {
-          layers: {
-            [getLayerIndex()]: {
-              custom: {
-                $set: undefined,
+      // prevent trying to remove custom palette when it does not exist
+      if (
+        state[compareState]
+        && state[compareState].layers
+        && typeof getLayerIndex() !== 'undefined'
+        && state[compareState].layers[getLayerIndex()]
+        && 'custom' in state[compareState].layers[getLayerIndex()]
+      ) {
+        return update(state, {
+          [compareState]: {
+            layers: {
+              [getLayerIndex()]: {
+                custom: {
+                  $set: undefined,
+                },
               },
             },
           },
-        },
-      });
+        });
+      }
+      return state;
     }
 
     case SET_CUSTOM_PALETTE: {
