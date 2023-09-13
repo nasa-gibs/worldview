@@ -152,8 +152,7 @@ class toolbarContainer extends Component {
         // Use the configured domain in production
         ? `${notification.url}?domain=${domain}`
         // Use the UAT domain for test instances
-        : `${notification.url}?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov`;
-
+        : `${notification.url}?client=Worldview%20(UAT)`;
       if (parameters.mockAlerts) {
         notificationURL = `mock/notify_${parameters.mockAlerts}.json`;
       } else if (parameters.notificationURL) {

@@ -2,7 +2,7 @@
   "layers": {
     "HLS_Customizable_Landsat": {
       "id": "HLS_Customizable_Landsat",
-      "title": "HLS Customizable Landsat *BETA*",
+      "title": "HLS Customizable Landsat 8 & 9 *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Customizable_Landsat",
       "tags": "corrected surface landsat oli l30",
