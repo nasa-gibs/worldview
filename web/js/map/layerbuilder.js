@@ -19,6 +19,7 @@ import Static from 'ol/source/ImageStatic';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
+import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -828,7 +829,7 @@ export default function mapLayerBuilder(config, cache, store) {
         nextDate,
         previousDate,
       };
-      def = structuredClone(def);
+      def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';

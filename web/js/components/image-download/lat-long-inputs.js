@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { containsExtent, isEmpty } from 'ol/extent';
+import lodashCloneDeep from 'lodash/cloneDeep';
 import * as olProj from 'ol/proj';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,7 +25,7 @@ function Input({
   const update = () => {
     try {
       const newInputValue = Number(inputValue);
-      const clonedBBoxArray = structuredClone(boundingBoxArray);
+      const clonedBBoxArray = lodashCloneDeep(boundingBoxArray);
       clonedBBoxArray[index] = newInputValue;
       const minX = Math.min(clonedBBoxArray[0], clonedBBoxArray[2]);
       const minY = Math.min(clonedBBoxArray[1], clonedBBoxArray[3]);

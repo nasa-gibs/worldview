@@ -262,7 +262,7 @@ export const getActiveOverlayGroups = (state) => {
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id].projections[proj.id],
+      (id) => !!activeLayersMap[id]?.projections?.[proj.id],
     ).length,
   );
 };

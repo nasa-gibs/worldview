@@ -2,7 +2,7 @@
   "layers": {
     "HLS_Customizable_Sentinel": {
       "id": "HLS_Customizable_Sentinel",
-      "title": "HLS Customizable Sentinel *BETA*",
+      "title": "HLS Customizable Sentinel 2A & 2B *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Customizable_Sentinel",
       "tags": "corrected surface oli sentinel msi s30",
