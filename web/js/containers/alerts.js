@@ -56,9 +56,12 @@ class DismissableAlerts extends React.Component {
    * @param {String} stateKey
    */
   dismissAlert(storageKey, stateKey) {
-    console.log('dismissAlert', stateKey);
-    safeLocalStorage.setItem(storageKey, true);
-    this.setState({ [stateKey]: true });
+    if (stateKey === 'hasDismissedOutage') {
+      // decrement state.notifications.numberOutagesUnseen
+    } else {
+      safeLocalStorage.setItem(storageKey, true);
+      this.setState({ [stateKey]: true });
+    }
   }
 
   render() {
