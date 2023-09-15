@@ -199,7 +199,6 @@ export function layerReducer(state = initialState, action) {
     }
 
     case CLEAR_CUSTOM_PALETTE: {
-      // prevent trying to remove custom palette when it does not exist
       const layerIndex = getLayerIndex();
       if (layerIndex < 0) { return state; }
       return update(state, {
