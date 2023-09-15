@@ -14,6 +14,7 @@ const {
   DISMISSED_COMPARE_ALERT,
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
+  DISMISSED_OUTAGE_ALERT,
 } = safeLocalStorage.keys;
 
 class DismissableAlerts extends React.Component {
@@ -55,6 +56,7 @@ class DismissableAlerts extends React.Component {
    * @param {String} stateKey
    */
   dismissAlert(storageKey, stateKey) {
+    console.log('dismissAlert', stateKey);
     safeLocalStorage.setItem(storageKey, true);
     this.setState({ [stateKey]: true });
   }
@@ -95,10 +97,6 @@ class DismissableAlerts extends React.Component {
     const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
     const nonOutageNotificationCount = layerOutages ? layerNotices.length - layerOutages.length : null;
     const hasSeenOutageAlerts = nonOutageNotificationCount >= layerNoticesUnseen;
-    console.log('alert.js: layerNoticesUnseen', layerNoticesUnseen);
-    console.log('alert.js: layerOutages', layerOutages);
-    console.log('alert.js: layerNotices', layerNotices);
-    console.log('alert.js: hasSeenOutageAlerts', hasSeenOutageAlerts);
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -157,12 +155,13 @@ class DismissableAlerts extends React.Component {
             />
           )}
           {layerOutages && !hasSeenOutageAlerts && layerOutages.map((outage, index) => (
+            // update dismissAlert params so unseen outage alerts is incremented
             <AlertUtil
               isOpen
               noPortal
               icon="info-circle"
               message={outage.message}
-              onDismiss={() => {}}
+              onDismiss={() => this.dismissAlert(DISMISSED_OUTAGE_ALERT, 'hasDismissedOutage')}
             />
           ))}
         </>

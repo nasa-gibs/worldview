@@ -135,12 +135,13 @@ class App extends React.Component {
       modalId,
       parameters,
     } = this.props;
-    console.log('isTourActive', isTourActive);
-    console.log('layerNoticesUnseen', layerNoticesUnseen);
+
     const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
     const nonOutageNotificationCount = layerOutages ? layerNotices.length - layerOutages.length : null;
     const hasSeenOutageAlerts = layerNoticesUnseen !== null && nonOutageNotificationCount >= layerNoticesUnseen;
-    console.log('app.js hasSeenOutageAlerts', hasSeenOutageAlerts);
+
+    console.log('hasSeenOutageAlerts', hasSeenOutageAlerts); // this never updates!!
+    console.log('isTourActive', isTourActive);
 
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (

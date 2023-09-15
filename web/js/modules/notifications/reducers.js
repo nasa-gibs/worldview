@@ -27,10 +27,13 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
         const notificationsByType = separateByType(action.array);
+        const { layerNotices } = notificationsByType;
+        const numberOutagesUnseen = layerNotices.filter((notice) => notice.notification_type === 'outage').length;
         return {
           ...state,
           number: getCount(notificationsByType),
           numberUnseen: getCount(notificationsByType, true),
+          numberOutagesUnseen,
           type: getPriority(notificationsByType),
           isActive: true,
           object: notificationsByType,
