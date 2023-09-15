@@ -202,19 +202,17 @@ export function layerReducer(state = initialState, action) {
       // prevent trying to remove custom palette when it does not exist
       const layerIndex = getLayerIndex();
       if (layerIndex < 0) { return state; }
-        return update(state, {
-          [compareState]: {
-            layers: {
-              [getLayerIndex()]: {
-                custom: {
-                  $set: undefined,
-                },
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              custom: {
+                $set: undefined,
               },
             },
           },
-        });
-
-      return state;
+        },
+      });
     }
 
     case SET_CUSTOM_PALETTE: {
