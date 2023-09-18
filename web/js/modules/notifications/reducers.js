@@ -46,13 +46,11 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case NOTIFICATIONS_SEEN:
       return {
         ...state,
-        numberUnseen: null,
+        numberUnseen: 0,
         type: '',
         isActive: true,
       };
     case OUTAGE_NOTIFICATIONS_SEEN:
-      console.log('OUTAGE_NOTIFICATIONS_SEEN Reducer');
-      console.log('state.numberOutagesUnseen will update to ', state.numberOutagesUnseen - 1);
       return {
         ...state,
         numberOutagesUnseen: state.numberOutagesUnseen - 1,
