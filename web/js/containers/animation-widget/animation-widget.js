@@ -35,7 +35,6 @@ import {
   changeEndDate,
   changeStartAndEndDate,
   toggleAnimationCollapse,
-  toggleAnimationAutoplay,
 } from '../../modules/animation/actions';
 import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
@@ -76,7 +75,6 @@ function AnimationWidget (props) {
     onPushPause,
     onPushPlay,
     onSlide,
-    onToggleAnimationAutoplay,
     onToggleAnimationCollapse,
     onUpdateEndDate,
     onUpdateStartDate,
@@ -109,10 +107,6 @@ function AnimationWidget (props) {
     onToggleAnimationCollapse();
   };
 
-  const toggleAutoplay = () => {
-    onToggleAnimationAutoplay();
-  };
-
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
@@ -121,7 +115,6 @@ function AnimationWidget (props) {
     }
     if (!isPlaying && autoplay) {
       onPushPlay();
-      toggleAutoplay();
     }
   }, []);
 
@@ -313,6 +306,7 @@ function AnimationWidget (props) {
         : (
           <DesktopAnimationWidget
             animationCustomModalOpen={animationCustomModalOpen}
+            autoplay={autoplay}
             customModalType={customModalType}
             isDistractionFreeModeActive={isDistractionFreeModeActive}
             endDate={endDate}
@@ -517,9 +511,6 @@ const mapDispatchToProps = (dispatch) => ({
   onToggleAnimationCollapse: () => {
     dispatch(toggleAnimationCollapse());
   },
-  onToggleAnimationAutoplay: () => {
-    dispatch(toggleAnimationAutoplay());
-  },
 });
 
 AnimationWidget.propTypes = {
@@ -551,7 +542,6 @@ AnimationWidget.propTypes = {
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
-  onToggleAnimationAutoplay: PropTypes.func,
   onClose: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
