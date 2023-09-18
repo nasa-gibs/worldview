@@ -416,7 +416,7 @@ export function updateLayerDateCollection(layerInfo) {
   };
 }
 
-export function updateBandCombination(id, bandCombo, layerIndex) {
+export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset) {
   return (dispatch, getState) => {
     const state = getState();
     const {
@@ -435,6 +435,7 @@ export function updateBandCombination(id, bandCombo, layerIndex) {
       proj.id,
       groupOverlays,
       bandCombo,
+      selectedPreset,
     );
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);
