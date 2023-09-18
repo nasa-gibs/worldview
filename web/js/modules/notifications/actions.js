@@ -21,7 +21,6 @@ export function notificationsSeen() {
   };
 }
 export function outageNotificationsSeenAction() {
-  console.log('outageNotificationsSeen ACTION');
   return {
     type: OUTAGE_NOTIFICATIONS_SEEN,
   };

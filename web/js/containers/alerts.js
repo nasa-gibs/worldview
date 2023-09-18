@@ -6,7 +6,9 @@ import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import { outageNotificationsSeenAction } from '../modules/notifications/actions';
 import { hasVectorLayers } from '../modules/layers/util';
-import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
+import {
+  DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES,
+} from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
@@ -161,7 +163,7 @@ class DismissableAlerts extends React.Component {
               noPortal
               icon="info-circle"
               message={outage.message}
-              onDismiss={() => dismissOutageNotification()}
+              onDismiss={dismissOutageNotification}
             />
           ))}
         </>
@@ -174,7 +176,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  dismissOutageNotification: () => dispatch(outageNotificationsSeenAction()),
+  dismissOutageNotification: () => {
+    dispatch(outageNotificationsSeenAction());
+  },
 });
 
 const mapStateToProps = (state) => {

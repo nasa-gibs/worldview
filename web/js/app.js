@@ -129,18 +129,13 @@ class App extends React.Component {
       isEmbedModeActive,
       isMobile,
       isTourActive,
-      layerNotices,
-      layerNoticesUnseen,
+      numberOutagesUnseen,
       locationKey,
       modalId,
       parameters,
     } = this.props;
 
-    const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
-    const nonOutageNotificationCount = layerOutages ? layerNotices.length - layerOutages.length : null;
-    const hasSeenOutageAlerts = layerNoticesUnseen !== null && nonOutageNotificationCount >= layerNoticesUnseen;
-
-    console.log('hasSeenOutageAlerts', hasSeenOutageAlerts); // this never updates!!
+    console.log('numberOutagesUnseen', numberOutagesUnseen);
     console.log('isTourActive', isTourActive);
 
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
@@ -153,7 +148,7 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
-          {isTourActive && hasSeenOutageAlerts ? <Tour /> : null}
+          {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
@@ -177,7 +172,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   const { notifications } = state;
-  const { numberUnseen: layerNoticesUnseen } = notifications;
+  const { numberOutagesUnseen } = notifications;
   const { layerNotices } = notifications.object;
   return {
     state,
@@ -186,7 +181,7 @@ function mapStateToProps(state) {
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
     layerNotices,
-    layerNoticesUnseen,
+    numberOutagesUnseen,
     tour: state.tour,
     config: state.config,
     parameters: state.parameters,
@@ -217,7 +212,7 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   layerNotices: PropTypes.array,
-  layerNoticesUnseen: PropTypes.number,
+  numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
 };

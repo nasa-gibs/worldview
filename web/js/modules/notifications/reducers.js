@@ -52,9 +52,10 @@ export function notificationsReducer(state = notificationReducerState, action) {
       };
     case OUTAGE_NOTIFICATIONS_SEEN:
       console.log('OUTAGE_NOTIFICATIONS_SEEN Reducer');
+      console.log('state.numberOutagesUnseen will update to ', state.numberOutagesUnseen - 1);
       return {
         ...state,
-        numberUnseen: state.numberOutagesUnseen - 1,
+        numberOutagesUnseen: state.numberOutagesUnseen - 1,
       };
     default:
       return state;
