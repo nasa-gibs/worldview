@@ -135,9 +135,6 @@ class App extends React.Component {
       parameters,
     } = this.props;
 
-    console.log('numberOutagesUnseen', numberOutagesUnseen);
-    console.log('isTourActive', isTourActive);
-
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
       <div className={appClass} id="wv-content" data-role="content">
