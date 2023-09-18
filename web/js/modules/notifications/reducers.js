@@ -24,7 +24,6 @@ export function notificationsRequest(state = {}, action) {
 }
 
 export function notificationsReducer(state = notificationReducerState, action) {
-  console.log('notificationsReducer');
   switch (action.type) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
@@ -46,7 +45,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case NOTIFICATIONS_SEEN:
       return {
         ...state,
-        numberUnseen: 0,
+        numberUnseen: null,
         type: '',
         isActive: true,
       };
