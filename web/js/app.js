@@ -144,7 +144,7 @@ class App extends React.Component {
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
-          {/* <Alerts /> */}
+          <Alerts />
           {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
         <Sidebar />

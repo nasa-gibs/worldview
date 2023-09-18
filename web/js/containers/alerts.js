@@ -159,6 +159,7 @@ class DismissableAlerts extends React.Component {
           {layerOutages && !hasSeenOutageAlerts && layerOutages.map((outage, index) => (
             // update dismissAlert params so unseen outage alerts is incremented
             <AlertUtil
+              id="outage-alert"
               isOpen
               noPortal
               icon="info-circle"

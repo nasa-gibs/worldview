@@ -49,8 +49,10 @@ test('Use Mock to make sure appropriate number of event markers are appended to 
 
 test('Selecting event shows track points and markers which are not visible when switched to layer tab', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { secondEvent, trackMarker, eventIcons, eventsTab, layersTab } = selectors
+  const { eventIcons, eventsTab, layersTab, outageDismissButtonOne, outageDismissButtonTwo, secondEvent, trackMarker } = selectors
   await page.waitForTimeout(1000)
+  await outageDismissButtonOne.click()
+  await outageDismissButtonTwo.click()
   await secondEvent.click()
   await page.waitForTimeout(5000)
   await expect(trackMarker).toHaveCount(5)
@@ -64,9 +66,11 @@ test('Selecting event shows track points and markers which are not visible when 
 
 test('Clicking an event in the list selects the event', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { firstEvent, selectedFirstEvent } = selectors
+  const { firstEvent, outageDismissButtonOne, outageDismissButtonTwo, selectedFirstEvent } = selectors
   await page.goto(mockEvents)
   await page.waitForLoadState('networkidle')
+  await outageDismissButtonOne.click()
+  await outageDismissButtonTwo.click()
   await firstEvent.click()
   await page.waitForTimeout(5000)
   await expect(selectedFirstEvent).toBeVisible()
