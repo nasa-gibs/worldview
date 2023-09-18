@@ -119,7 +119,7 @@ function AnimationWidget (props) {
       setWidgetPosition({ x: 10, y: 0 });
       toggleCollapse();
     }
-    if (!isPlaying && autoplay && !isKioskModeActive) {
+    if (!isPlaying && autoplay) {
       onPushPlay();
       toggleAutoplay();
     }
