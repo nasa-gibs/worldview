@@ -53,6 +53,7 @@ describe('notificationsReducer', () => {
         }),
       ).toEqual({
         number: 1,
+        numberOutagesUnseen: 0,
         numberUnseen: 1,
         type: 'outage',
         isActive: true,
