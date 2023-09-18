@@ -8,6 +8,7 @@ import {
   REQUEST_NOTIFICATIONS,
   SET_NOTIFICATIONS,
   NOTIFICATIONS_SEEN,
+  OUTAGE_NOTIFICATIONS_SEEN,
 } from './constants';
 
 export const notificationReducerState = {
@@ -23,6 +24,7 @@ export function notificationsRequest(state = {}, action) {
 }
 
 export function notificationsReducer(state = notificationReducerState, action) {
+  console.log('notificationsReducer');
   switch (action.type) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
@@ -47,6 +49,12 @@ export function notificationsReducer(state = notificationReducerState, action) {
         numberUnseen: null,
         type: '',
         isActive: true,
+      };
+    case OUTAGE_NOTIFICATIONS_SEEN:
+      console.log('OUTAGE_NOTIFICATIONS_SEEN Reducer');
+      return {
+        ...state,
+        numberUnseen: state.numberOutagesUnseen - 1,
       };
     default:
       return state;

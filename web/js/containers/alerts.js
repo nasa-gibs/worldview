@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
+import { outageNotificationsSeenAction } from '../modules/notifications/actions';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
@@ -14,7 +15,6 @@ const {
   DISMISSED_COMPARE_ALERT,
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
-  DISMISSED_OUTAGE_ALERT,
 } = safeLocalStorage.keys;
 
 class DismissableAlerts extends React.Component {
@@ -56,16 +56,13 @@ class DismissableAlerts extends React.Component {
    * @param {String} stateKey
    */
   dismissAlert(storageKey, stateKey) {
-    if (stateKey === 'hasDismissedOutage') {
-      // decrement state.notifications.numberOutagesUnseen
-    } else {
-      safeLocalStorage.setItem(storageKey, true);
-      this.setState({ [stateKey]: true });
-    }
+    safeLocalStorage.setItem(storageKey, true);
+    this.setState({ [stateKey]: true });
   }
 
   render() {
     const {
+      dismissOutageNotification,
       dismissVectorZoomAlert,
       dismissVectorExceededAlert,
       hasSubdailyLayers,
@@ -164,7 +161,7 @@ class DismissableAlerts extends React.Component {
               noPortal
               icon="info-circle"
               message={outage.message}
-              onDismiss={() => this.dismissAlert(DISMISSED_OUTAGE_ALERT, 'hasDismissedOutage')}
+              onDismiss={() => dismissOutageNotification()}
             />
           ))}
         </>
@@ -177,6 +174,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
+  dismissOutageNotification: () => dispatch(outageNotificationsSeenAction()),
 });
 
 const mapStateToProps = (state) => {
@@ -210,6 +208,7 @@ export default connect(
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {
+  dismissOutageNotification: PropTypes.func,
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
