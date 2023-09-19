@@ -28,13 +28,13 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
         const notificationsByType = separateByType(action.array);
-        // const { layerNotices } = notificationsByType;
-        // const numberOutagesUnseen = layerNotices.filter((notice) => notice.notification_type === 'outage').length;
+        const { layerNotices } = notificationsByType;
+        const numberOutagesUnseen = layerNotices.filter((notice) => notice.notification_type === 'outage').length;
         return {
           ...state,
           number: getCount(notificationsByType),
           numberUnseen: getCount(notificationsByType, true),
-          // numberOutagesUnseen,
+          numberOutagesUnseen,
           type: getPriority(notificationsByType),
           isActive: true,
           object: notificationsByType,
@@ -49,11 +49,11 @@ export function notificationsReducer(state = notificationReducerState, action) {
         type: '',
         isActive: true,
       };
-    // case OUTAGE_NOTIFICATIONS_SEEN:
-    //   return {
-    //     ...state,
-    //     numberOutagesUnseen: state.numberOutagesUnseen - 1,
-    //   };
+    case OUTAGE_NOTIFICATIONS_SEEN:
+      return {
+        ...state,
+        numberOutagesUnseen: state.numberOutagesUnseen - 1,
+      };
     default:
       return state;
   }
