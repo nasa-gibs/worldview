@@ -41,6 +41,7 @@ function InfoList (props) {
 
   function getNotificationListItem() {
     const { numberUnseen, type, object } = notifications;
+    console.log('info.js object', object);
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
@@ -193,6 +194,8 @@ const mapDispatchToProps = (dispatch) => ({
     }
   },
   notificationClick: (obj, numberUnseen) => {
+    console.log('obj', obj);
+    console.log('numberUnseen', numberUnseen);
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',

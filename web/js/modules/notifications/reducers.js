@@ -28,6 +28,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
         const notificationsByType = separateByType(action.array);
+        console.log('notificationsByType', notificationsByType);
 
         const { layerNotices } = notificationsByType;
         const numberOutagesUnseen = layerNotices.filter((notice) => notice.notification_type === 'outage').length;

@@ -14,6 +14,7 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
+import { openCustomContent } from './modules/modal/actions';
 // Location Search
 import LocationSearch from './components/location-search/location-search';
 
@@ -22,7 +23,6 @@ import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
-import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
@@ -34,7 +34,10 @@ import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
-
+// Notifications
+import Notifications from './containers/notifications';
+import { notificationsSeen } from './modules/notifications/actions';
+import { addToLocalStorage } from './modules/notifications/util';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
@@ -86,6 +89,13 @@ class App extends React.Component {
     setScreenInfoAction();
   };
 
+  openNotification = (obj, numUnseen) => {
+    console.log('openNotification(): obj', obj);
+    console.log('openNotification(): numUnseen', numUnseen);
+    const { notificationClick } = this.props;
+    notificationClick(obj, numUnseen);
+  };
+
   onload() {
     const self = this;
     const state = self.props.parameters;
@@ -130,8 +140,10 @@ class App extends React.Component {
       isMobile,
       isTourActive,
       numberOutagesUnseen,
+      numberUnseen,
       locationKey,
       modalId,
+      object,
       parameters,
     } = this.props;
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
@@ -143,7 +155,11 @@ class App extends React.Component {
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
-          <Alerts />
+          {/* Correct these args below!! */}
+          {/* Causing a runaway refresh?? */}
+          {/* {openNotification(object, numberUnseen)} */}
+          {numberUnseen > 0 ? this.openNotification(object, numberUnseen) : null}
+
           {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
         <Sidebar />
@@ -168,7 +184,9 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   const { notifications } = state;
-  const { numberOutagesUnseen } = notifications;
+  const {
+    numberOutagesUnseen, numberUnseen, type, object,
+  } = notifications;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -176,7 +194,10 @@ function mapStateToProps(state) {
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
     numberOutagesUnseen,
+    numberUnseen,
+    object,
     tour: state.tour,
+    type,
     config: state.config,
     parameters: state.parameters,
     locationKey: state.location.key,
@@ -190,6 +211,25 @@ const mapDispatchToProps = (dispatch) => ({
   setScreenInfoAction: () => {
     dispatch(setScreenInfo());
   },
+  notificationClick: (obj, numberUnseen) => {
+    console.log('notificationClick');
+    console.log('obj', obj);
+    console.log('numberUnseen', numberUnseen);
+    dispatch(
+      openCustomContent('NOTIFICATION_LIST_MODAL', {
+        headerText: 'Notifications',
+        bodyComponent: Notifications,
+        onClose: () => {
+          if (numberUnseen > 0) {
+            dispatch(notificationsSeen());
+            addToLocalStorage(obj);
+          }
+        },
+      }),
+    );
+  },
+
+
 });
 
 export default connect(
@@ -205,6 +245,7 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
+  notificationClick: PropTypes.func,
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,

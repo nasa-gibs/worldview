@@ -51,8 +51,8 @@ test('Selecting event shows track points and markers which are not visible when 
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
   const { eventIcons, eventsTab, layersTab, outageDismissButtonOne, outageDismissButtonTwo, secondEvent, trackMarker } = selectors
   await page.waitForTimeout(1000)
-  await outageDismissButtonOne.click()
   await outageDismissButtonTwo.click()
+  await outageDismissButtonOne.click()
   await secondEvent.click()
   await page.waitForTimeout(5000)
   await expect(trackMarker).toHaveCount(5)
