@@ -283,8 +283,6 @@ module.exports = (page) => ({
   timelineSetToYears: page.locator('#current-zoom.zoom-years'),
   modalCloseButton: page.locator('.modal-close-btn'),
   notificationDismissButton: page.locator('.wv-alert .close-alert .fa-times'),
-  outageDismissButtonOne: page.locator('div[id^="outage-alert-close"]').first(),
-  outageDismissButtonTwo: page.locator('div[id^="outage-alert-close"]').nth(1),
   overlayLayerItems: page.locator('#overlays li'),
   resolutionTooltip: page.locator('#zoom-btn-container'),
   globalSelectInput: page.locator('#image-global-cb'),

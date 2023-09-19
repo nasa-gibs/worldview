@@ -47,12 +47,9 @@ test('Share link clipboard with existing time query string param in the page url
 })
 
 test('Share link clipboard with no time query string param in the page url will have the same serialized time (partial YYYY-MM-DD)', async () => {
-  const { outageDismissButtonOne, outageDismissButtonTwo, shareToolbarButton } = selectors
+  const { shareToolbarButton } = selectors
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
-  await page.waitForTimeout(1000)
-  await outageDismissButtonTwo.click()
-  await outageDismissButtonOne.click()
   await page.waitForTimeout(1000)
   await page.getByRole('button', { name: '×' }).click()
   await shareToolbarButton.click()

@@ -36,7 +36,7 @@ import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
 // Notifications
 import Notifications from './containers/notifications';
-import { notificationsSeen } from './modules/notifications/actions';
+import { outageNotificationsSeenAction } from './modules/notifications/actions';
 import { addToLocalStorage } from './modules/notifications/util';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -67,10 +67,10 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
-    const { numberUnseen, object } = this.props;
-    if (numberUnseen !== prevProps.numberUnseen) {
-      if (numberUnseen > 0) {
-        this.openNotification(object, numberUnseen);
+    const { numberOutagesUnseen, object } = this.props;
+    if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
+      if (numberOutagesUnseen > 0) {
+        this.openNotification(object, numberOutagesUnseen);
       }
     }
   }
@@ -100,11 +100,9 @@ class App extends React.Component {
     setScreenInfoAction();
   };
 
-  openNotification = (obj, numUnseen) => {
-    console.log('openNotification(): obj', obj);
-    console.log('openNotification(): numUnseen', numUnseen);
+  openNotification = (obj, numberOutagesUnseen) => {
     const { notificationClick } = this.props;
-    notificationClick(obj, numUnseen);
+    notificationClick(obj, numberOutagesUnseen);
   };
 
   onload() {
@@ -151,10 +149,8 @@ class App extends React.Component {
       isMobile,
       isTourActive,
       numberOutagesUnseen,
-      numberUnseen,
       locationKey,
       modalId,
-      object,
       parameters,
     } = this.props;
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
@@ -166,11 +162,6 @@ class App extends React.Component {
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
-          {/* Correct these args below!! */}
-          {/* Causing a runaway refresh?? */}
-          {/* {openNotification(object, numberUnseen)} */}
-          {/* {numberUnseen !== null && numberUnseen > 0 ? this.openNotification(object, numberUnseen) : null} */}
-
           {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
         <Sidebar />
@@ -222,15 +213,14 @@ const mapDispatchToProps = (dispatch) => ({
   setScreenInfoAction: () => {
     dispatch(setScreenInfo());
   },
-  notificationClick: (obj, numberUnseen) => {
+  notificationClick: (obj, numberOutagesUnseen) => {
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
         bodyComponent: Notifications,
         onClose: () => {
-          if (numberUnseen > 0) {
-            dispatch(notificationsSeen());
-            addToLocalStorage(obj);
+          if (numberOutagesUnseen > 0) {
+            dispatch(outageNotificationsSeenAction());
           }
         },
       }),

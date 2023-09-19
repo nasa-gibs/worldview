@@ -39,11 +39,9 @@ export function separateByType(notifications) {
   };
 
   notifications.forEach((notification) => {
-    console.log('notification', notification);
     const { notification_type: type, path } = notification;
 
     if (path.includes(LAYER_NOTICE)) {
-      console.log('LAYER_NOTICE');
       layerNotices.push(notification);
       // return;
     }
