@@ -22,6 +22,7 @@ const {
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
@@ -157,7 +158,6 @@ class DismissableAlerts extends React.Component {
             />
           )}
           {layerOutages && !hasSeenOutageAlerts && layerOutages.map((outage, index) => (
-            // update dismissAlert params so unseen outage alerts is incremented
             <AlertUtil
               id="outage-alert"
               isOpen

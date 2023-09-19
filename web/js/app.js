@@ -134,7 +134,6 @@ class App extends React.Component {
       modalId,
       parameters,
     } = this.props;
-
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
       <div className={appClass} id="wv-content" data-role="content">
@@ -170,14 +169,12 @@ class App extends React.Component {
 function mapStateToProps(state) {
   const { notifications } = state;
   const { numberOutagesUnseen } = notifications;
-  const { layerNotices } = notifications.object;
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
-    layerNotices,
     numberOutagesUnseen,
     tour: state.tour,
     config: state.config,
@@ -208,7 +205,6 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
-  layerNotices: PropTypes.array,
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
