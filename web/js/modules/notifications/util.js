@@ -133,6 +133,8 @@ export function getNumberOfTypeNotSeen(type, arra) {
   for (let i = 0; i < len; i += 1) {
     if (new Date(storageItem) < new Date(arra[i].created_at)) {
       count += 1;
+    } else {
+      return count;
     }
   }
 

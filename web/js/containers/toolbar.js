@@ -140,7 +140,6 @@ class toolbarContainer extends Component {
   }
 
   requestNotifications() {
-    console.log('requestNotifications');
     const { config, requestNotifications } = this.props;
     const { parameters, features } = config;
     const { notification } = features;
