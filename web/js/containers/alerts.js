@@ -149,6 +149,7 @@ class DismissableAlerts extends React.Component {
             />
           )}
         </>
+
       );
   }
 }
@@ -159,7 +160,6 @@ const mapDispatchToProps = (dispatch) => ({
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
 });
-
 const mapStateToProps = (state) => {
   const {
     embed, events, sidebar, compare, alerts, ui, animation, screenSize,

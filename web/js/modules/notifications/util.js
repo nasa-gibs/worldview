@@ -43,7 +43,6 @@ export function separateByType(notifications) {
 
     if (path.includes(LAYER_NOTICE)) {
       layerNotices.push(notification);
-      // return;
     }
     if (type === NOTIFICATION_MSG) {
       messages.push(notification);

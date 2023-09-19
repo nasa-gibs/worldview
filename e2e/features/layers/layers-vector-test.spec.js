@@ -22,7 +22,6 @@ test.afterAll(async () => {
 test('Vector layer click does not show alert when all vector layers are clickable', async () => {
   const { geographicMap, notifyMessage } = selectors
   await page.goto(damsLayerUrl)
-
   const pointerIcon = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
   await expect(pointerIcon).toBeVisible()
   await geographicMap.click()
