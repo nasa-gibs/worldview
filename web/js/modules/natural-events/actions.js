@@ -13,6 +13,8 @@ import {
   DESELECT_EVENT,
   SET_EVENTS_FILTER,
   FINISHED_ANIMATING_TO_EVENT,
+  HIGHLIGHT_EVENT,
+  UNHIGHLIGHT_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
 
@@ -90,6 +92,20 @@ export function setEventsFilter(categories, start, end, showAll, showAllTracks) 
     if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {
       dispatch(requestEvents(requestUrl));
     }
+  };
+}
+
+export function highlightEvent(id, eventDate) {
+  return {
+    type: HIGHLIGHT_EVENT,
+    id,
+    date: eventDate,
+  };
+}
+
+export function unHighlightEvent(id, date) {
+  return {
+    type: UNHIGHLIGHT_EVENT,
   };
 }
 
