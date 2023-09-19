@@ -21,7 +21,7 @@ const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam) {
+export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam, selectedPresetParam) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
@@ -51,6 +51,10 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
     };
   } else if (bandComboParam) {
     def.bandCombo = bandComboParam;
+  }
+
+  if (selectedPresetParam) {
+    def.selectedPreset = selectedPresetParam;
   }
 
   if (!lodashIsUndefined(spec.visible)) {
@@ -262,7 +266,7 @@ export const getActiveOverlayGroups = (state) => {
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id].projections[proj.id],
+      (id) => !!activeLayersMap[id]?.projections?.[proj.id],
     ).length,
   );
 };
