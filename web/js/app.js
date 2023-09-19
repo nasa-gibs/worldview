@@ -65,11 +65,22 @@ class App extends React.Component {
     window.addEventListener('orientationchange', this.setVhCSSProperty);
   }
 
+  componentDidUpdate(prevProps) {
+    // Check if the numberUnseen prop has changed
+    const { numberUnseen, object } = this.props;
+    if (numberUnseen !== prevProps.numberUnseen) {
+      if (numberUnseen > 0) {
+        this.openNotification(object, numberUnseen);
+      }
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
     window.removeEventListener('resize', this.setVhCSSProperty);
     window.removeEventListener('orientationchange', this.setVhCSSProperty);
   }
+
 
   // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   setVhCSSProperty = () => {
@@ -158,7 +169,7 @@ class App extends React.Component {
           {/* Correct these args below!! */}
           {/* Causing a runaway refresh?? */}
           {/* {openNotification(object, numberUnseen)} */}
-          {numberUnseen > 0 ? this.openNotification(object, numberUnseen) : null}
+          {/* {numberUnseen !== null && numberUnseen > 0 ? this.openNotification(object, numberUnseen) : null} */}
 
           {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
@@ -212,9 +223,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberUnseen) => {
-    console.log('notificationClick');
-    console.log('obj', obj);
-    console.log('numberUnseen', numberUnseen);
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
@@ -228,8 +236,6 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-
-
 });
 
 export default connect(
