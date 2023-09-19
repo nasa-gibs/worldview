@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
-import { outageNotificationsSeenAction } from '../modules/notifications/actions';
 import { hasVectorLayers } from '../modules/layers/util';
-import {
-  DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES,
-} from '../modules/alerts/constants';
+import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
@@ -65,7 +62,6 @@ class DismissableAlerts extends React.Component {
 
   render() {
     const {
-      dismissOutageNotification,
       dismissVectorZoomAlert,
       dismissVectorExceededAlert,
       hasSubdailyLayers,
@@ -78,8 +74,6 @@ class DismissableAlerts extends React.Component {
       isAnimationActive,
       isVectorZoomAlertPresent,
       isVectorExceededAlertPresent,
-      layerNotices,
-      layerNoticesUnseen,
       openAlertModal,
     } = this.props;
     const {
@@ -97,9 +91,6 @@ class DismissableAlerts extends React.Component {
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
     const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
     const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
-    const layerOutages = layerNotices ? layerNotices.filter((obj) => obj.notification_type === 'outage') : null;
-    const nonOutageNotificationCount = layerOutages ? layerNotices.length - layerOutages.length : null;
-    const hasSeenOutageAlerts = nonOutageNotificationCount >= layerNoticesUnseen;
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -157,16 +148,6 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {layerOutages && !hasSeenOutageAlerts && layerOutages.map((outage, index) => (
-            <AlertUtil
-              id="outage-alert"
-              isOpen
-              noPortal
-              icon="info-circle"
-              message={outage.message}
-              onDismiss={dismissOutageNotification}
-            />
-          ))}
         </>
       );
   }
@@ -177,17 +158,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  dismissOutageNotification: () => {
-    dispatch(outageNotificationsSeenAction());
-  },
 });
 
 const mapStateToProps = (state) => {
   const {
-    embed, events, sidebar, compare, alerts, ui, animation, screenSize, notifications,
+    embed, events, sidebar, compare, alerts, ui, animation, screenSize,
   } = state;
-  const { numberUnseen: layerNoticesUnseen } = notifications;
-  const { layerNotices } = notifications.object;
   const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
   const activeLayers = getActiveLayers(state);
   const hasActiveVectorLayers = hasVectorLayers(activeLayers);
@@ -203,8 +179,6 @@ const mapStateToProps = (state) => {
     isVectorZoomAlertPresent: hasActiveVectorLayers && isVectorZoomAlertPresent,
     isVectorExceededAlertPresent: hasActiveVectorLayers && isVectorExceededAlertPresent,
     hasSubdailyLayers: subdailyLayersActive(state),
-    layerNotices,
-    layerNoticesUnseen,
   };
 };
 export default connect(
@@ -213,7 +187,6 @@ export default connect(
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {
-  dismissOutageNotification: PropTypes.func,
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
@@ -226,7 +199,5 @@ DismissableAlerts.propTypes = {
   isMobile: PropTypes.bool,
   isVectorZoomAlertPresent: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
-  layerNotices: PropTypes.array,
-  layerNoticesUnseen: PropTypes.number,
   openAlertModal: PropTypes.func,
 };
