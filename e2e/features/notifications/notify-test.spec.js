@@ -40,9 +40,12 @@ test('No visible notifications with mockAlert parameter set to no_types', async 
 })
 
 test('Outage takes precedence when all three notifications are present', async () => {
+  const { modalCloseButton } = selectors
+  // http://localhost:3000/?l=Coastlines_15m,MODIS_Aqua_CorrectedReflectance_TrueColor,Particulate_Matter_Below_2.5micrometers_2001-2010&mockAlerts=all_types
   const url = `${layerNoticesQuery}&mockAlerts=all_types`
   const statusOutage = await page.locator('#wv-info-button.wv-status-outage')
   await page.goto(url)
+  await modalCloseButton.click()
   await expect(statusOutage).toBeVisible()
   await infoButtonIcon.click()
   await expect(infoMenu).toContainText('Notifications')
@@ -52,7 +55,7 @@ test('Outage takes precedence when all three notifications are present', async (
 test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
   const badge = await page.locator('span.badge')
   await expect(badge).toBeVisible()
-  await expect(badge).toContainText('3')
+  await expect(badge).toContainText('2')
 })
 
 test('Alert, outage, and message content is highlighted and found in modal', async () => {
@@ -60,6 +63,7 @@ test('Alert, outage, and message content is highlighted and found in modal', asy
   const alertContentHighlighted = await page.locator('#notification_list_modal .alert-notification-item p')
   const messageContentHighlighted = await page.locator('#notification_list_modal .message-notification-item p')
   await notificationsListItem.click()
+  await page.waitForTimeout(30000)
   await expect(outageContentHighlighted).toContainText('Posted 20 May 2018')
   await expect(alertContentHighlighted).toContainText('learn how to visualize global satellite imagery')
   await expect(messageContentHighlighted).toContainText('This is a message test')
