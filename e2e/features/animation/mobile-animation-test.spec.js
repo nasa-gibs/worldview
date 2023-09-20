@@ -20,8 +20,9 @@ test.afterAll(async () => {
 })
 
 test('Clicking the animation widget button opens the widget', async () => {
-  const { mobileAnimateButton } = selectors
+  const { mobileAnimateButton, modalCloseButton } = selectors
   await page.goto(knownDate)
+  await modalCloseButton.click()
   await mobileAnimateButton.click()
   const customIntervalInput = page.locator('.custom-interval-delta-input')
   await expect(customIntervalInput).toHaveValue('1')

@@ -23,6 +23,7 @@ import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
+import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
@@ -161,6 +162,7 @@ class App extends React.Component {
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
+          <Alerts />
           {isTourActive && numberOutagesUnseen === 0 ? <Tour /> : null}
         </div>
         <Sidebar />
