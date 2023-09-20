@@ -40,8 +40,6 @@
   "MODIS_Terra_L2_Photosynthetically_Available_Radiation": "2020-06-06T00:00:00Z",
   "MODIS_Terra_L2_Chlorophyll_A": "2020-06-06T00:00:00Z",
 
-  "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day": "2019-12-19T00:00:00Z",
-
   "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day": "2019-02-01T00:00:00Z",
   "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Night": "2019-02-01T00:00:00Z",
   "MOPITT_CO_Monthly_Total_Column_Day": "2019-02-01T00:00:00Z",
