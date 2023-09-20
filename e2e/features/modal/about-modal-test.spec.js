@@ -22,7 +22,9 @@ test.afterAll(async () => {
 })
 
 test('About modal not open when URL param not present', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await expect(aboutPage).not.toBeVisible()
 })
 
