@@ -843,7 +843,7 @@ export function serializeLayers(layers, state, groupName) {
       const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>');
       item.attributes.push({
         id: 'bandCombo',
-        value: encodeURIComponent(bandComboString),
+        value: bandComboString,
       });
     }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
