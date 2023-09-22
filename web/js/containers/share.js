@@ -29,6 +29,7 @@ import history from '../main';
 const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
   if (/localhost/.test(window.location.href)) {
+    console.log('return mock/short_link.json');
     return 'mock/short_link.json';
   }
   return (
@@ -83,6 +84,14 @@ class ShareLinkContainer extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (history.location.search !== prevState.queryString) {
+      this.setState({
+        queryString: history.location.search || '',
+      });
+    }
+  }
+
   componentWillUnmount() {
     if (this.unlisten) this.unlisten();
   }
@@ -94,9 +103,15 @@ class ShareLinkContainer extends Component {
     return requestShortLinkAction(location);
   };
 
+  getPermalinkParams = (permalink) => {
+    const indexToSplit = permalink.indexOf('?');
+    const permalinkParams = permalink.substring(indexToSplit);
+    return permalinkParams;
+  };
+
   onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
-    if (!isShort && shortLinkKey !== queryString) {
+    if (!isShort && queryString !== shortLinkKey) {
       this.getShortLink().then(() => {
         googleTagManager.pushEvent({
           event: 'share_link_shorten',
