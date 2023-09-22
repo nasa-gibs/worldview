@@ -111,6 +111,8 @@ class ShareLinkContainer extends Component {
 
   onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
+    console.log('shortLinkKey', shortLinkKey);
+    console.log('queryString', queryString);
     if (!isShort && queryString !== shortLinkKey) {
       this.getShortLink().then(() => {
         googleTagManager.pushEvent({
