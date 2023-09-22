@@ -29,7 +29,6 @@ import history from '../main';
 const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
   if (/localhost/.test(window.location.href)) {
-    console.log('return mock/short_link.json');
     return 'mock/short_link.json';
   }
   return (
@@ -103,17 +102,9 @@ class ShareLinkContainer extends Component {
     return requestShortLinkAction(location);
   };
 
-  getPermalinkParams = (permalink) => {
-    const indexToSplit = permalink.indexOf('?');
-    const permalinkParams = permalink.substring(indexToSplit);
-    return permalinkParams;
-  };
-
   onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
-    console.log('shortLinkKey', shortLinkKey);
-    console.log('queryString', queryString);
-    if (!isShort && queryString !== shortLinkKey) {
+    if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink().then(() => {
         googleTagManager.pushEvent({
           event: 'share_link_shorten',
