@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashRound from 'lodash/round';
 import lodashEach from 'lodash/each';
@@ -143,7 +143,8 @@ const addLineOverlay = function(map, dateA, dateB) {
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  ReactDOM.render(<FontAwesomeIcon icon="arrows-alt-h" />, draggerCircleEl);
+  const root = createRoot(draggerCircleEl);
+  root.render(<FontAwesomeIcon icon="arrows-alt-h" />);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe

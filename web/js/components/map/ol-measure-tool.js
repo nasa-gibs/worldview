@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { unByKey as OlObservableUnByKey } from 'ol/Observable';
@@ -162,7 +162,8 @@ function OlMeasureTool (props) {
       updateMeasurements(allMeasurements);
     };
 
-    ReactDOM.render(
+    const root = createRoot(overlay.getElement());
+    root.render(
       (
         <MeasureTooltip
           active={!!tooltipElement}
@@ -173,7 +174,7 @@ function OlMeasureTool (props) {
           olMap={olMap}
           proj={proj}
         />
-      ), overlay.getElement(),
+      ),
     );
   };
 

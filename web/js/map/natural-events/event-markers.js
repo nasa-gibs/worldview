@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashIsEmpty from 'lodash/isEmpty';
@@ -34,7 +34,8 @@ const icons = [
 
 const createPin = function(id, category, isSelected, title, hideTooltip) {
   const overlayEl = document.createElement('div');
-  ReactDOM.render(
+  const root = createRoot(overlayEl);
+  root.render(
     React.createElement(EventIcon, {
       category: category.title,
       title,
@@ -42,7 +43,6 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
       hideTooltip,
       isSelected,
     }),
-    overlayEl,
   );
   return new OlOverlay({
     element: overlayEl,
