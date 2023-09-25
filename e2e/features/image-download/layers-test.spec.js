@@ -38,14 +38,12 @@ test('List layers in draw order', async () => {
 test('Move AOD over the reference features', async () => {
   const { modalCloseButton } = selectors
   const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Features_15m')
-  console.warn(url)
   await page.goto(url)
   await page.waitForTimeout(5000)
   await modalCloseButton.click()
   await openImageDownloadPanel(page)
-  await page.waitForTimeout(5000)
+  await page.waitForTimeout(1000)
   await clickDownload(page)
-  await modalCloseButton.click()
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
   expect(urlAttribute).toContain('LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,MODIS_Terra_Aerosol')
 })
