@@ -31,7 +31,7 @@ function AnimationButton(props) {
       return `phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `phone-landscape${subdailyID}`;
-    } if (((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) && isEmbedModeActive) {
+    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone && screenWidth < breakpoints.small)) && isEmbedModeActive) {
       return `tablet-portrait${subdailyID}-embed`;
     } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
       return `tablet-portrait${subdailyID}`;
@@ -45,7 +45,7 @@ function AnimationButton(props) {
   return (
     <div
       onClick={clickAnimationButton}
-      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
@@ -78,6 +78,7 @@ AnimationButton.propTypes = {
   isMobileTablet: PropTypes.bool,
   isMobile: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
 };
 
 export default React.memo(AnimationButton);
