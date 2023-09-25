@@ -39,16 +39,23 @@ const { inputDirectory, schemaFile } = argv
 
 const schemaRaw = fs.readFileSync(schemaFile)
 const schema = JSON.parse(schemaRaw)
+// check if build is gitc
+const gitcEnv = process.env.CONFIG_ENV && process.env.CONFIG_ENV.includes("gitc")
+// setting the additionalProperties to true for gitc builds
+if (gitcEnv) {
+  schema.definitions.layer.additionalProperties = true;
+}
 const validate = ajv.compile(schema)
 
-const invalidJsonFiles = []
+layerConfigFiles = []
+invalidJsonFiles = []
 
 console.warn(`${prog}: Validating layer configs...`)
 
 async function main () {
   let files = globSync(inputDirectory + '/**/*')
   files = files.filter(file => file.endsWith('.json'))
-  for (const filePath of files) {
+  for (filePath of files) {
     validateFile(filePath)
   }
   if (invalidJsonFiles.length) {
@@ -65,10 +72,11 @@ async function validateFile (filePath) {
   const layer = JSON.parse(layerFile)
   const valid = validate(layer)
   if (!valid) {
-    for (const error of validate.errors) {
+    for (error of validate.errors) {
       invalidJsonFiles.push(error)
       console.error(`${prog}: ERROR: ${error.instancePath} ${error.message}`)
-      if (argv.mode === 'verbose') console.error(error)
+      // TOD: Add verbose mode with the full error:
+      // console.error(error)
     }
   }
 }
