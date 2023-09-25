@@ -15,7 +15,9 @@ function Event (props) {
     deselectEvent,
     event,
     eventLayers,
+    highlightEvent,
     isSelected,
+    isHighlighted,
     layers,
     removeGroup,
     selectedDate,
@@ -23,9 +25,10 @@ function Event (props) {
     sources,
     toggleGroupVisibility,
     toggleVisibility,
+    unHighlightEvent,
   } = props;
   const dateString = formatDisplayDate(event.geometry[0].date);
-  const itemClass = isSelected
+  const itemClass = isSelected || isHighlighted
     ? 'item-selected event item'
     : 'event item';
 
@@ -40,8 +43,6 @@ function Event (props) {
   /**
    *
    * @param {String} date | Date of event clicked
-   * @param {Boolean} isSelected | Is this event already selected
-   * @param {Object} e | Event Object
    */
   function onEventSelect(date) {
     if (isSelected && (!date || date === selectedDate)) {
@@ -65,6 +66,19 @@ function Event (props) {
           category: event.categories[0].title,
         },
       });
+    }
+  }
+
+  /**
+   *
+   * @param {Boolean} isHighlighting | Is the action to highlight
+   */
+  function onEventHighlight(isHighlighting) {
+    if (!isHighlighting) {
+      unHighlightEvent();
+    } else {
+      const selectedEventDate = getDefaultEventDate(event);
+      highlightEvent(event.id, selectedEventDate);
     }
   }
 
@@ -174,6 +188,12 @@ function Event (props) {
         e.stopPropagation();
         onEventSelect();
       }}
+      onMouseEnter={(e) => {
+        onEventHighlight(true);
+      }}
+      onMouseLeave={(e) => {
+        onEventHighlight(false);
+      }}
     >
       <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
       <h4
@@ -198,7 +218,9 @@ Event.propTypes = {
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
   eventLayers: PropTypes.array,
+  highlightEvent: PropTypes.func,
   isSelected: PropTypes.bool,
+  isHighlighted: PropTypes.bool,
   layers: PropTypes.array,
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
@@ -206,6 +228,7 @@ Event.propTypes = {
   sources: PropTypes.array,
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
+  unHighlightEvent: PropTypes.func,
 };
 
 export default Event;
