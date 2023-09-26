@@ -83,6 +83,14 @@ class ShareLinkContainer extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (history.location.search !== prevState.queryString) {
+      this.setState({
+        queryString: history.location.search || '',
+      });
+    }
+  }
+
   componentWillUnmount() {
     if (this.unlisten) this.unlisten();
   }
