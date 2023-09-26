@@ -5,7 +5,7 @@ module.exports = {
   ],
   plugins: [
     [
-      '@babel/plugin-proposal-class-properties',
+      '@babel/plugin-transform-class-properties',
       {
         loose: true
       }
