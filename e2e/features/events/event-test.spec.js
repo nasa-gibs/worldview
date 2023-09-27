@@ -30,8 +30,10 @@ test('Make sure that 4 fire layers are not present in layer list: use mock', asy
 })
 
 test('Check that 4 fire layers are now present', async ({ browserName }) => {
-  test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight, layersTab } = selectors
+  // test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
+  const { layersTab, modalCloseButton, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+  await page.goto(mockEvents)
+  await modalCloseButton.click()
   await sidebarEvent.click()
   await layersTab.click()
   await expect(thermAnomSNPPday).toBeVisible()
@@ -51,7 +53,9 @@ test('Use Mock to make sure appropriate number of event markers are appended to 
 
 test('Selecting event shows track points and markers which are not visible when switched to layer tab', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { eventIcons, eventsTab, layersTab, secondEvent, trackMarker } = selectors
+  const { eventIcons, eventsTab, layersTab, modalCloseButton, secondEvent, trackMarker } = selectors
+  await page.goto(mockEvents)
+  await modalCloseButton.click()
   await page.waitForTimeout(1000)
   await secondEvent.click()
   await page.waitForTimeout(5000)
@@ -69,8 +73,8 @@ test('Selecting event shows track points and markers which are not visible when 
 test('Clicking an event in the list selects the event', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
   const { firstEvent, modalCloseButton, selectedFirstEvent } = selectors
-  await page.goto(mockEvents)
-  await modalCloseButton.click()
+  // await page.goto(mockEvents)
+  // await modalCloseButton.click()
   await page.waitForLoadState('networkidle')
   await firstEvent.click()
   await page.waitForTimeout(5000)
@@ -79,7 +83,10 @@ test('Clicking an event in the list selects the event', async ({ browserName }) 
 
 test('Verify that Url is updated', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
+  const { modalCloseButton } = selectors
   await page.waitForTimeout(5000)
+  await page.goto(mockEvents)
+  await modalCloseButton.click()
   const currentUrl = await page.url()
   expect(currentUrl).toContain('efs=true')
   expect(currentUrl).toContain('efa=false')
@@ -88,7 +95,11 @@ test('Verify that Url is updated', async ({ browserName }) => {
 
 test('Verify Events message and clicking message opens dialog', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { notifyMessage, modalCloseButton } = selectors
+  const { firstEvent, notifyMessage, modalCloseButton } = selectors
+  await page.goto(mockEvents)
+  await modalCloseButton.click()
+  await page.waitForLoadState('networkidle')
+  await firstEvent.click()
   await expect(notifyMessage).toBeVisible()
   await expect(notifyMessage).toContainText('Events may not be visible at all times.')
   await notifyMessage.click()
@@ -101,7 +112,10 @@ test('Verify Events message and clicking message opens dialog', async ({ browser
 
 test('Clicking selected event deselects event', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { selectedFirstEvent, eventsTab } = selectors
+  const { firstEvent, selectedFirstEvent, eventsTab, modalCloseButton } = selectors
+  await page.goto(mockEvents)
+  await modalCloseButton.click()
+  await firstEvent.click()
   await selectedFirstEvent.click()
   await eventsTab.hover()
   await page.waitForTimeout(5000)
