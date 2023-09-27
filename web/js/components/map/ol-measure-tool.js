@@ -58,6 +58,7 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
+  let root;
 
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
@@ -162,7 +163,6 @@ function OlMeasureTool (props) {
       updateMeasurements(allMeasurements);
     };
 
-    const root = createRoot(overlay.getElement());
     root.render(
       (
         <MeasureTooltip
@@ -243,6 +243,7 @@ function OlMeasureTool (props) {
       stopEvent: false,
     });
     olMap.addOverlay(tooltipOverlay);
+    root = createRoot(tooltipOverlay.getElement());
 
     draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
