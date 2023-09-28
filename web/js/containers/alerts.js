@@ -148,8 +148,8 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-        </>
 
+        </>
       );
   }
 }
