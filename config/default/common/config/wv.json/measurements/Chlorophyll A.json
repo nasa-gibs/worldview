@@ -1,6 +1,6 @@
 {
     "measurements": {
-        "Chlorophyll A": {
+        "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
             "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
