@@ -153,6 +153,7 @@ class toolbarContainer extends Component {
     const { parameters, features } = config;
     const { notification } = features;
     const domain = window.location.origin;
+    console.warn('window.location.origin', window.location.origin);
     const testDomains = ['localhost', 'worldview.sit', 'worldview.uat', 'uat.gibs'];
     const isTestInstance = testDomains.some((href) => domain.includes(href));
 
