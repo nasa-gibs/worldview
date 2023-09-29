@@ -159,7 +159,8 @@ class toolbarContainer extends Component {
     if (notification) {
       let notificationURL = !isTestInstance
         // Use the configured domain in production
-        ? `${notification.url}?domain=${domain}`
+        // ? `${notification.url}?domain=${domain}`
+        ? `${notification.url}?client=Worldview%20(UAT)`
         // Use the UAT domain for test instances
         : `${notification.url}?client=Worldview%20(UAT)`;
       if (parameters.mockAlerts) {
