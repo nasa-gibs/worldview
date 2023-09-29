@@ -25,8 +25,6 @@ export function openBasicContent(modalHeader, bodyText) {
   };
 }
 export function openCustomContent(key, params) {
-  console.log('key', key);
-  console.log('params', params);
   return {
     type: OPEN_CUSTOM,
     key,
