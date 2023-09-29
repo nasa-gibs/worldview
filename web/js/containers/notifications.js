@@ -16,7 +16,7 @@ function Notifications(props) {
         type="outage"
         numberNotSeen={getNumberOfTypeNotSeen('outage', outages)}
       />
-      {/* <NotificationBlock
+      <NotificationBlock
         arr={alerts}
         type="alert"
         numberNotSeen={getNumberOfTypeNotSeen('alert', alerts)}
@@ -25,7 +25,7 @@ function Notifications(props) {
         arr={messages}
         type="message"
         numberNotSeen={getNumberOfTypeNotSeen('message', messages)}
-      /> */}
+      />
     </div>
   );
 }
