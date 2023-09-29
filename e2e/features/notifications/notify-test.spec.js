@@ -28,24 +28,6 @@ test.afterAll(async () => {
   await page.close()
 })
 
-// test('Alert and outage content is highlighted and found in modal on page load', async () => {
-//   await page.goto(layerNoticesQuery)
-//   const outageContentHighlighted = await page.locator('#notification_list_modal .outage-notification-item span').first()
-//   const alertContentHighlighted = await page.locator('#notification_list_modal .alert-notification-item p')
-//   await expect(outageContentHighlighted).toContainText('Posted 19 September 2023')
-//   await expect(alertContentHighlighted).toContainText('Several Aqua and Terra MODIS layers are experiencing delays in processing. (test)')
-// })
-
-// test('Message content is found in modal with mock request', async () => {
-//   const url = `${mockAlertQuery}message`
-//   await page.goto(url)
-//   await infoButtonIcon.click()
-//   const notificationsMenuItem = await page.locator('#notifications_info_item')
-//   await notificationsMenuItem.click()
-//   const messageContentHighlighted = await page.locator('#notification_list_modal .message-notification-item p')
-//   await expect(messageContentHighlighted).toContainText('This is a message test')
-// })
-
 test('No visible notifications with mockAlert parameter set to no_types', async () => {
   const url = `${mockAlertQuery}no_types`
   const giftListItem = await page.locator('#toolbar_info li.gift')
@@ -72,7 +54,7 @@ test('Outage takes precedence when all three notifications are present', async (
 test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
   const badge = await page.locator('span.badge')
   await expect(badge).toBeVisible()
-  await expect(badge).toContainText('3')
+  await expect(badge).toContainText('2')
 })
 
 test('Alert, outage, and message content is highlighted and found in modal', async () => {
@@ -85,10 +67,10 @@ test('Alert, outage, and message content is highlighted and found in modal', asy
   await expect(messageContentHighlighted).toContainText('This is a message test')
 })
 
-test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
-  const badge = await page.locator('span.badge')
-  await expect(badge).toBeVisible()
-  await expect(badge).toContainText('2')
+test('Verify that the user is only alerted if they have not already stored all items in localStorage', async () => {
+  const hideButton = await page.locator('#wv-info-button.wv-status-hide')
+  await page.locator('.modal-close-btn').click()
+  await expect(hideButton).toBeVisible()
 })
 
 test('Verify that zots show for the layers that have notices', async () => {
