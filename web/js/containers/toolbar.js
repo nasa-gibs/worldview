@@ -153,15 +153,13 @@ class toolbarContainer extends Component {
     const { parameters, features } = config;
     const { notification } = features;
     const domain = window.location.origin;
-    console.warn('window.location.origin', window.location.origin);
     const testDomains = ['localhost', 'worldview.sit', 'worldview.uat', 'uat.gibs'];
     const isTestInstance = testDomains.some((href) => domain.includes(href));
 
     if (notification) {
       let notificationURL = !isTestInstance
         // Use the configured domain in production
-        // ? `${notification.url}?domain=${domain}`
-        ? `${notification.url}?client=Worldview%20(UAT)`
+        ? `${notification.url}?domain=${domain}`
         // Use the UAT domain for test instances
         : `${notification.url}?client=Worldview%20(UAT)`;
       if (parameters.mockAlerts) {
