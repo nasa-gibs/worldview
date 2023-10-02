@@ -201,7 +201,7 @@ const updateLookup = function(layerId, palettesObj, state) {
           }
         } else {
           sourcePercent = index / sourceCount;
-          targetIndex = Math.floor(sourcePercent * targetCount);
+          targetIndex = Math.round(sourcePercent * targetCount);
         }
         targetColor = target[targetIndex];
       }

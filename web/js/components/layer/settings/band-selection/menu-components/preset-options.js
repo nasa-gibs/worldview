@@ -91,7 +91,7 @@ const sentinelPresets = [
     title: 'False Color (Urban)',
     r: 'B12',
     g: 'B11',
-    b: 'B4',
+    b: 'B04',
     img: 'HLS_False_Color_Urban_Sentinel.jpg',
   },
   {

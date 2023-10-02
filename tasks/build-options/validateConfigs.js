@@ -39,6 +39,12 @@ const { inputDirectory, schemaFile } = argv
 
 const schemaRaw = fs.readFileSync(schemaFile)
 const schema = JSON.parse(schemaRaw)
+// check if build is gitc
+const gitcEnv = process.env.CONFIG_ENV && process.env.CONFIG_ENV.includes('gitc')
+// setting the additionalProperties to true for gitc builds
+if (gitcEnv) {
+  schema.definitions.layer.additionalProperties = true
+}
 const validate = ajv.compile(schema)
 
 const invalidJsonFiles = []
@@ -68,7 +74,6 @@ async function validateFile (filePath) {
     for (const error of validate.errors) {
       invalidJsonFiles.push(error)
       console.error(`${prog}: ERROR: ${error.instancePath} ${error.message}`)
-      if (argv.mode === 'verbose') console.error(error)
     }
   }
 }

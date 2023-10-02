@@ -14,7 +14,11 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
-import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import {
+  selectEvent as selectEventAction,
+  highlightEvent as highlightEventAction,
+  unHighlightEvent as unHighlightEventAction,
+} from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
@@ -101,7 +105,7 @@ class EventMarkers extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       proj, eventsDataIsLoading, isAnimatingToEvent, selectedEvent,
     } = this.props;
@@ -193,7 +197,9 @@ class EventMarkers extends React.Component {
   }
 
   addInteractions(marker, event, date, isSelected) {
-    const { selectEvent, mapUi } = this.props;
+    const {
+      selectEvent, highlightEvent, unHighlightEvent, mapUi,
+    } = this.props;
     const category = event.categories[0];
     let willSelect = true;
     let moveCount = 0;
@@ -222,6 +228,12 @@ class EventMarkers extends React.Component {
         });
       }
     };
+    const onMouseEnter = () => {
+      highlightEvent(event.id, date);
+    };
+    const onMouseLeave = () => {
+      unHighlightEvent();
+    };
 
     ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
       pinEl.addEventListener(type, onMouseDownTouchStart, options);
@@ -232,6 +244,8 @@ class EventMarkers extends React.Component {
     ['pointermove', 'mousemove'].forEach((type) => {
       pinEl.addEventListener(type, onMouseMove, options);
     });
+    pinEl.addEventListener('mouseenter', onMouseEnter, options);
+    pinEl.addEventListener('mouseleave', onMouseLeave, options);
   }
 
   remove() {
@@ -283,11 +297,18 @@ const mapDispatchToProps = (dispatch) => ({
   selectEvent: (id, date) => {
     dispatch(selectEventAction(id, date));
   },
+  highlightEvent: (id, date) => {
+    dispatch(highlightEventAction(id, date));
+  },
+  unHighlightEvent: () => {
+    dispatch(unHighlightEventAction());
+  },
 });
 
 EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  highlightEvent: PropTypes.func,
   isAnimatingToEvent: PropTypes.bool,
   isMobile: PropTypes.bool,
   map: PropTypes.object,
@@ -295,6 +316,7 @@ EventMarkers.propTypes = {
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
+  unHighlightEvent: PropTypes.func,
 };
 
 export default connect(

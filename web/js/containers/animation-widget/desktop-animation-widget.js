@@ -12,11 +12,13 @@ import CustomIntervalSelector from '../../components/timeline/custom-interval-se
 function DesktopAnimationWidget(props) {
   const {
     animationCustomModalOpen,
+    autoplay,
     customModalType,
     endDate,
     handleDragStart,
     hasSubdailyLayers,
     interval,
+    isDistractionFreeModeActive,
     isPlaying,
     looping,
     maxDate,
@@ -47,6 +49,8 @@ function DesktopAnimationWidget(props) {
     onSlide(speed);
   };
 
+  const hideWidget = autoplay || isDistractionFreeModeActive ? 'd-none' : '';
+
   return (
     <Draggable
       bounds="body"
@@ -56,7 +60,7 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className="wv-animation-widget-wrapper">
+      <div className={`wv-animation-widget-wrapper ${hideWidget}`}>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
@@ -101,7 +105,6 @@ function DesktopAnimationWidget(props) {
               />
             </div>
             <span className="wv-slider-label mt-1">
-
               {speed}
               {' '}
               {sliderLabel}
@@ -122,7 +125,6 @@ function DesktopAnimationWidget(props) {
             subDailyMode={subDailyMode}
             isDisabled={isPlaying}
           />
-
           <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
           <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
         </div>
@@ -133,11 +135,13 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
+  autoplay: PropTypes.bool,
   customModalType: PropTypes.object,
   endDate: PropTypes.object,
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
+  isDistractionFreeModeActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,

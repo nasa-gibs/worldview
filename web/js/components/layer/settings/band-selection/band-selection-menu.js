@@ -18,14 +18,16 @@ export default function BandSelection({ layer }) {
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
+  const currentSelectedPreset = useSelector((state) => state.layers.active.layers[layerIndex].selectedPreset);
+  const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const updateBandCombination = (id, bandCombo) => {
-    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex));
+    dispatch(updateBandCombinationAction(id, bandCombo, layerIndex, selectedPreset));
   };
+
   const removeLayer = (id) => { dispatch(removeLayerAction(id)); };
   const closeModal = () => { dispatch(onClose()); };
 
 
-  const [selectedPreset, setSelectedPreset] = useState(null);
   const [bandSelection, setBandSelection] = useState({
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
