@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
 import OlOverlay from 'ol/Overlay';
@@ -50,13 +50,13 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  */
 const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
+  const root = createRoot(overlayEl);
   const removeMarker = () => {
-    ReactDOM.unmountComponentAtNode(overlayEl);
+    root.unmount(overlayEl);
     removeMarkerPin();
   };
-  ReactDOM.render(
+  root.render(
     React.createElement(LocationMarker, { ...pinProps, removeMarker }),
-    overlayEl,
   );
   const markerPin = new OlOverlay({
     element: overlayEl,
