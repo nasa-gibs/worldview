@@ -17,10 +17,11 @@ test.afterAll(async () => {
 })
 
 test('Data tab is available and in default state when clicked', async () => {
-  const { dataDownloadTabButton } = selectors
+  const { dataDownloadTabButton, modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-12-01'
   const handoffTitle = await page.locator('.smart-handoff-side-panel > h1')
   await page.goto(queryString)
+  await modalCloseButton.click()
   await expect(dataDownloadTabButton).toBeVisible()
   await dataDownloadTabButton.click()
   await page.waitForTimeout(5000)
@@ -52,9 +53,10 @@ test('Select "Cloud Effective Radius" layer and check that it is available for d
 })
 
 test('Arriving via permalink, data tab selected and granule count shows', async () => {
-  const { dataDownloadTabButton } = selectors
+  const { dataDownloadTabButton, modalCloseButton } = selectors
   const permalinkParams = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=2020-02-06-T06%3A00%3A00Z'
   await page.goto(permalinkParams)
+  await modalCloseButton.click()
   await dataDownloadTabButton.click()
   const granuleCountInfo = await page.locator('.granule-count-info')
   await expect(granuleCountInfo).not.toHaveText('NONE')
@@ -67,17 +69,20 @@ test('Changing collection updates URL', async () => {
 })
 
 test('Layers outside of their coverage date range are hidden from layers available for download', async () => {
-  const { dataDownloadTabButton } = selectors
+  const { dataDownloadTabButton, modalCloseButton } = selectors
   const permalinkParams1980 = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=1980-02-06-T06%3A00%3A00Z'
   await page.goto(permalinkParams1980)
+  await modalCloseButton.click()
   await expect(dataDownloadTabButton).toBeVisible()
   const smartHandoffTitle = await page.locator('.smart-handoff-side-panel > h1')
   await expect(smartHandoffTitle).toContainText('None of your current layers are available for download.')
 })
 
 test('Map extent entirely across dateline disables download button and displays warning for user to zoom out to see available map', async () => {
+  const { modalCloseButton } = selectors
   const extentCrossedDateline = 'http://localhost:3000/?v=226.32336353630282,-35.84415340249873,233.47009302183025,-31.309041515170094&l=VIIRS_NOAA20_Thermal_Anomalies_375m_All,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&sh=VIIRS_NOAA20_Thermal_Anomalies_375m_All,C1355615368-LANCEMODIS&t=2021-08-29-T17%3A56%3A03Z'
   await page.goto(extentCrossedDateline)
+  await modalCloseButton.click()
   const downloadButton = await page.locator('.download-btn')
   await expect(downloadButton).toBeVisible()
   await expect(downloadButton).toHaveClass(/wv-disabled/)
@@ -86,8 +91,10 @@ test('Map extent entirely across dateline disables download button and displays 
 })
 
 test('Download via Earthdata Search', async () => {
+  const { modalCloseButton } = selectors
   const permalinkParams = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=2020-02-06-T06%3A00%3A00Z'
   await page.goto(permalinkParams)
+  await modalCloseButton.click()
   await page.locator('.download-btn').click()
   const transferring = await page.locator('#transferring-to-earthdata-search')
   await expect(transferring).toBeVisible()

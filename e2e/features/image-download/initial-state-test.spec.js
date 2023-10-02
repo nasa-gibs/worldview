@@ -29,8 +29,9 @@ test.afterAll(async () => {
 })
 
 test('Check resolutions', async () => {
-  const { imageResolution } = selectors
+  const { imageResolution, modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await openImageDownloadPanel(page)
   await expect(imageResolution).toContainText(expectedResolutions)
 })

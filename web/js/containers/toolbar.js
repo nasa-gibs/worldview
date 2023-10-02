@@ -101,6 +101,15 @@ class toolbarContainer extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { isAboutOpen, openAboutModal, modalIsOpen } = this.props;
+    if (modalIsOpen !== prevProps.modalIsOpen) {
+      if (isAboutOpen) {
+        openAboutModal();
+      }
+    }
+  }
+
   getPromise(bool, type, action, title) {
     const { visibleLayersForProj } = this.props;
     const { notify } = this.props;
@@ -441,38 +450,40 @@ const mapStateToProps = (state) => {
   const { isAnimatingToEvent } = events;
   const { activeTab } = sidebar;
   const isDataDownloadTabActive = activeTab === 'download';
+  const { isOpen: modalIsOpen } = modal;
 
   // Collapse when Image download / GIF /  is open or measure tool active
-  const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
+  const snapshotModalOpen = modalIsOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
-    proj,
-    faSize,
-    notificationType: type,
-    notificationContentNumber: number,
-    config: state.config,
-    rotation: map.rotation,
     activePalettes,
+    config: state.config,
+    faSize,
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
+    isAnimatingToEvent,
+    isAboutOpen: modalAbout.isOpen,
+    isCompareActive,
+    isDistractionFreeModeActive,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
       && !isCompareActive && !isDataDownloadTabActive,
     ),
-    isAnimatingToEvent,
-    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
-    isCompareActive,
+    isKioskModeActive,
     isLocationSearchExpanded,
     isMobile,
-    isAboutOpen: modalAbout.isOpen,
-    shouldBeCollapsed,
+    isRotated: Boolean(map.rotation !== 0),
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
       activePalettes,
     ),
+    modalIsOpen,
+    notificationType: type,
+    notificationContentNumber: number,
+    proj,
+    rotation: map.rotation,
+    shouldBeCollapsed,
     visibleLayersForProj,
-    isRotated: Boolean(map.rotation !== 0),
-    isDistractionFreeModeActive,
-    isKioskModeActive,
   };
 };
 
@@ -558,7 +569,6 @@ export default connect(
 toolbarContainer.propTypes = {
   activePalettes: PropTypes.object,
   hasNonDownloadableLayer: PropTypes.bool,
-  visibleLayersForProj: PropTypes.array,
   config: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
@@ -571,6 +581,7 @@ toolbarContainer.propTypes = {
   isImageDownloadActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRotated: PropTypes.bool,
+  modalIsOpen: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
   notificationType: PropTypes.string,
   notify: PropTypes.func,
@@ -583,4 +594,5 @@ toolbarContainer.propTypes = {
   toggleDialogVisible: PropTypes.func,
   toggleDistractionFreeModeAction: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
+  visibleLayersForProj: PropTypes.array,
 };

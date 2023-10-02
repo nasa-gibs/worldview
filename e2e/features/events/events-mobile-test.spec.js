@@ -24,8 +24,9 @@ test.afterAll(async () => {
 
 test('Events populated in sidebar', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { sidebarButton, sidebarContent, eventsTab, icebergEvent } = selectors
+  const { modalCloseButton, sidebarButton, sidebarContent, eventsTab, icebergEvent } = selectors
   await page.goto(mockEvents)
+  await modalCloseButton.click()
   await page.waitForLoadState('networkidle')
   await sidebarButton.click()
   await expect(sidebarContent).toBeVisible()
@@ -45,8 +46,9 @@ test('Clicking event in list closes sidebar and selects marker for event on map'
 
 test('Events load when arriving via permalink', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { sidebarButton, sidebarContent, selectedMarker } = selectors
+  const { modalCloseButton, sidebarButton, sidebarContent, selectedMarker } = selectors
   await page.goto(stormEventSelected)
+  await modalCloseButton.click()
   await expect(selectedMarker).toBeVisible()
   await expect(sidebarContent).not.toBeVisible()
   await expect(sidebarButton).toBeVisible()
