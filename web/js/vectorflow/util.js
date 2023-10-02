@@ -44,12 +44,13 @@ export function throttle(fn, wait) {
   };
 }
 
+// Establish color gradient to differentiate lower & higher magnitudes
 export function colorGradient(fadeFraction) {
   const color1 = {
-    red: 246, green: 219, blue: 160,
+    red: 100, green: 100, blue: 100,
   };
   const color2 = {
-    red: 245, green: 165, blue: 157,
+    red: 255, green: 255, blue: 255,
   };
 
   const fade = fadeFraction;

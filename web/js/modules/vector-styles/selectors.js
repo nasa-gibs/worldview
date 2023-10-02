@@ -157,7 +157,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   // Custom dealing with OSCAR
   if (styleId === 'OSCAR_Sea_Surface_Currents') {
     // return here if we want to apply our custom arrow styling (NOT the glStyle)
-    // return;
+    return;
   }
   console.log('glStyle');
   console.log(glStyle);

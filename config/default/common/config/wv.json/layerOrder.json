@@ -1,5 +1,7 @@
 {
 	"layerOrder": [
+		"ASCAT_Ocean_Surface_Wind_Speed",
+		"OSCAR_Sea_Surface_Currents_Final",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
