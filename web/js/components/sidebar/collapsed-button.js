@@ -6,14 +6,13 @@ import { UncontrolledTooltip } from 'reactstrap';
 class CollapsedButton extends PureComponent {
   render() {
     const {
-      isEmbed,
       isMobile,
       numberOfLayers,
       onclick,
     } = this.props;
     const buttonId = 'accordion-toggler-button';
     const labelText = 'Expand sidebar';
-    const classes = `sidebar-expand ${isMobile && !isEmbed ? 'mobile' : ''}`;
+    const classes = `sidebar-expand ${isMobile ? 'mobile' : ''}`;
 
     return (
       <div
@@ -23,6 +22,7 @@ class CollapsedButton extends PureComponent {
           id={buttonId}
           aria-label={labelText}
           onClick={onclick}
+          className="sidebar-anchor"
         >
           <UncontrolledTooltip id="center-align-tooltip" placement="right" target={buttonId}>
             {labelText}
@@ -46,7 +46,6 @@ class CollapsedButton extends PureComponent {
   }
 }
 CollapsedButton.propTypes = {
-  isEmbed: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func,

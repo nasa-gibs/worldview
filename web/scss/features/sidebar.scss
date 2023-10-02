@@ -78,7 +78,7 @@
     height: 32px;
   }
 
-  .nav-item a:hover {
+  .nav-item a:not(.active):hover {
     color: #fff !important;
   }
 
@@ -88,6 +88,7 @@
 
   .tab-content .nav-tabs {
     border-bottom: 3px solid #dee2e6;
+    padding-bottom: 4px;
   }
 
   .nav-item {
@@ -189,27 +190,63 @@
 
 #products-holder footer {
   width: initial;
+  margin-bottom: 10px;
 }
 
 footer .product-buttons {
-  padding: 10px;
   height: 47px;
-  width: initial;
+  width: auto;
+  padding: 10px;
 }
 
-footer .layers-add {
-  position: absolute;
-  left: 10px;
+.wv-button {
+  background-image: linear-gradient(#555,#666);
+  border: 1px solid #666;
+  color: #eee;
+  font-family: "Open Sans Bold",sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0;
+  border-radius: 0;
+}
+
+.compare-chart-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.charting-button {
+  display: flex;
+  justify-content: space-around;
+}
+
+#compare-toggle-button {
+  background-image: linear-gradient(#555,#666);
+  border: 1px solid #666;
+  color: #eee;
+  font-family: "Open Sans Bold",sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0;
 }
 
 footer .compare-toggle-button {
+  border-bottom: none;
   position: absolute;
   right: 10px;
-  border-bottom: none;
+}
+
+div#group-overlays-checkbox-case {
+  margin: 4px 0 0 4px;
 }
 
 .layer-group-baselayers {
   margin-top: 10px;
+}
+
+.compare-chart-container > button {
+  width: 45%;
+  height: 30px;
 }
 
 .layer-group-case {
@@ -387,7 +424,8 @@ footer .compare-toggle-button {
   }
 }
 
-.wv-ab-mode-selection-case {
+.wv-ab-mode-selection-case,
+.wv-charting-mode-container {
   margin: 5px;
   color: #fff;
 }
@@ -408,6 +446,117 @@ footer .compare-toggle-button {
 .wv-ab-mode-selection-case > div,
 .wv-ab-mode-selection-case h3 {
   display: inline-block;
+}
+
+.charting-aoi-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 10px;
+
+  svg {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    line-height: 1.4em;
+  }
+}
+
+.charting-date-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.charting-timespan-container,
+.charting-date-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.charting-timespan-container {
+  align-items: center;
+  margin: 10px;
+
+  div > .btn-active {
+    background: #d54e21;
+    border-color: #d54e21;
+  }
+
+  svg {
+    font-size: 1.4em;
+  }
+}
+
+.charting-info-container,
+.charting-calendar-container {
+  text-align: center;
+  font-size: 1.4em;
+  margin-right: 10px;
+}
+
+.charting-icons {
+  display: flex;
+}
+
+.charting-statistics-label {
+  font-weight: bolder;
+  min-width: 40%;
+}
+
+.charting-statistics-row {
+  display: flex;
+  margin: 0 0 1em;
+  padding: 0.25em;
+}
+
+.charting-buttons {
+  font-size: 1.5em;
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-around;
+}
+
+.charting-indicator {
+  font-size: 1.5em;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#charting-chart {
+  max-width: 800px;
+}
+
+button#charting-simple-stats-button {
+  border-right: 3px solid black;
+}
+
+.charting-info,
+.charting-disclaimer {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.charting-chart-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.charting-stat-text {
+  float: left;
+  margin-left: 20px;
+}
+
+.charting-request-status {
+  text-align: center;
+  margin-top: 10px;
+}
+
+p.recharts-tooltip-label {
+  color: black;
+  font-weight: bold;
 }
 
 #products-holder footer p {
@@ -689,6 +838,8 @@ footer .compare-toggle-button {
 
   .layer-orbit-tracks .wv-checkbox {
     margin: 10px 0 10px 10px;
+    display: flex;
+    align-items: center;
 
     & label {
       display: inline;

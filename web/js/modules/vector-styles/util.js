@@ -329,7 +329,8 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     console.log(vectorStyles);
     console.log(olLayer);
     console.log(state);
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
+    // setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
@@ -337,6 +338,6 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
     console.log('calling stylefunction...');
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
   }
 }

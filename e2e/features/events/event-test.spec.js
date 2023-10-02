@@ -52,7 +52,10 @@ test('Selecting event shows track points and markers which are not visible when 
   const { secondEvent, trackMarker, eventIcons, eventsTab, layersTab } = selectors
   await page.waitForTimeout(1000)
   await secondEvent.click()
+  await page.waitForTimeout(5000)
   await expect(trackMarker).toHaveCount(5)
+  await layersTab.hover()
+  await page.waitForTimeout(1000)
   await layersTab.click()
   await expect(trackMarker).not.toBeVisible()
   await expect(eventIcons).not.toBeVisible()
@@ -67,6 +70,7 @@ test('Clicking an event in the list selects the event', async ({ browserName }) 
   await page.goto(mockEvents)
   await page.waitForLoadState('networkidle')
   await firstEvent.click()
+  await page.waitForTimeout(5000)
   await expect(selectedFirstEvent).toBeVisible()
 })
 
@@ -94,7 +98,9 @@ test('Verify Events message and clicking message opens dialog', async ({ browser
 
 test('Clicking selected event deselects event', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { selectedFirstEvent } = selectors
+  const { selectedFirstEvent, eventsTab } = selectors
   await selectedFirstEvent.click()
+  await eventsTab.hover()
+  await page.waitForTimeout(5000)
   await expect(selectedFirstEvent).not.toBeVisible()
 })

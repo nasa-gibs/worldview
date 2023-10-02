@@ -1,8 +1,8 @@
 
 import { get } from 'lodash';
-import googleTagManager from 'googleTagManager';
-import { parseTemplate } from 'url-template';
 import moment from 'moment';
+import { parseTemplate } from 'url-template';
+import googleTagManager from 'googleTagManager';
 
 import { TOOLS_EARTHDATA_SEARCH } from './constants';
 

@@ -13,6 +13,8 @@ import Scrollbars from '../../components/util/scrollbar';
 import {
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
+  highlightEvent as highlightEventActionCreator,
+  unHighlightEvent as unHighlightEventActionCreator,
 } from '../../modules/natural-events/actions';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
@@ -29,28 +31,31 @@ import { formatDisplayDate } from '../../modules/date/util';
 function Events(props) {
   const {
     defaultEventLayer,
-    eventsData,
-    sources,
-    isLoading,
-    layers,
-    selectEvent,
-    selected,
-    openFilterModal,
-    height,
     deselectEvent,
+    eventLayers,
+    eventsData,
     hasRequestError,
+    height,
+    highlighted,
+    highlightEvent,
+    isLoading,
     isMobile,
     isEmbedModeActive,
-    showAlert,
+    layers,
+    openFilterModal,
+    removeGroup,
     selectedDate,
-    showDates,
+    selected,
+    selectEvent,
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
-    removeGroup,
-    eventLayers,
+    showAlert,
+    showDates,
+    sources,
     toggleVisibility,
     toggleGroupVisibility,
+    unHighlightEvent,
   } = props;
 
   const filterControlHeight = 115;
@@ -85,7 +90,7 @@ function Events(props) {
       </div>
       <Button
         id="event-filter-button"
-        className="filter-button"
+        className={isEmbedModeActive ? 'filter-button-hidden' : 'filter-button'}
         aria-label="Filtered layer search"
         onClick={openFilterModal}
         color="primary"
@@ -108,11 +113,14 @@ function Events(props) {
               event={event}
               selectEvent={(id, date) => selectEvent(id, date, isMobile)}
               deselectEvent={deselectEvent}
+              highlightEvent={(id, date) => highlightEvent(id, date)}
+              unHighlightEvent={unHighlightEvent}
               removeGroup={removeGroup}
               eventLayers={eventLayers}
               toggleVisibility={toggleVisibility}
               toggleGroupVisibility={toggleGroupVisibility}
               isSelected={selected.id === event.id}
+              isHighlighted={highlighted.id === event.id}
               selectedDate={selectedDate}
               sources={sources}
               defaultEventLayer={defaultEventLayer}
@@ -157,6 +165,12 @@ const mapDispatchToProps = (dispatch) => ({
   deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
+  highlightEvent: (id, dateStr) => {
+    dispatch(highlightEventActionCreator(id, dateStr));
+  },
+  unHighlightEvent: () => {
+    dispatch(unHighlightEventActionCreator());
+  },
   openFilterModal: () => {
     dispatch(toggleCustomContent('events-filter', {
       headerText: 'Filter Events',
@@ -192,7 +206,7 @@ const mapStateToProps = (state) => {
   } = state;
 
   const {
-    selected, showAll, selectedDates, selectedCategories,
+    selected, highlighted, showAll, selectedDates, selectedCategories,
   } = events;
   const { isEmbedModeActive } = embed;
 
@@ -207,6 +221,7 @@ const mapStateToProps = (state) => {
     showAll,
     showDates: !!(selectedDates.start && selectedDates.end),
     selected,
+    highlighted,
     selectedCategories,
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
@@ -221,10 +236,12 @@ export default connect(
 Events.propTypes = {
   defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
-  eventLayers: PropTypes.array,
   eventsData: PropTypes.array,
+  eventLayers: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
+  highlighted: PropTypes.object,
+  highlightEvent: PropTypes.func,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
@@ -233,13 +250,14 @@ Events.propTypes = {
   removeGroup: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
-  showDates: PropTypes.bool,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   selectedCategories: PropTypes.array,
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
+  showDates: PropTypes.bool,
   sources: PropTypes.array,
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
+  unHighlightEvent: PropTypes.func,
 };

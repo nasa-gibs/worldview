@@ -13,6 +13,7 @@ function Markers(props) {
     activeLayers,
     config,
     coordinates,
+    isKioskModeActive,
     isMobileDevice,
     selectedMap,
     selectedMapMarkers,
@@ -21,25 +22,6 @@ function Markers(props) {
     setGeocodeResults,
     ui,
   } = props;
-
-  useEffect(() => {
-    switch (action.type) {
-      case 'LOCATION_SEARCH/REMOVE_MARKER': {
-        return removeCoordinatesMarker(action.coordinates);
-      }
-      case 'LOCATION_SEARCH/SET_MARKER': {
-        if (action.flyToExistingMarker) {
-          return flyToMarker(action.coordinates);
-        }
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
-      }
-      case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
-        return addMarkerAndUpdateStore(false);
-      }
-      default:
-        break;
-    }
-  }, [action]);
 
   /**
    * Remove coordinates marker from all projections
@@ -75,27 +57,6 @@ function Markers(props) {
     });
   };
 
-  /**
-   * Handle reverse geocode and add map marker with results
-   *
-   * @method handleActiveMapMarker
-   * @static
-   *
-   * @returns {void}
-   */
-  const handleActiveMapMarker = () => {
-    removeAllCoordinatesMarkers();
-    if (coordinates && coordinates.length > 0) {
-      coordinates.forEach((coordinatesObject) => {
-        const { longitude, latitude } = coordinatesObject;
-        const coord = [longitude, latitude];
-        if (!areCoordinatesWithinExtent(proj, coord)) return;
-        reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
-          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
-        });
-      });
-    }
-  };
 
   const flyToMarker = (coordinatesObject) => {
     const { sources } = config;
@@ -103,7 +64,7 @@ function Markers(props) {
     const latestCoordinates = coordinatesObject && [longitude, latitude];
     const zoom = selectedMap.getView().getZoom();
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-    animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom);
+    animateCoordinates(selectedMap, proj, latestCoordinates, maxZoom, isKioskModeActive);
   };
 
   /**
@@ -146,9 +107,50 @@ function Markers(props) {
     setGeocodeResults(geocodeResults);
   };
 
+  /**
+   * Handle reverse geocode and add map marker with results
+   *
+   * @method handleActiveMapMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const handleActiveMapMarker = () => {
+    removeAllCoordinatesMarkers();
+    if (coordinates && coordinates.length > 0) {
+      coordinates.forEach((coordinatesObject) => {
+        const { longitude, latitude } = coordinatesObject;
+        const coord = [longitude, latitude];
+        if (!areCoordinatesWithinExtent(proj, coord)) return;
+        reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
+          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
+        });
+      });
+    }
+  };
+
   useEffect(() => {
     handleActiveMapMarker();
   }, [ui]);
+
+  useEffect(() => {
+    switch (action.type) {
+      case 'LOCATION_SEARCH/REMOVE_MARKER': {
+        return removeCoordinatesMarker(action.coordinates);
+      }
+      case 'LOCATION_SEARCH/SET_MARKER': {
+        if (action.flyToExistingMarker) {
+          return flyToMarker(action.coordinates);
+        }
+        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
+      }
+      case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
+        return addMarkerAndUpdateStore(false);
+      }
+      default:
+        break;
+    }
+  }, [action]);
 
   return null;
 }
@@ -157,6 +159,7 @@ const mapStateToProps = (state) => {
   const {
     locationSearch, proj, screenSize, map,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const { coordinates } = locationSearch;
   const { isMobileDevice } = screenSize;
   const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
@@ -165,6 +168,7 @@ const mapStateToProps = (state) => {
   return {
     activeLayers,
     coordinates,
+    isKioskModeActive,
     isMobileDevice,
     selectedMap,
     selectedMapMarkers,
@@ -192,6 +196,7 @@ Markers.propTypes = {
   action: PropTypes.object,
   config: PropTypes.object,
   coordinates: PropTypes.array,
+  isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
   proj: PropTypes.object,
   removeMarker: PropTypes.func,
@@ -199,5 +204,4 @@ Markers.propTypes = {
   state: PropTypes.object,
   ui: PropTypes.object,
 };
-
 

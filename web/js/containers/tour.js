@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import googleTagManager from 'googleTagManager';
+import update from 'immutability-helper';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
   uniqBy,
   isEmpty as lodashIsEmpty,
 } from 'lodash';
-import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 
 import JoyrideWrapper from '../components/tour/joyride-wrapper';
 import TourStart from '../components/tour/modal-tour-start';
@@ -35,12 +35,21 @@ import {
   startTour as startTourAction,
 } from '../modules/tour/actions';
 import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
-
+import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
+
+const getTransitionAttr = function(transition) {
+  if (!transition) return '';
+  const { element, action } = transition;
+  if (element === 'animation' && action === 'play') {
+    return '&playanim=true';
+  }
+  return '';
+};
 
 class Tour extends React.Component {
   constructor(props) {
@@ -79,10 +88,16 @@ class Tour extends React.Component {
   }
 
   componentDidMount() {
-    const { currentStory, currentStoryIndex, currentStoryId } = this.state;
+    const {
+      currentStory, currentStoryIndex, currentStoryId, modalStart, modalInProgress, modalComplete,
+    } = this.state;
     // If app loads with tour link at step other than 1, restart that tour story
     if (currentStory && currentStoryIndex !== -1) {
       this.selectTour(null, currentStory, 1, currentStoryId);
+    }
+
+    if (!modalStart && !modalInProgress && !modalComplete) {
+      this.setState({ modalStart: true });
     }
   }
 
@@ -123,9 +138,10 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive,
     } = this.props;
     if (e) e.preventDefault();
+    const kioskParam = this.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -145,7 +161,7 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
       config,
       renderedPalettes,
     );
@@ -194,6 +210,7 @@ class Tour extends React.Component {
   }
 
   toggleModalInProgress(e) {
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalInProgress: !prevState.modalInProgress,
@@ -202,6 +219,7 @@ class Tour extends React.Component {
 
   toggleModalComplete(e) {
     const { currentStoryId } = this.state;
+    if (!e) return;
     e.preventDefault();
     this.setState((prevState) => ({
       modalComplete: !prevState.modalComplete,
@@ -225,8 +243,11 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
+    const kioskParam = this.getKioskParam(isKioskModeActive);
+
+    if (activeTab === 'events') changeTab('layers');
 
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
@@ -239,7 +260,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
         renderedPalettes,
       );
@@ -250,13 +271,21 @@ class Tour extends React.Component {
     }
   }
 
+  getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
+    const kioskParam = this.getKioskParam(isKioskModeActive);
+
+    if (activeTab === 'events') changeTab('layers');
+
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
@@ -268,7 +297,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
         renderedPalettes,
       );
@@ -346,6 +375,7 @@ class Tour extends React.Component {
     const {
       stories,
       config,
+      isKioskModeActive,
     } = this.props;
     const {
       modalInProgress,
@@ -379,6 +409,7 @@ class Tour extends React.Component {
         metaLoaded={metaLoaded}
         isLoadingMeta={isLoadingMeta}
         description={description}
+        isKioskModeActive={isKioskModeActive}
       />
     );
   }
@@ -402,25 +433,18 @@ class Tour extends React.Component {
     const {
       map,
       stories,
-      screenHeight,
-      screenWidth,
       isActive,
-      endTour,
       resetProductPicker,
     } = this.props;
     const {
       currentStory,
       currentStep,
       modalInProgress,
-      modalComplete,
       modalStart,
       showSupportAlert,
       showDisabledAlert,
       tourEnded,
     } = this.state;
-    if (screenWidth < 740 || screenHeight < 450) {
-      endTour();
-    }
     if (showDisabledAlert && tourEnded) return this.renderDisableAlert();
 
     if (showSupportAlert) {
@@ -429,9 +453,7 @@ class Tour extends React.Component {
     if (!stories && !isActive) {
       return null;
     }
-    if (!modalStart && !modalInProgress && !modalComplete) {
-      this.setState({ modalStart: true });
-    }
+
     return (
       <ErrorBoundary>
         <div>
@@ -512,17 +534,23 @@ const mapDispatchToProps = (dispatch) => ({
   resetProductPicker: () => {
     dispatch(resetProductPickerStateAction());
   },
+  changeTab: (str) => {
+    dispatch(changeTabAction(str));
+  },
 });
 
 const mapStateToProps = (state) => {
   const {
-    screenSize, config, tour, palettes, models, compare, map,
+    screenSize, config, tour, palettes, models, compare, map, sidebar,
   } = state;
   const { screenWidth, screenHeight } = screenSize;
-
+  const { isKioskModeActive } = state.ui;
+  const { isEmbedModeActive } = state.embed;
   return {
     config,
     isActive: tour.active,
+    isEmbedModeActive,
+    isKioskModeActive,
     map,
     models,
     compareState: compare,
@@ -532,16 +560,8 @@ const mapStateToProps = (state) => {
     screenWidth,
     screenHeight,
     renderedPalettes: palettes.rendered,
+    activeTab: sidebar.activeTab,
   };
-};
-
-const getTransitionAttr = function(transition) {
-  if (!transition) return '';
-  const { element, action } = transition;
-  if (element === 'animation' && action === 'play') {
-    return '&playanim=true';
-  }
-  return '';
 };
 
 export default connect(
@@ -550,6 +570,8 @@ export default connect(
 )(Tour);
 
 Tour.propTypes = {
+  activeTab: PropTypes.string,
+  changeTab: PropTypes.func,
   config: PropTypes.object.isRequired,
   map: PropTypes.object,
   selectTour: PropTypes.func.isRequired,
@@ -558,6 +580,7 @@ Tour.propTypes = {
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,

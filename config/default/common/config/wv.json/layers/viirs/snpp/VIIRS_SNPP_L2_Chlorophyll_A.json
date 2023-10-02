@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L2_Chlorophyll_A": {
+      "id": "VIIRS_SNPP_L2_Chlorophyll_A",
+      "description": "viirs/snpp/VIIRS_SNPP_L2_Chlorophyll_A",
+      "tags": "ocean color",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}

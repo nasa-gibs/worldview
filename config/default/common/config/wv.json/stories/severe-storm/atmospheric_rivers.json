@@ -1,0 +1,137 @@
+{
+  "stories": {
+    "atmospheric_rivers": {
+      "id": "atmospheric_rivers",
+      "type": "severe-storm",
+      "title": "Atmospheric Rivers",
+      "description": "Wintertime atmospheric rivers brought moisture to California.",
+      "backgroundImage": "atmo-rivers.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "NASA Earth Observatory - A Boom Year for Sierra Nevada Snow ",
+          "link": "https://earthobservatory.nasa.gov/images/151232/a-boom-year-for-sierra-nevada-snow"
+        },
+        {
+          "title": "NASA Earth Observatory - Tulare Lake Grows",
+          "link": "https://earthobservatory.nasa.gov/images/151284/tulare-lake-grows"
+        },
+        {
+          "title": "NASA Earth Observatory - A Flood of Wildflowers",
+          "link": "https://earthobservatory.nasa.gov/images/151192/a-flood-of-wildflowers"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-162.295938399713,16.42698668057487,-84.86031845217389,52.526006177450554&l=Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor&lg=true&t=2023-02-24-T10%3A00%3A00Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-162.295938399713,16.426986680574874,-84.86031845217389,52.526006177450554&l=Reference_Features_15m,Coastlines_15m,IMERG_Precipitation_Rate,VIIRS_SNPP_CorrectedReflectance_TrueColor&lg=true&t=2023-02-24-T10%3A00%3A00Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "v=-178.1909136918125,9.88729141397923,-70.7972042578835,61.027153049183525&z=4&ics=true&ici=5&icd=10&as=2023-02-24-T19%3A00%3A00Z&ae=2023-02-25-T03%3A00%3A00Z&l=Coastlines_15m,GOES-West_ABI_GeoColor,Land_Water_Map&lg=true&al=true&av=7.5&ab=on&t=2023-02-24-T19%3A00%3A00Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=true&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&l1=Reference_Features_15m,Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721,MODIS_Terra_CorrectedReflectance_TrueColor&lg1=true&ca=false&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-127.72163900711622,34.391801512398075,-111.7778187557815,41.82450855984652&l=Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),BlueMarble_ShadedRelief_Bathymetry&lg=true&l1=Coastlines_15m,SMAP_L4_Snow_Mass(palette=blue_2,min=8.7),BlueMarble_ShadedRelief_Bathymetry&lg1=true&ca=true&t=2023-02-15-T05%3A35%3A22Z&t1=2023-03-02-T05%3A35%3A22Z"
+        }
+        ,
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-149.2343104071579,26.61555273706992,-93.40895023395714,52.64027839533624&l=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg=true&l1=Reference_Features_15m,SMAP_L4_Analyzed_Root_Zone_Soil_Moisture&lg1=true&ca=true&t=2022-11-19-T23%3A35%3A22Z&t1=2023-04-06-T21%3A35%3A22Z"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-120.32664595033344,35.56312423104413,-119.07005472101878,36.370066631457775&l=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(hidden,disabled=5-0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance(hidden),HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance(hidden),HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&tr=atmospheric_rivers&t=2023-03-13-T05%3A35%3A22Z&t1=2023-04-30-T09%3A35%3A22Z"
+        },
+        {
+          "id": "009",
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-121.55756218602946,38.471499589321944,-120.70126583530936,38.96745403679784&l=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&s=-119.751,36.0666&t=2022-11-20-T05%3A35%3A22Z&t1=2023-04-09-T09%3A35%3A22Z"
+        },
+        {
+          "id": "010",
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-122.06583991341911,39.245694471318245,-120.84924510836755,39.95032856655172&l=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&s=-119.751,36.0666&t=2022-04-25-T20%3A12%3A08Z&t1=2023-04-20-T09%3A35%3A22Z"
+        },
+        {
+          "id": "011",
+          "description": "step011.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-120.02188986175089,34.9361033051464,-119.48113862606267,35.214284223736584&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden)&lg=true&l1=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=true&t=2020-04-16-T14%3A00%3A00Z&t1=2023-04-11-T12%3A00%3A00Z"
+        },
+        {
+          "id": "012",
+          "description": "step012.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-118.57317550214069,34.59533637747795,-118.14026849136232,34.84606984978397&l=Reference_Labels_15m,Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&t=2020-04-18-T02%3A00%3A00Z&t1=2023-04-07-T16%3A00%3A00Z"
+        }
+      ]
+    }
+  }
+}

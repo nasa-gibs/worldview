@@ -1,0 +1,31 @@
+{
+  "layers": {
+    "HLS_False_Color_Sentinel": {
+      "id": "HLS_False_Color_Sentinel",
+      "title": "Reflectance (Color Infrared, Bands 8-4-3) *BETA*",
+      "subtitle": "Sentinel 2A & 2B / MSI",
+      "description": "multi-mission/hls/HLS_False_Color_Sentinel",
+      "tags": "corrected surface oli sentinel msi s30 cir",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending", "descending"],
+      "bandCombo": {
+        "r": "B08",
+        "g": "B04",
+        "b": "B03"
+      },
+      "wrapX": false,
+      "disableSnapshot": true,
+      "projections": {
+        "geographic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
+        }
+      }
+    }
+  }
+}

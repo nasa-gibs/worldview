@@ -103,13 +103,14 @@
         <li>Natural events database is provided by the <a href="https://eonet.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>.</li>
         <li>User-selectable color palettes are primarily derived from:<ul>
-                        <li><a href="https://neo.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">NEO</a>
+                        <li><a href="https://neo.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">NEO</a>
                         </li>
                         <li><a href="https://arxiv.org/abs/1509.03700" target="_blank" rel="noopener noreferrer">Peter
                                         Kovesi.
                                         Good Colour Maps: How to Design Them</a></li>
                 </ul>
         </li>
+        <li>Location Search feature uses the <a href="https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm" target="_blank" rel="noopener noreferrer">ArcGIS Geocoding service</a>.</li>
         <li>The imagery ingest and serving system (GIBS) is built by NASA/JPL and operated by NASA/GSFC.</li>
         <li>Worldview is built by the NASA/GSFC <a href="https://earthdata.nasa.gov/esdis" target="_blank"
                         rel="noopener noreferrer">Earth Science Data and Information System (ESDIS) Project</a>. We are

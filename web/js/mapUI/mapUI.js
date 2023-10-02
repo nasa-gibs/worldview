@@ -16,6 +16,9 @@ import UpdateOpacity from './components/update-opacity/updateOpacity';
 import UpdateProjection from './components/update-projection/updateProjection';
 import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
+import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
+import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
+import DevTestButton from './components/dev-test-mode/dev-test-button';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SET_SCREEN_INFO } from '../modules/screen-size/constants';
@@ -44,6 +47,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { REDUX_ACTION_DISPATCHED } from '../util/constants';
 import { updateMapExtent } from '../modules/map/actions';
 import { clearPreload, setPreload } from '../modules/date/actions';
+import { DISPLAY_STATIC_MAP } from '../modules/ui/constants';
 
 const { events } = util;
 
@@ -59,6 +63,7 @@ function MapUI(props) {
     config,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     layerQueue,
     lastPreloadDate,
@@ -91,12 +96,17 @@ function MapUI(props) {
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
 
+  // eslint-disable-next-line no-unused-vars
+  const [tileImageTestMode, setTileImageTestMode] = useState(false);
+
   const subscribeToStore = function(action) {
     switch (action.type) {
       case CHANGE_PROJECTION: {
         return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);
       }
       case layerConstants.ADD_LAYER:
+      case layerConstants.UPDATE_DDV_LAYER:
+      case DISPLAY_STATIC_MAP:
         return setAddLayerAction(action);
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
@@ -159,30 +169,6 @@ function MapUI(props) {
     }
   };
 
-  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-  window.addEventListener('orientationchange', () => {
-    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
-  });
-
-  // Initial hook that initiates the map after it has been created in CreateMap.js
-  useEffect(() => {
-    if (document.getElementById('app')) {
-      setProjectionTrigger(1);
-    }
-  }, [ui]);
-
-  useEffect(() => {
-    if (vectorActions.type === vectorStyleConstants.SET_SELECTED_VECTORS) {
-      updateVectorSelections();
-    }
-  }, [vectorActions]);
-
-  useEffect(() => {
-    if (preloadAction.type === dateConstants.CHANGE_INTERVAL) {
-      preloadNextTiles();
-    }
-  }, [preloadAction]);
-
   const updateVectorSelections = () => {
     const type = 'selection';
     const newSelection = vectorActions.payload;
@@ -195,6 +181,11 @@ function MapUI(props) {
     );
     ui.selectedVectors = newSelection;
   };
+
+  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
+  });
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -215,6 +206,7 @@ function MapUI(props) {
       const date = getSelectedDate(dateCompareState, dateGroup);
       const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
       const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);
+
       layer.setVisible(renderable);
     };
 
@@ -302,18 +294,13 @@ function MapUI(props) {
     };
   };
 
-  function preloadForCompareMode() {
-    preloadNextTiles(selectedDate, 'active');
-    if (compare.active) {
-      preloadNextTiles(selectedDateB, 'activeB');
-    }
-  }
-
   async function preloadNextTiles(date, compareString) {
     const map = { ui };
     const state = {
-      proj, embed, layers, palettes, vectorStyles, compare, map,
+      proj, embed, layers, palettes, vectorStyles, compare, map, ui,
     };
+    const { dislayStaticMap } = ui;
+    if (dislayStaticMap) return;
     const useActiveString = compareString || activeString;
     const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(dateCompareState));
     const nextDate = getNextDateTime(dateCompareState, 1, useDate);
@@ -330,6 +317,32 @@ function MapUI(props) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
   }
+
+  function preloadForCompareMode() {
+    preloadNextTiles(selectedDate, 'active');
+    if (compare.active) {
+      preloadNextTiles(selectedDateB, 'activeB');
+    }
+  }
+
+  // Initial hook that initiates the map after it has been created in CreateMap.js
+  useEffect(() => {
+    if (document.getElementById('app')) {
+      setProjectionTrigger(1);
+    }
+  }, [ui]);
+
+  useEffect(() => {
+    if (vectorActions.type === vectorStyleConstants.SET_SELECTED_VECTORS) {
+      updateVectorSelections();
+    }
+  }, [vectorActions]);
+
+  useEffect(() => {
+    if (preloadAction.type === dateConstants.CHANGE_INTERVAL) {
+      preloadNextTiles();
+    }
+  }, [preloadAction]);
 
   return (
     <>
@@ -378,6 +391,7 @@ function MapUI(props) {
         preloadNextTiles={preloadNextTiles}
         updateLayerVisibilities={updateLayerVisibilities}
         getGranuleOptions={getGranuleOptions}
+        findLayer={findLayer}
       />
       <UpdateOpacity
         action={opacityAction}
@@ -389,13 +403,22 @@ function MapUI(props) {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
+      { isEICModeActive
+      && (
+      <>
+        <KioskAnimations ui={ui} />
+        <TileMeasurement ui={ui} />
+      </>
+      )}
+      {tileImageTestMode && <DevTestButton />}
+
     </>
   );
 }
 
 const mapStateToProps = (state) => {
   const {
-    compare, config, date, embed, layers, map, palettes, proj, vectorStyles,
+    compare, config, date, embed, layers, map, palettes, proj, vectorStyles, ui,
   } = state;
   const {
     arrowDown, lastArrowDirection, lastPreloadDate, preloaded, selected, selectedB,
@@ -416,6 +439,7 @@ const mapStateToProps = (state) => {
   const useDate = selectedDate || (preloaded ? lastPreloadDate : getSelectedDate(state));
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
+  const isEICModeActive = ui.eic !== '';
 
   return {
     activeLayers,
@@ -425,6 +449,7 @@ const mapStateToProps = (state) => {
     compare,
     dateCompareState,
     embed,
+    isEICModeActive,
     lastArrowDirection,
     lastPreloadDate,
     layers,
@@ -469,6 +494,7 @@ MapUI.propTypes = {
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
+  isEICModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,

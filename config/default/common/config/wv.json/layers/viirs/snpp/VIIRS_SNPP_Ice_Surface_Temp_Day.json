@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Ice_Surface_Temp_Day": {
+      "id": "VIIRS_SNPP_Ice_Surface_Temp_Day",
+      "description": "viirs/snpp/VIIRS_SNPP_Ice_Surface_Temp_Day",
+      "tags": "suomi npp",
+      "group": "overlays",
+      "layergroup": "Ice Surface Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

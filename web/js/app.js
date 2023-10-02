@@ -143,9 +143,9 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
+          {(!isMobile && isTourActive) || (isEmbedModeActive && isTourActive) ? <Tour /> : null}
         </div>
         <Sidebar />
-        {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="eventsHolder" />

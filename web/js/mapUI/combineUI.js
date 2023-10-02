@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cache from 'cachai';
+// eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue';
 import util from '../util/util';
 import MapRunningData from '../map/runningdata';

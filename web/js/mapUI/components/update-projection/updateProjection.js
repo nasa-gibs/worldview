@@ -38,6 +38,7 @@ function UpdateProjection(props) {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
+    isKioskModeActive,
     isMobile,
     layerState,
     map,
@@ -52,87 +53,23 @@ function UpdateProjection(props) {
     requestPalette,
   } = props;
 
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
-
-  useEffect(() => {
-    if (projectionTrigger === 1) {
-      updateProjection(true);
-    } else if (projectionTrigger > 1) {
-      updateProjection();
-    }
-  }, [projectionTrigger]);
-
-  const actionSwitch = () => {
-    switch (action.type) {
-      case STOP_ANIMATION:
-      case EXIT_ANIMATION:
-        return onStopAnimation();
-      case LOCATION_POP_ACTION: {
-        const newState = util.fromQueryString(action.payload.search);
-        const extent = lodashGet(map, 'extent');
-        const rotate = lodashGet(map, 'rotation') || 0;
-        setTimeout(() => {
-          updateProjection();
-          if (newState.v && !newState.e && extent) {
-            flyToNewExtent(extent, rotate);
-          }
-        }, 200); return;
-      }
-      case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
-        const granuleOptions = {
-          id: action.id,
-          reset: null,
-        };
-        return reloadLayers(granuleOptions);
-      }
-      case layerConstants.RESET_GRANULE_LAYER_OPTIONS: {
-        const granuleOptions = {
-          id: action.id,
-          reset: action.id,
-        };
-        return reloadLayers(granuleOptions);
-      }
-      case compareConstants.CHANGE_STATE:
-        if (compareMode === 'spy') {
-          return reloadLayers();
-        }
-        return;
-      case layerConstants.REORDER_LAYERS:
-      case layerConstants.REORDER_OVERLAY_GROUPS:
-      case compareConstants.TOGGLE_ON_OFF:
-      case compareConstants.CHANGE_MODE:
-        reloadLayers();
-        preloadForCompareMode();
-        return;
-      case layerConstants.TOGGLE_OVERLAY_GROUPS:
-        return reloadLayers();
-      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
-      case paletteConstants.SET_CUSTOM:
-      case paletteConstants.SET_DISABLED_CLASSIFICATION:
-      case paletteConstants.CLEAR_CUSTOM:
-      case layerConstants.ADD_LAYERS_FOR_EVENT:
-        return setTimeout(reloadLayers, 100);
-      case vectorStyleConstants.SET_FILTER_RANGE:
-      case vectorStyleConstants.SET_VECTORSTYLE:
-      case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case SET_SCREEN_INFO:
-        return onResize();
-      default:
-        break;
-    }
-  };
-
-  const flyToNewExtent = function(extent, rotation) {
-    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
-    const coordinates = [coordinateX, coordinateY];
-    const resolution = ui.selected.getView().getResolutionForExtent(extent);
-    const zoom = ui.selected.getView().getZoomForResolution(resolution);
-    // Animate to extent, zoom & rotate:
-    // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation);
+  /**
+  * Remove Layers from map
+  *
+  * @method clearLayers
+  * @static
+  *
+  * @returns {void}
+  */
+  const clearLayers = function() {
+    const activeLayersUI = ui.selected
+      .getLayers()
+      .getArray()
+      .slice(0);
+    lodashEach(activeLayersUI, (mapLayer) => {
+      ui.selected.removeLayer(mapLayer);
+    });
+    ui.cache.clear();
   };
 
   /**
@@ -171,25 +108,6 @@ function UpdateProjection(props) {
       group: compareActiveString,
     });
   }
-
-  /**
-  * Remove Layers from map
-  *
-  * @method clearLayers
-  * @static
-  *
-  * @returns {void}
-  */
-  const clearLayers = function() {
-    const activeLayersUI = ui.selected
-      .getLayers()
-      .getArray()
-      .slice(0);
-    lodashEach(activeLayersUI, (mapLayer) => {
-      ui.selected.removeLayer(mapLayer);
-    });
-    ui.cache.clear();
-  };
 
   /**
    * @method reloadLayers
@@ -241,6 +159,36 @@ function UpdateProjection(props) {
   };
 
   /**
+ * Hide Map
+ *
+ * @method hideMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function hideMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'none';
+  }
+
+  /**
+ * Show Map
+ *
+ * @method showMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function showMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'block';
+  }
+
+  /**
  * When page is resized set for mobile or desktop
  *
  * @method onResize
@@ -258,35 +206,6 @@ function UpdateProjection(props) {
       mapUI.addControl(mapUI.wv.scaleMetric);
     }
   }
-
-  /**
- * Show Map
- *
- * @method showMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function showMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'block';
-  }
-
-  /**
- * Hide Map
- *
- * @method hideMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function hideMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'none';
-  }
-
 
   const updateProjection = (start) => {
     if (ui.selected) {
@@ -350,6 +269,98 @@ function UpdateProjection(props) {
     onResize();
   };
 
+  /**
+ * Collect information required & initiate a "fly" map transition
+ * Used in Tour Stories.
+ * @method flyToNewExtent
+ * @static
+ *
+ * @param {object} extent
+ * @param {number} rotation
+ */
+  const flyToNewExtent = function(extent, rotation) {
+    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+    const coordinates = [coordinateX, coordinateY];
+    const resolution = ui.selected.getView().getResolutionForExtent(extent);
+    const zoom = ui.selected.getView().getZoomForResolution(resolution);
+    // Animate to extent, zoom & rotate:
+    // Don't animate when an event is selected (Event selection already animates)
+    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
+  };
+
+  const actionSwitch = () => {
+    switch (action.type) {
+      case STOP_ANIMATION:
+      case EXIT_ANIMATION:
+        return onStopAnimation();
+      case LOCATION_POP_ACTION: {
+        const newState = util.fromQueryString(action.payload.search);
+        const extent = lodashGet(map, 'extent');
+        const rotate = lodashGet(map, 'rotation') || 0;
+        setTimeout(() => {
+          updateProjection();
+          if (newState.v && !newState.e && extent) {
+            flyToNewExtent(extent, rotate);
+          }
+        }, 200); return;
+      }
+      case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
+        const granuleOptions = {
+          id: action.id,
+          reset: null,
+        };
+        return reloadLayers(granuleOptions);
+      }
+      case layerConstants.RESET_GRANULE_LAYER_OPTIONS: {
+        const granuleOptions = {
+          id: action.id,
+          reset: action.id,
+        };
+        return reloadLayers(granuleOptions);
+      }
+      case compareConstants.CHANGE_STATE:
+        if (compareMode === 'spy') {
+          return reloadLayers();
+        }
+        return;
+      case layerConstants.REORDER_LAYERS:
+      case layerConstants.REORDER_OVERLAY_GROUPS:
+      case compareConstants.TOGGLE_ON_OFF:
+      case compareConstants.CHANGE_MODE:
+        reloadLayers();
+        preloadForCompareMode();
+        return;
+      case layerConstants.TOGGLE_OVERLAY_GROUPS:
+        return reloadLayers();
+      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
+      case paletteConstants.SET_CUSTOM:
+      case paletteConstants.SET_DISABLED_CLASSIFICATION:
+      case paletteConstants.CLEAR_CUSTOM:
+      case layerConstants.ADD_LAYERS_FOR_EVENT:
+        return setTimeout(reloadLayers, 100);
+      case vectorStyleConstants.SET_FILTER_RANGE:
+      case vectorStyleConstants.SET_VECTORSTYLE:
+      case vectorStyleConstants.CLEAR_VECTORSTYLE:
+      case SET_SCREEN_INFO:
+        return onResize();
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
+
+  useEffect(() => {
+    if (projectionTrigger === 1) {
+      updateProjection(true);
+    } else if (projectionTrigger > 1) {
+      updateProjection();
+    }
+  }, [projectionTrigger]);
+
   return null;
 }
 
@@ -357,6 +368,7 @@ const mapStateToProps = (state) => {
   const {
     proj, map, screenSize, layers, compare, date,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
   const isMobile = screenSize.isMobileDevice;
   const dateCompareState = { date, compare };
@@ -367,6 +379,7 @@ const mapStateToProps = (state) => {
     compare,
     compareMode,
     dateCompareState,
+    isKioskModeActive,
     isMobile,
     layerState,
     proj,
@@ -401,6 +414,7 @@ UpdateProjection.propTypes = {
   dateCompareState: PropTypes.object,
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerState: PropTypes.object,
   map: PropTypes.object,

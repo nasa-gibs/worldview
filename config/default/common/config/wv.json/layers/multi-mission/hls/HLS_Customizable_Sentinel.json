@@ -1,0 +1,31 @@
+{
+  "layers": {
+    "HLS_Customizable_Sentinel": {
+      "id": "HLS_Customizable_Sentinel",
+      "title": "HLS Customizable Sentinel 2A & 2B *BETA*",
+      "subtitle": "Sentinel 2A & 2B / MSI",
+      "description": "multi-mission/hls/HLS_Customizable_Sentinel",
+      "tags": "corrected surface oli sentinel msi s30",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending", "descending"],
+      "bandCombo": {
+        "r": "B07",
+        "g": "B05",
+        "b": "B04"
+      },
+      "wrapX": false,
+      "disableSnapshot": true,
+      "projections": {
+        "geographic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
+        }
+      }
+    }
+  }
+}

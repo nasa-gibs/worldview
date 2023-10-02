@@ -58,7 +58,7 @@ test('Removing individual layers updates the list', async () => {
 
 test('Clear list button empties the entire list', async () => {
   await page.locator('#clear-recent-layers').click()
-  const productList = await page.locator('.product-outter-list-case.layers-all')
+  const productList = await page.locator('.product-outer-list-case.layers-all')
   const noResults = await page.locator('.no-results')
   await expect(productList).not.toBeVisible()
   await expect(noResults).toBeVisible()

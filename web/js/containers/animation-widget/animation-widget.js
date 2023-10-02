@@ -40,12 +40,15 @@ import usePrevious from '../../util/customHooks';
 import DesktopAnimationWidget from './desktop-animation-widget';
 import MobileAnimationWidget from './mobile-animation-widget';
 import CollapsedAnimationWidget from './collapsed-animation-widget';
+import AnimationTileCheck from '../../components/kiosk/animation-tile-check/animation-tile-check';
 
 function AnimationWidget (props) {
   const {
     appNow,
     animationCustomModalOpen,
+    autoplay,
     breakpoints,
+    checkAnimationAvailability,
     currentDate,
     delta,
     endDate,
@@ -54,7 +57,9 @@ function AnimationWidget (props) {
     interval,
     isActive,
     isCollapsed,
+    isDistractionFreeModeActive,
     isEmbedModeActive,
+    isKioskModeActive,
     isLandscape,
     isMobile,
     isMobilePhone,
@@ -98,10 +103,18 @@ function AnimationWidget (props) {
   const prevSubDailyMode = usePrevious(subDailyMode);
   const prevHasFutureLayers = usePrevious(hasFutureLayers);
 
+  const toggleCollapse = () => {
+    onToggleAnimationCollapse();
+  };
+
   // component did mount
   useEffect(() => {
     if (isEmbedModeActive) {
       setWidgetPosition({ x: 10, y: 0 });
+      toggleCollapse();
+    }
+    if (!isPlaying && autoplay) {
+      onPushPlay();
     }
   }, []);
 
@@ -134,10 +147,6 @@ function AnimationWidget (props) {
     ];
     const { classList } = e.target;
     return draggableTargets.some((tClass) => classList.contains(tClass));
-  };
-
-  const toggleCollapse = () => {
-    onToggleAnimationCollapse();
   };
 
   const onExpandedDrag = (e, position) => {
@@ -211,27 +220,39 @@ function AnimationWidget (props) {
 
   return isActive ? (
     <ErrorBoundary>
-      {isPlaying && (
-        <PlayQueue
-          isMobile={isMobile}
-          isLoopActive={looping}
-          isPlaying={isPlaying}
-          numberOfFrames={numberOfFrames}
-          snappedCurrentDate={snappedCurrentDate}
-          currentDate={currentDate}
-          startDate={startDate}
-          endDate={endDate}
-          interval={interval}
-          delta={delta}
-          speed={speed}
-          selectDate={selectDate}
-          togglePlaying={onPushPause}
-          promiseImageryForTime={promiseImageryForTime}
-          onClose={onPushPause}
-        />
-      )}
+      {
+        checkAnimationAvailability ? (
+          <AnimationTileCheck
+            startDate={startDate}
+            endDate={endDate}
+            interval={interval}
+            delta={delta}
+            isPlaying={isPlaying}
+          />
+        ) : isPlaying ? (
+          <PlayQueue
+            isMobile={isMobile}
+            isLoopActive={looping}
+            isPlaying={isPlaying}
+            numberOfFrames={numberOfFrames}
+            snappedCurrentDate={snappedCurrentDate}
+            currentDate={currentDate}
+            startDate={startDate}
+            endDate={endDate}
+            interval={interval}
+            isKioskModeActive={isKioskModeActive}
+            delta={delta}
+            speed={speed}
+            selectDate={selectDate}
+            togglePlaying={onPushPause}
+            promiseImageryForTime={promiseImageryForTime}
+            onClose={onPushPause}
+          />
+        ) : null
+      }
       {isCollapsed ? (
         <CollapsedAnimationWidget
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
           isPlaying={isPlaying}
@@ -255,6 +276,7 @@ function AnimationWidget (props) {
           breakpoints={breakpoints}
           endDate={endDate}
           hasSubdailyLayers={hasSubdailyLayers}
+          isEmbedModeActive={isEmbedModeActive}
           isLandscape={isLandscape}
           isMobile={isMobile}
           isMobilePhone={isMobilePhone}
@@ -279,37 +301,42 @@ function AnimationWidget (props) {
           subDailyMode={subDailyMode}
           toggleCollapse={toggleCollapse}
         />
-      ) : (
-        <DesktopAnimationWidget
-          animationCustomModalOpen={animationCustomModalOpen}
-          customModalType={customModalType}
-          endDate={endDate}
-          handleDragStart={handleDragStart}
-          hasSubdailyLayers={hasSubdailyLayers}
-          interval={interval}
-          isPlaying={isPlaying}
-          looping={looping}
-          maxDate={maxDate}
-          minDate={minDate}
-          numberOfFrames={numberOfFrames}
-          onClose={onClose}
-          onDateChange={onDateChange}
-          onExpandedDrag={onExpandedDrag}
-          onLoop={onLoop}
-          onPushPause={onPushPause}
-          onPushPlay={onPushPlayFunc}
-          onSlide={onSlide}
-          playDisabled={playDisabled}
-          toggleCollapse={toggleCollapse}
-          setSpeed={setSpeed}
-          sliderLabel={sliderLabel}
-          speed={speed}
-          startDate={startDate}
-          subDailyMode={subDailyMode}
-          widgetPosition={widgetPosition}
-          zeroDates={zeroDates}
-        />
-      )}
+      ) : isKioskModeActive
+        ? null
+        : (
+          <DesktopAnimationWidget
+            animationCustomModalOpen={animationCustomModalOpen}
+            autoplay={autoplay}
+            customModalType={customModalType}
+            isDistractionFreeModeActive={isDistractionFreeModeActive}
+            endDate={endDate}
+            handleDragStart={handleDragStart}
+            hasSubdailyLayers={hasSubdailyLayers}
+            interval={interval}
+            isKioskModeActive={isKioskModeActive}
+            isPlaying={isPlaying}
+            looping={looping}
+            maxDate={maxDate}
+            minDate={minDate}
+            numberOfFrames={numberOfFrames}
+            onClose={onClose}
+            onDateChange={onDateChange}
+            onExpandedDrag={onExpandedDrag}
+            onLoop={onLoop}
+            onPushPause={onPushPause}
+            onPushPlay={onPushPlayFunc}
+            onSlide={onSlide}
+            playDisabled={playDisabled}
+            toggleCollapse={toggleCollapse}
+            setSpeed={setSpeed}
+            sliderLabel={sliderLabel}
+            speed={speed}
+            startDate={startDate}
+            subDailyMode={subDailyMode}
+            widgetPosition={widgetPosition}
+            zeroDates={zeroDates}
+          />
+        )}
     </ErrorBoundary>
   ) : null;
 }
@@ -329,7 +356,7 @@ const mapStateToProps = (state) => {
     proj,
   } = state;
   const {
-    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed,
+    startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
@@ -356,7 +383,10 @@ const mapStateToProps = (state) => {
     maxDate = appNow;
   }
 
-  const { isDistractionFreeModeActive } = ui;
+  const {
+    isDistractionFreeModeActive, isKioskModeActive, animationAvailabilityChecked, eic,
+  } = ui;
+  const checkAnimationAvailability = (eic === 'sa' || eic === 'da') && !animationAvailabilityChecked && isKioskModeActive && isPlaying;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
     && lodashGet(map, 'ui.selected.frameState_')
@@ -403,10 +433,13 @@ const mapStateToProps = (state) => {
   return {
     appNow,
     animationCustomModalOpen,
+    autoplay,
+    checkAnimationAvailability,
     customSelected,
     startDate,
     endDate,
     isCollapsed,
+    isKioskModeActive,
     snappedCurrentDate,
     currentDate,
     minDate,
@@ -483,11 +516,11 @@ const mapDispatchToProps = (dispatch) => ({
 AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  autoplay: PropTypes.bool,
   breakpoints: PropTypes.object,
+  checkAnimationAvailability: PropTypes.bool,
   snappedCurrentDate: PropTypes.object,
   currentDate: PropTypes.object,
-  customDelta: PropTypes.number,
-  customInterval: PropTypes.number,
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasFutureLayers: PropTypes.bool,
@@ -497,6 +530,7 @@ AnimationWidget.propTypes = {
   isCollapsed: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
@@ -509,7 +543,6 @@ AnimationWidget.propTypes = {
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
-  onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
   onPushPlay: PropTypes.func,
@@ -523,10 +556,9 @@ AnimationWidget.propTypes = {
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
-  speed: PropTypes.number,
+  speedRedux: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
-  toggleCustomModal: PropTypes.func,
 };
 
 export default connect(

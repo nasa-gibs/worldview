@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR": {
+      "id": "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
+      "description": "viirs/snpp/VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cirrus Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}

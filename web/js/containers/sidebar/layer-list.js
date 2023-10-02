@@ -31,26 +31,27 @@ const reorder = (list, startIndex, endIndex) => {
 
 function LayerList(props) {
   const {
+    activeLayers,
+    activeChartingLayer,
+    available,
     compareState,
     collapsed,
-    reorderLayers,
-    layerSplit,
-    activeLayers,
-    layers,
-    zots,
-    projId,
     getNames,
-    available,
     groupId,
+    isAnimating,
+    isMobile,
+    isChartingActive,
+    layerSplit,
+    layers,
+    numVisible,
+    projId,
+    reorderLayers,
     title,
     removeGroup,
     toggleVisibility,
     toggleCollapse,
-    isMobile,
-    numVisible,
-    isAnimating,
+    zots,
   } = props;
-
   const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
@@ -106,6 +107,8 @@ function LayerList(props) {
       <LayerRow
         layer={layer}
         compareState={compareState}
+        isChartingActive={isChartingActive}
+        activeChartingLayer={activeChartingLayer}
         isInProjection={!!projections[projId]}
         key={id}
         index={index}
@@ -117,7 +120,7 @@ function LayerList(props) {
     );
   };
 
-  const renderDropdownMenu = () => !isAnimating && (
+  const renderDropdownMenu = () => (!isAnimating && !isChartingActive) && (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
       <DropdownToggle>
         <FontAwesomeIcon
@@ -152,11 +155,13 @@ function LayerList(props) {
       </h3>
       <div className="layer-group-icons">
         {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
-        <FontAwesomeIcon
-          className="layer-group-collapse"
-          icon={!collapsed ? 'caret-down' : 'caret-left'}
-          onClick={() => toggleCollapse(groupId, !collapsed)}
-        />
+        {!isChartingActive && (
+          <FontAwesomeIcon
+            className="layer-group-collapse"
+            icon={!collapsed ? 'caret-down' : 'caret-left'}
+            onClick={() => toggleCollapse(groupId, !collapsed)}
+          />
+        )}
       </div>
     </div>
   );
@@ -207,7 +212,6 @@ LayerList.propTypes = {
   numVisible: PropTypes.number,
   projId: PropTypes.string,
   reorderLayers: PropTypes.func,
-  removeLayers: PropTypes.func,
   toggleCollapse: PropTypes.func,
   toggleVisibility: PropTypes.func,
   title: PropTypes.string,
@@ -216,8 +220,10 @@ LayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    embed, proj, config, map, animation, screenSize,
+    embed, proj, config, map, animation, screenSize, charting,
   } = state;
+  const isChartingActive = charting.active;
+  const activeChartingLayer = charting.activeLayer;
   const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
@@ -237,6 +243,8 @@ const mapStateToProps = (state, ownProps) => {
     available: (layerId) => availableSelector(state)(layerId),
     numVisible,
     isAnimating: animation.isPlaying,
+    isChartingActive,
+    activeChartingLayer,
   };
 };
 

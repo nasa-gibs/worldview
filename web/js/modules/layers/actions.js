@@ -1,8 +1,8 @@
 import {
   findIndex as lodashFindIndex,
 } from 'lodash';
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import {
   addLayer as addLayerSelector,
   getLayers as getLayersSelector,
@@ -33,6 +33,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
+  UPDATE_DDV_LAYER,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -282,26 +283,6 @@ export function showLayers(layers) {
   };
 }
 
-export function updateGranuleLayerState(layer) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const {
-      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
-    } = layer.wv;
-
-    const mostRecentGranuleDate = granuleDates[0];
-    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
-    const granuleFootprints = getGranuleFootprints(layer);
-    const existingLayer = getGranuleLayer(state, id);
-
-    if (existingLayer) {
-      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
-    }
-    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
-  };
-}
-
 function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
@@ -343,6 +324,26 @@ function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
       granulePlatform,
       count,
     });
+  };
+}
+
+export function updateGranuleLayerState(layer) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      id, def: { endDate, subtitle }, reorderedGranules, granuleDates,
+    } = layer.wv;
+
+    const mostRecentGranuleDate = granuleDates[0];
+    const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
+    const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
+    const granuleFootprints = getGranuleFootprints(layer);
+    const existingLayer = getGranuleLayer(state, id);
+
+    if (existingLayer) {
+      dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
+    }
+    dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
   };
 }
 
@@ -412,5 +413,39 @@ export function updateLayerDateCollection(layerInfo) {
   return {
     type: UPDATE_LAYER_DATE_COLLECTION,
     ...layerInfo,
+  };
+}
+
+export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      layers, compare, proj, config,
+    } = state;
+    const layerObj = layers.layerConfig[id];
+    const { groupOverlays } = layers[compare.activeString];
+    const activeLayers = getActiveLayersSelector(state);
+    const overlays = getLayersSelector(state, { group: 'overlays' });
+    const newLayers = addLayerSelector(
+      id,
+      {},
+      activeLayers,
+      layers.layerConfig,
+      overlays.length || 0,
+      proj.id,
+      groupOverlays,
+      bandCombo,
+      selectedPreset,
+    );
+    const projections = Object.keys(config.projections);
+    updateRecentLayers(layerObj, projections);
+
+    dispatch({
+      type: UPDATE_DDV_LAYER,
+      id,
+      activeString: compare.activeString,
+      layers: newLayers,
+      layerIndex,
+    });
   };
 }

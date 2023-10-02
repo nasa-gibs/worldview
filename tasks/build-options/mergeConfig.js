@@ -34,10 +34,10 @@ async function main () {
   await mergeFiles(inputDir)
 
   fs.writeFileSync(outputFile, JSON.stringify(conf, null, 2), 'utf-8')
-
   console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
 }
 
+// inputDir refers to build\options-build\config\wv.json\*.*
 async function mergeFiles (inputDir) {
   const files = fs.readdirSync(inputDir)
   for (const file of files) {
@@ -47,7 +47,7 @@ async function mergeFiles (inputDir) {
         const data = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8'))
         await dictMerge(conf, data)
       } else if (fs.existsSync(path.join(inputDir, file)) && fs.lstatSync(path.join(inputDir, file)).isDirectory()) {
-        subDir = path.join(inputDir, file)
+        const subDir = path.join(inputDir, file)
         await mergeFiles(subDir)
       }
     } catch (error) {

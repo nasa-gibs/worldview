@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize as lodashCapitalize } from 'lodash';
 import FileSaver from 'file-saver';
-import googleTagManager from 'googleTagManager';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
 import util from '../../util/util';
 import Button from '../util/button';
 import MonospaceDate from '../util/monospace-date';
@@ -35,6 +35,7 @@ export default class GifResults extends Component {
       screenWidth,
       screenHeight,
       onClose,
+      closeBtn,
     } = this.props;
     const { blob } = gifObject;
     const { size } = gifObject;
@@ -57,7 +58,7 @@ export default class GifResults extends Component {
         className="dynamic-modal"
         toggle={onClose}
       >
-        <ModalHeader toggle={onClose}>GIF Results</ModalHeader>
+        <ModalHeader close={closeBtn}>GIF Results</ModalHeader>
         <ModalBody>
           <div className="gif-results-dialog-case clearfix">
             <img src={blobURL} width={imgElWidth} height={imgElHeight} />

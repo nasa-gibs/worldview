@@ -10,12 +10,14 @@ function AnimationButton(props) {
     clickAnimationButton,
     breakpoints,
     screenWidth,
+    isKioskModeActive,
     isLandscape,
     isPortrait,
     isMobilePhone,
     isMobileTablet,
     isMobile,
     hasSubdailyLayers,
+    isEmbedModeActive,
   } = props;
 
   const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
@@ -23,10 +25,14 @@ function AnimationButton(props) {
   const labelText = label || 'Set up animation';
 
   const getButtonClassName = () => {
-    if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+    if (((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) && isEmbedModeActive) {
+      return 'phone-portrait-embed';
+    } if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
       return `phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `phone-landscape${subdailyID}`;
+    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone && screenWidth < breakpoints.small)) && isEmbedModeActive) {
+      return `tablet-portrait${subdailyID}-embed`;
     } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
       return `tablet-portrait${subdailyID}`;
     } if (isMobileTablet && isLandscape) {
@@ -39,7 +45,7 @@ function AnimationButton(props) {
   return (
     <div
       onClick={clickAnimationButton}
-      className={disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
@@ -65,12 +71,14 @@ AnimationButton.propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
   screenWidth: PropTypes.number,
+  isKioskModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
   isPortrait: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
   isMobile: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
 };
 
 export default React.memo(AnimationButton);

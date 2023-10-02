@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import googleTagManager from 'googleTagManager';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
@@ -23,11 +23,9 @@ const helpMsg = 'Click: Add a point. Right-click: Cancel. Double-click to comple
 const MeasureButton = function () {
   const dispatch = useDispatch();
 
-  const { isActive, isDistractionFreeModeActive, isMobile } = useSelector((state) => ({
-    isActive: state.measure.isActive,
-    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
-    isMobile: state.screenSize.isMobileDevice,
-  }), shallowEqual);
+  const isActive = useSelector((state) => state.measure.isActive);
+  const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
 
   const [showAlert, setShowAlert] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);

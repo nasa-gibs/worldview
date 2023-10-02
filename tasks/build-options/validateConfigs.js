@@ -22,6 +22,12 @@ const options = yargs
     type: 'string',
     description: 'layer-config.json schema'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Validates layers using a JSON schema')
 
 const { argv } = options
@@ -33,20 +39,26 @@ const { inputDirectory, schemaFile } = argv
 
 const schemaRaw = fs.readFileSync(schemaFile)
 const schema = JSON.parse(schemaRaw)
+// check if build is gitc
+const gitcEnv = process.env.CONFIG_ENV && process.env.CONFIG_ENV.includes('gitc')
+// setting the additionalProperties to true for gitc builds
+if (gitcEnv) {
+  schema.definitions.layer.additionalProperties = true
+}
 const validate = ajv.compile(schema)
 
-layerConfigFiles = []
-invalidJsonFiles = []
+const invalidJsonFiles = []
 
 console.warn(`${prog}: Validating layer configs...`)
 
 async function main () {
   let files = globSync(inputDirectory + '/**/*')
   files = files.filter(file => file.endsWith('.json'))
-  for (filePath of files) {
+  for (const filePath of files) {
     validateFile(filePath)
   }
   if (invalidJsonFiles.length) {
+    if (argv.mode === 'verbose') console.warn(`${prog}: Invalid JSON files: ${invalidJsonFiles}`)
     throw new Error(`${prog}: FAILED: ${invalidJsonFiles.length} layer configs failed validation.`)
   } else {
     console.warn(`${prog}: PASSED: All layer configs passed validation!`)
@@ -54,15 +66,14 @@ async function main () {
 }
 
 async function validateFile (filePath) {
+  if (argv.mode === 'verbose') console.warn(`${prog}: Validating ${filePath}`)
   const layerFile = fs.readFileSync(filePath)
   const layer = JSON.parse(layerFile)
   const valid = validate(layer)
   if (!valid) {
-    for (error of validate.errors) {
+    for (const error of validate.errors) {
       invalidJsonFiles.push(error)
       console.error(`${prog}: ERROR: ${error.instancePath} ${error.message}`)
-      // TOD: Add verbose mode with the full error:
-      // console.error(error)
     }
   }
 }

@@ -152,8 +152,7 @@ class toolbarContainer extends Component {
         // Use the configured domain in production
         ? `${notification.url}?domain=${domain}`
         // Use the UAT domain for test instances
-        : `${notification.url}?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov`;
-
+        : `${notification.url}?client=Worldview%20(UAT)`;
       if (parameters.mockAlerts) {
         notificationURL = `mock/notify_${parameters.mockAlerts}.json`;
       } else if (parameters.notificationURL) {
@@ -394,13 +393,14 @@ class toolbarContainer extends Component {
   }
 
   render() {
+    const { isKioskModeActive } = this.props;
     return (
       <ErrorBoundary>
         <ButtonToolbar
           id="wv-toolbar"
           className="wv-toolbar"
         >
-          {this.renderDistractionFreeExitButton()}
+          {!isKioskModeActive && this.renderDistractionFreeExitButton()}
           {this.renderLocationSearchButtonComponent()}
           {this.renderShareButton()}
           {this.renderProjectionButton()}
@@ -429,7 +429,7 @@ const mapStateToProps = (state) => {
     sidebar,
     ui,
   } = state;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { number, type } = notifications;
   const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
@@ -472,6 +472,7 @@ const mapStateToProps = (state) => {
     visibleLayersForProj,
     isRotated: Boolean(map.rotation !== 0),
     isDistractionFreeModeActive,
+    isKioskModeActive,
   };
 };
 
@@ -565,6 +566,7 @@ toolbarContainer.propTypes = {
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isMobile: PropTypes.bool,
