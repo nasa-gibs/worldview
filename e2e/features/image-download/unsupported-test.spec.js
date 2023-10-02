@@ -29,9 +29,10 @@ test.afterAll(async () => {
 })
 
 test('Custom palettes are not supported dialog', async () => {
-  const { snapshotToolbarButton } = selectors
+  const { modalCloseButton, snapshotToolbarButton } = selectors
   const url = await joinUrl(startParams, '&l=MODIS_Terra_Aerosol(palette=red_1)')
   await page.goto(url)
+  await modalCloseButton.click()
   await snapshotToolbarButton.click()
   await expect(notify).toBeVisible()
 })
@@ -53,9 +54,10 @@ test('Custom palettes: OK button brings up download panel', async () => {
 })
 
 test('Rotation is not supported dialog', async () => {
-  const { snapshotToolbarButton } = selectors
+  const { modalCloseButton, snapshotToolbarButton } = selectors
   const url = await joinUrl(startParams, '&p=arctic&r=18')
   await page.goto(url)
+  await modalCloseButton.click()
   await snapshotToolbarButton.click()
   await expect(notify).toBeVisible()
 })

@@ -2,7 +2,7 @@ import {
   MultiLineString as OlGeomMultiLineString,
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
-import geographiclib from 'geographiclib';
+import geographiclib from 'geographiclib-geodesic';
 import FileSaver from 'file-saver';
 import { CRS } from '../../modules/map/constants';
 

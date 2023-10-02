@@ -18,8 +18,9 @@ test.afterAll(async () => {
 })
 
 test('Info toolbar is visible and contains valid menu items', async () => {
-  const { infoToolbarButton } = selectors
+  const { infoToolbarButton, modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   const sendFeedback = await page.locator('#send_feedback_info_item')
   const startTour = await page.locator('#start_tour_info_item')
   const settingsInfo = await page.locator('#settings_info_item')

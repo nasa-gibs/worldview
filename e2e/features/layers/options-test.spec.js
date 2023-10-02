@@ -19,8 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Verify that settings button opens settings modal', async () => {
-  const { aodSidebarLayer } = selectors
+  const { aodSidebarLayer, modalCloseButton } = selectors
   await page.goto(customsSquashedQuerystring)
+  await modalCloseButton.click()
   await aodSidebarLayer.hover()
   const thresholdMinLabel = await page.locator('#wv-layer-options-threshold0 .wv-label-range-min')
   const combinedAodSettingsButton = await page.locator('#active-MODIS_Combined_Value_Added_AOD .wv-layers-options')

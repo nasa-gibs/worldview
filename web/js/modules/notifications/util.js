@@ -154,9 +154,9 @@ export function getCount(notifications, unseenOnly) {
   } = notifications;
 
   if (unseenOnly) {
-    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
-    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
-    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
+    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, notifications.layerNotices.filter((obj) => obj.notification_type === 'message'));
+    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, notifications.layerNotices.filter((obj) => obj.notification_type === 'alert'));
+    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, notifications.layerNotices.filter((obj) => obj.notification_type === 'outage'));
 
     return messageCount + outageCount + alertCount;
   }
