@@ -26,6 +26,7 @@ async function processTemporalLayer (wvLayer, value) {
     const dateRangeEnd = []
     const rangeInterval = []
     for (const range of ranges) {
+      console.warn('range', range)
       const [start, end, interval] = range._text.split('/')
       if (
         wvLayer.period === 'daily' ||

@@ -4,6 +4,7 @@ import { debounce } from 'lodash';
 
 class OpacitySelect extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       value: props.start,

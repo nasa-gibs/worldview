@@ -1,0 +1,19 @@
+{
+  "measurements": {
+      "ASCAT_Ocean_Surface_Wind_Speed": {
+          "id": "ASCAT_Ocean_Surface_Wind_Speed",
+          "title": "ASCAT_Ocean_Surface_Wind_Speed title",
+          "subtitle": "ASCAT_Ocean_Surface_Wind_Speed Testing",
+          "sources": {
+            "tbd": {
+                "id": "ASCAT_Ocean_Surface_Wind_Speed",
+                "title": "ASCAT_Ocean_Surface_Wind_Speed Title",
+                "description": "",
+                "image": "",
+                "settings": [
+                ]
+            }
+          }
+      }
+  }
+}

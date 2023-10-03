@@ -46,6 +46,7 @@ export function getAllVectorStyles(layerId, index, state) {
       vectorStyle = vectorStyle.layers[index];
     }
   }
+
   return vectorStyle;
 }
 
@@ -96,6 +97,10 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
+// Review calls to this function & determine if calls are necessary for Vector Flow Layers
+// export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+
+
 const updateGlStylePalette = (glStyle, rgbPalette) => {
   for (let i = 0; i < glStyle.layers.length; i += 1) {
     const thisPaintObj = glStyle.layers[i].paint;
@@ -142,8 +147,24 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
-
   let glStyle = vectorStyles[styleId];
+
+  if (glStyle === undefined) {
+    console.log('glStyle not found!!');
+    return;
+  }
+
+  // Custom dealing with OSCAR
+  if (styleId === 'OSCAR_Sea_Surface_Currents') {
+    // return here if we want to apply our custom arrow styling (NOT the glStyle)
+    return;
+  }
+  console.log('glStyle');
+  console.log(glStyle);
+
+  if (!layer || layer.isWMS) {
+    return; // WMS breakpoint tile
+  }
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
@@ -173,6 +194,21 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
+  // Explore layer data!
+  // const maxNumberToPrint = 500;
+  // if (glStyle.name === 'OSCAR_Sea_Surface_Currents' || glStyle.name === 'MISR_Cloud_Motion_Vector') {
+  //   let count = 0;
+  //   console.log('listing features');
+  //   layer.setStyle((feature, resolution) => {
+  //     count += 1;
+  //     if (count < maxNumberToPrint) {
+  //       console.log(feature.flatCoordinates_);
+  //     }
+  //     return styleFunction(feature, resolution);
+  //   });
+  // }
+
+  // Handle selected feature style
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
@@ -202,6 +238,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
+  if (layerId === 'OSCAR_Sea_Surface_Currents_Final') {
+    layerId = 'OSCAR_Sea_Surface_Currents';
+  }
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
@@ -256,9 +295,9 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 
 /** Apply style to new layer
  *
- * @param {Object} def
- * @param {Object} olVectorLayer
- * @param {Object} state
+ * @param {Object} def {object} The layer information
+ * @param {Object} olVectorLayer {object} The VectorTileLayer object
+ * @param {Object} state {object} application state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
   const { config } = state;

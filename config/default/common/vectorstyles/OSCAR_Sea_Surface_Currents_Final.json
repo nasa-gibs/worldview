@@ -1,0 +1,34 @@
+{
+  "version": 8,
+  "name": "OSCAR_Sea_Surface_Currents_Final",
+  "sources": {
+    "OSCAR_Sea_Surface_Currents_Final": {
+      "type": "vector",
+      "tiles": [
+        "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/OSCAR_Sea_Surface_Currents_Final/default/2020-01-01/2km/0/0/0.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "OSCAR_Sea_Surface_Currents_Final",
+      "source": "OSCAR_Sea_Surface_Currents_Final",
+      "source-layer": "OSCAR_Sea_Surface_Currents_Final",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(160, 229, 26)"
+      }
+    }
+  ]
+}

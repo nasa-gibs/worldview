@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "MISR_Cloud_Motion_Vector": {
+      "id": "MISR_Cloud_Motion_Vector",
+      "title": "MISR_Cloud_Motion_Vector",
+      "subtitle": "MISR_Cloud_Motion_Vector subtitle",
+      "description": "MISR_Cloud_Motion_Vector description",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Vectors",
+      "vectorStyle": {
+        "id": "MISR_Cloud_Motion_Vector"
+      },
+      "transition": true,
+      "projections": {
+        "geographic": {
+          "source": "UAT:GIBS:geographic"
+        }
+      }
+    }
+  }
+}

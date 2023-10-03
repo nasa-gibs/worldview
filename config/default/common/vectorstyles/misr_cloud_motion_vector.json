@@ -1,0 +1,34 @@
+{
+  "version": 8,
+  "name": "MISR_Cloud_Motion_Vector",
+  "sources": {
+    "MISR_Cloud_Motion_Vector": {
+      "type": "vector",
+      "tiles": [
+        "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/MISR_Cloud_Motion_Vector/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "MISR_Cloud_Motion_Vector",
+      "source": "MISR_Cloud_Motion_Vector",
+      "source-layer": "MISR_Cloud_Motion_Vector",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          1,
+          2,
+          3,
+          3
+        ],
+        "circle-color": "rgb(160, 229, 26)"
+      }
+    }
+  ]
+}

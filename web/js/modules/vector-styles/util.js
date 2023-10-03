@@ -220,7 +220,11 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const desktopLimit = 12;
   const mobileLimit = 5;
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
+  console.log(map);
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    console.log('forEachFeatureAtPixel');
+    console.log(pixels);
+    console.log(feature);
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
@@ -287,6 +291,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
  * @returns {Object}
  */
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
+  console.log('onMapClickGetVectorFeatures');
   const { config, compare } = state;
   const { screenWidth, screenHeight, isMobileDevice } = state.screenSize;
   const isMobile = isMobileDevice;
@@ -319,6 +324,12 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    console.log('calling setStyleFunction');
+    console.log(def);
+    console.log(vectorStyles);
+    console.log(olLayer);
+    console.log(state);
+    // setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state);
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
     if (lastSelection[key]) delete lastSelection[key];
   }
@@ -326,6 +337,7 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
+    console.log('calling stylefunction...');
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
   }
 }

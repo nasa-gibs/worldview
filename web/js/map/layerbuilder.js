@@ -10,16 +10,25 @@ import TileState from 'ol/TileState';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
-import axios from 'axios';
-import qs from 'qs';
+
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
-import ImageLayer from 'ol/layer/Image';
-import Static from 'ol/source/ImageStatic';
+import WebGLPointsLayer from 'ol/layer/WebGLPoints';
+import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
-import lodashCloneDeep from 'lodash/cloneDeep';
+import { Style, RegularShape } from 'ol/style';
+import Stroke from 'ol/style/Stroke';
+import Fill from 'ol/style/Fill';
+import * as dat from 'dat.gui';
+import axios from 'axios';
+import qs from 'qs';
+import ImageLayer from 'ol/layer/Image';
+import Static from 'ol/source/ImageStatic';
+import { throttle } from '../vectorflow/util';
+import WindTile from '../vectorflow/renderer.js';
+import { colorGradient } from '../vectorflow/util';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -49,6 +58,10 @@ import {
 } from '../modules/map/constants';
 
 export default function mapLayerBuilder(config, cache, store) {
+  const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
+  const renderParticleFlow = true;
+  const vectorLayers = ['ASCAT_Ocean_Surface_Wind_Speed', 'MISR_Cloud_Motion_Vector', 'OSCAR_Sea_Surface_Currents_Final'];
+
   /**
    * Return a layer, or layergroup, created with the supplied function
    * @param {*} createLayerFunc
@@ -149,7 +162,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
-   *
+   * Create a new OpenLayers Layer
    * @function layerKey
    * @static
    * @param {Object} def - Layer properties
@@ -256,10 +269,27 @@ export default function mapLayerBuilder(config, cache, store) {
     return { closestDate, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
+  /**
+   * Create a layer key
+   *
+   * @function layerKey
+   * @static
+   * @param {Object} def - Layer properties
+   * @param {number} options - Layer options
+   * @param {boolean} precache // This does not align with the parameters of the layerKey function
+   * @returns {object} layer key Object
+   */
+  //   const layerKey = (def, options, state) => {
+  //     const { compare } = state;
+  //     let date;
+  //     const layerId = def.id;
+  //     const projId = state.proj.id;
+  //     let style = '';
+  //     const activeGroupStr = options.group ? options.group : compare.activeString;
+  // =======
   const createStaticImageLayer = async() => {
     const state = store.getState();
     const { proj: { selected: { id, crs, maxExtent } } } = state;
-
     const projectionURL = `images/map/bluemarble-${id}.jpg`;
 
     const layer = new ImageLayer({
@@ -450,6 +480,132 @@ export default function mapLayerBuilder(config, cache, store) {
     });
   }
 
+  /**
+   * Create a WindTile
+   *
+   * @method createWindtile
+   * @static
+   * @param {object} tilesource
+   * @param {object} selected - OL map
+   * @param {object} layer
+   * @returns {object} OpenLayers WMS layer -- INCORRECT~!
+   */
+  const createWindtile = function(tileSource, selected, layer) {
+    // Vars to generate the animation & support the mini-GUI to play with the animation settings
+    let i = 0;
+    let moving = false;
+    let initiatedGUI = false;
+    let currentFeatures;
+    let zoom;
+    let extent;
+    let options;
+    let windRender;
+    const gui = new dat.GUI();
+
+    tileSource.on('tileloadstart', (e) => {
+      i += 1;
+    });
+    tileSource.on('tileloadend', (e) => {
+      if (!windRender) {
+        const mapSize = selected.getSize();
+        const tileOptions = {
+          olmap: selected,
+          uMin: -76.57695007324219,
+          uMax: 44.30181884765625,
+          vMin: -76.57695007324219,
+          vMax: 44.30181884765625,
+          width: mapSize[0],
+          height: mapSize[1],
+        };
+        windRender = new WindTile(tileOptions);
+      }
+
+      i -= 1;
+      if (i === 1 && !windRender.stopped && windRender) {
+        windRender.stop();
+      }
+      if (i === 0 && !moving && windRender) {
+        if (!initiatedGUI) {
+          setTimeout(() => { updateRenderer(); }, 1);
+        } else {
+          updateRendererThrottled();
+        }
+      }
+    });
+
+    // These listen for changes to position/zoom/other properties & re-render the animation canvas to compensate
+    selected.getView().on('change:center', () => {
+      if (windRender !== undefined) {
+        windRender.stop();
+        moving = true;
+      }
+    });
+    selected.getView().on('propertychange', (e) => {
+      if (e.key === 'resolution' && windRender) {
+        windRender.stop();
+        moving = true;
+      }
+    });
+
+    const updateRenderer = () => {
+      const view = selected.getView();
+      const mapSize = selected.getSize();
+      extent = view.calculateExtent(mapSize);
+      currentFeatures = layer.getSource().getFeaturesInExtent(extent);
+      zoom = view.getZoom();
+      options = {
+        uMin: -55.806217193603516,
+        uMax: 45.42329406738281,
+        vMin: -5.684286117553711,
+        vMax: 44.30181884765625,
+        width: mapSize[0],
+        height: mapSize[1],
+        ts: Date.now(),
+      };
+      windRender.updateData(currentFeatures, extent, zoom, options);
+      if (!initiatedGUI) initGUI();
+    };
+
+    const updateRendererThrottled = throttle(updateRenderer, 150);
+
+    // when the user stops moving the map, we need to re-render the windtiles in the new position
+    selected.on('moveend', (e) => {
+      moving = false;
+      if (i === 0 && windRender) updateRendererThrottled();
+    });
+
+    const updateTexture = function() {
+      windRender.updateData(currentFeatures, extent, zoom, options);
+    };
+    const initGUI = function() {
+      const { wind } = windRender;
+      gui.add(wind, 'numParticles', 144, 248832).setValue(11025);
+      gui.add(wind, 'fadeOpacity', 0.96, 0.999).setValue(0.996).step(0.001).updateDisplay();
+      gui.add(wind, 'speedFactor', 0.05, 1.0).setValue(0.25);
+      gui.add(wind, 'dropRate', 0, 0.1).setValue(0.003);
+      gui.add(wind, 'dropRateBump', 0, 0.2).setValue(0.01);
+      gui.add(windRender, 'dataGridWidth', 18, 360).setValue(200).step(2).onChange(updateTexture);
+      initiatedGUI = true;
+      updateRenderer();
+    };
+  };
+
+  const animateVectors = function(layerName, tileSource, selected, layer) {
+    const animationAllowed = vectorLayers.indexOf(layerName) > -1;
+
+    if (animationAllowed && renderParticleFlow) {
+      const canvasElem = document.querySelectorAll('canvas');
+      if (canvasElem.length > 0) {
+        // Add z-index property to existing OL canvas. This ensures that the visualization is on the top layer.
+        // The z-index should be applied with CSS on map generation to avoid this code entirely.
+        canvasElem[0].style.zIndex = -1;
+      }
+      createWindtile(tileSource, selected, layer);
+    }
+  };
+
+
+  /** Create a new Vector Layer
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
   /**
@@ -547,9 +703,10 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {number} day
     * @param {object} state
     * @param {object} attributes
+    * @returns {object} OpenLayers Vector layer
     */
-  const createLayerVector = function(def, options, day, state, attributes) {
-    const { proj, animation } = state;
+  const createLayerVector = function(def, layeroptions, day, state, attributes) {
+    const { proj, animation, map: { ui: { selected } } } = state;
     let date;
     let gridExtent;
     let matrixIds;
@@ -565,10 +722,68 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
+
+
+    // These checks are for the misr_cloud_motion_vector layer
+    // this is just to visualize the dataset from the demo instance so we can compare the demo to WV
+    if (!source.matrixSets) {
+      source.matrixSets = {
+        '2km': {
+          id: '2km',
+          maxResolution: 0.5625,
+          resolutions: [
+            0.5625,
+            0.28125,
+            0.140625,
+            0.0703125,
+            0.03515625,
+            0.017578125,
+          ],
+          tileSize: [
+            512,
+            512,
+          ],
+          tileMatrices: [
+            {
+              matrixWidth: 2,
+              matrixHeight: 1,
+            },
+            {
+              matrixWidth: 3,
+              matrixHeight: 2,
+            },
+            {
+              matrixWidth: 5,
+              matrixHeight: 3,
+            },
+            {
+              matrixWidth: 10,
+              matrixHeight: 5,
+            },
+            {
+              matrixWidth: 20,
+              matrixHeight: 10,
+            },
+            {
+              matrixWidth: 40,
+              matrixHeight: 20,
+            },
+          ],
+        },
+      };
+    }
+
+    if (!def.matrixSet) {
+      def.matrixSet = '2km';
+    }
+    // end of misr_cloud_motion_vector code
+
     const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
+
+    // ASCAT does not have def.matrixIds data
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
       lodashEach(matrixSet.resolutions, (resolution, index) => {
@@ -590,12 +805,18 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
 
-    const layerName = def.layer || def.id;
+    let layerName = def.layer || def.id;
+    if (layerName === 'OSCAR_Sea_Surface_Currents_Final') {
+      layerName = 'OSCAR_Sea_Surface_Currents';
+    }
     const tileMatrixSet = def.matrixSet;
-    date = options.date || getSelectedDate(state);
+    date = layeroptions.date || getSelectedDate(state);
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
-    const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
+    let urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
+    if (layerName === 'OSCAR_Sea_Surface_Currents') {
+      urlParameters = urlParameters.replace('OSCAR_Sea_Surface_Currents', 'OSCAR_Sea_Surface_Currents_Final');
+    }
     const wrapX = !!(day === 1 || day === -1);
     const breakPointLayerDef = def.breakPointLayer;
     const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
@@ -620,6 +841,39 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    // Attempting to create a layer utilizing WebGL to improve performance
+    const webGLlayer = new WebGLPointsLayer({
+      source: tileSource,
+      style: {
+        symbol: {
+          symbolType: 'triangle',
+          size: 18,
+          color: 'green',
+        },
+      },
+      // extent: layerExtent,
+      // renderMode: 'vector',
+      // preload: 0,
+      // ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      // ...isMinBreakPoint && { minResolution: breakPointResolution },
+      // style (feature, resolution) {
+      //   return new Style({
+      //     image: new RegularShape({
+      //       size: 2,
+      //     //       points: 2,
+      //     //       radius: 10,
+      //     //       stroke: new Stroke({
+      //     //         width: 2,
+      //     //         color: 'red',
+      //     //       }),
+      //     //       angle: 53,
+      //     }),
+      //   });
+      // },
+    });
+
+    let counter = 0;
+
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: tileSource,
@@ -627,15 +881,74 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
+      style (feature, resolution) {
+        counter += 1;
+
+        // Due to the large number of points to render for OSCAR, I am only rendering every 25th feature
+        if (counter % 25 !== 0) return [];
+
+        let arrowSizeMultiplier;
+        const radianDirection = feature.get('direction'); // was "dir"
+        const magnitude = feature.get('magnitude'); // was "speed"
+        const arrowColor = colorGradient(magnitude);
+
+        // Adjust color & arrow length based on magnitude
+        if (magnitude < 0.08) {
+          arrowSizeMultiplier = 1;
+        } else if (magnitude < 0.17) {
+          arrowSizeMultiplier = 1.25;
+        } else {
+          arrowSizeMultiplier = 1.5;
+        }
+
+        // https://openlayers.org/en/latest/examples/wind-arrows.html
+        const shaft = new RegularShape({
+          points: 2,
+          radius: 5,
+          stroke: new Stroke({
+            width: 2,
+            color: arrowColor,
+          }),
+          rotateWithView: true,
+        });
+
+        const head = new RegularShape({
+          points: 3,
+          radius: 8,
+          fill: new Fill({
+            color: arrowColor,
+          }),
+          rotateWithView: true,
+        });
+
+        const styles = [new Style({ image: shaft }), new Style({ image: head })];
+        const angle = ((radianDirection - 180) * Math.PI) / 180;
+        const scale = (magnitude + 1) * arrowSizeMultiplier;
+        shaft.setScale([1, scale]);
+        shaft.setRotation(angle);
+        head.setDisplacement([
+          0,
+          head.getRadius() / 2 + shaft.getRadius() * scale,
+        ]);
+        head.setRotation(angle);
+        return styles;
+      },
     });
-    applyStyle(def, layer, state, options);
+
+    applyStyle(def, layer, state, layeroptions);
+    console.log(layer);
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
 
+    const animationAllowed = vectorLayers.indexOf(layerName) > -1;
+    if (animationAllowed && renderParticleFlow) {
+      animateVectors(layerName, tileSource, selected, layer);
+    }
+
     if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
       const layerGroup = new OlLayerGroup({
         layers: [layer, wmsLayer],
       });
@@ -646,7 +959,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (breakPointResolution && animationIsPlaying) {
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const wmsLayer = createLayerWMS(newDef, layeroptions, day, state);
       wmsLayer.wv = attributes;
       return wmsLayer;
     }
@@ -654,6 +967,26 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  /**
+   * Create a new WMS Layer
+   *
+   * @method createLayerWMS
+   * @static
+   * @param {object} def - Layer Specs
+   * @param {object} options - Layer options
+   * @param {number} day
+   * @param {object} state
+   * @returns {object} OpenLayers WMS layer
+   */
+  //   const createLayerWMS = function(def, options, day, state) {
+  //     const { proj } = state;
+  //     const selectedProj = proj.selected;
+  //     let urlParameters;
+  //     let date;
+  //     let extent;
+  //     let start;
+  //     let res;
+  // =======
   const registerSearch = async (def, options, state) => {
     const { date } = state;
     let requestDate;
@@ -744,7 +1077,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
-
     const source = config.sources[def.source];
 
     const searchID = await registerSearch(def, options, state);

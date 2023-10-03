@@ -16,6 +16,7 @@ import {
  * @param {String} groupName | layer group string
  */
 export function setFilterRange(layerId, props, index, groupName) {
+  console.log('setfilterrange');
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setRangeSelector(

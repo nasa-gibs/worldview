@@ -1,5 +1,11 @@
 {
   "sources": {
+    "GITC:geographic": {
+      "url": "https://sit.gitc.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
+    },
+    "UAT:GIBS:geographic": {
+        "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
+    },
     "GIBS:arctic": {
       "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi"
     },
