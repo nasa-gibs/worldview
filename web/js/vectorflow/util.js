@@ -45,15 +45,25 @@ export function throttle(fn, wait) {
 }
 
 // Establish color gradient to differentiate lower & higher magnitudes
-export function colorGradient(fadeFraction) {
-  const color1 = {
-    red: 100, green: 100, blue: 100,
+export function colorGradient(pointMagnitude) {
+  let color1 = {
+    red: 0, green: 255, blue: 0, // green
   };
-  const color2 = {
-    red: 255, green: 255, blue: 255,
+  let color2 = {
+    red: 255, green: 255, blue: 0, // yellow
   };
+  const color3 = {
+    red: 255, green: 0, blue: 0, // red
+  };
+  // console.log('pointMagnitude', pointMagnitude);
+  let fade = pointMagnitude * 2;
 
-  const fade = fadeFraction;
+  if (fade >= 1) {
+    // console.log('fade is 1+', fade);
+    fade -= 1;
+    color1 = color2;
+    color2 = color3;
+  }
   const diffRed = color2.red - color1.red;
   const diffGreen = color2.green - color1.green;
   const diffBlue = color2.blue - color1.blue;

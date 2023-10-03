@@ -806,7 +806,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     let layerName = def.layer || def.id;
-    console.log(`layerName: ${layerName}`);
     if (layerName === 'OSCAR_Sea_Surface_Currents_Final') {
       layerName = 'OSCAR_Sea_Surface_Currents';
     }
@@ -815,7 +814,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
     let urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
-    console.log(`url: ${urlParameters}`);
     if (layerName === 'OSCAR_Sea_Surface_Currents') {
       urlParameters = urlParameters.replace('OSCAR_Sea_Surface_Currents', 'OSCAR_Sea_Surface_Currents_Final');
     }
@@ -887,7 +885,7 @@ export default function mapLayerBuilder(config, cache, store) {
         counter += 1;
 
         // Due to the large number of points to render for OSCAR, I am only rendering every 25th feature
-        if (counter % 25 !== 0) return [];
+        if (counter % 15 !== 0) return [];
 
         let arrowSizeMultiplier;
         const radianDirection = feature.get('direction'); // was "dir"
@@ -908,7 +906,7 @@ export default function mapLayerBuilder(config, cache, store) {
           points: 2,
           radius: 5,
           stroke: new Stroke({
-            width: 4,
+            width: 2,
             color: arrowColor,
           }),
           rotateWithView: true,
