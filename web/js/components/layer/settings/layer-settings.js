@@ -15,7 +15,7 @@ import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
 import safeLocalStorage from '../../../util/local-storage';
-import ImagerySearch from './band-selection/imagery-search';
+import { ImagerySearch } from './imagery-search';
 
 
 import {

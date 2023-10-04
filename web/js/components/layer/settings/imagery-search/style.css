@@ -1,0 +1,16 @@
+.lazyload-list {
+  list-style-type: none;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+
+  li {
+    user-select: none;
+  }
+
+  li:hover {
+    background-color: black;
+  }
+}
