@@ -5,14 +5,14 @@ import {
 } from 'reactstrap';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 
-import './style.css'
+import './style.css';
 
 const dateOptions = {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 };
-const parseGranuleTimestamp = (granule) => new Date(granule.time_start)
+const parseGranuleTimestamp = (granule) => new Date(granule.time_start);
 
 export default function ImagerySearch({ layer }) {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export default function ImagerySearch({ layer }) {
     const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
     return olderDates;
-  }
+  };
 
   const getNewerGranules = async (layer, refDate = selectedDate) => {
     const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=5`);
@@ -36,7 +36,7 @@ export default function ImagerySearch({ layer }) {
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
     return newerDates;
-  }
+  };
 
   const searchForImagery = async (layer) => {
     setGranulesStatus('loading');
@@ -52,28 +52,28 @@ export default function ImagerySearch({ layer }) {
   };
 
   useEffect(async () => {
-    await searchForImagery(layer)
-  }, [])
+    await searchForImagery(layer);
+  }, []);
 
   const handleScroll = async (e) => {
-    const scrollTop = e.target.scrollTop;
+    const { scrollTop } = e.target;
     const position = e.target.scrollHeight - e.target.clientHeight;
     const scrollPercentage = scrollTop / position;
 
     if (scrollPercentage === 0) {
       const newerDates = await getNewerGranules(layer, granuleDates[0]);
       const dates = [...granuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-      
+
       setGranuleDates(dates);
     }
 
     if (scrollPercentage === 1) {
       const olderDates = await getOlderGranules(layer, granuleDates.at(-1));
       const dates = [...olderDates, ...granuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-      
+
       setGranuleDates(dates);
     }
-  }
+  };
 
   return (
     <div className="imagery-search-container">
@@ -81,9 +81,9 @@ export default function ImagerySearch({ layer }) {
       {
         granulesStatus === 'loaded'
           ? (
-            <ul className='lazyload-list' onScroll={handleScroll}>
+            <ul className="lazyload-list" onScroll={handleScroll}>
               {[...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
-                <li className='lazyload-list-item' key={i} onClick={() => handleSelection(date)}>
+                <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
                   {date}
                 </li>
               ))}

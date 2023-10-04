@@ -1,5 +1,4 @@
+// eslint-disable import/prefer-default-export
 import ImagerySearch from './imagery-search';
 
-export {
-    ImagerySearch
-}
+export default ImagerySearch;
