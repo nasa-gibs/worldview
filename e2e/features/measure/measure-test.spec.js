@@ -27,9 +27,11 @@ test.afterAll(async () => {
 })
 
 test('Clicking the measure button opens the menu', async ({ browserName }) => {
+  const { modalCloseButton } = selectors
   test.skip(browserName === 'firefox', 'firefox pointer issue')
   const { measureMenu, measureBtn } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await expect(measureMenu).not.toBeVisible()
   await measureBtn.click()
 })

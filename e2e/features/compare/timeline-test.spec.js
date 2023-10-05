@@ -19,8 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Verify that A|B draggers are visible', async () => {
-  const { draggerA, draggerB } = selectors
+  const { draggerA, draggerB, modalCloseButton } = selectors
   await page.goto(swipeAndAIsActive)
+  await modalCloseButton.click()
   await expect(draggerA).toBeVisible()
   await expect(draggerB).toBeVisible()
 })

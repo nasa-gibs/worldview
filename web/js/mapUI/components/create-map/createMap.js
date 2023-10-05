@@ -234,7 +234,7 @@ function CreateMap(props) {
     });
     setGranuleFootprints(granuleFootprintsObj);
     setUI(uiCopy);
-  });
+  }, []);
 
   return null;
 }

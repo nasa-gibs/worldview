@@ -102,6 +102,11 @@ async function main () {
       removeLayer(wv, layerId)
       continue
     }
+    if (!('projections' in layer) || !Object.keys(layer.projections).length) {
+      error(`[${layerId}] No projections defined`)
+      removeLayer(wv, layerId)
+      continue
+    }
     if ('temporal' in layer) {
       warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
       layer = await processTemporalLayer(layer, layer.temporal)

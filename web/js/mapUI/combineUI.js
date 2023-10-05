@@ -94,7 +94,7 @@ function CombineUI(props) {
       util.warn(e);
     }
 
-    registerMapMouseHandlers(uiProperties.map.proj);
+    setTimeout(() => registerMapMouseHandlers(uiProperties.map.proj));
 
     // Sink all focus on inputs if click unhandled
     document.addEventListener('click', (e) => {

@@ -23,8 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Initial state indicates layer count', async () => {
-  const { layerCount } = selectors
+  const { layerCount, modalCloseButton } = selectors
   await page.goto(url)
+  await modalCloseButton.click()
   await expect(layerCount).toBeVisible()
   await expect(layerCount).toContainText('7')
 })

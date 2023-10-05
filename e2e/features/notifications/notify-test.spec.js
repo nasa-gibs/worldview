@@ -40,9 +40,11 @@ test('No visible notifications with mockAlert parameter set to no_types', async 
 })
 
 test('Outage takes precedence when all three notifications are present', async () => {
+  const { modalCloseButton } = selectors
   const url = `${layerNoticesQuery}&mockAlerts=all_types`
   const statusOutage = await page.locator('#wv-info-button.wv-status-outage')
   await page.goto(url)
+  await modalCloseButton.click()
   await expect(statusOutage).toBeVisible()
   await infoButtonIcon.click()
   await expect(infoMenu).toContainText('Notifications')
@@ -52,7 +54,7 @@ test('Outage takes precedence when all three notifications are present', async (
 test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
   const badge = await page.locator('span.badge')
   await expect(badge).toBeVisible()
-  await expect(badge).toContainText('3')
+  await expect(badge).toContainText('2')
 })
 
 test('Alert, outage, and message content is highlighted and found in modal', async () => {
@@ -72,6 +74,10 @@ test('Verify that the user is only alerted if they have not already stored all i
 })
 
 test('Verify that zots show for the layers that have notices', async () => {
+  const { modalCloseButton } = selectors
+  const url = `${layerNoticesQuery}&mockAlerts=all_types`
+  await page.goto(url)
+  await modalCloseButton.click()
   const aquaZot = await page.locator('#MODIS_Aqua_CorrectedReflectance_TrueColor-zot')
   const particulateZot = await page.locator('#Particulate_Matter_Below_2__2E__5micrometers_2001-2010-zot')
   await expect(aquaZot).toBeVisible()

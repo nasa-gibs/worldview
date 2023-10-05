@@ -21,8 +21,9 @@ test.afterAll(async () => {
 })
 
 test('Mobile info toolbar is visible and contains valid mobile menu items', async () => {
-  const { infoToolbarButton } = selectors
+  const { infoToolbarButton, modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   const sendFeedback = await page.locator('#send_feedback_info_item')
   const settingsInfo = await page.locator('#settings_info_item')
   const aboutInfo = await page.locator('#about_info_item')

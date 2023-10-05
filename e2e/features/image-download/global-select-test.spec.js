@@ -30,9 +30,10 @@ test.afterAll(async () => {
 })
 
 test('Verify that global select is present and not selected', async () => {
-  const { globalSelectInput } = selectors
+  const { globalSelectInput, modalCloseButton } = selectors
   const url = await joinUrl(startParams, null)
   await page.goto(url)
+  await modalCloseButton.click()
   await openImageDownloadPanel(page)
   await expect(globalSelectInput).toBeVisible()
   await expect(globalSelectInput).not.toBeChecked()

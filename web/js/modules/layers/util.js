@@ -840,7 +840,7 @@ export function serializeLayers(layers, state, groupName) {
       });
     }
     if (def.bandCombo) {
-      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>');
+      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>').replaceAll(',', ';');
       item.attributes.push({
         id: 'bandCombo',
         value: bandComboString,
@@ -981,6 +981,11 @@ const getLayerSpec = (attributes) => {
     if (attr.id === 'bands') {
       const values = util.toArray(attr.value.split(';'));
       bandCombo = values;
+    }
+
+    if (attr.id === 'bandCombo') {
+      const formattedString = attr.value.replaceAll(';', ',').replaceAll('<', '(').replaceAll('>', ')');
+      bandCombo = JSON.parse(formattedString);
     }
 
     if (attr.id === 'palette') {

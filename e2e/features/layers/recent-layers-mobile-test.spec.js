@@ -23,8 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Layer picker shows categories when first opened', async () => {
-  const { collapsedLayerButton, addLayers } = selectors
+  const { addLayers, collapsedLayerButton, modalCloseButton } = selectors
   await page.goto(url)
+  await modalCloseButton.click()
   await collapsedLayerButton.click()
   await addLayers.click()
   await assertCategories(page)
