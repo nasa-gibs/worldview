@@ -70,7 +70,7 @@ class App extends React.Component {
     const { numberOutagesUnseen, object } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
       if (numberOutagesUnseen > 0) {
-        this.openNotification(object, numberOutagesUnseen);
+        this.openNotification(object.outages, numberOutagesUnseen);
       }
     }
   }
@@ -215,10 +215,14 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberOutagesUnseen) => {
+    Notifications.alerts = {};
+    Notifications.layernotices = {};
+    Notifications.messages = {};
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
         bodyComponent: Notifications,
+        source: 'outage-alert',
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());

@@ -5,10 +5,22 @@ import NotificationBlock from '../components/notifications/notification-block';
 import { getNumberOfTypeNotSeen } from '../modules/notifications/util';
 
 function Notifications(props) {
-  const { object } = props;
+  const { object, numberOutagesUnseen } = props;
   const {
     messages, outages, alerts,
   } = object;
+
+  if (numberOutagesUnseen > 0) {
+    return (
+      <div className="wv-notify-modal">
+        <NotificationBlock
+          arr={outages}
+          type="outage"
+          numberNotSeen={getNumberOfTypeNotSeen('outage', outages)}
+        />
+      </div>
+    );
+  }
   return (
     <div className="wv-notify-modal">
       <NotificationBlock
@@ -30,10 +42,11 @@ function Notifications(props) {
   );
 }
 function mapStateToProps(state) {
-  const { object } = state.notifications;
+  const { object, numberOutagesUnseen } = state.notifications;
 
   return {
     object,
+    numberOutagesUnseen,
   };
 }
 
@@ -44,4 +57,5 @@ export default connect(
 
 Notifications.propTypes = {
   object: PropTypes.object,
+  numberOutagesUnseen: PropTypes.number,
 };
