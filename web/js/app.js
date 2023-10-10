@@ -67,9 +67,9 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
-    const { numberOutagesUnseen, object } = this.props;
+    const { eicModeEnabled, numberOutagesUnseen, object } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0) {
+      if (numberOutagesUnseen > 0 && !eicModeEnabled) {
         this.openNotification(object.outages, numberOutagesUnseen);
       }
     }
@@ -190,8 +190,10 @@ function mapStateToProps(state) {
   const {
     numberOutagesUnseen, numberUnseen, type, object,
   } = notifications;
+  const eicModeEnabled = state.ui.eic !== null && state.ui.eic !== '';
   return {
     state,
+    eicModeEnabled,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
@@ -240,6 +242,7 @@ export default connect(
 
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  eicModeEnabled: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,

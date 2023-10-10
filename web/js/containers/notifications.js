@@ -5,12 +5,12 @@ import NotificationBlock from '../components/notifications/notification-block';
 import { getNumberOfTypeNotSeen } from '../modules/notifications/util';
 
 function Notifications(props) {
-  const { object, numberOutagesUnseen } = props;
+  const { eicModeEnabled, numberOutagesUnseen, object } = props;
   const {
     messages, outages, alerts,
   } = object;
 
-  if (numberOutagesUnseen > 0) {
+  if (numberOutagesUnseen > 0 && !eicModeEnabled) {
     return (
       <div className="wv-notify-modal">
         <NotificationBlock
@@ -43,10 +43,12 @@ function Notifications(props) {
 }
 function mapStateToProps(state) {
   const { object, numberOutagesUnseen } = state.notifications;
+  const eicModeEnabled = state.ui.eic !== null && state.ui.eic !== '';
 
   return {
-    object,
+    eicModeEnabled,
     numberOutagesUnseen,
+    object,
   };
 }
 
