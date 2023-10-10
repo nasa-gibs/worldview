@@ -217,9 +217,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberOutagesUnseen) => {
-    Notifications.alerts = {};
-    Notifications.layernotices = {};
-    Notifications.messages = {};
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
