@@ -67,10 +67,10 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
-    const { numberOutagesUnseen, object } = this.props;
+    const { kioskModeEnabled, numberOutagesUnseen, object } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0) {
-        this.openNotification(object, numberOutagesUnseen);
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
+        this.openNotification(object.outages, numberOutagesUnseen);
       }
     }
   }
@@ -190,8 +190,10 @@ function mapStateToProps(state) {
   const {
     numberOutagesUnseen, numberUnseen, type, object,
   } = notifications;
+  const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
   return {
     state,
+    kioskModeEnabled,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
@@ -219,6 +221,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
         bodyComponent: Notifications,
+        source: 'outage-alert',
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
@@ -236,6 +239,7 @@ export default connect(
 
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  kioskModeEnabled: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
