@@ -16,6 +16,7 @@ export const layersToMeasure = [
   'VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate',
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night',
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
+  'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -37,6 +38,7 @@ export const layerPixelData = {
   VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate: { threshold: 0.95 },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { threshold: 0.20 },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { threshold: 0.20 },
+  VIIRS_NOAA20_CorrectedReflectance_TrueColor: { threshold: 0.65 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
@@ -57,5 +59,5 @@ export const bestDates = {
   VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate: { date: '2023-10-06' },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { date: '2023-10-06' },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { date: '2023-10-06' },
-
+  VIIRS_NOAA20_CorrectedReflectance_TrueColor: { date: '2023-10-06' },
 };
