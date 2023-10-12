@@ -11,7 +11,7 @@ function DevTestModal() {
     <div id="dev-block" className="d-flex flex-column justify-content-center align-items-center">
       <ConsoleTestMode />
       <PresetConsoleCommands />
-      {/* <PixelTestMode /> */}
+      <PixelTestMode />
       {/* <FindOrbitTracksTestMode /> */}
     </div>
   );

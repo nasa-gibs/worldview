@@ -119,16 +119,19 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const updateCollections = (headers) => {
       const actualId = headers.get('layer-identifier-actual');
+
       if (!actualId) return;
 
+      const parts = actualId.split('_');
+      const type = parts[parts.length - 1];
+      const version = parts[parts.length - 2];
+
+      if (type !== 'NRT' && type !== 'STD') return;
+
       const { layers } = state;
-      const collectionCheck = getCollections(layers, date, layer);
       // check if the collection & dates already exist for layer so we don't dispatch actions
-      if (!collectionCheck) {
+      if (!getCollections(layers, date, layer)) {
         updateStoreCollections(layer.id);
-        const parts = actualId.split('_');
-        const version = parts[parts.length - 2];
-        const type = parts[parts.length - 1];
         updateStoreCollectionDates(layer.id, version, type, date);
       }
     };
