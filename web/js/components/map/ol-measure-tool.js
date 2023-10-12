@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { unByKey as OlObservableUnByKey } from 'ol/Observable';
@@ -58,6 +58,7 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
+  const root = useRef([]);
 
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections, proj,
@@ -162,7 +163,7 @@ function OlMeasureTool (props) {
       updateMeasurements(allMeasurements);
     };
 
-    ReactDOM.render(
+    root.current[overlay.ol_uid].render(
       (
         <MeasureTooltip
           active={!!tooltipElement}
@@ -173,7 +174,7 @@ function OlMeasureTool (props) {
           olMap={olMap}
           proj={proj}
         />
-      ), overlay.getElement(),
+      ),
     );
   };
 
@@ -323,6 +324,11 @@ function OlMeasureTool (props) {
       }
     };
   }, [map, unitOfMeasure]);
+
+  useEffect(() => {
+    if (!tooltipOverlay) return;
+    root.current[tooltipOverlay.ol_uid] = createRoot(tooltipOverlay.getElement());
+  }, [tooltipOverlay]);
 
   /**
    * Go through every tooltip and recalculate the measurement based on

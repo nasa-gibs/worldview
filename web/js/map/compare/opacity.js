@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import OpacitySlider from '../../components/compare/opacity-slider';
 import { getCompareDates } from '../../modules/compare/selectors';
 import util from '../../util/util';
@@ -46,7 +46,8 @@ export default class Opacity {
    * Remove all nodes
    */
   destroy() {
-    ReactDOM.unmountComponentAtNode(slider);
+    const root = createRoot(slider);
+    root.unmount(slider);
     this.mapCase.removeChild(slider);
   }
 
@@ -65,7 +66,8 @@ export default class Opacity {
       dateB: this.dateB,
     };
     this.mapCase.appendChild(this.sliderCase);
-    ReactDOM.render(React.createElement(OpacitySlider, Props), this.sliderCase);
+    const root = createRoot(this.sliderCase);
+    root.render(React.createElement(OpacitySlider, Props));
     return this.sliderCase;
   }
 

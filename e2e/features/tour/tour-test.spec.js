@@ -18,8 +18,9 @@ test.afterAll(async () => {
 })
 
 test('Verify that all tour modals are present when the page is loaded', async () => {
-  const { infoToolbarButton } = selectors
+  const { infoToolbarButton, modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await infoToolbarButton.click()
   await page.locator('#start_tour_info_item').click()
 })

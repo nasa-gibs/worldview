@@ -1,6 +1,9 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
+const createSelectors = require('../../test-utils/global-variables/selectors')
+
 let page
+let selectors
 
 const enabledPermalink = 'http://localhost:3000/?l=Last_of_the_Wild_1995-2004'
 const disabledPermalink = 'http://localhost:3000/?l=Last_of_the_Wild_1995-2004(disabled=0-13-12-1-2-6)'
@@ -9,6 +12,7 @@ test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
+  selectors = createSelectors(page)
 })
 
 test.afterAll(async () => {
@@ -16,7 +20,9 @@ test.afterAll(async () => {
 })
 
 test('Verify that toggling class updates permalink and layer-legend', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(enabledPermalink)
+  await modalCloseButton.click()
   const disabledClassification = await page.locator('#active-Last_of_the_Wild_1995-2004 .disabled-classification')
   await expect(disabledClassification).not.toBeVisible()
   await page.locator('#active-Last_of_the_Wild_1995-2004').hover()
@@ -47,7 +53,9 @@ test('Verify that toggling class-all on updates permalink and layer-legend', asy
 })
 
 test('Verify that loaded permalink disables classes', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(disabledPermalink)
+  await modalCloseButton.click()
   const colorBoxDisabledZero = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active0.disabled-classification')
   const colorBoxDisabledThirteen = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active13.disabled-classification')
   const colorBoxDisabledSix = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active6.disabled-classification')

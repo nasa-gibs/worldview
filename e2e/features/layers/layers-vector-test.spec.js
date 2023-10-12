@@ -20,8 +20,9 @@ test.afterAll(async () => {
 })
 
 test('Vector layer click does not show alert when all vector layers are clickable', async () => {
-  const { geographicMap, notifyMessage } = selectors
+  const { geographicMap, modalCloseButton, notifyMessage } = selectors
   await page.goto(damsLayerUrl)
+  await modalCloseButton.click()
   const pointerIcon = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
   await expect(pointerIcon).toBeVisible()
   await geographicMap.click()
@@ -30,8 +31,9 @@ test('Vector layer click does not show alert when all vector layers are clickabl
 
 test('Vectors show alert when not clickable', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'issue identifying pointer')
-  const { geographicMap, notifyMessage } = selectors
+  const { geographicMap, modalCloseButton, notifyMessage } = selectors
   await page.goto(damsLayerWMSZoomLevelUrl)
+  await modalCloseButton.click()
   const pointerIcon = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
   await expect(pointerIcon).toBeVisible()
   await geographicMap.click()

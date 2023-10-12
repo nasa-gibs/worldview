@@ -110,6 +110,7 @@
                                         Good Colour Maps: How to Design Them</a></li>
                 </ul>
         </li>
+        <li>Location Search feature uses the <a href="https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm" target="_blank" rel="noopener noreferrer">ArcGIS Geocoding service</a>.</li>
         <li>The imagery ingest and serving system (GIBS) is built by NASA/JPL and operated by NASA/GSFC.</li>
         <li>Worldview is built by the NASA/GSFC <a href="https://earthdata.nasa.gov/esdis" target="_blank"
                         rel="noopener noreferrer">Earth Science Data and Information System (ESDIS) Project</a>. We are

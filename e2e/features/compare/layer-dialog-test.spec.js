@@ -28,7 +28,9 @@ test.afterAll(async () => {
 })
 
 test('Layer option features work in A|B mode', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(swipeAOD)
+  await modalCloseButton.click()
   await expect(AodOptionsPanelBody).not.toBeVisible()
   await aerosolLayer.hover()
   await page.locator('#active-MODIS_Terra_Aerosol .wv-layers-options').click()

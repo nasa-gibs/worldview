@@ -4,7 +4,7 @@ import 'elm-pep';
 import 'regenerator-runtime/runtime';
 // polyfills
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import {
   createStore,
@@ -103,12 +103,12 @@ function render (config, legacyState) {
   );
   listenForHistoryChange(store, history);
 
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('app'));
+  root.render(
     <Provider store={store}>
       <App models={models} store={store} />
       <CombineUI models={models} config={config} store={store} />
     </Provider>,
-    document.getElementById('app'),
   );
   // combineUi(models, config, store); // Legacy UI
   util.errorReport(errors);

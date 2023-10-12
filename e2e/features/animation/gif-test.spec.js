@@ -23,8 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Clicking the animation widget button opens the widget', async () => {
-  const { createGifIcon, arcticRotationResetButton, rotationDialogOkButton } = selectors
+  const { createGifIcon, arcticRotationResetButton, modalCloseButton, rotationDialogOkButton } = selectors
   await page.goto(animationProjectionRotated)
+  await modalCloseButton.click()
   await createGifIcon.click()
   await expect(arcticRotationResetButton).toHaveText('-18')
   await rotationDialogOkButton.click()
@@ -38,9 +39,11 @@ test('GIF selection preview is Accurate and selections that are too high disable
     gifPreviewEndDate,
     gifPreviewFrameRateValue,
     gifPreviewEndResolutionSelector,
-    gifDownloadButton
+    gifDownloadButton,
+    modalCloseButton
   } = selectors
   await page.goto(activeAnimationWidget)
+  await modalCloseButton.click()
   await createGifIcon.click()
   await expect(gifPreviewStartDate).toHaveText('2018 MAR 28')
   await expect(gifPreviewEndDate).toHaveText('2018 APR 04')
@@ -57,13 +60,17 @@ test('GIF selection preview is Accurate and selections that are too high disable
 })
 
 test('GIF download is disabled when too many frames would be requested with standard interval', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(animationTooManyFramesGif)
+  await modalCloseButton.click()
   const createGif = page.locator('#create-gif-button')
   await expect(createGif).toHaveClass(/disabled/)
 })
 
 test('GIF download is disabled when too many frames would be requested with custom interval', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(animationTooManyFramesGifCustomInterval)
+  await modalCloseButton.click()
   const createGif = page.locator('#create-gif-button')
   await expect(createGif).toHaveClass(/disabled/)
 })

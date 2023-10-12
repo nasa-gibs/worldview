@@ -12,8 +12,6 @@ function DateLines(props) {
     map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
-  if (!mapIsRendered) return null;
-
   const [height, setHeight] = useState(0);
   const [startY, setStartY] = useState(0);
   const [hideLines, setHideLines] = useState(false);
@@ -24,8 +22,8 @@ function DateLines(props) {
     let bottomY;
     let newStartY;
 
-    if (map.getSize()[0] === 0) {
-      return [0, 0];
+    if (!map || map.getSize()[0] === 0) {
+      return;
     }
     const extent = map.getView().calculateExtent(map.getSize());
     const top = [extent[2] - 1, extent[3] + 5];
@@ -74,6 +72,8 @@ function DateLines(props) {
   }, [mapIsRendered]);
 
   useEffect(updatePosition, [mapIsRendered]);
+
+  if (!mapIsRendered) return null;
 
   return (
     <>
