@@ -41,6 +41,7 @@ function InfoList (props) {
 
   function getNotificationListItem() {
     const { numberUnseen, type, object } = notifications;
+    console.log('numberUnseen', numberUnseen);
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
