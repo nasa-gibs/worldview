@@ -103,14 +103,13 @@ class toolbarContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      isAboutOpen, notificationContentNumber, openAboutModal, modalIsOpen,
+      isAboutOpen, openAboutModal, modalIsOpen,
     } = this.props;
     if (modalIsOpen !== prevProps.modalIsOpen) {
       if (isAboutOpen) {
         openAboutModal();
       }
     }
-    console.log('notificationContentNumber', notificationContentNumber);
   }
 
   getPromise(bool, type, action, title) {
@@ -444,8 +443,8 @@ const mapStateToProps = (state) => {
   } = state;
   const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { numberUnseen, type } = notifications;
-  console.log('notifications', notifications);
-  console.log('numberUnseen', numberUnseen);
+  // console.log('notifications', notifications);
+  // console.log('numberUnseen', numberUnseen);
   const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
   const isMobile = screenSize.isMobileDevice;

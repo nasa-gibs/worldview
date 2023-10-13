@@ -32,7 +32,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         return {
           ...state,
           number: getCount(notificationsByType),
-          numberUnseen: getCount(notificationsByType, true),
+          numberUnseen: getCount(notificationsByType),
           numberOutagesUnseen,
           type: getPriority(notificationsByType),
           isActive: true,
@@ -49,14 +49,11 @@ export function notificationsReducer(state = notificationReducerState, action) {
         isActive: true,
       };
     case OUTAGE_NOTIFICATIONS_SEEN:
-      console.log(state);
-      const { number, numberOutagesUnseen } = state;
-      // console.log('number', number);
-      // console.log('numberOutagesUnseen', numberOutagesUnseen);
-      const newNumberUnseen = number - numberOutagesUnseen >= 0 ? number - numberOutagesUnseen : 0;
       return {
         ...state,
-        numberUnseen: newNumberUnseen,
+        numberUnseen: state.number - state.numberOutagesUnseen >= 0
+          ? state.number - state.numberOutagesUnseen
+          : 0,
         numberOutagesUnseen: 0,
       };
     default:

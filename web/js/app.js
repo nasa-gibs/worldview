@@ -27,7 +27,7 @@ import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 import { addToLocalStorage } from './modules/notifications/util';
-import { notificationsSeen, outageNotificationsSeenAction } from './modules/notifications/actions';
+import { outageNotificationsSeenAction } from './modules/notifications/actions';
 
 // actions
 import Tour from './containers/tour';
