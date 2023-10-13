@@ -349,8 +349,6 @@ class toolbarContainer extends Component {
       isMobile,
     } = this.props;
 
-    console.log('notificationContentNumber', notificationContentNumber);
-
     const notificationClass = notificationType
       ? ` wv-status-${notificationType}`
       : ' wv-status-hide';

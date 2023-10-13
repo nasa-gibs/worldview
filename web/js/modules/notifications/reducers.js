@@ -49,8 +49,14 @@ export function notificationsReducer(state = notificationReducerState, action) {
         isActive: true,
       };
     case OUTAGE_NOTIFICATIONS_SEEN:
+      console.log(state);
+      const { number, numberOutagesUnseen } = state;
+      // console.log('number', number);
+      // console.log('numberOutagesUnseen', numberOutagesUnseen);
+      const newNumberUnseen = number - numberOutagesUnseen >= 0 ? number - numberOutagesUnseen : 0;
       return {
         ...state,
+        numberUnseen: newNumberUnseen,
         numberOutagesUnseen: 0,
       };
     default:

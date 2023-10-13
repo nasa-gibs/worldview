@@ -26,6 +26,8 @@ import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
+import { addToLocalStorage } from './modules/notifications/util';
+import { notificationsSeen, outageNotificationsSeenAction } from './modules/notifications/actions';
 
 // actions
 import Tour from './containers/tour';
@@ -37,7 +39,6 @@ import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
 // Notifications
 import Notifications from './containers/notifications';
-import { outageNotificationsSeenAction } from './modules/notifications/actions';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
@@ -67,10 +68,12 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
-    const { kioskModeEnabled, numberOutagesUnseen, object } = this.props;
+    const {
+      kioskModeEnabled, notifications, numberOutagesUnseen,
+    } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
       if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
-        this.openNotification(object.outages, numberOutagesUnseen);
+        this.openNotification(notifications, numberOutagesUnseen);
       }
     }
   }
@@ -198,6 +201,7 @@ function mapStateToProps(state) {
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
+    notifications,
     numberOutagesUnseen,
     numberUnseen,
     object,
@@ -225,6 +229,7 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
+            addToLocalStorage({ ...obj.object });
           }
         },
       }),
@@ -247,6 +252,7 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   notificationClick: PropTypes.func,
+  notifications: PropTypes.object,
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
