@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Vegetation Disturbance Status": {
+            "id": "vegetation-disturbance-status",
+            "title": "Vegetation Disturbance Status",
+            "subtitle": "DIST-ALERT-HLS",
+            "sources": {
+                "DIST-ALERT-HLS": {
+                    "id": "DIST-ALERT-HLS",
+                    "title": "DIST-ALERT-HLS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OPERA_L3_DIST-ALERT-HLS_Color_Index_Provisional",
+                        "OrbitTracks_Landsat-8_Descending",
+                        "OrbitTracks_Sentinel-2A_Descending",
+                        "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

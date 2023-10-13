@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "OPERA_L3_DIST-ALERT-HLS_Color_Index_Provisional": {
+      "id": "OPERA_L3_DIST-ALERT-HLS_Color_Index_Provisional",
+      "description": "multi-mission/opera/OPERA_L3_DIST-ALERT-HLS_Color_Index_Provisional",
+      "tags": "lpdaac LPDAAC DIST ALERT",
+      "group": "overlays",
+      "layergroup": "Vegetation Disturbance Status"
+    }
+  }
+}
