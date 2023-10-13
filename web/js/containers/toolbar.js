@@ -102,12 +102,15 @@ class toolbarContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isAboutOpen, openAboutModal, modalIsOpen } = this.props;
+    const {
+      isAboutOpen, notificationContentNumber, openAboutModal, modalIsOpen,
+    } = this.props;
     if (modalIsOpen !== prevProps.modalIsOpen) {
       if (isAboutOpen) {
         openAboutModal();
       }
     }
+    console.log('notificationContentNumber', notificationContentNumber);
   }
 
   getPromise(bool, type, action, title) {
@@ -367,7 +370,7 @@ class toolbarContainer extends Component {
         aria-label={labelText}
         className={`wv-toolbar-button${notificationClass}`}
         onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
-        data-content={notificationContentNumber}
+        data-content={notificationContentNumber} // This is the red number indicator
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
@@ -440,7 +443,9 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
   const { isDistractionFreeModeActive, isKioskModeActive } = ui;
-  const { number, type } = notifications;
+  const { numberUnseen, type } = notifications;
+  console.log('notifications', notifications);
+  console.log('numberUnseen', numberUnseen);
   const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
   const isMobile = screenSize.isMobileDevice;
@@ -480,7 +485,7 @@ const mapStateToProps = (state) => {
     ),
     modalIsOpen,
     notificationType: type,
-    notificationContentNumber: number,
+    notificationContentNumber: numberUnseen,
     proj,
     rotation: map.rotation,
     shouldBeCollapsed,
