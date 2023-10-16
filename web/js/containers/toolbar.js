@@ -103,7 +103,7 @@ class toolbarContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      isAboutOpen, openAboutModal, modalIsOpen, type,
+      isAboutOpen, openAboutModal, modalIsOpen,
     } = this.props;
     if (modalIsOpen !== prevProps.modalIsOpen) {
       if (isAboutOpen) {

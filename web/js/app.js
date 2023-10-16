@@ -26,12 +26,6 @@ import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
-import { addToLocalStorage } from './modules/notifications/util';
-import {
-  outageNotificationsSeenAction,
-  requestNotifications,
-  setNotifications,
-} from './modules/notifications/actions';
 
 // actions
 import Tour from './containers/tour';
@@ -42,7 +36,12 @@ import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
 // Notifications
+import { addToLocalStorage } from './modules/notifications/util';
 import Notifications from './containers/notifications';
+import {
+  outageNotificationsSeenAction,
+  setNotifications,
+} from './modules/notifications/actions';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
