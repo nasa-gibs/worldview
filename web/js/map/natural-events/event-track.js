@@ -26,7 +26,7 @@ import {
 const removePointOverlays = (map, pointsAndArrows, overlayMapping) => {
   lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
-      map.removeOverlay(overlayMapping[pointOverlay.getId()]);
+      map.removeOverlay(overlayMapping[pointOverlay.getId()] || pointsAndArrows);
     }
   });
 };
@@ -145,14 +145,14 @@ function EventTrack () {
 
   const removeAllTracks = (mapArg) => {
     const overlayMapping = {};
-    mapArg.getOverlays().forEach((overlay) => {
+    mapArg?.getOverlays().forEach((overlay) => {
       overlayMapping[overlay.getId()] = overlay;
     });
 
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      mapArg.removeOverlay(overlayMapping[track.id]);
+      mapArg.removeOverlay(overlayMapping[track.id] || track);
       removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
     });
   };
