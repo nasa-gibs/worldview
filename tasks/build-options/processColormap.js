@@ -114,7 +114,7 @@ async function matchLegend (entry, legends) {
   }
 }
 
-async function processEntries (colormap) {
+async function processEntries (colormap, id) {
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
 
@@ -159,9 +159,20 @@ async function processEntries (colormap) {
       // Force alpha value to 255 always
       const a = 255
 
+      if (id === 'MODIS_Flood') {
+        console.warn('id', id)
+        console.warn(entry)
+      }
       // If entry is served transparent, add it to the disabled array
       if (entry._attributes.transparent !== 'false') {
-        initializeDisabled.push(index)
+        if (id === 'MODIS_Flood') {
+          console.warn('index', index)
+          console.warn('-*-*-*-*-refsList.length', refsList.length)
+
+          initializeDisabled.push(refsList.length)
+        } else {
+          initializeDisabled.push(index)
+        }
       }
 
       if (!entry._attributes.ref) {
@@ -269,9 +280,19 @@ async function processEntries (colormap) {
       tooltips.push(...disabledTooltipsArr)
 
       const firstDisabledIndex = totalEntries - numDisabled
+      if (id === 'MODIS_Flood') {
+        console.warn('initializeDisabled before', initializeDisabled)
+        console.warn('colors', colors)
+        console.warn('legendColors', legendColors)
+        console.warn('tooltips', tooltips)
+      }
       initializeDisabled = Array.from({
         length: numDisabled
       }, (item, index) => firstDisabledIndex + index)
+
+      if (id === 'MODIS_Flood') {
+        console.warn('initializeDisabled after', initializeDisabled)
+      }
     }
   }
 
@@ -326,7 +347,7 @@ async function processFile (id, xml) {
     }
     const maps = []
     for (const colormap of colormaps) {
-      const result = await processEntries(colormap)
+      const result = await processEntries(colormap, id)
       if (result === 'transparent') {
         // There are no visible colors in the colormap so stop processing
         continue
