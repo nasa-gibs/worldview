@@ -221,6 +221,12 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberOutagesUnseen) => {
+    const notificationObj = {
+      alerts: [],
+      layerNotices: [],
+      messages: [],
+      outages: obj.object.outages,
+    };
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
@@ -229,7 +235,7 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
-            addToLocalStorage({ ...obj.object });
+            addToLocalStorage(notificationObj);
           }
         },
       }),
