@@ -23,10 +23,10 @@ import {
   getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
 } from './util';
 
-const removePointOverlays = (map, pointsAndArrows) => {
+const removePointOverlays = (map, pointsAndArrows, overlayMapping) => {
   lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
-      map.removeOverlay(pointOverlay);
+      map.removeOverlay(overlayMapping[pointOverlay.getId()]);
     }
   });
 };
@@ -144,11 +144,16 @@ function EventTrack () {
   }, [showAllTracks]);
 
   const removeAllTracks = (mapArg) => {
+    const overlayMapping = {};
+    mapArg.getOverlays().forEach((overlay) => {
+      overlayMapping[overlay.getId()] = overlay;
+    });
+
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      mapArg.removeOverlay(track);
-      removePointOverlays(mapArg, pointsAndArrows);
+      mapArg.removeOverlay(overlayMapping[track.id]);
+      removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
     });
   };
 
