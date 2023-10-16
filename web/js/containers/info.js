@@ -193,7 +193,6 @@ const mapDispatchToProps = (dispatch) => ({
     }
   },
   notificationClick: (obj, numberUnseen) => {
-    console.log('info.js obj', obj);
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',

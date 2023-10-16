@@ -27,7 +27,11 @@ import Alerts from './containers/alerts';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 import { addToLocalStorage } from './modules/notifications/util';
-import { outageNotificationsSeenAction } from './modules/notifications/actions';
+import {
+  outageNotificationsSeenAction,
+  requestNotifications,
+  setNotifications,
+} from './modules/notifications/actions';
 
 // actions
 import Tour from './containers/tour';
@@ -221,12 +225,21 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberOutagesUnseen) => {
-    const notificationObj = {
+    // Used to update local storage to reflect OUTAGES have been seen
+    const notificationsSeenObj = {
       alerts: [],
       layerNotices: [],
       messages: [],
       outages: obj.object.outages,
     };
+
+    // Used to indicate which notifications remain unseen
+    const remainingNotifications = [
+      ...obj.object.alerts,
+      ...obj.object.messages,
+      ...obj.object.layerNotices,
+    ];
+
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
@@ -235,7 +248,8 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
-            addToLocalStorage(notificationObj);
+            addToLocalStorage(notificationsSeenObj);
+            dispatch(setNotifications(remainingNotifications));
           }
         },
       }),

@@ -103,7 +103,7 @@ class toolbarContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      isAboutOpen, openAboutModal, modalIsOpen,
+      isAboutOpen, openAboutModal, modalIsOpen, type,
     } = this.props;
     if (modalIsOpen !== prevProps.modalIsOpen) {
       if (isAboutOpen) {
@@ -443,8 +443,6 @@ const mapStateToProps = (state) => {
   } = state;
   const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { numberUnseen, type } = notifications;
-  // console.log('notifications', notifications);
-  // console.log('numberUnseen', numberUnseen);
   const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
   const isMobile = screenSize.isMobileDevice;
