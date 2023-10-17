@@ -158,21 +158,8 @@ async function processEntries (colormap, id) {
 
       // Force alpha value to 255 always
       const a = 255
-
-      if (id === 'MODIS_Flood') {
-        console.warn('id', id)
-        console.warn(entry)
-      }
-      // If entry is served transparent, add it to the disabled array
       if (entry._attributes.transparent !== 'false') {
-        if (id === 'MODIS_Flood') {
-          console.warn('index', index)
-          console.warn('-*-*-*-*-refsList.length', refsList.length)
-
-          initializeDisabled.push(refsList.length)
-        } else {
-          initializeDisabled.push(index)
-        }
+        initializeDisabled.push(refsList.length)
       }
 
       if (!entry._attributes.ref) {
@@ -280,19 +267,9 @@ async function processEntries (colormap, id) {
       tooltips.push(...disabledTooltipsArr)
 
       const firstDisabledIndex = totalEntries - numDisabled
-      if (id === 'MODIS_Flood') {
-        console.warn('initializeDisabled before', initializeDisabled)
-        console.warn('colors', colors)
-        console.warn('legendColors', legendColors)
-        console.warn('tooltips', tooltips)
-      }
       initializeDisabled = Array.from({
         length: numDisabled
       }, (item, index) => firstDisabledIndex + index)
-
-      if (id === 'MODIS_Flood') {
-        console.warn('initializeDisabled after', initializeDisabled)
-      }
     }
   }
 
