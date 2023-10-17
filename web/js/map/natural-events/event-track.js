@@ -26,7 +26,13 @@ import {
 const removePointOverlays = (map, pointsAndArrows, overlayMapping) => {
   lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
-      map.removeOverlay(overlayMapping[pointOverlay.getId()] || pointsAndArrows);
+      if (overlayMapping[pointOverlay.getId()]) {
+        overlayMapping[pointOverlay.getId()].forEach((subPointsAndArrows) => {
+          map.removeOverlay(subPointsAndArrows);
+        });
+      } else {
+        map.removeOverlay(pointsAndArrows);
+      }
     }
   });
 };
@@ -146,7 +152,11 @@ function EventTrack () {
   const createOverlayMapping = (mapArg) => {
     const overlayMapping = {};
     mapArg.getOverlays().forEach((overlay) => {
-      overlayMapping[overlay.getId()] = overlay;
+      if (!overlay.getId()) return;
+      if (!overlayMapping[overlay.getId()]) {
+        overlayMapping[overlay.getId()] = [];
+      }
+      overlayMapping[overlay.getId()].push(overlay);
     });
     return overlayMapping;
   };
@@ -157,7 +167,13 @@ function EventTrack () {
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      mapArg.removeOverlay(overlayMapping[track.id] || track);
+      if (overlayMapping[track.id]) {
+        overlayMapping[track.id].forEach((subTrack) => {
+          mapArg.removeOverlay(subTrack);
+        });
+      } else {
+        mapArg.removeOverlay(track);
+      }
       removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
     });
   };
@@ -166,7 +182,13 @@ function EventTrack () {
     if (!mapArg) return;
     const overlayMapping = createOverlayMapping(mapArg);
     const { track, pointsAndArrows } = trackDetailsRef.current;
-    mapArg.removeOverlay(overlayMapping[track?.id] || track);
+    if (overlayMapping[track?.id]) {
+      overlayMapping[track.id].forEach((subTrack) => {
+        mapArg.removeOverlay(subTrack);
+      });
+    } else {
+      mapArg.removeOverlay(track);
+    }
     removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
 
     return {};
