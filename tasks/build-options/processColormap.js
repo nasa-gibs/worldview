@@ -162,6 +162,7 @@ async function processEntries (colormap) {
         initializeDisabled.push(refsList.length)
       }
 
+      // If entry is served transparent, add it to the disabled array
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
       }
