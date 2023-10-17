@@ -158,11 +158,12 @@ async function processEntries (colormap) {
 
       // Force alpha value to 255 always
       const a = 255
+
+      // If entry is served transparent, add it to the disabled array
       if (entry._attributes.transparent !== 'false') {
         initializeDisabled.push(refsList.length)
       }
 
-      // If entry is served transparent, add it to the disabled array
       if (!entry._attributes.ref) {
         throw new Error('No ref in legend')
       }
