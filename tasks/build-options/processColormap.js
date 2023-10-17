@@ -114,7 +114,7 @@ async function matchLegend (entry, legends) {
   }
 }
 
-async function processEntries (colormap, id) {
+async function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
 
@@ -324,7 +324,7 @@ async function processFile (id, xml) {
     }
     const maps = []
     for (const colormap of colormaps) {
-      const result = await processEntries(colormap, id)
+      const result = await processEntries(colormap)
       if (result === 'transparent') {
         // There are no visible colors in the colormap so stop processing
         continue
