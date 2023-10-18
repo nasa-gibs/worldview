@@ -106,11 +106,11 @@ const checkRightArrowDisabled = (
   timelineEndDateLimit,
 ) => {
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
-  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
 
-  const nextIncrementDateTime = nextIncrementDate.getTime();
-  const maxPlusDeltaDateTime = new Date(timelineEndDateLimit).getTime();
-  return nextIncrementDateTime > maxPlusDeltaDateTime;
+  const startOfDayNextIncrement = nextIncMoment.startOf('day').valueOf();
+  const startOfDayLimit = moment.utc(timelineEndDateLimit).startOf('day').valueOf();
+
+  return startOfDayNextIncrement > startOfDayLimit;
 };
 
 const checkNowButtonDisabled = (
