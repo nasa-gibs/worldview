@@ -48,15 +48,25 @@ export function notificationsReducer(state = notificationReducerState, action) {
         type: '',
         isActive: true,
       };
-    case OUTAGE_NOTIFICATIONS_SEEN:
+    case OUTAGE_NOTIFICATIONS_SEEN: {
+      const notificationObj = {
+        alerts: state.object.alerts,
+        messages: state.object.messages,
+        layerNotices: state.object.layerNotices,
+        outages: [],
+      };
       return {
         ...state,
         numberUnseen: state.number - state.numberOutagesUnseen >= 0
           ? state.number - state.numberOutagesUnseen
           : 0,
+        number: state.number - state.numberOutagesUnseen >= 0
+          ? state.number - state.numberOutagesUnseen
+          : 0,
         numberOutagesUnseen: 0,
-        type: 'alert',
+        type: getPriority(notificationObj),
       };
+    }
     default:
       return state;
   }

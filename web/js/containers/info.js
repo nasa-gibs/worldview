@@ -50,7 +50,7 @@ function InfoList (props) {
           ? 'exclamation-circle'
           : ['fas', 'bolt'],
       id: 'notifications_info_item',
-      badge: numberUnseen,
+      badge: type ? numberUnseen : 0,
       className: type ? `${type}-notification` : '',
       onClick: () => {
         notificationClick(object, numberUnseen);
