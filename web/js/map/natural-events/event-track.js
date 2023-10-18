@@ -161,19 +161,24 @@ function EventTrack () {
     return overlayMapping;
   };
 
+  const removeTrackById = (mapArg, overlayMapping, track) => {
+    const id = track?.id;
+    if (overlayMapping[id]) {
+      overlayMapping[id].forEach((subTrack) => {
+        mapArg.removeOverlay(subTrack);
+      });
+    } else {
+      mapArg.removeOverlay(track);
+    }
+  };
+
   const removeAllTracks = (mapArg) => {
     if (!mapArg) return;
     const overlayMapping = createOverlayMapping(mapArg);
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      if (overlayMapping[track.id]) {
-        overlayMapping[track.id].forEach((subTrack) => {
-          mapArg.removeOverlay(subTrack);
-        });
-      } else {
-        mapArg.removeOverlay(track);
-      }
+      removeTrackById(mapArg, overlayMapping, track);
       removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
     });
   };
@@ -182,13 +187,7 @@ function EventTrack () {
     if (!mapArg) return;
     const overlayMapping = createOverlayMapping(mapArg);
     const { track, pointsAndArrows } = trackDetailsRef.current;
-    if (overlayMapping[track?.id]) {
-      overlayMapping[track.id].forEach((subTrack) => {
-        mapArg.removeOverlay(subTrack);
-      });
-    } else {
-      mapArg.removeOverlay(track);
-    }
+    removeTrackById(mapArg, overlayMapping, track);
     removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
 
     return {};
