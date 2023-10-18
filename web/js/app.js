@@ -38,10 +38,7 @@ import setScreenInfo from './modules/screen-size/actions';
 // Notifications
 import { addToLocalStorage } from './modules/notifications/util';
 import Notifications from './containers/notifications';
-import {
-  outageNotificationsSeenAction,
-  setNotifications,
-} from './modules/notifications/actions';
+import { outageNotificationsSeenAction } from './modules/notifications/actions';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
