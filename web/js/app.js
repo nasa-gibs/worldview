@@ -232,13 +232,6 @@ const mapDispatchToProps = (dispatch) => ({
       outages: obj.object.outages,
     };
 
-    // Used to indicate which notifications remain unseen
-    const remainingNotifications = [
-      ...obj.object.alerts,
-      ...obj.object.messages,
-      ...obj.object.layerNotices,
-    ];
-
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
@@ -248,7 +241,6 @@ const mapDispatchToProps = (dispatch) => ({
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
             addToLocalStorage(notificationsSeenObj);
-            dispatch(setNotifications(remainingNotifications));
           }
         },
       }),

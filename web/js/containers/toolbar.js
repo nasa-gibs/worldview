@@ -369,7 +369,7 @@ class toolbarContainer extends Component {
         aria-label={labelText}
         className={`wv-toolbar-button${notificationClass}`}
         onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
-        data-content={notificationContentNumber} // This is the red number indicator
+        data-content={notificationContentNumber}
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}

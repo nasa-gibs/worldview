@@ -55,6 +55,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
           ? state.number - state.numberOutagesUnseen
           : 0,
         numberOutagesUnseen: 0,
+        type: 'alert',
       };
     default:
       return state;
