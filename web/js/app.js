@@ -36,7 +36,6 @@ import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
 // Notifications
-import { addToLocalStorage } from './modules/notifications/util';
 import Notifications from './containers/notifications';
 import { outageNotificationsSeenAction } from './modules/notifications/actions';
 // Dependency CSS
@@ -68,12 +67,10 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
-    const {
-      kioskModeEnabled, notifications, numberOutagesUnseen,
-    } = this.props;
+    const { kioskModeEnabled, numberOutagesUnseen, object } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
       if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
-        this.openNotification(notifications, numberOutagesUnseen);
+        this.openNotification(object.outages, numberOutagesUnseen);
       }
     }
   }
@@ -201,7 +198,6 @@ function mapStateToProps(state) {
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
-    notifications,
     numberOutagesUnseen,
     numberUnseen,
     object,
@@ -221,14 +217,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setScreenInfo());
   },
   notificationClick: (obj, numberOutagesUnseen) => {
-    // Used to update local storage to reflect OUTAGES have been seen
-    const notificationsSeenObj = {
-      alerts: [],
-      layerNotices: [],
-      messages: [],
-      outages: obj.object.outages,
-    };
-
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
@@ -237,7 +225,6 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           if (numberOutagesUnseen > 0) {
             dispatch(outageNotificationsSeenAction());
-            addToLocalStorage(notificationsSeenObj);
           }
         },
       }),
@@ -260,7 +247,6 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   notificationClick: PropTypes.func,
-  notifications: PropTypes.object,
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
