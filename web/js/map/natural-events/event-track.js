@@ -160,7 +160,7 @@ function EventTrack () {
     });
     return overlayMapping;
   };
-
+  
   const removeTrackById = (mapArg, overlayMapping, track) => {
     const id = track?.id;
     if (overlayMapping[id]) {
@@ -171,7 +171,7 @@ function EventTrack () {
       mapArg.removeOverlay(track);
     }
   };
-
+  
   const removeAllTracks = (mapArg) => {
     if (!mapArg) return;
     const overlayMapping = createOverlayMapping(mapArg);
