@@ -219,7 +219,7 @@ export const getTrackLines = function(map, trackCoords, eventID, date, callback,
     insertFirst: true,
     stopEvent: false,
     element: svgEl,
-    id: 'event-track',
+    id: `event-track-${eventID}`,
   });
 };
 

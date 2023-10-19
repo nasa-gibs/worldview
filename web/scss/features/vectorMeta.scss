@@ -16,6 +16,7 @@
 }
 
 .vector-modal .modal-body {
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties */
   overflow-x: scroll;
   overflow-y: visible;
   padding: 0;

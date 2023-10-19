@@ -161,7 +161,7 @@ async function processEntries (colormap) {
 
       // If entry is served transparent, add it to the disabled array
       if (entry._attributes.transparent !== 'false') {
-        initializeDisabled.push(index)
+        initializeDisabled.push(refsList.length)
       }
 
       if (!entry._attributes.ref) {
