@@ -32,7 +32,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         return {
           ...state,
           number: getCount(notificationsByType),
-          numberUnseen: getCount(notificationsByType, true),
+          numberUnseen: getCount(notificationsByType),
           numberOutagesUnseen,
           type: getPriority(notificationsByType),
           isActive: true,
