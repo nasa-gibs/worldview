@@ -11,6 +11,7 @@ import {
   ARROW_UP,
   SET_PRELOAD,
   CLEAR_PRELOAD,
+  AUTO_IMAGERY_UPDATE,
 } from './constants';
 import { getSelectedDate } from './selectors';
 import { getMaxActiveLayersDate, outOfStepChange } from './util';
@@ -140,5 +141,11 @@ export function setPreload (preloaded, lastPreloadDate) {
     type: SET_PRELOAD,
     preloaded,
     lastPreloadDate,
+  };
+}
+export function setAutoUpdateInterval (interval) {
+  return {
+    type: AUTO_IMAGERY_UPDATE,
+    interval
   };
 }

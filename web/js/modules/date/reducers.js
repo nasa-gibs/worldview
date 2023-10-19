@@ -11,6 +11,7 @@ import {
   ARROW_UP,
   SET_PRELOAD,
   CLEAR_PRELOAD,
+  AUTO_IMAGERY_UPDATE,
 } from './constants';
 import util from '../../util/util';
 
@@ -28,6 +29,7 @@ export const dateReducerState = {
   timelineCustomModalOpen: false,
   animationCustomModalOpen: false,
   testNow: undefined,
+  autoUpdateInterval: 'OFF',
 };
 
 export function getInitialState(config) {
@@ -113,6 +115,11 @@ export function dateReducer(state = dateReducerState, action) {
         ...state,
         appNow: action.value,
       };
+    case AUTO_IMAGERY_UPDATE:
+      return {
+        ...state,
+        autoUpdateInterval: action.interval,
+      }
     default:
       return state;
   }
