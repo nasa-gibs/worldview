@@ -23,10 +23,16 @@ import {
   getTrackLines, getTrackPoint, getArrows, getClusterPointEl,
 } from './util';
 
-const removePointOverlays = (map, pointsAndArrows) => {
+const removePointOverlays = (map, pointsAndArrows, overlayMapping) => {
   lodashEach(pointsAndArrows, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
-      map.removeOverlay(pointOverlay);
+      if (overlayMapping[pointOverlay.getId()]) {
+        overlayMapping[pointOverlay.getId()].forEach((subPointsAndArrows) => {
+          map.removeOverlay(subPointsAndArrows);
+        });
+      } else {
+        map.removeOverlay(pointsAndArrows);
+      }
     }
   });
 };
@@ -143,20 +149,46 @@ function EventTrack () {
     showAllTracksRef.current = showAllTracks;
   }, [showAllTracks]);
 
+  const createOverlayMapping = (mapArg) => {
+    const overlayMapping = {};
+    mapArg.getOverlays().forEach((overlay) => {
+      if (!overlay.getId()) return;
+      if (!overlayMapping[overlay.getId()]) {
+        overlayMapping[overlay.getId()] = [];
+      }
+      overlayMapping[overlay.getId()].push(overlay);
+    });
+    return overlayMapping;
+  };
+
+  const removeTrackById = (mapArg, overlayMapping, track) => {
+    const id = track?.id;
+    if (overlayMapping[id]) {
+      overlayMapping[id].forEach((subTrack) => {
+        mapArg.removeOverlay(subTrack);
+      });
+    } else {
+      mapArg.removeOverlay(track);
+    }
+  };
+
   const removeAllTracks = (mapArg) => {
+    if (!mapArg) return;
+    const overlayMapping = createOverlayMapping(mapArg);
     allTrackDetailsRef.current?.forEach((trackDetail) => {
       const { pointsAndArrows } = trackDetail.newTrackDetails;
       const { track } = trackDetail.newTrackDetails;
-      mapArg.removeOverlay(track);
-      removePointOverlays(mapArg, pointsAndArrows);
+      removeTrackById(mapArg, overlayMapping, track);
+      removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
     });
   };
 
   const removeTrack = (mapArg) => {
     if (!mapArg) return;
+    const overlayMapping = createOverlayMapping(mapArg);
     const { track, pointsAndArrows } = trackDetailsRef.current;
-    mapArg.removeOverlay(track);
-    removePointOverlays(mapArg, pointsAndArrows);
+    removeTrackById(mapArg, overlayMapping, track);
+    removePointOverlays(mapArg, pointsAndArrows, overlayMapping);
 
     return {};
   };
@@ -326,7 +358,7 @@ function EventTrack () {
         if (prevMap) {
           update(null);
           removeTrack(prevMap);
-          removePointOverlays(prevMap, trackDetailsRef.current.pointsAndArrows);
+          removePointOverlays(prevMap, trackDetailsRef.current.pointsAndArrows, createOverlayMapping(prevMap));
           if (showAllTracksRef.current) {
             removeAllTracks(prevMap);
           }
