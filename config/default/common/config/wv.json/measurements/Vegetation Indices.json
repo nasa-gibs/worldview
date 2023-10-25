@@ -3,7 +3,7 @@
         "Vegetation Indices": {
             "id": "vegetation-indices",
             "title":    "Vegetation Indices",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Landsat/WELD, Terra/MISR",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Harmonized Landsat Sentinel-2 (HLS), Landsat/WELD, Terra/MISR",
             "sources": {
                   "Aqua/MODIS": {
                       "id": "aqua-modis",
@@ -29,6 +29,30 @@
                         "MODIS_Terra_L3_NDVI_Monthly",
                         "MODIS_Terra_L3_EVI_16Day",
                         "MODIS_Terra_L3_EVI_Monthly"
+                    ]
+                },
+                "HLS-Sentinel2": {
+                    "id": "HLS: Sentinel-2",
+                    "title": "HLS: Sentinel-2A & 2B/MSI",
+                    "description": "multi-mission/hls/Reflectance",
+                    "image": "",
+                    "settings": [
+                        "HLS_NDVI_Sentinel",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Sentinel-2A_Descending",
+                        "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "HLS-Landsat8": {
+                    "id": "HLS: Landsat 8 & 9",
+                    "title": "HLS: Landsat 8 & 9/OLI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "HLS_NDVI_Landsat",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Landsat-8_Descending",
+                        "OrbitTracks_Landsat-9_Descending"
                     ]
                 },
                 "Landsat/WELD": {
