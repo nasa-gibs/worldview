@@ -38,15 +38,6 @@ export default function ImagerySearch({ layer }) {
     return newerDates;
   };
 
-  const searchForImagery = async (layer) => {
-    setGranulesStatus('loading');
-    const olderDates = await getOlderGranules(layer);
-    const newerDates = await getNewerGranules(layer);
-    setGranulesStatus('loaded');
-    const dates = [...new Set([...olderDates, ...newerDates])].sort((a, b) => Date.parse(b) - Date.parse(a));
-    setGranuleDates(dates);
-  };
-
   const loadNewerDates = async (layer) => {
     setGranulesStatus('loading');
     const newerDates = await getNewerGranules(layer, granuleDates[0]);
