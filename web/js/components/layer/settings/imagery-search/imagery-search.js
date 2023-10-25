@@ -23,7 +23,7 @@ export default function ImagerySearch({ layer }) {
   const [granuleDates, setGranuleDates] = useState([]);
 
   const getOlderGranules = async (layer, refDate = selectedDate) => {
-    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=5`);
+    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=50`);
     const olderGranules = await olderResponse.json();
     const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -31,7 +31,7 @@ export default function ImagerySearch({ layer }) {
   };
 
   const getNewerGranules = async (layer, refDate = selectedDate) => {
-    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=5`);
+    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=50`);
     const newerGranules = await newerResponse.json();
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -47,12 +47,29 @@ export default function ImagerySearch({ layer }) {
     setGranuleDates(dates);
   };
 
+  const loadNewerDates = async (layer) => {
+    setGranulesStatus('loading');
+    const newerDates = await getNewerGranules(layer, granuleDates[0]);
+    const dates = [...granuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    setGranuleDates(dates);
+    setGranulesStatus('loaded');
+  };
+
+  const loadOlderDates = async (layer) => {
+    setGranulesStatus('loading');
+    const newerDates = await getOlderGranules(layer, granuleDates.at(-1));
+    const dates = [...granuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    setGranuleDates(dates);
+    setGranulesStatus('loaded');
+  };
+
   const handleSelection = (date) => {
     selectDate(new Date(date));
   };
 
   useEffect(async () => {
-    await searchForImagery(layer);
+    await loadOlderDates(layer);
+    await loadNewerDates(layer);
   }, []);
 
   const handleScroll = async (e) => {
@@ -61,36 +78,25 @@ export default function ImagerySearch({ layer }) {
     const scrollPercentage = scrollTop / position;
 
     if (scrollPercentage === 0) {
-      const newerDates = await getNewerGranules(layer, granuleDates[0]);
-      const dates = [...granuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-
-      setGranuleDates(dates);
+      loadNewerDates(layer);
     }
 
     if (scrollPercentage === 1) {
-      const olderDates = await getOlderGranules(layer, granuleDates.at(-1));
-      const dates = [...olderDates, ...granuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-
-      setGranuleDates(dates);
+      loadOlderDates(layer);
     }
   };
 
   return (
     <div className="imagery-search-container">
       <p>Imagery Dates</p>
-      {
-        granulesStatus === 'loaded'
-          ? (
-            <ul className="lazyload-list" onScroll={handleScroll}>
-              {[...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
-                <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
-                  {date}
-                </li>
-              ))}
-            </ul>
-          )
-          : granulesStatus && <Spinner>Loading...</Spinner>
-      }
+      {granulesStatus === 'loading' && <Spinner>Loading...</Spinner>}
+      <ul className="lazyload-list" onScroll={handleScroll}>
+        {[...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
+          <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
+            {date}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
