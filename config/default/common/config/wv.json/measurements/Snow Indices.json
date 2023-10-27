@@ -1,8 +1,8 @@
 {
   "measurements": {
-      "Snow Indicies": {
-          "id": "snow-indicies",
-          "title":    "Snow Indicies",
+      "Snow Indices": {
+          "id": "snow-indices",
+          "title":    "Snow Indices",
           "subtitle": "Aqua/MODIS, Terra/MODIS, Harmonized Landsat Sentinel-2 (HLS), NOAA-20/VIIRS, Suomi NPP/VIIRS",
           "sources": {
               "Suomi NPP/VIIRS": {
@@ -58,6 +58,7 @@
                 "image": "",
                 "settings": [
                     "HLS_NDSI_Sentinel",
+                    "HLS_Customizable_Sentinel",
                     "HLS_MGRS_Granule_Grid",
                     "OrbitTracks_Sentinel-2A_Descending",
                     "OrbitTracks_Sentinel-2B_Descending"
@@ -70,6 +71,7 @@
                 "image": "",
                 "settings": [
                     "HLS_NDSI_Landsat",
+                    "HLS_Customizable_Landsat",
                     "HLS_MGRS_Granule_Grid",
                     "OrbitTracks_Landsat-8_Descending",
                     "OrbitTracks_Landsat-9_Descending"

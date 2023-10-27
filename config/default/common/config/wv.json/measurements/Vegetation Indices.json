@@ -38,6 +38,7 @@
                     "image": "",
                     "settings": [
                         "HLS_NDVI_Sentinel",
+                        "HLS_Customizable_Sentinel",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Sentinel-2A_Descending",
                         "OrbitTracks_Sentinel-2B_Descending"
@@ -50,6 +51,7 @@
                     "image": "",
                     "settings": [
                         "HLS_NDVI_Landsat",
+                        "HLS_Customizable_Landsat",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Landsat-8_Descending",
                         "OrbitTracks_Landsat-9_Descending"

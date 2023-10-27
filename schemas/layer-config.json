@@ -124,6 +124,7 @@
             "Liquid Water Equivalent",
             "Mammal Richness",
             "Methane",
+            "Moisture Indices",
             "Net Ecosystem CO2 Exchange",
             "Net Migration",
             "Nitric Acid",
@@ -158,6 +159,7 @@
             "Snow Cover",
             "Snow Depth",
             "Snow Extent",
+            "Snow Indices",
             "Snow Mass",
             "Snow Water Equivalent",
             "Socioeconomic",
@@ -180,6 +182,7 @@
             "Vegetation Light Use Efficiency",
             "Volcano Hazard",
             "Water Bodies",
+            "Water Indices",
             "Water Vapor",
             "Wind Speed"
           ]
