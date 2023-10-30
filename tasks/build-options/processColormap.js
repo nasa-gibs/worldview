@@ -160,7 +160,7 @@ async function processEntries (colormap) {
       const a = 255
 
       // If entry is served transparent, add it to the disabled array
-      if (entry._attributes.transparent !== 'false') {
+      if (entry._attributes.transparent !== 'false' && mapType === 'classification') {
         initializeDisabled.push(refsList.length)
       }
 

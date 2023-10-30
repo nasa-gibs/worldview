@@ -13,6 +13,7 @@
                     "Human Built-up And Settlement Extent",
                     "Land Surface Reflectance",
                     "Land Surface Temperature",
+                    "Moisture Indices",
                     "Population Density",
                     "Precipitation Estimate",
                     "Precipitation Rate",
@@ -21,11 +22,13 @@
                     "Reservoirs",
                     "Settlements",
                     "Snow Cover",
+                    "Snow Indices",
                     "Snow Water Equivalent",
                     "Soil Moisture",
                     "Urban Extents",
                     "Urban Expansion",
-                    "Vegetation Indices"
+                    "Vegetation Indices",
+                    "Water Indices"
                 ]
             }
         }
