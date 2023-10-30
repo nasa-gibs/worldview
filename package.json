@@ -213,6 +213,10 @@
     "url-template": "^3.1.0",
     "what-input": "^5.2.12"
   },
+  "overrides": {
+    "semver": "7.5.4",
+    "word-wrap": "1.2.5"
+  },
   "browserslist": [
     "last 2 versions",
     "not IE 11",
