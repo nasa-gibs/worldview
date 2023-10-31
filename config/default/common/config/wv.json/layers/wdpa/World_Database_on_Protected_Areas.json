@@ -17,12 +17,6 @@
       "projections": {
         "geographic": {
           "source": "FIRMS:xyz"
-        },
-        "arctic": {
-          "source": "FIRMS:xyz"
-        },
-        "antarctic": {
-          "source": "FIRMS:xyz"
         }
       },
       "palette": {
