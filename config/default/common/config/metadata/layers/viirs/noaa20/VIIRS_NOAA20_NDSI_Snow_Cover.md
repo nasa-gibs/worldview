@@ -3,4 +3,4 @@ likely errors and flag uncertain snow detections.
 
 The Snow Cover (Normalized Difference Snow Index) layer is available from both the joint NASA/NOAA Suomi NPP (VNP10) and NOAA-20 (VJ110) satellites. The sensor resolution is 375 m, imagery resolution is 500 m, and the temporal resolution is daily.
 
-References: VJ110 [doi:10.5067/JNKFY4XFDHRN](https://doi.org/10.5067/JNKFY4XFDHRN)
+References: VJ110_NRT [doi:10.5067/VIIRS/VJ110_NRT.002](https://doi.org/10.5067/VIIRS/VJ110_NRT.002); VJ110 [doi:10.5067/JNKFY4XFDHRN](https://doi.org/10.5067/JNKFY4XFDHRN)
