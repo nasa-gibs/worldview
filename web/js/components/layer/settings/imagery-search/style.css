@@ -14,3 +14,8 @@
     background-color: black;
   }
 }
+
+.imagery-search-spinner {
+  height: 13px;
+  width: 100%;
+}
