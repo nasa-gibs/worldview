@@ -74,7 +74,7 @@ export default function ImagerySearch({ layer }) {
     const granuleDates = [...olderGranuleDates, ...newerGranuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
     setGranuleDates(granuleDates);
   }, [olderGranuleDates, newerGranuleDates]);
-  
+
   const renderDates = () => {
     const renderedDates = [...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
       <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
