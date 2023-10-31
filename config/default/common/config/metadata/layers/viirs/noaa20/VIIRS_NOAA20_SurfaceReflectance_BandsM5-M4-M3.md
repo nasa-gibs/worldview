@@ -4,4 +4,4 @@ These images are called true-color or natural color because this combination of 
 
 The Land Surface Reflectance product is available from both the joint NASA/NOAA Suomi NPP (VNP09GA) and NOAA-20 (VJ109GA) satellites. The sensor resolution is 750 m, the imagery resolution is 500 m, and the temporal resolution is daily.
 
-References: VJ109GA [doi:10.5067/VIIRS/VJ109GA.002](https://doi.org/10.5067/VIIRS/VJ109GA.002)
+References: VJ109_NRT [doi:10.5067/VIIRS/VJ109_NRT.002](https://doi.org/10.5067/VIIRS/VJ109_NRT.002); VJ109GA [doi:10.5067/VIIRS/VJ109GA.002](https://doi.org/10.5067/VIIRS/VJ109GA.002)

@@ -4,4 +4,4 @@ Vegetation is very reflective in the near infrared (Band I2), and absorbent in B
 
 The Land Surface Reflectance product is available from both the joint NASA/NOAA Suomi NPP (VNP09GA) and NOAA-20 (VJ109GA) satellites. The sensor resolution is 375 m, imagery resolution is 250 m, and the temporal resolution is daily.
 
-References: VNP09GA [doi:10.5067/VIIRS/VNP09GA.002](https://doi.org/10.5067/VIIRS/VNP09GA.002)
+References: VNP09_NRT [doi:10.5067/VIIRS/VNP09_NRT.002](https://doi.org/10.5067/VIIRS/VNP09_NRT.002); VNP09GA [doi:10.5067/VIIRS/VNP09GA.002](https://doi.org/10.5067/VIIRS/VNP09GA.002)

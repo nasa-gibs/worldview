@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "4.17.1",
+  "version": "4.18.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -212,6 +212,10 @@
     "upng-js": "^2.1.0",
     "url-template": "^3.1.0",
     "what-input": "^5.2.12"
+  },
+  "overrides": {
+    "semver": "7.5.4",
+    "word-wrap": "1.2.5"
   },
   "browserslist": [
     "last 2 versions",
