@@ -2,4 +2,4 @@ The Snow Cover (Normalized Difference Snow Index (NDSI)) layer shows an estimate
 
 The Snow Cover (Normalized Difference Snow Index) layer is available from both the joint NASA/NOAA Suomi NPP (VNP10) and NOAA-20 (VJ110) satellites. The sensor resolution is 375 m, imagery resolution is 500 m, and the temporal resolution is daily.
 
-References: VNP10 [doi:10.5067/ZZMS6RM8LQS9](https://doi.org/10.5067/ZZMS6RM8LQS9)
+References: VNP10_NRT [doi:10.5067/VIIRS/VNP10_NRT.002](https://doi.org/10.5067/VIIRS/VNP10_NRT.002); VNP10 [doi:10.5067/ZZMS6RM8LQS9](https://doi.org/10.5067/ZZMS6RM8LQS9)
