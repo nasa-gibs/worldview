@@ -4,4 +4,4 @@ detections.
 
 The Sea Ice Extent layer is available from both the joint NASA/NOAA Suomi NPP (VNP29) and NOAA-20 (VJ110) satellites. The sensor resolution is 375 m, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: VNP29 [doi:10.5067/GKJ486GAV3HH](https://doi.org/10.5067/GKJ486GAV3HH)
+References: VNP29_NRT [doi:10.5067/VIIRS/VNP29_NRT.002](https://doi.org/10.5067/VIIRS/VNP29_NRT.002); VNP29 [doi:10.5067/GKJ486GAV3HH](https://doi.org/10.5067/GKJ486GAV3HH)

@@ -4,4 +4,4 @@ The VJ121 product is developed synergistically with the Moderate Resolution Imag
 
 The Land Surface Temperature (Night) layer is available from both the joint NASA/NOAA Suomi NPP (VNP21) and NOAA-20 (VJ121) satellites. The sensor resolution is 750 m, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: VNP21 [doi:10.5067/VIIRS/VNP21.002](https://doi.org/10.5067/VIIRS/VNP21.002)
+References: VNP21_NRT [doi:10.5067/VIIRS/VNP21_NRT.002](https://doi.org/10.5067/VIIRS/VNP21_NRT.002); VNP21 [doi:10.5067/VIIRS/VNP21.002](https://doi.org/10.5067/VIIRS/VNP21.002)

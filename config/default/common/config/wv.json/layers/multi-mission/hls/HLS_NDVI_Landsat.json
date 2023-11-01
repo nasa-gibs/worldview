@@ -7,7 +7,7 @@
         "description": "multi-mission/hls/HLS_NDVI_Landsat",
         "tags": "corrected surface landsat oli l30 ndvi",
         "group": "overlays",
-        "layergroup": "Land Surface Reflectance",
+        "layergroup": "Vegetation Indices",
         "format": "image/png",
         "type": "ttiler",
         "period": "daily",
