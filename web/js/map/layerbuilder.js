@@ -804,7 +804,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const urlParams = `${def.layerName}/${z}/${y}/${x}`;
 
-      return `${source.url}/${urlParams}.png`;
+      return `${source?.url}/${urlParams}.png`;
     };
 
     const xyzSourceOptions = {
