@@ -771,11 +771,13 @@ export function getZotsForActiveLayers(state) {
   lodashEach(getActiveLayersMap(state), (layer) => {
     if (layer.projections[projection]) {
       const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
+      const underZoomValue = Math.round((layer.minZoom - zoom) * 100) / 100;
       const layerNotices = getLayerNoticesForLayer(layer.id, notifications);
-      if (overZoomValue || layerNotices.length) {
+      if (overZoomValue || layerNotices.length || underZoomValue > 0) {
         zotObj[layer.id] = {
           overZoomValue,
           layerNotices,
+          underZoomValue,
         };
       }
     }

@@ -762,7 +762,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = new OlLayerTile({
       source: xyzSource,
       className,
-      minZoom: 7,
+      minZoom: def.minZoom,
       extent: maxExtent,
     });
 

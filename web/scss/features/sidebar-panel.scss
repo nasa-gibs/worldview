@@ -449,6 +449,14 @@ li.item.productsitem.inmotion,
     }
   }
 
+  &.underzoom {
+    background: #003ada;
+
+    &:hover {
+      background: #0095ff;
+    }
+  }
+
   &.layer-notice {
     background-color: #f60;
 

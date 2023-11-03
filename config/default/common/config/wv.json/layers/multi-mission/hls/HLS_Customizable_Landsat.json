@@ -21,6 +21,7 @@
       },
       "disableSnapshot": true,
       "wrapX": false,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",
