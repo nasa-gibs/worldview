@@ -26,36 +26,35 @@ export default function ImagerySearch({ layer }) {
   const [granulesEndStatus, setGranulesEndStatus] = useState(undefined);
   const [olderGranuleDates, setOlderGranuleDates] = useState([]);
   const [newerGranuleDates, setNewerGranuleDates] = useState([]);
+  const [page, setPage] = useState(1);
 
-  const getOlderGranules = async (layer, refDate = selectedDate, page = 1) => {
-    console.log(page);
-    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${page}`);
+  const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`);
     const olderGranules = await olderResponse.json();
     const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
     return olderDates;
   };
 
-  const getNewerGranules = async (layer, refDate = selectedDate, page = 25) => {
-    console.log(page);
-    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${page}`);
+  const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`);
     const newerGranules = await newerResponse.json();
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
     return newerDates;
   };
 
-  const loadNewerDates = async (layer, page = 1) => {
+  const loadNewerDates = async (layer, pageNum = 1) => {
     setGranulesStartStatus('loading');
-    const newerDates = await getNewerGranules(layer, newerGranuleDates[0], page);
+    const newerDates = await getNewerGranules(layer, newerGranuleDates[0], pageNum);
     const dates = [...newerGranuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
     setNewerGranuleDates(dates);
     setGranulesStartStatus('loaded');
   };
 
-  const loadOlderDates = async (layer, page = 1) => {
+  const loadOlderDates = async (layer, pageNum = 1) => {
     setGranulesEndStatus('loading');
-    const olderDates = await getOlderGranules(layer, olderGranuleDates.at(-1), page);
+    const olderDates = await getOlderGranules(layer, olderGranuleDates.at(-1), pageNum);
     const dates = [...olderGranuleDates, ...olderDates].sort((a, b) => Date.parse(b) - Date.parse(a));
     setOlderGranuleDates(dates);
     setGranulesEndStatus('loaded');
@@ -66,19 +65,15 @@ export default function ImagerySearch({ layer }) {
   };
 
   useEffect(async () => {
-    // await loadOlderDates(layer);
-    // await loadNewerDates(layer);
-    let i = 0;
-    while (listRef.current.scrollHeight <= listRef.current.clientHeight) {
-      console.log(listRef.current.scrollHeight, listRef.current.clientHeight);
-      i++;
-      loadOlderDates(layer, i);
-      await loadNewerDates(layer, i);
+    if (listRef.current.scrollHeight <= listRef.current.clientHeight) {
+      loadOlderDates(layer, page);
+      await loadNewerDates(layer, page);
+      setPage(page + 1);
+    } else {
+      listRef.current.scrollTop = listRef.current.scrollHeight / 2;
     }
-    console.log(listRef.current.scrollHeight, listRef.current.clientHeight);
-    listRef.current.scrollTop = listRef.current.scrollHeight / 2;
-  }, []);
-  
+  }, [page]);
+
   const renderDates = () => {
     const granuleDates = [...olderGranuleDates, ...newerGranuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
     const renderedDates = [...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
