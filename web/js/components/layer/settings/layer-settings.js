@@ -340,7 +340,7 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
-      zot
+      zot,
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;

@@ -8,7 +8,7 @@ function GranuleAlertModalBody() {
         <Col>
 
           <h2>
-            Why can't I see the data for this layer?
+            Why can&apos;t I see the data for this layer?
           </h2>
         </Col>
       </Row>

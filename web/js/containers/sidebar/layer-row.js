@@ -2,11 +2,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
-import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
@@ -92,24 +91,23 @@ function LayerRow (props) {
     updateActiveChartingLayer,
   } = props;
 
-  
   const encodedLayerId = util.encodeId(layer.id);
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
   const collectionIdentifierDescription = 'Dataset version and the source of data processing, Near Real-Time (NRT) or Standard (STD)';
-  
+
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
-  
+
   const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
   const layerInfoBtnTitle = 'View Description';
   const [showButtons, toggleShowButtons] = useState(isMobile);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
   const [runningDataObj, setRunningDataObj] = useState({});
-  const [disabled, setDisabled] = useState(isDisabled)
-  const [activeZot, setActiveZot] = useState(zot)
+  const [disabled, setDisabled] = useState(isDisabled);
+  const [activeZot, setActiveZot] = useState(zot);
   const [showZoomAlert, setShowZoomAlert] = useState(false);
   const [showGranuleAlert, setShowGranuleAlert] = useState(false);
   const map = useSelector((state) => state.map);
@@ -120,24 +118,24 @@ function LayerRow (props) {
       const res = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${selectedDate.toISOString()}/P0Y0M0DT23H59M&sort_key=-start_date&pageSize=1`);
       const granules = await res.json();
       if (!granules?.feed?.entry?.length) {
-        setActiveZot({ hasGranules: false })
-        setShowGranuleAlert(true)
+        setActiveZot({ hasGranules: false });
+        setShowGranuleAlert(true);
       } else {
-        setActiveZot(zot)
-        setShowGranuleAlert(false)
+        setActiveZot(zot);
+        setShowGranuleAlert(false);
       }
       if (zot?.underZoomValue) {
-        setShowZoomAlert(true)
+        setShowZoomAlert(true);
       } else {
-        setShowZoomAlert(false)
+        setShowZoomAlert(false);
       }
       if (!granules?.feed?.entry?.length || zot?.underZoomValue) {
-        setDisabled(true)
+        setDisabled(true);
       } else {
-        setDisabled(isDisabled)
+        setDisabled(isDisabled);
       }
     }
-  }, [map.extent, zot])
+  }, [map.extent, zot]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
@@ -474,21 +472,25 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && <AlertUtil
-          id="zoom-alert"
-          isOpen
-          title="Bad Zoom Level"
-          message="Data is not available at this zoom level."
-          onDismiss={() => setShowZoomAlert(false)}
-        />}
-        {showGranuleAlert && <AlertUtil
-          id="granule-alert"
-          isOpen
-          title="No Data Available"
-          message="Data is not available at this location or date."
-          onDismiss={() => setShowGranuleAlert(false)}
-          onClick={openGranuleAlertModal}
-        />}
+        {showZoomAlert && (
+          <AlertUtil
+            id="zoom-alert"
+            isOpen
+            title="Bad Zoom Level"
+            message="Data is not available at this zoom level."
+            onDismiss={() => setShowZoomAlert(false)}
+          />
+        )}
+        {showGranuleAlert && (
+          <AlertUtil
+            id="granule-alert"
+            isOpen
+            title="No Data Available"
+            message="Data is not available at this location or date."
+            onDismiss={() => setShowGranuleAlert(false)}
+            onClick={openGranuleAlertModal}
+          />
+        )}
       </div>
     </>
   );
@@ -614,7 +616,7 @@ const mapDispatchToProps = (dispatch) => ({
         timeout: 150,
         bodyComponentProps: {
           layer,
-          zot
+          zot,
         },
       }),
     );

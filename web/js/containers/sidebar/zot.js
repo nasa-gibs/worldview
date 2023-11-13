@@ -9,7 +9,12 @@ export default function Zot (props) {
   let tooltipString = '';
   const delay = isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 500 };
   if (zot) {
-    const { overZoomValue, layerNotices, underZoomValue, hasGranules } = zot;
+    const {
+      overZoomValue,
+      layerNotices,
+      underZoomValue,
+      hasGranules,
+    } = zot;
     if (overZoomValue) {
       className = 'zot overzoom';
       tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level. <br/>`;
