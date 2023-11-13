@@ -1,6 +1,7 @@
 import EventsAlertModalBody from '../../components/events/alert-body';
 import CompareAlertModalBody from '../../components/compare/alert';
 import VectorZoomAlertModalBody from '../../components/feature-alert/vector-alert-modal';
+import GranuleAlertModalBody from '../../components/feature-alert/granuleAlertModal';
 
 export const DISABLE_VECTOR_ZOOM_ALERT = 'ALERTS/DISABLE_VECTOR_ZOOM_ALERT';
 export const ACTIVATE_VECTOR_ZOOM_ALERT = 'ALERTS/ACTIVATE_VECTOR_ZOOM_ALERT';
@@ -38,6 +39,17 @@ export const MODAL_PROPERTIES = {
       size: 'lg',
       clickableBehindModal: true,
       bodyComponent: VectorZoomAlertModalBody,
+      desktopOnly: true,
+    },
+  },
+  granuleModalProps: {
+    id: 'granule_layer_info',
+    props: {
+      headerText: 'Layer data is not visible at this location or date.',
+      backdrop: false,
+      size: 'lg',
+      clickableBehindModal: true,
+      bodyComponent: GranuleAlertModalBody,
       desktopOnly: true,
     },
   },

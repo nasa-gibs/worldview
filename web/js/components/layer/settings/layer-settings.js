@@ -340,11 +340,12 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
+      zot
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
     const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
-    const granuleMetadata = Object.hasOwn(layer, 'collection_concept_id');
+    const granuleMetadata = Object.hasOwn(layer, 'collection_concept_id') && !zot?.underZoomValue;
     const layerGroup = layer.layergroup;
 
     if (layer.type !== 'vector') {
@@ -490,4 +491,5 @@ LayerSettings.propTypes = {
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,
+  zot: PropTypes.object,
 };

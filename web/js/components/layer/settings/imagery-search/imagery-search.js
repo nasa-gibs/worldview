@@ -100,15 +100,15 @@ export default function ImagerySearch({ layer }) {
 
   return (
     <div className="imagery-search-container">
-      <p>Imagery Dates</p>
+      <p>Available Imagery Dates</p>
       <ul ref={listRef} className="lazyload-list" onScroll={handleScroll}>
-        <div ref={startRef} className="imagery-search-spinner">
+        <li ref={startRef} className="imagery-search-spinner">
           {granulesStartStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
-        </div>
+        </li>
         {renderDates()}
-        <div ref={endRef} className="imagery-search-spinner">
+        <li ref={endRef} className="imagery-search-spinner">
           {granulesEndStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
-        </div>
+        </li>
       </ul>
     </div>
   );
