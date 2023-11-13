@@ -52,7 +52,6 @@ Windows users will also need the following:
 
 - [Git Bash](https://git-scm.com/downloads)
 
-
 ## Usage
 
 ```bash
