@@ -77,10 +77,10 @@
     "upload": "node tasks/util/upload.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.3",
-    "@babel/eslint-parser": "^7.23.3",
-    "@babel/plugin-transform-class-properties": "^7.23.3",
-    "@babel/preset-env": "^7.23.3",
+    "@babel/core": "^7.23.2",
+    "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-transform-class-properties": "^7.22.5",
+    "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@playwright/test": "^1.39.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
