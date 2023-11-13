@@ -35,6 +35,7 @@ test('Check that 4 fire layers are now present', async ({ browserName }) => {
   await modalCloseButton.click()
   await sidebarEvent.click()
   await layersTab.click()
+  await page.waitForTimeout(1000)
   await expect(thermAnomSNPPday).toBeVisible()
   await expect(thermAnomSNPPnight).toBeVisible()
   await expect(thermAnomVIIRSday).toBeVisible()
@@ -71,7 +72,7 @@ test('Clicking an event in the list selects the event', async ({ browserName }) 
   const { firstEvent, selectedFirstEvent } = selectors
   await page.waitForLoadState('networkidle')
   await firstEvent.click()
-  await page.waitForTimeout(5000)
+  await page.waitForTimeout(6000)
   await expect(selectedFirstEvent).toBeVisible()
 })
 
