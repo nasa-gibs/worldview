@@ -23,7 +23,7 @@ jobs:
 
       - name: Install NPM Dependencies
         run: |
-          npm ci
+          npm ci --verbose
 
       - name: Linting and Unit testing
         run: |
