@@ -14,6 +14,7 @@
       "disableSnapshot": true,
       "layergroup": "Reference",
       "wrapX": true,
+      "maxZoom": 12,
       "projections": {
         "geographic": {
           "source": "FIRMS:xyz"

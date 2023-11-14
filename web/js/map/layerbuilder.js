@@ -811,6 +811,7 @@ export default function mapLayerBuilder(config, cache, store) {
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
+      maxZoom: def.maxZoom,
     };
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
