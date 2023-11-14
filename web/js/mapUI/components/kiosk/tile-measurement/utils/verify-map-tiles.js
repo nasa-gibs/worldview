@@ -40,8 +40,10 @@ export default function countTilesForSpecifiedLayers (ui, layersToCheck) {
   const view = map.getView();
   const layers = map.getLayers().getArray();
   const matchingLayers = layers.filter((layer) => {
+    if (layer.wv && layer.wv.id){
     const layerId = layer.wv.id;
     return layersToCheck.includes(layerId);
+    }
   });
 
   let totalExpectedTileCount = 0;

@@ -33,7 +33,7 @@ function TileMeasurement({ ui }) {
   // #2 Filter all of the active layers that are also in the layersToMeasure array
   const findLayersToMeasure = () => {
     const measurementLayersExtra = activeLayers.filter((layer) => layersToMeasure.includes(layer.id));
-    // condense this step into the above filter later
+
     const measurementLayers = measurementLayersExtra.map((layer) => ({ id: layer.id, period: layer.period }));
     if (measurementLayers.length) console.log(`${measurementLayers.length} EIC layer(s) found to measure...`);
     return measurementLayers;
@@ -181,7 +181,6 @@ function TileMeasurement({ ui }) {
       verifyTilesAndHandleErrors(false);
     } catch (error) {
       console.error('Error calculating measurements:', error);
-      // verifyTilesAndHandleErrors(true);
     }
   };
 
