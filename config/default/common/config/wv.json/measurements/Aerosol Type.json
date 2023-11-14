@@ -3,7 +3,7 @@
         "Aerosol Type": {
             "id": "aerosol-type",
             "title":    "Aerosol Type",
-            "subtitle": "Suomi NPP/VIIRS",
+            "subtitle": "Suomi NPP/VIIRS, NOAA-20/VIIRS",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
@@ -13,6 +13,16 @@
                     "settings": [
                         "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Best_Estimate",
+                        "OrbitTracks_NOAA20_Ascending"
                     ]
                 }
             }
