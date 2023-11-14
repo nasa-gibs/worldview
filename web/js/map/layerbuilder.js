@@ -264,6 +264,10 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected: { id, crs, maxExtent } } } = state;
 
     const projectionURL = `images/map/bluemarble-${id}.jpg`;
+    // const projectionURL = `images/map/bluemarble-test.jpg`;
+
+
+    console.log(`projectionURL === ${projectionURL}`)
 
     const layer = new ImageLayer({
       source: new Static({
