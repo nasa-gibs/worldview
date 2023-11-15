@@ -21,6 +21,9 @@
     "WDPA:wms": {
       "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
     },
+    "FIRMS:xyz": {
+      "url": "https://firms.modaps.eosdis.nasa.gov/layers"
+    },
     "DDV": {
       "url": "https://kv9drwgv6l.execute-api.us-west-2.amazonaws.com/",
       "matrixSets": {
