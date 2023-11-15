@@ -6,7 +6,15 @@
       <ColorMapEntry rgb="34,154,0" transparent="false" ref="1" />
     </Entries>
     <Legend type="classification">
-      <LegendEntry rgb="34,154,0" id="1" tooltip="Protected Area" label="Protected Area" showLabel="true" />
+      <LegendEntry rgb="34,154,0" id="1" tooltip="Terrestrial Protected Area" label="Terrestrial Protected Area" showLabel="true" />
+    </Legend>
+  </ColorMap>
+  <ColorMap title="Protected Area">
+    <Entries>
+      <ColorMapEntry rgb="0, 110, 255" transparent="false" ref="1" />
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0, 110, 255" id="1" tooltip="Marine Protected Area" label="Marine Protected Area" showLabel="true" />
     </Legend>
   </ColorMap>
 </ColorMaps>
