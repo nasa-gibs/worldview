@@ -4,7 +4,7 @@ End-to-end tests are integrated into our CI and are required to pass before a su
 
 ## Scripts
 
-- `e2e` :  Builds WV and runs the end-to-end tests for Firefox & Chromium in a Docker container
+- `e2e` : Builds WV and runs the end-to-end tests for Firefox & Chromium in a Docker container
 
 See the [Docker](docker.md) page for more information.
 
@@ -23,7 +23,7 @@ To run Playwright tests locally you will need to run `npx playwright install` wh
 Playwright commands can be used to run the entire test suite, individual tests and launch different features.
 
 - `npx playwright test` : Runs all tests headless
-- `npx playwright test --headed` : Runs all tests headless
+- `npx playwright test --headed` : Runs all tests in an open browser
 - `npx playwright test --project=firefox` : Run all tests headless for specific browser
 - `npx playwright test --headed --project=firefox` : Run all tests headed for specific browser
 - `npx playwright test compare-test.spec.js` : Run individual test headless
@@ -88,6 +88,7 @@ let selectors
 
 const url = 'http://localhost:3000/?t=2020-07-04'
 ```
+
 - Each test file must import `test` & `expect` from the `@playwright/test` library
 - `createSelectors` is how we import the global selectors from the `selectors.js` file
 - `assertCategories` is a Worldview specific hook. We can import any hooks we need for our test here
@@ -107,6 +108,7 @@ test.afterAll(async () => {
   await page.close()
 })
 ```
+
 - The `test.describe` property must be configured with `'serial'` to make the tests run in the order that they are written
 - The `beforeAll` hook is where we will define our `page` and `selectors` variable before all of our tests run. The `page` variable represents the current state of the browser
 - The `afterAll` hook is crucial to make sure the next test file is run properly. We close the page after all the tests in the file have run
@@ -133,6 +135,7 @@ test('Recent tab shows layers that were selected', async () => {
   await expect(aodSearchRow).toBeVisible()
 })
 ```
+
 - Each test is an async function that requires a description parameter
 - We can destructure the variables we need from the selectors object
 - For elements that are not defined in the `selectors.js` file you can use `page.locator()` or any other locator. A full list can be found in the [Playwright Locators docs](https://playwright.dev/docs/locators)
