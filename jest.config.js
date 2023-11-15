@@ -10,7 +10,7 @@ module.exports = {
     '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js'
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox|node-fetch|data-uri-to-buffer|fetch-blob|formdata-polyfill)/)'
+    'node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox|node-fetch|data-uri-to-buffer|fetch-blob|formdata-polyfill|color-space|color-rgba|color-parse)/)'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/e2e/'

@@ -791,6 +791,44 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createXYZLayer = (def, options, day, state) => {
+    const { proj: { selected }, date } = state;
+    const { maxExtent, crs } = selected;
+
+    const source = config.sources[def.source];
+
+    const tileUrlFunction = (tileCoord) => {
+      const z = tileCoord[0] - 1;
+      const x = tileCoord[1];
+      const y = tileCoord[2];
+
+      const urlParams = `${def.layerName}/${z}/${y}/${x}`;
+
+      return `${source?.url}/${urlParams}.png`;
+    };
+
+    const xyzSourceOptions = {
+      crossOrigin: 'anonymous',
+      projection: get(crs),
+      tileUrlFunction,
+      maxZoom: def.maxZoom,
+    };
+
+    const xyzSource = new OlSourceXYZ(xyzSourceOptions);
+
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    const className = `${def.id} ${requestDate}`;
+
+    const layer = new OlLayerTile({
+      source: xyzSource,
+      className,
+      extent: maxExtent,
+    });
+
+    return layer;
+  };
+
+
   /**
    * Create a new OpenLayers Layer
    * @param {object} def
@@ -852,6 +890,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'ttiler':
             layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'xyz':
+            layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
