@@ -22,7 +22,7 @@
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Best_Estimate",
-                        "OrbitTracks_NOAA20_Ascending"
+                        "OrbitTracks_NOAA-20_Ascending"
                     ]
                 }
             }

@@ -101,7 +101,7 @@
                         "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean",
                         "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
-                        "OrbitTracks_NOAA20_Ascending"
+                        "OrbitTracks_NOAA-20_Ascending"
                       ]
                 },
                 "MERRA-2": {
