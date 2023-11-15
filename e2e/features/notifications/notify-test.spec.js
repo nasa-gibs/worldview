@@ -45,7 +45,7 @@ test('Verify that layer notices don\'t show up in the notification list or contr
   await page.goto(url)
   await modalCloseButton.click()
   await infoButtonIcon.click()
-  const badge = await page.getByRole('button', { name: 'Notifications 2' });
+  const badge = await page.getByRole('button', { name: 'Notifications 2' })
   await expect(badge).toBeVisible()
   await expect(badge).toContainText('2')
 })
