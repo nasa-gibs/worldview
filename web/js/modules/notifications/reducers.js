@@ -56,7 +56,6 @@ export function notificationsReducer(state = notificationReducerState, action) {
         layerNotices: state.object.layerNotices,
         outages: [],
       };
-      console.log('state', state);
       return {
         ...state,
         numberUnseen: state.number - state.numberOutagesUnseen >= 0
