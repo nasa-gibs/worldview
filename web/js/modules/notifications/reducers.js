@@ -31,6 +31,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         const numberOutagesUnseen = notificationsByType.outages.length;
         return {
           ...state,
+          total: getCount(notificationsByType),
           number: getCount(notificationsByType),
           numberUnseen: getCount(notificationsByType),
           numberOutagesUnseen,
@@ -55,6 +56,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         layerNotices: state.object.layerNotices,
         outages: [],
       };
+      console.log('state', state);
       return {
         ...state,
         numberUnseen: state.number - state.numberOutagesUnseen >= 0
