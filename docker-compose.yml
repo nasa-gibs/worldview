@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  app:
+    container_name: worldview
+    build: .
+    ports:
+      - '3000:3000'
+    command: /bin/bash -c "npm run start & sleep 60 && ./tasks/docker-ci.sh"

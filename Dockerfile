@@ -1,41 +1,16 @@
-FROM almalinux:9.1
+# keep this updated to match the current version of playwright
+FROM mcr.microsoft.com/playwright:v1.39.0-jammy
 
-RUN dnf install -y epel-release && \
-    dnf --enablerepo=crb install giflib-devel -y && \
-    dnf install -y \
-    "@Development Tools" \
-    cairo-devel \
-    firefox \
-    httpd \
-    libjpeg-turbo-devel \
-    java-1.8.0-openjdk \
-    git \
-    stow \
-    which \
-    xorg-x11-server-Xvfb \
-    wget \
-    libffi-devel \
-    openssl-devel \
-    xz
-RUN mkdir -p /usr/local/nvm
-ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=20.9.0
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
-    . "$NVM_DIR/nvm.sh" && \
-    nvm install v${NODE_VERSION} && \
-    nvm use v${NODE_VERSION} && \
-    nvm alias default v${NODE_VERSION}
+WORKDIR /app
 
-ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+COPY package*.json ./
 
-FROM mcr.microsoft.com/playwright:focal
+COPY tasks ./tasks
 
-WORKDIR /build
+RUN npm install
 
-RUN mkdir -p /build/node_modules && \
-    npm install \
-    @playwright/test \
-    playwright-firefox
+COPY . .
 
-EXPOSE 80
-CMD  tail -f /dev/null
+RUN npm run build
+
+EXPOSE 3000
