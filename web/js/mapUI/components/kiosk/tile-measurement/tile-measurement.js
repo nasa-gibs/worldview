@@ -33,7 +33,7 @@ function TileMeasurement({ ui }) {
   // #2 Filter all of the active layers that are also in the layersToMeasure array
   const findLayersToMeasure = () => {
     const measurementLayersExtra = activeLayers.filter((layer) => layersToMeasure.includes(layer.id));
-    // condense this step into the above filter later
+
     const measurementLayers = measurementLayersExtra.map((layer) => ({ id: layer.id, period: layer.period }));
     if (measurementLayers.length) console.log(`${measurementLayers.length} EIC layer(s) found to measure...`);
     return measurementLayers;
@@ -128,8 +128,10 @@ function TileMeasurement({ ui }) {
 
   const verifyTilesAndHandleErrors = (abortProceedure) => {
     console.log('Verifying tiles on map...');
+
     const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
     const loadedTiles = tileCount.totalLoadedTileCount > 0;
+    console.log(`Total tiles loaded: ${tileCount.totalLoadedTileCount} and abortProceedure === ${abortProceedure}}`);
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
       setEICMeasurementComplete();
     }
@@ -139,7 +141,7 @@ function TileMeasurement({ ui }) {
     } else if (loadedTiles && abortProceedure) {
       console.log('EIC measure process aborted... Loaded map tiles found... Leaving map as is...');
       setEICMeasurementAborted();
-    } else if (!loadedTiles && abortProceedure) {
+    } else if (!loadedTiles) {
       console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
       toggleStaticMap(true);
       const activeLayerIds = activeLayers.map((layer) => layer.id);
@@ -156,7 +158,7 @@ function TileMeasurement({ ui }) {
       setMeasurementsStarted(true);
 
       const measurementLayers = findLayersToMeasure();
-      if (!measurementLayers) {
+      if (!measurementLayers.length) {
         console.error('No layers found to be measured... Aborting...');
         return verifyTilesAndHandleErrors(true);
       }
@@ -176,10 +178,9 @@ function TileMeasurement({ ui }) {
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod);
 
-      verifyTilesAndHandleErrors();
+      verifyTilesAndHandleErrors(false);
     } catch (error) {
       console.error('Error calculating measurements:', error);
-      verifyTilesAndHandleErrors(true);
     }
   };
 
