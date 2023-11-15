@@ -17,6 +17,8 @@ export const layersToMeasure = [
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night',
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
   'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
+  'CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly',
+
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -39,6 +41,7 @@ export const layerPixelData = {
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { threshold: 0.20 },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { threshold: 0.20 },
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { threshold: 0.65 },
+  CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { threshold: 0.01 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
@@ -60,4 +63,5 @@ export const bestDates = {
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { date: '2023-10-17' },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { date: '2023-10-17' },
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { date: '2023-10-30' },
+  CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { date: '2023-10-30' },
 };

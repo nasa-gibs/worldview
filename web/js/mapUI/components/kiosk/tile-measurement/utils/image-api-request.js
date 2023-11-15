@@ -18,7 +18,7 @@ export default async function fetchWMSImage(layer, date, extent, testMode) {
     version: '1.3.0',
     service: 'WMS',
     request: 'GetMap',
-    format: 'image/png',
+    format: 'image/jpeg',
     STYLE: 'default',
     bbox,
     CRS: 'EPSG:3857',
@@ -38,8 +38,8 @@ export default async function fetchWMSImage(layer, date, extent, testMode) {
     // Save the file for debugging purposes in test mode
     // This should open image in a seperate tab in the browser, may have to allow popups
     if (testMode) {
-      const file = new Blob([response.data], { type: 'image/png' });
-      saveAs(file, `${layer}.png`);
+      const file = new Blob([response.data], { type: 'image/jpeg' });
+      saveAs(file, `${layer}.jpeg`);
     }
 
     return imageSrc;

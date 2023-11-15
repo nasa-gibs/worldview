@@ -4,4 +4,4 @@ The Deep Blue (DB) algorithm is employed for over-land use and the Satellite Oce
 
 The VIIRS Deep Blue Aerosol Type layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (AERDB_L2_VIIRS_SNPP) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
-References: AERDB_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011)
+References: AERDB_L2_VIIRS_SNPP_NRT [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.002](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.002); AERDB_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.002](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.002)

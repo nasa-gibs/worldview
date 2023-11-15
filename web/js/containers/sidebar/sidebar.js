@@ -266,6 +266,7 @@ class Sidebar extends React.Component {
       activeTab,
       changeTab,
       config,
+      displayStaticMap,
       eventsData,
       eventsSources,
       hasEventRequestError,
@@ -322,7 +323,7 @@ class Sidebar extends React.Component {
     return (
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
-          {this.renderSidebarLogo()}
+          {!displayStaticMap && this.renderSidebarLogo()}
           {!isDistractionFreeModeActive && isCollapsed && (
           <CollapsedButton
             isMobile={isMobile}
@@ -419,7 +420,7 @@ const mapStateToProps = (state) => {
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = screenSize;
-  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
   const { isEmbedModeActive } = embed;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
@@ -440,6 +441,7 @@ const mapStateToProps = (state) => {
     activeString,
     chartingModeAccessible,
     config,
+    displayStaticMap,
     eventsData,
     eventsSources,
     numberOfLayers,
