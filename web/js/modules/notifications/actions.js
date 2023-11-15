@@ -3,6 +3,7 @@ import {
   REQUEST_NOTIFICATIONS,
   SET_NOTIFICATIONS,
   NOTIFICATIONS_SEEN,
+  OUTAGE_NOTIFICATIONS_SEEN,
 } from './constants';
 
 export function requestNotifications(location) {
@@ -17,5 +18,10 @@ export function setNotifications(array) {
 export function notificationsSeen() {
   return {
     type: NOTIFICATIONS_SEEN,
+  };
+}
+export function outageNotificationsSeenAction() {
+  return {
+    type: OUTAGE_NOTIFICATIONS_SEEN,
   };
 }

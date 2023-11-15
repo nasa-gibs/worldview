@@ -3,6 +3,7 @@ const moment = require('moment')
 const shell = require('shelljs')
 const tar = require('tar')
 const pkg = require('../../package.json')
+const { v4: uuidv4 } = require('uuid')
 
 console.log('Preparing distribution')
 shell.rm('-rf', 'build/worldview')
@@ -35,7 +36,7 @@ const applyTo = [
 const buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]')
 
 // Append to all URI references for cache busting
-const buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS')
+const buildNonce = uuidv4()
 
 const officialName = brand.officialName || brand.name
 const longName = brand.longName || brand.name

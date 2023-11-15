@@ -20,7 +20,7 @@ test.beforeAll(async ({ browser }) => {
   selectors = createSelectors(page)
   infoButtonIcon = page.locator('#wv-info-button svg.svg-inline--fa')
   infoMenu = page.locator('#toolbar_info')
-  notificationsListItem = page.locator('#notifications_info_item .fa-circle-exclamation')
+  notificationsListItem = page.locator('#notifications_info_item')
   tooltipSelector = page.locator('.tooltip-inner div')
 })
 
@@ -39,28 +39,21 @@ test('No visible notifications with mockAlert parameter set to no_types', async 
   await expect(boltListItem).not.toBeVisible()
 })
 
-test('Outage takes precedence when all three notifications are present', async () => {
-  const url = `${layerNoticesQuery}&mockAlerts=all_types`
-  const statusOutage = await page.locator('#wv-info-button.wv-status-outage')
-  await page.goto(url)
-  await expect(statusOutage).toBeVisible()
-  await infoButtonIcon.click()
-  await expect(infoMenu).toContainText('Notifications')
-  await expect(notificationsListItem).toBeVisible()
-})
-
 test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
+  const { modalCloseButton } = selectors
+  const url = `${layerNoticesQuery}&mockAlerts=all_types`
+  await page.goto(url)
+  await modalCloseButton.click()
+  await infoButtonIcon.click()
   const badge = await page.locator('span.badge')
   await expect(badge).toBeVisible()
-  await expect(badge).toContainText('3')
+  await expect(badge).toContainText('2')
 })
 
-test('Alert, outage, and message content is highlighted and found in modal', async () => {
-  const outageContentHighlighted = await page.locator('#notification_list_modal .outage-notification-item span')
+test('Alert and message content is highlighted and found in modal', async () => {
   const alertContentHighlighted = await page.locator('#notification_list_modal .alert-notification-item p')
   const messageContentHighlighted = await page.locator('#notification_list_modal .message-notification-item p')
   await notificationsListItem.click()
-  await expect(outageContentHighlighted).toContainText('Posted 20 May 2018')
   await expect(alertContentHighlighted).toContainText('learn how to visualize global satellite imagery')
   await expect(messageContentHighlighted).toContainText('This is a message test')
 })
@@ -72,6 +65,10 @@ test('Verify that the user is only alerted if they have not already stored all i
 })
 
 test('Verify that zots show for the layers that have notices', async () => {
+  const { modalCloseButton } = selectors
+  const url = `${layerNoticesQuery}&mockAlerts=all_types`
+  await page.goto(url)
+  await modalCloseButton.click()
   const aquaZot = await page.locator('#MODIS_Aqua_CorrectedReflectance_TrueColor-zot')
   const particulateZot = await page.locator('#Particulate_Matter_Below_2__2E__5micrometers_2001-2010-zot')
   await expect(aquaZot).toBeVisible()

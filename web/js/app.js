@@ -14,6 +14,7 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
+import { openCustomContent } from './modules/modal/actions';
 // Location Search
 import LocationSearch from './components/location-search/location-search';
 
@@ -34,7 +35,10 @@ import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 import keyPress from './modules/key-press/actions';
 import setScreenInfo from './modules/screen-size/actions';
-
+// Notifications
+import { addToLocalStorage } from './modules/notifications/util';
+import Notifications from './containers/notifications';
+import { outageNotificationsSeenAction } from './modules/notifications/actions';
 // Dependency CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'ol/ol.css';
@@ -62,11 +66,24 @@ class App extends React.Component {
     window.addEventListener('orientationchange', this.setVhCSSProperty);
   }
 
+  componentDidUpdate(prevProps) {
+    // Check if the numberUnseen prop has changed
+    const {
+      kioskModeEnabled, notifications, numberOutagesUnseen,
+    } = this.props;
+    if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
+        this.openNotification(notifications, numberOutagesUnseen);
+      }
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
     window.removeEventListener('resize', this.setVhCSSProperty);
     window.removeEventListener('orientationchange', this.setVhCSSProperty);
   }
+
 
   // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   setVhCSSProperty = () => {
@@ -84,6 +101,11 @@ class App extends React.Component {
   getScreenInfo = () => {
     const { setScreenInfoAction } = this.props;
     setScreenInfoAction();
+  };
+
+  openNotification = (obj, numberOutagesUnseen) => {
+    const { notificationClick } = this.props;
+    notificationClick(obj, numberOutagesUnseen);
   };
 
   onload() {
@@ -129,6 +151,7 @@ class App extends React.Component {
       isEmbedModeActive,
       isMobile,
       isTourActive,
+      numberOutagesUnseen,
       locationKey,
       modalId,
       parameters,
@@ -143,7 +166,7 @@ class App extends React.Component {
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
-          {isTourActive ? <Tour /> : null}
+          {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
@@ -166,13 +189,24 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { notifications } = state;
+  const {
+    numberOutagesUnseen, numberUnseen, type, object,
+  } = notifications;
+  const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
   return {
     state,
+    kioskModeEnabled,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
     isTourActive: state.tour.active,
+    notifications,
+    numberOutagesUnseen,
+    numberUnseen,
+    object,
     tour: state.tour,
+    type,
     config: state.config,
     parameters: state.parameters,
     locationKey: state.location.key,
@@ -186,6 +220,29 @@ const mapDispatchToProps = (dispatch) => ({
   setScreenInfoAction: () => {
     dispatch(setScreenInfo());
   },
+  notificationClick: (obj, numberOutagesUnseen) => {
+    // Used to update local storage to reflect OUTAGES have been seen
+    const notificationsSeenObj = {
+      alerts: [],
+      layerNotices: [],
+      messages: [],
+      outages: obj.object.outages,
+    };
+
+    dispatch(
+      openCustomContent('NOTIFICATION_LIST_MODAL', {
+        headerText: 'Notifications',
+        bodyComponent: Notifications,
+        source: 'outage-alert',
+        onClose: () => {
+          if (numberOutagesUnseen > 0) {
+            dispatch(outageNotificationsSeenAction());
+            addToLocalStorage(notificationsSeenObj);
+          }
+        },
+      }),
+    );
+  },
 });
 
 export default connect(
@@ -195,12 +252,16 @@ export default connect(
 
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  kioskModeEnabled: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
-  setScreenInfoAction: PropTypes.func,
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
+  notificationClick: PropTypes.func,
+  notifications: PropTypes.object,
+  numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
+  setScreenInfoAction: PropTypes.func,
 };

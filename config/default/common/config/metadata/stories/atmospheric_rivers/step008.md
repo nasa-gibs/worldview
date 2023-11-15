@@ -1,0 +1,1 @@
+Tulare Lake in San Joaquin Valley, California, was once the largest freshwater lake west of the Mississippi River but feeder rivers were diverted for irrigation and municipal water use. Since the 1920s, the dry lake bed has been used to grow crops like almonds and tomatoes. The right "B" side shows how heavy rains caused the area to flood and re-fill.

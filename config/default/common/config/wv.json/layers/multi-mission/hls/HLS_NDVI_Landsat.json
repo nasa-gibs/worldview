@@ -1,0 +1,33 @@
+{
+    "layers": {
+      "HLS_NDVI_Landsat": {
+        "id": "HLS_NDVI_Landsat",
+        "title": "Vegetation Index (NDVI) *BETA*",
+        "subtitle": "Landsat 8 & 9 / OLI",
+        "description": "multi-mission/hls/HLS_NDVI_Landsat",
+        "tags": "corrected surface landsat oli l30 ndvi",
+        "group": "overlays",
+        "layergroup": "Vegetation Indices",
+        "format": "image/png",
+        "type": "ttiler",
+        "period": "daily",
+        "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
+        "orbitDirection": ["descending", "descending"],
+        "bandCombo": {
+            "assets": ["B05", "B04"],
+            "expression": "(B05-B04)/(B05+B04)",
+            "rescale": "-1,1",
+            "colormap_name": "greens"
+        },
+        "disableSnapshot": true,
+        "wrapX": false,
+        "projections": {
+          "geographic": {
+            "source": "DDV",
+            "matrixSet": "31.25m"
+          }
+        },
+        "startDate": "2022-01-01T00:00:00Z"
+      }
+    }
+  }

@@ -25,9 +25,11 @@ test('Add AOD Layer to Layer Group A', async () => {
   const {
     addLayers,
     aerosolOpticalDepth,
-    layersModalCloseButton
+    layersModalCloseButton,
+    modalCloseButton
   } = selectors
   await page.goto(swipeAndAIsActive)
+  await modalCloseButton.click()
   await addLayers.click()
   await aerosolOpticalDepth.click()
   await aodCheckBox.click()

@@ -77,7 +77,7 @@ class NaturalEvents extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       map,
       eventsDataIsLoading,

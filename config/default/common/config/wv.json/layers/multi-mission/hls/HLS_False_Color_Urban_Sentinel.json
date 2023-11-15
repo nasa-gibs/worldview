@@ -3,7 +3,7 @@
     "HLS_False_Color_Urban_Sentinel": {
       "id": "HLS_False_Color_Urban_Sentinel",
       "collection_concept_id": "C2021957295-LPCLOUD",
-      "title": "Reflectance (Bands 12-11-4, Urban False Color) *BETA*",
+      "title": "Reflectance (Urban False Color, Bands 12-11-4) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_False_Color_Urban_Sentinel",
       "tags": "corrected surface oli sentinel msi s30",
@@ -27,7 +27,8 @@
           "source": "DDV",
           "matrixSet": "31.25m"
         }
-      }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
     }
   }
 }

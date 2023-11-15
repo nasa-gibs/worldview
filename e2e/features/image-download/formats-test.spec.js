@@ -11,8 +11,10 @@ const {
   joinUrl,
   selectOption
 } = require('../../test-utils/hooks/basicHooks')
+const createSelectors = require('../../test-utils/global-variables/selectors')
 
 let page
+let selectors
 
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
@@ -25,6 +27,7 @@ test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
+  selectors = createSelectors(page)
 })
 
 test.afterAll(async () => {
@@ -32,8 +35,10 @@ test.afterAll(async () => {
 })
 
 test('JPEG is the default', async () => {
+  const { modalCloseButton } = selectors
   const url = await joinUrl(startParams, null)
   await page.goto(url)
+  await modalCloseButton.click()
   await openImageDownloadPanel(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')

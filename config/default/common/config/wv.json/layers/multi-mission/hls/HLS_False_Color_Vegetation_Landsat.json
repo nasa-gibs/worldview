@@ -3,7 +3,7 @@
     "HLS_False_Color_Vegetation_Landsat": {
       "id": "HLS_False_Color_Vegetation_Landsat",
       "collection_concept_id": "C2021957657-LPCLOUD",
-      "title": "Reflectance (Bands 6-5-4, Vegetative Analysis False Color) *BETA*",
+      "title": "Reflectance (Vegetative Analysis False Color, Bands 6-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Vegetation_Landsat",
       "tags": "corrected surface oli l30",
@@ -27,7 +27,8 @@
           "source": "DDV",
           "matrixSet": "31.25m"
         }
-      }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
     }
   }
 }

@@ -153,13 +153,6 @@ export function getCount(notifications, unseenOnly) {
     messages, outages, alerts,
   } = notifications;
 
-  if (unseenOnly) {
-    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
-    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
-    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
-
-    return messageCount + outageCount + alertCount;
-  }
   return messages.length + alerts.length + outages.length;
 }
 

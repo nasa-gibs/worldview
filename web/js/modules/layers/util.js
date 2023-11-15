@@ -24,15 +24,22 @@ import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
 import { parseDate } from '../date/util';
 
-export function getOrbitTrackTitle(def) {
+/**
+ * Given a layer definition, returns formatted string
+ * @param {object} def | Layer definition
+ * @param {bool} includeSatName | Optionally exclude the satellite name from the output
+ * @return {string}
+ */
+export function getOrbitTrackTitle(def, includeSatName = true) {
+  const satelliteName = includeSatName ? ` (${def.title.split(' - ')[0]})` : '';
   const { track } = def;
   const daynightValue = lodashGet(def, 'daynight[0]');
   if (track && daynightValue) {
-    return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}`;
+    return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}${satelliteName}`;
   } if (track) {
-    return lodashStartCase(track);
+    return `${lodashStartCase(track)}${satelliteName}`;
   } if (daynightValue) {
-    return lodashStartCase(daynightValue);
+    return `${lodashStartCase(daynightValue)}${satelliteName}`;
   }
 }
 
@@ -833,11 +840,10 @@ export function serializeLayers(layers, state, groupName) {
       });
     }
     if (def.bandCombo) {
-      const { r, g, b } = def.bandCombo;
-      const bands = `${r};${g};${b}`;
+      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>').replaceAll(',', ';');
       item.attributes.push({
-        id: 'bands',
-        value: bands,
+        id: 'bandCombo',
+        value: bandComboString,
       });
     }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
@@ -975,6 +981,11 @@ const getLayerSpec = (attributes) => {
     if (attr.id === 'bands') {
       const values = util.toArray(attr.value.split(';'));
       bandCombo = values;
+    }
+
+    if (attr.id === 'bandCombo') {
+      const formattedString = attr.value.replaceAll(';', ',').replaceAll('<', '(').replaceAll('>', ')');
+      bandCombo = JSON.parse(formattedString);
     }
 
     if (attr.id === 'palette') {

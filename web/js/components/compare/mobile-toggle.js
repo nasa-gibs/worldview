@@ -9,9 +9,6 @@ function MobileComparisonToggle (props) {
     isCompareA,
     toggleActiveCompareState,
   } = props;
-  if (!active) {
-    return null;
-  }
 
   const [isCompareASelected, toggleCompareASelected] = useState(isCompareA);
   useEffect(() => {
@@ -24,6 +21,10 @@ function MobileComparisonToggle (props) {
       toggleActiveCompareState();
     }
   }, [isCompareASelected]);
+
+  if (!active) {
+    return null;
+  }
 
   const classA = isCompareASelected ? 'compare-btn-selected' : '';
   const classB = !isCompareASelected ? 'compare-btn-selected' : '';

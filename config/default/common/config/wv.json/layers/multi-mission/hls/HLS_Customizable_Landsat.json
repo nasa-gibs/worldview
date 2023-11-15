@@ -3,7 +3,7 @@
     "HLS_Customizable_Landsat": {
       "id": "HLS_Customizable_Landsat",
       "collection_concept_id": "C2021957657-LPCLOUD",
-      "title": "HLS Customizable Landsat *BETA*",
+      "title": "HLS Customizable Landsat 8 & 9 *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Customizable_Landsat",
       "tags": "corrected surface landsat oli l30",
@@ -27,7 +27,8 @@
           "source": "DDV",
           "matrixSet": "31.25m"
         }
-      }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
     }
   }
 }

@@ -2,4 +2,4 @@ The Sea Ice Surface Temperature (Day) layer shows the "skin" temperature of the 
 
 The Ice Surface Temperature product is available for the Suomi NPP (VNP29) and JPSS-1/NOAA-20 (VJ129) satellites. The sensor resolution is 750 m, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: VJ130 [doi:10.5067/BW817SEFZ1TT](https://doi.org/10.5067/BW817SEFZ1TT)
+References: VJ130_NRT [doi:10.5067/VIIRS/VJ130_NRT.002](https://doi.org/10.5067/VIIRS/VJ130_NRT.002); VJ130 [doi:10.5067/BW817SEFZ1TT](https://doi.org/10.5067/BW817SEFZ1TT)

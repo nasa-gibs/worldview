@@ -3,7 +3,7 @@
     "HLS_Shortwave_Infrared_Sentinel": {
       "id": "HLS_Shortwave_Infrared_Sentinel",
       "collection_concept_id": "C2021957295-LPCLOUD",
-      "title": "Reflectance (Bands 12-8A-4, Shortwave Infrared) *BETA*",
+      "title": "Reflectance (Shortwave Infrared, Bands 12-8A-4) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Sentinel",
       "tags": "corrected surface oli sentinel msi s30 swir",
@@ -27,7 +27,8 @@
           "source": "DDV",
           "matrixSet": "31.25m"
         }
-      }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
     }
   }
 }

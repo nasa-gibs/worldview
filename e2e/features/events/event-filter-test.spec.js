@@ -38,8 +38,9 @@ test.afterAll(async () => {
 })
 
 test('Default filtering includes last 120 days and all categories', async () => {
-  const { eventsTab, filterIcons, filterDates } = selectors
+  const { eventsTab, filterIcons, filterDates, modalCloseButton } = selectors
   await page.goto(fixedAppNow)
+  await modalCloseButton.click()
   await eventsTab.click()
   await expect(filterIcons).toHaveCount(8)
   await expect(filterDates).toContainText('2011 SEP 02 - 2011 DEC 31')
@@ -81,21 +82,23 @@ test('URL params for categories, dates, and extent filtering are present', async
 
 test('Loading from permalink sets all criteria properly', async () => {
   const {
-    filterButton,
     dustSwitch,
+    filterButton,
+    filterDates,
+    filterIcons,
     manmadeSwitch,
+    mapExtentFilterCheckbox,
+    modalCloseButton,
     seaLakeIceSwitch,
     severeStormsSwitch,
     snowSwitch,
     volcanoesSwitch,
     watercolorSwitch,
     wildfiresSwitch,
-    mapExtentFilterCheckbox,
-    filterIcons,
-    wildfiresIcon,
-    filterDates
+    wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
+  await modalCloseButton.click()
 
   const currentUrl = await page.url()
 
@@ -123,19 +126,21 @@ test('Loading from permalink sets all criteria properly', async () => {
 
 test('Changing criteria in modal DOES NOT update summary of criteria in sidebar on CANCEL', async () => {
   const {
+    endInputDay,
+    endInputMonth,
+    endInputYear,
+    filterButton,
+    filterDates,
+    filterIcons,
+    filterModalCancel,
+    modalCloseButton,
     startInputYear,
     startInputMonth,
     startInputDay,
-    endInputYear,
-    endInputMonth,
-    endInputDay,
-    filterButton,
-    filterModalCancel,
-    filterDates,
-    filterIcons,
     wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
+  await modalCloseButton.click()
   await filterButton.click()
   await startInputYear.fill('2000')
   await startInputMonth.fill('APR')
@@ -211,8 +216,15 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
 })
 
 test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
-  const { filterDates, filterButton, filterIcons, mapExtentFilterCheckbox } = selectors
+  const {
+    filterDates,
+    filterButton,
+    filterIcons,
+    mapExtentFilterCheckbox,
+    modalCloseButton
+  } = selectors
   await page.goto(backwardsCompatibleEventUrl)
+  await modalCloseButton.click()
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
@@ -222,8 +234,9 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
 })
 
 test('No extent search checkbox in polar projections', async () => {
-  const { filterButton, mapExtentFilterCheckbox } = selectors
+  const { filterButton, mapExtentFilterCheckbox, modalCloseButton } = selectors
   await page.goto(extentsUrl)
+  await modalCloseButton.click()
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeVisible()
   await expect(mapExtentFilterCheckbox).toBeChecked()

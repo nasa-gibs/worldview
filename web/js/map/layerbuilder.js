@@ -16,10 +16,10 @@ import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
-import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
+import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -119,16 +119,19 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const updateCollections = (headers) => {
       const actualId = headers.get('layer-identifier-actual');
+
       if (!actualId) return;
 
+      const parts = actualId.split('_');
+      const type = parts[parts.length - 1];
+      const version = parts[parts.length - 2];
+
+      if (type !== 'NRT' && type !== 'STD') return;
+
       const { layers } = state;
-      const collectionCheck = getCollections(layers, date, layer);
       // check if the collection & dates already exist for layer so we don't dispatch actions
-      if (!collectionCheck) {
+      if (!getCollections(layers, date, layer)) {
         updateStoreCollections(layer.id);
-        const parts = actualId.split('_');
-        const version = parts[parts.length - 2];
-        const type = parts[parts.length - 1];
         updateStoreCollectionDates(layer.id, version, type, date);
       }
     };
@@ -149,7 +152,6 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
-   * Create a layer key
    *
    * @function layerKey
    * @static
@@ -667,8 +669,14 @@ export default function mapLayerBuilder(config, cache, store) {
     const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
     const layerID = def.id;
     const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    const { r, g, b } = def.bandCombo;
-    const bandCombo = [r, g, b];
+    const {
+      r,
+      g,
+      b,
+      expression,
+      assets = [],
+    } = def.bandCombo;
+    const bandCombo = [r, g, b, ...assets].filter((band) => band);
 
     const landsatLayers = [
       'HLS_Customizable_Landsat',
@@ -676,6 +684,10 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_False_Color_Urban_Landsat',
       'HLS_False_Color_Vegetation_Landsat',
       'HLS_Shortwave_Infrared_Landsat',
+      'HLS_NDVI_Landsat',
+      'HLS_NDWI_Landsat',
+      'HLS_NDSI_Landsat',
+      'HLS_Moisture_Index_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
@@ -715,6 +727,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const params = {
       post_process: 'swir',
       assets: bandCombo,
+      expression,
     };
 
     const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
@@ -744,7 +757,16 @@ export default function mapLayerBuilder(config, cache, store) {
       const x = tileCoord[1];
       const y = tileCoord[2];
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&assets=${r}&assets=${g}&assets=${b}`;
+      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+
+      const params = assets.map((asset) => `assets=${asset}`);
+      params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
+      params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
+      params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
+      params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
+
+      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+
       return source.url + urlParams;
     };
 
