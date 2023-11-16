@@ -113,28 +113,34 @@ function LayerRow (props) {
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
-  useEffect(async () => {
-    if (layer.collection_concept_id) {
-      const res = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${selectedDate.toISOString()}/P0Y0M0DT23H59M&sort_key=-start_date&pageSize=1`);
-      const granules = await res.json();
-      if (!granules?.feed?.entry?.length) {
-        setActiveZot({ hasGranules: false });
-        setShowGranuleAlert(true);
-      } else {
-        setActiveZot(zot);
-        setShowGranuleAlert(false);
+  useEffect(() => {
+    const asyncFunc = async () => {
+      if (layer?.collection_concept_id) {
+        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer?.collection_concept_id}&bounding_box=${map?.extent?.join(',')}&temporal=P0Y0M0DT11H59M/${selectedDate?.toISOString()}&sort_key=-start_date&pageSize=1`);
+        const olderGranules = await olderRes.json();
+        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer?.collection_concept_id}&bounding_box=${map?.extent?.join(',')}&temporal=${selectedDate?.toISOString()}/P0Y0M0DT11H59M&sort_key=-start_date&pageSize=1`);
+        const newerGranules = await newerRes.json();
+        const granules = [...olderGranules.feed.entry, ...newerGranules.feed.entry];
+        if (!granules.length) {
+          setActiveZot({ hasGranules: false });
+          setShowGranuleAlert(true);
+        } else {
+          setActiveZot(zot);
+          setShowGranuleAlert(false);
+        }
+        if (zot?.underZoomValue) {
+          setShowZoomAlert(true);
+        } else {
+          setShowZoomAlert(false);
+        }
+        if (!granules.length || zot?.underZoomValue) {
+          setDisabled(true);
+        } else {
+          setDisabled(isDisabled);
+        }
       }
-      if (zot?.underZoomValue) {
-        setShowZoomAlert(true);
-      } else {
-        setShowZoomAlert(false);
-      }
-      if (!granules?.feed?.entry?.length || zot?.underZoomValue) {
-        setDisabled(true);
-      } else {
-        setDisabled(isDisabled);
-      }
-    }
+    };
+    asyncFunc();
   }, [map.extent, zot]);
 
   useEffect(() => {

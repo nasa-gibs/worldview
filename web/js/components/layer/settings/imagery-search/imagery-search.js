@@ -64,14 +64,17 @@ export default function ImagerySearch({ layer }) {
     selectDate(new Date(date));
   };
 
-  useEffect(async () => {
-    if (listRef.current.scrollHeight <= listRef.current.clientHeight) {
-      loadOlderDates(layer, page);
-      await loadNewerDates(layer, page);
-      setPage(page + 1);
-    } else {
-      listRef.current.scrollTop = listRef.current.scrollHeight / 2;
-    }
+  useEffect(() => {
+    const asyncFunc = async () => {
+      if (listRef.current.scrollHeight <= listRef.current.clientHeight) {
+        loadOlderDates(layer, page);
+        await loadNewerDates(layer, page);
+        setPage(page + 1);
+      } else {
+        listRef.current.scrollTop = listRef.current.scrollHeight / 2;
+      }
+    };
+    asyncFunc();
   }, [page]);
 
   const renderDates = () => {
