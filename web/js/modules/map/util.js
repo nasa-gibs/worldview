@@ -155,7 +155,7 @@ export function getMapParameterSetup(
  * @return {array}                An extent array. Used to calculate
  * the extent for prev, next & current day
  */
-function calculateExtent(layerExtent, map) {
+function calculateExtent(layerExtent = [], map) {
   const viewportExtent = map.getView().calculateExtent();
   const visibleExtent = olExtent.getIntersection(viewportExtent, layerExtent);
 

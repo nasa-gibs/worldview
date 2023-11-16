@@ -791,6 +791,26 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createEsriDemoLayer = (def, options, day, state) => {
+    const { proj: { selected } } = state;
+    const { crs } = selected;
+    const source = config.sources[def.source];
+
+    const vectorSource = new SourceVectorTile({
+      url: `${source.url}/tile/{z}/{y}/{x}.pbf`,
+      projection: crs,
+      format: new MVT(),
+      extent: selected.maxExtent,
+    });
+
+    return new LayerVectorTile({
+      source: vectorSource,
+      extent: selected.maxExtent,
+      renderMode: 'vector',
+      className: def.id,
+    });
+  };
+
   /**
    * Create a new OpenLayers Layer
    * @param {object} def
@@ -852,6 +872,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'ttiler':
             layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'esri-demo':
+            layer = getLayer(createEsriDemoLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);

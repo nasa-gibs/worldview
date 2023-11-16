@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "ESRI_Demo_Layer": {
+      "id": "ESRI_Demo_Layer",
+      "title": "ESRI Demo Layer",
+      "description": "reference/Reference_Features_15m",
+      "tags": "esri reference, country, countries, state, province",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "type": "esri-demo",
+      "projections": {
+        "geographic": {
+          "source": "ESRI:demo"
+        }
+      }
+    }
+  }
+}
