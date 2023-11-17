@@ -1,0 +1,78 @@
+{
+  "stories": {
+    "surface_water_extent": {
+      "id": "surface_water_extent",
+      "type": "default",
+      "title": "Surface Water Extent",
+      "description": "OPERA's Surface Water Extent product",
+      "backgroundImage": "",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Observational Products for End-Users from Remote Sensing Analysis",
+          "link": "https://www.jpl.nasa.gov/go/opera"
+        },
+        {
+          "title": "OPERA - DSWx Product Suite",
+          "link": "https://www.jpl.nasa.gov/go/opera/products/dswx-product-suite"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-172.07216935629182,-75.27671304270082,139.34614952827977,76.68146944943469&l=Coastlines_15m,Reference_Features_15m,Reference_Labels_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map&lg=true&t=2023-10-28-T00%3A00%3A00Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-71.0726540539477,-33.93245949860628,-70.75710190092255,-33.778484190323425&l=Reference_Labels_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-3-0-4),HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg=false&l1=Reference_Labels_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-0-3),HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg1=false&ca=false&cv=51&t=2023-05-18-T02%3A00%3A00Z&t1=2023-09-15-T13%3A50%3A15Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=65.265999415653,25.210151628215105,71.65035384265732,28.325430455061475&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-3),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg1=true&ca=false&cv=49&t=2023-05-03-T13%3A24%3A03Z&t1=2023-08-11-T05%3A24%3A03Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-73.35201308797072,44.044156366447325,-72.21632451633302,44.59832149019883&l=Reference_Labels_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=false&l1=Reference_Labels_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg1=false&ca=false&cv=52&t=2023-07-08-T12%3A07%3A02Z&t1=2023-07-11-T08%3A07%3A02Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-120.85451125731683,35.39929766539523,-118.54001784177757,36.52866672138105&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(hidden,disabled=5),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,HLS_L30_Nadir_BRDF_Adjusted_Reflectance&lg=false&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=0-4),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance&lg1=false&ca=true&cm=opacity&cv=100&t=2023-04-30-T15%3A35%3A22Z&t1=2023-04-30-T09%3A35%3A22Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=9.858292854006237,43.29955036964894,11.057128062815018,43.88452822223854&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-4-0-3),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-0-3-4),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,HLS_S30_Nadir_BRDF_Adjusted_Reflectance(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=54&t=2023-10-02-T19%3A45%3A11Z&t1=2023-11-03-T19%3A45%3A11Z"
+        }
+      ]
+    }
+  }
+}

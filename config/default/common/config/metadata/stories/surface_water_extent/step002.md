@@ -1,0 +1,1 @@
+[Earth Observatory Article: Water Returns to Laguna de Aculeo](https://earthobservatory.nasa.gov/images/151836/water-returns-to-laguna-de-aculeo)
