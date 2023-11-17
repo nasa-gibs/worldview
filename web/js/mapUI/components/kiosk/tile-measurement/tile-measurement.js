@@ -128,22 +128,50 @@ function TileMeasurement({ ui }) {
     }
   };
 
-  const verifyTilesAndHandleErrors = (abortProceedure) => {
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const verifyTilesAndHandleErrors = async (abortProceedure) => {
     console.log('Verifying tiles on map...');
 
     // most of these variables are purely for debugging purposes
-    const {
-      totalExpectedTileCount,
-      totalLoadedTileCount,
-      totalTilesLoadedWithBadImage,
-      totalErrorTiles,
-      totalEmptyTiles,
-      totalOtherTileStates,
-    } = countTilesForSpecifiedLayers(ui, layersToMeasure);
+    let tileCount = 0;
+    let loadedTilesCount = 0;
+    let errorTilesCount = 0;
+    let emptyTilesCount = 0;
+    let totalTilesLoadedWithBadImageCount = 0;
+    let otherTileStates = [];
 
-    const loadedTiles = totalLoadedTileCount > 0;
-    const tileStatus = `Out of an expected ${totalExpectedTileCount} tiles, ${totalLoadedTileCount} were loaded. There were ${totalTilesLoadedWithBadImage} tiles loaded with bad images, ${totalErrorTiles} error tiles, and ${totalEmptyTiles} empty tiles. There were ${totalOtherTileStates.length} other tile states: ${totalOtherTileStates.join(', ')}`;
+    // In rare cases the TileLayer may not have finished loading tiles at the time of measurement
+    // We can verify this by checking the otherTileStates array for values of 1 that indicate that tiles were still loading
+    let retries = 0;
+    while (retries < 10) {
+      console.log('Attempt #', retries + 1, 'to verify tiles on map...');
+      const {
+        totalExpectedTileCount,
+        totalLoadedTileCount,
+        totalTilesLoadedWithBadImage,
+        totalErrorTiles,
+        totalEmptyTiles,
+        totalOtherTileStates,
+      } = countTilesForSpecifiedLayers(ui, layersToMeasure);
+      tileCount = totalExpectedTileCount;
+      loadedTilesCount = totalLoadedTileCount;
+      errorTilesCount = totalErrorTiles;
+      emptyTilesCount = totalEmptyTiles;
+      totalTilesLoadedWithBadImageCount = totalTilesLoadedWithBadImage;
+      otherTileStates = totalOtherTileStates;
+      if (loadedTilesCount === 0) {
+        retries += 1;
+        await delay(1000);
+      } else {
+        break;
+      }
+    }
+
+    const loadedTiles = loadedTilesCount > 0;
+    const tileStatus = `Out of an expected ${tileCount} tiles, ${loadedTilesCount} were loaded. There were ${totalTilesLoadedWithBadImageCount} tiles loaded with bad images, ${errorTilesCount} error tiles, and ${emptyTilesCount} empty tiles. There were ${otherTileStates.length} other tile states: ${otherTileStates.join(', ')}`;
     console.log(tileStatus);
+    console.log('LoadedTiles === ', loadedTiles);
 
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
       setEICMeasurementComplete();
