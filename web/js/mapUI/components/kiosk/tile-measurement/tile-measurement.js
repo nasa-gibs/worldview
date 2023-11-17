@@ -76,7 +76,7 @@ function TileMeasurement({ ui }) {
             break;
           }
         } catch (error) {
-          console.error(`Error while processing layer ${layers[j].id} for date ${dates[i]}: `, error);
+          console.error(`No WMS image tile available for layer ${layers[j].id} on date ${dates[i]}: `, error);
           break;
         }
       }
@@ -86,7 +86,6 @@ function TileMeasurement({ ui }) {
       }
       layersMeetingThresholdForDate = 0;
     }
-
 
     const firstLayerWithBestDate = findBestDate(layers, bestDates);
 
@@ -166,11 +165,8 @@ function TileMeasurement({ ui }) {
 
   // #1 Parent function that is called from useEffect.
   const calculateMeasurements = async () => {
+    console.log('Entering EIC mode...');
     try {
-      console.log('Entering EIC mode...');
-
-      setMeasurementsStarted(true);
-
       const measurementLayers = findLayersToMeasure();
       if (!measurementLayers.length) {
         console.error('No layers found to be measured... Aborting...');
@@ -204,9 +200,10 @@ function TileMeasurement({ ui }) {
 
   useEffect(() => {
     if (!measurementsStarted && activeLayers && eic && ui.selected) {
+      setMeasurementsStarted(true);
       calculateMeasurements();
     }
-  });
+  }, [ui.selected]);
 
   return null;
 }
