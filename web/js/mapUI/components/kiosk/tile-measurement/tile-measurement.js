@@ -45,6 +45,16 @@ function TileMeasurement({ ui }) {
     return dates;
   };
 
+  // returns the date of the first layer that has a best date
+  function findBestDate(layers, bestDates) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const layer of layers) {
+      if (bestDates[layer.id]) {
+        return bestDates[layer.id].date;
+      }
+    }
+  }
+
   // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
   const findFullImageryDate = async (layers, dates) => {
     console.log('Date range found... Finding date with satisfactory imagery...');
@@ -76,15 +86,7 @@ function TileMeasurement({ ui }) {
       }
       layersMeetingThresholdForDate = 0;
     }
-    // returns the date of the first layer that has a best date
-    function findBestDate(layers, bestDates) {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const layer of layers) {
-        if (bestDates[layer.id]) {
-          return bestDates[layer.id].date;
-        }
-      }
-    }
+
 
     const firstLayerWithBestDate = findBestDate(layers, bestDates);
 
@@ -95,6 +97,7 @@ function TileMeasurement({ ui }) {
     console.error(`No date found that satisfies imagery thresholds. Returning best date for ${layers[0].id} on ${firstLayerWithBestDate}.`);
     return firstLayerWithBestDate;
   };
+
 
   // #5 Update the date of the map to the date that satisfies the full imagery threshold
   const updateDate = (fullImageryDate, layerPeriod) => {
@@ -132,6 +135,7 @@ function TileMeasurement({ ui }) {
     const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
     const loadedTiles = tileCount.totalLoadedTileCount > 0;
     console.log(`Total tiles loaded: ${tileCount.totalLoadedTileCount} and abortProceedure === ${abortProceedure}}`);
+
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
       setEICMeasurementComplete();
     }
@@ -141,7 +145,7 @@ function TileMeasurement({ ui }) {
     } else if (loadedTiles && abortProceedure) {
       console.log('EIC measure process aborted... Loaded map tiles found... Leaving map as is...');
       setEICMeasurementAborted();
-    } else if (!loadedTiles) {
+    } else if (!loadedTiles && abortProceedure) {
       console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
       toggleStaticMap(true);
       const activeLayerIds = activeLayers.map((layer) => layer.id);
@@ -173,7 +177,11 @@ function TileMeasurement({ ui }) {
       }
 
       const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange);
-      if (!fullImageryDate) return verifyTilesAndHandleErrors(true);
+
+      // If we are using the best date, we need to make sure there are tiles on the map so we include the abort prodcedure parameter
+      // This allows us to fall back to the static map if the best date fails as a last resort
+      const bestDate = findBestDate(measurementLayers, bestDates);
+      if (!fullImageryDate || bestDate === fullImageryDate) return verifyTilesAndHandleErrors(true);
 
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod);
