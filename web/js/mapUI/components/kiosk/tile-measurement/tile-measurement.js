@@ -132,9 +132,19 @@ function TileMeasurement({ ui }) {
   const verifyTilesAndHandleErrors = (abortProceedure) => {
     console.log('Verifying tiles on map...');
 
-    const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
-    const loadedTiles = tileCount.totalLoadedTileCount > 0;
-    console.log(`Total tiles loaded: ${tileCount.totalLoadedTileCount} and abortProceedure === ${abortProceedure}}`);
+    // most of these variables are purely for debugging purposes
+    const {
+      totalExpectedTileCount,
+      totalLoadedTileCount,
+      totalTilesLoadedWithBadImage,
+      totalErrorTiles,
+      totalEmptyTiles,
+      totalOtherTileStates,
+    } = countTilesForSpecifiedLayers(ui, layersToMeasure);
+
+    const loadedTiles = totalLoadedTileCount > 0;
+    const tileStatus = `Out of an expected ${totalExpectedTileCount} tiles, ${totalLoadedTileCount} were loaded. There were ${totalTilesLoadedWithBadImage} tiles loaded with bad images, ${totalErrorTiles} error tiles, and ${totalEmptyTiles} empty tiles. There were ${totalOtherTileStates.length} other tile states: ${totalOtherTileStates.join(', ')}`;
+    console.log(tileStatus);
 
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
       setEICMeasurementComplete();
