@@ -2,18 +2,25 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getSelectedDate } from '../../../modules/date/selectors';
 
 function ConsoleTest () {
   // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
-  const {
-    map,
-  } = useSelector((state) => ({
-    map: state.map.ui.selected,
-  }));
+  const map = useSelector((state) => state.map.ui.selected );
+  const layers = useSelector((state) => state.layers.active.layers );
+  const selectedDate = useSelector((state) => getSelectedDate(state));
 
-  const consoleResponse = () => {
-    console.log(map);
+  const urlString =  'https://gibs-b.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=2023-11-13T00:00:00Z&layer=MODIS_Combined_L4_LAI_4Day&style=default&tilematrixset=500m&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=0&TileCol=0&TileRow=0'
+
+  const wmtsRequest = async (layer, date) => {
+
+  }
+
+
+  const consoleResponse = async () => {
+    const layer = layers[0];
+    console.log(selectedDate)
   };
 
 
