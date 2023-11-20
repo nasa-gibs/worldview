@@ -164,7 +164,7 @@ function LayerRow (props) {
         ? compare.activeString === compareState && !!runningDataForLayer
         : !!runningDataForLayer;
       const colorHex = isRunningData ? runningDataForLayer.paletteHex : null;
-      let width = activeZot ? 220 : 231;
+      let width = activeZot || zot ? 220 : 231;
       if (isEmbedModeActive) {
         width = 201;
       }
@@ -351,7 +351,7 @@ function LayerRow (props) {
     } else {
       baseClasses += ' layer-visible';
     }
-    if (activeZot) baseClasses += ' zotted';
+    if (activeZot || zot) baseClasses += ' zotted';
     return baseClasses;
   };
 
@@ -441,7 +441,7 @@ function LayerRow (props) {
           </a>
         </>
       )}
-      <Zot zot={activeZot} layer={layer.id} isMobile={isMobile} />
+      <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
