@@ -76,7 +76,7 @@ function TileMeasurement({ ui }) {
             break;
           }
         } catch (error) {
-          console.error(`Error while processing layer ${layers[j].id} for date ${dates[i]}: `, error);
+          console.error(`No WMS image tile available for layer ${layers[j].id} on date ${dates[i]}: `, error);
           break;
         }
       }
@@ -86,7 +86,6 @@ function TileMeasurement({ ui }) {
       }
       layersMeetingThresholdForDate = 0;
     }
-
 
     const firstLayerWithBestDate = findBestDate(layers, bestDates);
 
@@ -129,12 +128,50 @@ function TileMeasurement({ ui }) {
     }
   };
 
-  const verifyTilesAndHandleErrors = (abortProceedure) => {
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const verifyTilesAndHandleErrors = async (abortProceedure) => {
     console.log('Verifying tiles on map...');
 
-    const tileCount = countTilesForSpecifiedLayers(ui, layersToMeasure);
-    const loadedTiles = tileCount.totalLoadedTileCount > 0;
-    console.log(`Total tiles loaded: ${tileCount.totalLoadedTileCount} and abortProceedure === ${abortProceedure}}`);
+    // most of these variables are purely for debugging purposes
+    let tileCount = 0;
+    let loadedTilesCount = 0;
+    let errorTilesCount = 0;
+    let emptyTilesCount = 0;
+    let totalTilesLoadedWithBadImageCount = 0;
+    let otherTileStates = [];
+
+    // In rare cases the TileLayer may not have finished loading tiles at the time of measurement
+    // We can verify this by checking the otherTileStates array for values of 1 that indicate that tiles were still loading
+    let retries = 0;
+    while (retries < 10) {
+      console.log('Attempt #', retries + 1, 'to verify tiles on map...');
+      const {
+        totalExpectedTileCount,
+        totalLoadedTileCount,
+        totalTilesLoadedWithBadImage,
+        totalErrorTiles,
+        totalEmptyTiles,
+        totalOtherTileStates,
+      } = countTilesForSpecifiedLayers(ui, layersToMeasure);
+      tileCount = totalExpectedTileCount;
+      loadedTilesCount = totalLoadedTileCount;
+      errorTilesCount = totalErrorTiles;
+      emptyTilesCount = totalEmptyTiles;
+      totalTilesLoadedWithBadImageCount = totalTilesLoadedWithBadImage;
+      otherTileStates = totalOtherTileStates;
+      if (loadedTilesCount === 0) {
+        retries += 1;
+        await delay(1000);
+      } else {
+        break;
+      }
+    }
+
+    const loadedTiles = loadedTilesCount > 0;
+    const tileStatus = `Out of an expected ${tileCount} tiles, ${loadedTilesCount} were loaded. There were ${totalTilesLoadedWithBadImageCount} tiles loaded with bad images, ${errorTilesCount} error tiles, and ${emptyTilesCount} empty tiles. There were ${otherTileStates.length} other tile states: ${otherTileStates.join(', ')}`;
+    console.log(tileStatus);
+    console.log('LoadedTiles === ', loadedTiles);
 
     if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
       setEICMeasurementComplete();
@@ -156,11 +193,8 @@ function TileMeasurement({ ui }) {
 
   // #1 Parent function that is called from useEffect.
   const calculateMeasurements = async () => {
+    console.log('Entering EIC mode...');
     try {
-      console.log('Entering EIC mode...');
-
-      setMeasurementsStarted(true);
-
       const measurementLayers = findLayersToMeasure();
       if (!measurementLayers.length) {
         console.error('No layers found to be measured... Aborting...');
@@ -194,9 +228,10 @@ function TileMeasurement({ ui }) {
 
   useEffect(() => {
     if (!measurementsStarted && activeLayers && eic && ui.selected) {
+      setMeasurementsStarted(true);
       calculateMeasurements();
     }
-  });
+  }, [ui.selected]);
 
   return null;
 }

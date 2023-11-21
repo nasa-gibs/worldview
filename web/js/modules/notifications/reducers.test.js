@@ -56,6 +56,7 @@ describe('notificationsReducer', () => {
         numberOutagesUnseen: 1,
         numberUnseen: 1,
         type: 'outage',
+        total: 1,
         isActive: true,
         object: constants.MOCK_SORTED_NOTIFICATIONS,
       });

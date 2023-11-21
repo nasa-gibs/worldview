@@ -31,6 +31,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
         const numberOutagesUnseen = notificationsByType.outages.length;
         return {
           ...state,
+          total: getCount(notificationsByType),
           number: getCount(notificationsByType),
           numberUnseen: getCount(notificationsByType),
           numberOutagesUnseen,
