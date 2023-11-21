@@ -71,7 +71,7 @@ class App extends React.Component {
     const {
       kioskModeEnabled, notifications, numberOutagesUnseen,
     } = this.props;
-    if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
+    if (numberOutagesUnseen !== prevProps.numberOutagesUnseen && process.env.NODE_ENV !== 'development') {
       if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
         this.openNotification(notifications, numberOutagesUnseen);
       }

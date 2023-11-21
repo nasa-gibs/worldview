@@ -23,6 +23,7 @@ import {
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
   UPDATE_DDV_LAYER,
+  UPDATE_COLLECTION,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -373,6 +374,30 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
+
+    case UPDATE_COLLECTION: {
+      const updates = {};
+      action.payload.forEach(collection => {
+        const { id, date, type, version } = collection;
+
+        // If the layer doesn't exist, initialize it
+        if (!state.collections[id]) {
+          updates[id] = { $set: { dates: [{ version, type, date }] } };
+        } else {
+          // If the layer exists, prepare to push to the dates array
+          const newEntry = { date, type, version };
+          updates[id] = {
+            dates: { $push: [newEntry] }
+          };
+        }
+      });
+
+      return update(state, {
+        collections: {
+          $apply: collections => update(collections, updates)
+        }
+      });
+    }
 
       // This is required because to update band combinations we need to actually remove and re-add these layers
       // This case sets the ddv layer back to its original index before being removed and added again

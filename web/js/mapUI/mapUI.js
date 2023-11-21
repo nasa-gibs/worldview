@@ -18,6 +18,7 @@ import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
 import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
+import UpdateCollections from './components/update-collections/updateCollections';
 import DevTestButton from './components/dev-test-mode/dev-test-button';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
@@ -403,6 +404,7 @@ function MapUI(props) {
       <GranuleHover granuleFootprints={granuleFootprints} ui={ui} />
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
+      <UpdateCollections />
       { isEICModeActive
       && (
       <>

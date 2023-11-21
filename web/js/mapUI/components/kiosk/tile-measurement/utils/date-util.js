@@ -1,6 +1,6 @@
 // format a single daily date
 // Accepts a date object
-function formatDailyDate (date) {
+export function formatDailyDate (date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
@@ -28,7 +28,7 @@ function getDailyDates (selectedDate) {
 
 // format a single subdaily date
 // accepts a date object
-function formatSubdailyDate (date) {
+export function formatSubdailyDate (date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');

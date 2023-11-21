@@ -33,6 +33,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_LAYER_COLLECTION,
   UPDATE_LAYER_DATE_COLLECTION,
+  UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
@@ -413,6 +414,13 @@ export function updateLayerDateCollection(layerInfo) {
   return {
     type: UPDATE_LAYER_DATE_COLLECTION,
     ...layerInfo,
+  };
+}
+
+export function updateCollection(collection) {
+  return {
+    type: UPDATE_COLLECTION,
+    payload: collection,
   };
 }
 

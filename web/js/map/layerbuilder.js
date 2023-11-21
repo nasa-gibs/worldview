@@ -114,9 +114,6 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
     const state = store.getState();
-    // console.log('layer', layer)
-    console.log('src', src)
-
     const date = layerDate.toISOString().split('T')[0];
 
     const updateCollections = (headers) => {
@@ -135,15 +132,13 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!getCollections(layers, date, layer)) {
         updateStoreCollections(layer.id);
         updateStoreCollectionDates(layer.id, version, type, date);
-        // console.log('Layer ID: ', layer.id, 'Collection: ', version, 'Type: ', type, 'Date: ', date);
-        // console.log(layer)
       }
     };
 
     try {
       const response = await fetch(src);
       const data = await response.blob();
-      updateCollections(response.headers);
+      // updateCollections(response.headers);
 
       if (data !== undefined) {
         tile.getImage().src = URL.createObjectURL(data);
@@ -429,7 +424,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceURL = def.sourceOverride || configSource.url;
-    console.log(sourceURL + urlParameters)
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
