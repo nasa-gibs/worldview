@@ -18,7 +18,7 @@ function UpdateCollections () {
     const { matrixSet } = def.projections[proj.id];
     const crs = `epsg${proj.selected.epsg}`;
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));
-    const imageType = def.imageType === 'image/png' ? 'png' : 'jpeg';
+    const imageType = def.format === 'image/png' ? 'png' : 'jpeg';
 
     const srcs = [
       `https://gibs-a.earthdata.nasa.gov/wmts/${crs}/best/wmts.cgi?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`,
