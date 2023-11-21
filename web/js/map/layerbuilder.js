@@ -20,6 +20,7 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import lodashCloneDeep from 'lodash/cloneDeep';
+import { applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -792,23 +793,33 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createEsriDemoLayer = (def, options, day, state) => {
+    const apiKey = 'AAPK46d95319598247e198b2730e87583b93ksf48XkyAaA7JMkMg02bBM1yAMcielel6xWL0xeEJlHATkyE0dCbXginzMRQyPGF';
+    const basemapId = "6976148c11bd497d8624206f9ee03e30"; // Custom vector tile style
     const { proj: { selected } } = state;
     const { crs } = selected;
     const source = config.sources[def.source];
 
+    console.log(crs);
+
     const vectorSource = new SourceVectorTile({
-      url: `${source.url}/tile/{z}/{y}/{x}.pbf`,
+      // url: `${source.url}/tile/{z}/{y}/{x}.pbf`,
       projection: crs,
       format: new MVT(),
       extent: selected.maxExtent,
     });
 
-    return new LayerVectorTile({
+    const layer = new LayerVectorTile({
       source: vectorSource,
       extent: selected.maxExtent,
       renderMode: 'vector',
       className: def.id,
     });
+
+    olmsApplyStyle(layer, `${source.url}/${basemapId}?token=${apiKey}`);
+
+    console.log(layer);
+
+    return layer;
   };
 
   /**
