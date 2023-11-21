@@ -20,8 +20,6 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
-  UPDATE_LAYER_COLLECTION,
-  UPDATE_LAYER_DATE_COLLECTION,
   UPDATE_DDV_LAYER,
   UPDATE_COLLECTION,
 } from './constants';
@@ -349,37 +347,12 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case UPDATE_LAYER_COLLECTION:
-      return update(state, {
-        collections: {
-          $merge: {
-            [action.id]: {
-              dates: [],
-            },
-          },
-        },
-      });
-
-    case UPDATE_LAYER_DATE_COLLECTION:
-      return update(state, {
-        collections: {
-          [action.id]: {
-            dates: {
-              $push: [{
-                version: action.collection.version,
-                type: action.collection.type,
-                date: action.date,
-              }],
-            },
-          },
-        },
-      });
-
     case UPDATE_COLLECTION: {
       const updates = {};
-      action.payload.forEach(collection => {
-        const { id, date, type, version } = collection;
-
+      action.payload.forEach((collection) => {
+        const {
+          id, date, type, version,
+        } = collection;
         // If the layer doesn't exist, initialize it
         if (!state.collections[id]) {
           updates[id] = { $set: { dates: [{ version, type, date }] } };
@@ -387,20 +360,19 @@ export function layerReducer(state = initialState, action) {
           // If the layer exists, prepare to push to the dates array
           const newEntry = { date, type, version };
           updates[id] = {
-            dates: { $push: [newEntry] }
+            dates: { $push: [newEntry] },
           };
         }
       });
-
       return update(state, {
         collections: {
-          $apply: collections => update(collections, updates)
-        }
+          $apply: (collections) => update(collections, updates),
+        },
       });
     }
 
-      // This is required because to update band combinations we need to actually remove and re-add these layers
-      // This case sets the ddv layer back to its original index before being removed and added again
+    // This is required because to update band combinations we need to actually remove and re-add these layers
+    // This case sets the ddv layer back to its original index before being removed and added again
     case UPDATE_DDV_LAYER: {
       const { layerIndex, id, layers } = action;
       const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);

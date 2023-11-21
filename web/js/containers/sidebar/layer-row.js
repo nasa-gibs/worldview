@@ -33,7 +33,7 @@ import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import {
   getActiveLayers, makeGetDescription, getCollections,
 } from '../../modules/layers/selectors';
-import { formatDailyDate, formatSubdailyDate } from '../../mapUI/components/kiosk/tile-measurement/utils/date-util'
+import { formatDailyDate, formatSubdailyDate } from '../../mapUI/components/kiosk/tile-measurement/utils/date-util';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 import {
