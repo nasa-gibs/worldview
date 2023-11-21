@@ -12,7 +12,6 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_L2_Chlorophyll_A",
-                        "MODIS_Terra_Chlorophyll_A",
                         "OrbitTracks_Terra_Descending"
                     ]
                 },
@@ -23,7 +22,6 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_L2_Chlorophyll_A",
-                        "MODIS_Aqua_Chlorophyll_A",
                         "OrbitTracks_Aqua_Ascending"
                     ]
                 },

@@ -149,7 +149,7 @@ function InfoList (props) {
         arr.splice(1, 0, getExploreWorldviewObj());
       }
     }
-    if (notifications.isActive && notifications.number > 0) {
+    if (notifications.isActive && notifications.total > 0) {
       arr.splice(2, 0, getNotificationListItem());
     }
     arr.push(getDistractionFreeObj());

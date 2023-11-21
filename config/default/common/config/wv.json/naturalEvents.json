@@ -571,11 +571,11 @@
                         false
                     ],
                     [
-                        "MODIS_Terra_Chlorophyll_A",
+                        "MODIS_Terra_L2_Chlorophyll_A",
                         false
                     ],
                     [
-                        "MODIS_Aqua_Chlorophyll_A",
+                        "MODIS_Aqua_L2_Chlorophyll_A",
                         false
                     ]
                 ],
