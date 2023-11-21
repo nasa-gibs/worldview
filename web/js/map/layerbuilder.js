@@ -794,15 +794,12 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const createEsriDemoLayer = (def, options, day, state) => {
     const apiKey = 'AAPK46d95319598247e198b2730e87583b93ksf48XkyAaA7JMkMg02bBM1yAMcielel6xWL0xeEJlHATkyE0dCbXginzMRQyPGF';
-    const basemapId = "6976148c11bd497d8624206f9ee03e30"; // Custom vector tile style
+    const basemapId = '6976148c11bd497d8624206f9ee03e30'; // Custom vector tile style
     const { proj: { selected } } = state;
     const { crs } = selected;
     const source = config.sources[def.source];
 
-    console.log(crs);
-
     const vectorSource = new SourceVectorTile({
-      // url: `${source.url}/tile/{z}/{y}/{x}.pbf`,
       projection: crs,
       format: new MVT(),
       extent: selected.maxExtent,
@@ -816,8 +813,6 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     olmsApplyStyle(layer, `${source.url}/${basemapId}?token=${apiKey}`);
-
-    console.log(layer);
 
     return layer;
   };
