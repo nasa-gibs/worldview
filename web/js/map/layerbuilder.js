@@ -794,7 +794,12 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const createEsriDemoLayer = (def, options, day, state) => {
     const apiKey = 'AAPK46d95319598247e198b2730e87583b93ksf48XkyAaA7JMkMg02bBM1yAMcielel6xWL0xeEJlHATkyE0dCbXginzMRQyPGF';
-    const basemapId = '6976148c11bd497d8624206f9ee03e30'; // Custom vector tile style
+    const basemapId = 'b21e69e11f344697a13450b0970d9241'; // dark grey
+    // const basemapId = '3f79b4dde3c34e1c8f8c9688be8733bb'; // light grey
+    // const basemapId = 'cc8072363d614d96b08b2361a09979a5'; // streets
+    // const basemapId = '2c2be6e056a54901965be11752b83dfe'; // navigation
+    // const basemapId = 'cabd61a6cfc44843b2ccd6969bb88cf0'; // osm
+    // const basemapId = '670c2a9ee3b949a8991b99df425abd0d'; // topo
     const { proj: { selected } } = state;
     const { crs } = selected;
     const source = config.sources[def.source];
