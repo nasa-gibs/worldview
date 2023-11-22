@@ -69,7 +69,6 @@ function UpdateProjection(props) {
     lodashEach(activeLayersUI, (mapLayer) => {
       ui.selected.removeLayer(mapLayer);
     });
-    ui.cache.clear();
   };
 
   /**
