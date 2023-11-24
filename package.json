@@ -177,7 +177,7 @@
     "moment-locales-webpack-plugin": "^1.2.0",
     "node-dir": "^0.1.17",
     "ol": "^8.2.0",
-    "ol-mapbox-style": "^12.1.0",
+    "ol-mapbox-style": "^12.1.1",
     "p-queue": "^7.4.1",
     "proj4": "^2.9.2",
     "prop-types": "^15.8.1",
