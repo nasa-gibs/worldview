@@ -51,17 +51,19 @@ function TravelModeColorbars() {
 
   return (
     <div id="travel-mode-colorbar-container">
-      {Object.values(palettes).map((layer, index) => {
+      {Object.values(palettes).map((layer) => {
         const layerID = layer.id;
-        const legend = layer.maps[0].legend;
-        return (
-          <ColorBarRow
-            key={index}
-            layerID={layerID}
-            legend={legend}
-            index={index}
-          />
-        );
+        return layer.maps.map((mapItem, index) => {
+          const legend = mapItem.legend;
+          return (
+            <ColorBarRow
+              key={`${layerID}-${index}`}
+              layerID={layerID}
+              legend={legend}
+              index={index}
+            />
+          );
+        });
       })}
     </div>
   );

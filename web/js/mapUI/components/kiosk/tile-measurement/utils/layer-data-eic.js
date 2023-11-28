@@ -77,7 +77,7 @@ export const travelModeData = {
     title: 'Active fires detected by Suomi NPP satellite'
   },
   "4": {
-    title: 'Black Marble night time imaging from Suomi NPP satellite'
+    title: 'Black Marble Night Time Imaging from Suomi NPP Satellite'
   },
   "5": {
     title: 'Rain and Snow'
