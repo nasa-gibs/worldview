@@ -8,6 +8,7 @@ import {
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
+  SET_TRAVELING_HYPERWALL,
 } from './constants';
 
 export const uiState = {
@@ -19,6 +20,7 @@ export const uiState = {
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,
   eicMeasurementAborted: false,
+  travelMode: false,
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -71,6 +73,11 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         eicMeasurementAborted: true,
+      };
+    case SET_TRAVELING_HYPERWALL:
+      return {
+        ...state,
+        travelMode: action.travelMode,
       };
     default:
       return state;
