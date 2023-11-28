@@ -65,3 +65,45 @@ export const bestDates = {
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { date: '2023-10-30' },
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { date: '2023-10-30' },
 };
+
+export const travelModeData = {
+  "1": {
+    title: 'True color imagery from Terra satellite'
+  },
+  "2": {
+    title: 'Geostationary imagery from NOAA and JAXA satellites'
+  },
+  "3": {
+    title: 'Active fires detected by Suomi NPP satellite'
+  },
+  "4": {
+    title: 'Black Marble night time imaging from Suomi NPP satellite'
+  },
+  "5": {
+    title: 'Rain and Snow'
+  },
+  "6": {
+    title: 'Sea Surface Temperature'
+  },
+  "7": {
+    title: 'Land Surface Temperature'
+  },
+  "8": {
+    title: 'Arctic Sea Ice'
+  },
+  "9": {
+    title: 'Antarctic Sea Ice'
+  },
+  "10": {
+    title: 'VIIRS/Suomi NPP fires & VIRRS True Color Corrected Reflectance'
+  },
+  "11": {
+    title: 'Aura/OMI Nitrogen Dioxide and VIIRS/NOAA-20 True Color Corrected Reflectance'
+  },
+  "12": {
+    title: 'Aqua/AIRS Carbon Monoxide Day and Night + Borders and coastlines'
+  },
+  "13": {
+    title: 'VIIRS/Suomi NPP Aerosol Optical Depth Dark Target and Deep Blue & True Color Corrected Reflectance'
+  },
+}
