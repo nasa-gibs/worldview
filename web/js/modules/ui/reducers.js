@@ -20,7 +20,7 @@ export const uiState = {
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,
   eicMeasurementAborted: false,
-  travelMode: false,
+  travelMode: '', // an id key that corresponds to a specific set of EIC scenario details
 };
 
 export default function uiReducers(state = uiState, action) {

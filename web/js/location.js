@@ -565,15 +565,7 @@ const getParameters = function(config, parameters) {
     },
     travel: {
       stateKey: 'ui.travelMode',
-      initialState: false,
-      type: 'bool',
-      options: {
-        serializeNeedsGlobalState: true,
-        serialize: (boo, state) => {
-          const isTravelModeActive = get(state, 'ui.travelMode');
-          return isTravelModeActive ? boo : undefined;
-        },
-      },
+      initialState: '',
     }
   };
 };
