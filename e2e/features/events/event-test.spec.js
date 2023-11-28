@@ -28,9 +28,10 @@ test('Make sure that 4 fire layers are not present in layer list: use mock', asy
 })
 
 test('Check that 4 fire layers are now present', async () => {
-  const { layersTab, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+  const { layersTab, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
-  await sidebarEvent.click()
+  const sidebarEventList = await page.locator('#EONET_3931-listwildfires')
+  await sidebarEventList.click()
   await layersTab.click()
   await page.waitForTimeout(3000)
   await expect(thermAnomSNPPday).toBeVisible()
