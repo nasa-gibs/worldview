@@ -65,6 +65,7 @@ function MapUI(props) {
     dateCompareState,
     embed,
     isEICModeActive,
+    isStaticMapActive,
     isTravelModeActive,
     lastArrowDirection,
     layerQueue,
@@ -410,7 +411,7 @@ function MapUI(props) {
       <>
         <KioskAnimations ui={ui} />
         <TileMeasurement ui={ui} />
-        { isTravelModeActive && <TravelMode /> }
+        { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }
       </>
       )}
       {tileImageTestMode && <DevTestButton />}
@@ -444,6 +445,7 @@ const mapStateToProps = (state) => {
   const prevDate = getNextDateTime(state, -1, useDate);
   const isEICModeActive = ui.eic !== '';
   const isTravelModeActive = ui.travelMode !== '';
+  const isStaticMapActive = ui.displayStaticMap;
 
   return {
     activeLayers,
@@ -454,6 +456,7 @@ const mapStateToProps = (state) => {
     dateCompareState,
     embed,
     isEICModeActive,
+    isStaticMapActive,
     isTravelModeActive,
     lastArrowDirection,
     lastPreloadDate,
