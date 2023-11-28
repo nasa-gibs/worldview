@@ -89,6 +89,7 @@ function AnimationWidget (props) {
     snappedCurrentDate,
     startDate,
     subDailyMode,
+    map,
   } = props;
 
   const widgetWidth = 334;
@@ -247,6 +248,7 @@ function AnimationWidget (props) {
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
             onClose={onPushPause}
+            map={map}
           />
         ) : null
       }

@@ -60,13 +60,24 @@ class PlayQueue extends React.Component {
     this.minBufferLength = null;
     this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
     this.abortController = null;
+    this.isBetweenSteps = false;
   }
 
   componentDidMount() {
+    const {
+      map,
+    } = this.props;
     this.mounted = true;
     // this.queue.on('completed', (dateStr) => {
     //   console.debug(dateStr, this.queue.size, this.queue.pending);
     // });
+    map.ui.selected.getView().on('propertychange', (e) => {
+      this.isBetweenSteps = true;
+    });
+    map.ui.selected.on('moveend', () => {
+      this.isBetweenSteps = false;
+      this.checkShouldPlay();
+    });
     this.playingDate = this.getStartDate();
     this.checkQueue();
     this.checkShouldPlay();
@@ -223,6 +234,7 @@ class PlayQueue extends React.Component {
     }
     if (this.isPreloadSufficient() || restartLoop) {
       // console.debug('Started: ', Date.now());
+      if (this.isBetweenSteps) return;
       return this.play();
     }
     this.checkQueue();
@@ -483,6 +495,7 @@ PlayQueue.propTypes = {
   numberOfFrames: PropTypes.number,
   snappedCurrentDate: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
+  map: PropTypes.object,
 };
 
 export default PlayQueue;
