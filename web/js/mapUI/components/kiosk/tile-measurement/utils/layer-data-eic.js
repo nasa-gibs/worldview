@@ -68,7 +68,7 @@ export const bestDates = {
 
 export const travelModeData = {
   "1": {
-    title: 'True color imagery from Terra satellite'
+    title: 'True Color Imagery from Terra Satellite'
   },
   "2": {
     title: 'Geostationary imagery from NOAA and JAXA satellites'
