@@ -566,7 +566,7 @@ const getParameters = function(config, parameters) {
     travel: {
       stateKey: 'ui.travelMode',
       initialState: '',
-    }
+    },
   };
 };
 

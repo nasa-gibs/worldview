@@ -7,29 +7,31 @@ function ColorBarRow({ layerID, legend, index }) {
   const canvasRef = useRef(null);
   const width = 400;
   const height = 40;
-  const { minLabel, maxLabel, units, type, title } = legend;
-  const minimum = minLabel + ' ' + units;
-  const maximum = maxLabel + ' ' + units;
+  const {
+    minLabel, maxLabel, units, type, title, colors, id,
+  } = legend;
+  const minimum = `${minLabel} ${units}`;
+  const maximum = `${maxLabel} ${units}`;
 
-  useEffect(() => {
-    if (type === 'continuous' || type === 'discrete') {
-      drawOnCanvas(canvasRef, legend, width, height);
-    }
-  }, [legend]);
-
-  const drawOnCanvas = (canvasRef, colorMap, width, height) => {
-    if (canvasRef.current && colorMap) {
+  const drawOnCanvas = () => {
+    if (canvasRef.current && legend) {
       const ctx = canvasRef.current.getContext('2d');
-      drawTravelModePaletteOnCanvas(ctx, colorMap.colors, width, height);
+      drawTravelModePaletteOnCanvas(ctx, colors, width, height);
     }
   };
 
+  useEffect(() => {
+    if (type === 'continuous' || type === 'discrete') {
+      drawOnCanvas();
+    }
+  }, [legend]);
+
   return (
-    <div className="travel-mode-colorbar-row" datalayer={layerID} key={index}>
+    <div className="travel-mode-colorbar-row" key={index}>
       <div className="travel-mode-colorbar-title">{title}</div>
       <div className="travel-mode-colorbar-case">
         <canvas
-          id={`${util.encodeId(layerID)}-${util.encodeId(legend.id)}${index}colorbar`}
+          id={`${util.encodeId(layerID)}-${util.encodeId(id)}${index}colorbar`}
           className="travel-mode-colorbar"
           width={width}
           height={height}
@@ -54,10 +56,10 @@ function TravelModeColorbars() {
       {Object.values(palettes).map((layer) => {
         const layerID = layer.id;
         return layer.maps.map((mapItem, index) => {
-          const legend = mapItem.legend;
+          const { legend } = mapItem;
           return (
             <ColorBarRow
-              key={`${layerID}-${index}`}
+              key={`${layerID}-${legend.id}`}
               layerID={layerID}
               legend={legend}
               index={index}

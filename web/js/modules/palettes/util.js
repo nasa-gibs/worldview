@@ -122,7 +122,7 @@ export function drawTravelModePaletteOnCanvas(
   width,
   height,
 ) {
-  const colorbarStartY = 0
+  const colorbarStartY = 0;
   ctx.fillStyle = checkerBoardPattern;
   ctx.fillRect(1, colorbarStartY, width - 1, height);
 
