@@ -563,6 +563,18 @@ const getParameters = function(config, parameters) {
         parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
     },
+    travel: {
+      stateKey: 'ui.travelMode',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isTravelModeActive = get(state, 'ui.travelMode');
+          return isTravelModeActive ? boo : undefined;
+        },
+      },
+    }
   };
 };
 
