@@ -7,9 +7,12 @@ function ColorBarRow({ layerID, legend, index }) {
   const canvasRef = useRef(null);
   const width = 400;
   const height = 40;
+  const { minLabel, maxLabel, units, type, title } = legend;
+  const minimum = minLabel + ' ' + units;
+  const maximum = maxLabel + ' ' + units;
 
   useEffect(() => {
-    if (legend.type === 'continuous' || legend.type === 'discrete') {
+    if (type === 'continuous' || type === 'discrete') {
       drawOnCanvas(canvasRef, legend, width, height);
     }
   }, [legend]);
@@ -23,13 +26,21 @@ function ColorBarRow({ layerID, legend, index }) {
 
   return (
     <div className="travel-mode-colorbar-row" datalayer={layerID} key={index}>
-      <div id="travel-mode-colorbar-case">
+      <div className="travel-mode-colorbar-title">{title}</div>
+      <div className="travel-mode-colorbar-case">
         <canvas
           id={`${util.encodeId(layerID)}-${util.encodeId(legend.id)}${index}colorbar`}
+          className="travel-mode-colorbar"
           width={width}
           height={height}
           ref={canvasRef}
         />
+      </div>
+      <div className="travel-mode-colorbar-label-container">
+        <div className="travel-mode-colorbar-labels">
+          <div className="travel-mode-colorbar-min-label">{minimum}</div>
+          <div className="travel-mode-colorbar-max-label">{maximum}</div>
+        </div>
       </div>
     </div>
   );
