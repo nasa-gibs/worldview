@@ -18,7 +18,6 @@ export const layersToMeasure = [
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
   'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
   'CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly',
-
 ];
 
 // Object that contains the black pixel % threshold for each layer

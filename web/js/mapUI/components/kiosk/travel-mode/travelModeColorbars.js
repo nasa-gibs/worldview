@@ -1,14 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import util from '../../../../util/util';
 import { drawTravelModePaletteOnCanvas } from '../../../../modules/palettes/util';
 
-function ColorBarRow({ layerID, legend, index }) {
+function ColorBarRow({ legend, index }) {
   const canvasRef = useRef(null);
   const width = 400;
   const height = 40;
+
   const {
-    minLabel, maxLabel, units, type, title, colors, id,
+    minLabel, maxLabel, units, type, title, colors,
   } = legend;
   const minimum = `${minLabel} ${units}`;
   const maximum = `${maxLabel} ${units}`;
@@ -31,7 +31,6 @@ function ColorBarRow({ layerID, legend, index }) {
       <div className="travel-mode-colorbar-title">{title}</div>
       <div className="travel-mode-colorbar-case">
         <canvas
-          id={`${util.encodeId(layerID)}-${util.encodeId(id)}${index}colorbar`}
           className="travel-mode-colorbar"
           width={width}
           height={height}
@@ -49,7 +48,16 @@ function ColorBarRow({ layerID, legend, index }) {
 }
 
 function TravelModeColorbars() {
-  const palettes = useSelector((state) => state.palettes.rendered);
+  const activePalettes = useSelector((state) => state.palettes.active);
+  const renderedPalettes = useSelector((state) => state.palettes.rendered);
+
+  // custom palettes will be found in activePalettes
+  let palettes = renderedPalettes;
+  if (Object.keys(activePalettes).length > 0) {
+    palettes = activePalettes;
+  }
+
+  if (!palettes) return null;
 
   return (
     <div id="travel-mode-colorbar-container">
@@ -60,7 +68,6 @@ function TravelModeColorbars() {
           return (
             <ColorBarRow
               key={`${layerID}-${legend.id}`}
-              layerID={layerID}
               legend={legend}
               index={index}
             />
