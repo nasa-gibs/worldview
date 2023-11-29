@@ -51,17 +51,24 @@ function TravelModeColorbars() {
   const activePalettes = useSelector((state) => state.palettes.active);
   const renderedPalettes = useSelector((state) => state.palettes.rendered);
 
-  // custom palettes will be found in activePalettes
   let palettes = renderedPalettes;
   if (Object.keys(activePalettes).length > 0) {
     palettes = activePalettes;
   }
 
-  if (!palettes) return null;
+  if (!palettes || !Object.keys(palettes).length) return null;
+
+  // Filter out legends with type 'classification' and create an intermediate array
+  const filteredPalettes = Object.values(palettes).map((layer) => ({
+    ...layer,
+    maps: layer.maps.filter((mapItem) => !(mapItem.legend && mapItem.legend.type === 'classification')),
+  })).filter((layer) => layer.maps.length > 0);
+
+  if (filteredPalettes.length === 0) return null;
 
   return (
     <div id="travel-mode-colorbar-container">
-      {Object.values(palettes).map((layer) => {
+      {filteredPalettes.map((layer) => {
         const layerID = layer.id;
         return layer.maps.map((mapItem, index) => {
           const { legend } = mapItem;
