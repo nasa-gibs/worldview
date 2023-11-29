@@ -9,7 +9,13 @@ button:focus {
   z-index: 3;
 }
 
-.kiosk-year, .kiosk-month, .kiosk-day, .kiosk-hours, .kiosk-minutes, .kiosk-seconds, .kiosk-timezone {
+.kiosk-year,
+.kiosk-month,
+.kiosk-day,
+.kiosk-hours,
+.kiosk-minutes,
+.kiosk-seconds,
+.kiosk-timezone {
   font-family: Helvetica, sans-serif;
   font-size: 34px;
   letter-spacing: initial;
@@ -17,7 +23,8 @@ button:focus {
   text-align: center;
 }
 
-.kiosk-year, .kiosk-month {
+.kiosk-year,
+.kiosk-month {
   min-width: 80px;
 }
 
@@ -62,7 +69,8 @@ button:focus {
   bottom: 0;
   left: 0;
   border-radius: 0;
-  border-top-right-radius: 15px;
+  border-top-right-radius: 5px;
+  height: 100px;
 }
 
 #timeline-header {
@@ -158,7 +166,7 @@ button:focus {
   }
 
   & .input-wrapper .date-arrows::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -15px;
     height: 30px;
@@ -230,7 +238,7 @@ button:focus {
   & .date-arrow-down {
     transform: scaleY(-1);
     filter: flipv;
-    filter: "FlipV";
+    filter: 'FlipV';
   }
 
   & .date-arrows:hover,
@@ -260,7 +268,7 @@ button:focus {
 
   & #left-arrow-group svg {
     filter: fliph;
-    filter: "FlipH";
+    filter: 'FlipH';
   }
 
   & #now-button-group {
@@ -569,7 +577,7 @@ button:focus {
   position: absolute;
   top: 100%;
   left: 15%;
-  content: "";
+  content: '';
   border-top: 5px solid #000;
   border-top: 5px solid rgb(51 51 51 / 90%);
   border-right: 5px solid transparent;
@@ -654,7 +662,7 @@ button:focus {
   height: 21px;
   width: 30px;
   position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -8px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -8px no-repeat;
   border-radius: 0;
   box-sizing: border-box;
   border-right: 0;
@@ -686,7 +694,7 @@ button:focus {
 
 .timeline-layer-coverage-panel-handle-chevron {
   position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -3px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
   box-sizing: border-box;
   left: 50%;
   width: 57px;
@@ -704,7 +712,8 @@ button:focus {
   margin-left: -14px;
 }
 
-#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
+#timeline-layer-coverage-panel-handle:hover
+  .timeline-layer-coverage-panel-handle-chevron {
   background-position: -206px -63px;
 }
 
@@ -912,7 +921,7 @@ button:focus {
 .animate-button-phone-portrait-embed {
   left: 100px;
   bottom: 52px;
-  transform: scale(.75);
+  transform: scale(0.75);
 }
 
 .animate-button-phone-portrait-subdaily {
@@ -938,13 +947,13 @@ button:focus {
 .animate-button-tablet-portrait-embed {
   left: 235px;
   bottom: 15px;
-  transform: scale(.75);
+  transform: scale(0.75);
 }
 
 .animate-button-tablet-portrait-subdaily-embed {
   left: 315px;
   bottom: 15px;
-  transform: scale(.75);
+  transform: scale(0.75);
 }
 
 .animate-button-tablet-portrait-subdaily {
