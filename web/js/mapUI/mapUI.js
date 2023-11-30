@@ -18,6 +18,7 @@ import MouseMoveEvents from './components/mouse-move-events/mouseMoveEvents';
 import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAnimate';
 import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
+import TravelMode from './components/kiosk/travel-mode/travelMode';
 import UpdateCollections from './components/update-collections/updateCollections';
 import DevTestButton from './components/dev-test-mode/dev-test-button';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -65,6 +66,8 @@ function MapUI(props) {
     dateCompareState,
     embed,
     isEICModeActive,
+    isStaticMapActive,
+    isTravelModeActive,
     lastArrowDirection,
     layerQueue,
     lastPreloadDate,
@@ -410,6 +413,7 @@ function MapUI(props) {
       <>
         <KioskAnimations ui={ui} />
         <TileMeasurement ui={ui} />
+        { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }
       </>
       )}
       {tileImageTestMode && <DevTestButton />}
@@ -442,6 +446,8 @@ const mapStateToProps = (state) => {
   const nextDate = getNextDateTime(state, 1, useDate);
   const prevDate = getNextDateTime(state, -1, useDate);
   const isEICModeActive = ui.eic !== '';
+  const isTravelModeActive = ui.travelMode !== '';
+  const isStaticMapActive = ui.displayStaticMap;
 
   return {
     activeLayers,
@@ -452,6 +458,8 @@ const mapStateToProps = (state) => {
     dateCompareState,
     embed,
     isEICModeActive,
+    isStaticMapActive,
+    isTravelModeActive,
     lastArrowDirection,
     lastPreloadDate,
     layers,

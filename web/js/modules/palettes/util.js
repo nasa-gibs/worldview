@@ -109,6 +109,39 @@ export function drawSidebarPaletteOnCanvas(
   }
 }
 
+/**
+ * Draw canvas with selected colormap for EIC Travel Mode
+ * @param {String} ctxStr | String of wanted cavnas
+ * @param {Array} colors | array of color values
+ * @param {Number} width | width of canvas
+ * @param {Number} height | height of canvas
+ */
+export function drawTravelModePaletteOnCanvas(
+  ctx,
+  colors,
+  width,
+  height,
+) {
+  const colorbarStartY = 0;
+  ctx.fillStyle = checkerBoardPattern;
+  ctx.fillRect(1, colorbarStartY, width - 1, height);
+
+  if (colors) {
+    const bins = colors.length;
+    const binWidth = (width - 2) / bins;
+    const drawWidth = Math.ceil(binWidth);
+    const thickness = 0.5;
+    ctx.strokeStyle = '#000';
+
+    colors.forEach((color, i) => {
+      ctx.fillStyle = util.hexToRGBA(color);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, height);
+    });
+    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), height + (thickness * 2));
+    ctx.stroke();
+  }
+}
+
 export function drawTicksOnCanvas(ctx, legend, width) {
   const canvasHeight = 24;
   const { ticks } = legend;
