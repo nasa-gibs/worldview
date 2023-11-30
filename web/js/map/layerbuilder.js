@@ -6,7 +6,6 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
-import TileState from 'ol/TileState';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
@@ -30,8 +29,6 @@ import {
   mergeBreakpointLayerAttributes,
 } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import { updateLayerDateCollection, updateLayerCollection } from '../modules/layers/actions';
-import { getCollections } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -89,66 +86,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return {
       expirationAbsolute: new Date(now + tenMin),
     };
-  };
-
-  const updateStoreCollectionDates = (id, version, type, date) => {
-    store.dispatch(updateLayerDateCollection({
-      id,
-      date,
-      collection: {
-        version,
-        type,
-      },
-    }));
-  };
-
-  const updateStoreCollections = (id) => {
-    store.dispatch(updateLayerCollection(id));
-  };
-
-  /**
-   * We define our own tile loading function in order to capture custom header values
-   *
-   * @param {*} tile
-   * @param {*} src
-   */
-  const tileLoadFunction = (layer, layerDate) => async function(tile, src) {
-    const state = store.getState();
-
-    const date = layerDate.toISOString().split('T')[0];
-
-    const updateCollections = (headers) => {
-      const actualId = headers.get('layer-identifier-actual');
-
-      if (!actualId) return;
-
-      const parts = actualId.split('_');
-      const type = parts[parts.length - 1];
-      const version = parts[parts.length - 2];
-
-      if (type !== 'NRT' && type !== 'STD') return;
-
-      const { layers } = state;
-      // check if the collection & dates already exist for layer so we don't dispatch actions
-      if (!getCollections(layers, date, layer)) {
-        updateStoreCollections(layer.id);
-        updateStoreCollectionDates(layer.id, version, type, date);
-      }
-    };
-
-    try {
-      const response = await fetch(src);
-      const data = await response.blob();
-      updateCollections(response.headers);
-
-      if (data !== undefined) {
-        tile.getImage().src = URL.createObjectURL(data);
-      } else {
-        tile.setState(TileState.ERROR);
-      }
-    } catch (e) {
-      tile.setState(TileState.ERROR);
-    }
   };
 
   /**
@@ -436,7 +373,6 @@ export default function mapLayerBuilder(config, cache, store) {
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
-      tileLoadFunction: tileLoadFunction(def, layerDate),
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);

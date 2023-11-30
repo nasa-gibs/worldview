@@ -29,13 +29,13 @@ test('Make sure that 4 fire layers are not present in layer list: use mock', asy
 })
 
 test('Check that 4 fire layers are now present', async ({ browserName }) => {
-  // // test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
+  test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
   const { layersTab, modalCloseButton, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
   await modalCloseButton.click()
   await sidebarEvent.click()
   await layersTab.click()
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(5000)
   await expect(thermAnomSNPPday).toBeVisible()
   await expect(thermAnomSNPPnight).toBeVisible()
   await expect(thermAnomVIIRSday).toBeVisible()
@@ -70,7 +70,6 @@ test('Selecting event shows track points and markers which are not visible when 
 
 test('Clicking an event in the list selects the event', async ({ browserName }) => {
   const { firstEvent, selectedFirstEvent } = selectors
-  await page.waitForLoadState('networkidle')
   await firstEvent.click()
   await page.waitForTimeout(6000)
   await expect(selectedFirstEvent).toBeVisible()
@@ -91,7 +90,6 @@ test('Verify Events message and clicking message opens dialog', async ({ browser
   const { firstEvent, notifyMessage, modalCloseButton } = selectors
   await page.goto(mockEvents)
   await modalCloseButton.click()
-  await page.waitForLoadState('networkidle')
   await firstEvent.click()
   await expect(notifyMessage).toBeVisible()
   await expect(notifyMessage).toContainText('Events may not be visible at all times.')

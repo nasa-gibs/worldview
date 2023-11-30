@@ -33,6 +33,7 @@ import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import {
   getActiveLayers, makeGetDescription, getCollections,
 } from '../../modules/layers/selectors';
+import { formatDailyDate, formatSubdailyDate } from '../../mapUI/components/kiosk/tile-measurement/utils/date-util';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 import {
@@ -562,8 +563,9 @@ const makeMapStateToProps = () => {
       (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
     );
     const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
-    const convertedDate = activeDate.toISOString().split('T')[0];
-    const collections = getCollections(layers, convertedDate, layer);
+    const dailyDate = formatDailyDate(activeDate);
+    const subdailyDate = formatSubdailyDate(activeDate);
+    const collections = getCollections(layers, dailyDate, subdailyDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
     return {
