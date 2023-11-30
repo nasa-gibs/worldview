@@ -62,6 +62,8 @@ class PlayQueue extends React.Component {
     this.abortController = null;
     this.isBetweenSteps = false;
     this.hasPlayStarted = false;
+    this.onPropertyChange = this.onPropertyChange.bind(this);
+    this.onMoveEnd = this.onMoveEnd.bind(this);
   }
 
   componentDidMount() {
@@ -375,6 +377,7 @@ class PlayQueue extends React.Component {
   stopPlaying() {
     this.abortController.abort();
     this.setState({ isAnimating: false });
+    this.hasPlayStarted = false;
     // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
