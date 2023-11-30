@@ -793,7 +793,7 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createEsriDemoLayer = (def, options, day, state) => {
-    const apiKey = 'AAPK46d95319598247e198b2730e87583b93ksf48XkyAaA7JMkMg02bBM1yAMcielel6xWL0xeEJlHATkyE0dCbXginzMRQyPGF';
+    const apiKey = 'AAPK9ed378a566c84c9a8e21bd2fa1093669uqcx3vu2aLFBQ1F1lZjzifEun591f1RE0rT_wWLRwaUyeXOIMtCUgU0-oBxTi2Fz';
     const basemapId = 'b21e69e11f344697a13450b0970d9241'; // dark grey
     // const basemapId = '3f79b4dde3c34e1c8f8c9688be8733bb'; // light grey
     // const basemapId = 'cc8072363d614d96b08b2361a09979a5'; // streets
