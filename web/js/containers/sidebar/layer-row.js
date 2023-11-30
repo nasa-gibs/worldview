@@ -121,7 +121,9 @@ function LayerRow (props) {
         const olderGranules = await olderRes.json();
         const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer?.collection_concept_id}&bounding_box=${map?.extent?.join(',')}&temporal=${selectedDate?.toISOString()}/P0Y0M0DT13H0M&sort_key=-start_date&pageSize=1`);
         const newerGranules = await newerRes.json();
-        const granules = [...olderGranules.feed.entry, ...newerGranules.feed.entry];
+        const olderEntries = olderGranules?.feed?.entry || [];
+        const newerEntries = newerGranules?.feed?.entry || [];
+        const granules = [...olderEntries, ...newerEntries];
         if (!granules.length) {
           setActiveZot({ hasGranules: false });
           setShowGranuleAlert(true);
