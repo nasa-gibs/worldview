@@ -23,7 +23,7 @@ export default function Zot (props) {
       tooltipString += `Layer is underzoomed by ${zot.underZoomValue.toString()}x its minimum zoom level. <br/>`;
     } else if (!hasGranules) {
       className = 'zot no-granules';
-      tooltipString += 'No data visible data this location and/or for the date selected. <br/> Try moving the map or select a different date in the layer\'s settings <br/>';
+      tooltipString += 'No visible imagery on this date and/or location. <br/> Try moving the map or select a different date in the layer\'s settings. <br/>';
     }
     if (layerNotices) {
       tooltipString += zot.layerNotices;

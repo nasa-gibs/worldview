@@ -490,7 +490,7 @@ function LayerRow (props) {
             id="zoom-alert"
             isOpen
             title="Bad Zoom Level"
-            message="Data is not available at this zoom level."
+            message="Imagery is not available at this zoom level."
             onDismiss={() => setShowZoomAlert(false)}
           />
         )}
@@ -498,8 +498,8 @@ function LayerRow (props) {
           <AlertUtil
             id="granule-alert"
             isOpen
-            title="No Data Available"
-            message="Data is not available at this location or date."
+            title="No Imagery Available"
+            message="Imagery is not available at this location or date."
             onDismiss={() => setShowGranuleAlert(false)}
             onClick={openGranuleAlertModal}
           />

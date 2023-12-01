@@ -45,7 +45,7 @@ export const MODAL_PROPERTIES = {
   granuleModalProps: {
     id: 'granule_layer_info',
     props: {
-      headerText: 'Layer data is not visible at this location or date.',
+      headerText: 'Layer imagery is not visible at this location or date.',
       backdrop: false,
       size: 'lg',
       clickableBehindModal: true,
