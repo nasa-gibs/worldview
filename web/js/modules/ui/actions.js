@@ -8,6 +8,7 @@ import {
   CHECK_ANIMATION_AVAILABILITY,
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
+  SET_TRAVELING_HYPERWALL,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -79,5 +80,13 @@ export function setEICMeasurementComplete() {
 export function setEICMeasurementAborted() {
   return {
     type: SET_EIC_MEASUREMENT_ABORTED,
+  };
+}
+
+// This action is dispatched when the travel hyperwall exhibit param is active in the URL
+export function setTravelMode(travelMode) {
+  return {
+    type: SET_TRAVELING_HYPERWALL,
+    travelMode,
   };
 }
