@@ -126,11 +126,11 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-export const getCollections = (layers, date, layer) => {
+export const getCollections = (layers, dailyDate, subdailyDate, layer) => {
   if (!layers.collections[layer.id]) return;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if (dateCollection[i].date === date) {
+    if (dateCollection[i].date === dailyDate || dateCollection[i].date === subdailyDate) {
       return dateCollection[i];
     }
   }
@@ -168,7 +168,7 @@ export const getActiveLayerGroup = (state) => {
         ? layerGroups[0]
         : layerGroups[1].get('group') === activeString
           ? layerGroups[1]
-          : null;
+          : map.ui.selected;
     }
   }
   return map.ui.selected;

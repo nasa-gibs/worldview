@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean": {
+      "id": "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true
+    }
+  }
+}

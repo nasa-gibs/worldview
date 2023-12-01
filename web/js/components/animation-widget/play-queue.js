@@ -60,13 +60,22 @@ class PlayQueue extends React.Component {
     this.minBufferLength = null;
     this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
     this.abortController = null;
+    this.isBetweenSteps = false;
+    this.hasPlayStarted = false;
+    this.onPropertyChange = this.onPropertyChange.bind(this);
+    this.onMoveEnd = this.onMoveEnd.bind(this);
   }
 
   componentDidMount() {
+    const {
+      map,
+    } = this.props;
     this.mounted = true;
     // this.queue.on('completed', (dateStr) => {
     //   console.debug(dateStr, this.queue.size, this.queue.pending);
     // });
+    map.ui.selected.getView().on('propertychange', this.onPropertyChange);
+    map.ui.selected.on('moveend', this.onMoveEnd);
     this.playingDate = this.getStartDate();
     this.checkQueue();
     this.checkShouldPlay();
@@ -74,12 +83,28 @@ class PlayQueue extends React.Component {
   }
 
   componentWillUnmount() {
+    const {
+      map,
+    } = this.props;
     this.mounted = false;
     this.clearCache();
     this.queue.clear();
+    map.ui.selected.getView().un('propertychange', this.onPropertyChange);
+    map.ui.selected.un('moveend', this.onMoveEnd);
     if (this.abortController) {
       this.abortController.abort();
     }
+  }
+
+  onPropertyChange() {
+    if (this.isBetweenSteps) return;
+    this.isBetweenSteps = true;
+  }
+
+  onMoveEnd() {
+    if (!this.isBetweenSteps) return;
+    this.isBetweenSteps = false;
+    this.checkShouldPlay();
   }
 
   /**
@@ -218,11 +243,13 @@ class PlayQueue extends React.Component {
     const currentDate = toDate(this.playingDate);
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
 
-    if (isAnimating && !loopStart) {
+    if ((isAnimating || this.hasPlayStarted) && !loopStart) {
       return;
     }
     if (this.isPreloadSufficient() || restartLoop) {
+      if (this.isBetweenSteps) return;
       // console.debug('Started: ', Date.now());
+      this.hasPlayStarted = true;
       return this.play();
     }
     this.checkQueue();
@@ -350,7 +377,8 @@ class PlayQueue extends React.Component {
   stopPlaying() {
     this.abortController.abort();
     this.setState({ isAnimating: false });
-    console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
+    this.hasPlayStarted = false;
+    // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {
@@ -483,6 +511,7 @@ PlayQueue.propTypes = {
   numberOfFrames: PropTypes.number,
   snappedCurrentDate: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
+  map: PropTypes.object,
 };
 
 export default PlayQueue;

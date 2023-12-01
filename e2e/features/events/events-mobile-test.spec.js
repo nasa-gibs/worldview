@@ -27,7 +27,6 @@ test('Events populated in sidebar', async ({ browserName }) => {
   const { modalCloseButton, sidebarButton, sidebarContent, eventsTab, icebergEvent } = selectors
   await page.goto(mockEvents)
   await modalCloseButton.click()
-  await page.waitForLoadState('networkidle')
   await sidebarButton.click()
   await expect(sidebarContent).toBeVisible()
   await eventsTab.click()

@@ -1,0 +1,66 @@
+#travel-mode-title {
+  color: #fff;
+  position: absolute;
+  left: 287px;
+  top: 10px;
+  width: auto;
+  height: 55px;
+  font-family: Helvetica, sans-serif;
+  font-size: 27px;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  background: rgb(27 27 27);
+  border-right: 1px solid #333;
+  border-top: 1px solid #333;
+  border-radius: 0 5px 5px 0;
+  white-space: nowrap;
+  padding: 15px;
+}
+
+#travel-mode-colorbar-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 500px;
+  min-height: 100px;
+  background: rgb(35 31 32 / 60%);
+  border: 1px solid #555;
+  border-top-left-radius: 15px;
+}
+
+.travel-mode-colorbar-case {
+  padding: 0 10px;
+  margin: 5px 10px;
+  width: 480px;
+  display: flex;
+  justify-content: center;
+}
+
+.travel-mode-colorbar-title {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 0 5px;
+  font-family: Helvetica, sans-serif;
+}
+
+.travel-mode-colorbar {
+  border: 1px solid #fff;
+}
+
+.travel-mode-colorbar-label-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.travel-mode-colorbar-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  color: #fff;
+  font-family: Helvetica, sans-serif;
+  padding: 2px 0 0 2px;
+}
