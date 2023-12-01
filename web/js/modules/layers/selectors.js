@@ -168,7 +168,7 @@ export const getActiveLayerGroup = (state) => {
         ? layerGroups[0]
         : layerGroups[1].get('group') === activeString
           ? layerGroups[1]
-          : null;
+          : map.ui.selected;
     }
   }
   return map.ui.selected;
