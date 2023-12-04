@@ -94,15 +94,15 @@ export const travelModeData = {
     title: 'Antarctic Sea Ice',
   },
   10: {
-    title: 'VIIRS/Suomi NPP fires & VIIRS True Color Corrected Reflectance',
+    title: 'Active fires detected by Suomi NPP satellite',
   },
   11: {
-    title: 'Aura/OMI Nitrogen Dioxide and VIIRS/NOAA-20 True Color Corrected Reflectance',
+    title: 'Nitrogen Dioxide (NO2) by Aura satellite',
   },
   12: {
-    title: 'Aqua/AIRS Carbon Monoxide Day and Night',
+    title: 'Carbon Monoxide (CO) by Aqua satellite',
   },
   13: {
-    title: 'VIIRS/Suomi NPP Aerosol Optical Depth Dark Target & True Color Corrected Reflectance',
+    title: 'Aerosol Optical Depth (AOD) by Suomi NPP satellite',
   },
 };
