@@ -3,7 +3,7 @@
         "Aerosol Optical Depth": {
             "id": "aerosol-optical-depth",
             "title":    "Aerosol Optical Depth",
-            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, MERRA-2",
+            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, NOAA-20/VIIRS, MERRA-2",
             "sources": {
                 "Aura/OMI": {
                     "id": "aura-omi",
@@ -89,6 +89,19 @@
                         "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
                         "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                      ]
+                }                ,
+                  "NOAA-20/VIIRS": {
+                      "id": "noaa-20-viirs",
+                      "title": "NOAA-20/VIIRS",
+                      "description": "viirs/Aerosol",
+                      "image": "",
+                      "settings": [
+                        "VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate",
+                        "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
+                        "VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean",
+                        "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
+                        "OrbitTracks_NOAA-20_Ascending"
                       ]
                 },
                 "MERRA-2": {

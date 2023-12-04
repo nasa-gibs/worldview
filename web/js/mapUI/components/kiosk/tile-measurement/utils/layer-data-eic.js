@@ -18,7 +18,6 @@ export const layersToMeasure = [
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
   'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
   'CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly',
-
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -64,4 +63,46 @@ export const bestDates = {
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { date: '2023-10-17' },
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { date: '2023-10-30' },
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { date: '2023-10-30' },
+};
+
+export const travelModeData = {
+  1: {
+    title: 'True Color Imagery from Terra Satellite',
+  },
+  2: {
+    title: 'Geostationary imagery from NOAA and JAXA satellites',
+  },
+  3: {
+    title: 'Active fires detected by Suomi NPP satellite',
+  },
+  4: {
+    title: 'Black Marble Night Time Imaging from Suomi NPP Satellite',
+  },
+  5: {
+    title: 'Rain and Snow',
+  },
+  6: {
+    title: 'Sea Surface Temperature',
+  },
+  7: {
+    title: 'Land Surface Temperature',
+  },
+  8: {
+    title: 'Arctic Sea Ice',
+  },
+  9: {
+    title: 'Antarctic Sea Ice',
+  },
+  10: {
+    title: 'Active fires detected by Suomi NPP satellite',
+  },
+  11: {
+    title: 'Nitrogen Dioxide (NO2) by Aura satellite',
+  },
+  12: {
+    title: 'Carbon Monoxide (CO) by Aqua satellite',
+  },
+  13: {
+    title: 'Aerosol Optical Depth (AOD) by Suomi NPP satellite',
+  },
 };
