@@ -10,8 +10,17 @@ function ColorBarRow({ legend, index }) {
   const {
     minLabel, maxLabel, units, type, title, colors,
   } = legend;
-  const minimum = `${minLabel} ${units}`;
-  const maximum = `${maxLabel} ${units}`;
+  const validUnits = units !== undefined;
+  const minimum = validUnits ? `${minLabel} ${units}` : minLabel;
+  const maximum = validUnits ? `${maxLabel} ${units}` : maxLabel;
+
+  // Temporary fix for manually updating title of the colorbar
+  let colorbarTitle = title;
+  if (title === 'Nitric Oxide') {
+    colorbarTitle = 'Nitrogen Dioxide';
+  } else if (title === 'Deep Blue Aerosol Optical Depth') {
+    colorbarTitle = 'Aerosol Optical Depth';
+  }
 
   const drawOnCanvas = () => {
     if (canvasRef.current && legend) {
@@ -28,7 +37,7 @@ function ColorBarRow({ legend, index }) {
 
   return (
     <div className="travel-mode-colorbar-row" key={index}>
-      <div className="travel-mode-colorbar-title">{title}</div>
+      <div className="travel-mode-colorbar-title">{colorbarTitle}</div>
       <div className="travel-mode-colorbar-case">
         <canvas
           className="travel-mode-colorbar"
