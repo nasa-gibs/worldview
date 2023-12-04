@@ -11,14 +11,14 @@ function ColorBarRow({ legend, index }) {
     minLabel, maxLabel, units, type, title, colors,
   } = legend;
   const validUnits = units !== undefined;
-  const minimum = validUnits ? `${minLabel} ${units}`: minLabel;
-  const maximum = validUnits ? `${maxLabel} ${units}`: maxLabel;
+  const minimum = validUnits ? `${minLabel} ${units}` : minLabel;
+  const maximum = validUnits ? `${maxLabel} ${units}` : maxLabel;
 
   // Temporary fix for manually updating title of the colorbar
   let colorbarTitle = title;
-  if (title === 'Nitric Oxide'){
+  if (title === 'Nitric Oxide') {
     colorbarTitle = 'Nitrogen Dioxide';
-  } else if (title === 'Deep Blue Aerosol Optical Depth'){
+  } else if (title === 'Deep Blue Aerosol Optical Depth') {
     colorbarTitle = 'Aerosol Optical Depth';
   }
 
