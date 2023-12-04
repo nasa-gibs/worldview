@@ -103,6 +103,6 @@ export const travelModeData = {
     title: 'Aqua/AIRS Carbon Monoxide Day and Night',
   },
   13: {
-    title: 'VIIRS/Suomi NPP Aerosol Optical Depth Dark Target and Deep Blue & True Color Corrected Reflectance',
+    title: 'VIIRS/Suomi NPP Aerosol Optical Depth Dark Target & True Color Corrected Reflectance',
   },
 };
