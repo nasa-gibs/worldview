@@ -94,13 +94,13 @@ export const travelModeData = {
     title: 'Antarctic Sea Ice',
   },
   10: {
-    title: 'VIIRS/Suomi NPP fires & VIRRS True Color Corrected Reflectance',
+    title: 'VIIRS/Suomi NPP fires & VIIRS True Color Corrected Reflectance',
   },
   11: {
     title: 'Aura/OMI Nitrogen Dioxide and VIIRS/NOAA-20 True Color Corrected Reflectance',
   },
   12: {
-    title: 'Aqua/AIRS Carbon Monoxide Day and Night + Borders and coastlines',
+    title: 'Aqua/AIRS Carbon Monoxide Day and Night',
   },
   13: {
     title: 'VIIRS/Suomi NPP Aerosol Optical Depth Dark Target and Deep Blue & True Color Corrected Reflectance',
