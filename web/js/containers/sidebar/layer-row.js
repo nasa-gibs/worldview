@@ -498,8 +498,8 @@ function LayerRow (props) {
           <AlertUtil
             id="granule-alert"
             isOpen
-            title="No Imagery Available"
-            message={`Imagery for ${layer.title} is not available at this location or date. Try moving the map or select a different date in the layer's settings.`}
+            title="Try moving the map or select a different date in the layer's settings."
+            message={`Imagery for ${layer.title} is not available at this location or date.`}
             onDismiss={() => setShowGranuleAlert(false)}
             onClick={openGranuleAlertModal}
           />
