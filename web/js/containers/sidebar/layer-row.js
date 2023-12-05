@@ -140,7 +140,7 @@ function LayerRow (props) {
         } else {
           setShowZoomAlert(false);
         }
-        if (!granules.length || zot?.underZoomValue) {
+        if (!granules.length || zot?.underZoomValue > 0) {
           setDisabled(true);
         } else {
           setDisabled(isDisabled);
@@ -489,8 +489,8 @@ function LayerRow (props) {
           <AlertUtil
             id="zoom-alert"
             isOpen
-            title="Bad Zoom Level"
-            message="Imagery is not available at this zoom level."
+            title="Zoom in to see imagery for this layer"
+            message={`Imagery for ${layer.title} is not available at this zoom level.`}
             onDismiss={() => setShowZoomAlert(false)}
           />
         )}
@@ -499,7 +499,7 @@ function LayerRow (props) {
             id="granule-alert"
             isOpen
             title="No Imagery Available"
-            message="Imagery is not available at this location or date."
+            message={`Imagery for ${layer.title} is not available at this location or date. Try moving the map or select a different date in the layer's settings.`}
             onDismiss={() => setShowGranuleAlert(false)}
             onClick={openGranuleAlertModal}
           />
