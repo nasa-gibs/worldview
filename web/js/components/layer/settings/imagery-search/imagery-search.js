@@ -103,7 +103,7 @@ export default function ImagerySearch({ layer }) {
 
   return (
     <div className="imagery-search-container">
-      <p>Available Imagery Dates</p>
+      <p className="lazyload-title">Available Imagery Dates</p>
       <ul ref={listRef} className="lazyload-list" onScroll={handleScroll}>
         <li ref={startRef} className="imagery-search-spinner">
           {granulesStartStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
