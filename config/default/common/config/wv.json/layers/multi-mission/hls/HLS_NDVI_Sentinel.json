@@ -2,7 +2,8 @@
     "layers": {
       "HLS_NDVI_Sentinel": {
         "id": "HLS_NDVI_Sentinel",
-        "collection_concept_id": "C2021957295-LPCLOUD",
+        "enableCMRDataFinder": true,
+        "collectionConceptID": "C2021957295-LPCLOUD",
         "title": "Vegetation Index (NDVI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDVI_Sentinel",

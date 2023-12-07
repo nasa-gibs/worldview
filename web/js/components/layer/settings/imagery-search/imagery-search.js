@@ -28,8 +28,10 @@ export default function ImagerySearch({ layer }) {
   const [newerGranuleDates, setNewerGranuleDates] = useState([]);
   const [page, setPage] = useState(1);
 
+  const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
+
   const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
-    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`);
+    const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map.extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`);
     const olderGranules = await olderResponse.json();
     const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -37,7 +39,7 @@ export default function ImagerySearch({ layer }) {
   };
 
   const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
-    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer.collection_concept_id}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`);
+    const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map.extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`);
     const newerGranules = await newerResponse.json();
     const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 

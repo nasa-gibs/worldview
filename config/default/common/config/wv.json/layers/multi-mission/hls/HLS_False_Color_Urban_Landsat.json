@@ -2,7 +2,8 @@
   "layers": {
     "HLS_False_Color_Urban_Landsat": {
       "id": "HLS_False_Color_Urban_Landsat",
-      "collection_concept_id": "C2021957657-LPCLOUD",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Urban False Color, Bands 7-6-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Urban_Landsat",

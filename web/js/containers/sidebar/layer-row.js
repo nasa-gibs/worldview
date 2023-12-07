@@ -114,16 +114,18 @@ function LayerRow (props) {
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
+  
   useEffect(() => {
     const asyncFunc = async () => {
-      if (layer?.collection_concept_id) {
+      if (layer?.enableCMRDataFinder) {
+        const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
         const dateTime = selectedDate?.toISOString().split('T');
         dateTime.pop();
         dateTime.push('00:00:00.000Z');
         const zeroedDate = dateTime.join('T');
-        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer?.collection_concept_id}&bounding_box=${map?.extent?.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
+        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map?.extent?.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
         const olderGranules = await olderRes.json();
-        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${layer?.collection_concept_id}&bounding_box=${map?.extent?.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
+        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map?.extent?.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
         const newerGranules = await newerRes.json();
         const olderEntries = olderGranules?.feed?.entry || [];
         const newerEntries = newerGranules?.feed?.entry || [];

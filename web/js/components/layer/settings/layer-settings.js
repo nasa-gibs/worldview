@@ -345,7 +345,7 @@ class LayerSettings extends React.Component {
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
     const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
-    const granuleMetadata = Object.hasOwn(layer, 'collection_concept_id') && !zot?.underZoomValue;
+    const granuleMetadata = layer?.enableCMRDataFinder && !zot?.underZoomValue;
     const layerGroup = layer.layergroup;
 
     if (layer.type !== 'vector') {

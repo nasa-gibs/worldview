@@ -2,7 +2,8 @@
   "layers": {
     "HLS_Customizable_Landsat": {
       "id": "HLS_Customizable_Landsat",
-      "collection_concept_id": "C2021957657-LPCLOUD",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "HLS Customizable Landsat 8 & 9 *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Customizable_Landsat",

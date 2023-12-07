@@ -2,7 +2,8 @@
   "layers": {
     "HLS_Shortwave_Infrared_Landsat": {
       "id": "HLS_Shortwave_Infrared_Landsat",
-      "collection_concept_id": "C2021957657-LPCLOUD",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Shortwave Infrared, Bands 7-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Landsat",
