@@ -114,7 +114,6 @@ function LayerRow (props) {
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
-  
   useEffect(() => {
     const asyncFunc = async () => {
       if (layer?.enableCMRDataFinder) {
