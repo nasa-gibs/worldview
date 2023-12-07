@@ -40,6 +40,7 @@ function UpdateProjection(props) {
     getGranuleOptions,
     isKioskModeActive,
     isMobile,
+    isTourActive,
     layerState,
     map,
     models,
@@ -69,6 +70,10 @@ function UpdateProjection(props) {
     lodashEach(activeLayersUI, (mapLayer) => {
       ui.selected.removeLayer(mapLayer);
     });
+    // Clear cache if action type is not 'REDUX-LOCATION-POP-ACTION' and if tour is not active
+    if (!(action.type === 'REDUX-LOCATION-POP-ACTION' && isTourActive)) {
+      ui.cache.clear();
+    }
   };
 
   /**
@@ -365,7 +370,7 @@ function UpdateProjection(props) {
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, screenSize, layers, compare, date,
+    proj, map, screenSize, layers, compare, date, tour,
   } = state;
   const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
@@ -373,6 +378,7 @@ const mapStateToProps = (state) => {
   const dateCompareState = { date, compare };
   const activeLayers = getActiveLayers(state);
   const compareMode = compare.mode;
+  const isTourActive = tour.active;
   return {
     activeLayers,
     compare,
@@ -380,6 +386,7 @@ const mapStateToProps = (state) => {
     dateCompareState,
     isKioskModeActive,
     isMobile,
+    isTourActive,
     layerState,
     proj,
     map,

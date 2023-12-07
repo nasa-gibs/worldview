@@ -6,7 +6,6 @@ import {
   findIndex as lodashFindIndex,
   get as lodashGet,
   uniqBy,
-  isEmpty as lodashIsEmpty,
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 
@@ -21,9 +20,6 @@ import {
   preloadPalettes,
   hasCustomTypePalette,
 } from '../modules/palettes/util';
-import {
-  clearCustoms,
-} from '../modules/palettes/actions';
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
@@ -498,9 +494,6 @@ const mapDispatchToProps = (dispatch) => ({
     });
     dispatch(stopAnimation());
     dispatch(closeModal());
-    if (!lodashIsEmpty(rendered)) {
-      dispatch(clearCustoms());
-    }
     if (
       (parameters.l && hasCustomTypePalette(parameters.l))
       || (parameters.l1 && hasCustomTypePalette(parameters.l1))
