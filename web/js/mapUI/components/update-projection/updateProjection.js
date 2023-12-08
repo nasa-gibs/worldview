@@ -61,7 +61,7 @@ function UpdateProjection(props) {
   *
   * @returns {void}
   */
-  const clearLayers = function() {
+  const clearLayers = function(saveCache) {
     const activeLayersUI = ui.selected
       .getLayers()
       .getArray()
@@ -69,6 +69,9 @@ function UpdateProjection(props) {
     lodashEach(activeLayersUI, (mapLayer) => {
       ui.selected.removeLayer(mapLayer);
     });
+
+    if (saveCache) return;
+    ui.cache.clear();
   };
 
   /**
@@ -116,7 +119,7 @@ function UpdateProjection(props) {
    *   @param {Boolean} id - layer id
    * @returns {void}
    */
-  async function reloadLayers(granuleOptions) {
+  async function reloadLayers(granuleOptions, saveCache) {
     const mapUI = ui.selected;
     const { createLayer } = ui;
 
@@ -125,7 +128,7 @@ function UpdateProjection(props) {
       if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
-      clearLayers();
+      clearLayers(saveCache);
       const defs = getLayers(layerState, { reverse: true });
       const layerPromises = defs.map((def) => {
         const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
@@ -138,7 +141,7 @@ function UpdateProjection(props) {
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-      clearLayers();
+      clearLayers(saveCache);
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
       compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
@@ -222,7 +225,7 @@ function UpdateProjection(props) {
 
     updateMapUI(ui, rotation);
 
-    reloadLayers();
+    reloadLayers(null, !start);
 
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
