@@ -111,6 +111,8 @@ function LayerRow (props) {
   const [activeZot, setActiveZot] = useState(zot);
   const [showZoomAlert, setShowZoomAlert] = useState(false);
   const [showGranuleAlert, setShowGranuleAlert] = useState(false);
+  const [hideZoomAlert, setHideZoomAlert] = useState(false);
+  const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
@@ -486,22 +488,22 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && (
+        {showZoomAlert && !hideZoomAlert && (
           <AlertUtil
             id="zoom-alert"
             isOpen
             title="Zoom in to see imagery for this layer"
             message={`Imagery for ${layer.title} is not available at this zoom level.`}
-            onDismiss={() => setShowZoomAlert(false)}
+            onDismiss={() => setHideZoomAlert(true)}
           />
         )}
-        {showGranuleAlert && (
+        {showGranuleAlert && !hideGranuleAlert && (
           <AlertUtil
             id="granule-alert"
             isOpen
             title="Try moving the map or select a different date in the layer's settings."
             message={`Imagery for ${layer.title} is not available at this location or date.`}
-            onDismiss={() => setShowGranuleAlert(false)}
+            onDismiss={() => setHideGranuleAlert(true)}
             onClick={openGranuleAlertModal}
           />
         )}
