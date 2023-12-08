@@ -202,7 +202,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
     "regenerator-runtime": "^0.14.0",
-    "reselect": "^4.1.8",
+    "reselect": "^5.0.1",
     "rgbcolor": "^1.0.1",
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.4",
