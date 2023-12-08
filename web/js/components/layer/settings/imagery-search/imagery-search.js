@@ -115,6 +115,7 @@ export default function ImagerySearch({ layer }) {
           {granulesEndStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
         </li>
       </ul>
+      <hr/>
     </div>
   );
 }

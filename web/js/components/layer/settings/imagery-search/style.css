@@ -24,3 +24,8 @@
 .lazyload-title {
   margin-bottom: 8px;
 }
+
+.imagery-search-container hr {
+  margin-top: 20px;
+  width: 100%;
+}
