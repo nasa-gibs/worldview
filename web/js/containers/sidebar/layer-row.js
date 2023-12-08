@@ -118,7 +118,7 @@ function LayerRow (props) {
 
   useEffect(() => {
     const asyncFunc = async () => {
-      if (layer?.enableCMRDataFinder) {
+      if (layer.enableCMRDataFinder && isVisible) {
         const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
         const dateTime = selectedDate?.toISOString().split('T');
         dateTime.pop();
