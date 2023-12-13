@@ -2,6 +2,7 @@ import EventsAlertModalBody from '../../components/events/alert-body';
 import CompareAlertModalBody from '../../components/compare/alert';
 import VectorZoomAlertModalBody from '../../components/feature-alert/vector-alert-modal';
 import GranuleAlertModalBody from '../../components/feature-alert/granuleAlertModal';
+import ZoomAlertModalBody from '../../components/feature-alert/zoomAlertModal';
 
 export const DISABLE_VECTOR_ZOOM_ALERT = 'ALERTS/DISABLE_VECTOR_ZOOM_ALERT';
 export const ACTIVATE_VECTOR_ZOOM_ALERT = 'ALERTS/ACTIVATE_VECTOR_ZOOM_ALERT';
@@ -50,6 +51,17 @@ export const MODAL_PROPERTIES = {
       size: 'lg',
       clickableBehindModal: true,
       bodyComponent: GranuleAlertModalBody,
+      desktopOnly: true,
+    },
+  },
+  zoomModalProps: {
+    id: 'zoom_layer_info',
+    props: {
+      headerText: 'Layer imagery is not visible at this zoom level.',
+      backdrop: false,
+      size: 'lg',
+      clickableBehindModal: true,
+      bodyComponent: ZoomAlertModalBody,
       desktopOnly: true,
     },
   },

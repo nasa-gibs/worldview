@@ -42,7 +42,7 @@ import {
 import AlertUtil from '../../components/util/alert';
 
 const { events } = util;
-const { vectorModalProps, granuleModalProps } = MODAL_PROPERTIES;
+const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   ...draggableStyle,
@@ -76,6 +76,7 @@ function LayerRow (props) {
     hasClickableFeature,
     openVectorAlertModal,
     openGranuleAlertModal,
+    openZoomAlertModal,
     toggleVisibility,
     isDisabled,
     isVisible,
@@ -495,6 +496,7 @@ function LayerRow (props) {
             title="Zoom in to see imagery for this layer"
             message={`Imagery for ${layer.title} is not available at this zoom level.`}
             onDismiss={() => setHideZoomAlert(true)}
+            onClick={openZoomAlertModal}
           />
         )}
         {showGranuleAlert && !hideGranuleAlert && (
@@ -611,6 +613,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   openGranuleAlertModal: () => {
     const { id, props } = granuleModalProps;
+    dispatch(openCustomContent(id, props));
+  },
+  openZoomAlertModal: () => {
+    const { id, props } = zoomModalProps;
     dispatch(openCustomContent(id, props));
   },
   onRemoveClick: (id) => {
