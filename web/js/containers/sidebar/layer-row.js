@@ -142,12 +142,12 @@ function LayerRow (props) {
         const olderEntries = olderGranules?.feed?.entry || [];
         const newerEntries = newerGranules?.feed?.entry || [];
         const granules = [...olderEntries, ...newerEntries];
-        if (zot?.underZoomValue) {
+        if (zot?.underZoomValue > 0) {
           setShowZoomAlert(true);
         } else {
           setShowZoomAlert(false);
         }
-        if (!granules.length && !zot?.underZoomValue) {
+        if (!granules.length && !(zot?.underZoomValue > 0)) {
           setActiveZot({ hasGranules: false });
           setShowGranuleAlert(true);
         } else {

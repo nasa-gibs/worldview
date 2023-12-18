@@ -18,7 +18,7 @@ export default function Zot (props) {
     if (overZoomValue) {
       className = 'zot overzoom';
       tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level. <br/>`;
-    } else if (underZoomValue) {
+    } else if (underZoomValue > 0) {
       className = 'zot underzoom';
       tooltipString += `Layer is underzoomed by ${zot.underZoomValue.toString()}x its minimum zoom level; zoom in to see imagery <br/>`;
     } else if (!hasGranules) {
