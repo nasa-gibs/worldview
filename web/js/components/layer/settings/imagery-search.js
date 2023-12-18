@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Spinner,
 } from 'reactstrap';
-import { selectDate as selectDateAction } from '../../../../modules/date/actions';
-
-import './style.css';
+import { selectDate as selectDateAction } from '../../../modules/date/actions';
 
 const dateOptions = {
   year: 'numeric',

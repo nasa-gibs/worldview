@@ -22,6 +22,38 @@
   line-height: 0;
 }
 
+.lazyload-list {
+  list-style-type: none;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  background-color: #383838;
+
+  li {
+    user-select: none;
+  }
+
+  li:hover {
+    background-color: black;
+  }
+}
+
+.imagery-search-spinner {
+  height: 13px;
+  width: 100%;
+}
+
+.lazyload-title {
+  margin-bottom: 8px;
+}
+
+.imagery-search-container hr {
+  margin-top: 20px;
+  width: 100%;
+}
+
 .layer-list-container .layers-all-layer {
   transition: background-color 200ms ease-out;
   left: 0;
