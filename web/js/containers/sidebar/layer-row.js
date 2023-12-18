@@ -162,7 +162,7 @@ function LayerRow (props) {
       }
     };
     asyncFunc();
-  }, [map.extent, zot, selectedDate]);
+  }, [map.extent, zot, selectedDate, isVisible]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
