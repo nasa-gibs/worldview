@@ -125,9 +125,19 @@ function LayerRow (props) {
         dateTime.pop();
         dateTime.push('00:00:00.000Z');
         const zeroedDate = dateTime.join('T');
-        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map?.extent?.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
+        const maxExtent = [-180, -90, 180, 90];
+        // clamp extent to maximum extent allowed by the CMR api
+        const extent = map.extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return maxExtent[i];
+        });
+        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
+        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
+        if (!olderRes.ok || !newerRes.ok) return;
         const olderGranules = await olderRes.json();
-        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${map?.extent?.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
         const newerGranules = await newerRes.json();
         const olderEntries = olderGranules?.feed?.entry || [];
         const newerEntries = newerGranules?.feed?.entry || [];
