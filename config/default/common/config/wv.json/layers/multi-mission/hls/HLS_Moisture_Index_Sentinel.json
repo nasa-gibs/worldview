@@ -2,6 +2,8 @@
     "layers": {
       "HLS_Moisture_Index_Sentinel": {
         "id": "HLS_Moisture_Index_Sentinel",
+        "enableCMRDataFinder": true,
+        "collectionConceptID": "C2021957295-LPCLOUD",
         "title": "Moisture Index (NDMI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
@@ -20,6 +22,7 @@
             "colormap_name": "jet_r"
         },
         "disableSnapshot": true,
+        "minZoom": 7,
         "wrapX": false,
         "projections": {
           "geographic": {

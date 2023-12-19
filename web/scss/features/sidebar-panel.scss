@@ -449,6 +449,22 @@ li.item.productsitem.inmotion,
     }
   }
 
+  &.underzoom {
+    background: #0095ff;
+
+    &:hover {
+      background: #003ada;
+    }
+  }
+
+  &.no-granules {
+    background: #0095ff;
+
+    &:hover {
+      background: #003ada;
+    }
+  }
+
   &.layer-notice {
     background-color: #f60;
 

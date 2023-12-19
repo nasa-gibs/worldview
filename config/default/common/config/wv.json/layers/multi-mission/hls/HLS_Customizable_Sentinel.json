@@ -2,6 +2,8 @@
   "layers": {
     "HLS_Customizable_Sentinel": {
       "id": "HLS_Customizable_Sentinel",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "HLS Customizable Sentinel 2A & 2B *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Customizable_Sentinel",
@@ -20,6 +22,7 @@
       },
       "wrapX": false,
       "disableSnapshot": true,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",

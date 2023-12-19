@@ -2,6 +2,8 @@
   "layers": {
     "HLS_False_Color_Vegetation_Landsat": {
       "id": "HLS_False_Color_Vegetation_Landsat",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Vegetative Analysis False Color, Bands 6-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Vegetation_Landsat",
@@ -20,6 +22,7 @@
       },
       "wrapX": false,
       "disableSnapshot": true,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",
