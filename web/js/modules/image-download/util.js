@@ -305,8 +305,6 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     imageUtilGetLayerClassifications(layerDefs, palettes),
     imageUtilGetLayerColormaps(layerDefs),
   );
-  console.log('classificationsArray', classificationsArray);
-  console.log('colormapArray', colormapArray);
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
@@ -315,12 +313,25 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
     `BBOX=${bboxWMS13(bbox, crs)}`,
     `CRS=${crs}`,
-    `LAYERS=${layersArray.join(',')}`,
     `WRAP=${layerWraps.join(',')}`,
     `FORMAT=${imgFormat}`,
     `WIDTH=${width}`,
     `HEIGHT=${height}`,
   ];
+  const hasCustomPalette = classificationsArray.some((value) => value !== null);
+  if (hasCustomPalette) {
+    // Generate layer string with classifications appended
+    const layerArg = layersArray.map((layer, index) => {
+      const classification = classificationsArray[index];
+      return classification != null ? `${layer}%28disabled=${classification}%29` : layer;
+    });
+    params.push(`LAYERS=${layerArg.join(',')}`);
+
+    // Generate colormap string
+    params.push(`COLORMAPS=${colormapArray.join(',')}`);
+  } else {
+    params.push(`LAYERS=${layersArray.join(',')}`);
+  }
   if (opacities.length > 0) {
     params.push(`OPACITIES=${opacities.join(',')}`);
   }
