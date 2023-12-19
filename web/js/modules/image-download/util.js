@@ -82,15 +82,16 @@ const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opaciti
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities, classificationsArray) {
+const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities, classificationsArray, colormapArray) {
   if (fileType === 'application/vnd.google-earth.kmz') {
-    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities, classificationsArray);
+    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities, classificationsArray, colormapArray);
   }
   return {
     layersArray,
     layerWraps,
     opacities,
     classificationsArray,
+    colormapArray,
   };
 };
 
@@ -231,10 +232,18 @@ export function imageUtilGetLayerClassifications(layers, palettes) {
     if (layer.disabled) {
       // Return the classification array
       const layerId = layer.id;
-      console.log(`returning ${palettes[layerId].maps[0].disabled.join('-')}`);
       return palettes[layerId].maps[0].disabled.join('-');
     }
-    console.log('returning null');
+    return null;
+  }) || [];
+}
+
+// Return the colormap ID per layer
+export function imageUtilGetLayerColormaps(layers) {
+  return layers.map((layer) => {
+    if (layer.palette && layer.palette.id) {
+      return layer.palette.id;
+    }
     return null;
   }) || [];
 }
@@ -287,14 +296,17 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     layerWraps,
     opacities,
     classificationsArray,
+    colormapArray,
   } = imageUtilProcessWrap(
     fileType,
     imageUtilGetLayers(layerDefs, proj.id),
     imageUtilGetLayerWrap(layerDefs),
     imageUtilGetLayerOpacities(layerDefs),
     imageUtilGetLayerClassifications(layerDefs, palettes),
+    imageUtilGetLayerColormaps(layerDefs),
   );
   console.log('classificationsArray', classificationsArray);
+  console.log('colormapArray', colormapArray);
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
