@@ -1,0 +1,55 @@
+
+name: CI SOTO
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ${{matrix.os}}
+    name: ${{matrix.os}}, Node ${{matrix.node}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macOS-latest, ubuntu-latest, windows-latest]
+        node: [18]
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node}}
+
+      - name: Install NPM Dependencies
+        run: |
+          npm ci
+
+      - name: Linting and Unit testing
+        run: |
+          npm test
+
+      - name: Build the application
+        run: |
+          npm run build:ci
+
+      - name: Run E2E tests - Chrome / MacOS
+        if: ${{ runner.os == 'macOS' }}
+        run: |
+          npm run start &
+          npx playwright install chromium &
+          sleep 10
+          SOTO=true npx playwright test --project=chromium --reporter=list
+
+      - name: Run E2E tests - Firefox / Windows
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          npm run start &
+          npx playwright install firefox &
+          sleep 10
+          set SOTO=true
+          npx playwright test --project=firefox --reporter=list
+
+

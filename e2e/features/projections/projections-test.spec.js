@@ -9,8 +9,6 @@ let selectors
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
-
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
@@ -28,12 +26,18 @@ test('Verify default page shows projection toolbar button in geographic projecti
 })
 
 test('Verify changing projection to arctic switches map to arctic', async () => {
+  if (process.env.SOTO === 'true') {
+    test.skip(true, '2nd Polar change is hidden by something: <iframe src="about:blank" id="react-refresh-overlay"></iframe> intercepts pointer events')
+  }
   const { arcticMap } = selectors
   await switchProjections(page, 'arctic')
   await expect(arcticMap).toBeVisible()
 })
 
 test('Verify changing projection to antarctic switches map to antarctic', async () => {
+  if (process.env.SOTO === 'true') {
+    test.skip(true, '2nd Polar change is hidden by something: <iframe src="about:blank" id="react-refresh-overlay"></iframe> intercepts pointer events')
+  }
   const { antarcticMap } = selectors
   await switchProjections(page, 'antarctic')
   await expect(antarcticMap).toBeVisible()

@@ -15,8 +15,6 @@ let tooltipSelector
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
-
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
@@ -91,7 +89,7 @@ test('Verify that zots show for the layers that have notices', async () => {
 test('Verify that warning shows in the product picker category/measurement rows', async () => {
   const { addLayers } = selectors
   await addLayers.click()
-  await page.locator('#layer-category-item-air-quality-corrected-reflectance').click()
+  await page.locator('#layer-category-item-drought-corrected-reflectance').click()
   await page.locator('#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor').hover()
   const aquaNotice = tooltipSelector.first()
   const multiNotice = tooltipSelector.last()

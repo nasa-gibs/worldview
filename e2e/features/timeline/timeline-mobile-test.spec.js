@@ -1,13 +1,16 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
+const moment = require('moment')
 
 let page
 let selectors
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
+if (process.env.SOTO === 'true') {
+  test.skip(true, 'Bug Reported for SOTO: https://github.com/podaac/worldview/issues/33')
+}
 
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext({
@@ -23,9 +26,11 @@ test.afterAll(async () => {
 
 test('date.mob.init.2a: Before 3:00 UTC: load yesterdays date', async () => {
   const { mobileDatePickerSelectBtn } = selectors
-  const queryString = 'http://localhost:3000/?now=2013-03-15T0'
+  const todayDate = '2013-03-15'
+  const expectedDate = moment.utc(todayDate, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY MMM DD').toUpperCase()
+  const queryString = 'http://localhost:3000/?now=' + todayDate + 'T0'
   await page.goto(queryString)
-  await expect(mobileDatePickerSelectBtn).toContainText('2013 MAR 14')
+  await expect(mobileDatePickerSelectBtn).toContainText(expectedDate)
 })
 
 test('date.mob.init.2b: Before 3:00 UTC: right button is not disabled', async () => {
@@ -38,9 +43,11 @@ test('date.mob.init.2b: Before 3:00 UTC: right button is not disabled', async ()
 
 test('date.mob.init.3a: After 3:00 UTC: load todays date', async () => {
   const { mobileDatePickerSelectBtn } = selectors
-  const queryString = 'http://localhost:3000/?now=2013-03-15T4'
+  const todayDate = '2013-03-15'
+  const expectedDate = moment.utc(todayDate, 'YYYY-MM-DD').subtract(0, 'days').format('YYYY MMM DD').toUpperCase()
+  const queryString = 'http://localhost:3000/?now=' + todayDate + 'T4'
   await page.goto(queryString)
-  await expect(mobileDatePickerSelectBtn).toContainText('2013 MAR 15')
+  await expect(mobileDatePickerSelectBtn).toContainText(expectedDate)
 })
 
 test('date.mob.init.3b:After 3:00 UTC: right button is disabled', async () => {
@@ -51,15 +58,18 @@ test('date.mob.init.3b:After 3:00 UTC: right button is disabled', async () => {
 
 test('date.mob.range.1: Date label should show 2013-03-15', async () => {
   const { mobileDatePickerSelectBtn } = selectors
-  const queryString = 'http://localhost:3000/?now=2013-03-15T12'
+  const todayDate = '2013-03-15'
+  const expectedDate = moment.utc(todayDate, 'YYYY-MM-DD').subtract(0, 'days').format('YYYY MMM DD').toUpperCase()
+  const queryString = 'http://localhost:3000/?now=' + todayDate + 'T2'
   await page.goto(queryString)
-  await expect(mobileDatePickerSelectBtn).toContainText('2013 MAR 15')
+  await expect(mobileDatePickerSelectBtn).toContainText(expectedDate)
 })
 
 test('date.mob.range.2: mobile selector header should show 2013 MAR 15', async () => {
   const { mobileDatePickerSelectBtn, mobileDatePickerHeader } = selectors
+  const todayDate = '2013 MAR 15'
   await mobileDatePickerSelectBtn.click()
-  await expect(mobileDatePickerHeader).toContainText('2013 MAR 15')
+  await expect(mobileDatePickerHeader).toContainText(todayDate)
 })
 
 test('date.mob.range.3: Date label should show 2012 MAR 15 after year drag', async ({ browserName }) => {

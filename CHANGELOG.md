@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Added SOTO git action workflow
+- Added SOTO npm e2e execution
+- Updated test cases for SOTO compatibility
+- Added parameter for assertDefaultLayers
+- Disabled some test cases for SOTO due to issue #33 and #34
 
 ## [0.2.5]
 - Updated to 4.4.0 upstream version

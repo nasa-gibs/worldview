@@ -8,8 +8,6 @@ let selectors
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
-
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
@@ -21,6 +19,7 @@ test.afterAll(async () => {
 
 test('Make sure that 4 fire layers are not present in layer list: use mock', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
+  test.skip(process.env.SOTO === 'true', 'SOTO does not contain the layers')
   const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
   await expect(sidebarEvent).toBeVisible()
@@ -32,6 +31,7 @@ test('Make sure that 4 fire layers are not present in layer list: use mock', asy
 
 test('Check that 4 fire layers are now present', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
+  test.skip(process.env.SOTO === 'true', 'SOTO does not contain the layers')
   const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight, layersTab } = selectors
   await sidebarEvent.click()
   await layersTab.click()

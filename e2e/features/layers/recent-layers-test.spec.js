@@ -10,8 +10,6 @@ const url = 'http://localhost:3000/?t=2020-07-04'
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
-
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)

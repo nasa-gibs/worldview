@@ -10,8 +10,6 @@ const url = 'http://localhost:3000/?t=2013-05-15'
 
 test.describe.configure({ mode: 'serial' })
 
-test.skip(true, 'Needs to be updated for SOTO')
-
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
@@ -29,9 +27,22 @@ test('Layer picker shows categories when first opened', async () => {
 })
 
 test('Enabled Corrected Reflectance layers are shown as checked', async () => {
-  const { allCategoryHeader, correctedReflectanceChecked } = selectors
+  const {
+    allCategoryHeader,
+    correctedReflectanceChecked,
+    crCheckboxMODISTrueColor
+  } = selectors
   await allCategoryHeader.click()
   await page.locator('#accordion-legacy-all-corrected-reflectance').click()
+  if (process.env.SOTO === 'true') {
+    let isChecked = true
+    await expect(correctedReflectanceChecked).toBeVisible().catch(() => {
+      isChecked = false
+    })
+    if (isChecked.valueOf() !== true) {
+      await crCheckboxMODISTrueColor.click()
+    }
+  }
   await expect(correctedReflectanceChecked).toBeVisible()
 })
 
@@ -192,14 +203,16 @@ test('Switching to "Science Disciplines" tab updates category/measurement choice
   await scienceDisciplinesTab.click()
   await expect(scientificAll).toBeVisible()
   await expect(atmosphere).toBeVisible()
-  await expect(biosphere).toBeVisible()
   await expect(cryosphere).toBeVisible()
-  await expect(humanDimensions).toBeVisible()
   await expect(landSurface).toBeVisible()
   await expect(oceans).toBeVisible()
-  await expect(spectralEngineering).toBeVisible()
   await expect(terrestrialHydrosphere).toBeVisible()
   await expect(scientificOther).toBeVisible()
+  if (process.env.SOTO !== 'true') {
+    await expect(biosphere).toBeVisible()
+    await expect(humanDimensions).toBeVisible()
+    await expect(spectralEngineering).toBeVisible()
+  }
 })
 
 test('Selecting a measurement from the grid shows sources and details for first source', async () => {
@@ -207,16 +220,34 @@ test('Selecting a measurement from the grid shows sources and details for first 
     aodMeasurement,
     layerDetailHeader,
     aodCheckboxMODIS,
-    aodCheckboxMAIAC
+    aodCheckboxMAIAC,
+    crScientificAllMeasurement,
+    crCheckboxMODISTrueColor,
+    crCheckboxMODISBands721,
+    crCheckboxOrbitAscending
   } = selectors
-  await aodMeasurement.click()
-  await expect(layerDetailHeader).toContainText('Aqua and Terra/MODIS')
-  await expect(aodCheckboxMODIS).toBeVisible()
-  await expect(aodCheckboxMAIAC).toBeVisible()
-  const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
-  const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
-  await expect(modisAvailableCoverage).toBeVisible()
-  await expect(maiacAvailableCoverage).toBeVisible()
+  if (process.env.SOTO === 'true') {
+    await crScientificAllMeasurement.click()
+    await expect(layerDetailHeader).toContainText('Aqua/MODIS')
+    await expect(crCheckboxMODISTrueColor).toBeVisible()
+    await expect(crCheckboxMODISBands721).toBeVisible()
+    await expect(crCheckboxOrbitAscending).toBeVisible()
+    // const trueColorAvailableCoverage = page.locator('#MODIS_Aqua_CorrectedReflectance_TrueColor-checkbox + svg#availability-info')
+    // const brandsAvailableCoverage = page.locator('#MODIS_Aqua_CorrectedReflectance_Bands721-checkbox + svg#availability-info')
+    // const orbitAvailableCoverage = page.locator('#OrbitTracks_Aqua_Ascending-checkbox + svg#availability-info')
+    // await expect(trueColorAvailableCoverage).toBeVisible()
+    // await expect(brandsAvailableCoverage).toBeVisible()
+    // await expect(orbitAvailableCoverage).toBeVisible()
+  } else {
+    await aodMeasurement.click()
+    await expect(layerDetailHeader).toContainText('Aqua and Terra/MODIS')
+    await expect(aodCheckboxMODIS).toBeVisible()
+    await expect(aodCheckboxMAIAC).toBeVisible()
+    const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
+    const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
+    await expect(modisAvailableCoverage).toBeVisible()
+    await expect(maiacAvailableCoverage).toBeVisible()
+  }
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage icon', async () => {
@@ -224,14 +255,26 @@ test('Available grid source layer measuremet does not have unavaiable coverage i
     aquaModisTab,
     layerDetailHeader,
     aodCheckboxAquaMODIS,
-    aquaTerraMODISTab
+    aquaTerraMODISTab,
+    crTerraModisTab,
+    crCheckboxTerraBands367,
+    crAquaModisTab
   } = selectors
-  await aquaModisTab.click()
-  await expect(layerDetailHeader).toContainText('Aqua/MODIS')
-  await expect(aodCheckboxAquaMODIS).toBeVisible()
-  const modisAvailabilityInfo = await page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
-  await expect(modisAvailabilityInfo).not.toBeVisible()
-  await aquaTerraMODISTab.click()
+  if (process.env.SOTO === 'true') {
+    await crTerraModisTab.click()
+    await expect(layerDetailHeader).toContainText('Terra/MODIS')
+    await expect(crCheckboxTerraBands367).toBeVisible()
+    const modisAvailabilityInfo = await page.locator('#MODIS_Aqua_CorrectedReflectance_Bands367-checkbox + svg#availability-info')
+    await expect(modisAvailabilityInfo).not.toBeVisible()
+    await crAquaModisTab.click()
+  } else {
+    await aquaModisTab.click()
+    await expect(layerDetailHeader).toContainText('Aqua/MODIS')
+    await expect(aodCheckboxAquaMODIS).toBeVisible()
+    const modisAvailabilityInfo = await page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
+    await expect(modisAvailabilityInfo).not.toBeVisible()
+    await aquaTerraMODISTab.click()
+  }
 })
 
 test('Selecting layers from product picker adds them to the sidebar/map', async () => {
@@ -241,14 +284,27 @@ test('Selecting layers from product picker adds them to the sidebar/map', async 
     layerPickerBackButton,
     layersModalCloseButton,
     aodSidebarLayer,
-    aodMAIACSidebarLayer
+    aodMAIACSidebarLayer,
+    crCheckboxMODISTrueColor,
+    crCheckboxMODISBands721,
+    crSidebarMODISTrueColorLayer,
+    crSidebarMODISBands721Layer
   } = selectors
-  await aodCheckboxMODIS.click()
-  await aodCheckboxMAIAC.click()
-  await layerPickerBackButton.click()
-  await layersModalCloseButton.click()
-  await expect(aodSidebarLayer).toBeVisible()
-  await expect(aodMAIACSidebarLayer).toBeVisible()
+  if (process.env.SOTO === 'true') {
+    await crCheckboxMODISTrueColor.click()
+    await crCheckboxMODISBands721.click()
+    await layerPickerBackButton.click()
+    await layersModalCloseButton.click()
+    await expect(crSidebarMODISTrueColorLayer).toBeVisible()
+    await expect(crSidebarMODISBands721Layer).toBeVisible()
+  } else {
+    await aodCheckboxMODIS.click()
+    await aodCheckboxMAIAC.click()
+    await layerPickerBackButton.click()
+    await layersModalCloseButton.click()
+    await expect(aodSidebarLayer).toBeVisible()
+    await expect(aodMAIACSidebarLayer).toBeVisible()
+  }
 })
 
 test('Collapsed sidebar shows updated layer count', async () => {

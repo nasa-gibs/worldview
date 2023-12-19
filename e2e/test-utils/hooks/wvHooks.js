@@ -59,7 +59,11 @@ const dateSelectorMonthDay = async (page) => {
   return month + day
 }
 
-const assertDefaultLayers = async (page) => {
+/**
+ * @param {Object} page - Playwright object representing the browser page.
+ * @param {Integer} expectedLayerCount - The expected count for layers
+ */
+const assertDefaultLayers = async (page, expectedLayerCount) => {
   const layerItem = page.locator('.item.productsitem')
   const refLabels = page.locator('#active-Reference_Labels_15m')
   const refFeatures = page.locator('#active-Reference_Features_15m')
@@ -68,14 +72,16 @@ const assertDefaultLayers = async (page) => {
   const trueColorAqua = page.locator('#active-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const trueColorMODIS = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
   const trueColorNOAA = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
-  await expect(layerItem).toHaveCount(7)
+  await expect(layerItem).toHaveCount(expectedLayerCount)
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
   await expect(coastlines).toBeVisible()
-  await expect(trueColorSNPP).toBeVisible()
-  await expect(trueColorAqua).toBeVisible()
-  await expect(trueColorMODIS).toBeVisible()
-  await expect(trueColorNOAA).toBeVisible()
+  if (process.env.SOTO !== 'true') {
+    await expect(trueColorSNPP).toBeVisible()
+    await expect(trueColorAqua).toBeVisible()
+    await expect(trueColorMODIS).toBeVisible()
+    await expect(trueColorNOAA).toBeVisible()
+  }
 }
 
 const assertCategories = async (page) => {
@@ -94,17 +100,19 @@ const assertCategories = async (page) => {
   const other = page.locator('#legacy-other')
   await expect(categoriesContainer).toBeVisible()
   await expect(legacy).toBeVisible()
-  await expect(airQuality).toBeVisible()
-  await expect(ashPlumes).toBeVisible()
   await expect(drought).toBeVisible()
-  await expect(fires).toBeVisible()
   await expect(floods).toBeVisible()
   await expect(shipping).toBeVisible()
-  await expect(dust).toBeVisible()
   await expect(storms).toBeVisible()
-  await expect(smoke).toBeVisible()
-  await expect(vegetation).toBeVisible()
   await expect(other).toBeVisible()
+  if (process.env.SOTO !== 'true') {
+    await expect(airQuality).toBeVisible()
+    await expect(ashPlumes).toBeVisible()
+    await expect(fires).toBeVisible()
+    await expect(dust).toBeVisible()
+    await expect(smoke).toBeVisible()
+    await expect(vegetation).toBeVisible()
+  }
 }
 
 /**

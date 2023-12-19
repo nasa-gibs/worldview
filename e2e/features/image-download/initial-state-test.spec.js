@@ -59,7 +59,9 @@ test('Check arctic formats', async () => {
 })
 
 test('Check antarctic formats', async () => {
-  test.skip(true, 'Needs to be updated for SOTO')
+  if (process.env.SOTO === 'true') {
+    test.skip(true, '2nd Polar change is hidden by something: <iframe src="about:blank" id="react-refresh-overlay"></iframe> intercepts pointer events')
+  }
   const { imageFormat } = selectors
   await closeImageDownloadPanel(page)
   await switchProjections(page, 'antarctic')
