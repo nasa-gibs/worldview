@@ -2,6 +2,7 @@
   "layers": {
     "OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional": {
       "id": "OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional",
+      "enableCMRDataFinder": true,
       "description": "multi-mission/opera/OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional",
       "tags": "podaac PO.DAAC DSWx flood",
       "group": "overlays",

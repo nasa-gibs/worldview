@@ -2,6 +2,8 @@
   "layers": {
     "HLS_False_Color_Landsat": {
       "id": "HLS_False_Color_Landsat",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Color Infrared, Bands 5-4-3) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Landsat",
@@ -20,6 +22,7 @@
       },
       "wrapX": false,
       "disableSnapshot": true,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",

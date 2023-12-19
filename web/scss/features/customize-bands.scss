@@ -26,6 +26,14 @@
     }
 }
 
+.imagery-search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-top: 3px;
+}
+
 .customize-bands-container {
     display: flex;
     justify-content: center;
