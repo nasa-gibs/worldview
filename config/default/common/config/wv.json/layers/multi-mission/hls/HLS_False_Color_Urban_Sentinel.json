@@ -2,6 +2,8 @@
   "layers": {
     "HLS_False_Color_Urban_Sentinel": {
       "id": "HLS_False_Color_Urban_Sentinel",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Reflectance (Urban False Color, Bands 12-11-4) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_False_Color_Urban_Sentinel",
@@ -20,6 +22,7 @@
       },
       "wrapX": false,
       "disableSnapshot": true,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",

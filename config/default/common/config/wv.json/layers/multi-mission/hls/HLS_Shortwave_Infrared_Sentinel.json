@@ -2,6 +2,8 @@
   "layers": {
     "HLS_Shortwave_Infrared_Sentinel": {
       "id": "HLS_Shortwave_Infrared_Sentinel",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Reflectance (Shortwave Infrared, Bands 12-8A-4) *BETA*",
       "subtitle": "Sentinel 2A & 2B / MSI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Sentinel",
@@ -20,6 +22,7 @@
       },
       "wrapX": false,
       "disableSnapshot": true,
+      "minZoom": 7,
       "projections": {
         "geographic": {
           "source": "DDV",

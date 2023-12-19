@@ -2,6 +2,8 @@
     "layers": {
       "HLS_NDWI_Landsat": {
         "id": "HLS_NDWI_Landsat",
+        "enableCMRDataFinder": true,
+        "collectionConceptID": "C2021957657-LPCLOUD",
         "title": "Water Index (NDWI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDWI_Landsat",
@@ -20,6 +22,7 @@
             "colormap_name": "gnbu"
         },
         "disableSnapshot": true,
+        "minZoom": 7,
         "wrapX": false,
         "projections": {
           "geographic": {

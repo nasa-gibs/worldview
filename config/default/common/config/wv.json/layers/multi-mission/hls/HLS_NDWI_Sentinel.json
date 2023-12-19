@@ -2,6 +2,8 @@
     "layers": {
       "HLS_NDWI_Sentinel": {
         "id": "HLS_NDWI_Sentinel",
+        "enableCMRDataFinder": true,
+        "collectionConceptID": "C2021957295-LPCLOUD",
         "title": "Water Index (NDWI) *BETA*",
         "subtitle": "Sentinel 2A & 2B / MSI",
         "description": "multi-mission/hls/HLS_NDWI_Sentinel",
@@ -20,6 +22,7 @@
             "colormap_name": "gnbu"
         },
         "disableSnapshot": true,
+        "minZoom": 7,
         "wrapX": false,
         "projections": {
           "geographic": {
