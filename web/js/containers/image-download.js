@@ -151,6 +151,7 @@ class ImageDownloadContainer extends Component {
       hasSubdailyLayers,
       markerCoordinates,
       onPanelChange,
+      activePalettes,
     } = this.props;
     const {
       resolution, isWorldfile, fileType, bottomLeftLatLong, topRightLatLong, boundaries,
@@ -196,6 +197,7 @@ class ImageDownloadContainer extends Component {
           onLatLongChange={this.onLatLongChange}
           geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
           map={map.ui.selected}
+          palettes={activePalettes}
         />
         <Crop
           x={x}
@@ -228,6 +230,7 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state);
   const {
     config,
     proj,
@@ -235,6 +238,7 @@ function mapStateToProps(state) {
     locationSearch,
     map,
     imageDownload,
+    palettes,
   } = state;
   const {
     isWorldfile, fileType, resolution, boundaries,
@@ -243,6 +247,7 @@ function mapStateToProps(state) {
   const markerCoordinates = locationSearch.coordinates;
   const hasSubdailyLayers = subdailyLayersActive(state);
   let url = DEFAULT_URL;
+  const activePalettes = palettes.active;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
   }
@@ -271,6 +276,7 @@ function mapStateToProps(state) {
         renderable: true,
       },
     ),
+    activePalettes,
   };
 }
 const mapDispatchToProps = (dispatch) => ({

@@ -136,7 +136,7 @@ class toolbarContainer extends Component {
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
-    await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
+    // await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(

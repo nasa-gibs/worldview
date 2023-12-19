@@ -82,14 +82,15 @@ const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opaciti
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities) {
+const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities, classificationsArray) {
   if (fileType === 'application/vnd.google-earth.kmz') {
-    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
+    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities, classificationsArray);
   }
   return {
     layersArray,
     layerWraps,
     opacities,
+    classificationsArray,
   };
 };
 
@@ -224,6 +225,20 @@ export function imageUtilGetLayerOpacities(layers) {
   return opacities;
 }
 
+// Return the classification setting per layer
+export function imageUtilGetLayerClassifications(layers, palettes) {
+  return layers.map((layer) => {
+    if (layer.disabled) {
+      // Return the classification array
+      const layerId = layer.id;
+      console.log(`returning ${palettes[layerId].maps[0].disabled.join('-')}`);
+      return palettes[layerId].maps[0].disabled.join('-');
+    }
+    console.log('returning null');
+    return null;
+  }) || [];
+}
+
 export function imageUtilGetLayerWrap(layers) {
   return layers.map((layer) => {
     if (layer.wrapX) {
@@ -265,19 +280,21 @@ export function bboxWMS13(lonlats, crs) {
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
+export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates, palettes) {
   const { crs } = proj.selected;
   const {
     layersArray,
     layerWraps,
     opacities,
+    classificationsArray,
   } = imageUtilProcessWrap(
     fileType,
     imageUtilGetLayers(layerDefs, proj.id),
     imageUtilGetLayerWrap(layerDefs),
     imageUtilGetLayerOpacities(layerDefs),
+    imageUtilGetLayerClassifications(layerDefs, palettes),
   );
-
+  console.log('classificationsArray', classificationsArray);
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);

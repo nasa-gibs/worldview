@@ -48,6 +48,7 @@ function ImageDownloadPanel(props) {
     firstLabel,
     geoLatLong,
     onLatLongChange,
+    palettes,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -69,6 +70,7 @@ function ImageDownloadPanel(props) {
       currFileType,
       currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
       markerCoordinates,
+      palettes,
     );
 
     window.open(dlURL, '_blank');
@@ -241,6 +243,7 @@ ImageDownloadPanel.propTypes = {
   worldFileOptions: PropTypes.bool,
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
+  palettes: PropTypes.object,
 };
 
 export default ImageDownloadPanel;
