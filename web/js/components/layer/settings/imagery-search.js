@@ -28,7 +28,7 @@ export default function ImagerySearch({ layer }) {
   const [newerGranuleDates, setNewerGranuleDates] = useState([]);
   const [page, setPage] = useState(1);
 
-  let selectedDate = date.selected
+  let selectedDate = date.selected;
 
   if (compare.active && !compare.isCompareA) {
     selectedDate = date.selectedB;
