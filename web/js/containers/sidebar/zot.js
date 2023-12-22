@@ -21,7 +21,7 @@ export default function Zot (props) {
     } else if (underZoomValue > 0) {
       className = 'zot underzoom';
       tooltipString += `Layer is underzoomed by ${zot.underZoomValue.toString()}x its minimum zoom level; zoom in to see imagery <br/>`;
-    } else if (!hasGranules) {
+    } else if (Object.hasOwn(zot, 'hasGranules') && !hasGranules) {
       className = 'zot no-granules';
       tooltipString += 'No visible imagery on this date and/or location. <br/> Try moving the map or select a different date in the layer\'s settings. <br/>';
     }
