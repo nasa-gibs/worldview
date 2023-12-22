@@ -19,13 +19,20 @@ export default function ImagerySearch({ layer }) {
   const endRef = useRef(null);
   const dispatch = useDispatch();
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
-  const selectedDate = useSelector((state) => state.date.selected);
+  const date = useSelector((state) => state.date);
+  const compare = useSelector((state) => state.compare);
   const map = useSelector((state) => state.map);
   const [granulesStartStatus, setGranulesStartStatus] = useState(undefined);
   const [granulesEndStatus, setGranulesEndStatus] = useState(undefined);
   const [olderGranuleDates, setOlderGranuleDates] = useState([]);
   const [newerGranuleDates, setNewerGranuleDates] = useState([]);
   const [page, setPage] = useState(1);
+
+  let selectedDate = date.selected;
+
+  if (compare.active && !compare.isCompareA) {
+    selectedDate = date.selectedB;
+  }
 
   const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
 
