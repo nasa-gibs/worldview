@@ -131,7 +131,7 @@ customarily used for software exchange.
 **B.** Each Recipient must ensure that the following copyright notice appears
 prominently in the Subject Software:
 
-    Copyright © 2012-2023 United States Government
+    Copyright © 2012-2024 United States Government
     as represented by the Administrator of the
     National Aeronautics and Space Administration.
     All Rights Reserved.
