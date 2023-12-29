@@ -11,6 +11,7 @@ import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
 import { encode } from '../link/util';
 import { getActiveVisibleLayersAtDate } from '../layers/selectors';
+import { tryCatchDate } from '../date/util';
 
 /*
  * Set default extent according to time of day:
@@ -304,4 +305,45 @@ export async function promiseImageryForTime(state, date, activeString) {
   }));
   selected.getView().changed();
   return date;
+}
+
+/**
+ * Trigger tile requests for all given layers on a given date.
+ * @method promiseImageryForTour
+ */
+export async function promiseImageryForTour(state, layers, dateString, activeString) {
+  const { map } = state;
+  if (!map.ui.proj) return;
+  const {
+    cache, selected, createLayer, layerKey,
+  } = map.ui;
+  const appNow = lodashGet(state, 'date.appNow');
+  const date = tryCatchDate(dateString, appNow);
+  await Promise.all(layers.map(async (layer) => {
+    if (layer.type === 'granule' || layer.type === 'ttiler') {
+      return Promise.resolve();
+    }
+    const options = { date, group: activeString };
+    const keys = [];
+    if (layer.custom) {
+      keys.push(`palette=${layer.custom}`);
+    }
+    if (layer.min) {
+      keys.push(`min=${layer.min}`);
+    }
+    if (layer.max) {
+      keys.push(`max=${layer.max}`);
+    }
+    if (layer.squash) {
+      keys.push('squash');
+    }
+    if (keys.length > 0) {
+      options.style = keys.join(',');
+    }
+
+    const key = layerKey(layer, options, state);
+    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
+    return promiseLayerGroup(layerGroup, selected);
+  }));
+  selected.getView().changed();
 }

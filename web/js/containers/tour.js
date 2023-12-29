@@ -39,6 +39,7 @@ import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
+import { promiseImageryForTour } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -138,7 +139,7 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
     const kioskParam = this.getKioskParam(isKioskModeActive);
@@ -157,6 +158,13 @@ class Tour extends React.Component {
     this.fetchMetadata(currentStory, 0);
     const storyStep = currentStory.steps[0];
     const transitionParam = getTransitionAttr(storyStep.transition);
+    currentStory.steps.forEach((step) => {
+      preProcessStepLink(
+        `${step.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+        config,
+        promiseImageryForTour,
+      );
+    });
     processStepLink(
       currentStoryId,
       1,
@@ -522,6 +530,24 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
+  preProcessStepLink: async (search, config, promiseImageryForTour) => {
+    search = search.split('/?').pop();
+    const parameters = util.fromQueryString(search);
+    let layers = [];
+    const promises = [];
+
+    if (parameters.l) {
+      layers = layersParse12(parameters.l, config);
+      layers = uniqBy(layers, 'id');
+      promises.push(promiseImageryForTour(layers, parameters.t));
+      if (parameters.l1) {
+        layers = layersParse12(parameters.l1, config);
+        layers = uniqBy(layers, 'id');
+        promises.push(promiseImageryForTour(layers, parameters.t1, 'activeB'));
+      }
+    }
+    await Promise.all(promises);
+  },
   startTour: () => {
     dispatch(startTourAction());
   },
@@ -561,6 +587,7 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
+    promiseImageryForTour: (layers, dateString, activeString) => promiseImageryForTour(state, layers, dateString, activeString),
   };
 };
 
@@ -582,6 +609,7 @@ Tour.propTypes = {
   isActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
+  preProcessStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
