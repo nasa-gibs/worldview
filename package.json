@@ -214,6 +214,9 @@
     "url-template": "^3.1.1",
     "what-input": "^5.2.12"
   },
+  "resolutions": {
+    "follow-redirects": "1.15.4"
+  },
   "overrides": {
     "semver": "7.5.4",
     "word-wrap": "1.2.5"
