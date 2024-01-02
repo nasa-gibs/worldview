@@ -17,18 +17,10 @@ function UpdateCollections () {
 
   // Finds the correct subdomain to query headers from based on the layer source and GIBS/GITC env
   const lookupLayerSource = (layerId) => {
-    const crs = `epsg${proj.selected.epsg}`;
-    let sourceDomain = '';
-    // ex. GIBS:geographic or GITC:geographic
     const { source } = layerConfig[layerId].projections[proj.id];
-    // ex. GIBS or GITC
-    const splitSource = source.split(':')[0];
-    // This is necessary because GIBS source URL structure uses {a-c}. We can pull GITC srcs straight from the config
-    if (splitSource === 'GIBS') {
-      sourceDomain = `https://gibs-a.earthdata.nasa.gov/wmts/${crs}/best/wmts.cgi?`;
-    } else {
-      sourceDomain = sources[source].url;
-    }
+    const subRegex = /-{[a-z]{1}-[a-z]{1}}/i;
+    const sourceDomain = sources[source].url.replace(subRegex, '-a');
+
     return sourceDomain;
   };
 
@@ -41,7 +33,6 @@ function UpdateCollections () {
     const sourceDomain = lookupLayerSource(id);
 
     const sourceUrl = `${sourceDomain}?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`;
-
     try {
       const response = await fetch(sourceUrl);
 
