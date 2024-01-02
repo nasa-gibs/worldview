@@ -1,1 +1,2 @@
-[Earth Observatory Article: Water Returns to Laguna de Aculeo](https://earthobservatory.nasa.gov/images/151836/water-returns-to-laguna-de-aculeo)
+**Laguna de Aculeo, Chile**
+The lake is a two hours' drive from Santiago, Chile and was a long-time popular summer vacationing spot to go boating, swimming, and water skiing. A combination of nearby population growth, purchasing of water rights for agriculture, and drought caused the shallow lake to go dry in 2018. This true-color reflectance image from 18 May 2023 from the European Space Agency's Sentinel-2A and 2B satellites show a dry lake bed in shades of brown in the center of the map.

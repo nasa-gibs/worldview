@@ -1,2 +1,2 @@
-**Return of Lake Tulare**
-Tulare Lake in San Joaquin Valley, California, was once the largest freshwater lake west of the Mississippi River but feeder rivers were diverted for irrigation and municipal water use. Since the 1920s, the dry lake bed has been used to grow crops like almonds and tomatoes. The right "B" side shows how heavy rains caused the area to flood and re-fill.
+**Indus River Valley Monsoon Rains**
+The Indus River Valley receives heavy monsoon rains each summer which contribute to the apperance of extensive surface waters. These false-color reflectance images from Landsat 8 and 9 show water in dark blues. The left image is from 3 May 2023, before the monsoon rains, and the right side is from 7 August 2023, and if you swipe the bar back and forth you can see the extent of floodwaters along the riverbanks and in the surrounding region.

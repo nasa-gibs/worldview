@@ -1,1 +1,3 @@
-2023 Vermont Floods
+Overlaid on these true-color reflectance images is the OPERA surface water extent layer and it highlights the refilled lake in shades of blue, indicating open water and partial surface water. The layer is designed to improve our understanding of the spatial and temporal variations of land inundation by surface water. It is currently unclear how long this lake will remain filled, but as of 19 December 2023 in the right image, the lake appears to be at a similar water level as the left image of 15 September.
+
+Read more in the Earth Observatory Article, [Water Returns to Laguna de Aculeo](https://earthobservatory.nasa.gov/images/151836/water-returns-to-laguna-de-aculeo).

@@ -1,0 +1,1 @@
+Zooming in closer, it is evident that the dam was breached. Swipe the bar back and forth to compare the amount of water in the reservoir between 5 June 2023 and 4 August 2023. The right image shows light brown, exposed land from the draining of the reservoir.
