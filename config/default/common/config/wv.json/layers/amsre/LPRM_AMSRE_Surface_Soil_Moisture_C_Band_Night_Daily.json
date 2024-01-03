@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "LPRM_AMSRE_Surface_Soil_Moisture_C_Band_Night_Daily": {
+      "id": "LPRM_AMSRE_Surface_Soil_Moisture_C_Band_Night_Daily",
+      "description": "amsre/LPRM_AMSRE_Surface_Soil_Moisture_C_Band_Night_Daily",
+      "tags": "amsre",
+      "group": "overlays",
+      "layergroup": "Soil Moisture"
+    }
+  }
+}

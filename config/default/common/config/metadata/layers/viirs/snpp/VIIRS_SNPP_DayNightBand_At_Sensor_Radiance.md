@@ -11,6 +11,6 @@ References: VNP46A1 [doi:10.5067/VIIRS/VNP46A1.001](https://doi.org/10.5067/VIIR
 
 Román, M. O., Z. Wang, Q. Sun, V. Kalb, S. D. Miller, A. Molthan, L. Schultz, J. Bell, E. C. Stokes, B. Pandey, K. C. Seto, D. Hall, T. Oda, R. E. Wolfe, G. Lin, N. Golpayegani, S. Devadiga, C. Davidson, S. Sarkar, C. Praderas, J. Schmaltz, R. Boller, J. Stevens, O. M. Ramos Gonzalez, E. Padilla, J. Alonso, Y. Detrés, R. Armstrong, I. Miranda, Y. Conte, N. Marrero, K. MacManus, T. Esch, and E. J. Masuoka. 2018. "NASA’s Black Marble nighttime lights product suite." Remote Sensing of Environment 210 113-143 [doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017)
 
-Lee, T., S. Miller, F. Turk, C. Schueler, R. Julian, S. Deyo, P. Dills, and S. Wang, 2006: The NPOESS VIIRS Day/Night Visible Sensor. Bull. Amer. Meteor. Soc., 87, 191–199, [doi: 10.1175/BAMS-87-2-191](https://journals.ametsoc.org/doi/abs/10.1175/BAMS-87-2-191)
+Lee, T., S. Miller, F. Turk, C. Schueler, R. Julian, S. Deyo, P. Dills, and S. Wang, 2006: The NPOESS VIIRS Day/Night Visible Sensor. Bull. Amer. Meteor. Soc., 87, 191–199, [doi:10.1175/BAMS-87-2-191](https://doi.org/10.1175/BAMS-87-2-191)
 
-Román, M. O. and Stokes, E. C. (2015), Holidays in lights: Tracking cultural patterns in demand for energy services. Earth's Future, 3: 182–205. [doi:10.1002/2014EF000285](https://onlinelibrary.wiley.com/doi/10.1002/2014EF000285/full)
+Román, M. O. and Stokes, E. C. (2015), Holidays in lights: Tracking cultural patterns in demand for energy services. Earth's Future, 3: 182–205. [doi:10.1002/2014EF000285](https://doi.org/10.1002/2014EF000285)

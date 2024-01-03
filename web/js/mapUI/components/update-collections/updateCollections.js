@@ -12,50 +12,49 @@ function UpdateCollections () {
   const layers = useSelector((state) => state.layers.active.layers);
   const selectedDate = useSelector((state) => getSelectedDate(state));
   const proj = useSelector((state) => state.proj);
+  const sources = useSelector((state) => state.config.sources);
+  const layerConfig = useSelector((state) => state.layers.layerConfig);
+
+  // Finds the correct subdomain to query headers from based on the layer source and GIBS/GITC env
+  const lookupLayerSource = (layerId) => {
+    const { source } = layerConfig[layerId].projections[proj.id];
+    const subRegex = /-{[a-z]{1}-[a-z]{1}}/i;
+    const sourceDomain = sources[source].url.replace(subRegex, '-a');
+
+    return sourceDomain;
+  };
 
   const getHeaders = async (def, date) => {
     const { id, period } = def;
     const { matrixSet } = def.projections[proj.id];
-    const crs = `epsg${proj.selected.epsg}`;
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));
     const imageType = def.format === 'image/png' ? 'png' : 'jpeg';
 
-    const srcs = [
-      `https://gibs-a.earthdata.nasa.gov/wmts/${crs}/best/wmts.cgi?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`,
-      `https://gibs-b.earthdata.nasa.gov/wmts/${crs}/best/wmts.cgi?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`,
-      `https://gibs-c.earthdata.nasa.gov/wmts/${crs}/best/wmts.cgi?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`,
-    ];
+    const sourceDomain = lookupLayerSource(id);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const src of srcs) {
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        const response = await fetch(src);
-        if (!response.ok) {
-          // If the response is not OK (e.g., 400 error), continue to the next URL
-          // eslint-disable-next-line no-continue
-          continue;
-        }
+    const sourceUrl = `${sourceDomain}?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`;
+    try {
+      const response = await fetch(sourceUrl);
 
-        const { headers } = response;
-        const actualId = headers.get('layer-identifier-actual');
-        if (!actualId) return undefined;
+      const { headers } = response;
+      const actualId = headers.get('layer-identifier-actual');
+      if (!actualId) return undefined;
 
-        const parts = actualId.split('_');
-        const type = parts[parts.length - 1];
-        const version = parts[parts.length - 2];
-        const formattedDate = period === 'daily' ? formatDailyDate(date) : formatSubdailyDate(date);
+      const parts = actualId.split('_');
+      const type = parts[parts.length - 1];
+      const version = parts[parts.length - 2];
+      const formattedDate = period === 'daily' ? formatDailyDate(date) : formatSubdailyDate(date);
 
-        if (type !== 'NRT' && type !== 'STD') return undefined;
+      if (type !== 'NRT' && type !== 'STD') return undefined;
 
-        return {
-          id, date: formattedDate, type, version,
-        };
-      } catch (error) {
-        console.error(error);
-      }
+      return {
+        id, date: formattedDate, type, version,
+      };
+    } catch (error) {
+      // errors will clutter console, turn this on for debugging
+      // console.error(error);
     }
-    // Return undefined if all srcs fail
+    // Return undefined if query fails
     return undefined;
   };
 
@@ -86,7 +85,8 @@ function UpdateCollections () {
       const validCollections = results.filter((result) => result !== undefined);
       updateCollection(validCollections);
     } catch (error) {
-      console.error('error', error);
+      // errors will clutter console, turn this on for debugging
+      // console.error(error);
     }
   };
 

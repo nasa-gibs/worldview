@@ -16,8 +16,8 @@
       "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
       "orbitDirection": ["descending", "descending"],
       "bandCombo": {
-        "r": "B07",
-        "g": "B05",
+        "r": "B12",
+        "g": "B8A",
         "b": "B04"
       },
       "wrapX": false,
