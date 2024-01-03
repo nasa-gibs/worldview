@@ -171,6 +171,10 @@ function LayerRow (props) {
     };
   }, []);
 
+  useEffect(() => {
+    setDisabled(isDisabled);
+  }, [isDisabled]);
+
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
       setDropdownBtnVisible(false);
