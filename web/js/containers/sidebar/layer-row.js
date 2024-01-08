@@ -127,7 +127,7 @@ function LayerRow (props) {
         dateTime.pop();
         dateTime.push('00:00:00.000Z');
         const zeroedDate = dateTime.join('T');
-        const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
+        const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326');
         const maxExtent = [-180, -90, 180, 90];
         // clamp extent to maximum extent allowed by the CMR api
         const extent = transformedExtent.map((coord, i) => {

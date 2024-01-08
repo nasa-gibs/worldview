@@ -41,8 +41,7 @@ export default function ImagerySearch({ layer }) {
   const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
 
   const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
-    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
-    console.log(transformedExtent);
+    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326');
     // clamp extent to maximum extent allowed by the CMR api
     const extent = transformedExtent.map((coord, i) => {
       const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
@@ -63,8 +62,7 @@ export default function ImagerySearch({ layer }) {
   };
 
   const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
-    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
-    console.log({ transformedExtent });
+    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326');
     // clamp extent to maximum extent allowed by the CMR api
     const extent = transformedExtent.map((coord, i) => {
       const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
