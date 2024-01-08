@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
+import { transformExtent } from 'ol/proj';
 import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 import googleTagManager from 'googleTagManager';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -115,6 +116,7 @@ function LayerRow (props) {
   const [hideZoomAlert, setHideZoomAlert] = useState(false);
   const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
   const map = useSelector((state) => state.map);
+  const selectedProj = useSelector((state) => state.proj.selected);
   const selectedDate = useSelector((state) => state.date.selected);
 
   useEffect(() => {
@@ -125,9 +127,10 @@ function LayerRow (props) {
         dateTime.pop();
         dateTime.push('00:00:00.000Z');
         const zeroedDate = dateTime.join('T');
+        const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
         const maxExtent = [-180, -90, 180, 90];
         // clamp extent to maximum extent allowed by the CMR api
-        const extent = map.extent.map((coord, i) => {
+        const extent = transformedExtent.map((coord, i) => {
           const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
           if (condition) {
             return coord;

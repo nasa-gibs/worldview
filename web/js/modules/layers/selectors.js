@@ -759,7 +759,8 @@ function getZoomLevel(layer, zoom, proj, sources) {
 
   if (matrixSet !== undefined && layer.type !== 'vector') {
     const { source } = layer.projections[proj];
-    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+    const resolutionsLength = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions?.length;
+    const zoomLimit = resolutionsLength ? (resolutionsLength - 1) + zoomOffset : 0;
     if (zoom > zoomLimit) {
       const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
       return overZoomValue;

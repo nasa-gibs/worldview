@@ -7,6 +7,8 @@ import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
+import proj4 from 'proj4';
+import { register } from 'ol/proj/proj4.js';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
 import axios from 'axios';
@@ -688,6 +690,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const searchID = await registerSearch(def, options, state);
 
+    const projParam = selected.id === 'arctic' ? 'UPSArcticWGS84Quad' : 'WGS1984Quad';
+
+    proj4.defs('EPSG:5041', '+proj=stere +lat_0=90 +lon_0=0 +k=0.994 +x_0=2000000 +y_0=2000000 +datum=WGS84 +units=m +no_defs +type=crs');
+    register(proj4);
+
+    const proj5041 = get('EPSG:5041');
+    proj5041.setExtent([-1371213.76, -1405880.72, 5371213.76, 5405880.72]);
+
     const tileUrlFunction = (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
@@ -701,15 +711,17 @@ export default function mapLayerBuilder(config, cache, store) {
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `mosaic/tiles/${searchID}/${projParam}/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };
 
+    const projection = selected.id === 'arctic' ? 'EPSG:5041' : get(crs);
     const xyzSourceOptions = {
       crossOrigin: 'anonymous',
-      projection: get(crs),
+      projection,
       tileUrlFunction,
+      reprojectionErrorThreshold: 2,
     };
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);

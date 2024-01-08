@@ -27,6 +27,10 @@
         "geographic": {
           "source": "DDV",
           "matrixSet": "31.25m"
+        },
+        "arctic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
         }
       },
       "startDate": "2022-01-01T00:00:00Z"

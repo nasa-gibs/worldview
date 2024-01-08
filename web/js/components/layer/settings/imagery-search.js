@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Spinner,
 } from 'reactstrap';
+import { transformExtent } from 'ol/proj';
 import { selectDate as selectDateAction } from '../../../modules/date/actions';
 
 const dateOptions = {
@@ -22,11 +23,14 @@ export default function ImagerySearch({ layer }) {
   const date = useSelector((state) => state.date);
   const compare = useSelector((state) => state.compare);
   const map = useSelector((state) => state.map);
+  const selectedProj = useSelector((state) => state.proj.selected);
   const [granulesStartStatus, setGranulesStartStatus] = useState(undefined);
   const [granulesEndStatus, setGranulesEndStatus] = useState(undefined);
   const [olderGranuleDates, setOlderGranuleDates] = useState([]);
   const [newerGranuleDates, setNewerGranuleDates] = useState([]);
   const [page, setPage] = useState(1);
+
+  console.log(selectedProj.crs);
 
   let selectedDate = date.selected;
 
@@ -37,8 +41,10 @@ export default function ImagerySearch({ layer }) {
   const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
 
   const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
+    console.log(transformedExtent);
     // clamp extent to maximum extent allowed by the CMR api
-    const extent = map.extent.map((coord, i) => {
+    const extent = transformedExtent.map((coord, i) => {
       const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
       if (condition) {
         return coord;
@@ -57,8 +63,10 @@ export default function ImagerySearch({ layer }) {
   };
 
   const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+    const transformedExtent = transformExtent(map.extent, selectedProj.crs, 'EPSG:4326')
+    console.log({ transformedExtent });
     // clamp extent to maximum extent allowed by the CMR api
-    const extent = map.extent.map((coord, i) => {
+    const extent = transformedExtent.map((coord, i) => {
       const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
       if (condition) {
         return coord;
