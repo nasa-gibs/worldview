@@ -546,6 +546,12 @@ const mapDispatchToProps = (dispatch) => ({
         promises.push(promiseImageryForTour(layers, parameters.t1, 'activeB'));
       }
     }
+    preloadPalettes(layers, {}, false).then((obj) => {
+      dispatch({
+        type: BULK_PALETTE_RENDERING_SUCCESS,
+        rendered: obj.rendered,
+      });
+    });
     await Promise.all(promises);
   },
   startTour: () => {

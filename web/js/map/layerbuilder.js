@@ -115,7 +115,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
-    if (options.style) {
+    if (def.custom && options.style) {
       style = options.style;
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
