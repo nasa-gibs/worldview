@@ -1,1 +1,1 @@
-The OPERA surface water extent layer shows the extent of floodwaters very clearly in shades of dark and light blue and highlights how much extends from the meandering river banks and covers the surrounding region.
+The OPERA surface water extent layer shows the floodwaters very clearly in shades of dark and light blue. It highlights how much surface water there is beyond the meandering river banks and the water covering the surrounding region.
