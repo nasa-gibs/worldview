@@ -61,7 +61,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=30.53197246393441,45.69929499944203,37.0819472324028,48.922782873266016&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-0),HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS_Provisional(disabled=5-0),HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map&lg1=true&ca=true&s=33.3662,46.7822%2B33.3662,46.7822&t=2023-06-05-T03%3A54%3A43Z&t1=2023-07-05-T07%3A54%3A43Z"
+          "stepLink": "http://localhost:3000/?v=66.26097333885345,26.79208364911574,70.01383041589206,28.63900515761756&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,HLS_Customizable_Landsat(bandCombo=%7B%22r%22%3A%22B07%22;%22g%22%3A%22B05%22;%22b%22%3A%22B04%22%7D),Land_Water_Map&lg=true&l1=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,HLS_Customizable_Landsat(bandCombo=%7B%22r%22%3A%22B07%22;%22g%22%3A%22B05%22;%22b%22%3A%22B04%22%7D),Land_Water_Map&lg1=true&ca=true&t=2023-05-03-T13%3A24%3A03Z&t1=2023-08-07-T05%3A24%3A03Z"
         },
         {
           "id": "006",
