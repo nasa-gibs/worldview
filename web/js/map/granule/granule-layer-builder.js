@@ -237,9 +237,29 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const visibleGranules = getVisibleGranules(availableGranules, count, date);
-    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
+    console.log(availableGranules)
+  /*
+    [
+      {
+        date: '2023-12-17T22:00:00Z',
+        polygon: [[-148.978333, 27.035683], [-117.748947,  31.746162], [-118.743423, 52.53973], [-160.668777, 46.210739], [-148.978333, 27.035683]],
+        dayNight: "DAY"
+      },
+      {
+        date: '2023-12-17T21:54:00Z',
+        polygon: [[-142.217865, 6.903207], [-114.694138, 11.060287], [-117.744019, 31.871849], [-149.010025, 27.155781], [-142.217865, 6.903207]],
+        dayNight: "DAY"
+      }
+    ]
+  */
 
+    // polygon coordinates are used here to determine which items are visible
+    const visibleGranules = getVisibleGranules(availableGranules, count, date);
+    console.log(visibleGranules)
+
+    // transforming each polygon coordinate to the selected projection
+    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
+    console.log(transformedGranules)
     return {
       count,
       granuleDates: transformedGranules.map((g) => g.date),
@@ -253,6 +273,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes
    * @param {object} options
    * @returns {object} - Granule layer
+   * This function is exported as "getGranuleLayer" and is called in layerBuilder
   */
   const createGranuleLayer = async (def, attributes, options) => {
     const {
