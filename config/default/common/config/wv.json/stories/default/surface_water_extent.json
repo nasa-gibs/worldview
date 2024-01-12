@@ -4,7 +4,7 @@
       "id": "surface_water_extent",
       "type": "default",
       "title": "Surface Water Extent",
-      "description": "Viewing near-global surface water extent at 30 meter resolution is available in Worldview!",
+      "description": "View near-global surface water extent at 30 meter resolution in Worldview!",
       "backgroundImage": "",
       "backgroundImageHover": "",
       "readMoreLinks": [
