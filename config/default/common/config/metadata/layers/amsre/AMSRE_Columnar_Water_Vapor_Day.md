@@ -4,4 +4,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 Data field: `TotalColWaterVapor`
 
-References: [doi:10.5067/IR85TKB5BLM3](https://doi.org/10.5067/IR85TKB5BLM3)
+References: AE_Rain [doi:10.5067/IR85TKB5BLM3](https://doi.org/10.5067/IR85TKB5BLM3)
