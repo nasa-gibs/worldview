@@ -42,9 +42,6 @@ import {
 } from '../modules/vector-styles/selectors';
 import { nearestInterval } from '../modules/layers/util';
 import {
-  lookup as createLookup,
-} from '../modules/palettes/util';
-import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
@@ -117,9 +114,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
-    }
-    if (def.custom && options.style) {
-      style = options.style;
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
   };
@@ -380,17 +374,9 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
-    console.log(def.id, def, options, state.palettes);
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
-      console.log(def.id, lookup);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
-    } else if (def.palette && def.custom && state.palettes.tourStoryPalettes && state.palettes.tourStoryPalettes[def.palette.id]) {
-      const lookup = createLookup(state.palettes.tourStoryPalettes[def.palette.id].maps[0].entries, state.palettes.custom[def.custom[0]]);
-      console.log(def.id, lookup);
-      sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
-      // Lookup is now working, so custom palette is properly preloaded
-      // Still TODO: fix min & max, still not working when preloading
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
 

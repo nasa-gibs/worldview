@@ -541,22 +541,23 @@ const mapDispatchToProps = (dispatch) => ({
     search = search.split('/?').pop();
     const parameters = util.fromQueryString(search);
     let layers = [];
+    let layers2 = [];
     const promises = [];
     const temp = [];
 
     if (parameters.l) {
       layers = layersParse12(parameters.l, config);
       layers = uniqBy(layers, 'id');
+      layers = layers.filter((layer) => !layer.custom && !layer.disabled);
       temp.push({ layers, dateString: parameters.t });
       if (parameters.l1) {
-        layers = layersParse12(parameters.l1, config);
-        layers = uniqBy(layers, 'id');
-        temp.push({ layers, dateString: parameters.t1, activeString: 'activeB' });
+        layers2 = layersParse12(parameters.l1, config);
+        layers2 = uniqBy(layers2, 'id');
+        layers2 = layers2.filter((layer) => !layer.custom && !layer.disabled);
+        temp.push({ layers: layers2, dateString: parameters.t1, activeString: 'activeB' });
       }
     }
-    console.log(layers);
-    preloadPalettes(layers, {}, false).then(async (obj) => {
-      console.log(obj);
+    preloadPalettes([...layers, ...layers2], {}, false).then(async (obj) => {
       await dispatch({
         type: BULK_PALETTE_PRELOADING_SUCCESS,
         tourStoryPalettes: obj.rendered,
