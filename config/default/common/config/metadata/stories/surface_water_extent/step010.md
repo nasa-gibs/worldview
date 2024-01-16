@@ -1,0 +1,3 @@
+Storm Ciarán hit northwestern France on 1 November 2023 and moved to Britain and western Europe on 2 November causing heavy rains and strong winds. This comparison of northwestern Tuscany shows 2 October 2023 on the "A" left side, and 3 November on the "B" right side. The "B" side shows flooded agricultural fields near the river banks in dark and light blue.
+
+Read more at Earth Observatory's [Flooding in Tuscany](https://earthobservatory.nasa.gov/images/152051/flooding-in-tuscany).

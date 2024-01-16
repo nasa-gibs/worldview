@@ -5,10 +5,12 @@ import TourBox from './tour-box';
 
 function TourBoxes(props) {
   const { stories, storyOrder, selectTour } = props;
+  // when we remove this we need to update tour-box.js render function to index+1 && index+2
+  const activeStoryOrder = storyOrder.filter((storyId) => storyId !== 'surface_water_extent');
   return (
     <div className="tour-box-container">
       <div className="tour-box-row">
-        {storyOrder.map((storyId, i) => {
+        {activeStoryOrder.map((storyId, i) => {
           const story = stories[storyId];
           return (
             <TourBox

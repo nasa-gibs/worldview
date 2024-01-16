@@ -1412,7 +1412,7 @@ export function adjustStartDates(layers) {
     .format('YYYY-MM-DDThh:mm:ss')}Z`;
 
   const applyDateAdjustment = (layer) => {
-    const { availability, dateRanges } = layer;
+    const { availability, dateRanges, endDate } = layer;
     if (!availability) {
       return;
     }
@@ -1420,8 +1420,15 @@ export function adjustStartDates(layers) {
 
     if (Array.isArray(dateRanges) && dateRanges.length) {
       const [firstDateRange] = dateRanges;
-      firstDateRange.startDate = adjustDate(rollingWindow);
-      layer.startDate = adjustDate(rollingWindow);
+      const adjustedDate = adjustDate(rollingWindow);
+
+      // To prevent a startDate greater than endDate for layers with a rollingWindow and specific start and end dates
+      if (endDate && new Date(adjustedDate) > new Date(endDate)) {
+        return;
+      }
+
+      firstDateRange.startDate = adjustedDate;
+      layer.startDate = adjustedDate;
     } else {
       console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }

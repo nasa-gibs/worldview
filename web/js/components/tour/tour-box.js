@@ -53,8 +53,8 @@ class TourBox extends React.Component {
     } = this.props;
     const { styles } = this.state;
     let floatBox = '';
-    if (storyOrder.length - (index + 1) === 0
-      || storyOrder.length - (index + 2) === 0) {
+    if (storyOrder.length - (index + 2) === 0
+      || storyOrder.length - (index + 3) === 0) {
       floatBox = ' tour-box-float';
     }
     return (

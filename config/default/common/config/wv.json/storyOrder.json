@@ -1,5 +1,6 @@
 {
     "storyOrder": [
+        "surface_water_extent",
         "atmospheric_rivers",
         "flood-product",
         "black_marble_night_lights",
