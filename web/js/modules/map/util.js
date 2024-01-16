@@ -345,5 +345,4 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     const layerGroup = cache.getItem(key) || await createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
   }));
-  selected.getView().changed();
 }

@@ -24,7 +24,10 @@ import {
 import {
   clearCustoms,
 } from '../modules/palettes/actions';
-import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
+import {
+  BULK_PALETTE_RENDERING_SUCCESS,
+  BULK_PALETTE_PRELOADING_SUCCESS,
+} from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -158,13 +161,6 @@ class Tour extends React.Component {
     this.fetchMetadata(currentStory, 0);
     const storyStep = currentStory.steps[0];
     const transitionParam = getTransitionAttr(storyStep.transition);
-    currentStory.steps.forEach((step) => {
-      preProcessStepLink(
-        `${step.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
-        config,
-        promiseImageryForTour,
-      );
-    });
     processStepLink(
       currentStoryId,
       1,
@@ -173,6 +169,13 @@ class Tour extends React.Component {
       config,
       renderedPalettes,
     );
+    currentStory.steps.forEach((step) => {
+      preProcessStepLink(
+        `${step.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+        config,
+        promiseImageryForTour,
+      );
+    });
   }
 
   fetchMetadata(currentStory, stepIndex) {
@@ -524,6 +527,10 @@ const mapDispatchToProps = (dispatch) => ({
           type: BULK_PALETTE_RENDERING_SUCCESS,
           rendered: obj.rendered,
         });
+        dispatch({
+          type: BULK_PALETTE_PRELOADING_SUCCESS,
+          tourStoryPalettes: obj.rendered,
+        });
         dispatch({ type: LOCATION_POP_ACTION, payload: location });
       });
     } else {
@@ -535,24 +542,30 @@ const mapDispatchToProps = (dispatch) => ({
     const parameters = util.fromQueryString(search);
     let layers = [];
     const promises = [];
+    const temp = [];
 
     if (parameters.l) {
       layers = layersParse12(parameters.l, config);
       layers = uniqBy(layers, 'id');
-      promises.push(promiseImageryForTour(layers, parameters.t));
+      temp.push({ layers, dateString: parameters.t });
       if (parameters.l1) {
         layers = layersParse12(parameters.l1, config);
         layers = uniqBy(layers, 'id');
-        promises.push(promiseImageryForTour(layers, parameters.t1, 'activeB'));
+        temp.push({ layers, dateString: parameters.t1, activeString: 'activeB' });
       }
     }
-    preloadPalettes(layers, {}, false).then((obj) => {
-      dispatch({
-        type: BULK_PALETTE_RENDERING_SUCCESS,
-        rendered: obj.rendered,
+    console.log(layers);
+    preloadPalettes(layers, {}, false).then(async (obj) => {
+      console.log(obj);
+      await dispatch({
+        type: BULK_PALETTE_PRELOADING_SUCCESS,
+        tourStoryPalettes: obj.rendered,
       });
+      temp.forEach((set) => {
+        promises.push(promiseImageryForTour(set.layers, set.dateString, set.activeString));
+      });
+      await Promise.all(promises);
     });
-    await Promise.all(promises);
   },
   startTour: () => {
     dispatch(startTourAction());
