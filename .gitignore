@@ -28,6 +28,7 @@ e2e/reports
 e2e/screens
 playwright-report/
 playwright/.cache/
+.nyc_output
 *.jar
 # Config
 /config/*

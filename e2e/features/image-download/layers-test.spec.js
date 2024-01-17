@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('playwright-test-coverage')
 const { openImageDownloadPanel, clickDownload } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 const createSelectors = require('../../test-utils/global-variables/selectors')

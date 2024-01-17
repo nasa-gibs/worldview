@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('playwright-test-coverage')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 
 const url = 'http://localhost:3000/?v=-78.52435703125,37.8608744140625,-75.56244296875,39.7483255859375&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&s=-77.0434,38.8046&t=2023-02-15-T19%3A53%3A41Z'

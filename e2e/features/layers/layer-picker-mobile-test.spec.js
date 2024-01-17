@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('playwright-test-coverage')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { assertDefaultLayers, assertCategories } = require('../../test-utils/hooks/wvHooks')
 

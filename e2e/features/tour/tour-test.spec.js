@@ -1,5 +1,5 @@
 // @ts-check
-const { test } = require('@playwright/test')
+const { test } = require('playwright-test-coverage')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 

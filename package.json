@@ -74,7 +74,12 @@
     "watch": "cross-env NODE_ENV=development webpack serve",
     "watch:debug:logger": "cross-env DEBUG=logger NODE_ENV=development webpack serve",
     "watch:debug:devtools": "cross-env DEBUG=devtools NODE_ENV=development webpack serve",
-    "upload": "node tasks/util/upload.js"
+    "upload": "node tasks/util/upload.js",
+
+    "preplaywright": "rm -rf playwright-coverage/ .nyc_output/",
+    "playwright:pls": "NODE_ENV=playwright nyc playwright test --project=chromium --reporter=list",
+    "playwright:ci": "start-server-and-test start http-get://localhost:3000 playwright:pls",
+    "postplaywright": "npx nyc report --reporter=json --reporter=lcov --reporter=clover --report-dir=playwright-coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",
@@ -177,9 +182,11 @@
     "moment": "^2.30.1",
     "moment-locales-webpack-plugin": "^1.2.0",
     "node-dir": "^0.1.17",
+    "nyc": "^15.1.0",
     "ol": "^8.2.0",
     "ol-mapbox-style": "^12.1.1",
     "p-queue": "^8.0.1",
+    "playwright-test-coverage": "^1.2.12",
     "proj4": "^2.10.0",
     "prop-types": "^15.8.1",
     "qs": "^6.11.2",
@@ -208,6 +215,7 @@
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.4",
     "stackblur": "^1.0.0",
+    "start-server-and-test": "^2.0.3",
     "supercluster": "^8.0.1",
     "tough-cookie": "^4.1.3",
     "upng-js": "^2.1.0",

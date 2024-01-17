@@ -16,5 +16,10 @@ module.exports = {
         loose: true
       }
     ]
-  ]
+  ],
+  env: {
+    playwright: {
+      plugins: ['istanbul']
+    }
+  }
 }

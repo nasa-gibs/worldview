@@ -141,3 +141,22 @@ test('Recent tab shows layers that were selected', async () => {
 - For elements that are not defined in the `selectors.js` file you can use `page.locator()` or any other locator. A full list can be found in the [Playwright Locators docs](https://playwright.dev/docs/locators)
 - If you are only performing an action on an element such as `click()` you do not need to define the element as a variable. You can simply write `await page.locator('.recent-tab').click()`
 - If you are performing an assertion on an element, you will need to define the element as a variable first `const aquaAerosolRow = await page.locator('#MODIS_Aqua_Aerosol-search-row')` `await expect(aquaAerosolRow).toBeVisible()`
+
+### Running Code Coverage Tests
+1. `npm install nyc playwright-test-coverage start-server-and-test`
+2. Create the following scripts in the package.json
+```
+    "playwright:coverage": "NODE_ENV=playwright nyc playwright test --project=chromium --reporter=list",
+    "playwright:ci": "start-server-and-test start http-get://localhost:3000 playwright:coverage",
+```
+3. Add the following to babel.config.js
+```
+  env: {
+    playwright: {
+      plugins: ['istanbul']
+    }
+  }
+```
+4. Use VSCode's search & replace tool to search for all instances of "@playwright/test" in the e2e/features directory and replace them with "playwright-test-coverage".
+5. Run the playwright:ci script
+6. After the tests finish, you can view results from the coverage/lcov-report index.html file
