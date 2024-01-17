@@ -2,4 +2,4 @@ The Ice Surface Temperature (L3, Daily, Day) layer shows daily, daytime ice surf
 
 The Moderate Resolution Imaging Spectroradiometer (MODIS) is a 36-band visible to thermal-infrared sensor onboard the Terra and Aqua satellites. Two of the bands are imaged at a nominal resolution of 250 m at nadir, five bands at 500 m, and the remaining bands at 1000 m.
 
-References: MOD29P1D [doi:110.5067/MODIS/MOD29P1D.061](https://doi.org/10.5067/MODIS/MOD29P1D.061)
+References: MOD29P1D [doi:10.5067/MODIS/MOD29P1D.061](https://doi.org/10.5067/MODIS/MOD29P1D.061)
