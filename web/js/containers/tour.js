@@ -540,29 +540,29 @@ const mapDispatchToProps = (dispatch) => ({
   preProcessStepLink: async (search, config, promiseImageryForTour) => {
     search = search.split('/?').pop();
     const parameters = util.fromQueryString(search);
-    let layers = [];
-    let layers2 = [];
-    const promises = [];
-    const temp = [];
+    let layersA = [];
+    let layersB = [];
+    const promisesParams = [];
 
     if (parameters.l) {
-      layers = layersParse12(parameters.l, config);
-      layers = uniqBy(layers, 'id');
-      layers = layers.filter((layer) => !layer.custom && !layer.disabled);
-      temp.push({ layers, dateString: parameters.t });
+      layersA = layersParse12(parameters.l, config);
+      layersA = uniqBy(layersA, 'id');
+      layersA = layersA.filter((layer) => !layer.custom && !layer.disabled);
+      promisesParams.push({ layersA, dateString: parameters.t });
       if (parameters.l1) {
-        layers2 = layersParse12(parameters.l1, config);
-        layers2 = uniqBy(layers2, 'id');
-        layers2 = layers2.filter((layer) => !layer.custom && !layer.disabled);
-        temp.push({ layers: layers2, dateString: parameters.t1, activeString: 'activeB' });
+        layersB = layersParse12(parameters.l1, config);
+        layersB = uniqBy(layersB, 'id');
+        layersB = layersB.filter((layer) => !layer.custom && !layer.disabled);
+        promisesParams.push({ layers: layersB, dateString: parameters.t1, activeString: 'activeB' });
       }
     }
-    preloadPalettes([...layers, ...layers2], {}, false).then(async (obj) => {
+    preloadPalettes([...layersA, ...layersB], {}, false).then(async (obj) => {
       await dispatch({
         type: BULK_PALETTE_PRELOADING_SUCCESS,
         tourStoryPalettes: obj.rendered,
       });
-      temp.forEach((set) => {
+      const promises = [];
+      promisesParams.forEach((set) => {
         promises.push(promiseImageryForTour(set.layers, set.dateString, set.activeString));
       });
       await Promise.all(promises);
