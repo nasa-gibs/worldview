@@ -55,6 +55,14 @@ const getTransitionAttr = function(transition) {
   return '';
 };
 
+const prepareLayersList = function(layersString, config) {
+  let layers;
+  layers = layersParse12(layersString, config);
+  layers = uniqBy(layers, 'id');
+  layers = layers.filter((layer) => !layer.custom && !layer.disabled);
+  return layers;
+};
+
 class Tour extends React.Component {
   constructor(props) {
     super(props);
@@ -545,16 +553,12 @@ const mapDispatchToProps = (dispatch) => ({
     const promisesParams = [];
 
     if (parameters.l) {
-      layersA = layersParse12(parameters.l, config);
-      layersA = uniqBy(layersA, 'id');
-      layersA = layersA.filter((layer) => !layer.custom && !layer.disabled);
-      promisesParams.push({ layersA, dateString: parameters.t });
-      if (parameters.l1) {
-        layersB = layersParse12(parameters.l1, config);
-        layersB = uniqBy(layersB, 'id');
-        layersB = layersB.filter((layer) => !layer.custom && !layer.disabled);
-        promisesParams.push({ layers: layersB, dateString: parameters.t1, activeString: 'activeB' });
-      }
+      layersA = prepareLayersList(parameters.l, config);
+      promisesParams.push({ layers: layersA, dateString: parameters.t });
+    }
+    if (parameters.l1) {
+      layersB = prepareLayersList(parameters.l1, config);
+      promisesParams.push({ layers: layersB, dateString: parameters.t1, activeString: 'activeB' });
     }
     preloadPalettes([...layersA, ...layersB], {}, false).then(async (obj) => {
       await dispatch({
