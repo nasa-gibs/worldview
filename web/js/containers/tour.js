@@ -177,13 +177,11 @@ class Tour extends React.Component {
       config,
       renderedPalettes,
     );
-    currentStory.steps.forEach((step) => {
-      preProcessStepLink(
-        `${step.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
-        config,
-        promiseImageryForTour,
-      );
-    });
+    preProcessStepLink(
+      `${currentStory.steps[1].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+      config,
+      promiseImageryForTour,
+    );
   }
 
   fetchMetadata(currentStory, stepIndex) {
@@ -262,7 +260,7 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     const kioskParam = this.getKioskParam(isKioskModeActive);
 
@@ -283,6 +281,13 @@ class Tour extends React.Component {
         config,
         renderedPalettes,
       );
+      if (currentStep + 2 <= totalSteps) {
+        preProcessStepLink(
+          `${currentStory.steps[newStep].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+          config,
+          promiseImageryForTour,
+        );
+      }
     }
     if (currentStep + 1 === totalSteps + 1) {
       this.toggleModalInProgress(e);
@@ -534,10 +539,6 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch({
           type: BULK_PALETTE_RENDERING_SUCCESS,
           rendered: obj.rendered,
-        });
-        dispatch({
-          type: BULK_PALETTE_PRELOADING_SUCCESS,
-          tourStoryPalettes: obj.rendered,
         });
         dispatch({ type: LOCATION_POP_ACTION, payload: location });
       });

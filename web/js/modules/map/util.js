@@ -323,7 +323,7 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     if (layer.type === 'granule' || layer.type === 'ttiler') {
       return Promise.resolve();
     }
-    const options = { date, group: activeString };
+    const options = { date, group: activeString || 'active' };
     const keys = [];
     if (layer.custom) {
       keys.push(`palette=${layer.custom}`);
