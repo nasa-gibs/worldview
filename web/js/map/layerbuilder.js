@@ -597,91 +597,91 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, state) => {
-    const { date } = state;
-    let requestDate;
-    if (options.group === 'activeB') {
-      requestDate = date.selectedB;
-    } else {
-      requestDate = date.selected;
-    }
+  // const registerSearch = async (def, options, state) => {
+  //   const { date } = state;
+  //   let requestDate;
+  //   if (options.group === 'activeB') {
+  //     requestDate = date.selectedB;
+  //   } else {
+  //     requestDate = date.selected;
+  //   }
 
-    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
-    const layerID = def.id;
-    const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    const {
-      r,
-      g,
-      b,
-      expression,
-      assets = [],
-    } = def.bandCombo;
-    const bandCombo = [r, g, b, ...assets].filter((band) => band);
+  //   const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
+  //   const layerID = def.id;
+  //   const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
+  //   const {
+  //     r,
+  //     g,
+  //     b,
+  //     expression,
+  //     assets = [],
+  //   } = def.bandCombo;
+  //   const bandCombo = [r, g, b, ...assets].filter((band) => band);
 
-    const landsatLayers = [
-      'HLS_Customizable_Landsat',
-      'HLS_False_Color_Landsat',
-      'HLS_False_Color_Urban_Landsat',
-      'HLS_False_Color_Vegetation_Landsat',
-      'HLS_Shortwave_Infrared_Landsat',
-      'HLS_NDVI_Landsat',
-      'HLS_NDWI_Landsat',
-      'HLS_NDSI_Landsat',
-      'HLS_Moisture_Index_Landsat',
-    ];
+  //   const landsatLayers = [
+  //     'HLS_Customizable_Landsat',
+  //     'HLS_False_Color_Landsat',
+  //     'HLS_False_Color_Urban_Landsat',
+  //     'HLS_False_Color_Vegetation_Landsat',
+  //     'HLS_Shortwave_Infrared_Landsat',
+  //     'HLS_NDVI_Landsat',
+  //     'HLS_NDWI_Landsat',
+  //     'HLS_NDSI_Landsat',
+  //     'HLS_Moisture_Index_Landsat',
+  //   ];
 
-    const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
+  //   const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
 
-    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
+  //   const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
 
-    const collectionsFilter = {
-      op: '=',
-      args: [{ property: 'collection' }, collectionID],
-    };
+  //   const collectionsFilter = {
+  //     op: '=',
+  //     args: [{ property: 'collection' }, collectionID],
+  //   };
 
-    const temporalFilter = {
-      op: 't_intersects',
-      args: [{ property: 'datetime' }, { interval: temporalRange }],
-    };
+  //   const temporalFilter = {
+  //     op: 't_intersects',
+  //     args: [{ property: 'datetime' }, { interval: temporalRange }],
+  //   };
 
-    const searchBody = {
-      'filter-lang': 'cql2-json',
-      context: 'on',
-      filter: {
-        op: 'and',
-        args: [
-          collectionsFilter,
-          temporalFilter,
-        ],
-      },
-    };
+  //   const searchBody = {
+  //     'filter-lang': 'cql2-json',
+  //     context: 'on',
+  //     filter: {
+  //       op: 'and',
+  //       args: [
+  //         collectionsFilter,
+  //         temporalFilter,
+  //       ],
+  //     },
+  //   };
 
-    const mosaicResponse = await axios
-      .post(`${BASE_URL}/mosaic/register`, searchBody)
-      .then((res) => res.data);
+  //   const mosaicResponse = await axios
+  //     .post(`${BASE_URL}/mosaic/register`, searchBody)
+  //     .then((res) => res.data);
 
-    const tilesHref = mosaicResponse.links.find(
-      (link) => link.rel === 'tilejson',
-    ).href;
+  //   const tilesHref = mosaicResponse.links.find(
+  //     (link) => link.rel === 'tilejson',
+  //   ).href;
 
-    const params = {
-      post_process: 'swir',
-      assets: bandCombo,
-      expression,
-    };
+  //   const params = {
+  //     post_process: 'swir',
+  //     assets: bandCombo,
+  //     expression,
+  //   };
 
-    const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
+  //   const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
 
-    const tilejsonResponse = await axios
-      .get(tilesHref, {
-        params: new URLSearchParams(queryString),
-      })
-      .then((res) => res.data);
+  //   const tilejsonResponse = await axios
+  //     .get(tilesHref, {
+  //       params: new URLSearchParams(queryString),
+  //     })
+  //     .then((res) => res.data);
 
-    const { name } = tilejsonResponse;
+  //   const { name } = tilejsonResponse;
 
-    return name;
-  };
+  //   return name;
+  // };
 
   const createTtilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
