@@ -4,11 +4,15 @@ import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
+import OlSourceVector from 'ol/source/Vector';
+import OlLayerVector from 'ol/layer/Vector';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
+import GeoJSON from 'ol/format/GeoJSON';
+import { bbox } from 'ol/loadingstrategy';
 import axios from 'axios';
 import qs from 'qs';
 import LayerVectorTile from 'ol/layer/VectorTile';
@@ -683,6 +687,83 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
+    const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
+    const dateTime = state.date.selected?.toISOString().split('T');
+    dateTime.pop();
+    dateTime.push('00:00:00.000Z');
+    const zeroedDate = dateTime.join('T');
+    const cmrMaxExtent = [-180, -90, 180, 90];
+
+    const cmrSource = new OlSourceVector({
+      format: new GeoJSON(),
+      projection: get(crs),
+      strategy: bbox,
+      loader: async (extent, resolution, projection, success, failure) => {
+        // clamp extent to maximum extent allowed by the CMR api
+        const clampedExtent = extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > cmrMaxExtent[i] : coord < cmrMaxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return cmrMaxExtent[i];
+        });
+        const getGranules = () => {
+          const entries = [];
+          return async function requestGranules(pageNum = 1) {
+            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000&pageNum=${pageNum}`;
+            const cmrRes = await fetch(url, {
+              headers: {
+                'Client-Id': 'worldview',
+              },
+            });
+            const granules = await cmrRes.json();
+
+            entries.push(...granules.feed.entry);
+
+            if (granules?.feed?.entry.length === 2000) {
+              await requestGranules(pageNum + 1);
+            }
+            return entries;
+          };
+        };
+
+        const granuleGetter = await getGranules();
+        const granules = await granuleGetter();
+
+        const features = granules.map((granule) => {
+          const coords = granule.polygons[0][0].split(' ').reduce((acc, coord, i, arr) => {
+            if (i % 2 !== 0) return acc;
+
+            acc.push([arr[i + 1], coord]);
+
+            return acc;
+          }, []);
+
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [coords],
+            },
+            properties: {
+              granuleId: granule.id,
+            },
+          };
+        });
+
+        const geojson = {
+          type: 'FeatureCollection',
+          features,
+        };
+
+        const formatedFeatures = cmrSource.getFormat().readFeatures(geojson);
+        console.log({ formatedFeatures });
+
+        cmrSource.addFeatures(formatedFeatures);
+        success(formatedFeatures);
+        console.log({ granules });
+      },
+    });
 
     const source = config.sources[def.source];
 
@@ -717,11 +798,17 @@ export default function mapLayerBuilder(config, cache, store) {
     const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
-    const layer = new OlLayerTile({
-      source: xyzSource,
+    // const layer = new OlLayerTile({
+    //   source: xyzSource,
+    //   className,
+    //   minZoom: def.minZoom,
+    //   extent: maxExtent,
+    // });
+
+    const layer = new OlLayerVector({
+      source: cmrSource,
       className,
-      minZoom: def.minZoom,
-      extent: maxExtent,
+      extent: cmrMaxExtent,
     });
 
     return layer;

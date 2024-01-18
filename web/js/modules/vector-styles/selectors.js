@@ -246,7 +246,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if (minutes) {
         minute = minutes.split(':');
       }
-      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getType?.() === 'LineString') {
         return styleFunction(feature, resolution);
       }
     });

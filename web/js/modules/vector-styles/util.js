@@ -99,7 +99,7 @@ export function offsetLineStringStyle(feature, styleArray) {
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
-    const type = feature.getType();
+    const type = feature.getType?.();
     switch (type) {
       case 'Point':
         return selectedCircleStyle(style, size);
@@ -236,7 +236,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       return;
     }
 
-    const type = feature.getType();
+    const type = feature.getType?.();
     if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return;
