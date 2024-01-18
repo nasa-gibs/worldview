@@ -686,7 +686,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const createTtilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
-    const { r, g, b } = def.bandCombo;
+    // const { r, g, b } = def.bandCombo;
     const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
     const dateTime = state.date.selected?.toISOString().split('T');
     dateTime.pop();
@@ -757,43 +757,42 @@ export default function mapLayerBuilder(config, cache, store) {
         };
 
         const formatedFeatures = cmrSource.getFormat().readFeatures(geojson);
-        console.log({ formatedFeatures });
 
         cmrSource.addFeatures(formatedFeatures);
         success(formatedFeatures);
-        console.log({ granules });
+        console.log(granules.length);
       },
     });
 
-    const source = config.sources[def.source];
+    // const source = config.sources[def.source];
 
-    const searchID = await registerSearch(def, options, state);
+    // const searchID = await registerSearch(def, options, state);
 
-    const tileUrlFunction = (tileCoord) => {
-      const z = tileCoord[0] - 1;
-      const x = tileCoord[1];
-      const y = tileCoord[2];
+    // const tileUrlFunction = (tileCoord) => {
+    //   const z = tileCoord[0] - 1;
+    //   const x = tileCoord[1];
+    //   const y = tileCoord[2];
 
-      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+    //   const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
 
-      const params = assets.map((asset) => `assets=${asset}`);
-      params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
-      params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
-      params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
-      params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
+    //   const params = assets.map((asset) => `assets=${asset}`);
+    //   params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
+    //   params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
+    //   params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
+    //   params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+    //   const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
-      return source.url + urlParams;
-    };
+    //   return source.url + urlParams;
+    // };
 
-    const xyzSourceOptions = {
-      crossOrigin: 'anonymous',
-      projection: get(crs),
-      tileUrlFunction,
-    };
+    // const xyzSourceOptions = {
+    //   crossOrigin: 'anonymous',
+    //   projection: get(crs),
+    //   tileUrlFunction,
+    // };
 
-    const xyzSource = new OlSourceXYZ(xyzSourceOptions);
+    // const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
     const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
@@ -808,7 +807,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = new OlLayerVector({
       source: cmrSource,
       className,
-      extent: cmrMaxExtent,
+      extent: maxExtent,
     });
 
     return layer;
