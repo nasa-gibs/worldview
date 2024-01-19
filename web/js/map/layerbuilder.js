@@ -5,14 +5,16 @@ import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlSourceVector from 'ol/source/Vector';
-import OlLayerVector from 'ol/layer/Vector';
+// import OlLayerVector from 'ol/layer/Vector';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
+import Layer from 'ol/layer/Layer.js';
+import WebGLVectorLayerRenderer from 'ol/renderer/webgl/VectorLayer.js';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
-import { bbox } from 'ol/loadingstrategy';
+// import { bbox } from 'ol/loadingstrategy';
 // import axios from 'axios';
 // import qs from 'qs';
 import LayerVectorTile from 'ol/layer/VectorTile';
@@ -694,10 +696,25 @@ export default function mapLayerBuilder(config, cache, store) {
     const zeroedDate = dateTime.join('T');
     const cmrMaxExtent = [-180, -90, 180, 90];
 
+    const style = {
+      'stroke-color': ['*', ['get', 'COLOR'], [220, 220, 220]],
+      'stroke-width': 3,
+      'stroke-offset': -1,
+      'fill-color': ['*', ['get', 'COLOR'], [255, 255, 255, 0.6]],
+    };
+
+    class WebGLLayer extends Layer {
+      createRenderer() {
+        return new WebGLVectorLayerRenderer(this, {
+          style,
+        });
+      }
+    }
+
     const cmrSource = new OlSourceVector({
       format: new GeoJSON(),
       projection: get(crs),
-      strategy: bbox,
+      // strategy: bbox,
       loader: async (extent, resolution, projection, success, failure) => {
         // clamp extent to maximum extent allowed by the CMR api
         const clampedExtent = extent.map((coord, i) => {
@@ -803,8 +820,12 @@ export default function mapLayerBuilder(config, cache, store) {
     //   minZoom: def.minZoom,
     //   extent: maxExtent,
     // });
-
-    const layer = new OlLayerVector({
+    // const layer = new OlLayerVector({
+    //   source: cmrSource,
+    //   className,
+    //   extent: maxExtent,
+    // });
+    const layer = new WebGLLayer({
       source: cmrSource,
       className,
       extent: maxExtent,
