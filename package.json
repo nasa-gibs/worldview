@@ -93,7 +93,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.9.0",
-    "css-minimizer-webpack-plugin": "^5.0.1",
+    "css-minimizer-webpack-plugin": "^6.0.0",
     "css-url-relative-plugin": "^1.1.0",
     "cssnano": "^6.0.3",
     "eslint": "^8.56.0",
