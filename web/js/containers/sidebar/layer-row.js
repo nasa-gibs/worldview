@@ -116,6 +116,8 @@ function LayerRow (props) {
   const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
+  const mapExtent = map.extent;
+  const zotUnderZoomValue = zot?.underZoomValue;
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -134,14 +136,14 @@ function LayerRow (props) {
           }
           return maxExtent[i];
         });
-        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
-        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
-        if (!olderRes.ok || !newerRes.ok) return;
-        const olderGranules = await olderRes.json();
-        const newerGranules = await newerRes.json();
-        const olderEntries = olderGranules?.feed?.entry || [];
-        const newerEntries = newerGranules?.feed?.entry || [];
-        const granules = [...olderEntries, ...newerEntries];
+        const res = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`, {
+          headers: {
+            'Client-Id': 'worldview',
+          },
+        });
+        if (!res.ok) return;
+        const granulesJSON = await res.json();
+        const granules = granulesJSON?.feed?.entry || [];
         if (zot?.underZoomValue > 0) {
           setShowZoomAlert(true);
         } else {
@@ -162,7 +164,8 @@ function LayerRow (props) {
       }
     };
     asyncFunc();
-  }, [map.extent, zot, selectedDate, isVisible]);
+    console.log(zot);
+  }, [mapExtent, zotUnderZoomValue, selectedDate, isVisible]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);

@@ -46,7 +46,11 @@ export default function ImagerySearch({ layer }) {
       return maxExtent[i];
     });
     try {
-      const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`);
+      const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`, {
+        headers: {
+          'Client-Id': 'worldview',
+        },
+      });
       const olderGranules = await olderResponse.json();
       const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -66,7 +70,11 @@ export default function ImagerySearch({ layer }) {
       return maxExtent[i];
     });
     try {
-      const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`);
+      const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`, {
+        headers: {
+          'Client-Id': 'worldview',
+        },
+      });
       const newerGranules = await newerResponse.json();
       const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 

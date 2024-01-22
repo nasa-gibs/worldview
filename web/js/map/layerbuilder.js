@@ -744,7 +744,7 @@ export default function mapLayerBuilder(config, cache, store) {
           };
         };
 
-        const granuleGetter = await getGranules();
+        const granuleGetter = getGranules();
         const granules = await granuleGetter();
 
         const features = granules.map((granule) => {
