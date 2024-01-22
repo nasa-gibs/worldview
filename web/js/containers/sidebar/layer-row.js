@@ -118,6 +118,7 @@ function LayerRow (props) {
   const selectedDate = useSelector((state) => state.date.selected);
   const mapExtent = map.extent;
   const zotUnderZoomValue = zot?.underZoomValue;
+  const zotOverZoomValue = zot?.overZoomValue;
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -164,8 +165,7 @@ function LayerRow (props) {
       }
     };
     asyncFunc();
-    console.log(zot);
-  }, [mapExtent, zotUnderZoomValue, selectedDate, isVisible]);
+  }, [mapExtent, zotOverZoomValue, zotUnderZoomValue, selectedDate, isVisible]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
