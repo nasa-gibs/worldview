@@ -726,19 +726,21 @@ export default function mapLayerBuilder(config, cache, store) {
         });
         const getGranules = () => {
           const entries = [];
-          return async function requestGranules(pageNum = 1) {
-            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000&pageNum=${pageNum}`;
-            const cmrRes = await fetch(url, {
-              headers: {
-                'Client-Id': 'worldview',
-              },
-            });
+          return async function requestGranules(searchAfter) {
+            const headers = {
+              'Client-Id': 'worldview',
+            };
+            headers['cmr-search-after'] = searchAfter ?? '';
+            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000`;
+            const cmrRes = await fetch(url, { headers });
+            const resHeaders = cmrRes.headers;
             const granules = await cmrRes.json();
+            const resEntries = granules?.feed?.entry || [];
 
-            entries.push(...granules.feed.entry);
+            entries.push(...resEntries);
 
-            if (granules?.feed?.entry.length === 2000) {
-              await requestGranules(pageNum + 1);
+            if (resHeaders.has('cmr-search-after')) {
+              await requestGranules(resHeaders.get('cmr-search-after'));
             }
             return entries;
           };
@@ -777,7 +779,6 @@ export default function mapLayerBuilder(config, cache, store) {
 
         cmrSource.addFeatures(formatedFeatures);
         success(formatedFeatures);
-        console.log(granules.length);
       },
     });
 
