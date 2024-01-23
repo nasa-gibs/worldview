@@ -1,9 +1,8 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const createSelectors = require('../../test-utils/global-variables/selectors')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
-let selectors
 
 const withinMapURLParams = 'http://localhost:3000/?v=-67.80916012733559,-56.052180562072095,-30.50743102883792,-30.873513420586164&t=2021-08-08-T0'
 const crossesPrevDayURLParams = 'http://localhost:3000/?v=161.16767164758798,-54.46571918482002,198.46940074608565,-29.287052043334096&t=2021-08-08-T0'
@@ -13,7 +12,6 @@ test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
-  selectors = createSelectors(page)
 })
 
 test.afterAll(async () => {
@@ -21,18 +19,16 @@ test.afterAll(async () => {
 })
 
 test('No dateline alert notification with message if not crossing dateline(s)', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(withinMapURLParams)
-  await modalCloseButton.click()
+  await closeModal(page)
   await page.locator('#wv-image-button').click()
   const datelineAlert = page.locator('#snapshot-dateline-alert')
   await expect(datelineAlert).not.toBeVisible()
 })
 
 test('Dateline alert notification with previous day message if crosses previous day dateline', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(crossesPrevDayURLParams)
-  await modalCloseButton.click()
+  await closeModal(page)
   await page.locator('#wv-image-button').click()
   const datelineAlert = page.locator('#snapshot-dateline-alert')
   const datelineAlertMessage = page.locator('#snapshot-dateline-alert .wv-alert-message')
@@ -41,9 +37,8 @@ test('Dateline alert notification with previous day message if crosses previous 
 })
 
 test('Dateline alert notification with next day message if crosses next day dateline', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(crossesNextDayURLParams)
-  await modalCloseButton.click()
+  await closeModal(page)
   await page.locator('#wv-image-button').click()
   const datelineAlert = page.locator('#snapshot-dateline-alert')
   const datelineAlertMessage = page.locator('#snapshot-dateline-alert .wv-alert-message')

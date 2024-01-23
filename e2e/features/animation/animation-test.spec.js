@@ -2,6 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour, activeAnimationWidget, animationGeostationary } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -18,9 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Clicking the animation widget button opens the widget', async () => {
-  const { dragger, animationWidget, animationButton, modalCloseButton } = selectors
+  const { dragger, animationWidget, animationButton } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(dragger).toBeVisible()
   await expect(animationWidget).not.toBeVisible()
   await animationButton.click()
@@ -28,9 +29,9 @@ test('Clicking the animation widget button opens the widget', async () => {
 })
 
 test('Opening custom interval widget', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(activeAnimationWidget)
-  await modalCloseButton.click()
+  // await modalCloseButton.click()
+  await closeModal(page)
   await page.locator('.wv-animation-widget-header #timeline-interval-btn-container #current-interval').hover()
   const yearInterval = page.locator('.wv-animation-widget-header .timeline-interval .interval-years')
   await expect(yearInterval).toBeVisible()
@@ -45,9 +46,9 @@ test('Opening custom interval widget', async () => {
 })
 
 test('Changing animation time interval', async () => {
-  const { animationButton, modalCloseButton } = selectors
+  const { animationButton } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await animationButton.click()
   await page.locator('.wv-animation-widget-header #timeline-interval-btn-container #current-interval').hover()
   const yearInterval = page.locator('.wv-animation-widget-header .timeline-interval .interval-years')
@@ -61,9 +62,9 @@ test('Changing animation time interval', async () => {
 })
 
 test('Disable playback when max frames exceeded', async () => {
-  const { modalCloseButton, playButton, yearStartInput } = selectors
+  const { playButton, yearStartInput } = selectors
   await page.goto(animationGeostationary)
-  await modalCloseButton.click()
+  await closeModal(page)
   const animateYearDown = page.locator('.wv-date-range-selector > div > div > div:nth-child(3) > svg > .downarrow').first()
   const animateYearUp = page.locator('.wv-date-range-selector > div > div > div > svg > .uparrow').first()
   await animateYearDown.click()

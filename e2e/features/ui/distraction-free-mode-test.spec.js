@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -71,10 +72,10 @@ const distractionFreeModeValidElsRemoved = async (proj, isActive) => {
 }
 
 test('Enabling distraction free mode with shortcut key hides UI elements', async () => {
-  const { locationSearchMinimizeButton, infoToolbarButton, modalCloseButton } = selectors
+  const { locationSearchMinimizeButton, infoToolbarButton } = selectors
   const queryString = 'http://localhost:3000/?p=arctic'
   await page.goto(queryString)
-  await modalCloseButton.click()
+  await closeModal(page)
   await locationSearchMinimizeButton.click()
   await infoToolbarButton.click()
   await page.locator('#distraction_free_info_item').click()
@@ -88,9 +89,8 @@ test('Disabling distraction free mode with shortcut key returns UI elements', as
 })
 
 test('Enabling distraction free mode activates query string parameter df', async () => {
-  const { modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/?df=true'
   await page.goto(queryString)
-  await modalCloseButton.click()
+  await closeModal(page)
   await distractionFreeModeValidElsRemoved('geographic', true)
 })
