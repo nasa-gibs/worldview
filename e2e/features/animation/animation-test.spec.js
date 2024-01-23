@@ -30,7 +30,6 @@ test('Clicking the animation widget button opens the widget', async () => {
 
 test('Opening custom interval widget', async () => {
   await page.goto(activeAnimationWidget)
-  // await modalCloseButton.click()
   await closeModal(page)
   await page.locator('.wv-animation-widget-header #timeline-interval-btn-container #current-interval').hover()
   const yearInterval = page.locator('.wv-animation-widget-header .timeline-interval .interval-years')
