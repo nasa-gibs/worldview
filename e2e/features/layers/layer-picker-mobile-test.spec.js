@@ -185,6 +185,7 @@ test('Close product picker and confirm added layers show in sidebar', async () =
 
 test('Collapse sidebar and confirm layer count updated', async () => {
   const { layerCount } = selectors
+  await page.locator('.layer-btn-close').click()
   await page.locator('#toggleIconHolder').click()
   await expect(layerCount).toContainText('8')
 })
