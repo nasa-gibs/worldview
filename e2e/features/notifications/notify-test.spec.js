@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -40,10 +41,9 @@ test('No visible notifications with mockAlert parameter set to no_types', async 
 })
 
 test('Verify that layer notices don\'t show up in the notification list or contribute to the count', async () => {
-  const { modalCloseButton } = selectors
   const url = `${layerNoticesQuery}&mockAlerts=all_types`
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   await infoButtonIcon.click()
   const badge = await page.getByRole('button', { name: 'Notifications 2' })
   await expect(badge).toBeVisible()
@@ -65,10 +65,9 @@ test('Verify that the user is only alerted if they have not already stored all i
 })
 
 test('Verify that zots show for the layers that have notices', async () => {
-  const { modalCloseButton } = selectors
   const url = `${layerNoticesQuery}&mockAlerts=all_types`
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   const aquaZot = await page.locator('#MODIS_Aqua_CorrectedReflectance_TrueColor-zot')
   const particulateZot = await page.locator('#Particulate_Matter_Below_2__2E__5micrometers_2001-2010-zot')
   await expect(aquaZot).toBeVisible()

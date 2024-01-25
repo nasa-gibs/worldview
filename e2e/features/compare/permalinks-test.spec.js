@@ -6,6 +6,7 @@ const {
   opacityAndBIsActive,
   spyAndBIsActive
 } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -22,36 +23,35 @@ test.afterAll(async () => {
 })
 
 test('Swipe mode and A|B state A are active and date is correct', async () => {
-  const { modalCloseButton, swipeButton, aTab } = selectors
+  const { swipeButton, aTab } = selectors
   await page.goto(swipeAndAIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(swipeButton).not.toBeEnabled()
   await expect(aTab).toHaveClass(/active/)
   await expect(aTab).toContainText('A: 2018 AUG 17')
 })
 
 test('Opacity mode and A|B state B are active and date is correct', async () => {
-  const { modalCloseButton, opacityButton, bTab } = selectors
+  const { opacityButton, bTab } = selectors
   await page.goto(opacityAndBIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(opacityButton).not.toBeEnabled()
   await expect(bTab).toHaveClass(/active/)
   await expect(bTab).toContainText('B: 2018 AUG 16')
 })
 
 test('Spy mode is active in B state', async () => {
-  const { modalCloseButton, spyButton, bTab } = selectors
+  const { spyButton, bTab } = selectors
   await page.goto(spyAndBIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(spyButton).not.toBeEnabled()
   await expect(bTab).toHaveClass(/active/)
   await expect(bTab).toContainText('B: 2018 AUG 16')
 })
 
 test('A|B loaded with only one layer in A section -- Corrected Reflectance (True Color)', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(swipeAndAIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   const overlayLayer = page.locator('.ab-tabs-case .tab-pane.active ul#overlays .item')
   const correctedReflectance = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
   await expect(overlayLayer).not.toBeVisible()
