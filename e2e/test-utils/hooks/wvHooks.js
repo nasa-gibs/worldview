@@ -169,12 +169,20 @@ const clickAndWait = async (page, locator) => {
   await page.waitForTimeout(200)
 }
 
+const closeModal = async (page) => {
+  const closeButton = page.locator('.modal-close-btn')
+  if (await closeButton.count() > 0) {
+    await closeButton.click()
+  }
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
   assertLayerOrdering,
   clickDownload,
   closeImageDownloadPanel,
+  closeModal,
   createAreaMeasurement,
   createDistanceMeasurement,
   dateSelectorMonthDay,
