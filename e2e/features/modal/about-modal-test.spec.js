@@ -38,8 +38,6 @@ test('Opening about modal from menu sets URL param', async () => {
 })
 
 test('About modal is open when URL param is present', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(aboutOpenURL)
-  await modalCloseButton.click()
   await expect(aboutPage).toBeVisible()
 })
