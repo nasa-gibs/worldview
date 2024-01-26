@@ -1137,6 +1137,7 @@ class Timeline extends React.Component {
       breakpoints,
       dateA,
       dateB,
+      displayStaticMap,
       draggerSelected,
       hasFutureLayers,
       hasSubdailyLayers,
@@ -1453,7 +1454,10 @@ class Timeline extends React.Component {
                 id="distraction-free-timeline-header"
                 className={`distraction-free-timeline-header ${hasSubdailyLayers ? 'subdaily' : ''} ${isMobile ? 'mobile' : ''}`}
                 style={
-                  { marginRight: isTimelineHidden ? '20px' : '0' }
+                  {
+                    marginRight: isTimelineHidden ? '20px' : '0',
+                    display: displayStaticMap ? 'none' : 'flex',
+                  }
                 }
               >
                 <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} isKioskModeActive={isKioskModeActive} />
@@ -1496,7 +1500,7 @@ function mapStateToProps(state) {
   } = date;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
-  const { isDistractionFreeModeActive, isKioskModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const {
@@ -1621,6 +1625,7 @@ function mapStateToProps(state) {
     isDistractionFreeModeActive,
     isEmbedModeActive,
     isKioskModeActive,
+    displayStaticMap,
   };
 }
 

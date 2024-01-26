@@ -2,10 +2,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
+import { useSelector, connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
-import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
@@ -39,9 +39,10 @@ import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
 import {
   updateActiveChartingLayerAction,
 } from '../../modules/charting/actions';
+import AlertUtil from '../../components/util/alert';
 
 const { events } = util;
-const { vectorModalProps } = MODAL_PROPERTIES;
+const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   ...draggableStyle,
@@ -74,6 +75,8 @@ function LayerRow (props) {
     onOptionsClick,
     hasClickableFeature,
     openVectorAlertModal,
+    openGranuleAlertModal,
+    openZoomAlertModal,
     toggleVisibility,
     isDisabled,
     isVisible,
@@ -105,6 +108,61 @@ function LayerRow (props) {
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
   const [runningDataObj, setRunningDataObj] = useState({});
+  const [disabled, setDisabled] = useState(isDisabled);
+  const [activeZot, setActiveZot] = useState(zot);
+  const [showZoomAlert, setShowZoomAlert] = useState(false);
+  const [showGranuleAlert, setShowGranuleAlert] = useState(false);
+  const [hideZoomAlert, setHideZoomAlert] = useState(false);
+  const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
+  const map = useSelector((state) => state.map);
+  const selectedDate = useSelector((state) => state.date.selected);
+
+  useEffect(() => {
+    const asyncFunc = async () => {
+      if (layer.enableCMRDataFinder && isVisible) {
+        const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
+        const dateTime = selectedDate?.toISOString().split('T');
+        dateTime.pop();
+        dateTime.push('00:00:00.000Z');
+        const zeroedDate = dateTime.join('T');
+        const maxExtent = [-180, -90, 180, 90];
+        // clamp extent to maximum extent allowed by the CMR api
+        const extent = map.extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return maxExtent[i];
+        });
+        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
+        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
+        if (!olderRes.ok || !newerRes.ok) return;
+        const olderGranules = await olderRes.json();
+        const newerGranules = await newerRes.json();
+        const olderEntries = olderGranules?.feed?.entry || [];
+        const newerEntries = newerGranules?.feed?.entry || [];
+        const granules = [...olderEntries, ...newerEntries];
+        if (zot?.underZoomValue > 0) {
+          setShowZoomAlert(true);
+        } else {
+          setShowZoomAlert(false);
+        }
+        if (!granules.length && !(zot?.underZoomValue > 0)) {
+          setActiveZot({ hasGranules: false });
+          setShowGranuleAlert(true);
+        } else {
+          setActiveZot(zot);
+          setShowGranuleAlert(false);
+        }
+        if (!granules.length || zot?.underZoomValue > 0) {
+          setDisabled(true);
+        } else {
+          setDisabled(isDisabled);
+        }
+      }
+    };
+    asyncFunc();
+  }, [map.extent, zot, selectedDate, isVisible]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
@@ -112,6 +170,10 @@ function LayerRow (props) {
       events.off(MAP_RUNNING_DATA, setRunningDataObj);
     };
   }, []);
+
+  useEffect(() => {
+    setDisabled(isDisabled);
+  }, [isDisabled]);
 
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
@@ -127,7 +189,7 @@ function LayerRow (props) {
         ? compare.activeString === compareState && !!runningDataForLayer
         : !!runningDataForLayer;
       const colorHex = isRunningData ? runningDataForLayer.paletteHex : null;
-      let width = zot ? 220 : 231;
+      let width = activeZot || zot ? 220 : 231;
       if (isEmbedModeActive) {
         width = 201;
       }
@@ -212,7 +274,7 @@ function LayerRow (props) {
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
           className="button wv-layers-options layer-options-dropdown-item"
-          onClick={() => onOptionsClick(layer, title)}
+          onClick={() => onOptionsClick(layer, title, zot)}
         >
           {layerOptionsBtnTitle}
         </DropdownItem>
@@ -248,7 +310,7 @@ function LayerRow (props) {
         aria-label={layerOptionsBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
         onMouseDown={stopPropagation}
-        onClick={() => onOptionsClick(layer, title)}
+        onClick={() => onOptionsClick(layer, title, zot)}
       >
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerOptionsBtnId}>
           {layerOptionsBtnTitle}
@@ -309,23 +371,23 @@ function LayerRow (props) {
   const getLayerItemClasses = () => {
     let baseClasses = 'item productsitem layer-enabled';
     if (isAnimating) baseClasses += ' disabled';
-    if (!isVisible || isDisabled) {
+    if (!isVisible || disabled) {
       baseClasses += ' layer-hidden';
     } else {
       baseClasses += ' layer-visible';
     }
-    if (zot) baseClasses += ' zotted';
+    if (activeZot || zot) baseClasses += ' zotted';
     return baseClasses;
   };
 
   const getVisibilityToggleClass = () => {
     let baseClasses = 'visibility';
-    if (isDisabled || isAnimating) {
+    if (disabled || isAnimating) {
       baseClasses += ' disabled';
     } else {
       baseClasses += ' layer-enabled';
     }
-    if (isVisible && !isDisabled) {
+    if (isVisible && !disabled) {
       baseClasses += ' layer-visible';
     } else {
       baseClasses += ' layer-hidden';
@@ -333,13 +395,13 @@ function LayerRow (props) {
     return baseClasses;
   };
 
-  const visibilityTitle = !isVisible && !isDisabled
+  const visibilityTitle = !isVisible && !disabled
     ? 'Show layer'
-    : isDisabled
+    : disabled
       ? getDisabledTitle(layer)
       : 'Hide layer';
 
-  const visibilityIconClass = isDisabled
+  const visibilityIconClass = disabled
     ? 'ban'
     : !isVisible
       ? ['fas', 'eye-slash']
@@ -360,7 +422,7 @@ function LayerRow (props) {
           id={`hide${encodedLayerId}`}
           className={getVisibilityToggleClass()}
           aria-label={visibilityTitle}
-          onClick={() => !isAnimating && !isDisabled && toggleVisibility(layer.id, !isVisible)}
+          onClick={() => !isAnimating && !disabled && toggleVisibility(layer.id, !isVisible)}
         >
           {!isAnimating && (
           <UncontrolledTooltip
@@ -404,7 +466,7 @@ function LayerRow (props) {
           </a>
         </>
       )}
-      <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
+      <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
         <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
@@ -440,6 +502,26 @@ function LayerRow (props) {
               />
             ))}
           </div>
+        )}
+        {showZoomAlert && !hideZoomAlert && (
+          <AlertUtil
+            id="zoom-alert"
+            isOpen
+            title="Zoom in to see imagery for this layer"
+            message={`Imagery for ${layer.title} is not available at this zoom level.`}
+            onDismiss={() => setHideZoomAlert(true)}
+            onClick={openZoomAlertModal}
+          />
+        )}
+        {showGranuleAlert && !hideGranuleAlert && (
+          <AlertUtil
+            id="granule-alert"
+            isOpen
+            title="Try moving the map or select a different date in the layer's settings."
+            message={`Imagery for ${layer.title} is not available at this location or date.`}
+            onDismiss={() => setHideGranuleAlert(true)}
+            onClick={openGranuleAlertModal}
+          />
         )}
       </div>
     </>
@@ -543,10 +625,18 @@ const mapDispatchToProps = (dispatch) => ({
     const { id, props } = vectorModalProps;
     dispatch(openCustomContent(id, props));
   },
+  openGranuleAlertModal: () => {
+    const { id, props } = granuleModalProps;
+    dispatch(openCustomContent(id, props));
+  },
+  openZoomAlertModal: () => {
+    const { id, props } = zoomModalProps;
+    dispatch(openCustomContent(id, props));
+  },
   onRemoveClick: (id) => {
     dispatch(removeLayer(id));
   },
-  onOptionsClick: (layer, title) => {
+  onOptionsClick: (layer, title, zot) => {
     const key = `LAYER_OPTIONS_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_options',
@@ -563,6 +653,7 @@ const mapDispatchToProps = (dispatch) => ({
         timeout: 150,
         bodyComponentProps: {
           layer,
+          zot,
         },
       }),
     );
@@ -640,6 +731,7 @@ LayerRow.propTypes = {
   hasClickableFeature: PropTypes.bool,
   tracksForLayer: PropTypes.array,
   openVectorAlertModal: PropTypes.func,
+  openGranuleAlertModal: PropTypes.func,
   zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,

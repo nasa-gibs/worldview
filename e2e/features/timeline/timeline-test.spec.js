@@ -6,6 +6,7 @@ const {
   subdailyLayerIntervalTimescale,
   knownDate
 } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -22,9 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Dragger is visible', async () => {
-  const { dragger, modalCloseButton } = selectors
+  const { dragger } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(dragger).toBeVisible()
 })
 
@@ -71,9 +72,8 @@ test('Change to year zoom level and axis changes', async () => {
 })
 
 test('Interval state of HOUR restored from permalink', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
-  await modalCloseButton.click()
+  await closeModal(page)
   const currentInteval = await page.locator('#current-interval')
   await page.locator('#timeline-interval-btn-container').hover()
   await expect(currentInteval).toContainText('1 hour')
@@ -101,10 +101,10 @@ test('Custom interval widget opens on selecting custom', async () => {
 })
 
 test('Select custom interval changes current interval and changes date by current interval', async () => {
-  const { dateSelectorDayInput, modalCloseButton } = selectors
+  const { dateSelectorDayInput } = selectors
   const customInterval = await page.locator('#current-interval')
   await page.goto(knownDate)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(dateSelectorDayInput).toHaveValue('22')
   await page.locator('#timeline-interval-btn-container').hover()
   await page.locator('#interval-custom-static').click()
@@ -117,22 +117,20 @@ test('Select custom interval changes current interval and changes date by curren
 })
 
 test('Timescale zoom level defaults to DAY', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   const currentZoom = await page.locator('#current-zoom')
   await expect(currentZoom).toContainText('day')
 })
 
 test('Timescale zoom subdaily default year, month, day, hour, minute, and custom intervals', async () => {
-  const { modalCloseButton } = selectors
   const zoomYears = await page.locator('#zoom-years')
   const zoomMonths = await page.locator('#zoom-months')
   const zoomDays = await page.locator('#zoom-days')
   const zoomHours = await page.locator('#zoom-hours')
   const zoomMinutes = await page.locator('#zoom-minutes')
   await page.goto(subdailyLayerIntervalTimescale)
-  await modalCloseButton.click()
+  await closeModal(page)
   await page.locator('#current-zoom').hover()
   await expect(zoomYears).toBeVisible()
   await expect(zoomMonths).toBeVisible()
@@ -147,18 +145,16 @@ test('Timescale zoom HOUR restored from permalink', async () => {
 })
 
 test('Date tooltip date present load', async () => {
-  const { modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
-  await modalCloseButton.click()
+  await closeModal(page)
   const dateTooltip = await page.locator('.date-tooltip')
   await expect(dateTooltip).toContainText('2019 FEB 22 (DOY 053)')
 })
 
 test('Date subdaily tooltip date present on load', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
-  await modalCloseButton.click()
+  await closeModal(page)
   const dateTooltip = await page.locator('.date-tooltip')
   await expect(dateTooltip).toContainText('2019 OCT 04 09:46Z (DOY 277)')
 })

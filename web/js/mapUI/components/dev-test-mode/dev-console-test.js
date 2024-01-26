@@ -6,11 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function ConsoleTest () {
   // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
-  const {
-    map,
-  } = useSelector((state) => ({
-    map: state.map.ui.selected,
-  }));
+  const map = useSelector((state) => state.map.ui.selected);
 
   const consoleResponse = () => {
     console.log(map);

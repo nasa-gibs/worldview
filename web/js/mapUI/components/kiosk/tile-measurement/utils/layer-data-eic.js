@@ -67,7 +67,7 @@ export const bestDates = {
 
 export const travelModeData = {
   1: {
-    title: 'True Color Imagery from Terra Satellite',
+    title: 'True Color Imagery from Terra satellite',
   },
   2: {
     title: 'Geostationary imagery from NOAA and JAXA satellites',
@@ -76,7 +76,7 @@ export const travelModeData = {
     title: 'Active fires detected by Suomi NPP satellite',
   },
   4: {
-    title: 'Black Marble Night Time Imaging from Suomi NPP Satellite',
+    title: 'Black Marble Night Time Imaging from Suomi NPP satellite',
   },
   5: {
     title: 'Rain and Snow',
@@ -94,7 +94,7 @@ export const travelModeData = {
     title: 'Antarctic Sea Ice',
   },
   10: {
-    title: 'Active fires detected by Suomi NPP satellite',
+    title: 'Active fires detected by NOAA-20 satellite',
   },
   11: {
     title: 'Nitrogen Dioxide (NO2) by Aura satellite',
