@@ -130,7 +130,7 @@ function TileMeasurement({ ui }) {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const verifyTilesAndHandleErrors = async (abortProceedure) => {
+  const verifyTilesAndHandleErrors = async () => {
     console.log('Verifying tiles on map...');
 
     // most of these variables are purely for debugging purposes
@@ -140,6 +140,7 @@ function TileMeasurement({ ui }) {
     let emptyTilesCount = 0;
     let totalTilesLoadedWithBadImageCount = 0;
     let otherTileStates = [];
+    let abort = false;
 
     // In rare cases the TileLayer may not have finished loading tiles at the time of measurement
     // We can verify this by checking the otherTileStates array for values of 1 that indicate that tiles were still loading
@@ -168,21 +169,23 @@ function TileMeasurement({ ui }) {
       }
     }
 
+    if (retries >= 9) abort = true;
+
     const loadedTiles = loadedTilesCount > 0;
     const tileStatus = `Out of an expected ${tileCount} tiles, ${loadedTilesCount} were loaded. There were ${totalTilesLoadedWithBadImageCount} tiles loaded with bad images, ${errorTilesCount} error tiles, and ${emptyTilesCount} empty tiles. There were ${otherTileStates.length} other tile states: ${otherTileStates.join(', ')}`;
     console.log(tileStatus);
     console.log('LoadedTiles === ', loadedTiles);
 
-    if ((eic === 'da' || eic === 'sa') && !abortProceedure) {
+    if ((eic === 'da' || eic === 'sa') && !abort) {
       setEICMeasurementComplete();
     }
-    if (loadedTiles && !abortProceedure) {
+    if (loadedTiles && !abort) {
       setEICMeasurementComplete();
       console.log('Tile verified... EIC measure process complete...');
-    } else if (loadedTiles && abortProceedure) {
+    } else if (loadedTiles && abort) {
       console.log('EIC measure process aborted... Loaded map tiles found... Leaving map as is...');
       setEICMeasurementAborted();
-    } else if (!loadedTiles && abortProceedure) {
+    } else if (!loadedTiles && abort) {
       console.log('EIC measure process aborted... No tiles found on map... Displaying static map...');
       toggleStaticMap(true);
       const activeLayerIds = activeLayers.map((layer) => layer.id);
@@ -198,7 +201,7 @@ function TileMeasurement({ ui }) {
       const measurementLayers = findLayersToMeasure();
       if (!measurementLayers.length) {
         console.error('No layers found to be measured... Aborting...');
-        return verifyTilesAndHandleErrors(true);
+        return verifyTilesAndHandleErrors();
       }
 
       const layersIncludeSubdaily = measurementLayers.some((layer) => layer.period === 'subdaily');
@@ -207,7 +210,7 @@ function TileMeasurement({ ui }) {
       const dateRange = findDateRange(layerPeriod);
       if (!dateRange) {
         console.error('No date range found... Aborting..');
-        return verifyTilesAndHandleErrors(true);
+        return verifyTilesAndHandleErrors();
       }
 
       const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange);
@@ -215,12 +218,12 @@ function TileMeasurement({ ui }) {
       // If we are using the best date, we need to make sure there are tiles on the map so we include the abort prodcedure parameter
       // This allows us to fall back to the static map if the best date fails as a last resort
       const bestDate = findBestDate(measurementLayers, bestDates);
-      if (!fullImageryDate || bestDate === fullImageryDate) return verifyTilesAndHandleErrors(true);
+      if (!fullImageryDate || bestDate === fullImageryDate) return verifyTilesAndHandleErrors();
 
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod);
 
-      verifyTilesAndHandleErrors(false);
+      verifyTilesAndHandleErrors();
     } catch (error) {
       console.error('Error calculating measurements:', error);
     }
