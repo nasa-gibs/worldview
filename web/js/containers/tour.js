@@ -24,7 +24,10 @@ import {
 import {
   clearCustoms,
 } from '../modules/palettes/actions';
-import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
+import {
+  BULK_PALETTE_RENDERING_SUCCESS,
+  BULK_PALETTE_PRELOADING_SUCCESS,
+} from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -39,6 +42,7 @@ import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
+import { promiseImageryForTour } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -138,7 +142,7 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
     const kioskParam = this.getKioskParam(isKioskModeActive);
@@ -165,6 +169,13 @@ class Tour extends React.Component {
       config,
       renderedPalettes,
     );
+    currentStory.steps.forEach((step) => {
+      preProcessStepLink(
+        `${step.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+        config,
+        promiseImageryForTour,
+      );
+    });
   }
 
   fetchMetadata(currentStory, stepIndex) {
@@ -516,11 +527,45 @@ const mapDispatchToProps = (dispatch) => ({
           type: BULK_PALETTE_RENDERING_SUCCESS,
           rendered: obj.rendered,
         });
+        dispatch({
+          type: BULK_PALETTE_PRELOADING_SUCCESS,
+          tourStoryPalettes: obj.rendered,
+        });
         dispatch({ type: LOCATION_POP_ACTION, payload: location });
       });
     } else {
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
+  },
+  preProcessStepLink: async (search, config, promiseImageryForTour) => {
+    search = search.split('/?').pop();
+    const parameters = util.fromQueryString(search);
+    let layers = [];
+    const promises = [];
+    const temp = [];
+
+    if (parameters.l) {
+      layers = layersParse12(parameters.l, config);
+      layers = uniqBy(layers, 'id');
+      temp.push({ layers, dateString: parameters.t });
+      if (parameters.l1) {
+        layers = layersParse12(parameters.l1, config);
+        layers = uniqBy(layers, 'id');
+        temp.push({ layers, dateString: parameters.t1, activeString: 'activeB' });
+      }
+    }
+    console.log(layers);
+    preloadPalettes(layers, {}, false).then(async (obj) => {
+      console.log(obj);
+      await dispatch({
+        type: BULK_PALETTE_PRELOADING_SUCCESS,
+        tourStoryPalettes: obj.rendered,
+      });
+      temp.forEach((set) => {
+        promises.push(promiseImageryForTour(set.layers, set.dateString, set.activeString));
+      });
+      await Promise.all(promises);
+    });
   },
   startTour: () => {
     dispatch(startTourAction());
@@ -561,6 +606,7 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
+    promiseImageryForTour: (layers, dateString, activeString) => promiseImageryForTour(state, layers, dateString, activeString),
   };
 };
 
@@ -582,6 +628,7 @@ Tour.propTypes = {
   isActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
+  preProcessStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,

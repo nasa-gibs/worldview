@@ -375,6 +375,7 @@ export function loadPalettes(permlinkState, state) {
   }
   lodashEach(stateArray, (stateObj) => {
     lodashEach(state.layers[stateObj.groupStr].layers, (layerDef) => {
+      console.log(layerDef.id, layerDef);
       if (layerDef.palette) {
         const layerId = layerDef.id;
         const min = [];
@@ -529,6 +530,7 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
         && !loading[obj.palette.id]
       ) {
         const paletteId = obj.palette.id;
+        console.log(paletteId, obj);
         const location = `config/palettes/${paletteId}.json`;
         const promise = util.fetch(location, 'application/json');
         loading[paletteId] = true;
