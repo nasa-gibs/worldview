@@ -350,15 +350,16 @@ export function getKey(layerId, groupStr, state) {
     return '';
   }
   const def = getPalette(layerId, undefined, groupStr, state);
+  const { values } = getPalette(layerId, 0, groupStr, state).entries;
   const keys = [];
   if (def.custom) {
     keys.push(`palette=${def.custom}`);
   }
   if (def.min) {
-    keys.push(`min=${def.min}`);
+    keys.push(`min=${getMinValue(values[def.min])}`);
   }
   if (def.max) {
-    keys.push(`max=${def.max}`);
+    keys.push(`max=${getMinValue(values[def.max])}`);
   }
   if (def.squash) {
     keys.push('squash');
