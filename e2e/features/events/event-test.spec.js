@@ -2,6 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { mockEvents } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -17,10 +18,10 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test('Make sure that 4 fire layers are not present in layer list: use mock', async ({ browserName }) => {
-  const { modalCloseButton, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+test('Make sure that 4 fire layers are not present in layer list: use mock', async () => {
+  const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(sidebarEvent).toBeVisible()
   await expect(thermAnomSNPPday).not.toBeVisible()
   await expect(thermAnomSNPPnight).not.toBeVisible()
@@ -30,9 +31,9 @@ test('Make sure that 4 fire layers are not present in layer list: use mock', asy
 
 test('Check that 4 fire layers are now present', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { layersTab, modalCloseButton, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+  const { layersTab, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await sidebarEvent.click()
   await layersTab.click()
   await page.waitForTimeout(5000)
@@ -42,18 +43,18 @@ test('Check that 4 fire layers are now present', async ({ browserName }) => {
   await expect(thermAnomVIIRSnight).toBeVisible()
 })
 
-test('Use Mock to make sure appropriate number of event markers are appended to map', async ({ browserName }) => {
-  const { eventIcons, listOfEvents, modalCloseButton } = selectors
+test('Use Mock to make sure appropriate number of event markers are appended to map', async () => {
+  const { eventIcons, listOfEvents } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(listOfEvents).toBeVisible()
   await expect(eventIcons).toHaveCount(8)
 })
 
-test('Selecting event shows track points and markers which are not visible when switched to layer tab', async ({ browserName }) => {
-  const { eventIcons, eventsTab, layersTab, modalCloseButton, secondEvent, trackMarker } = selectors
+test('Selecting event shows track points and markers which are not visible when switched to layer tab', async () => {
+  const { eventIcons, eventsTab, layersTab, secondEvent, trackMarker } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await page.waitForTimeout(1000)
   await secondEvent.click()
   await page.waitForTimeout(5000)
@@ -68,43 +69,42 @@ test('Selecting event shows track points and markers which are not visible when 
   await expect(eventIcons).toHaveCount(8)
 })
 
-test('Clicking an event in the list selects the event', async ({ browserName }) => {
+test('Clicking an event in the list selects the event', async () => {
   const { firstEvent, selectedFirstEvent } = selectors
   await firstEvent.click()
   await page.waitForTimeout(6000)
   await expect(selectedFirstEvent).toBeVisible()
 })
 
-test('Verify that Url is updated', async ({ browserName }) => {
-  const { modalCloseButton } = selectors
+test('Verify that Url is updated', async () => {
   await page.waitForTimeout(5000)
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   const currentUrl = await page.url()
   expect(currentUrl).toContain('efs=true')
   expect(currentUrl).toContain('efa=false')
   expect(currentUrl).toContain('lg=false')
 })
 
-test('Verify Events message and clicking message opens dialog', async ({ browserName }) => {
-  const { firstEvent, notifyMessage, modalCloseButton } = selectors
+test('Verify Events message and clicking message opens dialog', async () => {
+  const { firstEvent, notifyMessage } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await firstEvent.click()
   await expect(notifyMessage).toBeVisible()
   await expect(notifyMessage).toContainText('Events may not be visible at all times.')
   await notifyMessage.click()
   await expect(page.locator('#event_visibility_info h1')).toContainText('Why can’t I see an event?')
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(page.locator('#event_visibility_info')).not.toBeVisible()
   await page.locator('#event-alert-close').click()
   await expect(page.locator('.wv-alert .close-alert .fa-times')).not.toBeVisible()
 })
 
-test('Clicking selected event deselects event', async ({ browserName }) => {
-  const { firstEvent, selectedFirstEvent, eventsTab, modalCloseButton } = selectors
+test('Clicking selected event deselects event', async () => {
+  const { firstEvent, selectedFirstEvent, eventsTab } = selectors
   await page.goto(mockEvents)
-  await modalCloseButton.click()
+  await closeModal(page)
   await firstEvent.click()
   await selectedFirstEvent.click()
   await eventsTab.hover()

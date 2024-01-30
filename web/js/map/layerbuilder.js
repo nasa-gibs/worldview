@@ -241,7 +241,7 @@ export default function mapLayerBuilder(config, cache, store) {
       previousDate,
     } = getRequestDates(def, options);
     const date = closestDate;
-    if (date) {
+    if (date && !options.date) {
       options.date = date;
     }
     const dateOptions = { date, nextDate, previousDate };
