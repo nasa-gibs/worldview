@@ -144,7 +144,7 @@ const getBestZoom = function(distance, start, end, view) {
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-export function fly (map, proj, endPoint, endZoom = 5, rotation = 0) {
+export function fly (map, proj, endPoint, endZoom = 5, rotation = 0, isKioskModeActive) {
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar
   view.cancelAnimations();
@@ -156,7 +156,9 @@ export function fly (map, proj, endPoint, endZoom = 5, rotation = 0) {
   const line = new OlGeomLineString([startPoint, endPoint]);
   const distance = line.getLength(); // In map units, which is usually degrees
   const distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
-  let duration = Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000)); // Minimum 5 seconds, approx 12 seconds to go 360 degrees
+  let duration = isKioskModeActive
+    ? Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000)) // Minimum 5 seconds, approx 12 seconds to go 360 degrees
+    : Math.min(6000, Math.floor(distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000)); // approx 6 seconds to go 360 degrees
 
   const animationPromise = function(...args) {
     return new Promise((resolve, reject) => {
@@ -215,3 +217,60 @@ export const getOverDateLineCoordinates = (coordinates) => {
 export const getExtent = (proj) => (proj.selected.id === 'geographic'
   ? [-250, -90, 250, 90]
   : [-180, -90, 180, 90]);
+
+// Called in formatReduxDate when subdaily layers are active
+// The timezone in the tile request URL parameter & selected date in redux are different
+// Updates the redux date string to match the url parameter timezone
+export function updateReduxDateTimezone(reduxDate, urlDate) {
+  const parsedReduxDate = new Date(reduxDate);
+  const parsedUrlDate = new Date(urlDate);
+  // Get the timezone offset in minutes and convert it to milliseconds
+  const timezoneOffsetMillis = parsedUrlDate.getTimezoneOffset() * 60 * 1000;
+  // Apply the timezone offset to the reduxDate
+  const adjustedReduxDate = new Date(parsedReduxDate.getTime() + timezoneOffsetMillis);
+  // Set the hour of the adjustedReduxDate to match the hour of the urlDate
+  adjustedReduxDate.setHours(parsedUrlDate.getHours());
+  // Round down the minutes to the nearest multiple of 10
+  const roundedMinutes = Math.floor(parsedUrlDate.getMinutes() / 10) * 10;
+  // Set the rounded minutes
+  adjustedReduxDate.setMinutes(roundedMinutes);
+  // Format the updated reduxDate back to a string
+  const year = adjustedReduxDate.getFullYear();
+  const month = String(adjustedReduxDate.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedReduxDate.getDate()).padStart(2, '0');
+  const hours = String(adjustedReduxDate.getHours()).padStart(2, '0');
+  const minutes = String(adjustedReduxDate.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+}
+
+// Used in layerbuilder and TileErrorHandler
+// Formats the selected date in redux to match the date url parameter from error tiles
+export function formatReduxDate(reduxDate, urlDate, isSubdailyLayer) {
+  const date = new Date(reduxDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  if (isSubdailyLayer) {
+    const formattedReduxDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    const timezoneAdjustedReduxDate = updateReduxDateTimezone(formattedReduxDate, urlDate);
+    return timezoneAdjustedReduxDate;
+  }
+  return `${year}-${month}-${day}T00:00:00`;
+}
+
+// Used in layerbuilder to extract date param from tile error url
+export function extractDateFromTileErrorURL(url) {
+  const regex = /TIME=([\d-]+T(?:\d{2}:\d{2}:\d{2})?)/;
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    return match[1];
+  }
+  console.error('Date not found in the URL.');
+  return null;
+}

@@ -14,10 +14,7 @@
     {
       "files": ["*.js"],
       "rules": {
-        "no-undef": "off",
-        "n/no-unpublished-require": "off",
-        "no-unused-expressions": "off",
-        "prefer-regex-literals": "warn"
+        "n/no-unpublished-require": "off", // 96 failures across 79 files - many "@playwright/test" related
       }
     }
   ]

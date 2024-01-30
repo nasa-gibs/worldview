@@ -10,6 +10,17 @@ const {
 // as layer notices which only show if the specified layers are in the active list
 const LAYER_NOTICE = 'layer-notice';
 
+export function transformLayerNotices(notifications) {
+  return notifications.map((notice) => {
+    const splitPath = notice.path.split('/');
+    const layers = splitPath.slice(2, splitPath.length);
+    return {
+      ...notice,
+      layers,
+    };
+  });
+}
+
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -52,6 +63,29 @@ export function separateByType(notifications) {
 }
 
 /**
+ * Determines if most recent notification has already been seen
+ * @function objectAlreadySeen
+ * @private
+ * @param {object} obj - object from API array
+ * @returns {void}
+ */
+function objectAlreadySeen(obj) {
+  const type = obj.notification_type;
+  const idString = obj.created_at.toString();
+  let fieldValueMatches = false;
+  const fieldExists = !!safeLocalStorage.getItem(type);
+  const localStorageValueMatches = (property, value) => {
+    const oldValue = safeLocalStorage.getItem(property);
+    return oldValue && new Date(value) <= new Date(oldValue);
+  };
+
+  if (fieldExists) {
+    fieldValueMatches = localStorageValueMatches(type, idString);
+  }
+  return fieldValueMatches;
+}
+
+/**
  * Sets active state global values
  * @function getPriority
  * @private
@@ -77,44 +111,6 @@ export function getPriority(sortedNotifications) {
     priority = NOTIFICATION_OUTAGE;
   }
   return priority;
-}
-
-/**
- * Gets a total count of the notifications - excluding layerNotices
- * @function getCount
- * @private
- * @param {boolean} unseenOnly - count only unseen notifications
- * @returns {Number}
- */
-export function getCount(notifications, unseenOnly) {
-  const {
-    messages, outages, alerts,
-  } = notifications;
-
-  if (unseenOnly) {
-    const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
-    const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
-    const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
-
-    return messageCount + outageCount + alertCount;
-  }
-  return messages.length + alerts.length + outages.length;
-}
-
-export function addToLocalStorage({ messages, outages, alerts }) {
-  const [message] = messages;
-  const [outage] = outages;
-  const [alert] = alerts;
-
-  if (outage) {
-    safeLocalStorage.setItem(NOTIFICATION_OUTAGE, outage.created_at);
-  }
-  if (alert) {
-    safeLocalStorage.setItem(NOTIFICATION_ALERT, alert.created_at);
-  }
-  if (message) {
-    safeLocalStorage.setItem(NOTIFICATION_MSG, message.created_at);
-  }
 }
 
 /**
@@ -146,37 +142,34 @@ export function getNumberOfTypeNotSeen(type, arra) {
 }
 
 /**
- * Determines if most recent notification has already been seen
- * @function objectAlreadySeen
+ * Gets a total count of the notifications - excluding layerNotices
+ * @function getCount
  * @private
- * @param {object} obj - object from API array
- * @returns {void}
+ * @param {boolean} unseenOnly - count only unseen notifications
+ * @returns {Number}
  */
-function objectAlreadySeen(obj) {
-  const type = obj.notification_type;
-  const idString = obj.created_at.toString();
-  let fieldValueMatches = false;
-  const fieldExists = !!safeLocalStorage.getItem(type);
-  const localStorageValueMatches = (property, value) => {
-    const oldValue = safeLocalStorage.getItem(property);
-    return oldValue && new Date(value) <= new Date(oldValue);
-  };
+export function getCount(notifications, unseenOnly) {
+  const {
+    messages, outages, alerts,
+  } = notifications;
 
-  if (fieldExists) {
-    fieldValueMatches = localStorageValueMatches(type, idString);
-  }
-  return fieldValueMatches;
+  return messages.length + alerts.length + outages.length;
 }
 
-export function transformLayerNotices(notifications) {
-  return notifications.map((notice) => {
-    const splitPath = notice.path.split('/');
-    const layers = splitPath.slice(2, splitPath.length);
-    return {
-      ...notice,
-      layers,
-    };
-  });
+export function addToLocalStorage({ messages, outages, alerts }) {
+  const [message] = messages;
+  const [outage] = outages;
+  const [alert] = alerts;
+
+  if (outage) {
+    safeLocalStorage.setItem(NOTIFICATION_OUTAGE, outage.created_at);
+  }
+  if (alert) {
+    safeLocalStorage.setItem(NOTIFICATION_ALERT, alert.created_at);
+  }
+  if (message) {
+    safeLocalStorage.setItem(NOTIFICATION_MSG, message.created_at);
+  }
 }
 
 export function getLayerNoticesForLayer(layer, notifications) {

@@ -23,9 +23,11 @@ test('Verify subdaily default year, month, day, hour, minute date selector input
     dateSelectorHourInput,
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput
+    dateSelectorYearInput,
+    modalCloseButton
   } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
+  await modalCloseButton.click()
   await expect(dateSelectorMinuteInput).toBeVisible()
   await expect(dateSelectorHourInput).toBeVisible()
   await expect(dateSelectorDayInput).toBeVisible()
@@ -34,8 +36,9 @@ test('Verify subdaily default year, month, day, hour, minute date selector input
 })
 
 test('Change date using left/right arrows', async () => {
-  const { dateSelectorDayInput } = selectors
+  const { dateSelectorDayInput, modalCloseButton } = selectors
   await page.goto(knownDate)
+  await modalCloseButton.click()
   await expect(dateSelectorDayInput).toHaveValue('22')
   await page.locator('#left-arrow-group').click()
   await expect(dateSelectorDayInput).toHaveValue('21')
@@ -44,8 +47,10 @@ test('Change date using left/right arrows', async () => {
 })
 
 test('Left timeline arrow will not be disabled by default', async () => {
+  const { modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await page.getByRole('button', { name: '×' }).click()
   const leftArrow = await page.locator('#left-arrow-group')
   await expect(leftArrow).not.toHaveClass(/button-disabled/)
@@ -74,13 +79,17 @@ test('Now button will be disabled by default', async () => {
 })
 
 test('Right timeline arrow will not be disabled', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(knownDate)
+  await modalCloseButton.click()
   const rightArrow = await page.locator('#right-arrow-group')
   await expect(rightArrow).not.toHaveClass(/button-disabled/)
 })
 
 test('Now button will not be disabled if date is not on now', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(knownDate)
+  await modalCloseButton.click()
   const nowButton = await page.locator('#now-button-group')
   await expect(nowButton).not.toHaveClass(/button-disabled/)
 })
@@ -89,10 +98,12 @@ test('Verify date selector is populated with date YYYY-MON-DD', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput
+    dateSelectorYearInput,
+    modalCloseButton
   } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await expect(dateSelectorDayInput).toHaveValue('22')
   await expect(dateSelectorMonthInput).toHaveValue('FEB')
   await expect(dateSelectorYearInput).toHaveValue('2019')
@@ -104,9 +115,11 @@ test('Verify subdaily date selector is populated with date YYYY-MON-DD-HH-MM', a
     dateSelectorMonthInput,
     dateSelectorYearInput,
     dateSelectorHourInput,
-    dateSelectorMinuteInput
+    dateSelectorMinuteInput,
+    modalCloseButton
   } = selectors
   await page.goto(subdailyLayerIntervalTimescale)
+  await modalCloseButton.click()
   await expect(dateSelectorMinuteInput).toHaveValue('46')
   await expect(dateSelectorHourInput).toHaveValue('09')
   await expect(dateSelectorDayInput).toHaveValue('04')
@@ -115,9 +128,10 @@ test('Verify subdaily date selector is populated with date YYYY-MON-DD-HH-MM', a
 })
 
 test('Allow invalid day values in date selector', async () => {
-  const { dateSelectorDayInput } = selectors
+  const { dateSelectorDayInput, modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await dateSelectorDayInput.fill('31')
   await page.keyboard.press('Enter')
   await expect(dateSelectorDayInput).toHaveClass(/invalid-input/)
@@ -127,10 +141,12 @@ test('Allow invalid year to valid year values in date selector', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput
+    dateSelectorYearInput,
+    modalCloseButton
   } = selectors
   const queryString = 'http://localhost:3000/?t=2019-02-22'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await dateSelectorYearInput.fill('2020')
   await dateSelectorMonthInput.fill('MAR')
   await dateSelectorDayInput.fill('31')
@@ -144,10 +160,12 @@ test('Verify invalid days are rolled over', async () => {
   const {
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput
+    dateSelectorYearInput,
+    modalCloseButton
   } = selectors
   const queryString = 'http://localhost:3000/?t=2013-02-29'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await expect(dateSelectorDayInput).toHaveValue('01')
   await expect(dateSelectorMonthInput).toHaveValue('MAR')
   await expect(dateSelectorYearInput).toHaveValue('2013')
@@ -159,10 +177,12 @@ test('Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the
     dayDown,
     dateSelectorDayInput,
     dateSelectorMonthInput,
-    dateSelectorYearInput
+    dateSelectorYearInput,
+    modalCloseButton
   } = selectors
   const queryString = 'http://localhost:3000/?t=2013-02-28'
   await page.goto(queryString)
+  await modalCloseButton.click()
   await dayUp.click()
   await expect(dateSelectorDayInput).toHaveValue('01')
   await expect(dateSelectorMonthInput).toHaveValue('FEB')
@@ -174,8 +194,10 @@ test('Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the
 })
 
 test('Added future layer and right timeline arrow is not disabled', async () => {
+  const { modalCloseButton } = selectors
   const queryString = 'http://localhost:3000/?mockFutureLayer=VIIRS_SNPP_CorrectedReflectance_TrueColor,3D'
   await page.goto(queryString)
+  await modalCloseButton.click()
   const rightArrow = await page.locator('#right-arrow-group')
   await expect(rightArrow).not.toHaveClass(/button-disabled/)
   await rightArrow.click()

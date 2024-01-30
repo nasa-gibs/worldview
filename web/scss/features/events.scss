@@ -129,6 +129,7 @@
     font-size: 14px;
     font-family: $wv-monospace-font;
     cursor: pointer;
+    text-decoration: none;
   }
 
   .active {
@@ -293,11 +294,22 @@
 
 .event-track-line {
   z-index: 0;
+  pointer-events: none !important;
+
+  polyline.clickable-track-line {
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  &.highlighted-track-line {
+    z-index: 1;
+  }
 }
 
 .event-track-point,
 .event-track-cluster-point {
-  z-index: 1;
+  z-index: 2;
 }
 
 .event-track-arrows {
@@ -311,6 +323,12 @@
 
 .track-marker-case .track-marker:hover ~ .track-marker-date {
   display: block;
+}
+
+@media (any-hover: none) {
+  .track-marker-date-selected {
+    display: block;
+  }
 }
 
 .cluster-marker:hover ~ .cluster-track-marker-date {

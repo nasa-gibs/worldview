@@ -89,9 +89,11 @@ export default class AlertUtil extends React.Component {
 
   render() {
     const { noPortal } = this.props;
-    return noPortal
-      ? this.renderAlert()
-      : createPortal(this.renderAlert(), document.getElementById('wv-alert-container'));
+    const alertContainer = document.getElementById('wv-alert-container');
+    if (!noPortal && alertContainer) {
+      return createPortal(this.renderAlert(), document.getElementById('wv-alert-container'));
+    }
+    return this.renderAlert();
   }
 }
 

@@ -3,12 +3,51 @@ button:focus {
   outline: 0;
 }
 
+#distraction-free-timeline,
 #timeline {
   left: 0;
   z-index: 3;
 }
 
+.kiosk-year,
+.kiosk-month,
+.kiosk-day,
+.kiosk-hours,
+.kiosk-minutes,
+.kiosk-seconds,
+.kiosk-timezone {
+  font-family: Helvetica, sans-serif;
+  font-size: 34px;
+  letter-spacing: initial;
+  min-width: 46px;
+  text-align: center;
+}
+
+.kiosk-year,
+.kiosk-month {
+  min-width: 80px;
+}
+
+.kiosk-month {
+  padding: 0 8px;
+}
+
+.kiosk-hours {
+  margin-left: 8px;
+}
+
+.kiosk-colon {
+  font-family: Helvetica, sans-serif;
+  font-size: 37px;
+  letter-spacing: initial;
+}
+
+.kiosk-timezone {
+  padding-left: 8px;
+}
+
 .timeline-inner {
+  height: 67px;
   position: absolute;
   border: $wv-dark-menu-border;
   background: $wv-transparent-black;
@@ -17,13 +56,30 @@ button:focus {
   flex-flow: row nowrap;
   margin-left: 10px;
   margin-right: 10px;
-  height: 67px;
   bottom: 10px;
 }
 
+#distraction-free-timeline {
+  position: absolute;
+  border: $wv-dark-menu-border;
+  background: rgba(35 31 32 / 60%);
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0;
+  border-top-right-radius: 15px;
+  height: 100px;
+}
+
 #timeline-header {
-  margin-top: 2px;
   min-width: 310px;
+  margin-top: 2px;
+}
+
+#distraction-free-timeline-header,
+#timeline-header {
   display: inline-block;
 
   &.subdaily {
@@ -110,7 +166,7 @@ button:focus {
   }
 
   & .input-wrapper .date-arrows::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -15px;
     height: 30px;
@@ -137,11 +193,26 @@ button:focus {
     margin-top: 23px;
   }
 
+  & .input-time-divider-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    width: 13px;
+    margin-top: 13px;
+  }
+
   & .input-time-zmark {
     font-family: $wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
+  }
+
+  & .input-time-zmark-kiosk {
+    font-family: $wv-monospace-font;
+    color: #fff;
+    font-size: 24px;
+    margin-top: 15px;
   }
 
   & .date-arrows {
@@ -167,7 +238,7 @@ button:focus {
   & .date-arrow-down {
     transform: scaleY(-1);
     filter: flipv;
-    filter: "FlipV";
+    filter: 'FlipV';
   }
 
   & .date-arrows:hover,
@@ -197,7 +268,7 @@ button:focus {
 
   & #left-arrow-group svg {
     filter: fliph;
-    filter: "FlipH";
+    filter: 'FlipH';
   }
 
   & #now-button-group {
@@ -506,7 +577,7 @@ button:focus {
   position: absolute;
   top: 100%;
   left: 15%;
-  content: "";
+  content: '';
   border-top: 5px solid #000;
   border-top: 5px solid rgb(51 51 51 / 90%);
   border-right: 5px solid transparent;
@@ -591,7 +662,7 @@ button:focus {
   height: 21px;
   width: 30px;
   position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -8px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -8px no-repeat;
   border-radius: 0;
   box-sizing: border-box;
   border-right: 0;
@@ -623,7 +694,7 @@ button:focus {
 
 .timeline-layer-coverage-panel-handle-chevron {
   position: absolute;
-  background: url("../images/icon-sprite.svg") -206px -3px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
   box-sizing: border-box;
   left: 50%;
   width: 57px;
@@ -641,7 +712,8 @@ button:focus {
   margin-left: -14px;
 }
 
-#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
+#timeline-layer-coverage-panel-handle:hover
+  .timeline-layer-coverage-panel-handle-chevron {
   background-position: -206px -63px;
 }
 
@@ -813,6 +885,25 @@ button:focus {
   fill: #1a1a1a;
 }
 
+#distraction-free-timeline-header {
+  color: #fff;
+  font-family: Helvetica, sans-serif;
+  font-size: 37px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 33px 10px 34px 51px;
+
+  &.subdaily {
+    width: unset;
+    min-width: 320px;
+  }
+
+  .mobile {
+    max-width: 390px;
+  }
+}
+
 .mobile-animate-button {
   position: absolute;
   background: $wv-transparent-black;
@@ -825,6 +916,12 @@ button:focus {
 .animate-button-phone-portrait {
   left: 140px;
   bottom: 75px;
+}
+
+.animate-button-phone-portrait-embed {
+  left: 100px;
+  bottom: 52px;
+  transform: scale(0.75);
 }
 
 .animate-button-phone-portrait-subdaily {
@@ -845,6 +942,18 @@ button:focus {
 .animate-button-tablet-portrait {
   left: 325px;
   bottom: 20px;
+}
+
+.animate-button-tablet-portrait-embed {
+  left: 235px;
+  bottom: 15px;
+  transform: scale(0.75);
+}
+
+.animate-button-tablet-portrait-subdaily-embed {
+  left: 315px;
+  bottom: 15px;
+  transform: scale(0.75);
 }
 
 .animate-button-tablet-portrait-subdaily {

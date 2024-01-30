@@ -24,6 +24,12 @@ const options = yargs
     type: 'string',
     description: 'getcapabilities file'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Pulls GetCapabilities XML and linked metadata from configured locations')
 
 const { argv } = options
@@ -68,7 +74,9 @@ async function getCapabilities () {
       const inputFile = value.from
       const outputFile = `${outputDir}/${value.to}`
 
+      if (argv.mode === 'verbose') console.warn(`Fetching config for ${inputFile} to ${outputFile}...`)
       await fetchConfigs(inputFile, outputFile)
+      if (argv.mode === 'verbose') console.warn(`Processing capabilities for ${outputFile}...`)
       await processGetCapabilities(outputFile)
     }
   }
@@ -81,8 +89,9 @@ async function fetchConfigs (inputFile, outputFile) {
     method: 'get',
     url: inputFile,
     responseType: 'stream',
-    timeout: 10000
+    timeout: 100000
   }).then(async (response) => {
+    if (argv.mode === 'verbose') console.warn(`Writing ${outputFile}...`)
     await response.data.pipe(writer)
     return finished(writer)
   })
@@ -99,10 +108,15 @@ async function handleException (error, link, dir, ext, count) {
 }
 
 async function processVectorData (layer) {
+  if (argv.mode === 'verbose') {
+    const ident = layer['ows:Identifier']._text
+    console.warn(`Processing vector data for ${ident}:`)
+  }
   if (layer['ows:Metadata']) {
     Object.values(layer['ows:Metadata']).forEach((item) => {
       const schemaVersion = item._attributes['xlink:role']
       if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
+        if (argv.mode === 'verbose') console.warn(`  Processing Metadata: ${item._attributes['xlink:href']}`)
         const vectorDataLink = item._attributes['xlink:href']
         const vectorDataFile = path.basename(vectorDataLink)
         const vectorDataId = path.parse(vectorDataFile).name
@@ -114,11 +128,13 @@ async function processVectorData (layer) {
 
 async function processLayer (layer) {
   const ident = layer['ows:Identifier']._text
+  if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}:`)
   if (layer['ows:Metadata']) {
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
     } else {
       Object.values(layer['ows:Metadata']).forEach((item) => {
+        if (argv.mode === 'verbose') console.warn(`  Processing pallette: ${item._attributes['xlink:href']}`)
         const schemaVersion = item._attributes['xlink:role']
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
           const colormapLink = item._attributes['xlink:href']

@@ -5,7 +5,7 @@
     "OrbitTracks_Aqua_Ascending": {
       "type": "vector",
       "tiles": [
-        "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     }
   },

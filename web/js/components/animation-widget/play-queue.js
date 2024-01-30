@@ -60,13 +60,22 @@ class PlayQueue extends React.Component {
     this.minBufferLength = null;
     this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
     this.abortController = null;
+    this.isBetweenSteps = false;
+    this.hasPlayStarted = false;
+    this.onPropertyChange = this.onPropertyChange.bind(this);
+    this.onMoveEnd = this.onMoveEnd.bind(this);
   }
 
   componentDidMount() {
+    const {
+      map,
+    } = this.props;
     this.mounted = true;
     // this.queue.on('completed', (dateStr) => {
     //   console.debug(dateStr, this.queue.size, this.queue.pending);
     // });
+    map.ui.selected.getView().on('propertychange', this.onPropertyChange);
+    map.ui.selected.on('moveend', this.onMoveEnd);
     this.playingDate = this.getStartDate();
     this.checkQueue();
     this.checkShouldPlay();
@@ -74,16 +83,32 @@ class PlayQueue extends React.Component {
   }
 
   componentWillUnmount() {
+    const {
+      map,
+    } = this.props;
     this.mounted = false;
     this.clearCache();
     this.queue.clear();
+    map.ui.selected.getView().un('propertychange', this.onPropertyChange);
+    map.ui.selected.un('moveend', this.onMoveEnd);
     if (this.abortController) {
       this.abortController.abort();
     }
   }
 
+  onPropertyChange() {
+    if (this.isBetweenSteps) return;
+    this.isBetweenSteps = true;
+  }
+
+  onMoveEnd() {
+    if (!this.isBetweenSteps) return;
+    this.isBetweenSteps = false;
+    this.checkShouldPlay();
+  }
+
   /**
-   * Create an array of each date to be played
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
    */
   determineFrameDates() {
     const { startDate, endDate } = this.props;
@@ -218,11 +243,13 @@ class PlayQueue extends React.Component {
     const currentDate = toDate(this.playingDate);
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
 
-    if (isAnimating && !loopStart) {
+    if ((isAnimating || this.hasPlayStarted) && !loopStart) {
       return;
     }
     if (this.isPreloadSufficient() || restartLoop) {
+      if (this.isBetweenSteps) return;
       // console.debug('Started: ', Date.now());
+      this.hasPlayStarted = true;
       return this.play();
     }
     this.checkQueue();
@@ -232,7 +259,7 @@ class PlayQueue extends React.Component {
     const {
       isLoopActive, startDate, togglePlaying, speed,
     } = this.props;
-    const loopDelay = speed === 0.5 ? 2000 : 1000 / speed;
+    const loopDelay = speed === 0.5 ? 2000 : 1500;
 
     if (isLoopActive) {
       this.playingDate = toString(startDate);
@@ -350,22 +377,24 @@ class PlayQueue extends React.Component {
   stopPlaying() {
     this.abortController.abort();
     this.setState({ isAnimating: false });
-    console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
+    this.hasPlayStarted = false;
+    // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {
     const start = document.timeline.currentTime;
-    const frame = (time) => {
-      if (this.abortController.signal.aborted) return;
-      callback(time);
-      scheduleFrame(time);
-    };
     const scheduleFrame = (time) => {
       const elapsedTime = time - start;
       const roundedElapsedTime = Math.round(elapsedTime / ms) * ms;
       const targetNext = start + roundedElapsedTime + ms;
       const delay = targetNext - performance.now();
+      // eslint-disable-next-line no-use-before-define
       setTimeout(() => requestAnimationFrame(frame), delay);
+    };
+    const frame = (time) => {
+      if (this.abortController.signal.aborted) return;
+      callback(time);
+      scheduleFrame(time);
     };
     scheduleFrame(start);
   }
@@ -435,7 +464,7 @@ class PlayQueue extends React.Component {
 
   render() {
     const { isAnimating } = this.state;
-    const { onClose, isMobile } = this.props;
+    const { onClose, isMobile, isKioskModeActive } = this.props;
     const loadedItems = util.objectLength(this.bufferObject);
     const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
     const mobileProgressStyle = {
@@ -459,6 +488,7 @@ class PlayQueue extends React.Component {
           onClose={onClose}
           loadedItems={loadedItems}
           totalItems={this.minBufferLength || 100}
+          isKioskModeActive={isKioskModeActive}
         />
       );
   }
@@ -480,6 +510,8 @@ PlayQueue.propTypes = {
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
   snappedCurrentDate: PropTypes.object,
+  isKioskModeActive: PropTypes.bool,
+  map: PropTypes.object,
 };
 
 export default PlayQueue;

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import update from 'immutability-helper';
 import lodashIsNaN from 'lodash/isNaN';
 import OlOverlay from 'ol/Overlay';
@@ -19,14 +19,14 @@ const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
  * @param {Array} coordinates
  * @param {Number} zoom
  */
-export function animateCoordinates(map, proj, coordinates, zoom) {
+export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActive) {
   const { crs } = proj.selected;
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  fly(map, proj, [x, y], zoom);
+  fly(map, proj, [x, y], zoom, isKioskModeActive);
 }
 
 /**
@@ -41,6 +41,33 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
   const coord = crs === CRS.GEOGRAPHIC ? coordinates : transform(coordinates, CRS.GEOGRAPHIC, crs);
   return containsCoordinate(extent, coord); // expects X then Y!
 }
+
+/**
+ * Create Ol vector layer map pin
+ * @param {Array} coordinates
+ * @param {Object} pinProps
+ * @param {Number} id
+ */
+const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
+  const overlayEl = document.createElement('div');
+  const root = createRoot(overlayEl);
+  const removeMarker = () => {
+    root.unmount(overlayEl);
+    removeMarkerPin();
+  };
+  root.render(
+    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
+  );
+  const markerPin = new OlOverlay({
+    element: overlayEl,
+    position: coordinates,
+    positioning: 'bottom-center',
+    stopEvent: false,
+    id,
+  });
+
+  return markerPin;
+};
 
 /**
  * Get coordinates marker
@@ -73,31 +100,11 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
 }
 
 /**
- * Create Ol vector layer map pin
- * @param {Array} coordinates
- * @param {Object} pinProps
- * @param {Number} id
+ * @return {Boolean} is Location Search local storage set to 'collapsed'
  */
-const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
-  const overlayEl = document.createElement('div');
-  const removeMarker = () => {
-    ReactDOM.unmountComponentAtNode(overlayEl);
-    removeMarkerPin();
-  };
-  ReactDOM.render(
-    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
-    overlayEl,
-  );
-  const markerPin = new OlOverlay({
-    element: overlayEl,
-    position: coordinates,
-    positioning: 'bottom-center',
-    stopEvent: false,
-    id,
-  });
-
-  return markerPin;
-};
+export function getLocalStorageCollapseState() {
+  return safeLocalStorage.getItem(LOCATION_SEARCH_COLLAPSED) === 'collapsed';
+}
 
 /**
  *
@@ -159,13 +166,6 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
-}
-
-/**
- * @return {Boolean} is Location Search local storage set to 'collapsed'
- */
-export function getLocalStorageCollapseState() {
-  return safeLocalStorage.getItem(LOCATION_SEARCH_COLLAPSED) === 'collapsed';
 }
 
 /**

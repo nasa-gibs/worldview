@@ -22,9 +22,11 @@ test('Add AOD Layer to Layer Group A', async () => {
     addLayers,
     layersAll3rdElement,
     layersList1stCheckbox,
-    layersModalCloseButton
+    layersModalCloseButton,
+    modalCloseButton
   } = selectors
   await page.goto(swipeAndAIsActive)
+  await modalCloseButton.click()
   await addLayers.click()
   await layersAll3rdElement.click()
   await layersList1stCheckbox.click()

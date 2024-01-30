@@ -24,6 +24,7 @@ import {
   parseEventFilterDates,
 } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
+import { mapLocationToChartingState } from './modules/charting/util';
 import {
   mapLocationToProjState,
   parseProjection,
@@ -82,6 +83,10 @@ export const mapLocationToState = (state, location) => {
       state,
     );
     stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation,
+    );
+    stateFromLocation = mapLocationToChartingState(
       parameters,
       stateFromLocation,
     );
@@ -296,6 +301,22 @@ const getParameters = function(config, parameters) {
         },
       },
     },
+    kiosk: {
+      stateKey: 'ui.isKioskModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isKioskModeActive = get(state, 'ui.isKioskModeActive');
+          return isKioskModeActive ? boo : undefined;
+        },
+      },
+    },
+    eic: {
+      stateKey: 'ui.eic',
+      initialState: '',
+    },
     em: {
       stateKey: 'embed.isEmbedModeActive',
       initialState: false,
@@ -481,6 +502,14 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
+    aa: {
+      stateKey: 'animation.autoplay',
+      initialState: false,
+      options: {
+        serialize: (boo) => (boo ? 'true' : undefined),
+        parse: (str) => str === 'true',
+      },
+    },
     abt: {
       stateKey: 'modalAbout.isOpen',
       initialState: false,
@@ -533,6 +562,10 @@ const getParameters = function(config, parameters) {
         serialize: serializeDateBWrapper,
         parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
+    },
+    travel: {
+      stateKey: 'ui.travelMode',
+      initialState: '',
     },
   };
 };

@@ -1,0 +1,1 @@
+Water levels in Folsom Lake Reservoir, near Sacramento, California also rose as a result of the 2022 - 2023 winter rains. This comparison shows low water levels in Nov. 20, 2022 compared to an almost full reservoir on Apr. 9, 2023.

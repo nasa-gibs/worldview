@@ -4,11 +4,13 @@ import Cache from 'cachai';
 
 import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
+import { initialChartingState } from './modules/charting/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
 import { getInitialEventsState } from './modules/natural-events/reducers';
 import { sidebarState as initialSidebarState } from './modules/sidebar/reducers';
+import { uiState as initialUiState } from './modules/ui/reducers';
 import util from './util/util';
 
 const mockBaseCmrApi = 'mock.cmr.api/';
@@ -27,6 +29,7 @@ const fixtures = {
 fixtures.getState = function() {
   return {
     compare: initialCompareState,
+    charting: initialChartingState,
     config: fixtures.config(),
     layers: initialLayerState,
     alerts: defaultAlertState,
@@ -35,6 +38,7 @@ fixtures.getState = function() {
     map: fixtures.map(),
     animation: initialAnimationState,
     sidebar: initialSidebarState,
+    ui: initialUiState,
     proj: {
       selected: {
         id: 'geographic',
@@ -310,7 +314,7 @@ fixtures.config = function() {
             ],
           },
         },
-        url: 'https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi',
+        url: 'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi',
       },
     },
     layers: {

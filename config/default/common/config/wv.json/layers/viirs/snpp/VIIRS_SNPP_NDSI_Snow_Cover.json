@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_NDSI_Snow_Cover": {
+      "id": "VIIRS_SNPP_NDSI_Snow_Cover",
+      "description": "viirs/snpp/VIIRS_SNPP_NDSI_Snow_Cover",
+      "tags": "snow cover",
+      "group": "overlays",
+      "layergroup": "Snow Cover",
+      "wrapadjacentdays": true
+    }
+  }
+}

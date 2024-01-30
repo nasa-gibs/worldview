@@ -2,22 +2,23 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import googleTagManager from 'googleTagManager';
 import { getPermalink } from '../modules/link/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import HoverTooltip from '../components/util/hover-tooltip';
 import history from '../main';
 
-function Embed (props) {
-  const {
-    isEmbedModeActive,
-  } = props;
+function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
+  const [showClickToInteractMessage, setShowClickToInteractMessage] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
 
-  const [showOverlay, clickOverlay] = useState(true);
+  const handleOverlayClick = () => {
+    setShowClickToInteractMessage(false);
+    setHasClicked(true);
+  };
 
   const newTabLink = function() {
-    const { selectedDate } = props;
     const queryString = history.location.search || '';
     const permalink = getPermalink(queryString, selectedDate);
     googleTagManager.pushEvent({
@@ -27,7 +28,6 @@ function Embed (props) {
   };
 
   const renderEmbedLinkBtn = function() {
-    const { isMobile } = props;
     const buttonId = 'wv-embed-link-button';
     const labelText = 'Open this @NAME@ map in a new tab';
     return (
@@ -49,10 +49,14 @@ function Embed (props) {
 
   return (
     isEmbedModeActive && (
-      <>
-        {showOverlay && (
+      <div
+        id={!hasClicked ? 'embed-mode-wrapper' : ''}
+        onMouseEnter={() => !hasClicked && setShowClickToInteractMessage(true)}
+        onMouseLeave={() => !hasClicked && setShowClickToInteractMessage(false)}
+      >
+        {showClickToInteractMessage && (
           <>
-            <div onClick={() => clickOverlay(false)} className="embed-overlay-bg" />
+            <div onClick={handleOverlayClick} className="embed-overlay-bg" />
             <div className="embed-overlay-btn">
               <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth />
               <p>Click anywhere to interact</p>
@@ -60,7 +64,7 @@ function Embed (props) {
           </>
         )}
         {renderEmbedLinkBtn()}
-      </>
+      </div>
     )
   );
 }

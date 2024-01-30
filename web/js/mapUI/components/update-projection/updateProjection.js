@@ -38,6 +38,7 @@ function UpdateProjection(props) {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
+    isKioskModeActive,
     isMobile,
     layerState,
     map,
@@ -52,17 +53,243 @@ function UpdateProjection(props) {
     requestPalette,
   } = props;
 
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
+  /**
+  * Remove Layers from map
+  *
+  * @method clearLayers
+  * @static
+  *
+  * @returns {void}
+  */
+  const clearLayers = function(saveCache) {
+    const activeLayersUI = ui.selected
+      .getLayers()
+      .getArray()
+      .slice(0);
+    lodashEach(activeLayersUI, (mapLayer) => {
+      ui.selected.removeLayer(mapLayer);
+    });
 
-  useEffect(() => {
-    if (projectionTrigger === 1) {
-      updateProjection(true);
-    } else if (projectionTrigger > 1) {
-      updateProjection();
+    if (saveCache) return;
+    ui.cache.clear();
+  };
+
+  /**
+ * Create a Layergroup given the date and layerGroups when compare mode is activated and
+ * the group similar layers option is selected.
+ *
+ * @method getCompareLayerGroup
+ * @static
+ *
+ * @param {string} compareActiveString
+ * @param {string} compareDateString
+ * @param {object} state object representing the layers, compare, & proj properties from global state
+ * @param {object} granuleOptions object representing selected granule layer options
+ */
+  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+    const { createLayer } = ui;
+    const compareSideLayers = getActiveLayers(state, compareActiveString);
+    const layers = getLayers(state, { reverse: true }, compareSideLayers)
+      .map(async (def) => {
+        const options = {
+          ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
+          date: getSelectedDate(dateCompareState, compareDateString),
+          group: compareActiveString,
+        };
+        // Check if the layer contains a palette & load if necessary
+        if (def.palette) {
+          requestPalette(def.id);
+        }
+        return createLayer(def, options);
+      });
+    const compareLayerGroup = await Promise.all(layers);
+
+    return new OlLayerGroup({
+      layers: compareLayerGroup,
+      date: getSelectedDate(dateCompareState, compareDateString),
+      group: compareActiveString,
+    });
+  }
+
+  /**
+   * @method reloadLayers
+   *
+   * @param {Object} granuleOptions (optional: only used for granule layers)
+   *   @param {Boolean} granuleDates - array of granule dates
+   *   @param {Boolean} id - layer id
+   * @returns {void}
+   */
+  async function reloadLayers(granuleOptions, saveCache) {
+    const mapUI = ui.selected;
+    const { createLayer } = ui;
+
+    if (!config.features.compare || !compare.active) {
+      const compareMapDestroyed = !compare.active && compareMapUi.active;
+      if (compareMapDestroyed) {
+        compareMapUi.destroy();
+      }
+      clearLayers(saveCache);
+      const defs = getLayers(layerState, { reverse: true });
+      const layerPromises = defs.map((def) => {
+        const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
+        return createLayer(def, options);
+      });
+      const createdLayers = await Promise.all(layerPromises);
+      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
+    } else {
+      const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
+      if (compare && !compare.isCompareA && compare.mode === 'spy') {
+        stateArray.reverse(); // Set Layer order based on active A|B group
+      }
+      clearLayers(saveCache);
+      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
+      const compareLayerGroups = await Promise.all(stateArrayGroups);
+      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
+      compareMapUi.create(mapUI, compare.mode);
     }
-  }, [projectionTrigger]);
+    updateLayerVisibilities();
+  }
+
+  const onStopAnimation = function() {
+    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
+    if (needsRefresh) {
+      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
+      // try to modify map layers asynchronously so we need to set a timeout to allow
+      // the updateDate() function to complete before trying to call reloadLayers() here
+      setTimeout(reloadLayers, 100);
+    }
+  };
+
+  /**
+ * Hide Map
+ *
+ * @method hideMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function hideMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'none';
+  }
+
+  /**
+ * Show Map
+ *
+ * @method showMap
+ * @static
+ *
+ * @param {object} map - Openlayers Map obj
+ *
+ * @returns {void}
+ */
+  function showMap(map) {
+    const el = document.getElementById(`${map.getTarget()}`);
+    if (el) el.style.display = 'block';
+  }
+
+  /**
+ * When page is resized set for mobile or desktop
+ *
+ * @method onResize
+ * @static
+ *
+ * @returns {void}
+ */
+  function onResize() {
+    const mapUI = ui.selected;
+    if (isMobile) {
+      mapUI.removeControl(mapUI.wv.scaleImperial);
+      mapUI.removeControl(mapUI.wv.scaleMetric);
+    } else {
+      mapUI.addControl(mapUI.wv.scaleImperial);
+      mapUI.addControl(mapUI.wv.scaleMetric);
+    }
+  }
+
+  const updateProjection = (start) => {
+    if (ui.selected) {
+      // Keep track of center point on projection switch
+      ui.selected.previousCenter = ui.selected.center;
+      hideMap(ui.selected);
+    }
+    ui.selected = ui.proj[proj.id];
+    const map = ui.selected;
+
+    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
+    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
+    const rotation = start ? rotationStart : currentRotation;
+
+    updateMapUI(ui, rotation);
+
+    reloadLayers(null, !start);
+
+    // If the browser was resized, the inactive map was not notified of
+    // the event. Force the update no matter what and reposition the center
+    // using the previous value.
+    showMap(map);
+
+    map.updateSize();
+
+    if (ui.selected.previousCenter) {
+      ui.selected.setCenter(ui.selected.previousCenter);
+    }
+
+    if (start) {
+      const projId = proj.selected.id;
+      let extent = null;
+      let callback = null;
+      if (models.map.extent) {
+        extent = models.map.extent;
+      } else if (!models.map.extent && projId === 'geographic') {
+        extent = getLeadingExtent(config.pageLoadTime);
+        callback = () => {
+          const view = map.getView();
+          const extent = view.calculateExtent(map.getSize());
+          fitToLeadingExtent(extent);
+        };
+      }
+      if (projId !== 'geographic') {
+        callback = () => {
+          const view = map.getView();
+          view.setRotation(rotationStart);
+        };
+      }
+      if (extent) {
+        map.getView().fit(extent, {
+          constrainResolution: false,
+          callback,
+        });
+      } else if (rotationStart && projId !== 'geographic') {
+        callback();
+      }
+    }
+    updateExtent();
+    onResize();
+  };
+
+  /**
+ * Collect information required & initiate a "fly" map transition
+ * Used in Tour Stories.
+ * @method flyToNewExtent
+ * @static
+ *
+ * @param {object} extent
+ * @param {number} rotation
+ */
+  const flyToNewExtent = function(extent, rotation) {
+    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+    const coordinates = [coordinateX, coordinateY];
+    const resolution = ui.selected.getView().getResolutionForExtent(extent);
+    const zoom = ui.selected.getView().getZoomForResolution(resolution);
+    // Animate to extent, zoom & rotate:
+    // Don't animate when an event is selected (Event selection already animates)
+    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
+  };
 
   const actionSwitch = () => {
     switch (action.type) {
@@ -124,231 +351,17 @@ function UpdateProjection(props) {
     }
   };
 
-  const flyToNewExtent = function(extent, rotation) {
-    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
-    const coordinates = [coordinateX, coordinateY];
-    const resolution = ui.selected.getView().getResolutionForExtent(extent);
-    const zoom = ui.selected.getView().getZoomForResolution(resolution);
-    // Animate to extent, zoom & rotate:
-    // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation);
-  };
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
 
-  /**
- * Create a Layergroup given the date and layerGroups when compare mode is activated and
- * the group similar layers option is selected.
- *
- * @method getCompareLayerGroup
- * @static
- *
- * @param {string} compareActiveString
- * @param {string} compareDateString
- * @param {object} state object representing the layers, compare, & proj properties from global state
- * @param {object} granuleOptions object representing selected granule layer options
- */
-  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
-    const { createLayer } = ui;
-    const compareSideLayers = getActiveLayers(state, compareActiveString);
-    const layers = getLayers(state, { reverse: true }, compareSideLayers)
-      .map(async (def) => {
-        const options = {
-          ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
-          date: getSelectedDate(dateCompareState, compareDateString),
-          group: compareActiveString,
-        };
-        // Check if the layer contains a palette & load if necessary
-        if (def.palette) {
-          requestPalette(def.id);
-        }
-        return createLayer(def, options);
-      });
-    const compareLayerGroup = await Promise.all(layers);
-
-    return new OlLayerGroup({
-      layers: compareLayerGroup,
-      date: getSelectedDate(dateCompareState, compareDateString),
-      group: compareActiveString,
-    });
-  }
-
-  /**
-  * Remove Layers from map
-  *
-  * @method clearLayers
-  * @static
-  *
-  * @returns {void}
-  */
-  const clearLayers = function() {
-    const activeLayersUI = ui.selected
-      .getLayers()
-      .getArray()
-      .slice(0);
-    lodashEach(activeLayersUI, (mapLayer) => {
-      ui.selected.removeLayer(mapLayer);
-    });
-    ui.cache.clear();
-  };
-
-  /**
-   * @method reloadLayers
-   *
-   * @param {Object} granuleOptions (optional: only used for granule layers)
-   *   @param {Boolean} granuleDates - array of granule dates
-   *   @param {Boolean} id - layer id
-   * @returns {void}
-   */
-  async function reloadLayers(granuleOptions) {
-    const mapUI = ui.selected;
-    const { createLayer } = ui;
-
-    if (!config.features.compare || !compare.active) {
-      const compareMapDestroyed = !compare.active && compareMapUi.active;
-      if (compareMapDestroyed) {
-        compareMapUi.destroy();
-      }
-      clearLayers();
-      const defs = getLayers(layerState, { reverse: true });
-      const layerPromises = defs.map((def) => {
-        const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
-        return createLayer(def, options);
-      });
-      const createdLayers = await Promise.all(layerPromises);
-      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
-    } else {
-      const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
-      if (compare && !compare.isCompareA && compare.mode === 'spy') {
-        stateArray.reverse(); // Set Layer order based on active A|B group
-      }
-      clearLayers();
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
-      const compareLayerGroups = await Promise.all(stateArrayGroups);
-      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
-      compareMapUi.create(mapUI, compare.mode);
+  useEffect(() => {
+    if (projectionTrigger === 1) {
+      updateProjection(true);
+    } else if (projectionTrigger > 1) {
+      updateProjection();
     }
-    updateLayerVisibilities();
-  }
-
-  const onStopAnimation = function() {
-    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
-    if (needsRefresh) {
-      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
-      // try to modify map layers asynchronously so we need to set a timeout to allow
-      // the updateDate() function to complete before trying to call reloadLayers() here
-      setTimeout(reloadLayers, 100);
-    }
-  };
-
-  /**
- * When page is resized set for mobile or desktop
- *
- * @method onResize
- * @static
- *
- * @returns {void}
- */
-  function onResize() {
-    const mapUI = ui.selected;
-    if (isMobile) {
-      mapUI.removeControl(mapUI.wv.scaleImperial);
-      mapUI.removeControl(mapUI.wv.scaleMetric);
-    } else {
-      mapUI.addControl(mapUI.wv.scaleImperial);
-      mapUI.addControl(mapUI.wv.scaleMetric);
-    }
-  }
-
-  /**
- * Show Map
- *
- * @method showMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function showMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'block';
-  }
-
-  /**
- * Hide Map
- *
- * @method hideMap
- * @static
- *
- * @param {object} map - Openlayers Map obj
- *
- * @returns {void}
- */
-  function hideMap(map) {
-    document.getElementById(`${map.getTarget()}`).style.display = 'none';
-  }
-
-
-  const updateProjection = (start) => {
-    if (ui.selected) {
-      // Keep track of center point on projection switch
-      ui.selected.previousCenter = ui.selected.center;
-      hideMap(ui.selected);
-    }
-    ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
-
-    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
-    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
-    const rotation = start ? rotationStart : currentRotation;
-
-    updateMapUI(ui, rotation);
-
-    reloadLayers();
-
-    // If the browser was resized, the inactive map was not notified of
-    // the event. Force the update no matter what and reposition the center
-    // using the previous value.
-    showMap(map);
-
-    map.updateSize();
-
-    if (ui.selected.previousCenter) {
-      ui.selected.setCenter(ui.selected.previousCenter);
-    }
-
-    if (start) {
-      const projId = proj.selected.id;
-      let extent = null;
-      let callback = null;
-      if (models.map.extent) {
-        extent = models.map.extent;
-      } else if (!models.map.extent && projId === 'geographic') {
-        extent = getLeadingExtent(config.pageLoadTime);
-        callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
-          fitToLeadingExtent(extent);
-        };
-      }
-      if (projId !== 'geographic') {
-        callback = () => {
-          const view = map.getView();
-          view.setRotation(rotationStart);
-        };
-      }
-      if (extent) {
-        map.getView().fit(extent, {
-          constrainResolution: false,
-          callback,
-        });
-      } else if (rotationStart && projId !== 'geographic') {
-        callback();
-      }
-    }
-    updateExtent();
-    onResize();
-  };
+  }, [projectionTrigger]);
 
   return null;
 }
@@ -357,6 +370,7 @@ const mapStateToProps = (state) => {
   const {
     proj, map, screenSize, layers, compare, date,
   } = state;
+  const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
   const isMobile = screenSize.isMobileDevice;
   const dateCompareState = { date, compare };
@@ -367,6 +381,7 @@ const mapStateToProps = (state) => {
     compare,
     compareMode,
     dateCompareState,
+    isKioskModeActive,
     isMobile,
     layerState,
     proj,
@@ -401,6 +416,7 @@ UpdateProjection.propTypes = {
   dateCompareState: PropTypes.object,
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerState: PropTypes.object,
   map: PropTypes.object,

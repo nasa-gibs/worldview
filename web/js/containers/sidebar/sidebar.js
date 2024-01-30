@@ -8,6 +8,7 @@ import {
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import LayersContainer from './layers-container';
+import ChartingLayerMenu from './charting';
 import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
@@ -100,7 +101,9 @@ class Sidebar extends React.Component {
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
-    const { isMobile, screenHeight, isCompareMode } = this.props;
+    const {
+      isMobile, screenHeight, isCompareMode,
+    } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
     const groupCheckboxHeight = 35;
@@ -143,8 +146,8 @@ class Sidebar extends React.Component {
     collapseExpandToggle();
   }
 
-  getProductsToRender(activeTab, isCompareMode) {
-    const { activeString } = this.props;
+  getProductsToRender(activeTab, isCompareMode, isChartMode) {
+    const { activeString, chartingModeAccessible } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {
       return (
@@ -153,7 +156,17 @@ class Sidebar extends React.Component {
           height={subComponentHeight}
         />
       );
-    } if (!isCompareMode) {
+    } if (isChartMode) {
+      return (
+        <ChartingLayerMenu
+          height={subComponentHeight}
+          isActive={activeTab === 'layers'}
+          compareState={activeString}
+          chartState={isChartMode}
+          chartingModeAccessible={chartingModeAccessible}
+        />
+      );
+    } if (!isCompareMode && !isChartMode) {
       return (
         <LayersContainer
           height={subComponentHeight}
@@ -253,21 +266,26 @@ class Sidebar extends React.Component {
       activeTab,
       changeTab,
       config,
+      displayStaticMap,
       eventsData,
       eventsSources,
       hasEventRequestError,
       isCollapsed,
       isCompareMode,
+      isChartMode,
       isDataDisabled,
       isDistractionFreeModeActive,
       isEmbedModeActive,
       isLoadingEvents,
       isMobile,
+      isKioskModeActive,
       numberOfLayers,
       onTabClick,
       screenHeight,
       tabTypes,
+      chartingModeAccessible,
     } = this.props;
+
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
@@ -283,7 +301,7 @@ class Sidebar extends React.Component {
       position: 'static',
     } : null;
 
-    const productsHolderStyle = isDistractionFreeModeActive ? {
+    const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
       display: 'none',
     } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
       cssFloat: 'left',
@@ -305,7 +323,7 @@ class Sidebar extends React.Component {
     return (
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
-          {this.renderSidebarLogo()}
+          {!displayStaticMap && this.renderSidebarLogo()}
           {!isDistractionFreeModeActive && isCollapsed && (
           <CollapsedButton
             isMobile={isMobile}
@@ -333,7 +351,7 @@ class Sidebar extends React.Component {
               />
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="layers">
-                  {this.getProductsToRender(activeTab, isCompareMode)}
+                  {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
                 </TabPane>
                 {naturalEvents && activeTab === 'events' && (
                 <TabPane tabId="events">
@@ -354,13 +372,16 @@ class Sidebar extends React.Component {
                   />
                 </TabPane>
                 )}
-
-                <FooterContent
-                  ref={(el) => { this.footerElement = el; }}
-                  tabTypes={tabTypes}
-                  activeTab={activeTab}
-                />
-
+                {
+                  !isKioskModeActive && (
+                    <FooterContent
+                      ref={(el) => { this.footerElement = el; }}
+                      tabTypes={tabTypes}
+                      activeTab={activeTab}
+                      chartingModeAccessible={chartingModeAccessible}
+                    />
+                  )
+                }
               </TabContent>
             </>
             )}
@@ -375,9 +396,11 @@ const mapStateToProps = (state) => {
   const {
     animation,
     compare,
+    charting,
     config,
     embed,
     events,
+    layers,
     measure,
     modal,
     map,
@@ -388,6 +411,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette')).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
@@ -396,7 +420,7 @@ const mapStateToProps = (state) => {
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = screenSize;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
   const { isEmbedModeActive } = embed;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
@@ -415,16 +439,20 @@ const mapStateToProps = (state) => {
   return {
     activeTab,
     activeString,
+    chartingModeAccessible,
     config,
+    displayStaticMap,
     eventsData,
     eventsSources,
     numberOfLayers,
     hasEventRequestError,
     isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     isCompareMode: compare.active,
+    isChartMode: charting.active,
     isDataDisabled: events.isAnimatingToEvent,
     isDistractionFreeModeActive,
     isEmbedModeActive,
+    isKioskModeActive,
     isLoadingEvents,
     isMobile,
     selectedMap,
@@ -473,6 +501,7 @@ Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
+  chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
   eventsData: PropTypes.array,
@@ -480,6 +509,7 @@ Sidebar.propTypes = {
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
+  isChartMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,

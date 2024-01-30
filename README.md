@@ -76,7 +76,6 @@ To update Worldview, pull down any branch or tag from GitHub. From the `main` br
 - [Custom Branding](doc/branding.md)
 - [Optional Features](doc/features.md)
 - [Developing](doc/developing.md)
-- [Deployment](doc/deployment.md)
 - [Testing](doc/testing.md)
 - [URL Parameters](doc/url_parameters.md)
 - [Uploading](doc/upload.md)

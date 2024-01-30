@@ -19,8 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Verify default page shows projection toolbar button in geographic projection map', async () => {
-  const { projToolbarButton, geographicMap } = selectors
+  const { geographicMap, modalCloseButton, projToolbarButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await expect(projToolbarButton).toBeVisible()
   await expect(geographicMap).toBeVisible()
 })

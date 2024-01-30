@@ -50,7 +50,7 @@ function InfoList (props) {
           ? 'exclamation-circle'
           : ['fas', 'bolt'],
       id: 'notifications_info_item',
-      badge: numberUnseen,
+      badge: type ? numberUnseen : 0,
       className: type ? `${type}-notification` : '',
       onClick: () => {
         notificationClick(object, numberUnseen);
@@ -149,7 +149,7 @@ function InfoList (props) {
         arr.splice(1, 0, getExploreWorldviewObj());
       }
     }
-    if (notifications.isActive && notifications.number > 0) {
+    if (notifications.isActive && notifications.total > 0) {
       arr.splice(2, 0, getNotificationListItem());
     }
     arr.push(getDistractionFreeObj());

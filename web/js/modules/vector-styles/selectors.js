@@ -3,6 +3,7 @@ import {
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   find as lodashFind,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 
 import update from 'immutability-helper';
@@ -11,13 +12,12 @@ import { stylefunction } from 'ol-mapbox-style';
 import {
   getMinValue, getMaxValue, selectedStyleFunction,
 } from './util';
-import {
-  getActiveLayers,
-} from '../layers/selectors';
+import util from '../../util/util';
+
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
- * layer definiteions. NOTE: This currently also will include the associate WMS
+ * layer definitions. NOTE: This currently also will include the associate WMS
  * breakpoint layers as well.
  *
  * @param {*} state
@@ -32,6 +32,21 @@ export function getVectorLayers(state) {
     const layers = layerGroup.getLayersArray ? layerGroup.getLayersArray() : layerGroup;
     return [...prev, ...layers];
   }, []);
+}
+
+export function getAllVectorStyles(layerId, index, state) {
+  const { config, vectorStyles } = state;
+  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
+  let vectorStyle = vectorStyles.custom[name];
+  if (!vectorStyle) {
+    throw new Error(`${name} Is not a rendered vectorStyle`);
+  }
+  if (!lodashIsUndefined(index)) {
+    if (vectorStyle.layers) {
+      vectorStyle = vectorStyle.layers[index];
+    }
+  }
+  return vectorStyle;
 }
 
 /**
@@ -53,21 +68,6 @@ export function getVectorStyle(layerId, index, groupStr, state) {
     return renderedVectorStyle;
   }
   return getAllVectorStyles(layerId, index, state);
-}
-
-export function getAllVectorStyles(layerId, index, state) {
-  const { config, vectorStyles } = state;
-  const name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
-  let vectorStyle = vectorStyles.custom[name];
-  if (!vectorStyle) {
-    throw new Error(`${name} Is not a rendered vectorStyle`);
-  }
-  if (!lodashIsUndefined(index)) {
-    if (vectorStyle.layers) {
-      vectorStyle = vectorStyle.layers[index];
-    }
-  }
-  return vectorStyle;
 }
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
@@ -96,7 +96,44 @@ export function setRange(layerId, props, index, palettes, state) {
   };
 }
 
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+const updateGlStylePalette = (glStyle, rgbPalette) => {
+  for (let i = 0; i < glStyle.layers.length; i += 1) {
+    const thisPaintObj = glStyle.layers[i].paint;
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-color')) {
+      thisPaintObj['line-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'circle-color')) {
+      thisPaintObj['circle-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'fill-color')) {
+      thisPaintObj['fill-color'] = rgbPalette;
+    }
+    if (Object.prototype.hasOwnProperty.call(thisPaintObj, 'line-width')) {
+      thisPaintObj['line-width'] = 2;
+    }
+  }
+  return glStyle;
+};
+
+const shouldRenderFeature = (feature, acceptableExtent) => {
+  if (!acceptableExtent) return true;
+  const midpoint = feature.getFlatCoordinates
+    ? feature.getFlatCoordinates()
+    : feature.getGeometry().getFlatCoordinates();
+  if (containsCoordinate(acceptableExtent, midpoint)) return true;
+  return false;
+};
+
+/** Sets the Style Function for the layer (this styles vector features)
+ *
+ * @param {Object} def | Layer definition
+ * @param {String} vectorStyleId | ID to lookup the vector style in the state
+ * @param {Object} vectorStyles | Contains styles of all vector products
+ * @param {Object} layer | OL layer object
+ * @param {Object} state | The entire state of the application
+ * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
+ */
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -104,20 +141,39 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { resolutions } = proj.selected;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
-  const glStyle = vectorStyles[styleId];
+  const customPalette = def.custom;
 
-  if (!layer || layer.isWMS) {
-    return; // WMS breakpoint tile
+  let glStyle = vectorStyles[styleId];
+  if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
+    const hexColor = state.palettes.custom[customPalette].colors[0];
+    const rgbPalette = util.hexToRGBA(hexColor);
+    glStyle = updateGlStylePalette(glStyle, rgbPalette);
+  } else if (!styleSelection) {
+    const customDefaultStyle = state.vectorStyles.customDefault[def.vectorStyle.id];
+    if (customDefaultStyle !== undefined) {
+      glStyle = customDefaultStyle;
+    }
+  }
+
+  if (!layer || layer.isWMS || glStyle === undefined) {
+    return;
+  }
+
+  // This is required to bust the openlayers functionCache
+  if (Object.prototype.hasOwnProperty.call(glStyle, 'id')) {
+    delete glStyle.id;
   }
 
   layer = layer.getLayers
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
+  // De-reference the glState object prior to applying the palette to the layer
+  glStyle = lodashCloneDeep(glStyle);
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
-  // Handle selected feature style
+  // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
     const acceptableExtent = extentStartX === 180
@@ -144,14 +200,12 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   return vectorStyleId;
 }
 
-const shouldRenderFeature = (feature, acceptableExtent) => {
-  if (!acceptableExtent) return true;
-  const midpoint = feature.getFlatCoordinates
-    ? feature.getFlatCoordinates()
-    : feature.getGeometry().getFlatCoordinates();
-  if (containsCoordinate(acceptableExtent, midpoint)) return true;
-  return false;
-};
+export function isActive(layerId, group, state) {
+  group = group || state.compare.activeString;
+  if (state.vectorStyles.custom[layerId]) {
+    return state.vectorStyles[group][layerId];
+  }
+}
 
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
@@ -170,13 +224,6 @@ export function getKey(layerId, groupStr, state) {
     keys.push(`max=${def.max}`);
   }
   return keys.join(',');
-}
-
-export function isActive(layerId, group, state) {
-  group = group || state.compare.activeString;
-  if (state.vectorStyles.custom[layerId]) {
-    return state.vectorStyles[group][layerId];
-  }
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
@@ -216,18 +263,11 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 export const applyStyle = (def, olVectorLayer, state) => {
   const { config } = state;
   const { vectorStyles } = config;
-  const activeLayers = getActiveLayers(state) || [];
-  const layerName = def.layer || def.id;
-  let vectorStyleId = def.vectorStyle.id;
+  const vectorStyleId = def.vectorStyle.id;
 
   if (!vectorStyles || !vectorStyleId) {
     return;
   }
 
-  activeLayers.forEach((layer) => {
-    if (layer.id === layerName && layer.custom) {
-      vectorStyleId = layer.custom;
-    }
-  });
   setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
 };

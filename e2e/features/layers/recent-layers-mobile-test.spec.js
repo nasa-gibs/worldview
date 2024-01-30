@@ -23,8 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Layer picker shows categories when first opened', async () => {
-  const { collapsedLayerButton, addLayers } = selectors
+  const { addLayers, collapsedLayerButton, modalCloseButton } = selectors
   await page.goto(url)
+  await modalCloseButton.click()
   await collapsedLayerButton.click()
   await addLayers.click()
   await assertCategories(page)
@@ -52,7 +53,7 @@ test('Recent tab shows layers that were selected', async () => {
 
 test('Clear list button empties the entire list', async () => {
   await page.locator('#clear-recent-layers').click()
-  const productList = await page.locator('.product-outter-list-case.layers-all')
+  const productList = await page.locator('.product-outer-list-case.layers-all')
   const noResults = await page.locator('.no-results')
   await expect(productList).not.toBeVisible()
   await expect(noResults).toBeVisible()

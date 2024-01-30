@@ -1,0 +1,1 @@
+On Feb. 24, 2023, an atmospheric river brought rain (in shades of green to yellow) to the coastal and the Central Valley regions. When the water vapor moved up and over the Sierra Nevada mountain range, it rapidly cooled to form snow  (in shades of blue to purple).

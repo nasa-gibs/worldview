@@ -8,12 +8,15 @@ import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
+import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
 import safeLocalStorage from '../../../util/local-storage';
+import ImagerySearch from './imagery-search';
+
 
 import {
   palettesTranslate,
@@ -337,16 +340,22 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
+      zot,
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
+    const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
+    const layerGroup = layer.layergroup;
 
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
         : '';
-    } else {
-      renderCustomizations = ''; // this.renderVectorStyles(); for future
+    } else if (layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+      // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
+      // Reference (MGRS/HLS Grid) has no need for palettes
+      renderCustomizations = this.renderCustomPalettes();
     }
 
     if (!layer.id) return '';
@@ -359,6 +368,8 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
+        {ttilerLayer && <BandSelection layer={layer} />}
+        {granuleMetadata && <ImagerySearch layer={layer} /> }
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>
     );
@@ -466,6 +477,7 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
+  onCustomizeBandClick: PropTypes.func,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
@@ -479,4 +491,5 @@ LayerSettings.propTypes = {
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,
+  zot: PropTypes.object,
 };

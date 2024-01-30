@@ -20,8 +20,8 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
-  UPDATE_LAYER_COLLECTION,
-  UPDATE_LAYER_DATE_COLLECTION,
+  UPDATE_DDV_LAYER,
+  UPDATE_COLLECTION,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -159,12 +159,13 @@ export function layerReducer(state = initialState, action) {
       };
 
     case TOGGLE_LAYER_VISIBILITY:
+      if (getLayerIndex() === -1) return state;
       return update(state, {
         [compareState]: {
           layers: {
             [getLayerIndex()]: {
               visible: {
-                $set: action.visible,
+                $set: action?.visible,
               },
             },
           },
@@ -185,10 +186,12 @@ export function layerReducer(state = initialState, action) {
 
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
       return update(state, {
         [compareState]: {
           layers: {
-            [getLayerIndex()]: {
+            [layerIndex]: {
               $merge: action.props,
             },
           },
@@ -197,10 +200,12 @@ export function layerReducer(state = initialState, action) {
     }
 
     case CLEAR_CUSTOM_PALETTE: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) { return state; }
       return update(state, {
         [compareState]: {
           layers: {
-            [getLayerIndex()]: {
+            [layerIndex]: {
               custom: {
                 $set: undefined,
               },
@@ -342,33 +347,49 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case UPDATE_LAYER_COLLECTION:
+    case UPDATE_COLLECTION: {
+      const updates = {};
+      action.payload.forEach((collection) => {
+        const {
+          id, date, type, version,
+        } = collection;
+        // If the layer doesn't exist, initialize it
+        if (!state.collections[id]) {
+          updates[id] = { $set: { dates: [{ version, type, date }] } };
+        } else {
+          // If the layer exists, prepare to push to the dates array
+          const newEntry = { date, type, version };
+          updates[id] = {
+            dates: { $push: [newEntry] },
+          };
+        }
+      });
       return update(state, {
         collections: {
+          $apply: (collections) => update(collections, updates),
+        },
+      });
+    }
+
+    // This is required because to update band combinations we need to actually remove and re-add these layers
+    // This case sets the ddv layer back to its original index before being removed and added again
+    case UPDATE_DDV_LAYER: {
+      const { layerIndex, id, layers } = action;
+      const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);
+      const [layerToMove] = layers.splice(indexToMove, 1);
+      layers.splice(layerIndex, 0, layerToMove);
+
+      return update(state, {
+        [compareState]: {
           $merge: {
-            [action.id]: {
-              dates: [],
-            },
+            layers,
+            overlayGroups: getOverlayGroups(layers, getPrevOverlayGroups()),
+            prevLayers: [],
+            layerIndex: action.layerIndex,
           },
         },
-
       });
-
-    case UPDATE_LAYER_DATE_COLLECTION:
-      return update(state, {
-        collections: {
-          [action.id]: {
-            dates: {
-              $push: [{
-                version: action.collection.version,
-                type: action.collection.type,
-                date: action.date,
-              }],
-            },
-          },
-        },
-
-      });
+    }
 
     default:
       return state;

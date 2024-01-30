@@ -1,11 +1,12 @@
 {
     "storyOrder": [
+        "surface_water_extent",
+        "atmospheric_rivers",
         "flood-product",
         "black_marble_night_lights",
         "geostationary",
         "fires_overview_2019",
         "worldview_intro",
-        "hls_intro",
         "clouds",
         "australia_fires_2019_2020",
         "dust_storms_overview_2019",

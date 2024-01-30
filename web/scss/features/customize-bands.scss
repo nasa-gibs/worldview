@@ -1,0 +1,108 @@
+.customize-bands-parent-info {
+    margin-bottom: 12px;
+
+    hr {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.5;
+    }
+
+    .current-band-info {
+        margin-left: 10px;
+        margin-bottom: 10px;
+
+        div {
+            line-height: 1.5;
+        }
+
+        .band-color {
+            display: inline-block;
+            min-width: 50px;
+            font-weight: bold;
+        }
+    }
+}
+
+.imagery-search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-top: 3px;
+}
+
+.customize-bands-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .band-selection-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .band-selection-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 1.5rem;
+
+        p {
+            margin-right: .75rem;
+        }
+
+        .band-selection-rwb-info {
+            margin-left: .75rem;
+        }
+
+        .band-selection-color-header {
+            font-weight: bold;
+        }
+    }
+
+    .band-selection-button-row {
+        margin-top: 1.5rem;
+    }
+
+    .band-selection-presets-container {
+        width: 100%;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+
+        .band-selection-presets-title-row p {
+            font-weight: bold;
+            margin-bottom: .5rem;
+        }
+
+        .band-selection-presets-scrollable {
+            overflow-y: scroll;
+            height: 300px;
+        }
+
+        .band-selection-preset-card {
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            height: 60px;
+            background-color: $wv-transparent-black;
+            color: $wv-white-font;
+            border: 2px solid $wv-dark-menu-border;
+
+            .band-selection-preset-image {
+                width: 60px;
+                height: 56px;
+            }
+        }
+
+        .selected-preset {
+            background-color: $wv-dark-blue;
+            border: 2px solid $wv-orange;
+        }
+    }
+}

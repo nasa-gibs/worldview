@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "HLS_Customizable_Landsat": {
+      "id": "HLS_Customizable_Landsat",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957657-LPCLOUD",
+      "title": "HLS Customizable Landsat 8 & 9 *BETA*",
+      "subtitle": "Landsat 8 & 9 / OLI",
+      "description": "multi-mission/hls/HLS_Customizable_Landsat",
+      "tags": "corrected surface landsat oli l30",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "ttiler",
+      "period": "daily",
+      "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
+      "orbitDirection": ["descending", "descending"],
+      "bandCombo": {
+        "r": "B07",
+        "g": "B05",
+        "b": "B04"
+      },
+      "disableSnapshot": true,
+      "wrapX": false,
+      "minZoom": 7,
+      "projections": {
+        "geographic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
+        }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
+    }
+  }
+}

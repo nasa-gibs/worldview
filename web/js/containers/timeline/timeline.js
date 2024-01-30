@@ -2,17 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import googleTagManager from 'googleTagManager';
 import { UncontrolledTooltip } from 'reactstrap';
-
 import {
   debounce as lodashDebounce,
   throttle as lodashThrottle,
   get as lodashGet,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
-
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
 import TimelineLayerCoveragePanel from '../../components/timeline/timeline-coverage/timeline-coverage';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/timescale-interval-change';
@@ -20,13 +18,12 @@ import DraggerContainer from '../../components/timeline/timeline-draggers/dragge
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
 import DateTooltip from '../../components/timeline/timeline-axis/date-tooltip/date-tooltip';
 import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
-
 import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
-
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 import TimelineRangeSelector from '../../components/range-selection/range-selection';
+import KioskTimeStamp from '../../components/timeline/kiosk-timestamp';
 
 import {
   getIsBetween,
@@ -76,6 +73,96 @@ import MobileComparisonToggle from '../../components/compare/mobile-toggle';
 const preventDefaultFunc = (e) => {
   e.preventDefault();
 };
+
+// get axisWidth and parentOffset for axis, footer, and leftOffset calculations
+const getOffsetValues = (innerWidth, hasSubDaily) => {
+  const parentOffset = (hasSubDaily ? 414 : 310) + 10;
+  const width = innerWidth - parentOffset - 88;
+  return { width, parentOffset };
+};
+
+// check if left arrow should be disabled on predicted decrement
+const checkLeftArrowDisabled = (
+  date,
+  delta,
+  timeScaleChangeUnit,
+  timelineStartDateLimit,
+) => {
+  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
+  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
+
+  const nextDecrementDateTime = nextDecrementDate.getTime();
+  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
+  return nextDecrementDateTime <= minMinusDeltaDateTime;
+};
+
+// check if right arrow should be disabled on predicted increment
+const checkRightArrowDisabled = (
+  date,
+  delta,
+  timeScaleChangeUnit,
+  timelineEndDateLimit,
+) => {
+  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
+
+  const startOfDayNextIncrement = nextIncMoment.startOf('day').valueOf();
+  const startOfDayLimit = moment.utc(timelineEndDateLimit).startOf('day').valueOf();
+
+  return startOfDayNextIncrement > startOfDayLimit;
+};
+
+const checkNowButtonDisabled = (
+  date,
+  timelineEndDateLimit,
+  hasFutureLayers,
+  nowOverride,
+  appNow,
+) => {
+  const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
+  let maxDateMoment;
+  if (nowOverride || hasFutureLayers) {
+    maxDateMoment = new Date(moment.utc(appNow).seconds(0).format());
+  } else {
+    maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
+  }
+  return dateTimeMoment.getTime() === maxDateMoment.getTime();
+};
+
+// get timelineEndDateLimit based on potential future layers
+const getTimelineEndDateLimit = (state) => {
+  const {
+    date, layers, compare, proj,
+  } = state;
+  const { appNow } = date;
+  const activeLayers = getActiveLayers(state);
+
+  let layerDateRange;
+  if (compare.active) {
+    // use all layers to keep timeline axis range consistent when switching between A/B
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
+  } else {
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    layerDateRange = getDateRange({}, activeLayersFiltered);
+  }
+
+  let timelineEndDateLimit;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
+    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
+    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
+      // if layerDateRange.end is after the set rounded quarter hour time, then update
+      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
+    }
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
+  return timelineEndDateLimit;
+};
+
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -518,17 +605,23 @@ class Timeline extends React.Component {
     if (e.target.tagName !== 'INPUT' && e.target.className !== 'form-range' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
       const timeScaleNumber = Number(TIME_SCALE_TO_NUMBER[timeScale]);
       const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
-      if (e.keyCode === 38) {
+      if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (timeScaleNumber > 1) {
           this.changeTimeScale(timeScaleNumber - 1);
         }
       // down arrow
-      } else if (e.keyCode === 40) {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         if (timeScaleNumber < maxTimeScaleNumber) {
           this.changeTimeScale(timeScaleNumber + 1);
         }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.handleArrowDateChange(-1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.handleArrowDateChange(1);
       }
     }
   };
@@ -925,7 +1018,7 @@ class Timeline extends React.Component {
       mobileBottom = 75;
       if (isEmbedModeActive) {
         mobileLeft = isCompareModeActive ? 90 : 10;
-        mobileBottom = 60;
+        mobileBottom = 56;
       }
     }
 
@@ -933,6 +1026,18 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
+  };
+
+  getStringFromDate = (dateObj, hasSubdailyLayers) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = months[dateObj.getMonth()];
+    const year = dateObj.getFullYear().toString();
+    const hours = dateObj.getUTCHours();
+    const minutes = dateObj.getUTCMinutes();
+    const timeString = hasSubdailyLayers ? ` ${`0${hours}`.slice(-2)}:${`0${minutes}`.slice(-2)}` : '';
+
+    return `${year} ${month} ${day}${timeString}`;
   };
 
   renderDateChangeArrows = () => {
@@ -958,6 +1063,8 @@ class Timeline extends React.Component {
       hasSubdailyLayers,
       isCompareModeActive,
       isDataDownload,
+      isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isMobilePhone,
       isMobileTablet,
@@ -979,6 +1086,7 @@ class Timeline extends React.Component {
           onDateChange={this.onDateChange}
           hasSubdailyLayers={hasSubdailyLayers}
           isMobile={isMobile}
+          isEmbedModeActive={isEmbedModeActive}
         />
         <MobileComparisonToggle />
         <div
@@ -1001,6 +1109,8 @@ class Timeline extends React.Component {
             isPortrait={isPortrait}
             clickAnimationButton={this.clickAnimationButton}
             hasSubdailyLayers={hasSubdailyLayers}
+            isKioskModeActive={isKioskModeActive}
+            isEmbedModeActive={isEmbedModeActive}
             disabled={animationDisabled}
             label={
                     isCompareModeActive
@@ -1027,6 +1137,7 @@ class Timeline extends React.Component {
       breakpoints,
       dateA,
       dateB,
+      displayStaticMap,
       draggerSelected,
       hasFutureLayers,
       hasSubdailyLayers,
@@ -1038,6 +1149,7 @@ class Timeline extends React.Component {
       isDataDownload,
       isDistractionFreeModeActive,
       isEmbedModeActive,
+      isKioskModeActive,
       isMobile,
       isTourActive,
       parentOffset,
@@ -1094,75 +1206,171 @@ class Timeline extends React.Component {
       && animationEndLocationDate;
 
     const containerDisplayStyle = {
-      display: isDistractionFreeModeActive ? 'none' : 'block',
+      display: isDistractionFreeModeActive ? 'block' : 'block',
     };
-
     return (
       <div
         className="timeline-container"
         style={containerDisplayStyle}
       >
         {initialLoadComplete && !isDistractionFreeModeActive
-            && (
-            <ErrorBoundary>
-              {isMobile || isEmbedModeActive
-              /* Mobile Timeline Size */
-                ? this.renderMobile()
-                /* Normal Timeline Size */
-                : !isDistractionFreeModeActive && (
-                  <section id="timeline" className="timeline-inner clearfix">
-                    <div
-                      id="timeline-header"
-                      className={`timeline-header-desktop ${hasSubdailyLayers ? 'subdaily' : ''}`}
-                      style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
-                    >
-                      {/* Date Selector, Interval, Arrow Controls */}
-                      <div id="date-selector-main">
-                        <DateSelector
-                          id={draggerSelected}
-                          idSuffix="timeline"
-                          date={new Date(selectedDate)}
-                          onDateChange={this.onDateChange}
-                          maxDate={new Date(timelineEndDateLimit)}
-                          minDate={new Date(timelineStartDateLimit)}
-                          subDailyMode={hasSubdailyLayers}
-                          fontSize={24}
-                        />
-                      </div>
-                      <div id="zoom-buttons-group">
-
-                        <TimeScaleIntervalChange
-                          timeScaleChangeUnit={timeScaleChangeUnit}
-                          hasSubdailyLayers={hasSubdailyLayers}
-                          modalType={customModalType.TIMELINE}
-                        />
-
-                        {this.renderDateChangeArrows()}
-                      </div>
-                      <AnimationButton
-                        clickAnimationButton={this.clickAnimationButton}
-                        disabled={animationDisabled}
-                        screenWidth={screenWidth}
-                        breakpoints={breakpoints}
-                        label={
-                        isCompareModeActive
-                          ? 'Animation feature is deactivated when Compare feature is active'
-                          : isDataDownload
-                            ? 'Animation feature is deactivated when Data Download feature is active'
-                            : ''
-                      }
+          && (
+          <ErrorBoundary>
+            {isMobile || isEmbedModeActive
+            /* Mobile Timeline Size */
+              ? this.renderMobile()
+              /* Normal Timeline Size */
+              : !isDistractionFreeModeActive && (
+                <section id="timeline" className="timeline-inner clearfix">
+                  <div
+                    id="timeline-header"
+                    className={`timeline-header-desktop ${hasSubdailyLayers ? 'subdaily' : ''}`}
+                    style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
+                  >
+                    {/* Date Selector, Interval, Arrow Controls */}
+                    <div id="date-selector-main" className={isKioskModeActive ? 'date-selector-kiosk' : ''}>
+                      <DateSelector
+                        id={draggerSelected}
+                        idSuffix="timeline"
+                        date={new Date(selectedDate)}
+                        onDateChange={this.onDateChange}
+                        maxDate={new Date(timelineEndDateLimit)}
+                        minDate={new Date(timelineStartDateLimit)}
+                        subDailyMode={hasSubdailyLayers}
+                        isKioskModeActive={isKioskModeActive}
+                        fontSize={24}
                       />
                     </div>
+                    <div id="zoom-buttons-group" className={isKioskModeActive ? 'd-none' : ''}>
 
-                    {!isTimelineHidden
-                      && (
-                      <div id="timeline-footer" className="notranslate">
-                        {/* Axis */}
-                        <TimelineAxis
-                          appNow={appNow}
+                      <TimeScaleIntervalChange
+                        timeScaleChangeUnit={timeScaleChangeUnit}
+                        hasSubdailyLayers={hasSubdailyLayers}
+                        modalType={customModalType.TIMELINE}
+                      />
+
+                      {this.renderDateChangeArrows()}
+                    </div>
+                    <AnimationButton
+                      clickAnimationButton={this.clickAnimationButton}
+                      disabled={animationDisabled}
+                      isKioskModeActive={isKioskModeActive}
+                      screenWidth={screenWidth}
+                      breakpoints={breakpoints}
+                      label={
+                      isCompareModeActive
+                        ? 'Animation feature is deactivated when Compare feature is active'
+                        : isDataDownload
+                          ? 'Animation feature is deactivated when Data Download feature is active'
+                          : ''
+                    }
+                    />
+                  </div>
+
+                  {!isTimelineHidden
+                    && (
+                    <div id="timeline-footer" className="notranslate">
+                      {/* Axis */}
+                      <TimelineAxis
+                        appNow={appNow}
+                        axisWidth={axisWidth}
+                        parentOffset={parentOffset}
+                        leftOffset={leftOffset}
+                        position={position}
+                        transformX={transformX}
+                        timeScale={timeScale}
+                        timelineStartDateLimit={timelineStartDateLimit}
+                        timelineEndDateLimit={timelineEndDateLimit}
+                        frontDate={frontDate}
+                        backDate={backDate}
+                        dateA={dateA}
+                        dateB={dateB}
+                        hoverTime={hoverTime}
+                        draggerSelected={draggerSelected}
+                        draggerTimeState={draggerTimeState}
+                        draggerTimeStateB={draggerTimeStateB}
+                        draggerPosition={draggerPosition}
+                        draggerPositionB={draggerPositionB}
+                        draggerVisible={draggerVisible}
+                        draggerVisibleB={draggerVisibleB}
+                        animationStartLocation={animationStartLocation}
+                        animationEndLocation={animationEndLocation}
+                        animStartLocationDate={animStartLocationDate}
+                        animEndLocationDate={animEndLocationDate}
+                        debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
+                        onDateChange={this.onDateChange}
+                        updatePositioning={this.updatePositioning}
+                        updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
+                        updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
+                        updatePositioningOnAxisStopDrag={this.updatePositioningOnAxisStopDrag}
+                        updateDraggerDatePosition={this.updateDraggerDatePosition}
+                        showHoverOn={this.showHoverOn}
+                        showHoverOff={this.showHoverOff}
+                        showHover={this.showHover}
+                        hasFutureLayers={hasFutureLayers}
+                        hasSubdailyLayers={hasSubdailyLayers}
+                        isCompareModeActive={isCompareModeActive}
+                        isAnimationPlaying={isAnimationPlaying}
+                        isAnimatingToEvent={isAnimatingToEvent}
+                        isTourActive={isTourActive}
+                        isAnimationDraggerDragging={isAnimationDraggerDragging}
+                        isDraggerDragging={isDraggerDragging}
+                        isTimelineDragging={isTimelineDragging}
+                        matchingTimelineCoverage={matchingTimelineCoverage}
+                      />
+
+                      <AxisHoverLine
+                        activeLayers={activeLayers}
+                        shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
+                        axisWidth={axisWidth}
+                        hoverLinePosition={hoverLinePosition}
+                        showHoverLine={showHoverLine}
+                        isTimelineDragging={isTimelineDragging}
+                        isAnimationDraggerDragging={isAnimationDraggerDragging}
+                        isDraggerDragging={isDraggerDragging}
+                        selectedDraggerPosition={selectedDraggerPosition}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
+                      />
+
+                      {/* Timeline Layer Coverage Panel */}
+                      <TimelineLayerCoveragePanel
+                        appNow={appNow}
+                        axisWidth={axisWidth}
+                        backDate={backDate}
+                        frontDate={frontDate}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
+                        matchingTimelineCoverage={matchingTimelineCoverage}
+                        parentOffset={parentOffset}
+                        positionTransformX={position + transformX}
+                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        timelineStartDateLimit={timelineStartDateLimit}
+                        timeScale={timeScale}
+                        toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
+                      />
+
+                      {isAnimationWidgetReady
+                        && (
+                        <TimelineRangeSelector
                           axisWidth={axisWidth}
-                          parentOffset={parentOffset}
-                          leftOffset={leftOffset}
+                          position={position}
+                          transformX={transformX}
+                          timeScale={timeScale}
+                          timelineStartDateLimit={timelineStartDateLimit}
+                          timelineEndDateLimit={timelineEndDateLimit}
+                          frontDate={frontDate}
+                          startLocation={animationStartLocation}
+                          endLocation={animationEndLocation}
+                          startLocationDate={animationStartLocationDate}
+                          endLocationDate={animationEndLocationDate}
+                          updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
+                          max={rangeSelectorMax}
+                        />
+                        )}
+
+                      {frontDate
+                        && (
+                        <DraggerContainer
+                          axisWidth={axisWidth}
                           position={position}
                           transformX={transformX}
                           timeScale={timeScale}
@@ -1170,9 +1378,6 @@ class Timeline extends React.Component {
                           timelineEndDateLimit={timelineEndDateLimit}
                           frontDate={frontDate}
                           backDate={backDate}
-                          dateA={dateA}
-                          dateB={dateB}
-                          hoverTime={hoverTime}
                           draggerSelected={draggerSelected}
                           draggerTimeState={draggerTimeState}
                           draggerTimeStateB={draggerTimeStateB}
@@ -1180,159 +1385,86 @@ class Timeline extends React.Component {
                           draggerPositionB={draggerPositionB}
                           draggerVisible={draggerVisible}
                           draggerVisibleB={draggerVisibleB}
-                          animationStartLocation={animationStartLocation}
-                          animationEndLocation={animationEndLocation}
-                          animStartLocationDate={animStartLocationDate}
-                          animEndLocationDate={animEndLocationDate}
-                          debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
-                          onDateChange={this.onDateChange}
-                          updatePositioning={this.updatePositioning}
-                          updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
-                          updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
-                          updatePositioningOnAxisStopDrag={this.updatePositioningOnAxisStopDrag}
+                          setDraggerVisibility={this.setDraggerVisibility}
+                          toggleShowDraggerTime={this.toggleShowDraggerTime}
+                          onChangeSelectedDragger={toggleActiveCompareState}
                           updateDraggerDatePosition={this.updateDraggerDatePosition}
-                          showHoverOn={this.showHoverOn}
-                          showHoverOff={this.showHoverOff}
-                          showHover={this.showHover}
-                          hasFutureLayers={hasFutureLayers}
-                          hasSubdailyLayers={hasSubdailyLayers}
                           isCompareModeActive={isCompareModeActive}
-                          isAnimationPlaying={isAnimationPlaying}
-                          isAnimatingToEvent={isAnimatingToEvent}
-                          isTourActive={isTourActive}
-                          isAnimationDraggerDragging={isAnimationDraggerDragging}
                           isDraggerDragging={isDraggerDragging}
-                          isTimelineDragging={isTimelineDragging}
-                          matchingTimelineCoverage={matchingTimelineCoverage}
+                          isAnimationPlaying={isAnimationPlaying}
                         />
+                        )}
 
-                        <AxisHoverLine
+                      {!isTimelineDragging
+                        && (
+                        <DateTooltip
                           activeLayers={activeLayers}
                           shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
                           axisWidth={axisWidth}
-                          hoverLinePosition={hoverLinePosition}
-                          showHoverLine={showHoverLine}
-                          isTimelineDragging={isTimelineDragging}
-                          isAnimationDraggerDragging={isAnimationDraggerDragging}
-                          isDraggerDragging={isDraggerDragging}
+                          leftOffset={leftOffset}
+                          hoverTime={hoverTime}
+                          selectedDate={selectedDate}
                           selectedDraggerPosition={selectedDraggerPosition}
+                          hasSubdailyLayers={hasSubdailyLayers}
+                          showDraggerTime={showDraggerTime}
+                          showHoverLine={showHoverLine}
                           isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                         />
-
-                        {/* Timeline Layer Coverage Panel */}
-                        <TimelineLayerCoveragePanel
-                          appNow={appNow}
-                          axisWidth={axisWidth}
-                          backDate={backDate}
-                          frontDate={frontDate}
-                          isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
-                          matchingTimelineCoverage={matchingTimelineCoverage}
-                          parentOffset={parentOffset}
-                          positionTransformX={position + transformX}
-                          setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
-                          timelineStartDateLimit={timelineStartDateLimit}
-                          timeScale={timeScale}
-                          toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
-                        />
-
-                        {isAnimationWidgetReady
-                          && (
-                          <TimelineRangeSelector
-                            axisWidth={axisWidth}
-                            position={position}
-                            transformX={transformX}
-                            timeScale={timeScale}
-                            timelineStartDateLimit={timelineStartDateLimit}
-                            timelineEndDateLimit={timelineEndDateLimit}
-                            frontDate={frontDate}
-                            startLocation={animationStartLocation}
-                            endLocation={animationEndLocation}
-                            startLocationDate={animationStartLocationDate}
-                            endLocationDate={animationEndLocationDate}
-                            updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
-                            max={rangeSelectorMax}
-                          />
-                          )}
-
-                        {frontDate
-                          && (
-                          <DraggerContainer
-                            axisWidth={axisWidth}
-                            position={position}
-                            transformX={transformX}
-                            timeScale={timeScale}
-                            timelineStartDateLimit={timelineStartDateLimit}
-                            timelineEndDateLimit={timelineEndDateLimit}
-                            frontDate={frontDate}
-                            backDate={backDate}
-                            draggerSelected={draggerSelected}
-                            draggerTimeState={draggerTimeState}
-                            draggerTimeStateB={draggerTimeStateB}
-                            draggerPosition={draggerPosition}
-                            draggerPositionB={draggerPositionB}
-                            draggerVisible={draggerVisible}
-                            draggerVisibleB={draggerVisibleB}
-                            setDraggerVisibility={this.setDraggerVisibility}
-                            toggleShowDraggerTime={this.toggleShowDraggerTime}
-                            onChangeSelectedDragger={toggleActiveCompareState}
-                            updateDraggerDatePosition={this.updateDraggerDatePosition}
-                            isCompareModeActive={isCompareModeActive}
-                            isDraggerDragging={isDraggerDragging}
-                            isAnimationPlaying={isAnimationPlaying}
-                          />
-                          )}
-
-                        {!isTimelineDragging
-                          && (
-                          <DateTooltip
-                            activeLayers={activeLayers}
-                            shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
-                            axisWidth={axisWidth}
-                            leftOffset={leftOffset}
-                            hoverTime={hoverTime}
-                            selectedDate={selectedDate}
-                            selectedDraggerPosition={selectedDraggerPosition}
-                            hasSubdailyLayers={hasSubdailyLayers}
-                            showDraggerTime={showDraggerTime}
-                            showHoverLine={showHoverLine}
-                            isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
-                          />
-                          )}
-                      </div>
-                      )}
-
-                    {/* Custom Interval Selector Widget */}
-                    <CustomIntervalSelector
-                      modalOpen={timelineCustomModalOpen}
-                      hasSubdailyLayers={hasSubdailyLayers}
-                    />
-
-                    {/* Zoom Level Change Controls */}
-                    <AxisTimeScaleChange
-                      timeScale={timeScale}
-                      changeTimeScale={this.changeTimeScale}
-                      isDraggerDragging={isDraggerDragging}
-                      hasSubdailyLayers={hasSubdailyLayers}
-                      timelineHidden={isTimelineHidden}
-                    />
-
-                    {/* Open/Close Chevron */}
-                    <div
-                      id="timeline-hide"
-                      aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
-                      onClick={this.toggleHideTimeline}
-                    >
-                      <UncontrolledTooltip id="center-align-tooltip" target="timeline-hide" placement="top">
-                        {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
-                      </UncontrolledTooltip>
-                      <div
-                        className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
-                      />
+                        )}
                     </div>
-                  </section>
-                )}
-            </ErrorBoundary>
-            )}
+                    )}
+
+                  {/* Custom Interval Selector Widget */}
+                  <CustomIntervalSelector
+                    modalOpen={timelineCustomModalOpen}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                  />
+
+                  {/* Zoom Level Change Controls */}
+                  <AxisTimeScaleChange
+                    timeScale={timeScale}
+                    changeTimeScale={this.changeTimeScale}
+                    isDraggerDragging={isDraggerDragging}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                    timelineHidden={isTimelineHidden}
+                  />
+
+                  {/* Open/Close Chevron */}
+                  <div
+                    id="timeline-hide"
+                    aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                    onClick={this.toggleHideTimeline}
+                  >
+                    <UncontrolledTooltip id="center-align-tooltip" target="timeline-hide" placement="top">
+                      {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                    </UncontrolledTooltip>
+                    <div
+                      className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
+                    />
+                  </div>
+                </section>
+              )}
+          </ErrorBoundary>
+          )}
+        {initialLoadComplete && isDistractionFreeModeActive
+        && (
+          <ErrorBoundary>
+            <section id="distraction-free-timeline" className="clearfix">
+              <div
+                id="distraction-free-timeline-header"
+                className={`distraction-free-timeline-header ${hasSubdailyLayers ? 'subdaily' : ''} ${isMobile ? 'mobile' : ''}`}
+                style={
+                  {
+                    marginRight: isTimelineHidden ? '20px' : '0',
+                    display: displayStaticMap ? 'none' : 'flex',
+                  }
+                }
+              >
+                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} isKioskModeActive={isKioskModeActive} />
+              </div>
+            </section>
+          </ErrorBoundary>
+        )}
       </div>
     );
   }
@@ -1368,7 +1500,7 @@ function mapStateToProps(state) {
   } = date;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
-  const { isDistractionFreeModeActive } = ui;
+  const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const {
@@ -1492,6 +1624,8 @@ function mapStateToProps(state) {
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
     isEmbedModeActive,
+    isKioskModeActive,
+    displayStaticMap,
   };
 }
 
@@ -1587,6 +1721,7 @@ Timeline.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
@@ -1616,93 +1751,4 @@ Timeline.propTypes = {
   toggleCustomModal: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
-};
-
-// get axisWidth and parentOffset for axis, footer, and leftOffset calculations
-const getOffsetValues = (innerWidth, hasSubDaily) => {
-  const parentOffset = (hasSubDaily ? 414 : 310) + 10;
-  const width = innerWidth - parentOffset - 88;
-  return { width, parentOffset };
-};
-
-// check if left arrow should be disabled on predicted decrement
-const checkLeftArrowDisabled = (
-  date,
-  delta,
-  timeScaleChangeUnit,
-  timelineStartDateLimit,
-) => {
-  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
-  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
-  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
-
-  const nextDecrementDateTime = nextDecrementDate.getTime();
-  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
-  return nextDecrementDateTime <= minMinusDeltaDateTime;
-};
-
-// check if right arrow should be disabled on predicted increment
-const checkRightArrowDisabled = (
-  date,
-  delta,
-  timeScaleChangeUnit,
-  timelineEndDateLimit,
-) => {
-  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
-  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
-
-  const nextIncrementDateTime = nextIncrementDate.getTime();
-  const maxPlusDeltaDateTime = new Date(timelineEndDateLimit).getTime();
-  return nextIncrementDateTime > maxPlusDeltaDateTime;
-};
-
-const checkNowButtonDisabled = (
-  date,
-  timelineEndDateLimit,
-  hasFutureLayers,
-  nowOverride,
-  appNow,
-) => {
-  const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
-  let maxDateMoment;
-  if (nowOverride || hasFutureLayers) {
-    maxDateMoment = new Date(moment.utc(appNow).seconds(0).format());
-  } else {
-    maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
-  }
-  return dateTimeMoment.getTime() === maxDateMoment.getTime();
-};
-
-// get timelineEndDateLimit based on potential future layers
-const getTimelineEndDateLimit = (state) => {
-  const {
-    date, layers, compare, proj,
-  } = state;
-  const { appNow } = date;
-  const activeLayers = getActiveLayers(state);
-
-  let layerDateRange;
-  if (compare.active) {
-    // use all layers to keep timeline axis range consistent when switching between A/B
-    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
-    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
-    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
-  } else {
-    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
-    layerDateRange = getDateRange({}, activeLayersFiltered);
-  }
-
-  let timelineEndDateLimit;
-  if (layerDateRange && layerDateRange.end > appNow) {
-    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
-    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
-    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
-      // if layerDateRange.end is after the set rounded quarter hour time, then update
-      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
-    }
-  } else {
-    timelineEndDateLimit = getISODateFormatted(appNow);
-  }
-  return timelineEndDateLimit;
 };

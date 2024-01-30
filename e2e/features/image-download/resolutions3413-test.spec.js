@@ -32,9 +32,10 @@ test.afterAll(async () => {
 })
 
 test('In the arctic, top zoom levels is 5km', async () => {
-  const { imageResolution } = selectors
+  const { imageResolution, modalCloseButton } = selectors
   const url = await joinUrl(startParams, null)
   await page.goto(url)
+  await modalCloseButton.click()
   await openImageDownloadPanel(page)
   await expect(imageResolution).toHaveValue('20')
   await closeImageDownloadPanel(page)

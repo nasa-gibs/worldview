@@ -20,7 +20,9 @@ test.afterAll(async () => {
 })
 
 test('Mobile comparison A|B toggle buttons are visible and only A is selected by default', async () => {
+  const { modalCloseButton } = selectors
   await page.goto(swipeAndAIsActive)
+  await modalCloseButton.click()
   const aMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(1)')
   const bMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(2)')
   await expect(aMobileCompareButton).toHaveClass(/compare-btn-selected/)

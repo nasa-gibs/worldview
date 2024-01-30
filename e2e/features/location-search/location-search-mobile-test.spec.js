@@ -21,8 +21,9 @@ test.afterAll(async () => {
 })
 
 test('Location Search component is visible by default', async () => {
-  const { locationSearchMobileDialog } = selectors
+  const { locationSearchMobileDialog, modalCloseButton } = selectors
   await page.goto(skipTour)
+  await modalCloseButton.click()
   await expect(locationSearchMobileDialog).not.toBeVisible()
 })
 

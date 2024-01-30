@@ -1,5 +1,5 @@
-import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
+import googleTagManager from 'googleTagManager';
 import safeLocalStorage from '../../util/local-storage';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
@@ -19,7 +19,12 @@ export function mapLocationToTourState(
   config,
 ) {
   const isEmbedModeActive = parameters.em && parameters.em === 'true';
-  if (parameters.tr && !isEmbedModeActive) {
+  if (parameters.tr && isEmbedModeActive) {
+    stateFromLocation = update(stateFromLocation, {
+      tour: { active: { $set: true } },
+      embed: { isEmbedModeActive: { $set: true } },
+    });
+  } else if (parameters.tr) {
     stateFromLocation = update(stateFromLocation, {
       tour: { active: { $set: true } },
     });

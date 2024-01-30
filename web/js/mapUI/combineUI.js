@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cache from 'cachai';
+// eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue';
 import util from '../util/util';
 import MapRunningData from '../map/runningdata';
@@ -93,7 +94,7 @@ function CombineUI(props) {
       util.warn(e);
     }
 
-    registerMapMouseHandlers(uiProperties.map.proj);
+    setTimeout(() => registerMapMouseHandlers(uiProperties.map.proj));
 
     // Sink all focus on inputs if click unhandled
     document.addEventListener('click', (e) => {

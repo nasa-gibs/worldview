@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createPortal } from 'react-dom';
+import googleTagManager from 'googleTagManager';
 import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
 import {

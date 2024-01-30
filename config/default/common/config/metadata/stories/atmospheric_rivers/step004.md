@@ -1,0 +1,1 @@
+This comparison of true-color corrected reflectance imagery of Feb. 15 and Mar. 2 show large amounts of snow that fell as a result of a strong atmospheric river over the western United States. Large amounts of snow can be seen in white over the Sierra Nevada mountains and the state of Nevada on the right "B" side.

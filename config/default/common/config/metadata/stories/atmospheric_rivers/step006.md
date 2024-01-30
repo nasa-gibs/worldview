@@ -1,0 +1,1 @@
+This comparison of snow mass from Feb. 15 and Mar. 2 shows the incredible amount of snow mass, in kg/m<sup>2</sup>, that accumulated over the Sierra Nevadas.

@@ -1,0 +1,36 @@
+{
+    "layers": {
+      "HLS_NDSI_Sentinel": {
+        "id": "HLS_NDSI_Sentinel",
+        "enableCMRDataFinder": true,
+        "collectionConceptID": "C2021957295-LPCLOUD",
+        "title": "Snow Index (NDSI) *BETA*",
+        "subtitle": "Sentinel 2A & 2B / MSI",
+        "description": "multi-mission/hls/HLS_NDSI_Sentinel",
+        "tags": "corrected surface Sentinel msi s30 ndsi",
+        "group": "overlays",
+        "layergroup": "Snow Indices",
+        "format": "image/png",
+        "type": "ttiler",
+        "period": "daily",
+        "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+        "orbitDirection": ["descending", "descending"],
+        "bandCombo": {
+            "assets": ["B03", "B11"],
+            "expression": "(B03-B11)/(B03+B11)",
+            "rescale": "-1,1",
+            "colormap_name": "winter_r"
+        },
+        "disableSnapshot": true,
+        "minZoom": 7,
+        "wrapX": false,
+        "projections": {
+          "geographic": {
+            "source": "DDV",
+            "matrixSet": "31.25m"
+          }
+        },
+        "startDate": "2022-01-01T00:00:00Z"
+      }
+    }
+  }

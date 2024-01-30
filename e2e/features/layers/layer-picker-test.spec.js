@@ -20,8 +20,9 @@ test.afterAll(async () => {
 })
 
 test('Layer picker shows categories when first opened', async () => {
-  const { addLayers } = selectors
+  const { addLayers, modalCloseButton } = selectors
   await page.goto(url)
+  await modalCloseButton.click()
   await addLayers.click()
   await assertCategories(page)
 })
@@ -108,8 +109,8 @@ test('"Available 2013 May 15" filter removes items not available from list, adds
   await expect(tooltip).toBeVisible()
   await layerPickerBackButton.hover()
   await availableFilterCheckbox.click()
-  await expect(layersSearchRow).toHaveCount(4)
-  await expect(layerResultsCountText).toContainText('Showing 4 out of')
+  await expect(layersSearchRow).toHaveCount(5)
+  await expect(layerResultsCountText).toContainText('Showing 5 out of')
   const filterChip = await page.locator('.filter-chip')
   await expect(filterChip).toHaveCount(1)
 })
@@ -125,15 +126,15 @@ test('Closing and reopening layer picker restores state.', async () => {
     layerDetails,
     layerDetailsDateRange
   } = selectors
-  await page.locator('.product-outter-list-case .search-row:nth-child(1)').click()
-  await expect(layerDetailHeader).toContainText('Corrected Reflectance')
+  await page.locator('.product-outer-list-case .search-row:nth-child(1)').click()
+  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
   await layersModalCloseButton.click()
   await expect(layersAll).not.toBeVisible()
   await addLayers.click()
-  await expect(layersSearchRow).toHaveCount(4)
-  await expect(layerResultsCountText).toContainText('Showing 4 out of')
+  await expect(layersSearchRow).toHaveCount(5)
+  await expect(layerResultsCountText).toContainText('Showing 5 out of')
   await expect(layerDetails).toBeVisible()
-  await expect(layerDetailHeader).toContainText('Corrected Reflectance')
+  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
   await expect(layerDetailsDateRange).toBeVisible()
   const filterChip = await page.locator('.filter-chip')
   await expect(filterChip).toHaveCount(1)
@@ -167,8 +168,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(10)
-  await expect(layerResultsCountText).toContainText('Showing 10 out of')
+  await expect(layersSearchRow).toHaveCount(12)
+  await expect(layerResultsCountText).toContainText('Showing 12 out of')
 })
 
 test('Finding layer by ID with search', async () => {
@@ -334,8 +335,8 @@ test('Searching in arctic projection', async () => {
     layersModalCloseButton
   } = selectors
   await layersSearchField.fill('sea')
-  await expect(layersSearchRow).toHaveCount(15)
-  await expect(layerResultsCountText).toContainText('Showing 15 out of')
+  await expect(layersSearchRow).toHaveCount(17)
+  await expect(layerResultsCountText).toContainText('Showing 17 out of')
   await layerPickerBackButton.click()
   await expect(layerBrowseDetail).toBeVisible()
   await layersModalCloseButton.click()

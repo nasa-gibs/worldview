@@ -47,6 +47,12 @@ beforeEach(() => {
   };
 });
 
+function doAsync(c) {
+  setTimeout(() => {
+    c(true);
+  }, 10);
+}
+
 test('if there is a feature at pixel dispatch changeCursor action', () => {
   map.hasFeatureAtPixel = () => true;
   map.forEachFeatureAtPixel = () => {};
@@ -72,8 +78,3 @@ test('Check that hover changes', () => {
 test('Check that cursor-hover class is not present', () => {
   expect(component.toJSON()).toMatchSnapshot();
 });
-function doAsync(c) {
-  setTimeout(() => {
-    c(true);
-  }, 10);
-}

@@ -18,8 +18,9 @@ test.afterAll(async () => {
 })
 
 test('Animation is disabled when compare mode active', async () => {
-  const { animationButtonCase, animationWidget } = selectors
+  const { animationButtonCase, animationWidget, modalCloseButton } = selectors
   await page.goto(swipeAndAIsActive)
+  await modalCloseButton.click()
   await expect(animationButtonCase).toHaveClass(/wv-disabled-button/)
   const disableMessage = 'Animation feature is deactivated when Compare feature is active'
   await expect(animationButtonCase).toHaveAttribute('aria-label', disableMessage)
@@ -82,8 +83,9 @@ test('Removing layer removes correct layer from correct layer group', async () =
 })
 
 test('Collapse layer list with B state and test label shows correct number of layers', async () => {
-  const { toggleButton, collapsedToggleButton } = selectors
+  const { toggleButton, collapsedToggleButton, modalCloseButton } = selectors
   await page.goto(spyAndBIsActive)
+  await modalCloseButton.click()
   await expect(collapsedToggleButton).not.toBeVisible()
   await toggleButton.click()
   await expect(collapsedToggleButton).toBeVisible()

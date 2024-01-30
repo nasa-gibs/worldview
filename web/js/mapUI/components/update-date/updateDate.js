@@ -35,26 +35,6 @@ function UpdateDate(props) {
     vectorStyleState,
   } = props;
 
-  useEffect(() => {
-    actionSwitch();
-  }, [action]);
-
-  const actionSwitch = () => {
-    if (action.type === dateConstants.SELECT_DATE) {
-      if (ui.processingPromise) {
-        return new Promise((resolve) => {
-          resolve(ui.processingPromise);
-        }).then(() => {
-          ui.processingPromise = null;
-          return updateDate(action.outOfStep);
-        });
-      }
-      return updateDate(action.outOfStep);
-    } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
-      return updateDate();
-    }
-  };
-
   function findLayerIndex({ id }) {
     const layerGroup = getActiveLayerGroup(layerState);
     const layers = layerGroup.getLayers().getArray();
@@ -79,7 +59,7 @@ function UpdateDate(props) {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
   }
 
-  async function updateCompareLayer (def, index, layerCollection) {
+  async function updateCompareLayer (def, index, mapLayerCollection) {
     const { createLayer } = ui;
     const options = {
       group: activeString,
@@ -87,11 +67,11 @@ function UpdateDate(props) {
       ...getGranuleOptions(granuleState, def, activeString),
     };
     const updatedLayer = await createLayer(def, options);
-    layerCollection.setAt(index, updatedLayer);
+    mapLayerCollection.setAt(index, updatedLayer);
     compareMapUi.update(activeString);
   }
 
-  async function updateDate(outOfStepChange) {
+  async function updateDate(outOfStepChange, skipTtiler) {
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
@@ -112,7 +92,7 @@ function UpdateDate(props) {
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length) {
-        await updateCompareLayer(def, index, mapLayerCollection);
+        await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
       } else if (temporalLayer) {
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
@@ -133,6 +113,29 @@ function UpdateDate(props) {
       preloadNextTiles();
     }
   }
+
+  const actionSwitch = () => {
+    if (action.type === dateConstants.SELECT_DATE) {
+      if (ui.processingPromise) {
+        return new Promise((resolve) => {
+          resolve(ui.processingPromise);
+        }).then(() => {
+          ui.processingPromise = null;
+          return updateDate(action.outOfStep);
+        });
+      }
+      return updateDate(action.outOfStep);
+    } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
+      const outOfStep = false;
+      // if date not changing we do not want to recreate ttiler layer
+      const skipTtiler = true;
+      return updateDate(outOfStep, skipTtiler);
+    }
+  };
+
+  useEffect(() => {
+    actionSwitch();
+  }, [action]);
 
   return null;
 }

@@ -6,7 +6,7 @@ import {
 
 export default function LoadingIndicator(props) {
   const {
-    onClose, title, bodyMsg, loadedItems, totalItems,
+    onClose, title, bodyMsg, loadedItems, totalItems, isKioskModeActive,
   } = props;
 
   const msgStyle = {
@@ -31,7 +31,7 @@ export default function LoadingIndicator(props) {
     </button>
   );
 
-  return (
+  return !isKioskModeActive && (
     <Modal
       isOpen
       toggle={onClose}
@@ -56,4 +56,5 @@ LoadingIndicator.propTypes = {
   bodyMsg: PropTypes.string,
   loadedItems: PropTypes.number,
   totalItems: PropTypes.number,
+  isKioskModeActive: PropTypes.bool,
 };

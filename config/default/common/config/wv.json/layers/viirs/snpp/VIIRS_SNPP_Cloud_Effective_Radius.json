@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Cloud_Effective_Radius": {
+      "id": "VIIRS_SNPP_Cloud_Effective_Radius",
+      "description": "viirs/snpp/VIIRS_SNPP_Cloud_Effective_Radius",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Effective Radius",
+      "wrapadjacentdays": true
+    }
+  }
+}
