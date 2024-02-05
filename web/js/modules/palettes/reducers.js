@@ -25,6 +25,7 @@ export const defaultPaletteState = {
   isLoading: {},
 };
 export function getInitialPaletteState(config) {
+  console.log(config);
   const rendered = lodashGet(config, 'palettes.rendered') || {};
   const custom = lodashGet(config, 'palettes.custom') || {};
   return lodashAssign({}, defaultPaletteState, {

@@ -197,6 +197,7 @@ LookupImageTile.prototype.load = function() {
 };
 
 export default function lookupFactory(lookup, sourceOptions) {
+  console.log({ lookup, sourceOptions });
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
     return new LookupImageTile(
       lookup,

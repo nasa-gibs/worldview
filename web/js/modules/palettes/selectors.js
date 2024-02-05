@@ -143,6 +143,7 @@ const useLookup = function(layerId, palettesObj, state) {
 
 // Looks up options/colormaps/layer.xml colormap entry
 export function getLookup(layerId, groupstr, state) {
+  // console.log({ layerId, groupstr, state });
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
