@@ -101,10 +101,9 @@ function MapUI(props) {
   const [preloadAction, setPreloadAction] = useState({});
 
   // eslint-disable-next-line no-unused-vars
-  const [devTestMode, setDevTestMode] = useState(true);
+  const [devTestMode, setDevTestMode] = useState(false);
 
   const subscribeToStore = function(action) {
-    console.log(action.type);
     switch (action.type) {
       case CHANGE_PROJECTION: {
         return setProjectionTrigger((projectionTrigger) => projectionTrigger + 1);

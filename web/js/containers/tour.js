@@ -5,7 +5,6 @@ import update from 'immutability-helper';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
-  uniqBy,
   isEmpty as lodashIsEmpty,
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
@@ -18,17 +17,11 @@ import AlertUtil from '../components/util/alert';
 import safeLocalStorage from '../util/local-storage';
 
 import {
-  preloadPalettes,
-  hasCustomTypePalette,
-} from '../modules/palettes/util';
-import {
   clearCustoms,
 } from '../modules/palettes/actions';
-import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
-import { layersParse12 } from '../modules/layers/util';
 import {
   endTour as endTourAction,
   selectStory as selectStoryAction,
@@ -38,7 +31,6 @@ import { resetProductPickerState as resetProductPickerStateAction } from '../mod
 import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
-import util from '../util/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -484,8 +476,6 @@ const mapDispatchToProps = (dispatch) => ({
     const location = update(history.location, {
       search: { $set: search },
     });
-    const parameters = util.fromQueryString(search);
-    let layers = [];
 
     // Record selected story's id, current steps, and total steps to analytics
     googleTagManager.pushEvent({
@@ -501,26 +491,8 @@ const mapDispatchToProps = (dispatch) => ({
     if (!lodashIsEmpty(rendered)) {
       dispatch(clearCustoms());
     }
-    if (
-      (parameters.l && hasCustomTypePalette(parameters.l))
-      || (parameters.l1 && hasCustomTypePalette(parameters.l1))
-    ) {
-      layers = layersParse12(parameters.l, config);
-      if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
-        layers.push(layersParse12(parameters.l1, config));
-      }
-      layers = uniqBy(layers, 'id');
 
-      preloadPalettes(layers, rendered, true).then((obj) => {
-        dispatch({
-          type: BULK_PALETTE_RENDERING_SUCCESS,
-          rendered: obj.rendered,
-        });
-        dispatch({ type: LOCATION_POP_ACTION, payload: location });
-      });
-    } else {
-      dispatch({ type: LOCATION_POP_ACTION, payload: location });
-    }
+    dispatch({ type: LOCATION_POP_ACTION, payload: location });
   },
   startTour: () => {
     dispatch(startTourAction());

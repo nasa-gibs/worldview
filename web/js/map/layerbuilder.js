@@ -374,7 +374,6 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
-    // console.log(!!isPaletteActive(id, options.group, state));
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);

@@ -149,7 +149,6 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       return lodashFindIndex(activeLayers, { id: layerId });
     };
     const layerIndex = state.layers[groupName].layers[getLayerIndex()];
-    // const layerIndex = true;
     if (layerIndex) {
       dispatch({
         type: SET_DISABLED_CLASSIFICATION,
