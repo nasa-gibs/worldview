@@ -11,9 +11,9 @@
                   "description": "gedi/AbovegroundBiomass",
                   "image": "",
                   "settings": [
-                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_Mean_201904-202108",
-                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_StandardError_201904-202108",
-                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_PercentStandardError_201904-202108"
+                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_Mean_201904-202303",
+                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_StandardError_201904-202303",
+                  "GEDI_ISS_L4B_Aboveground_Biomass_Density_PercentStandardError_201904-202303"
                   ]
               }
           }
