@@ -5,7 +5,7 @@
             "title":    "Canopy Characteristics",
             "subtitle": "ISS/GEDI",
             "sources": {
-                "AVISO": {
+                "ISS/GEDI": {
                     "id": "iss-gedi",
                     "title": "ISS/GEDI",
                     "description": "gedi/LandSurfaceMetrics",

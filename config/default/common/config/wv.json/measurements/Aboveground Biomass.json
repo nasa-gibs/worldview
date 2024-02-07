@@ -5,7 +5,7 @@
           "title":    "Aboveground Biomass",
           "subtitle": "ISS/GEDI",
           "sources": {
-              "AVISO": {
+              "ISS/GEDI": {
                   "id": "iss-gedi",
                   "title": "ISS/GEDI",
                   "description": "gedi/AbovegroundBiomass",
