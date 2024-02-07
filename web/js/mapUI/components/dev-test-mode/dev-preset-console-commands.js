@@ -16,18 +16,6 @@ function PresetConsoleCommands () {
     parameters: state.parameters,
   }));
 
-  window.olMap ??= map
-  window.activeLayers ??= activeLayers
-
-  const refreshAllLayers = function(layerSource) {
-    const layers = layerSource.getLayers().getArray();
-    layers.forEach((layer) => {
-      if (layer?.getLayers) return refreshAllLayers(layer);
-      layer.getSource().refresh();
-      layer.changed();
-    });
-  }
-
   const getZoom = () => {
     const zoom = map.getView().getZoom();
     console.log(zoom);
@@ -91,12 +79,6 @@ function PresetConsoleCommands () {
           onClick={getParameters}
         >
           Get Parameters
-        </Button>
-        <Button
-          style={{ backgroundColor: '#d54e21', width: '48%' }}
-          onClick={() => refreshAllLayers(map)}
-        >
-          Refresh All Layers
         </Button>
       </div>
     </div>
