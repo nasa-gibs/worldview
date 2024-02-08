@@ -1,3 +1,0 @@
-The Aboveground Biomass Density Percent Standard Error (L4B, v2, 2019 APR to 2021 AUG) layer is the standard error as a fraction of the estimated mean aboveground biomass density within the1 km x 1 km grid cell. If the percent standard error exceeds 100%, the cell values are truncated to 100. This layer is from the version 2 release of the Global Elevation Dynamics Investigation (GEDI) L4B gridded aboveground biomass density data covering the period between the 19th and the 138th mission weeks (2019-04-18 to 2021-08-04). The imagery resolution is 1km and is available globally within -52 and 52 degrees latitude.
-
-References: GEDI_L4B_Gridded_Biomass_2017 [doi:10.3334/ORNLDAAC/2017](https://doi.org/10.3334/ORNLDAAC/2017)

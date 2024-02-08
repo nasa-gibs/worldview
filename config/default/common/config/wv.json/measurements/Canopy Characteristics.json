@@ -5,12 +5,14 @@
             "title":    "Canopy Characteristics",
             "subtitle": "ISS/GEDI",
             "sources": {
-                "AVISO": {
+                "ISS/GEDI": {
                     "id": "iss-gedi",
                     "title": "ISS/GEDI",
                     "description": "gedi/LandSurfaceMetrics",
                     "image": "",
                     "settings": [
+                        "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202303",
+                        "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202303",
                         "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202201",
                         "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202201",
                         "GEDI_ISS_L3_Canopy_Height_Mean_RH100_201904-202108",

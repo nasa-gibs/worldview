@@ -1,0 +1,3 @@
+The Number of High-quality Waveforms (L4B, v2.1, 2019 APR to 2023 MAR) layer is the total number of high-quality waveforms across all ground tracks within the 1 km x 1 km grid cell. This layer is from the version 2.1 release of the Global Elevation Dynamics Investigation (GEDI) L4B gridded aboveground biomass density data covering the period between the 19th and the 223rd mission weeks (2019-04-18 to 2023-03-16). The imagery resolution is 1km and is available globally within -52 and 52 degrees latitude.
+
+References: GEDI_L4B_Gridded_Biomass_V2_1_2299 [doi:10.3334/ORNLDAAC/2299](https://doi.org/10.3334/ORNLDAAC/2299)
