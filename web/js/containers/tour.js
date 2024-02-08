@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import {
   findIndex as lodashFindIndex,
   get as lodashGet,
+  uniqBy,
   isEmpty as lodashIsEmpty,
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
@@ -17,15 +18,18 @@ import AlertUtil from '../components/util/alert';
 import safeLocalStorage from '../util/local-storage';
 
 import {
+  preloadPalettes,
+} from '../modules/palettes/util';
+import {
   clearCustoms,
 } from '../modules/palettes/actions';
 import {
-  BULK_PALETTE_RENDERING_SUCCESS,
   BULK_PALETTE_PRELOADING_SUCCESS,
 } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
+import { layersParse12 } from '../modules/layers/util';
 import {
   endTour as endTourAction,
   selectStory as selectStoryAction,
