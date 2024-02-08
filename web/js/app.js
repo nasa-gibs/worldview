@@ -22,14 +22,11 @@ import LocationSearch from './components/location-search/location-search';
 import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
-import FeatureAlert from './components/feature-alert/alert';
-import Alerts from './containers/alerts';
 import AlertContainer from './containers/alertContainer';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
 // actions
-import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
@@ -165,10 +162,11 @@ class App extends React.Component {
         <Toolbar />
         <MapInteractions />
         <AlertContainer
-          isTourActive
-          numberOutagesUnseen
-          isMobile
-          isEmbedModeActive />
+          isTourActive={isTourActive}
+          numberOutagesUnseen={numberOutagesUnseen}
+          isMobile={isMobile}
+          isEmbedModeActive={isEmbedModeActive}
+        />
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
