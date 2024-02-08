@@ -1,3 +1,20 @@
+.wv-alert-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  left: auto;
+  width: 850px;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .wv-alert-container {
   position: absolute;
   top: 60px;

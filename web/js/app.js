@@ -24,6 +24,7 @@ import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
+import AlertContainer from './containers/alertContainer';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
@@ -163,11 +164,11 @@ class App extends React.Component {
         <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
-        <div id="wv-alert-container" className="wv-alert-container">
-          <FeatureAlert />
-          <Alerts />
-          {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
-        </div>
+        <AlertContainer
+          isTourActive
+          numberOutagesUnseen
+          isMobile
+          isEmbedModeActive />
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
