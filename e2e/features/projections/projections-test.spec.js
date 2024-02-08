@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { switchProjections } = require('../../test-utils/hooks/wvHooks')
+const { switchProjections, closeModal } = require('../../test-utils/hooks/wvHooks')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 
 let page
@@ -19,9 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Verify default page shows projection toolbar button in geographic projection map', async () => {
-  const { geographicMap, modalCloseButton, projToolbarButton } = selectors
+  const { geographicMap, projToolbarButton } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(projToolbarButton).toBeVisible()
   await expect(geographicMap).toBeVisible()
 })
