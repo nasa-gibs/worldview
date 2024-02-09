@@ -1,25 +1,33 @@
 .wv-alert-dropdown {
   position: absolute;
   top: 60px;
-  right: 10px;
+  right: 50px;
   left: auto;
-  width: 850px;
-  display: flex;
-  justify-content: space-between;
+  width: 450px;
 
   button {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    color: #fff;
+    background: #282828;
+    border: #282828;
+    border-radius: 0;
+    min-height: 40px;
+    cursor: pointer;
+    padding: 0;
+    z-index: 100;
+    margin-bottom: 5px;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
 .wv-alert-container {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  left: auto;
+  max-height: 300px;
+  overflow-y: scroll;
 }
 
 .wv-alert {
