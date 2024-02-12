@@ -177,11 +177,13 @@ class Tour extends React.Component {
       config,
       renderedPalettes,
     );
-    preProcessStepLink(
-      `${currentStory.steps[1].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
-      config,
-      promiseImageryForTour,
-    );
+    if (currentStory.steps.length > 1) {
+      preProcessStepLink(
+        `${currentStory.steps[1].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
+        config,
+        promiseImageryForTour,
+      );
+    }
   }
 
   fetchMetadata(currentStory, stepIndex) {
