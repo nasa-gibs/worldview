@@ -121,10 +121,11 @@ export class VectorInteractions extends React.Component {
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         if (!layer) return;
         const def = lodashGet(layer, 'wv.def');
+        console.log(feature, layer, feature.getGeometry().getType());
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
         const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType()) || featureOutsideExtent) return;
+        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
         if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {

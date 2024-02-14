@@ -32,12 +32,14 @@ export async function requestAction(
   dispatch(startRequest(actionName, id));
   try {
     const response = await fetch(url, options);
+    console.log('hhh', response);
     const data = mimeType === 'application/json'
       ? await response.json()
       : await response.text();
     dispatch(fetchSuccess(actionName, data, id));
     return data;
   } catch (error) {
+    console.log('hhh', error);
     dispatch(fetchFailure(actionName, error, id));
     console.error(error);
   }

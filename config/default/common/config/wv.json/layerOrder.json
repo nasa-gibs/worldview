@@ -962,6 +962,7 @@
 		"ASTER_GDEM_Greyscale_Shaded_Relief",
 		"SRTM_Color_Index",
 		"GRanD_Reservoirs",
+		"AERONET_AOD_500NM",
 		"GRanD_Dams",
 		"Nuclear_Power_Plant_Locations",
 		"GRUMP_Settlements",

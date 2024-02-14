@@ -88,6 +88,9 @@
           ]
         }
       }
+    },
+    "AERONET": {
+      "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     }
   }
 }

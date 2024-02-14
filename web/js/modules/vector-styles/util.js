@@ -99,7 +99,7 @@ export function offsetLineStringStyle(feature, styleArray) {
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
-    const type = feature.getType();
+    const type = feature.getGeometry().getType();
     switch (type) {
       case 'Point':
         return selectedCircleStyle(style, size);
@@ -220,6 +220,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const desktopLimit = 12;
   const mobileLimit = 5;
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
+  console.log('hi');
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
     const featureId = feature.getId();
@@ -236,7 +237,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       return;
     }
 
-    const type = feature.getType();
+    const type = feature.getGeometry().getType();
+    console.log('loop', def, def.vectorData, def.title);
     if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return;

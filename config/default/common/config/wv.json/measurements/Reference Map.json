@@ -3,7 +3,7 @@
         "Reference Map": {
             "id": "reference-map",
             "title": "Reference Map",
-            "subtitle": "OpenStreetMap.org, WDPA",
+            "subtitle": "OpenStreetMap.org, WDPA, AERONET",
             "multichoice": true,
             "sources": {
                 "OpenStreetMap.org": {
@@ -26,6 +26,15 @@
                     "image": "",
                     "settings": [
                         "World_Database_on_Protected_Areas"
+                    ]
+                },
+                "AERONET": {
+                    "id": "aeronet",
+                    "title": "AERONET",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AERONET_AOD_500NM"
                     ]
                 }
             }

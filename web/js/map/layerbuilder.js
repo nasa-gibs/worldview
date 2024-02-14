@@ -9,10 +9,13 @@ import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
+import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
 import qs from 'qs';
-import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import OlLayerVector from 'ol/layer/Vector';
+import OlSourceVector from 'ol/source/Vector';
+import LayerVectorTile from 'ol/layer/VectorTile';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
 import lodashMerge from 'lodash/merge';
@@ -487,7 +490,147 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
+  const createLayerVectorAeronet = function(def, options, day, state, attributes) {
+    console.log(def.id, def, config, config.sources[def.source].matrixSets);
+    const { proj, animation } = state;
+    let date;
+    let gridExtent;
+    let layerExtent;
+    const selectedProj = proj.selected;
+    const source = config.sources[def.source];
+    const animationIsPlaying = animation.isPlaying;
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
+
+    if (!source) {
+      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+    }
+
+    if (day) {
+      if (day === 1) {
+        layerExtent = LEFT_WING_EXTENT;
+        gridExtent = [110, -90, 180, 90];
+      } else {
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = RIGHT_WING_EXTENT;
+      }
+    }
+
+    date = options.date || getSelectedDate(state);
+
+    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
+    const breakPointLayerDef = def.breakPointLayer;
+    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+
+    const vectorSource = new OlSourceVector({
+      format: new GeoJSON(),
+      loader: async () => {
+        console.log('loader');
+        const getData = async () => {
+          const urlParameters = `?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}&AOD15=1&AVG=10&if_no_html=1`;
+          const res = await fetch(source.url + urlParameters);
+          const data = await res.text();
+          return data;
+        };
+
+        const data = await getData();
+
+        const features = [];
+        const takenNames = {};
+        const split = data.split('\n');
+        if (split.length > 5) {
+          const key = split[5].split(',');
+          console.log('1', key);
+          for (let i = 6; i < split.length; i += 1) {
+            const split2 = split[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && rowObj.AOD_500nm > 0 && !takenNames[rowObj.AERONET_Site_Name]) {
+              const temp = {};
+              temp.type = 'Feature';
+              temp.geometry = { type: 'Point' };
+              temp.geometry.coordinates = [parseFloat(rowObj['Site_Longitude(Degrees)']), parseFloat(rowObj['Site_Latitude(Degrees)'])];
+              temp.properties = { name: rowObj.AERONET_Site_Name };
+              features.push(temp);
+              takenNames[rowObj.AERONET_Site_Name] = true;
+            }
+          }
+        }
+
+        console.log(features);
+        features.forEach((feature) => {
+          feature.MAIN_USE = 'Fisheries';
+        });
+
+        const geoJson = {
+          type: 'FeatureCollection',
+          features,
+        };
+
+        console.log('3', geoJson, proj.selected.crs);
+        const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
+        vectorSource.addFeatures(formattedFeatures);
+      },
+    });
+
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date)).slice(0, 10);
+    const className = `${def.id} ${requestDate}`;
+
+    const layer = new OlLayerVector({
+      extent: layerExtent,
+      className,
+      source: vectorSource,
+    });
+
+    layer.vectorData = {
+      id: def.id,
+    };
+
+    console.log('hi', layer, options);
+    applyStyle(def, layer, state, options);
+    layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
+
+    if (breakPointLayerDef && !animationIsPlaying) {
+      console.log('1a');
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const layerGroup = new OlLayerGroup({
+        layers: [layer, wmsLayer],
+      });
+      wmsLayer.wv = attributes;
+      return layerGroup;
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
+      console.log('2a');
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
+    }
+
+    console.log('3a');
+    return layer;
+  };
+
+  /**
+    *
+    * @param {object} def - Layer Specs
+    * @param {object} options - Layer options
+    * @param {number} day
+    * @param {object} state
+    * @param {object} attributes
+    */
   const createLayerVector = function(def, options, day, state, attributes) {
+    if (def.source === 'AERONET') {
+      console.log('aeronet');
+      return createLayerVectorAeronet(def, options, day, state, attributes);
+    }
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -573,6 +716,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
+      console.log('1');
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -583,6 +727,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (breakPointResolution && animationIsPlaying) {
+      console.log('2');
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -590,6 +735,7 @@ export default function mapLayerBuilder(config, cache, store) {
       return wmsLayer;
     }
 
+    console.log('3');
     return layer;
   };
 
@@ -819,7 +965,7 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
-            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
