@@ -494,7 +494,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVectorAeronet = function(def, options, day, state, attributes) {
-    // console.log(def.id, def, config, config.sources[def.source].matrixSets);
+    console.log(def.id, def, config, config.sources[def.source].matrixSets);
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -528,7 +528,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
       loader: async () => {
-        // console.log('loader');
         const getData = async () => {
           const urlParameters = `?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}&AOD15=1&AVG=10&if_no_html=1`;
           const res = await fetch(source.url + urlParameters);
@@ -562,7 +561,6 @@ export default function mapLayerBuilder(config, cache, store) {
           }
         }
 
-        // console.log('features', features);
         features.forEach((feature) => {
           feature.MAIN_USE = 'Fisheries';
         });
@@ -571,43 +569,7 @@ export default function mapLayerBuilder(config, cache, store) {
           type: 'FeatureCollection',
           features,
         };
-        console.log('geoJson', geoJson);
-        // const aeronetStyle = {
-        //   version: 8,
-        //   sources: {
-        //     AERONET_AOD_500NM: {
-        //       type: 'geojson',
-        //       data: geoJson,
-        //     },
-        //   },
-        //   layers: [
-        //     {
-        //       id: 'AERONET_AOD_500NM',
-        //       source: 'AERONET_AOD_500NM',
-        //       type: 'circle',
-        //       paint: {
-        //         'circle-radius': {
-        //           base: 2,
-        //           stops: [[12, 1], [22, 7]],
-        //         },
-        //         // 'circle-color': [
-        //         //   'case',
-        //         //   ['<', ['get', 'Magnitude'], 0.10], 'rgb(0, 41, 130)',
-        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.10], ['<', ['get', 'Magnitude'], 0.20]], 'rgb(  0,  76, 101)',
-        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.20], ['<', ['get', 'Magnitude'], 0.30]], 'rgb( 35, 119,  73)',
-        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.30], ['<', ['get', 'Magnitude'], 0.40]], 'rgb( 60, 163,  40)',
-        //         //   'rgb(135, 13, 0)',
-        //         // ],
-        //       },
-        //     },
-        //   ],
-        // };
-
-        // const style = await stylefunction(aeronetStyle, 'AERONET_AOD_500NM');
-        // vectorSource.setStyle(style);
-        // console.log('3', geoJson, proj.selected.crs);
         const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
-        // console.log('formattedFeatures', formattedFeatures);
         vectorSource.addFeatures(formattedFeatures);
       },
     });
@@ -619,32 +581,55 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: layerExtent,
       className,
       source: vectorSource,
-      style: new Style({
-        image: new Circle({
-          radius: 10,
-          fill: new Fill({
-            color: 'red',
+      // Use a style function to dynamically style the points based on features
+      style (feature, resolution) {
+        // Access the properties of the feature
+        const featureProperties = feature.getProperties();
+        // Extract the feature name
+        const { name } = featureProperties;
+        // Define styles based on the feature properties
+        const radius = 5;
+        let fillColor;
+        let strokeColor;
+
+        // Because the data we want to filter on is not currently defined as a feature, I arbitrarily split the color coding by first letter of the locaion
+        const firstLetterOfFeatureName = name.charAt(0).toUpperCase();
+
+        if (firstLetterOfFeatureName <= 'H') {
+          fillColor = 'blue';
+          strokeColor = 'white';
+        } else if (name <= 'P') {
+          fillColor = 'green';
+          strokeColor = 'white';
+        } else {
+          fillColor = 'red';
+          strokeColor = 'white';
+        }
+        // Return the style for the current feature
+        return new Style({
+          image: new Circle({
+            radius,
+            fill: new Fill({
+              color: fillColor,
+            }),
+            stroke: new Stroke({
+              color: strokeColor,
+            }),
           }),
-          stroke: new Stroke({
-            color: 'white',
-          }),
-        }),
-      }),
+        });
+      },
     });
 
     layer.vectorData = {
       id: def.id,
     };
 
-    // console.log('hi', def, layer, options);
-    applyStyle(def, layer, state, options);
-    console.log('applystyle returned');
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
-      // console.log('1a');
+      console.log('1a');
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -677,7 +662,7 @@ export default function mapLayerBuilder(config, cache, store) {
     */
   const createLayerVector = function(def, options, day, state, attributes) {
     if (def.source === 'AERONET') {
-      console.log('aeronet');
+      // console.log('aeronet');
       return createLayerVectorAeronet(def, options, day, state, attributes);
     }
     const { proj, animation } = state;
