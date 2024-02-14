@@ -16,6 +16,9 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import LayerVectorTile from 'ol/layer/VectorTile';
+import {
+  Circle, Fill, Stroke, Style,
+} from 'ol/style';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
 import lodashMerge from 'lodash/merge';
@@ -568,9 +571,43 @@ export default function mapLayerBuilder(config, cache, store) {
           type: 'FeatureCollection',
           features,
         };
+        console.log('geoJson', geoJson);
+        // const aeronetStyle = {
+        //   version: 8,
+        //   sources: {
+        //     AERONET_AOD_500NM: {
+        //       type: 'geojson',
+        //       data: geoJson,
+        //     },
+        //   },
+        //   layers: [
+        //     {
+        //       id: 'AERONET_AOD_500NM',
+        //       source: 'AERONET_AOD_500NM',
+        //       type: 'circle',
+        //       paint: {
+        //         'circle-radius': {
+        //           base: 2,
+        //           stops: [[12, 1], [22, 7]],
+        //         },
+        //         // 'circle-color': [
+        //         //   'case',
+        //         //   ['<', ['get', 'Magnitude'], 0.10], 'rgb(0, 41, 130)',
+        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.10], ['<', ['get', 'Magnitude'], 0.20]], 'rgb(  0,  76, 101)',
+        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.20], ['<', ['get', 'Magnitude'], 0.30]], 'rgb( 35, 119,  73)',
+        //         //   ['all', ['>=', ['get', 'Magnitude'], 0.30], ['<', ['get', 'Magnitude'], 0.40]], 'rgb( 60, 163,  40)',
+        //         //   'rgb(135, 13, 0)',
+        //         // ],
+        //       },
+        //     },
+        //   ],
+        // };
 
+        // const style = await stylefunction(aeronetStyle, 'AERONET_AOD_500NM');
+        // vectorSource.setStyle(style);
         // console.log('3', geoJson, proj.selected.crs);
         const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
+        // console.log('formattedFeatures', formattedFeatures);
         vectorSource.addFeatures(formattedFeatures);
       },
     });
@@ -582,6 +619,17 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: layerExtent,
       className,
       source: vectorSource,
+      style: new Style({
+        image: new Circle({
+          radius: 10,
+          fill: new Fill({
+            color: 'red',
+          }),
+          stroke: new Stroke({
+            color: 'white',
+          }),
+        }),
+      }),
     });
 
     layer.vectorData = {

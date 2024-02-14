@@ -176,6 +176,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
+    console.log('selectedFeatures');
     const extentStartX = layer.getExtent()[0];
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
@@ -203,6 +204,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
+  console.log('isactive');
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
