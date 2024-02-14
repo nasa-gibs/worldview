@@ -25,6 +25,7 @@ import MeasureButton from './components/measure-tool/measure-button';
 import AlertDropdown from './containers/alertDropdown';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
+import Tour from './containers/tour';
 
 // actions
 import Timeline from './containers/timeline/timeline';
@@ -161,12 +162,10 @@ class App extends React.Component {
         <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
-        <AlertDropdown
-          isTourActive={isTourActive}
-          numberOutagesUnseen={numberOutagesUnseen}
-          isMobile={isMobile}
-          isEmbedModeActive={isEmbedModeActive}
-        />
+        <AlertDropdown isTourActive={isTourActive} />
+        <div>
+          {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
+        </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
