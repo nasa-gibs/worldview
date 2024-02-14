@@ -22,7 +22,7 @@ import LocationSearch from './components/location-search/location-search';
 import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
-import AlertContainer from './containers/alertContainer';
+import AlertDropdown from './containers/alertDropdown';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
 
@@ -161,7 +161,7 @@ class App extends React.Component {
         <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
-        <AlertContainer
+        <AlertDropdown
           isTourActive={isTourActive}
           numberOutagesUnseen={numberOutagesUnseen}
           isMobile={isMobile}

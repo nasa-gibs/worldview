@@ -4,7 +4,7 @@ import FeatureAlert from '../components/feature-alert/alert';
 import Alerts from './alerts';
 import Tour from './tour';
 
-export default function AlertContainer(isTourActive, numberOutagesUnseen, isMobile, isEmbedModeActive) {
+export default function AlertDropdown(isTourActive, numberOutagesUnseen, isMobile, isEmbedModeActive) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const containerRef = useRef(null);
   const notifications = containerRef?.current?.children.length;
