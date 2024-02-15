@@ -27,6 +27,8 @@ function TileMeasurement({ ui }) {
   const eic = useSelector((state) => state.ui.eic);
   const realTime = useSelector((state) => state.date.appNow);
   const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
+  const eicLegacy = useSelector((state) => state.ui.eicLegacy);
+  const scenario = useSelector((state) => state.ui.scenario);
 
   const [measurementsStarted, setMeasurementsStarted] = useState(false);
 
@@ -230,7 +232,7 @@ function TileMeasurement({ ui }) {
   };
 
   useEffect(() => {
-    if (!measurementsStarted && activeLayers && eic && ui.selected) {
+    if (!measurementsStarted && activeLayers && eic && ui.selected && (eicLegacy || !scenario)) {
       setMeasurementsStarted(true);
       calculateMeasurements();
     }
