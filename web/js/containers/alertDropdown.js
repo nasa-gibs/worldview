@@ -27,6 +27,9 @@ export default function AlertDropdown(isTourActive) {
         <FeatureAlert />
         <Alerts />
       </div>
+      <div className="wv-alert-footer" hidden={!dropdownOpen || notifications <= 1}>
+        <em>Select an issue above for details</em>
+      </div>
     </div>
   );
 }

@@ -4,6 +4,8 @@
   right: 50px;
   left: auto;
   width: 450px;
+  background: #282828;
+
 
   button {
     width: 100%;
@@ -39,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 40px;
+  min-height: 50px;
   cursor: pointer;
   padding: 0;
   z-index: 100;
@@ -50,7 +52,22 @@
   padding-right: 3px;
   display: flex;
   align-items: center;
+  min-height: 50px;
+  width: 100%;
+}
+
+.alert-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.wv-alert-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
   height: 40px;
+  color: #fff;
 }
 
 .wv-alert .close-alert {
