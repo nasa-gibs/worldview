@@ -11,9 +11,10 @@ export default function AlertDropdown(isTourActive) {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const { isTourActive: tourActive } = isTourActive;
   const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
 
   return (
-    <div className="wv-alert-dropdown" hidden={isDistractionFreeModeActive || tourActive}>
+    <div className="wv-alert-dropdown" hidden={isDistractionFreeModeActive || tourActive || isMobile}>
       <button type="button" hidden={notifications <= 1} onClick={toggle}>
         <FontAwesomeIcon
           icon="exclamation-triangle"
