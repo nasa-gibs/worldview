@@ -79,7 +79,6 @@ test('Enabling distraction free mode with shortcut key hides UI elements', async
   await locationSearchMinimizeButton.click()
   await infoToolbarButton.click()
   await page.locator('#distraction_free_info_item').click()
-  await page.locator('#distraction-free-mode-active-alert-close').click()
   await distractionFreeModeValidElsRemoved('arctic', true)
 })
 
