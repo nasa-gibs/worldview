@@ -16,7 +16,7 @@ function EIC() {
 
   const requestBestDate = async () => {
     try {
-      const url = `https://0k5r4dvbbk.execute-api.us-east-1.amazonaws.com/dev/scenarios?item_type=scenario&item_id=${scenario}`;
+      const url = `https://fst9exeuk7.execute-api.us-east-1.amazonaws.com/dev/scenarios?item_type=scenario&item_id=${scenario}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Network response was not ok.');
