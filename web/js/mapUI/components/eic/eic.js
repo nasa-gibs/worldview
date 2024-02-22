@@ -31,7 +31,6 @@ function EIC() {
       }
 
       const dateObj = new Date(resolutionDate);
-      console.log(data);
       selectDate(dateObj);
     } catch (error) {
       console.error('Error fetching the best date, using EIC Legacy mode:', error);
