@@ -508,7 +508,8 @@ function LayerRow (props) {
             id="zoom-alert"
             isOpen
             title="Zoom in to see imagery for this layer"
-            message={`Imagery for ${layer.title} is not available at this zoom level.`}
+            messageTitle={layer.title}
+            message="Imagery is not available at this zoom level."
             onDismiss={() => setHideZoomAlert(true)}
             onClick={openZoomAlertModal}
           />
@@ -518,7 +519,8 @@ function LayerRow (props) {
             id="granule-alert"
             isOpen
             title="Try moving the map or select a different date in the layer's settings."
-            message={`Imagery for ${layer.title} is not available at this location or date.`}
+            messageTitle={layer.title}
+            message="Imagery is not available at this location or date."
             onDismiss={() => setHideGranuleAlert(true)}
             onClick={openGranuleAlertModal}
           />
