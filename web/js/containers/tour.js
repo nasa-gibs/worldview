@@ -19,11 +19,13 @@ import safeLocalStorage from '../util/local-storage';
 
 import {
   preloadPalettes,
+  hasCustomTypePalette,
 } from '../modules/palettes/util';
 import {
   clearCustoms,
 } from '../modules/palettes/actions';
 import {
+  BULK_PALETTE_RENDERING_SUCCESS,
   BULK_PALETTE_PRELOADING_SUCCESS,
 } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
@@ -508,6 +510,8 @@ const mapDispatchToProps = (dispatch) => ({
     const location = update(history.location, {
       search: { $set: search },
     });
+    const parameters = util.fromQueryString(search);
+    let layers = [];
 
     // Record selected story's id, current steps, and total steps to analytics
     googleTagManager.pushEvent({
@@ -523,8 +527,28 @@ const mapDispatchToProps = (dispatch) => ({
     if (!lodashIsEmpty(rendered)) {
       dispatch(clearCustoms());
     }
+    if (
+      ((parameters.l && hasCustomTypePalette(parameters.l))
+      || (parameters.l1 && hasCustomTypePalette(parameters.l1)))
+      && !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
+    ) {
+      layers = layersParse12(parameters.l, config);
+      if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
+        layers.push(layersParse12(parameters.l1, config));
+      }
+      layers = uniqBy(layers, 'id');
 
-    dispatch({ type: LOCATION_POP_ACTION, payload: location });
+
+      preloadPalettes(layers, rendered, true).then((obj) => {
+        dispatch({
+          type: BULK_PALETTE_RENDERING_SUCCESS,
+          rendered: obj.rendered,
+        });
+        dispatch({ type: LOCATION_POP_ACTION, payload: location });
+      });
+    } else {
+      dispatch({ type: LOCATION_POP_ACTION, payload: location });
+    }
   },
   preProcessStepLink: async (search, config, promiseImageryForTour) => {
     search = search.split('/?').pop();
