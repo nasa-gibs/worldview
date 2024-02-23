@@ -10,11 +10,11 @@ const crossesNextDayURLParams = 'http://localhost:3000/?v=-198.76946733086245,-5
 
 test.describe.configure({ mode: 'serial' })
 
-test.beforeAll(async ({ browser }) => {
+test.beforeEach(async ({ browser }) => {
   page = await browser.newPage()
 })
 
-test.afterAll(async () => {
+test.afterEach(async () => {
   await page.close()
 })
 

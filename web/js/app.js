@@ -22,13 +22,12 @@ import LocationSearch from './components/location-search/location-search';
 import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
-import FeatureAlert from './components/feature-alert/alert';
-import Alerts from './containers/alerts';
+import AlertDropdown from './containers/alertDropdown';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
+import Tour from './containers/tour';
 
 // actions
-import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
@@ -163,9 +162,8 @@ class App extends React.Component {
         <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
-        <div id="wv-alert-container" className="wv-alert-container">
-          <FeatureAlert />
-          <Alerts />
+        <AlertDropdown isTourActive={isTourActive} />
+        <div>
           {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
         </div>
         <Sidebar />
