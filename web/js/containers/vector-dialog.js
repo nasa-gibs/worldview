@@ -6,7 +6,7 @@ import {
   ModalBody, ModalHeader, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
-import VectorMetaTable from '../components/vector-metadata/table';
+// import VectorMetaTable from '../components/vector-metadata/table';
 
 class VectorDialog extends React.Component {
   constructor(props) {
@@ -23,12 +23,14 @@ class VectorDialog extends React.Component {
 
   render() {
     const {
-      toggleWithClose, vectorMetaObject, modalHeight, dialogKey,
+      toggleWithClose, vectorMetaObject, modalHeight,
     } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
     const keyArray = [];
     let i = 0;
+    console.log(activeIndex);
+    console.log(this.props);
     for (const [key, value] of Object.entries(vectorMetaObject)) {
       const stringLength = 20;
       const title = value[0].title || key;
@@ -66,11 +68,18 @@ class VectorDialog extends React.Component {
 
         <ModalBody>
           <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
-            <VectorMetaTable
-              id={dialogKey}
-              metaArray={activeMetaArray}
-              title={keyArray[activeIndex]}
-            />
+            <a
+              href={
+                `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/
+                ${activeMetaArray[0].features.name}.html`
+              }
+              rel="noreferrer"
+              target="_blank"
+            >
+              https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/
+              {activeMetaArray[0].features.name}
+              .html
+            </a>
           </Scrollbars>
         </ModalBody>
       </div>

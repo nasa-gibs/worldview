@@ -494,7 +494,8 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVectorAeronet = function(def, options, day, state, attributes) {
-    console.log(def.id, def, config, config.sources[def.source].matrixSets);
+    console.log(def.id);
+    // console.log(def.id, def, config, config.sources[def.source].matrixSets);
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -519,7 +520,7 @@ export default function mapLayerBuilder(config, cache, store) {
       }
     }
 
-    date = options.date || getSelectedDate(state);
+    date = getSelectedDate(state);
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
     const breakPointLayerDef = def.breakPointLayer;
@@ -528,46 +529,73 @@ export default function mapLayerBuilder(config, cache, store) {
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
       loader: async () => {
-        const getData = async () => {
-          const urlParameters = `?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}&AOD15=1&AVG=10&if_no_html=1`;
+        const getAllData = async () => {
+          // const url = `https://aeronet.gsfc.nasa.gov/aeronet_locations_v3.txt`;
+          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
+          const res = await fetch(url);
+          const data = await res.text();
+          return data;
+        };
+
+        const getActiveData = async () => {
+          const urlParameters = `?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}&year2=${date.getFullYear()}&month2=${date.getMonth() + 1}&day2=${date.getDate()}&AOD15=1&AVG=10&if_no_html=1`;
           const res = await fetch(source.url + urlParameters);
           const data = await res.text();
           return data;
         };
 
-        const data = await getData();
+        const allData = await getAllData();
+        const activeData = await getActiveData();
 
-        const features = [];
-        const takenNames = {};
-        const split = data.split('\n');
-        if (split.length > 5) {
-          const key = split[5].split(',');
-          // console.log('1', key);
-          for (let i = 6; i < split.length; i += 1) {
-            const split2 = split[i].split(',');
+        const featuresObj = [];
+        const takenNamesActive = {};
+        const splitActive = activeData.split('\n');
+        if (splitActive.length > 6) {
+          const key = splitActive[5].split(',');
+          for (let i = 6; i < splitActive.length; i += 1) {
+            const split2 = splitActive[i].split(',');
             const rowObj = {};
             for (let j = 0; j < split2.length; j += 1) {
               rowObj[key[j]] = split2[j];
             }
-            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && rowObj.AOD_500nm > 0 && !takenNames[rowObj.AERONET_Site_Name]) {
-              const temp = {};
-              temp.type = 'Feature';
-              temp.geometry = { type: 'Point' };
-              temp.geometry.coordinates = [parseFloat(rowObj['Site_Longitude(Degrees)']), parseFloat(rowObj['Site_Latitude(Degrees)'])];
-              temp.properties = { name: rowObj.AERONET_Site_Name };
-              features.push(temp);
-              takenNames[rowObj.AERONET_Site_Name] = true;
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+              featuresObj[rowObj.AERONET_Site_Name] = {};
+              featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
+              featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.AERONET_Site_Name].geometry.coordinates = [parseFloat(rowObj['Site_Longitude(Degrees)']), parseFloat(rowObj['Site_Latitude(Degrees)'])];
+              featuresObj[rowObj.AERONET_Site_Name].properties = { name: rowObj.AERONET_Site_Name, AOD_500nm: rowObj.AOD_500nm };
+              takenNamesActive[rowObj.AERONET_Site_Name] = true;
             }
           }
         }
 
-        features.forEach((feature) => {
-          feature.MAIN_USE = 'Fisheries';
-        });
+        const takenNamesAll = {};
+        const splitAll = allData.split('\n');
+        if (splitAll.length > 2) {
+          const key = splitAll[1].split(',');
+          for (let i = 2; i < splitAll.length; i += 1) {
+            const split2 = splitAll[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.Site_Name && rowObj.Site_Name !== '' && !takenNamesAll[rowObj.Site_Name]) {
+              if (!featuresObj[rowObj.Site_Name]) {
+                featuresObj[rowObj.Site_Name] = {};
+              }
+              featuresObj[rowObj.Site_Name].type = 'Feature';
+              featuresObj[rowObj.Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.Site_Name].geometry.coordinates = [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])];
+              featuresObj[rowObj.Site_Name].properties = { ...featuresObj[rowObj.Site_Name].properties, name: rowObj.Site_Name, active: !!takenNamesActive[rowObj.Site_Name] };
+              takenNamesAll[rowObj.Site_Name] = true;
+            }
+          }
+        }
+
 
         const geoJson = {
           type: 'FeatureCollection',
-          features,
+          features: Object.values(featuresObj).sort((a, b) => a.properties.active > b.properties.active),
         };
         const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
         vectorSource.addFeatures(formattedFeatures);
@@ -586,24 +614,29 @@ export default function mapLayerBuilder(config, cache, store) {
         // Access the properties of the feature
         const featureProperties = feature.getProperties();
         // Extract the feature name
-        const { name } = featureProperties;
+        const { active } = featureProperties;
+        const aod = featureProperties.AOD_500nm;
         // Define styles based on the feature properties
-        const radius = 5;
+        const radius = 7;
         let fillColor;
-        let strokeColor;
+        const strokeColor = 'white';
 
-        // Because the data we want to filter on is not currently defined as a feature, I arbitrarily split the color coding by first letter of the locaion
-        const firstLetterOfFeatureName = name.charAt(0).toUpperCase();
-
-        if (firstLetterOfFeatureName <= 'H') {
-          fillColor = 'blue';
-          strokeColor = 'white';
-        } else if (name <= 'P') {
-          fillColor = 'green';
-          strokeColor = 'white';
+        if (active) {
+          if (aod <= 0.1) {
+            fillColor = 'blue';
+          } else if (aod <= 0.2) {
+            fillColor = 'green';
+          } else if (aod <= 0.3) {
+            fillColor = 'yellow';
+          } else if (aod <= 0.4) {
+            fillColor = 'orange';
+          } else if (aod <= 0.5) {
+            fillColor = 'red';
+          } else {
+            fillColor = 'black';
+          }
         } else {
-          fillColor = 'red';
-          strokeColor = 'white';
+          fillColor = 'gray';
         }
         // Return the style for the current feature
         return new Style({
@@ -629,7 +662,6 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
-      console.log('1a');
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -640,7 +672,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (breakPointResolution && animationIsPlaying) {
-      // console.log('2a');
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -648,7 +679,6 @@ export default function mapLayerBuilder(config, cache, store) {
       return wmsLayer;
     }
 
-    // console.log('3a');
     return layer;
   };
 
@@ -662,7 +692,6 @@ export default function mapLayerBuilder(config, cache, store) {
     */
   const createLayerVector = function(def, options, day, state, attributes) {
     if (def.source === 'AERONET') {
-      // console.log('aeronet');
       return createLayerVectorAeronet(def, options, day, state, attributes);
     }
     const { proj, animation } = state;
@@ -750,7 +779,6 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.isVector = true;
 
     if (breakPointLayerDef && !animationIsPlaying) {
-      console.log('1');
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -761,7 +789,6 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (breakPointResolution && animationIsPlaying) {
-      console.log('2');
       delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
@@ -769,7 +796,6 @@ export default function mapLayerBuilder(config, cache, store) {
       return wmsLayer;
     }
 
-    console.log('3');
     return layer;
   };
 

@@ -121,7 +121,6 @@ export class VectorInteractions extends React.Component {
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         if (!layer) return;
         const def = lodashGet(layer, 'wv.def');
-        console.log(feature, layer, feature.getGeometry().getType());
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
         const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
@@ -183,6 +182,7 @@ export class VectorInteractions extends React.Component {
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
     const clickObj = getDialogObject(pixels, map);
+    console.log(clickObj);
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
@@ -316,6 +316,8 @@ const mapDispatchToProps = (dispatch) => ({
     const mobileTopOffset = 106;
     const modalWidth = isMobile ? screenWidth : 445;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
+
+    console.log(vectorDialog);
 
     dispatch(openCustomContent(
       dialogId,

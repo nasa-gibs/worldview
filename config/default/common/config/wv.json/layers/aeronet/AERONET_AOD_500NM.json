@@ -5,6 +5,7 @@
       "title": "AERONET AOD 500nm",
       "subtitle": "AERONET",
       "description": "aeronet/AERONET_AOD_500NM",
+      "period": "daily",
       "group": "overlays",
       "tags": "vectors aeronet aod",
       "type": "vector",

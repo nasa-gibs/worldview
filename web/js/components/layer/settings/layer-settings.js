@@ -348,8 +348,6 @@ class LayerSettings extends React.Component {
     const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
     const layerGroup = layer.layergroup;
 
-    console.log(layer, layerGroup);
-
     if (layer.type !== 'vector') {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
@@ -359,7 +357,6 @@ class LayerSettings extends React.Component {
       // Reference (MGRS/HLS Grid) has no need for palettes
       renderCustomizations = this.renderCustomPalettes();
     }
-    console.log('ggg', layer);
 
     if (!layer.id) return '';
     return (

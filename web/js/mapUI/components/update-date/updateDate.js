@@ -72,6 +72,7 @@ function UpdateDate(props) {
   }
 
   async function updateDate(outOfStepChange, skipTtiler) {
+    console.log('date updated');
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
@@ -87,13 +88,16 @@ function UpdateDate(props) {
 
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
+      console.log('date', id, def, def.period);
       const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
         .includes(def.period);
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length) {
+        console.log('date', '1');
         await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
       } else if (temporalLayer) {
+        console.log('date', '2');
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
           const layerOptions = type === 'granule'

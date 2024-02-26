@@ -30,7 +30,6 @@ export function requestPalette(id) {
     const layer = config.layers[id];
     const paletteID = layer.palette.id;
     const location = `config/palettes/${paletteID}.json`;
-    console.log(location, id, layer.palette.id);
     return requestAction(
       dispatch,
       REQUEST_PALETTE,

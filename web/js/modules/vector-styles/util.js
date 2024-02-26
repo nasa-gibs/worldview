@@ -220,7 +220,6 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const desktopLimit = 12;
   const mobileLimit = 5;
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
-  console.log('hi');
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
     const featureId = feature.getId();
@@ -238,16 +237,16 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
 
     const type = feature.getGeometry().getType();
-    console.log('loop', def, def.vectorData, def.title);
     if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return;
     }
-    if (def.vectorData && def.vectorData.id && def.title) {
+    // console.log(feature.values_.name, feature, def, config);
+    if (def.vectorStyle && def.vectorStyle.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
-      const vectorDataId = def.vectorData.id;
+      const vectorDataId = 'GRanD_Dams';
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;

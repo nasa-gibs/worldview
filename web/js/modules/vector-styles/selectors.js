@@ -144,7 +144,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const customPalette = def.custom;
 
   let glStyle = vectorStyles[styleId];
-  console.log('setStyleFunction glStyle', glStyle);
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
     const hexColor = state.palettes.custom[customPalette].colors[0];
     const rgbPalette = util.hexToRGBA(hexColor);
@@ -176,7 +175,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
-    console.log('selectedFeatures');
     const extentStartX = layer.getExtent()[0];
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
@@ -204,7 +202,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
 
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
-  console.log('isactive');
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
@@ -241,7 +238,6 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
     });
   }
   const styleFunction = stylefunction(layer, glStyle, vectorStyleId);
-  console.log('layer', layer);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle((feature, resolution) => {
@@ -265,7 +261,6 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  */
 export const applyStyle = (def, olVectorLayer, state) => {
-  console.log('applystyle');
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
