@@ -317,6 +317,10 @@ const getParameters = function(config, parameters) {
       stateKey: 'ui.eic',
       initialState: '',
     },
+    scenario: {
+      stateKey: 'ui.scenario',
+      initialState: '',
+    },
     em: {
       stateKey: 'embed.isEmbedModeActive',
       initialState: false,

@@ -9,6 +9,7 @@ import {
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
   SET_TRAVELING_HYPERWALL,
+  SET_EIC_LEGACY,
 } from './constants';
 
 export const uiState = {
@@ -20,7 +21,9 @@ export const uiState = {
   animationAvailabilityChecked: false,
   eicMeasurementComplete: false,
   eicMeasurementAborted: false,
-  travelMode: '', // an id key that corresponds to a specific set of EIC scenario details
+  travelMode: '', // an id key that corresponds to a specific set of EIC scenario details for travel mode
+  eicLegacy: false,
+  scenario: '', // the scenario id that corresponds to the current EIC scenario to query backend
 };
 
 export default function uiReducers(state = uiState, action) {
@@ -78,6 +81,11 @@ export default function uiReducers(state = uiState, action) {
       return {
         ...state,
         travelMode: action.travelMode,
+      };
+    case SET_EIC_LEGACY:
+      return {
+        ...state,
+        eicLegacy: action.isLegacy,
       };
     default:
       return state;
