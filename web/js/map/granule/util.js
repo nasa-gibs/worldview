@@ -175,8 +175,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
 
   const getShortName = () => {
     try {
-      let { shortName } = def.conceptIds[0];
-      [shortName] = shortName.split('_');
+      const { shortName } = def.conceptIds[0];
       return shortName;
     } catch (e) {
       console.error(`Could not get shortName for a collection associated with layer ${def.id}`);

@@ -203,7 +203,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate) => {
     const { proj: { selected: { crs } } } = store.getState();
     const granules = [];
-    const availableCount = availableGranules.length;
+    const availableCount = availableGranules?.length;
     if (!availableCount) return granules;
     const count = granuleCount > availableCount ? availableCount : granuleCount;
 
