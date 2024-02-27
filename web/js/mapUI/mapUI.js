@@ -19,6 +19,7 @@ import BufferQuickAnimate from './components/buffer-quick-animate/bufferQuickAni
 import KioskAnimations from './components/kiosk/kiosk-animations/kiosk-animations';
 import TileMeasurement from './components/kiosk/tile-measurement/tile-measurement';
 import TravelMode from './components/kiosk/travel-mode/travelMode';
+import EIC from './components/eic/eic';
 import UpdateCollections from './components/update-collections/updateCollections';
 import DevTestButton from './components/dev-test-mode/dev-test-button';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -411,6 +412,7 @@ function MapUI(props) {
       { isEICModeActive
       && (
       <>
+        <EIC />
         <KioskAnimations ui={ui} />
         <TileMeasurement ui={ui} />
         { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }

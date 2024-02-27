@@ -528,14 +528,16 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(clearCustoms());
     }
     if (
-      (parameters.l && hasCustomTypePalette(parameters.l))
-      || (parameters.l1 && hasCustomTypePalette(parameters.l1))
+      ((parameters.l && hasCustomTypePalette(parameters.l))
+      || (parameters.l1 && hasCustomTypePalette(parameters.l1)))
+      && !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
     ) {
       layers = layersParse12(parameters.l, config);
       if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
         layers.push(layersParse12(parameters.l1, config));
       }
       layers = uniqBy(layers, 'id');
+
 
       preloadPalettes(layers, rendered, true).then((obj) => {
         dispatch({
