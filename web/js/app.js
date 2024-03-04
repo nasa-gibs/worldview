@@ -265,5 +265,5 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-  numberOutagesUnseen: 0
+  numberOutagesUnseen: 0,
 };
