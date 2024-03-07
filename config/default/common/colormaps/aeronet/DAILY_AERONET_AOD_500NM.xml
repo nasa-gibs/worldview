@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
-  <ColorMap title="AERONET_AOD_500NM">
+  <ColorMap title="DAILY_AERONET_AOD_500NM">
     <Entries>
       <ColorMapEntry rgb="128,128,128" transparent="false" ref="1"/>
       <ColorMapEntry rgb="0,0,255"     transparent="false" ref="2"/>

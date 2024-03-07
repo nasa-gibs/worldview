@@ -34,7 +34,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "AERONET_AOD_500NM"
+                        "AERONET_AOD_500NM",
+                        "DAILY_AERONET_AOD_500NM"
                     ]
                 }
             }
