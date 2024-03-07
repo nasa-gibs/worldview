@@ -263,3 +263,7 @@ App.propTypes = {
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
 };
+
+App.defaultProps = {
+  numberOutagesUnseen: 0,
+};
