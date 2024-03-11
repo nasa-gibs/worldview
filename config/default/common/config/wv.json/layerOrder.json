@@ -12,7 +12,7 @@
 		"HLS_False_Color_Vegetation_Landsat",
 		"HLS_False_Color_Urban_Landsat",
 		"HLS_Shortwave_Infrared_Landsat",
-    	        "HLS_NDVI_Landsat",
+    "HLS_NDVI_Landsat",
 		"HLS_NDWI_Landsat",
 		"HLS_NDSI_Landsat",
 		"HLS_Moisture_Index_Landsat",
