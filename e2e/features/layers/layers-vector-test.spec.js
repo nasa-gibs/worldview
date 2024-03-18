@@ -38,6 +38,7 @@ test('Vectors show alert when not clickable', async ({ browserName }) => {
   const pointerIcon = await page.locator('#active-GRanD_Dams .fa-hand-pointer')
   await expect(pointerIcon).toBeVisible()
   await geographicMap.click()
+  await page.waitForTimeout(500)
   await geographicMap.click()
   await expect(notifyMessage).toBeVisible()
   await expect(notifyMessage).toContainText('Vector features may not be clickable at all zoom levels.')
