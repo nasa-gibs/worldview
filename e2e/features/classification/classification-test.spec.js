@@ -1,4 +1,10 @@
 // @ts-check
+/* These tests take a screenshots & compare the image output to an existing reference image in the /classification-test.spec.js-snapshots directory. There are reference images for various platforms.
+toHaveScreenshot() will create a reference image if it doesn't already exist. So, if you need to
+generate any new reference images simply delete the old ones & run this test again on both windows &
+Mac to generate the required reference images for all platforms.
+*/
+
 const { test, expect } = require('@playwright/test')
 let page
 
