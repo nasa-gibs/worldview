@@ -33,7 +33,8 @@ jobs:
         run: |
           npm run build:ci
 
-      - run: mkdir playwright-report
+      - name: Create directory for report
+        run: mkdir playwright-report
 
       - name: Run E2E tests - Chrome / MacOS
         if: ${{ runner.os == 'macOS' }}
@@ -41,7 +42,7 @@ jobs:
           npm run start &
           npx playwright install chromium &
           sleep 10
-          npx playwright test classification-test.spec.js --project=chromium --reporter=list
+          npx playwright test --project=chromium --reporter=list
 
       - name: Run E2E tests - Firefox / Windows
         if: ${{ runner.os == 'Windows' }}
@@ -49,7 +50,7 @@ jobs:
           npm run start &
           npx playwright install firefox &
           sleep 10
-          npx playwright test classification-test.spec.js --project=firefox --reporter=list
+          npx playwright test --project=firefox --reporter=list
 
       - run: echo cariello > playwright-report/test.txt
       - name: Upload Test Artifacts
