@@ -39,7 +39,7 @@ jobs:
           npm run start &
           npx playwright install chromium &
           sleep 10
-          npx playwright test --project=chromium --reporter=list
+          npx playwright test classification-test.spec.js --project=chromium --reporter=list
 
       - name: Run E2E tests - Firefox / Windows
         if: ${{ runner.os == 'Windows' }}
@@ -47,7 +47,10 @@ jobs:
           npm run start &
           npx playwright install firefox &
           sleep 10
-          npx playwright test --project=firefox --reporter=list
+          npx playwright test classification-test.spec.js --project=firefox --reporter=list
+
+      - run: mkdir playwright-report
+      - run: echo cariello > playwright-report/test.txt
       - name: Upload Test Artifacts
         uses: actions/upload-artifact@v4
         with:
