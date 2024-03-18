@@ -48,3 +48,8 @@ jobs:
           npx playwright install firefox &
           sleep 10
           npx playwright test --project=firefox --reporter=list
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-artifacts
+          path: playwright-report
