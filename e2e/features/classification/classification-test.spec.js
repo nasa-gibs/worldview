@@ -12,7 +12,7 @@ const red = '250,30,36,255'
 const blue = '50,210,245,255'
 const gray = '175,175,175,255'
 
-test.describe.configure({ mode: 'serial', timeout: 60000 })
+test.describe.configure({ mode: 'serial' })
 
 test.beforeEach(async ({ browser }) => {
   page = await browser.newPage()
@@ -22,7 +22,7 @@ test.afterEach(async () => {
   await page.close()
 })
 
-test('Flood 2 Day only Gray', async ({ page }) => {
+test('Flood 2 Day only Gray', async () => {
   await page.goto(floodOnlyGrayUrl)
   await page.waitForLoadState('load')
   await page.waitForTimeout(3000)
