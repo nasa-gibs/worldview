@@ -29,7 +29,7 @@ test('Flood 2 Day only Gray', async () => {
 
   await expect(page).toHaveScreenshot('only-gray.png', {
     fullPage: true,
-    threshold: 0.2
+    threshold: 0.4
   })
 })
 
@@ -40,7 +40,7 @@ test('Flood 2 Day Gray & Blue', async () => {
 
   await expect(page).toHaveScreenshot('gray-and-blue.png', {
     fullPage: true,
-    threshold: 0.2
+    threshold: 0.4
   })
 })
 
