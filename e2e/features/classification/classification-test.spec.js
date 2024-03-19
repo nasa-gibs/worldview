@@ -1,17 +1,16 @@
 // @ts-check
-/* These tests take a screenshots & compare the image output to an existing reference image in the /classification-test.spec.js-snapshots directory. There are reference images for various platforms.
-toHaveScreenshot() will create a reference image if it doesn't already exist. So, if you need to
-generate any new reference images simply delete the old ones & run this test again on both windows &
-Mac to generate the required reference images for all platforms.
-*/
-
 const { test, expect } = require('@playwright/test')
 const UPNG = require('upng-js')
 let page
 
-const floodOnlyGrayUrl = 'http://localhost:3000/?v=-141,-32,21,66&df=true&l=MODIS_Combined_Flood_2-Day(disabled=3-0)&lg=true&t=2023-12-07-T18%3A49%3A23Z'
-const floodGrayAndBlueUrl = 'http://localhost:3000/?v=-139,-44,23,54&df=true&l=MODIS_Combined_Flood_2-Day(disabled=3-1)&lg=true&t=2023-12-07-T18%3A49%3A23Z'
-const floodAllColorsUrl = 'http://localhost:3000/?v=40,22,53,33&df=true&l=MODIS_Combined_Flood_2-Day&lg=true&t=2023-01-07-T18%3A49%3A23Z'
+const floodOnlyGrayUrl = 'http://localhost:3000/?v=-213,-96,107,99&df=true&l=MODIS_Combined_Flood_2-Day(disabled=3-0)&lg=true&t=2023-12-07-T18%3A49%3A23Z'
+const floodGrayAndBlueUrl = 'http://localhost:3000/?v=-195,-120,202,122&df=true&l=MODIS_Combined_Flood_2-Day(disabled=3-1)&lg=true&t=2023-12-07-T18%3A49%3A23Z'
+const floodAllColorsUrl = 'http://localhost:3000/?v=20.927495068573297,59.38686212149608,23.42534040372529,60.914081461203466&l=MODIS_Combined_Flood_2-Day(disabled=3)&lg=true&t=2021-04-05-T18%3A49%3A23Z'
+
+// RGB Colors taken from the colormap for the flood layer
+const red = '250,30,36,255'
+const blue = '50,210,245,255'
+const gray = '175,175,175,255'
 
 test.describe.configure({ mode: 'serial', timeout: 60000 })
 
@@ -23,65 +22,59 @@ test.afterEach(async () => {
   await page.close()
 })
 
-test('Check colors in screenshot', async ({ page }) => {
+test('Flood 2 Day only Gray', async ({ page }) => {
   await page.goto(floodOnlyGrayUrl)
   await page.waitForLoadState('load')
-  await page.waitForTimeout(5000)
+  await page.waitForTimeout(3000)
   const screenshot = await page.screenshot()
   const colorsFound = analyzePixels(screenshot)
-
-  // Define expected colors
-  const expectedColors = ['#cccccc', '#ddeedd']
-
-  // Check if all expected colors are found
-  expect(colorsFound).toEqual(expectedColors)
+  const isRed = colorsFound.indexOf(red) > -1
+  const isBlue = colorsFound.indexOf(blue) > -1
+  const isGray = colorsFound.indexOf(gray) > -1
+  const isGrayOnly = !isRed && !isBlue && isGray
+  expect(isGrayOnly).toEqual(true)
 })
 
-// test('Flood 2 Day only Gray', async () => {
-//   await page.goto(floodOnlyGrayUrl)
-//   await page.waitForLoadState('load')
-//   await page.waitForTimeout(5000)
+test('Flood 2 Day Gray & Blue', async () => {
+  await page.goto(floodGrayAndBlueUrl)
+  await page.waitForLoadState('load')
+  await page.waitForTimeout(3000)
+  const screenshot = await page.screenshot()
+  const colorsFound = analyzePixels(screenshot)
+  const isRed = colorsFound.indexOf(red) > -1
+  const isBlue = colorsFound.indexOf(blue) > -1
+  const isGray = colorsFound.indexOf(gray) > -1
+  const isGrayAndBlue = !isRed && isBlue && isGray
+  expect(isGrayAndBlue).toEqual(true)
+})
 
-//   await expect(page).toHaveScreenshot('only-gray.png', {
-//     fullPage: true,
-//     threshold: 0.6
-//   })
-// })
-
-// test('Flood 2 Day Gray & Blue', async () => {
-//   await page.goto(floodGrayAndBlueUrl)
-//   await page.waitForLoadState('load')
-//   await page.waitForTimeout(5000)
-
-//   await expect(page).toHaveScreenshot('gray-and-blue.png', {
-//     fullPage: true,
-//     threshold: 0.6
-//   })
-// })
-
-// test('Flood 2 Day All Colors', async () => {
-//   await page.goto(floodAllColorsUrl)
-//   await page.waitForLoadState('load')
-//   await page.waitForTimeout(5000)
-
-//   await expect(page).toHaveScreenshot('all-colors.png', {
-//     fullPage: true,
-//     threshold: 0.2
-//   })
-// })
+test('Flood 2 Day All Colors', async () => {
+  await page.goto(floodAllColorsUrl)
+  await page.waitForLoadState('load')
+  await page.waitForTimeout(3000)
+  const screenshot = await page.screenshot()
+  const colorsFound = analyzePixels(screenshot)
+  const isRed = colorsFound.indexOf(red) > -1
+  const isBlue = colorsFound.indexOf(blue) > -1
+  const isGray = colorsFound.indexOf(gray) > -1
+  const isRedAndBlueAndGray = isRed && isBlue && isGray
+  expect(isRedAndBlueAndGray).toEqual(true)
+})
 
 function analyzePixels (screenshot) {
   const imageData = decodeImageData(screenshot)
-  const expectedColors = ['#cccccc', '#ddeedd']
-
   const colorsFound = new Set()
-  for (let i = 0; i < imageData.length; i += 4) {
-    const color = `#${('000000' + ((imageData[i] << 16) | (imageData[i + 1] << 8) | imageData[i + 2]).toString(16)).slice(-6)}`
-    if (expectedColors.includes(color)) {
-      colorsFound.add(color)
-    }
+  const uint8Array = new Uint8Array(imageData)
+  for (let i = 0; i < uint8Array.length; i += 4) {
+    const pixelColor = [
+      uint8Array[i], // Red
+      uint8Array[i + 1], // Green
+      uint8Array[i + 2], // Blue
+      uint8Array[i + 3] // Alpha
+    ]
+    const colorString = pixelColor.join(',')
+    colorsFound.add(colorString)
   }
-
   return Array.from(colorsFound)
 }
 
