@@ -255,7 +255,8 @@ function ChartingModeOptions (props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    // let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.sit.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
