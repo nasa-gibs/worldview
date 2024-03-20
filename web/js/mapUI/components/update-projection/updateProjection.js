@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
 import {
-  each as lodashEach,
   get as lodashGet,
 } from 'lodash';
 import {
@@ -62,7 +61,7 @@ function UpdateProjection(props) {
   * @returns {void}
   */
   const clearLayers = function(saveCache) {
-    ui.selected.setLayers([])
+    ui.selected.setLayers([]);
 
     if (saveCache) return;
     ui.cache.clear();
