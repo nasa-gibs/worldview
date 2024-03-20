@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "4.28.0",
+  "version": "4.29.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -127,7 +127,7 @@
     "react-test-renderer": "^18.0.0",
     "redux-mock-store": "^1.5.4",
     "run-script-os": "^1.1.6",
-    "sass": "^1.71.1",
+    "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
@@ -141,21 +141,21 @@
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-middleware": "^7.0.0",
-    "webpack-dev-server": "^4.15.1",
+    "webpack-dev-server": "^5.0.3",
     "xml-js": "^1.6.11",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"
   },
   "dependencies": {
-    "@elastic/react-search-ui": "^1.20.2",
-    "@elastic/react-search-ui-views": "^1.20.2",
+    "@elastic/react-search-ui": "^1.21.0",
+    "@elastic/react-search-ui-views": "^1.21.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@khanisak/temperature-converter": "^2.0.1",
     "@redux-devtools/extension": "^3.2.6",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "bluebird": "3.7.2",
     "bootstrap": "^5.3.3",
     "cachai": "^1.0.2",
@@ -216,7 +216,10 @@
   },
   "overrides": {
     "semver": "7.5.4",
-    "word-wrap": "1.2.5"
+    "word-wrap": "1.2.5",
+    "@pmmmwh/react-refresh-webpack-plugin": {
+      "webpack-dev-server": "^5.0.2"
+    }
   },
   "browserslist": [
     "last 2 versions",
