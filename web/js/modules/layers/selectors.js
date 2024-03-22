@@ -591,6 +591,23 @@ export const subdailyLayersActive = createSelector(
 );
 
 /**
+ * Gets largest interval value of subdaily layers
+ * @param {Object} state
+ */
+export function getLargestIntervalValue(state) {
+  const layers = getActiveLayers(state);
+  let largestDelta = 10;
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      if (layers[i].period === 'subdaily' && lodashGet(layers[i], 'dateRanges[0].dateInterval') > largestDelta) {
+        largestDelta = Number(lodashGet(layers[i], 'dateRanges[0].dateInterval'));
+      }
+    }
+  }
+  return largestDelta;
+}
+
+/**
  *
  * @param {*} config
  * @param {*} layerId

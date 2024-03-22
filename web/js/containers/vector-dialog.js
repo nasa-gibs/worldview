@@ -63,24 +63,21 @@ class VectorDialog extends React.Component {
             <div style={{ padding: '10px' }}>
               <div style={{ marginBottom: '5px', fontSize: '16px' }}>
                 <b>
-                  Site is
-                  {activeMetaArray[0].features.active ? 'online' : 'currently offline'}
+                  {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
                 </b>
               </div>
               {activeMetaArray[0].features.active && (
               <div style={{ marginBottom: '5px' }}>
-                Most recent reading:
-                {activeMetaArray[0].features.value}
+                {`Most recent reading: ${activeMetaArray[0].features.value}`}
               </div>
               )}
               {activeMetaArray[0].features.active && (
               <div style={{ marginBottom: '5px' }}>
-                As of
-                {activeMetaArray[0].features.date.toString().split(' ').slice(1).join(' ')}
+                {`As of ${activeMetaArray[0].features.date.toString().split(' ').slice(1).join(' ')}`}
               </div>
               )}
               <div style={{ marginBottom: '5px' }}>
-                Site:
+                {'Site: '}
                 <a
                   href={
                     `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/${activeMetaArray[0].features.name}.html`
@@ -90,11 +87,7 @@ class VectorDialog extends React.Component {
                 >
                   {activeMetaArray[0].features.name}
                 </a>
-                (
-                {activeMetaArray[0].features.coordinates[0]}
-                ,
-                {activeMetaArray[0].features.coordinates[1]}
-                )
+                {` (${activeMetaArray[0].features.coordinates[0]}, ${activeMetaArray[0].features.coordinates[1]})`}
               </div>
             </div>
           ) : (

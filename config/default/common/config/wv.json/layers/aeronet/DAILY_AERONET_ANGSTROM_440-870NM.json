@@ -1,26 +1,18 @@
 {
   "layers": {
-    "AERONET_AOD_500NM": {
-      "id": "AERONET_AOD_500NM",
-      "title": "AERONET AOD 500nm",
+    "DAILY_AERONET_ANGSTROM_440-870NM": {
+      "id": "DAILY_AERONET_ANGSTROM_440-870NM",
+      "title": "Daily AERONET Angstrom 440-870nm",
       "subtitle": "AERONET",
-      "description": "aeronet/AERONET_AOD_500NM",
-      "period": "subdaily",
+      "description": "aeronet/DAILY_AERONET_ANGSTROM_440-870NM",
+      "period": "daily",
       "group": "overlays",
-      "tags": "vectors aeronet aod",
+      "tags": "vectors aeronet angstrom",
       "type": "vector",
       "layergroup": "Socioeconomic",
       "vectorStyle": {
-        "id": "AERONET_AOD_500NM"
+        "id": "DAILY_AERONET_ANGSTROM_440-870NM"
       },
-      "startDate": "1992-01-01T00:00:00Z",
-      "dateRanges": [
-        {
-          "startDate": "1992-01-01T00:00:00Z",
-          "endDate": "2024-03-22T23:59:00Z",
-          "dateInterval": "60"
-        }
-      ],
       "wrapX": true,
       "projections": {
         "geographic": {
@@ -28,13 +20,13 @@
         }
       },
       "palette": {
-        "id": "AERONET_AOD_500NM",
+        "id": "DAILY_AERONET_ANGSTROM_440-870NM",
         "immutable": true,
         "styleProperty": "MAIN_USE",
         "unclassified": "Not Classified"
       },
       "breakPointLayer": {
-        "id": "AERONET_AOD_500NM",
+        "id": "DAILY_AERONET_ANGSTROM_440-870NM",
         "type": "wms",
         "format": "image/png",
         "breakPointType": "max",

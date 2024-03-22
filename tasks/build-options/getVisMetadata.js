@@ -84,7 +84,9 @@ const skipLayers = [
   'HLS_Moisture_Index_Sentinel',
   'HLS_False_Color_Landsat',
   'AERONET_AOD_500NM',
-  'DAILY_AERONET_AOD_500NM'
+  'AERONET_ANGSTROM_440-870NM',
+  'DAILY_AERONET_AOD_500NM',
+  'DAILY_AERONET_ANGSTROM_440-870NM'
 ]
 
 // NOTE: Only using these properties at this time

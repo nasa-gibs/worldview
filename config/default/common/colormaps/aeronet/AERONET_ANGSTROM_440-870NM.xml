@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="AERONET_ANGSTROM_440-870NM">
+    <Entries>
+      <ColorMapEntry rgb="128,128,128" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="0,0,255"     transparent="false" ref="2"/>
+      <ColorMapEntry rgb="0,128,0"     transparent="false" ref="3"/>
+      <ColorMapEntry rgb="255,255,0"   transparent="false" ref="4"/>
+      <ColorMapEntry rgb="255,165,0"   transparent="false" ref="5"/>
+      <ColorMapEntry rgb="255,0,0"     transparent="false" ref="6"/>
+      <ColorMapEntry rgb="255,190,232" transparent="false" ref="7"/>
+      <ColorMapEntry rgb="132,0,168"   transparent="false" ref="8"/>
+      <ColorMapEntry rgb="0,0,0"       transparent="false" ref="9"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="128,128,128" id="1" tooltip="Inactive" />
+      <LegendEntry rgb="0,0,255"     id="2" tooltip="<= 0.1" />
+      <LegendEntry rgb="0,128,0"     id="3" tooltip="<= 0.2" />
+      <LegendEntry rgb="255,255,0"   id="4" tooltip="<= 0.3" />
+      <LegendEntry rgb="255,165,0"   id="5" tooltip="<= 0.4" />
+      <LegendEntry rgb="255,0,0"     id="6" tooltip="<= 0.5" />
+      <LegendEntry rgb="0,0,0"       id="7" tooltip="> 0.5" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

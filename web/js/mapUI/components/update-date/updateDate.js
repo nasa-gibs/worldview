@@ -72,7 +72,6 @@ function UpdateDate(props) {
   }
 
   async function updateDate(outOfStepChange, skipTtiler) {
-    console.log('date updated');
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
