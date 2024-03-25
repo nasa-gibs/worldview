@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
 import {
-  each as lodashEach,
   get as lodashGet,
 } from 'lodash';
 import {
@@ -62,13 +61,7 @@ function UpdateProjection(props) {
   * @returns {void}
   */
   const clearLayers = function(saveCache) {
-    const activeLayersUI = ui.selected
-      .getLayers()
-      .getArray()
-      .slice(0);
-    lodashEach(activeLayersUI, (mapLayer) => {
-      ui.selected.removeLayer(mapLayer);
-    });
+    ui.selected.setLayers([]);
 
     if (saveCache) return;
     ui.cache.clear();
@@ -135,7 +128,7 @@ function UpdateProjection(props) {
         return createLayer(def, options);
       });
       const createdLayers = await Promise.all(layerPromises);
-      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
+      mapUI.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -144,7 +137,7 @@ function UpdateProjection(props) {
       clearLayers(saveCache);
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
-      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
+      mapUI.setLayers(compareLayerGroups);
       compareMapUi.create(mapUI, compare.mode);
     }
     updateLayerVisibilities();
