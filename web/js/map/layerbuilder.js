@@ -9,10 +9,16 @@ import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
+import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
 import qs from 'qs';
-import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import OlLayerVector from 'ol/layer/Vector';
+import OlSourceVector from 'ol/source/Vector';
+import LayerVectorTile from 'ol/layer/VectorTile';
+import {
+  Circle, Fill, Stroke, Style,
+} from 'ol/style';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
 import lodashMerge from 'lodash/merge';
@@ -487,7 +493,526 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
+  const createLayerVectorAeronet = function(def, options, day, state, attributes) {
+    console.log(def.id);
+    // console.log(def.id, def, config, config.sources[def.source].matrixSets);
+    const { proj, animation } = state;
+    let date;
+    let gridExtent;
+    let layerExtent;
+    const selectedProj = proj.selected;
+    const source = config.sources[def.source];
+    const animationIsPlaying = animation.isPlaying;
+    const isSubdaily = def.period === 'subdaily';
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
+
+    if (!source) {
+      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+    }
+
+    if (day) {
+      if (day === 1) {
+        layerExtent = LEFT_WING_EXTENT;
+        gridExtent = [110, -90, 180, 90];
+      } else {
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = RIGHT_WING_EXTENT;
+      }
+    }
+
+    date = getSelectedDate(state);
+
+    if (isSubdaily && !date) {
+      date = getRequestDates(def, options).closestDate;
+      date = new Date(date.getTime());
+    }
+    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
+    const breakPointLayerDef = def.breakPointLayer;
+    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+
+    const vectorSource = new OlSourceVector({
+      format: new GeoJSON(),
+      loader: async () => {
+        const getAllData = async () => {
+          // const url = `https://aeronet.gsfc.nasa.gov/aeronet_locations_v3.txt`;
+          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
+          const res = await fetch(url);
+          const data = await res.text();
+          return data;
+        };
+
+        const getActiveData = async () => {
+          const avg = def.id.includes('DAILY') ? 20 : 10;
+          const urlParameters = `?year=${date.getFullYear()}&month=${date.getUTCMonth() + 1}&day=${date.getUTCDate()}&year2=${date.getUTCFullYear()}&month2=${date.getUTCMonth() + 1}&day2=${date.getUTCDate()}${isSubdaily ? `&hour=${date.getUTCHours()}&hour2=${date.getUTCHours() + 1}` : ''}&AOD15=1&AVG=${avg}&if_no_html=1`;
+          const res = await fetch(source.url + urlParameters);
+          const data = await res.text();
+          return data;
+        };
+
+        const allData = await getAllData();
+        const activeData = await getActiveData();
+
+        const featuresObj = [];
+        const takenNamesActive = {};
+        const splitActive = activeData.split('\n');
+        if (splitActive.length > 6) {
+          const key = splitActive[5].split(',');
+          for (let i = 6; i < splitActive.length; i += 1) {
+            const split2 = splitActive[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+              featuresObj[rowObj.AERONET_Site_Name] = {};
+              featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
+              featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.AERONET_Site_Name].geometry.coordinates = [parseFloat(rowObj['Site_Longitude(Degrees)']), parseFloat(rowObj['Site_Latitude(Degrees)'])];
+              featuresObj[rowObj.AERONET_Site_Name].properties = {
+                name: rowObj.AERONET_Site_Name,
+                value: def.id.includes('ANGSTROM') ? rowObj['440-870_Angstrom_Exponent'] : rowObj.AOD_500nm,
+                date: new Date(`${rowObj['Date(dd:mm:yyyy)'].split(':')[2]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[1]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[0]}`),
+              };
+              takenNamesActive[rowObj.AERONET_Site_Name] = true;
+            }
+          }
+        }
+
+        const takenNamesAll = {};
+        const splitAll = allData.split('\n');
+        if (splitAll.length > 2) {
+          const key = splitAll[1].split(',');
+          for (let i = 2; i < splitAll.length; i += 1) {
+            const split2 = splitAll[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.Site_Name && rowObj.Site_Name !== '' && !takenNamesAll[rowObj.Site_Name]) {
+              if (!featuresObj[rowObj.Site_Name]) {
+                featuresObj[rowObj.Site_Name] = {};
+              }
+              featuresObj[rowObj.Site_Name].type = 'Feature';
+              featuresObj[rowObj.Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.Site_Name].geometry.coordinates = [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])];
+              const mainUseValue = !featuresObj[rowObj.Site_Name].properties ? 'Inactive' : featuresObj[rowObj.Site_Name].properties.value > 0.5 ? '> 0.5' : `<= ${Math.max(Math.min(Math.ceil(featuresObj[rowObj.Site_Name].properties.value * 10) / 10, 0.5), 0.1)}`;
+              featuresObj[rowObj.Site_Name].properties = {
+                ...featuresObj[rowObj.Site_Name].properties,
+                name: rowObj.Site_Name,
+                active: !!takenNamesActive[rowObj.Site_Name],
+                coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
+                MAIN_USE: mainUseValue,
+              };
+              takenNamesAll[rowObj.Site_Name] = true;
+            }
+          }
+        }
+
+
+        const geoJson = {
+          type: 'FeatureCollection',
+          features: Object.values(featuresObj).sort((a, b) => a.properties.active > b.properties.active),
+        };
+        const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
+        vectorSource.addFeatures(formattedFeatures);
+      },
+    });
+
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date)).slice(0, 10);
+    const className = `${def.id} ${requestDate}`;
+
+    const layer = new OlLayerVector({
+      extent: layerExtent,
+      className,
+      source: vectorSource,
+      // Use a style function to dynamically style the points based on features
+      style (feature, resolution) {
+        const customStyle = !def.custom || typeof def.custom[0] === 'undefined' ? 'default' : def.custom[0];
+        // Access the properties of the feature
+        const featureProperties = feature.getProperties();
+        // Extract the feature name
+        const { active, value } = featureProperties;
+        // Define styles based on the feature properties
+        const radius = 7;
+        let fillColor;
+        const strokeColor = 'white';
+        let colors = [];
+        if (customStyle !== 'default') {
+          colors = state.palettes.custom[customStyle].colors;
+        } else {
+          colors = [
+            'fffdcdff',
+            'fffcc7ff',
+            'fffbc1ff',
+            'fffabcff',
+            'fff9b7ff',
+            'fff8b2ff',
+            'fff7adff',
+            'fff6a7ff',
+            'fff5a2ff',
+            'fff49dff',
+            'fff398ff',
+            'fff293ff',
+            'fff090ff',
+            'ffef8dff',
+            'ffee8aff',
+            'ffec87ff',
+            'ffeb84ff',
+            'ffea81ff',
+            'ffe87eff',
+            'ffe77bff',
+            'ffe678ff',
+            'ffe576ff',
+            'ffe373ff',
+            'ffe271ff',
+            'ffe16eff',
+            'ffdf6cff',
+            'ffde6aff',
+            'ffdd67ff',
+            'ffdb65ff',
+            'ffda62ff',
+            'ffd960ff',
+            'ffd85eff',
+            'ffd65bff',
+            'ffd459ff',
+            'ffd257ff',
+            'ffd055ff',
+            'ffcf53ff',
+            'ffcd50ff',
+            'ffcb4eff',
+            'ffc94cff',
+            'ffc74aff',
+            'ffc648ff',
+            'ffc346ff',
+            'ffc144ff',
+            'ffbe42ff',
+            'ffbc40ff',
+            'ffb93eff',
+            'ffb73cff',
+            'ffb43aff',
+            'ffb238ff',
+            'ffaf36ff',
+            'ffad35ff',
+            'ffaa33ff',
+            'ffa832ff',
+            'ffa531ff',
+            'ffa32fff',
+            'ffa12eff',
+            'ff9e2dff',
+            'ff9c2bff',
+            'ff992aff',
+            'ff9729ff',
+            'ff9528ff',
+            'ff9227ff',
+            'ff9026ff',
+            'ff8e25ff',
+            'ff8c25ff',
+            'ff8a24ff',
+            'ff8723ff',
+            'ff8523ff',
+            'ff8322ff',
+            'ff8121ff',
+            'ff7f21ff',
+            'ff7c20ff',
+            'ff791fff',
+            'ff761fff',
+            'ff731eff',
+            'ff701eff',
+            'ff6d1dff',
+            'ff6a1cff',
+            'ff671cff',
+            'ff641bff',
+            'ff621bff',
+            'ff5e1aff',
+            'ff5b19ff',
+            'ff5818ff',
+            'ff5518ff',
+            'ff5217ff',
+            'ff4e16ff',
+            'ff4b16ff',
+            'ff4815ff',
+            'ff4514ff',
+            'ff4214ff',
+            'fe3f13ff',
+            'fd3c13ff',
+            'fc3a12ff',
+            'fb3712ff',
+            'fa3512ff',
+            'f93211ff',
+            'f82f11ff',
+            'f72d10ff',
+            'f62a10ff',
+            'f52810ff',
+            'f3260fff',
+            'f2240fff',
+            'f0220eff',
+            'ef200eff',
+            'ee1e0dff',
+            'ec1c0dff',
+            'eb1a0cff',
+            'e9180cff',
+            'e8160bff',
+            'e7140bff',
+            'e5120bff',
+            'e3110bff',
+            'e1100bff',
+            'df0e0bff',
+            'dd0d0bff',
+            'db0c0bff',
+            'd90a0bff',
+            'd7090bff',
+            'd5080bff',
+            'd3070cff',
+            'd0060cff',
+            'ce050cff',
+            'cc040cff',
+            'c9040cff',
+            'c7030dff',
+            'c5020dff',
+            'c2020dff',
+            'c0010dff',
+            'be000dff',
+            'bc000eff',
+            'b8000eff',
+            'b5000eff',
+            'b2000eff',
+            'ae000eff',
+            'ab000eff',
+            'a8000eff',
+            'a4000eff',
+            'a1000eff',
+            '9e000eff',
+            '9b000eff',
+            '98000eff',
+            '95000eff',
+            '92000eff',
+            '8f000eff',
+            '8c000eff',
+            '89000eff',
+            '86000eff',
+            '83000eff',
+            '80000eff',
+            '7d000eff',
+          ];
+        }
+        const values = [
+          [-1, 0],
+          [0, 0.005],
+          [0.005, 0.01],
+          [0.01, 0.015],
+          [0.015, 0.02],
+          [0.02, 0.025],
+          [0.025, 0.03],
+          [0.03, 0.035],
+          [0.035, 0.04],
+          [0.04, 0.045],
+          [0.045, 0.05],
+          [0.05, 0.055],
+          [0.055, 0.06],
+          [0.06, 0.065],
+          [0.065, 0.07],
+          [0.07, 0.075],
+          [0.075, 0.08],
+          [0.08, 0.085],
+          [0.085, 0.09],
+          [0.09, 0.095],
+          [0.095, 0.1],
+          [0.1, 0.105],
+          [0.105, 0.11],
+          [0.11, 0.115],
+          [0.115, 0.12],
+          [0.12, 0.125],
+          [0.125, 0.13],
+          [0.13, 0.135],
+          [0.135, 0.14],
+          [0.14, 0.145],
+          [0.145, 0.15],
+          [0.15, 0.155],
+          [0.155, 0.16],
+          [0.16, 0.165],
+          [0.165, 0.17],
+          [0.17, 0.175],
+          [0.175, 0.18],
+          [0.18, 0.185],
+          [0.185, 0.19],
+          [0.19, 0.195],
+          [0.195, 0.2],
+          [0.2, 0.205],
+          [0.205, 0.21],
+          [0.21, 0.215],
+          [0.215, 0.22],
+          [0.22, 0.225],
+          [0.225, 0.23],
+          [0.23, 0.235],
+          [0.235, 0.24],
+          [0.24, 0.245],
+          [0.245, 0.25],
+          [0.25, 0.255],
+          [0.255, 0.26],
+          [0.26, 0.265],
+          [0.265, 0.27],
+          [0.27, 0.275],
+          [0.275, 0.28],
+          [0.28, 0.285],
+          [0.285, 0.29],
+          [0.29, 0.295],
+          [0.295, 0.3],
+          [0.3, 0.305],
+          [0.305, 0.31],
+          [0.31, 0.315],
+          [0.315, 0.32],
+          [0.32, 0.325],
+          [0.325, 0.33],
+          [0.33, 0.335],
+          [0.335, 0.34],
+          [0.34, 0.345],
+          [0.345, 0.35],
+          [0.35, 0.355],
+          [0.355, 0.36],
+          [0.36, 0.365],
+          [0.365, 0.37],
+          [0.37, 0.375],
+          [0.375, 0.38],
+          [0.38, 0.385],
+          [0.385, 0.39],
+          [0.39, 0.395],
+          [0.395, 0.4],
+          [0.4, 0.405],
+          [0.405, 0.41],
+          [0.41, 0.415],
+          [0.415, 0.42],
+          [0.42, 0.425],
+          [0.425, 0.43],
+          [0.43, 0.435],
+          [0.435, 0.44],
+          [0.44, 0.445],
+          [0.445, 0.45],
+          [0.45, 0.455],
+          [0.455, 0.46],
+          [0.46, 0.465],
+          [0.465, 0.47],
+          [0.47, 0.475],
+          [0.475, 0.48],
+          [0.48, 0.485],
+          [0.485, 0.49],
+          [0.49, 0.495],
+          [0.495, 0.5],
+          [0.5, 0.505],
+          [0.505, 0.51],
+          [0.51, 0.515],
+          [0.515, 0.52],
+          [0.52, 0.525],
+          [0.525, 0.53],
+          [0.53, 0.535],
+          [0.535, 0.54],
+          [0.54, 0.545],
+          [0.545, 0.55],
+          [0.55, 0.555],
+          [0.555, 0.56],
+          [0.56, 0.565],
+          [0.565, 0.57],
+          [0.57, 0.575],
+          [0.575, 0.58],
+          [0.58, 0.585],
+          [0.585, 0.59],
+          [0.59, 0.595],
+          [0.595, 0.6],
+          [0.6, 0.605],
+          [0.605, 0.61],
+          [0.61, 0.615],
+          [0.615, 0.62],
+          [0.62, 0.625],
+          [0.625, 0.63],
+          [0.63, 0.635],
+          [0.635, 0.64],
+          [0.64, 0.645],
+          [0.645, 0.65],
+          [0.65, 0.655],
+          [0.655, 0.66],
+          [0.66, 0.665],
+          [0.665, 0.67],
+          [0.67, 0.675],
+          [0.675, 0.68],
+          [0.68, 0.685],
+          [0.685, 0.69],
+          [0.69, 0.695],
+          [0.695, 0.7],
+          [0.7, 1.13],
+          [1.13, 1.56],
+          [1.56, 1.99],
+          [1.99, 2.42],
+          [2.42, 2.85],
+          [2.85, 3.28],
+          [3.28, 3.71],
+          [3.71, 4.14],
+          [4.14, 4.57],
+          [4.57, 5],
+          [5],
+        ];
+
+        if (active) {
+          fillColor = `#${colors[values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]))]}`;
+          fillColor = fillColor.substring(0, fillColor.length - 2);
+        } else {
+          fillColor = 'gray';
+        }
+        // Return the style for the current feature
+        return new Style({
+          image: new Circle({
+            radius,
+            fill: new Fill({
+              color: fillColor,
+            }),
+            stroke: new Stroke({
+              color: strokeColor,
+            }),
+          }),
+        });
+      },
+    });
+
+    layer.vectorData = {
+      id: def.id,
+    };
+
+    layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
+
+    if (breakPointLayerDef && !animationIsPlaying) {
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const layerGroup = new OlLayerGroup({
+        layers: [layer, wmsLayer],
+      });
+      wmsLayer.wv = attributes;
+      return layerGroup;
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
+    }
+
+    return layer;
+  };
+
+  /**
+    *
+    * @param {object} def - Layer Specs
+    * @param {object} options - Layer options
+    * @param {number} day
+    * @param {object} state
+    * @param {object} attributes
+    */
   const createLayerVector = function(def, options, day, state, attributes) {
+    if (def.source === 'AERONET') {
+      return createLayerVectorAeronet(def, options, day, state, attributes);
+    }
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -819,7 +1344,7 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
-            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);

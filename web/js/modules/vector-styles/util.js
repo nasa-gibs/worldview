@@ -99,7 +99,7 @@ export function offsetLineStringStyle(feature, styleArray) {
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
-    const type = feature.getType();
+    const type = feature.getGeometry().getType();
     switch (type) {
       case 'Point':
         return selectedCircleStyle(style, size);
@@ -181,17 +181,17 @@ export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
  */
 function getModalOffset(dimensionProps) {
   const {
-    x, y, screenHeight, screenWidth, isMobile,
+    x, y, screenHeight, screenWidth, isMobile, modalWidth,
   } = dimensionProps;
   const isOnLeft = screenWidth - x >= screenWidth / 2;
-  const modalWidth = isMobile ? 250 : 445;
+  const modalWidthVal = modalWidth || (isMobile ? 250 : 445);
   const modalHeight = 300;
-  let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
+  let offsetLeft = isOnLeft ? x + 20 : x - modalWidthVal - 20;
   let offsetTop = y - (modalHeight / 2);
   if (offsetLeft < 0) {
     offsetLeft = 20;
-  } else if (offsetLeft + modalWidth > screenWidth) {
-    offsetLeft = screenWidth - modalWidth - 20;
+  } else if (offsetLeft + modalWidthVal > screenWidth) {
+    offsetLeft = screenWidth - modalWidthVal - 20;
   }
   if (offsetTop < 0) {
     offsetTop = 20;
@@ -236,16 +236,17 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       return;
     }
 
-    const type = feature.getType();
+    const type = feature.getGeometry().getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return;
     }
-    if (def.vectorData && def.vectorData.id && def.title) {
+    // console.log(feature.values_.name, feature, def, config);
+    if (def.vectorStyle && def.vectorStyle.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
-      const vectorDataId = def.vectorData.id;
+      const vectorDataId = 'GRanD_Dams';
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
@@ -286,14 +287,14 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
  *
  * @returns {Object}
  */
-export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
+export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset, modalWidth) {
   const { config, compare } = state;
   const { screenWidth, screenHeight, isMobileDevice } = state.screenSize;
   const isMobile = isMobileDevice;
   const x = pixels[0];
   const y = pixels[1];
   const modalOffsetProps = {
-    x, y, isMobile, screenHeight, screenWidth,
+    x, y, isMobile, screenHeight, screenWidth, modalWidth,
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);

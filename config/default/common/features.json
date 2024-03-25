@@ -30,7 +30,8 @@
                 "ORNL_CLOUD": "ORNL DAAC",
                 "PODAAC": "PO.DAAC",
                 "POCLOUD": "PO.DAAC",
-                "SEDAC": "SEDAC"
+                "SEDAC": "SEDAC",
+                "AERONET": "AERONET"
             }
         },
         "cmr": {

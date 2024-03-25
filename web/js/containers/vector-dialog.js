@@ -58,21 +58,58 @@ class VectorDialog extends React.Component {
     );
     return (
       <div className="draggable-modal-content">
-        <ModalHeader toggle={toggleWithClose} close={closeBtn}>
-          <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
-            {navArray}
-          </Nav>
-        </ModalHeader>
+        {activeMetaArray[0].id.includes('AERONET')
+          ? (
+            <div style={{ padding: '10px', position: 'relative' }}>
+              <span style={{ position: 'absolute', right: '0px', top: '3px' }}>{closeBtn}</span>
+              <div style={{ marginBottom: '5px', fontSize: '16px' }}>
+                <b>
+                  {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
+                </b>
+              </div>
+              {activeMetaArray[0].features.active && (
+              <div style={{ marginBottom: '5px' }}>
+                {`Most recent reading: ${activeMetaArray[0].features.value}`}
+              </div>
+              )}
+              {activeMetaArray[0].features.active && (
+              <div style={{ marginBottom: '5px' }}>
+                {`As of ${activeMetaArray[0].features.date.toString().split(' ').slice(1).join(' ')}`}
+              </div>
+              )}
+              <div style={{ marginBottom: '5px' }}>
+                {'Site: '}
+                <a
+                  href={
+                    `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/${activeMetaArray[0].features.name}.html`
+                  }
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {activeMetaArray[0].features.name}
+                </a>
+                {` (${activeMetaArray[0].features.coordinates[0]}, ${activeMetaArray[0].features.coordinates[1]})`}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <ModalHeader toggle={toggleWithClose} close={closeBtn}>
+                <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
+                  {navArray}
+                </Nav>
+              </ModalHeader>
 
-        <ModalBody>
-          <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
-            <VectorMetaTable
-              id={dialogKey}
-              metaArray={activeMetaArray}
-              title={keyArray[activeIndex]}
-            />
-          </Scrollbars>
-        </ModalBody>
+              <ModalBody>
+                <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
+                  <VectorMetaTable
+                    id={dialogKey}
+                    metaArray={activeMetaArray}
+                    title={keyArray[activeIndex]}
+                  />
+                </Scrollbars>
+              </ModalBody>
+            </div>
+          )}
       </div>
     );
   }
