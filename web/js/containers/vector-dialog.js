@@ -60,7 +60,8 @@ class VectorDialog extends React.Component {
       <div className="draggable-modal-content">
         {activeMetaArray[0].id.includes('AERONET')
           ? (
-            <div style={{ padding: '10px' }}>
+            <div style={{ padding: '10px', position: 'relative' }}>
+              <span style={{ position: 'absolute', right: '0px', top: '3px' }}>{closeBtn}</span>
               <div style={{ marginBottom: '5px', fontSize: '16px' }}>
                 <b>
                   {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
