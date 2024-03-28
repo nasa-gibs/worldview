@@ -241,12 +241,11 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return;
     }
-    // console.log(feature.values_.name, feature, def, config);
-    if (def.vectorStyle && def.vectorStyle.id && def.title) {
+    if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
-      const vectorDataId = 'GRanD_Dams';
+      const vectorDataId = def.vectorData.id;
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
@@ -269,6 +268,22 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       };
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);
+    } else if (def.id.includes('AERONET')) {
+      const layerId = def.id;
+      if (!selected[layerId]) selected[layerId] = [];
+      const features = feature.getProperties();
+      if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
+      const obj = {
+        features,
+        id: layerId,
+        title: def.title || layerId,
+        subTitle: def.subtitle,
+        featureTitle: layerId,
+        disableUnitConversion: !!def.disableUnitConversion,
+
+      };
+      metaArray.push(obj);
+      selected[layerId].push(layerId);
     }
   }, featureOptions);
   return {

@@ -494,8 +494,6 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVectorAeronet = function(def, options, day, state, attributes) {
-    console.log(def.id);
-    // console.log(def.id, def, config, config.sources[def.source].matrixSets);
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -971,6 +969,8 @@ export default function mapLayerBuilder(config, cache, store) {
         });
       },
     });
+
+    applyStyle(def, layer, state, options);
 
     layer.vectorData = {
       id: def.id,
