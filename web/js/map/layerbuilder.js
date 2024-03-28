@@ -51,6 +51,11 @@ import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
 
+const componentToHex = (c) => {
+  const hex = c.toString(16);
+  return hex.length === 1 ? `0${hex}` : hex;
+};
+
 export default function mapLayerBuilder(config, cache, store) {
   /**
    * Return a layer, or layergroup, created with the supplied function
@@ -533,7 +538,6 @@ export default function mapLayerBuilder(config, cache, store) {
       format: new GeoJSON(),
       loader: async () => {
         const getAllData = async () => {
-          // const url = `https://aeronet.gsfc.nasa.gov/aeronet_locations_v3.txt`;
           const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
           const res = await fetch(url);
           const data = await res.text();
@@ -572,7 +576,11 @@ export default function mapLayerBuilder(config, cache, store) {
                 value: def.id.includes('ANGSTROM') ? rowObj['440-870_Angstrom_Exponent'] : rowObj.AOD_500nm,
                 date: new Date(`${rowObj['Date(dd:mm:yyyy)'].split(':')[2]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[1]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[0]}`),
               };
-              takenNamesActive[rowObj.AERONET_Site_Name] = true;
+              if (featuresObj[rowObj.AERONET_Site_Name].properties.value < 0) {
+                delete featuresObj[rowObj.AERONET_Site_Name];
+              } else {
+                takenNamesActive[rowObj.AERONET_Site_Name] = true;
+              }
             }
           }
         }
@@ -636,7 +644,10 @@ export default function mapLayerBuilder(config, cache, store) {
         let fillColor;
         const strokeColor = 'white';
         let colors = [];
-        if (customStyle !== 'default') {
+        if (isPaletteActive(def.id, options.group, state)) {
+          const lookup = getPaletteLookup(def.id, options.group, state);
+          colors = Object.values(lookup).map((rgbaObj) => `${componentToHex(rgbaObj.r)}${componentToHex(rgbaObj.g)}${componentToHex(rgbaObj.b)}ff`);
+        } else if (customStyle !== 'default') {
           colors = state.palettes.custom[customStyle].colors;
         } else {
           colors = [
@@ -949,11 +960,22 @@ export default function mapLayerBuilder(config, cache, store) {
           [5],
         ];
 
+        let valueIndex;
         if (active) {
-          fillColor = `#${colors[values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]))]}`;
+          valueIndex = values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
+          fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
+          valueIndex = -1;
           fillColor = 'gray';
+          // return null;
+        }
+        if (fillColor === '#000000'
+          || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
+          || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))
+          || (def.min && !Array.isArray(def.min) && def.min > valueIndex)
+          || (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
+          return null;
         }
         // Return the style for the current feature
         return new Style({
@@ -969,8 +991,6 @@ export default function mapLayerBuilder(config, cache, store) {
         });
       },
     });
-
-    applyStyle(def, layer, state, options);
 
     layer.vectorData = {
       id: def.id,
