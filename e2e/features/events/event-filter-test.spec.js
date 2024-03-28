@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
-const { switchProjections, clickAndWait } = require('../../test-utils/hooks/wvHooks')
+const { switchProjections, clickAndWait, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -38,9 +38,9 @@ test.afterAll(async () => {
 })
 
 test('Default filtering includes last 120 days and all categories', async () => {
-  const { eventsTab, filterIcons, filterDates, modalCloseButton } = selectors
+  const { eventsTab, filterIcons, filterDates } = selectors
   await page.goto(fixedAppNow)
-  await modalCloseButton.click()
+  await closeModal(page)
   await eventsTab.click()
   await expect(filterIcons).toHaveCount(8)
   await expect(filterDates).toContainText('2011 SEP 02 - 2011 DEC 31')
@@ -88,7 +88,6 @@ test('Loading from permalink sets all criteria properly', async () => {
     filterIcons,
     manmadeSwitch,
     mapExtentFilterCheckbox,
-    modalCloseButton,
     seaLakeIceSwitch,
     severeStormsSwitch,
     snowSwitch,
@@ -98,7 +97,7 @@ test('Loading from permalink sets all criteria properly', async () => {
     wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
-  await modalCloseButton.click()
+  await closeModal(page)
 
   const currentUrl = await page.url()
 
@@ -133,14 +132,13 @@ test('Changing criteria in modal DOES NOT update summary of criteria in sidebar 
     filterDates,
     filterIcons,
     filterModalCancel,
-    modalCloseButton,
     startInputYear,
     startInputMonth,
     startInputDay,
     wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
-  await modalCloseButton.click()
+  await closeModal(page)
   await filterButton.click()
   await startInputYear.fill('2000')
   await startInputMonth.fill('APR')
@@ -220,11 +218,10 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
     filterDates,
     filterButton,
     filterIcons,
-    mapExtentFilterCheckbox,
-    modalCloseButton
+    mapExtentFilterCheckbox
   } = selectors
   await page.goto(backwardsCompatibleEventUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
@@ -234,9 +231,9 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
 })
 
 test('No extent search checkbox in polar projections', async () => {
-  const { filterButton, mapExtentFilterCheckbox, modalCloseButton } = selectors
+  const { filterButton, mapExtentFilterCheckbox } = selectors
   await page.goto(extentsUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeVisible()
   await expect(mapExtentFilterCheckbox).toBeChecked()

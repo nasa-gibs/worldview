@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202303": {
+      "id": "GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202303",
+      "description": "gedi/GEDI_ISS_L3_Canopy_Height_StdDev_RH100_201904-202303",
+      "tags": "international space station iss",
+      "group": "overlays",
+      "layergroup": "Canopy Characteristics",
+      "wrapX": true
+    }
+  }
+}
