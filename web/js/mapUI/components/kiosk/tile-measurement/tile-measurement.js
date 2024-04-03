@@ -236,7 +236,7 @@ function TileMeasurement({ ui }) {
       setMeasurementsStarted(true);
       calculateMeasurements();
     }
-  }, [ui.selected]);
+  }, [ui.selected, eicLegacy]);
 
   return null;
 }
