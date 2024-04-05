@@ -148,11 +148,11 @@ class CoverageLine extends PureComponent {
       layerPeriod,
       index,
     } = this.props;
-    return (
-      <g clipPath="url(#coverageLineBoundary)">
+    return options.map((option) => {
+      return (<g clipPath="url(#coverageLineBoundary)">
         {this.createMatchingCoverageLineDOMEl(
           id,
-          options,
+          option,
           lineType,
           startDate,
           endDate,
@@ -160,8 +160,8 @@ class CoverageLine extends PureComponent {
           layerPeriod,
           index,
         )}
-      </g>
-    );
+      </g>)
+    });
   }
 }
 
@@ -172,7 +172,7 @@ CoverageLine.propTypes = {
   index: PropTypes.string,
   layerPeriod: PropTypes.string,
   lineType: PropTypes.string,
-  options: PropTypes.object,
+  options: PropTypes.array,
   positionTransformX: PropTypes.number,
   startDate: PropTypes.string,
 };
