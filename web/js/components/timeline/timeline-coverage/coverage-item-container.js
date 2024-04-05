@@ -149,35 +149,35 @@ class CoverageItemContainer extends Component {
               // create DOM line element
               const key = `${id}-${multiIndex}`;
               return (
-                    <React.Fragment key={key}>
-                      <CoverageLine
-                        axisWidth={axisWidth}
-                        positionTransformX={positionTransformX}
-                        id={id}
-                        options={multiLineRangeOptions}
-                        lineType="MULTI"
-                        startDate={date}
-                        endDate={rangeDateEnd}
-                        color={lineBackgroundColor}
-                        layerPeriod={layerPeriod}
-                        index={key}
-                      />
-                    </React.Fragment>
-                  );
+                <React.Fragment key={key}>
+                  <CoverageLine
+                    axisWidth={axisWidth}
+                    positionTransformX={positionTransformX}
+                    id={id}
+                    options={multiLineRangeOptions}
+                    lineType="MULTI"
+                    startDate={date}
+                    endDate={rangeDateEnd}
+                    color={lineBackgroundColor}
+                    layerPeriod={layerPeriod}
+                    index={key}
+                  />
+                </React.Fragment>
+              );
             })
             : (
-            <CoverageLine
-              axisWidth={axisWidth}
-              positionTransformX={positionTransformX}
-              id={id}
-              options={containerLineDimensions}
-              lineType="SINGLE"
-              startDate={startDate}
-              endDate={endDate}
-              color={lineBackgroundColor}
-              layerPeriod={layerPeriod}
-              index={`${id}-0`}
-            />
+              <CoverageLine
+                axisWidth={axisWidth}
+                positionTransformX={positionTransformX}
+                id={id}
+                options={containerLineDimensions}
+                lineType="SINGLE"
+                startDate={startDate}
+                endDate={endDate}
+                color={lineBackgroundColor}
+                layerPeriod={layerPeriod}
+                index={`${id}-0`}
+              />
             )}
         </svg>
       </div>

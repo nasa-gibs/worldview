@@ -1343,16 +1343,16 @@ class TimelineAxis extends Component {
       const axisBackDate = new Date(backDate).getTime();
       const layerStart = new Date(startDate).getTime();
       const layerEnd = new Date(endDate).getTime();
-  
+
       let visible = true;
       if (layerStart >= axisBackDate || layerEnd <= axisFrontDate) {
         visible = false;
       }
-  
+
       let leftOffset = 0;
       const layerStartBeforeAxisFront = layerStart < axisFrontDate;
       const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
-  
+
       // oversized width allows axis drag buffer
       let width = axisWidth * 2;
       if (visible) {
@@ -1364,7 +1364,7 @@ class TimelineAxis extends Component {
           const gridDiff = gridWidth * diff;
           leftOffset = gridDiff + positionTransformX;
         }
-  
+
         if (layerEndBeforeAxisBack) {
           // positive diff means layerEnd earlier than back date
           const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
@@ -1372,12 +1372,12 @@ class TimelineAxis extends Component {
           width = Math.max(gridDiff + positionTransformX - leftOffset, 0);
         }
       }
-  
+
       return {
         visible,
         leftOffset,
         width,
-      };  
+      };
     });
   };
 
@@ -1387,35 +1387,30 @@ class TimelineAxis extends Component {
   * @param {Number} transformX
   * @returns {Object} DOM SVG object
   */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => {
-    return lineCoverageOptions.map(({ leftOffset, visible, width }, i) => {
-      return (
-        <g
-          key={`matchingCoverageLine-${i}`}
-          className="axis-matching-layer-coverage-line"
-          transform={`translate(${-transformX})`}
-          clipPath="url(#matchingCoverage)"
-        >
-          <rect
-            style={{
-              left: leftOffset,
-              visibility: visible ? 'visible' : 'hidden',
-              margin: '0 0 6px 0',
-            }}
-            rx={0}
-            ry={0}
-            width={width}
-            height={10}
-            transform={`translate(${transformX + leftOffset})`}
-            fill="rgba(0, 119, 212, 0.5)"
-            stroke="rgba(0, 69, 123, 0.8)"
-            strokeWidth={3}
-          />
-        </g>
-      );
-  
-    });
-  };
+  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => lineCoverageOptions.map(({ leftOffset, visible, width }, i) => (
+    <g
+      key={`matchingCoverageLine-${crypto.randomUUID()}`}
+      className="axis-matching-layer-coverage-line"
+      transform={`translate(${-transformX})`}
+      clipPath="url(#matchingCoverage)"
+    >
+      <rect
+        style={{
+          left: leftOffset,
+          visibility: visible ? 'visible' : 'hidden',
+          margin: '0 0 6px 0',
+        }}
+        rx={0}
+        ry={0}
+        width={width}
+        height={10}
+        transform={`translate(${transformX + leftOffset})`}
+        fill="rgba(0, 119, 212, 0.5)"
+        stroke="rgba(0, 69, 123, 0.8)"
+        strokeWidth={3}
+      />
+    </g>
+  ));
 
   render() {
     const {
