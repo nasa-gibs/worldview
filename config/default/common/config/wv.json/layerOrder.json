@@ -116,6 +116,8 @@
 		"VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09",
 		"VIIRS_SNPP_L2_Chlorophyll_A",
 		"VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+		"S3A_OLCI_Chlorophyll_a",
+		"S3B_OLCI_Chlorophyll_a",
 		"GOES-East_ABI_GeoColor",
 		"GOES-West_ABI_GeoColor",
 		"GOES-East_ABI_Band2_Red_Visible_1km",
