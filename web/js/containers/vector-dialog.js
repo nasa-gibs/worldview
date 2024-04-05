@@ -74,7 +74,8 @@ class VectorDialog extends React.Component {
               )}
               {activeMetaArray[0].features.active && (
               <div style={{ marginBottom: '5px' }}>
-                {`As of ${activeMetaArray[0].features.date.toString().split(' ').slice(1).join(' ')}`}
+                {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ').slice(1).join(' ')
+                  .replace('GMT', 'UTC')}`}
               </div>
               )}
               <div style={{ marginBottom: '5px' }}>

@@ -546,7 +546,9 @@ export default function mapLayerBuilder(config, cache, store) {
 
         const getActiveData = async () => {
           const avg = def.id.includes('DAILY') ? 20 : 10;
-          const urlParameters = `?year=${date.getFullYear()}&month=${date.getUTCMonth() + 1}&day=${date.getUTCDate()}&year2=${date.getUTCFullYear()}&month2=${date.getUTCMonth() + 1}&day2=${date.getUTCDate()}${isSubdaily ? `&hour=${date.getUTCHours()}&hour2=${date.getUTCHours() + 1}` : ''}&AOD15=1&AVG=${avg}&if_no_html=1`;
+          const date2 = new Date(date.toString());
+          date2.setHours(date.getHours() + 1);
+          const urlParameters = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth() + 1}&day=${date.getUTCDate()}&year2=${date2.getUTCFullYear()}&month2=${date2.getUTCMonth() + 1}&day2=${date2.getUTCDate()}${isSubdaily ? `&hour=${date.getUTCHours()}&hour2=${date2.getUTCHours()}` : ''}&AOD15=1&AVG=${avg}&if_no_html=1`;
           const res = await fetch(source.url + urlParameters);
           const data = await res.text();
           return data;
@@ -574,7 +576,7 @@ export default function mapLayerBuilder(config, cache, store) {
               featuresObj[rowObj.AERONET_Site_Name].properties = {
                 name: rowObj.AERONET_Site_Name,
                 value: def.id.includes('ANGSTROM') ? rowObj['440-870_Angstrom_Exponent'] : rowObj.AOD_500nm,
-                date: new Date(`${rowObj['Date(dd:mm:yyyy)'].split(':')[2]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[1]}-${rowObj['Date(dd:mm:yyyy)'].split(':')[0]}`),
+                date: new Date(Date.UTC(rowObj['Date(dd:mm:yyyy)'].split(':')[2], rowObj['Date(dd:mm:yyyy)'].split(':')[1] - 1, rowObj['Date(dd:mm:yyyy)'].split(':')[0], rowObj['Time(hh:mm:ss)'].split(':')[0], rowObj['Time(hh:mm:ss)'].split(':')[1], rowObj['Time(hh:mm:ss)'].split(':')[2])),
               };
               if (featuresObj[rowObj.AERONET_Site_Name].properties.value < 0) {
                 delete featuresObj[rowObj.AERONET_Site_Name];
@@ -966,9 +968,11 @@ export default function mapLayerBuilder(config, cache, store) {
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
+          if (def.disabled) {
+            return null;
+          }
           valueIndex = -1;
           fillColor = 'gray';
-          // return null;
         }
         if (fillColor === '#000000'
           || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
