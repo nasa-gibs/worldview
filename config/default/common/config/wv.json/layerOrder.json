@@ -1072,6 +1072,8 @@
 		"OrbitTracks_METOP-C_Descending",
 		"OrbitTracks_NOAA-20_Ascending",
 		"OrbitTracks_NOAA-20_Descending",
+		"OrbitTracks_NOAA-21_Ascending",
+		"OrbitTracks_NOAA-21_Descending",
 		"OrbitTracks_OCO-2_Ascending",
 		"OrbitTracks_OCO-2_Descending",
 		"OrbitTracks_SAOCOM1-A_Ascending",
