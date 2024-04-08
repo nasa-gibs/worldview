@@ -2,4 +2,4 @@ The Chlorophyll *a* layer provides the near-surface concentration of chlorophyll
 
 The Chlorophyll *a* product is available from the Ocean and Land Colour Instrument (OCLI) aboard the European Space Agency's (ESA) Sentinel-3A and Sentinel-3B satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: doi: [10.5067/S3B/OLCI/L2/ERR/OC/2022](https://doi.org/10.5067/S3B/OLCI/L2/ERR/OC/2022)
+References: doi:[10.5067/SENTINEL-3B/OLCI/L2/ERR/OC/2022](https://doi.org/10.5067/SENTINEL-3B/OLCI/L2/ERR/OC/2022)
