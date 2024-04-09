@@ -6,6 +6,8 @@ import {
   ACTIVATE_VECTOR_EXCEEDED_ALERT,
   ACTIVATE_DDV_ZOOM_ALERT,
   ACTIVATE_DDV_LOCATION_ALERT,
+  DEACTIVATE_DDV_LOCATION_ALERT,
+  DEACTIVATE_DDV_ZOOM_ALERT,
 } from './constants';
 import { hasVectorLayers } from '../layers/util';
 import { REMOVE_LAYER, REMOVE_GROUP } from '../layers/constants';
@@ -68,6 +70,14 @@ export function alertReducer(state = defaultAlertState, action) {
           id: action.id,
           title: action.title,
         },
+      });
+    case DEACTIVATE_DDV_ZOOM_ALERT:
+      return lodashAssign({}, state, {
+        isDDVZoomAlertPresent: false,
+      });
+    case DEACTIVATE_DDV_LOCATION_ALERT:
+      return lodashAssign({}, state, {
+        isDDVLocationAlertPresent: false,
       });
     default:
       return state;

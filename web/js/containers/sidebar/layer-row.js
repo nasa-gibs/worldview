@@ -40,7 +40,9 @@ import {
   updateActiveChartingLayerAction,
 } from '../../modules/charting/actions';
 import AlertUtil from '../../components/util/alert';
-import { enableDDVZoomAlert, enableDDVLocationAlert } from '../../modules/alerts/actions';
+import {
+  enableDDVZoomAlert, enableDDVLocationAlert, disableDDVLocationAlert, disableDDVZoomAlert,
+} from '../../modules/alerts/actions';
 
 const { events } = util;
 const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
@@ -96,6 +98,8 @@ function LayerRow (props) {
     enableDDVZoomAlert,
     enableDDVLocationAlert,
     isDDVLocationAlertPresent,
+    disableDDVLocationAlert,
+    disableDDVZoomAlert,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -175,6 +179,8 @@ function LayerRow (props) {
     if (isDDVLayer && !isDDVZoomAlertPresent && showZoomAlert) {
       const { id, title } = layer;
       enableDDVZoomAlert(id, title);
+    } else if (isDDVLayer && isDDVZoomAlertPresent && !showZoomAlert) {
+      disableDDVZoomAlert();
     }
   }, [showZoomAlert]);
 
@@ -182,6 +188,8 @@ function LayerRow (props) {
     if (isDDVLayer && !isDDVLocationAlertPresent && showGranuleAlert) {
       const { id, title } = layer;
       enableDDVLocationAlert(id, title);
+    } else if (isDDVLayer && isDDVLocationAlertPresent && !showGranuleAlert) {
+      disableDDVLocationAlert();
     }
   }, [showGranuleAlert]);
 
@@ -719,6 +727,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   enableDDVLocationAlert: (id, title) => {
     dispatch(enableDDVLocationAlert(id, title));
+  },
+  disableDDVLocationAlert: () => {
+    dispatch(disableDDVLocationAlert());
+  },
+  disableDDVZoomAlert: () => {
+    dispatch(disableDDVZoomAlert());
   },
 });
 
