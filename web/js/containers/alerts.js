@@ -17,7 +17,7 @@ const {
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
   DISSMISSED_DDV_ZOOM_ALERT,
-  DISSMISSED_DDV_LOCATION_ALERT
+  DISSMISSED_DDV_LOCATION_ALERT,
 } = safeLocalStorage.keys;
 
 class DismissableAlerts extends React.Component {
@@ -85,16 +85,15 @@ class DismissableAlerts extends React.Component {
       isDDVLocationAlertPresent,
       openGranuleAlertModal,
       openZoomAlertModal,
-      activeDDVLayer
+      activeDDVLayer,
     } = this.props;
-    console.log('activeDDVLayer', activeDDVLayer)
     const {
       hasDismissedEvents,
       hasDismissedCompare,
       hasDismissedDistractionFree,
       distractionFreeModeInitLoad,
       hasDismissedDDVZoom,
-      hasDismissedDDVLocation
+      hasDismissedDDVLocation,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
     const hasFailCondition = !HAS_LOCAL_STORAGE
@@ -174,7 +173,7 @@ class DismissableAlerts extends React.Component {
               message="Imagery is not available at this zoom level."
               onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
               onClick={openZoomAlertModal}
-              />
+            />
           )}
           {showDDVLocationAlert && (
             <AlertUtil
@@ -216,7 +215,7 @@ const mapStateToProps = (state) => {
     isVectorExceededAlertPresent,
     isDDVZoomAlertPresent,
     isDDVLocationAlertPresent,
-    activeDDVLayer
+    activeDDVLayer,
   } = alerts;
   const activeLayers = getActiveLayers(state);
   const hasActiveVectorLayers = hasVectorLayers(activeLayers);
@@ -256,4 +255,9 @@ DismissableAlerts.propTypes = {
   isVectorZoomAlertPresent: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   openAlertModal: PropTypes.func,
+  isDDVZoomAlertPresent: PropTypes.bool,
+  isDDVLocationAlertPresent: PropTypes.bool,
+  openGranuleAlertModal: PropTypes.func,
+  openZoomAlertModal: PropTypes.func,
+  activeDDVLayer: PropTypes.object,
 };

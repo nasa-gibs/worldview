@@ -95,7 +95,7 @@ function LayerRow (props) {
     updateActiveChartingLayer,
     enableDDVZoomAlert,
     enableDDVLocationAlert,
-    isDDVLocationAlertPresent
+    isDDVLocationAlertPresent,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -616,7 +616,7 @@ const makeMapStateToProps = () => {
     const collections = getCollections(layers, dailyDate, subdailyDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
-    const {isDDVZoomAlertPresent, isDDVLocationAlertPresent } = state.alerts;
+    const { isDDVZoomAlertPresent, isDDVLocationAlertPresent } = state.alerts;
 
     return {
       compare,
@@ -770,4 +770,9 @@ LayerRow.propTypes = {
   isAnimating: PropTypes.bool,
   isChartingActive: PropTypes.bool,
   activeChartingLayer: PropTypes.string,
+  enableDDVZoomAlert: PropTypes.func,
+  enableDDVLocationAlert: PropTypes.func,
+  isDDVLocationAlertPresent: PropTypes.bool,
+  isDDVZoomAlertPresent: PropTypes.bool,
+  openZoomAlertModal: PropTypes.func,
 };
