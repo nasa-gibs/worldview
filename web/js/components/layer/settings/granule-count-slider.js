@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import lodashDebounce from 'lodash/debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
 import { DEFAULT_NUM_GRANULES, MIN_GRANULES, MAX_GRANULES } from '../../../modules/layers/constants';
@@ -20,7 +19,6 @@ function GranuleCountSlider(props) {
   const onChange = (val) => {
     updateGranuleLayerOptions(granuleDates, def, val);
   };
-  const debounceOnchange = lodashDebounce(onChange, 300);
 
   const satelliteInfo = `Updating granule count for all granules layers associated with the ${granulePlatform} satellite.`;
 
@@ -46,7 +44,7 @@ function GranuleCountSlider(props) {
         onChange={(e) => {
           const val = parseInt(e.target.value, 10);
           setGranuleCount(val);
-          debounceOnchange(val);
+          onChange(val);
         }}
         style={{
           '--value-percent': `${((granuleCount - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES)) * 100}%`,

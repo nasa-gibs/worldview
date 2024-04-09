@@ -3,7 +3,7 @@
         "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS, Sentinel-3A, Sentinel-3B",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -33,6 +33,24 @@
                     "settings": [
                         "VIIRS_SNPP_L2_Chlorophyll_A",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "Sentinel-3A/OLCI": {
+                    "id": "sentinel-3a-olci",
+                    "title": "Sentinel-3A/OLCI",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "S3A_OLCI_Chlorophyll_a"
+                    ]
+                },
+                "Sentinel-3B/OLCI": {
+                    "id": "sentinel-3b-olci",
+                    "title": "Sentinel-3B/OLCI",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "S3B_OLCI_Chlorophyll_a"
                     ]
                 }
             }
