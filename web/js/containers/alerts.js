@@ -9,11 +9,15 @@ import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERT
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
+const { zoomModalProps } = MODAL_PROPERTIES;
+
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 const {
   DISMISSED_COMPARE_ALERT,
   DISMISSED_DISTRACTION_FREE_ALERT,
   DISMISSED_EVENT_VIS_ALERT,
+  DISSMISSED_DDV_ZOOM_ALERT,
+  DISSMISSED_DDV_LOCATION_ALERT
 } = safeLocalStorage.keys;
 
 class DismissableAlerts extends React.Component {
@@ -24,6 +28,8 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
       hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
+      hasDismissedDDVZoom: !!safeLocalStorage.getItem(DISSMISSED_DDV_ZOOM_ALERT),
+      hasDismissedDDVLocation: !!safeLocalStorage.getItem(DISSMISSED_DDV_LOCATION_ALERT),
       distractionFreeModeInitLoad: false,
     };
   }
@@ -75,7 +81,12 @@ class DismissableAlerts extends React.Component {
       isVectorZoomAlertPresent,
       isVectorExceededAlertPresent,
       openAlertModal,
+      isDDVZoomAlertPresent,
+      isDDVLocationAlertPresent,
+      openZoomAlertModal,
+      activeDDVLayer
     } = this.props;
+    console.log('activeDDVLayer', activeDDVLayer)
     const {
       hasDismissedEvents,
       hasDismissedCompare,
@@ -148,6 +159,18 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
+          {isDDVZoomAlertPresent && (
+            <AlertUtil
+              id="zoom-alert"
+              isOpen
+              noPortal
+              title="Zoom in to see imagery for this layer"
+              messageTitle={activeDDVLayer.title}
+              message="Imagery is not available at this zoom level."
+              onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
+              onClick={openZoomAlertModal}
+              />
+          )}
 
         </>
       );
@@ -157,6 +180,10 @@ const mapDispatchToProps = (dispatch) => ({
   openAlertModal: ({ id, props }) => {
     dispatch(openCustomContent(id, props));
   },
+  openZoomAlertModal: () => {
+    const { id, props } = zoomModalProps;
+    dispatch(openCustomContent(id, props));
+  },
   dismissVectorZoomAlert: () => dispatch({ type: DISABLE_VECTOR_ZOOM_ALERT }),
   dismissVectorExceededAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
 });
@@ -164,12 +191,21 @@ const mapStateToProps = (state) => {
   const {
     embed, events, sidebar, compare, alerts, ui, animation, screenSize,
   } = state;
-  const { isVectorZoomAlertPresent, isVectorExceededAlertPresent } = alerts;
+  const {
+    isVectorZoomAlertPresent,
+    isVectorExceededAlertPresent,
+    isDDVZoomAlertPresent,
+    isDDVLocationAlertPresent,
+    activeDDVLayer
+  } = alerts;
   const activeLayers = getActiveLayers(state);
   const hasActiveVectorLayers = hasVectorLayers(activeLayers);
 
   return {
+    activeDDVLayer,
     isCompareActive: compare.active,
+    isDDVZoomAlertPresent,
+    isDDVLocationAlertPresent,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),

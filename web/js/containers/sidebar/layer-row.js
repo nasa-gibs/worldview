@@ -40,6 +40,8 @@ import {
   updateActiveChartingLayerAction,
 } from '../../modules/charting/actions';
 import AlertUtil from '../../components/util/alert';
+import { enableDDVZoomAlert, enableDDVLocationAlert } from '../../modules/alerts/actions';
+import { is } from 'bluebird';
 
 const { events } = util;
 const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
@@ -64,6 +66,7 @@ function LayerRow (props) {
     requestPalette,
     globalTemperatureUnit,
     isCustomPalette,
+    isDDVZoomAlertPresent,
     isDistractionFreeModeActive,
     isEmbedModeActive,
     isLoading,
@@ -91,6 +94,8 @@ function LayerRow (props) {
     isChartingActive,
     activeChartingLayer,
     updateActiveChartingLayer,
+    enableDDVZoomAlert,
+    enableDDVLocationAlert,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -116,6 +121,8 @@ function LayerRow (props) {
   const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
+
+  const isDDVLayer = layer.type === 'ttiler';
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -163,6 +170,13 @@ function LayerRow (props) {
     };
     asyncFunc();
   }, [map.extent, zot, selectedDate, isVisible]);
+
+  useEffect(() => {
+    if (isDDVLayer && !isDDVZoomAlertPresent && showZoomAlert) {
+      const { id, title } = layer;
+      enableDDVZoomAlert(id, title);
+    }
+  }, [showZoomAlert]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
@@ -503,7 +517,7 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && !hideZoomAlert && (
+        {showZoomAlert && !hideZoomAlert && !isDDVLayer && (
           <AlertUtil
             id="zoom-alert"
             isOpen
@@ -595,6 +609,8 @@ const makeMapStateToProps = () => {
     const collections = getCollections(layers, dailyDate, subdailyDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
+    const isDDVZoomAlertPresent = state.alerts.isDDVZoomAlertPresent;
+
     return {
       compare,
       collections,
@@ -602,6 +618,7 @@ const makeMapStateToProps = () => {
       measurementDescriptionPath,
       globalTemperatureUnit,
       isCustomPalette,
+      isDDVZoomAlertPresent,
       isDistractionFreeModeActive,
       isEmbedModeActive,
       isLoading: palettes.isLoading[paletteName],
@@ -688,6 +705,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   updateActiveChartingLayer: (layersId) => {
     dispatch(updateActiveChartingLayerAction(layersId));
+  },
+  enableDDVZoomAlert: (id, title) => {
+    dispatch(enableDDVZoomAlert(id, title));
+  },
+  enableDDVLocationAlert: (id, title) => {
+    dispatch(enableDDVLocationAlert(id, title));
   },
 });
 
