@@ -9,7 +9,7 @@ import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERT
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
-const { zoomModalProps } = MODAL_PROPERTIES;
+const { granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 const {
@@ -83,6 +83,7 @@ class DismissableAlerts extends React.Component {
       openAlertModal,
       isDDVZoomAlertPresent,
       isDDVLocationAlertPresent,
+      openGranuleAlertModal,
       openZoomAlertModal,
       activeDDVLayer
     } = this.props;
@@ -92,6 +93,8 @@ class DismissableAlerts extends React.Component {
       hasDismissedCompare,
       hasDismissedDistractionFree,
       distractionFreeModeInitLoad,
+      hasDismissedDDVZoom,
+      hasDismissedDDVLocation
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
     const hasFailCondition = !HAS_LOCAL_STORAGE
@@ -102,6 +105,8 @@ class DismissableAlerts extends React.Component {
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
     const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
     const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
+    const showDDVZoomAlert = isDDVZoomAlertPresent && !hasDismissedDDVZoom;
+    const showDDVLocationAlert = isDDVLocationAlertPresent && !hasDismissedDDVLocation;
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -159,7 +164,7 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {isDDVZoomAlertPresent && (
+          {showDDVZoomAlert && (
             <AlertUtil
               id="zoom-alert"
               isOpen
@@ -171,13 +176,28 @@ class DismissableAlerts extends React.Component {
               onClick={openZoomAlertModal}
               />
           )}
-
+          {showDDVLocationAlert && (
+            <AlertUtil
+              id="granule-alert"
+              isOpen
+              noPortal
+              title="Try moving the map or select a different date in the layer's settings."
+              messageTitle={activeDDVLayer.title}
+              message="Imagery is not available at this location or date."
+              onDismiss={() => this.dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
+              onClick={openGranuleAlertModal}
+            />
+          )}
         </>
       );
   }
 }
 const mapDispatchToProps = (dispatch) => ({
   openAlertModal: ({ id, props }) => {
+    dispatch(openCustomContent(id, props));
+  },
+  openGranuleAlertModal: () => {
+    const { id, props } = granuleModalProps;
     dispatch(openCustomContent(id, props));
   },
   openZoomAlertModal: () => {

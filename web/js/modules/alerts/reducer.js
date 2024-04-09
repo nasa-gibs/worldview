@@ -55,18 +55,21 @@ export function alertReducer(state = defaultAlertState, action) {
         });
       }
       return state;
-      case ACTIVATE_DDV_ZOOM_ALERT:
-        const { id, title } = action;
-        return lodashAssign({}, state, {
-          isDDVZoomAlertPresent: true,
-          activeDDVLayer: {
-            id: id,
-            title: title,
-          },
-        });
+    case ACTIVATE_DDV_ZOOM_ALERT:
+      return lodashAssign({}, state, {
+        isDDVZoomAlertPresent: true,
+        activeDDVLayer: {
+          id: action.id,
+          title: action.title,
+        },
+      });
     case ACTIVATE_DDV_LOCATION_ALERT:
       return lodashAssign({}, state, {
         isDDVLocationAlertPresent: true,
+        activeDDVLayer: {
+          id: action.id,
+          title: action.title,
+        },
       });
     case DISABLE_DDV_ZOOM_ALERT:
       return lodashAssign({}, state, {

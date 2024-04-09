@@ -13,9 +13,11 @@ export function enableDDVZoomAlert(id, title) {
   };
 }
 
-export function enableDDVLocationAlert() {
+export function enableDDVLocationAlert(id, title) {
   return {
     type: ACTIVATE_DDV_LOCATION_ALERT,
+    id,
+    title,
   };
 }
 

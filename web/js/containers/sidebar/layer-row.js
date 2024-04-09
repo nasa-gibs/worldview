@@ -41,7 +41,6 @@ import {
 } from '../../modules/charting/actions';
 import AlertUtil from '../../components/util/alert';
 import { enableDDVZoomAlert, enableDDVLocationAlert } from '../../modules/alerts/actions';
-import { is } from 'bluebird';
 
 const { events } = util;
 const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
@@ -96,6 +95,7 @@ function LayerRow (props) {
     updateActiveChartingLayer,
     enableDDVZoomAlert,
     enableDDVLocationAlert,
+    isDDVLocationAlertPresent
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -177,6 +177,13 @@ function LayerRow (props) {
       enableDDVZoomAlert(id, title);
     }
   }, [showZoomAlert]);
+
+  useEffect(() => {
+    if (isDDVLayer && !isDDVLocationAlertPresent && showGranuleAlert) {
+      const { id, title } = layer;
+      enableDDVLocationAlert(id, title);
+    }
+  }, [showGranuleAlert]);
 
   useEffect(() => {
     events.on(MAP_RUNNING_DATA, setRunningDataObj);
@@ -528,7 +535,7 @@ function LayerRow (props) {
             onClick={openZoomAlertModal}
           />
         )}
-        {showGranuleAlert && !hideGranuleAlert && (
+        {showGranuleAlert && !hideGranuleAlert && !isDDVLayer && (
           <AlertUtil
             id="granule-alert"
             isOpen
@@ -609,7 +616,7 @@ const makeMapStateToProps = () => {
     const collections = getCollections(layers, dailyDate, subdailyDate, layer);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
-    const isDDVZoomAlertPresent = state.alerts.isDDVZoomAlertPresent;
+    const {isDDVZoomAlertPresent, isDDVLocationAlertPresent } = state.alerts;
 
     return {
       compare,
@@ -619,6 +626,7 @@ const makeMapStateToProps = () => {
       globalTemperatureUnit,
       isCustomPalette,
       isDDVZoomAlertPresent,
+      isDDVLocationAlertPresent,
       isDistractionFreeModeActive,
       isEmbedModeActive,
       isLoading: palettes.isLoading[paletteName],
