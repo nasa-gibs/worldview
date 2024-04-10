@@ -126,7 +126,8 @@ function LayerRow (props) {
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
-  const isDDVLayer = layer.type === 'ttiler';
+  console.log(layer)
+  const isDDVLayer = layer.type === 'ttiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)';
 
   useEffect(() => {
     const asyncFunc = async () => {
