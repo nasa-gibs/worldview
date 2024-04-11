@@ -126,7 +126,7 @@ function LayerRow (props) {
   const map = useSelector((state) => state.map);
   const selectedDate = useSelector((state) => state.date.selected);
 
-  const isDDVLayer = layer.type === 'ttiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)';
+  const isLayerNotificationDismissable = layer.type === 'ttiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)' || layer.subtitle === 'DSWx-HLS';
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -176,19 +176,19 @@ function LayerRow (props) {
   }, [map.extent, zot, selectedDate, isVisible]);
 
   useEffect(() => {
-    if (isDDVLayer && !isDDVZoomAlertPresent && showZoomAlert) {
+    if (isLayerNotificationDismissable && !isDDVZoomAlertPresent && showZoomAlert) {
       const { id, title } = layer;
       enableDDVZoomAlert(id, title);
-    } else if (isDDVLayer && isDDVZoomAlertPresent && !showZoomAlert) {
+    } else if (isLayerNotificationDismissable && isDDVZoomAlertPresent && !showZoomAlert) {
       disableDDVZoomAlert();
     }
   }, [showZoomAlert]);
 
   useEffect(() => {
-    if (isDDVLayer && !isDDVLocationAlertPresent && showGranuleAlert) {
+    if (isLayerNotificationDismissable && !isDDVLocationAlertPresent && showGranuleAlert) {
       const { id, title } = layer;
       enableDDVLocationAlert(id, title);
-    } else if (isDDVLayer && isDDVLocationAlertPresent && !showGranuleAlert) {
+    } else if (isLayerNotificationDismissable && isDDVLocationAlertPresent && !showGranuleAlert) {
       disableDDVLocationAlert();
     }
   }, [showGranuleAlert]);
@@ -532,7 +532,7 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && !hideZoomAlert && !isDDVLayer && (
+        {showZoomAlert && !hideZoomAlert && !isLayerNotificationDismissable && (
           <AlertUtil
             id="zoom-alert"
             isOpen
@@ -543,7 +543,7 @@ function LayerRow (props) {
             onClick={openZoomAlertModal}
           />
         )}
-        {showGranuleAlert && !hideGranuleAlert && !isDDVLayer && (
+        {showGranuleAlert && !hideGranuleAlert && !isLayerNotificationDismissable && (
           <AlertUtil
             id="granule-alert"
             isOpen
