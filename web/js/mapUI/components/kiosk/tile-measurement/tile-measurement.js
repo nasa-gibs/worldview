@@ -220,7 +220,11 @@ function TileMeasurement({ ui }) {
       // If we are using the best date, we need to make sure there are tiles on the map so we include the abort prodcedure parameter
       // This allows us to fall back to the static map if the best date fails as a last resort
       const bestDate = findBestDate(measurementLayers, bestDates);
-      if (!fullImageryDate || bestDate === fullImageryDate) return verifyTilesAndHandleErrors();
+      if (!fullImageryDate || bestDate === fullImageryDate) {
+        updateDate(bestDate, layerPeriod);
+        verifyTilesAndHandleErrors();
+        return;
+      }
 
       // Format date based on period and dispatch redux action
       updateDate(fullImageryDate, layerPeriod);
@@ -236,7 +240,7 @@ function TileMeasurement({ ui }) {
       setMeasurementsStarted(true);
       calculateMeasurements();
     }
-  }, [ui.selected]);
+  }, [ui.selected, eicLegacy]);
 
   return null;
 }
