@@ -52,6 +52,7 @@ async function getLayerGranuleRanges(layer) {
   let hits = Infinity;
   let searchAfter = false;
   const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
+  /* eslint-disable no-await-in-loop */
   do {
     const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'worldview' } : { 'Client-Id': 'worldview' };
     const res = await fetch(url, { headers });
