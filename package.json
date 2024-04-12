@@ -134,7 +134,7 @@
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",
     "stylelint-high-performance-animation": "^1.10.0",
-    "tar": "^6.2.1",
+    "tar": "^7.0.0",
     "terser-webpack-plugin": "^5.3.10",
     "uuid": "^9.0.1",
     "webpack": "^5.90.2",
