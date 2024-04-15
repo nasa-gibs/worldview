@@ -926,7 +926,15 @@ const getLayerSpec = (attributes) => {
     }
     if (attr.id === 'disabled') {
       const values = util.toArray(attr.value.split(';'));
-      disabled = values;
+      const disabledArray = [];
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          disabledArray.push(undefined);
+        } else {
+          disabledArray.push(value);
+        }
+      });
+      disabled = disabledArray;
     }
 
     if (attr.id === 'max' && typeof attr.value === 'string') {
