@@ -604,19 +604,17 @@ export default function mapLayerBuilder(config, cache, store) {
               featuresObj[rowObj.Site_Name].type = 'Feature';
               featuresObj[rowObj.Site_Name].geometry = { type: 'Point' };
               featuresObj[rowObj.Site_Name].geometry.coordinates = [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])];
-              const mainUseValue = !featuresObj[rowObj.Site_Name].properties ? 'Inactive' : featuresObj[rowObj.Site_Name].properties.value > 0.5 ? '> 0.5' : `<= ${Math.max(Math.min(Math.ceil(featuresObj[rowObj.Site_Name].properties.value * 10) / 10, 0.5), 0.1)}`;
               featuresObj[rowObj.Site_Name].properties = {
                 ...featuresObj[rowObj.Site_Name].properties,
                 name: rowObj.Site_Name,
                 active: !!takenNamesActive[rowObj.Site_Name],
                 coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
-                MAIN_USE: mainUseValue,
+                MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
               };
               takenNamesAll[rowObj.Site_Name] = true;
             }
           }
         }
-
 
         const geoJson = {
           type: 'FeatureCollection',
@@ -972,7 +970,7 @@ export default function mapLayerBuilder(config, cache, store) {
             return null;
           }
           valueIndex = -1;
-          fillColor = 'gray';
+          fillColor = '#808080';
         }
         if (fillColor === '#000000'
           || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
