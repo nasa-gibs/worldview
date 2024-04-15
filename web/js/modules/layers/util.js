@@ -846,7 +846,7 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
-    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
+    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
