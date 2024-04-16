@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
-  <ColorMap title="No Data">
+  <ColorMap title="Classification">
     <Entries>
-      <ColorMapEntry rgb="220,220,255" transparent="true" sourceValue="[-9999,-1000)" nodata="true" ref="0"/>
+      <ColorMapEntry rgb="128,128,128" transparent="false" sourceValue="0" ref="0"/>
     </Entries>
     <Legend type="classification">
-      <LegendEntry rgb="220,220,255" tooltip="Fill" id="0"/>
+      <LegendEntry rgb="128,128,128" id="0" tooltip="Inactive Site" label="Inactive Site" showLabel="true"/>
     </Legend>
   </ColorMap>
-  <ColorMap title="AERONET_ANGSTROM_440-870NM">
+  <ColorMap title="AERONET ANGSTROM 440-870NM">
     <Entries>
       <ColorMapEntry rgb="255,253,205" transparent="false" sourceValue="[-1000,0)" value="[-1,0)" ref="1"/>
       <ColorMapEntry rgb="255,252,199" transparent="false" sourceValue="[0,5)" value="[0,0.005)" ref="2"/>
