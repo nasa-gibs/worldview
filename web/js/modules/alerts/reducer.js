@@ -18,10 +18,8 @@ export const defaultAlertState = {
   isVectorExceededAlertPresent: false,
   isDDVZoomAlertPresent: false,
   isDDVLocationAlertPresent: false,
-  activeDDVLayer: {
-    id: '',
-    title: '',
-  },
+  ddvZoomAlerts: [],
+  ddvLocationAlerts: [],
 };
 
 export function alertReducer(state = defaultAlertState, action) {
@@ -58,27 +56,24 @@ export function alertReducer(state = defaultAlertState, action) {
     case ACTIVATE_DDV_ZOOM_ALERT:
       return lodashAssign({}, state, {
         isDDVZoomAlertPresent: true,
-        activeDDVLayer: {
-          id: action.id,
-          title: action.title,
-        },
+        ddvZoomAlerts: [...state.ddvZoomAlerts, action.title],
       });
     case ACTIVATE_DDV_LOCATION_ALERT:
       return lodashAssign({}, state, {
         isDDVLocationAlertPresent: true,
-        activeDDVLayer: {
-          id: action.id,
-          title: action.title,
-        },
+        ddvLocationAlerts: [...state.ddvLocationAlerts, action.title],
       });
     case DEACTIVATE_DDV_ZOOM_ALERT:
       return lodashAssign({}, state, {
-        isDDVZoomAlertPresent: false,
+        isDDVZoomAlertPresent: state.ddvZoomAlerts.length > 1,
+        ddvZoomAlerts: state.ddvZoomAlerts.filter((title) => title !== action.title),
       });
     case DEACTIVATE_DDV_LOCATION_ALERT:
       return lodashAssign({}, state, {
-        isDDVLocationAlertPresent: false,
+        isDDVLocationAlertPresent: state.ddvLocationAlerts.length > 1,
+        ddvLocationAlerts: state.ddvLocationAlerts.filter((title) => title !== action.title),
       });
+
     default:
       return state;
   }

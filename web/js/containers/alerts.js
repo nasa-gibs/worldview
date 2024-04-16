@@ -85,7 +85,8 @@ class DismissableAlerts extends React.Component {
       isDDVLocationAlertPresent,
       openGranuleAlertModal,
       openZoomAlertModal,
-      activeDDVLayer,
+      ddvZoomAlerts,
+      ddvLocationAlerts,
     } = this.props;
     const {
       hasDismissedEvents,
@@ -163,30 +164,32 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {showDDVZoomAlert && (
-            <AlertUtil
-              id="zoom-alert"
-              isOpen
-              noPortal
-              title="Zoom in to see imagery for this layer"
-              messageTitle={activeDDVLayer.title}
-              message="Imagery is not available at this zoom level."
-              onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
-              onClick={openZoomAlertModal}
-            />
-          )}
-          {showDDVLocationAlert && (
-            <AlertUtil
-              id="granule-alert"
-              isOpen
-              noPortal
-              title="Try moving the map or select a different date in the layer's settings."
-              messageTitle={activeDDVLayer.title}
-              message="Imagery is not available at this location or date."
-              onDismiss={() => this.dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
-              onClick={openGranuleAlertModal}
-            />
-          )}
+          {showDDVZoomAlert
+            && ddvZoomAlerts.map((layer) => (
+              <AlertUtil
+                id="zoom-alert"
+                isOpen
+                noPortal
+                title="Zoom in to see imagery for this layer"
+                messageTitle={layer}
+                message="Imagery is not available at this zoom level."
+                onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
+                onClick={openZoomAlertModal}
+              />
+            ))}
+          { showDDVLocationAlert
+            && ddvLocationAlerts.map((layer) => (
+              <AlertUtil
+                id="granule-alert"
+                isOpen
+                noPortal
+                title="Try moving the map or select a different date in the layer's settings."
+                messageTitle={layer}
+                message="Imagery is not available at this location or date."
+                onDismiss={() => this.dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
+                onClick={openGranuleAlertModal}
+              />
+            ))}
         </>
       );
   }
@@ -215,13 +218,15 @@ const mapStateToProps = (state) => {
     isVectorExceededAlertPresent,
     isDDVZoomAlertPresent,
     isDDVLocationAlertPresent,
-    activeDDVLayer,
+    ddvZoomAlerts,
+    ddvLocationAlerts,
   } = alerts;
   const activeLayers = getActiveLayers(state);
   const hasActiveVectorLayers = hasVectorLayers(activeLayers);
 
   return {
-    activeDDVLayer,
+    ddvLocationAlerts,
+    ddvZoomAlerts,
     isCompareActive: compare.active,
     isDDVZoomAlertPresent,
     isDDVLocationAlertPresent,

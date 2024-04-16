@@ -5,30 +5,30 @@ import {
   DEACTIVATE_DDV_ZOOM_ALERT,
 } from './constants';
 
-export function enableDDVZoomAlert(id, title) {
+export function enableDDVZoomAlert(title) {
   return {
     type: ACTIVATE_DDV_ZOOM_ALERT,
-    id,
     title,
   };
 }
 
-export function enableDDVLocationAlert(id, title) {
+export function enableDDVLocationAlert(title) {
   return {
     type: ACTIVATE_DDV_LOCATION_ALERT,
-    id,
     title,
   };
 }
 
-export function disableDDVZoomAlert() {
+export function disableDDVZoomAlert(title) {
   return {
     type: DEACTIVATE_DDV_ZOOM_ALERT,
+    title,
   };
 }
 
-export function disableDDVLocationAlert() {
+export function disableDDVLocationAlert(title) {
   return {
     type: DEACTIVATE_DDV_LOCATION_ALERT,
+    title,
   };
 }
