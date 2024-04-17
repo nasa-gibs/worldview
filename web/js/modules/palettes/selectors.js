@@ -386,7 +386,7 @@ export function refreshDisabledSelector(
       },
     },
   });
-  return toggleLookup(layerId, newPalettes, state);
+  return updateLookup(layerId, newPalettes, state);
 }
 
 export function initDisabledSelector(
@@ -396,7 +396,7 @@ export function initDisabledSelector(
   palettes,
   state,
 ) {
-  const disabled = disabledStr.split('-');
+  const disabled = disabledStr ? disabledStr.split('-') : [];
   for (let i = 0; i < disabled.length; i += 1) { disabled[i] = +disabled[i]; }
   let newPalettes = prepare(layerId, palettes, state);
   newPalettes = update(newPalettes, {
@@ -441,7 +441,7 @@ export function setDisabledSelector(
       },
     },
   });
-  return toggleLookup(layerId, newPalettes, state);
+  return updateLookup(layerId, newPalettes, state);
 }
 
 export function setRange(layerId, props, index, palettes, state) {
