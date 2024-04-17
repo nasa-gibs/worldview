@@ -381,7 +381,7 @@ class PaletteLegend extends React.Component {
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               let legendColor = color;
               const customColor = palette.custom;
-              if (palette.custom !== undefined) {
+              if (palette.custom !== undefined && palette.custom !== '') {
                 [legendColor] = palettes.custom[customColor].colors;
               }
 
