@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_Chlorophyll_a": {
+      "id": "VIIRS_NOAA21_Chlorophyll_a",
+      "description": "viirs/noaa21/VIIRS_NOAA21_Chlorophyll_a",
+      "tags": "ocean color jpss-2",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}

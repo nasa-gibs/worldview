@@ -3,7 +3,7 @@
         "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS, Sentinel-3A, Sentinel-3B",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -23,6 +23,26 @@
                     "settings": [
                         "MODIS_Aqua_L2_Chlorophyll_A",
                         "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Chlorophyll_a",
+                        "OrbitTracks_NOAA-21_Ascending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Chlorophyll_a",
+                        "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
