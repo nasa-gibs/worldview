@@ -4,6 +4,10 @@ import {
   ACTIVATE_VECTOR_ZOOM_ALERT,
   DISABLE_VECTOR_EXCEEDED_ALERT,
   ACTIVATE_VECTOR_EXCEEDED_ALERT,
+  ACTIVATE_DDV_ZOOM_ALERT,
+  ACTIVATE_DDV_LOCATION_ALERT,
+  DEACTIVATE_DDV_LOCATION_ALERT,
+  DEACTIVATE_DDV_ZOOM_ALERT,
 } from './constants';
 import { hasVectorLayers } from '../layers/util';
 import { REMOVE_LAYER, REMOVE_GROUP } from '../layers/constants';
@@ -12,6 +16,10 @@ import { UPDATE_MAP_EXTENT } from '../map/constants';
 export const defaultAlertState = {
   isVectorZoomAlertPresent: false,
   isVectorExceededAlertPresent: false,
+  isDDVZoomAlertPresent: false,
+  isDDVLocationAlertPresent: false,
+  ddvZoomAlerts: [],
+  ddvLocationAlerts: [],
 };
 
 export function alertReducer(state = defaultAlertState, action) {
@@ -45,6 +53,26 @@ export function alertReducer(state = defaultAlertState, action) {
         });
       }
       return state;
+    case ACTIVATE_DDV_ZOOM_ALERT:
+      return lodashAssign({}, state, {
+        isDDVZoomAlertPresent: true,
+        ddvZoomAlerts: [...state.ddvZoomAlerts, action.title],
+      });
+    case ACTIVATE_DDV_LOCATION_ALERT:
+      return lodashAssign({}, state, {
+        isDDVLocationAlertPresent: true,
+        ddvLocationAlerts: [...state.ddvLocationAlerts, action.title],
+      });
+    case DEACTIVATE_DDV_ZOOM_ALERT:
+      return lodashAssign({}, state, {
+        isDDVZoomAlertPresent: state.ddvZoomAlerts.length > 1,
+        ddvZoomAlerts: state.ddvZoomAlerts.filter((title) => title !== action.title),
+      });
+    case DEACTIVATE_DDV_LOCATION_ALERT:
+      return lodashAssign({}, state, {
+        isDDVLocationAlertPresent: state.ddvLocationAlerts.length > 1,
+        ddvLocationAlerts: state.ddvLocationAlerts.filter((title) => title !== action.title),
+      });
 
     default:
       return state;
