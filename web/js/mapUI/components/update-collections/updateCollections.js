@@ -14,6 +14,7 @@ function UpdateCollections () {
   const proj = useSelector((state) => state.proj);
   const sources = useSelector((state) => state.config.sources);
   const layerConfig = useSelector((state) => state.layers.layerConfig);
+  const projId = useSelector((state) => state.proj.id);
 
   // Finds the correct subdomain to query headers from based on the layer source and GIBS/GITC env
   const lookupLayerSource = (layerId) => {
@@ -59,7 +60,7 @@ function UpdateCollections () {
     return undefined;
   };
 
-  const findLayerCollections = (layers, dailyDate, subdailyDate) => {
+  const findLayerCollections = (layers, dailyDate, subdailyDate, forceUpdate) => {
     const wmtsLayers = layers.filter((layer) => {
       if (layer.type !== 'wmts' || !layer.visible) return false;
 
@@ -70,15 +71,15 @@ function UpdateCollections () {
 
       const collectionDate = layerInCollections.dates.some((d) => d.date === date);
 
-      return !collectionDate; // If date exists in layer collection, don't query layer
+      return !collectionDate || forceUpdate; // If date exists in layer collection, don't query layer
     });
     return wmtsLayers;
   };
 
-  const updateLayerCollections = async () => {
+  const updateLayerCollections = async (forceUpdate = false) => {
     const formattedDailyDate = formatDailyDate(selectedDate);
     const formattedSubdailyDate = formatSubdailyDate(selectedDate);
-    const layersToUpdate = findLayerCollections(layers, formattedDailyDate, formattedSubdailyDate);
+    const layersToUpdate = findLayerCollections(layers, formattedDailyDate, formattedSubdailyDate, forceUpdate);
     const headerPromises = layersToUpdate.map((layer) => getHeaders(layer, selectedDate));
 
     try {
@@ -95,6 +96,11 @@ function UpdateCollections () {
     if (!layers.length) return;
     updateLayerCollections();
   }, [selectedDate, layers]);
+
+  useEffect(() => {
+    if (!layers.length) return;
+    updateLayerCollections(true);
+  }, [projId]);
 
   return null;
 }
