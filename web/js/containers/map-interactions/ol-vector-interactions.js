@@ -203,7 +203,7 @@ export class VectorInteractions extends React.Component {
     }
 
     if (metaArray.length) {
-      if (hasNonClickableVectorLayerType) {
+      if (hasNonClickableVectorLayerType && !isAeronet) {
         activateVectorZoomAlert();
       } else {
         openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);

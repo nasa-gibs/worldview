@@ -1375,6 +1375,7 @@ export const hasVectorLayers = (activeLayers) => {
  * @return {Boolean}
  */
 export const isVectorLayerClickable = (layer, mapRes, projId, isMobile) => {
+  if (layer.id && layer.id.includes('AERONET')) return true;
   if (!mapRes) return false;
   let resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
   if (resolutionBreakPoint) {
