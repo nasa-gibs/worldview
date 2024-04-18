@@ -50,7 +50,7 @@ function UpdateCollections () {
       if (type !== 'NRT' && type !== 'STD') return undefined;
 
       return {
-        id, date: formattedDate, type, version,
+        id, date: formattedDate, type, version, projection: proj.id
       };
     } catch (error) {
       // errors will clutter console, turn this on for debugging
