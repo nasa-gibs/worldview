@@ -351,14 +351,28 @@ export function layerReducer(state = initialState, action) {
       const updates = {};
       action.payload.forEach((collection) => {
         const {
-          id, date, type, version, projection
+          id, date, type, version, projection,
         } = collection;
         // If the layer doesn't exist, initialize it
         if (!state.collections[id]) {
-          updates[id] = { $set: { dates: [{ version, type, date, projection }] } };
+          updates[id] = {
+            $set: {
+              dates: [{
+                version,
+                type,
+                date,
+                projection,
+              }],
+            },
+          };
         } else {
           // If the layer exists, prepare to push to the dates array
-          const newEntry = { date, type, version, projection };
+          const newEntry = {
+            date,
+            type,
+            version,
+            projection,
+          };
           updates[id] = {
             dates: { $push: [newEntry] },
           };
