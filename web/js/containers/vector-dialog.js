@@ -91,6 +91,17 @@ class VectorDialog extends React.Component {
                 </a>
                 {` (${activeMetaArray[0].features.coordinates[0]}, ${activeMetaArray[0].features.coordinates[1]})`}
               </div>
+              <div style={{ marginBottom: '5px' }}>
+                <a
+                  href={
+                    `https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=${activeMetaArray[0].features.name}&nachal=0&year=${activeMetaArray[0].features.date.getUTCFullYear()}&month=${activeMetaArray[0].features.date.getUTCMonth() + 1}&day=${activeMetaArray[0].features.date.getUTCDate()}&aero_water=0&level=1&if_day=0&if_err=0&place_code=10&year_or_month=0`
+                  }
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  View More Data
+                </a>
+              </div>
             </div>
           ) : (
             <div>
