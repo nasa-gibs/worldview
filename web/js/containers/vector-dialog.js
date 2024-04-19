@@ -63,23 +63,6 @@ class VectorDialog extends React.Component {
             <div style={{ padding: '10px', position: 'relative' }}>
               <span style={{ position: 'absolute', right: '0px', top: '3px' }}>{closeBtn}</span>
               <div style={{ marginBottom: '5px', fontSize: '16px' }}>
-                <b>
-                  {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
-                </b>
-              </div>
-              {activeMetaArray[0].features.active && (
-              <div style={{ marginBottom: '5px' }}>
-                {`Most recent reading: ${activeMetaArray[0].features.value}`}
-              </div>
-              )}
-              {activeMetaArray[0].features.active && (
-              <div style={{ marginBottom: '5px' }}>
-                {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ').slice(1).join(' ')
-                  .replace('GMT', 'UTC')}`}
-              </div>
-              )}
-              <div style={{ marginBottom: '5px' }}>
-                {'Site: '}
                 <a
                   href={
                     `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/${activeMetaArray[0].features.name}.html`
@@ -89,9 +72,27 @@ class VectorDialog extends React.Component {
                 >
                   {activeMetaArray[0].features.name}
                 </a>
+              </div>
+              <div style={{ marginBottom: '5px' }}>
                 {` (${activeMetaArray[0].features.coordinates[0]}, ${activeMetaArray[0].features.coordinates[1]})`}
               </div>
               <div style={{ marginBottom: '5px' }}>
+                {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
+              </div>
+              {activeMetaArray[0].features.active && (
+              <div style={{ marginBottom: '5px' }}>
+                <b>
+                  {`Most recent reading: ${activeMetaArray[0].features.value}`}
+                </b>
+              </div>
+              )}
+              {activeMetaArray[0].features.active && (
+              <div style={{ marginBottom: '5px' }}>
+                {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ').slice(1).join(' ')
+                  .replace('GMT', 'UTC')}`}
+              </div>
+              )}
+              <div>
                 <a
                   href={
                     `https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=${activeMetaArray[0].features.name}&nachal=0&year=${activeMetaArray[0].features.date.getUTCFullYear()}&month=${activeMetaArray[0].features.date.getUTCMonth() + 1}&day=${activeMetaArray[0].features.date.getUTCDate()}&aero_water=0&level=1&if_day=0&if_err=0&place_code=10&year_or_month=0`

@@ -610,6 +610,7 @@ export default function mapLayerBuilder(config, cache, store) {
                 active: !!takenNamesActive[rowObj.Site_Name],
                 coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
                 MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
+                date: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
               };
               takenNamesAll[rowObj.Site_Name] = true;
             }
