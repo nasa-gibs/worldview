@@ -3,7 +3,7 @@
         "Photosynthetically Available Radiation": {
             "id": "photosynthetically-available-radiation",
             "title":    "Photosynthetically Available Radiation",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -25,10 +25,30 @@
                         "OrbitTracks_Aqua_Ascending"
                     ]
                 },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Photosynthetically_Available_Radiation",
+                        "OrbitTracks_NOAA-21_Ascending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Photosynthetically_Available_Radiation",
+                        "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/PhotosyntheticallyAvailableRadiation",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",

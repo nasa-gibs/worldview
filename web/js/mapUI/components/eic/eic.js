@@ -17,7 +17,7 @@ function EIC() {
   const requestBestDate = async () => {
     try {
       const url = `https://uhkookzof2.execute-api.us-west-2.amazonaws.com/dev/scenarios?item_type=scenario&item_id=${scenario}`;
-      const response = await fetch(url);
+      const response = await fetch(url, { timeout: 10000 });
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
