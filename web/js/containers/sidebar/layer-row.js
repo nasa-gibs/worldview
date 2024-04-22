@@ -646,7 +646,7 @@ const makeMapStateToProps = () => {
     const dailyDate = formatDailyDate(activeDate);
     const selectedDate = date.selected;
     const subdailyDate = formatSubdailyDate(activeDate);
-    const collections = getCollections(layers, dailyDate, subdailyDate, layer);
+    const collections = getCollections(layers, dailyDate, subdailyDate, layer, proj.id);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
     const { ddvZoomAlerts, ddvLocationAlerts } = state.alerts;
 
