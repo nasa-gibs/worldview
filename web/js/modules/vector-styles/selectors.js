@@ -12,6 +12,10 @@ import { stylefunction } from 'ol-mapbox-style';
 import {
   getMinValue, getMaxValue, selectedStyleFunction,
 } from './util';
+import {
+  isActive as isPaletteActive,
+  getLookup as getPaletteLookup,
+} from '../palettes/selectors';
 import util from '../../util/util';
 
 
@@ -115,6 +119,26 @@ const updateGlStylePalette = (glStyle, rgbPalette) => {
   return glStyle;
 };
 
+const updateDisabled = (glStyle, lookup) => {
+  for (let i = 0; i < glStyle.layers.length; i += 1) {
+    const thisCircleColor = glStyle.layers[i].paint['circle-color'];
+    thisCircleColor.forEach((color, index) => {
+      const regex = /rgba?\(.*\)/;
+      if (regex.test(color)) {
+        const colors = color.split('(')[1].split(')')[0].split(/,\s?/);
+        if (colors.length < 4) {
+          colors.push('255');
+        }
+        const colorStr = colors.join(',');
+        if (lookup[colorStr]) {
+          thisCircleColor[index] = `rgba(${lookup[colorStr].r}, ${lookup[colorStr].g}, ${lookup[colorStr].b}, ${lookup[colorStr].a})`;
+        }
+      }
+    });
+  }
+  return glStyle;
+};
+
 const shouldRenderFeature = (feature, acceptableExtent) => {
   if (!acceptableExtent) return true;
   const midpoint = feature.getFlatCoordinates
@@ -130,10 +154,11 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
  * @param {String} vectorStyleId | ID to lookup the vector style in the state
  * @param {Object} vectorStyles | Contains styles of all vector products
  * @param {Object} layer | OL layer object
+ * @param {Object} options | Layer options object
  * @param {Object} state | The entire state of the application
  * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
  */
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, styleSelection = false) {
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, options, state, styleSelection = false) {
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -142,6 +167,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
+  const disabledPalette = def.disabled;
 
   let glStyle = vectorStyles[styleId];
   if (customPalette && Object.prototype.hasOwnProperty.call(state, 'palettes')) {
@@ -153,6 +179,17 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     if (customDefaultStyle !== undefined) {
       glStyle = customDefaultStyle;
     }
+  }
+
+  // De-reference the glState object prior to applying the palette to the layer
+  glStyle = lodashCloneDeep(glStyle);
+
+  let lookup;
+  if (isPaletteActive(def.id, options.group, state)) {
+    lookup = getPaletteLookup(def.id, options.group, state);
+  }
+  if (disabledPalette) {
+    glStyle = updateDisabled(glStyle, lookup);
   }
 
   if (!layer || layer.isWMS || glStyle === undefined) {
@@ -168,8 +205,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
-  // De-reference the glState object prior to applying the palette to the layer
-  glStyle = lodashCloneDeep(glStyle);
   const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
   const selectedFeatures = selected[layerId];
 
@@ -259,8 +294,9 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} def
  * @param {Object} olVectorLayer
  * @param {Object} state
+ * @param {Object} options
  */
-export const applyStyle = (def, olVectorLayer, state) => {
+export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
@@ -269,5 +305,5 @@ export const applyStyle = (def, olVectorLayer, state) => {
     return;
   }
 
-  setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
+  setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, options, state);
 };
