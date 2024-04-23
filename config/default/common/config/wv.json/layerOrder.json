@@ -1080,6 +1080,8 @@
 		"OrbitTracks_NOAA-21_Descending",
 		"OrbitTracks_OCO-2_Ascending",
 		"OrbitTracks_OCO-2_Descending",
+		"OrbitTracks_PACE_Ascending",
+		"OrbitTracks_PACE_Descending",
 		"OrbitTracks_SAOCOM1-A_Ascending",
 		"OrbitTracks_SAOCOM1-A_Descending",
 		"OrbitTracks_SMAP_Ascending",
