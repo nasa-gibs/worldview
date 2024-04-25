@@ -967,7 +967,7 @@ export default function mapLayerBuilder(config, cache, store) {
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
-          if (def.disabled) {
+          if (def.disabled === true || (Array.isArray(def.disabled) && def.disabled.includes('0'))) {
             return null;
           }
           valueIndex = -1;
