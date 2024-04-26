@@ -2,14 +2,14 @@
   "layers": {
     "AERONET_ANGSTROM_440-870NM": {
       "id": "AERONET_ANGSTROM_440-870NM",
-      "title": "AERONET Angstrom 440-870nm",
+      "title": "Angstrom Parameter 440-870nm (Near Real-Time)",
       "subtitle": "AERONET",
       "description": "aeronet/AERONET_ANGSTROM_440-870NM",
       "period": "subdaily",
       "group": "overlays",
       "tags": "vectors aeronet angstrom",
       "type": "vector",
-      "layergroup": "Socioeconomic",
+      "layergroup": "Aerosol Optical Depth",
       "vectorStyle": {
         "id": "AERONET_ANGSTROM_440-870NM"
       },

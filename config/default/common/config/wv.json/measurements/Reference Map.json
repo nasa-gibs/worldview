@@ -3,7 +3,7 @@
         "Reference Map": {
             "id": "reference-map",
             "title": "Reference Map",
-            "subtitle": "OpenStreetMap.org, WDPA, AERONET",
+            "subtitle": "OpenStreetMap.org, WDPA",
             "multichoice": true,
             "sources": {
                 "OpenStreetMap.org": {
@@ -26,18 +26,6 @@
                     "image": "",
                     "settings": [
                         "World_Database_on_Protected_Areas"
-                    ]
-                },
-                "AERONET": {
-                    "id": "aeronet",
-                    "title": "AERONET",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "AERONET_AOD_500NM",
-                        "AERONET_ANGSTROM_440-870NM",
-                        "DAILY_AERONET_AOD_500NM",
-                        "DAILY_AERONET_ANGSTROM_440-870NM"
                     ]
                 }
             }

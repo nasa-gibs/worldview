@@ -2,14 +2,14 @@
   "layers": {
     "DAILY_AERONET_ANGSTROM_440-870NM": {
       "id": "DAILY_AERONET_ANGSTROM_440-870NM",
-      "title": "Daily AERONET Angstrom 440-870nm",
+      "title": "Angstrom Parameter 440-870nm (Daily)",
       "subtitle": "AERONET",
       "description": "aeronet/DAILY_AERONET_ANGSTROM_440-870NM",
       "period": "daily",
       "group": "overlays",
       "tags": "vectors aeronet angstrom",
       "type": "vector",
-      "layergroup": "Socioeconomic",
+      "layergroup": "Aerosol Optical Depth",
       "vectorStyle": {
         "id": "DAILY_AERONET_ANGSTROM_440-870NM"
       },

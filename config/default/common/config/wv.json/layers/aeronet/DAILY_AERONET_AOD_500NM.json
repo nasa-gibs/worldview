@@ -2,14 +2,14 @@
   "layers": {
     "DAILY_AERONET_AOD_500NM": {
       "id": "DAILY_AERONET_AOD_500NM",
-      "title": "Daily AERONET AOD 500nm",
+      "title": "Aerosol Optical Depth 500nm (Daily)",
       "subtitle": "AERONET",
       "description": "aeronet/DAILY_AERONET_AOD_500NM",
       "period": "daily",
       "group": "overlays",
       "tags": "vectors aeronet aod",
       "type": "vector",
-      "layergroup": "Socioeconomic",
+      "layergroup": "Aerosol Optical Depth",
       "vectorStyle": {
         "id": "DAILY_AERONET_AOD_500NM"
       },

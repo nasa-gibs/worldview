@@ -2,14 +2,14 @@
   "layers": {
     "AERONET_AOD_500NM": {
       "id": "AERONET_AOD_500NM",
-      "title": "AERONET AOD 500nm",
+      "title": "Aerosol Optical Depth 500nm (Near Real-Time)",
       "subtitle": "AERONET",
       "description": "aeronet/AERONET_AOD_500NM",
       "period": "subdaily",
       "group": "overlays",
       "tags": "vectors aeronet aod",
       "type": "vector",
-      "layergroup": "Socioeconomic",
+      "layergroup": "Aerosol Optical Depth",
       "vectorStyle": {
         "id": "AERONET_AOD_500NM"
       },
