@@ -4,6 +4,6 @@ Aerosol Optical Depth (AOD) (or Aerosol Optical Thickness) indicates the level a
 
 Each AERONET ground-based remote sensing aerosol network site consist of a sun photometer and satellite transmission system. Sun photometer measurements of the direct (collimated) solar radiation provide information to calculate the columnar aerosol optical depth (AOD). AOD can be used to compute columnar water vapor (Precipitable Water) and estimate the aerosol size using the Angstrom parameter relationship.
 
-The Near Real-Time layer displays the reading from the last one hour, ranging from < 0 to 5. Inactive sites are denoted in grey.
+The Near Real-Time layer displays the reading from the last one hour, ranging from < 0.0 to 5.0. Inactive sites are denoted in grey.
 
 References: [AERONET Aerosol Optical Depth](https://aeronet.gsfc.nasa.gov/new_web/aerosols.html)
