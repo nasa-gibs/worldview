@@ -10,6 +10,7 @@
       "tags": "vectors aeronet angstrom",
       "type": "vector",
       "layergroup": "Aerosol Optical Depth",
+      "disableSnapshot": true,
       "vectorStyle": {
         "id": "DAILY_AERONET_ANGSTROM_440-870NM"
       },
