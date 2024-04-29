@@ -3,7 +3,7 @@
         "Corrected Reflectance": {
             "id": "corrected-reflectance",
             "title":    "Corrected Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, Landsat/WELD",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, Landsat/WELD",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -58,6 +58,19 @@
                     "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                	"VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                	"VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
+                	"VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
+                    "OrbitTracks_NOAA-21_Ascending"
+                    ]
+                }
+                ,
                 "Landsat/WELD": {
                     "id": "landsat-weld",
                     "title": "Landsat/WELD",
