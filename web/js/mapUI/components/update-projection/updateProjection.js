@@ -25,6 +25,7 @@ import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette } from '../../../modules/palettes/actions';
+import usePrevious from '../../../util/customHooks';
 
 function UpdateProjection(props) {
   const {
@@ -357,8 +358,11 @@ function UpdateProjection(props) {
     }
   }, [projectionTrigger]);
 
+  const prevRenderedPalettes = usePrevious(renderedPalettes);
+
   useEffect(() => {
     if (!ui.selected) return;
+    if (Object.keys(prevRenderedPalettes).length === Object.keys(renderedPalettes).length) return;
     reloadLayers(null, false);
   }, [renderedPalettes]);
 
