@@ -5,7 +5,7 @@
         "enableCMRDataFinder": true,
         "collectionConceptID": "C2021957295-LPCLOUD",
         "title": "Moisture Index (NDMI) *BETA*",
-        "subtitle": "Sentinel 2A & 2B / MSI",
+        "subtitle": "Sentinel-2A & -2B / MSI",
         "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
         "tags": "corrected surface Sentinel msi s30 ndmi",
         "group": "overlays",

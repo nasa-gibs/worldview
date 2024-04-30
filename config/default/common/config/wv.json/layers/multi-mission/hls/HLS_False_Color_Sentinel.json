@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Reflectance (Color Infrared, Bands 8-4-3) *BETA*",
-      "subtitle": "Sentinel 2A & 2B / MSI",
+      "subtitle": "Sentinel-2A & -2B / MSI",
       "description": "multi-mission/hls/HLS_False_Color_Sentinel",
       "tags": "corrected surface oli sentinel msi s30 cir",
       "group": "overlays",

@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Suomi NPP, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, OCO-2, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
+            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, NOAA-21, OCO-2, PACE, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
             "sources": {
               "Aqua/Space-Track.org": {
                   "id": "space-track-org-aqua",
@@ -205,6 +205,16 @@
                         "OrbitTracks_NOAA-20_Descending"
                     ]
                 },
+                "NOAA-21/Space-Track.org": {
+                    "id": "space-track-org-noaa-21",
+                    "title": "NOAA-21/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_NOAA-21_Ascending",
+                        "OrbitTracks_NOAA-21_Descending"
+                    ]
+                },
                 "OCO-2/Space-Track.org": {
                     "id": "space-track-org-oco-2",
                     "title": "OCO-2/Space-Track.org",
@@ -215,6 +225,16 @@
                         "OrbitTracks_OCO-2_Descending"
                     ]
                 },
+                "PACE/Space-Track.org": {
+                    "id": "space-track-org-pace",
+                    "title": "PACE/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_PACE_Ascending",
+                        "OrbitTracks_PACE_Descending"
+                    ]
+                 },
                 "SAOCOM1-A/Space-Track.org": {
                     "id": "space-track-org-saocom1-a",
                     "title": "SAOCOM1-A/Space-Track.org",

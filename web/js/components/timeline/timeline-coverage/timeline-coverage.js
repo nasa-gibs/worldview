@@ -11,7 +11,6 @@ import googleTagManager from 'googleTagManager';
 import { timeScaleOptions } from '../../../modules/date/constants';
 import {
   filterProjLayersWithStartDate,
-  getMaxLayerEndDates,
 } from '../../../modules/date/util';
 import { getActiveLayers } from '../../../modules/layers/selectors';
 import { toggleCustomContent } from '../../../modules/modal/actions';
@@ -19,6 +18,67 @@ import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
 import LayerCoverageInfoModal from './info-modal';
 import CoverageItemList from './coverage-item-list';
+
+function makeTime(date) {
+  return new Date(date).getTime();
+}
+
+function mergeSortedGranuleDateRanges(granules) {
+  return granules.reduce((acc, [start, end]) => {
+    if (!acc.length) return [[start, end]];
+    const startTime = makeTime(start);
+    const endTime = makeTime(end);
+    const lastRangeEndTime = makeTime(acc.at(-1)[1]);
+    const lastRangeStartTime = makeTime(acc.at(-1)[0]);
+    if ((startTime >= lastRangeStartTime && startTime <= lastRangeEndTime) && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) { // within current range, ignore
+      return acc;
+    }
+    if (startTime > lastRangeEndTime) { // discontinuous, add new range
+      return [...acc, [start, end]];
+    }
+    if (startTime <= lastRangeEndTime && endTime > lastRangeEndTime) { // intersects current range, merge
+      return acc.with(-1, [acc.at(-1)[0], end]);
+    }
+    return acc;
+  }, []);
+}
+
+async function getLayerGranuleRanges(layer) {
+  const conceptID = layer.conceptIds?.[0]?.value;
+  const extent = [-180, -90, 180, 90];
+  const startDate = new Date(layer.startDate).toISOString();
+  const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString();
+  const granules = [];
+  let hits = Infinity;
+  let searchAfter = false;
+  const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
+  /* eslint-disable no-await-in-loop */
+  do {
+    const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'worldview' } : { 'Client-Id': 'worldview' };
+    const res = await fetch(url, { headers });
+    searchAfter = res.headers.get('Cmr-Search-After');
+    hits = parseInt(res.headers.get('Cmr-Hits'), 10);
+    const data = await res.json();
+    granules.push(...data.feed.entry);
+  } while (searchAfter || hits > granules.length);
+  const granuleDateRanges = granules.map(({ time_start: timeStart, time_end: timeEnd }) => [timeStart, timeEnd]);
+  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges);
+
+  return mergedGranuleDateRanges;
+}
+
+async function mapGranulesToLayers(layers) {
+  const promises = layers.map(async (layer) => {
+    if (layer.type !== 'granule') return layer;
+
+    const ranges = await getLayerGranuleRanges(layer);
+
+    return { ...layer, granules: ranges };
+  });
+  const cmrLayers = await Promise.all(promises);
+
+  return cmrLayers;
+}
 
 /*
  * Timeline Layer Coverage Panel for temporal coverage.
@@ -30,6 +90,7 @@ class TimelineLayerCoveragePanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      cmrLayers: [],
       activeLayers: [],
       shouldIncludeHiddenLayers: false,
     };
@@ -119,7 +180,7 @@ class TimelineLayerCoveragePanel extends Component {
   * @param {Object} layer
   * @param {String} rangeStart
   * @param {String} rangeEnd
-  * @returns {Object} visible, leftOffset, width, isWidthGreaterThanRendered
+  * @returns {Array} visible, leftOffset, width, isWidthGreaterThanRendered
   */
   getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
@@ -132,9 +193,62 @@ class TimelineLayerCoveragePanel extends Component {
       timelineStartDateLimit,
     } = this.props;
     const {
-      endDate, futureTime, startDate, ongoing,
+      futureTime, ongoing,
     } = layer;
 
+    if (layer.granules?.length) {
+      return layer.granules.map(([startDate, endDate]) => {
+        const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
+        const axisFrontDate = new Date(frontDate).getTime();
+        const axisBackDate = new Date(backDate).getTime();
+        let layerStart;
+        const layerEnd = new Date(endDate).getTime();
+
+        if (rangeStart || startDate) {
+          layerStart = new Date(startDate).getTime();
+        } else {
+          layerStart = new Date(timelineStartDateLimit).getTime();
+        }
+
+        let visible = true;
+        if (layerStart >= axisBackDate || layerEnd <= axisFrontDate) {
+          visible = false;
+        }
+
+        let leftOffset = 0;
+        const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
+        const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
+        const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
+        // oversized width allows axis drag buffer
+        let width = axisWidth * 5;
+        if (visible) {
+          if (layerStartBeforeAxisFront) {
+            leftOffset = 0;
+          } else {
+            // positive diff means layerStart more recent than axisFrontDate
+            const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
+            const gridDiff = gridWidth * diff;
+            leftOffset = gridDiff + positionTransformX;
+          }
+          if (layerEndBeforeAxisBack) {
+            // positive diff means layerEnd earlier than back date
+            const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
+            const gridDiff = gridWidth * diff;
+            width = gridDiff + positionTransformX - leftOffset;
+          }
+        }
+
+        return {
+          visible,
+          leftOffset,
+          width,
+          isWidthGreaterThanRendered,
+          layerStartBeforeAxisFront,
+          layerEndBeforeAxisBack,
+        };
+      });
+    }
+    const { startDate, endDate } = layer;
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
@@ -182,14 +296,14 @@ class TimelineLayerCoveragePanel extends Component {
       }
     }
 
-    return {
+    return [{
       visible,
       leftOffset,
       width,
       isWidthGreaterThanRendered,
       layerStartBeforeAxisFront,
       layerEndBeforeAxisBack,
-    };
+    }];
   };
 
   /**
@@ -211,11 +325,13 @@ class TimelineLayerCoveragePanel extends Component {
   * @returns {void}
   */
   // eslint-disable-next-line react/destructuring-assignment
-  addMatchingCoverageToTimeline = (isChecked, layers) => {
+  addMatchingCoverageToTimeline = async (isChecked, layers) => {
     const { setMatchingTimelineCoverage } = this.props;
-    const dateRange = this.getNewMatchingDatesRange(layers);
+    const cmrLayers = await mapGranulesToLayers(layers);
+    const dateRange = this.getNewMatchingDatesRange(cmrLayers);
     setMatchingTimelineCoverage(dateRange, isChecked);
     this.setState({
+      cmrLayers,
       activeLayers: layers,
       shouldIncludeHiddenLayers: isChecked,
     });
@@ -232,36 +348,14 @@ class TimelineLayerCoveragePanel extends Component {
     const {
       appNow,
     } = this.props;
-    let startDate;
-    let endDate = new Date(appNow);
     if (layers.length > 0) {
-      // for each start date, find latest that is still below end date
-      const startDates = layers.reduce((acc, x) => (x.startDate ? acc.concat(x.startDate) : acc), []);
-      for (let i = 0; i < startDates.length; i += 1) {
-        const date = new Date(startDates[i]);
-        if (i === 0) {
-          startDate = date;
+      return layers.flatMap(({ granules, startDate, endDate }) => {
+        if (!granules?.length) {
+          return [{ startDate, endDate: endDate || appNow }];
         }
-        if (date.getTime() > startDate.getTime()) {
-          startDate = date;
-        }
-      }
-      // for each end date, find earliest that is still after start date
-      const endDates = getMaxLayerEndDates(layers, appNow);
-      for (let i = 0; i < endDates.length; i += 1) {
-        const date = new Date(endDates[i]);
-        if (i === 0) {
-          endDate = date;
-        }
-        if (date.getTime() < endDate.getTime()) {
-          endDate = date;
-        }
-      }
 
-      return {
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-      };
+        return granules.map(([start, end]) => ({ startDate: start, endDate: end }));
+      });
     }
   };
 
@@ -357,6 +451,7 @@ class TimelineLayerCoveragePanel extends Component {
       timeScale,
     } = this.props;
     const {
+      cmrLayers,
       activeLayers,
       shouldIncludeHiddenLayers,
     } = this.state;
@@ -411,7 +506,7 @@ class TimelineLayerCoveragePanel extends Component {
             </header>
             <Scrollbars style={scrollbarStyle}>
               <CoverageItemList
-                activeLayers={activeLayers}
+                activeLayers={cmrLayers}
                 appNow={appNow}
                 axisWidth={axisWidth}
                 backDate={backDate}
