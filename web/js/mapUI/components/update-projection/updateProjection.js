@@ -49,6 +49,7 @@ function UpdateProjection(props) {
     updateLayerVisibilities,
     updateMapUI,
     ui,
+    renderedPalettes,
     requestPalette,
   } = props;
 
@@ -356,12 +357,17 @@ function UpdateProjection(props) {
     }
   }, [projectionTrigger]);
 
+  useEffect(() => {
+    if (!ui.selected) return;
+    reloadLayers(null, false);
+  }, [renderedPalettes]);
+
   return null;
 }
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, screenSize, layers, compare, date,
+    proj, map, screenSize, layers, compare, date, palettes,
   } = state;
   const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
@@ -369,6 +375,7 @@ const mapStateToProps = (state) => {
   const dateCompareState = { date, compare };
   const activeLayers = getActiveLayers(state);
   const compareMode = compare.mode;
+  const renderedPalettes = palettes.rendered;
   return {
     activeLayers,
     compare,
@@ -379,6 +386,7 @@ const mapStateToProps = (state) => {
     layerState,
     proj,
     map,
+    renderedPalettes,
     requestPalette,
   };
 };
@@ -421,5 +429,6 @@ UpdateProjection.propTypes = {
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
   updateMapUi: PropTypes.func,
+  renderedPalettes: PropTypes.object,
   requestPalette: PropTypes.func,
 };
