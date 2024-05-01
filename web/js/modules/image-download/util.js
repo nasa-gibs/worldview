@@ -304,8 +304,10 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     `FORMAT=${imgFormat}`,
     `WIDTH=${width}`,
     `HEIGHT=${height}`,
-    `granule_dates=${granuleDates}`,
   ];
+  if (granuleDates.length > 0) {
+    params.push(`granule_dates=${granuleDates}`);
+  }
   if (opacities.length > 0) {
     params.push(`OPACITIES=${opacities.join(',')}`);
   }

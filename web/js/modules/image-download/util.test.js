@@ -228,7 +228,6 @@ test('Download URL [imagedownload-url]', () => {
     + '&WRAP=day'
     + '&FORMAT=image/jpeg'
     + '&WIDTH=300&HEIGHT=300'
-    + '&granule_dates='
     + '&MARKER=2.7117,-19.1609,71.173,-39.0961';
   expect(dlURL.includes(expectedURL)).toBe(true);
 });
