@@ -360,7 +360,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
+    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
