@@ -126,7 +126,7 @@ class CoverageItemContainer extends Component {
     } = getLayerItemStyles(visible, id);
 
     // get line container dimensions
-    const containerLineDimensions = getMatchingCoverageLineDimensions(layer);
+    const containerLineDimensions = getMatchingCoverageLineDimensions(layer).filter(({ visible }) => visible);
     return (
       <div
         className="layer-coverage-line"
@@ -145,40 +145,39 @@ class CoverageItemContainer extends Component {
               const nextDate = array[multiIndex + 1];
               const rangeDateEnd = getRangeDateEndWithAddedInterval(layer, dateObj, layerPeriod, interval, nextDate);
               // get range line dimensions
-              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd);
+              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd).filter(({ visible }) => visible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;
-              return multiLineRangeOptions.visible
-                  && (
-                    <React.Fragment key={key}>
-                      <CoverageLine
-                        axisWidth={axisWidth}
-                        positionTransformX={positionTransformX}
-                        id={id}
-                        options={multiLineRangeOptions}
-                        lineType="MULTI"
-                        startDate={date}
-                        endDate={rangeDateEnd}
-                        color={lineBackgroundColor}
-                        layerPeriod={layerPeriod}
-                        index={key}
-                      />
-                    </React.Fragment>
-                  );
+              return (
+                <React.Fragment key={key}>
+                  <CoverageLine
+                    axisWidth={axisWidth}
+                    positionTransformX={positionTransformX}
+                    id={id}
+                    options={multiLineRangeOptions}
+                    lineType="MULTI"
+                    startDate={date}
+                    endDate={rangeDateEnd}
+                    color={lineBackgroundColor}
+                    layerPeriod={layerPeriod}
+                    index={key}
+                  />
+                </React.Fragment>
+              );
             })
-            : containerLineDimensions.visible && (
-            <CoverageLine
-              axisWidth={axisWidth}
-              positionTransformX={positionTransformX}
-              id={id}
-              options={containerLineDimensions}
-              lineType="SINGLE"
-              startDate={startDate}
-              endDate={endDate}
-              color={lineBackgroundColor}
-              layerPeriod={layerPeriod}
-              index={`${id}-0`}
-            />
+            : (
+              <CoverageLine
+                axisWidth={axisWidth}
+                positionTransformX={positionTransformX}
+                id={id}
+                options={containerLineDimensions}
+                lineType="SINGLE"
+                startDate={startDate}
+                endDate={endDate}
+                color={lineBackgroundColor}
+                layerPeriod={layerPeriod}
+                index={`${id}-0`}
+              />
             )}
         </svg>
       </div>

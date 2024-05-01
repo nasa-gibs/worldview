@@ -129,8 +129,9 @@ const updateDisabled = (glStyle, lookup) => {
         if (colors.length < 4) {
           colors.push('255');
         }
-        if (lookup[colors.join(',')]) {
-          thisCircleColor[index] = `rgba(${lookup[colors.join(',')].r}, ${lookup[colors.join(',')].g}, ${lookup[colors.join(',')].b}, ${lookup[colors.join(',')].a})`;
+        const colorStr = colors.join(',');
+        if (lookup[colorStr]) {
+          thisCircleColor[index] = `rgba(${lookup[colorStr].r}, ${lookup[colorStr].g}, ${lookup[colorStr].b}, ${lookup[colorStr].a})`;
         }
       }
     });

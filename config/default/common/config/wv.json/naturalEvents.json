@@ -419,6 +419,14 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
+                        false
+                    ],
+                    [
                         "OMPS_Aerosol_Index_PyroCumuloNimbus",
                         false
                     ],
@@ -502,6 +510,14 @@
                     ],
                     [
                         "VIIRS_SNPP_DayNightBand_ENCC",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
@@ -614,6 +630,14 @@
                     ],
                     [
                         "VIIRS_SNPP_DayNightBand_ENCC",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
@@ -757,6 +781,14 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
+                        false
+                    ],
+                    [
                         "Reference_Features_15m",
                         true
                     ],
@@ -808,6 +840,14 @@
                     ],
                     [
                         "VIIRS_SNPP_DayNightBand_ENCC",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
                     ]
                 ],
