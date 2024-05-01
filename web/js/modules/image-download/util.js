@@ -282,10 +282,10 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
   const granuleDates = layerDefs.reduce((acc, def, i) => {
-    if (!def.granuleDates) return acc
+    if (!def.granuleDates) return acc;
     const processedDates = def.granuleDates.map((date) => date.split(':').filter((d) => d !== '00Z').join(':'));
-    return `${acc}${i};${processedDates.join(',')},`
-  }, '')
+    return `${acc}${i};${processedDates.join(',')},`;
+  }, '');
   const params = [
     'REQUEST=GetSnapshot',
     `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
