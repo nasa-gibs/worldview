@@ -9,7 +9,7 @@
       <LegendEntry rgb="128,128,128" id="0" tooltip="Inactive Site" label="Inactive Site" showLabel="true"/>
     </Legend>
   </ColorMap>
-  <ColorMap title="DAILY AERONET ANGSTROM 440-870NM">
+  <ColorMap title="Angstrom Parameter">
     <Entries>
       <ColorMapEntry rgb="122,143,2" transparent="false" sourceValue="[-1000,0)" value="[-1,0)" ref="1"/>
       <ColorMapEntry rgb="122,145,2" transparent="false" sourceValue="[0,10)" value="[0,0.01)" ref="2"/>

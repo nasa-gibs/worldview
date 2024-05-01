@@ -9,7 +9,7 @@
       <LegendEntry rgb="128,128,128" id="0" tooltip="Inactive Site" label="Inactive Site" showLabel="true"/>
     </Legend>
   </ColorMap>
-  <ColorMap title="AERONET AOD 500NM">
+  <ColorMap title="Aerosol Optical Depth">
     <Entries>
       <ColorMapEntry rgb="255,253,205" transparent="false" sourceValue="[-1000,0)" value="[-1,0)" ref="1"/>
       <ColorMapEntry rgb="255,252,199" transparent="false" sourceValue="[0,5)" value="[0,0.005)" ref="2"/>

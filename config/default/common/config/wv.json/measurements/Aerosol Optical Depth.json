@@ -3,8 +3,20 @@
         "Aerosol Optical Depth": {
             "id": "aerosol-optical-depth",
             "title":    "Aerosol Optical Depth",
-            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, NOAA-20/VIIRS, MERRA-2",
+            "subtitle": "AERONET, Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, NOAA-20/VIIRS, MERRA-2",
             "sources": {
+                "AERONET": {
+                    "id": "aeronet",
+                    "title": "AERONET",
+                    "description": "aeronet/aeronet",
+                    "image": "",
+                    "settings": [
+                        "AERONET_AOD_500NM",
+                        "AERONET_ANGSTROM_440-870NM",
+                        "DAILY_AERONET_AOD_500NM",
+                        "DAILY_AERONET_ANGSTROM_440-870NM"
+                    ]
+                },
                 "Aura/OMI": {
                     "id": "aura-omi",
                     "title": "Aura/OMI",
