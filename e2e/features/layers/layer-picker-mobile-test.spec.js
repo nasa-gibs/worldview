@@ -45,12 +45,14 @@ test('Open product picker and show categories by default', async () => {
 test('Clicking a measurement shows choices, indicates unavailability', async () => {
   const {
     aodAllMeasurement,
+    aquaTerraMODISTab,
     sourceMetadataCollapsed,
     aodCheckboxMAIAC,
     aodCheckboxMODIS,
     sourceTabs
   } = selectors
   await aodAllMeasurement.click()
+  await aquaTerraMODISTab.click()
   await expect(sourceMetadataCollapsed).toBeVisible()
   await expect(aodCheckboxMAIAC).toBeVisible()
   await expect(aodCheckboxMODIS).toBeVisible()
@@ -58,7 +60,7 @@ test('Clicking a measurement shows choices, indicates unavailability', async () 
   // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
   await expect(modisAvailableCoverage).toBeVisible()
   // await expect(maiacAvailableCoverage).toBeVisible()
-  await expect(sourceTabs).toHaveCount(9)
+  await expect(sourceTabs).toHaveCount(10)
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage class', async () => {
@@ -140,7 +142,7 @@ test('Searching for layers', async () => {
     aodCheckbox
   } = selectors
   await layersSearchField.fill('aerosol optical depth')
-  await expect(layersSearchRow).toHaveCount(17)
+  await expect(layersSearchRow).toHaveCount(19)
   await expect(aodCheckbox).toBeVisible()
 })
 
