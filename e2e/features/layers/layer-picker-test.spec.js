@@ -155,8 +155,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(12)
-  await expect(layerResultsCountText).toContainText('Showing 12 out of')
+  await expect(layersSearchRow).toHaveCount(13)
+  await expect(layerResultsCountText).toContainText('Showing 13 out of')
 })
 
 test('Finding layer by ID with search', async () => {
