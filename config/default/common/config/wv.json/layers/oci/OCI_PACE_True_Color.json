@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OCI_PACE_True_Color": {
+      "id": "OCI_PACE_True_Color",
+      "description": "oci/OCI_PACE_True_Color",
+      "tags": "natural color oci pace plankton ocean",
+      "group": "baselayers",
+      "layergroup": "Corrected Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}
