@@ -537,6 +537,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
       loader: async () => {
+        // Get data from all locations of the current year (both active and inactive)
         const getAllData = async () => {
           const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
           const res = await fetch(url);
@@ -544,12 +545,13 @@ export default function mapLayerBuilder(config, cache, store) {
           return data;
         };
 
+        // Get data from all active locations given the date
         const getActiveData = async () => {
           const avg = def.id.includes('DAILY') ? 20 : 10;
           const date2 = new Date(date.toString());
           date2.setHours(date.getHours() + 1);
           const urlParameters = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth() + 1}&day=${date.getUTCDate()}&year2=${date2.getUTCFullYear()}&month2=${date2.getUTCMonth() + 1}&day2=${date2.getUTCDate()}${isSubdaily ? `&hour=${date.getUTCHours()}&hour2=${date2.getUTCHours()}` : ''}&AOD15=1&AVG=${avg}&if_no_html=1`;
-          const res = await fetch(source.url + urlParameters);
+          const res = await fetch(`${source.url}${urlParameters}`);
           const data = await res.text();
           return data;
         };
@@ -559,10 +561,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
         const featuresObj = [];
         const takenNamesActive = {};
+        // Split the input data by rows (one data point per row)
         const splitActive = activeData.split('\n');
         if (splitActive.length > 6) {
+          // Split the key row into an array of keys
           const key = splitActive[5].split(',');
+          // Actual data starts at row index 6, loop through all data points
           for (let i = 6; i < splitActive.length; i += 1) {
+            // Split the current data point into each value, and assign them their respective key based on the key from row index 5
             const split2 = splitActive[i].split(',');
             const rowObj = {};
             for (let j = 0; j < split2.length; j += 1) {
@@ -588,10 +594,14 @@ export default function mapLayerBuilder(config, cache, store) {
         }
 
         const takenNamesAll = {};
+        // Split the input data by rows (one data point per row)
         const splitAll = allData.split('\n');
         if (splitAll.length > 2) {
+          // Split the key row into an array of keys
           const key = splitAll[1].split(',');
+          // Actual data starts at row index 2, loop through all data points
           for (let i = 2; i < splitAll.length; i += 1) {
+            // Split the current data point into each value, and assign them their respective key based on the key from row index 1
             const split2 = splitAll[i].split(',');
             const rowObj = {};
             for (let j = 0; j < split2.length; j += 1) {
@@ -633,12 +643,8 @@ export default function mapLayerBuilder(config, cache, store) {
       values = state.palettes.rendered[def.id].maps[1].entries.values;
     }
 
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date)).slice(0, 10);
-    const className = `${def.id} ${requestDate}`;
-
     const layer = new OlLayerVector({
       extent: layerExtent,
-      className,
       source: vectorSource,
       style (feature, resolution) {
         const customStyle = !def.custom || typeof def.custom[0] === 'undefined' ? 'default' : def.custom[0];
@@ -658,17 +664,20 @@ export default function mapLayerBuilder(config, cache, store) {
         }
 
         let valueIndex;
+        // For active data points, define a color based on their value via the color palette
         if (active) {
           valueIndex = values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
+          // For inactive data points, either hide or color them gray depending on if disabled
           if (def.disabled === true || (Array.isArray(def.disabled) && def.disabled.includes('0'))) {
             return null;
           }
           valueIndex = -1;
           fillColor = '#808080';
         }
+        // Ignore data points that fall outside of the defined range
         if (fillColor === '#000000'
           || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
           || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))

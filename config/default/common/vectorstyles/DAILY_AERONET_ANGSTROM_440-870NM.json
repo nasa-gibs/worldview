@@ -15,43 +15,7 @@
       "source": "DAILY_AERONET_ANGSTROM_440-870NM",
       "source-layer": "DAILY_AERONET_ANGSTROM_440-870NM_v1.01_STD",
       "source-description": "Default",
-      "type": "circle",
-      "paint": {
-        "circle-radius": [
-          "step",
-          [
-            "zoom"
-          ],
-          1,
-          2,
-          2,
-          3,
-          3,
-          4,
-          7
-        ],
-        "circle-color": [
-          "match",
-          [
-            "get",
-            "MAIN_USE"
-          ],
-          "Inactive",
-          "rgb(128, 128, 128)",
-          "<= 0.1",
-          "rgb(0, 0, 255)",
-          "<= 0.2",
-          "rgb(0, 128, 0)",
-          "<= 0.3",
-          "rgb(255, 255, 0)",
-          "<= 0.4",
-          "rgb(255, 165, 0)",
-          "<= 0.5",
-          "rgb(255, 0, 0)",
-          "> 0.5",
-          "rgb(0, 0, 0)"
-        ]
-      }
+      "type": "circle"
     }
   ]
 }
