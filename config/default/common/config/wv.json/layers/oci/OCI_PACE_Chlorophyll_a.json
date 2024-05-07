@@ -6,7 +6,6 @@
       "tags": "ocean color oci pace plankton",
       "group": "overlays",
       "layergroup": "Chlorophyll a",
-      "ongoing": true,
       "wrapadjacentdays": true
     }
   }
