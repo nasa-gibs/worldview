@@ -140,7 +140,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     try {
       showLoading();
       const requestUrl = getGranulesUrl(params);
-      console.log('requestUrl', requestUrl);
       const nrtRequestUrl = getGranulesUrl(nrtParams);
       const response = await fetch(requestUrl, CMR_AJAX_OPTIONS);
       const nrtResponse = await fetch(nrtRequestUrl, CMR_AJAX_OPTIONS);
