@@ -148,8 +148,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       data = data.feed.entry;
       nrtData = nrtData.feed.entry;
       if (data.length || nrtData.length) {
-        addGranuleCMRDateData(def, data, shortName, dateRanges);
         addGranuleCMRDateData(def, nrtData, nrtShortName, dateRanges);
+        addGranuleCMRDateData(def, data, shortName, dateRanges);
       } else {
         const dateWithinRange = isWithinDateRange(date, startDate, endDate);
         // only show modal error if layer not set to hidden and outside of selected date range
@@ -163,7 +163,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       hideLoading();
     }
 
-    return [...existingGranules, ...existingNRTGranules];
+    return [...existingNRTGranules, ...existingGranules];
   };
 
   /**
