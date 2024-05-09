@@ -44,7 +44,12 @@ function mergeSortedGranuleDateRanges(granules) {
 }
 
 async function requestGranules(params) {
-  const {shortName, extent, startDate, endDate} = params;
+  const {
+    shortName,
+    extent,
+    startDate,
+    endDate,
+  } = params;
   const granules = [];
   let hits = Infinity;
   let searchAfter = false;
@@ -67,12 +72,22 @@ async function getLayerGranuleRanges(layer) {
   const startDate = new Date(layer.startDate).toISOString();
   const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString();
   const shortName = layer.conceptIds?.[0]?.shortName;
-  const nrtParams = { shortName, extent, startDate, endDate };
+  const nrtParams = {
+    shortName,
+    extent,
+    startDate,
+    endDate,
+  };
   const nrtGranules = await requestGranules(nrtParams);
   let nonNRTGranules = [];
   if (shortName.includes('_NRT')) { // if NRT, also get non-NRT granules
     const nonNRTShortName = shortName.replace('_NRT', '');
-    const nonNRTParams = { shortName: nonNRTShortName, extent, startDate, endDate };
+    const nonNRTParams = {
+      shortName: nonNRTShortName,
+      extent,
+      startDate,
+      endDate,
+    };
     nonNRTGranules = await requestGranules(nonNRTParams);
   }
   const granules = [...nonNRTGranules, ...nrtGranules];
