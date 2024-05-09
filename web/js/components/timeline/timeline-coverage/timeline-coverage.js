@@ -43,26 +43,41 @@ function mergeSortedGranuleDateRanges(granules) {
   }, []);
 }
 
-async function getLayerGranuleRanges(layer) {
-  const conceptID = layer.conceptIds?.[0]?.value;
-  const extent = [-180, -90, 180, 90];
-  const startDate = new Date(layer.startDate).toISOString();
-  const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString();
+async function requestGranules(params) {
+  const {shortName, extent, startDate, endDate} = params;
   const granules = [];
   let hits = Infinity;
   let searchAfter = false;
-  const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
+  const url = `https://cmr.earthdata.nasa.gov/search/granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
   /* eslint-disable no-await-in-loop */
-  do {
-    const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'worldview' } : { 'Client-Id': 'worldview' };
+  do { // run the query at least once
+    const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
     const res = await fetch(url, { headers });
     searchAfter = res.headers.get('Cmr-Search-After');
     hits = parseInt(res.headers.get('Cmr-Hits'), 10);
     const data = await res.json();
     granules.push(...data.feed.entry);
-  } while (searchAfter || hits > granules.length);
+  } while (searchAfter || hits > granules.length); // searchAfter will not be present if there are no more results https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html#search-after
+
+  return granules;
+}
+
+async function getLayerGranuleRanges(layer) {
+  const extent = [-180, -90, 180, 90];
+  const startDate = new Date(layer.startDate).toISOString();
+  const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString();
+  const shortName = layer.conceptIds?.[0]?.shortName;
+  const nrtParams = { shortName, extent, startDate, endDate };
+  const nrtGranules = await requestGranules(nrtParams);
+  let nonNRTGranules = [];
+  if (shortName.includes('_NRT')) { // if NRT, also get non-NRT granules
+    const nonNRTShortName = shortName.replace('_NRT', '');
+    const nonNRTParams = { shortName: nonNRTShortName, extent, startDate, endDate };
+    nonNRTGranules = await requestGranules(nonNRTParams);
+  }
+  const granules = [...nonNRTGranules, ...nrtGranules];
   const granuleDateRanges = granules.map(({ time_start: timeStart, time_end: timeEnd }) => [timeStart, timeEnd]);
-  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges);
+  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges); // merge overlapping granule ranges to simplify rendering
 
   return mergedGranuleDateRanges;
 }
