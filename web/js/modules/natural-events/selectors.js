@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { validateGeometryCoords } from './util';
 
 const getActiveCategories = ({ events }) => events.selectedCategories;

@@ -59,10 +59,12 @@ function ImageDownloadPanel(props) {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
+    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
     const dlURL = getDownloadUrl(
       url,
       projection,
-      layerList,
+      layerDefs,
       lonlats,
       { width, height },
       time,

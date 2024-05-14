@@ -124,21 +124,31 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { proj: { selected: { crs } } } = state;
     const getGranulesUrl = getGranulesUrlSelector(state);
     const params = getParamsForGranuleRequest(def, date, crs);
+    const nrtParams = getParamsForGranuleRequest(def, date, crs, true);
     const { shortName } = params;
+    const { shortName: nrtShortName } = nrtParams;
     let data = [];
+    let nrtData = [];
     const existingGranules = CMRDataStore[crs][shortName] || [];
-    const datesQueried = datesHaveBeenQueried(params.startDate, date, existingGranules);
+    const existingNRTGranules = CMRDataStore[crs][nrtShortName] || [];
+    const mergedExistingGranules = existingGranules.concat(existingNRTGranules);
+    const datesQueried = datesHaveBeenQueried(params.startDate, date, mergedExistingGranules);
 
-    if (existingGranules.length && datesQueried) {
-      return existingGranules;
+    if (mergedExistingGranules.length && datesQueried) {
+      return mergedExistingGranules;
     }
     try {
       showLoading();
       const requestUrl = getGranulesUrl(params);
+      const nrtRequestUrl = getGranulesUrl(nrtParams);
       const response = await fetch(requestUrl, CMR_AJAX_OPTIONS);
+      const nrtResponse = await fetch(nrtRequestUrl, CMR_AJAX_OPTIONS);
       data = await response.json();
+      nrtData = await nrtResponse.json();
       data = data.feed.entry;
-      if (data.length) {
+      nrtData = nrtData.feed.entry;
+      if (data.length || nrtData.length) {
+        addGranuleCMRDateData(def, nrtData, nrtShortName, dateRanges);
         addGranuleCMRDateData(def, data, shortName, dateRanges);
       } else {
         const dateWithinRange = isWithinDateRange(date, startDate, endDate);
@@ -153,7 +163,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       hideLoading();
     }
 
-    return CMRDataStore[crs][shortName];
+    return [...existingNRTGranules, ...existingGranules];
   };
 
   /**

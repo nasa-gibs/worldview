@@ -11,7 +11,7 @@
         "group": "overlays",
         "layergroup": "Vegetation Indices",
         "format": "image/png",
-        "type": "ttiler",
+        "type": "titiler",
         "period": "daily",
         "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
         "orbitDirection": ["descending", "descending"],
