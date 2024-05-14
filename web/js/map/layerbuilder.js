@@ -54,15 +54,15 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} attributes
    * @param {*} wrapLayer
    */
-  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+  const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state, attributes);
+    const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
-    const layerNext = createLayerFunc(def, options, 1, state, attributes);
-    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
+    const layerNext = await createLayerFunc(def, options, 1, state, attributes);
+    const layerPrior = await createLayerFunc(def, options, -1, state, attributes);
 
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
@@ -679,16 +679,13 @@ export default function mapLayerBuilder(config, cache, store) {
     return name;
   };
 
-  const createTtilerLayer = async (def, options, day, state) => {
-    const { proj: { selected }, date } = state;
-    const { maxExtent, crs } = selected;
-    const { r, g, b } = def.bandCombo;
-
+  const buildDdvTileUrlFunction = async (def, options, state) => {
     const source = config.sources[def.source];
-
+    const { r, g, b } = def.bandCombo;
+    
     const searchID = await registerSearch(def, options, state);
 
-    const tileUrlFunction = (tileCoord) => {
+    return (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
@@ -703,8 +700,29 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
-      return source.url + urlParams;
+      return `${source.url}${urlParams}`;
     };
+  };
+
+  const buildGhgcTileUrlFunction = (def) => {
+    const source = config.sources[def.source];
+
+    return (tileCoord) => {
+      const z = tileCoord[0] - 1;
+      const x = tileCoord[1];
+      const y = tileCoord[2];
+
+      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=purd&rescale=0%2C0.3`
+
+      return `${source.url}/${urlParams}`;
+    };
+  };
+
+  const createTtilerLayer = async (def, options, day, state) => {
+    const { proj: { selected }, date } = state;
+    const { maxExtent, crs } = selected;
+
+    const tileUrlFunction = def.source === 'DDV' ? await buildDdvTileUrlFunction(def, options, state) : buildGhgcTileUrlFunction(def);
 
     const xyzSourceOptions = {
       crossOrigin: 'anonymous',
@@ -720,7 +738,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = new OlLayerTile({
       source: xyzSource,
       className,
-      minZoom: def.minZoom,
+      minZoom: def.minZoom || 0,
       extent: maxExtent,
     });
 
@@ -816,19 +834,19 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!isGranule) {
         switch (def.type) {
           case 'wmts':
-            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
-            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
-            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'ttiler':
             layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
             break;
           case 'xyz':
-            layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);

@@ -1,0 +1,23 @@
+{
+    "layers": {
+      "GHGC_Net_Primary_Produnction": {
+        "id": "GHGC_Net_Primary_Produnction",
+        "layerName": "npp",
+        "title": "Net Primary Production",
+        "subtitle": "U.S. Greenhouse Gas Center",
+        "description": "ghgc/Net_Primary_Produnction",
+        "tags": "ghgc npp",
+        "group": "overlays",
+        "layergroup": "Reference",
+        "format": "image/png",
+        "type": "ttiler",
+        "disableSnapshot": true,
+        "wrapX": true,
+        "projections": {
+          "geographic": {
+            "source": "GHGC:geographic"
+          }
+        }
+      }
+    }
+  }

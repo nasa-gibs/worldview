@@ -24,6 +24,9 @@
     "FIRMS:xyz": {
       "url": "https://firms.modaps.eosdis.nasa.gov/layers"
     },
+    "GHGC:geographic": {
+      "url": "https://ghg.center/api/raster/mosaic/3b46d29dcb49fd2eb8e4a65b5dcde805"
+    },
     "DDV": {
       "url": "https://kv9drwgv6l.execute-api.us-west-2.amazonaws.com/",
       "matrixSets": {

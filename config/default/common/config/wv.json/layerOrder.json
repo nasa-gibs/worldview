@@ -1,5 +1,6 @@
 {
 	"layerOrder": [
+		"GHGC_Net_Primary_Produnction",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
