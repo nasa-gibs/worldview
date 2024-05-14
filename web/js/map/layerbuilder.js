@@ -718,7 +718,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const createTtilerLayer = async (def, options, day, state) => {
+  const createTitilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
 

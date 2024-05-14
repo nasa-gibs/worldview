@@ -10,7 +10,7 @@
         "group": "overlays",
         "layergroup": "Reference",
         "format": "image/png",
-        "type": "ttiler",
+        "type": "titiler",
         "disableSnapshot": true,
         "wrapX": true,
         "projections": {
