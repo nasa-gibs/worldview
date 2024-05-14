@@ -1,4 +1,4 @@
-import thunkMiddleware from 'redux-thunk'; // For ASYNC actions
+import { thunk } from 'redux-thunk'; // For ASYNC actions
 import { compact } from 'lodash';
 import { createLogger } from 'redux-logger';
 
@@ -10,6 +10,6 @@ const loggerMiddleware = createLogger({ collapsed: true });
  */
 export default function getMiddleware(enableDebugLogger, locationMiddleware) {
   return enableDebugLogger
-    ? compact([thunkMiddleware, locationMiddleware, loggerMiddleware])
-    : compact([thunkMiddleware, locationMiddleware]);
+    ? compact([thunk, locationMiddleware, loggerMiddleware])
+    : compact([thunk, locationMiddleware]);
 }
