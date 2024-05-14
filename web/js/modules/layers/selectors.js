@@ -8,7 +8,7 @@ import {
   findIndex as lodashFindIndex,
   memoize as lodashMemoize,
 } from 'lodash';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
