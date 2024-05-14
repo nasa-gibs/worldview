@@ -129,7 +129,7 @@ function LayerRow (props) {
   const ddvLayerZoomNoticeActive = ddvZoomAlerts.includes(layer.title);
   const ddvLayerLocationNoticeActive = ddvLocationAlerts.includes(layer.title);
   // All DDV layer notices are dismissable + Reflectance (Nadir BRDF-Adjusted) + DSWx-HLS
-  const isLayerNotificationDismissable = layer.type === 'ttiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)' || layer.subtitle === 'DSWx-HLS';
+  const isLayerNotificationDismissable = layer.type === 'titiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)' || layer.subtitle === 'DSWx-HLS';
 
   useEffect(() => {
     const asyncFunc = async () => {
