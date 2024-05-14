@@ -682,7 +682,7 @@ export default function mapLayerBuilder(config, cache, store) {
   const buildDdvTileUrlFunction = async (def, options, state) => {
     const source = config.sources[def.source];
     const { r, g, b } = def.bandCombo;
-    
+
     const searchID = await registerSearch(def, options, state);
 
     return (tileCoord) => {
@@ -712,7 +712,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const x = tileCoord[1];
       const y = tileCoord[2];
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=purd&rescale=0%2C0.3`
+      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=purd&rescale=0%2C0.3`;
 
       return `${source.url}/${urlParams}`;
     };
