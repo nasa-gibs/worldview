@@ -714,9 +714,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
-    const layerID = def.id;
     const BASE_URL = 'https://ghg.center/api/raster';
-    const collectionID = def.layerName;
     const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
 
     const collectionsFilter = {
@@ -748,14 +746,11 @@ export default function mapLayerBuilder(config, cache, store) {
       body: JSON.stringify(searchBody),
     });
     const registerResponseJSON = await registerResponse.json();
-    console.log(registerResponseJSON);
 
-    const tilesHref = registerResponseJSON.links?.find((link) => link.rel === 'tilejson',).href;
-    console.log(tilesHref);
+    const tilesHref = registerResponseJSON.links?.find((link) => link.rel === 'tilejson').href;
 
     const tilejsonResponse = await fetch(`${tilesHref}?assets=${def.layerName}&colormap_name=${def.colormapName}&rescale=${encodeURI(def.rescale)}`);
     const tilejsonResponseJSON = await tilejsonResponse.json();
-    console.log(tilejsonResponseJSON);
 
     const { name } = tilejsonResponseJSON;
 
