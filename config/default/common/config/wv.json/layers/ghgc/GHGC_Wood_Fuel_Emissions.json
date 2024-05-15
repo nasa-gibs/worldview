@@ -1,20 +1,20 @@
 {
     "layers": {
-      "GHGC_Net_Primary_Produnction": {
-        "id": "GHGC_Net_Primary_Produnction",
-        "layerName": "npp",
-        "title": "Net Primary Production",
+      "GHGC_Wood_Fuel_Emissions": {
+        "id": "GHGC_Wood_Fuel_Emissions",
+        "layerName": "fuel",
+        "title": "Wood Fuel Emissions",
         "subtitle": "U.S. Greenhouse Gas Center",
-        "description": "ghgc/Net_Primary_Produnction",
-        "tags": "ghgc npp",
+        "description": "ghgc/Wood_Fuel_Emissions",
+        "tags": "ghgc fuel",
         "group": "overlays",
         "layergroup": "Reference",
         "format": "image/png",
         "type": "titiler",
         "disableSnapshot": true,
         "wrapX": true,
-        "colormapName": "purd",
-        "rescale": "0,0.3",
+        "colormapName": "bupu",
+        "rescale": "0,0.03",
         "projections": {
           "geographic": {
             "source": "GHGC:geographic"

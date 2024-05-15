@@ -1,12 +1,12 @@
 {
     "layers": {
-      "GHGC_Net_Primary_Produnction": {
-        "id": "GHGC_Net_Primary_Produnction",
-        "layerName": "npp",
-        "title": "Net Primary Production",
+      "GHGC_Heterotrophic_Respiration": {
+        "id": "GHGC_Heterotrophic_Respiration",
+        "layerName": "rh",
+        "title": "Heterotrophic Respiration",
         "subtitle": "U.S. Greenhouse Gas Center",
-        "description": "ghgc/Net_Primary_Produnction",
-        "tags": "ghgc npp",
+        "description": "ghgc/Heterotrophic_Respiration",
+        "tags": "ghgc rh",
         "group": "overlays",
         "layergroup": "Reference",
         "format": "image/png",

@@ -1,20 +1,20 @@
 {
     "layers": {
-      "GHGC_Net_Primary_Produnction": {
-        "id": "GHGC_Net_Primary_Produnction",
-        "layerName": "npp",
-        "title": "Net Primary Production",
+      "GHGC_Net_Ecosystem_Exchange": {
+        "id": "GHGC_Net_Ecosystem_Exchange",
+        "layerName": "nee",
+        "title": "Net Ecosystem Exchange",
         "subtitle": "U.S. Greenhouse Gas Center",
-        "description": "ghgc/Net_Primary_Produnction",
-        "tags": "ghgc npp",
+        "description": "ghgc/Net_Ecosystem_Exchange",
+        "tags": "ghgc nee",
         "group": "overlays",
         "layergroup": "Reference",
         "format": "image/png",
         "type": "titiler",
         "disableSnapshot": true,
         "wrapX": true,
-        "colormapName": "purd",
-        "rescale": "0,0.3",
+        "colormapName": "coolwarm",
+        "rescale": "-0.1,0.1",
         "projections": {
           "geographic": {
             "source": "GHGC:geographic"

@@ -593,7 +593,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, state) => {
+  const registerSearchDDV = async (def, options, state) => {
     const { date } = state;
     let requestDate;
     if (options.group === 'activeB') {
@@ -683,7 +683,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const source = config.sources[def.source];
     const { r, g, b } = def.bandCombo;
 
-    const searchID = await registerSearch(def, options, state);
+    const searchID = await registerSearchDDV(def, options, state);
 
     return (tileCoord) => {
       const z = tileCoord[0] - 1;
@@ -704,15 +704,75 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
-  const buildGhgcTileUrlFunction = (def) => {
+  const registerSearchGHGC = async (def, options, state) => {
+    const { date } = state;
+    let requestDate;
+    if (options.group === 'activeB') {
+      requestDate = date.selectedB;
+    } else {
+      requestDate = date.selected;
+    }
+
+    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
+    const layerID = def.id;
+    const BASE_URL = 'https://ghg.center/api/raster';
+    const collectionID = def.layerName;
+    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
+
+    const collectionsFilter = {
+      op: 'eq',
+      args: [{ property: 'collection' }, 'casagfed-carbonflux-monthgrid-v3'],
+    };
+
+    const temporalFilter = {
+      op: 't_intersects',
+      args: [{ property: 'datetime' }, { interval: temporalRange }],
+    };
+
+    const searchBody = {
+      'filter-lang': 'cql2-json',
+      filter: {
+        op: 'and',
+        args: [
+          collectionsFilter,
+          temporalFilter,
+        ],
+      },
+    };
+
+    const registerResponse = await fetch(`${BASE_URL}/mosaic/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(searchBody),
+    });
+    const registerResponseJSON = await registerResponse.json();
+    console.log(registerResponseJSON);
+
+    const tilesHref = registerResponseJSON.links?.find((link) => link.rel === 'tilejson',).href;
+    console.log(tilesHref);
+
+    const tilejsonResponse = await fetch(`${tilesHref}?assets=${def.layerName}&colormap_name=${def.colormapName}&rescale=${encodeURI(def.rescale)}`);
+    const tilejsonResponseJSON = await tilejsonResponse.json();
+    console.log(tilejsonResponseJSON);
+
+    const { name } = tilejsonResponseJSON;
+
+    return name;
+  };
+
+  const buildGhgcTileUrlFunction = async (def, options, state) => {
     const source = config.sources[def.source];
+
+    const searchID = await registerSearchGHGC(def, options, state);
 
     return (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=purd&rescale=0%2C0.3`;
+      const urlParams = `${searchID}/tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=${def.colormapName}&rescale=${encodeURI(def.rescale)}`;
 
       return `${source.url}/${urlParams}`;
     };
@@ -722,7 +782,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
 
-    const tileUrlFunction = def.source === 'DDV' ? await buildDdvTileUrlFunction(def, options, state) : buildGhgcTileUrlFunction(def);
+    const tileUrlFunction = def.source === 'DDV' ? await buildDdvTileUrlFunction(def, options, state) : await buildGhgcTileUrlFunction(def, options, state);
 
     const xyzSourceOptions = {
       crossOrigin: 'anonymous',

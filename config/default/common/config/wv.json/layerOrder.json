@@ -1,6 +1,10 @@
 {
 	"layerOrder": [
 		"GHGC_Net_Primary_Produnction",
+		"GHGC_Heterotrophic_Respiration",
+		"GHGC_Net_Ecosystem_Exchange",
+		"GHGC_Fire_Emissions",
+		"GHGC_Wood_Fuel_Emissions",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
