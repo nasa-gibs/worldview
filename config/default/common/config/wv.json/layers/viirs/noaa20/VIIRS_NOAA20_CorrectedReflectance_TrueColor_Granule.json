@@ -11,8 +11,7 @@
           "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_TrueColor"],
           "availability": {
             "rollingWindow": 30
-          },
-          "disableSnapshot": true
+          }
       }
   }
 }

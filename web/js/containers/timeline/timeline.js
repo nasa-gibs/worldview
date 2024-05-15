@@ -195,7 +195,7 @@ class Timeline extends React.Component {
       rangeSelectorMax: {
         end: false, start: false, startOffset: -50, width: 50000,
       },
-      matchingTimelineCoverage: {},
+      matchingTimelineCoverage: [],
       isTimelineLayerCoveragePanelOpen: false,
       shouldIncludeHiddenLayers: false,
     };

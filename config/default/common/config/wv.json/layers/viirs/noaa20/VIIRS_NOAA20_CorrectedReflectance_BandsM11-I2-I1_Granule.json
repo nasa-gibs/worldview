@@ -11,8 +11,7 @@
           "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1"],
           "availability": {
             "rollingWindow": 30
-          },
-          "disableSnapshot": true
+          }
       }
   }
 }

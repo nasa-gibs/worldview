@@ -6,12 +6,7 @@ import 'regenerator-runtime/runtime';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import {
-  createStore,
-  applyMiddleware,
-  compose as defaultCompose,
-} from 'redux';
-import { composeWithDevTools } from '@redux-devtools/extension';
+import { configureStore } from '@reduxjs/toolkit';
 import {
   createReduxLocationActions,
   listenForHistoryChange,
@@ -42,23 +37,6 @@ import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
 const history = createBrowserHistory();
 const configURI = Brand.url('config/wv.json');
-const compose = DEBUG === false || DEBUG === 'logger'
-  ? defaultCompose
-  : DEBUG === 'devtools' && composeWithDevTools({
-    stateSanitizer: (state) => {
-      const sanitizedState = {
-        ...state,
-        map: {
-          ...state.map,
-          ui: {
-            ...state.map.ui,
-          },
-        },
-      };
-      delete sanitizedState.map.ui;
-      return sanitizedState;
-    },
-  });
 let parameters = util.fromQueryString(window.location.search);
 const errors = [];
 
@@ -94,13 +72,12 @@ function render (config, legacyState) {
     stateToParams,
   );
   const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
-  const store = createStore(
-    reducersWithLocation,
-    getInitialState(models, config, parameters),
-    compose(
-      applyMiddleware(...middleware),
-    ),
-  );
+  const store = configureStore({
+    middleware: (getDefaultMiddleware) => [...middleware],
+    reducer: reducersWithLocation,
+    preloadedState: getInitialState(models, config, parameters),
+    devTools: true,
+  });
   listenForHistoryChange(store, history);
 
   const root = createRoot(document.getElementById('app'));
