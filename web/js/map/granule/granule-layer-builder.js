@@ -243,7 +243,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { proj: { selected: { crs } } } = state;
     const { granuleCount, date, group } = options;
     const { count: currentCount } = getGranuleLayer(state, def.id) || {};
-    const count = currentCount || granuleCount || DEFAULT_NUM_GRANULES;
+    const count = currentCount || granuleCount || def.count || DEFAULT_NUM_GRANULES;
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
