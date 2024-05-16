@@ -171,8 +171,14 @@ const clickAndWait = async (page, locator) => {
 
 const closeModal = async (page) => {
   const closeButton = page.locator('.modal-close-btn')
+  await page.waitForTimeout(300)
   if (await closeButton.count() > 0) {
     await closeButton.click()
+  } else {
+    await page.waitForTimeout(500)
+    if (await closeButton.count() > 0) {
+      await closeButton.click()
+    }
   }
 }
 
