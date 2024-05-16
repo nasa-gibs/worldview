@@ -15,6 +15,7 @@
         "wrapX": true,
         "colormapName": "bupu",
         "rescale": "0,0.03",
+        "period": "monthly",
         "projections": {
           "geographic": {
             "source": "GHGC:geographic"

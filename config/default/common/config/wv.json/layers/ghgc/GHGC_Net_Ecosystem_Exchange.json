@@ -15,6 +15,7 @@
         "wrapX": true,
         "colormapName": "coolwarm",
         "rescale": "-0.1,0.1",
+        "period": "monthly",
         "projections": {
           "geographic": {
             "source": "GHGC:geographic"

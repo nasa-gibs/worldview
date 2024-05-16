@@ -15,6 +15,7 @@
         "wrapX": true,
         "colormapName": "purd",
         "rescale": "0,0.3",
+        "period": "monthly",
         "projections": {
           "geographic": {
             "source": "GHGC:geographic"
