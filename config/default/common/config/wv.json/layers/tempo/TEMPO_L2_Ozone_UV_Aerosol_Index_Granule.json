@@ -1,8 +1,8 @@
 {
   "layers": {
-    "TEMPO_L2_Ozone_Cloud_Fraction_Granule": {
-      "id": "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
-      "title": "Ozone (L2, Cloud Fraction, Subdaily) (BETA)",
+    "TEMPO_L2_Ozone_UV_Aerosol_Index_Granule": {
+      "id": "TEMPO_L2_Ozone_UV_Aerosol_Index_Granule",
+      "title": "Ozone (L2, UV Aerosol Index, Subdaily) (BETA)",
       "subtitle": "TEMPO",
       "tags": "",
       "group": "overlays",

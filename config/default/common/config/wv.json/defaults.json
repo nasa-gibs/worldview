@@ -18,6 +18,10 @@
                 "hidden": "true"
             },
             {
+                "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                "hidden": "true"
+            },
+            {
                 "id": "Coastlines_15m"
             },
             {

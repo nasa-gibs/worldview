@@ -3,7 +3,7 @@
         "Ozone": {
             "id": "ozone",
             "title":    "Ozone",
-            "subtitle": "Aura/MLS, Aura/OMI, Suomi NPP/OMPS, MERRA-2",
+            "subtitle": "Aura/MLS, Aura/OMI, Suomi NPP/OMPS, TEMPO, MERRA-2",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-mls",
@@ -36,6 +36,26 @@
                     "settings": [
                         "OMPS_Ozone_Total_Column",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "TEMPO": {
+                    "id": "tempo",
+                    "title": "TEMPO",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "TEMPO_L2_Ozone_Vertical_Column_Stratosphere_Granule",
+                        "TEMPO_L2_Ozone_Vertical_Column_Total_Granule",
+                        "TEMPO_L2_Ozone_Vertical_Column_Troposphere_Granule",
+                        "TEMPO_L2_Ozone_Column_Amount_Granule",
+                        "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
+                        "TEMPO_L2_Ozone_UV_Aerosol_Index_Granule",
+                        "TEMPO_L3_Ozone_Vertical_Column_Stratosphere",
+                        "TEMPO_L3_Ozone_Vertical_Column_Total",
+                        "TEMPO_L3_Ozone_Vertical_Column_Troposphere",
+                        "TEMPO_L3_Ozone_Column_Amount",
+                        "TEMPO_L3_Ozone_Cloud_Fraction",
+                        "TEMPO_L3_Ozone_UV_Aerosol_Index"
                     ]
                 },
                 "MERRA-2": {

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "TEMPO_L2_Formaldehyde_Vertical_Column_Granule": {
+      "id": "TEMPO_L2_Formaldehyde_Vertical_Column_Granule",
+      "title": "Formaldehyde (L2, Vertical Column, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Formaldehyde",
+      "type": "granule",
+      "period": "subdaily"
+    }
+  }
+}
