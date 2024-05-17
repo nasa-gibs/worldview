@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "TEMPO_L3_Ozone_Column_Amount": {
+      "id": "TEMPO_L3_Ozone_Column_Amount",
+      "title": "Ozone (L3, Column Amount O3, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Ozone"
+    }
+  }
+}

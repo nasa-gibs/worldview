@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule": {
+      "id": "TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule",
+      "title": "Clouds (L2, Cloud Fraction Total, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Fraction",
+      "type": "granule",
+      "period": "subdaily"
+    }
+  }
+}
