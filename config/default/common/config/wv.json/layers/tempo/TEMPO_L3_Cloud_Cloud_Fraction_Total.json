@@ -6,7 +6,8 @@
       "subtitle": "TEMPO",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Cloud Fraction"
+      "layergroup": "Cloud Fraction",
+      "count": 1
     }
   }
 }

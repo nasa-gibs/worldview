@@ -6,7 +6,8 @@
       "subtitle": "TEMPO",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Cloud Pressure"
+      "layergroup": "Cloud Pressure",
+      "count": 1
     }
   }
 }

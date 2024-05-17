@@ -6,7 +6,8 @@
       "subtitle": "TEMPO",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Ozone"
+      "layergroup": "Ozone",
+      "count": 1
     }
   }
 }

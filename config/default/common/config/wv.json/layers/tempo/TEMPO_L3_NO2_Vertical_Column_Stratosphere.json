@@ -6,7 +6,8 @@
       "subtitle": "TEMPO",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Nitrogen Dioxide"
+      "layergroup": "Nitrogen Dioxide",
+      "count": 1
     }
   }
 }

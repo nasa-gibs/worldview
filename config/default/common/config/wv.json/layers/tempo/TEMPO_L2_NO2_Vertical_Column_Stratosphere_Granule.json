@@ -8,7 +8,8 @@
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "type": "granule",
-      "period": "subdaily"
+      "period": "subdaily",
+      "count": 1
     }
   }
 }
