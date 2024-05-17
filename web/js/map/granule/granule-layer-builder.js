@@ -111,6 +111,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     return startIsCovered && endIsCovered;
   };
 
+  const getGranulesFromStore = (shortName, nrtShortName) => {
+    const state = store.getState();
+    const { proj: { selected: { crs } } } = state;
+    const existingGranules = CMRDataStore[crs][shortName] || [];
+    const existingNRTGranules = CMRDataStore[crs][nrtShortName] || [];
+
+    return [...existingGranules, ...existingNRTGranules];
+  };
+
   /**
    * Query CMR to get dates
    * @param {object} def - Layer specs
@@ -129,9 +138,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { shortName: nrtShortName } = nrtParams;
     let data = [];
     let nrtData = [];
-    const existingGranules = CMRDataStore[crs][shortName] || [];
-    const existingNRTGranules = CMRDataStore[crs][nrtShortName] || [];
-    const mergedExistingGranules = existingGranules.concat(existingNRTGranules);
+    const mergedExistingGranules = getGranulesFromStore(shortName, nrtShortName);
     const datesQueried = datesHaveBeenQueried(params.startDate, date, mergedExistingGranules);
 
     if (mergedExistingGranules.length && datesQueried) {
@@ -163,7 +170,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       hideLoading();
     }
 
-    return [...existingNRTGranules, ...existingGranules];
+    return getGranulesFromStore(shortName, nrtShortName);
   };
 
   /**
