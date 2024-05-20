@@ -4,3 +4,4 @@ Imagery is available as approximately six-minute granules for daylight hours ove
 
 Total ozone Level 2 files provide ozone and supporting information at TEMPO’s native spatial resolution for individual granules. Each granule covers the entire North-South TEMPO FOR but only a portion of the East-West FOR. The temporal resolution of a nominal scan is approximately one hour during daylight hours, with more frequent scans in the morning over the eastern portion of the FOR and in the evenings over the western portion of the FOR.
 
+References: TEMPO_O3TOT_L2 [doi:10.5067/IS-40e/TEMPO/O3TOT_L2.003](https://doi.org/10.5067/IS-40e/TEMPO/O3TOT_L2.003)
