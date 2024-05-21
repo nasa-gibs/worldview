@@ -3,7 +3,7 @@
         "Aerosol Index": {
             "id": "aerosol-index",
             "title":    "Aerosol Index",
-            "subtitle": "Aura/OMI, Suomi NPP/OMPS",
+            "subtitle": "Aura/OMI, Suomi NPP/OMPS, TEMPO",
             "sources": {
                 "Aura/OMI": {
                     "id": "aura-omi",
@@ -25,6 +25,16 @@
                         "OMPS_Aerosol_Index",
                         "OMPS_Aerosol_Index_PyroCumuloNimbus",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "TEMPO": {
+                    "id": "tempo",
+                    "title": "TEMPO",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "TEMPO_L2_Ozone_UV_Aerosol_Index_Granule",
+                        "TEMPO_L3_Ozone_UV_Aerosol_Index"
                     ]
                 }
             }
