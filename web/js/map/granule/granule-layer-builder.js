@@ -36,6 +36,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const baseGranuleUrl = getGranuleUrl();
   const CMR_AJAX_OPTIONS = {
     url: baseGranuleUrl,
+    cache: 'force-cache',
     headers: { 'Client-Id': 'Worldview' },
     traditional: true,
     dataType: 'json',
