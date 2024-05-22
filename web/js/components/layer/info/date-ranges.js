@@ -20,7 +20,8 @@ export default class DateRanges extends React.Component {
       const ListItemEndDate = () => coverageDateFormatter('END-DATE', l.endDate, layer.period);
 
       return (
-        <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
+        // notranslate included below to prevent Google Translate extension from crashing the page
+        <ListGroupItem key={`${l.startDate} - ${l.endDate}`} className="notranslate">
           <ListItemStartDate />
           {' - '}
           <ListItemEndDate />
