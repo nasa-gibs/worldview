@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule": {
+      "id": "TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule",
+      "title": "Nitrogen Dioxide (L2, Vertical Column Stratosphere, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Nitrogen Dioxide",
+      "type": "granule",
+      "period": "subdaily",
+      "count": 1,
+      "cmrAvailability": true
+
+    }
+  }
+}

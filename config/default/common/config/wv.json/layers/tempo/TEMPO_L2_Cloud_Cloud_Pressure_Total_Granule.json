@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule": {
+      "id": "TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule",
+      "title": "Clouds L2, Cloud Pressure Total, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Pressure",
+      "type": "granule",
+      "period": "subdaily",
+      "count": 1,
+      "cmrAvailability": true
+
+    }
+  }
+}

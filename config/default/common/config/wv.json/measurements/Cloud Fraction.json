@@ -3,7 +3,7 @@
         "Cloud Fraction": {
             "id": "cloud-fraction",
             "title":    "Cloud Fraction",
-            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODI, TEMPO",
             "sources": {
               "Aqua/AIRS": {
                  "id": "aqua-airs",
@@ -39,9 +39,17 @@
                         "MODIS_Terra_Cloud_Fraction_Night",
                         "OrbitTracks_Terra_Descending",
                         "OrbitTracks_Terra_Ascending"
-
                     ]
-
+                },
+                "TEMPO": {
+                    "id": "tempo",
+                    "title": "TEMPO",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule",
+                        "TEMPO_L3_Cloud_Cloud_Fraction_Total"
+                    ]
                 }
             }
         }

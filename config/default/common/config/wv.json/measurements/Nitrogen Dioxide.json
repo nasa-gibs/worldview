@@ -3,7 +3,7 @@
         "Nitrogen Dioxide": {
             "id": "nitrogen-dioxide",
             "title":    "Nitrogen Dioxide",
-            "subtitle": "Aura/OMI, SEDAC",
+            "subtitle": "Aura/OMI, TEMPO, SEDAC",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-omi",
@@ -13,6 +13,18 @@
                     "settings": [
                         "OMI_Nitrogen_Dioxide_Tropo_Column",
                         "OrbitTracks_Aura_Ascending"
+                    ]
+                },
+                "TEMPO": {
+                    "id": "tempo",
+                    "title": "TEMPO",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule",
+                        "TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule",
+                        "TEMPO_L3_NO2_Vertical_Column_Stratosphere",
+                        "TEMPO_L3_NO2_Vertical_Column_Troposphere"
                     ]
                 },
                 "SEDAC": {

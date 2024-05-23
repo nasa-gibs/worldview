@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "TEMPO_L3_Formaldehyde_Vertical_Column": {
+      "id": "TEMPO_L3_Formaldehyde_Vertical_Column",
+      "title": "Formaldehyde (L3, Vertical Column, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Formaldehyde",
+      "cmrAvailability": true
+    }
+  }
+}
