@@ -284,28 +284,27 @@
                         "OrbitTracks_Sentinel-2B_Ascending",
                         "OrbitTracks_Sentinel-2B_Descending"
                     ]
-                    ,
-                    "Sentinel-3A/Space-Track.org": {
-                        "id": "space-track-org-sentinel-3a",
-                        "title": "Sentinel-3A/Space-Track.org",
-                        "description": "",
-                        "image": "",
-                        "settings": [
-                            "OrbitTracks_Sentinel-3A_Ascending",
-                            "OrbitTracks_Sentinel-3A_Descending"
-                        ]
-                    },
-                    "Sentinel-3B/Space-Track.org": {
-                        "id": "space-track-org-sentinel-3b",
-                        "title": "Sentinel-3B/Space-Track.org",
-                        "description": "",
-                        "image": "",
-                        "settings": [
-                            "OrbitTracks_Sentinel-3B_Ascending",
-                            "OrbitTracks_Sentinel-3B_Descending"
-                        ]
-                    }}
-                ,
+                },
+                "Sentinel-3A/Space-Track.org": {
+                    "id": "space-track-org-sentinel-3a",
+                    "title": "Sentinel-3A/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_Sentinel-3A_Ascending",
+                        "OrbitTracks_Sentinel-3A_Descending"
+                    ]
+                },
+                "Sentinel-3B/Space-Track.org": {
+                    "id": "space-track-org-sentinel-3b",
+                    "title": "Sentinel-3B/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_Sentinel-3B_Ascending",
+                        "OrbitTracks_Sentinel-3B_Descending"
+                    ]
+                },
                 "Sentinel-5P/Space-Track.org": {
                     "id": "space-track-org-sentinel-5p",
                     "title": "Sentinel-5P/Space-Track.org",
