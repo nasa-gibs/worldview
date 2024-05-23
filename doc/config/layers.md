@@ -112,7 +112,7 @@ Example:
     * dateInterval - Number of days (or minutes for subdaily layers)
 * **temporal**: Used to override the layer temporal availability declared in the capabilities document. Note: Changing the temporal availability can cause missing layer coverage within the interface for layers tiles that aren't available from the source at the revised temporal range. This option can be added as a string with the new availability range. For example, `"1981-10-13/2019-10-11/P1M"`.
 * **count**: Used to override the default number of granules displayed on the map and in the granule count slider component for granule layers.
-* **cmrAvailability**: Boolean - Whether of not to use the CMR API for data availability.
+* **cmrAvailability**: Boolean - Whether or not to use the CMR API for data availability.
 
 ## Full Example
 
