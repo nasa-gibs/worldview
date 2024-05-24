@@ -12,7 +12,8 @@
       "period": "subdaily",
       "count": 1,
       "cmrAvailability": true,
-      "startDate": "2024-05-13T10:41:03Z"
+      "startDate": "2024-05-13T10:41:03Z",
+      "disableSnapshot": true
     }
   }
 }

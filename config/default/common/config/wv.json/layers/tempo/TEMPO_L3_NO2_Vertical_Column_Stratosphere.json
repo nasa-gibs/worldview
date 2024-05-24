@@ -9,7 +9,8 @@
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "cmrAvailability": true,
-      "startDate": "2024-05-13T10:30:00Z"
+      "startDate": "2024-05-13T10:30:00Z",
+      "disableSnapshot": true
 
     }
   }
