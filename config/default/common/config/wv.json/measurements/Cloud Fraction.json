@@ -3,7 +3,7 @@
         "Cloud Fraction": {
             "id": "cloud-fraction",
             "title":    "Cloud Fraction",
-            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODI, TEMPO",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS, TEMPO",
             "sources": {
               "Aqua/AIRS": {
                  "id": "aqua-airs",
