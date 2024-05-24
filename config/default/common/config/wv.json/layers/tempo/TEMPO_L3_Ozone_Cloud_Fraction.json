@@ -7,7 +7,9 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Ozone",
-      "cmrAvailability": true
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:30:00Z"
+
     }
   }
 }

@@ -10,7 +10,8 @@
       "type": "granule",
       "period": "subdaily",
       "count": 1,
-      "cmrAvailability": true
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:41:03Z"
 
     }
   }

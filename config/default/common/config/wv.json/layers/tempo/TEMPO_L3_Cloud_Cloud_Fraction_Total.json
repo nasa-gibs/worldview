@@ -7,7 +7,8 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Fraction",
-      "cmrAvailability": true
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:30:00Z"
     }
   }
 }
