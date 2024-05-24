@@ -99,7 +99,7 @@ async function getLayerGranuleRanges(layer) {
 
 async function mapGranulesToLayers(layers) {
   const promises = layers.map(async (layer) => {
-    if (layer.type !== 'granule') return layer;
+    if (!layer.cmrAvailability) return layer;
 
     const ranges = await getLayerGranuleRanges(layer);
 

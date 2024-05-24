@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "TEMPO_L2_Ozone_Column_Amount_Granule": {
+      "id": "TEMPO_L2_Ozone_Column_Amount_Granule",
+      "title": "Ozone (L2, Column Amount O3, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L2_Ozone_Column_Amount_Granule",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Ozone",
+      "type": "granule",
+      "period": "subdaily",
+      "count": 1,
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:41:03Z",
+      "disableSnapshot": true
+
+    }
+  }
+}

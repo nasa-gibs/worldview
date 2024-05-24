@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule": {
+      "id": "TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule",
+      "title": "Nitrogen Dioxide (L2, Vertical Column Troposphere, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Nitrogen Dioxide",
+      "type": "granule",
+      "period": "subdaily",
+      "count": 1,
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:41:03Z",
+      "disableSnapshot": true
+
+    }
+  }
+}
