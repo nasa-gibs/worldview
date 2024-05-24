@@ -4,6 +4,7 @@
       "id": "TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule",
       "title": "Clouds (L2, Cloud Fraction Total, Subdaily) (BETA)",
       "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule",
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Fraction",

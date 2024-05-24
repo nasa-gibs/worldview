@@ -4,6 +4,7 @@
       "id": "TEMPO_L3_Formaldehyde_Vertical_Column",
       "title": "Formaldehyde (L3, Vertical Column, Subdaily) (BETA)",
       "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L3_Formaldehyde_Vertical_Column",
       "tags": "",
       "group": "overlays",
       "layergroup": "Formaldehyde",
