@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "TEMPO_L3_Ozone_Column_Amount": {
+      "id": "TEMPO_L3_Ozone_Column_Amount",
+      "title": "Ozone (L3, Column Amount O3, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L3_Ozone_Column_Amount",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Ozone",
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:30:00Z",
+      "disableSnapshot": true
+
+    }
+  }
+}

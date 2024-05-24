@@ -1,0 +1,16 @@
+{
+  "layers": {
+    "TEMPO_L3_Cloud_Cloud_Fraction_Total": {
+      "id": "TEMPO_L3_Cloud_Cloud_Fraction_Total",
+      "title": "Clouds (L3, Cloud Fraction Total, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L3_Cloud_Cloud_Fraction_Total",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Fraction",
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:30:00Z",
+      "disableSnapshot": true
+    }
+  }
+}
