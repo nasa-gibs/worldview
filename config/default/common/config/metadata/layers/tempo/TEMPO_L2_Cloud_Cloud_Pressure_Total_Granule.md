@@ -1,4 +1,3 @@
-
 The Tropospheric Emissions: Monitoring of Pollution (TEMPO) Level 2 (L2) Cloud Pressure layer provides information on the optical centroid pressure of clouds derived using the O<sub>2</sub>-O<sub>2</sub> cloud retrieval algorithm and is measured in hectopascals (hPa).
 
 Imagery is available as approximately six-minute granules for daylight hours over North America. The sensor’s native spatial resolution is ~2 km x 4.75 km at the center of TEMPO’s field of regard (FOR), and the imagery resolution is 1 km. The layer is filtered to display high-quality pixels with solar zenith angles less than 80 degrees.
