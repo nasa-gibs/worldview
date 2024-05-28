@@ -1,5 +1,4 @@
-
-The Tropospheric Emissions: Monitoring of Pollution (TEMPO) Level 3 (l3) Cloud Fraction layer provides information on the effective cloud fraction (a unitless quantity) derived using the mixed Lambert Equivalent Reflectivity (LER) model from the total ozone retrieval algorithm. The retrieval is based on the Ozone Monitoring Instrument Total Ozone Mapping Spectrometer (OMI TOMS) V8.5 algorithm adapted for TEMPO.
+The Tropospheric Emissions: Monitoring of Pollution (TEMPO) Level 3 (L3) Cloud Fraction layer provides information on the effective cloud fraction (a unitless quantity) derived using the mixed Lambert Equivalent Reflectivity (LER) model from the total ozone retrieval algorithm. The retrieval is based on the Ozone Monitoring Instrument Total Ozone Mapping Spectrometer (OMI TOMS) V8.5 algorithm adapted for TEMPO.
 
 Imagery is available as approximately one-hour scans for daylight hours over North America. The sensor’s native spatial resolution is ~2 km x 4.75 km at the center of TEMPO’s field of regard (FOR), the Level 3 product resolution is 0.02 x 0.02 degrees, and the imagery resolution is 2 km. The layer is filtered to display high-quality pixels using the solar zenith angle variable.
 
