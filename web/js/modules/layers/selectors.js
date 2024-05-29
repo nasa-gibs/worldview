@@ -591,6 +591,44 @@ export const subdailyLayersActive = createSelector(
 );
 
 /**
+ * Get subdaily layers from given layers
+ * @param {Array} layers
+ */
+export function getSubDaily(layers) {
+  const outputLayers = [];
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      if (layers[i].period === 'subdaily') {
+        outputLayers.push(layers[i]);
+      }
+    }
+  }
+  return outputLayers;
+}
+
+export const subdailyLayers = createSelector(
+  [getActiveLayers],
+  (layers) => getSubDaily(layers),
+);
+
+/**
+ * Gets smallest interval value of subdaily layers
+ * @param {Object} state
+ */
+export function getSmallestIntervalValue(state) {
+  const layers = getActiveLayers(state);
+  let smallestDelta = 1440;
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      if (layers[i].period === 'subdaily' && lodashGet(layers[i], 'dateRanges[0].dateInterval') < smallestDelta) {
+        smallestDelta = Number(lodashGet(layers[i], 'dateRanges[0].dateInterval'));
+      }
+    }
+  }
+  return smallestDelta;
+}
+
+/**
  *
  * @param {*} config
  * @param {*} layerId
