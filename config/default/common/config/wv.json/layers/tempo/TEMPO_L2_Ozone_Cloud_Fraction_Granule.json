@@ -2,13 +2,19 @@
   "layers": {
     "TEMPO_L2_Ozone_Cloud_Fraction_Granule": {
       "id": "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
-      "title": "Ozone (Daily, Cloud Fraction)",
-      "subtitle": "TEMPO_L2G_O3_CF_LNK, Best Available, TEMPO",
+      "title": "Ozone (L2, Cloud Fraction, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L2_Ozone_Cloud_Fraction_Granule",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Granules",
+      "layergroup": "Ozone",
       "type": "granule",
-      "period": "subdaily"
+      "period": "subdaily",
+      "count": 1,
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:41:03Z",
+      "disableSnapshot": true
+
     }
   }
 }

@@ -7,6 +7,7 @@
           "group":    "overlays",
           "layergroup": "Granules",
           "type": "granule",
+          "cmrAvailability": true,
           "period": "subdaily",
           "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1"],
           "availability": {
