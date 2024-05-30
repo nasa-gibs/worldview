@@ -33,7 +33,10 @@ import {
   dateRange as getDateRange,
   hasSubDaily,
   subdailyLayersActive,
+  subdailyLayers,
   getActiveLayers,
+  getSubDaily,
+  getSmallestIntervalValue,
 } from '../../modules/layers/selectors';
 import { getSelectedDate, getDeltaIntervalUnit } from '../../modules/date/selectors';
 import {
@@ -278,7 +281,6 @@ class Timeline extends React.Component {
       animEndLocationDate,
       changeCustomInterval,
       customInterval,
-      customSelected,
       dateA,
       dateB,
       interval,
@@ -286,6 +288,8 @@ class Timeline extends React.Component {
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
+      subDailyLayersList,
+      newCustomDelta,
     } = this.props;
     const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
 
@@ -309,8 +313,8 @@ class Timeline extends React.Component {
       }
     }
 
-    const subdailyAdded = hasSubdailyLayers && !prevProps.hasSubdailyLayers;
     const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const subDailyCountChanged = subDailyLayersList.length !== prevProps.subDailyLayersList.length;
     const subdailyInterval = customInterval > 3 || interval > 3;
 
     if (subdailyRemoved && subdailyInterval) {
@@ -318,8 +322,13 @@ class Timeline extends React.Component {
       selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
     }
 
-    if (subdailyAdded && !customSelected) {
-      changeCustomInterval(10, TIME_SCALE_TO_NUMBER.minute);
+    const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
+    if (subDailyCountChanged) {
+      if (isSubDaily) {
+        changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
+      } else {
+        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
+      }
     }
 
     // if user adds a subdaily layer (and none were active) change the time scale to hourly
@@ -1519,7 +1528,10 @@ function mapStateToProps(state) {
   const hasSubdailyLayers = isCompareModeActive
     ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
     : subdailyLayersActive(state);
-
+  const subDailyLayersList = isCompareModeActive
+    ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
+    : subdailyLayers(state);
+  const newCustomDelta = getSmallestIntervalValue(state);
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1586,6 +1598,7 @@ function mapStateToProps(state) {
     breakpoints,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
+    subDailyLayersList,
     customSelected,
     isCompareModeActive,
     isAnimatingToEvent,
@@ -1626,6 +1639,7 @@ function mapStateToProps(state) {
     isEmbedModeActive,
     isKioskModeActive,
     displayStaticMap,
+    newCustomDelta,
   };
 }
 
@@ -1711,6 +1725,7 @@ Timeline.propTypes = {
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  subDailyLayersList: PropTypes.object,
   hideTimeline: PropTypes.bool,
   interval: PropTypes.number,
   isAnimationPlaying: PropTypes.bool,

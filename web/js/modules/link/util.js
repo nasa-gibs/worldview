@@ -116,6 +116,17 @@ export function getPermalink(queryString, selectedDate, isEmbed) {
     }
   }
 
+  // Remove 'e2e=true'
+  if (permalink.includes('e2e=true')) {
+    if (permalink.includes('?e2e=true&')) {
+      permalink = permalink.replace('?e2e=true&', '?');
+    } else if (permalink.includes('&e2e=true')) {
+      permalink = permalink.replace('&e2e=true', '');
+    } else if (permalink.includes('?e2e=true')) {
+      permalink = permalink.replace('?e2e=true', '');
+    }
+  }
+
   // Check for 'eic=' and remove it along with the next two characters
   const eicPattern = /eic=../g;
   permalink = permalink.replace(eicPattern, '');
