@@ -322,11 +322,12 @@ class Timeline extends React.Component {
       selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
     }
 
+    const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
-      if (newCustomDelta === 1440) {
-        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
-      } else {
+      if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
+      } else {
+        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
       }
     }
 

@@ -617,11 +617,12 @@ export const subdailyLayers = createSelector(
  */
 export function getSmallestIntervalValue(state) {
   const layers = getActiveLayers(state);
-  let smallestDelta = 1440;
+  let smallestDelta = 1440; // 1 day in minutes
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
-      if (layers[i].period === 'subdaily' && lodashGet(layers[i], 'dateRanges[0].dateInterval') < smallestDelta) {
-        smallestDelta = Number(lodashGet(layers[i], 'dateRanges[0].dateInterval'));
+      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      if (layers[i].period === 'subdaily' && interval < smallestDelta) {
+        smallestDelta = Number(interval);
       }
     }
   }
