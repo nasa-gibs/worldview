@@ -323,7 +323,11 @@ class Timeline extends React.Component {
     }
 
     if (subDailyCountChanged) {
-      changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
+      if (newCustomDelta === 1440) {
+        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
+      } else {
+        changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
+      }
     }
 
     // if user adds a subdaily layer (and none were active) change the time scale to hourly
