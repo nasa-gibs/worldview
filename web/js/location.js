@@ -317,6 +317,18 @@ const getParameters = function(config, parameters) {
       stateKey: 'ui.eic',
       initialState: '',
     },
+    e2e: {
+      stateKey: 'ui.isE2eModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isE2eModeActive = get(state, 'ui.isE2eModeActive');
+          return isE2eModeActive ? boo : undefined;
+        },
+      },
+    },
     scenario: {
       stateKey: 'ui.scenario',
       initialState: '',
