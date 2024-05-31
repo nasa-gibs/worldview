@@ -11,7 +11,7 @@
         "group": "overlays",
         "layergroup": "Snow Indices",
         "format": "image/png",
-        "type": "ttiler",
+        "type": "titiler",
         "period": "daily",
         "orbitTracks": ["OrbitTracks_Landsat-8_Descending", "OrbitTracks_Landsat-9_Descending"],
         "orbitDirection": ["descending", "descending"],

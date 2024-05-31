@@ -1,0 +1,21 @@
+{
+  "measurements": {
+      "Formaldehyde": {
+          "id": "formaldehyde",
+          "title":    "Formaldehyde",
+          "subtitle": "TEMPO",
+          "sources": {
+              "ISS/GEDI": {
+                  "id": "tempo",
+                  "title": "TEMPO",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "TEMPO_L2_Formaldehyde_Vertical_Column_Granule",
+                  "TEMPO_L3_Formaldehyde_Vertical_Column"
+                  ]
+              }
+          }
+      }
+  }
+}

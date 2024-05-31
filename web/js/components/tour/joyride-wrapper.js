@@ -51,6 +51,7 @@ export default function JoyrideWrapper ({
   const [elementPositionKey, setElementPositionKey] = useState(key);
   const [stepIndex, setStepIndex] = useState();
   const [run, setRun] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const incrementKey = () => {
     key += 1;
@@ -144,6 +145,7 @@ export default function JoyrideWrapper ({
         setPlaceholderLocation(placeholderEl, targetCoordinates);
       }
     });
+    setIsInitializing(false);
     // Force a re-render so that Joyride updates the beacon location,
     // otherwise it doesn't know the DOM element position was updated
     incrementKey();
@@ -215,7 +217,7 @@ export default function JoyrideWrapper ({
     }
   });
 
-  return !projMatches ? null : (
+  return !projMatches || isInitializing ? null : (
     <Joyride
       run={run}
       stepIndex={stepIndex}

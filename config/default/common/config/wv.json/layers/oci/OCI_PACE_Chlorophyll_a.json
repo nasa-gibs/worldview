@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OCI_PACE_Chlorophyll_a": {
+      "id": "OCI_PACE_Chlorophyll_a",
+      "description": "oci/OCI_PACE_Chlorophyll_a",
+      "tags": "ocean color oci pace plankton",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}

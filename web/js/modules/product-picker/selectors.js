@@ -2,7 +2,7 @@ import {
   sortBy as lodashSortBy,
   indexOf as lodashIndexOf,
 } from 'lodash';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import buildLayerFacetProps from './format-config';
 import { getSelectedDate } from '../date/selectors';
 import util from '../../util/util';

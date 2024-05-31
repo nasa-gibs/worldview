@@ -71,7 +71,7 @@ function UpdateDate(props) {
     compareMapUi.update(activeString);
   }
 
-  async function updateDate(outOfStepChange, skipTtiler) {
+  async function updateDate(outOfStepChange, skipTitiler) {
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
@@ -92,7 +92,7 @@ function UpdateDate(props) {
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length) {
-        await updateCompareLayer(def, index, mapLayerCollection, layers, skipTtiler);
+        await updateCompareLayer(def, index, mapLayerCollection, layers, skipTitiler);
       } else if (temporalLayer) {
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
@@ -127,9 +127,9 @@ function UpdateDate(props) {
       return updateDate(action.outOfStep);
     } if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
       const outOfStep = false;
-      // if date not changing we do not want to recreate ttiler layer
-      const skipTtiler = true;
-      return updateDate(outOfStep, skipTtiler);
+      // if date not changing we do not want to recreate titiler layer
+      const skipTitiler = true;
+      return updateDate(outOfStep, skipTitiler);
     }
   };
 

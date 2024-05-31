@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "TEMPO_L3_Ozone_Cloud_Fraction": {
+      "id": "TEMPO_L3_Ozone_Cloud_Fraction",
+      "title": "Ozone (L3, Cloud Fraction, Subdaily) (BETA)",
+      "subtitle": "TEMPO",
+      "description": "tempo/TEMPO_L3_Ozone_Cloud_Fraction",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Ozone",
+      "cmrAvailability": true,
+      "startDate": "2024-05-13T10:30:00Z",
+      "disableSnapshot": true
+
+    }
+  }
+}

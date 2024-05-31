@@ -3,7 +3,7 @@
         "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, PACE/OCI, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -43,6 +43,16 @@
                     "settings": [
                         "VIIRS_NOAA20_Chlorophyll_a",
                         "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
+                "PACE/OCI": {
+                    "id": "pace-oci",
+                    "title": "PACE/OCI",
+                    "description": "oci/oci",
+                    "image": "",
+                    "settings": [
+                        "OCI_PACE_Chlorophyll_a",
+                        "OrbitTracks_PACE_Ascending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {

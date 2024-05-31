@@ -932,7 +932,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return name;
   };
 
-  const createTtilerLayer = async (def, options, day, state) => {
+  const createTitilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
@@ -1046,7 +1046,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
 
-    if (!layer || isGranule || def.type === 'ttiler') {
+    if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);
       const cacheOptions = getCacheOptions(period, date);
       const attributes = {
@@ -1077,8 +1077,8 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
-          case 'ttiler':
-            layer = await getLayer(createTtilerLayer, def, options, attributes, wrapLayer);
+          case 'titiler':
+            layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
             break;
           case 'xyz':
             layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
@@ -1088,7 +1088,7 @@ export default function mapLayerBuilder(config, cache, store) {
         }
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
-        if (def.type !== 'ttiler') layer.setVisible(false);
+        if (def.type !== 'titiler') layer.setVisible(false);
       } else {
         layer = await getGranuleLayer(def, attributes, options);
       }

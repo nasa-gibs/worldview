@@ -163,7 +163,7 @@ export const getCMRQueryDates = (crs, selectedDate) => {
  * @param {*} crs
  * @returns
  */
-export const getParamsForGranuleRequest = (def, date, crs) => {
+export const getParamsForGranuleRequest = (def, date, crs, nrt) => {
   const dayNightFilter = def.daynight[0];
   const bboxForProj = {
     [CRS.WEB_MERCATOR]: [-180, -65, 180, 65],
@@ -176,6 +176,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
   const getShortName = () => {
     try {
       const { shortName } = def.conceptIds[0];
+      if (nrt) return shortName;
       // remove _NRT from shortName
       return shortName.replace('_NRT', '');
     } catch (e) {

@@ -344,7 +344,7 @@ class LayerSettings extends React.Component {
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
-    const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
     const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
     const layerGroup = layer.layergroup;
 
@@ -368,7 +368,7 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
-        {ttilerLayer && <BandSelection layer={layer} />}
+        {titilerLayer && <BandSelection layer={layer} />}
         {granuleMetadata && <ImagerySearch layer={layer} /> }
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>

@@ -295,7 +295,7 @@ export async function promiseImageryForTime(state, date, activeString) {
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
-    if (layer.type === 'granule' || layer.type === 'ttiler') {
+    if (layer.type === 'granule' || layer.type === 'titiler') {
       return Promise.resolve();
     }
     const options = { date, group: activeString };
@@ -320,7 +320,7 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
   const appNow = lodashGet(state, 'date.appNow');
   const date = tryCatchDate(dateString, appNow);
   await Promise.all(layers.map(async (layer) => {
-    if (layer.type === 'granule' || layer.type === 'ttiler') {
+    if (layer.type === 'granule' || layer.type === 'titiler') {
       return Promise.resolve();
     }
     const options = { date, group: activeString || 'active' };

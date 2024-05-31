@@ -8,7 +8,7 @@ import {
   findIndex as lodashFindIndex,
   memoize as lodashMemoize,
 } from 'lodash';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
@@ -41,7 +41,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
-  def.count = spec.count || undefined;
+  def.count = spec.count || def.count || undefined;
 
   if (Array.isArray(spec.bandCombo)) {
     def.bandCombo = {
@@ -591,20 +591,42 @@ export const subdailyLayersActive = createSelector(
 );
 
 /**
- * Gets largest interval value of subdaily layers
- * @param {Object} state
+ * Get subdaily layers from given layers
+ * @param {Array} layers
  */
-export function getLargestIntervalValue(state) {
-  const layers = getActiveLayers(state);
-  let largestDelta = 10;
+export function getSubDaily(layers) {
+  const outputLayers = [];
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
-      if (layers[i].period === 'subdaily' && lodashGet(layers[i], 'dateRanges[0].dateInterval') > largestDelta) {
-        largestDelta = Number(lodashGet(layers[i], 'dateRanges[0].dateInterval'));
+      if (layers[i].period === 'subdaily') {
+        outputLayers.push(layers[i]);
       }
     }
   }
-  return largestDelta;
+  return outputLayers;
+}
+
+export const subdailyLayers = createSelector(
+  [getActiveLayers],
+  (layers) => getSubDaily(layers),
+);
+
+/**
+ * Gets smallest interval value of subdaily layers
+ * @param {Object} state
+ */
+export function getSmallestIntervalValue(state) {
+  const layers = getActiveLayers(state);
+  let smallestDelta = 1440; // 1 day in minutes
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      if (layers[i].period === 'subdaily' && interval < smallestDelta) {
+        smallestDelta = Number(interval);
+      }
+    }
+  }
+  return smallestDelta;
 }
 
 /**
