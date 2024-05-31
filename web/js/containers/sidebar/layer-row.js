@@ -247,6 +247,7 @@ function LayerRow (props) {
           isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
           palettes={palettes}
+          showingVectorHand={isVectorLayer && isVisible}
         />
       );
     }

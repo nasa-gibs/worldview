@@ -1,0 +1,43 @@
+{
+  "layers": {
+    "DAILY_AERONET_AOD_500NM": {
+      "id": "DAILY_AERONET_AOD_500NM",
+      "title": "Aerosol Optical Depth 500nm (Daily)",
+      "subtitle": "AERONET",
+      "description": "aeronet/DAILY_AERONET_AOD_500NM",
+      "period": "daily",
+      "group": "overlays",
+      "tags": "vectors aeronet aod",
+      "type": "vector",
+      "layergroup": "Aerosol Optical Depth",
+      "disableSnapshot": true,
+      "vectorStyle": {
+        "id": "DAILY_AERONET_AOD_500NM"
+      },
+      "wrapX": true,
+      "projections": {
+        "geographic": {
+          "source": "AERONET"
+        }
+      },
+      "palette": {
+        "id": "DAILY_AERONET_AOD_500NM",
+        "immutable": true,
+        "styleProperty": "MAIN_USE",
+        "unclassified": "Not Classified"
+      },
+      "breakPointLayer": {
+        "id": "DAILY_AERONET_AOD_500NM",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "AERONET",
+            "resolutionBreakPoint": 0.03515625
+          }
+        }
+      }
+    }
+  }
+}

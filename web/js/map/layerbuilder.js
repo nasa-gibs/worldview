@@ -9,10 +9,16 @@ import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
+import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
 import qs from 'qs';
-import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import OlLayerVector from 'ol/layer/Vector';
+import OlSourceVector from 'ol/source/Vector';
+import LayerVectorTile from 'ol/layer/VectorTile';
+import {
+  Circle, Fill, Stroke, Style,
+} from 'ol/style';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
 import lodashMerge from 'lodash/merge';
@@ -44,6 +50,11 @@ import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
+
+const componentToHex = (c) => {
+  const hex = c.toString(16);
+  return hex.length === 1 ? `0${hex}` : hex;
+};
 
 export default function mapLayerBuilder(config, cache, store) {
   /**
@@ -487,7 +498,249 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
+  const createLayerVectorAeronet = function(def, options, day, state, attributes) {
+    const { proj, animation } = state;
+    let date;
+    let gridExtent;
+    let layerExtent;
+    const selectedProj = proj.selected;
+    const source = config.sources[def.source];
+    const animationIsPlaying = animation.isPlaying;
+    const isSubdaily = def.period === 'subdaily';
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
+
+    if (!source) {
+      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+    }
+
+    if (day) {
+      if (day === 1) {
+        layerExtent = LEFT_WING_EXTENT;
+        gridExtent = [110, -90, 180, 90];
+      } else {
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = RIGHT_WING_EXTENT;
+      }
+    }
+
+    date = getSelectedDate(state);
+
+    if (isSubdaily && !date) {
+      date = getRequestDates(def, options).closestDate;
+      date = new Date(date.getTime());
+    }
+    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
+    const breakPointLayerDef = def.breakPointLayer;
+    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
+
+    const vectorSource = new OlSourceVector({
+      format: new GeoJSON(),
+      loader: async () => {
+        // Get data from all locations of the current year (both active and inactive)
+        const getAllData = async () => {
+          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
+          const res = await fetch(url);
+          const data = await res.text();
+          return data;
+        };
+
+        // Get data from all active locations given the date
+        const getActiveData = async () => {
+          const avg = def.id.includes('DAILY') ? 20 : 10;
+          const date2 = new Date(date.toString());
+          date2.setHours(date.getHours() + 1);
+          const urlParameters = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth() + 1}&day=${date.getUTCDate()}&year2=${date2.getUTCFullYear()}&month2=${date2.getUTCMonth() + 1}&day2=${date2.getUTCDate()}${isSubdaily ? `&hour=${date.getUTCHours()}&hour2=${date2.getUTCHours()}` : ''}&AOD15=1&AVG=${avg}&if_no_html=1`;
+          const res = await fetch(`${source.url}${urlParameters}`);
+          const data = await res.text();
+          return data;
+        };
+
+        const allData = await getAllData();
+        const activeData = await getActiveData();
+
+        const featuresObj = [];
+        const takenNamesActive = {};
+        // Split the input data by rows (one data point per row)
+        const splitActive = activeData.split('\n');
+        if (splitActive.length > 6) {
+          // Split the key row into an array of keys
+          const key = splitActive[5].split(',');
+          // Actual data starts at row index 6, loop through all data points
+          for (let i = 6; i < splitActive.length; i += 1) {
+            // Split the current data point into each value, and assign them their respective key based on the key from row index 5
+            const split2 = splitActive[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+              featuresObj[rowObj.AERONET_Site_Name] = {};
+              featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
+              featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.AERONET_Site_Name].geometry.coordinates = [parseFloat(rowObj['Site_Longitude(Degrees)']), parseFloat(rowObj['Site_Latitude(Degrees)'])];
+              featuresObj[rowObj.AERONET_Site_Name].properties = {
+                name: rowObj.AERONET_Site_Name,
+                value: def.id.includes('ANGSTROM') ? rowObj['440-870_Angstrom_Exponent'] : rowObj.AOD_500nm,
+                date: new Date(Date.UTC(rowObj['Date(dd:mm:yyyy)'].split(':')[2], rowObj['Date(dd:mm:yyyy)'].split(':')[1] - 1, rowObj['Date(dd:mm:yyyy)'].split(':')[0], rowObj['Time(hh:mm:ss)'].split(':')[0], rowObj['Time(hh:mm:ss)'].split(':')[1], rowObj['Time(hh:mm:ss)'].split(':')[2])),
+              };
+              if (featuresObj[rowObj.AERONET_Site_Name].properties.value < 0) {
+                delete featuresObj[rowObj.AERONET_Site_Name];
+              } else {
+                takenNamesActive[rowObj.AERONET_Site_Name] = true;
+              }
+            }
+          }
+        }
+
+        const takenNamesAll = {};
+        // Split the input data by rows (one data point per row)
+        const splitAll = allData.split('\n');
+        if (splitAll.length > 2) {
+          // Split the key row into an array of keys
+          const key = splitAll[1].split(',');
+          // Actual data starts at row index 2, loop through all data points
+          for (let i = 2; i < splitAll.length; i += 1) {
+            // Split the current data point into each value, and assign them their respective key based on the key from row index 1
+            const split2 = splitAll[i].split(',');
+            const rowObj = {};
+            for (let j = 0; j < split2.length; j += 1) {
+              rowObj[key[j]] = split2[j];
+            }
+            if (!!rowObj.Site_Name && rowObj.Site_Name !== '' && !takenNamesAll[rowObj.Site_Name]) {
+              if (!featuresObj[rowObj.Site_Name]) {
+                featuresObj[rowObj.Site_Name] = {};
+              }
+              featuresObj[rowObj.Site_Name].type = 'Feature';
+              featuresObj[rowObj.Site_Name].geometry = { type: 'Point' };
+              featuresObj[rowObj.Site_Name].geometry.coordinates = [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])];
+              featuresObj[rowObj.Site_Name].properties = {
+                ...featuresObj[rowObj.Site_Name].properties,
+                name: rowObj.Site_Name,
+                active: !!takenNamesActive[rowObj.Site_Name],
+                coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
+                MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
+                date: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
+              };
+              takenNamesAll[rowObj.Site_Name] = true;
+            }
+          }
+        }
+
+        const geoJson = {
+          type: 'FeatureCollection',
+          features: Object.values(featuresObj).sort((a, b) => a.properties.active > b.properties.active),
+        };
+        const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
+        vectorSource.addFeatures(formattedFeatures);
+      },
+    });
+
+    let colors = [];
+    let values = [];
+    if (state.palettes.rendered[def.id]) {
+      colors = state.palettes.rendered[def.id].maps[1].entries.colors;
+      values = state.palettes.rendered[def.id].maps[1].entries.values;
+    }
+
+    const layer = new OlLayerVector({
+      extent: layerExtent,
+      source: vectorSource,
+      style (feature, resolution) {
+        const customStyle = !def.custom || typeof def.custom[0] === 'undefined' ? 'default' : def.custom[0];
+        // Access the properties of the feature
+        const featureProperties = feature.getProperties();
+        // Extract the feature name
+        const { active, value } = featureProperties;
+        // Define styles based on the feature properties
+        const radius = 7;
+        let fillColor;
+        const strokeColor = 'white';
+        if (isPaletteActive(def.id, options.group, state)) {
+          const lookup = getPaletteLookup(def.id, options.group, state);
+          colors = Object.values(lookup).map((rgbaObj) => `${componentToHex(rgbaObj.r)}${componentToHex(rgbaObj.g)}${componentToHex(rgbaObj.b)}ff`);
+        } else if (customStyle !== 'default') {
+          colors = state.palettes.custom[customStyle].colors;
+        }
+
+        let valueIndex;
+        // For active data points, define a color based on their value via the color palette
+        if (active) {
+          valueIndex = values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
+          fillColor = `#${colors[valueIndex]}`;
+          fillColor = fillColor.substring(0, fillColor.length - 2);
+        } else {
+          // For inactive data points, either hide or color them gray depending on if disabled
+          if (def.disabled === true || (Array.isArray(def.disabled) && def.disabled.includes('0'))) {
+            return null;
+          }
+          valueIndex = -1;
+          fillColor = '#808080';
+        }
+        // Ignore data points that fall outside of the defined range
+        if (fillColor === '#000000'
+          || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
+          || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))
+          || (def.min && !Array.isArray(def.min) && def.min > valueIndex)
+          || (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
+          return null;
+        }
+        // Return the style for the current feature
+        return new Style({
+          image: new Circle({
+            radius,
+            fill: new Fill({
+              color: fillColor,
+            }),
+            stroke: new Stroke({
+              color: strokeColor,
+            }),
+          }),
+        });
+      },
+    });
+
+    layer.vectorData = {
+      id: def.id,
+    };
+
+    layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
+
+    if (breakPointLayerDef && !animationIsPlaying) {
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const layerGroup = new OlLayerGroup({
+        layers: [layer, wmsLayer],
+      });
+      wmsLayer.wv = attributes;
+      return layerGroup;
+    }
+
+    if (breakPointResolution && animationIsPlaying) {
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
+    }
+
+    return layer;
+  };
+
+  /**
+    *
+    * @param {object} def - Layer Specs
+    * @param {object} options - Layer options
+    * @param {number} day
+    * @param {object} state
+    * @param {object} attributes
+    */
   const createLayerVector = function(def, options, day, state, attributes) {
+    if (def.source === 'AERONET') {
+      return createLayerVectorAeronet(def, options, day, state, attributes);
+    }
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -819,7 +1072,7 @@ export default function mapLayerBuilder(config, cache, store) {
             layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
-            layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
             layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
