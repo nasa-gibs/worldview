@@ -179,8 +179,9 @@ class Sidebar extends React.Component {
 
   handleWorldviewLogoClick(e, permalink) {
     e.preventDefault();
-    const { isEmbedModeActive } = this.props;
+    const { isEmbedModeActive, isKioskModeActive } = this.props;
     if (window.location.search === '') return; // Nothing to reset
+    if (isKioskModeActive) return;
     let msg;
     if (isEmbedModeActive) {
       msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
