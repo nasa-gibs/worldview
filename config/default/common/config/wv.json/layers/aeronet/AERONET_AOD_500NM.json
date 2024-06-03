@@ -1,0 +1,51 @@
+{
+  "layers": {
+    "AERONET_AOD_500NM": {
+      "id": "AERONET_AOD_500NM",
+      "title": "Aerosol Optical Depth 500nm (Near Real-Time)",
+      "subtitle": "AERONET",
+      "description": "aeronet/AERONET_AOD_500NM",
+      "period": "subdaily",
+      "group": "overlays",
+      "tags": "vectors aeronet aod",
+      "type": "vector",
+      "layergroup": "Aerosol Optical Depth",
+      "disableSnapshot": true,
+      "vectorStyle": {
+        "id": "AERONET_AOD_500NM"
+      },
+      "startDate": "1992-01-01T00:00:00Z",
+      "dateRanges": [
+        {
+          "startDate": "1992-01-01T00:00:00Z",
+          "endDate": "2024-03-22T23:59:00Z",
+          "dateInterval": "60"
+        }
+      ],
+      "wrapX": true,
+      "projections": {
+        "geographic": {
+          "source": "AERONET"
+        }
+      },
+      "palette": {
+        "id": "AERONET_AOD_500NM",
+        "immutable": true,
+        "styleProperty": "MAIN_USE",
+        "unclassified": "Not Classified"
+      },
+      "breakPointLayer": {
+        "id": "AERONET_AOD_500NM",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "AERONET",
+            "resolutionBreakPoint": 0.03515625
+          }
+        }
+      }
+    }
+  }
+}

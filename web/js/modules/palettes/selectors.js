@@ -130,7 +130,7 @@ const useLookup = function(layerId, palettesObj, state) {
       if (palette.max >= rendered.entries.values.length) {
         delete palette.max;
       }
-      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
+      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max) || layerId.includes('AERONET')) {
         use = true;
         return false;
       }
