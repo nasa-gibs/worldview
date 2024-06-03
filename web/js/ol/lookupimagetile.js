@@ -131,31 +131,31 @@ LookupImageTile.prototype.load = async function() {
       imageProcessed = true;
       const pixelsToDisplay = getPixelColorsToDisplay(this.lookup_);
       try {
-        const res = await fetch(this.src_)
+        const res = await fetch(this.src_);
         if (!res.ok) throw new Error(`Failed to fetch image: ${res.status} ${res.statusText}`);
         const buffer = await res.arrayBuffer();
         // decode the buffer PNG file
         const decodedPNG = UPNG.decode(buffer);
         const { width, height } = decodedPNG;
-  
+
         // Create an array buffer matching the pixel dimensions of the provided image
         const bufferSize = height * width * 4;
         const arrBuffer = new Uint32Array(bufferSize);
-  
+
         // Extract the colormap values. This is an array of integers representing rgba values.
         // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = b, etc.)
         // colorMapArr assumes a max of 256 colors
         const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
-  
+
         // Extract the pixel data. This is an array of integers corresponding to the colormap
         // i.e. if pixelData[0] == 5, this pixel is the color of the 5th entry in the colormap
         const pixelData = decodedPNG.data;
-  
+
         // iterate through the pixelData, drawing each pixel using the appropriate color
         for (let i = 0; i < pixelData.length; i += 1) {
           const arrBuffIndex = i * 4;
           const lookupIndex = pixelData[i] * 4;
-  
+
           // Determine desired RGBA for this pixel
           const r = colorMapArr[lookupIndex];
           const g = colorMapArr[lookupIndex + 1];
@@ -164,7 +164,7 @@ LookupImageTile.prototype.load = async function() {
           // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
           const rgbaStr = `${r},${g},${b},${a}`;
           const drawThisColor = pixelsToDisplay[rgbaStr];
-  
+
           // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
           if (drawThisColor !== undefined) {
             arrBuffer[arrBuffIndex + 0] = r;
@@ -179,13 +179,13 @@ LookupImageTile.prototype.load = async function() {
             arrBuffer[arrBuffIndex + 3] = 0;
           }
         }
-  
+
         // Encode the image, creating a new PNG file
         const encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
         const blob = new Blob([encodedBufferImage], { type: 'image/png' });
         const dataURL = `${URL.createObjectURL(blob)}`;
         this.image_.src = dataURL;
-        this.image_.addEventListener('load', onImageLoad);  
+        this.image_.addEventListener('load', onImageLoad);
       } catch (error) {
         that.state = OlTileState.ERROR;
         that.changed();

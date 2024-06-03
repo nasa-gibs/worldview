@@ -128,7 +128,7 @@ function UpdateProjection(props) {
         return createLayer(def, options);
       });
       const layerResults = await Promise.allSettled(layerPromises);
-      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value)
+      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
       mapUI.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
