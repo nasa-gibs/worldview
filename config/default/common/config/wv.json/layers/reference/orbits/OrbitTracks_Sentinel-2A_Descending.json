@@ -10,6 +10,7 @@
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_Sentinel-2A_Ascending"],
       "palette": {
         "id": "OrbitTracks_Sentinel-2A_Descending",
         "immutable": true

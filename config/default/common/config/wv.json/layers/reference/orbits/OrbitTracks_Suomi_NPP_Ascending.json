@@ -10,6 +10,7 @@
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "track": "ascending",
+      "associatedLayers": ["OrbitTracks_Suomi_NPP_Descending"],
       "palette": {
         "id": "OrbitTracks_Suomi_NPP_Ascending",
         "immutable": true
