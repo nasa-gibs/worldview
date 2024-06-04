@@ -1,0 +1,51 @@
+{
+  "layers": {
+    "AERONET_ANGSTROM_440-870NM": {
+      "id": "AERONET_ANGSTROM_440-870NM",
+      "title": "Angstrom Parameter 440-870nm (Near Real-Time)",
+      "subtitle": "AERONET",
+      "description": "aeronet/AERONET_ANGSTROM_440-870NM",
+      "period": "subdaily",
+      "group": "overlays",
+      "tags": "vectors aeronet angstrom",
+      "type": "vector",
+      "layergroup": "Aerosol Optical Depth",
+      "disableSnapshot": true,
+      "vectorStyle": {
+        "id": "AERONET_ANGSTROM_440-870NM"
+      },
+      "startDate": "1992-01-01T00:00:00Z",
+      "dateRanges": [
+        {
+          "startDate": "1992-01-01T00:00:00Z",
+          "endDate": "2024-03-22T23:59:00Z",
+          "dateInterval": "60"
+        }
+      ],
+      "wrapX": true,
+      "projections": {
+        "geographic": {
+          "source": "AERONET"
+        }
+      },
+      "palette": {
+        "id": "AERONET_ANGSTROM_440-870NM",
+        "immutable": true,
+        "styleProperty": "MAIN_USE",
+        "unclassified": "Not Classified"
+      },
+      "breakPointLayer": {
+        "id": "AERONET_ANGSTROM_440-870NM",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "AERONET",
+            "resolutionBreakPoint": 0.03515625
+          }
+        }
+      }
+    }
+  }
+}

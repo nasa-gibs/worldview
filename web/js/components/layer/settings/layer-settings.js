@@ -117,7 +117,7 @@ class LayerSettings extends React.Component {
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
 
-      if (legend.type === 'classification' && legend.colors.length > 1) {
+      if (legend.type === 'classification' && (legend.colors.length > 1 || layer.id.includes('AERONET'))) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
             <ClassificationToggle

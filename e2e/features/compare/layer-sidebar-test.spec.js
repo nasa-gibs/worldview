@@ -26,12 +26,14 @@ test('Add AOD Layer to Layer Group A', async () => {
   const {
     addLayers,
     aerosolOpticalDepth,
+    aquaTerraMODISTab,
     layersModalCloseButton
   } = selectors
   await page.goto(swipeAndAIsActive)
   await closeModal(page)
   await addLayers.click()
   await aerosolOpticalDepth.click()
+  await aquaTerraMODISTab.click()
   await aodCheckBox.click()
   await layersModalCloseButton.click()
   const layerPicker = page.locator('#layer_picker_component')

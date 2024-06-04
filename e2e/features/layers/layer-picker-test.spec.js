@@ -204,11 +204,13 @@ test('Switching to "Science Disciplines" tab updates category/measurement choice
 test('Selecting a measurement from the grid shows sources and details for first source', async () => {
   const {
     aodMeasurement,
+    aquaTerraMODISTab,
     layerDetailHeader,
     aodCheckboxMODIS,
     aodCheckboxMAIAC
   } = selectors
   await aodMeasurement.click()
+  await aquaTerraMODISTab.click()
   await expect(layerDetailHeader).toContainText('Aqua and Terra/MODIS')
   await expect(aodCheckboxMODIS).toBeVisible()
   await expect(aodCheckboxMAIAC).toBeVisible()
