@@ -9,6 +9,7 @@
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "track": "ascending",
+      "associatedLayers": ["OrbitTracks_OCO-2_Descending"],
       "palette": {
         "id": "OrbitTracks_OCO-2_Ascending",
         "immutable": true

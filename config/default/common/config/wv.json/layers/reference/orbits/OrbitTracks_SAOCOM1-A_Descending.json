@@ -8,6 +8,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_SAOCOM1-A_Ascending"],
       "palette": {
         "id": "OrbitTracks_SAOCOM1-A_Descending",
         "immutable": true

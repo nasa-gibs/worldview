@@ -9,6 +9,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_Sentinel-5P_Ascending"],
       "palette": {
         "id": "OrbitTracks_Sentinel-5P_Descending",
         "immutable": true
