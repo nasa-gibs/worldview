@@ -179,9 +179,8 @@ class Sidebar extends React.Component {
 
   handleWorldviewLogoClick(e, permalink) {
     e.preventDefault();
-    const { isEmbedModeActive, isKioskModeActive } = this.props;
+    const { isEmbedModeActive } = this.props;
     if (window.location.search === '') return; // Nothing to reset
-    if (isKioskModeActive) return;
     let msg;
     if (isEmbedModeActive) {
       msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
@@ -207,6 +206,7 @@ class Sidebar extends React.Component {
       isEmbedModeActive,
       selectedDate,
       isMobile,
+      isKioskModeActive,
     } = this.props;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
@@ -247,14 +247,22 @@ class Sidebar extends React.Component {
       };
 
     return (
-      <a
-        href={embedWVLogoLink}
-        title={WVLogoTitle}
-        id="wv-logo"
-        className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-        style={sidebarStyle}
-        onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-      />
+      !isKioskModeActive ? (
+        <span
+          id="wv-logo"
+          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+          style={sidebarStyle}
+        />
+      ) : (
+        <a
+          href={embedWVLogoLink}
+          title={WVLogoTitle}
+          id="wv-logo"
+          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+          style={sidebarStyle}
+          onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
+        />
+      )
     );
   }
 
