@@ -129,7 +129,8 @@ function UpdateProjection(props) {
         const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
         return createLayer(def, options);
       });
-      const createdLayers = await Promise.all(layerPromises);
+      const layerResults = await Promise.allSettled(layerPromises);
+      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
       mapUI.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
