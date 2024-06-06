@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a": {
+      "id": "SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a",
+      "description": "seawifs/SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a",
+      "tags": "chl",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}
