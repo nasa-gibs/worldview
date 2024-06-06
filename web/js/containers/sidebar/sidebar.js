@@ -248,6 +248,12 @@ class Sidebar extends React.Component {
 
     return (
       isKioskModeActive ? (
+        <span
+          id="wv-logo"
+          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+          style={sidebarStyle}
+        />
+      ) : (
         <a
           href={embedWVLogoLink}
           title={WVLogoTitle}
@@ -255,12 +261,6 @@ class Sidebar extends React.Component {
           className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
           style={sidebarStyle}
           onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-        />
-      ) : (
-        <span
-          id="wv-logo"
-          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-          style={sidebarStyle}
         />
       )
     );
