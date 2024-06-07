@@ -18,6 +18,8 @@ export const layersToMeasure = [
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
   'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
   'CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly',
+  'TEMPO_L3_NO2_Vertical_Column_Troposphere',
+  'TEMPO_L3_Ozone_Column_Amount',
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -41,6 +43,8 @@ export const layerPixelData = {
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { threshold: 0.20 },
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { threshold: 0.65 },
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { threshold: 0.01 },
+  TEMPO_L3_NO2_Vertical_Column_Troposphere: { threshold: 0.99 },
+  TEMPO_L3_Ozone_Column_Amount: { threshold: 0.99 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
@@ -63,6 +67,8 @@ export const bestDates = {
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { date: '2023-10-17' },
   VIIRS_NOAA20_CorrectedReflectance_TrueColor: { date: '2023-10-30' },
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { date: '2023-10-30' },
+  TEMPO_L3_NO2_Vertical_Column_Troposphere: { date: '2024-06-03T17:00:00.000Z' },
+  TEMPO_L3_Ozone_Column_Amount: { date: '2024-06-03T17:00:00.000Z' },
 };
 
 export const travelModeData = {
@@ -104,5 +110,11 @@ export const travelModeData = {
   },
   13: {
     title: 'Aerosol Optical Depth (AOD) by Suomi NPP satellite',
+  },
+  14: {
+    title: 'TEMPO L3 NO2 Vertical Column Troposphere',
+  },
+  15: {
+    title: 'TEMPO L3 Ozone Column Amount',
   },
 };
