@@ -85,7 +85,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const [response, nrtResponse] = fulfilledResponses;
       const jsonRequests = [response.json(), nrtResponse.json()];
       const jsonResponses = await Promise.allSettled(jsonRequests);
-      const [responseJson, nrtResponseJson] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
+      const [responseJson, nrtResponseJson] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value)
       data = responseJson.feed.entry;
       nrtData = nrtResponseJson.feed.entry;
     } catch (e) {

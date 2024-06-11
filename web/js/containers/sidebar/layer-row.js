@@ -148,16 +148,11 @@ function LayerRow (props) {
           }
           return maxExtent[i];
         });
-        const olderUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`;
-        const newerUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`;
-        const headers = { 'Client-Id': 'Worldview' };
-        const requests = [fetch(olderUrl, { headers }), fetch(newerUrl, { headers })];
-        const responses = await Promise.allSettled(requests);
-        const [olderRes, newerRes] = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
+        const olderRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`);
+        const newerRes = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`);
         if (!olderRes.ok || !newerRes.ok) return;
-        const jsonRequests = [olderRes.json(), newerRes.json()];
-        const jsonResponses = await Promise.allSettled(jsonRequests);
-        const [olderGranules, newerGranules] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
+        const olderGranules = await olderRes.json();
+        const newerGranules = await newerRes.json();
         const olderEntries = olderGranules?.feed?.entry || [];
         const newerEntries = newerGranules?.feed?.entry || [];
         const granules = [...olderEntries, ...newerEntries];
