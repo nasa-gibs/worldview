@@ -12,6 +12,7 @@ const dateOptions = {
 };
 const parseGranuleTimestamp = (granule) => new Date(granule.time_start);
 const maxExtent = [-180, -90, 180, 90];
+const headers = { 'Client-Id': 'Worldview' };
 
 export default function ImagerySearch({ layer }) {
   const listRef = useRef(null);
@@ -46,7 +47,8 @@ export default function ImagerySearch({ layer }) {
       return maxExtent[i];
     });
     try {
-      const olderResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`);
+      const olderUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`;
+      const olderResponse = await fetch(olderUrl, { headers });
       const olderGranules = await olderResponse.json();
       const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -66,7 +68,8 @@ export default function ImagerySearch({ layer }) {
       return maxExtent[i];
     });
     try {
-      const newerResponse = await fetch(`https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`);
+      const newerUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`;
+      const newerResponse = await fetch(newerUrl, { headers });
       const newerGranules = await newerResponse.json();
       const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
@@ -99,8 +102,7 @@ export default function ImagerySearch({ layer }) {
   useEffect(() => {
     const asyncFunc = async () => {
       if (listRef.current.scrollHeight <= listRef.current.clientHeight) {
-        await loadOlderDates(layer, page);
-        await loadNewerDates(layer, page);
+        await Promise.allSettled([loadOlderDates(layer, page), loadNewerDates(layer, page)]);
         setPage(page + 1);
       } else {
         listRef.current.scrollTop = listRef.current.scrollHeight / 2;
