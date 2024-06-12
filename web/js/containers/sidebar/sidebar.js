@@ -13,6 +13,7 @@ import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
+import AddLayersContent from './add-layers-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
@@ -284,6 +285,7 @@ class Sidebar extends React.Component {
       screenHeight,
       tabTypes,
       chartingModeAccessible,
+      activeString,
     } = this.props;
 
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
@@ -352,25 +354,29 @@ class Sidebar extends React.Component {
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="layers">
                   {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                  <AddLayersContent
+                    isActive={activeTab === 'layers'}
+                    compareState={activeString}
+                  />
                 </TabPane>
                 {naturalEvents && activeTab === 'events' && (
-                <TabPane tabId="events">
-                  <Events
-                    height={subComponentHeight}
-                    isLoading={isLoadingEvents}
-                    hasRequestError={hasEventRequestError}
-                    eventsData={eventsData}
-                    sources={eventsSources}
-                  />
-                </TabPane>
+                  <TabPane tabId="events">
+                    <Events
+                      height={subComponentHeight}
+                      isLoading={isLoadingEvents}
+                      hasRequestError={hasEventRequestError}
+                      eventsData={eventsData}
+                      sources={eventsSources}
+                    />
+                  </TabPane>
                 )}
                 {smartHandoffs && activeTab === 'download' && (
-                <TabPane tabId="download">
-                  <SmartHandoff
-                    isActive={activeTab === 'download'}
-                    tabTypes={tabTypes}
-                  />
-                </TabPane>
+                  <TabPane tabId="download">
+                    <SmartHandoff
+                      isActive={activeTab === 'download'}
+                      tabTypes={tabTypes}
+                    />
+                  </TabPane>
                 )}
                 {
                   !isKioskModeActive && (

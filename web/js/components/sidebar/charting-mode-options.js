@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { Draw as OlInteractionDraw } from 'ol/interaction';
 import { createBox } from 'ol/interaction/Draw';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
+import CustomButton from '../util/button';
 import {
   toggleChartingAOIOnOff,
   toggleAOISelected,
@@ -40,7 +40,6 @@ function ChartingModeOptions (props) {
     activeLayers,
     aoiActive,
     aoiCoordinates,
-    aoiSelected,
     chartRequestInProgress,
     crs,
     displayChart,
@@ -343,7 +342,6 @@ function ChartingModeOptions (props) {
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
       const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `(${paletteLegend.units})` : '';
-      console.log(unitOfMeasure);
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -378,11 +376,13 @@ function ChartingModeOptions (props) {
     openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
-  const aoiTextPrompt = aoiSelected ? 'Area of Interest Selected' : 'Select Area of Interest';
+  const layerInfo = getActiveChartingLayer();
+  const aoiTextPrompt = 'Area of Interest:';
   const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
   const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   const chartRequestMessage = chartRequestInProgress ? 'In progress...' : '';
+  const requestBtnText = timeSpanSelection === 'date' ? 'Generate Statistics' : 'Generate Chart';
 
   return (
     <div
@@ -390,16 +390,39 @@ function ChartingModeOptions (props) {
       className="wv-charting-mode-container"
       style={{ display: isChartingActive && !isMobile ? 'block' : 'none' }}
     >
+      <h1 className="charting-title">Charting Mode</h1>
+      <div id="charting-info-container" className="charting-info-container">
+        <span id="charting-info-icon">
+          <FontAwesomeIcon
+            icon="info-circle"
+            onClick={openChartingInfoModal}
+          />
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            placement="right"
+            target="charting-info-icon"
+          >
+            Charting Information
+          </UncontrolledTooltip>
+        </span>
+      </div>
+      <div className="charting-subtitle">
+        <h3>Layer: </h3>
+        <span>{layerInfo && layerInfo.title}</span>
+      </div>
       <div className="charting-aoi-container">
         <h3>{aoiTextPrompt}</h3>
-        <FontAwesomeIcon
-          icon={faPencilAlt}
+        <Button
+          id="edit-coordinates"
+          className="edit-coordinates red"
           onClick={onAreaOfInterestButtonClick}
-        />
+        >
+          Edit Coordinates
+        </Button>
       </div>
       <div className="charting-timespan-container">
-        <h3>Time Span:</h3>
-        <ButtonGroup size="sm">
+        <h3>Time:</h3>
+        <ButtonGroup>
           <Button
             id="charting-date-single-button"
             className={`charting-button ${oneDateBtnStatus}`}
@@ -418,34 +441,23 @@ function ChartingModeOptions (props) {
       </div>
       <div className="charting-date-row">
         <div className="charting-date-container">
-          {dateRangeValue}
-        </div>
-        <div className="charting-icons">
-          <div id="charting-calendar-container" className="charting-calendar-container">
-            <FontAwesomeIcon
-              icon={faCalendarDay}
-              onClick={onDateIconClick}
-            />
-          </div>
-          <div id="charting-info-container" className="charting-info-container">
-            <FontAwesomeIcon
-              icon="info-circle"
-              onClick={openChartingInfoModal}
-            />
-          </div>
+          <Button
+            id="charting-date-button"
+            className="charting-date-button"
+            onClick={onDateIconClick}
+          >
+            {dateRangeValue}
+          </Button>
         </div>
       </div>
       <div className="charting-buttons">
-        <ButtonGroup size="sm">
-          <Button
-            id="charting-create-chart-button"
-            className="charting-button"
-            disabled={chartRequestInProgress}
-            onClick={() => onRequestChartClick()}
-          >
-            Request Chart
-          </Button>
-        </ButtonGroup>
+        <CustomButton
+          id="charting-create-button"
+          aria-label={requestBtnText}
+          className="charting-create-button btn"
+          onClick={() => onRequestChartClick()}
+          text={requestBtnText}
+        />
       </div>
       <div className="charting-request-status">
         {chartRequestMessage}
