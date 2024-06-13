@@ -45,7 +45,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(9)
+  await expect(layersSearchRow).toHaveCount(10)
 })
 
 test('Updating input changes results', async () => {
@@ -256,7 +256,7 @@ test('Collapsed sidebar shows updated layer count', async () => {
   const { collapsedLayerButton } = selectors
   await page.locator('#toggleIconHolder').click()
   const layerCount = await page.locator('.layer-count')
-  await expect(layerCount).toContainText('9 Layers')
+  await expect(layerCount).toContainText('10 Layers')
   await collapsedLayerButton.click()
 })
 
