@@ -1,0 +1,28 @@
+{
+    "layers": {
+      "GHGC_Wood_Fuel_Emissions": {
+        "id": "GHGC_Wood_Fuel_Emissions",
+        "layerName": "fuel",
+        "title": "Wood Fuel Emissions",
+        "subtitle": "U.S. Greenhouse Gas Center",
+        "description": "ghgc/Wood_Fuel_Emissions",
+        "tags": "ghgc fuel",
+        "group": "overlays",
+        "layergroup": "Reference",
+        "format": "image/png",
+        "type": "titiler",
+        "disableSnapshot": true,
+        "wrapX": true,
+        "colormapName": "bupu",
+        "rescale": "0,0.03",
+        "period": "monthly",
+        "projections": {
+          "geographic": {
+            "source": "GHGC:geographic"
+          }
+        },
+        "startDate": "2003-01-01T00:00:00Z",
+        "endDate": "2017-12-31T23:59:59Z"
+      }
+    }
+  }
