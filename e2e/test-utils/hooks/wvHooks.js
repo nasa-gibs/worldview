@@ -64,18 +64,20 @@ const assertDefaultLayers = async (page) => {
   const refLabels = page.locator('#active-Reference_Labels_15m')
   const refFeatures = page.locator('#active-Reference_Features_15m')
   const coastlines = page.locator('#active-Coastlines_15m')
+  const trueColorNOAA21 = page.locator('#active-VIIRS_NOAA21_CorrectedReflectance_TrueColor')
   const trueColorSNPP = page.locator('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor')
   const trueColorAqua = page.locator('#active-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const trueColorMODIS = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
-  const trueColorNOAA = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
-  await expect(layerItem).toHaveCount(7)
+  const trueColorNOAA20 = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
+  await expect(layerItem).toHaveCount(8)
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
   await expect(coastlines).toBeVisible()
+  await expect(trueColorNOAA21).toBeVisible()
   await expect(trueColorSNPP).toBeVisible()
   await expect(trueColorAqua).toBeVisible()
   await expect(trueColorMODIS).toBeVisible()
-  await expect(trueColorNOAA).toBeVisible()
+  await expect(trueColorNOAA20).toBeVisible()
 }
 
 const assertCategories = async (page) => {
