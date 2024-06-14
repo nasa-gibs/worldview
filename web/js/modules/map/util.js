@@ -205,8 +205,8 @@ function promiseTileLayer(layer, extent, map) {
     const { projection, resolution } = viewState;
     const { zDirection } = new OlRendererCanvasTileLayer(layer);
     tileSource = layer.getSource();
-    tileGrid = tileSource.getTileGridForProjection(projection);
-    currentZ = tileGrid.getZForResolution(resolution, zDirection);
+    tileGrid = tileSource?.getTileGridForProjection?.(projection);
+    currentZ = tileGrid?.getZForResolution?.(resolution, zDirection);
     i = 0;
 
 
@@ -249,7 +249,7 @@ function promiseTileLayer(layer, extent, map) {
       tileSource.on('tileloaderror', onLoad);
     };
 
-    tileGrid.forEachTileCoord(extent, currentZ, loadTile);
+    tileGrid?.forEachTileCoord(extent, currentZ, loadTile);
   });
 }
 

@@ -171,6 +171,7 @@ export class VectorInteractions extends React.Component {
   }
 
   singleClick(e, map) {
+    console.log('click');
     const {
       screenSize, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
@@ -203,15 +204,11 @@ export class VectorInteractions extends React.Component {
     }
 
     if (metaArray.length) {
-      if (hasNonClickableVectorLayerType && !isAeronet) {
-        activateVectorZoomAlert();
-      } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);
-        if (exceededLengthLimit) {
-          activateVectorExceededResultsAlert();
-        } else if (isVectorExceededAlertPresent) {
-          clearVectorExceededResultsAlert();
-        }
+      openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);
+      if (exceededLengthLimit) {
+        activateVectorExceededResultsAlert();
+      } else if (isVectorExceededAlertPresent) {
+        clearVectorExceededResultsAlert();
       }
     } else if (hasNonClickableVectorLayerType) {
       activateVectorZoomAlert();

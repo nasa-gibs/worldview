@@ -18,7 +18,7 @@ export default class VectorMetaTable extends React.Component {
 
     return (
       <div>
-        {metaArray.map((obj, metaIndex) => {
+        {metaArray?.map((obj, metaIndex) => {
           const metaFeatures = obj.features;
           const metaLegend = obj.legend;
           const title = obj.featureTitle;
@@ -31,7 +31,7 @@ export default class VectorMetaTable extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {metaLegend.map((properties, index) => {
+                  {metaLegend?.map((properties, index) => {
                     const {
                       Function, ValueMap, DataType, Title, Identifier, Units, Description,
                     } = properties;

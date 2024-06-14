@@ -221,6 +221,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const mobileLimit = 5;
   const maxLimitOfResults = isMobile ? mobileLimit : desktopLimit;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    console.log(feature);
     const lengthCheck = (arr) => arr.length >= maxLimitOfResults;
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
@@ -268,7 +269,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       };
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);
-    } else if (def.id.includes('AERONET')) {
+    } else {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
@@ -335,13 +336,13 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
+    setStyleFunction(def, def?.vectorStyle?.id, vectorStyles, olLayer, state, true);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     const olLayer = vectorLayers.find((layer) => layer.wv.id === key);
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, olLayer, state, true);
+    setStyleFunction(def, def?.vectorStyle?.id, vectorStyles, olLayer, state, true);
   }
 }

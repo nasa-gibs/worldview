@@ -24,6 +24,10 @@
     "FIRMS:xyz": {
       "url": "https://firms.modaps.eosdis.nasa.gov/layers"
     },
+    "FIRMS:wfs": {
+      "url": "https://firms.modaps.eosdis.nasa.gov/mapserver/wfs",
+      "mapKey": "a0db629058f30afca1035eebf7ce6339"
+    },
     "DDV": {
       "url": "https://kv9drwgv6l.execute-api.us-west-2.amazonaws.com/",
       "matrixSets": {

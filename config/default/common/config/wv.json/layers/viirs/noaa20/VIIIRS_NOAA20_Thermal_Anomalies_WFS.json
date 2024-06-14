@@ -1,0 +1,21 @@
+{
+    "layers": {
+      "VIIIRS_NOAA20_Thermal_Anomalies_WFS": {
+        "id": "VIIIRS_NOAA20_Thermal_Anomalies_WFS",
+        "title": "VIIRS NOAA20 Thermal Anomalies",
+        "subtitle": "VIIRS NOAA20 Thermal Anomalies WFS",
+        "description": "viirs/noaa20/VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "tags": "hotspots jpss1 jpss vectors jpss-1",
+        "group": "overlays",
+        "layergroup": "Fires and Thermal Anomalies",
+        "type": "point",
+        "period": "daily",
+        "transition": true,
+        "projections": {
+            "geographic": {
+              "source": "FIRMS:wfs"
+            }
+          }
+      }
+    }
+  }

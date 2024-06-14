@@ -5,7 +5,7 @@ import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
-import OlLayerTile from 'ol/layer/Tile';
+import OlLayerTile from 'ol/layer/WebGLTile';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
@@ -16,6 +16,8 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import LayerVectorTile from 'ol/layer/VectorTile';
+import WebGLPointsLayer from '../ol/layer/WebGLPoints';
+import WebGLVectorTileLayer from '../ol/layer/WebGLVectorTile';
 import {
   Circle, Fill, Stroke, Style,
 } from 'ol/style';
@@ -50,6 +52,23 @@ import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
+
+const pointStyle = {
+  // by using an exponential interpolation with a base of 2 we can make it so that circles will have a fixed size
+  // in world coordinates between zoom level 5 and 15
+  'circle-radius': [
+    'interpolate',
+    ['exponential', 2],
+    ['zoom'],
+    5,
+    1.5,
+    15,
+    1.5 * Math.pow(2, 10),
+  ],
+  'circle-fill-color': ['match', ['get', 'hover'], 1, '#ff3f3f', '#fc0303'],
+  'circle-displacement': [0, 0],
+  'circle-opacity': 0.95,
+};
 
 const componentToHex = (c) => {
   const hex = c.toString(16);
@@ -812,36 +831,36 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
-    const layer = new LayerVectorTile({
+    const layer = new WebGLVectorTileLayer({
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
       preload: 0,
-      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
-      ...isMinBreakPoint && { minResolution: breakPointResolution },
+      // ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      // ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
 
-    if (breakPointLayerDef && !animationIsPlaying) {
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      const layerGroup = new OlLayerGroup({
-        layers: [layer, wmsLayer],
-      });
-      wmsLayer.wv = attributes;
-      return layerGroup;
-    }
+    // if (breakPointLayerDef && !animationIsPlaying) {
+    //   const newDef = { ...def, ...breakPointLayerDef };
+    //   const wmsLayer = createLayerWMS(newDef, options, day, state);
+    //   const layerGroup = new OlLayerGroup({
+    //     layers: [layer, wmsLayer],
+    //   });
+    //   wmsLayer.wv = attributes;
+    //   return layerGroup;
+    // }
 
-    if (breakPointResolution && animationIsPlaying) {
-      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      wmsLayer.wv = attributes;
-      return wmsLayer;
-    }
+    // if (breakPointResolution && animationIsPlaying) {
+    //   delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+    //   const newDef = { ...def, ...breakPointLayerDef };
+    //   const wmsLayer = createLayerWMS(newDef, options, day, state);
+    //   wmsLayer.wv = attributes;
+    //   return wmsLayer;
+    // }
 
     return layer;
   };
@@ -1017,6 +1036,36 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createLayerPointWebGL = (def, options, day, state) => {
+    const { proj: { selected }, date } = state;
+    const { maxExtent, crs } = selected;
+
+    const source = config.sources[def.source];
+
+    const pointSource = new OlSourceVector({
+      format: new GeoJSON(),
+      projection: get(crs),
+      url: function (extent) {
+        const maxExtent = [-180, -90, 180, 90];
+        const clampedExtent = extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > maxExtent[i] : coord < maxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return maxExtent[i];
+        });
+        const params = `/USA_contiguous_and_Hawaii/${source.mapKey}/?SERVICE=WFS&REQUEST=GetFeature&VERSION=2.0.0&TYPENAME=ms:fires_noaa20_7days&STARTINDEX=0&COUNT=1000000&SRSNAME=urn:ogc:def:crs:EPSG::4326&BBOX=${clampedExtent.join(',')},urn:ogc:def:crs:EPSG::4326&outputformat=geojson`;
+
+        return `${source.url}${params}`;
+      },
+    });
+
+    return new WebGLPointsLayer({
+      source: pointSource,
+      extent: maxExtent,
+      style: pointStyle,
+    });
+  }
 
   /**
    * Create a new OpenLayers Layer
@@ -1082,6 +1131,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'xyz':
             layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'point':
+            layer = getLayer(createLayerPointWebGL, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
