@@ -8,6 +8,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "ascending",
+      "associatedLayers": ["OrbitTracks_Terra_Descending"],
       "palette": {
         "id": "OrbitTracks_Terra_Ascending",
         "immutable": true

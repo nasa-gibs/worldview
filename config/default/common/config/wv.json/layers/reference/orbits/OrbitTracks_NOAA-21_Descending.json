@@ -9,6 +9,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_NOAA-21_Ascending"],
       "palette": {
         "id": "OrbitTracks_NOAA-21_Descending",
         "immutable": true

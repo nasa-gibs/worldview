@@ -55,9 +55,8 @@ function UpdateCollections () {
     } catch (error) {
       // errors will clutter console, turn this on for debugging
       // console.error(error);
+      throw new Error('Failed to query headers');
     }
-    // Return undefined if query fails
-    return undefined;
   };
 
   const findLayerCollections = (layers, dailyDate, subdailyDate, forceUpdate) => {
@@ -83,8 +82,8 @@ function UpdateCollections () {
     const headerPromises = layersToUpdate.map((layer) => getHeaders(layer, selectedDate));
 
     try {
-      const results = await Promise.all(headerPromises);
-      const validCollections = results.filter((result) => result !== undefined);
+      const results = await Promise.allSettled(headerPromises);
+      const validCollections = results.filter(({ status, value }) => status === 'fulfilled' && value).map(({ value }) => value);
       updateCollection(validCollections);
     } catch (error) {
       // errors will clutter console, turn this on for debugging
