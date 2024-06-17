@@ -8,6 +8,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_SMAP_Ascending"],
       "palette": {
         "id": "OrbitTracks_SMAP_Descending",
         "immutable": true

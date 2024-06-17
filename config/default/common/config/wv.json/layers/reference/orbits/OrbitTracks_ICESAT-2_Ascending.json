@@ -9,6 +9,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "ascending",
+      "associatedLayers": ["OrbitTracks_ICESAT-2_Descending"],
       "palette": {
         "id": "OrbitTracks_ICESAT-2_Ascending",
         "immutable": true
