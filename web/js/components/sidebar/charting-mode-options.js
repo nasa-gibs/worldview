@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import * as olProj from 'ol/proj';
 import { Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
-import { Draw as OlInteractionDraw } from 'ol/interaction';
-import { createBox } from 'ol/interaction/Draw';
-import { Vector as OlVectorLayer } from 'ol/layer';
-import { transform } from 'ol/proj';
 import { Vector as OlVectorSource } from 'ol/source';
 import CustomButton from '../util/button';
+import Crop from '../util/image-crop';
+import util from '../../util/util';
 import {
   toggleChartingAOIOnOff,
   toggleAOISelected,
@@ -19,14 +18,10 @@ import {
 } from '../../modules/charting/actions';
 import { openCustomContent } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
-import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import ChartingInfo from '../charting/charting-info';
 import SimpleStatistics from '../charting/simple-statistics';
 import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
-import {
-  drawStyles, vectorStyles,
-} from '../charting/charting-area-of-interest-style';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -34,7 +29,7 @@ const sources = {};
 let init = false;
 let draw;
 
-function ChartingModeOptions (props) {
+function ChartingModeOptions(props) {
   const {
     activeLayer,
     activeLayers,
@@ -50,7 +45,6 @@ function ChartingModeOptions (props) {
     openChartingDateModal,
     openChartingInfoModal,
     olMap,
-    proj,
     projections,
     renderedPalettes,
     requestStatusMessage,
@@ -114,49 +108,6 @@ function ChartingModeOptions (props) {
     return `${year} ${month} ${day}`;
   }
 
-  function getAreaOfInterestCoordinates(geometry) {
-    updateAOICoordinates(geometry.getExtent());
-  }
-
-  const drawEndCallback = ({ feature }) => {
-    // Add the draw feature to the collection
-    AOIFeatureObj[crs][feature.ol_uid] = {
-      feature,
-    };
-    endDrawingAreaOfInterest();
-    toggleAreaOfInterestActive();
-    toggleAreaOfInterestSelected();
-    getAreaOfInterestCoordinates(feature.getGeometry());
-  };
-
-  function beginDrawingAOI () {
-    resetAreaOfInterest();
-    draw = new OlInteractionDraw({
-      source: sources[crs], // Destination source for the drawn features (i.e. VectorSource)
-      type: 'Circle', // Geometry type of the geometries being drawn with this instance.
-      style: drawStyles, // Style used to indicate Area of Interest
-      // This is from measurement tool; validate area selected
-      condition(e) {
-        const pixel = [e.originalEvent.x, e.originalEvent.y];
-        const coord = olMap.getCoordinateFromPixel(pixel);
-        const tCoord = transform(coord, crs, CRS.GEOGRAPHIC);
-        return areCoordinatesWithinExtent(proj, tCoord);
-      },
-      geometryFunction: createBox(), // Function that is called when a geometry's coordinates are updated.
-
-    });
-    olMap.addInteraction(draw);
-    draw.on('drawend', drawEndCallback);
-
-    if (!vectorLayers[crs]) {
-      vectorLayers[crs] = new OlVectorLayer({
-        source: sources[crs],
-        style: vectorStyles,
-        map: olMap,
-      });
-    }
-  }
-
   useEffect(() => {
     if (!init) {
       projections.forEach((key) => {
@@ -179,11 +130,6 @@ function ChartingModeOptions (props) {
 
   const onAreaOfInterestButtonClick = (evt) => {
     toggleAreaOfInterestActive();
-    if (!aoiActive) {
-      beginDrawingAOI();
-    } else {
-      endDrawingAreaOfInterest();
-    }
   };
 
 
@@ -254,7 +200,7 @@ function ChartingModeOptions (props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.sit.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
@@ -376,6 +322,60 @@ function ChartingModeOptions (props) {
     openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
+  const { screenHeight, screenWidth } = props;
+
+  const [boundaries, setBoundaries] = useState({
+    x: screenWidth / 2 - 100,
+    y: screenHeight / 2 - 100,
+    x2: screenWidth / 2 + 100,
+    y2: screenHeight / 2 + 100,
+  });
+  const {
+    x, y, y2, x2,
+  } = boundaries;
+
+  /**
+   * Convert pixel value to latitude longitude value
+   * @param {Array} pixelX
+   * @param {Array} pixelY
+   *
+   * @returns {Array}
+   */
+  function getLatLongFromPixelValue(pixelX, pixelY) {
+    const { proj, olMap } = props;
+    const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
+    const { crs } = proj.selected;
+    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
+
+    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
+  }
+
+  const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
+  const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
+
+  /**
+  * Update latitude longitude values on
+  * crop change
+  * @param {Object} boundaries
+  *
+  * @returns {null}
+  */
+  function onBoundaryUpdate(boundaries) {
+    const {
+      x, y, width, height,
+    } = boundaries;
+    const newBoundaries = {
+      x,
+      y,
+      x2: x + width,
+      y2: y + height,
+    };
+    setBoundaries(newBoundaries);
+    setBottomLeftLatLong(getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2));
+    setTopRightLatLong(getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y));
+    updateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
+  }
+
   const layerInfo = getActiveChartingLayer();
   const aoiTextPrompt = 'Area of Interest:';
   const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
@@ -383,6 +383,7 @@ function ChartingModeOptions (props) {
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   const chartRequestMessage = chartRequestInProgress ? 'In progress...' : '';
   const requestBtnText = timeSpanSelection === 'date' ? 'Generate Statistics' : 'Generate Chart';
+  const aoiBtnText = aoiActive ? 'Area Selected' : 'Entire Screen';
 
   return (
     <div
@@ -399,7 +400,7 @@ function ChartingModeOptions (props) {
           />
           <UncontrolledTooltip
             id="center-align-tooltip"
-            placement="right"
+            placement="bottom"
             target="charting-info-icon"
           >
             Charting Information
@@ -412,13 +413,13 @@ function ChartingModeOptions (props) {
       </div>
       <div className="charting-aoi-container">
         <h3>{aoiTextPrompt}</h3>
-        <Button
+        <CustomButton
           id="edit-coordinates"
-          className="edit-coordinates red"
+          aria-label={aoiBtnText}
+          className="edit-coordinates btn"
           onClick={onAreaOfInterestButtonClick}
-        >
-          Edit Coordinates
-        </Button>
+          text={aoiBtnText}
+        />
       </div>
       <div className="charting-timespan-container">
         <h3>Time:</h3>
@@ -441,41 +442,68 @@ function ChartingModeOptions (props) {
       </div>
       <div className="charting-date-row">
         <div className="charting-date-container">
-          <Button
+          <CustomButton
             id="charting-date-button"
-            className="charting-date-button"
+            aria-label={dateRangeValue}
+            className="charting-date-button btn"
             onClick={onDateIconClick}
-          >
-            {dateRangeValue}
-          </Button>
+            text={dateRangeValue}
+          />
         </div>
       </div>
       <div className="charting-buttons">
         <CustomButton
           id="charting-create-button"
           aria-label={requestBtnText}
-          className="charting-create-button btn"
+          className="charting-create-button btn wv-button red"
           onClick={() => onRequestChartClick()}
           text={requestBtnText}
         />
       </div>
       <div className="charting-request-status">
         {chartRequestMessage}
-      </div>
-      <div className="charting-request-status">
         {requestStatusMessage}
       </div>
+      <div className="charting-request-status" />
+      {aoiActive && (
+        <Crop
+          x={x}
+          y={y}
+          width={x2 - x}
+          height={y2 - y}
+          maxHeight={screenHeight}
+          maxWidth={screenWidth}
+          onChange={onBoundaryUpdate}
+          onClose={onAreaOfInterestButtonClick}
+          bottomLeftStyle={{
+            left: x,
+            top: y2 + 5,
+            width: x2 - x,
+          }}
+          topRightStyle={{
+            left: x,
+            top: y - 20,
+            width: x2 - x,
+          }}
+          coordinates={{
+            bottomLeft: util.formatCoordinate(bottomLeftLatLong),
+            topRight: util.formatCoordinate(topRightLatLong),
+          }}
+          showCoordinates
+        />
+      )}
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   const {
-    charting, map, proj, config, layers, date, palettes,
+    charting, map, proj, config, layers, date, palettes, screenSize,
   } = state;
   const renderedPalettes = palettes.rendered;
   const activeLayers = layers.active.layers;
   const { crs } = proj.selected;
+  const { screenWidth, screenHeight } = screenSize;
   const {
     activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, requestStatusMessage,
   } = charting;
@@ -500,6 +528,8 @@ const mapStateToProps = (state) => {
     timeSpanStartDate,
     timelineStartDate,
     timelineEndDate,
+    screenWidth,
+    screenHeight,
   };
 };
 
