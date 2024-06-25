@@ -153,9 +153,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const availableCount = availableGranules?.length;
     if (!availableCount) return granules;
     const count = granuleCount > availableCount ? availableCount : granuleCount;
+    const sortedAvailableGranules = availableGranules.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     for (let i = 0; granules.length < count; i += 1) {
-      const item = availableGranules[i];
+      const item = sortedAvailableGranules[i];
       if (!item) break;
       const { date } = item;
       if (new Date(date) <= leadingEdgeDate && isWithinBounds(crs, item)) {
