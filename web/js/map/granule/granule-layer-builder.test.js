@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock';
+import fetchMock from 'fetch-mock-jest';
 import fixtures from '../../fixtures';
 import layerbuilder from '../layerbuilder';
 import granuleLayerBuilder from './granule-layer-builder';
