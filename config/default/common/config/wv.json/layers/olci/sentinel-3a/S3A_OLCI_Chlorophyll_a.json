@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "S3A_OLCI_Chlorophyll_a": {
+      "id": "S3A_OLCI_Chlorophyll_a",
+      "description": "olci/sentinel-3a/S3A_OLCI_Chlorophyll_a",
+      "tags": "ocean color Sentinel-3A olci",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}

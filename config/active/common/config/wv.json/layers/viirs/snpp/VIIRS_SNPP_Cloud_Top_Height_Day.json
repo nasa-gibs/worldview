@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Cloud_Top_Height_Day": {
+      "id": "VIIRS_SNPP_Cloud_Top_Height_Day",
+      "description": "viirs/snpp/VIIRS_SNPP_Cloud_Top_Height_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Top Height",
+      "wrapadjacentdays": true
+    }
+  }
+}

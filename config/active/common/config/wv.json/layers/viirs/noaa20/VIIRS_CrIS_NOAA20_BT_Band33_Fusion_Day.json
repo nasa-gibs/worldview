@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Day": {
+      "id": "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Day",
+      "description": "viirs/noaa20/VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

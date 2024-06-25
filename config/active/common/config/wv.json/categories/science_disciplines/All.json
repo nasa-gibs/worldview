@@ -8,7 +8,8 @@
                 "description": "",
                 "measurements": [
                   "Blue Marble",
-                  "Chlorophyll A",
+                  "Brightness Temperature",
+                  "Chlorophyll a",
                   "Corrected Reflectance",
                   "Latitude-Longitude Lines",
                   "Liquid Water Equivalent",
@@ -16,6 +17,7 @@
                   "Radiance",
                   "Reference Map",
                   "Sea Ice",
+                  "Sea Surface Currents",
                   "Sea Surface Height Anomalies",
                   "Sea Surface Salinity",
                   "Sea Surface Temperature",

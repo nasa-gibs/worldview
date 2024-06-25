@@ -10,6 +10,10 @@
                 "hidden": "true"
             },
             {
+                "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                "hidden": "true"
+            },
+            {
                 "id": "GHRSST_L4_MUR_Sea_Surface_Temperature"
             },
             {
@@ -21,8 +25,7 @@
                 "hidden": "true"
             },
             {
-                "id": "Coastlines_15m",
-                "hidden": "true"
+                "id": "Coastlines_15m"
             },
             {
                 "id": "Reference_Features_15m",

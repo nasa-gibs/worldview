@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
 import {
-  each as lodashEach,
   get as lodashGet,
 } from 'lodash';
 import {
@@ -26,6 +25,7 @@ import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette } from '../../../modules/palettes/actions';
+import usePrevious from '../../../util/customHooks';
 
 function UpdateProjection(props) {
   const {
@@ -50,6 +50,7 @@ function UpdateProjection(props) {
     updateLayerVisibilities,
     updateMapUI,
     ui,
+    renderedPalettes,
     requestPalette,
   } = props;
 
@@ -62,13 +63,7 @@ function UpdateProjection(props) {
   * @returns {void}
   */
   const clearLayers = function(saveCache) {
-    const activeLayersUI = ui.selected
-      .getLayers()
-      .getArray()
-      .slice(0);
-    lodashEach(activeLayersUI, (mapLayer) => {
-      ui.selected.removeLayer(mapLayer);
-    });
+    ui.selected.setLayers([]);
 
     if (saveCache) return;
     ui.cache.clear();
@@ -134,8 +129,9 @@ function UpdateProjection(props) {
         const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
         return createLayer(def, options);
       });
-      const createdLayers = await Promise.all(layerPromises);
-      lodashEach(createdLayers, (l) => { mapUI.addLayer(l); });
+      const layerResults = await Promise.allSettled(layerPromises);
+      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
+      mapUI.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -144,7 +140,7 @@ function UpdateProjection(props) {
       clearLayers(saveCache);
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
-      compareLayerGroups.forEach((layerGroup) => mapUI.addLayer(layerGroup));
+      mapUI.setLayers(compareLayerGroups);
       compareMapUi.create(mapUI, compare.mode);
     }
     updateLayerVisibilities();
@@ -363,12 +359,20 @@ function UpdateProjection(props) {
     }
   }, [projectionTrigger]);
 
+  const prevRenderedPalettes = usePrevious(renderedPalettes);
+
+  useEffect(() => {
+    if (!ui.selected) return;
+    if (Object.keys(prevRenderedPalettes).length === Object.keys(renderedPalettes).length) return;
+    reloadLayers(null, false);
+  }, [renderedPalettes]);
+
   return null;
 }
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, screenSize, layers, compare, date,
+    proj, map, screenSize, layers, compare, date, palettes,
   } = state;
   const { isKioskModeActive } = state.ui;
   const layerState = { layers, compare, proj };
@@ -376,6 +380,7 @@ const mapStateToProps = (state) => {
   const dateCompareState = { date, compare };
   const activeLayers = getActiveLayers(state);
   const compareMode = compare.mode;
+  const renderedPalettes = palettes.rendered;
   return {
     activeLayers,
     compare,
@@ -386,6 +391,7 @@ const mapStateToProps = (state) => {
     layerState,
     proj,
     map,
+    renderedPalettes,
     requestPalette,
   };
 };
@@ -428,5 +434,6 @@ UpdateProjection.propTypes = {
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
   updateMapUi: PropTypes.func,
+  renderedPalettes: PropTypes.object,
   requestPalette: PropTypes.func,
 };

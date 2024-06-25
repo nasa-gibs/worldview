@@ -2,23 +2,16 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
-const { switchProjections, clickAndWait } = require('../../test-utils/hooks/wvHooks')
-const moment = require('moment')
+const { switchProjections, clickAndWait, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
-let dayDisplacement
 
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   selectors = createSelectors(page)
-  if (process.env.SOTO === 'true') {
-    dayDisplacement = 2
-  } else {
-    dayDisplacement = 0
-  }
 })
 
 const assertDateInputValues = async (start, end) => {
@@ -45,15 +38,12 @@ test.afterAll(async () => {
 })
 
 test('Default filtering includes last 120 days and all categories', async () => {
-  const { eventsTab, filterIcons, filterDates, modalCloseButton } = selectors
+  const { eventsTab, filterIcons, filterDates } = selectors
   await page.goto(fixedAppNow)
-  await modalCloseButton.click()
+  await closeModal(page)
   await eventsTab.click()
   await expect(filterIcons).toHaveCount(8)
-  const endDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(0 + dayDisplacement, 'days').format('YYYY MMM DD').toUpperCase()
-  const startDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(120 + dayDisplacement, 'days').format('YYYY MMM DD').toUpperCase()
-  const expectedText = startDate + ' - ' + endDate
-  await expect(filterDates).toContainText(expectedText)
+  await expect(filterDates).toContainText('2011 SEP 02 - 2011 DEC 31')
 })
 
 test('Filter modal inputs are correct', async () => {
@@ -69,10 +59,8 @@ test('Filter modal inputs are correct', async () => {
     wildfiresSwitch,
     mapExtentFilterCheckbox
   } = selectors
-  const endDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(0 + dayDisplacement, 'days').format('YYYY-MMM-DD').toUpperCase()
-  const startDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(120 + dayDisplacement, 'days').format('YYYY-MMM-DD').toUpperCase()
   await filterButton.click()
-  await assertDateInputValues(startDate, endDate)
+  await assertDateInputValues('2011-SEP-02', '2011-DEC-31')
   await expect(dustSwitch).toBeChecked()
   await expect(manmadeSwitch).toBeChecked()
   await expect(seaLakeIceSwitch).toBeChecked()
@@ -86,11 +74,9 @@ test('Filter modal inputs are correct', async () => {
 
 test('URL params for categories, dates, and extent filtering are present', async () => {
   const currentUrl = await page.url()
-  const endDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(0 + dayDisplacement, 'days').format('YYYY-MM-DD').toUpperCase()
-  const startDate = moment.utc('2011-DEC-31', 'YYYY-MMM-DD').subtract(120 + dayDisplacement, 'days').format('YYYY-MM-DD').toUpperCase()
   expect(currentUrl).toContain('e=true')
   expect(currentUrl).toContain('efc=dustHaze,manmade,seaLakeIce,severeStorms,snow,volcanoes,waterColor,wildfires')
-  expect(currentUrl).toContain('efd=' + startDate + ',' + endDate)
+  expect(currentUrl).toContain('efd=2011-09-02,2011-12-31')
   expect(currentUrl).toContain('efs=true')
 })
 
@@ -102,7 +88,6 @@ test('Loading from permalink sets all criteria properly', async () => {
     filterIcons,
     manmadeSwitch,
     mapExtentFilterCheckbox,
-    modalCloseButton,
     seaLakeIceSwitch,
     severeStormsSwitch,
     snowSwitch,
@@ -112,7 +97,7 @@ test('Loading from permalink sets all criteria properly', async () => {
     wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
-  await modalCloseButton.click()
+  await closeModal(page)
 
   const currentUrl = await page.url()
 
@@ -147,14 +132,13 @@ test('Changing criteria in modal DOES NOT update summary of criteria in sidebar 
     filterDates,
     filterIcons,
     filterModalCancel,
-    modalCloseButton,
     startInputYear,
     startInputMonth,
     startInputDay,
     wildfiresIcon
   } = selectors
   await page.goto(wildfiresWithDates)
-  await modalCloseButton.click()
+  await closeModal(page)
   await filterButton.click()
   await startInputYear.fill('2000')
   await startInputMonth.fill('APR')
@@ -234,11 +218,10 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
     filterDates,
     filterButton,
     filterIcons,
-    mapExtentFilterCheckbox,
-    modalCloseButton
+    mapExtentFilterCheckbox
   } = selectors
   await page.goto(backwardsCompatibleEventUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
@@ -248,12 +231,9 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
 })
 
 test('No extent search checkbox in polar projections', async () => {
-  if (process.env.SOTO === 'true') {
-    test.skip(true, 'Polar change is hidden by something: <iframe src="about:blank" id="react-refresh-overlay"></iframe> intercepts pointer events')
-  }
-  const { filterButton, mapExtentFilterCheckbox, modalCloseButton } = selectors
+  const { filterButton, mapExtentFilterCheckbox } = selectors
   await page.goto(extentsUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await filterButton.click()
   await expect(mapExtentFilterCheckbox).toBeVisible()
   await expect(mapExtentFilterCheckbox).toBeChecked()

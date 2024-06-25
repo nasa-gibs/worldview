@@ -8,6 +8,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "ascending",
+      "associatedLayers": ["OrbitTracks_METOP-B_Descending"],
       "palette": {
         "id": "OrbitTracks_METOP-B_Ascending",
         "immutable": true

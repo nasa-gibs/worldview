@@ -124,7 +124,7 @@ export class VectorInteractions extends React.Component {
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
         const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType()) || featureOutsideExtent) return;
+        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
         if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
@@ -181,8 +181,10 @@ export class VectorInteractions extends React.Component {
     if (measureIsActive || isCoordinateSearchActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
-    const clickObj = getDialogObject(pixels, map);
+    let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
+    const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
+    clickObj = getDialogObject(pixels, map, isMobile ? screenSize.screenWidth : isAeronet ? 250 : 445);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
@@ -201,10 +203,10 @@ export class VectorInteractions extends React.Component {
     }
 
     if (metaArray.length) {
-      if (hasNonClickableVectorLayerType) {
+      if (hasNonClickableVectorLayerType && !isAeronet) {
         activateVectorZoomAlert();
       } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive);
+        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
         } else if (isVectorExceededAlertPresent) {
@@ -271,7 +273,7 @@ function mapStateToProps(state) {
     screenSize,
     isCoordinateSearchActive,
     compareState: compare,
-    getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
+    getDialogObject: (pixels, olMap, modalWidth) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset, modalWidth),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isVectorExceededAlertPresent,
@@ -307,13 +309,13 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive) => {
+  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet) => {
     const { screenHeight, screenWidth } = screenSize;
     const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
-    const modalWidth = isMobile ? screenWidth : 445;
+    const modalWidth = isMobile ? screenWidth : isAeronet ? 250 : 445;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
 
     dispatch(openCustomContent(

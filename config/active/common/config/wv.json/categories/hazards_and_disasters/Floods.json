@@ -7,9 +7,22 @@
                 "image": "floods.jpg",
                 "description": "",
                 "measurements": [
+                    "Flood",
+                    "Flood Hazard",
                     "Corrected Reflectance",
-                    "Precipitation Rate",
-                    "Soil Moisture"
+                    "Land Surface Reflectance",
+                    "Precipitation Estimate",
+					"Precipitation Rate",
+                    "Human Impacts",
+                    "Land Cover",
+                    "Forests, Mangrove",
+					"Soil Moisture",
+                    "Snow Cover",
+                    "Snow Indices",
+                    "Snow Water Equivalent",
+                    "Surface Water Extent",
+                    "Water Bodies",
+                    "Water Indices"
                 ]
             }
         }

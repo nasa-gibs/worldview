@@ -1,0 +1,33 @@
+{
+  "measurements": {
+      "TEMPO - Featured": {
+          "id": "featured-tempo",
+          "title":    "Tropospheric Emissions: Monitoring of Pollution",
+          "subtitle": "TEMPO",
+          "sources": {
+              "TEMPO": {
+                  "id": "tempo",
+                  "title": "TEMPO",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                      "TEMPO_L2_Formaldehyde_Vertical_Column_Granule",
+                      "TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule",
+                      "TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule",
+                      "TEMPO_L2_Cloud_Cloud_Fraction_Total_Granule",
+                      "TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule",
+                      "TEMPO_L2_Ozone_Column_Amount_Granule",
+                      "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
+                      "TEMPO_L3_Formaldehyde_Vertical_Column",
+                      "TEMPO_L3_NO2_Vertical_Column_Stratosphere",
+                      "TEMPO_L3_NO2_Vertical_Column_Troposphere",
+                      "TEMPO_L3_Cloud_Cloud_Fraction_Total",
+                      "TEMPO_L3_Cloud_Cloud_Pressure_Total",
+                      "TEMPO_L3_Ozone_Column_Amount",
+                      "TEMPO_L3_Ozone_Cloud_Fraction"
+                  ]
+              }
+          }
+      }
+  }
+}

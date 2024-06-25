@@ -22,13 +22,12 @@ import LocationSearch from './components/location-search/location-search';
 import Brand from './brand';
 import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
-import FeatureAlert from './components/feature-alert/alert';
-import Alerts from './containers/alerts';
+import AlertDropdown from './containers/alertDropdown';
 import LoadingSpinner from './components/map/loading-spinner';
 import './font-awesome-library';
+import Tour from './containers/tour';
 
 // actions
-import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
@@ -69,10 +68,10 @@ class App extends React.Component {
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
     const {
-      kioskModeEnabled, notifications, numberOutagesUnseen,
+      kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled,
     } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled) {
         this.openNotification(notifications, numberOutagesUnseen);
       }
     }
@@ -163,9 +162,8 @@ class App extends React.Component {
         <LoadingSpinner />
         <Toolbar />
         <MapInteractions />
-        <div id="wv-alert-container" className="wv-alert-container">
-          <FeatureAlert />
-          <Alerts />
+        <AlertDropdown isTourActive={isTourActive} />
+        <div>
           {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
         </div>
         <Sidebar />
@@ -194,9 +192,11 @@ function mapStateToProps(state) {
     numberOutagesUnseen, numberUnseen, type, object,
   } = notifications;
   const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
+  const e2eModeEnabled = state.ui.isE2eModeActive;
   return {
     state,
     kioskModeEnabled,
+    e2eModeEnabled,
     isAnimationWidgetActive: state.animation.isActive,
     isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.screenSize.isMobileDevice,
@@ -253,6 +253,7 @@ export default connect(
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
   kioskModeEnabled: PropTypes.bool,
+  e2eModeEnabled: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
@@ -264,4 +265,8 @@ App.propTypes = {
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
+};
+
+App.defaultProps = {
+  numberOutagesUnseen: 0,
 };

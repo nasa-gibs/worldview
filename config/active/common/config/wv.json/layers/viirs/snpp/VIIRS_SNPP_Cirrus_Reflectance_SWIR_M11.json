@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11": {
+      "id": "VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11",
+      "description": "viirs/snpp/VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cirrus Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}

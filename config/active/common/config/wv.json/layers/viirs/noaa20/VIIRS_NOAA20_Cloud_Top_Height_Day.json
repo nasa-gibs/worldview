@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Cloud_Top_Height_Day": {
+      "id": "VIIRS_NOAA20_Cloud_Top_Height_Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Cloud_Top_Height_Day",
+      "tags": "jpss-1 jpss",
+      "group": "overlays",
+      "layergroup": "Cloud Top Height",
+      "wrapadjacentdays": true
+    }
+  }
+}

@@ -1,0 +1,1 @@
+The atmospheric river can be seen funneling moisture through California, from south to north, in this GeoColor animation from the GOES-West geostationary satellite from 19:00 UTC Feb. 24 to 03:00 UTC, Feb. 25, 2023.

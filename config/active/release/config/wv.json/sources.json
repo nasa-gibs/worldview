@@ -1,25 +1,96 @@
 {
-    "sources": {
-        "GIBS:arctic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi"
-        },
-        "GIBS:antarctic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi"
-        },
-        "GIBS:geographic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
-        },
-        "GIBS:wms": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
-        },
-        "GIBS:wms:arctic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3413/best/wms.cgi"
-        },
-        "GIBS:wms:antarctic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3031/best/wms.cgi"
-        },
-        "WDPA:wms": {
-            "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
+  "sources": {
+    "GIBS:arctic": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi"
+    },
+    "GIBS:antarctic": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi"
+    },
+    "GIBS:geographic": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
+    },
+    "GIBS:wms": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
+    },
+    "GIBS:wms:arctic": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3413/best/wms.cgi"
+    },
+    "GIBS:wms:antarctic": {
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3031/best/wms.cgi"
+    },
+    "WDPA:wms": {
+      "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
+    },
+    "FIRMS:xyz": {
+      "url": "https://firms.modaps.eosdis.nasa.gov/layers"
+    },
+    "DDV": {
+      "url": "https://kv9drwgv6l.execute-api.us-west-2.amazonaws.com/",
+      "matrixSets": {
+        "31.25m": {
+          "id": "31.25m",
+          "maxResolution": 0.5625,
+          "resolutions": [
+            0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125,
+            0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125,
+            0.00054931640625, 0.000274658203125
+          ],
+          "tileSize": [512, 512],
+          "tileMatrices": [
+            {
+              "matrixWidth": 2,
+              "matrixHeight": 1
+            },
+            {
+              "matrixWidth": 3,
+              "matrixHeight": 2
+            },
+            {
+              "matrixWidth": 5,
+              "matrixHeight": 3
+            },
+            {
+              "matrixWidth": 10,
+              "matrixHeight": 5
+            },
+            {
+              "matrixWidth": 20,
+              "matrixHeight": 10
+            },
+            {
+              "matrixWidth": 40,
+              "matrixHeight": 20
+            },
+            {
+              "matrixWidth": 80,
+              "matrixHeight": 40
+            },
+            {
+              "matrixWidth": 160,
+              "matrixHeight": 80
+            },
+            {
+              "matrixWidth": 320,
+              "matrixHeight": 160
+            },
+            {
+              "matrixWidth": 640,
+              "matrixHeight": 320
+            },
+            {
+              "matrixWidth": 1280,
+              "matrixHeight": 640
+            },
+            {
+              "matrixWidth": 2560,
+              "matrixHeight": 1280
+            }
+          ]
         }
+      }
+    },
+    "AERONET": {
+      "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     }
+  }
 }

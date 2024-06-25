@@ -7,12 +7,27 @@
                 "id": "legacy-other",
                 "description": "",
                 "measurements": [
+                    "Areas of No Data (mask)",
                     "Blue Marble",
-                    "Chlorophyll A",
+                    "Brightness Temperature",
+                    "Cirrus Reflectance",
+                    "Chlorophyll a",
+                    "Dams",
+                    "Earth at Night",
                     "Latitude-Longitude Lines",
+                    "Lidar",
+                    "Orbital Track",
+                    "Photosynthetically Available Radiation",
+                    "Population Density",
+                    "Power Plants, Nuclear",
+                    "Radiance",
                     "Reference Map",
+                    "Reservoirs",
                     "Sea Surface Temperature",
-                    "Terrain Elevation"
+                    "Settlements",
+                    "Terrain Elevation",
+                    "Urban Extents",
+                    "Water Bodies"
                 ]
             }
         }

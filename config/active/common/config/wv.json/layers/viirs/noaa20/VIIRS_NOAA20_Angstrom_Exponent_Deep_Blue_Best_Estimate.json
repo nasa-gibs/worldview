@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate": {
+      "id": "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true
+    }
+  }
+}

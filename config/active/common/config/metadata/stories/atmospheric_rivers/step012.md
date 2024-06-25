@@ -1,0 +1,1 @@
+Antelope Valley in Southern California also experienced a superbloom of wildflowers. This comparison shows a previous superbloom on Apr. 18, 2020 and the superbloom on Apr. 7, 2023. The previous superbloom appeared to have even more vibrant orange-yellow colors than the 2023 bloom.

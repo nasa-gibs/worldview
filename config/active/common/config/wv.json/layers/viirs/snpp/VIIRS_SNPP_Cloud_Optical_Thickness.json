@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Cloud_Optical_Thickness": {
+      "id": "VIIRS_SNPP_Cloud_Optical_Thickness",
+      "description": "viirs/snpp/VIIRS_SNPP_Cloud_Optical_Thickness",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Optical Thickness",
+      "wrapadjacentdays": true
+    }
+  }
+}

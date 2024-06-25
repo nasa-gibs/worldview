@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { openImageDownloadPanel } = require('../../test-utils/hooks/wvHooks')
+const { openImageDownloadPanel, closeModal } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 
 let page
@@ -30,10 +30,10 @@ test.afterAll(async () => {
 })
 
 test('Verify that global select is present and not selected', async () => {
-  const { globalSelectInput, modalCloseButton } = selectors
+  const { globalSelectInput } = selectors
   const url = await joinUrl(startParams, null)
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   await openImageDownloadPanel(page)
   await expect(globalSelectInput).toBeVisible()
   await expect(globalSelectInput).not.toBeChecked()

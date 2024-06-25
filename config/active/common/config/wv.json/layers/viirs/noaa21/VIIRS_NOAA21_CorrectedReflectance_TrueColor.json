@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_CorrectedReflectance_TrueColor": {
+      "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+      "description": "viirs/noaa21/VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+      "tags": "natural color cr jpss2 jpss-2",
+      "layergroup": "Corrected Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true
+    }
+  }
+}

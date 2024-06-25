@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "VIIRS_SNPP_CorrectedReflectance_TrueColor": {
+      "id": "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+      "description": "viirs/snpp/VIIRS_SNPP_CorrectedReflectance_TrueColor",
+      "tags": "natural color cr s-npp snpp",
+      "layergroup": "Corrected Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule"],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}

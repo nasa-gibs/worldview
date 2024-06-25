@@ -9,6 +9,7 @@
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "track": "descending",
+      "associatedLayers": ["OrbitTracks_Landsat-7_Ascending"],
       "palette": {
         "id": "OrbitTracks_Landsat-7_Descending",
         "immutable": true

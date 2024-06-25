@@ -2,4 +2,4 @@ The MODIS Cloud Water Path (PCL) indicates the amount of water in the atmosphere
 
 The MODIS Cloud Water Path layers are available from both the Terra (MOD06) and Aqua (MYD06) satellites for daytime overpasses. The sensor/algorithm resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [NCAR|UCAR Climate Date Guide: Cloud Water Path](https://climatedataguide.ucar.edu/climate-data/liquid-water-path-overview); [GES DISC: Cloud Water Path](https://disc.gsfc.nasa.gov/information/glossary?title=Cloud%20Water%20Path)
+References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [NCAR|UCAR Climate Date Guide: Cloud Dataset Overview](https://climatedataguide.ucar.edu/climate-data/cloud-dataset-overview); [GES DISC: Cloud Water Path](https://disc.gsfc.nasa.gov/information/glossary?title=Cloud%20Water%20Path)

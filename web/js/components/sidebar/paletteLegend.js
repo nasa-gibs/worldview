@@ -381,7 +381,7 @@ class PaletteLegend extends React.Component {
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               let legendColor = color;
               const customColor = palette.custom;
-              if (palette.custom !== undefined) {
+              if (palette.custom !== undefined && palette.custom !== '') {
                 [legendColor] = palettes.custom[customColor].colors;
               }
 
@@ -442,9 +442,11 @@ class PaletteLegend extends React.Component {
   }
 
   render() {
-    const { paletteId, layer, isCustomPalette } = this.props;
+    const {
+      paletteId, layer, isCustomPalette, showingVectorHand,
+    } = this.props;
     const { isHoveringLegend } = this.state;
-    const customClass = isCustomPalette ? ' is_custom' : '';
+    const customClass = showingVectorHand && layer.id.includes('AERONET') ? ' vector-palette' : isCustomPalette ? ' is_custom' : '';
     if (!layer.palette) return;
     return (
       <div

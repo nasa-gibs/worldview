@@ -130,7 +130,7 @@ const useLookup = function(layerId, palettesObj, state) {
       if (palette.max >= rendered.entries.values.length) {
         delete palette.max;
       }
-      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
+      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max) || layerId.includes('AERONET')) {
         use = true;
         return false;
       }
@@ -350,15 +350,16 @@ export function getKey(layerId, groupStr, state) {
     return '';
   }
   const def = getPalette(layerId, undefined, groupStr, state);
+  const { values } = getPalette(layerId, 0, groupStr, state).entries;
   const keys = [];
   if (def.custom) {
     keys.push(`palette=${def.custom}`);
   }
   if (def.min) {
-    keys.push(`min=${def.min}`);
+    keys.push(`min=${getMinValue(values[def.min])}`);
   }
   if (def.max) {
-    keys.push(`max=${def.max}`);
+    keys.push(`max=${getMinValue(values[def.max])}`);
   }
   if (def.squash) {
     keys.push('squash');
@@ -385,7 +386,7 @@ export function refreshDisabledSelector(
       },
     },
   });
-  return toggleLookup(layerId, newPalettes, state);
+  return updateLookup(layerId, newPalettes, state);
 }
 
 export function initDisabledSelector(
@@ -395,7 +396,7 @@ export function initDisabledSelector(
   palettes,
   state,
 ) {
-  const disabled = disabledStr.split('-');
+  const disabled = disabledStr ? disabledStr.split('-') : [];
   for (let i = 0; i < disabled.length; i += 1) { disabled[i] = +disabled[i]; }
   let newPalettes = prepare(layerId, palettes, state);
   newPalettes = update(newPalettes, {
@@ -440,7 +441,7 @@ export function setDisabledSelector(
       },
     },
   });
-  return toggleLookup(layerId, newPalettes, state);
+  return updateLookup(layerId, newPalettes, state);
 }
 
 export function setRange(layerId, props, index, palettes, state) {

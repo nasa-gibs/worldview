@@ -6,13 +6,7 @@
       "tags": "natural color cr",
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
-      "wrapadjacentdays": true,
-      "projections": {
-        "geographic": {
-          "source": "GIBS:geographic"
-        }
-      },
-      "disableSmartHandoff": true
+      "wrapadjacentdays": true
     }
   }
 }

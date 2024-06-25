@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { getDates } from '../date/selectors';
 import { getFormattedMonthAbbrevDates } from './util';
 

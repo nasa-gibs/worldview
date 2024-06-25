@@ -1,0 +1,32 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Biosphere": {
+                "title": "Biosphere",
+                "id": "biosphere",
+                "image": "biosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Aboveground Biomass",
+                    "Amphibian Richness",
+                    "Canopy Characteristics",
+                    "Forests, Mangrove",
+                    "Gross Primary Productivity",
+                    "Heterotrophic Respiration",
+                    "Human Footprint",
+                    "Land Cover",
+                    "Leaf Area Index",
+                    "Mammal Richness",
+                    "Moisture Indices",
+                    "Net Ecosystem CO2 Exchange",
+                    "Photosynthesis, Net",
+                    "Photosynthetically Available Radiation",
+                    "FPAR",
+                    "Solar Induced Chlorophyll Fluorescence",
+                    "Vegetation Indices",
+                    "Vegetation Light Use Efficiency"
+                ]
+            }
+        }
+    }
+}

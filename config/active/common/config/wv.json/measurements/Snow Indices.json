@@ -1,0 +1,83 @@
+{
+  "measurements": {
+      "Snow Indices": {
+          "id": "snow-indices",
+          "title":    "Snow Indices",
+          "subtitle": "Aqua/MODIS, Terra/MODIS, Harmonized Landsat Sentinel-2 (HLS), NOAA-20/VIIRS, Suomi NPP/VIIRS",
+          "sources": {
+              "Suomi NPP/VIIRS": {
+                  "id": "suominpp-viirs",
+                  "title": "Suomi NPP/VIIRS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                      "VIIRS_SNPP_NDSI_Snow_Cover",
+                      "OrbitTracks_Suomi_NPP_Ascending"
+                  ]
+              },
+              "NOAA-20/VIIRS": {
+                  "id": "noaa20-viirs",
+                  "title": "NOAA-20/VIIRS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                      "VIIRS_NOAA20_NDSI_Snow_Cover",
+                      "OrbitTracks_NOAA-20_Ascending"
+                  ]
+              },
+              "Aqua/MODIS": {
+                  "id": "aqua-modis",
+                  "title": "Aqua/MODIS",
+                  "description": "modis/SnowCover",
+                  "image": "",
+                  "settings": [
+                      "MODIS_Aqua_NDSI_Snow_Cover",
+                      "MODIS_Aqua_L3_NDSI_Snow_Cover_Daily",
+                      "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct",
+                      "OrbitTracks_Aqua_Ascending",
+                      "OrbitTracks_Aqua_Descending"
+                  ]
+              },
+              "Terra/MODIS": {
+                  "id": "terra-modis",
+                  "title": "Terra/MODIS",
+                  "description": "modis/terra/SnowCover",
+                  "image": "",
+                  "settings": [
+                      "MODIS_Terra_NDSI_Snow_Cover",
+                      "MODIS_Terra_L3_NDSI_Snow_Cover_Daily",
+                      "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
+                      "OrbitTracks_Terra_Ascending",
+                      "OrbitTracks_Terra_Descending"
+                  ]
+              },
+              "HLS-Sentinel2": {
+                "id": "HLS: Sentinel-2",
+                "title": "HLS: Sentinel-2A & 2B/MSI",
+                "description": "multi-mission/hls/Reflectance",
+                "image": "",
+                "settings": [
+                    "HLS_NDSI_Sentinel",
+                    "HLS_Customizable_Sentinel",
+                    "HLS_MGRS_Granule_Grid",
+                    "OrbitTracks_Sentinel-2A_Descending",
+                    "OrbitTracks_Sentinel-2B_Descending"
+                ]
+            },
+            "HLS-Landsat8": {
+                "id": "HLS: Landsat 8 & 9",
+                "title": "HLS: Landsat 8 & 9/OLI",
+                "description": "multi-mission/hls/Reflectance",
+                "image": "",
+                "settings": [
+                    "HLS_NDSI_Landsat",
+                    "HLS_Customizable_Landsat",
+                    "HLS_MGRS_Granule_Grid",
+                    "OrbitTracks_Landsat-8_Descending",
+                    "OrbitTracks_Landsat-9_Descending"
+                ]
+            }
+          }
+      }
+  }
+}

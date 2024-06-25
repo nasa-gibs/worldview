@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive, spyAndBIsActive, opacityAndBIsActive } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -20,9 +21,8 @@ test.afterAll(async () => {
 })
 
 test('Mobile comparison A|B toggle buttons are visible and only A is selected by default', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(swipeAndAIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   const aMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(1)')
   const bMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(2)')
   await expect(aMobileCompareButton).toHaveClass(/compare-btn-selected/)

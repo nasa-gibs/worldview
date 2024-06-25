@@ -1,0 +1,7 @@
+The Tropospheric Emissions: Monitoring of Pollution (TEMPO) Level 2 (L2) ultraviolet (UV) Aerosol Index layer provides information on the UV aerosol index (a unitless quantity) using the difference between measured and theoretical radiance contrasts at two wavelengths (331.2 and 360 nm) from the total ozone retrieval algorithm. The retrieval is based on the Ozone Monitoring Instrument Total Ozone Mapping Spectrometer (OMI TOMS) V8.5 algorithm adapted for TEMPO.
+
+Imagery is available as approximately six-minute granules for daylight hours over North America. The sensor’s native spatial resolution is ~2 km x 4.75 km at the center of TEMPO’s field of regard (FOR), and the imagery resolution is 1 km. The layer is filtered to display high-quality pixels with solar zenith angles less than 80 degrees.
+
+Total ozone Level 2 files provide ozone and supporting information at TEMPO’s native spatial resolution for individual granules. Each granule covers the entire North-South TEMPO FOR but only a portion of the East-West FOR. The temporal resolution of a nominal scan is approximately one hour during daylight hours, with more frequent scans in the morning over the eastern portion of the FOR and in the evenings over the western portion of the FOR.
+
+References: TEMPO_O3TOT_L2 [doi:10.5067/IS-40e/TEMPO/O3TOT_L2.003](https://doi.org/10.5067/IS-40e/TEMPO/O3TOT_L2.003)

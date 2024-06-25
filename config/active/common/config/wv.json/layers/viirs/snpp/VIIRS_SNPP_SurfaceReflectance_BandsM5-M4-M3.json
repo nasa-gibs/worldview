@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3": {
+      "id": "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
+      "description": "viirs/snpp/VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
+      "tags": "natural color lsr s-npp snpp",
+      "layergroup": "Land Surface Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true
+    }
+  }
+}

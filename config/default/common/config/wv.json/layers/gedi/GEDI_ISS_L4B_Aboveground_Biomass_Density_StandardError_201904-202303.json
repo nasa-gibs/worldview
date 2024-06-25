@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "GEDI_ISS_L4B_Aboveground_Biomass_Density_StandardError_201904-202303": {
+      "id": "GEDI_ISS_L4B_Aboveground_Biomass_Density_StandardError_201904-202303",
+      "description": "gedi/GEDI_ISS_L4B_Aboveground_Biomass_Density_StandardError_201904-202303",
+      "tags": "international space station iss aboveground biomass density",
+      "group": "overlays",
+      "layergroup": "Aboveground Biomass",
+      "wrapX": true
+    }
+  }
+}

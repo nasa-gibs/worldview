@@ -7,6 +7,7 @@ const {
   animationTooManyFramesGif,
   animationProjectionRotated
 } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -23,9 +24,9 @@ test.afterAll(async () => {
 })
 
 test('Clicking the animation widget button opens the widget', async () => {
-  const { createGifIcon, arcticRotationResetButton, modalCloseButton, rotationDialogOkButton } = selectors
+  const { createGifIcon, arcticRotationResetButton, rotationDialogOkButton } = selectors
   await page.goto(animationProjectionRotated)
-  await modalCloseButton.click()
+  await closeModal(page)
   await createGifIcon.click()
   await expect(arcticRotationResetButton).toHaveText('-18')
   await rotationDialogOkButton.click()
@@ -39,11 +40,10 @@ test('GIF selection preview is Accurate and selections that are too high disable
     gifPreviewEndDate,
     gifPreviewFrameRateValue,
     gifPreviewEndResolutionSelector,
-    gifDownloadButton,
-    modalCloseButton
+    gifDownloadButton
   } = selectors
   await page.goto(activeAnimationWidget)
-  await modalCloseButton.click()
+  await closeModal(page)
   await createGifIcon.click()
   await expect(gifPreviewStartDate).toHaveText('2018 MAR 28')
   await expect(gifPreviewEndDate).toHaveText('2018 APR 04')
@@ -60,17 +60,15 @@ test('GIF selection preview is Accurate and selections that are too high disable
 })
 
 test('GIF download is disabled when too many frames would be requested with standard interval', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(animationTooManyFramesGif)
-  await modalCloseButton.click()
+  await closeModal(page)
   const createGif = page.locator('#create-gif-button')
   await expect(createGif).toHaveClass(/disabled/)
 })
 
 test('GIF download is disabled when too many frames would be requested with custom interval', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(animationTooManyFramesGifCustomInterval)
-  await modalCloseButton.click()
+  await closeModal(page)
   const createGif = page.locator('#create-gif-button')
   await expect(createGif).toHaveClass(/disabled/)
 })

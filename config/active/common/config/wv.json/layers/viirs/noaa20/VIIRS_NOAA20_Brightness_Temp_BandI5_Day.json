@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Brightness_Temp_BandI5_Day": {
+      "id": "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
+      "tags": "jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

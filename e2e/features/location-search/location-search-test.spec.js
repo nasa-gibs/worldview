@@ -2,6 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -22,9 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Location Search component is visible by default', async () => {
-  const { locationSearchComponent, modalCloseButton } = selectors
+  const { locationSearchComponent } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(locationSearchComponent).toBeVisible()
 })
 
@@ -35,9 +36,9 @@ test('Clicking the minimize button minimizes the Location Search component', asy
 })
 
 test('Location Search component remains hidden on subsequent page loads per user preference', async () => {
-  const { locationSearchComponent, modalCloseButton } = selectors
+  const { locationSearchComponent } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(locationSearchComponent).not.toBeVisible()
 })
 
@@ -48,10 +49,9 @@ test('Clicking Location Search toolbar button expands the Location Search compon
 })
 
 test('Coordinates dialog for permalink marker is visible by default on page load', async () => {
-  const { modalCloseButton } = selectors
   const testMarkerEncodedID = await page.locator('.coordinates-map-marker_-77__2E__032__2C__38__2E__8904')
   await page.goto(markerUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(testMarkerEncodedID).toBeVisible()
 })
 
@@ -68,9 +68,9 @@ test('Clicking minimize tooltip hides the coordinates dialog', async () => {
 })
 
 test('Clicking close tooltip removes the marker and coordinates dialog', async () => {
-  const { coordinatesMapMarker, modalCloseButton, tooltipCoordinatesCloseButton } = selectors
+  const { coordinatesMapMarker, tooltipCoordinatesCloseButton } = selectors
   await page.goto(removeMarkerUrl)
-  await modalCloseButton.click()
+  await closeModal(page)
   await tooltipCoordinatesCloseButton.click()
   await expect(coordinatesMapMarker).not.toBeVisible()
   const url = await page.url()
@@ -78,9 +78,9 @@ test('Clicking close tooltip removes the marker and coordinates dialog', async (
 })
 
 test('Invalid marker query string parameter prevents state update', async () => {
-  const { coordinatesMapMarker, modalCloseButton } = selectors
+  const { coordinatesMapMarker } = selectors
   await page.goto(invalidMarkerQuery)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(coordinatesMapMarker).not.toBeVisible()
   const url = await page.url()
   expect(url).not.toContain('s=')

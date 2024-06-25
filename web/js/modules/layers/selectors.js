@@ -8,7 +8,7 @@ import {
   findIndex as lodashFindIndex,
   memoize as lodashMemoize,
 } from 'lodash';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
@@ -41,7 +41,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
-  def.count = spec.count || undefined;
+  def.count = spec.count || def.count || undefined;
 
   if (Array.isArray(spec.bandCombo)) {
     def.bandCombo = {
@@ -126,11 +126,11 @@ export const getStartingLayers = createSelector([getConfig], (config) => resetLa
 
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-export const getCollections = (layers, dailyDate, subdailyDate, layer) => {
+export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) => {
   if (!layers.collections[layer.id]) return;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if (dateCollection[i].date === dailyDate || dateCollection[i].date === subdailyDate) {
+    if ((dateCollection[i].date === dailyDate || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
@@ -589,6 +589,45 @@ export const subdailyLayersActive = createSelector(
   [getActiveLayers],
   (layers) => hasSubDaily(layers),
 );
+
+/**
+ * Get subdaily layers from given layers
+ * @param {Array} layers
+ */
+export function getSubDaily(layers) {
+  const outputLayers = [];
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      if (layers[i].period === 'subdaily') {
+        outputLayers.push(layers[i]);
+      }
+    }
+  }
+  return outputLayers;
+}
+
+export const subdailyLayers = createSelector(
+  [getActiveLayers],
+  (layers) => getSubDaily(layers),
+);
+
+/**
+ * Gets smallest interval value of subdaily layers
+ * @param {Object} state
+ */
+export function getSmallestIntervalValue(state) {
+  const layers = getActiveLayers(state);
+  let smallestDelta = 1440; // 1 day in minutes
+  if (layers && layers.length) {
+    for (let i = 0; i < layers.length; i += 1) {
+      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      if (layers[i].period === 'subdaily' && interval < smallestDelta) {
+        smallestDelta = Number(interval);
+      }
+    }
+  }
+  return smallestDelta;
+}
 
 /**
  *

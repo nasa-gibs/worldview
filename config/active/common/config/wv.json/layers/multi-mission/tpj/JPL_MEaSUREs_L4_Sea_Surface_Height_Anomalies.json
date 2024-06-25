@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies": {
+      "id": "JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies",
+      "description": "multi-mission/tpj/JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies",
+      "tags": "ssha podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Surface Height Anomalies"
+    }
+  }
+}

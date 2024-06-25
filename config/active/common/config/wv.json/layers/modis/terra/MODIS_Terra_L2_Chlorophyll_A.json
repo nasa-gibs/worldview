@@ -5,7 +5,7 @@
       "description": "modis/terra/MODIS_Terra_L2_Chlorophyll_A",
       "tags": "ocean color",
       "group": "overlays",
-      "layergroup": "Chlorophyll A",
+      "layergroup": "Chlorophyll a",
       "wrapadjacentdays": true
     }
   }

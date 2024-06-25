@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L2_Sea_Surface_Temp_Night": {
+      "id": "VIIRS_SNPP_L2_Sea_Surface_Temp_Night",
+      "description": "viirs/snpp/VIIRS_SNPP_L2_Sea_Surface_Temp_Night",
+      "tags": "sst",
+      "group": "overlays",
+      "layergroup": "Sea Surface Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

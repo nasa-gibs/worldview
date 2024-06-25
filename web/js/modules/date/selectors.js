@@ -2,8 +2,7 @@ import { TIME_SCALE_FROM_NUMBER } from './constants';
 
 export function getDates (state) {
   const { date } = state;
-  const { selected, selectedB } = date;
-  return { selected, selectedB };
+  return date;
 }
 
 export function getSelectedDate (state, compareDateString) {

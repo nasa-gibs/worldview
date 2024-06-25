@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters": {
+      "id": "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters",
+      "description": "modis/combined/MODIS_Combined_MAIAC_L3_IsotropicKernelParameters",
+      "tags": "",
+      "group": "baselayers",
+      "layergroup": "Isotropic Kernel Parameters"
+    }
+  }
+}

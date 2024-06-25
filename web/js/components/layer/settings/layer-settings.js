@@ -117,7 +117,7 @@ class LayerSettings extends React.Component {
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
 
-      if (legend.type === 'classification' && legend.colors.length > 1) {
+      if (legend.type === 'classification' && (legend.colors.length > 1 || layer.id.includes('AERONET'))) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
             <ClassificationToggle
@@ -344,7 +344,7 @@ class LayerSettings extends React.Component {
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
-    const ttilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
     const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
     const layerGroup = layer.layergroup;
 
@@ -368,7 +368,7 @@ class LayerSettings extends React.Component {
         />
         {this.renderGranuleSettings()}
         {renderCustomizations}
-        {ttilerLayer && <BandSelection layer={layer} />}
+        {titilerLayer && <BandSelection layer={layer} />}
         {granuleMetadata && <ImagerySearch layer={layer} /> }
         {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
       </>

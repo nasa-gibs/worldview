@@ -2,6 +2,6 @@ The Soil Moisture Active Passive (SMAP) "Uncorrected Brightness Temperature 9 km
 
 Within the image, green indicates that TB observations are free of RFI and approved for science use, yellow indicates that caution should be used with the TB observations as RFI was detected but mitigated, and red indicates that TB observations are flagged as bad due to RFI.
 
-References: SPL1CTB_E [doi:10.5067/XB8K63YM4U8O](https://doi.org/10.5067/XB8K63YM4U8O)
+References: SPL1CTB_E [doi:10.5067/99LHDR3NUM47](https://dx.doi.org/10.5067/99LHDR3NUM47)
 
 Data field: `cell_tb_qual_flag_h_fore`

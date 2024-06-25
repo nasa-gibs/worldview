@@ -11,7 +11,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day"
+                        "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters"
                     ]
                 }
             }

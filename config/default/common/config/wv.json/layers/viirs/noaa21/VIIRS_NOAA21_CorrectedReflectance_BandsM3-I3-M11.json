@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11": {
+      "id": "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
+      "description": "viirs/noaa21/VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
+      "tags": "false color jpss2 3-6-7 jpss-2",
+      "layergroup": "Corrected Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true
+    }
+  }
+}

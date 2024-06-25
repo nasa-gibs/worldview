@@ -6,8 +6,7 @@
       "tags": "cr m3-i3-m11",
       "group": "baselayers",
       "wrapadjacentdays": true,
-      "layergroup": "Corrected Reflectance",
-      "disableSmartHandoff": true
+      "layergroup": "Corrected Reflectance"
     }
   }
 }

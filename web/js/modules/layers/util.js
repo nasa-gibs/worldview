@@ -846,7 +846,7 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
-    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
+    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -926,7 +926,15 @@ const getLayerSpec = (attributes) => {
     }
     if (attr.id === 'disabled') {
       const values = util.toArray(attr.value.split(';'));
-      disabled = values;
+      const disabledArray = [];
+      lodashEach(values, (value, index) => {
+        if (value === '') {
+          disabledArray.push(undefined);
+        } else {
+          disabledArray.push(value);
+        }
+      });
+      disabled = disabledArray;
     }
 
     if (attr.id === 'max' && typeof attr.value === 'string') {
@@ -1367,6 +1375,7 @@ export const hasVectorLayers = (activeLayers) => {
  * @return {Boolean}
  */
 export const isVectorLayerClickable = (layer, mapRes, projId, isMobile) => {
+  if (layer.id && layer.id.includes('AERONET')) return true;
   if (!mapRes) return false;
   let resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
   if (resolutionBreakPoint) {

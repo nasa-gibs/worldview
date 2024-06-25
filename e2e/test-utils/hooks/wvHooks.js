@@ -68,10 +68,11 @@ const assertDefaultLayers = async (page, expectedLayerCount) => {
   const refLabels = page.locator('#active-Reference_Labels_15m')
   const refFeatures = page.locator('#active-Reference_Features_15m')
   const coastlines = page.locator('#active-Coastlines_15m')
+  const trueColorNOAA21 = page.locator('#active-VIIRS_NOAA21_CorrectedReflectance_TrueColor')
   const trueColorSNPP = page.locator('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor')
   const trueColorAqua = page.locator('#active-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const trueColorMODIS = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
-  const trueColorNOAA = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
+  const trueColorNOAA20 = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
   await expect(layerItem).toHaveCount(expectedLayerCount)
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
@@ -80,7 +81,8 @@ const assertDefaultLayers = async (page, expectedLayerCount) => {
     await expect(trueColorSNPP).toBeVisible()
     await expect(trueColorAqua).toBeVisible()
     await expect(trueColorMODIS).toBeVisible()
-    await expect(trueColorNOAA).toBeVisible()
+    await expect(trueColorNOAA20).toBeVisible()
+    await expect(trueColorNOAA21).toBeVisible()
   }
 }
 
@@ -177,12 +179,20 @@ const clickAndWait = async (page, locator) => {
   await page.waitForTimeout(200)
 }
 
+const closeModal = async (page) => {
+  const closeButton = page.locator('.modal-close-btn')
+  if (await closeButton.count() > 0) {
+    await closeButton.click()
+  }
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
   assertLayerOrdering,
   clickDownload,
   closeImageDownloadPanel,
+  closeModal,
   createAreaMeasurement,
   createDistanceMeasurement,
   dateSelectorMonthDay,

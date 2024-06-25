@@ -1,0 +1,21 @@
+{
+  "version": 8,
+  "name": "aeronet",
+  "sources": {
+    "AERONET_AOD_500NM": {
+      "type": "vector",
+      "tiles": [
+        "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3?year=2024&month=1&day=9&AOD15=1&AVG=10&if_no_html=1"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "AERONET_AOD_500NM_v1.01_STD",
+      "source": "AERONET_AOD_500NM",
+      "source-layer": "AERONET_AOD_500NM_v1.01_STD",
+      "source-description": "Default",
+      "type": "circle"
+    }
+  ]
+}

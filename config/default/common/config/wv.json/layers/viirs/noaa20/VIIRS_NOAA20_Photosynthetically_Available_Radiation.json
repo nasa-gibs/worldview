@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Photosynthetically_Available_Radiation": {
+      "id": "VIIRS_NOAA20_Photosynthetically_Available_Radiation",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Photosynthetically_Available_Radiation",
+      "tags": "par jpss-1",
+      "group": "overlays",
+      "layergroup": "Photosynthetically Available Radiation",
+      "wrapadjacentdays": true
+    }
+  }
+}

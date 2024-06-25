@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate": {
+      "id": "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
+      "description": "viirs/snpp/VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true
+    }
+  }
+}

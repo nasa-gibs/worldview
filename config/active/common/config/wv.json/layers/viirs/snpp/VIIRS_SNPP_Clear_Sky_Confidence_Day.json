@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Clear_Sky_Confidence_Day": {
+      "id": "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+      "description": "viirs/snpp/VIIRS_SNPP_Clear_Sky_Confidence_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Clear Sky Confidence",
+      "wrapadjacentdays": true
+    }
+  }
+}

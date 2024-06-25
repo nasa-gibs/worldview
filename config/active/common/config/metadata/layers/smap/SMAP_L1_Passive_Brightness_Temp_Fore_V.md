@@ -2,6 +2,6 @@ The Soil Moisture Active Passive (SMAP) "Uncorrected Brightness Temperature 36 k
 
 The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (passive), that together make global measurements of land surface soil moisture and freeze/thaw state. It is useful for monitoring and predicting natural hazards such as floods and droughts, understanding the linkages between Earth’s water, energy and carbon cycles, and reducing uncertainties in predicting weather and climate.
 
-References: SPL1CTB [doi: 10.5067/JJ5FL7FRLKJI](https://doi.org/10.5067/JJ5FL7FRLKJI)
+References: SPL1CTB [doi:10.5067/DV7IX2DQ681Y](https://doi.org/10.5067/DV7IX2DQ681Y)
 
 Data field: `cell_tb_v_fore`

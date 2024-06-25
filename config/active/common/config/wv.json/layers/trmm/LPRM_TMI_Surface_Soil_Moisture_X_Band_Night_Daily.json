@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "LPRM_TMI_Surface_Soil_Moisture_X_Band_Night_Daily": {
+      "id": "LPRM_TMI_Surface_Soil_Moisture_X_Band_Night_Daily",
+      "description": "trmm/LPRM_TMI_Surface_Soil_Moisture_X_Band_Night_Daily",
+      "tags": "trmm tmi",
+      "group": "overlays",
+      "layergroup": "Soil Moisture"
+    }
+  }
+}

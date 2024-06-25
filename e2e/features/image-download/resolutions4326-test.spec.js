@@ -5,7 +5,8 @@ const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
   clickDownload,
-  zoomIn
+  zoomIn,
+  closeModal
 } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
@@ -32,10 +33,10 @@ test.afterAll(async () => {
 })
 
 test('In geographic, top two zoom levels are 10km', async () => {
-  const { imageResolution, modalCloseButton } = selectors
+  const { imageResolution } = selectors
   const url = await joinUrl(startParams, null)
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   await openImageDownloadPanel(page)
   await expect(imageResolution).toHaveValue('40')
   await closeImageDownloadPanel(page)

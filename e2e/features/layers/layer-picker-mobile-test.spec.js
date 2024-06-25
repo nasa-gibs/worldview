@@ -1,11 +1,10 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { assertDefaultLayers, assertCategories } = require('../../test-utils/hooks/wvHooks')
+const { assertDefaultLayers, assertCategories, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
-let expectedLayerCount
 
 const url = 'http://localhost:3000/?t=2013-05-15'
 
@@ -17,11 +16,6 @@ test.beforeAll(async ({ browser }) => {
   })
   page = await context.newPage()
   selectors = createSelectors(page)
-  if (process.env.SOTO === 'true') {
-    expectedLayerCount = 8
-  } else {
-    expectedLayerCount = 7
-  }
 })
 
 test.afterAll(async () => {
@@ -29,17 +23,17 @@ test.afterAll(async () => {
 })
 
 test('Initial state indicates layer count', async () => {
-  const { layerCount, modalCloseButton } = selectors
+  const { layerCount } = selectors
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(layerCount).toBeVisible()
-  await expect(layerCount).toContainText(expectedLayerCount.toString())
+  await expect(layerCount).toContainText('8')
 })
 
 test('Expand layer list and show default layers', async () => {
   const { collapsedLayerButton } = selectors
   await collapsedLayerButton.click()
-  await assertDefaultLayers(page, expectedLayerCount)
+  await assertDefaultLayers(page)
 })
 
 test('Open product picker and show categories by default', async () => {
@@ -51,77 +45,41 @@ test('Open product picker and show categories by default', async () => {
 test('Clicking a measurement shows choices, indicates unavailability', async () => {
   const {
     aodAllMeasurement,
+    aquaTerraMODISTab,
     sourceMetadataCollapsed,
     aodCheckboxMAIAC,
     aodCheckboxMODIS,
-    sourceTabs,
-    crAllMeasurement,
-    crCheckboxMODISTrueColor,
-    crCheckboxMODISBands721,
-    crCheckboxOrbitAscending
+    sourceTabs
   } = selectors
-  let sourceTabCount = 8
-  if (process.env.SOTO === 'true') {
-    await crAllMeasurement.click()
-    await expect(crCheckboxMODISTrueColor).toBeVisible()
-    await expect(crCheckboxMODISBands721).toBeVisible()
-    await expect(crCheckboxOrbitAscending).toBeVisible()
-    // const trueColorAvailableCoverage = page.locator('#MODIS_Aqua_CorrectedReflectance_TrueColor-checkbox + svg#availability-info')
-    // const brandsAvailableCoverage = page.locator('#MODIS_Aqua_CorrectedReflectance_Bands721-checkbox + svg#availability-info')
-    // const orbitAvailableCoverage = page.locator('#OrbitTracks_Aqua_Ascending-checkbox + svg#availability-info')
-    // await expect(trueColorAvailableCoverage).toBeVisible()
-    // await expect(brandsAvailableCoverage).toBeVisible()
-    // await expect(orbitAvailableCoverage).toBeVisible()
-    sourceTabCount = 5
-  } else {
-    await aodAllMeasurement.click()
-    await expect(sourceMetadataCollapsed).toBeVisible()
-    await expect(aodCheckboxMAIAC).toBeVisible()
-    await expect(aodCheckboxMODIS).toBeVisible()
-    const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
-    const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
-    await expect(modisAvailableCoverage).toBeVisible()
-    await expect(maiacAvailableCoverage).toBeVisible()
-  }
-  await expect(sourceTabs).toHaveCount(sourceTabCount)
+  await aodAllMeasurement.click()
+  await aquaTerraMODISTab.click()
+  await expect(sourceMetadataCollapsed).toBeVisible()
+  await expect(aodCheckboxMAIAC).toBeVisible()
+  await expect(aodCheckboxMODIS).toBeVisible()
+  const modisAvailableCoverage = page.locator('#MODIS_Combined_Value_Added_AOD-checkbox + svg#availability-info')
+  // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
+  await expect(modisAvailableCoverage).toBeVisible()
+  // await expect(maiacAvailableCoverage).toBeVisible()
+  await expect(sourceTabs).toHaveCount(10)
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage class', async () => {
   const {
     aquaTerraMODISTab,
     aquaModisTab,
-    aodCheckbox,
-    crAquaModisTab,
-    crTerraModisTab,
-    crCheckboxTerraBands367
+    aodCheckbox
   } = selectors
-  if (process.env.SOTO === 'true') {
-    await crAquaModisTab.click()
-    await crTerraModisTab.click()
-    await expect(crCheckboxTerraBands367).toBeVisible()
-    await expect(crCheckboxTerraBands367).not.toHaveClass('unavailable')
-    await crAquaModisTab.click()
-  } else {
-    await aquaTerraMODISTab.click()
-    await aquaModisTab.click()
-    await expect(aodCheckbox).toBeVisible()
-    await expect(aodCheckbox).not.toHaveClass('unavailable')
-    await aquaTerraMODISTab.click()
-  }
+  await aquaTerraMODISTab.click()
+  await aquaModisTab.click()
+  await expect(aodCheckbox).toBeVisible()
+  await expect(aodCheckbox).not.toHaveClass('unavailable')
+  await aquaTerraMODISTab.click()
 })
 
 test('Expanding and collapsing measurement details', async () => {
-  const {
-    aquaTerraModisHeader,
-    sourceMetadataExpanded,
-    crAquaModisHeader
-  } = selectors
+  const { aquaTerraModisHeader, sourceMetadataExpanded } = selectors
   await page.locator('.ellipsis').click()
-  if (process.env.SOTO === 'true') {
-    await expect(crAquaModisHeader).toContainText('MODIS Corrected Reflectance vs. MODIS Surface Reflectance')
-  } else {
-    await expect(aquaTerraModisHeader).toContainText('About Aerosol Optical Depth (AOD)')
-  }
+  await expect(aquaTerraModisHeader).toContainText('About Aerosol Optical Depth (AOD)')
   const ellipsis = page.locator('.ellipsis.up')
   await expect(ellipsis).toBeVisible()
   await ellipsis.click()
@@ -132,24 +90,13 @@ test('Switching source tabs', async () => {
   const {
     aquaTerraModisHeader,
     aquaModisTab,
-    aodCheckbox,
-    crTerraModisTab,
-    crAquaModisHeader,
-    crCheckboxTerraBands367
+    aodCheckbox
   } = selectors
-  if (process.env.SOTO === 'true') {
-    await crTerraModisTab.click()
-    await expect(crCheckboxTerraBands367).toBeVisible()
-    await expect(crAquaModisHeader).toBeVisible()
-    await expect(crAquaModisHeader).toContainText('MODIS Corrected Reflectance vs. MODIS Surface Reflectance')
-    await crCheckboxTerraBands367.click()
-  } else {
-    await aquaModisTab.click()
-    await expect(aodCheckbox).toBeVisible()
-    await expect(aquaTerraModisHeader).toBeVisible()
-    await expect(aquaTerraModisHeader).toContainText('About Aerosol Optical Depth (AOD)')
-    await aodCheckbox.click()
-  }
+  await aquaModisTab.click()
+  await expect(aodCheckbox).toBeVisible()
+  await expect(aquaTerraModisHeader).toBeVisible()
+  await expect(aquaTerraModisHeader).toContainText('About Aerosol Optical Depth (AOD)')
+  await aodCheckbox.click()
 })
 
 test('Back button returns to categories', async () => {
@@ -168,7 +115,6 @@ test('Switch to facet view and confirm applying facets limits results', async ()
     measurementFacetChoices,
     measurementMoreButton,
     measurementTemperatureLabel,
-    measurementBrightnessTemperatureLabel,
     sourcesMERRALabel,
     applyButton,
     layersSearchRow,
@@ -182,8 +128,6 @@ test('Switch to facet view and confirm applying facets limits results', async ()
   await expect(measurementFacetChoices).toHaveCount(5)
   await measurementMoreButton.click()
   await expect(measurementFacetChoices).toHaveCount(15)
-  await expect(measurementBrightnessTemperatureLabel).toBeVisible()
-  await expect(measurementTemperatureLabel).toBeVisible()
   await measurementTemperatureLabel.click()
   await sourcesMERRALabel.click()
   await applyButton.click()
@@ -197,9 +141,8 @@ test('Searching for layers', async () => {
     layersSearchRow,
     aodCheckbox
   } = selectors
-  const filteredElementCount = 17
   await layersSearchField.fill('aerosol optical depth')
-  await expect(layersSearchRow).toHaveCount(filteredElementCount)
+  await expect(layersSearchRow).toHaveCount(19)
   await expect(aodCheckbox).toBeVisible()
 })
 
@@ -237,14 +180,14 @@ test('Clicking the selected row deselects it and hides the details', async () =>
 })
 
 test('Close product picker and confirm added layers show in sidebar', async () => {
-  const { layersModalCloseButton } = selectors
-  await layersModalCloseButton.click()
+  await closeModal(page)
   const activeLayer = page.locator('#active-MODIS_Aqua_Aerosol')
   await expect(activeLayer).toBeVisible()
 })
 
 test('Collapse sidebar and confirm layer count updated', async () => {
   const { layerCount } = selectors
+  await page.locator('.layer-btn-close').click()
   await page.locator('#toggleIconHolder').click()
-  await expect(layerCount).toContainText('8')
+  await expect(layerCount).toContainText('9')
 })

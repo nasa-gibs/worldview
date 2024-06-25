@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Land_Surface_Temp_Night": {
+      "id": "VIIRS_NOAA20_Land_Surface_Temp_Night",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Land_Surface_Temp_Night",
+      "tags": "jpss-1 jpss",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "version": 8,
+  "name": "OSCAR_Sea_Surface_Currents",
+  "sources": {
+    "OSCAR_Sea_Surface_Currents": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/OSCAR_Sea_Surface_Currents/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "OSCAR_Sea_Surface_Currents_v1_STD",
+      "source": "OSCAR_Sea_Surface_Currents",
+      "source-layer": "OSCAR_Sea_Surface_Currents_v1_STD",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": {
+          "base": 2,
+          "stops": [[12, 1], [22, 7]]
+        },
+        "circle-color": [
+          "case",
+          ["<", ["get", "Magnitude"], 0.10], "rgb(0, 41, 130)",
+          ["all", [">=", ["get", "Magnitude"], 0.10], ["<", ["get", "Magnitude"], 0.20]], "rgb(  0,  76, 101)",
+          ["all", [">=", ["get", "Magnitude"], 0.20], ["<", ["get", "Magnitude"], 0.30]], "rgb( 35, 119,  73)",
+          ["all", [">=", ["get", "Magnitude"], 0.30], ["<", ["get", "Magnitude"], 0.40]], "rgb( 60, 163,  40)",
+          ["all", [">=", ["get", "Magnitude"], 0.40], ["<", ["get", "Magnitude"], 0.50]], "rgb( 96, 177,   9)",
+          ["all", [">=", ["get", "Magnitude"], 0.50], ["<", ["get", "Magnitude"], 0.60]], "rgb(146, 153,   0)",
+          ["all", [">=", ["get", "Magnitude"], 0.60], ["<", ["get", "Magnitude"], 0.70]], "rgb(191, 132,   0)",
+          ["all", [">=", ["get", "Magnitude"], 0.70], ["<", ["get", "Magnitude"], 0.80]], "rgb(230, 111,   0)",
+          ["all", [">=", ["get", "Magnitude"], 0.80], ["<", ["get", "Magnitude"], 0.90]], "rgb(200,  77,   0)",
+          ["all", [">=", ["get", "Magnitude"], 0.90], ["<", ["get", "Magnitude"], 1.00]], "rgb(167,  43,   0)",
+          "rgb(135, 13, 0)"
+        ]
+      }
+    }
+  ]
+}

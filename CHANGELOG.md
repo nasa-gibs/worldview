@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Fix [issues/38](https://github.com/podaac/worldview/issues/38). Update to upstream 4.41.1 
 - Added SOTO git action workflow
 - Added SOTO npm e2e execution
 - Updated test cases for SOTO compatibility

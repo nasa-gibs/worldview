@@ -5,7 +5,8 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  switchProjections
+  switchProjections,
+  closeModal
 } = require('../../test-utils/hooks/wvHooks')
 
 let page
@@ -29,9 +30,9 @@ test.afterAll(async () => {
 })
 
 test('Check resolutions', async () => {
-  const { imageResolution, modalCloseButton } = selectors
+  const { imageResolution } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await openImageDownloadPanel(page)
   await expect(imageResolution).toContainText(expectedResolutions)
 })
@@ -60,9 +61,6 @@ test('Check arctic formats', async () => {
 })
 
 test('Check antarctic formats', async () => {
-  if (process.env.SOTO === 'true') {
-    test.skip(true, '2nd Polar change is hidden by something: <iframe src="about:blank" id="react-refresh-overlay"></iframe> intercepts pointer events')
-  }
   const { imageFormat } = selectors
   await closeImageDownloadPanel(page)
   await switchProjections(page, 'antarctic')

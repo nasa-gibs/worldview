@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation": {
+      "id": "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+      "description": "viirs/snpp/VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+      "tags": "par",
+      "group": "overlays",
+      "layergroup": "Photosynthetically Available Radiation",
+      "wrapadjacentdays": true
+    }
+  }
+}

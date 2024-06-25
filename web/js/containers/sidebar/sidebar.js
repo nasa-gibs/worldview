@@ -206,6 +206,7 @@ class Sidebar extends React.Component {
       isEmbedModeActive,
       selectedDate,
       isMobile,
+      isKioskModeActive,
     } = this.props;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
@@ -246,14 +247,22 @@ class Sidebar extends React.Component {
       };
 
     return (
-      <a
-        href={embedWVLogoLink}
-        title={WVLogoTitle}
-        id="wv-logo"
-        className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-        style={sidebarStyle}
-        onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-      />
+      isKioskModeActive ? (
+        <span
+          id="wv-logo"
+          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+          style={sidebarStyle}
+        />
+      ) : (
+        <a
+          href={embedWVLogoLink}
+          title={WVLogoTitle}
+          id="wv-logo"
+          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+          style={sidebarStyle}
+          onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
+        />
+      )
     );
   }
 

@@ -6,7 +6,8 @@ const { getAttribute } = require('../../test-utils/hooks/basicHooks')
 const {
   createDistanceMeasurement,
   createAreaMeasurement,
-  switchProjections
+  switchProjections,
+  closeModal
 } = require('../../test-utils/hooks/wvHooks')
 
 let page
@@ -27,11 +28,10 @@ test.afterAll(async () => {
 })
 
 test('Clicking the measure button opens the menu', async ({ browserName }) => {
-  const { modalCloseButton } = selectors
   test.skip(browserName === 'firefox', 'firefox pointer issue')
   const { measureMenu, measureBtn } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(measureMenu).not.toBeVisible()
   await measureBtn.click()
 })

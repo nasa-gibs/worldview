@@ -26,6 +26,8 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
     timeZone: 'America/New_York',
   };
 
+  const updateKioskModeTime = isKioskModeActive && subdaily;
+
   const isDaylightSavingsTime = getIsDaylightSavingsTime();
   const formatter = new Intl.DateTimeFormat('en-US', options);
   const dateParts = formatter.formatToParts(date);
@@ -40,10 +42,10 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
   const dfDay = util.pad(date.getUTCDate(), 2, '0');
   const dfHour = util.pad(date.getUTCHours(), 2, '0');
 
-  const year = isKioskModeActive ? kioskYear : dfYear;
-  const month = isKioskModeActive ? kioskMonth : dfMonth;
-  const day = isKioskModeActive ? kioskDay : dfDay;
-  const hour = isKioskModeActive ? kioskHour : dfHour;
+  const year = updateKioskModeTime ? kioskYear : dfYear;
+  const month = updateKioskModeTime ? kioskMonth : dfMonth;
+  const day = updateKioskModeTime ? kioskDay : dfDay;
+  const hour = updateKioskModeTime ? kioskHour : dfHour;
 
   const minutes = dateParts.find((part) => part.type === 'minute').value;
   const timeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';

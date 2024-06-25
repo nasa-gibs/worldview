@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Vegation Disturbance Status">
+    <Entries>
+      <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="255" />
+      <ColorMapEntry rgb="18,18,18" transparent="false" sourceValue="0" ref="0" />
+      <ColorMapEntry rgb="0,85,85" transparent="false" sourceValue="1" ref="1"/>
+      <ColorMapEntry rgb="137,127,78" transparent="false" sourceValue="2" ref="2"/>
+      <ColorMapEntry rgb="222,224,67" transparent="false" sourceValue="3" ref="3" />
+      <ColorMapEntry rgb="0,136,136" transparent="false" sourceValue="4" ref="4"/>
+      <ColorMapEntry rgb="228,135,39" transparent="false" sourceValue="5" ref="5"/>
+      <ColorMapEntry rgb="224,27,7" transparent="false" sourceValue="6" ref="6"/>
+      <ColorMapEntry rgb="119,119,119" transparent="false" sourceValue="7" ref="7"/>
+      <ColorMapEntry rgb="221,221,221" transparent="false" sourceValue="8" ref="8"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0,0,0" tooltip="No Data" id="255"/>
+      <LegendEntry rgb="18,18,18" tooltip="No Disturbance" id="0"/>
+      <LegendEntry rgb="0,85,85" tooltip="First Detection &lt; 50%" id="1"/>
+      <LegendEntry rgb="137,127,78" tooltip="Provisional &lt; 50%" id="2"/>
+      <LegendEntry rgb="222,224,67" tooltip="Confirmed &lt; 50%" id="3"/>
+      <LegendEntry rgb="0,136,136" tooltip="First Detection &gt;= 50%" id="4"/>
+      <LegendEntry rgb="228,135,39" tooltip="Provisional &gt;= 50%" id="5"/>
+      <LegendEntry rgb="224,27,7" tooltip="Confirmed &gt;= 50%" id="6"/>
+      <LegendEntry rgb="119,119,119" tooltip="Confirmed &lt; 50% finished" id="7"/>
+      <LegendEntry rgb="221,221,221" tooltip="Confirmed &gt;= 50% finished" id="8"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

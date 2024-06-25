@@ -9,6 +9,7 @@ import {
   SET_EIC_MEASUREMENT_COMPLETE,
   SET_EIC_MEASUREMENT_ABORTED,
   SET_TRAVELING_HYPERWALL,
+  SET_EIC_LEGACY,
 } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -88,5 +89,13 @@ export function setTravelMode(travelMode) {
   return {
     type: SET_TRAVELING_HYPERWALL,
     travelMode,
+  };
+}
+
+// Determines whether EIC mode should query backend (new EIC) or query data from the frontend (legacy)
+export function setEICLegacy(isLegacy) {
+  return {
+    type: SET_EIC_LEGACY,
+    isLegacy,
   };
 }

@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { assertCategories } = require('../../test-utils/hooks/wvHooks')
+const { assertCategories, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -23,9 +23,9 @@ test.afterAll(async () => {
 })
 
 test('Layer picker shows categories when first opened', async () => {
-  const { addLayers, collapsedLayerButton, modalCloseButton } = selectors
+  const { addLayers, collapsedLayerButton } = selectors
   await page.goto(url)
-  await modalCloseButton.click()
+  await closeModal(page)
   await collapsedLayerButton.click()
   await addLayers.click()
   await assertCategories(page)

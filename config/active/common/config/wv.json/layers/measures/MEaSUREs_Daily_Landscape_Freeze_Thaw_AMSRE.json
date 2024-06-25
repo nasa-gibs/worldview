@@ -11,7 +11,7 @@
         }
       },
       "palette": {
-        "immutable": true
+        "immutable": false
       }
     }
   }

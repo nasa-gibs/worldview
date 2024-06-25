@@ -1,9 +1,9 @@
 {
     "measurements": {
-        "Chlorophyll A": {
+        "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, PACE/OCI, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI, OrbView-2/SeaWiFS",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -12,7 +12,6 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_L2_Chlorophyll_A",
-                        "MODIS_Terra_Chlorophyll_A",
                         "OrbitTracks_Terra_Descending"
                     ]
                 },
@@ -23,8 +22,37 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_L2_Chlorophyll_A",
-                        "MODIS_Aqua_Chlorophyll_A",
                         "OrbitTracks_Aqua_Ascending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Chlorophyll_a",
+                        "OrbitTracks_NOAA-21_Ascending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Chlorophyll_a",
+                        "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
+                "PACE/OCI": {
+                    "id": "pace-oci",
+                    "title": "PACE/OCI",
+                    "description": "oci/oci",
+                    "image": "",
+                    "settings": [
+                        "OCI_PACE_Chlorophyll_a",
+                        "OrbitTracks_PACE_Ascending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
@@ -35,6 +63,33 @@
                     "settings": [
                         "VIIRS_SNPP_L2_Chlorophyll_A",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "Sentinel-3A/OLCI": {
+                    "id": "sentinel-3a-olci",
+                    "title": "Sentinel-3A/OLCI",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "S3A_OLCI_Chlorophyll_a"
+                    ]
+                },
+                "Sentinel-3B/OLCI": {
+                    "id": "sentinel-3b-olci",
+                    "title": "Sentinel-3B/OLCI",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "S3B_OLCI_Chlorophyll_a"
+                    ]
+                },
+                "OrbView-2/SeaWiFS": {
+                    "id": "orbview-2-seawifs",
+                    "title": "OrbView-2/SeaWiFS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a"
                     ]
                 }
             }

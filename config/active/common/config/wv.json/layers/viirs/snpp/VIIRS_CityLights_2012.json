@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_CityLights_2012": {
+      "id": "VIIRS_CityLights_2012",
+      "description": "viirs/snpp/VIIRS_CityLights_2012",
+      "tags": "night lights city lights urban snpp s-npp nighttime",
+      "layergroup": "Earth at Night",
+      "group": "baselayers",
+      "wrapX": true
+    }
+  }
+}

@@ -344,7 +344,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     }
 
     [palObj, minObj, maxObj, squashObj, disabledObj].forEach((obj) => {
-      if (obj.isActive) {
+      if (obj.isActive || (obj.key === 'disabled' && obj.value !== '')) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
           value: obj.value,

@@ -9,7 +9,7 @@
       <LegendEntry rgb="255,255,255" tooltip="No Data" id="0"/>
     </Legend>
   </ColorMap>
-  <ColorMap title="Economic Risk" units="Decile">
+  <ColorMap title="Mortality Risk" units="Decile">
     <Entries>
       <ColorMapEntry rgb="255,255,204" transparent="false" sourceValue="[1]" value="[1]" ref="1"/>
       <ColorMapEntry rgb="255,237,160" transparent="false" sourceValue="[2]" value="[2]" ref="2"/>

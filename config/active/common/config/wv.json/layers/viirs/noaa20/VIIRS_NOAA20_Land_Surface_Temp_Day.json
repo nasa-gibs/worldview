@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Land_Surface_Temp_Day": {
+      "id": "VIIRS_NOAA20_Land_Surface_Temp_Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Land_Surface_Temp_Day",
+      "tags": "jpss-1 jpss",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

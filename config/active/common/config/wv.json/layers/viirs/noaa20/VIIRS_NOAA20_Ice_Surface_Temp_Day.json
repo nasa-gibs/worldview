@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Ice_Surface_Temp_Day": {
+      "id": "VIIRS_NOAA20_Ice_Surface_Temp_Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Ice_Surface_Temp_Day",
+      "tags": "jpss jpss-1",
+      "group": "overlays",
+      "layergroup": "Ice Surface Temperature",
+      "wrapadjacentdays": true
+    }
+  }
+}

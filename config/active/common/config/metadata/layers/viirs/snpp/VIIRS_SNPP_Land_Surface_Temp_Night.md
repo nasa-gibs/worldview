@@ -1,0 +1,7 @@
+The Land Surface Temperature (Night) layer shows the temperature of the land surface in Kelvin (K), from the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite.
+
+The VJ121 product is developed synergistically with the Moderate Resolution Imaging Spectroradiometer (MODIS) LST&E Version 6.1 product (MOD21) using the same input atmospheric products and algorithmic approach based on the ASTER Temperature Emissivity Separation (TES) technique. The VJ121 product uses a physics-based algorithm to dynamically retrieve both the Land Surface Temperature (LST) and emissivity simultaneously for VIIRS thermal infrared bands M14 (8.55 µm), M15 (10.76 µm), and M16 (12 µm). The TES algorithm is combined with an improved Water Vapor Scaling (WVS) atmospheric correction scheme to stabilize the retrieval during very warm and humid conditions. The overall objective for NASA VIIRS products is to ensure the algorithms and products are compatible with the MODIS Terra and Aqua algorithms to promote the continuity of the Earth Observation System (EOS) mission.
+
+The Land Surface Temperature layer is available from both the joint NASA/NOAA Suomi NPP (VNP21) and NOAA-20 (VJ121) satellites. The sensor resolution is 750 m, imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: VNP21_NRT [doi:10.5067/VIIRS/VNP21_NRT.002](https://doi.org/10.5067/VIIRS/VNP21_NRT.002); VNP21 [doi:10.5067/VIIRS/VNP21.002](https://doi.org/10.5067/VIIRS/VNP21.002)

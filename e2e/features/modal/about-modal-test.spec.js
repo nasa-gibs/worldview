@@ -2,6 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
+const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -22,9 +23,8 @@ test.afterAll(async () => {
 })
 
 test('About modal not open when URL param not present', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(skipTour)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(aboutPage).not.toBeVisible()
 })
 
@@ -38,8 +38,6 @@ test('Opening about modal from menu sets URL param', async () => {
 })
 
 test('About modal is open when URL param is present', async () => {
-  const { modalCloseButton } = selectors
   await page.goto(aboutOpenURL)
-  await modalCloseButton.click()
   await expect(aboutPage).toBeVisible()
 })

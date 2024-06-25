@@ -1,0 +1,21 @@
+{
+  "version": 8,
+  "name": "aeronet",
+  "sources": {
+    "DAILY_AERONET_ANGSTROM_440-870NM": {
+      "type": "vector",
+      "tiles": [
+        "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3?year=2024&month=1&day=9&AOD15=1&AVG=20&if_no_html=1"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "DAILY_AERONET_ANGSTROM_440-870NM_v1.01_STD",
+      "source": "DAILY_AERONET_ANGSTROM_440-870NM",
+      "source-layer": "DAILY_AERONET_ANGSTROM_440-870NM_v1.01_STD",
+      "source-description": "Default",
+      "type": "circle"
+    }
+  ]
+}

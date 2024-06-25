@@ -1,0 +1,1 @@
+The heavy rainfall and snow helped to replenish ground water in California, which had been in a drought for the past three years. A drastic increase in the root zone soil moisture is evident when comparing Nov. 19 2022 and Apr. 6, 2023.

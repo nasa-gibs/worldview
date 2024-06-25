@@ -1,0 +1,53 @@
+{
+  "layers": {
+    "OrbitTracks_Sentinel-3B_Descending": {
+      "id": "OrbitTracks_Sentinel-3B_Descending",
+      "description": "reference/orbits/OrbitTracks_Sentinel-3B_Descending",
+      "tags": "tracks day vector",
+      "group": "overlays",
+      "type": "vector",
+      "period": "daily",
+      "wrapadjacentdays": true,
+      "layergroup": "Orbital Track",
+      "track": "descending",
+      "associatedLayers": ["OrbitTracks_Sentinel-3B_Ascending"],
+      "palette": {
+        "id": "OrbitTracks_Sentinel-3B_Descending",
+        "immutable": true
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "vectorStyle": {
+        "id": "OrbitTracks_Sentinel-3B_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_Sentinel-3B_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Sentinel-3B_Descending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_Sentinel-3B_Descending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:antarctic"
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
+    }
+  }
+}

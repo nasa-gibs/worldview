@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive } = require('../../test-utils/global-variables/querystrings')
-const { timelineDrag, dateSelectorMonthDay } = require('../../test-utils/hooks/wvHooks')
+const { timelineDrag, dateSelectorMonthDay, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -19,9 +19,9 @@ test.afterAll(async () => {
 })
 
 test('Verify that A|B draggers are visible', async () => {
-  const { draggerA, draggerB, modalCloseButton } = selectors
+  const { draggerA, draggerB } = selectors
   await page.goto(swipeAndAIsActive)
-  await modalCloseButton.click()
+  await closeModal(page)
   await expect(draggerA).toBeVisible()
   await expect(draggerB).toBeVisible()
 })
