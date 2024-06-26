@@ -1,4 +1,4 @@
-# [Worldview](https://worldview.earthdata.nasa.gov)
+# [NASA Worldview](https://worldview.earthdata.nasa.gov)
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
@@ -8,7 +8,7 @@ Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
-This app from NASA's [EOSDIS](https://earthdata.nasa.gov/) provides the
+This app from NASA's [ESDIS](https://www.earthdata.nasa.gov/esdis) provides the
 capability to interactively browse over 1000 global, full-resolution satellite
 imagery layers on desktop and mobile devices. Many of the imagery layers are
 updated daily and are within three hours of observation - showing the entire Earth as it is
@@ -39,7 +39,7 @@ cd worldview
 npm ci
 ```
 
-View the [Configuration](doc/config/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
+View the [Configuration](doc/config/configuration.md) section for information on how to install the official NASA Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
 
