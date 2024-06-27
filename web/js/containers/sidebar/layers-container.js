@@ -13,10 +13,8 @@ import {
 } from '../../modules/layers/selectors';
 import {
   reorderOverlayGroups as reorderOverlayGroupsAction,
-  toggleOverlayGroups as toggleOverlayGroupsAction,
   toggleGroupCollapsed as toggleGroupCollapsedAction,
 } from '../../modules/layers/actions';
-import Checkbox from '../../components/util/checkbox';
 import util from '../../util/util';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
@@ -36,7 +34,6 @@ function LayersContainer (props) {
     overlays,
     reorderOverlayGroups,
     toggleCollapse,
-    toggleOverlayGroups,
   } = props;
 
   const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);
@@ -162,18 +159,6 @@ function LayersContainer (props) {
           )}
         </div>
       </div>
-      { !isEmbedModeActive && (
-        <div className="product-buttons">
-          <div className="layers-add-container">
-            <Checkbox
-              id="group-overlays-checkbox"
-              checked={groupOverlays}
-              onCheck={toggleOverlayGroups}
-              label="Group Similar Layers"
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 }
@@ -181,10 +166,9 @@ function LayersContainer (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    compare, charting, embed, layers, animation, screenSize,
+    compare, embed, layers, animation, screenSize,
   } = state;
   const isCompareActive = compare.active;
-  const isChartingActive = charting.active;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const { groupOverlays } = layers[compareState];
@@ -201,9 +185,10 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isAnimating: animation.isPlaying,
     isCompareActive,
-    isChartingActive,
     isEmbedModeActive,
     isMobile,
+    breakpoints: screenSize.breakpoints,
+    screenWidth: screenSize.screenWidth,
     baselayers,
     overlays,
     overlayGroups,
@@ -215,11 +200,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
   reorderOverlayGroups: (layers, groups) => {
     dispatch(reorderOverlayGroupsAction(layers, groups));
-  },
-  toggleOverlayGroups: () => {
-    setTimeout(() => {
-      dispatch(toggleOverlayGroupsAction());
-    });
   },
   toggleCollapse: (groupName, collapsed) => {
     dispatch(toggleGroupCollapsedAction(groupName, collapsed));
@@ -255,14 +235,12 @@ LayersContainer.propTypes = {
   isActive: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isCompareActive: PropTypes.bool,
-  isChartingActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,
   reorderOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
-  toggleOverlayGroups: PropTypes.func,
   breakpoints: PropTypes.object,
   isPlaying: PropTypes.bool,
   screenWidth: PropTypes.number,
