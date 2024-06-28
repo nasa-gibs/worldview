@@ -48,7 +48,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
   const hour = updateKioskModeTime ? kioskHour : dfHour;
 
   const minutes = dateParts.find((part) => part.type === 'minute').value;
-  const timeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';
+  const timeZoneLabel = updateKioskModeTime ? isDaylightSavingsTime ? 'EDT' : 'EST' : 'UTC';
 
   return (
     <>
