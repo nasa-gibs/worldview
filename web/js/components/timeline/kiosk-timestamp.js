@@ -36,6 +36,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
   const kioskMonth = dateParts.find((part) => part.type === 'month').value.slice(0, 3);
   const kioskDay = dateParts.find((part) => part.type === 'day').value;
   const kioskHour = dateParts.find((part) => part.type === 'hour').value;
+  const kioskTimeZoneLabel = isDaylightSavingsTime ? 'EDT' : 'EST';
 
   const dfYear = date.getUTCFullYear();
   const dfMonth = MONTH_STRING_ARRAY[date.getUTCMonth()];
@@ -48,7 +49,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
   const hour = updateKioskModeTime ? kioskHour : dfHour;
 
   const minutes = dateParts.find((part) => part.type === 'minute').value;
-  const timeZoneLabel = updateKioskModeTime ? isDaylightSavingsTime ? 'EDT' : 'EST' : 'UTC';
+  const timeZoneLabel = updateKioskModeTime ? kioskTimeZoneLabel : 'UTC';
 
   return (
     <>
