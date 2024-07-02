@@ -6,7 +6,7 @@
                 href="https://search.earthdata.nasa.gov/">Earthdata Search</a> for a full listing of available data
         products.</p>
 <p>Near real-time imagery is courtesy of the<a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time"
-                target="_blank" rel="noopener noreferrer"> Land, Atmosphere Near Real-Time Capability for EOS (LANCE)
+                target="_blank" rel="noopener noreferrer"> Land, Atmosphere Near Real-Time Capability for Eo (LANCE)
         </a>data providers:
 </p>
 <ul>
@@ -35,7 +35,7 @@
                         rel="noopener noreferrer">FIRMS</a> </li>
 </ul>
 <p>Standard quality/ Science quality imagery is courtesy of the <a href="https://earthdata.nasa.gov/eosdis/daacs"
-                target="_blank" rel="noopener noreferrer">EOSDIS Distributed Active Archive Centers (DAACs)</a>:</p>
+                target="_blank" rel="noopener noreferrer">ESDIS Distributed Active Archive Centers (DAACs)</a>:</p>
 <ul>
         <li>Atmospheric layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank"
                         rel="noopener noreferrer">ASDC DAAC</a></li>

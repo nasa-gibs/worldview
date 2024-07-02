@@ -7,7 +7,7 @@
 </div>
 <p>This <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source
         code</a> app from NASA's <a href="https://earthdata.nasa.gov/eosdis" target="_blank"
-        rel="noopener noreferrer">EOSDIS</a> provides the capability to interactively browse over 1000 global,
+        rel="noopener noreferrer">ESDIS</a> provides the capability to interactively browse over 1000 global,
     full-resolution satellite imagery layers and then download the underlying data. Many of the imagery layers are
     updated daily and are available within three hours of observation - essentially showing the entire Earth as it
     looks "right now". This supports time-critical application areas such as wildfire management, air quality
