@@ -68,7 +68,7 @@ function UpdateCollections () {
       const layerInCollections = collections[layer.id];
       if (!layerInCollections) return true; // Layer not in collections, needs to be updated
 
-      const collectionDate = layerInCollections.dates.some((d) => d.date === date);
+      const collectionDate = layerInCollections.dates.some((d) => d.date === date && d.projection === proj.id);
 
       return !collectionDate || forceUpdate; // If date exists in layer collection, don't query layer
     });
