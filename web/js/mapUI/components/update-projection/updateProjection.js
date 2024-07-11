@@ -366,10 +366,6 @@ function UpdateProjection(props) {
     const prevRenderedPalettesKeys = Object.keys(prevRenderedPalettes);
     const renderedPalettesKeys = Object.keys(renderedPalettes);
     if (prevRenderedPalettesKeys.length === renderedPalettesKeys.length) return;
-    const previousRenderedPalettesSet = new Set(prevRenderedPalettesKeys);
-    const currentRenderedPalettesSet = new Set(renderedPalettesKeys);
-    const difference = currentRenderedPalettesSet.symmetricDifference(previousRenderedPalettesSet);
-    if (!Array.from(difference).some((diff) => diff.includes('AERONET'))) return;
     reloadLayers(null, false);
   }, [renderedPalettes]);
 
