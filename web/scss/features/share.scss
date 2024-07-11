@@ -49,6 +49,10 @@
   height: 108px;
 }
 
+.share-body-tall {
+  height: 148px;
+}
+
 .share-nav-container {
   .input-group {
     padding-top: 10px;
@@ -61,7 +65,7 @@
   }
 
   .share-tab-embed {
-    p {
+    p:first-of-type {
       padding: 10px 1px;
     }
   }
@@ -108,13 +112,13 @@
   }
 }
 
-#feedback-url {
+#feedback-url, #api-doc-url {
   cursor: pointer;
   text-decoration: none;
   color: #7bf;
 }
 
-#feedback-url:hover {
+#feedback-url:hover, #api-doc-url:hover {
   text-decoration: underline;
   color: #7bf !important;
 }

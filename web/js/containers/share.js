@@ -305,6 +305,13 @@ class ShareLinkContainer extends Component {
               {' '}
               to enable Worldview embedding on your website.
             </p>
+            <p>
+              View the
+              {' '}
+              <a href="https://nasa-gibs.github.io/gibs-api-docs/" target="_blank" rel="noopener noreferrer" id="api-doc-url">API documentation</a>
+              {' '}
+              to learn how to directly access the imagery via GIBS.
+            </p>
           </>
         )}
       </TabPane>
@@ -342,7 +349,7 @@ class ShareLinkContainer extends Component {
     } = this.state;
 
     return (
-      <div className="share-body">
+      <div className={`share-body${activeTab === 'embed' ? ' share-body-tall' : ''}`}>
         <ShareToolTips
           activeTab={activeTab}
           tooltipErrorTime={tooltipErrorTime}
