@@ -109,7 +109,7 @@
     "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-react": "^7.34.3",
     "express": "^4.19.2",
-    "glob": "^10.4.2",
+    "glob": "^11.0.0",
     "husky": "^9.0.11",
     "jest": "^29.7.0",
     "jest-canvas-mock": "^2.5.2",
