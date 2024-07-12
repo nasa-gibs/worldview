@@ -13,10 +13,9 @@ import {
   TabContent, TabPane,
 } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
 import {
-  getPermalink, getShareLink, wrapWithIframe,
+  getPermalink, wrapWithIframe,
 } from '../modules/link/util';
 import onClickFeedback from '../modules/feedback/util';
 import initFeedback from '../modules/feedback/actions';
@@ -39,8 +38,8 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const DESKTOP_SHARE_TABS = ['link', 'embed', 'social'];
-const MOBILE_SHARE_TABS = ['link', 'social'];
+const DESKTOP_SHARE_TABS = ['link', 'embed', 'citation'];
+const MOBILE_SHARE_TABS = ['link', 'citation'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -142,34 +141,6 @@ class ShareLinkContainer extends Component {
     return getPermalink(queryString, selectedDate, isEmbed);
   };
 
-  onLinkClick = (type) => {
-    const permalink = this.getPermalink();
-    let shareLink = getShareLink(type, permalink);
-
-    googleTagManager.pushEvent({
-      event: 'share_social_platform',
-      social_type: type,
-    });
-
-    // If a short link can be generated, replace the full link.
-    if (type === 'twitter') {
-      const newTab = window.open('', '_blank');
-      this.getShortLink().then(({ link }) => {
-        shareLink = getShareLink(type, link);
-      }).finally(() => {
-        newTab.location = shareLink;
-      });
-    } else if (type === 'email') {
-      this.getShortLink().then(({ link }) => {
-        shareLink = getShareLink(type, link);
-      }).finally(() => {
-        window.location = shareLink;
-      });
-    } else {
-      window.open(shareLink, '_blank');
-    }
-  };
-
   setActiveTab = (activeTab) => {
     this.setState({ activeTab });
   };
@@ -228,6 +199,27 @@ class ShareLinkContainer extends Component {
         value={value}
         name={`permalink-content-${type}`}
         id={`permalink-content-${type}`}
+        onChange={(e) => {
+          e.preventDefault();
+        }}
+      />
+      <Button
+        id={`copy-to-clipboard-button-${type}`}
+        onClick={() => this.copyToClipboard(value)}
+        onTouchEnd={() => this.copyToClipboard(value)}
+      >
+        COPY
+      </Button>
+    </InputGroup>
+  );
+
+  renderTextareaGroup = (value, type) => (
+    <InputGroup>
+      <textarea
+        value={value}
+        name={`permalink-content-${type}`}
+        id={`permalink-content-${type}`}
+        className="form-control"
         onChange={(e) => {
           e.preventDefault();
         }}
@@ -311,23 +303,17 @@ class ShareLinkContainer extends Component {
     );
   };
 
-  renderSocialTab = () => {
-    const { isMobile } = this.props;
+  renderCitationTab = () => {
     const {
       activeTab,
     } = this.state;
+    const citationValue = 'We acknowledge the use of imagery from the NASA Worldview application (https://worldview.earthdata.nasa.gov), part of the NASA Earth Science Data and Information System (ESDIS).';
 
     return (
-      <TabPane tabId="social" className="share-tab-social">
-        {activeTab === 'social' && (
+      <TabPane tabId="citation" className="share-tab-citation">
+        {activeTab === 'citation' && (
           <>
-            <ShareLinks
-              isMobile={isMobile}
-              onClick={this.onLinkClick}
-            />
-            <p>
-              Share @NAME@ on social media.
-            </p>
+            {this.renderTextareaGroup(citationValue, 'citation')}
           </>
         )}
       </TabPane>
@@ -353,7 +339,7 @@ class ShareLinkContainer extends Component {
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
             {this.renderEmbedTab()}
-            {this.renderSocialTab()}
+            {this.renderCitationTab()}
           </TabContent>
         </div>
       </div>
