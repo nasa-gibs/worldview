@@ -38,8 +38,8 @@ const getShortenRequestString = (mock, permalink) => {
   );
 };
 
-const DESKTOP_SHARE_TABS = ['link', 'embed', 'citation'];
-const MOBILE_SHARE_TABS = ['link', 'citation'];
+const DESKTOP_SHARE_TABS = ['link', 'embed', 'cite-us'];
+const MOBILE_SHARE_TABS = ['link', 'cite-us'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -303,17 +303,17 @@ class ShareLinkContainer extends Component {
     );
   };
 
-  renderCitationTab = () => {
+  renderCiteUsTab = () => {
     const {
       activeTab,
     } = this.state;
-    const citationValue = 'We acknowledge the use of imagery from the NASA Worldview application (https://worldview.earthdata.nasa.gov), part of the NASA Earth Science Data and Information System (ESDIS).';
+    const citeUsValue = 'We acknowledge the use of imagery from the NASA Worldview application (https://worldview.earthdata.nasa.gov), part of the NASA Earth Science Data and Information System (ESDIS).';
 
     return (
-      <TabPane tabId="citation" className="share-tab-citation">
-        {activeTab === 'citation' && (
+      <TabPane tabId="cite-us" className="share-tab-cite-us">
+        {activeTab === 'cite-us' && (
           <>
-            {this.renderTextareaGroup(citationValue, 'citation')}
+            {this.renderTextareaGroup(citeUsValue, 'cite-us')}
           </>
         )}
       </TabPane>
@@ -339,7 +339,7 @@ class ShareLinkContainer extends Component {
           <TabContent activeTab={activeTab}>
             {this.renderLinkTab()}
             {this.renderEmbedTab()}
-            {this.renderCitationTab()}
+            {this.renderCiteUsTab()}
           </TabContent>
         </div>
       </div>
