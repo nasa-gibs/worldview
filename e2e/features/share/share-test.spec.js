@@ -29,12 +29,12 @@ test('Clicking the share link button opens the share dialog', async () => {
   await expect(shareToolbar).toBeVisible()
 })
 
-test('Share tabs link and citation are visible and enabled', async () => {
+test('Share tabs link and cite us are visible and enabled', async () => {
   const linkShareNav = await page.locator('.link-share-nav')
-  const citationShareNav = await page.locator('.citation-share-nav')
+  const citeUsShareNav = await page.locator('.cite-us-share-nav')
   const linkShareActive = await page.locator('.link-share-nav a')
   await expect(linkShareNav).toBeVisible()
-  await expect(citationShareNav).toBeVisible()
+  await expect(citeUsShareNav).toBeVisible()
   await expect(linkShareActive).toHaveClass(/active/)
 })
 
