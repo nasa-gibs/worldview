@@ -363,7 +363,9 @@ function UpdateProjection(props) {
 
   useEffect(() => {
     if (!ui.selected) return;
-    if (Object.keys(prevRenderedPalettes).length === Object.keys(renderedPalettes).length) return;
+    const prevRenderedPalettesKeys = Object.keys(prevRenderedPalettes);
+    const renderedPalettesKeys = Object.keys(renderedPalettes);
+    if (prevRenderedPalettesKeys.length === renderedPalettesKeys.length) return;
     reloadLayers(null, false);
   }, [renderedPalettes]);
 

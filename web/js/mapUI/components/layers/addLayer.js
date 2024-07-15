@@ -51,7 +51,12 @@ function AddLayer(props) {
       compareMapUi.create(ui.selected, mode);
     } else {
       const newLayer = await createLayer(def);
-      ui.selected.getLayers().insertAt(index, newLayer);
+      const layers = ui.selected.getLayers();
+      if (index <= layers.getLength()) {
+        layers.insertAt(index, newLayer);
+      } else {
+        layers.push(newLayer);
+      }
     }
     updateLayerVisibilities();
     preloadNextTiles();
