@@ -26,6 +26,6 @@
     mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind, and several other
     clients. We encourage interested developers to build their own clients or integrate NASA imagery into their
     existing ones using these services.</p>
-<p><a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently
-        Asked Questions</a></p>
+<p>View the <a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently
+        Asked Questions</a> and visit the <a href="https://earthdata.nasa.gov/worldview/worldview-image-archive">Worldview Image of the Week</a> archive which uses data and imagery available in Worldview to highlight recent events, hazards, and disasters.</p>
 <hr>
