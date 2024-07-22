@@ -108,7 +108,9 @@ async function main (url) {
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   for (const layerId of layerOrder) {
-    await getMetadata(layerId, url)
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
+      await getMetadata(layerId, url)
+    }
   }
 
   const layers = Object.keys(layerMetadata).sort().reduce(
