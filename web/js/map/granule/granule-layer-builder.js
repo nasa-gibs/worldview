@@ -2,7 +2,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import { throttle as lodashThrottle } from 'lodash';
 import OlCollection from 'ol/Collection';
 import { DEFAULT_NUM_GRANULES } from '../../modules/layers/constants';
-import { updateGranuleLayerState, addGranuleLayerGranules } from '../../modules/layers/actions';
+import { updateGranuleLayerState, addGranuleDateRanges } from '../../modules/layers/actions';
 import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
@@ -306,7 +306,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (def.cmrAvailability) {
       if (!def.granuleDateRanges) {
         granuleDateRanges = await getLayerGranuleRanges(def);
-        store.dispatch(addGranuleLayerGranules(def, granuleDateRanges));
+        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
       } else {
         granuleDateRanges = def.granuleDateRanges;
       }

@@ -22,7 +22,7 @@ import {
   REMOVE_GROUP,
   UPDATE_DDV_LAYER,
   UPDATE_COLLECTION,
-  ADD_GRANULE_LAYER_GRANULES,
+  ADD_GRANULE_DATE_RANGES,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -297,7 +297,7 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    case ADD_GRANULE_LAYER_GRANULES: {
+    case ADD_GRANULE_DATE_RANGES: {
       const {
         granuleDateRanges,
       } = action;

@@ -33,7 +33,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
-  ADD_GRANULE_LAYER_GRANULES,
+  ADD_GRANULE_DATE_RANGES,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -347,14 +347,14 @@ export function updateGranuleLayerState(layer) {
   };
 }
 
-export function addGranuleLayerGranules(layer, granuleDateRanges) {
+export function addGranuleDateRanges(layer, granuleDateRanges) {
   return (dispatch, getState) => {
     const state = getState();
     const { activeString } = state.compare;
     const { id } = layer;
 
     dispatch({
-      type: ADD_GRANULE_LAYER_GRANULES,
+      type: ADD_GRANULE_DATE_RANGES,
       activeString,
       id,
       granuleDateRanges,
