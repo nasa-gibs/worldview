@@ -33,6 +33,7 @@ import {
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
+  ADD_GRANULE_LAYER_GRANULES,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -343,6 +344,21 @@ export function updateGranuleLayerState(layer) {
       dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
     }
     dispatch(addGranuleLayerDates(layer, granuleFootprints, `${subtitle}`));
+  };
+}
+
+export function addGranuleLayerGranules(layer, granuleDateRanges) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { activeString } = state.compare;
+    const { id } = layer;
+
+    dispatch({
+      type: ADD_GRANULE_LAYER_GRANULES,
+      activeString,
+      id,
+      granuleDateRanges,
+    });
   };
 }
 
