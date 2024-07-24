@@ -33,7 +33,9 @@ import {
   createVectorUrl,
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
+  getLayerGranuleRanges,
 } from './util';
+import { addGranuleDateRanges } from '../modules/layers/actions';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -1033,6 +1035,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const proj = state.proj.selected;
     const {
       breakPointLayer,
+      cmrAvailability,
       id,
       opacity,
       period,
@@ -1045,6 +1048,17 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
+    let granuleDateRanges = null;
+
+    // if opted in to CMR availability, get granule date ranges if needed
+    if (cmrAvailability) {
+      if (!def.granuleDateRanges) {
+        granuleDateRanges = await getLayerGranuleRanges(def);
+        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
+      } else {
+        granuleDateRanges = def.granuleDateRanges;
+      }
+    }
 
     if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);
