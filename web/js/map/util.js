@@ -335,7 +335,7 @@ async function requestGranules(params) {
   /* eslint-disable no-await-in-loop */
   do { // run the query at least once
     const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
-    const res = await fetch(url, { headers, cache: 'force-cache' });
+    const res = await fetch(url, { headers });
     searchAfter = res.headers.get('Cmr-Search-After');
     hits = parseInt(res.headers.get('Cmr-Hits'), 10);
     const data = await res.json();
