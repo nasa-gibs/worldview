@@ -14,7 +14,7 @@
       "vectorStyle": {
         "id": "DAILY_AERONET_AOD_500NM"
       },
-      "wrapX": true,
+      "wrapX": false,
       "projections": {
         "geographic": {
           "source": "AERONET"
