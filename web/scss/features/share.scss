@@ -1,9 +1,9 @@
 .share-body {
   height: 108px;
-}
 
-.share-body-tall {
-  height: 148px;
+  &.tall {
+    height: 148px;
+  }
 }
 
 .share-nav-container {

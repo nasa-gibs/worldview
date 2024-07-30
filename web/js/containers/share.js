@@ -335,7 +335,7 @@ class ShareLinkContainer extends Component {
     } = this.state;
 
     return (
-      <div className={`share-body${activeTab === 'embed' ? '-tall' : ''}`}>
+      <div className={`share-body${activeTab === 'embed' ? ' tall' : ''}`}>
         <ShareToolTips
           activeTab={activeTab}
           tooltipErrorTime={tooltipErrorTime}
