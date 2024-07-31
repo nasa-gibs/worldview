@@ -22,7 +22,7 @@
           "dateInterval": "60"
         }
       ],
-      "wrapX": true,
+      "wrapX": false,
       "projections": {
         "geographic": {
           "source": "AERONET"
