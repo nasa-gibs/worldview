@@ -1,4 +1,4 @@
-The SeaWiFS Corrected Reflectance (True Color) layer provides true-color or natural color images because the combination of wavelengths produces and image that is similar to what the human eye would see. The images are natural-looking images of land surface, oceanic and atmospheric features.
+The SeaWiFS Corrected Reflectance (True Color) layer provides true-color or natural color images because the combination of wavelengths produces an image that is similar to what the human eye would see. The images are natural-looking images of land surface, oceanic and atmospheric features.
 
 The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2 (a.k.a. SeaStar) satellite in August 1997, and collected data from September 1997 until the end of mission in December 2010. SeaWiFS had 8 spectral bands from 412 to 865 nm. It collected global data at 4 km resolution, and local data (limited onboard storage and direct broadcast) at 1 km. The mission and sensor were optimized for ocean color measurements, with a local noon (descending) equator crossing time orbit, fore-and-aft tilt capability, full dynamic range, and low polarization sensitivity.
 
