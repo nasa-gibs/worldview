@@ -120,7 +120,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // Don't key by time if this is a static layer
     if (def.period) {
-      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date), true);
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -373,7 +373,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate)}`;
+    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, true)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -459,7 +459,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), true)}`;
 
     const sourceOptions = {
       url: source.url + urlParameters,

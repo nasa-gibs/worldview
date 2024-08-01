@@ -232,10 +232,12 @@ export default (function(self) {
    * @method toISOStringSeconds
    * @static
    * @param  {Date} date the date to convert
+   * @param  {Boolean} shouldRemoveTime if the time should be removed from the date
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
-  self.toISOStringSeconds = function(date) {
+  self.toISOStringSeconds = function(date, shouldRemoveTime = false) {
     const isString = typeof date === 'string' || date instanceof String;
+    if (shouldRemoveTime) date = self.clearTimeUTC(date);
     const dateString = isString ? date : date.toISOString();
     return `${dateString.split('.')[0]}Z`;
   };
