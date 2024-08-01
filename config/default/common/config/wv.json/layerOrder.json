@@ -145,6 +145,7 @@
 		"VIIRS_NOAA20_Photosynthetically_Available_Radiation",
 		"VIIRS_SNPP_L2_Chlorophyll_A",
 		"VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+		"SEAWIFS_ORBVIEW-2_GAC_True_Color",
 		"SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a",
 		"GOES-East_ABI_GeoColor",
 		"GOES-West_ABI_GeoColor",
