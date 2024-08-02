@@ -44,7 +44,7 @@ const landsatPresets = [
     assets: ['B05', 'B04'],
     expression: '(B05-B04)/(B05+B04)',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_NDVI_Landsat.jpg',
   },
   {
@@ -71,7 +71,7 @@ const landsatPresets = [
     assets: ['B05', 'B06'],
     expression: '(B05-B06)/(B05+B06)',
     rescale: '-1,1',
-    colormap_name: 'jet_r',
+    colormap_name: 'bwr_r',
     img: 'HLS_Moisture_Index_Landsat.jpg',
   },
   {
@@ -80,7 +80,7 @@ const landsatPresets = [
     assets: ['B05', 'B04', 'B02'],
     expression: '(2.5*(B05-B04))/(B05+6*B04-7.5*B02+1)',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_EVI_Landsat.jpg',
   },
   {
@@ -89,7 +89,7 @@ const landsatPresets = [
     assets: ['B05', 'B04'],
     expression: '1.5*((B05-B04)/(B05+B04+0.5))',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_SAVI_Landsat.jpg',
   },
   {
@@ -98,7 +98,7 @@ const landsatPresets = [
     assets: ['B05', 'B04'],
     expression: '(2*B05+1-sqrt((2*B05+1)**2-8*(B05-B04)))/2',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_MSAVI_Landsat.jpg',
   },
   {
@@ -107,7 +107,7 @@ const landsatPresets = [
     assets: ['B05', 'B07'],
     expression: '(B05-B07)/(B05+B07)',
     rescale: '-1,1',
-    colormap_name: 'jet_r',
+    colormap_name: 'puor',
     img: 'HLS_NBR_Landsat.jpg',
   },
   {
@@ -116,7 +116,7 @@ const landsatPresets = [
     assets: ['B06', 'B07'],
     expression: '(B06-B07)/(B06+B07)',
     rescale: '-1,1',
-    colormap_name: 'jet_r',
+    colormap_name: 'puor',
     img: 'HLS_NBR2_Landsat.jpg',
   },
   {
@@ -125,7 +125,7 @@ const landsatPresets = [
     assets: ['B03', 'B04', 'B05'],
     expression: '(120*(B05-B03)-200*(B04-B03))/2',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_TVI_Landsat.jpg',
   },
 ];
@@ -169,7 +169,7 @@ const sentinelPresets = [
     assets: ['B08', 'B04'],
     expression: '(B08-B04)/(B08+B04)',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     asset_as_band: true,
     img: 'HLS_NDVI_Sentinel.jpg',
   },
@@ -199,7 +199,7 @@ const sentinelPresets = [
     assets: ['B8A', 'B11'],
     expression: '(B8A-B11)/(B8A+B11)',
     rescale: '-1,1',
-    colormap_name: 'jet_r',
+    colormap_name: 'bwr_r',
     asset_as_band: true,
     img: 'HLS_Moisture_Index_Sentinel.jpg',
   },
@@ -209,7 +209,7 @@ const sentinelPresets = [
     assets: ['B8A', 'B04', 'B02'],
     expression: '(2.5*(B8A-B04))/(B8A+6*B04-7.5*B02+1)',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_EVI_Sentinel.jpg',
   },
   {
@@ -218,7 +218,7 @@ const sentinelPresets = [
     assets: ['B8A', 'B04'],
     expression: '1.428*((B8A-B04)/(B8A+B04+0.428))',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_SAVI_Sentinel.jpg',
   },
   {
@@ -227,7 +227,7 @@ const sentinelPresets = [
     assets: ['B8A', 'B04'],
     expression: '(2*B8A+1-sqrt((2*B8A+1)**2-8*(B8A-B04)))/2',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_MSAVI_Sentinel.jpg',
   },
   {
@@ -236,7 +236,7 @@ const sentinelPresets = [
     assets: ['B8A', 'B12'],
     expression: '(B8A-B12)/(B8A+B12)',
     rescale: '-1,1',
-    colormap_name: 'jet_r',
+    colormap_name: 'puor',
     img: 'HLS_NBR_Sentinel.jpg',
   },
   {
@@ -245,7 +245,7 @@ const sentinelPresets = [
     assets: ['B11', 'B12'],
     expression: '(B11-B12)/(B11+B12)',
     rescale: '-1,1',
-    colormap_name: 'jet',
+    colormap_name: 'puor',
     img: 'HLS_NBR2_Sentinel.jpg',
   },
   {
@@ -254,7 +254,7 @@ const sentinelPresets = [
     assets: ['B03', 'B04', 'B8A'],
     expression: '(120*(B8A-B03)-200*(B04-B03))/2',
     rescale: '-1,1',
-    colormap_name: 'greens',
+    colormap_name: 'brbg',
     img: 'HLS_TVI_Sentinel.jpg',
   },
 ];
