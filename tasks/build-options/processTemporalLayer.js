@@ -1,4 +1,5 @@
 const moment = require('moment')
+const xml2js = require('xml2js')
 
 function toList (val) {
   return val instanceof Array ? val : [val]
@@ -8,7 +9,23 @@ async function processTemporalLayer (wvLayer, value) {
   const dateFormat = 'YYYY-MM-DD'
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
   try {
-    const ranges = toList(value)
+    let ranges = toList(value)
+    const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
+    const describeDomainsResponse = await fetch(describeDomainsUrl).catch((e) => {
+      console.error(`Error fetching DescribeDomains for ${describeDomainsUrl}: ${e}`)
+    })
+    if (describeDomainsResponse?.ok) {
+      const describeDomainsText = await describeDomainsResponse?.text?.() || ''
+      const parser = new xml2js.Parser()
+      const describeDomainsJson = await parser.parseStringPromise(describeDomainsText)
+      const domain = describeDomainsJson?.Domains?.DimensionDomain?.[0]?.Domain?.[0] || ''
+      const domains = domain.split(',').map((d) => {
+        return {
+          _text: d
+        }
+      })
+      ranges = toList(domains)
+    }
     if (ranges && ranges[0] && ranges[0]._text && ranges[0]._text.includes('T')) {
       wvLayer.period = 'subdaily'
     } else {
@@ -82,7 +99,7 @@ async function processTemporalLayer (wvLayer, value) {
       }
     }
   } catch (e) {
-    throw new Error(`Error processing temporal layer: ${e}`)
+    throw new Error(`Error processing temporal layer ${wvLayer.id}: ${e}`)
   }
   return wvLayer
 }
