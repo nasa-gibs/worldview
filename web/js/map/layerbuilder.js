@@ -120,7 +120,8 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // Don't key by time if this is a static layer
     if (def.period) {
-      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date), true);
+      const isSubdaily = def.period === 'subdaily';
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date), !isSubdaily);
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -373,7 +374,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, true)}`;
+    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -421,6 +422,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let extent;
     let start;
     let res;
+    const isSubdaily = def.period === 'subdaily';
 
     const source = config.sources[def.source];
     extent = selectedProj.maxExtent;
@@ -459,7 +461,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), true)}`;
+    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
       url: source.url + urlParameters,
