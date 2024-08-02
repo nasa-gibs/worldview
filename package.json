@@ -127,7 +127,7 @@
     "redux-mock-store": "^1.5.4",
     "run-script-os": "^1.1.6",
     "sass": "^1.77.8",
-    "sass-loader": "^15.0.0",
+    "sass-loader": "^16.0.0",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
     "stylelint": "^15.11.0",
