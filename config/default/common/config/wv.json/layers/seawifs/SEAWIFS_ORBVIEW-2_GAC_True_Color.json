@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "SEAWIFS_ORBVIEW-2_GAC_True_Color": {
+      "id": "SEAWIFS_ORBVIEW-2_GAC_True_Color",
+      "description": "seawifs/SEAWIFS_ORBVIEW-2_GAC_True_Color",
+      "tags": "cr",
+      "group": "overlays",
+      "layergroup": "Corrected Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}

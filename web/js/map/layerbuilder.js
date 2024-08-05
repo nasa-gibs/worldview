@@ -578,7 +578,7 @@ export default function mapLayerBuilder(config, cache, store) {
             for (let j = 0; j < split2.length; j += 1) {
               rowObj[key[j]] = split2[j];
             }
-            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name] && parseInt(rowObj['Date(dd:mm:yyyy)'].split(':')[0], 10) === date.getUTCDate()) {
               featuresObj[rowObj.AERONET_Site_Name] = {};
               featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
               featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
