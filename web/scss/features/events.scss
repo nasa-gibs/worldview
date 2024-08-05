@@ -9,6 +9,7 @@
 
 .event-container {
   background: #333;
+  min-height: 166px;
 
   .no-events {
     text-align: center;
@@ -17,8 +18,6 @@
     padding: 20px;
     margin: 15px auto;
   }
-
-  min-height: 166px;
 
   @media (max-width: $mobile-max-width) {
     height: calc(var(--vh, 1vh) * 100 - 85px);
@@ -60,13 +59,13 @@
 }
 
 .map-item-list li.item h4.title {
-  @media (max-width: $mobile-max-width) {
-    font-size: 1em;
-  }
-
   color: #ccc;
   padding: 0 3px;
   margin-left: 40px;
+
+  @media (max-width: $mobile-max-width) {
+    font-size: 1em;
+  }
 }
 
 .map-item-list li.item p,

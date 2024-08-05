@@ -15,6 +15,7 @@
       "files": ["*.js"],
       "rules": {
         "n/no-unpublished-require": "off", // 96 failures across 79 files - many "@playwright/test" related
+        "n/no-unsupported-features/node-builtins": "off"
       }
     }
   ]
