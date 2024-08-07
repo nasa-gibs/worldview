@@ -65,7 +65,7 @@ function ImageDownloadPanel(props) {
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
 
     setShowGranuleWarning(isTruncated);
-  }, [])
+  }, []);
 
   const onDownload = (width, height) => {
     const time = new Date(date.getTime());
@@ -208,7 +208,7 @@ function ImageDownloadPanel(props) {
           map={map}
         />
         {showGranuleWarning && (
-          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p>
+          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
         )}
         <ResTable
           width={width}
