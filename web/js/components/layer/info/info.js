@@ -11,6 +11,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
     id,
     period,
     startDate,
+    ongoing,
   } = layer;
 
   const [layerMetadata, setLayerMetadata] = useState();
@@ -47,7 +48,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
     const overlapDateRanges = hasLayerDateRange
       ? dateOverlap(period, dateRanges)
       : [];
-    return hasLayerDateRange && overlapDateRanges.overlap === false;
+    return hasLayerDateRange && overlapDateRanges.overlap === false && !ongoing;
   };
 
   const needDateRanges = getDateOverlapDateRanges();
