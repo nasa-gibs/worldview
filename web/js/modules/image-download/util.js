@@ -10,7 +10,7 @@ import { CRS } from '../map/constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
-const GRANULE_LIMIT = 15;
+export const GRANULE_LIMIT = 30;
 
 /**
  * Get a date time snapped to the interval of the layer with the shortest interval.
@@ -255,6 +255,46 @@ export function bboxWMS13(lonlats, crs) {
 }
 
 /**
+ * Get the granule date string for each layer and whether or not the granule dates were truncated
+ * @param {Array} layerDefs
+ * @returns {Object} { truncated: Boolean, value: String }
+ */
+export function getTruncatedGranuleDates(layerDefs) {
+  let numGranules = 0;
+  let truncated = false;
+
+  return layerDefs.reduce((acc, def, i) => {
+    let granuleDatesString = acc.value;
+    if (!def.granuleDates) {
+      return {
+        truncated,
+        value: granuleDatesString,
+      };
+    }
+    granuleDatesString = `${acc.value}${i};`; // ensure that each granule layer gets an index
+    if (numGranules >= GRANULE_LIMIT) { // limit number of granules to GRANULE_LIMIT
+      truncated = true;
+
+      return {
+        truncated,
+        value: granuleDatesString,
+      };
+    }
+    const numToAdd = GRANULE_LIMIT - numGranules;
+    const truncatedDates = def.granuleDates.slice(0, numToAdd);
+    numGranules += truncatedDates.length;
+    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z').join(':'));
+    return {
+      truncated,
+      value: `${granuleDatesString}${processedDates.join(',')},`,
+    };
+  }, {
+    truncated: false,
+    value: '',
+  });
+}
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
@@ -282,18 +322,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
-  let numGranules = 0;
-  const granuleDates = layerDefs.reduce((acc, def, i) => {
-    let granuleDatesString = acc;
-    if (!def.granuleDates) return granuleDatesString;
-    granuleDatesString = `${acc}${i};`; // ensure that each granule layer gets an index
-    if (numGranules >= GRANULE_LIMIT) return granuleDatesString; // limit number of granules
-    const numToAdd = GRANULE_LIMIT - numGranules;
-    const truncatedDates = def.granuleDates.slice(0, numToAdd);
-    numGranules += truncatedDates.length;
-    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z').join(':'));
-    return `${granuleDatesString}${processedDates.join(',')},`;
-  }, '');
+  const granuleDates = getTruncatedGranuleDates(layerDefs).value;
   const params = [
     'REQUEST=GetSnapshot',
     `TIME=${util.toISOStringSeconds(snappedDateTime)}`,

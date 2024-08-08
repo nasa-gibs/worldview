@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
   imageSizeValid,
   getDimensions,
   getDownloadUrl,
+  getTruncatedGranuleDates,
+  GRANULE_LIMIT,
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
@@ -54,6 +56,16 @@ function ImageDownloadPanel(props) {
   const [currIsWorldfile, setIsWorldfile] = useState(isWorldfile);
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
+  const [showGranuleWarning, setShowGranuleWarning] = useState(false);
+
+  useEffect(() => {
+    const layerList = getLayers();
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
+    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
+
+    setShowGranuleWarning(isTruncated);
+  }, []);
 
   const onDownload = (width, height) => {
     const time = new Date(date.getTime());
@@ -195,6 +207,9 @@ function ImageDownloadPanel(props) {
           proj={projection.id}
           map={map}
         />
+        {showGranuleWarning && (
+          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
+        )}
         <ResTable
           width={width}
           height={height}
