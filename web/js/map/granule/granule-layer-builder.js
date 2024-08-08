@@ -63,17 +63,17 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   /**
    * Query CMR to get dates
    * @param {object} def - Layer specs
-   * @param {object} date - current selected date (Note: may not return this date, but this date will be the max returned)
+   * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
   */
-  const getQueriedGranuleDates = async (def, date) => {
+  const getQueriedGranuleDates = async (def, selectedDate) => {
     const {
       title,
     } = def;
     const state = store.getState();
     const { proj: { selected: { crs } } } = state;
     const getGranulesUrl = getGranulesUrlSelector(state);
-    const params = getParamsForGranuleRequest(def, date, crs);
-    const nrtParams = getParamsForGranuleRequest(def, date, crs, true);
+    const params = getParamsForGranuleRequest(def, selectedDate, crs);
+    const nrtParams = getParamsForGranuleRequest(def, selectedDate, crs, true);
     let data = [];
     let nrtData = [];
     try {
@@ -101,7 +101,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
       return transformGranuleData(entry, date, crs);
     });
-    return transformedData;
+    const dedupedData = transformedData.reduce((acc, granule) => {
+      const { date } = granule;
+      const dateIndex = acc.findIndex((g) => g.date === date);
+      if (dateIndex >= 0) return acc;
+      return [...acc, granule];
+    }, []);
+
+    return dedupedData;
   };
 
   /**
