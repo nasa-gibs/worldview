@@ -139,7 +139,7 @@ async function processEntry (entry) {
   for (const gcLayer of gcContents.Layer) {
     try {
       layerCount += 1
-      processLayer(gcLayer, wvLayers, entry)
+      await processLayer(gcLayer, wvLayers, entry)
     } catch (error) {
       if (error instanceof SkipException) {
         warningCount += 1
@@ -184,7 +184,7 @@ async function processLayer (gcLayer, wvLayers, entry) {
     const dimension = gcLayer.Dimension
     if (dimension['ows:Identifier']._text === 'Time') {
       try {
-        wvLayer = await processTemporalLayer(wvLayer, dimension.Value)
+        wvLayer = await processTemporalLayer(wvLayer, dimension.Value, entry.source)
       } catch (e) {
         console.error(e)
         console.error(`${prog}: ERROR: [${ident}] Error processing time values.`)
