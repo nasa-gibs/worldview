@@ -879,6 +879,12 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_NDWI_Landsat',
       'HLS_NDSI_Landsat',
       'HLS_Moisture_Index_Landsat',
+      'HLS_EVI_Landsat',
+      'HLS_SAVI_Landsat',
+      'HLS_MSAVI_Landsat',
+      'HLS_NBR2_Landsat',
+      'HLS_NBR_Landsat',
+      'HLS_TVI_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
