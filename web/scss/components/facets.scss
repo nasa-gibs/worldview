@@ -19,12 +19,11 @@
     border-radius: 20px;
     position: relative;
     display: inline-block;
+    cursor: pointer;
 
     span {
       font-weight: 500;
     }
-
-    cursor: pointer;
 
     &:hover {
       background: #eee;

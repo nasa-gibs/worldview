@@ -14,7 +14,7 @@
       "vectorStyle": {
         "id": "DAILY_AERONET_ANGSTROM_440-870NM"
       },
-      "wrapX": true,
+      "wrapX": false,
       "projections": {
         "geographic": {
           "source": "AERONET"

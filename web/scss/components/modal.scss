@@ -95,12 +95,12 @@
 }
 
 .modal-content {
+  border: none;
+  border-radius: 6px;
+
   .modal-header {
     justify-content: space-between;
   }
-
-  border: none;
-  border-radius: 6px;
 }
 
 .modal-title {
