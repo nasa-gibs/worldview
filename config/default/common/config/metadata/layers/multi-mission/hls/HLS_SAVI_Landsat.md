@@ -1,6 +1,14 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Soil Adjusted Vegetation Index (SAVI) imagery layer is used to correct Normalized Difference Vegetation Index (NDVI) for the influence of soil brightness in areas where vegetative cover is low. Surface Reflectance-derived SAVI is calculated as a ratio between the R and NIR values with a soil brightness correction factor (L) defined as 0.5 to accommodate most land cover types. SAVI is calculated using SAVI = ((NIR - R) / (NIR + R + L)) * (1 + L), and specifically for Landsat 8 and 9, SAVI = ((Band 5 – Band 4) / (Band 5 + Band 4 + 0.5)) * (1.5).
+The dynamically generated Soil Adjusted Vegetation Index (SAVI) imagery layer is used to correct Normalized Difference Vegetation Index (NDVI) for the influence of soil brightness in areas where vegetative cover is low. Surface Reflectance-derived SAVI is calculated as a ratio between the R and NIR values with a soil brightness correction factor (L) defined as 0.5 to accommodate most land cover types.
+
+It is calcuated using:
+
+`SAVI = ((NIR - R) / (NIR + R + L)) * (1 + L)`
+
+Specifically for Landsat 8 and 9:
+
+`SAVI = ((Band 5 – Band 4) / (Band 5 + Band 4 + 0.5)) * (1.5)`
 
 The image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors.Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light greens, and areas with little to no vegetation growth are in shades of brown.
 

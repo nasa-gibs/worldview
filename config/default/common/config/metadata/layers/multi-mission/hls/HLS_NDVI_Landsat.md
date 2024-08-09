@@ -1,6 +1,10 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Difference Vegetation Index (NDVI) (B5-B4)/(B5+B4) imagery layer is an index for quantifying green vegetation. It reflects the state of vegetation health based on how vegetation reflects light at certain wavelengths. It is calculated using near infrared and red wavelengths using the calculation NDVI = (B5-B4)/(B5+B4).
+The dynamically generated Normalized Difference Vegetation Index (NDVI) (B5-B4)/(B5+B4) imagery layer is an index for quantifying green vegetation. It reflects the state of vegetation health based on how vegetation reflects light at certain wavelengths. It is calculated using near infrared and red wavelengths.
+
+It is calculated using:
+
+`NDVI = (B5-B4)/(B5+B4)`
 
 The image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors. Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light yellows, and areas with little to no vegetation growth are shades of brown.
 

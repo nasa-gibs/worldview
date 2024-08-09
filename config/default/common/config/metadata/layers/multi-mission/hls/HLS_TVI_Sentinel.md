@@ -1,6 +1,12 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Triangular Vegetation Index imagery layer is good for estimating green leaf area index (LAI), but its sensitivity to chlorophyll increases with an increase in canopy density. TVI is calculated using TVI = (120(NIR - Green) - 200(Red-Green)) / 2, and specifically for Sentinel-2A and -2B, TVI = (120(Band 8A – Band 3) - 200(Band 4 - Band 3)) / 2.
+The dynamically generated Triangular Vegetation Index imagery layer is good for estimating green leaf area index (LAI), but its sensitivity to chlorophyll increases with an increase in canopy density.
+
+It is calculated using:
+`TVI = (120(NIR - Green) - 200(Red-Green)) / 2`
+
+Specifically for Sentinel-2A and -2B:
+`TVI = (120(Band 8A – Band 3) - 200(Band 4 - Band 3)) / 2`
 
 The image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors. Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light yellows, and areas with little to no vegetation growth are in shades of brown.
 

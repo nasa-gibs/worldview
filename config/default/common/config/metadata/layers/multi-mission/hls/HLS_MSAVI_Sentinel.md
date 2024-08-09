@@ -1,6 +1,14 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Modified Soil Adjusted Vegetation Index (MSAVI) imagery layer minimizes the effect of bare soil on the Soil Adjusted Vegetation Index (SAVI). MSAVI is calculated as a ratio between the R and NIR values with an inductive L function applied to maximize reduction of soil effects on the vegetation signal. MSAVI is calculated using MSAVI = (2 * NIR + 1 – sqrt ((2 * NIR + 1)2 – 8 * (NIR - R))) / 2, and specifically for Sentinel-2A and -2B, MSAVI = (2 * Band 8A + 1 – sqrt ((2 * Band 8A + 1)2 – 8 * (Band 8A – Band 4))) / 2.
+The dynamically generated Modified Soil Adjusted Vegetation Index (MSAVI) imagery layer minimizes the effect of bare soil on the Soil Adjusted Vegetation Index (SAVI). MSAVI is calculated as a ratio between the R and NIR values with an inductive L function applied to maximize reduction of soil effects on the vegetation signal.
+
+It is calculated using:
+
+`MSAVI = (2 * NIR + 1 – sqrt ((2 * NIR + 1)2 – 8 * (NIR - R))) / 2`
+
+Specifically for Sentinel-2A and -2B:
+
+`MSAVI = (2 * Band 8A + 1 – sqrt ((2 * Band 8A + 1)2 – 8 * (Band 8A – Band 4))) / 2`
 
 DThe image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors. Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light greens, and areas with little to no vegetation growth are in shades of brown.
 
