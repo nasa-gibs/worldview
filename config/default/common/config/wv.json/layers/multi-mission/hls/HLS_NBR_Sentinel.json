@@ -4,7 +4,7 @@
       "id": "HLS_NBR_Sentinel",
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957295-LPCLOUD",
-      "title": "Burn Ratio (NBR) *BETA*",
+      "title": "Normalized Burn Ratio (NBR) *BETA*",
       "subtitle": "Sentinel-2A & -2B / MSI",
       "description": "multi-mission/hls/HLS_NBR_Sentinel",
       "tags": "corrected surface Sentinel msi s30 nbr",

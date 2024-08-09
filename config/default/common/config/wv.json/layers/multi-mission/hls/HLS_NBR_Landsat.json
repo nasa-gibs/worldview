@@ -4,7 +4,7 @@
       "id": "HLS_NBR_Landsat",
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957657-LPCLOUD",
-      "title": "Burn Ratio (NBR) *BETA*",
+      "title": "Normalized Burn Ratio (NBR) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_NBR_Landsat",
       "tags": "corrected surface landsat oli l30 nbr",
