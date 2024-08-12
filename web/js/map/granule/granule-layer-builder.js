@@ -2,7 +2,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import { throttle as lodashThrottle } from 'lodash';
 import OlCollection from 'ol/Collection';
 import { DEFAULT_NUM_GRANULES } from '../../modules/layers/constants';
-import { updateGranuleLayerState } from '../../modules/layers/actions';
+import { updateGranuleLayerState, addGranuleDateRanges } from '../../modules/layers/actions';
 import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
@@ -21,6 +21,7 @@ import {
   datelineShiftGranules,
   transformGranulesForProj,
 } from './util';
+import { getLayerGranuleRanges } from '../util';
 import util from '../../util/util';
 
 const { toISOStringSeconds } = util;
@@ -62,17 +63,17 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   /**
    * Query CMR to get dates
    * @param {object} def - Layer specs
-   * @param {object} date - current selected date (Note: may not return this date, but this date will be the max returned)
+   * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
   */
-  const getQueriedGranuleDates = async (def, date) => {
+  const getQueriedGranuleDates = async (def, selectedDate) => {
     const {
       title,
     } = def;
     const state = store.getState();
     const { proj: { selected: { crs } } } = state;
     const getGranulesUrl = getGranulesUrlSelector(state);
-    const params = getParamsForGranuleRequest(def, date, crs);
-    const nrtParams = getParamsForGranuleRequest(def, date, crs, true);
+    const params = getParamsForGranuleRequest(def, selectedDate, crs);
+    const nrtParams = getParamsForGranuleRequest(def, selectedDate, crs, true);
     let data = [];
     let nrtData = [];
     try {
@@ -100,7 +101,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
       return transformGranuleData(entry, date, crs);
     });
-    return transformedData;
+    const dedupedData = transformedData.reduce((acc, granule) => {
+      const { date } = granule;
+      const dateIndex = acc.findIndex((g) => g.date === date);
+      if (dateIndex >= 0) return acc;
+      return [...acc, granule];
+    }, []);
+
+    return dedupedData;
   };
 
   /**
@@ -139,6 +147,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
+   * Check if date is within a range
+   * @param {Date} date - date to check
+   * @param {array} ranges - array of date ranges
+   * @returns {boolean} - true if date is within a range
+  */
+  const isWithinRanges = (date, ranges) => ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
+
+  /**
    * Get granuleCount number of granules that have visible imagery based on
    * predetermined longitude bounds.
    *
@@ -147,19 +163,21 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {Date} leadingEdgeDate - timeline date
    * @returns {array}
   */
-  const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate) => {
+  const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate, granuleDateRanges) => {
     const { proj: { selected: { crs } } } = store.getState();
     const granules = [];
     const availableCount = availableGranules?.length;
     if (!availableCount) return granules;
     const count = granuleCount > availableCount ? availableCount : granuleCount;
     const sortedAvailableGranules = availableGranules.sort((a, b) => new Date(b.date) - new Date(a.date));
-
     for (let i = 0; granules.length < count; i += 1) {
       const item = sortedAvailableGranules[i];
       if (!item) break;
       const { date } = item;
-      if (new Date(date) <= leadingEdgeDate && isWithinBounds(crs, item)) {
+      const dateDate = new Date(date);
+      const leadingEdgeDateUTC = new Date(leadingEdgeDate.toUTCString());
+      const isWithinRange = isWithinRanges(leadingEdgeDateUTC, granuleDateRanges);
+      if (dateDate <= leadingEdgeDateUTC && isWithinRange && isWithinBounds(crs, item)) {
         granules.unshift(item);
       }
     }
@@ -182,16 +200,27 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { granuleCount, date, group } = options;
     const { count: currentCount } = getGranuleLayer(state, def.id) || {};
     const count = currentCount || granuleCount || def.count || DEFAULT_NUM_GRANULES;
+    let granuleDateRanges = null;
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const visibleGranules = getVisibleGranules(availableGranules, count, date);
+    // if opted in to CMR availability, get granule date ranges if needed
+    if (def.cmrAvailability) {
+      if (!def.granuleDateRanges) {
+        granuleDateRanges = await getLayerGranuleRanges(def);
+        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
+      } else {
+        granuleDateRanges = def.granuleDateRanges;
+      }
+    }
+    const visibleGranules = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
     const transformedGranules = transformGranulesForProj(visibleGranules, crs);
 
     return {
       count,
       granuleDates: transformedGranules.map((g) => g.date),
       visibleGranules: transformedGranules,
+      granuleDateRanges,
     };
   };
 

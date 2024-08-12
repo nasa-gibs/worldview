@@ -33,7 +33,9 @@ import {
   createVectorUrl,
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
+  getLayerGranuleRanges,
 } from './util';
+import { addGranuleDateRanges } from '../modules/layers/actions';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -118,7 +120,8 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // Don't key by time if this is a static layer
     if (def.period) {
-      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
+      const isSubdaily = def.period === 'subdaily';
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date), !isSubdaily);
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -371,7 +374,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate)}`;
+    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -419,6 +422,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let extent;
     let start;
     let res;
+    const isSubdaily = def.period === 'subdaily';
 
     const source = config.sources[def.source];
     extent = selectedProj.maxExtent;
@@ -457,7 +461,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
       url: source.url + urlParameters,
@@ -574,7 +578,7 @@ export default function mapLayerBuilder(config, cache, store) {
             for (let j = 0; j < split2.length; j += 1) {
               rowObj[key[j]] = split2[j];
             }
-            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name] && parseInt(rowObj['Date(dd:mm:yyyy)'].split(':')[0], 10) === date.getUTCDate()) {
               featuresObj[rowObj.AERONET_Site_Name] = {};
               featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
               featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
@@ -1033,6 +1037,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const proj = state.proj.selected;
     const {
       breakPointLayer,
+      cmrAvailability,
       id,
       opacity,
       period,
@@ -1045,6 +1050,17 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
+    let granuleDateRanges = null;
+
+    // if opted in to CMR availability, get granule date ranges if needed
+    if (cmrAvailability) {
+      if (!def.granuleDateRanges) {
+        granuleDateRanges = await getLayerGranuleRanges(def);
+        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
+      } else {
+        granuleDateRanges = def.granuleDateRanges;
+      }
+    }
 
     if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);

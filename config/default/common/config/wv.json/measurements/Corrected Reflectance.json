@@ -3,7 +3,7 @@
         "Corrected Reflectance": {
             "id": "corrected-reflectance",
             "title":    "Corrected Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/OCI, Landsat/WELD",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/OCI, Landsat/WELD, OrbView-2/SeaWiFS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -92,6 +92,15 @@
                        "Landsat_WELD_CorrectedReflectance_Bands157_Global_Monthly",
                        "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual",
                        "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly"
+                    ]
+                },
+                "OrbView-2/SeaWiFS": {
+                    "id": "orbview-2-seawifs",
+                    "title": "OrbView-2/SeaWiFS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                       "SEAWIFS_ORBVIEW-2_GAC_True_Color"
                     ]
                 }
             }
