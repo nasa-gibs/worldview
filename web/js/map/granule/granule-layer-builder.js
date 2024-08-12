@@ -72,23 +72,23 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const state = store.getState();
     const { proj: { selected: { crs } } } = state;
     const getGranulesUrl = getGranulesUrlSelector(state);
-    const params = getParamsForGranuleRequest(def, selectedDate, crs);
-    const nrtParams = getParamsForGranuleRequest(def, selectedDate, crs, true);
+    const paramsArray = getParamsForGranuleRequest(def, selectedDate, crs);
     let data = [];
     let nrtData = [];
     try {
       showLoading();
-      const requestUrl = getGranulesUrl(params);
-      const nrtRequestUrl = getGranulesUrl(nrtParams);
-      const requests = [fetch(requestUrl, CMR_AJAX_OPTIONS), fetch(nrtRequestUrl, CMR_AJAX_OPTIONS)];
-      const responses = await Promise.allSettled(requests);
+      const promises = paramsArray.map((params) => {
+        const requestUrl = getGranulesUrl(params);
+        return fetch(requestUrl, CMR_AJAX_OPTIONS);
+      });
+      const responses = await Promise.allSettled(promises);
       const fulfilledResponses = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
       const [response, nrtResponse] = fulfilledResponses;
-      const jsonRequests = [response.json(), nrtResponse.json()];
+      const jsonRequests = [response?.json(), nrtResponse?.json()];
       const jsonResponses = await Promise.allSettled(jsonRequests);
       const [responseJson, nrtResponseJson] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
-      data = responseJson.feed.entry;
-      nrtData = nrtResponseJson.feed.entry;
+      data = responseJson?.feed?.entry || [];
+      nrtData = nrtResponseJson?.feed?.entry || [];
     } catch (e) {
       console.error(e);
       throttleDispathCMRErrorDialog(title);
