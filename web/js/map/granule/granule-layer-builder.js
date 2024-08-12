@@ -64,6 +64,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * Query CMR to get dates
    * @param {object} def - Layer specs
    * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
+   * @returns {array} granule dates
   */
   const getQueriedGranuleDates = async (def, selectedDate) => {
     const {
@@ -176,6 +177,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const { date } = item;
       const dateDate = new Date(date);
       const leadingEdgeDateUTC = new Date(leadingEdgeDate.toUTCString());
+      leadingEdgeDateUTC.setSeconds(59);
       const isWithinRange = isWithinRanges(leadingEdgeDateUTC, granuleDateRanges);
       if (dateDate <= leadingEdgeDateUTC && isWithinRange && isWithinBounds(crs, item)) {
         granules.unshift(item);
