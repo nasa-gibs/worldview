@@ -16,8 +16,6 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import LayerVectorTile from 'ol/layer/VectorTile';
-import Layer from 'ol/layer/Layer';
-import WebGLVectorLayerRenderer from 'ol/renderer/webgl/VectorLayer';
 import {
   Circle, Fill, Stroke, Style,
 } from 'ol/style';
@@ -949,21 +947,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const zeroedDate = dateTime.join('T');
     const cmrMaxExtent = [-180, -90, 180, 90];
 
-    const style = {
-      'stroke-color': ['*', ['get', 'COLOR'], [220, 220, 220]],
-      'stroke-width': 3,
-      'stroke-offset': -1,
-      'fill-color': ['*', ['get', 'COLOR'], [255, 255, 255, 0.6]],
-    };
-
-    class WebGLLayer extends Layer {
-      createRenderer() {
-        return new WebGLVectorLayerRenderer(this, {
-          style,
-        });
-      }
-    }
-
     const cmrSource = new OlSourceVector({
       format: new GeoJSON(),
       projection: get(crs),
@@ -1073,17 +1056,11 @@ export default function mapLayerBuilder(config, cache, store) {
       minZoom: def.minZoom,
       extent: maxExtent,
     });
-    // const footprintLayer = new OlLayerVector({
-    //   source: cmrSource,
-    //   className,
-    //   extent: maxExtent,
-    // });
-    const footprintLayer = new WebGLLayer({
+    const footprintLayer = new OlLayerVector({
       source: cmrSource,
       className,
       maxZoom: def.minZoom,
     });
-
     const layerGroup = new OlLayerGroup({
       layers: [footprintLayer, layer],
     });
