@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "GOES-West_ABI_FireTemp": {
+      "id": "GOES-West_ABI_FireTemp",
+      "description": "goes/GOES-West_ABI_FireTemp",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": "Geostationary",
+      "wrapX": true,
+      "availability": {
+        "rollingWindow": 90
+      }
+    }
+  }
+}
