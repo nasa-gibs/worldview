@@ -2,7 +2,7 @@
 
 The dynamically generated Normalized Difference Water Index (NDWI) (B3-B5)/(B3+B5) imagery layer is useful for identifying water bodies and to monitor changes related to water content in water bodies. It is calculated using green and near infrared wavelengths.
 
-It is calcuated using:
+It is calculated using:
 
 `NDWI = (B3-B5)/(B3+B5)`
 
