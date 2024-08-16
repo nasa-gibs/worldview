@@ -2,7 +2,7 @@
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status]([![CI-CD](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml))
+[![CI-CD](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
