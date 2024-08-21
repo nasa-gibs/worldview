@@ -1,0 +1,25 @@
+{
+    "layers": {
+      "Snowday": {
+        "id": "Snowday",
+        "title": "Snowday *BETA*",
+        "subtitle": "Canvas",
+        "description": "animations/Snowday",
+        "tags": "custom snowday animation",
+        "group": "overlays",
+        "layergroup": "Animations",
+        "format": "canvas",
+        "type": "animation",
+        "disableSnapshot": false,
+        "wrapX": false,
+        "projections": {
+            "geographic": {
+              "source": "DDV",
+              "matrixSet": "31.25m"
+            }
+          },  
+        "worker": "/js/workers/snowday.worker.js"
+      }
+    }
+  }
+  

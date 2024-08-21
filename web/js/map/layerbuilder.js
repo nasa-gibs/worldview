@@ -16,6 +16,13 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import LayerVectorTile from 'ol/layer/VectorTile';
+import Layer from 'ol/layer/Layer';
+import ImageCanvasSource from 'ol/source/ImageCanvas.js';
+import {
+  compose,
+  create,
+  toString as toTransformString,
+} from 'ol/transform.js';
 import {
   Circle, Fill, Stroke, Style,
 } from 'ol/style';
@@ -1111,6 +1118,89 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createAnimationLayer = (def, options, day, state) => {
+    console.log({ def });
+    const worker = new Worker(def.worker, { type: 'module' });
+
+    let container;
+    let transformContainer;
+    let canvas;
+    let rendering;
+    let workerFrameState;
+    let mainThreadFrameState;
+
+    // Transform the container to account for the difference between the (newer)
+    // main thread frameState and the (older) worker frameState
+    function updateContainerTransform() {
+      if (workerFrameState) {
+        const { viewState } = mainThreadFrameState;
+        const renderedViewState = workerFrameState.viewState;
+        const { center } = viewState;
+        const { resolution } = viewState;
+        const { rotation } = viewState;
+        const renderedCenter = renderedViewState.center;
+        const renderedResolution = renderedViewState.resolution;
+        const renderedRotation = renderedViewState.rotation;
+        const transform = create();
+        // Skip the extra transform for rotated views, because it will not work
+        // correctly in that case
+        if (!rotation) {
+          compose(
+            transform,
+            (renderedCenter[0] - center[0]) / resolution,
+            (center[1] - renderedCenter[1]) / resolution,
+            renderedResolution / resolution,
+            renderedResolution / resolution,
+            rotation - renderedRotation,
+            0,
+            0,
+          );
+        }
+        transformContainer.style.transform = toTransformString(transform);
+      }
+    }
+
+    return new Layer({
+      render: (frameState) => {
+        if (!container) {
+          container = document.createElement('div');
+          container.style.position = 'absolute';
+          container.style.width = '100%';
+          container.style.height = '100%';
+          transformContainer = document.createElement('div');
+          transformContainer.style.position = 'absolute';
+          transformContainer.style.width = '100%';
+          transformContainer.style.height = '100%';
+          container.appendChild(transformContainer);
+          canvas = document.createElement('canvas');
+          canvas.style.position = 'absolute';
+          canvas.style.left = '0';
+          canvas.style.width = '100%';
+          canvas.style.height = '100%';
+          canvas.style.transformOrigin = 'top left';
+          transformContainer.appendChild(canvas);
+        }
+        mainThreadFrameState = frameState;
+        updateContainerTransform();
+        if (!rendering) {
+          rendering = true;
+          const offscreen = canvas.transferControlToOffscreen();
+          worker.postMessage({
+            action: 'render',
+            canvas: offscreen,
+          }, [offscreen]);
+        } else {
+          frameState.animate = true;
+        }
+        return container;
+      },
+      source: new ImageCanvasSource({
+        canvasFunction: () => canvas,
+      }),
+      extent: [-180, -90, 180, 90],
+    });
+  };
+
 
   /**
    * Create a new OpenLayers Layer
@@ -1188,6 +1278,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'xyz':
             layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'animation':
+            layer = getLayer(createAnimationLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
