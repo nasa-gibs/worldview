@@ -4,8 +4,9 @@ import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
+import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
-import OlLayerTile from 'ol/layer/Tile';
+import OlLayerTile from 'ol/layer/WebGLTile.js';
 import { get } from 'ol/proj';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
@@ -1111,6 +1112,19 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createLayerEsri = (def, options, day, state) => {
+    const source = config.sources[def.source];
+    const urlParams = `${def.id}/MapServer/tile/{z}/{y}/{x}`;
+
+    const url = `${source.url}/${urlParams}`;
+
+    return new OlLayerTile({
+      extent: [-180, -90, 180, 90],
+      source: new OlImageTile({
+        url,
+      }),
+    });
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -1188,6 +1202,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'xyz':
             layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'esri':
+            layer = getLayer(createLayerEsri, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
