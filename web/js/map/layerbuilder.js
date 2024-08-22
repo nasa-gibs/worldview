@@ -1119,7 +1119,6 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const createAnimationLayer = (def, options, day, state) => {
-    console.log({ def });
     const worker = new Worker(def.worker, { type: 'module' });
 
     let container;

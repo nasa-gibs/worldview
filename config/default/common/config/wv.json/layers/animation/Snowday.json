@@ -10,7 +10,7 @@
         "layergroup": "Animations",
         "format": "canvas",
         "type": "animation",
-        "disableSnapshot": false,
+        "disableSnapshot": true,
         "wrapX": false,
         "projections": {
             "geographic": {
