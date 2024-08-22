@@ -3,7 +3,7 @@
         "Dust": {
             "id": "dust",
             "title":    "Dust",
-            "subtitle": "Aqua/AIRS, MERRA-2",
+            "subtitle": "Aqua/AIRS, GOES-East/ABI, GOES-West/ABI, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -15,6 +15,24 @@
                         "AIRS_L2_Dust_Score_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "GOES-East/ABI": {
+                    "id": "goes-east-abi",
+                    "title": "GOES-East/ABI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "GOES-East_ABI_Dust"
+                    ]
+                },
+                "GOES-West/ABI": {
+                    "id": "goes-west-abi",
+                    "title": "GOES-West/ABI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "GOES-West_ABI_Dust"
                     ]
                 },
                 "MERRA-2": {

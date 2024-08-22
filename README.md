@@ -2,7 +2,7 @@
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml/badge.svg?branch=main)](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml)
+[![CI-CD](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
@@ -25,7 +25,7 @@ or [custom GDAL scripts](https://nasa-gibs.github.io/gibs-api-docs/map-library-u
 We encourage interested developers to fork Worldview or build their own clients
 using GIBS services.
 
-Check out our [roadmap](https://github.com/nasa-gibs/worldview/projects/7)
+Check out our [roadmap](https://github.com/orgs/nasa-gibs/projects/3/views/1)
 to see what we're working on and follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)
 to find out the latest features and imagery available.
 

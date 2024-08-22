@@ -881,6 +881,12 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_NDWI_Landsat',
       'HLS_NDSI_Landsat',
       'HLS_Moisture_Index_Landsat',
+      'HLS_EVI_Landsat',
+      'HLS_SAVI_Landsat',
+      'HLS_MSAVI_Landsat',
+      'HLS_NBR2_Landsat',
+      'HLS_NBR_Landsat',
+      'HLS_TVI_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
@@ -940,6 +946,82 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
+    const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
+    const dateTime = state.date.selected?.toISOString().split('T');
+    dateTime.pop();
+    dateTime.push('00:00:00.000Z');
+    const zeroedDate = dateTime.join('T');
+    const cmrMaxExtent = [-180, -90, 180, 90];
+
+    const cmrSource = new OlSourceVector({
+      format: new GeoJSON(),
+      projection: get(crs),
+      loader: async (extent, resolution, projection, success, failure) => {
+        // clamp extent to maximum extent allowed by the CMR api
+        const clampedExtent = extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > cmrMaxExtent[i] : coord < cmrMaxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return cmrMaxExtent[i];
+        });
+        const getGranules = () => {
+          const entries = [];
+          return async function requestGranules(searchAfter) {
+            const headers = {
+              'Client-Id': 'Worldview',
+            };
+            headers['cmr-search-after'] = searchAfter ?? '';
+            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000`;
+            const cmrRes = await fetch(url, { headers });
+            const resHeaders = cmrRes.headers;
+            const granules = await cmrRes.json();
+            const resEntries = granules?.feed?.entry || [];
+
+            entries.push(...resEntries);
+
+            if (resHeaders.has('cmr-search-after')) {
+              await requestGranules(resHeaders.get('cmr-search-after'));
+            }
+            return entries;
+          };
+        };
+
+        const granuleGetter = getGranules();
+        const granules = await granuleGetter();
+
+        const features = granules.map((granule) => {
+          const coords = granule.polygons[0][0].split(' ').reduce((acc, coord, i, arr) => {
+            if (i % 2 !== 0) return acc;
+
+            acc.push([arr[i + 1], coord]);
+
+            return acc;
+          }, []);
+
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [coords],
+            },
+            properties: {
+              granuleId: granule.id,
+            },
+          };
+        });
+
+        const geojson = {
+          type: 'FeatureCollection',
+          features,
+        };
+
+        const formatedFeatures = cmrSource.getFormat().readFeatures(geojson);
+
+        cmrSource.addFeatures(formatedFeatures);
+        success(formatedFeatures);
+      },
+    });
 
     const source = config.sources[def.source];
 
@@ -980,8 +1062,16 @@ export default function mapLayerBuilder(config, cache, store) {
       minZoom: def.minZoom,
       extent: maxExtent,
     });
+    const footprintLayer = new OlLayerVector({
+      source: cmrSource,
+      className,
+      maxZoom: def.minZoom,
+    });
+    const layerGroup = new OlLayerGroup({
+      layers: [footprintLayer, layer],
+    });
 
-    return layer;
+    return layerGroup;
   };
 
   const createXYZLayer = (def, options, day, state) => {
