@@ -22,6 +22,7 @@
             display: inline-block;
             min-width: 50px;
             font-weight: bold;
+            margin-right: 5px;
         }
     }
 }
@@ -89,14 +90,20 @@
             cursor: pointer;
             display: flex;
             flex-direction: row;
-            height: 60px;
+            height: 75px;
             background-color: $wv-transparent-black;
             color: $wv-white-font;
             border: 2px solid $wv-dark-menu-border;
 
             .band-selection-preset-image {
-                width: 60px;
-                height: 56px;
+                width: 73px;
+            }
+
+            .card-text {
+                font-size: 0.8em;
+                color: #ccc;
+                font-style: italic;
+                line-height: unset;
             }
         }
 

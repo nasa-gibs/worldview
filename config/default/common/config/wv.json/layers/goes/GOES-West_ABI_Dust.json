@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "GOES-West_ABI_Dust": {
+      "id": "GOES-West_ABI_Dust",
+      "description": "goes/GOES-West_ABI_Dust",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": "Geostationary",
+      "wrapX": true,
+      "availability": {
+        "rollingWindow": 90
+      }
+    }
+  }
+}

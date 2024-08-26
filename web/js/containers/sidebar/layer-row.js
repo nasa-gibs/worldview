@@ -173,7 +173,7 @@ function LayerRow (props) {
           setActiveZot(zot);
           setShowGranuleAlert(false);
         }
-        if (!granules.length || zot?.underZoomValue > 0) {
+        if (!granules.length) {
           setDisabled(true);
         } else {
           setDisabled(isDisabled);
