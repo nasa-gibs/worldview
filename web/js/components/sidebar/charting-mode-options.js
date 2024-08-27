@@ -244,7 +244,7 @@ function ChartingModeOptions (props) {
     };
   }
 
-  function getImageStatStatsRequestURL(uriParameters) {
+  function getImageStatStatsRequestURI(uriParameters) {
     const {
       type,
       timestamp,
@@ -329,9 +329,10 @@ function ChartingModeOptions (props) {
       return;
     }
     const requestedLayerSource = layerInfo.projections.geographic.source;
+    console.log('requestedLayerSource', requestedLayerSource);
     if (requestedLayerSource === 'GIBS:geographic') {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
+      const requestURI = getImageStatStatsRequestURI(uriParameters);
       const data = await getImageStatData(requestURI);
 
       if (!data.ok) {
@@ -343,7 +344,6 @@ function ChartingModeOptions (props) {
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
       const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `(${paletteLegend.units})` : '';
-      console.log(unitOfMeasure);
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -365,9 +365,20 @@ function ChartingModeOptions (props) {
         displaySimpleStats(dataToRender);
         updateChartRequestStatus(false, 'Success');
       }
+    } else if (requestedLayerSource === 'EGIS-WMS') {
+      // Do stuff
+      // const uriParameters = getEgisRequestParameters(layerInfo, timeSpanSelection);
+      // const requestURI = getEgisStatsRequestURI(uriParameters);
+      // const data = await getEgisData(requestURI);
+
+      // if (!data.ok) {
+      //   updateChartRequestStatus(false, 'Chart request failed.');
+      //   return;
+      // }
+      // https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples?geometry=0%2C10&geometryType=esriGeometryPoint&sampleDistance=&sampleCount=&mosaicRule=%7B%0D%0A++%22multidimensionalDefinition%22%3A+%5B%0D%0A++++%7B%0D%0A++++++%22variableName%22%3A+%22tmax_above_100%22%2C%0D%0A++++++%22dimensionName%22%3A+%22StdTime%22%0D%0A++++%7D%0D%0A++%5D%0D%0A%7D&pixelSize=&returnFirstValueOnly=false&interpolation=RSP_BilinearInterpolation&outFields=*&sliceId=&time=1451520000000+-+1735603200000&f=html
     } else {
       // handle requests for layers outside of GIBS here!
-      updateChartRequestStatus(false, 'Unable to process non-GIBS layer.');
+      updateChartRequestStatus(false, 'This layer is not configured for charting mode.');
     }
   }
 

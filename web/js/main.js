@@ -97,7 +97,6 @@ window.onload = () => {
 
   promise
     .then((response) => {
-      console.log(response);
       if (!response.ok) {
         throw Error('Could not load config');
       }
