@@ -37,8 +37,14 @@
                     "description": "multi-mission/hls/Reflectance",
                     "image": "",
                     "settings": [
-                        "HLS_NDVI_Sentinel",
                         "HLS_Customizable_Sentinel",
+                        "HLS_NDVI_Sentinel",
+                        "HLS_EVI_Sentinel",
+                        "HLS_SAVI_Sentinel",
+                        "HLS_MSAVI_Sentinel",
+                        "HLS_NBR_Sentinel",
+                        "HLS_NBR2_Sentinel",
+                        "HLS_TVI_Sentinel",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Sentinel-2A_Descending",
                         "OrbitTracks_Sentinel-2B_Descending"
@@ -50,8 +56,14 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "HLS_NDVI_Landsat",
                         "HLS_Customizable_Landsat",
+                        "HLS_NDVI_Landsat",
+                        "HLS_EVI_Landsat",
+                        "HLS_SAVI_Landsat",
+                        "HLS_MSAVI_Landsat",
+                        "HLS_NBR_Landsat",
+                        "HLS_NBR2_Landsat",
+                        "HLS_TVI_Landsat",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Landsat-8_Descending",
                         "OrbitTracks_Landsat-9_Descending"

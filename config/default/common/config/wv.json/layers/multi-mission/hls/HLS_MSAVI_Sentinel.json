@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "HLS_MSAVI_Sentinel": {
+      "id": "HLS_MSAVI_Sentinel",
+      "enableCMRDataFinder": true,
+      "collectionConceptID": "C2021957295-LPCLOUD",
+      "title": "Modified Soil Adjusted Vegetation Index (MSAVI) *BETA*",
+      "subtitle": "Sentinel-2A & -2B / MSI",
+      "description": "multi-mission/hls/HLS_MSAVI_Sentinel",
+      "tags": "corrected surface Sentinel msi s30 msavi",
+      "group": "overlays",
+      "layergroup": "Land Surface Reflectance",
+      "format": "image/png",
+      "type": "titiler",
+      "period": "daily",
+      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
+      "orbitDirection": ["descending", "descending"],
+      "bandCombo": {
+        "assets": ["B05", "B04"],
+        "expression": "(2*B05+1-sqrt((2*B05+1)**2-8*(B05-B04)))/2",
+        "rescale": "-1,1",
+        "colormap_name": "brbg"
+      },
+      "disableSnapshot": true,
+      "minZoom": 7,
+      "wrapX": false,
+      "projections": {
+        "geographic": {
+          "source": "DDV",
+          "matrixSet": "31.25m"
+        }
+      },
+      "startDate": "2022-01-01T00:00:00Z"
+    }
+  }
+}

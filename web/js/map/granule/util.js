@@ -161,9 +161,9 @@ export const getCMRQueryDates = (crs, selectedDate) => {
  * @param {*} def - layer definition
  * @param {*} date - "current" date from which to base the query
  * @param {*} crs
- * @returns
+ * @returns {Array} - array of objects with parameters for CMR request
  */
-export const getParamsForGranuleRequest = (def, date, crs, nrt) => {
+export const getParamsForGranuleRequest = (def, date, crs) => {
   const dayNightFilter = def.daynight[0];
   const bboxForProj = {
     [CRS.WEB_MERCATOR]: [-180, -65, 180, 65],
@@ -173,7 +173,7 @@ export const getParamsForGranuleRequest = (def, date, crs, nrt) => {
   };
   const { startQueryDate, endQueryDate } = getCMRQueryDates(crs, date);
 
-  const getShortName = () => {
+  const getShortName = (nrt) => {
     try {
       const { shortName } = def.conceptIds[0];
       if (nrt) return shortName;
@@ -184,14 +184,35 @@ export const getParamsForGranuleRequest = (def, date, crs, nrt) => {
     }
   };
 
-  return {
+  if (def.conceptIds[0].type === 'NRT') {
+    return [
+      {
+        shortName: getShortName(false),
+        startDate: startQueryDate.toISOString(),
+        endDate: endQueryDate.toISOString(),
+        dayNight: dayNightFilter,
+        bbox: bboxForProj[crs],
+        pageSize: 500,
+      },
+      {
+        shortName: getShortName(true),
+        startDate: startQueryDate.toISOString(),
+        endDate: endQueryDate.toISOString(),
+        dayNight: dayNightFilter,
+        bbox: bboxForProj[crs],
+        pageSize: 500,
+      },
+    ];
+  }
+
+  return [{
     shortName: getShortName(),
     startDate: startQueryDate.toISOString(),
     endDate: endQueryDate.toISOString(),
     dayNight: dayNightFilter,
     bbox: bboxForProj[crs],
     pageSize: 500,
-  };
+  }];
 };
 
 /**
