@@ -11,6 +11,10 @@
         {
             "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-antarctic.xml"
+        },
+        {
+            "from": "https://gis.earthdata.nasa.gov/UAT/services/NEX-GDDP-CMIP6/tmaxXF_ACCESS_CM2_ssp126/ImageServer/WMSServer?request=GetCapabilities&service=WMS",
+            "to": "EGIS-wms.xml"
         }
     ],
     "wv-options-wmts": [
@@ -33,6 +37,13 @@
             "from": "gibs-antarctic.xml",
             "to": "gibs-antarctic.json",
             "projection": "antarctic",
+            "maxResolution": 8192.0
+        },
+        {
+            "source": "EGIS-WMS:geographic",
+            "from": "EGIS-wms.xml",
+            "to": "EGIS-wms.json",
+            "projection": "geographic",
             "maxResolution": 8192.0
         }
     ]

@@ -1574,6 +1574,15 @@ export function adjustActiveDateRanges(layers, appNow) {
  */
 export function adjustEndDates(layers) {
   const applyDateAdjustment = (layer) => {
+    if (layer.id === 'tmax_above_100') {
+      console.log('HERE');
+    }
+
+    // For tmax_above_100
+    // futureTime = 1Y
+    // dateRanges = null
+    // futureEndDate = Wed Aug 27 2025 13:15:00 GMT-0400 (Eastern Daylight Time)
+
     const { futureTime, dateRanges } = layer;
     if (!futureTime) {
       return;
@@ -1582,9 +1591,10 @@ export function adjustEndDates(layers) {
     const futureEndDate = getFutureLayerEndDate(layer);
     layer.endDate = util.toISOStringSeconds(futureEndDate);
 
-    if (dateRanges.length) {
+    if (dateRanges?.length) {
       const lastDateRange = dateRanges[dateRanges.length - 1];
       lastDateRange.endDate = util.toISOStringSeconds(futureEndDate);
+      console.log('lastDateRange.endDate ', lastDateRange.endDate);
     }
   };
 

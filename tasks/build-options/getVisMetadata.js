@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
+const { layer } = require('@fortawesome/fontawesome-svg-core')
 const axios = require('axios').default
 
 const prog = path.basename(__filename)
@@ -62,6 +63,7 @@ const layerMetadata = {}
 
 // These are alias or otherwise layers that don't exist in GIBS
 const skipLayers = [
+  'tmax_above_100',
   'Land_Water_Map',
   'Land_Mask',
   'World_Database_on_Protected_Areas',
@@ -106,8 +108,11 @@ async function main (url) {
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
+  // tmax_above_100 is not a GIBS layer but this is looking for it at https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/
+  // Can I force an exception for that layer?
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   for (const layerId of layerOrder) {
+    //  && !layerId === 'tmax_above_100'
     if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
       await getMetadata(layerId, url)
     }
@@ -171,7 +176,7 @@ async function handleException (error, layerId, url, count) {
   if (count <= 5) {
     await getMetadata(layerId, url, count)
   } else {
-    console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
+    console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error} at ${url}`)
   }
 }
 

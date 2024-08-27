@@ -1,0 +1,27 @@
+{
+  "layers": {
+    "tmax_above_100": {
+      "id": "tmax_above_100",
+      "description": "EGIS/tmax_above_100",
+      "group": "overlays",
+      "tags": "EGIS",
+      "layergroup": "Soil Moisture",
+      "title": "tmax_above_100",
+      "subtitle": "tmax_above_100 subtitle",
+      "type": "wms",
+      "format": "image/png",
+      "period": "yearly",
+      "startDate": "2015-12-31T00:00:00Z",
+      "endDate": "2094-12-31T00:00:00",
+      "ongoing": "true",
+      "futureTime": "1Y",
+      "disableSnapshot": true,
+      "disableSmartHandoff": true,
+      "projections": {
+        "geographic": {
+          "source": "EGIS-WMS"
+        }
+      }
+    }
+  }
+}

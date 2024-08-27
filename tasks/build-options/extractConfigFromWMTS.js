@@ -127,10 +127,20 @@ async function processEntry (entry) {
     return { errorCount, warningCount, layerCount }
   }
 
-  const gcContents = gc.Capabilities.Contents
+  let gcContents
+
+  // GetCapabilites v1.0.0
+  if (gc.Capabilities) {
+    gcContents = gc.Capabilities.Contents
+  // GetCapabilites v1.3.0
+  } else if (gc.WMS_Capabilities) {
+    console.error(`Skipping: [${gcId}] Not GetCapabilites v1.0.0.\n`)
+    // To-Do Improve these return values
+    return { errorCount, warningCount, layerCount }
+  }
   const wvLayers = wv.layers
 
-  if (!gcContents || !gcContents.Layer) {
+  if (!gcContents || !gcContents?.Layer) {
     errorCount += 1
     console.error(`${prog}: ERROR: [${gcId}] No layers\n`)
     return { errorCount, warningCount, layerCount }

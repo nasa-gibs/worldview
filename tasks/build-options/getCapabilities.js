@@ -126,29 +126,34 @@ async function processVectorData (layer) {
   }
 }
 
-async function processLayer (layer) {
-  const ident = layer['ows:Identifier']._text
-  if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}:`)
-  if (layer['ows:Metadata']) {
-    if (config.skipPalettes) {
-      console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
-    } else {
-      Object.values(layer['ows:Metadata']).forEach((item) => {
-        if (argv.mode === 'verbose') console.warn(`  Processing pallette: ${item._attributes['xlink:href']}`)
-        const schemaVersion = item._attributes['xlink:role']
-        if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
-          const colormapLink = item._attributes['xlink:href']
-          const colormapFile = path.basename(colormapLink)
-          const colormapId = path.parse(colormapFile).name
-          colormaps[colormapId] = colormapLink
-        } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
-          const vectorStyleLink = item._attributes['xlink:href']
-          const vectorStyleFile = path.basename(vectorStyleLink)
-          const vectorStyleId = path.parse(vectorStyleFile).name
-          vectorstyles[vectorStyleId] = vectorStyleLink
-        }
-      })
+async function processLayer (layer, gcVersion) {
+  // Extract the layer identification string
+  if (gcVersion === '1.0.0') {
+    const ident = layer['ows:Identifier']._text
+    if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}:`)
+    if (layer['ows:Metadata']) {
+      if (config.skipPalettes) {
+        console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
+      } else {
+        Object.values(layer['ows:Metadata']).forEach((item) => {
+          if (argv.mode === 'verbose') console.warn(`  Processing pallette: ${item._attributes['xlink:href']}`)
+          const schemaVersion = item._attributes['xlink:role']
+          if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
+            const colormapLink = item._attributes['xlink:href']
+            const colormapFile = path.basename(colormapLink)
+            const colormapId = path.parse(colormapFile).name
+            colormaps[colormapId] = colormapLink
+          } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
+            const vectorStyleLink = item._attributes['xlink:href']
+            const vectorStyleFile = path.basename(vectorStyleLink)
+            const vectorStyleId = path.parse(vectorStyleFile).name
+            vectorstyles[vectorStyleId] = vectorStyleLink
+          }
+        })
+      }
     }
+  } else if (gcVersion === '1.3.0') {
+    console.warn('GetCapabilities v1.3.0')
   }
 }
 
@@ -156,23 +161,35 @@ async function processGetCapabilities (outputFile) {
   const xml = fs.readFileSync(outputFile, { encoding: 'utf-8' })
   const gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
 
+  // Probably shouldn't make the assumption of the file structure in the ELSE condition!
+  const gcVersion = gc.Capabilities ? gc.Capabilities._attributes.version : gc.WMS_Capabilities._attributes.version
+  console.warn('gcVersion: ', gcVersion)
   try {
-    if (!gc.Capabilities || !gc.Capabilities.Contents) {
+    if (gc.Capabilities || gc.Capabilities?.Contents) {
+      const layers = gc.Capabilities.Contents.Layer
+
+      Object.values(layers).forEach((layer) => {
+        processLayer(layer, gcVersion)
+        processVectorData(layer)
+      })
+    } else if (gc.WMS_Capabilities) {
+      const layers = gc.WMS_Capabilities.Capability.Layer.Layer
+      Object.values(layers).forEach((Layer) => {
+        if (Layer.Name?._text === 'tmax_above_110') {
+          processLayer(Layer, gcVersion)
+          processVectorData(Layer)
+        }
+      })
+    } else {
       throw new Error(`error: ${outputFile}: no layers`)
     }
-
-    const layers = gc.Capabilities.Contents.Layer
-
-    Object.values(layers).forEach((layer) => {
-      processLayer(layer)
-      processVectorData(layer)
-    })
   } catch (error) {
     throw new Error(`ERROR: ${outputFile}: ${error}`)
   }
 }
 
 async function processMetadata (link, dir, ext, count) {
+  console.warn('link: ', link)
   // if (count) console.warn(`retry #${count} for ${link}`)
   try {
     const outputFile = path.join(dir, path.basename(link))
