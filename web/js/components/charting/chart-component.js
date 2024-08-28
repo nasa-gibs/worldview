@@ -8,8 +8,7 @@ function ChartComponent (props) {
   const {
     liveData,
   } = props;
-
-  const { data } = liveData;
+  const { data, source } = liveData;
 
   // Arbitrary array of colors to use
   const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -37,15 +36,15 @@ function ChartComponent (props) {
     let lowestMin;
     let highestMax;
     for (let i = 0; i < axisData.length; i += 1) {
+      const currentMean = axisData[i].mean;
       // Establish mean min & max values for chart rendering
-      if (axisData[i].mean < lowestMin || lowestMin === undefined) {
-        lowestMin = axisData[i].mean;
+      if (currentMean < lowestMin || lowestMin === undefined) {
+        lowestMin = currentMean;
       }
-      if (axisData[i].mean > highestMax || highestMax === undefined) {
-        highestMax = axisData[i].mean;
+      if (currentMean > highestMax || highestMax === undefined) {
+        highestMax = currentMean;
       }
     }
-
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
@@ -143,11 +142,13 @@ function ChartComponent (props) {
             </div>
           </div>
         </div>
-        <div className="charting-discalimer">
-          <strong>NOTE:</strong>
-          {' '}
-          Numerical analyses performed on imagery should only be used for initial basic exploratory purposes
-        </div>
+        { source === 'GIBS' ? (
+          <div className="charting-discalimer">
+            <strong>NOTE:</strong>
+            {' '}
+            Numerical analyses performed on imagery should only be used for initial basic exploratory purposes
+          </div>
+        ) : null}
       </>
     );
   }

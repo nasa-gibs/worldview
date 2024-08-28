@@ -255,7 +255,7 @@ function ChartingModeOptions (props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://d1igaxm6d8pbn2.cloudfront.net/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
@@ -266,7 +266,7 @@ function ChartingModeOptions (props) {
    * Execute the ImageStat API request
    * @param {String} simpleStatsURI
    */
-  async function getImageStatData(simpleStatsURI) {
+  async function getChartData(simpleStatsURI) {
     const requestOptions = {
       method: 'GET',
       redirect: 'follow',
@@ -295,8 +295,148 @@ function ChartingModeOptions (props) {
     }
   }
 
+  /**
+   * Returns the EGIS request parameters based on the provided layer
+   * @param {Object} layerInfo
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   */
+  function getEgisRequestParameters(layerInfo, timeSpan) {
+    // const startDateForImageStat = formatDateForImageStat(primaryDate);
+    // const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    // const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
+
+    // https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples?geometry=%7B%22rings%22%3A%5B%5B%5B-104%2C35%5D%2C%5B-104%2C36%5D%2C%5B-103%2C36%5D%2C%5B-103%2C35%5D%2C%5B-104%2C35%5D%5D%5D%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPolygon&sampleDistance=&sampleCount=1&mosaicRule=%7B%0D%0A++%22multidimensionalDefinition%22%3A+%5B%0D%0A++++%7B%0D%0A++++++%22variableName%22%3A+%22tmax_above_100%22%2C%0D%0A++++++%22dimensionName%22%3A+%22StdTime%22%0D%0A++++%7D%0D%0A++%5D%0D%0A%7D&pixelSize=&returnFirstValueOnly=false&interpolation=RSP_BilinearInterpolation&outFields=*&sliceId=&time=1451520000000+-+1735603200000&f=html
+
+    const geometry = `${JSON.stringify(
+      {
+        rings: [[[-104, 35], [-104, 36], [-103, 36], [-103, 35], [-104, 35]]],
+        spatialReference: { wkid: 4326 },
+      },
+    )}`;
+    const geometryType = 'esriGeometryPolygon';
+    const sampleDistance = '';
+    const sampleCount = 1;
+    const mosaicRule = `${JSON.stringify({
+      multidimensionalDefinition: [
+        {
+          variableName: 'tmax_above_100',
+          dimensionName: 'StdTime',
+        },
+      ],
+    })}`;
+    const pixelSize = '';
+    const returnFirstValueOnly = 'false';
+    const interpolation = 'RSP_BilinearInterpolation';
+    const outFields = '*';
+    const sliceId = '';
+    const time = '1451520000000,1703980800000';
+    const f = 'json';
+
+    return {
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    };
+  }
+
+  function getEgisStatsRequestURI(uriParameters) {
+    const {
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    } = uriParameters;
+    const baseURI = 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples';
+    const params = new URLSearchParams({
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    });
+
+    const requestURL = `${baseURI}?${params.toString()}`;
+
+    return requestURL;
+  }
+
   function getKeysFromObj(data) {
     return Object.keys(data);
+  }
+
+  function calculateMedian(values) {
+    const sorted = [...values].sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+
+    if (sorted.length % 2 === 0) {
+      return (sorted[middle - 1] + sorted[middle]) / 2;
+    }
+    return sorted[middle];
+  }
+  function calculateMean(values) {
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+  }
+
+  function calculateStandardDeviation(values) {
+    const mean = calculateMean(values);
+    const variance = values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
+    return Math.sqrt(variance);
+  }
+
+  /**
+   * Process the ImageStat (GIBS) data for use in the Recharts library
+   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   */
+  function formatEgisDataForRecharts(data) {
+    const rechartsData = [];
+    const temperatureValues = [];
+    data.samples.forEach((item) => {
+      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
+      temperatureValues.push(tmaxValue);
+    });
+    data.samples.forEach((item) => {
+      const date = new Date(item.attributes.StdTime);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
+
+      rechartsData.push({
+        name: dateString,
+        min: Math.min(...temperatureValues),
+        max: Math.max(...temperatureValues),
+        mean: tmaxValue,
+        median: calculateMedian(temperatureValues),
+        stddev: calculateStandardDeviation(temperatureValues),
+      });
+    });
+
+    return rechartsData;
   }
 
   /**
@@ -329,11 +469,10 @@ function ChartingModeOptions (props) {
       return;
     }
     const requestedLayerSource = layerInfo.projections.geographic.source;
-    console.log('requestedLayerSource', requestedLayerSource);
     if (requestedLayerSource === 'GIBS:geographic') {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getImageStatStatsRequestURI(uriParameters);
-      const data = await getImageStatData(requestURI);
+      const data = await getChartData(requestURI);
 
       if (!data.ok) {
         updateChartRequestStatus(false, 'Chart request failed.');
@@ -359,6 +498,7 @@ function ChartingModeOptions (props) {
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
           data: rechartsData,
+          source: 'GIBS',
         });
         updateChartRequestStatus(false, 'Success');
       } else {
@@ -366,16 +506,32 @@ function ChartingModeOptions (props) {
         updateChartRequestStatus(false, 'Success');
       }
     } else if (requestedLayerSource === 'EGIS-WMS') {
-      // Do stuff
-      // const uriParameters = getEgisRequestParameters(layerInfo, timeSpanSelection);
-      // const requestURI = getEgisStatsRequestURI(uriParameters);
-      // const data = await getEgisData(requestURI);
+      const uriParameters = getEgisRequestParameters(layerInfo, timeSpanSelection);
+      const requestURI = getEgisStatsRequestURI(uriParameters);
+      const data = await getChartData(requestURI);
 
-      // if (!data.ok) {
-      //   updateChartRequestStatus(false, 'Chart request failed.');
-      //   return;
-      // }
-      // https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples?geometry=0%2C10&geometryType=esriGeometryPoint&sampleDistance=&sampleCount=&mosaicRule=%7B%0D%0A++%22multidimensionalDefinition%22%3A+%5B%0D%0A++++%7B%0D%0A++++++%22variableName%22%3A+%22tmax_above_100%22%2C%0D%0A++++++%22dimensionName%22%3A+%22StdTime%22%0D%0A++++%7D%0D%0A++%5D%0D%0A%7D&pixelSize=&returnFirstValueOnly=false&interpolation=RSP_BilinearInterpolation&outFields=*&sliceId=&time=1451520000000+-+1735603200000&f=html
+      if (!data.ok) {
+        updateChartRequestStatus(false, 'Chart request failed.');
+      }
+
+      const unitOfMeasure = 'Temp Max over 100';
+      const dataToRender = {
+        title: layerInfo.title,
+        subtitle: layerInfo.subtitle,
+        unit: unitOfMeasure,
+        ...data.body,
+        ...uriParameters,
+      };
+
+      const rechartsData = formatEgisDataForRecharts(dataToRender);
+      displayChart({
+        title: dataToRender.title,
+        subtitle: dataToRender.subtitle,
+        unit: dataToRender.unit,
+        data: rechartsData,
+        source: 'EGIS',
+      });
+      updateChartRequestStatus(false, 'Success');
     } else {
       // handle requests for layers outside of GIBS here!
       updateChartRequestStatus(false, 'This layer is not configured for charting mode.');
