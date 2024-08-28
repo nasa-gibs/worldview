@@ -22,7 +22,10 @@ const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
 export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam, selectedPresetParam) {
-  const layers = lodashCloneDeep(layersParam);
+  let layers = lodashCloneDeep(layersParam);
+  if (projection) {
+    layers = layers.filter((layer) => layer.projections[projection]);
+  }
   if (lodashFind(layers, { id })) {
     return layers;
   }
