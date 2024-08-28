@@ -415,6 +415,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMS layer
    */
   const createLayerWMS = function(def, options, day, state) {
+    console.log('createLayerWMS()');
     const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
@@ -462,6 +463,13 @@ export default function mapLayerBuilder(config, cache, store) {
       date = util.dateAdd(date, 'day', day);
     }
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
+
+    // This EGIS WMS layer uses DIM_STDTIME as the TIME parameter
+    console.log('Checking def.id');
+    if (def.id === 'tmax_above_100') {
+      urlParameters = urlParameters.replace('?TIME=', '?DIM_STDTIME=');
+    }
+    console.log('urlParameters ', urlParameters);
 
     const sourceOptions = {
       url: source.url + urlParameters,
