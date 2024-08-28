@@ -420,7 +420,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') || layer.id == 'tmax_above_100').length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') || layer.id === 'tmax_above_100').length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error

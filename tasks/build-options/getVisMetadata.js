@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const console = require('console')
-const { layer } = require('@fortawesome/fontawesome-svg-core')
 const axios = require('axios').default
 
 const prog = path.basename(__filename)
