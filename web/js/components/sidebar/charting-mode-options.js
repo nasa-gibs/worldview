@@ -223,6 +223,34 @@ function ChartingModeOptions (props) {
   }
 
   /**
+   * Provides a default AOI of the entire map if unspecified, otherwise modifies the Openlayers coordinates for use with Egis API
+   * @param {Object} aoi (Area Of Interest)
+   */
+  function convertOLcoordsForEgis(aoi) {
+    let polygonCoordinates = [[-180, -90], [-180, 90], [180, 90], [180, -90], [-180, -90]];
+    if (aoi !== null) {
+      const aoiMinX = aoi[0];
+      const aoiMinY = aoi[1];
+      const aoiMaxX = aoi[2];
+      const aoiMaxY = aoi[3];
+
+      polygonCoordinates = [
+        [aoiMinX, aoiMinY], // Bottom-left
+        [aoiMinX, aoiMaxY], // Top-left
+        [aoiMaxX, aoiMaxY], // Top-right
+        [aoiMaxX, aoiMinY], // Bottom-right
+        [aoiMinX, aoiMinY], // Closing the loop (Bottom-left again)
+      ];
+    }
+    return `${JSON.stringify(
+      {
+        rings: [polygonCoordinates],
+        spatialReference: { wkid: 4326 },
+      },
+    )}`;
+  }
+
+  /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
@@ -300,22 +328,13 @@ function ChartingModeOptions (props) {
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getEgisRequestParameters(layerInfo, timeSpan) {
+  async function getEgisRequestParameters(layerInfo, timeSpan) {
     // const startDateForImageStat = formatDateForImageStat(primaryDate);
     // const endDateForImageStat = formatDateForImageStat(secondaryDate);
-    // const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
-
-    // https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples?geometry=%7B%22rings%22%3A%5B%5B%5B-104%2C35%5D%2C%5B-104%2C36%5D%2C%5B-103%2C36%5D%2C%5B-103%2C35%5D%2C%5B-104%2C35%5D%5D%5D%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPolygon&sampleDistance=&sampleCount=1&mosaicRule=%7B%0D%0A++%22multidimensionalDefinition%22%3A+%5B%0D%0A++++%7B%0D%0A++++++%22variableName%22%3A+%22tmax_above_100%22%2C%0D%0A++++++%22dimensionName%22%3A+%22StdTime%22%0D%0A++++%7D%0D%0A++%5D%0D%0A%7D&pixelSize=&returnFirstValueOnly=false&interpolation=RSP_BilinearInterpolation&outFields=*&sliceId=&time=1451520000000+-+1735603200000&f=html
-
-    const geometry = `${JSON.stringify(
-      {
-        rings: [[[-104, 35], [-104, 36], [-103, 36], [-103, 35], [-104, 35]]],
-        spatialReference: { wkid: 4326 },
-      },
-    )}`;
+    const geometry = convertOLcoordsForEgis(aoiCoordinates);
     const geometryType = 'esriGeometryPolygon';
     const sampleDistance = '';
-    const sampleCount = 1;
+    const sampleCount = 20;
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
@@ -506,10 +525,10 @@ function ChartingModeOptions (props) {
         updateChartRequestStatus(false, 'Success');
       }
     } else if (requestedLayerSource === 'EGIS-WMS') {
-      const uriParameters = getEgisRequestParameters(layerInfo, timeSpanSelection);
+      const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getEgisStatsRequestURI(uriParameters);
       const data = await getChartData(requestURI);
-
+      console.log('processing data');
       if (!data.ok) {
         updateChartRequestStatus(false, 'Chart request failed.');
       }
