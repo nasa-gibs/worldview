@@ -334,7 +334,7 @@ function ChartingModeOptions (props) {
     const geometry = convertOLcoordsForEgis(aoiCoordinates);
     const geometryType = 'esriGeometryPolygon';
     const sampleDistance = '';
-    const sampleCount = 20;
+    const sampleCount = 4; // 4 produces 1 value per year. Other values produce more output from the API but not more years
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
@@ -348,7 +348,12 @@ function ChartingModeOptions (props) {
     const interpolation = 'RSP_BilinearInterpolation';
     const outFields = '*';
     const sliceId = '';
-    const time = '1451520000000,1703980800000';
+
+    // December 31, 2015 --> 1451520000000
+    // December 31, 2050 --> 2556100800000
+    // December 31, 2075 --> 3345019200000
+    // December 31, 2099 --> 4102444800000
+    const time = '1451520000000 ,4102444800000';
     const f = 'json';
 
     return {
@@ -433,10 +438,13 @@ function ChartingModeOptions (props) {
   function formatEgisDataForRecharts(data) {
     const rechartsData = [];
     const temperatureValues = [];
+    let count = 0;
     data.samples.forEach((item) => {
       const tmaxValue = parseFloat(item.attributes.tmax_above_100);
       temperatureValues.push(tmaxValue);
+      count += 1;
     });
+    console.log('count: ', count);
     data.samples.forEach((item) => {
       const date = new Date(item.attributes.StdTime);
       const year = date.getFullYear();
@@ -528,12 +536,11 @@ function ChartingModeOptions (props) {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getEgisStatsRequestURI(uriParameters);
       const data = await getChartData(requestURI);
-      console.log('processing data');
       if (!data.ok) {
         updateChartRequestStatus(false, 'Chart request failed.');
       }
 
-      const unitOfMeasure = 'Temp Max over 100';
+      const unitOfMeasure = 'Days of maximum temperature over 100F';
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
