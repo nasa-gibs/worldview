@@ -35,7 +35,6 @@ function ChartingLayerMenu (props) {
     minHeight,
     maxHeight,
     overflowY: 'auto',
-    paddingBottom: '4px',
   };
 
   useEffect(() => {
@@ -76,7 +75,7 @@ const mapStateToProps = (state, ownProps) => {
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') || layer.id === 'tmax_above_100');
+  const activeLayersWithPalettes = overlays.filter((layer) => (Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous') || layer.id === 'tmax_above_100');
 
   return {
     isAnimating: animation.isPlaying,

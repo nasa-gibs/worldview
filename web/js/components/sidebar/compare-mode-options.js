@@ -28,33 +28,46 @@ class CompareModeOptions extends React.Component {
         className="wv-ab-mode-selection-case"
         style={{ display: isActive && !isMobile ? 'block' : 'none' }}
       >
-        <h3>COMPARE MODE:</h3>
-        <ButtonGroup size="sm">
-          <Button
-            id="compare-swipe-button"
-            className="compare-button compare-swipe-button"
-            disabled={selected === 'swipe'}
-            onClick={() => onclick('swipe')}
+        <h3
+          className="compare-title"
+        >
+          Comparison Mode
+        </h3>
+        <div
+          className="compare-button-row"
+        >
+          <h3
+            className="compare-subtitle"
           >
-            Swipe
-          </Button>
-          <Button
-            id="compare-opacity-button"
-            className="compare-button compare-opacity-button"
-            disabled={selected === 'opacity'}
-            onClick={() => onclick('opacity')}
-          >
-            Opacity
-          </Button>
-          <Button
-            id="compare-spy-button"
-            className="compare-button compare-spy-button"
-            disabled={selected === 'spy'}
-            onClick={() => onclick('spy')}
-          >
-            Spy
-          </Button>
-        </ButtonGroup>
+            Type:
+          </h3>
+          <ButtonGroup size="sm">
+            <Button
+              id="compare-swipe-button"
+              className="compare-button compare-swipe-button"
+              disabled={selected === 'swipe'}
+              onClick={() => onclick('swipe')}
+            >
+              Swipe
+            </Button>
+            <Button
+              id="compare-opacity-button"
+              className="compare-button compare-opacity-button"
+              disabled={selected === 'opacity'}
+              onClick={() => onclick('opacity')}
+            >
+              Opacity
+            </Button>
+            <Button
+              id="compare-spy-button"
+              className="compare-button compare-spy-button"
+              disabled={selected === 'spy'}
+              onClick={() => onclick('spy')}
+            >
+              Spy
+            </Button>
+          </ButtonGroup>
+        </div>
       </div>
     );
   }

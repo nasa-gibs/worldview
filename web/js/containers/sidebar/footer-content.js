@@ -6,7 +6,6 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMobileOnly, isTablet } from 'react-device-detect';
 import googleTagManager from 'googleTagManager';
 import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
@@ -19,11 +18,9 @@ import {
 import { openCustomContent } from '../../modules/modal/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
-import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import {
   toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
-import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
@@ -40,10 +37,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
-    breakpoints,
-    screenWidth,
-    isPlaying,
-    addLayers,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -68,12 +61,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
 
-  const onClickAddLayers = (e) => {
-    e.stopPropagation();
-    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
-    googleTagManager.pushEvent({ event: 'add_layers' });
-  };
-
   const renderLayersFooter = () => (
     <>
       <div>
@@ -84,36 +71,13 @@ const FooterContent = React.forwardRef((props, ref) => {
           onclick={changeCompareMode}
         />
         {isChartingActive && (
-        <ChartingModeOptions
-          isChartingActive={isChartingActive}
-          isMobile={isMobile}
-        />
+          <ChartingModeOptions
+            isChartingActive={isChartingActive}
+            isMobile={isMobile}
+          />
         )}
       </div>
       <div className="product-buttons">
-        {!isChartingActive
-        && (
-        <Button
-          id="layers-add"
-          aria-label="Add layers"
-          className="layers-add red"
-          text="+ Add Layers"
-          onClick={onClickAddLayers}
-        />
-        )}
-        {!isChartingActive
-          && (
-          <Button
-            id="compare-toggle-button"
-            aria-label={compareBtnText}
-            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
-            style={!compareFeature ? { display: 'none' } : null}
-            onClick={!isChartingActive ? onClickToggleCompare : null}
-            text={compareBtnText}
-          />
-          )}
-      </div>
-      <div className="charting-button">
         {!isMobile && !isCompareActive && chartFeature
           && (
           <Button
@@ -123,6 +87,17 @@ const FooterContent = React.forwardRef((props, ref) => {
             style={!chartFeature ? { display: 'none' } : null}
             onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
             text={chartBtnText}
+          />
+          )}
+        {!isChartingActive
+          && (
+          <Button
+            id="compare-toggle-button"
+            aria-label={compareBtnText}
+            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
+            style={!compareFeature ? { display: 'none' } : null}
+            onClick={!isChartingActive ? onClickToggleCompare : null}
+            text={compareBtnText}
           />
           )}
       </div>
@@ -170,12 +145,10 @@ const FooterContent = React.forwardRef((props, ref) => {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    animation, config, compare, charting, screenSize,
+    config, compare, charting, screenSize,
   } = state;
-  const { isPlaying } = animation;
   const eventsData = getFilteredEvents(state);
   return {
-    breakpoints: screenSize.breakpoints,
     chartFeature: config.features.charting,
     compareMode: compare.mode,
     compareFeature: config.features.compare,
@@ -183,8 +156,6 @@ const mapStateToProps = (state, ownProps) => {
     isChartingActive: charting.active,
     isCompareActive: compare.active,
     isMobile: screenSize.isMobileDevice,
-    isPlaying,
-    screenWidth: screenSize.screenWidth,
   };
 };
 
@@ -226,21 +197,6 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  addLayers: (isPlaying) => {
-    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
-    if (isPlaying) {
-      dispatch(stopAnimationAction());
-    }
-    dispatch(
-      openCustomContent('LAYER_PICKER_COMPONENT', {
-        headerText: null,
-        modalClassName,
-        backdrop: true,
-        CompletelyCustomModal: SearchUiProvider,
-        wrapClassName: '',
-      }),
-    );
-  },
 });
 
 export default connect(
@@ -264,8 +220,4 @@ FooterContent.propTypes = {
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
-  breakpoints: PropTypes.object,
-  isPlaying: PropTypes.bool,
-  screenWidth: PropTypes.number,
-  addLayers: PropTypes.func,
 };

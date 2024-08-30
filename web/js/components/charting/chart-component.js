@@ -11,7 +11,7 @@ function ChartComponent (props) {
   const { data, source } = liveData;
 
   // Arbitrary array of colors to use
-  const lineColors = ['#8884D8', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
 
   function formatToThreeDigits(str) {
     return parseFloat(str).toFixed(3);
@@ -145,6 +145,7 @@ function ChartComponent (props) {
         { source === 'GIBS' ? (
           <div className="charting-discalimer">
             <strong>NOTE:</strong>
+            <br />
             {' '}
             Numerical analyses performed on imagery should only be used for initial basic exploratory purposes
           </div>
@@ -161,8 +162,8 @@ function ChartComponent (props) {
           {' '}
           <Legend />
           {getLineChart(data)}
-          <XAxis dataKey="name" />
-          <YAxis type="number" domain={yAxisValuesArr} />
+          <XAxis dataKey="name" stroke="#a6a5a6" />
+          <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} />
           <Legend />
         </LineChart>
       </div>
