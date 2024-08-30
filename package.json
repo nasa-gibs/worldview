@@ -146,6 +146,7 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
+    "@edsc/earthdata-react-icons": "^0.0.2",
     "@elastic/react-search-ui": "^1.21.5",
     "@elastic/react-search-ui-views": "^1.21.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",

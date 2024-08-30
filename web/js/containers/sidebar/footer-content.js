@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import googleTagManager from 'googleTagManager';
+import { Plus } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
@@ -97,7 +98,7 @@ const FooterContent = React.forwardRef((props, ref) => {
           id="layers-add"
           aria-label="Add layers"
           className="layers-add red"
-          text="+ Add Layers"
+          text={`${<Plus class="add-plus" size="10px" />} Add Layers`}
           onClick={onClickAddLayers}
         />
         )}

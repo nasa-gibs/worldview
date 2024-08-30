@@ -67,6 +67,8 @@ class TourBox extends React.Component {
         onClick={(e) => selectTour(e, story, index, storyId)}
       >
         <div className="tour-box-content">
+          <i className="tour-box-icon" aria-hidden="true" />
+          <div className="tour-box-gradient" />
           <div className="tour-box-header">
             <h3 className="tour-box-title">{title}</h3>
           </div>
