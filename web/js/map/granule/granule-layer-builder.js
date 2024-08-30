@@ -2,7 +2,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import { throttle as lodashThrottle } from 'lodash';
 import OlCollection from 'ol/Collection';
 import { DEFAULT_NUM_GRANULES } from '../../modules/layers/constants';
-import { updateGranuleLayerState, addGranuleDateRanges } from '../../modules/layers/actions';
+import { updateGranuleLayerState } from '../../modules/layers/actions';
 import { getGranuleLayer } from '../../modules/layers/selectors';
 import {
   startLoading,
@@ -21,7 +21,6 @@ import {
   datelineShiftGranules,
   transformGranulesForProj,
 } from './util';
-import { getLayerGranuleRanges } from '../util';
 import util from '../../util/util';
 
 const { toISOStringSeconds } = util;
@@ -153,7 +152,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {array} ranges - array of date ranges
    * @returns {boolean} - true if date is within a range
   */
-  const isWithinRanges = (date, ranges) => ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
+  const isWithinRanges = (date, ranges) => {
+    if (!ranges) return true;
+
+    return ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
+  };
 
   /**
    * Get granuleCount number of granules that have visible imagery based on
@@ -202,19 +205,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { granuleCount, date, group } = options;
     const { count: currentCount } = getGranuleLayer(state, def.id) || {};
     const count = currentCount || granuleCount || def.count || DEFAULT_NUM_GRANULES;
-    let granuleDateRanges = null;
+    const { granuleDateRanges } = def;
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    // if opted in to CMR availability, get granule date ranges if needed
-    if (def.cmrAvailability) {
-      if (!def.granuleDateRanges) {
-        granuleDateRanges = await getLayerGranuleRanges(def);
-        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
-      } else {
-        granuleDateRanges = def.granuleDateRanges;
-      }
-    }
     const visibleGranules = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
     const transformedGranules = transformGranulesForProj(visibleGranules, crs);
 

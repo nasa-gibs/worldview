@@ -33,7 +33,6 @@ import {
   createVectorUrl,
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
-  getLayerGranuleRanges,
 } from './util';
 import { addGranuleDateRanges } from '../modules/layers/actions';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
@@ -1140,16 +1139,17 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
-    let granuleDateRanges = null;
-
     // if opted in to CMR availability, get granule date ranges if needed
-    if (cmrAvailability) {
-      if (!def.granuleDateRanges) {
-        granuleDateRanges = await getLayerGranuleRanges(def);
-        store.dispatch(addGranuleDateRanges(def, granuleDateRanges));
-      } else {
-        granuleDateRanges = def.granuleDateRanges;
-      }
+    if (cmrAvailability && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/cmr.worker.js');
+      worker.onmessage = (event) => {
+        worker.terminate();
+        store.dispatch(addGranuleDateRanges(def, event.data));
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      worker.postMessage({ funcName: 'getLayerGranuleRanges', args: [def] });
     }
 
     if (!layer || isGranule || def.type === 'titiler') {
