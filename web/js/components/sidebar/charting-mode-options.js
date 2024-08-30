@@ -228,11 +228,7 @@ function ChartingModeOptions(props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-<<<<<<< HEAD
     let requestURL = `https://worldview.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
-=======
-    let requestURL = `https://worldview.sit.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
->>>>>>> wv-3117-charting-wireframe-implementation
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
