@@ -142,7 +142,7 @@ function ChartingModeOptions(props) {
     return null;
   }
 
-  function formatDateForImageStat(dateStr) {
+  function formatDateForChartRequest(dateStr) {
     const dateParts = dateStr.split(' ');
     const year = dateParts[0];
     const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
@@ -172,27 +172,49 @@ function ChartingModeOptions(props) {
    * @param {Object} aoi (Area Of Interest)
    */
   function convertOLcoordsForEgis(aoi) {
-    let polygonCoordinates = [[-180, -90], [-180, 90], [180, 90], [180, -90], [-180, -90]];
+    // let polygonCoordinates = [[-180, -90], [-180, 90], [180, 90], [180, -90], [-180, -90]];
+    // if (aoi !== null) {
+    //   const aoiMinX = aoi[0];
+    //   const aoiMinY = aoi[1];
+    //   const aoiMaxX = aoi[2];
+    //   const aoiMaxY = aoi[3];
+
+    //   polygonCoordinates = [
+    //     [aoiMinX, aoiMinY], // Bottom-left
+    //     [aoiMinX, aoiMaxY], // Top-left
+    //     [aoiMaxX, aoiMaxY], // Top-right
+    //     [aoiMaxX, aoiMinY], // Bottom-right
+    //     [aoiMinX, aoiMinY], // Closing the loop (Bottom-left again)
+    //   ];
+    // }
+    // return `${JSON.stringify(
+    //   {
+    //     rings: [polygonCoordinates],
+    //     spatialReference: { wkid: 4326 },
+    //   },
+    // )}`;
+    let envelopeCoordinates = {
+      xmin: -10,
+      ymin: -10,
+      xmax: 10,
+      ymax: 10,
+      spatialReference: { wkid: 4326 },
+    };
     if (aoi !== null) {
       const aoiMinX = aoi[0];
       const aoiMinY = aoi[1];
       const aoiMaxX = aoi[2];
       const aoiMaxY = aoi[3];
 
-      polygonCoordinates = [
-        [aoiMinX, aoiMinY], // Bottom-left
-        [aoiMinX, aoiMaxY], // Top-left
-        [aoiMaxX, aoiMaxY], // Top-right
-        [aoiMaxX, aoiMinY], // Bottom-right
-        [aoiMinX, aoiMinY], // Closing the loop (Bottom-left again)
-      ];
-    }
-    return `${JSON.stringify(
-      {
-        rings: [polygonCoordinates],
+      envelopeCoordinates = {
+        xmin: aoiMinX,
+        ymin: aoiMinY,
+        xmax: aoiMaxX,
+        ymax: aoiMaxY,
         spatialReference: { wkid: 4326 },
-      },
-    )}`;
+      };
+    }
+    return JSON.stringify(envelopeCoordinates);
   }
 
   /**
@@ -201,8 +223,8 @@ function ChartingModeOptions(props) {
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(primaryDate);
-    const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const startDateForImageStat = formatDateForChartRequest(primaryDate);
+    const endDateForImageStat = formatDateForChartRequest(secondaryDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
@@ -270,16 +292,37 @@ function ChartingModeOptions(props) {
 
   /**
    * Returns the EGIS request parameters based on the provided layer
+   * @param {string} dateString | Time in YYYY-MM-DD format
+   *
+   * @returns {integer} | Epoch time representation of the provided string
+   */
+  function convertToMsSinceEpoch(dateString) {
+    const date = new Date(dateString);
+    const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
+    // const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+    // const epochYear = timeDifference / millisecondsPerYear;
+    return millisecondsSinceEpoch;
+  }
+
+  /**
+   * Returns the EGIS request parameters based on the provided layer
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   async function getEgisRequestParameters(layerInfo, timeSpan) {
-    // const startDateForImageStat = formatDateForImageStat(primaryDate);
-    // const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const startDate = formatDateForChartRequest(primaryDate);
+    const endDate = formatDateForChartRequest(secondaryDate);
+    const startEpochTime = convertToMsSinceEpoch(startDate);
+    const endEpochTime = convertToMsSinceEpoch(endDate);
     const geometry = convertOLcoordsForEgis(aoiCoordinates);
-    const geometryType = 'esriGeometryPolygon';
+    // const geometryType = 'esriGeometryPolygon';
+    const geometryType = 'esriGeometryEnvelope';
     const sampleDistance = '';
-    const sampleCount = 4; // 4 produces 1 value per year. Other values produce more output from the API but not more years
+
+    // 4 produces 1 value per year if using the entire globe extent.
+    // Other values produce more output from the API (per year!) but not more years
+    // Cannot find a combination that will provide data for the entire ~85 year span with a single request
+    const sampleCount = 2; // 1 fails with "full AOI"
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
@@ -298,7 +341,8 @@ function ChartingModeOptions(props) {
     // December 31, 2050 --> 2556100800000
     // December 31, 2075 --> 3345019200000
     // December 31, 2099 --> 4102444800000
-    const time = '1451520000000 ,4102444800000';
+    const time = '1451520000000,4102444800000';
+    // const time = `${startEpochTime},${endEpochTime}`;
     const f = 'json';
 
     return {
@@ -383,13 +427,10 @@ function ChartingModeOptions(props) {
   function formatEgisDataForRecharts(data) {
     const rechartsData = [];
     const temperatureValues = [];
-    let count = 0;
     data.samples.forEach((item) => {
       const tmaxValue = parseFloat(item.attributes.tmax_above_100);
       temperatureValues.push(tmaxValue);
-      count += 1;
     });
-    console.log('count: ', count);
     data.samples.forEach((item) => {
       const date = new Date(item.attributes.StdTime);
       const year = date.getFullYear();
@@ -481,8 +522,9 @@ function ChartingModeOptions(props) {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getEgisStatsRequestURI(uriParameters);
       const data = await getChartData(requestURI);
-      if (!data.ok) {
+      if (!data.ok || data.body?.error) {
         updateChartRequestStatus(false, 'Chart request failed.');
+        return;
       }
 
       const unitOfMeasure = 'Days of maximum temperature over 100F';
