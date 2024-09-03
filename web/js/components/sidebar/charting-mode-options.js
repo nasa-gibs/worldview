@@ -296,13 +296,11 @@ function ChartingModeOptions(props) {
    *
    * @returns {integer} | Epoch time representation of the provided string
    */
-  function convertToMsSinceEpoch(dateString) {
-    const date = new Date(dateString);
-    const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
-    // const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
-    // const epochYear = timeDifference / millisecondsPerYear;
-    return millisecondsSinceEpoch;
-  }
+  // function convertToMsSinceEpoch(dateString) {
+  //   const date = new Date(dateString);
+  //   const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
+  //   return millisecondsSinceEpoch;
+  // }
 
   /**
    * Returns the EGIS request parameters based on the provided layer
