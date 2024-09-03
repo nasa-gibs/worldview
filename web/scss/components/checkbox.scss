@@ -19,7 +19,7 @@
     position: absolute;
     color: #fff;
     left: 1px;
-    top: 4.5px;
+    top: 4px;
     pointer-events: none;
   }
 
@@ -44,6 +44,7 @@
   min-width: 16px;
   text-align: center;
   border-radius: 2px;
+  margin-top: 3px;
 }
 
 .wv-checkbox.gray label {

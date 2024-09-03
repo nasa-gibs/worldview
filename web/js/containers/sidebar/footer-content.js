@@ -98,7 +98,12 @@ const FooterContent = React.forwardRef((props, ref) => {
           id="layers-add"
           aria-label="Add layers"
           className="layers-add red"
-          text={`${<Plus class="add-plus" size="10px" />} Add Layers`}
+          text={(
+            <>
+              <Plus class="add-plus" size="10px" />
+              Add Layers
+            </>
+          )}
           onClick={onClickAddLayers}
         />
         )}

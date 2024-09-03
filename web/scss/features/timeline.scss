@@ -135,7 +135,7 @@ button:focus {
 
   & input {
     width: 100%;
-    height: 40px;
+    height: 36px;
     color: #fff;
     opacity: 1;
     font-size: 24px;
@@ -217,18 +217,22 @@ button:focus {
 
   & .date-arrows {
     display: block;
-    height: 10px;
+    height: 12px;
     max-width: inherit;
+    width: 35px;
+    margin: auto;
+    text-align: center;
   }
 
   & .date-arrows svg {
     vertical-align: top;
-    display: block;
     margin: 0 auto;
+    margin-top: -3px;
+    display: inline-block;
   }
 
   & .date-arrows svg path {
-    fill: #666;
+    fill: #cfcfcf;
   }
 
   & .input-wrapper:hover .date-arrows:hover svg path {
@@ -241,6 +245,12 @@ button:focus {
     filter: 'FlipV';
   }
 
+  & .date-arrows,
+  & > .button-action-group,
+  & .button-action-group {
+    background-color: #17171b;
+  }
+
   & .date-arrows:hover,
   & > .button-action-group:hover,
   & .button-action-group:hover {
@@ -250,7 +260,7 @@ button:focus {
 
   & > .button-action-group .button-disabled:hover,
   & .button-disabled:hover {
-    background-color: transparent;
+    background-color: #17171b;
     cursor: default;
   }
 
@@ -262,8 +272,12 @@ button:focus {
     margin-left: -12px;
   }
 
-  & #left-arrow-group {
-    transform: scaleX(-1);
+  & #left-arrow-group .arrow {
+    margin-left: -15px;
+  }
+
+  & #right-arrow-group .arrow {
+    margin-left: -14px;
   }
 
   & #left-arrow-group svg {
@@ -274,10 +288,10 @@ button:focus {
   & #now-button-group {
     width: 34px;
     height: 34px;
-    top: -2px;
 
     svg {
       left: 15px;
+      margin-top: -18px;
     }
   }
 
@@ -289,7 +303,8 @@ button:focus {
   }
 
   & > .button-action-group.button-disabled .arrow,
-  & #zoom-buttons-group .button-disabled .arrow {
+  & #zoom-buttons-group .button-disabled .arrow,
+  & #zoom-buttons-group .button-disabled .arrow path {
     fill: #4d4d4d;
   }
 
@@ -309,6 +324,7 @@ button:focus {
     width: 37px;
     top: 16px;
     right: 4px;
+    background-color: transparent;
 
     & svg {
       top: 5px;
