@@ -310,19 +310,26 @@ function ChartingModeOptions(props) {
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   async function getEgisRequestParameters(layerInfo, timeSpan) {
-    const startDate = formatDateForChartRequest(primaryDate);
-    const endDate = formatDateForChartRequest(secondaryDate);
-    const startEpochTime = convertToMsSinceEpoch(startDate);
-    const endEpochTime = convertToMsSinceEpoch(endDate);
+    // Example epoch timestamps
+    // December 31, 2015 --> 1451520000000
+    // December 31, 2050 --> 2556100800000
+    // December 31, 2075 --> 3345019200000
+    // December 31, 2099 --> 4102444800000
+
+    // Uncomment this block to use the dates from the datepicker
+    // const startDate = formatDateForChartRequest(primaryDate);
+    // const endDate = formatDateForChartRequest(secondaryDate);
+    // const startEpochTime = convertToMsSinceEpoch(startDate);
+    // const endEpochTime = convertToMsSinceEpoch(endDate);
+    // const time = `${startEpochTime},${endEpochTime}`;
+
+    // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
+    const time = '1451520000000,4102444800000';
+
     const geometry = convertOLcoordsForEgis(aoiCoordinates);
-    // const geometryType = 'esriGeometryPolygon';
     const geometryType = 'esriGeometryEnvelope';
     const sampleDistance = '';
-
-    // 4 produces 1 value per year if using the entire globe extent.
-    // Other values produce more output from the API (per year!) but not more years
-    // Cannot find a combination that will provide data for the entire ~85 year span with a single request
-    const sampleCount = 2; // 1 fails with "full AOI"
+    const sampleCount = 2;
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
@@ -337,12 +344,6 @@ function ChartingModeOptions(props) {
     const outFields = '*';
     const sliceId = '';
 
-    // December 31, 2015 --> 1451520000000
-    // December 31, 2050 --> 2556100800000
-    // December 31, 2075 --> 3345019200000
-    // December 31, 2099 --> 4102444800000
-    const time = '1451520000000,4102444800000';
-    // const time = `${startEpochTime},${endEpochTime}`;
     const f = 'json';
 
     return {
