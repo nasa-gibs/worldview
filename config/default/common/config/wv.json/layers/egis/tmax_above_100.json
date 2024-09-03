@@ -16,7 +16,7 @@
         {
           "startDate": "2015-12-31T00:00:00Z",
           "endDate": "2094-12-31T00:00:00",
-          "dateInterval": "365"
+          "dateInterval": "1"
         }
       ],
       "ongoing": "true",
