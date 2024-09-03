@@ -153,7 +153,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {boolean} - true if date is within a range
   */
   const isWithinRanges = (date, ranges) => {
-    if (!ranges) return true;
+    if (!ranges) return false;
 
     return ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
   };
