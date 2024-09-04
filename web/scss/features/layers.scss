@@ -283,10 +283,8 @@
     }
   }
 
-  &:hover {
-    .wv-checkbox::before {
-      border-color: #f3460a;
-    }
+  .wv-checkbox::before {
+    margin-top: 3px;
   }
 
   .wv-checkbox {

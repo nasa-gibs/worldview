@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, UncontrolledTooltip } from 'reactstrap';
+import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -129,7 +130,7 @@ class SearchLayerRow extends React.Component {
         onMouseEnter={() => this.toggleDeleteIcon(true)}
         onMouseLeave={() => this.toggleDeleteIcon(false)}
       >
-        <div className={checkboxClass}>
+        <div className={checkboxClass + (!isMetadataShowing ? ' gray' : '')}>
           <input
             type="checkbox"
             id={`${encodedId}-checkbox`}
@@ -137,6 +138,9 @@ class SearchLayerRow extends React.Component {
             checked={isEnabled}
             onChange={this.toggleEnabled}
           />
+          {isEnabled && (
+            <Check class="check" size="15px" />
+          )}
         </div>
         {layerNotices && (
           <div className="layer-notice-wrapper">
