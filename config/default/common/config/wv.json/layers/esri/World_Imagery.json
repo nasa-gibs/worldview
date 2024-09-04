@@ -6,7 +6,7 @@
         "subtitle": "Esri, Maxar, Earthstar Geographics, and the GIS User Community",
         "description": "esri/World_Imagery",
         "tags": "",
-        "group": "overlays",
+        "group": "baselayers",
         "layergroup": "Base Layers",
         "format": "image/png",
         "type": "esri",
