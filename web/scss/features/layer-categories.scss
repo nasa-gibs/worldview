@@ -289,6 +289,10 @@
     font-weight: 400;
     display: flex;
 
+    &::before {
+      margin-top: 2px;
+    }
+
     label {
       color: #333;
       padding-left: 5px;
