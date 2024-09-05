@@ -826,6 +826,10 @@ p.recharts-tooltip-label {
     display: flex;
     align-items: center;
 
+    .check {
+      top: unset;
+    }
+
     & label {
       display: inline;
       text-transform: capitalize;
