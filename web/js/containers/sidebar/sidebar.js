@@ -229,11 +229,11 @@ class Sidebar extends React.Component {
       position: 'absolute',
     }
       : {
-        background: `url(${mobileImgURL}) no-repeat 5px center/52px rgb(40 40 40 / 85%)`,
+        background: `url(${mobileImgURL}) no-repeat 15px center/52px rgb(40 40 40 / 85%)`,
         display: 'block',
         width: '286px',
         height: '65px',
-        padding: '10px 69px',
+        padding: '10px 76px',
         position: 'absolute',
         top: '10px',
         left: '10px',
@@ -246,7 +246,7 @@ class Sidebar extends React.Component {
         boxSizing: 'border-box',
         fontFamily: 'Inter',
         fontWeight: '300',
-        fontSize: '40px',
+        fontSize: '36px',
         textDecoration: 'none',
         color: '#fff',
         lineHeight: '45px',

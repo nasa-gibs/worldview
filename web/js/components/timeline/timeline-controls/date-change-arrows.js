@@ -85,7 +85,7 @@ class DateChangeArrows extends PureComponent {
     const rightArrowUp = () => this.onArrowUp('right');
 
     return (
-      <div>
+      <div className="arrow-group">
         {arrowDown && !tilesPreloaded && (
           <LoadingIndicator
             title="Loading ..."

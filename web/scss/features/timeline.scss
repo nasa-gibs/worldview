@@ -78,6 +78,10 @@ button:focus {
   margin-top: 2px;
 }
 
+.arrow-group {
+  margin-top: -1px;
+}
+
 #distraction-free-timeline-header,
 #timeline-header {
   display: inline-block;
@@ -280,10 +284,11 @@ button:focus {
 
   & #now-button-group {
     width: 34px;
+    height: 34px;
+    margin-top: -1.5px;
 
     svg {
       left: 15px;
-      margin-top: -18px;
     }
   }
 
