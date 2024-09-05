@@ -245,12 +245,6 @@ button:focus {
     filter: 'FlipV';
   }
 
-  & .date-arrows,
-  & > .button-action-group,
-  & .button-action-group {
-    background-color: #17171b;
-  }
-
   & .date-arrows:hover,
   & > .button-action-group:hover,
   & .button-action-group:hover {
@@ -260,7 +254,6 @@ button:focus {
 
   & > .button-action-group .button-disabled:hover,
   & .button-disabled:hover {
-    background-color: #17171b;
     cursor: default;
   }
 
