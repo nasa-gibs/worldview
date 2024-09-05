@@ -322,22 +322,24 @@ function ChartingModeOptions(props) {
     // const time = `${startEpochTime},${endEpochTime}`;
 
     // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
-    const time = '1451520000000,4102444800000';
+    // const time = '1451520000000,4102444800000';
+    const time = '1451520000000+-+4102444800000';
 
     const geometry = convertOLcoordsForEgis(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
     const sampleDistance = '';
-    const sampleCount = 2;
+    const sampleCount = '';
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
-          variableName: 'tmax_above_100',
+          // variableName: 'tmax_above_100',
+          variableName: 'heatmax_ssp126',
           dimensionName: 'StdTime',
         },
       ],
     })}`;
     const pixelSize = '';
-    const returnFirstValueOnly = 'false';
+    const returnFirstValueOnly = 'true';
     const interpolation = 'RSP_BilinearInterpolation';
     const outFields = '*';
     const sliceId = '';
@@ -360,7 +362,7 @@ function ChartingModeOptions(props) {
     };
   }
 
-  function getEgisStatsRequestURI(uriParameters) {
+  function getEgisStatsRequestURI(uriParameters, baseURI) {
     const {
       geometryType,
       geometry,
@@ -375,7 +377,6 @@ function ChartingModeOptions(props) {
       time,
       f,
     } = uriParameters;
-    const baseURI = 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples';
     const params = new URLSearchParams({
       geometryType,
       geometry,
@@ -452,6 +453,40 @@ function ChartingModeOptions(props) {
   }
 
   /**
+   * Process the Prototype Heatmax data for use in the Recharts library
+   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   */
+  function formatHeatmaxDataForRecharts(data) {
+    console.log('data', data);
+    const rechartsData = [];
+    const dataValues = [];
+    data.samples.forEach((item) => {
+      console.log(item);
+      const value = parseFloat(item.value);
+      dataValues.push(value);
+    });
+    data.samples.forEach((item) => {
+      const date = new Date(item.attributes.StdTime);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
+
+      rechartsData.push({
+        name: dateString,
+        min: Math.min(...dataValues),
+        max: Math.max(...dataValues),
+        mean: tmaxValue,
+        median: calculateMedian(dataValues),
+        stddev: calculateStandardDeviation(dataValues),
+      });
+    });
+
+    return rechartsData;
+  }
+
+  /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
    * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
    */
@@ -517,9 +552,13 @@ function ChartingModeOptions(props) {
         displaySimpleStats(dataToRender);
         updateChartRequestStatus(false, 'Success');
       }
-    } else if (requestedLayerSource === 'EGIS-WMS') {
+    } else if (requestedLayerSource === 'EGIS-WMS' || requestedLayerSource === 'heatmax-WMS') {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getEgisStatsRequestURI(uriParameters);
+      const baseURI = requestedLayerSource === 'EGIS-WMS'
+        ? 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples'
+        : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+
+      const requestURI = getEgisStatsRequestURI(uriParameters, baseURI);
       const data = await getChartData(requestURI);
       if (!data.ok || data.body?.error) {
         updateChartRequestStatus(false, 'Chart request failed.');
@@ -535,7 +574,10 @@ function ChartingModeOptions(props) {
         ...uriParameters,
       };
 
-      const rechartsData = formatEgisDataForRecharts(dataToRender);
+      const rechartsData = requestedLayerSource === 'EGIS-WMS'
+        ? formatEgisDataForRecharts(dataToRender)
+        : formatHeatmaxDataForRecharts(dataToRender);
+
       displayChart({
         title: dataToRender.title,
         subtitle: dataToRender.subtitle,
@@ -545,6 +587,7 @@ function ChartingModeOptions(props) {
       });
       updateChartRequestStatus(false, 'Success');
     } else {
+      console.log('requestedLayerSource', requestedLayerSource);
       // handle requests for layers outside of GIBS here!
       updateChartRequestStatus(false, 'This layer is not configured for charting mode.');
     }

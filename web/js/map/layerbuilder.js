@@ -463,8 +463,14 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
-    // This EGIS WMS layer uses DIM_STDTIME as the TIME parameter
-    if (def.id === 'tmax_above_100') {
+    const prototpeLayers = [
+      'heatmax_ssp126',
+      'heatmax_ssp245',
+      'heatmax_ssp370',
+      'tmax_above_100',
+    ];
+    // These layers uses DIM_STDTIME as the TIME parameter
+    if (prototpeLayers.indexOf(def.id) > -1) {
       urlParameters = urlParameters.replace('?TIME=', '?DIM_STDTIME=');
     }
 

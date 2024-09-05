@@ -1,0 +1,36 @@
+{
+  "layers": {
+    "heatmax_ssp245": {
+      "id": "heatmax_ssp245",
+      "description": "EGIS/heatmax_ssp245",
+      "group": "overlays",
+      "tags": "EGIS",
+      "layergroup": "Soil Moisture",
+      "title": "heatmax_ssp245",
+      "subtitle": "heatmax_ssp245 subtitle",
+      "type": "wms",
+      "format": "image/png",
+      "period": "monthly",
+      "startDate": "1950-01-31T00:00:00Z",
+      "endDate": "2100-12-31T00:00:00Z",
+      "dateRanges": [
+        {
+          "startDate": "1950-01-31T00:00:00Z",
+          "endDate": "2100-12-31T23:59:59Z",
+          "dateInterval": [
+            "1"
+          ]
+        }
+      ],
+      "ongoing": "true",
+      "futureTime": "1M",
+      "disableSnapshot": true,
+      "disableSmartHandoff": true,
+      "projections": {
+        "geographic": {
+          "source": "heatmax-WMS"
+        }
+      }
+    }
+  }
+}

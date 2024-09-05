@@ -62,6 +62,9 @@ const layerMetadata = {}
 
 // These are alias or otherwise layers that don't exist in GIBS
 const skipLayers = [
+  'heatmax_ssp126',
+  'heatmax_ssp245',
+  'heatmax_ssp370',
   'tmax_above_100',
   'Land_Water_Map',
   'Land_Mask',

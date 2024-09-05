@@ -428,7 +428,17 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => (Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous') || layer.id === 'tmax_above_100').length > 0;
+  const chartingPrototypeLayers = [
+    'heatmax_ssp126',
+    'heatmax_ssp245',
+    'heatmax_ssp370',
+    'tmax_above_100',
+  ];
+  const chartingModeAccessible = layers.active.layers.filter((layer) => (
+    Object.prototype.hasOwnProperty.call(layer, 'palette')
+    && state.palettes.rendered[layer.palette.id]
+    && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous'
+  ) || chartingPrototypeLayers.includes(layer.id));
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error

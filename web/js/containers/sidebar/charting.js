@@ -75,7 +75,17 @@ const mapStateToProps = (state, ownProps) => {
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.filter((layer) => (Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous') || layer.id === 'tmax_above_100');
+  const chartingPrototypeLayers = [
+    'heatmax_ssp126',
+    'heatmax_ssp245',
+    'heatmax_ssp370',
+    'tmax_above_100',
+  ];
+  const activeLayersWithPalettes = overlays.filter((layer) => (
+    Object.prototype.hasOwnProperty.call(layer, 'palette')
+        && state.palettes.rendered[layer.palette.id]
+        && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous'
+  ) || chartingPrototypeLayers.includes(layer.id));
 
   return {
     isAnimating: animation.isPlaying,

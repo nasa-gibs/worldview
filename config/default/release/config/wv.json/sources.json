@@ -94,6 +94,9 @@
     },
     "EGIS-WMS": {
       "url": "https://gis.earthdata.nasa.gov/UAT/services/NEX-GDDP-CMIP6/tmaxXF_ACCESS_CM2_ssp126/ImageServer/WMSServer"
+    },
+    "heatmax-WMS": {
+      "url": "https://gis.earthdata.nasa.gov/maphost/services/EIC/heatmax_median_multivariate/ImageServer/WMSServer"
     }
   }
 }

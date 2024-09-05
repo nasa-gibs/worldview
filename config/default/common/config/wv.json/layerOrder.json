@@ -1,5 +1,8 @@
 {
 	"layerOrder": [
+		"heatmax_ssp126",
+		"heatmax_ssp245",
+		"heatmax_ssp370",
 		"tmax_above_100",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
