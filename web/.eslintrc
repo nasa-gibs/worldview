@@ -25,7 +25,11 @@
     },
     "import/resolver": {
       "webpack": {}
-    }
+    },
+    "import/core-modules": [
+      "@edsc/earthdata-react-icons/horizon-design-system/earthdata/ui",
+      "@edsc/earthdata-react-icons/horizon-design-system/hds/ui"
+    ]
   },
   "rules": {
     // The following rules are cases where our base rules

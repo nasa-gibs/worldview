@@ -54,7 +54,7 @@ test('Share link clipboard with no time query string param in the page url will 
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
   await closeModal(page)
-  await page.getByRole('button', { name: '×' }).click()
+  await page.locator('.tour-close-btn').click()
   await shareToolbarButton.click()
   const minutesOffset = 40 * 60000 // 40 minutes
   let date = new Date(new Date().getTime() - minutesOffset)

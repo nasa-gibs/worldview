@@ -21,3 +21,26 @@
   src: url("../fonts/DroidSansMono/DroidSansMono.ttf");
   src: local("Droid Sans Mono"), local("DroidSansMono-Regular"), url("../fonts/DroidSansMono/DroidSansMono.ttf") format("truetype");
 }
+
+@font-face { /* Inter Light */
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/Inter/Inter-Light.ttf");
+  src: local("Inter Light"), local("Inter-Light"), url("../fonts/Inter/Inter-Light.ttf") format("truetype");
+}
+
+@font-face { /* Inter Medium */
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/Inter/Inter-Medium.ttf");
+  src: local("Inter"), local("Inter-Medium"), url("../fonts/Inter/Inter-Medium.ttf") format("truetype");
+}
+
+@font-face { /* Public Sans Regular */
+  font-family: "Public Sans";
+  font-style: normal;
+  src: url("../fonts/PublicSans/PublicSans-VariableFont_wght.ttf");
+  src: local("Public Sans"), local("PublicSans-VariableFont_wght"), url("../fonts/PublicSans/PublicSans-VariableFont_wght.ttf") format("truetype");
+}

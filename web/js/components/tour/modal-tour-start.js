@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputGroupText,
 } from 'reactstrap';
+import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import Checkbox from '../util/checkbox';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
@@ -44,7 +45,7 @@ class ModalStart extends React.Component {
     const { checked } = this.state;
     const closeBtn = (
       <button className="tour-close-btn" onClick={endTour} type="button">
-        &times;
+        <Close class="add-plus" size="14px" />
       </button>
     );
     return (
@@ -58,7 +59,7 @@ class ModalStart extends React.Component {
         keyboard={false}
       >
         <ModalHeader toggle={endTour} close={closeBtn}>
-          Welcome to @NAME@!
+          Welcome to NASA @NAME@
         </ModalHeader>
 
         <Scrollbars style={{ maxHeight: `${height - 200}px` }}>

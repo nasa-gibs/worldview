@@ -5,7 +5,7 @@
     float: left;
     left: 10px;
     position: absolute;
-    top: 67px;
+    top: 77px;
     height: 30px;
     padding-top: 8px;
     background: $wv-transparent-black;
@@ -583,7 +583,8 @@ li.item.productsitem.inmotion,
 
 .productsitem.layer-hidden .layer-info h4,
 .productsitem.layer-hidden .layer-info p {
-  color: #999;
+  color: #D1D1D1;
+  font-weight: 300;
 }
 
 .sidebar-panel .layer-main h4,
