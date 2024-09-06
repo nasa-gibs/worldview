@@ -171,7 +171,7 @@ function ChartingModeOptions(props) {
    * Provides a default AOI of the entire map if unspecified, otherwise modifies the Openlayers coordinates for use with Egis API
    * @param {Object} aoi (Area Of Interest)
    */
-  function convertOLcoordsForEgis(aoi) {
+  function convertOLcoordsToEnvelope(aoi) {
     // let polygonCoordinates = [[-180, -90], [-180, 90], [180, 90], [180, -90], [-180, -90]];
     // if (aoi !== null) {
     //   const aoiMinX = aoi[0];
@@ -303,6 +303,70 @@ function ChartingModeOptions(props) {
   // }
 
   /**
+   * Returns the Heatmax request parameters based on the provided layer
+   * @param {Object} layerInfo
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   */
+  async function getHeatmaxRequestParameters(layerInfo, timeSpan) {
+    // Example epoch timestamps
+    // December 31, 2015 --> 1451520000000
+    // December 31, 2022 --> 1672488000000
+    // December 31, 2023 --> 1704024000000
+    // December 31, 2050 --> 2556100800000
+    // December 31, 2075 --> 3345019200000
+    // December 31, 2099 --> 4102444800000
+
+    // Uncomment this block to use the dates from the datepicker
+    // const startDate = formatDateForChartRequest(primaryDate);
+    // const endDate = formatDateForChartRequest(secondaryDate);
+    // const startEpochTime = convertToMsSinceEpoch(startDate);
+    // const endEpochTime = convertToMsSinceEpoch(endDate);
+    // const time = `${startEpochTime},${endEpochTime}`;
+
+    // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
+    // const time = '1451520000000,4102444800000';
+    const startTime = 1672488000000;
+    const endTime = 1704024000000;
+
+    const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
+    const geometryType = 'esriGeometryEnvelope';
+    const sampleDistance = '';
+    const sampleCount = 1;
+    const mosaicRule = `${JSON.stringify({
+      ascending: true,
+      multidimensionalDefinition: [{
+        variableName: 'heatmax_ssp245',
+        // dimensionName: "StdTime",
+        // "values":[startTime,endTime],
+        isSlice: false,
+      }],
+    })}`;
+    const pixelSize = '';
+    const returnFirstValueOnly = 'false';
+    const interpolation = 'RSP_BilinearInterpolation';
+    const outFields = '*';
+    const sliceId = '';
+    const time = `${startTime},${endTime}`;
+
+    const f = 'json';
+
+    return {
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    };
+  }
+
+  /**
    * Returns the EGIS request parameters based on the provided layer
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
@@ -325,7 +389,7 @@ function ChartingModeOptions(props) {
     // const time = '1451520000000,4102444800000';
     const time = '1451520000000+-+4102444800000';
 
-    const geometry = convertOLcoordsForEgis(aoiCoordinates);
+    const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
     const sampleDistance = '';
     const sampleCount = '';
@@ -360,6 +424,41 @@ function ChartingModeOptions(props) {
       time,
       f,
     };
+  }
+
+  function getHeatmaxStatsRequestURI(uriParameters, baseURI) {
+    const {
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    } = uriParameters;
+    const params = new URLSearchParams({
+      geometryType,
+      geometry,
+      sampleDistance,
+      sampleCount,
+      mosaicRule,
+      pixelSize,
+      returnFirstValueOnly,
+      interpolation,
+      outFields,
+      sliceId,
+      time,
+      f,
+    });
+
+    const requestURL = `${baseURI}?${params.toString()}`;
+
+    return requestURL;
   }
 
   function getEgisStatsRequestURI(uriParameters, baseURI) {
@@ -457,11 +556,9 @@ function ChartingModeOptions(props) {
    * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
    */
   function formatHeatmaxDataForRecharts(data) {
-    console.log('data', data);
     const rechartsData = [];
     const dataValues = [];
     data.samples.forEach((item) => {
-      console.log(item);
       const value = parseFloat(item.value);
       dataValues.push(value);
     });
@@ -471,7 +568,7 @@ function ChartingModeOptions(props) {
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       const dateString = `${year}-${month}-${day}`;
-      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
+      const tmaxValue = parseFloat(item.value);
 
       rechartsData.push({
         name: dateString,
@@ -482,7 +579,7 @@ function ChartingModeOptions(props) {
         stddev: calculateStandardDeviation(dataValues),
       });
     });
-
+    console.log('rechartsData', rechartsData);
     return rechartsData;
   }
 
@@ -552,7 +649,7 @@ function ChartingModeOptions(props) {
         displaySimpleStats(dataToRender);
         updateChartRequestStatus(false, 'Success');
       }
-    } else if (requestedLayerSource === 'EGIS-WMS' || requestedLayerSource === 'heatmax-WMS') {
+    } else if (requestedLayerSource === 'EGIS-WMS') {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
       const baseURI = requestedLayerSource === 'EGIS-WMS'
         ? 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples'
@@ -574,9 +671,7 @@ function ChartingModeOptions(props) {
         ...uriParameters,
       };
 
-      const rechartsData = requestedLayerSource === 'EGIS-WMS'
-        ? formatEgisDataForRecharts(dataToRender)
-        : formatHeatmaxDataForRecharts(dataToRender);
+      const rechartsData = formatEgisDataForRecharts(dataToRender);
 
       displayChart({
         title: dataToRender.title,
@@ -584,6 +679,37 @@ function ChartingModeOptions(props) {
         unit: dataToRender.unit,
         data: rechartsData,
         source: 'EGIS',
+      });
+      updateChartRequestStatus(false, 'Success');
+    } else if (requestedLayerSource === 'heatmax-WMS') {
+      const uriParameters = await getHeatmaxRequestParameters(layerInfo, timeSpanSelection);
+      const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+      const requestURI = getHeatmaxStatsRequestURI(uriParameters, baseURI);
+      console.log('requestURI', requestURI);
+      const data = await getChartData(requestURI);
+      console.log('data', data);
+      if (!data.ok || data.body?.error) {
+        updateChartRequestStatus(false, 'Chart request failed.');
+        return;
+      }
+
+      const unitOfMeasure = 'Heatmax';
+      const dataToRender = {
+        title: layerInfo.title,
+        subtitle: layerInfo.subtitle,
+        unit: unitOfMeasure,
+        ...data.body,
+        ...uriParameters,
+      };
+
+      const rechartsData = formatHeatmaxDataForRecharts(dataToRender);
+
+      displayChart({
+        title: dataToRender.title,
+        subtitle: dataToRender.subtitle,
+        unit: dataToRender.unit,
+        data: rechartsData,
+        source: 'Heatmax',
       });
       updateChartRequestStatus(false, 'Success');
     } else {

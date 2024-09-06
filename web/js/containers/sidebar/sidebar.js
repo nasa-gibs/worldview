@@ -434,11 +434,10 @@ const mapStateToProps = (state) => {
     'heatmax_ssp370',
     'tmax_above_100',
   ];
-  const chartingModeAccessible = layers.active.layers.filter((layer) => (
-    Object.prototype.hasOwnProperty.call(layer, 'palette')
+  const chartingModeAccessible = layers.active.layers.filter((layer) => (Object.prototype.hasOwnProperty.call(layer, 'palette')
     && state.palettes.rendered[layer.palette.id]
-    && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous'
-  ) || chartingPrototypeLayers.includes(layer.id));
+    && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous')
+    || chartingPrototypeLayers.includes(layer.id)).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
