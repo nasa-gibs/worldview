@@ -324,8 +324,8 @@ function ChartingModeOptions(props) {
     // const time = `${startEpochTime},${endEpochTime}`;
 
     // Hardcoded timeframe of Dec 31, 2022 - Dec 31, 2023
-    const startTime = 1672488000000;
-    const endTime = 1704024000000;
+    const startTime = -599616000086;
+    const endTime = 4102444800000;
 
     const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
@@ -334,19 +334,18 @@ function ChartingModeOptions(props) {
     const mosaicRule = `${JSON.stringify({
       ascending: true,
       multidimensionalDefinition: [{
-        variableName: 'heatmax_ssp245',
-        // dimensionName: "StdTime",
-        // "values":[startTime,endTime],
+        variableName: layerInfo.id,
+        dimensionName: 'StdTime',
+        values: [[startTime, endTime]],
         isSlice: false,
       }],
     })}`;
     const pixelSize = '';
     const returnFirstValueOnly = 'false';
-    const interpolation = 'RSP_BilinearInterpolation';
+    const interpolation = 'RSP_NearestNeighbor';
     const outFields = '*';
     const sliceId = '';
-    const time = `${startTime},${endTime}`;
-
+    const time = '';
     const f = 'json';
 
     return {
@@ -578,7 +577,6 @@ function ChartingModeOptions(props) {
         stddev: calculateStandardDeviation(dataValues),
       });
     });
-    console.log('rechartsData', rechartsData);
     return rechartsData;
   }
 
@@ -682,11 +680,10 @@ function ChartingModeOptions(props) {
       updateChartRequestStatus(false, 'Success');
     } else if (requestedLayerSource === 'heatmax-WMS') {
       const uriParameters = await getHeatmaxRequestParameters(layerInfo, timeSpanSelection);
-      const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+      // const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+      const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate_historical_annual/ImageServer/getSamples';
       const requestURI = getHeatmaxStatsRequestURI(uriParameters, baseURI);
-      console.log('requestURI', requestURI);
       const data = await getChartData(requestURI);
-      console.log('data', data);
       if (!data.ok || data.body?.error) {
         updateChartRequestStatus(false, 'Chart request failed.');
         return;
@@ -712,7 +709,6 @@ function ChartingModeOptions(props) {
       });
       updateChartRequestStatus(false, 'Success');
     } else {
-      console.log('requestedLayerSource', requestedLayerSource);
       // handle requests for layers outside of GIBS here!
       updateChartRequestStatus(false, 'This layer is not configured for charting mode.');
     }
