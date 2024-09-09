@@ -59,6 +59,9 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
+        {isSelected && (
+          <span class="dot" />
+        )}
         <label htmlFor={`wv-palette-radio-${id}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
@@ -98,6 +101,9 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
+        {isSelected && (
+          <span class="dot" />
+        )}
         <label htmlFor={`wv-palette-radio-${id}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>

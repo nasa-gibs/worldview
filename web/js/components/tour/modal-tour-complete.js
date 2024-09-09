@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
+import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 
 function ModalComplete(props) {
   const {
@@ -11,7 +12,7 @@ function ModalComplete(props) {
   const { readMoreLinks } = currentStory;
   const closeBtn = (
     <button className="tour-close-btn" onClick={endTour} type="button">
-      &times;
+      <Close class="add-plus" size="14px" />
     </button>
   );
   let list;

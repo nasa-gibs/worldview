@@ -50,7 +50,7 @@ test('Left timeline arrow will not be disabled by default', async () => {
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
   await closeModal(page)
-  await page.getByRole('button', { name: '×' }).click()
+  await page.locator('.tour-close-btn').click()
   const leftArrow = await page.locator('#left-arrow-group')
   await expect(leftArrow).not.toHaveClass(/button-disabled/)
 })
@@ -59,7 +59,7 @@ test('Left timeline arrow will not be disabled by default', async () => {
 // test.only('Right timeline arrow will be disabled by default', async () => {
 //   const queryString = 'http://localhost:3000/'
 //   await page.goto(queryString)
-//   await page.getByRole('button', { name: '×' }).click()
+//   await page.locator('.tour-close-btn').click()
 //   const rightArrow = await page.locator('#right-arrow-group')
 //   await expect(rightArrow).toHaveClass(/button-disabled/)
 // })
@@ -68,7 +68,7 @@ test('Left timeline arrow will not be disabled by default', async () => {
 // test('Now button will be disabled by default', async () => {
 //   const queryString = 'http://localhost:3000/'
 //   await page.goto(queryString)
-//   await page.getByRole('button', { name: '×' }).click()
+//   await page.locator('.tour-close-btn').click()
 //   const nowButton = page.locator('#now-button-group')
 //   await expect(nowButton).toHaveClass(/button-disabled/)
 // })

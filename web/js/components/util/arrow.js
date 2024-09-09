@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ArrowFilledUp } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 
 /*
  * @function Arrow Up/Down
@@ -16,9 +17,7 @@ function Arrow({
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
-      <svg width="25" height="8">
-        <path d="M 12.5,0 25,8 0,8 z" className={arrowClassName} />
-      </svg>
+      <ArrowFilledUp className={arrowClassName} size="18px" />
     </div>
   );
 }
