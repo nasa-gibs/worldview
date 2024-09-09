@@ -323,8 +323,7 @@ function ChartingModeOptions(props) {
     // const endEpochTime = convertToMsSinceEpoch(endDate);
     // const time = `${startEpochTime},${endEpochTime}`;
 
-    // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
-    // const time = '1451520000000,4102444800000';
+    // Hardcoded timeframe of Dec 31, 2022 - Dec 31, 2023
     const startTime = 1672488000000;
     const endTime = 1704024000000;
 
