@@ -269,6 +269,10 @@ button:focus {
     margin-left: -12px;
   }
 
+  & .button-action-group-fixed svg {
+    margin-top: -12px;
+  }
+
   & #left-arrow-group .arrow {
     margin-left: -15px;
   }
@@ -809,9 +813,9 @@ button:focus {
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
+  height: 44px;
 
   & .mobile-date-picker-select-btn-text {
-    height: 44px;
     font-family: $wv-monospace-font;
     font-size: 23px;
     padding: 14px 8px;

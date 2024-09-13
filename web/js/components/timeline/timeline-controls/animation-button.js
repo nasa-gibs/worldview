@@ -45,7 +45,7 @@ function AnimationButton(props) {
   return (
     <div
       onClick={clickAnimationButton}
-      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group button-action-group-fixed mobile-animate-button animate-button-${buttonClass}`}
       aria-label={labelText}
     >
       <div id={buttonId}>
