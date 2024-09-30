@@ -1127,6 +1127,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const {
       breakPointLayer,
       cmrAvailability,
+      dataAvailability,
       id,
       opacity,
       period,
@@ -1140,7 +1141,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
     // if opted in to CMR availability, get granule date ranges if needed
-    if (cmrAvailability && !def.granuleDateRanges) {
+    if ((cmrAvailability || dataAvailability === 'cmr') && !def.granuleDateRanges) {
       const worker = new Worker('js/workers/cmr.worker.js');
       worker.onmessage = (event) => {
         worker.terminate();
@@ -1150,6 +1151,30 @@ export default function mapLayerBuilder(config, cache, store) {
         worker.terminate();
       };
       worker.postMessage({ funcName: 'getLayerGranuleRanges', args: [def] });
+    }
+
+    if (dataAvailability === 'dd' && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/dd.worker.js');
+      worker.onmessage = (event) => {
+        if (Array.isArray(event.data)) {
+          worker.terminate();
+          return store.dispatch(addGranuleDateRanges(def, event.data));
+        }
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+        const domains = xmlDoc.querySelector('Domain').textContent;
+        worker.postMessage({ funcName: 'mergeDomains', args: [domains] });
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      const params = {
+        startDate: new Date(def.startDate).toISOString(),
+        endDate: def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString(),
+        id,
+        proj: proj.crs,
+      };
+      worker.postMessage({ funcName: 'requestDescribeDomains', args: [params] });
     }
 
     if (!layer || isGranule || def.type === 'titiler') {
