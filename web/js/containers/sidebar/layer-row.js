@@ -587,36 +587,38 @@ function LayerRow (props) {
     </>
   );
 
-  return (
-    <Draggable
-      isDragDisabled={isEmbedModeActive || isAnimating}
-      draggableId={`${encodedLayerId}-${compareState}`}
-      index={index}
-      direction="vertical"
-    >
-      {(provided, snapshot) => (isInProjection ? (
-        <li
-          id={`${compareState}-${encodedLayerId}`}
-          className={getLayerItemClasses()}
-          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-          ref={provided.innerRef}
-          onMouseOver={mouseOver}
-          onMouseLeave={mouseLeave}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {renderLayerRow()}
-        </li>
-      ) : (
-        <li
-          className="layer-list-placeholder"
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        />
-      ))}
-    </Draggable>
-  );
+  if (!layer.shouldHide) {
+    return (
+      <Draggable
+        isDragDisabled={isEmbedModeActive || isAnimating}
+        draggableId={`${encodedLayerId}-${compareState}`}
+        index={index}
+        direction="vertical"
+      >
+        {(provided, snapshot) => (isInProjection ? (
+          <li
+            id={`${compareState}-${encodedLayerId}`}
+            className={getLayerItemClasses()}
+            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+            ref={provided.innerRef}
+            onMouseOver={mouseOver}
+            onMouseLeave={mouseLeave}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            {renderLayerRow()}
+          </li>
+        ) : (
+          <li
+            className="layer-list-placeholder"
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          />
+        ))}
+      </Draggable>
+    );
+  }
 }
 
 const makeMapStateToProps = () => {

@@ -38,7 +38,7 @@ function ChartingLayerMenu (props) {
   };
 
   useEffect(() => {
-    updateActiveChartingLayer(activeLayersWithPalettes[0].id);
+    updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
   }, []);
 
   return isActive && (
@@ -75,7 +75,7 @@ const mapStateToProps = (state, ownProps) => {
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous');
+  const activeLayersWithPalettes = overlays.map((layer) => ({ ...layer, shouldHide: !(Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous') }));
 
   return {
     isAnimating: animation.isPlaying,
