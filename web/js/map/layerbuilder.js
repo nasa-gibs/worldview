@@ -1150,20 +1150,21 @@ export default function mapLayerBuilder(config, cache, store) {
       worker.onerror = () => {
         worker.terminate();
       };
-      worker.postMessage({ funcName: 'getLayerGranuleRanges', args: [def] });
+      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
     }
-
+    // if opted in to DescribeDomains availability, get granule date ranges if needed
     if (dataAvailability === 'dd' && !def.granuleDateRanges) {
       const worker = new Worker('js/workers/dd.worker.js');
       worker.onmessage = (event) => {
-        if (Array.isArray(event.data)) {
-          worker.terminate();
-          return store.dispatch(addGranuleDateRanges(def, event.data));
+        if (Array.isArray(event.data)) { // our final format is an array
+          worker.terminate(); // terminate the worker
+          return store.dispatch(addGranuleDateRanges(def, event.data)); // dispatch the action
         }
+        // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(event.data, 'text/xml');
         const domains = xmlDoc.querySelector('Domain').textContent;
-        worker.postMessage({ funcName: 'mergeDomains', args: [domains] });
+        worker.postMessage({ operation: 'mergeDomains', args: [domains] });
       };
       worker.onerror = () => {
         worker.terminate();
@@ -1174,7 +1175,7 @@ export default function mapLayerBuilder(config, cache, store) {
         id,
         proj: proj.crs,
       };
-      worker.postMessage({ funcName: 'requestDescribeDomains', args: [params] });
+      worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     }
 
     if (!layer || isGranule || def.type === 'titiler') {

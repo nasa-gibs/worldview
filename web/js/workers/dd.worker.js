@@ -76,6 +76,6 @@ const functions = {
 
 onmessage = async (event) => {
   const { data } = event;
-  const result = await functions[data.funcName]?.(...data.args);
+  const result = await functions[data.operation]?.(...data.args);
   postMessage(result);
 };
