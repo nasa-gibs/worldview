@@ -1110,36 +1110,13 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-
-  /**
-   * Create a new OpenLayers Layer
-   * @param {object} def
-   * @param {object} key
-   * @param {object} options
-   * @param {object} dateOptions
-   * @param {object} granuleAttributes
-   * @returns {object} Openlayers TileLayer or LayerGroup
-   */
-  const createLayerWrapper = async (def, key, options, dateOptions) => {
-    const state = store.getState();
-    const { sidebar: { activeTab } } = state;
-    const proj = state.proj.selected;
+  const addTimeRanges = (def) => {
     const {
-      breakPointLayer,
       cmrAvailability,
       dataAvailability,
       id,
-      opacity,
-      period,
-      projections,
-      type,
-      wrapadjacentdays,
-      wrapX,
+      proj,
     } = def;
-    const { nextDate, previousDate } = dateOptions;
-    let { date } = dateOptions;
-    let layer = cache.getItem(key);
-    const isGranule = type === 'granule';
     // if opted in to CMR availability, get granule date ranges if needed
     if ((cmrAvailability || dataAvailability === 'cmr') && !def.granuleDateRanges) {
       const worker = new Worker('js/workers/cmr.worker.js');
@@ -1177,6 +1154,37 @@ export default function mapLayerBuilder(config, cache, store) {
       };
       worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     }
+  };
+
+  /**
+   * Create a new OpenLayers Layer
+   * @param {object} def
+   * @param {object} key
+   * @param {object} options
+   * @param {object} dateOptions
+   * @param {object} granuleAttributes
+   * @returns {object} Openlayers TileLayer or LayerGroup
+   */
+  const createLayerWrapper = async (def, key, options, dateOptions) => {
+    const state = store.getState();
+    const { sidebar: { activeTab } } = state;
+    const proj = state.proj.selected;
+    const {
+      breakPointLayer,
+      id,
+      opacity,
+      period,
+      projections,
+      type,
+      wrapadjacentdays,
+      wrapX,
+    } = def;
+    const { nextDate, previousDate } = dateOptions;
+    let { date } = dateOptions;
+    let layer = cache.getItem(key);
+    const isGranule = type === 'granule';
+
+    addTimeRanges(def);
 
     if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);
