@@ -1111,11 +1111,12 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   const addTimeRanges = (def) => {
+    const state = store.getState();
+    const proj = state.proj.selected;
     const {
       cmrAvailability,
       dataAvailability,
       id,
-      proj,
     } = def;
     // if opted in to CMR availability, get granule date ranges if needed
     if ((cmrAvailability || dataAvailability === 'cmr') && !def.granuleDateRanges) {
