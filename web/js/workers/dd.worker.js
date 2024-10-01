@@ -43,14 +43,14 @@ function makeTime(date) {
  * @description
  * Merge overlapping granule date ranges
 */
-function mergeDomains(domains) {
+function mergeDomains(domains, timeBuffer) {
   const dateRanges = domains.split(',').map((range) => range.split('/'));
 
   const mergedDateRanges = dateRanges.reduce((acc, [start, end]) => {
     if (!acc.length) return [[start, end]];
     // round start time down and end time up by 7 minutes to account for small range gaps
-    const startTime = makeTime(start) - 420000;
-    const endTime = makeTime(end) + 420000;
+    const startTime = makeTime(start) - timeBuffer;
+    const endTime = makeTime(end) + timeBuffer;
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
     if ((startTime >= lastRangeStartTime && startTime <= lastRangeEndTime) && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) { // within current range, ignore
