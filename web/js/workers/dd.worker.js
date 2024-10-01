@@ -48,7 +48,7 @@ function mergeDomains(domains, timeBuffer) {
 
   const mergedDateRanges = dateRanges.reduce((acc, [start, end]) => {
     if (!acc.length) return [[start, end]];
-    // round start time down and end time up by 7 minutes to account for small range gaps
+    // round start time down and end time up by a set amount of time to account for small range gaps
     const startTime = makeTime(start) - timeBuffer;
     const endTime = makeTime(end) + timeBuffer;
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
