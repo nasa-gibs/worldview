@@ -37,6 +37,23 @@ function makeTime(date) {
 }
 
 /**
+ * @method makeDateString
+ * @param {number} time
+ * @returns {string} dateString
+ * @description
+ * Convert time to date string
+*/
+function makeDateString(time) {
+  return new Date(time).toISOString();
+}
+
+const periodDict = {
+  PT6M: 360_000,
+  PT30M: 1_800_000,
+  PT10M: 600_000,
+};
+
+/**
  * @method mergeDomains
  * @param {array} domains
  * @param {number} timeBuffer
@@ -47,22 +64,37 @@ function makeTime(date) {
 function mergeDomains(domains, timeBuffer) {
   const dateRanges = domains.split(',').map((range) => range.split('/'));
 
-  const mergedDateRanges = dateRanges.reduce((acc, [start, end]) => {
-    if (!acc.length) return [[start, end]];
-    // round start time down and end time up by a set amount of time to account for small range gaps
-    const startTime = makeTime(start) - timeBuffer;
-    const endTime = makeTime(end) + timeBuffer;
+  const mergedDateRanges = dateRanges.reduce((acc, [start, end, period]) => {
+    // convert start and end to time values
+    const startTime = makeTime(start);
+    let endTime = makeTime(end);
+
+    // if start and end are the same, add period
+    if (startTime === endTime) {
+      endTime += periodDict[period] || 360_000;
+    }
+
+    if (!acc.length) return [[makeDateString(startTime), makeDateString(endTime)]]; // add the first range to the accumulator
+
+    // round start time down and end time up by a set time to account for small range gaps
+    const bufferedStartTime = startTime - timeBuffer;
+    const bufferedEndTime = endTime + timeBuffer;
+
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
-    if ((startTime >= lastRangeStartTime && startTime <= lastRangeEndTime) && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) { // within current range, ignore
+
+    if ((bufferedStartTime >= lastRangeStartTime && bufferedStartTime <= lastRangeEndTime) && (bufferedEndTime >= lastRangeStartTime && bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
       return acc;
     }
-    if (startTime > lastRangeEndTime) { // discontinuous, add new range
-      return [...acc, [start, end]];
+
+    if (bufferedStartTime > lastRangeEndTime) { // discontinuous, add new range
+      return [...acc, [makeDateString(startTime), makeDateString(endTime)]];
     }
-    if (startTime <= lastRangeEndTime && endTime > lastRangeEndTime) { // intersects current range, merge
-      return acc.with(-1, [acc.at(-1)[0], end]);
+
+    if (bufferedStartTime <= lastRangeEndTime && bufferedEndTime > lastRangeEndTime) { // intersects current range, merge
+      return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
+
     return acc;
   }, []);
 
