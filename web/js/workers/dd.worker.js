@@ -37,11 +37,12 @@ function makeTime(date) {
 }
 
 /**
- * @method mergeSortedGranuleDateRanges
- * @param {array} granules
- * @returns {array} mergedGranuleDateRanges
+ * @method mergeDomains
+ * @param {array} domains
+ * @param {number} timeBuffer
+ * @returns {array} mergedDateRanges
  * @description
- * Merge overlapping granule date ranges
+ * Merge overlapping date ranges
 */
 function mergeDomains(domains, timeBuffer) {
   const dateRanges = domains.split(',').map((range) => range.split('/'));
