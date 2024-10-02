@@ -47,11 +47,31 @@ function makeDateString(time) {
   return new Date(time).toISOString();
 }
 
-const periodDict = {
-  PT6M: 360_000,
-  PT30M: 1_800_000,
-  PT10M: 600_000,
-};
+/**
+ * @method periodToTime
+ * @param {string} period
+ * @returns {number} time
+ * @description
+ * Convert period to time
+*/
+function periodToTime(period) {
+  const oneMinute = 60_000;
+  const oneHour = 3_600_000;
+  const oneDay = 86_400_000;
+  const lookup = {
+    M: oneMinute,
+    H: oneHour,
+    D: oneDay,
+  };
+  const match = period.match(/[0-9]+/i);
+  const number = Number(match[0]);
+  const unit = period.at(-1);
+  const time = number * lookup[unit];
+
+  if (Number.isNaN(time)) return 360_000;
+
+  return time;
+}
 
 /**
  * @method mergeDomains
@@ -71,7 +91,7 @@ function mergeDomains(domains, timeBuffer) {
 
     // if start and end are the same, add period
     if (startTime === endTime) {
-      endTime += periodDict[period] || 360_000;
+      endTime += periodToTime(period);
     }
 
     if (!acc.length) return [[makeDateString(startTime), makeDateString(endTime)]]; // add the first range to the accumulator
