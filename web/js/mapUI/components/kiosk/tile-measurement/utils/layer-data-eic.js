@@ -20,6 +20,13 @@ export const layersToMeasure = [
   'CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly',
   'TEMPO_L3_NO2_Vertical_Column_Troposphere',
   'TEMPO_L3_Ozone_Column_Amount',
+  'VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance',
+  'VIIRS_NOAA20_DayNightBand_AtSensor_M15',
+  'VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate',
+  'VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean',
+  'VIIRS_NOAA21_Thermal_Anomalies_375m_All',
+  'VIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  'VIIRS_NOAA21_CorrectedReflectance_TrueColor',
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -45,6 +52,13 @@ export const layerPixelData = {
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { threshold: 0.01 },
   TEMPO_L3_NO2_Vertical_Column_Troposphere: { threshold: 0.99 },
   TEMPO_L3_Ozone_Column_Amount: { threshold: 0.99 },
+  VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance: { threshold: 0.45 },
+  VIIRS_NOAA20_DayNightBand_AtSensor_M15: { threshold: 0.10 },
+  VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { threshold: 0.90 },
+  VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { threshold: 0.90 },
+  VIIRS_NOAA21_Thermal_Anomalies_375m_All: { threshold: 0.95 },
+  VIIRS_NOAA20_Thermal_Anomalies_375m_All: { threshold: 0.95 },
+  VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
@@ -69,6 +83,13 @@ export const bestDates = {
   CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly: { date: '2023-10-30' },
   TEMPO_L3_NO2_Vertical_Column_Troposphere: { date: '2024-06-03T17:00:00.000Z' },
   TEMPO_L3_Ozone_Column_Amount: { date: '2024-06-03T17:00:00.000Z' },
+  VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance: { date: '2024-10-01' },
+  VIIRS_NOAA20_DayNightBand_AtSensor_M15: { date: '2024-10-01' },
+  VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { date: '2024-10-01' },
+  VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { date: '2024-10-01' },
+  VIIRS_NOAA21_Thermal_Anomalies_375m_All: { date: '2024-10-01' },
+  VIIRS_NOAA20_Thermal_Anomalies_375m_All: { date: '2024-10-01' },
+  VIIRS_NOAA21_CorrectedReflectance_TrueColor: { date: '2024-10-01' },
 };
 
 export const travelModeData = {
@@ -112,9 +133,21 @@ export const travelModeData = {
     title: 'Aerosol Optical Depth (AOD) by Suomi NPP satellite',
   },
   14: {
-    title: 'TEMPO L3 NO2 Vertical Column Troposphere',
+    title: 'Nitrogen Dioxide Vertical Column Troposphere (L3) by TEMPO satellite',
   },
   15: {
-    title: 'TEMPO L3 Ozone Column Amount',
+    title: 'Ozone Column Amount (L3) by TEMPO satellite',
+  },
+  16: {
+    title: 'Black Marble Nighttime At Sensor Radiance from NOAA-20 satellite',
+  },
+  17: {
+    title: 'Black Marble Nighttime Blue/Yellow Composite from NOAA-20 satellite',
+  },
+  18: {
+    title: 'Aerosol Optical Depth (AOD) by NOAA-20 satellite',
+  },
+  19: {
+    title: 'Active Fires detected by NOAA-21 satellite',
   },
 };
