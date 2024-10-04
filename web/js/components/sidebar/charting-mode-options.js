@@ -60,6 +60,18 @@ function ChartingModeOptions(props) {
     updateRequestStatusMessage,
   } = props;
 
+  const { screenHeight, screenWidth } = props;
+
+  const [boundaries, setBoundaries] = useState({
+    x: screenWidth / 2 - 100,
+    y: screenHeight / 2 - 100,
+    x2: screenWidth / 2 + 100,
+    y2: screenHeight / 2 + 100,
+  });
+  const {
+    x, y, y2, x2,
+  } = boundaries;
+
   function endDrawingAreaOfInterest () {
     if (draw) {
       olMap.removeInteraction(draw);
@@ -127,11 +139,6 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
-
-  const onAreaOfInterestButtonClick = (evt) => {
-    toggleAreaOfInterestActive();
-  };
-
 
   function getActiveChartingLayer() {
     const liveLayers = getLiveLayers();
@@ -322,18 +329,6 @@ function ChartingModeOptions(props) {
     openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
-  const { screenHeight, screenWidth } = props;
-
-  const [boundaries, setBoundaries] = useState({
-    x: screenWidth / 2 - 100,
-    y: screenHeight / 2 - 100,
-    x2: screenWidth / 2 + 100,
-    y2: screenHeight / 2 + 100,
-  });
-  const {
-    x, y, y2, x2,
-  } = boundaries;
-
   /**
    * Convert pixel value to latitude longitude value
    * @param {Array} pixelX
@@ -371,10 +366,26 @@ function ChartingModeOptions(props) {
       y2: y + height,
     };
     setBoundaries(newBoundaries);
-    setBottomLeftLatLong(getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2));
-    setTopRightLatLong(getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y));
-    updateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
+    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    updateAOICoordinates([...bottomLeft, ...topRight]);
   }
+
+  const onAreaOfInterestButtonClick = (evt) => {
+    if (aoiActive) {
+      updateAOICoordinates(null);
+    } else {
+      const {
+        x, y, x2, y2,
+      } = boundaries;
+      onBoundaryUpdate({
+        x, y, width: x2 - x, height: y2 - y,
+      });
+    }
+    toggleAreaOfInterestActive();
+  };
 
   const layerInfo = getActiveChartingLayer();
   const aoiTextPrompt = 'Area of Interest:';
