@@ -1,14 +1,14 @@
-# [Worldview](https://worldview.earthdata.nasa.gov)
+# [NASA Worldview](https://worldview.earthdata.nasa.gov)
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml/badge.svg?branch=main)](https://github.com/nasa-gibs/worldview/actions/workflows/build-test-app.yml)
+[![CI-CD](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/nasa-gibs/worldview/actions/workflows/ci-cd.yml)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
-This app from NASA's [EOSDIS](https://earthdata.nasa.gov/) provides the
+This app from NASA's [ESDIS](https://www.earthdata.nasa.gov/esdis) provides the
 capability to interactively browse over 1000 global, full-resolution satellite
 imagery layers on desktop and mobile devices. Many of the imagery layers are
 updated daily and are within three hours of observation - showing the entire Earth as it is
@@ -25,7 +25,7 @@ or [custom GDAL scripts](https://nasa-gibs.github.io/gibs-api-docs/map-library-u
 We encourage interested developers to fork Worldview or build their own clients
 using GIBS services.
 
-Check out our [roadmap](https://github.com/nasa-gibs/worldview/projects/7)
+Check out our [roadmap](https://github.com/orgs/nasa-gibs/projects/3/views/1)
 to see what we're working on and follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)
 to find out the latest features and imagery available.
 
@@ -39,7 +39,7 @@ cd worldview
 npm ci
 ```
 
-View the [Configuration](doc/config/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
+View the [Configuration](doc/config/configuration.md) section for information on how to install the official NASA Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
 

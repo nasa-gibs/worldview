@@ -6,7 +6,7 @@
   & h4,
   & p,
   & span {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Public Sans", sans-serif;
     font-weight: 300;
     color: #383838;
   }
@@ -141,7 +141,7 @@
   line-height: 100%;
   position: relative;
   display: block;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Public Sans", sans-serif;
   font-weight: 300;
   margin-right: 45px;
 }
@@ -239,7 +239,7 @@
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Public Sans", sans-serif;
   margin-top: 4px;
 }
 
@@ -283,10 +283,8 @@
     }
   }
 
-  &:hover {
-    .wv-checkbox::before {
-      border-color: #f3460a;
-    }
+  .wv-checkbox::before {
+    margin-top: 3px;
   }
 
   .wv-checkbox {
@@ -332,7 +330,7 @@
 .layer-modal-content .selected-category .ui-tabs-panel p,
 .layer-modal-content .selected-category .ui-tabs-panel span {
   font-size: 11px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Public Sans", sans-serif;
   font-weight: 400;
   color: #bbb;
 }
@@ -351,7 +349,7 @@
 .layer-date-wrap,
 .layer-metadata a,
 .layer-metadata p {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Public Sans", sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;

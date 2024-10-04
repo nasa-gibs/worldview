@@ -13,7 +13,7 @@
   width: 286px;
   background: transparent;
   left: 10px;
-  top: 65px;
+  top: 75px;
   box-sizing: border-box;
   padding: 0;
   border-top: none;
@@ -29,7 +29,7 @@
     border-left: 1px solid #333;
 
     &.nav-tabs {
-      border-bottom: 3px solid #00457b;
+      border-bottom: 3px solid #0B3D91;
 
       .disabled {
         color: #fff;
@@ -52,8 +52,8 @@
   }
 
   .nav-item .sidebar-tab.active {
-    background: #00457b;
-    border-color: #00457b;
+    background: #0B3D91;
+    border-color: #0B3D91;
     color: #fff;
     height: 32px;
   }
@@ -187,13 +187,19 @@ footer #layers-add {
 footer .product-buttons {
   height: 31px;
   width: auto;
+  padding: 10px;
+
+  #layers-add .add-plus {
+    margin-right: 5px;
+    margin-top: -2px;
+  }
 }
 
 .wv-button {
   background-image: linear-gradient(#555, #666);
   border: 1px solid #666;
   color: #eee;
-  font-family: 'Open Sans Bold', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 1em;
   font-weight: 700;
   padding: 0;
@@ -211,9 +217,10 @@ footer .product-buttons {
 }
 
 #compare-toggle-button {
-  background-image: linear-gradient(#555, #666);
+  background: #77777a;
+  border: 1px solid #77777a;
   color: #eee;
-  font-family: 'Open Sans Bold', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 1em;
   font-weight: 700;
   padding: 0;
@@ -234,7 +241,7 @@ footer .compare-toggle-button {
 }
 
 div#group-overlays-checkbox-case {
-  margin: 4px 0 0 4px;
+  margin: 4px 0 0 10px;
 }
 
 .layer-group-baselayers {
@@ -943,6 +950,10 @@ p.recharts-tooltip-label {
     margin: 10px 0 10px 10px;
     display: flex;
     align-items: center;
+
+    .check {
+      top: unset;
+    }
 
     & label {
       display: inline;

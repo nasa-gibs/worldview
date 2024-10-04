@@ -38,6 +38,7 @@ function AssociatedLayersToggle(props) {
           <Checkbox
             id={id}
             key={id}
+            color="gray"
             title="Enable/disable this layer"
             checked={isEnabled}
             onCheck={onCheck}

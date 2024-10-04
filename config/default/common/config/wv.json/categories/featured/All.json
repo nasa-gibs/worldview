@@ -9,7 +9,8 @@
               "measurements": [
                 "TEMPO - Featured",
                 "Land Surface Reflectance - Featured",
-                "Surface Water Extent - Featured",
+                "Surface Water Extent",
+                "Vegetation Disturbance Status",
                 "Aboveground Biomass",
                 "Land Surface Metrics - Featured",
                 "Geostationary",

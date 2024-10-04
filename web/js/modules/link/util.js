@@ -49,25 +49,6 @@ export function emailUrlParams(subject, body) {
   );
 }
 
-export function getShareLink(type, url) {
-  const shareMessage = 'Check out what I found in NASA @NAME@!';
-  const twMessage = 'Check out what I found in #NASAWorldview -';
-  const emailBody = `${shareMessage} - ${url}`;
-
-  switch (type) {
-    case 'twitter':
-      return twitterUrlParams(url, twMessage);
-    case 'facebook':
-      return facebookUrlParams('121285908450463', url, url, 'popup');
-    case 'reddit':
-      return redditUrlParams(url, shareMessage);
-    case 'email':
-      return emailUrlParams(shareMessage, emailBody);
-    default:
-      return undefined;
-  }
-}
-
 export function encode(value) {
   let encoded = encodeURIComponent(value);
   lodashEach(ENCODING_EXCEPTIONS, (exception) => {

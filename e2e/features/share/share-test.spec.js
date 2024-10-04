@@ -29,12 +29,12 @@ test('Clicking the share link button opens the share dialog', async () => {
   await expect(shareToolbar).toBeVisible()
 })
 
-test('Share tabs link and social are visible and enabled', async () => {
+test('Share tabs link and cite us are visible and enabled', async () => {
   const linkShareNav = await page.locator('.link-share-nav')
-  const socialShareNav = await page.locator('.social-share-nav')
+  const citeUsShareNav = await page.locator('.cite-us-share-nav')
   const linkShareActive = await page.locator('.link-share-nav a')
   await expect(linkShareNav).toBeVisible()
-  await expect(socialShareNav).toBeVisible()
+  await expect(citeUsShareNav).toBeVisible()
   await expect(linkShareActive).toHaveClass(/active/)
 })
 
@@ -54,7 +54,7 @@ test('Share link clipboard with no time query string param in the page url will 
   const queryString = 'http://localhost:3000/'
   await page.goto(queryString)
   await closeModal(page)
-  await page.getByRole('button', { name: '×' }).click()
+  await page.locator('.tour-close-btn').click()
   await shareToolbarButton.click()
   const minutesOffset = 40 * 60000 // 40 minutes
   let date = new Date(new Date().getTime() - minutesOffset)
@@ -70,20 +70,6 @@ test('Share link clipboard with no time query string param in the page url will 
   expect(url).not.toContain('t=')
   const shareLinkValue = await getAttribute(page, '#permalink-content-link', 'value')
   expect(shareLinkValue).toContain(`t=${year}-${monthText}-${dayText}`)
-})
-
-test('Clicking the social tab displays social share buttons', async () => {
-  const { shareToolbarButton } = selectors
-  const facebook = await page.locator('#fb-share')
-  const twitter = await page.locator('#tw-share')
-  const reddit = await page.locator('#rd-share')
-  const email = await page.locator('#email-share')
-  await shareToolbarButton.click()
-  await page.locator('.social-share-nav a').click()
-  await expect(facebook).toBeVisible()
-  await expect(twitter).toBeVisible()
-  await expect(reddit).toBeVisible()
-  await expect(email).toBeVisible()
 })
 
 test('Clicking Shorten link works with links less than 2049 characters', async () => {

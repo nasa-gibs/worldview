@@ -6,8 +6,8 @@
             target="_blank" rel="noopener noreferrer"> What's new in @OFFICIAL_NAME@! </a></div>
 </div>
 <p>This <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source
-        code</a> app from NASA's <a href="https://earthdata.nasa.gov/eosdis" target="_blank"
-        rel="noopener noreferrer">EOSDIS</a> provides the capability to interactively browse over 1000 global,
+        code</a> app from NASA's <a href="https://earthdata.nasa.gov/esdis" target="_blank"
+        rel="noopener noreferrer">ESDIS</a> provides the capability to interactively browse over 1000 global,
     full-resolution satellite imagery layers and then download the underlying data. Many of the imagery layers are
     updated daily and are available within three hours of observation - essentially showing the entire Earth as it
     looks "right now". This supports time-critical application areas such as wildfire management, air quality
@@ -26,6 +26,6 @@
     mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind, and several other
     clients. We encourage interested developers to build their own clients or integrate NASA imagery into their
     existing ones using these services.</p>
-<p><a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently
-        Asked Questions</a></p>
+<p>View the <a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently
+        Asked Questions</a> and visit the <a href="https://earthdata.nasa.gov/worldview/worldview-image-archive" target="_blank" rel="noopener noreferrer">Worldview Image of the Week</a> archive which uses data and imagery available in Worldview to highlight recent events, hazards, and disasters.</p>
 <hr>

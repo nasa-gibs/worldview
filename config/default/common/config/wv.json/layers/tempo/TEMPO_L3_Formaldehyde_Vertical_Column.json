@@ -8,7 +8,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Formaldehyde",
-      "cmrAvailability": true,
+      "dataAvailability": "dd",
       "startDate": "2024-05-13T10:30:00Z",
       "disableSnapshot": true
 

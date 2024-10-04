@@ -34,6 +34,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
+import { addGranuleDateRanges } from '../modules/layers/actions';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
@@ -118,7 +119,8 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // Don't key by time if this is a static layer
     if (def.period) {
-      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
+      const isSubdaily = def.period === 'subdaily';
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date), !isSubdaily);
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -197,7 +199,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (def.period === 'subdaily') {
-      closestDate = nearestInterval(def, closestDate);
+      closestDate = def.id.includes('TEMPO_L2') ? closestDate : nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
       closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
@@ -371,7 +373,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate)}`;
+    const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -419,6 +421,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let extent;
     let start;
     let res;
+    const isSubdaily = def.period === 'subdaily';
 
     const source = config.sources[def.source];
     extent = selectedProj.maxExtent;
@@ -457,7 +460,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+    urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
       url: source.url + urlParameters,
@@ -574,7 +577,7 @@ export default function mapLayerBuilder(config, cache, store) {
             for (let j = 0; j < split2.length; j += 1) {
               rowObj[key[j]] = split2[j];
             }
-            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name]) {
+            if (!!rowObj.AERONET_Site_Name && rowObj.AERONET_Site_Name !== '' && !takenNamesActive[rowObj.AERONET_Site_Name] && parseInt(rowObj['Date(dd:mm:yyyy)'].split(':')[0], 10) === date.getUTCDate()) {
               featuresObj[rowObj.AERONET_Site_Name] = {};
               featuresObj[rowObj.AERONET_Site_Name].type = 'Feature';
               featuresObj[rowObj.AERONET_Site_Name].geometry = { type: 'Point' };
@@ -877,6 +880,12 @@ export default function mapLayerBuilder(config, cache, store) {
       'HLS_NDWI_Landsat',
       'HLS_NDSI_Landsat',
       'HLS_Moisture_Index_Landsat',
+      'HLS_EVI_Landsat',
+      'HLS_SAVI_Landsat',
+      'HLS_MSAVI_Landsat',
+      'HLS_NBR2_Landsat',
+      'HLS_NBR_Landsat',
+      'HLS_TVI_Landsat',
     ];
 
     const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
@@ -936,6 +945,82 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
+    const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
+    const dateTime = state.date.selected?.toISOString().split('T');
+    dateTime.pop();
+    dateTime.push('00:00:00.000Z');
+    const zeroedDate = dateTime.join('T');
+    const cmrMaxExtent = [-180, -90, 180, 90];
+
+    const cmrSource = new OlSourceVector({
+      format: new GeoJSON(),
+      projection: get(crs),
+      loader: async (extent, resolution, projection, success, failure) => {
+        // clamp extent to maximum extent allowed by the CMR api
+        const clampedExtent = extent.map((coord, i) => {
+          const condition = i <= 1 ? coord > cmrMaxExtent[i] : coord < cmrMaxExtent[i];
+          if (condition) {
+            return coord;
+          }
+          return cmrMaxExtent[i];
+        });
+        const getGranules = () => {
+          const entries = [];
+          return async function requestGranules(searchAfter) {
+            const headers = {
+              'Client-Id': 'Worldview',
+            };
+            headers['cmr-search-after'] = searchAfter ?? '';
+            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000`;
+            const cmrRes = await fetch(url, { headers });
+            const resHeaders = cmrRes.headers;
+            const granules = await cmrRes.json();
+            const resEntries = granules?.feed?.entry || [];
+
+            entries.push(...resEntries);
+
+            if (resHeaders.has('cmr-search-after')) {
+              await requestGranules(resHeaders.get('cmr-search-after'));
+            }
+            return entries;
+          };
+        };
+
+        const granuleGetter = getGranules();
+        const granules = await granuleGetter();
+
+        const features = granules.map((granule) => {
+          const coords = granule.polygons[0][0].split(' ').reduce((acc, coord, i, arr) => {
+            if (i % 2 !== 0) return acc;
+
+            acc.push([arr[i + 1], coord]);
+
+            return acc;
+          }, []);
+
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [coords],
+            },
+            properties: {
+              granuleId: granule.id,
+            },
+          };
+        });
+
+        const geojson = {
+          type: 'FeatureCollection',
+          features,
+        };
+
+        const formatedFeatures = cmrSource.getFormat().readFeatures(geojson);
+
+        cmrSource.addFeatures(formatedFeatures);
+        success(formatedFeatures);
+      },
+    });
 
     const source = config.sources[def.source];
 
@@ -976,8 +1061,16 @@ export default function mapLayerBuilder(config, cache, store) {
       minZoom: def.minZoom,
       extent: maxExtent,
     });
+    const footprintLayer = new OlLayerVector({
+      source: cmrSource,
+      className,
+      maxZoom: def.minZoom,
+    });
+    const layerGroup = new OlLayerGroup({
+      layers: [footprintLayer, layer],
+    });
 
-    return layer;
+    return layerGroup;
   };
 
   const createXYZLayer = (def, options, day, state) => {
@@ -1017,6 +1110,52 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const addTimeRanges = (def) => {
+    const state = store.getState();
+    const proj = state.proj.selected;
+    const {
+      cmrAvailability,
+      dataAvailability,
+      id,
+    } = def;
+    // if opted in to CMR availability, get granule date ranges if needed
+    if ((cmrAvailability || dataAvailability === 'cmr') && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/cmr.worker.js');
+      worker.onmessage = (event) => {
+        worker.terminate();
+        store.dispatch(addGranuleDateRanges(def, event.data));
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
+    }
+    // if opted in to DescribeDomains availability, get granule date ranges if needed
+    if (dataAvailability === 'dd' && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/dd.worker.js');
+      worker.onmessage = (event) => {
+        if (Array.isArray(event.data)) { // our final format is an array
+          worker.terminate(); // terminate the worker
+          return store.dispatch(addGranuleDateRanges(def, event.data)); // dispatch the action
+        }
+        // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+        const domains = xmlDoc.querySelector('Domain').textContent;
+        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      const params = {
+        startDate: new Date(def.startDate).toISOString(),
+        endDate: def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString(),
+        id,
+        proj: proj.crs,
+      };
+      worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    }
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -1045,6 +1184,8 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
+
+    addTimeRanges(def);
 
     if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);

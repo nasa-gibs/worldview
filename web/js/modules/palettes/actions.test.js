@@ -1,7 +1,7 @@
 import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock';
+import fetchMock from 'fetch-mock-jest';
 import { assign, cloneDeep } from 'lodash';
 import update from 'immutability-helper';
 import {

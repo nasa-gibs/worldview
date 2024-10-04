@@ -86,9 +86,9 @@ function SmartHandoffModal({
           <h1 className="about-heading">Why must I register?</h1>
           <p>
             As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism for user registration and profile
-            management for all EOSDIS system components (DAACs, Tools, Services). Your Earthdata login also helps the EOSDIS program
-            better understand the usage of EOSDIS services to improve user experience through customization of tools and improvement
-            of services. EOSDIS data are openly available to all and free of charge except where governed by international agreements.
+            management for all ESDIS system components (DAACs, Tools, Services). Your Earthdata Login also helps the ESDIS program
+            better understand the usage of ESDIS services to improve user experience through customization of tools and improvement
+            of services. ESDIS data are openly available to all and free of charge except where governed by international agreements.
           </p>
         </div>
       </div>

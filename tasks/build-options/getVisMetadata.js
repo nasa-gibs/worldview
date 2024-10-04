@@ -78,10 +78,22 @@ const skipLayers = [
   'HLS_NDWI_Landsat',
   'HLS_NDSI_Landsat',
   'HLS_Moisture_Index_Landsat',
+  'HLS_EVI_Landsat',
+  'HLS_SAVI_Landsat',
+  'HLS_MSAVI_Landsat',
+  'HLS_NBR2_Landsat',
+  'HLS_NBR_Landsat',
+  'HLS_TVI_Landsat',
   'HLS_NDVI_Sentinel',
   'HLS_NDWI_Sentinel',
   'HLS_NDSI_Sentinel',
   'HLS_Moisture_Index_Sentinel',
+  'HLS_EVI_Sentinel',
+  'HLS_SAVI_Sentinel',
+  'HLS_MSAVI_Sentinel',
+  'HLS_NBR2_Sentinel',
+  'HLS_NBR_Sentinel',
+  'HLS_TVI_Sentinel',
   'HLS_False_Color_Landsat',
   'AERONET_AOD_500NM',
   'AERONET_ANGSTROM_440-870NM',
@@ -108,7 +120,9 @@ async function main (url) {
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   for (const layerId of layerOrder) {
-    await getMetadata(layerId, url)
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
+      await getMetadata(layerId, url)
+    }
   }
 
   const layers = Object.keys(layerMetadata).sort().reduce(

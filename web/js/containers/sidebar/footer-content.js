@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import googleTagManager from 'googleTagManager';
+import { Plus } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
@@ -78,6 +79,16 @@ const FooterContent = React.forwardRef((props, ref) => {
         )}
       </div>
       <div className="product-buttons">
+        {!isChartingActive
+        && (
+        <Button
+          id="layers-add"
+          aria-label="Add layers"
+          className="layers-add red"
+          text="+ Add Layers"
+          onClick={onClickAddLayers}
+        />
+        )}
         {!isMobile && !isCompareActive && chartFeature
           && (
           <Button
@@ -88,7 +99,7 @@ const FooterContent = React.forwardRef((props, ref) => {
             onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
             text={chartBtnText}
           />
-          )}
+        )}
         {!isChartingActive
           && (
           <Button

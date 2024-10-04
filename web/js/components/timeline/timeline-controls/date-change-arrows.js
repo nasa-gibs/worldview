@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ArrowChevronLeft, ArrowChevronRight } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import HoverTooltip from '../../util/hover-tooltip';
 import LoadingIndicator from '../../animation-widget/loading-indicator';
 import {
@@ -84,7 +85,7 @@ class DateChangeArrows extends PureComponent {
     const rightArrowUp = () => this.onArrowUp('right');
 
     return (
-      <div>
+      <div className="arrow-group">
         {arrowDown && !tilesPreloaded && (
           <LoadingIndicator
             title="Loading ..."
@@ -107,12 +108,7 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="left-arrow-group"
           />
-          <svg width="24" height="30">
-            <path
-              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-              className="arrow"
-            />
-          </svg>
+          <ArrowChevronLeft class="arrow" size="30px" />
         </div>
 
         {/* RIGHT ARROW */}
@@ -130,12 +126,7 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="right-arrow-group"
           />
-          <svg width="24" height="30">
-            <path
-              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-              className="arrow"
-            />
-          </svg>
+          <ArrowChevronRight class="arrow" size="30px" />
         </div>
 
         {/* NOW BUTTON */}
