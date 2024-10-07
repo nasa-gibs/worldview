@@ -250,7 +250,7 @@ function ChartingModeOptions(props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://worldview.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.sit.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
@@ -325,25 +325,53 @@ function ChartingModeOptions(props) {
 
     // Hardcoded timeframe of Dec 31, 2022 - Dec 31, 2023
     const startTime = -599616000086;
-    const endTime = 4102444800000;
+    const endTime = 4133894400000;
 
     const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
     const sampleDistance = '';
-    const sampleCount = 1;
+    const sampleCount = '';
     const mosaicRule = `${JSON.stringify({
       ascending: true,
-      multidimensionalDefinition: [{
-        variableName: layerInfo.id,
-        dimensionName: 'StdTime',
-        values: [[startTime, endTime]],
-        isSlice: false,
-      }],
+      multidimensionalDefinition: [
+        {
+          variableName: 'tasmax_ssp126',
+          dimensionName: 'StdTime',
+          values: [[-599616000086, 4133894400000]],
+          isSlice: false,
+        },
+        // {
+        //   variableName: layerInfo.id,
+        //   dimensionName: 'StdTime',
+        //   values: [[startTime, endTime]],
+        //   isSlice: false,
+        // },
+      ],
     })}`;
+
+    // const t = {
+    //   ascending: true,
+    //   multidimensionalDefinition: [
+    //     {
+    //       variableName: 'tasmax_ssp126',
+    //       dimensionName: 'StdTime',
+    //       values: [[-599616000086, 4133894400000]],
+    //       isSlice: false,
+    //     },
+    //     {
+    //       variableName: 'heatmax_ssp370',
+    //       dimensionName: 'StdTime',
+    //       values: [[-599616000086, 4133894400000]],
+    //       isSlice: false,
+    //     },
+    //   ],
+    // };
+
+
     const pixelSize = '';
-    const returnFirstValueOnly = 'false';
-    const interpolation = 'RSP_NearestNeighbor';
-    const outFields = '*';
+    const returnFirstValueOnly = 'true';
+    const interpolation = 'RSP_BilinearInterpolation';
+    const outFields = '';
     const sliceId = '';
     const time = '';
     const f = 'json';
@@ -650,7 +678,8 @@ function ChartingModeOptions(props) {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
       const baseURI = requestedLayerSource === 'EGIS-WMS'
         ? 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples'
-        : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+        // : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
+        : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate_annual/ImageServer/getSamples';
 
       const requestURI = getEgisStatsRequestURI(uriParameters, baseURI);
       const data = await getChartData(requestURI);
@@ -681,7 +710,9 @@ function ChartingModeOptions(props) {
     } else if (requestedLayerSource === 'heatmax-WMS') {
       const uriParameters = await getHeatmaxRequestParameters(layerInfo, timeSpanSelection);
       // const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
-      const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate_historical_annual/ImageServer/getSamples';
+      // const baseURI = 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate_historical_annual/ImageServer/getSamples';
+      // const baseURI = 'https://gis.earthdata.nasa.gov/eic/rest/services/tasmax_yearly_median/ImageServer/getSamples';
+      const baseURI = 'https://gis.earthdata.nasa.gov/UAT/rest/services/EIC/tasmax_yearly_median/ImageServer/getSamples';
       const requestURI = getHeatmaxStatsRequestURI(uriParameters, baseURI);
       const data = await getChartData(requestURI);
       if (!data.ok || data.body?.error) {

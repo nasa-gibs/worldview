@@ -92,11 +92,8 @@
     "AERONET": {
       "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     },
-    "EGIS-WMS": {
-      "url": "https://gis.earthdata.nasa.gov/UAT/services/NEX-GDDP-CMIP6/tmaxXF_ACCESS_CM2_ssp126/ImageServer/WMSServer"
-    },
-    "heatmax-WMS": {
-      "url": "https://gis.earthdata.nasa.gov/maphost/services/EIC/heatmax_median_multivariate/ImageServer/WMSServer"
+    "tasmax-WMS": {
+      "url": "https://gis.earthdata.nasa.gov/UAT/services/EIC/tasmax_yearly_median/ImageServer/WMSServer?request=GetCapabilities&service=WMS"
     }
   }
 }

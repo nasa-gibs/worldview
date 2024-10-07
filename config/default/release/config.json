@@ -13,12 +13,8 @@
             "to": "gibs-antarctic.xml"
         },
         {
-            "from": "https://gis.earthdata.nasa.gov/UAT/services/NEX-GDDP-CMIP6/tmaxXF_ACCESS_CM2_ssp126/ImageServer/WMSServer?request=GetCapabilities&service=WMS",
-            "to": "EGIS-wms.xml"
-        },
-        {
-            "from": "https://gis.earthdata.nasa.gov/maphost/services/EIC/heatmax_median_multivariate/ImageServer/WMSServer?request=GetCapabilities&service=WMS",
-            "to": "heatmax-wms.xml"
+            "from": "https://gis.earthdata.nasa.gov/UAT/services/EIC/tasmax_yearly_median/ImageServer/WMSServer?request=GetCapabilities&service=WMS",
+            "to": "tasmax-wms.xml"
         }
     ],
     "wv-options-wmts": [
@@ -51,9 +47,9 @@
             "maxResolution": 8192.0
         },
         {
-            "source": "heatmax-WMS:geographic",
-            "from": "heatmax-wms.xml",
-            "to": "heatmax-wms.json",
+            "source": "tasmax-WMS:geographic",
+            "from": "tasmax-wms.xml",
+            "to": "tasmax-wms.json",
             "projection": "geographic",
             "maxResolution": 8192.0
         }

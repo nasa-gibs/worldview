@@ -1,13 +1,13 @@
 {
   "layers": {
-    "heatmax_ssp245": {
-      "id": "heatmax_ssp245",
-      "description": "EGIS/heatmax_ssp245",
+    "tasmax_ssp370": {
+      "id": "tasmax_ssp370",
+      "description": "EGIS/tasmax_ssp370",
       "group": "overlays",
       "tags": "EGIS",
       "layergroup": "Soil Moisture",
-      "title": "heatmax_ssp245",
-      "subtitle": "heatmax_ssp245 subtitle",
+      "title": "tasmax_ssp370",
+      "subtitle": "tasmax_ssp370 subtitle",
       "type": "wms",
       "format": "image/png",
       "period": "monthly",
@@ -28,7 +28,7 @@
       "disableSmartHandoff": true,
       "projections": {
         "geographic": {
-          "source": "heatmax-WMS"
+          "source": "tasmax-WMS"
         }
       }
     }

@@ -85,6 +85,7 @@ async function getCapabilities () {
 // convert to superagent and use promises
 async function fetchConfigs (inputFile, outputFile) {
   const writer = await fs.createWriteStream(outputFile)
+  console.warn(inputFile)
   return axios({
     method: 'get',
     url: inputFile,
