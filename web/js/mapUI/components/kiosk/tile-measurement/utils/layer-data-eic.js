@@ -24,8 +24,6 @@ export const layersToMeasure = [
   'VIIRS_NOAA20_DayNightBand_AtSensor_M15',
   'VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate',
   'VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean',
-  'VIIRS_NOAA21_Thermal_Anomalies_375m_All',
-  'VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'VIIRS_NOAA21_CorrectedReflectance_TrueColor',
 ];
 
@@ -56,8 +54,6 @@ export const layerPixelData = {
   VIIRS_NOAA20_DayNightBand_AtSensor_M15: { threshold: 0.10 },
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { threshold: 0.90 },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { threshold: 0.90 },
-  VIIRS_NOAA21_Thermal_Anomalies_375m_All: { threshold: 0.95 },
-  VIIRS_NOAA20_Thermal_Anomalies_375m_All: { threshold: 0.95 },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
 };
 
@@ -87,8 +83,6 @@ export const bestDates = {
   VIIRS_NOAA20_DayNightBand_AtSensor_M15: { date: '2024-10-01' },
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { date: '2024-10-01' },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { date: '2024-10-01' },
-  VIIRS_NOAA21_Thermal_Anomalies_375m_All: { date: '2024-10-01' },
-  VIIRS_NOAA20_Thermal_Anomalies_375m_All: { date: '2024-10-01' },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { date: '2024-10-01' },
 };
 
