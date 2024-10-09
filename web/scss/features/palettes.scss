@@ -10,6 +10,9 @@
   margin-right: 10px;
   color: #000;
   margin-bottom: 1px;
+  min-height: 41px;
+  display: flex;
+  align-items: center;
 }
 
 .wv-palette-selector-row label {
@@ -194,8 +197,12 @@
   width: 13px;
   display: inline-block;
   border: 1px solid #000;
-  margin: 0 2px 4px;
+  margin: 2px;
   position: relative;
+}
+
+.wv-palettes-legend .wv-palettes-class {
+  margin: 0 2px 4px;
 }
 
 .wv-running .wv-palettes-class {

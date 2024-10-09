@@ -17,7 +17,7 @@ function Arrow({
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
-      <ArrowFilledUp className={arrowClassName} size="18px" />
+      <ArrowFilledUp className={arrowClassName} size="24px" />
     </div>
   );
 }
