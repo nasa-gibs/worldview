@@ -226,6 +226,9 @@
     "eslint-config-standard": {
       "eslint-plugin-n": "^17.1.0"
     },
+    "fetch-mock-jest": {
+      "path-to-regexp": "^8.0.0"
+    },
     "ws": "^8.17.1"
   },
   "browserslist": [
