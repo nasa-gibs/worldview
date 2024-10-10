@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
+import { faCircleDot, faCircle } from '@fortawesome/free-solid-svg-icons';
 import googleTagManager from 'googleTagManager';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
@@ -510,15 +510,14 @@ function LayerRow (props) {
             >
               Select layer for processing
             </UncontrolledTooltip>
-            {/* <FontAwesomeIcon icon="fa-solid fa-circle-dot" className="fa-circle-dot" /> */}
             {layer.id === activeChartingLayer ? (
               <FontAwesomeIcon
-                icon={faToggleOn}
+                icon={faCircleDot}
                 className="charting-indicator"
               />
             ) : (
               <FontAwesomeIcon
-                icon={faToggleOff}
+                icon={faCircle}
                 className="charting-indicator"
               />
             )}
@@ -588,36 +587,38 @@ function LayerRow (props) {
     </>
   );
 
-  return (
-    <Draggable
-      isDragDisabled={isEmbedModeActive || isAnimating}
-      draggableId={`${encodedLayerId}-${compareState}`}
-      index={index}
-      direction="vertical"
-    >
-      {(provided, snapshot) => (isInProjection ? (
-        <li
-          id={`${compareState}-${encodedLayerId}`}
-          className={getLayerItemClasses()}
-          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-          ref={provided.innerRef}
-          onMouseOver={mouseOver}
-          onMouseLeave={mouseLeave}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {renderLayerRow()}
-        </li>
-      ) : (
-        <li
-          className="layer-list-placeholder"
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        />
-      ))}
-    </Draggable>
-  );
+  if (!layer.shouldHide) {
+    return (
+      <Draggable
+        isDragDisabled={isEmbedModeActive || isAnimating}
+        draggableId={`${encodedLayerId}-${compareState}`}
+        index={index}
+        direction="vertical"
+      >
+        {(provided, snapshot) => (isInProjection ? (
+          <li
+            id={`${compareState}-${encodedLayerId}`}
+            className={getLayerItemClasses()}
+            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+            ref={provided.innerRef}
+            onMouseOver={mouseOver}
+            onMouseLeave={mouseLeave}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            {renderLayerRow()}
+          </li>
+        ) : (
+          <li
+            className="layer-list-placeholder"
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          />
+        ))}
+      </Draggable>
+    );
+  }
 }
 
 const makeMapStateToProps = () => {

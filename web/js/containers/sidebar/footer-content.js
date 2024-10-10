@@ -8,7 +8,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import googleTagManager from 'googleTagManager';
-import { Plus } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
 import CompareModeOptions from '../../components/sidebar/compare-mode-options';
@@ -41,10 +40,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
-    breakpoints,
-    screenWidth,
-    isPlaying,
-    addLayers,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -69,12 +64,6 @@ const FooterContent = React.forwardRef((props, ref) => {
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
 
-  const onClickAddLayers = (e) => {
-    e.stopPropagation();
-    addLayers(isPlaying, isMobile, breakpoints, screenWidth);
-    googleTagManager.pushEvent({ event: 'add_layers' });
-  };
-
   const renderLayersFooter = () => (
     <>
       <div>
@@ -92,34 +81,6 @@ const FooterContent = React.forwardRef((props, ref) => {
         )}
       </div>
       <div className="product-buttons">
-        {!isChartingActive
-        && (
-        <Button
-          id="layers-add"
-          aria-label="Add layers"
-          className="layers-add red"
-          text={(
-            <>
-              <Plus class="add-plus" size="10px" />
-              Add Layers
-            </>
-          )}
-          onClick={onClickAddLayers}
-        />
-        )}
-        {!isChartingActive
-          && (
-          <Button
-            id="compare-toggle-button"
-            aria-label={compareBtnText}
-            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
-            style={!compareFeature ? { display: 'none' } : null}
-            onClick={!isChartingActive ? onClickToggleCompare : null}
-            text={compareBtnText}
-          />
-          )}
-      </div>
-      <div className="charting-button">
         {!isMobile && !isCompareActive && chartFeature
           && (
           <Button
@@ -129,6 +90,17 @@ const FooterContent = React.forwardRef((props, ref) => {
             style={!chartFeature ? { display: 'none' } : null}
             onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
             text={chartBtnText}
+          />
+          )}
+        {!isChartingActive
+          && (
+          <Button
+            id="compare-toggle-button"
+            aria-label={compareBtnText}
+            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
+            style={!compareFeature ? { display: 'none' } : null}
+            onClick={!isChartingActive ? onClickToggleCompare : null}
+            text={compareBtnText}
           />
           )}
       </div>
