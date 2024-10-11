@@ -10,8 +10,8 @@
       "layergroup": "Aerosol Index",
       "dataAvailability": "dd",
       "startDate": "2024-05-13T10:30:00Z",
-      "disableSnapshot": true
-
+      "disableSnapshot": true,
+      "shiftadjacentdays": false
     }
   }
 }
