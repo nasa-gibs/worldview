@@ -73,12 +73,10 @@ test('Select an Area of Interest works appropriately', async () => {
   const isChartingEnabled = await page.$('#chart-toggle-button')
   if (isChartingEnabled) {
     await page.locator('#chart-toggle-button').click()
-    const aoiIcon = page.locator('#wv-charting-mode-container > div.charting-aoi-container > h3')
-    await expect(aoiIcon).toHaveText('Select Area of Interest')
-    await page.locator('#wv-charting-mode-container > div.charting-aoi-container > svg').click()
-    await page.mouse.click(300, 300)
-    await page.mouse.click(400, 400)
-    await expect(aoiIcon).toHaveText('Area of Interest Selected')
+    const aoiBtn = page.locator('#wv-charting-mode-container > div.charting-aoi-container > .edit-coordinates')
+    await expect(aoiBtn).toHaveText('Entire Screen')
+    await aoiBtn.click()
+    await expect(aoiBtn).toHaveText('Area Selected')
   }
 })
 
@@ -96,12 +94,12 @@ test('Confirm defaults for time span selection', async () => {
   }
 })
 
-test('Calendar icon opens datepicker modal', async () => {
+test('Date selector opens datepicker modal', async () => {
   await page.goto(multipleDataLayers)
   const isChartingEnabled = await page.$('#chart-toggle-button')
   if (isChartingEnabled) {
     await page.locator('#chart-toggle-button').click()
-    await page.locator('#charting-calendar-container > svg').click()
+    await page.locator('#charting-date-button').click()
     const chartingDateModal = page.locator('#charting_date_modal > div > div > div.modal-header > h5')
     await expect(chartingDateModal).toHaveText('Charting Mode Date Selection')
   }
@@ -116,7 +114,7 @@ test('Info modal opens on mode start & on icon click', async () => {
     await expect(infoModal).toHaveText('Charting Tool')
     await page.locator('#charting_info_modal > div > div > div.modal-header > button').click()
     await expect(infoModal).toHaveCount(0)
-    await page.locator('#charting-info-container > svg').click()
+    await page.locator('#charting-info-container svg').click()
     await expect(infoModal).toHaveText('Charting Tool')
   }
 })

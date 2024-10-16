@@ -1110,6 +1110,52 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const addTimeRanges = (def) => {
+    const state = store.getState();
+    const proj = state.proj.selected;
+    const {
+      cmrAvailability,
+      dataAvailability,
+      id,
+    } = def;
+    // if opted in to CMR availability, get granule date ranges if needed
+    if ((cmrAvailability || dataAvailability === 'cmr') && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/cmr.worker.js');
+      worker.onmessage = (event) => {
+        worker.terminate();
+        store.dispatch(addGranuleDateRanges(def, event.data));
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
+    }
+    // if opted in to DescribeDomains availability, get granule date ranges if needed
+    if (dataAvailability === 'dd' && !def.granuleDateRanges) {
+      const worker = new Worker('js/workers/dd.worker.js');
+      worker.onmessage = (event) => {
+        if (Array.isArray(event.data)) { // our final format is an array
+          worker.terminate(); // terminate the worker
+          return store.dispatch(addGranuleDateRanges(def, event.data)); // dispatch the action
+        }
+        // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+        const domains = xmlDoc.querySelector('Domain').textContent;
+        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      const params = {
+        startDate: new Date(def.startDate).toISOString(),
+        endDate: def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString(),
+        id,
+        proj: proj.crs,
+      };
+      worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    }
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -1126,7 +1172,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const proj = state.proj.selected;
     const {
       breakPointLayer,
-      cmrAvailability,
       id,
       opacity,
       period,
@@ -1139,18 +1184,8 @@ export default function mapLayerBuilder(config, cache, store) {
     let { date } = dateOptions;
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
-    // if opted in to CMR availability, get granule date ranges if needed
-    if (cmrAvailability && !def.granuleDateRanges) {
-      const worker = new Worker('js/workers/cmr.worker.js');
-      worker.onmessage = (event) => {
-        worker.terminate();
-        store.dispatch(addGranuleDateRanges(def, event.data));
-      };
-      worker.onerror = () => {
-        worker.terminate();
-      };
-      worker.postMessage({ funcName: 'getLayerGranuleRanges', args: [def] });
-    }
+
+    addTimeRanges(def);
 
     if (!layer || isGranule || def.type === 'titiler') {
       if (!date) date = options.date || getSelectedDate(state);

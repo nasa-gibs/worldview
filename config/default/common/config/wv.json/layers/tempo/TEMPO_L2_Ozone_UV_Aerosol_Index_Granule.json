@@ -11,10 +11,10 @@
       "type": "granule",
       "period": "subdaily",
       "count": 1,
-      "cmrAvailability": true,
+      "dataAvailability": "dd",
       "startDate": "2024-05-13T10:41:03Z",
-      "disableSnapshot": true
-
+      "disableSnapshot": true,
+      "shiftadjacentdays": false
     }
   }
 }

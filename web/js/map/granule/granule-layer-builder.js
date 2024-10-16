@@ -244,7 +244,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     const granuleAttributes = await getGranuleAttributes(def, options);
     const { visibleGranules } = granuleAttributes;
-    const granules = datelineShiftGranules(visibleGranules, date, crs);
+    const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
+    const granules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
     const tileLayers = new OlCollection(createGranuleTileLayers(granules, def, attributes));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);

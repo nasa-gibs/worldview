@@ -27,6 +27,11 @@
     padding: 3px 13px 4px;
 }
 
+#chart-toggle-button.disabled {
+  color: #fff;
+  pointer-events: auto;
+}
+
 .wv-button.red {
   background: #f64137;
   border-color: #f64137;
@@ -36,7 +41,7 @@
   background: #212121;
 }
 
-.wv-button:hover,
+.wv-button:not(.disabled):hover,
 #compare-toggle-button:hover {
   border-color: #eee;
   background-color: #eee;
