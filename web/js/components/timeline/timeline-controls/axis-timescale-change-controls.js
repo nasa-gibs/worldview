@@ -39,11 +39,13 @@ class AxisTimeScaleChangeControls extends PureComponent {
           direction="up"
           onClick={this.onClickUp}
           type="zoom-level-up"
+          arrowSize="24px"
         />
         <Arrow
           direction="down"
           onClick={this.onClickDown}
           type="zoom-level-down"
+          arrowSize="24px"
         />
       </div>
     );

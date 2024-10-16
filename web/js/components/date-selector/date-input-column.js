@@ -310,6 +310,7 @@ class DateInputColumn extends Component {
           onClick={isDisabled ? () => {} : () => this.changeDate(1)}
           type={type}
           isKioskModeActive={isKioskModeActive}
+          arrowSize="18px"
         />
         <input
           id={inputId}
@@ -333,6 +334,7 @@ class DateInputColumn extends Component {
           onClick={isDisabled ? () => {} : () => this.changeDate(-1)}
           type={type}
           isKioskModeActive={isKioskModeActive}
+          arrowSize="18px"
         />
       </div>
     );
