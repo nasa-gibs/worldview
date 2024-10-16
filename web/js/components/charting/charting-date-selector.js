@@ -37,7 +37,7 @@ function ChartingDateSelector (props) {
   }
 
   return (
-    <div className="charting-date-container">
+    <div className="charting-date-container wv-date-range-selector">
       {/* single date mode */}
       {timeSpanSelection === 'date'
         ? (

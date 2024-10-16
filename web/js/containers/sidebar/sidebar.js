@@ -13,6 +13,7 @@ import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
+import AddLayersContent from './add-layers-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
@@ -105,6 +106,7 @@ class Sidebar extends React.Component {
       isMobile, screenHeight, isCompareMode,
     } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
+    const addLayersHeight = lodashGet(this, 'addLayersElement.clientHeight') || 30;
     const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
     const groupCheckboxHeight = 35;
     let newHeight;
@@ -113,10 +115,10 @@ class Sidebar extends React.Component {
       const topOffset = 10;
       const basePadding = 130;
       newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight)
+        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight + addLayersHeight)
         - 10;
     } else {
-      newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight);
+      newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
     }
     // Issue #1415: This was checking for subComponentHeight !== newHeight.
     // Sometimes it would get stuck in a loop in which the newHeight
@@ -303,6 +305,7 @@ class Sidebar extends React.Component {
       screenHeight,
       tabTypes,
       chartingModeAccessible,
+      activeString,
     } = this.props;
 
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
@@ -371,25 +374,30 @@ class Sidebar extends React.Component {
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="layers">
                   {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                  <AddLayersContent
+                    ref={(el) => { this.addLayersElement = el; }}
+                    isActive={activeTab === 'layers'}
+                    compareState={activeString}
+                  />
                 </TabPane>
                 {naturalEvents && activeTab === 'events' && (
-                <TabPane tabId="events">
-                  <Events
-                    height={subComponentHeight}
-                    isLoading={isLoadingEvents}
-                    hasRequestError={hasEventRequestError}
-                    eventsData={eventsData}
-                    sources={eventsSources}
-                  />
-                </TabPane>
+                  <TabPane tabId="events">
+                    <Events
+                      height={subComponentHeight}
+                      isLoading={isLoadingEvents}
+                      hasRequestError={hasEventRequestError}
+                      eventsData={eventsData}
+                      sources={eventsSources}
+                    />
+                  </TabPane>
                 )}
                 {smartHandoffs && activeTab === 'download' && (
-                <TabPane tabId="download">
-                  <SmartHandoff
-                    isActive={activeTab === 'download'}
-                    tabTypes={tabTypes}
-                  />
-                </TabPane>
+                  <TabPane tabId="download">
+                    <SmartHandoff
+                      isActive={activeTab === 'download'}
+                      tabTypes={tabTypes}
+                    />
+                  </TabPane>
                 )}
                 {
                   !isKioskModeActive && (
@@ -430,7 +438,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette')).length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous').length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
