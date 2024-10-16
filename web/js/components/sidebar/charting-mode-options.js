@@ -420,7 +420,16 @@ function ChartingModeOptions(props) {
       </div>
       <div className="charting-subtitle">
         <h3>Layer: </h3>
-        <span>{layerInfo && layerInfo.title}</span>
+        <span id="charting-layer-name">
+          {layerInfo && layerInfo.title}
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            placement="right"
+            target="charting-layer-name"
+          >
+            {layerInfo && layerInfo.title}
+          </UncontrolledTooltip>
+        </span>
       </div>
       <div className="charting-aoi-container">
         <h3>{aoiTextPrompt}</h3>
