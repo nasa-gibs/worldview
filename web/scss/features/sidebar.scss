@@ -170,18 +170,28 @@
 
 #products-holder footer {
   width: initial;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: 12px;
+}
+
+footer #layers-add {
+  margin: 5px 10px 10px;
+}
+
+.product-section-break {
+  color: #ccc;
+  opacity: 1;
+  margin: 0 10px;
 }
 
 footer .product-buttons {
-  height: 47px;
+  height: 31px;
   width: auto;
-  padding: 10px;
+}
 
-  #layers-add .add-plus {
-    margin-right: 5px;
-    margin-top: -2px;
-  }
+#layers-add .add-plus {
+  margin-right: 5px;
+  margin-top: -2px;
 }
 
 .wv-button {
@@ -213,6 +223,19 @@ footer .product-buttons {
   font-size: 1em;
   font-weight: 700;
   padding: 0;
+  width: 138px;
+}
+
+footer .chart-toggle-button {
+  background: #77777a;
+  border: 1px solid #77777a;
+  position: absolute;
+  left: 10px;
+  width: 113px !important;
+
+  .button-text {
+    padding: 3px 0 4px !important;
+  }
 }
 
 footer .compare-toggle-button {
@@ -399,6 +422,20 @@ div#group-overlays-checkbox-case {
   }
 }
 
+.tab-pane > .product-buttons {
+  display: flex;
+  margin: 10px;
+
+  #group-overlays-checkbox-case {
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+  }
+}
+
 .group-overlays-checkbox {
   margin: 4px 0 0 4px;
 }
@@ -411,8 +448,42 @@ div#group-overlays-checkbox-case {
 
 .wv-ab-mode-selection-case,
 .wv-charting-mode-container {
-  margin: 5px;
+  margin: 10px;
   color: #fff;
+  position: relative;
+}
+
+.charting-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#charting-info-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  #charting-info-icon svg {
+    height: 16px;
+    cursor: pointer;
+  }
+}
+
+.charting-subtitle {
+  display: flex;
+  margin-top: 15px;
+}
+
+.charting-subtitle h3 {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.charting-subtitle span {
+  margin-left: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .wv-ab-mode-selection-case .compare-button {
@@ -424,52 +495,79 @@ div#group-overlays-checkbox-case {
   opacity: 1;
 }
 
-.wv-ab-mode-selection-case > div {
-  margin-left: 10px;
+.compare-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
-.wv-ab-mode-selection-case > div,
-.wv-ab-mode-selection-case h3 {
-  display: inline-block;
+.compare-button-row {
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  position: relative;
+
+  .btn-group {
+    position: absolute;
+    right: 0;
+
+    .compare-button {
+      padding: 3px 18px;
+    }
+  }
+
+  .compare-subtitle {
+    display: inline-block;
+  }
 }
 
 .charting-aoi-container {
   display: flex;
   justify-content: space-between;
-  width: 80%;
-  margin: 10px;
-
-  svg {
-    font-size: 1.4em;
-  }
+  margin-top: 10px;
 
   h3 {
-    line-height: 1.4em;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
   }
-}
 
-.charting-date-row {
-  display: flex;
-  justify-content: space-around;
-}
-
-.charting-timespan-container,
-.charting-date-container {
-  display: flex;
-  justify-content: space-around;
+  .edit-coordinates span {
+    padding: 3px 9px;
+  }
 }
 
 .charting-timespan-container {
   align-items: center;
-  margin: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 
-  div > .btn-active {
-    background: #d54e21;
-    border-color: #d54e21;
+  h3 {
+    font-size: 13px;
+    font-weight: bold;
   }
 
-  svg {
-    font-size: 1.4em;
+  button {
+    padding: 4px 11px;
+    background: #222;
+    border-color: #5c6369;
+  }
+
+  div > .btn-active {
+    background: #01457b;
+  }
+}
+
+.charting-date-row {
+  text-align: right;
+  margin-top: 6px;
+
+  .charting-date-button span {
+    padding: 3px 9px;
+    font-weight: normal;
   }
 }
 
@@ -484,6 +582,10 @@ div#group-overlays-checkbox-case {
   display: flex;
 }
 
+.modal-dialog.chart-dialog {
+  top: 80px;
+}
+
 .charting-statistics-label {
   font-weight: bolder;
   min-width: 40%;
@@ -495,19 +597,40 @@ div#group-overlays-checkbox-case {
   padding: 0.25em;
 }
 
+.recharts-legend-item {
+  font-weight: bold;
+}
+
+.charting-disclaimer {
+  line-height: 1.3em;
+}
+
 .charting-buttons {
-  font-size: 1.5em;
-  margin-top: 1em;
-  display: flex;
-  justify-content: space-around;
+  position: absolute;
+  right: -10px;
+  bottom: -37.5px;
+  width: calc(100% + 20px);
+
+  #charting-create-button {
+    float: right;
+    margin-right: 10px;
+    width: 138px;
+
+    .button-text {
+      display: block;
+      font-size: 13px;
+      padding: 3px 0;
+    }
+  }
 }
 
 .charting-indicator {
-  font-size: 1.5em;
+  font-size: 1.25em;
   margin: 0;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #charting-chart {
@@ -834,6 +957,11 @@ p.recharts-tooltip-label {
       display: inline;
       text-transform: capitalize;
       margin-left: 5px;
+      color: inherit;
     }
   }
+}
+
+.ReactCrop {
+  z-index: 0 !important;
 }

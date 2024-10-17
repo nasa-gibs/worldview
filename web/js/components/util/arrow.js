@@ -6,7 +6,7 @@ import { ArrowFilledUp } from '@edsc/earthdata-react-icons/horizon-design-system
  * @function Arrow Up/Down
  */
 function Arrow({
-  onClick, type, direction, isKioskModeActive,
+  onClick, type, direction, isKioskModeActive, arrowSize,
 }) {
   const containerClassName = `date-arrows date-arrow-${direction}`;
   const arrowClassName = `${direction}arrow`;
@@ -17,7 +17,7 @@ function Arrow({
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
-      <ArrowFilledUp className={arrowClassName} size="18px" />
+      <ArrowFilledUp className={arrowClassName} size={arrowSize} />
     </div>
   );
 }
@@ -27,6 +27,7 @@ Arrow.propTypes = {
   onClick: PropTypes.func,
   type: PropTypes.string,
   isKioskModeActive: PropTypes.bool,
+  arrowSize: PropTypes.string,
 };
 
 export default Arrow;
