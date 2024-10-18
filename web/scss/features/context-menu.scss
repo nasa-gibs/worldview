@@ -1,6 +1,8 @@
+@use "variables";
+
 .react-contextmenu {
-  @include wv-modal-dialog;
-  @include wv-modal-content;
+  @include variables.wv-modal-dialog;
+  @include variables.wv-modal-content;
 
   margin: 2px 0 0;
   min-width: 160px;
