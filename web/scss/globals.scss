@@ -1,7 +1,9 @@
+@use "variables";
+
 * {
   font-synthesis-weight: none;
 }
 
 .red-font {
-  color: $wv-orange;
+  color: variables.$wv-orange;
 }

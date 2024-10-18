@@ -1,3 +1,5 @@
+@use "variables";
+
 .ab-swipe-line {
   height: 100%;
   padding: 0 2px;
@@ -61,7 +63,7 @@
 }
 
 .ab-slider-case {
-  @include wv-date-chip;
+  @include variables.wv-date-chip;
 
   position: absolute;
   margin-left: auto;
@@ -113,9 +115,9 @@
 }
 
 .ab-swipe-line .ab-swipe-span {
-  @include wv-date-chip;
+  @include variables.wv-date-chip;
 
-  font-family: $wv-base-font;
+  font-family: variables.$wv-base-font;
   position: absolute;
   bottom: 195px;
   padding: 2px 4px;
@@ -126,9 +128,9 @@
 }
 
 .ab-spy-span {
-  @include wv-date-chip;
+  @include variables.wv-date-chip;
 
-  font-family: $wv-base-font;
+  font-family: variables.$wv-base-font;
   position: absolute;
   display: block;
   white-space: nowrap;
@@ -191,7 +193,7 @@
   border-radius: 5px;
   height: 44px;
   border: thin solid #333;
-  background-color: $wv-transparent-black;
+  background-color: variables.$wv-transparent-black;
   position: absolute;
   bottom: 75px;
   left: 10px;

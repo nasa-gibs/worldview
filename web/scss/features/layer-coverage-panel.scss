@@ -1,3 +1,5 @@
+@use "variables";
+
 .timeline-layer-coverage-container {
   position: absolute;
   background: rgb(40 40 40);
@@ -169,7 +171,7 @@
   & section {
     background: #222;
     border: 1px solid #333;
-    box-shadow: $wv-modal-shadow;
+    box-shadow: variables.$wv-modal-shadow;
     padding: 5px;
     margin: 3px;
   }

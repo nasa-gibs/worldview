@@ -126,7 +126,7 @@
     "react-test-renderer": "^18.3.0",
     "redux-mock-store": "^1.5.4",
     "run-script-os": "^1.1.6",
-    "sass": "^1.79.5",
+    "sass": "^1.80.2",
     "sass-loader": "^16.0.2",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",

@@ -1,3 +1,5 @@
+@use "variables";
+
 .tour {
   a {
     color: #00457b;
@@ -848,7 +850,7 @@
   }
 }
 
-@media (min-width: $tablet-min-width) {
+@media (min-width: variables.$tablet-min-width) {
   .tour {
     display: block;
   }
@@ -892,7 +894,7 @@
     right: 55px;
 
     .modal-dialog {
-      box-shadow: $wv-modal-shadow;
+      box-shadow: variables.$wv-modal-shadow;
 
       .modal-content {
         border-radius: 8px;

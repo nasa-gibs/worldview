@@ -160,7 +160,8 @@ module.exports = {
     },
     fallback: {
       fs: false
-    }
+    },
+    modules: ['node_modules', path.resolve(__dirname, 'web/scss')]
   },
   stats: {
     // reduce output text on build - remove for more verbose

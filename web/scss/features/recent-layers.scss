@@ -1,3 +1,5 @@
+@use "variables";
+
 li.recent-tab.nav-item {
   margin-left: 10px;
   background: transparent;
@@ -53,7 +55,7 @@ button.recent-layer-delete {
   top: 8px;
 }
 
-@media (min-width: $desktop-min-width) {
+@media (min-width: variables.$desktop-min-width) {
   .recent-layers-header {
     width: 50%;
   }

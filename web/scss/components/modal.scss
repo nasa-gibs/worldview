@@ -1,6 +1,8 @@
+@use "variables";
+
 /* universal/default modal styles */
 .modal-dialog {
-  @include wv-modal-dialog;
+  @include variables.wv-modal-dialog;
 
   h1 {
     font-size: 22px;
@@ -48,7 +50,7 @@
 
   .modal-body {
     background-color: #222;
-    border-radius: $wv-menu-border-radius;
+    border-radius: variables.$wv-menu-border-radius;
 
     & .modal-footer {
       padding-bottom: 0;
@@ -115,7 +117,7 @@
   background: #282828;
   color: #eee;
 
-  @include wv-modal-content;
+  @include variables.wv-modal-content;
 }
 
 .modal-body pre {

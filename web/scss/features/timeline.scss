@@ -1,3 +1,5 @@
+@use "variables";
+
 *:focus,
 button:focus {
   outline: 0;
@@ -49,9 +51,9 @@ button:focus {
 .timeline-inner {
   height: 67px;
   position: absolute;
-  border: $wv-dark-menu-border;
-  background: $wv-transparent-black;
-  border-radius: $wv-menu-border-radius;
+  border: variables.$wv-dark-menu-border;
+  background: variables.$wv-transparent-black;
+  border-radius: variables.$wv-menu-border-radius;
   display: flex;
   flex-flow: row nowrap;
   margin-left: 10px;
@@ -61,7 +63,7 @@ button:focus {
 
 #distraction-free-timeline {
   position: absolute;
-  border: $wv-dark-menu-border;
+  border: variables.$wv-dark-menu-border;
   background: rgba(35 31 32 / 60%);
   display: flex;
   flex-flow: row nowrap;
@@ -145,7 +147,7 @@ button:focus {
     font-size: 24px;
     background: transparent;
     border: 0;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     line-height: 1.2em;
     vertical-align: baseline;
     box-sizing: border-box;
@@ -190,7 +192,7 @@ button:focus {
   }
 
   & .input-time-divider {
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     color: #fff;
     font-size: 24px;
     width: 13px;
@@ -198,7 +200,7 @@ button:focus {
   }
 
   & .input-time-divider-kiosk {
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     color: #fff;
     font-size: 24px;
     width: 13px;
@@ -206,14 +208,14 @@ button:focus {
   }
 
   & .input-time-zmark {
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 25px;
   }
 
   & .input-time-zmark-kiosk {
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     color: #fff;
     font-size: 24px;
     margin-top: 15px;
@@ -419,7 +421,7 @@ button:focus {
 
 .axis-grid-text {
   font-size: 18px;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   pointer-events: none;
   user-select: none;
 }
@@ -443,7 +445,7 @@ button:focus {
 
 .zoom-level-display-text {
   color: #fff;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   text-align: center;
   font-size: 12px;
   line-height: 1.2em;
@@ -473,7 +475,7 @@ button:focus {
   width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   position: absolute;
   top: -54px;
   left: 85px;
@@ -510,7 +512,7 @@ button:focus {
   opacity: 1;
   font-size: 16px;
   background: transparent;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -526,7 +528,7 @@ button:focus {
   font-size: 16px;
   background: transparent;
   border: 0;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -560,7 +562,7 @@ button:focus {
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
-  background-color: $wv-transparent-black;
+  background-color: variables.$wv-transparent-black;
   border-radius: 3px;
 }
 
@@ -608,7 +610,7 @@ button:focus {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   margin-top: -2px;
 }
 
@@ -631,7 +633,7 @@ button:focus {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
@@ -651,9 +653,9 @@ button:focus {
   height: 64px;
   width: 20px;
   cursor: pointer;
-  border-left: $wv-dark-menu-border;
-  border-top-right-radius: $wv-menu-border-radius;
-  border-bottom-right-radius: $wv-menu-border-radius;
+  border-left: variables.$wv-dark-menu-border;
+  border-top-right-radius: variables.$wv-menu-border-radius;
+  border-bottom-right-radius: variables.$wv-menu-border-radius;
 }
 
 #timeline-hide:hover,
@@ -699,7 +701,7 @@ button:focus {
   cursor: pointer;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  background-color: $wv-transparent-black;
+  background-color: variables.$wv-transparent-black;
   border: thin solid #fff;
   border-bottom: none;
   overflow: hidden;
@@ -803,7 +805,7 @@ button:focus {
   position: absolute;
   left: 10px;
   bottom: 20px;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   color: #fff;
   border: thin solid #333;
   border-radius: 5px;
@@ -812,7 +814,7 @@ button:focus {
 
   & .mobile-date-picker-select-btn-text {
     height: 44px;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     font-size: 23px;
     padding: 14px 8px;
   }
@@ -821,7 +823,7 @@ button:focus {
 .datepicker-modal {
   & div,
   li {
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
   }
 
   & .datepicker-header,
@@ -845,7 +847,7 @@ button:focus {
   position: absolute;
   left: 120px;
   bottom: 20px;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   border: thin solid #333;
   border-radius: 5px;
   cursor: pointer;
@@ -919,7 +921,7 @@ button:focus {
 
 .mobile-animate-button {
   position: absolute;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   border: thin solid #333;
   height: 44px;
   width: 60px;

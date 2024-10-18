@@ -1,3 +1,5 @@
+@use "variables";
+
 .layer-modal-content {
   & div,
   & h1,
@@ -358,7 +360,7 @@
 
 .layer-date-start .monospace,
 .layer-date-end .monospace {
-  @include wv-date-chip;
+  @include variables.wv-date-chip;
 
   font-size: 14px;
   font-weight: 500;
@@ -379,7 +381,7 @@
 
 .source-metadata .layer-description .layer-date-start .monospace,
 .source-metadata .layer-description .layer-date-end .monospace {
-  @include wv-date-chip;
+  @include variables.wv-date-chip;
 
   border-color: #555;
   background-color: #777;
@@ -387,7 +389,7 @@
 }
 
 .layers-all-layer .source-metadata .layer-description .layer-date-ranges span.monospace {
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   font-size: 14px;
 }
 
@@ -693,7 +695,7 @@
   & .filter-tooltip {
     & .display-date {
       font-size: 14px;
-      font-family: $wv-monospace-font;
+      font-family: variables.$wv-monospace-font;
       margin: 5px;
     }
   }
@@ -770,7 +772,7 @@
   }
 }
 
-@media (min-width: $desktop-min-width) {
+@media (min-width: variables.$desktop-min-width) {
   .search-layers-container {
     & div.layer-list-detail-container {
       flex-direction: row;
@@ -791,7 +793,7 @@
 }
 
 /* Need at least 1024px to fit three category boxes inline */
-@media (max-width: $tablet-max-width) {
+@media (max-width: variables.$tablet-max-width) {
   .custom-layer-dialog.category-width {
     width: 658px;
 
@@ -815,7 +817,7 @@
   }
 }
 
-@media (min-width: $tablet-min-width) {
+@media (min-width: variables.$tablet-min-width) {
   .category-width .layer-modal-content {
     height: calc(var(--vh, 1vh) * 100 - 135px);
   }
@@ -833,7 +835,7 @@
   }
 }
 
-@media (max-width: $mobile-max-width) {
+@media (max-width: variables.$mobile-max-width) {
   .category-width .layer-modal-content {
     padding: 0;
     height: calc(var(--vh, 1vh) * 100 - 40px);
@@ -925,13 +927,13 @@
   }
 }
 
-@media (max-width: $mobile-max-width) {
+@media (max-width: variables.$mobile-max-width) {
   .layer-category {
     width: 100%;
   }
 }
 
-@media (max-width: $desktop-min-width) and (min-width: $mobile-max-width) {
+@media (max-width: variables.$desktop-min-width) and (min-width: variables.$mobile-max-width) {
   .layer-category {
     width: 48%;
   }
@@ -1074,8 +1076,8 @@ a[rel="noreferrer"]:hover {
   text-decoration: underline;
 }
 
-@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
-  (max-width: $mobile-max-width) {
+@media screen and (max-width: variables.$desktop-min-width) and (max-height: variables.$mobile-max-width) and (orientation: landscape),
+  (max-width: variables.$mobile-max-width) {
   .instrument-collection {
     h6 {
       margin-right: 20px;

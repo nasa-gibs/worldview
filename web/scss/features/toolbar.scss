@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-toolbar {
   position: absolute;
   right: 10px;
@@ -8,7 +10,7 @@
 
 .wv-toolbar-button,
 [data-whatintent="mouse"] .wv-toolbar-button:focus {
-  @include wv-map-button;
+  @include variables.wv-map-button;
 }
 
 [data-whatintent="keyboard"] .wv-toolbar-button:focus {
@@ -161,7 +163,7 @@
   }
 }
 
-@media (min-width: $tablet-min-width) {
+@media (min-width: variables.$tablet-min-width) {
   .wv-toolbar-button,
   [data-whatintent="mouse"] .wv-toolbar-button:focus {
     font-size: 20px;

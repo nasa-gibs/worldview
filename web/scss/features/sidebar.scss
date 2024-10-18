@@ -1,3 +1,5 @@
+@use "variables";
+
 #wv-sidebar {
   position: absolute;
   z-index: 3;
@@ -24,7 +26,7 @@
   }
 
   .main-nav {
-    background: $wv-transparent-black;
+    background: variables.$wv-transparent-black;
     border-right: 1px solid #333;
     border-left: 1px solid #333;
 
@@ -92,7 +94,7 @@
   }
 
   > .tab-content {
-    background: $wv-transparent-black;
+    background: variables.$wv-transparent-black;
     border: 1px solid #333;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -277,8 +279,8 @@ div#group-overlays-checkbox-case {
     max-width: 232px;
     line-height: 15px;
 
-    @media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
-      (max-width: $mobile-max-width) {
+    @media screen and (max-width: variables.$desktop-min-width) and (max-height: variables.$mobile-max-width) and (orientation: landscape),
+      (max-width: variables.$mobile-max-width) {
       font-size: 16px;
     }
   }
@@ -360,7 +362,7 @@ div#group-overlays-checkbox-case {
   font-size: 14px;
   padding: 6px 12px;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     font-size: 18px;
     padding: 12px 14px;
   }
@@ -378,7 +380,7 @@ div#group-overlays-checkbox-case {
   }
 }
 
-@media (max-width: $mobile-max-width) {
+@media (max-width: variables.$mobile-max-width) {
   .layer-group-case .layer-group-header {
     min-height: 32px;
     margin-top: 10px;
@@ -760,7 +762,7 @@ p.recharts-tooltip-label {
   position: absolute;
   max-width: 100vw;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     left: 0;
     width: 100%;
     height: calc(var(--vh, 1vh) * 100);
@@ -815,7 +817,7 @@ p.recharts-tooltip-label {
     max-height: calc(100vh - 200px);
   }
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     width: 100%;
 
     .modal-body {
@@ -828,7 +830,7 @@ p.recharts-tooltip-label {
 .layer-settings-modal {
   width: 300px;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     width: 100%;
   }
 

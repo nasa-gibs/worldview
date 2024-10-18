@@ -1,3 +1,5 @@
+@use "variables";
+
 #embed-mode-wrapper {
   position: fixed;
   inset: 0;
@@ -26,7 +28,7 @@
   left: 50%;
   margin-top: -50px;
   margin-left: -110px;
-  background-color: $wv-transparent-black;
+  background-color: variables.$wv-transparent-black;
   border-radius: 5px;
   border: 3px solid;
   border-color: #fff;
