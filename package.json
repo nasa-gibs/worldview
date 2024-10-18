@@ -18,7 +18,7 @@
   "homepage": "https://worldview.earthdata.nasa.gov/",
   "bugs": {
     "url": "https://github.com/nasa-gibs/worldview/issues",
-    "email": "support@earthdata.nasa.gov"
+    "email": "earthdata-support@nasa.gov"
   },
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",

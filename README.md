@@ -86,7 +86,7 @@ To update Worldview, pull down any branch or tag from GitHub. From the `main` br
 ## Contact
 
 Contact us via GitHub or by sending an email to
-[support@earthdata.nasa.gov](mailto:support@earthdata.nasa.gov).
+[earthdata-support@nasa.gov](mailto:earthdata-support@nasa.gov).
 
 ## Contribute
 
