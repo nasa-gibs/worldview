@@ -155,9 +155,7 @@ class TimelineAxis extends Component {
       const draggerTimeStateTime = draggerTimeStateDate.getTime();
       const maxBackDate = draggerTimeStateTime > backDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() + 1), draggerTimeStateDate.toISOString()) : backDate;
       const minFrontDate = draggerTimeStateTime < startDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() - 1), draggerTimeStateDate.toISOString()) : frontDate;
-      activeLayers.forEach((layer) => {
-        this.addTimeRanges(layer, proj, [minFrontDate, maxBackDate])
-      });
+      activeLayers.forEach((layer) => this.addTimeRanges(layer, proj, [minFrontDate, maxBackDate]));
     }
 
     const { wheelZoom } = this.state;
@@ -1340,7 +1338,7 @@ class TimelineAxis extends Component {
 
   addTimeRanges = (def, proj, dateRange) => {
     const {
-      addGranuleDateRanges
+      addGranuleDateRanges,
     } = this.props;
     const {
       cmrAvailability,
@@ -1348,15 +1346,13 @@ class TimelineAxis extends Component {
       id,
     } = def;
     // if opted in to CMR availability, get granule date ranges if needed
-    if ((cmrAvailability || dataAvailability === 'cmr')) {
+    if (cmrAvailability || dataAvailability === 'cmr') {
       const worker = new Worker('js/workers/cmr.worker.js');
       worker.onmessage = (event) => {
         worker.terminate();
         addGranuleDateRanges(def, event.data);
       };
-      worker.onerror = () => {
-        worker.terminate();
-      };
+      worker.onerror = () => worker.terminate();
       worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
     }
     // if opted in to DescribeDomains availability, get granule date ranges if needed
@@ -1374,14 +1370,11 @@ class TimelineAxis extends Component {
         if (!domains) worker.terminate();
         worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
       };
-      worker.onerror = () => {
-        worker.terminate();
-      };
+      worker.onerror = () => worker.terminate();
       let startDate = new Date(def.startDate);
-      let endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString()
+      let endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString();
       if (dateRange) {
-        startDate = dateRange[0];
-        endDate = dateRange[1];
+        [startDate, endDate] = dateRange;
       }
       const params = {
         startDate,
@@ -1391,7 +1384,7 @@ class TimelineAxis extends Component {
       };
       worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     }
-  };  
+  };
 
   /**
   * @desc get matching coverage line dimensions for given date range

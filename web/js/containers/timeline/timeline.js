@@ -1708,7 +1708,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   addGranuleDateRanges: (layer, dateRanges) => {
     dispatch(addGranuleDateRanges(layer, dateRanges));
-  }
+  },
 });
 
 export default connect(
