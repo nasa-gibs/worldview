@@ -142,7 +142,24 @@ class TimelineAxis extends Component {
       draggerTimeState,
       draggerTimeStateB,
       timelineEndDateLimit,
+      activeLayers,
+      proj,
+      frontDate,
+      backDate,
     } = this.props;
+
+    if (activeLayers.length !== prevProps.activeLayers.length || frontDate !== prevProps.frontDate || backDate !== prevProps.backDate) {
+      const backDateTime = new Date(backDate).getTime();
+      const startDateTime = new Date(frontDate).getTime();
+      const draggerTimeStateDate = new Date(draggerTimeState);
+      const draggerTimeStateTime = draggerTimeStateDate.getTime();
+      const maxBackDate = draggerTimeStateTime > backDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() + 1), draggerTimeStateDate.toISOString()) : backDate;
+      const minFrontDate = draggerTimeStateTime < startDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() - 1), draggerTimeStateDate.toISOString()) : frontDate;
+      activeLayers.forEach((layer) => {
+        this.addTimeRanges(layer, proj, [minFrontDate, maxBackDate])
+      });
+    }
+
     const { wheelZoom } = this.state;
     let draggerDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
 
@@ -1321,6 +1338,61 @@ class TimelineAxis extends Component {
     updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTimeDate);
   }
 
+  addTimeRanges = (def, proj, dateRange) => {
+    const {
+      addGranuleDateRanges
+    } = this.props;
+    const {
+      cmrAvailability,
+      dataAvailability,
+      id,
+    } = def;
+    // if opted in to CMR availability, get granule date ranges if needed
+    if ((cmrAvailability || dataAvailability === 'cmr')) {
+      const worker = new Worker('js/workers/cmr.worker.js');
+      worker.onmessage = (event) => {
+        worker.terminate();
+        addGranuleDateRanges(def, event.data);
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
+    }
+    // if opted in to DescribeDomains availability, get granule date ranges if needed
+    if (dataAvailability === 'dd') {
+      const worker = new Worker('js/workers/dd.worker.js');
+      worker.onmessage = (event) => {
+        if (Array.isArray(event.data)) { // our final format is an array
+          worker.terminate(); // terminate the worker
+          return addGranuleDateRanges(def, event.data); // dispatch the action
+        }
+        // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+        const domains = xmlDoc.querySelector('Domain')?.textContent;
+        if (!domains) worker.terminate();
+        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+      };
+      worker.onerror = () => {
+        worker.terminate();
+      };
+      let startDate = new Date(def.startDate);
+      let endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString()
+      if (dateRange) {
+        startDate = dateRange[0];
+        endDate = dateRange[1];
+      }
+      const params = {
+        startDate,
+        endDate,
+        id,
+        proj: proj.crs,
+      };
+      worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    }
+  };  
+
   /**
   * @desc get matching coverage line dimensions for given date range
   * @returns {Object} visible, leftOffset, width
@@ -1532,6 +1604,8 @@ class TimelineAxis extends Component {
 }
 
 TimelineAxis.propTypes = {
+  activeLayers: PropTypes.array,
+  addGranuleDateRanges: PropTypes.func,
   animationEndLocation: PropTypes.number,
   animationStartLocation: PropTypes.number,
   animEndLocationDate: PropTypes.object,

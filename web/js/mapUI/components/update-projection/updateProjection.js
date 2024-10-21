@@ -378,8 +378,7 @@ function UpdateProjection(props) {
   useEffect(() => {
     if (!ui.selected) return;
     const prevL2Layers = selectL2Layers(prevActiveLayers);
-    const activeL2Layers = selectL2Layers(activeLayers);
-    const needsReload = activeL2Layers.some((dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length);
+    const needsReload = prevL2Layers.includes(undefined);
     if (needsReload) {
       reloadLayers(null, true);
     }
