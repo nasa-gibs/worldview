@@ -79,6 +79,7 @@ class TimelineAxis extends Component {
       position,
       dateA,
       dateB,
+      activeLayers,
     } = this.props;
 
     const checkForPropsUpdates = nextProps.axisWidth === axisWidth
@@ -95,6 +96,7 @@ class TimelineAxis extends Component {
       && nextProps.transformX === transformX
       && nextProps.frontDate === frontDate
       && nextProps.backDate === backDate
+      && nextProps.activeLayers.length === activeLayers.length
       && lodashIsEqual(nextProps.matchingTimelineCoverage, matchingTimelineCoverage);
 
     const {
