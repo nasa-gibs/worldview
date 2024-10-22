@@ -155,6 +155,7 @@ class TimelineAxis extends Component {
       const startDateTime = new Date(frontDate).getTime();
       const draggerTimeStateDate = new Date(draggerTimeState);
       const draggerTimeStateTime = draggerTimeStateDate.getTime();
+      // Make sure that the dragger is within the new time range
       const maxBackDate = draggerTimeStateTime > backDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() + 1), draggerTimeStateDate.toISOString()) : backDate;
       const minFrontDate = draggerTimeStateTime < startDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() - 1), draggerTimeStateDate.toISOString()) : frontDate;
       activeLayers.forEach((layer) => this.addTimeRanges(layer, proj, [minFrontDate, maxBackDate]));
