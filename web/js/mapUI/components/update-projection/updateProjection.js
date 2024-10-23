@@ -36,7 +36,6 @@ function UpdateProjection(props) {
     compareMode,
     config,
     dateCompareState,
-    fitToLeadingExtent,
     getGranuleOptions,
     isKioskModeActive,
     isMobile,
@@ -48,10 +47,8 @@ function UpdateProjection(props) {
     projectionTrigger,
     updateExtent,
     updateLayerVisibilities,
-    updateMapUI,
     ui,
     renderedPalettes,
-    requestPalette,
   } = props;
 
   /**
@@ -62,7 +59,7 @@ function UpdateProjection(props) {
   *
   * @returns {void}
   */
-  const clearLayers = function(saveCache) {
+  const clearLayers = (saveCache) => {
     ui.selected?.setLayers([]);
 
     if (saveCache) return;
@@ -146,7 +143,7 @@ function UpdateProjection(props) {
     updateLayerVisibilities();
   }
 
-  const onStopAnimation = function() {
+  const onStopAnimation = () => {
     const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
     if (needsRefresh) {
       // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
@@ -162,12 +159,12 @@ function UpdateProjection(props) {
  * @method hideMap
  * @static
  *
- * @param {object} map - Openlayers Map obj
+ * @param {object} mapToHide - Openlayers Map obj
  *
  * @returns {void}
  */
-  function hideMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function hideMap(mapToHide) {
+    const el = document.getElementById(`${mapToHide.getTarget()}`);
     if (el) el.style.display = 'none';
   }
 
@@ -177,12 +174,12 @@ function UpdateProjection(props) {
  * @method showMap
  * @static
  *
- * @param {object} map - Openlayers Map obj
+ * @param {object} mapToShow - Openlayers Map obj
  *
  * @returns {void}
  */
-  function showMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function showMap(mapToShow) {
+    const el = document.getElementById(`${mapToShow.getTarget()}`);
     if (el) el.style.display = 'block';
   }
 
@@ -212,10 +209,10 @@ function UpdateProjection(props) {
       hideMap(ui.selected);
     }
     ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
+    const selectedMap = ui.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const currentRotation = isProjectionRotatable ? selectedMap.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
     const rotation = start ? rotationStart : currentRotation;
 
@@ -226,9 +223,9 @@ function UpdateProjection(props) {
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
-    showMap(map);
+    showMap(selectedMap);
 
-    map.updateSize();
+    selectedMap.updateSize();
 
     if (ui.selected.previousCenter) {
       ui.selected.setCenter(ui.selected.previousCenter);
@@ -243,19 +240,19 @@ function UpdateProjection(props) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
+          const view = selectedMap.getView();
+          const extent = view.calculateExtent(selectedMap.getSize());
           fitToLeadingExtent(extent);
         };
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const view = map.getView();
+          const view = selectedMap.getView();
           view.setRotation(rotationStart);
         };
       }
       if (extent) {
-        map.getView().fit(extent, {
+        selectedMap.getView().fit(extent, {
           constrainResolution: false,
           callback,
         });
@@ -441,10 +438,10 @@ UpdateProjection.propTypes = {
   action: PropTypes.object,
   activeLayers: PropTypes.array,
   compare: PropTypes.object,
+  compareMode: PropTypes.string,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
-  fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
@@ -457,7 +454,5 @@ UpdateProjection.propTypes = {
   ui: PropTypes.object,
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
-  updateMapUi: PropTypes.func,
   renderedPalettes: PropTypes.object,
-  requestPalette: PropTypes.func,
 };
