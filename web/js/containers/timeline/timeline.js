@@ -54,6 +54,7 @@ import {
   getNextTimeSelection,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
+import { addGranuleDateRanges } from '../../modules/layers/actions';
 import {
   onActivate as openAnimation,
   onClose as closeAnimation,
@@ -1138,6 +1139,7 @@ class Timeline extends React.Component {
   render() {
     const {
       activeLayers,
+      addGranuleDateRanges,
       animationDisabled,
       animEndLocationDate,
       animStartLocationDate,
@@ -1170,6 +1172,7 @@ class Timeline extends React.Component {
       timeScale,
       timeScaleChangeUnit,
       toggleActiveCompareState,
+      proj,
     } = this.props;
     const {
       animationEndLocation,
@@ -1281,6 +1284,8 @@ class Timeline extends React.Component {
                     <div id="timeline-footer" className="notranslate">
                       {/* Axis */}
                       <TimelineAxis
+                        activeLayers={activeLayers}
+                        addGranuleDateRanges={addGranuleDateRanges}
                         appNow={appNow}
                         axisWidth={axisWidth}
                         parentOffset={parentOffset}
@@ -1326,6 +1331,7 @@ class Timeline extends React.Component {
                         isDraggerDragging={isDraggerDragging}
                         isTimelineDragging={isTimelineDragging}
                         matchingTimelineCoverage={matchingTimelineCoverage}
+                        proj={proj}
                       />
 
                       <AxisHoverLine
@@ -1640,6 +1646,7 @@ function mapStateToProps(state) {
     isKioskModeActive,
     displayStaticMap,
     newCustomDelta,
+    proj: proj.selected,
   };
 }
 
@@ -1699,6 +1706,9 @@ const mapDispatchToProps = (dispatch) => ({
   onPauseAnimation: () => {
     dispatch(pauseAnimation());
   },
+  addGranuleDateRanges: (layer, dateRanges) => {
+    dispatch(addGranuleDateRanges(layer, dateRanges));
+  },
 });
 
 export default connect(
@@ -1707,6 +1717,7 @@ export default connect(
 )(Timeline);
 
 Timeline.propTypes = {
+  addGranuleDateRanges: PropTypes.func,
   appNow: PropTypes.object,
   activeLayers: PropTypes.array,
   animationDisabled: PropTypes.bool,
@@ -1766,4 +1777,5 @@ Timeline.propTypes = {
   toggleCustomModal: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
+  proj: PropTypes.object,
 };
