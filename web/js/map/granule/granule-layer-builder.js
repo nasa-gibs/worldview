@@ -169,12 +169,14 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   */
   const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate, granuleDateRanges) => {
     const { proj: { selected: { crs } } } = store.getState();
-    const granules = [];
+    const visibleGranules = [];
+    const invisibleGranules = [];
     const availableCount = availableGranules?.length;
-    if (!availableCount) return granules;
+    if (!availableCount) return { visibleGranules, invisibleGranules };
     const count = granuleCount > availableCount ? availableCount : granuleCount;
     const sortedAvailableGranules = availableGranules.sort((a, b) => new Date(b.date) - new Date(a.date));
-    for (let i = 0; granules.length < count; i += 1) {
+    let totalLength = visibleGranules.length + invisibleGranules.length;
+    for (let i = 0; totalLength < count; i += 1) {
       const item = sortedAvailableGranules[i];
       if (!item) break;
       const { date } = item;
@@ -183,14 +185,17 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       leadingEdgeDateUTC.setSeconds(59);
       const isWithinRange = isWithinRanges(leadingEdgeDateUTC, granuleDateRanges);
       if (dateDate <= leadingEdgeDateUTC && isWithinRange && isWithinBounds(crs, item)) {
-        granules.unshift(item);
+        visibleGranules.unshift(item);
+      } else if (dateDate <= leadingEdgeDateUTC && isWithinBounds(crs, item)) {
+        invisibleGranules.unshift(item);
       }
+      totalLength = visibleGranules.length + invisibleGranules.length;
     }
 
-    if (granules.length < granuleCount) {
-      console.warn('Could not find enough matching granules', `${granules.length}/${granuleCount}`);
+    if (totalLength < granuleCount) {
+      console.warn('Could not find enough matching granules', `${totalLength}/${granuleCount}`);
     }
-    return granules;
+    return { visibleGranules, invisibleGranules };
   };
 
   /**
@@ -209,13 +214,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const visibleGranules = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
-    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
+    const { visibleGranules, invisibleGranules } = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
+    const transformedVisibleGranules = transformGranulesForProj(visibleGranules, crs);
+    const transformedInvisibleGranules = transformGranulesForProj(invisibleGranules, crs);
 
     return {
       count,
-      granuleDates: transformedGranules.map((g) => g.date),
-      visibleGranules: transformedGranules,
+      granuleDates: [...transformedVisibleGranules.map((g) => g.date), ...transformedInvisibleGranules.map((g) => g.date)],
+      visibleGranules: transformedVisibleGranules,
+      invisibleGranules: transformedInvisibleGranules,
       granuleDateRanges,
     };
   };
@@ -243,10 +250,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     const granuleAttributes = await getGranuleAttributes(def, options);
-    const { visibleGranules } = granuleAttributes;
+    const { visibleGranules, invisibleGranules } = granuleAttributes;
     const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
-    const granules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
-    const tileLayers = new OlCollection(createGranuleTileLayers(granules, def, attributes));
+    const shiftedVisibleGranules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
+    const shiftedInvisibleGranules = shouldShift ? datelineShiftGranules(invisibleGranules, date, crs) : invisibleGranules;
+    const tileLayers = new OlCollection(createGranuleTileLayers(shiftedVisibleGranules, def, attributes));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);
     granuleLayer.set('granuleGroup', true);
@@ -254,7 +262,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     granuleLayer.wv = {
       ...attributes,
       ...granuleAttributes,
-      visibleGranules: granules,
+      visibleGranules: shiftedVisibleGranules,
+      invisibleGranules: shiftedInvisibleGranules,
     };
 
     // Don't update during animation due to the performance hit
