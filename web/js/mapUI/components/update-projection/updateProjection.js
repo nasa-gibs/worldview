@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
@@ -63,7 +63,7 @@ function UpdateProjection(props) {
   * @returns {void}
   */
   const clearLayers = function(saveCache) {
-    ui.selected.setLayers([]);
+    ui.selected?.setLayers([]);
 
     if (saveCache) return;
     ui.cache.clear();
@@ -131,7 +131,7 @@ function UpdateProjection(props) {
       });
       const layerResults = await Promise.allSettled(layerPromises);
       const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
-      mapUI.setLayers(createdLayers);
+      mapUI?.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
@@ -140,7 +140,7 @@ function UpdateProjection(props) {
       clearLayers(saveCache);
       const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
-      mapUI.setLayers(compareLayerGroups);
+      mapUI?.setLayers(compareLayerGroups);
       compareMapUi.create(mapUI, compare.mode);
     }
     updateLayerVisibilities();
@@ -374,12 +374,18 @@ function UpdateProjection(props) {
     .map((layer) => layer.granuleDateRanges);
 
   const prevActiveLayers = usePrevious(activeLayers);
+  const [selectedDate, setSelectedDate] = useState(dateCompareState.date.selected);
 
   useEffect(() => {
     if (!ui.selected) return;
     const prevL2Layers = selectL2Layers(prevActiveLayers);
     const activeL2Layers = selectL2Layers(activeLayers);
-    const needsReload = activeL2Layers.some((dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length);
+    // Check if new date ranges have been added to L2 layers. We don't want to reload every time new ranges are added so also check if there were no ranges before.
+    const hasNewDateRanges = activeL2Layers.some((dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length) && prevL2Layers.includes(undefined);
+    const hasNewLayers = prevActiveLayers.length !== activeLayers.length; // Check if new layers have been added
+    const hasNewDate = selectedDate !== dateCompareState.date.selected; // Check if the date has changed
+    const needsReload = hasNewDateRanges || hasNewLayers || hasNewDate;
+    setSelectedDate(dateCompareState.date.selected);
     if (needsReload) {
       reloadLayers(null, true);
     }
