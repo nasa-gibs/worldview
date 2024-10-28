@@ -167,7 +167,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     if (!ranges) return [];
     const MAX_TIME = 8.64e15;
 
-    const gaps = ranges.reduce((acc, [start, end], i) => {
+    const gaps = ranges.reduce((acc, [start, end]) => {
       acc.at(-1)[1] = new Date(start);
 
       return [...acc, [new Date(end), new Date(MAX_TIME)]];
