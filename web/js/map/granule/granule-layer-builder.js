@@ -153,9 +153,27 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {boolean} - true if date is within a range
   */
   const isWithinRanges = (date, ranges) => {
-    if (!ranges) return false;
+    if (!ranges) return;
 
     return ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
+  };
+
+  /**
+   * Identify gaps between date ranges
+   * @param {array} ranges - array of date ranges
+   * @returns {array} - array of date ranges
+  */
+  const identifyGaps = (ranges) => {
+    if (!ranges) return [];
+    const MAX_TIME = 8.64e15;
+
+    const gaps = ranges.reduce((acc, [start, end], i) => {
+      acc.at(-1)[1] = new Date(start);
+
+      return [...acc, [new Date(end), new Date(MAX_TIME)]];
+    }, [[new Date(-MAX_TIME), new Date(MAX_TIME)]]);
+
+    return gaps;
   };
 
   /**
@@ -181,14 +199,19 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       if (!item) break;
       const { date } = item;
       const dateDate = new Date(date);
-      const leadingEdgeDateUTC = new Date(leadingEdgeDate.toUTCString());
-      leadingEdgeDateUTC.setSeconds(59);
-      const isWithinRange = isWithinRanges(leadingEdgeDateUTC, granuleDateRanges);
-      if (dateDate <= leadingEdgeDateUTC && isWithinRange && isWithinBounds(crs, item)) {
+      leadingEdgeDate.setSeconds(59); // force currently selected time to be 59 seconds. This is to compensate for the inability to select seconds in the timeline
+      const isWithinRange = isWithinRanges(leadingEdgeDate, granuleDateRanges); // check if currently selected time is within a date range
+      const granuleIsWithinRange = isWithinRanges(dateDate, granuleDateRanges) ?? true; // check if the current granule is within a date range, defaults to true
+      const gaps = identifyGaps(granuleDateRanges); // identify gaps between date ranges
+      const currentlySelectedGap = !isWithinRange ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null; // get the gap that the currently selected time is within
+      const granuleIsWithinSelectedGap = currentlySelectedGap ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : false; // check if the current granule is within the currently selected gap
+
+      if (dateDate <= leadingEdgeDate && isWithinRange && granuleIsWithinRange && isWithinBounds(crs, item)) {
         visibleGranules.unshift(item);
-      } else if (dateDate <= leadingEdgeDateUTC && isWithinBounds(crs, item)) {
+      } else if (dateDate <= leadingEdgeDate && !isWithinRange && !granuleIsWithinRange && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
         invisibleGranules.unshift(item);
       }
+
       totalLength = visibleGranules.length + invisibleGranules.length;
     }
 
