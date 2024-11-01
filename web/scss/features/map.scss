@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-map {
   position: absolute;
   margin: 0;
@@ -10,7 +12,7 @@
   position: absolute;
   right: 0;
   z-index: 1;
-  background: none $wv-transparent-black;
+  background: none variables.$wv-transparent-black;
   border: 1px solid #333;
   margin-right: 0;
   border-radius: 0;
@@ -156,8 +158,8 @@
   z-index: 10;
   right: 58px;
   color: #fff;
-  background-color: $wv-transparent-black;
-  text-shadow: $wv-map-text-shadow;
+  background-color: variables.$wv-transparent-black;
+  text-shadow: variables.$wv-map-text-shadow;
   padding: 2px;
   border-left: 2px solid #fff;
 }
@@ -190,7 +192,7 @@
   white-space: pre;
   outline: none;
   color: #fff;
-  text-shadow: $wv-map-text-shadow;
+  text-shadow: variables.$wv-map-text-shadow;
   font-size: 100%;
   border: none;
   border-radius: 0;
@@ -201,7 +203,7 @@
 }
 
 .wv-coords-map:hover {
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
 }
 
 .wv-coords-map:hover div.coord-btn {
@@ -230,7 +232,7 @@
   position: relative;
   width: 20px;
   height: 35px;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   border: 1px solid transparent;
   display: inline-block;
   margin-left: 5px;
@@ -288,6 +290,6 @@
     fill: #eee;
     text-shadow: 1px 1px 0 #111;
     font-size: 14px;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
   }
 }

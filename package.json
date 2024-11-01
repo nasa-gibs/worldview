@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "4.50.0",
+  "version": "4.51.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -18,7 +18,7 @@
   "homepage": "https://worldview.earthdata.nasa.gov/",
   "bugs": {
     "url": "https://github.com/nasa-gibs/worldview/issues",
-    "email": "support@earthdata.nasa.gov"
+    "email": "earthdata-support@nasa.gov"
   },
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
@@ -77,12 +77,12 @@
     "upload": "node tasks/util/upload.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.8",
-    "@babel/eslint-parser": "^7.25.8",
-    "@babel/plugin-transform-class-properties": "^7.25.7",
-    "@babel/plugin-transform-private-methods": "^7.25.7",
-    "@babel/preset-env": "^7.25.8",
-    "@babel/preset-react": "^7.25.7",
+    "@babel/core": "^7.25.9",
+    "@babel/eslint-parser": "^7.25.9",
+    "@babel/plugin-transform-class-properties": "^7.25.9",
+    "@babel/plugin-transform-private-methods": "^7.25.9",
+    "@babel/preset-env": "^7.25.9",
+    "@babel/preset-react": "^7.25.9",
     "@playwright/test": "^1.48.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@webpack-cli/serve": "^2.0.5",
@@ -102,12 +102,12 @@
     "eslint-import-resolver-webpack": "^0.13.9",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^28.8.3",
-    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-jsx-a11y": "^6.10.1",
     "eslint-plugin-n": "^17.11.1",
     "eslint-plugin-no-storage": "^1.0.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.6.0",
-    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react": "^7.37.2",
     "express": "^4.21.0",
     "glob": "^11.0.0",
     "husky": "^9.1.6",
@@ -124,9 +124,9 @@
     "postcss-loader": "^8.1.1",
     "react-refresh": "^0.14.1",
     "react-test-renderer": "^18.3.0",
-    "redux-mock-store": "^1.5.4",
+    "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
-    "sass": "^1.79.5",
+    "sass": "^1.80.4",
     "sass-loader": "^16.0.2",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",

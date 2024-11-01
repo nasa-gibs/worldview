@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-animation-widget-wrapper {
   position: absolute;
   z-index: 100;
@@ -48,7 +50,7 @@
   left: 495px;
 }
 
-@media (min-width: $tablet-min-width) {
+@media (min-width: variables.$tablet-min-width) {
   .wv-animation-widget-wrapper {
     bottom: 88px;
 
@@ -128,7 +130,7 @@
   &.minimized {
     height: 52px;
     width: 80px;
-    background: $wv-transparent-black;
+    background: variables.$wv-transparent-black;
     cursor: move;
   }
 
@@ -174,7 +176,7 @@
     display: inline-block;
     height: 35px;
     width: 42px;
-    background: $wv-dark-blue;
+    background: variables.$wv-dark-blue;
     position: relative;
     border-radius: 5px;
 
@@ -245,7 +247,7 @@
     }
 
     /* No hover styles on mobile */
-    @media (min-width: $tablet-min-width) {
+    @media (min-width: variables.$tablet-min-width) {
       &:hover {
         color: #999;
         cursor: pointer;
@@ -266,7 +268,7 @@ a .wv-animation-widget-icon {
   left: 50%;
   top: 50%;
 
-  @media (min-width: $tablet-min-width) {
+  @media (min-width: variables.$tablet-min-width) {
     &:hover {
       color: #fff;
       opacity: 0.5;
@@ -423,12 +425,12 @@ a .wv-animation-widget-icon {
   height: 100%;
   box-sizing: border-box;
   bottom: 0;
-  background-color: $wv-solid-black;
+  background-color: variables.$wv-solid-black;
 
   & .mobile-animation-header {
     padding: 10px;
     background-color: #333;
-    border-bottom: $wv-dark-menu-border;
+    border-bottom: variables.$wv-dark-menu-border;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     display: flex;
@@ -456,7 +458,7 @@ a .wv-animation-widget-icon {
     width: 100%;
     margin: auto;
     text-align: center;
-    background: $wv-solid-black;
+    background: variables.$wv-solid-black;
     min-height: 30px;
 
     & span {
@@ -479,7 +481,7 @@ a .wv-animation-widget-icon {
     margin: 0;
     width: 100%;
     height: 100%;
-    background: $wv-solid-black;
+    background: variables.$wv-solid-black;
     border-radius: 0;
     margin-top: 0;
     padding: 0;
@@ -529,7 +531,7 @@ a .wv-animation-widget-icon {
 
       & .mobile-date-picker-select-btn {
         position: relative;
-        background-color: $wv-dark-blue;
+        background-color: variables.$wv-dark-blue;
         bottom: -10%;
         width: 95%;
         display: flex;
@@ -569,7 +571,7 @@ a .wv-animation-widget-icon {
 
       & .mobile-date-picker-select-btn {
         position: relative;
-        background-color: $wv-dark-blue;
+        background-color: variables.$wv-dark-blue;
 
         & span {
           margin: 20px;
@@ -640,7 +642,7 @@ a .wv-animation-widget-icon {
 .mobile-timescale-dropdown {
   & .dropdown-toggle {
     font-size: 18px;
-    background-color: $wv-dark-blue;
+    background-color: variables.$wv-dark-blue;
     height: 3em;
     width: 103px;
     border-top-left-radius: 0;
@@ -648,7 +650,7 @@ a .wv-animation-widget-icon {
   }
 
   & .dropdown-menu {
-    background-color: $wv-solid-black;
+    background-color: variables.$wv-solid-black;
     border: solid 1px white;
   }
 
@@ -690,7 +692,7 @@ a .wv-animation-widget-icon {
     border-radius: 4px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: $wv-dark-gray;
+    background-color: variables.$wv-dark-gray;
   }
 
   & .mobile-timescale-dropdown {
@@ -711,9 +713,9 @@ a .wv-animation-widget-icon {
 }
 
 .wv-kiosk-animation-widget {
-  border: $wv-dark-menu-border;
-  background: $wv-transparent-black;
-  border-radius: $wv-menu-border-radius;
+  border: variables.$wv-dark-menu-border;
+  background: variables.$wv-transparent-black;
+  border-radius: variables.$wv-menu-border-radius;
   color: #fff;
   display: flex;
   flex-flow: row nowrap;
