@@ -115,19 +115,23 @@ export const isWithinBounds = (crs, granule) => {
 
 export const getGranuleFootprints = (layer) => {
   const {
-    def, visibleGranules, granuleDates,
+    def, visibleGranules, invisibleGranules, granuleDates,
   } = layer.wv;
   const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-
-  return visibleGranules.reduce((dates, { date, polygon }) => {
+  const reduceFunc = (dates, { date, polygon }) => {
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       dates[date] = polygon;
     }
     return dates;
-  }, {});
+  };
+
+  const visibleGranuleFootprints = visibleGranules.reduce(reduceFunc, {});
+  const invisibleGranuleFootprints = invisibleGranules.reduce(reduceFunc, {});
+
+  return { ...invisibleGranuleFootprints, ...visibleGranuleFootprints };
 };
 
 /**
