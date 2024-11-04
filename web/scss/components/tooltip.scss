@@ -1,3 +1,5 @@
+@use "variables";
+
 /* Bootstrap override */
 .tooltip {
   z-index: 1050;
@@ -73,7 +75,7 @@
   color: #fff;
   border: thin solid #666;
   font-size: 17px;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   border-radius: 5px;
   height: 25px;
   line-height: 23px;
@@ -95,7 +97,7 @@
   position: relative;
   bottom: 1px;
   font-size: 14px;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   font-weight: 300;
 }
 
@@ -104,13 +106,13 @@
   position: relative;
   font-weight: 500;
   font-size: 16px;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   background: #000;
   border-radius: 4px;
   color: #fff;
   padding: 5px 8px;
   white-space: nowrap;
-  box-shadow: $wv-tooltip-shadow;
+  box-shadow: variables.$wv-tooltip-shadow;
   border: 1px solid rgb(255 255 255 / 50%);
 
   &.tooltip-active {
@@ -232,7 +234,7 @@
   top: 10px;
 }
 
-@media (max-width: $mobile-max-width) {
+@media (max-width: variables.$mobile-max-width) {
   .tooltip-custom-black {
     &.tooltip-coordinates-container {
       max-width: 320px;

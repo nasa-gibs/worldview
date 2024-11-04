@@ -1,3 +1,5 @@
+@use "variables";
+
 /* Categories view */
 .recent-layers-mobile-header {
   .recent-tooltip-icon {
@@ -146,7 +148,7 @@
       line-height: 20px;
       padding: 10px;
       color: #fff;
-      background: $wv-transparent-black;
+      background: variables.$wv-transparent-black;
       text-decoration: none;
     }
 

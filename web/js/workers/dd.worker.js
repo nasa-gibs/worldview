@@ -19,9 +19,13 @@ async function requestDescribeDomains(params) {
     proj,
   } = params;
 
-  const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${startDate.split('T')[0]}--${endDate.split('T')[0]}.xml`;
+  const start = new Date(startDate).toISOString().replace('.000', '');
+  const end = new Date(endDate).toISOString().replace('.000', '');
+
+  const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
   const describeDomainsResponse = await fetch(describeDomainsUrl);
   const describeDomainsText = await describeDomainsResponse.text();
+
   return describeDomainsText;
 }
 

@@ -1,3 +1,5 @@
+@use "variables";
+
 /* Autocomplete Input */
 .location-search-input-group {
   flex-wrap: nowrap;
@@ -118,7 +120,7 @@
   top: 10px;
   width: 350px;
   margin-right: 1px;
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   border-radius: 5px;
   z-index: 1;
 }
@@ -142,7 +144,7 @@
 
 /* Location Search Component Minimize Button */
 .location-search-minimize-button {
-  background: $wv-transparent-black;
+  background: variables.$wv-transparent-black;
   width: 21px;
   margin-right: 2px;
   border: none;
@@ -160,7 +162,7 @@
   }
 
   &.disabled:hover {
-    background-color: $wv-transparent-black;
+    background-color: variables.$wv-transparent-black;
     color: #eee;
   }
 }
@@ -194,7 +196,7 @@
 }
 
 /* Mobile Styling */
-@media only screen and (max-width: $mobile-max-width) {
+@media only screen and (max-width: variables.$mobile-max-width) {
   // .location-search-expanded {
   //   position: static;
   //   width: 100%;
