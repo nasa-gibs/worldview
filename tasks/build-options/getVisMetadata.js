@@ -29,7 +29,7 @@ const options = yargs
   })
   .option('mode', {
     demandOption: true,
-    alias: 'm',
+    alias: 'mo',
     type: 'string',
     description: 'mode'
   })
@@ -185,6 +185,15 @@ async function getMetadata (layerId, baseUrl, ummVisUrl, count) {
     metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
     for (const key of metadataKeys) {
       delete layerMetadata[layerId][key]
+    }
+    // Convert keys to camelCase
+    for (const key in layerMetadata[layerId]) {
+      const firstUppercaseCharacter = key.match(/^[A-Z]/g)?.[0]
+      if (firstUppercaseCharacter) {
+        const newKey = key.replace(firstUppercaseCharacter, firstUppercaseCharacter.toLowerCase())
+        layerMetadata[layerId][newKey] = layerMetadata[layerId][key]
+        delete layerMetadata[layerId][key]
+      }
     }
     if (argv.mode === 'verbose') console.warn(layerMetadata[layerId])
   } else {
