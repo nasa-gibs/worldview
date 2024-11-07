@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
 import Scrollbar from '../../util/scrollbar';
 import { coverageDateFormatter } from '../../../modules/date/util';
-import { set } from 'lodash';
 
-const formatDateRanges = (dateRanges) => dateRanges.map(({ startDate, endDate }) => [startDate, endDate])
+const formatDateRanges = (dateRanges) => dateRanges.map(({ startDate, endDate }) => [startDate, endDate]);
 
 export default function DateRanges ({ layer }) {
   const [showRanges, setShowRanges] = useState(false);
@@ -26,7 +25,7 @@ export default function DateRanges ({ layer }) {
       worker.postMessage({ operation: 'mergeDomains', args: [domains, 0] });
     };
     worker.onerror = () => {
-      worker.terminate()
+      worker.terminate();
       setDateRanges(formatDateRanges(layer.dateRanges)); // fallback to layer.dateRanges if worker fails
     };
     const { startDate } = layer;
