@@ -204,11 +204,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const granuleIsWithinRange = isWithinRanges(dateDate, granuleDateRanges) ?? true; // check if the current granule is within a date range, defaults to true
       const gaps = identifyGaps(granuleDateRanges); // identify gaps between date ranges
       const currentlySelectedGap = !isWithinRange ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null; // get the gap that the currently selected time is within
-      const granuleIsWithinSelectedGap = currentlySelectedGap ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : false; // check if the current granule is within the currently selected gap
+      const granuleIsWithinSelectedGap = currentlySelectedGap ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : true; // check if the current granule is within the currently selected gap
 
       if (dateDate <= leadingEdgeDate && isWithinRange && granuleIsWithinRange && isWithinBounds(crs, item)) {
         visibleGranules.unshift(item);
-      } else if (dateDate <= leadingEdgeDate && !isWithinRange && !granuleIsWithinRange && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
+      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
         invisibleGranules.unshift(item);
       }
 
