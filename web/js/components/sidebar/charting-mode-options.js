@@ -324,8 +324,8 @@ function ChartingModeOptions(props) {
     // const time = `${startEpochTime},${endEpochTime}`;
 
     // Hardcoded timeframe of Dec 31, 2022 - Dec 31, 2023
-    const startTime = -599616000086;
-    const endTime = 4133894400000;
+    // const startTime = -599616000086;
+    // const endTime = 4133894400000;
 
     const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
