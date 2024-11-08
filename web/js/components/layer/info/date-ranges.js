@@ -3,7 +3,7 @@ import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
 import Scrollbar from '../../util/scrollbar';
 import { coverageDateFormatter } from '../../../modules/date/util';
 
-const formatDateRanges = (dateRanges) => dateRanges.map(({ startDate, endDate }) => [startDate, endDate]);
+const formatDateRanges = (dateRanges = []) => dateRanges.map(({ startDate, endDate }) => [startDate, endDate]);
 
 export default function DateRanges ({ layer }) {
   const [showRanges, setShowRanges] = useState(false);
