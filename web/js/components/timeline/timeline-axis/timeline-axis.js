@@ -1360,7 +1360,7 @@ class TimelineAxis extends Component {
     }
     // if opted in to DescribeDomains availability, get granule date ranges if needed
     if (dataAvailability === 'dd') {
-      const worker = new Worker('js/workers/dd.worker.js');
+      const worker = new Worker('js/workers/describe-domains.worker.js');
       worker.onmessage = (event) => {
         if (Array.isArray(event.data)) { // our final format is an array
           worker.terminate(); // terminate the worker

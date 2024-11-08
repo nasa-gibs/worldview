@@ -13,7 +13,7 @@ export default function DateRanges ({ layer }) {
   const getDateRanges = async () => {
     if (dateRanges.length) return;
     if (!ongoing) return setDateRanges(formatDateRanges(layer.dateRanges));
-    const worker = new Worker('js/workers/dd.worker.js');
+    const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
         worker.terminate(); // terminate the worker
