@@ -15,6 +15,26 @@
     left: 0;
   }
 
+  .check {
+    position: absolute;
+    color: #fff;
+    left: 1px;
+    top: 4px;
+    pointer-events: none;
+  }
+
+  .dot {
+    position: absolute;
+    background-color: #1d67e3;
+    left: 0;
+    top: 6px;
+    pointer-events: none;
+    width: 11px;
+    height: 11px;
+    margin: 9px;
+    border-radius: 50%;
+  }
+
   label {
     color: #fff;
     cursor: pointer;
@@ -26,15 +46,16 @@
 }
 
 .wv-checkbox::before {
+  border: 1px solid #b5b5b7;
   content: "\00a0";
   display: inline-block;
-  height: 24px;
-  min-width: 24px;
-  border: 2px solid #d54f21;
-  text-align: center;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 12px;
+  height: 16px;
+  line-height: 14px;
   margin-right: 5px;
+  min-width: 16px;
+  text-align: center;
+  border-radius: 2px;
 }
 
 .wv-checkbox.gray label {
@@ -42,19 +63,24 @@
 }
 
 .wv-checkbox.gray::before {
-  border: 2px solid #808080;
+  border: 1px solid #b5b5b7;
 }
 
 .wv-checkbox.checked::before {
   color: #fff;
-  content: "\2713";
-  background-color: #d54f21;
+  background-color: #1d67e3;
+  border: 1px solid #1b50a6;
 }
 
 .wv-checkbox.gray.checked::before {
-  background-color: #808080;
+  background-color: #1d67e3;
+  border: 1px solid #2174ed;
 }
 
 .wv-checkbox.wv-checkbox-round::before {
   border-radius: 50%;
+}
+
+.wv-checkbox-round.checked::before {
+  background-color: transparent !important;
 }

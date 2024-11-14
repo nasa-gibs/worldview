@@ -8,7 +8,7 @@ Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
-This app from NASA's [ESDIS](https://www.earthdata.nasa.gov/esdis) provides the
+This app from NASA's [ESDIS](https://earthdata.nasa.gov/esdis) provides the
 capability to interactively browse over 1000 global, full-resolution satellite
 imagery layers on desktop and mobile devices. Many of the imagery layers are
 updated daily and are within three hours of observation - showing the entire Earth as it is
@@ -86,7 +86,7 @@ To update Worldview, pull down any branch or tag from GitHub. From the `main` br
 ## Contact
 
 Contact us via GitHub or by sending an email to
-[support@earthdata.nasa.gov](mailto:support@earthdata.nasa.gov).
+[earthdata-support@nasa.gov](mailto:earthdata-support@nasa.gov).
 
 ## Contribute
 

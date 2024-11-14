@@ -8,6 +8,7 @@
                 "description": "",
                 "measurements": [
                     "Aerosol Albedo",
+                    "Aerosol Extinction",
                     "Aerosol Index",
                     "Aerosol Optical Depth",
                     "Aerosol Type",

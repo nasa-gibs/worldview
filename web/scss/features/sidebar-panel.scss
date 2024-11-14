@@ -1,3 +1,5 @@
+@use "variables";
+
 .sidebar-expand {
   position: relative;
 
@@ -5,10 +7,10 @@
     float: left;
     left: 10px;
     position: absolute;
-    top: 67px;
+    top: 77px;
     height: 30px;
     padding-top: 8px;
-    background: $wv-transparent-black;
+    background: variables.$wv-transparent-black;
     border-radius: 0;
     box-sizing: border-box;
     width: 286px;
@@ -583,7 +585,8 @@ li.item.productsitem.inmotion,
 
 .productsitem.layer-hidden .layer-info h4,
 .productsitem.layer-hidden .layer-info p {
-  color: #999;
+  color: #A1A1A1;
+  font-weight: 300;
 }
 
 .sidebar-panel .layer-main h4,
@@ -619,8 +622,8 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media screen and (max-width: $desktop-min-width) and (max-height: $mobile-max-width) and (orientation: landscape),
-  (max-width: $mobile-max-width) {
+@media screen and (max-width: variables.$desktop-min-width) and (max-height: variables.$mobile-max-width) and (orientation: landscape),
+  (max-width: variables.$mobile-max-width) {
   .toggleIconHolder {
     height: 50px;
     width: 50px;

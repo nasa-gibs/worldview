@@ -38,7 +38,7 @@ function ChartingLayerMenu (props) {
   };
 
   useEffect(() => {
-    updateActiveChartingLayer(activeLayersWithPalettes[0].id);
+    updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
   }, []);
 
   return isActive && (

@@ -60,6 +60,18 @@ function ChartingModeOptions(props) {
     updateRequestStatusMessage,
   } = props;
 
+  const { screenHeight, screenWidth } = props;
+
+  const [boundaries, setBoundaries] = useState({
+    x: screenWidth / 2 - 100,
+    y: screenHeight / 2 - 100,
+    x2: screenWidth / 2 + 100,
+    y2: screenHeight / 2 + 100,
+  });
+  const {
+    x, y, y2, x2,
+  } = boundaries;
+
   function endDrawingAreaOfInterest () {
     if (draw) {
       olMap.removeInteraction(draw);
@@ -127,11 +139,6 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
-
-  const onAreaOfInterestButtonClick = (evt) => {
-    toggleAreaOfInterestActive();
-  };
-
 
   function getActiveChartingLayer() {
     const liveLayers = getLiveLayers();
@@ -752,18 +759,6 @@ function ChartingModeOptions(props) {
     openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
-  const { screenHeight, screenWidth } = props;
-
-  const [boundaries, setBoundaries] = useState({
-    x: screenWidth / 2 - 100,
-    y: screenHeight / 2 - 100,
-    x2: screenWidth / 2 + 100,
-    y2: screenHeight / 2 + 100,
-  });
-  const {
-    x, y, y2, x2,
-  } = boundaries;
-
   /**
    * Convert pixel value to latitude longitude value
    * @param {Array} pixelX
@@ -839,7 +834,16 @@ function ChartingModeOptions(props) {
       </div>
       <div className="charting-subtitle">
         <h3>Layer: </h3>
-        <span>{layerInfo && layerInfo.title}</span>
+        <span id="charting-layer-name">
+          {layerInfo && layerInfo.title}
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            placement="right"
+            target="charting-layer-name"
+          >
+            {layerInfo && layerInfo.title}
+          </UncontrolledTooltip>
+        </span>
       </div>
       <div className="charting-aoi-container">
         <h3>{aoiTextPrompt}</h3>

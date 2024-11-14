@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-date-selector-widget .input-wrapper,
 .date-arrow-wrapper {
   background: transparent;
@@ -48,7 +50,7 @@
     color: #fff;
     background: transparent;
     border: 0;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     vertical-align: middle;
     box-sizing: border-box;
     padding: 0;
@@ -115,6 +117,9 @@
 
 .zoom-level-change-arrows .date-arrows {
   height: 13px;
+  margin-top: -5px;
+  padding-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .wv-date-selector-widget .date-arrows svg,
@@ -234,7 +239,7 @@
     }
 
     .input-time-divider {
-      font-family: $wv-monospace-font;
+      font-family: variables.$wv-monospace-font;
       font-size: 15px;
       vertical-align: middle;
       width: 5px;
@@ -242,7 +247,7 @@
     }
 
     .input-time-zmark {
-      font-family: $wv-monospace-font;
+      font-family: variables.$wv-monospace-font;
       font-size: 15px;
       vertical-align: middle;
       margin-top: 2px;
@@ -251,6 +256,8 @@
 
     svg {
       margin: 0 auto;
+      display: inline-block;
+      margin-top: -3px;
     }
 
     input {

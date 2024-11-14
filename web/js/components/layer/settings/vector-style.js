@@ -123,6 +123,9 @@ class VectorStyleSelect extends React.Component {
           name="wv-palette-radio"
           onClick={() => this.onChangeVectorStyle(vectorStyleId)}
         />
+        {isSelected && (
+          <span class="dot" />
+        )}
         <label htmlFor={`wv-palette-radio-${vectorStyleId}`}>
           <span
             className="wv-palettes-class"

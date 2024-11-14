@@ -1,0 +1,25 @@
+{
+  "measurements": {
+        "Aerosol Extinction": {
+            "id": "aerosol-extinction",
+            "title":    "Aerosol Extinction",
+            "subtitle": "Suomi NPP/OMPS LP",
+            "sources": {
+                "Suomi NPP/OMPS": {
+                    "id": "suomi-npp-omps-lp",
+                    "title": "Suomi NPP/OMPS LP",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                      "OMPS_SNPP_LimbProfiler_AerosolHeight",
+		                  "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_12KM",
+		                  "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_14KM",
+	                    "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_16KM",
+	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_18KM",
+	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_20KM"
+                    ]
+                }
+            }
+        }
+    }
+}

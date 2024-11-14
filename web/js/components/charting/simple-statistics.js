@@ -68,7 +68,7 @@ function SimpleStatistics(props) {
           </div>
         </div>
       </div>
-      <div className="charting-discalimer">
+      <div className="charting-disclaimer">
         <strong>Note:</strong>
         <br />
         {' '}

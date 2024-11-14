@@ -1,3 +1,5 @@
+@use "variables";
+
 /* https://stackoverflow.com/a/4407335 */
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -33,5 +35,5 @@
 
 span.monospace,
 div.monospace {
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
 }
