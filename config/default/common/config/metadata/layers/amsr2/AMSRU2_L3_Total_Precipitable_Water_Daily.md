@@ -1,4 +1,4 @@
-The Total Precipitable Water (Daily) layer displays the integrated water vapor in the atmospheric columnn in millimeters (mm).
+The Total Precipitable Water (L3, Daily) layer displays the integrated water vapor in the atmospheric columnn in millimeters (mm).
 
 The Advanced Microwave Scanning Radiometer 2 (AMSR2) instrument on the Global Change Observation Mission - Water 1 (GCOM-W1) provides global passive microwave measurements of terrestrial, oceanic, and atmospheric parameters for the investigation of global water and energy cycles.
 

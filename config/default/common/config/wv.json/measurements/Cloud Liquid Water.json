@@ -14,6 +14,8 @@
                         "AMSRU2_Cloud_Liquid_Water_Day",
                         "AMSRU2_Cloud_Liquid_Water_Night",
                         "AMSRU2_L3_Cloud_Liquid_Water_Daily",
+                        "AMSRU2_L3_Cloud_Liquid_Water_Weekly",
+                        "AMSRU2_L3_Cloud_Liquid_Water_Monthly",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]

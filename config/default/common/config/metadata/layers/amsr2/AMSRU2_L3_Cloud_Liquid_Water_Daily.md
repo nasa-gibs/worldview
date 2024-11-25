@@ -1,4 +1,4 @@
-The Cloud Liquid Water Path (Daily) layer is the integrated liquid water, cloud water only, in the atmospheric column in units of grams per square meter (g/m<sup>2</sup>).
+The Cloud Liquid Water Path (L3, Daily) layer is the integrated liquid water, cloud water only, in the atmospheric column in units of grams per square meter (g/m<sup>2</sup>).
 
 The Advanced Microwave Scanning Radiometer 2 (AMSR2) instrument on the Global Change Observation Mission - Water 1 (GCOM-W1) provides global passive microwave measurements of terrestrial, oceanic, and atmospheric parameters for the investigation of global water and energy cycles.
 
