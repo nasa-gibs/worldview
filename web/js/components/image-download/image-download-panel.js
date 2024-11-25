@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
+import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
   imageSizeValid,
   getDimensions,

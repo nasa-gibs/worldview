@@ -21,7 +21,7 @@ import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
+import { refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
   showLayers, hideLayers,

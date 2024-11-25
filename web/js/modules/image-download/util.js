@@ -1,5 +1,4 @@
 import {
-  each as lodashEach,
   get as lodashGet,
 } from 'lodash';
 import { transform } from 'ol/proj';
@@ -189,7 +188,7 @@ export function imageUtilGetLayers(products, proj, activePalettes) {
     } else if (layer.projections[proj].layer) {
       layerId = layer.projections[proj].layer;
     }
-    const disabled = activePalettes[layer.id]?.maps?.[0]?.disabled;
+    const disabled = activePalettes?.[layer.id]?.maps?.[0]?.disabled;
     if (Array.isArray(disabled)) {
       return `${layerId}(disabled=${disabled.join('-')})`;
     }
@@ -333,12 +332,14 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     `BBOX=${bboxWMS13(bbox, crs)}`,
     `CRS=${crs}`,
     `LAYERS=${layersArray.join(',')}`,
-    `colormaps=${colormaps.join(',')}`,
     `WRAP=${layerWraps.join(',')}`,
     `FORMAT=${imgFormat}`,
     `WIDTH=${width}`,
     `HEIGHT=${height}`,
   ];
+  if (Array.isArray(colormaps) && colormaps.length > 0) {
+    params.push(`colormaps=${colormaps.join(',')}`);
+  }
   if (granuleDates.length > 0) {
     params.push(`granule_dates=${granuleDates}`);
   }
