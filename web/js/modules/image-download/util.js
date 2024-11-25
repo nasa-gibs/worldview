@@ -179,18 +179,21 @@ export function imageUtilCalculateResolution(
  * @returns {array} array of layer ids
  *
  */
-export function imageUtilGetLayers(products, proj) {
-  const layers = [];
-  lodashEach(products, (layer) => {
+export function imageUtilGetLayers(products, proj, activePalettes) {
+  const layers = products.map((layer) => {
+    let layerId = layer.id;
     if (layer.downloadId) {
-      layers.push(layer.downloadId);
+      layerId = layer.downloadId;
     } else if (layer.projections[proj].id) {
-      layers.push(layer.projections[proj].id);
+      layerId = layer.projections[proj].id;
     } else if (layer.projections[proj].layer) {
-      layers.push(layer.projections[proj].layer);
-    } else {
-      layers.push(layer.id);
+      layerId = layer.projections[proj].layer;
     }
+    const disabled = activePalettes[layer.id]?.maps?.[0]?.disabled;
+    if (Array.isArray(disabled)) {
+      return `${layerId}(disabled=${disabled.join('-')})`;
+    }
+    return layerId;
   });
   return layers;
 }
@@ -306,7 +309,7 @@ export function getTruncatedGranuleDates(layerDefs) {
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
+export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates, activePalettes) {
   const { crs } = proj.selected;
   const {
     layersArray,
@@ -314,7 +317,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     opacities,
   } = imageUtilProcessWrap(
     fileType,
-    imageUtilGetLayers(layerDefs, proj.id),
+    imageUtilGetLayers(layerDefs, proj.id, activePalettes),
     imageUtilGetLayerWrap(layerDefs),
     imageUtilGetLayerOpacities(layerDefs),
   );
@@ -323,12 +326,14 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
   const granuleDates = getTruncatedGranuleDates(layerDefs).value;
+  const colormaps = layerDefs.map((layer) => layer.palette?.id);
   const params = [
     'REQUEST=GetSnapshot',
     `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
     `BBOX=${bboxWMS13(bbox, crs)}`,
     `CRS=${crs}`,
     `LAYERS=${layersArray.join(',')}`,
+    `colormaps=${colormaps.join(',')}`,
     `WRAP=${layerWraps.join(',')}`,
     `FORMAT=${imgFormat}`,
     `WIDTH=${width}`,
