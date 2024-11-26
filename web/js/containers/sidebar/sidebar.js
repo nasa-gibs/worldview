@@ -439,15 +439,9 @@ const mapStateToProps = (state) => {
   } = state;
 
   const chartingPrototypeLayers = [
-    'heatmax_ssp126',
-    'heatmax_ssp245',
-    'heatmax_ssp370',
-    'tmax_above_100',
+    'TEMPO_L3_NO2_Vertical_Column_Troposphere',
   ];
-  const chartingModeAccessible = layers.active.layers.filter((layer) => (Object.prototype.hasOwnProperty.call(layer, 'palette')
-    && state.palettes.rendered[layer.palette.id]
-    && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous')
-    || chartingPrototypeLayers.includes(layer.id)).length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => chartingPrototypeLayers.includes(layer.id)).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error

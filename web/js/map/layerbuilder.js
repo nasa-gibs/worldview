@@ -462,10 +462,7 @@ export default function mapLayerBuilder(config, cache, store) {
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const prototpeLayers = [
-      'heatmax_ssp126',
-      'heatmax_ssp245',
-      'heatmax_ssp370',
-      'tmax_above_100',
+      'TEMPO_L3_NO2_Vertical_Column_Troposphere',
     ];
     // These layers uses DIM_STDTIME as the TIME parameter
     if (prototpeLayers.indexOf(def.id) > -1) {

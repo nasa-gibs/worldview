@@ -303,11 +303,11 @@ function ChartingModeOptions(props) {
    *
    * @returns {integer} | Epoch time representation of the provided string
    */
-  // function convertToMsSinceEpoch(dateString) {
-  //   const date = new Date(dateString);
-  //   const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
-  //   return millisecondsSinceEpoch;
-  // }
+  function convertToMsSinceEpoch(dateString) {
+    const date = new Date(dateString);
+    const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
+    return millisecondsSinceEpoch;
+  }
 
   /**
    * Returns the Heatmax request parameters based on the provided layer
@@ -412,36 +412,40 @@ function ChartingModeOptions(props) {
     // December 31, 2099 --> 4102444800000
 
     // Uncomment this block to use the dates from the datepicker
-    // const startDate = formatDateForChartRequest(primaryDate);
-    // const endDate = formatDateForChartRequest(secondaryDate);
-    // const startEpochTime = convertToMsSinceEpoch(startDate);
-    // const endEpochTime = convertToMsSinceEpoch(endDate);
-    // const time = `${startEpochTime},${endEpochTime}`;
+    const startDate = formatDateForChartRequest(primaryDate);
+    const endDate = formatDateForChartRequest(secondaryDate);
+    const startEpochTime = convertToMsSinceEpoch(startDate);
+    const endEpochTime = convertToMsSinceEpoch(endDate);
+    const time = `${startEpochTime},${endEpochTime}`;
 
     // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
     // const time = '1451520000000,4102444800000';
-    const time = '1451520000000+-+4102444800000';
+    // const time = '1451520000000+-+4102444800000';
 
     const geometry = convertOLcoordsToEnvelope(aoiCoordinates);
     const geometryType = 'esriGeometryEnvelope';
-    const sampleDistance = '';
+    const sampleDistance = '.2';
     const sampleCount = '';
     const mosaicRule = `${JSON.stringify({
       multidimensionalDefinition: [
         {
           // variableName: 'tmax_above_100',
-          variableName: 'heatmax_ssp126',
+          variableName: 'NO2_Troposphere',
           dimensionName: 'StdTime',
+          values: [
+            time.split(','),
+          ],
         },
       ],
     })}`;
     const pixelSize = '';
-    const returnFirstValueOnly = 'true';
-    const interpolation = 'RSP_BilinearInterpolation';
+    const returnFirstValueOnly = 'false';
+    const interpolation = 'RSP_NearestNeighbor';
     const outFields = '*';
     const sliceId = '';
 
     const f = 'json';
+    console.log('Estimated samples:', 10 * Math.round((Date.parse(secondaryDate) - Date.parse(primaryDate)) / (1000 * 60 * 60 * 24)) * ((JSON.parse(geometry).xmax - JSON.parse(geometry).xmin) / parseFloat(sampleDistance)) * ((JSON.parse(geometry).ymax - JSON.parse(geometry).ymin) / parseFloat(sampleDistance)));
 
     return {
       geometryType,
@@ -454,7 +458,7 @@ function ChartingModeOptions(props) {
       interpolation,
       outFields,
       sliceId,
-      time,
+      time: '',
       f,
     };
   }
@@ -557,19 +561,26 @@ function ChartingModeOptions(props) {
    * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
    */
   function formatEgisDataForRecharts(data) {
-    const rechartsData = [];
-    const temperatureValues = [];
+    const combinedData = {};
+    console.log('Actual samples:', data.samples.length);
     data.samples.forEach((item) => {
-      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
-      temperatureValues.push(tmaxValue);
+      if (!combinedData[item.attributes.StdTime]) {
+        combinedData[item.attributes.StdTime] = item;
+        combinedData[item.attributes.StdTime].values = [];
+      }
+      combinedData[item.attributes.StdTime].values.push(parseFloat(item.value));
     });
-    data.samples.forEach((item) => {
+    const rechartsData = [];
+    Object.values(combinedData).sort((a, b) => a.attributes.StdTime - b.attributes.StdTime).forEach((item) => {
+      const temperatureValues = [...item.values];
+      const tmaxValue = (item.values.filter((val) => !Number.isNaN(val)).reduce((acc, curr) => acc + parseFloat(curr), 0) / item.values.filter((val) => !Number.isNaN(val)).length).toExponential(3);
       const date = new Date(item.attributes.StdTime);
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       const dateString = `${year}-${month}-${day}`;
-      const tmaxValue = parseFloat(item.attributes.tmax_above_100);
+
+      if (Number.isNaN(tmaxValue)) return; // Removes null values from timeline
 
       rechartsData.push({
         name: dateString,
@@ -644,8 +655,12 @@ function ChartingModeOptions(props) {
       updateChartRequestStatus(false, 'No valid layer detected for request.');
       return;
     }
+    const layerIdMappings = {
+      TEMPO_L3_NO2_Vertical_Column_Troposphere: 'TEMPO_NO2_L3_V03_HOURLY_TROPOSPHERIC_VERTICAL_COLUMN_BETA',
+    };
+    const requestedLayerId = layerInfo.id;
     const requestedLayerSource = layerInfo.projections.geographic.source;
-    if (requestedLayerSource === 'GIBS:geographic') {
+    if (requestedLayerSource === 'GIBS:geographic' && false) {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getImageStatStatsRequestURI(uriParameters);
       const data = await getChartData(requestURI);
@@ -681,12 +696,9 @@ function ChartingModeOptions(props) {
         displaySimpleStats(dataToRender);
         updateChartRequestStatus(false, 'Success');
       }
-    } else if (requestedLayerSource === 'EGIS-WMS') {
+    } else if (requestedLayerSource === 'EGIS-WMS' || Object.prototype.hasOwnProperty.call(layerIdMappings, requestedLayerId)) {
       const uriParameters = await getEgisRequestParameters(layerInfo, timeSpanSelection);
-      const baseURI = requestedLayerSource === 'EGIS-WMS'
-        ? 'https://gis.earthdata.nasa.gov/UAT/rest/services/cmip6_staging_climdex_tmaxXF_ACCESS_CM2_ssp126_nc/ImageServer/getSamples'
-        // : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate/ImageServer/getSamples';
-        : 'https://gis.earthdata.nasa.gov/maphost/rest/services/EIC/heatmax_median_multivariate_annual/ImageServer/getSamples';
+      const baseURI = `https://gis.earthdata.nasa.gov/image/rest/services/C2930763263-LARC_CLOUD/${layerIdMappings[requestedLayerId]}/ImageServer/getSamples`;
 
       const requestURI = getEgisStatsRequestURI(uriParameters, baseURI);
       const data = await getChartData(requestURI);
@@ -753,10 +765,7 @@ function ChartingModeOptions(props) {
   }
 
   function onDateIconClick() {
-    const layerInfo = getActiveChartingLayer();
-    const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-    const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
-    openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
+    openChartingDateModal({ primaryDate, secondaryDate }, timeSpanSelection);
   }
 
   /**
@@ -800,6 +809,20 @@ function ChartingModeOptions(props) {
     setTopRightLatLong(getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y));
     updateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
   }
+
+  const onAreaOfInterestButtonClick = (evt) => {
+    if (aoiActive) {
+      updateAOICoordinates(null);
+    } else {
+      const {
+        x, y, x2, y2,
+      } = boundaries;
+      onBoundaryUpdate({
+        x, y, width: x2 - x, height: y2 - y,
+      });
+    }
+    toggleAreaOfInterestActive();
+  };
 
   const layerInfo = getActiveChartingLayer();
   const aoiTextPrompt = 'Area of Interest:';

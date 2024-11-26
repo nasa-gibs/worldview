@@ -14,7 +14,7 @@ function ChartComponent (props) {
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
 
   function formatToThreeDigits(str) {
-    return parseFloat(str).toFixed(3);
+    return parseFloat(str).toExponential(3);
   }
 
   /**
@@ -36,13 +36,15 @@ function ChartComponent (props) {
     let lowestMin;
     let highestMax;
     for (let i = 0; i < axisData.length; i += 1) {
-      const currentMean = axisData[i].mean;
-      // Establish mean min & max values for chart rendering
-      if (currentMean < lowestMin || lowestMin === undefined) {
-        lowestMin = currentMean;
-      }
-      if (currentMean > highestMax || highestMax === undefined) {
-        highestMax = currentMean;
+      const currentMean = parseFloat(Number(axisData[i].mean).toLocaleString('fullwide', { useGrouping: false }));
+      if (!Number.isNaN(currentMean)) {
+        // Establish mean min & max values for chart rendering
+        if (currentMean < lowestMin || lowestMin === undefined) {
+          lowestMin = currentMean;
+        }
+        if (currentMean > highestMax || highestMax === undefined) {
+          highestMax = currentMean;
+        }
       }
     }
     return bufferYAxisMinAndMax(lowestMin, highestMax);
@@ -83,21 +85,11 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getQuickStatistics(chartData) {
-    const count = chartData.length;
-    let minTotal = 0;
-    let maxTotal = 0;
-    let meanTotal = 0;
-    let medianTotal = 0;
-    let stddevTotal = 0;
-
-    for (let i = 0; i < chartData.length; i += 1) {
-      meanTotal += chartData[i].mean;
-      minTotal += chartData[i].min;
-      maxTotal += chartData[i].max;
-      medianTotal += chartData[i].median;
-      stddevTotal += chartData[i].stddev;
-    }
-
+    const minValue = chartData.filter((el) => !Number.isNaN(parseFloat(el.min))).reduce((acc, curr) => acc + parseFloat(curr.min), 0) / chartData.filter((el) => !Number.isNaN(el.min)).length;
+    const maxValue = chartData.filter((el) => !Number.isNaN(parseFloat(el.max))).reduce((acc, curr) => acc + parseFloat(curr.max), 0) / chartData.filter((el) => !Number.isNaN(el.max)).length;
+    const meanValue = chartData.filter((el) => !Number.isNaN(parseFloat(el.mean))).reduce((acc, curr) => acc + parseFloat(curr.mean), 0) / chartData.filter((el) => !Number.isNaN(el.mean)).length;
+    const medianValue = chartData.filter((el) => !Number.isNaN(parseFloat(el.median))).reduce((acc, curr) => acc + parseFloat(curr.median), 0) / chartData.filter((el) => !Number.isNaN(el.median)).length;
+    const stddevValue = chartData.filter((el) => !Number.isNaN(parseFloat(el.stddev))).reduce((acc, curr) => acc + parseFloat(curr.stddev), 0) / chartData.filter((el) => !Number.isNaN(el.stddev)).length;
     return (
       <>
         <div className="charting-statistics-container">
@@ -106,7 +98,7 @@ function ChartComponent (props) {
               Median:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(parseFloat(medianTotal) / count)}
+              {formatToThreeDigits(medianValue)}
             </div>
           </div>
           <div className="charting-statistics-row">
@@ -114,7 +106,7 @@ function ChartComponent (props) {
               Mean:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(meanTotal / count)}
+              {formatToThreeDigits(meanValue)}
             </div>
           </div>
           <div className="charting-statistics-row">
@@ -122,7 +114,7 @@ function ChartComponent (props) {
               Min:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(minTotal / count)}
+              {formatToThreeDigits(minValue)}
             </div>
           </div>
           <div className="charting-statistics-row">
@@ -130,7 +122,7 @@ function ChartComponent (props) {
               Max:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(maxTotal / count)}
+              {formatToThreeDigits(maxValue)}
             </div>
           </div>
           <div className="charting-statistics-row">
@@ -138,7 +130,7 @@ function ChartComponent (props) {
               Stdev:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(stddevTotal / count)}
+              {formatToThreeDigits(stddevValue)}
             </div>
           </div>
         </div>
@@ -163,7 +155,7 @@ function ChartComponent (props) {
           <Legend />
           {getLineChart(data)}
           <XAxis dataKey="name" stroke="#a6a5a6" />
-          <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} />
+          <YAxis width={75} type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tickFormatter={(val) => val.toExponential(3)} />
           <Legend />
         </LineChart>
       </div>
