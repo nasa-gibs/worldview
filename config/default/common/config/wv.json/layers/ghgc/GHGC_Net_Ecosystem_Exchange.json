@@ -1,0 +1,28 @@
+{
+    "layers": {
+      "GHGC_Net_Ecosystem_Exchange": {
+        "id": "GHGC_Net_Ecosystem_Exchange",
+        "layerName": "nee",
+        "title": "Net Ecosystem Exchange",
+        "subtitle": "U.S. Greenhouse Gas Center",
+        "description": "ghgc/Net_Ecosystem_Exchange",
+        "tags": "ghgc nee",
+        "group": "overlays",
+        "layergroup": "Reference",
+        "format": "image/png",
+        "type": "titiler",
+        "disableSnapshot": true,
+        "wrapX": true,
+        "colormapName": "coolwarm",
+        "rescale": "-0.1,0.1",
+        "period": "monthly",
+        "projections": {
+          "geographic": {
+            "source": "GHGC:geographic"
+          }
+        },
+        "startDate": "2003-01-01T00:00:00Z",
+        "endDate": "2017-12-31T23:59:59Z"
+      }
+    }
+  }

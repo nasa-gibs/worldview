@@ -65,15 +65,15 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} attributes
    * @param {*} wrapLayer
    */
-  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+  const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state, attributes);
+    const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
-    const layerNext = createLayerFunc(def, options, 1, state, attributes);
-    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
+    const layerNext = await createLayerFunc(def, options, 1, state, attributes);
+    const layerPrior = await createLayerFunc(def, options, -1, state, attributes);
 
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
@@ -848,7 +848,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, state) => {
+  const registerSearchDDV = async (def, options, state) => {
     const { date } = state;
     let requestDate;
     if (options.group === 'activeB') {
@@ -940,9 +940,8 @@ export default function mapLayerBuilder(config, cache, store) {
     return name;
   };
 
-  const createTitilerLayer = async (def, options, day, state) => {
-    const { proj: { selected }, date } = state;
-    const { maxExtent, crs } = selected;
+  const buildDdvTileUrlFunction = async (def, options, state) => {
+    const source = config.sources[def.source];
     const { r, g, b } = def.bandCombo;
     const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
     const dateTime = state.date.selected?.toISOString().split('T');
@@ -1021,11 +1020,9 @@ export default function mapLayerBuilder(config, cache, store) {
       },
     });
 
-    const source = config.sources[def.source];
+    const searchID = await registerSearchDDV(def, options, state);
 
-    const searchID = await registerSearch(def, options, state);
-
-    const tileUrlFunction = (tileCoord) => {
+    return (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
@@ -1040,8 +1037,84 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
-      return source.url + urlParams;
+      return `${source.url}${urlParams}`;
     };
+  };
+
+  const registerSearchGHGC = async (def, options, state) => {
+    const { date } = state;
+    let requestDate;
+    if (options.group === 'activeB') {
+      requestDate = date.selectedB;
+    } else {
+      requestDate = date.selected;
+    }
+
+    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
+    const BASE_URL = 'https://ghg.center/api/raster';
+    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
+
+    const collectionsFilter = {
+      op: 'eq',
+      args: [{ property: 'collection' }, 'casagfed-carbonflux-monthgrid-v3'],
+    };
+
+    const temporalFilter = {
+      op: 't_intersects',
+      args: [{ property: 'datetime' }, { interval: temporalRange }],
+    };
+
+    const searchBody = {
+      'filter-lang': 'cql2-json',
+      filter: {
+        op: 'and',
+        args: [
+          collectionsFilter,
+          temporalFilter,
+        ],
+      },
+    };
+
+    const registerResponse = await fetch(`${BASE_URL}/mosaic/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(searchBody),
+    });
+    const registerResponseJSON = await registerResponse.json();
+
+    const tilesHref = registerResponseJSON.links?.find((link) => link.rel === 'tilejson').href;
+
+    const tilejsonResponse = await fetch(`${tilesHref}?assets=${def.layerName}&colormap_name=${def.colormapName}&rescale=${encodeURI(def.rescale)}`);
+    const tilejsonResponseJSON = await tilejsonResponse.json();
+
+    const { name } = tilejsonResponseJSON;
+
+    return name;
+  };
+
+  const buildGhgcTileUrlFunction = async (def, options, state) => {
+    const source = config.sources[def.source];
+
+    const searchID = await registerSearchGHGC(def, options, state);
+
+    return (tileCoord) => {
+      const z = tileCoord[0] - 1;
+      const x = tileCoord[1];
+      const y = tileCoord[2];
+
+      const urlParams = `${searchID}/tiles/WGS1984Quad/${z}/${x}/${y}?assets=${def.layerName}&colormap_name=${def.colormapName}&rescale=${encodeURI(def.rescale)}`;
+
+      return `${source.url}/${urlParams}`;
+    };
+  };
+
+  const createTitilerLayer = async (def, options, day, state) => {
+    const { proj: { selected }, date } = state;
+    const { maxExtent, crs } = selected;
+
+    const tileUrlFunction = def.source === 'DDV' ? await buildDdvTileUrlFunction(def, options, state) : await buildGhgcTileUrlFunction(def, options, state);
 
     const xyzSourceOptions = {
       crossOrigin: 'anonymous',
@@ -1057,7 +1130,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const layer = new OlLayerTile({
       source: xyzSource,
       className,
-      minZoom: def.minZoom,
+      minZoom: def.minZoom || 0,
       extent: maxExtent,
     });
     const footprintLayer = new OlLayerVector({
@@ -1160,19 +1233,19 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!isGranule) {
         switch (def.type) {
           case 'wmts':
-            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
             layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
-            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'titiler':
             layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
             break;
           case 'xyz':
-            layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
