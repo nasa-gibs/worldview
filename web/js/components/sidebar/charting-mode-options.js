@@ -298,18 +298,6 @@ function ChartingModeOptions(props) {
   }
 
   /**
-   * Returns the EGIS request parameters based on the provided layer
-   * @param {string} dateString | Time in YYYY-MM-DD format
-   *
-   * @returns {integer} | Epoch time representation of the provided string
-   */
-  function convertToMsSinceEpoch(dateString) {
-    const date = new Date(dateString);
-    const millisecondsSinceEpoch = date.getTime(); // Time in milliseconds since Jan 1, 1970
-    return millisecondsSinceEpoch;
-  }
-
-  /**
    * Returns the Heatmax request parameters based on the provided layer
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
@@ -412,10 +400,17 @@ function ChartingModeOptions(props) {
     // December 31, 2099 --> 4102444800000
 
     // Uncomment this block to use the dates from the datepicker
-    const startDate = formatDateForChartRequest(primaryDate);
-    const endDate = formatDateForChartRequest(secondaryDate);
-    const startEpochTime = convertToMsSinceEpoch(startDate);
-    const endEpochTime = convertToMsSinceEpoch(endDate);
+    const startDate = new Date(primaryDate);
+    let endDate;
+    if (timeSpan === 'date') {
+      endDate = new Date(primaryDate);
+    } else if (timeSpan === 'range' || timeSpan === 'series') {
+      endDate = new Date(secondaryDate);
+    }
+    startDate.setUTCHours(0, 0, 0, 0);
+    endDate.setUTCHours(23, 59, 59, 999);
+    const startEpochTime = startDate.getTime();
+    const endEpochTime = endDate.getTime();
     const time = `${startEpochTime},${endEpochTime}`;
 
     // Hardcoded timeframe of Dec 31, 2015 - Dec 31, 2099
@@ -445,7 +440,7 @@ function ChartingModeOptions(props) {
     const sliceId = '';
 
     const f = 'json';
-    console.log('Estimated samples:', 10 * Math.round((Date.parse(secondaryDate) - Date.parse(primaryDate)) / (1000 * 60 * 60 * 24)) * ((JSON.parse(geometry).xmax - JSON.parse(geometry).xmin) / parseFloat(sampleDistance)) * ((JSON.parse(geometry).ymax - JSON.parse(geometry).ymin) / parseFloat(sampleDistance)));
+    console.log('Estimated samples:', Math.round(((endEpochTime - startEpochTime) / 10000000) * ((JSON.parse(geometry).xmax - JSON.parse(geometry).xmin) / parseFloat(sampleDistance)) * ((JSON.parse(geometry).ymax - JSON.parse(geometry).ymin) / parseFloat(sampleDistance))));
 
     return {
       geometryType,
@@ -578,9 +573,9 @@ function ChartingModeOptions(props) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
-      const dateString = `${year}-${month}-${day}`;
+      const dateString = `${year}-${month}-${day} (${date.toLocaleTimeString()})`;
 
-      if (Number.isNaN(tmaxValue)) return; // Removes null values from timeline
+      if (Number.isNaN(tmaxValue) || tmaxValue === 'NaN') return; // Removes null values from timeline
 
       rechartsData.push({
         name: dateString,
@@ -591,6 +586,24 @@ function ChartingModeOptions(props) {
         stddev: calculateStandardDeviation(temperatureValues),
       });
     });
+
+    if (timeSpanSelection !== 'range') {
+      const minValue = rechartsData.filter((el) => !Number.isNaN(parseFloat(el.min))).reduce((acc, curr) => acc + parseFloat(curr.min), 0) / rechartsData.filter((el) => !Number.isNaN(el.min)).length;
+      const maxValue = rechartsData.filter((el) => !Number.isNaN(parseFloat(el.max))).reduce((acc, curr) => acc + parseFloat(curr.max), 0) / rechartsData.filter((el) => !Number.isNaN(el.max)).length;
+      const meanValue = rechartsData.filter((el) => !Number.isNaN(parseFloat(el.mean))).reduce((acc, curr) => acc + parseFloat(curr.mean), 0) / rechartsData.filter((el) => !Number.isNaN(el.mean)).length;
+      const medianValue = rechartsData.filter((el) => !Number.isNaN(parseFloat(el.median))).reduce((acc, curr) => acc + parseFloat(curr.median), 0) / rechartsData.filter((el) => !Number.isNaN(el.median)).length;
+      const stddevValue = rechartsData.filter((el) => !Number.isNaN(parseFloat(el.stddev))).reduce((acc, curr) => acc + parseFloat(curr.stddev), 0) / rechartsData.filter((el) => !Number.isNaN(el.stddev)).length;
+      return {
+        median: medianValue,
+        mean: meanValue,
+        max: maxValue,
+        min: minValue,
+        stdev: stddevValue,
+        timestamp: primaryDate,
+        type: 'date',
+        endTimestamp: null,
+      };
+    }
 
     return rechartsData;
   }
@@ -717,14 +730,23 @@ function ChartingModeOptions(props) {
       };
 
       const rechartsData = formatEgisDataForRecharts(dataToRender);
-
-      displayChart({
-        title: dataToRender.title,
-        subtitle: dataToRender.subtitle,
-        unit: dataToRender.unit,
-        data: rechartsData,
-        source: 'EGIS',
-      });
+      if (timeSpanSelection === 'range') {
+        displayChart({
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          data: rechartsData,
+          source: 'EGIS',
+        });
+      } else {
+        displaySimpleStats({
+          title: layerInfo.title,
+          subtitle: layerInfo.subtitle,
+          unit: unitOfMeasure,
+          ...rechartsData,
+        });
+        updateChartRequestStatus(false, 'Success');
+      }
       updateChartRequestStatus(false, 'Success');
     } else if (requestedLayerSource === 'heatmax-WMS') {
       const uriParameters = await getHeatmaxRequestParameters(layerInfo, timeSpanSelection);
@@ -765,7 +787,9 @@ function ChartingModeOptions(props) {
   }
 
   function onDateIconClick() {
-    openChartingDateModal({ primaryDate, secondaryDate }, timeSpanSelection);
+    const layerStartDate = new Date(primaryDate);
+    const layerEndDate = new Date(secondaryDate);
+    openChartingDateModal({ layerStartDate, layerEndDate }, timeSpanSelection);
   }
 
   /**

@@ -16,7 +16,7 @@ function SimpleStatistics(props) {
   }
 
   function formatToThreeDigits(str) {
-    return parseFloat(str).toFixed(3);
+    return parseFloat(str).toExponential(3);
   }
 
   return (

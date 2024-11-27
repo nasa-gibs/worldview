@@ -154,7 +154,7 @@ function ChartComponent (props) {
           {' '}
           <Legend />
           {getLineChart(data)}
-          <XAxis dataKey="name" stroke="#a6a5a6" />
+          <XAxis dataKey="name" stroke="#a6a5a6" tickFormatter={(val) => val.split(' ')[0]} />
           <YAxis width={75} type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tickFormatter={(val) => val.toExponential(3)} />
           <Legend />
         </LineChart>
