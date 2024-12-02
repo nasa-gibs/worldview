@@ -1,5 +1,4 @@
-## What does El Niño impact?
+## When was the last El Niño?
+As of 2023, the last notable El Niño event was in 2015. This is a comparison of SST anomalies between October 22, 2015 (left "A" side) and October 22, 2023 (right "B" side). In 2015, an SST signature showing warmer than normal SSTs, known as "[The Blob](https://www.nps.gov/articles/theblob.htm)", was visible along the west coast of North America. 2023 does not appear to exhibit the same contemporaneous phenomenon.
 
-The weakening and shift in Trade Winds in the Equatorial Pacific causes changes in sea level and sea surface temperature, leading to ocean currents and atmospheric circulation spreading the varying impacts of El Niño such as precipitation across the globe.
-
-In this animation we can explore monthly SST anomalies (rainbow color bar) together with an overlaid precipitation rate (blue-white-red color bar) during the last notable El Niño, May 2014 to May 2016.
+While the Blob is not directly associated with El Niños, it caused significant [impacts](https://www.fisheries.noaa.gov/feature-story/looking-back-blob-record-warming-drives-unprecedented-ocean-change) across North America when it occured together with the 2015 El Niño.

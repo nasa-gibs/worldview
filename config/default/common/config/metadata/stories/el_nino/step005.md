@@ -1,3 +1,4 @@
-## Transition to La Niña
+## What does El Niño impact?
+During an El Niño, Peru and Chile often experience wetter weather while drier conditions occur across the western Pacific. Additionally, due to warmer SSTs, El Niño negatively impacts biodiversity and local economies. For example, the coastal upwelling off the Peruvian coast (where cold nutrient rich ocean water from the bottom rises towards the surface) is weakened due to warmer waters arriving from the western Equatorial Pacific. The warm waters suppress the cold, nutrient rich upwelling that support increased primary productivity and healthy fisheries. This causes a direct negative impact on fisheries yield and the economy of Peru.
 
-During La Niña conditions, SST anomalies in the Tropical Pacific transition from warm to cold temperatures. [NOAA](https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml) predicted a near 60 percent chance of a weak La Niña developing in the fall of 2024 to winter of 2025. Current conditions (November 11, 2024) indicate SSTs have returned to more normal temperatures.
+Press the "Play" button to view the development of the 2023 El Niño throughout the year, from January 1, 2023 to January 15, 2024 in 7-day increments.

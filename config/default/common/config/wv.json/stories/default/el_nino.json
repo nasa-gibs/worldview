@@ -37,7 +37,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-290.1424151729069,-64.86126039100748,-6.437011677036509,65.3142325516217&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
+          "stepLink": "v=248.06956668783653,-68.87363612899186,35.63583680803386,69.64918999105753&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
         },
         {
           "id": "002",
@@ -46,25 +46,25 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-240.02690135611005,-68.71114541979478,30.876080783471693,78.06675899260173&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies(hidden),BlueMarble_ShadedRelief&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg1=true&ca=true&cv=51&t=2015-10-22-T10%3A19%3A29Z&t1=2023-10-22-T10%3A19%3A29Z"
+          "stepLink": "v=-290.1424151729069,-64.86126039100748,-6.437011677036509,65.3142325516217&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
         },
         {
           "id": "003",
           "description": "step003.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
-          "stepLink": "v=-222.02445385851607,-23.644249262445108,-33.03223995758731,78.75359400804663&i=2&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),IMERG_Precipitation_Rate(opacity=0.75,palette=divergent_1;),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1&ab=on&t=2015-10-01-T00%3A00%3A00Z"
+          "stepLink": "v=-240.02690135611005,-68.71114541979478,30.876080783471693,78.06675899260173&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies(hidden),BlueMarble_ShadedRelief&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies(hidden),BlueMarble_ShadedRelief&lg1=true&ca=true&cv=51&t=2015-10-22-T10%3A19%3A29Z&t1=2023-10-22-T10%3A19%3A29Z"
         },
         {
           "id": "004",
           "description": "step004.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
-          "stepLink": "v=-354.9374065741792,-167.72843819701438,245.93898062240888,131.4872195168512&i=2&ics=true&ici=3&icd=7&as=2023-01-01-T00%3A00%3A00Z&ae=2024-01-15-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1.5&ab=on&t=2023-01-01-T06%3A00%3A00Z"
+          "stepLink": "v=-222.02445385851607,-24.070421589350147,-33.03223995758731,79.17976633495167&z=2&i=2&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1&ab=on&t=2015-10-01-T00%3A00%3A00Z"
         },
         {
           "id": "005",
@@ -73,7 +73,16 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-236.49653317730642,-56.83993131155791,20.128259302844555,69.37801859813834&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2024-11-11-T01%3A13%3A38Z"
+          "stepLink": "v=-243.65255625061272,-86.39594597509173,30.135471793466166,54.514911181397224&z=2&ics=true&ici=3&icd=7&as=2023-01-01-T00%3A00%3A00Z&ae=2024-01-15-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&tr=el_nino&al=true&av=1.5&ab=on&t=2023-01-01-T20%3A54%3A18Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-236.49653317730642,-56.83993131155791,20.128259302844555,69.37801859813834&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2024-11-14-T01%3A13%3A38Z"
         }
       ]
     }
