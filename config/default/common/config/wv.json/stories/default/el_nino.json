@@ -37,7 +37,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=248.06956668783653,-68.87363612899186,35.63583680803386,69.64918999105753&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
+          "stepLink": "v=-248.06956668783653,-68.87363612899186,35.63583680803386,69.64918999105753&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
         },
         {
           "id": "002",
@@ -64,7 +64,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-222.02445385851607,-24.070421589350147,-33.03223995758731,79.17976633495167&z=2&i=2&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1&ab=on&t=2015-10-01-T00%3A00%3A00Z"
+          "stepLink": "v=-272.5739624368728,-68.59367855849527,31.357840255403403,79.80494810815603&z=2&i=2&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1&ab=on&t=2014-05-01-T14%3A00%3A00Z"
         },
         {
           "id": "005",
@@ -73,7 +73,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-243.65255625061272,-86.39594597509173,30.135471793466166,54.514911181397224&z=2&ics=true&ici=3&icd=7&as=2023-01-01-T00%3A00%3A00Z&ae=2024-01-15-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&tr=el_nino&al=true&av=1.5&ab=on&t=2023-01-01-T20%3A54%3A18Z"
+          "stepLink": "v=-243.65255625061272,-86.39594597509173,30.135471793466166,54.514911181397224&z=2&ics=true&ici=3&icd=7&as=2023-01-01-T00%3A00%3A00Z&ae=2024-01-15-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1.5&ab=on&t=2023-01-01-T20%3A54%3A18Z"
         },
         {
           "id": "006",
