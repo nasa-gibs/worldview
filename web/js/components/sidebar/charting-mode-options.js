@@ -558,13 +558,16 @@ function ChartingModeOptions(props) {
   function formatEgisDataForRecharts(data) {
     const combinedData = {};
     console.log('Actual samples:', data.samples.length);
-    data.samples.forEach((item) => {
+    data.samples.filter((item) => item.value !== '').forEach((item) => {
       if (!combinedData[item.attributes.StdTime]) {
         combinedData[item.attributes.StdTime] = item;
         combinedData[item.attributes.StdTime].values = [];
       }
       combinedData[item.attributes.StdTime].values.push(parseFloat(item.value));
     });
+    if (Object.keys(combinedData).length === 0) {
+      return null;
+    }
     const rechartsData = [];
     Object.values(combinedData).sort((a, b) => a.attributes.StdTime - b.attributes.StdTime).forEach((item) => {
       const temperatureValues = [...item.values];
@@ -730,6 +733,11 @@ function ChartingModeOptions(props) {
       };
 
       const rechartsData = formatEgisDataForRecharts(dataToRender);
+      if (rechartsData === null) {
+        updateChartRequestStatus(false, 'Chart request failed.');
+        return;
+      }
+
       if (timeSpanSelection === 'range') {
         displayChart({
           title: dataToRender.title,
