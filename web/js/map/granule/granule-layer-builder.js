@@ -153,9 +153,27 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {boolean} - true if date is within a range
   */
   const isWithinRanges = (date, ranges) => {
-    if (!ranges) return false;
+    if (!ranges) return;
 
     return ranges.some(([start, end]) => date >= new Date(start) && date <= new Date(end));
+  };
+
+  /**
+   * Identify gaps between date ranges
+   * @param {array} ranges - array of date ranges
+   * @returns {array} - array of date ranges
+  */
+  const identifyGaps = (ranges) => {
+    if (!ranges) return [];
+    const MAX_TIME = 8.64e15;
+
+    const gaps = ranges.reduce((acc, [start, end]) => {
+      acc.at(-1)[1] = new Date(start);
+
+      return [...acc, [new Date(end), new Date(MAX_TIME)]];
+    }, [[new Date(-MAX_TIME), new Date(MAX_TIME)]]);
+
+    return gaps;
   };
 
   /**
@@ -169,28 +187,38 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   */
   const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate, granuleDateRanges) => {
     const { proj: { selected: { crs } } } = store.getState();
-    const granules = [];
+    const visibleGranules = [];
+    const invisibleGranules = [];
     const availableCount = availableGranules?.length;
-    if (!availableCount) return granules;
+    if (!availableCount) return { visibleGranules, invisibleGranules };
     const count = granuleCount > availableCount ? availableCount : granuleCount;
     const sortedAvailableGranules = availableGranules.sort((a, b) => new Date(b.date) - new Date(a.date));
-    for (let i = 0; granules.length < count; i += 1) {
+    let totalLength = visibleGranules.length + invisibleGranules.length;
+    for (let i = 0; totalLength < count; i += 1) {
       const item = sortedAvailableGranules[i];
       if (!item) break;
       const { date } = item;
       const dateDate = new Date(date);
-      const leadingEdgeDateUTC = new Date(leadingEdgeDate.toUTCString());
-      leadingEdgeDateUTC.setSeconds(59);
-      const isWithinRange = isWithinRanges(leadingEdgeDateUTC, granuleDateRanges);
-      if (dateDate <= leadingEdgeDateUTC && isWithinRange && isWithinBounds(crs, item)) {
-        granules.unshift(item);
+      leadingEdgeDate.setSeconds(59); // force currently selected time to be 59 seconds. This is to compensate for the inability to select seconds in the timeline
+      const isWithinRange = isWithinRanges(leadingEdgeDate, granuleDateRanges); // check if currently selected time is within a date range
+      const granuleIsWithinRange = isWithinRanges(dateDate, granuleDateRanges) ?? true; // check if the current granule is within a date range, defaults to true
+      const gaps = identifyGaps(granuleDateRanges); // identify gaps between date ranges
+      const currentlySelectedGap = !isWithinRange ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null; // get the gap that the currently selected time is within
+      const granuleIsWithinSelectedGap = currentlySelectedGap ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : true; // check if the current granule is within the currently selected gap
+
+      if (dateDate <= leadingEdgeDate && isWithinRange && granuleIsWithinRange && isWithinBounds(crs, item)) {
+        visibleGranules.unshift(item);
+      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
+        invisibleGranules.unshift(item);
       }
+
+      totalLength = visibleGranules.length + invisibleGranules.length;
     }
 
-    if (granules.length < granuleCount) {
-      console.warn('Could not find enough matching granules', `${granules.length}/${granuleCount}`);
+    if (totalLength < granuleCount) {
+      console.warn('Could not find enough matching granules', `${totalLength}/${granuleCount}`);
     }
-    return granules;
+    return { visibleGranules, invisibleGranules };
   };
 
   /**
@@ -209,13 +237,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const visibleGranules = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
-    const transformedGranules = transformGranulesForProj(visibleGranules, crs);
+    const { visibleGranules, invisibleGranules } = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
+    const transformedVisibleGranules = transformGranulesForProj(visibleGranules, crs);
+    const transformedInvisibleGranules = transformGranulesForProj(invisibleGranules, crs);
 
     return {
       count,
-      granuleDates: transformedGranules.map((g) => g.date),
-      visibleGranules: transformedGranules,
+      granuleDates: [...transformedVisibleGranules.map((g) => g.date), ...transformedInvisibleGranules.map((g) => g.date)],
+      visibleGranules: transformedVisibleGranules,
+      invisibleGranules: transformedInvisibleGranules,
       granuleDateRanges,
     };
   };
@@ -243,10 +273,11 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }
 
     const granuleAttributes = await getGranuleAttributes(def, options);
-    const { visibleGranules } = granuleAttributes;
+    const { visibleGranules, invisibleGranules } = granuleAttributes;
     const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
-    const granules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
-    const tileLayers = new OlCollection(createGranuleTileLayers(granules, def, attributes));
+    const shiftedVisibleGranules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
+    const shiftedInvisibleGranules = shouldShift ? datelineShiftGranules(invisibleGranules, date, crs) : invisibleGranules;
+    const tileLayers = new OlCollection(createGranuleTileLayers(shiftedVisibleGranules, def, attributes));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);
     granuleLayer.set('granuleGroup', true);
@@ -254,7 +285,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     granuleLayer.wv = {
       ...attributes,
       ...granuleAttributes,
-      visibleGranules: granules,
+      visibleGranules: shiftedVisibleGranules,
+      invisibleGranules: shiftedInvisibleGranules,
     };
 
     // Don't update during animation due to the performance hit

@@ -19,7 +19,7 @@ Common situations in which the flood product may be unable to accurately identif
 - Springtime snow melt ponding on fields: such water can appear as pixelated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
 #### Spatial Coverage
-Non-polar global land areas (below 80 degrees latitude), comprising 287 10x10 degree tiles (see [product homepage](https://www.earthdata.nasa.gov/learn/find-data/near-real-time/modis-nrt-global-flood-product) for map of included tiles).
+Non-polar global land areas (below 80 degrees latitude), comprising 287 10x10 degree tiles (see [product homepage](https://earthdata.nasa.gov/learn/find-data/near-real-time/modis-nrt-global-flood-product) for map of included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, with resolution increasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
