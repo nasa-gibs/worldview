@@ -37,6 +37,8 @@
                         "AMSRU2_Total_Precipitable_Water_Day",
                         "AMSRU2_Total_Precipitable_Water_Night",
                         "AMSRU2_L3_Total_Precipitable_Water_Daily",
+                        "AMSRU2_L3_Total_Precipitable_Water_Weekly",
+                        "AMSRU2_L3_Total_Precipitable_Water_Monthly",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]

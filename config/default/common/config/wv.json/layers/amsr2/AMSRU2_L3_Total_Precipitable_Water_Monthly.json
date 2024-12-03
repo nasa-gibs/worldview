@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRU2_L3_Total_Precipitable_Water_Monthly": {
+      "id": "AMSRU2_L3_Total_Precipitable_Water_Monthly",
+      "description": "amsr2/AMSRU2_L3_Total_Precipitable_Water_Monthly",
+      "tags": "amsru2 amsr-u2",
+      "group": "overlays",
+      "layergroup": "Precipitation Rate"
+    }
+  }
+}

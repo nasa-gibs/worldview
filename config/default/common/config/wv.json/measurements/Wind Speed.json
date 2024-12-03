@@ -14,6 +14,8 @@
                         "AMSRU2_Wind_Speed_Day",
                         "AMSRU2_Wind_Speed_Night",
                         "AMSRU2_L3_Ocean_Wind_Speed_Daily",
+                        "AMSRU2_L3_Ocean_Wind_Speed_Weekly",
+                        "AMSRU2_L3_Ocean_Wind_Speed_Monthly",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]
