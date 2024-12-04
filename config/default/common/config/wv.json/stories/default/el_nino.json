@@ -64,7 +64,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-272.5739624368728,-68.59367855849527,31.357840255403403,79.80494810815603&z=2&i=2&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1&ab=on&t=2014-05-01-T14%3A00%3A00Z"
+          "stepLink": "v=-274.26840499015793,-60.74871569831879,25.57558470468338,77.06453000105336&z=2&i=2&ics=true&ici=3&icd=7&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),IMERG_Precipitation_Rate(palette=green_2;blue_6,disabled=;),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,Land_Water_Map,BlueMarble_ShadedRelief(hidden)&lg=true&al=true&av=5.5&ab=on&t=2014-05-01-T00%3A00%3A00Z"
         },
         {
           "id": "005",
