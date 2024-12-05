@@ -1,3 +1,5 @@
+@use "variables";
+
 .about-page {
   background-color: #282828;
   padding: 10px 15px 0 10px;
@@ -10,8 +12,8 @@
   li,
   p {
     color: #eee;
-    font-weight: 100;
-    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-family: "Public Sans", sans-serif;
   }
 
   div,
@@ -24,7 +26,7 @@
   .version {
     margin-top: 10px;
     font-size: 12px;
-    font-weight: 100;
+    font-weight: 200;
     float: right;
   }
 
@@ -141,7 +143,7 @@
 }
 
 /* Keyboard shortcuts section */
-@media (min-width: $tablet-min-width) {
+@media (min-width: variables.$tablet-min-width) {
   .about-page .keyboard-shortcuts-section {
     display: block;
   }

@@ -13,6 +13,7 @@ import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
+import AddLayersContent from './add-layers-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
@@ -105,6 +106,7 @@ class Sidebar extends React.Component {
       isMobile, screenHeight, isCompareMode,
     } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
+    const addLayersHeight = lodashGet(this, 'addLayersElement.clientHeight') || 30;
     const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
     const groupCheckboxHeight = 35;
     let newHeight;
@@ -113,10 +115,10 @@ class Sidebar extends React.Component {
       const topOffset = 10;
       const basePadding = 130;
       newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight)
+        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight + addLayersHeight)
         - 10;
     } else {
-      newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight);
+      newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
     }
     // Issue #1415: This was checking for subComponentHeight !== newHeight.
     // Sometimes it would get stuck in a loop in which the newHeight
@@ -214,7 +216,7 @@ class Sidebar extends React.Component {
       : 'Click to Reset @NAME@ to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
     const mobileImgURL = 'brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
-    const desktopImgURL = 'brand/images/wv-logo.svg?v=@BUILD_NONCE@';
+    const wvName = !isMobile ? 'Worldview' : '';
 
     const sidebarStyle = isMobile ? {
       background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
@@ -229,11 +231,11 @@ class Sidebar extends React.Component {
       position: 'absolute',
     }
       : {
-        background: `url(${desktopImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+        background: `url(${mobileImgURL}) no-repeat 15px center/52px rgb(40 40 40 / 85%)`,
         display: 'block',
         width: '286px',
-        height: '55px',
-        padding: '5px 0',
+        height: '65px',
+        padding: '10px 76px',
         position: 'absolute',
         top: '10px',
         left: '10px',
@@ -244,6 +246,12 @@ class Sidebar extends React.Component {
         borderTopRightRadius: '5px',
         borderTopLeftRadius: '5px',
         boxSizing: 'border-box',
+        fontFamily: 'Inter',
+        fontWeight: '300',
+        fontSize: '36px',
+        textDecoration: 'none',
+        color: '#fff',
+        lineHeight: '45px',
       };
 
     return (
@@ -252,7 +260,9 @@ class Sidebar extends React.Component {
           id="wv-logo"
           className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
           style={sidebarStyle}
-        />
+        >
+          {wvName}
+        </span>
       ) : (
         <a
           href={embedWVLogoLink}
@@ -261,7 +271,9 @@ class Sidebar extends React.Component {
           className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
           style={sidebarStyle}
           onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-        />
+        >
+          {wvName}
+        </a>
       )
     );
   }
@@ -293,6 +305,7 @@ class Sidebar extends React.Component {
       screenHeight,
       tabTypes,
       chartingModeAccessible,
+      activeString,
     } = this.props;
 
     if ((isMobile || isEmbedModeActive) && activeTab === 'download') changeTab('layers');
@@ -361,25 +374,30 @@ class Sidebar extends React.Component {
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="layers">
                   {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                  <AddLayersContent
+                    ref={(el) => { this.addLayersElement = el; }}
+                    isActive={activeTab === 'layers'}
+                    compareState={activeString}
+                  />
                 </TabPane>
                 {naturalEvents && activeTab === 'events' && (
-                <TabPane tabId="events">
-                  <Events
-                    height={subComponentHeight}
-                    isLoading={isLoadingEvents}
-                    hasRequestError={hasEventRequestError}
-                    eventsData={eventsData}
-                    sources={eventsSources}
-                  />
-                </TabPane>
+                  <TabPane tabId="events">
+                    <Events
+                      height={subComponentHeight}
+                      isLoading={isLoadingEvents}
+                      hasRequestError={hasEventRequestError}
+                      eventsData={eventsData}
+                      sources={eventsSources}
+                    />
+                  </TabPane>
                 )}
                 {smartHandoffs && activeTab === 'download' && (
-                <TabPane tabId="download">
-                  <SmartHandoff
-                    isActive={activeTab === 'download'}
-                    tabTypes={tabTypes}
-                  />
-                </TabPane>
+                  <TabPane tabId="download">
+                    <SmartHandoff
+                      isActive={activeTab === 'download'}
+                      tabTypes={tabTypes}
+                    />
+                  </TabPane>
                 )}
                 {
                   !isKioskModeActive && (
@@ -420,7 +438,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette')).length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous').length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error

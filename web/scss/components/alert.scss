@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-alert-dropdown {
   position: absolute;
   top: 60px;
@@ -114,7 +116,7 @@
   margin-top: 10px;
 }
 
-@media (max-width: $mobile-max-width) {
+@media (max-width: variables.$mobile-max-width) {
   .wv-alert {
     min-height: 50px;
     font-size: 12px;

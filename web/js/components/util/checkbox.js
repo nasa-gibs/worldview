@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import HoverTooltip from './hover-tooltip';
 /*
  * A checkbox component
@@ -33,6 +34,9 @@ export default function Checkbox (props) {
           onChange={showDisabledToolTip ? () => null : onCheck}
           tabIndex="0"
         />
+        {checked && (
+          <Check class="check" size="15px" />
+        )}
         {children}
         <label htmlFor={id}>
           <span>{label}</span>

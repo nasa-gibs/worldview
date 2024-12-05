@@ -3,7 +3,7 @@
         "Fires and Thermal Anomalies - Featured": {
             "id": "featured-fires-thermal-anomalies",
             "title":    "Fires and Thermal Anomalies (Vectors)",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, GOES-East/ABI, GOES-West/ABI",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, GOES-East/ABI, GOES-West/ABI",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -66,6 +66,19 @@
 	                    "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
                         "OrbitTracks_NOAA-20_Ascending",
                         "OrbitTracks_NOAA-20_Descending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "viirs/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_All",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+	                    "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
+                        "OrbitTracks_NOAA-21_Ascending",
+                        "OrbitTracks_NOAA-21_Descending"
                     ]
                 }
             }

@@ -1,3 +1,5 @@
+@use "variables";
+
 /* Smart handoff side panel */
 .smart-handoff-side-panel {
   margin: 5px;
@@ -306,7 +308,7 @@ a.help-link {
 }
 
 .handoff-modal-date {
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   font-size: 16px;
   text-align: left;
 }

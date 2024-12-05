@@ -1,3 +1,5 @@
+@use "variables";
+
 .customize-bands-parent-info {
     margin-bottom: 12px;
 
@@ -91,9 +93,9 @@
             display: flex;
             flex-direction: row;
             height: 75px;
-            background-color: $wv-transparent-black;
-            color: $wv-white-font;
-            border: 2px solid $wv-dark-menu-border;
+            background-color: variables.$wv-transparent-black;
+            color: variables.$wv-white-font;
+            border: 2px solid variables.$wv-dark-menu-border;
 
             .band-selection-preset-image {
                 width: 73px;
@@ -108,8 +110,8 @@
         }
 
         .selected-preset {
-            background-color: $wv-dark-blue;
-            border: 2px solid $wv-orange;
+            background-color: variables.$wv-dark-blue;
+            border: 2px solid variables.$wv-orange;
         }
     }
 }

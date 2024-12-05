@@ -1,3 +1,5 @@
+@use "variables";
+
 .wv-eventslist {
   position: relative;
 }
@@ -19,7 +21,7 @@
     margin: 15px auto;
   }
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     height: calc(var(--vh, 1vh) * 100 - 85px);
   }
 
@@ -29,8 +31,8 @@
     background: #222;
     min-height: 260px;
 
-    @media (max-width: $mobile-max-width) {
-      min-height: calc(var(--vh, 1vh) * 100 - $wv-mobile-event-list-offset);
+    @media (max-width: variables.$mobile-max-width) {
+      min-height: calc(var(--vh, 1vh) * 100 - variables.$wv-mobile-event-list-offset);
     }
   }
 }
@@ -63,7 +65,7 @@
   padding: 0 3px;
   margin-left: 40px;
 
-  @media (max-width: $mobile-max-width) {
+  @media (max-width: variables.$mobile-max-width) {
     font-size: 1em;
   }
 }
@@ -126,14 +128,14 @@
 
   a {
     font-size: 14px;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     cursor: pointer;
     text-decoration: none;
   }
 
   .active {
     font-size: 14px;
-    font-family: $wv-monospace-font;
+    font-family: variables.$wv-monospace-font;
     font-weight: 500;
     color: #666;
   }
@@ -257,10 +259,10 @@
   top: -30px;
   left: -40px;
   padding: 4px;
-  background-color: $wv-transparent-black;
+  background-color: variables.$wv-transparent-black;
   border-radius: 3px;
   text-align: center;
-  font-family: $wv-monospace-font;
+  font-family: variables.$wv-monospace-font;
   font-size: 12px;
   color: #ccc;
   z-index: 900;
@@ -362,7 +364,7 @@
 
 .cluster-marker {
   border-radius: 12px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Public Sans", sans-serif;
   width: 24px;
   height: 24px;
 }

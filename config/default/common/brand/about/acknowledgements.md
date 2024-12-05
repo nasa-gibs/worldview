@@ -6,7 +6,7 @@
                 href="https://search.earthdata.nasa.gov/">Earthdata Search</a> for a full listing of available data
         products.</p>
 <p>Near real-time imagery is courtesy of the<a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time"
-                target="_blank" rel="noopener noreferrer"> Land, Atmosphere Near Real-Time Capability for Eo (LANCE)
+                target="_blank" rel="noopener noreferrer"> Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)
         </a>data providers:
 </p>
 <ul>
@@ -78,8 +78,8 @@
         <li>GeoColor imagery layers from GOES-East and GOES-West are provided by <a
                         href="https://www.star.nesdis.noaa.gov/goes/" target="_blank"
                         rel="noopener noreferrer">NOAA/NESDIS/STAR</a> .</li>
-        <li>Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, and Air
-                Mass) are provided by the <a href="https://weather.msfc.nasa.gov/sport/" target="_blank"
+        <li>Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, Air
+                Mass, Dust, and Fire Temperature) are provided by the <a href="https://weather.msfc.nasa.gov/sport/" target="_blank"
                         rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a> at
                 NASA
                 Marshall Space Flight Center.</li>

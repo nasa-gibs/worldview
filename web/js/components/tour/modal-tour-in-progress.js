@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
+import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
@@ -26,7 +27,7 @@ class ModalInProgress extends React.Component {
     } = this.props;
     const closeBtn = (
       <button className={isKioskModeActive ? 'd-none' : 'end-tour-close-btn'} onClick={endTour} type="button">
-        &times;
+        <Close class="add-plus" size="14px" />
       </button>
     );
     return (
