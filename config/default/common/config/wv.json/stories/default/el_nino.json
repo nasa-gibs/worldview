@@ -1,0 +1,90 @@
+{
+  "stories": {
+    "el_nino": {
+      "id": "el_nino",
+      "type": "default",
+      "title": "El Niño Impacts Around the Globe",
+      "description": "Explore two recent El Niño events (2015 and 2023) over the Pacific Ocean.",
+      "backgroundImage": "el_nino_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Understanding El Niño",
+          "link": "https://www.noaa.gov/understanding-el-nino"
+        },
+        {
+          "title": "NOAA El Niño-Southern Oscillation (ENSO)",
+          "link": "https://www.climate.gov/enso"
+        },
+        {
+          "title": "NOAA Oceanic Niño Index (ONI)",
+          "link": "https://www.climate.gov/news-features/understanding-climate/climate-variability-oceanic-nino-index"
+        },
+        {
+          "title": "The Blob",
+          "link": "https://www.nps.gov/articles/theblob.htm"
+        },
+        {
+          "title": "Looking Back At The Blob: Record Warming Drives Unprecedented Ocean Change",
+          "link": "https://www.fisheries.noaa.gov/feature-story/looking-back-blob-record-warming-drives-unprecedented-ocean-change"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-248.06956668783653,-68.87363612899186,35.63583680803386,69.64918999105753&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-290.1424151729069,-64.86126039100748,-6.437011677036509,65.3142325516217&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2023-10-22-T06%3A19%3A29Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-240.02690135611005,-68.71114541979478,30.876080783471693,78.06675899260173&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies(hidden),BlueMarble_ShadedRelief&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies(hidden),BlueMarble_ShadedRelief&lg1=true&ca=true&cv=51&t=2015-10-22-T10%3A19%3A29Z&t1=2023-10-22-T10%3A19%3A29Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-274.26840499015793,-60.74871569831879,25.57558470468338,77.06453000105336&z=2&i=2&ics=true&ici=3&icd=7&as=2014-05-01-T00%3A00%3A00Z&ae=2016-06-30-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),IMERG_Precipitation_Rate(palette=green_2;blue_6,disabled=;),GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies,Land_Water_Map,BlueMarble_ShadedRelief(hidden)&lg=true&al=true&av=5.5&ab=on&t=2014-05-01-T00%3A00%3A00Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-243.65255625061272,-86.39594597509173,30.135471793466166,54.514911181397224&z=2&ics=true&ici=3&icd=7&as=2023-01-01-T00%3A00%3A00Z&ae=2024-01-15-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&al=true&av=1.5&ab=on&t=2023-01-01-T20%3A54%3A18Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-236.49653317730642,-56.83993131155791,20.128259302844555,69.37801859813834&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies,BlueMarble_ShadedRelief&lg=true&t=2024-11-14-T01%3A13%3A38Z"
+        }
+      ]
+    }
+  }
+}

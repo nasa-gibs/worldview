@@ -1,0 +1,2 @@
+## What is El Niño anyway?
+El Niño conditions are known to form when trade winds in the equatorial Pacific, which usually blow from east to west, weaken or even reverse direction and blow from west to east. This transports warm water from the western Pacific to the west coast of South America, resulting in higher than normal sea surface temperatures (SST) in that region.
