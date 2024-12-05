@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule": {
       "id": "TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule",
-      "title": "Clouds (L2, Cloud Pressure Total, Subdaily) (BETA)",
+      "title": "Clouds (L2, Cloud Pressure Total, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule",
       "tags": "",
