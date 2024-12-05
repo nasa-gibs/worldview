@@ -1,0 +1,3 @@
+El Niño is noticeable in the equatorial Pacific in this SST anomalies layer, based on the Multiscale Ultrahigh Resolution (MUR) SST dataset, from October 22, 2023. Deep red colors indicate SST increases of about 3&deg;C from normal climatological conditions whereas blue/purple colors indicate cooler SST temperatures.
+
+For [more information](https://www.noaa.gov/understanding-el-nino) on El Niño including how it is quantified via the NOAA Oceanic Niño Index, visit [NOAA El Niño-Southern Oscillation (ENSO)](https://www.climate.gov/enso) and [NOAA Oceanic Niño Index (ONI)](https://www.climate.gov/news-features/understanding-climate/climate-variability-oceanic-nino-index).

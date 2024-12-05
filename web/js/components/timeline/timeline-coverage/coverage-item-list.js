@@ -262,9 +262,7 @@ class CoverageItemList extends Component {
     const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       // check layer date array cache and use caches date array if available, if not add date array
-      if (!this.layerDateArrayCache[id]) {
-        this.layerDateArrayCache[id] = {};
-      }
+      this.layerDateArrayCache[id] ??= {};
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (this.layerDateArrayCache[id][layerIdDates] === undefined) {

@@ -72,7 +72,7 @@ class CoverageItemContainer extends Component {
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
         // allow overwriting of subsequent date ranges
-        if (dateIntTime >= startDateTime && dateIntTime < endDateTime) {
+        if (dateIntTime >= startDateTime && dateIntTime <= endDateTime) {
           const dateIntFormatted = dateIntStartDate.toISOString();
           multiCoverageDates[dateIntFormatted] = {
             date: dateIntFormatted,

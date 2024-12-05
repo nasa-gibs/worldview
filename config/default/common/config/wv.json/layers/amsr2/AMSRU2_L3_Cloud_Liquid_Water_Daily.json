@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRU2_L3_Cloud_Liquid_Water_Daily": {
+      "id": "AMSRU2_L3_Cloud_Liquid_Water_Daily",
+      "description": "amsr2/AMSRU2_L3_Cloud_Liquid_Water_Daily",
+      "tags": "amsru2 amsr-u2",
+      "group": "overlays",
+      "layergroup": "Cloud Liquid Water"
+    }
+  }
+}
