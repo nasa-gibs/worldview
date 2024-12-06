@@ -504,7 +504,3 @@ export function isPaletteAllowed(layerId, config) {
   }
   return Boolean(config.layers[layerId].palette);
 }
-
-export function getActivePalettes (state, activeString) {
-  return state.palettes[activeString];
-}
