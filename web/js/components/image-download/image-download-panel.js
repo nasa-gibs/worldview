@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
   imageSizeValid,
   getDimensions,
@@ -59,7 +57,6 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
 
   useEffect(() => {
     const layerList = getLayers();
@@ -86,7 +83,6 @@ function ImageDownloadPanel(props) {
       currFileType,
       currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
       markerCoordinates,
-      activePalettes,
     );
 
     window.open(dlURL, '_blank');
