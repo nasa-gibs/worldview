@@ -21,7 +21,7 @@ import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import { refreshPalettes } from '../modules/palettes/actions';
+import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
   showLayers, hideLayers,
@@ -136,6 +136,7 @@ class toolbarContainer extends Component {
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
+    await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
