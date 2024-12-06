@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L3_Ozone_Column_Amount": {
       "id": "TEMPO_L3_Ozone_Column_Amount",
-      "title": "Ozone (L3, Column Amount O3, Subdaily) (BETA)",
+      "title": "Ozone (L3, Column Amount O3, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Ozone_Column_Amount",
       "tags": "",

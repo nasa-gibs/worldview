@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L2_Ozone_Cloud_Fraction_Granule": {
       "id": "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
-      "title": "Ozone (L2, Cloud Fraction, Subdaily) (BETA)",
+      "title": "Ozone (L2, Cloud Fraction, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Ozone_Cloud_Fraction_Granule",
       "tags": "",

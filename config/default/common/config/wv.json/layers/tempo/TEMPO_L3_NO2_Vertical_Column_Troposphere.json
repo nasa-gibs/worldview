@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L3_NO2_Vertical_Column_Troposphere": {
       "id": "TEMPO_L3_NO2_Vertical_Column_Troposphere",
-      "title": "Nitrogen Dioxide (L3, Vertical Column Troposphere, Subdaily) (BETA)",
+      "title": "Nitrogen Dioxide (L3, Vertical Column Troposphere, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_NO2_Vertical_Column_Troposphere",
       "tags": "",

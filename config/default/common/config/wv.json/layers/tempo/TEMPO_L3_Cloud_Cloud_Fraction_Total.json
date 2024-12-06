@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L3_Cloud_Cloud_Fraction_Total": {
       "id": "TEMPO_L3_Cloud_Cloud_Fraction_Total",
-      "title": "Clouds (L3, Cloud Fraction Total, Subdaily) (BETA)",
+      "title": "Clouds (L3, Cloud Fraction Total, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Cloud_Cloud_Fraction_Total",
       "tags": "",
