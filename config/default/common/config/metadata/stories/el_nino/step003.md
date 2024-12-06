@@ -1,0 +1,4 @@
+## When was the last El Niño?
+As of 2023, the last notable El Niño event was in 2015. This is a comparison of SST anomalies between October 22, 2015 (left "A" side) and October 22, 2023 (right "B" side). In 2015, an SST signature showing warmer than normal SSTs, known as "[The Blob](https://www.nps.gov/articles/theblob.htm)", was visible along the west coast of North America. 2023 does not appear to exhibit the same contemporaneous phenomenon.
+
+While the Blob is not directly associated with El Niños, it caused significant [impacts](https://www.fisheries.noaa.gov/feature-story/looking-back-blob-record-warming-drives-unprecedented-ocean-change) across North America when it occured together with the 2015 El Niño.

@@ -1,0 +1,4 @@
+## What does El Niño impact?
+During an El Niño, Peru and Chile often experience wetter weather while drier conditions occur across the western Pacific. Additionally, due to warmer SSTs, El Niño negatively impacts biodiversity and local economies. For example, the coastal upwelling off the Peruvian coast (where cold nutrient rich ocean water from the bottom rises towards the surface) is weakened due to warmer waters arriving from the western Equatorial Pacific. The warm waters suppress the cold, nutrient rich upwelling that support increased primary productivity and healthy fisheries. This causes a direct negative impact on fisheries yield and the economy of Peru.
+
+Press the "Play" button to view the development of the 2023 El Niño throughout the year, from January 1, 2023 to January 15, 2024 in 7-day increments.
