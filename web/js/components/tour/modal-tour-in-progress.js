@@ -7,11 +7,6 @@ import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui'
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
-  componentDidUpdate() {
-    // eslint-disable-next-line react/no-string-refs
-    if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
-  }
-
   render() {
     const {
       className,
