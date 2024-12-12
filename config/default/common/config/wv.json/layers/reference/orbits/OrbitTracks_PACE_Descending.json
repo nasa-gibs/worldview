@@ -6,7 +6,6 @@
       "group": "overlays",
       "type": "vector",
       "period": "daily",
-      "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
       "track": "descending",
       "associatedLayers": ["OrbitTracks_PACE_Ascending"],
