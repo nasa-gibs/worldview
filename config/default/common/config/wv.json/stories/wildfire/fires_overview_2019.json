@@ -9,24 +9,16 @@
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
-          "title": "Earthdata - Wildfire Data Resources",
-          "link": "https://earthdata.nasa.gov/learn/wildfires-resource-page"
-        },
-        {
-          "title": "Earthdata - Wildfires Data Pathfinder",
-          "link": "https://earthdata.nasa.gov/learn/pathfinders/wildfire-data-pathfinder"
-        },
-        {
-          "title": "Earthdata - Wildfires Toolkit",
-          "link": "https://earthdata.nasa.gov/learn/toolkits/wildfires"
+          "title": "Earthdata - Wildfires",
+          "link": "https://www.earthdata.nasa.gov/topics/human-dimensions/wildfires"
         },
         {
           "title": "Earthdata - Fire Information for Resource Management System (FIRMS)",
-          "link": "https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms"
+          "link": "https://www.earthdata.nasa.gov/data/tools/firms"
         },
         {
           "title": "Earthdata - Nighttime Lights",
-          "link": "https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights"
+          "link": "https://www.earthdata.nasa.gov/topics/human-dimensions/nighttime-lights"
         }
       ],
       "steps": [

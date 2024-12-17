@@ -9,7 +9,7 @@ The Visible Infrared Imaging Radiometer Suite (VIIRS) Nighttime Imagery (Day/Nig
 
 The current ENCC Nighttime Imagery layer is available from the VIIRS instrument aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite at a daily temporal resolution. The VIIRS Day/Night Band (DNB) sensor resolution is 750 m at nadir and the ENCC imagery layer’s gridded resolution is 15 arc-second (approximately 500 meters at the equator).
 
-References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights)
+References: [Earthdata - Nighttime Lights](https://www.earthdata.nasa.gov/topics/human-dimensions/nighttime-lights)
 
 Hillger, D., Seaman, C., Liang, C., Miller, S., Lindsey, D., & Kopp, T. (2014). Suomi NPP VIIRS imagery evaluation. Journal of Geophysical Research: Atmospheres, 119(11), 6440-6455, [doi:10.1002/2013JD021170](https://doi.org/10.1002/2013JD021170).
 
