@@ -17,20 +17,16 @@
           "link": "https://earthobservatory.nasa.gov/images/146110/fires-and-smoke-engulf-southeastern-australia"
         },
         {
-          "title": "NASA Earthdata - Wildfires Data Pathfinder",
-          "link": "https://earthdata.nasa.gov/learn/pathfinders/wildfire-data-pathfinder"
-        },
-        {
-          "title": "NASA Earthdata - Wildfires Toolkit",
-          "link": "https://earthdata.nasa.gov/learn/toolkits/wildfires"
+          "title": "NASA Earthdata - Wildfires",
+          "link": "https://www.earthdata.nasa.gov/topics/human-dimensions/wildfires"
         },
         {
           "title": "NASA Earthdata - Fire Information for Resource Management System (FIRMS) - Download MODIS/VIIRS Fire Data",
-          "link": "https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms"
+          "link": "https://www.earthdata.nasa.gov/data/tools/firms"
         },
         {
           "title": "NASA Disasters Program - Australia Fires 2020",
-          "link": "https://disasters.nasa.gov/australia-fires-2020"
+          "link": "https://disasters.nasa.gov/what-we-do/disasters/disasters-activations/australia-fires-2020"
         }
       ],
       "steps": [

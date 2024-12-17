@@ -2,7 +2,7 @@
   "layers": {
     "TEMPO_L3_Ozone_UV_Aerosol_Index": {
       "id": "TEMPO_L3_Ozone_UV_Aerosol_Index",
-      "title": "Ozone (L3, UV Aerosol Index, Subdaily) (BETA)",
+      "title": "Ozone (L3, UV Aerosol Index, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Ozone_UV_Aerosol_Index",
       "tags": "",
