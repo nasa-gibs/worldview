@@ -1,6 +1,6 @@
 The MODIS Near Real-Time (NRT) Global Flood Product (MCDWD) provides a daily global map of flooding. It is derived from the NRT MODIS Surface Reflectance (MOD09) datasets from both the Terra and Aqua satellites. The Flood Product is available for 3 compositing periods: 1-day, 2-day, and 3-day. For each composite, water detections for all observations (Terra and Aqua) over the compositing period (1, 2, or 3 days) are accumulated, and if the total exceeds the required threshold, the pixel is marked as water. (Note: 1-day product not yet available in Worldview)
 
-Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
+Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://www.earthdata.nasa.gov/data/instruments/modis/near-real-time-data/modis-nrt-flood-product#ed-flood-faq)
 
 As of January 12, 2023, a topographic filter has been applied to remove water detections from mountainous areas, greatly reducing the number of terrain shadow false-positives in such areas. These areas appear in all products as "Insufficient Data" (gray in default Worldview display).
 
@@ -19,7 +19,7 @@ Common situations in which the flood product may be unable to accurately identif
 - Springtime snow melt ponding on fields: such water can appear as pixelated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
 #### Spatial Coverage
-Non-polar global land areas (below 80 degrees latitude), comprising 287 10x10 degree tiles (see [product homepage](https://earthdata.nasa.gov/learn/find-data/near-real-time/modis-nrt-global-flood-product) for map of included tiles).
+Non-polar global land areas (below 80 degrees latitude), comprising 287 10x10 degree tiles (see [product homepage](https://www.earthdata.nasa.gov/data/instruments/modis/near-real-time-data/modis-nrt-flood-product) for map of included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, with resolution increasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.

@@ -1,6 +1,6 @@
 <h2>Imagery Use</h2>
 <p>NASA supports an <a
-                href="https://earthdata.nasa.gov/collaborate/open-data-services-and-software/data-information-policy"
+                href="https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-information-policy"
                 target="_blank" rel="noopener noreferrer">open data policy</a> and we encourage publication of imagery
         from
         Worldview; when doing so for image captions, please cite it as "NASA Worldview" and also consider including a
