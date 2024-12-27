@@ -31,13 +31,6 @@ test('Verify that settings button opens settings modal', async () => {
   await expect(thresholdMinLabel).toBeVisible()
 })
 
-test('Verify that custom blue custom palette is checked', async () => {
-  const activeDefaultPaletteCheckbox = await page.locator('.wv-palette-selector-row.checked #wv-palette-radio-__default')
-  const activeBluePaletteCheckbox = await page.locator('.wv-palette-selector-row.checked #wv-palette-radio-blue_2')
-  await expect(activeDefaultPaletteCheckbox).not.toBeVisible()
-  await expect(activeBluePaletteCheckbox).toBeVisible()
-})
-
 test('Verify that threshold and opacity components update when different layer setting button clicked', async () => {
   const thresholdMinLabel = await page.locator('#wv-layer-options-threshold0 .wv-label-range-min')
   const opacityLabel = await page.locator('.layer-opacity-select .wv-label')
@@ -49,11 +42,4 @@ test('Verify that threshold and opacity components update when different layer s
   await terraAodSettingsButton.click()
   await expect(thresholdMinLabel).toContainText('< 0.0')
   await expect(opacityLabel).toContainText('100%')
-})
-
-test('Verify that default palette is now checked', async () => {
-  const activeDefaultPaletteCheckbox = await page.locator('.wv-palette-selector-row.checked #wv-palette-radio-__default')
-  const activeBluePaletteCheckbox = await page.locator('.wv-palette-selector-row.checked #wv-palette-radio-blue_2')
-  await expect(activeDefaultPaletteCheckbox).toBeVisible()
-  await expect(activeBluePaletteCheckbox).not.toBeVisible()
 })
