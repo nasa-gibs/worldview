@@ -124,6 +124,8 @@ async function main (url) {
       await getMetadata(layerId, url)
     }
   }
+  console.warn("graceal1 layerMetadata is ");
+  console.warn(layerMetadata);
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -158,6 +160,39 @@ async function getDAAC (metadata) {
 }
 
 async function getMetadata (layerId, baseUrl, count) {
+  /*if (layerId === "VIIRS_VNP46A1_LERC_v1") {
+    const metadata = {
+      "title": "VIIRS_VNP46A1_LERC_v1",
+      "subtitle": "VIIRS_VNP46A1_LERC_v1",
+      "ongoing": false,
+      "measurement": "Earth at Night",
+      "retentionPeriod": -1,
+      "conceptIds": [
+      ],
+      "daynight": [
+        "night"
+      ],
+      "orbitTracks": [
+        "VIIRS_VNP46A1_LERC_v1"
+      ],
+      "orbitDirection": [
+        "descending"
+      ],
+      "layerPeriod": "Daily"
+    };
+    console.warn("graceal1 metadata is ");
+    console.warn(metadata);
+    layerMetadata[layerId] = await getDAAC(metadata)
+    console.warn("graceal1 saving");
+    console.warn(layerMetadata[layerId]);
+    let metadataKeys = Object.keys(layerMetadata[layerId])
+    metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+    for (const key of metadataKeys) {
+      delete layerMetadata[layerId][key]
+    }
+    return;
+  }*/
+  if (layerId === "VIIRS_VNP46A1_LERC_v1") return;
   if (count) console.warn(`retry #${count} for ${layerId}`)
   return axios({
     method: 'get',
@@ -173,6 +208,8 @@ async function getMetadata (layerId, baseUrl, count) {
       delete layerMetadata[layerId][key]
     }
   }).catch((error) => {
+    console.log("graceal1 layerId for fail is ");
+    console.log(layerId);
     handleException(error, layerId, url, count)
   })
 }

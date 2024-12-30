@@ -55,6 +55,7 @@ const componentToHex = (c) => {
   const hex = c.toString(16);
   return hex.length === 1 ? `0${hex}` : hex;
 };
+import { tileLoader } from "../util/LERCColorCoder";
 
 export default function mapLayerBuilder(config, cache, store) {
   /**
@@ -332,6 +333,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   function createLayerWMTS (def, options, day, state) {
+    console.log("graceal1 in createlayerWMTS");
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
@@ -391,6 +393,18 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
+    console.log("graceal1 printing layer def and state");
+    console.log(def);
+    console.log(state);
+    // graceal get the map in a prettier way
+    const { map } = state;
+    //graceal check if lerc layer from the format parameter of def which is for the layer
+    // that is a bit of an ugly if statement so maybe find a dif way
+    if (false) {
+      tileSource.setTileLoadFunction((tile, src) => {
+        return tileLoader(tile, src, def, map.ui.selected, sourceOptions.tileGrid);
+      });
+    }
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
@@ -413,6 +427,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMS layer
    */
   const createLayerWMS = function(def, options, day, state) {
+    console.log("graceal1 in createlayerWMS");
     const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
@@ -477,6 +492,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     if (isPaletteActive(def.id, options.group, state)) {
       const lookup = getPaletteLookup(def.id, options.group, state);
+      console.log("graceal1 right before call to lookup factory2");
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
@@ -1156,6 +1172,9 @@ export default function mapLayerBuilder(config, cache, store) {
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
+      console.log("graceal1 in createlayerwrapper def is ");
+      console.log(def.type);
+      console.log(def);
 
       if (!isGranule) {
         switch (def.type) {
