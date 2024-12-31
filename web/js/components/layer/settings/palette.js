@@ -50,12 +50,11 @@ function PaletteSelect (props) {
     const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     const isInvisible = color === '00000000';
-    const identifier = crypto.randomUUID();
 
     return (
-      <div key={identifier} className={caseDefaultClassName + checkedClassName}>
+      <div key={`${id}-${index}`} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={`wv-palette-radio-${identifier}`}
+          id={`wv-palette-radio-${id}-${index}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
@@ -63,7 +62,7 @@ function PaletteSelect (props) {
         {isSelected && (
           <span class="dot" />
         )}
-        <label htmlFor={`wv-palette-radio-${identifier}`}>
+        <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
             style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
@@ -94,11 +93,11 @@ function PaletteSelect (props) {
       canvas.height,
     );
     const dataURL = canvas.toDataURL('image/png');
-    const identifier = crypto.randomUUID();
+
     return (
-      <div key={identifier} className={caseDefaultClassName + checkedClassName}>
+      <div key={`${id}-${index}`} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={`wv-palette-radio-${identifier}`}
+          id={`wv-palette-radio-${id}-${index}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
@@ -106,7 +105,7 @@ function PaletteSelect (props) {
         {isSelected && (
           <span class="dot" />
         )}
-        <label htmlFor={`wv-palette-radio-${identifier}`}>
+        <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
