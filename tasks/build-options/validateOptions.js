@@ -19,6 +19,12 @@ const options = yargs
     type: 'string',
     description: 'config directory'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Validates and corrects the configuration files.')
 
 const { argv } = options
@@ -75,6 +81,7 @@ if (tolerant) warn('Validation enforcement disabled')
 let startDate = moment.max()
 
 async function main () {
+  if (argv.mode === 'profile') console.time('validateOptions')
   for (const layerId of Object.keys(wv.layers)) {
     let layer = wv.layers[layerId]
     if (layerId !== layer.id) {
@@ -186,6 +193,7 @@ async function main () {
   if (errorCount > 0) {
     throw new Error(`${prog}: Error: ${errorCount} errors occured`)
   }
+  if (argv.mode === 'profile') console.timeEnd('validateOptions')
 }
 
 main().catch((err) => {
