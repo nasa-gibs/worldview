@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "MERIS_ENVISAT_Chlorophyll_a": {
+      "id": "MERIS_ENVISAT_Chlorophyll_a",
+      "description": "meris/MERIS_ENVISAT_Chlorophyll_a",
+      "tags": "ocean color envisat",
+      "group": "overlays",
+      "layergroup": "Chlorophyll a",
+      "wrapadjacentdays": true
+    }
+  }
+}

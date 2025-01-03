@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "MERIS_ENVISAT_True_Color": {
+      "id": "MERIS_ENVISAT_True_Color",
+      "description": "meris/MERIS_ENVISAT_True_Color",
+      "tags": "corrected reflectance envisat cr",
+      "group": "baselayers",
+      "layergroup": "Corrected Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}
