@@ -333,7 +333,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   function createLayerWMTS (def, options, day, state) {
-    console.log("graceal1 in createlayerWMTS");
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
@@ -393,9 +392,6 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-    console.log("graceal1 printing layer def and state");
-    console.log(def);
-    console.log(state);
     // graceal get the map in a prettier way
     const { map } = state;
     //graceal check if lerc layer from the format parameter of def which is for the layer
@@ -427,7 +423,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers WMS layer
    */
   const createLayerWMS = function(def, options, day, state) {
-    console.log("graceal1 in createlayerWMS");
     const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
@@ -1174,6 +1169,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
       console.log("graceal1 in createlayerwrapper def is ");
       console.log(def.type);
+      console.log(def.id);
       console.log(def);
 
       if (!isGranule) {

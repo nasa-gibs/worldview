@@ -114,7 +114,12 @@ async function processEntry (entry) {
   const gcId = path.basename(inputFile)
   let gc
   try {
-    const xml = await fs.promises.readFile(inputFile, 'utf8')
+    let xml = await fs.promises.readFile(inputFile, 'utf8')
+    // need to manually add LERC because this is reading from build/options-build/gc/gibs-geographic.xml and
+    // I don't know from what that file is being created
+    if (entry.projection === "geographic") {
+      xml = xml.replaceAll("VIIRS_SNPP_DayNightBand_At_Sensor_Radiance", "VIIRS_VNP46A1_LERC_v1");
+    }
     gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
   } catch (e) {
     if (tolerant) {

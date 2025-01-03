@@ -153,7 +153,11 @@ async function processLayer (layer) {
 }
 
 async function processGetCapabilities (outputFile) {
-  const xml = fs.readFileSync(outputFile, { encoding: 'utf-8' })
+  let xml = fs.readFileSync(outputFile, { encoding: 'utf-8' })
+  // need to manually add LERC
+  if (outputFile.includes("gibs-geographic")) {
+    xml = xml.replaceAll("VIIRS_SNPP_DayNightBand_At_Sensor_Radiance", "VIIRS_VNP46A1_LERC_v1");
+  }
   const gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
 
   try {
