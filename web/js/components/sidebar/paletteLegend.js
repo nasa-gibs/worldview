@@ -80,7 +80,12 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isDistractionFreeModeActive, layer, width, paletteLegends } = this.props;
+    const {
+      isDistractionFreeModeActive,
+      layer,
+      width,
+      paletteLegends
+    } = this.props;
     // Updates when layer options/settings changed, if ZOT changes the width of the palette, or distraction free mode exit
     const layerChange = !lodashIsEqual(layer, prevProps.layer);
     const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevProps.paletteLegends);
