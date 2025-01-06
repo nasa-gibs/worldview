@@ -5,66 +5,66 @@
         all NASA standard products (or all parameters within each product) are available via Worldview, see <a
                 href="https://search.earthdata.nasa.gov/">Earthdata Search</a> for a full listing of available data
         products.</p>
-<p>Near real-time imagery is courtesy of the<a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time"
-                target="_blank" rel="noopener noreferrer"> Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)
+<p>Near real-time imagery is courtesy of the <a href="https://www.earthdata.nasa.gov/data/projects/lance"
+                target="_blank" rel="noopener noreferrer">Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)
         </a>data providers:
 </p>
 <ul>
         <li>AMSR2 and ISS LIS layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips"
+                        href="https://www.earthdata.nasa.gov/centers/amsr-sips"
                         target="_blank" rel="noopener noreferrer">AMSR SIPS</a> </li>
-        <li>VIIRS-Atmosphere layers from <a href="https://earthdata.nasa.gov/atmosphere-sips" target="_blank"
+        <li>VIIRS-Atmosphere layers from <a href="https://www.earthdata.nasa.gov/centers/atmosphere-sips" target="_blank"
                         rel="noopener noreferrer">Atmosphere SIPS</a> </li>
-        <li>MISR layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank"
+        <li>MISR layers from <a href="https://www.earthdata.nasa.gov/centers/asdc-daac" target="_blank"
                         rel="noopener noreferrer">ASDC</a> </li>
         <li>AIRS and MLS layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ges-disc"
-                        target="_blank" rel="noopener noreferrer">GES DISC</a> </li>
+                        href="https://www.earthdata.nasa.gov/centers/gesdisc-daac"
+                        target="_blank" rel="noopener noreferrer">GES DISC</a> and <a href="https://www.earthdata.nasa.gov/centers/mls-sips" target="_blank" rel="noopener noreferrer">MLS SIPS</a></li>
         <li>MODIS and VIIRS-Land layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-modaps"
-                        target="_blank" rel="noopener noreferrer">MODAPS</a> </li>
-        <li>MOPITT layer from <a href="https://earthdata.nasa.gov/eosdis/sips/sips-mopitt" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/modaps-sips"
+                        target="_blank" rel="noopener noreferrer">MODAPS SIPS</a> and <a href="https://www.earthdata.nasa.gov/centers/land-sips" target="_blank" rel="noopener noreferrer">Land SIPS</a></li>
+        <li>MOPITT layer from <a href="https://www.earthdata.nasa.gov/centers/mopitt-sips" target="_blank"
                         rel="noopener noreferrer">MOPITT SIPS</a> </li>
         <li>OMI and OMPS layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-omi-sips"
+                        href="https://www.earthdata.nasa.gov/centers/omi-sips"
                         target="_blank" rel="noopener noreferrer">OMI SIPS</a> and <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-ozone-sips"
-                        target="_blank" rel="noopener noreferrer">Ozone SIPS</a> </li>
+                        href="https://www.earthdata.nasa.gov/centers/omps-sips"
+                        target="_blank" rel="noopener noreferrer">OMPS SIPS</a> </li>
         <li>MODIS and VIIRS Fires and Thermal Anomalies layers from <a
-                        href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms" target="_blank"
+                        href="https://www.earthdata.nasa.gov/data/tools/firms" target="_blank"
                         rel="noopener noreferrer">FIRMS</a> </li>
 </ul>
-<p>Standard quality/ Science quality imagery is courtesy of the <a href="https://earthdata.nasa.gov/eosdis/daacs"
+<p>Standard quality/ Science quality imagery is courtesy of the <a href="https://www.earthdata.nasa.gov/centers"
                 target="_blank" rel="noopener noreferrer">ESDIS Distributed Active Archive Centers (DAACs)</a>:</p>
 <ul>
-        <li>Atmospheric layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/asdc" target="_blank"
+        <li>Atmospheric layers from <a href="https://www.earthdata.nasa.gov/centers/asdc-daac" target="_blank"
                         rel="noopener noreferrer">ASDC DAAC</a></li>
         <li>Atmospheric layers, modeled atmospheric layers and soil moisture layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/daacs/gesdisc" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/gesdisc-daac" target="_blank"
                         rel="noopener noreferrer">GES
                         DISC</a></li>
-        <li>Hydrology related layers and Lightning layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/ghrc"
+        <li>Hydrology related layers and Lightning layers from <a href="https://www.earthdata.nasa.gov/centers/ghrc-daac"
                         target="_blank" rel="noopener noreferrer">GHRC DAAC</a></li>
         <li>Level 1 MODIS and VIIRS Atmosphere and Land layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/daacs/laads" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/laads-daac" target="_blank"
                         rel="noopener noreferrer">LAADS
                         DAAC</a></li>
         <li>Web Enabled Landsat Data (WELD) layers and Digital Elevation Models (DEMs) layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/daacs/lpdaac" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/lp-daac" target="_blank"
                         rel="noopener noreferrer">LP
                         DAAC</a></li>
         <li>Snow and Ice layers, Freeze/Thaw and Soil Moisture layers from <a
-                        href="https://earthdata.nasa.gov/eosdis/daacs/nsidc" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/nsidc-daac" target="_blank"
                         rel="noopener noreferrer">NSIDC
                         DAAC</a></li>
-        <li>Chlorophyll-a layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/obdaac" target="_blank"
+        <li>Chlorophyll-a layers from <a href="https://www.earthdata.nasa.gov/centers/ob-daac" target="_blank"
                         rel="noopener noreferrer">OB.DAAC</a></li>
-        <li>Daymet layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/ornl" target="_blank"
+        <li>Daymet layers from <a href="https://www.earthdata.nasa.gov/centers/ornl-daac" target="_blank"
                         rel="noopener noreferrer">ORNL DAAC</a></li>
         <li>Ocean related layers like Sea Surface Temperature, Sea Surface Height and Sea Surface Salinity from <a
-                        href="https://earthdata.nasa.gov/eosdis/daacs/podaac" target="_blank"
+                        href="https://www.earthdata.nasa.gov/centers/po-daac" target="_blank"
                         rel="noopener noreferrer">PO.DAAC</a></li>
-        <li>Socioeconomic layers from <a href="https://earthdata.nasa.gov/eosdis/daacs/sedac" target="_blank"
+        <li>Socioeconomic layers from <a href="https://www.earthdata.nasa.gov/centers/sedac-daac" target="_blank"
                         rel="noopener noreferrer">SEDAC</a></li>
 </ul>
 <p>There are also many DAAC-specific tools for working directly with the data as listed here.</p>
@@ -85,7 +85,7 @@
                 Marshall Space Flight Center.</li>
         <li>Precipitation products provided by <a href="https://pps.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Precipitation Processing System (PPS)</a> and <a
-                        href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/lance/about-amsr2-sips"
+                        href="https://www.earthdata.nasa.gov/centers/amsr-sips"
                         target="_blank" rel="noopener noreferrer">AMSR SIPS</a>.</li>
         <li>Orbit tracks provided by <a href="https://www.space-track.org" target="_blank"
                         rel="noopener noreferrer">space-track.org</a>.</li>

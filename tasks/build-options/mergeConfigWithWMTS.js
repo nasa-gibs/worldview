@@ -18,6 +18,12 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Concatenates all configuration items a directory into one configuration file.')
 
 const { argv } = options
@@ -37,6 +43,7 @@ const outputData = JSON.parse(fs.readFileSync(outputFile, 'utf-8'))
 let fileCount = 0
 
 async function main () {
+  if (argv.mode === 'profile') console.time('mergeConfigWithWMTS')
   layers = newConf.layers
   delete layers.sources
   delete newConf.layers
@@ -50,6 +57,7 @@ async function main () {
   await fs.writeFileSync(outputFile, JSON.stringify(newConf, jsonOptions))
 
   console.warn(`${prog}: ${fileCount} file(s) merged into ${path.basename(outputFile)}`)
+  if (argv.mode === 'profile') console.timeEnd('mergeConfigWithWMTS')
 }
 
 async function processFiles () {

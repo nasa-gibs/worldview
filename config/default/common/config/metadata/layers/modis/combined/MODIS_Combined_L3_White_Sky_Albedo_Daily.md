@@ -4,7 +4,7 @@ The MCD43A3 provides black-sky albedo (directional hemispherical reflectance) an
 
 References: MCD43A3N NRT [doi:10.5067/MODIS/MCD43A3N.NRT.061](https://doi.org/10.5067/MODIS/MCD43A3N.NRT.061); MCD43A3 [doi:10.5067/MODIS/MCD43A3.061](https://doi.org/10.5067/MODIS/MCD43A3.061)
 
-Users are encouraged to download essential quality information provided in the corresponding MCD43A2 data files when using this product. Users should use the band specific quality flags to isolate the highest quality full inversion results for their own science applications as described in the [User Guide](https://www.umb.edu/spectralmass/terra_aqua_modis/v006). The MCD43A2 contains BRDF/Albedo band quality (inversion information) and days of valid observation within the 16-day period for MODIS bands 1 through 7 along with land water type, snow BRDF albedo, local solar noon, platform, and BRDF/Albedo uncertainty.
+Users are encouraged to download essential quality information provided in the corresponding MCD43A2 data files when using this product. Users should use the band specific quality flags to isolate the highest quality full inversion results for their own science applications as described in the [User Guide](https://www.umb.edu/spectralmass/modis-user-guide-v006-and-v0061/). The MCD43A2 contains BRDF/Albedo band quality (inversion information) and days of valid observation within the 16-day period for MODIS bands 1 through 7 along with land water type, snow BRDF albedo, local solar noon, platform, and BRDF/Albedo uncertainty.
 
 MCD43A2N v6 NRT [doi:10.5067/MODIS/MCD43A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD43A2N.NRT.006)<br>
 MCD43A2N v6.1 NRT [doi:10.5067/MODIS/MCD43A2N.NRT.061](https://doi.org/10.5067/MODIS/MCD43A2N.NRT.061)<br>

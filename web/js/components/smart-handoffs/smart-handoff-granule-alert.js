@@ -11,7 +11,7 @@ function GranuleAlertModalBody() {
       <p>
         Many layers in @NAME@ are made available in
         {' '}
-        <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/near-real-time-versus-standard-products" target="_blank" rel="noopener noreferrer">Near Real-Time (NRT)</a>
+        <a href="https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/near-real-time-versus-standard-products" target="_blank" rel="noopener noreferrer">Near Real-Time (NRT)</a>
         {' '}
         and then &quot;backfilled&quot; by the corresponding Standard (STD) product when it is available. @NAME@ displays them on a
         <a href="https://nasa-gibs.github.io/gibs-api-docs/access-advanced-topics/#best-available-layers" target="_blank" rel="noopener noreferrer"> &quot;Best Available&quot; </a>

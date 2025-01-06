@@ -29,6 +29,12 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Converts colormaps to JSON files')
 
 const { argv } = options
@@ -64,6 +70,7 @@ const walk = (dir) => {
 }
 
 async function main () {
+  if (argv.mode === 'profile') console.time('processColormap')
   const files = await walk(inputDir)
   for (const file of files) {
     try {
@@ -82,6 +89,7 @@ async function main () {
   if (errorCount > 0) {
     throw new Error(`${prog}: Error: ${errorCount} errors occured`)
   }
+  if (argv.mode === 'profile') console.timeEnd('processColormap')
 }
 
 function toList (v) {

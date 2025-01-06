@@ -26,6 +26,12 @@ const options = yargs
     type: 'string',
     description: 'features file'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Fetch preview images from WV Snapshots for any layers which they are missing.')
 
 const { argv } = options
@@ -80,6 +86,7 @@ const referenceLayers = {
 }
 
 async function main () {
+  if (argv.mode === 'profile') console.time('fetchPreviewSnapshots')
   // Check to see if this feature is enabled in features.json before continuing
   const featuresFileContent = fs.readFileSync(featuresFile, { encoding: 'utf-8' })
   const featuresDict = JSON.parse(featuresFileContent)
@@ -121,6 +128,7 @@ async function main () {
   if (totalFailureCount === 0 && totalSuccessCount === 0) {
     console.warn(`\n${prog}: No snapshots were retrieved. All layers found in wv.json have existing preview images!`)
   }
+  if (argv.mode === 'profile') console.timeEnd('fetchPreviewSnapshots')
 }
 
 async function trackBadSnapshots (layerId, projection, request, imgFile, badSnapshots) {

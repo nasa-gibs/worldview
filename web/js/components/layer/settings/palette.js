@@ -52,9 +52,9 @@ function PaletteSelect (props) {
     const isInvisible = color === '00000000';
 
     return (
-      <div key={id} className={caseDefaultClassName + checkedClassName}>
+      <div key={`${id}-${index}`} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={`wv-palette-radio-${id}`}
+          id={`wv-palette-radio-${id}-${index}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
@@ -62,7 +62,7 @@ function PaletteSelect (props) {
         {isSelected && (
           <span class="dot" />
         )}
-        <label htmlFor={`wv-palette-radio-${id}`}>
+        <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
             style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
@@ -93,10 +93,11 @@ function PaletteSelect (props) {
       canvas.height,
     );
     const dataURL = canvas.toDataURL('image/png');
+
     return (
-      <div key={id} className={caseDefaultClassName + checkedClassName}>
+      <div key={`${id}-${index}`} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={`wv-palette-radio-${id}`}
+          id={`wv-palette-radio-${id}-${index}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
@@ -104,7 +105,7 @@ function PaletteSelect (props) {
         {isSelected && (
           <span class="dot" />
         )}
-        <label htmlFor={`wv-palette-radio-${id}`}>
+        <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
