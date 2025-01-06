@@ -33,7 +33,6 @@ function getColormap(rawColormap) {
 class LookupImageTile extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions) {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
-    console.log("graceal1 in constructor of lookupImageTile");
     this.lookup_ = lookup;
     this.canvas_ = null;
     // Store custom tileLoadFunction
@@ -201,8 +200,6 @@ LookupImageTile.prototype.load = async function() {
 
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
-    console.log("graceal1 in the function of lookupFactory and tileLoadFunction is ");
-    console.log(tileLoadFunction);
     return new LookupImageTile(
       lookup,
       tileCoord,

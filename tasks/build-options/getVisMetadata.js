@@ -124,8 +124,6 @@ async function main (url) {
       await getMetadata(layerId, url)
     }
   }
-  console.warn("graceal1 layerMetadata is ");
-  console.warn(layerMetadata);
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -245,8 +243,6 @@ async function getMetadata (layerId, baseUrl, count) {
       delete layerMetadata[layerId][key]
     }
   }).catch((error) => {
-    console.log("graceal1 layerId for fail is ");
-    console.log(layerId);
     handleException(error, layerId, url, count)
   })
 }

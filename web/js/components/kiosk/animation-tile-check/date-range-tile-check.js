@@ -87,7 +87,6 @@ function DateRangeTileCheck(props) {
   };
 
   const requestTilesWMTS = async (def, date) => {
-    console.log("graceal1 in requestTilesWMTS");
     const {
       id, format, matrixIds, matrixSetLimits, projections, style, type,
     } = def;
@@ -116,7 +115,6 @@ function DateRangeTileCheck(props) {
     };
 
     const tileLoadFunction = function(tile, src) {
-      console.log("graceal1 in the default tileload function");
       return new Promise((resolve) => {
         fetch(src)
           .then((response) => response.blob().then((data) => [response, data]))

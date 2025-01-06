@@ -488,7 +488,6 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     if (isPaletteActive(def.id, options.group, state)) {
       const lookup = getPaletteLookup(def.id, options.group, state);
-      console.log("graceal1 right before call to lookup factory2");
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);

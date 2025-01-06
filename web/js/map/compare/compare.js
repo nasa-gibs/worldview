@@ -59,8 +59,6 @@ export default function mapCompare(store) {
    * @param {String} compareMode | Active compare mode
    */
   self.create = function (map, compareMode) {
-    console.warn("graceal1 in self.create of compate");
-    console.log(map);
     const state = store.getState();
     const { proj, compare } = state;
 
