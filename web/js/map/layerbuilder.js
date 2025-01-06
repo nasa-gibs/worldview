@@ -374,7 +374,8 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
-    const sourceURL = def.sourceOverride || configSource.url;
+    let sourceURL = def.sourceOverride || configSource.url;
+    if (def.format === "image/lerc") sourceURL = "https://localhost:8080/wmts/epsg4326/best/wmts.cgi";
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
@@ -396,7 +397,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { map } = state;
     //graceal check if lerc layer from the format parameter of def which is for the layer
     // that is a bit of an ugly if statement so maybe find a dif way
-    if (false) {
+    if (def.format === "image/lerc") {
       tileSource.setTileLoadFunction((tile, src) => {
         return tileLoader(tile, src, def, map.ui.selected, sourceOptions.tileGrid);
       });
@@ -1167,10 +1168,6 @@ export default function mapLayerBuilder(config, cache, store) {
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
-      console.log("graceal1 in createlayerwrapper def is ");
-      console.log(def.type);
-      console.log(def.id);
-      console.log(def);
 
       if (!isGranule) {
         switch (def.type) {

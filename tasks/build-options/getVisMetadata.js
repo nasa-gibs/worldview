@@ -161,7 +161,6 @@ async function getDAAC (metadata) {
 
 async function getMetadata (layerId, baseUrl, count) {
   if (layerId === "VIIRS_VNP46A1_LERC_v1") {
-    console.warn("graceal1 located LERC layer in getMetadata function");
     /*const metadata = {
       "title": "VIIRS_VNP46A1_LERC_v1",
       "subtitle": "VIIRS_VNP46A1_LERC_v1",
@@ -206,7 +205,7 @@ async function getMetadata (layerId, baseUrl, count) {
       "layerPeriod": "Daily"
     };*/
     const metadata = {
-      "title": "Black Marble Nighttime At Sensor Radiance (Day/Night Band)",
+      "title": "VIIRS Lerc layer for testing",
       "subtitle": "Suomi NPP / VIIRS",
       "ongoing": true,
       "measurement": "Earth at Night",
@@ -214,51 +213,10 @@ async function getMetadata (layerId, baseUrl, count) {
       "daynight": [
         "night"
       ],
-      "conceptIds": [
-        {
-          "type": "NRT",
-          "value": "C1989175258-LANCEMODIS",
-          "shortName": "VNP46A1_NRT",
-          "title": "VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat Lon Grid Night NRT",
-          "version": "1",
-          "dataCenter": "LANCEMODIS"
-        },
-        {
-          "type": "NRT",
-          "value": "C1990149134-LANCEMODIS",
-          "shortName": "VNP46A1G_NRT",
-          "title": "VIIRS/NPP Hourly Cumulative Gridded Day Night Band 500m Linear Lat Lon Grid Night NRT",
-          "version": "1",
-          "dataCenter": "LANCEMODIS"
-        },
-        {
-          "type": "NRT",
-          "value": "C2780753001-LANCEMODIS",
-          "shortName": "VNP46A1_NRT",
-          "title": "VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat. Lon. Grid Night NRT",
-          "version": "2",
-          "dataCenter": "LANCEMODIS"
-        },
-        {
-          "type": "NRT",
-          "value": "C2780764136-LANCEMODIS",
-          "shortName": "VNP46A1G_NRT",
-          "title": "VIIRS/NPP Granular Gridded Day Night Band 500m Linear Lat. Lon. Grid Night NRT",
-          "version": "2",
-          "dataCenter": "LANCEMODIS"
-        },
-        {
-          "type": "STD",
-          "value": "C1897815356-LAADS",
-          "shortName": "VNP46A1",
-          "title": "VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat Lon Grid Night",
-          "version": "1",
-          "dataCenter": "LAADS"
-        }
-      ],
-      "orbitTracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
+      "conceptIds": [],
+      /*"orbitTracks": [
+        "VIIRS_VNP46A1_LERC_v1"
+      ],*/
       "orbitDirection": [
         "descending"
       ],
