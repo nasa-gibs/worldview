@@ -161,6 +161,76 @@ async function getDAAC (metadata) {
 }
 
 async function getMetadata (layerId, baseUrl, count) {
+  if (layerId === "VIIRS_VNP46A1_LERC_v1") {
+    /*const metadata = {
+      "title": "VIIRS_VNP46A1_LERC_v1",
+      "subtitle": "VIIRS_VNP46A1_LERC_v1",
+      "ongoing": false,
+      "measurement": "Earth at Night",
+      "retentionPeriod": -1,
+      "conceptIds": [
+        {
+          "type": "NRT",
+          "value": "C1886251885-LANCEMODIS",
+          "shortName": "VNP14IMG_NRT",
+          "title": "VIIRS/NPP Active Fires 6-Min L2 Swath 375m - NRT",
+          "version": "2",
+          "dataCenter": "LANCEMODIS"
+        },
+        {
+          "type": "NRT",
+          "value": "C1942970257-LANCEMODIS",
+          "shortName": "VNP14IMGTDL_NRT",
+          "title": "VIIRS (S-NPP) I Band 375 m Active Fire Product NRT (Vector data)",
+          "version": "2",
+          "dataCenter": "LANCEMODIS"
+        },
+        {
+          "type": "STD",
+          "value": "C1392010612-LPDAAC_ECS",
+          "shortName": "VNP14",
+          "title": "VIIRS/NPP Thermal Anomalies/Fire 6-Min L2 Swath 750m V001",
+          "version": "001",
+          "dataCenter": "LPDAAC_ECS"
+        }
+      ],
+      "daynight": [
+        "night"
+      ],
+      "orbitTracks": [
+        "VIIRS_VNP46A1_LERC_v1"
+      ],
+      "orbitDirection": [
+        "descending"
+      ],
+      "layerPeriod": "Daily"
+    };*/
+    const metadata = {
+      "title": "VIIRS Lerc layer for testing",
+      "subtitle": "Suomi NPP / VIIRS",
+      "ongoing": true,
+      "measurement": "Earth at Night",
+      "retentionPeriod": -1,
+      "daynight": [
+        "night"
+      ],
+      "conceptIds": [],
+      /*"orbitTracks": [
+        "VIIRS_VNP46A1_LERC_v1"
+      ],*/
+      "orbitDirection": [
+        "descending"
+      ],
+      "layerPeriod": "Daily"
+    }
+    layerMetadata[layerId] = await getDAAC(metadata)
+    let metadataKeys = Object.keys(layerMetadata[layerId])
+    metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+    for (const key of metadataKeys) {
+      delete layerMetadata[layerId][key]
+    }
+    return;
+  }
   if (count) console.warn(`retry #${count} for ${layerId}`)
   return axios({
     method: 'get',

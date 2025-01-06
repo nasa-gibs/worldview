@@ -50,6 +50,7 @@ import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
+import { tileLoader } from "../util/LERCColorCoder";
 
 const componentToHex = (c) => {
   const hex = c.toString(16);
@@ -373,7 +374,8 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
-    const sourceURL = def.sourceOverride || configSource.url;
+    let sourceURL = def.sourceOverride || configSource.url;
+    if (def.format === "image/lerc") sourceURL = "https://localhost:8080/wmts/epsg4326/best/wmts.cgi";
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
@@ -391,6 +393,15 @@ export default function mapLayerBuilder(config, cache, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
+    // graceal get the map in a prettier way
+    const { map } = state;
+    //graceal check if lerc layer from the format parameter of def which is for the layer
+    // that is a bit of an ugly if statement so maybe find a dif way
+    if (def.format === "image/lerc") {
+      tileSource.setTileLoadFunction((tile, src) => {
+        return tileLoader(tile, src, def, map.ui.selected, sourceOptions.tileGrid);
+      });
+    }
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
