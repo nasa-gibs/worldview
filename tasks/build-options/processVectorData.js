@@ -23,12 +23,6 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
-  .option('mode', {
-    demandOption: true,
-    alias: 'm',
-    type: 'string',
-    description: 'mode'
-  })
   .epilog('Extracts vector data information from GetCapabilities')
 
 const { argv } = options
@@ -40,7 +34,6 @@ const inputDir = argv.inputDir
 const outputDir = argv.outputDir
 
 async function main () {
-  if (argv.mode === 'profile') console.time('processVectorData')
   let fileCount = 0
   let errorCount = 0
 
@@ -59,7 +52,6 @@ async function main () {
   if (errorCount > 0) {
     throw new Error(`${prog}: Error: ${errorCount} errors occured`)
   }
-  if (argv.mode === 'profile') console.timeEnd('processVectorData')
 }
 
 async function copyFileAsync (file) {
