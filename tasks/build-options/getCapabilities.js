@@ -49,7 +49,6 @@ const configData = fs.readFileSync(configFile)
 const config = JSON.parse(configData)
 
 async function main () {
-  if (argv.mode === 'profile') console.time('getCapabilities')
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir)
   }
@@ -65,7 +64,6 @@ async function main () {
   if (vectordata) {
     await gatherProcess(vectordata, 'vectordata files', vectordataDir, '.json')
   }
-  if (argv.mode === 'profile') console.timeEnd('getCapabilities')
 }
 
 async function getCapabilities () {

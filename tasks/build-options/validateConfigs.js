@@ -52,7 +52,6 @@ const invalidJsonFiles = []
 console.warn(`${prog}: Validating layer configs...`)
 
 async function main () {
-  if (argv.mode === 'profile') console.time('validateConfigs')
   let files = globSync(inputDirectory + '/**/*')
   files = files.filter(file => file.endsWith('.json'))
   for (const filePath of files) {
@@ -60,11 +59,9 @@ async function main () {
   }
   if (invalidJsonFiles.length) {
     if (argv.mode === 'verbose') console.warn(`${prog}: Invalid JSON files: ${invalidJsonFiles}`)
-    if (argv.mode === 'profile') console.timeEnd('validateConfigs')
     throw new Error(`${prog}: FAILED: ${invalidJsonFiles.length} layer configs failed validation.`)
   } else {
     console.warn(`${prog}: PASSED: All layer configs passed validation!`)
-    if (argv.mode === 'profile') console.timeEnd('validateConfigs')
   }
 }
 
