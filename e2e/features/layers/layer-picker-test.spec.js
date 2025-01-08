@@ -36,7 +36,7 @@ test('Enabled Corrected Reflectance layers are shown as checked', async () => {
 
 test('"Unavailable" layers show unavailable icon and tooltip', async () => {
   const { weldUnavailableTooltipIcon } = selectors
-  await page.locator('#landsat-weld-1-source-Nav').click()
+  await page.locator('#landsat-weld-2-source-Nav').click()
   await weldUnavailableTooltipIcon.hover()
   const tooltip = await page.locator('.tooltip')
   await expect(tooltip).toBeVisible()
@@ -155,8 +155,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(15)
-  await expect(layerResultsCountText).toContainText('Showing 15 out of')
+  await expect(layersSearchRow).toHaveCount(16)
+  await expect(layerResultsCountText).toContainText('Showing 16 out of')
 })
 
 test('Finding layer by ID with search', async () => {
