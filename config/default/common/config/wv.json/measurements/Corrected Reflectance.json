@@ -3,7 +3,7 @@
         "Corrected Reflectance": {
             "id": "corrected-reflectance",
             "title":    "Corrected Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/OCI, Landsat/WELD, OrbView-2/SeaWiFS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/OCI, Landsat/WELD, OrbView-2/SeaWiFS, ENVISAT/MERIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -101,6 +101,15 @@
                     "image": "",
                     "settings": [
                        "SEAWIFS_ORBVIEW-2_GAC_True_Color"
+                    ]
+                },
+                "ENVISAT/MERIS": {
+                    "id": "envisat-meris",
+                    "title": "ENVISAT/MERIS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                       "MERIS_ENVISAT_True_Color"
                     ]
                 }
             }
