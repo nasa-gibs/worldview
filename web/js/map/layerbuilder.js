@@ -451,6 +451,8 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     if (def.styles) {
       parameters.STYLES = def.styles;
+    } else if (def.size && def.size >= 5) {
+      parameters.STYLES = `size${def.size}`;
     }
 
     urlParameters = '';

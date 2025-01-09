@@ -39,6 +39,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || def.count || undefined;
+  def.size = spec.size || undefined;
 
   if (Array.isArray(spec.bandCombo)) {
     def.bandCombo = {

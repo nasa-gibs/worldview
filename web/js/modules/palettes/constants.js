@@ -8,6 +8,7 @@ export const SET_THRESHOLD_RANGE_AND_SQUASH = 'PALETTES/SET_THRESHOLD_RANGE_AND_
 export const CLEAR_CUSTOM = 'PALETTES/CLEAR_CUSTOM';
 export const CLEAR_CUSTOMS = 'PALETTES/CLEAR_CUSTOMS';
 export const SET_CUSTOM = 'PALETTES/SET_CUSTOM';
+export const SET_SIZE = 'PALETTES/SET_SIZE';
 export const LOADED_CUSTOM_PALETTES = 'PALETTES/LOADED_CUSTOM_PALETTES';
 export const BULK_PALETTE_RENDERING_SUCCESS = 'PALETTES/BULK_PALETTE_RENDERING_SUCCESS';
 export const BULK_PALETTE_PRELOADING_SUCCESS = 'PALETTES/BULK_PALETTE_PRELOADING_SUCCESS';
@@ -18,5 +19,6 @@ export const PALETTE_STRINGS_PERMALINK_ARRAY = [
   'min',
   'max',
   'disabled',
+  'size',
 ];
-export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max', 'disabled'];
+export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max', 'disabled', 'size'];

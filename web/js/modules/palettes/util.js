@@ -16,6 +16,7 @@ import {
   setRange as setRangeSelector,
   findIndex as findPaletteExtremeIndex,
   initDisabledSelector,
+  setSize,
 } from './selectors';
 import util from '../../util/util';
 
@@ -290,6 +291,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
     let disabledObj = lodashAssign({}, { key: 'disabled', array: [] }, DEFAULT_OBJ);
+    let sizeObj = lodashAssign({}, { key: 'size', array: [] }, DEFAULT_OBJ);
     const attrArray = [];
     for (let i = 0; i < count; i += 1) {
       if (!palettes[layerId].maps[i]) {
@@ -309,6 +311,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
       const disabledValue = paletteDef.disabled && paletteDef.disabled.length
         ? paletteDef.disabled.join('-')
         : undefined;
+      const sizeValue = paletteDef.size || undefined;
 
       palObj = createPaletteAttributeObject(
         paletteDef,
@@ -341,9 +344,15 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         disabledObj,
         count,
       );
+      sizeObj = createPaletteAttributeObject(
+        paletteDef,
+        sizeValue,
+        sizeObj,
+        count,
+      );
     }
 
-    [palObj, minObj, maxObj, squashObj, disabledObj].forEach((obj) => {
+    [palObj, minObj, maxObj, squashObj, disabledObj, sizeObj].forEach((obj) => {
       if (obj.isActive || (obj.key === 'disabled' && obj.value !== '')) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
@@ -450,9 +459,25 @@ export function loadPalettes(permlinkState, state) {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
             } catch (error) {
-              console.warn(` Invalid palette: ${value}`);
+              console.warn(`Invalid palette: ${value}`);
             }
           });
+        }
+        if (layerDef.size) {
+          try {
+            const newPalettes = setSize(
+              layerId,
+              layerDef.size,
+              0,
+              state.palettes[stateObj.groupStr],
+              state,
+            );
+            state = update(state, {
+              palettes: { [stateObj.groupStr]: { $set: newPalettes } },
+            });
+          } catch (error) {
+            console.warn(`Unable to set point size: ${layerDef.size}`);
+          }
         }
         if (min.length > 0 || max.length > 0) {
           count = getCount(layerId, state);

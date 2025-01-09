@@ -19,6 +19,7 @@ import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
   SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_SIZE,
 } from '../palettes/constants';
 
 const config = fixtures.config();
@@ -236,6 +237,17 @@ describe('layer Reducer tests', () => {
 
     expect(getTestLayer(initialLayers).custom).toEqual(undefined);
     expect(getTestLayer(response.active.layers).custom).toEqual(['custom-id']);
+  });
+
+  test('SET_SIZE action sets size for given layer [layers-reducer-set-custom-palette]', () => {
+    const response = layerReducer(initialState, {
+      type: SET_SIZE,
+      id: 'terra-cr',
+      activeString: 'active',
+      size: 15,
+    });
+
+    expect(getTestLayer(response.active.layers).size).toEqual(15);
   });
 
   test('UPDATE_OPACITY action updates opacity for given layer [layers-reducer-update-opacity]', () => {
