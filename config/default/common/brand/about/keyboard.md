@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <td><code>↓</code></td>
-                <td>Change date to a smaller interval (e.g., months to days</td>
+                <td>Change date to a smaller interval (e.g., months to day)</td>
             </tr>
             <tr>
                 <td><code>←</code></td>

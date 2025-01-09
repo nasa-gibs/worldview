@@ -3,7 +3,7 @@
         "Chlorophyll a": {
             "id": "chlorophyll-a",
             "title":    "Chlorophyll a",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, PACE/OCI, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI, OrbView-2/SeaWiFS",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, PACE/OCI, Suomi NPP/VIIRS, Sentinel-3A/OCLI, Sentinel-3B/OLCI, OrbView-2/SeaWiFS, ENVISAT/MERIS",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -90,6 +90,15 @@
                     "image": "",
                     "settings": [
                         "SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a"
+                    ]
+                },
+                "ENVISAT/MERIS": {
+                    "id": "envisat-meris",
+                    "title": "ENVISAT/MERIS",
+                    "description": "viirs/Chlorophyll_a",
+                    "image": "",
+                    "settings": [
+                        "MERIS_ENVISAT_Chlorophyll_a"
                     ]
                 }
             }
