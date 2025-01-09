@@ -61,6 +61,7 @@ function MeasurementMetadataDetail (props) {
                 aria-label="View layer preview"
               >
                 <img
+                  alt="Layer preview"
                   className="img-fluid layer-preview"
                   src={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
                 />

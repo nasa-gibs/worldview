@@ -59,6 +59,7 @@ export default function LocationMarker ({
         onClick={() => setShowDialog(true)}
       >
         <img
+          alt="Map marker"
           id="marker-pin"
           src="images/map-pin.png"
           height="32"

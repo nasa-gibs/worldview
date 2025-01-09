@@ -105,7 +105,7 @@
         "jsx-a11y/control-has-associated-label": "error",           // 1 error across 1 files
         "jsx-a11y/anchor-is-valid": "off",                        // 24 errors across 13 files
         "jsx-a11y/label-has-associated-control": "error",           // 5 errors across 4 files
-        "jsx-a11y/alt-text": "off",                               // 15 errors across 10 files
+        "jsx-a11y/alt-text": "error",                               // 15 errors across 10 files
         "jsx-a11y/mouse-events-have-key-events": "error",           // 7 errors across 4 files
         "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
         "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files

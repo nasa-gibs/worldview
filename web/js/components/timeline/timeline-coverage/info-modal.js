@@ -13,14 +13,14 @@ function LayerCoverageInfoModal() {
       </header>
       <div className="layer-coverage-info-item-container">
         <section className="layer-coverage-info-item-left">
-          <img src="images/lc-axis.png" />
+          <img alt="Timeline layer coverage axis" src="images/lc-axis.png" />
         </section>
         <section className="layer-coverage-info-item-right">
           <div>
             <p>
               Including layers that are hidden may affect the display of the timeline’s solid blue overlapping coverage line as it will take into account the dates of those layers, too.
             </p>
-            <img src="images/lc-toggle.png" />
+            <img alt="Include Hidden Layers toggle" src="images/lc-toggle.png" />
           </div>
           <div>
             <p>

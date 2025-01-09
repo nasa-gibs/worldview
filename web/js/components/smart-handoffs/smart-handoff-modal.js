@@ -46,9 +46,9 @@ function SmartHandoffModal({
 
       <div className="smart-handoff-heading">
         <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer" aria-label="Earthdata Search">
-          <img src="images/nasa-logo.png" style={{ maxHeight: '38px' }} />
+          <img alt="NASA logo" src="images/nasa-logo.png" style={{ maxHeight: '38px' }} />
           <span className="smart-handoff-pipe" />
-          <img src="images/earthdata-search.png" />
+          <img alt="Earthdata Search" src="images/earthdata-search.png" />
         </a>
       </div>
 
@@ -69,7 +69,7 @@ function SmartHandoffModal({
             viewport region in @NAME@ will be used to derive data granules within Earthdata Search.
           </p>
 
-          <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />
+          <img alt="Earthdata Search preview" className="earth-data-gif" src="images/earth-data-search-preview.gif" />
           <p className="earth-data-caption">
             Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
             downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
