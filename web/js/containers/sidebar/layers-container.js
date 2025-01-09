@@ -128,23 +128,22 @@ function LayersContainer (props) {
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
   return isActive && (
-    <>
-      <div id="layers-scroll-container" style={scrollContainerStyles}>
-        <div className="layer-container sidebar-panel">
+    <div id="layers-scroll-container" style={scrollContainerStyles}>
+      <div className="layer-container sidebar-panel">
 
-          {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
-            <LayerList
-              title="Overlays"
-              groupId="overlays"
-              compareState={compareState}
-              collapsed={overlaysCollapsed}
-              toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
-              layers={overlays}
-              layerSplit={overlays.length}
-            />
-          )}
+        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
+        <LayerList
+          title="Overlays"
+          groupId="overlays"
+          compareState={compareState}
+          collapsed={overlaysCollapsed}
+          toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
+          layers={overlays}
+          layerSplit={overlays.length}
+        />
+        )}
 
-          {!shouldHideForEmbedNoBaseLayers && (
+        {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -156,10 +155,9 @@ function LayersContainer (props) {
               layerSplit={overlays.length}
             />
           </div>
-          )}
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 

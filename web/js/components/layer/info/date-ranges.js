@@ -64,12 +64,15 @@ export default function DateRanges ({ layer }) {
     <>
       <sup
         className="layer-date-ranges-button"
-        onClick={() => {
-          getDateRanges();
-          setShowRanges(!showRanges);
-        }}
       >
-        *View Dates
+        <a
+          onClick={() => {
+            getDateRanges();
+            setShowRanges(!showRanges);
+          }}
+        >
+          *View Dates
+        </a>
       </sup>
       <div
         style={style}

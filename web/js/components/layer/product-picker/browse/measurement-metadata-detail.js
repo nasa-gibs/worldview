@@ -58,6 +58,7 @@ function MeasurementMetadataDetail (props) {
                 href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
                 rel="noopener noreferrer"
                 target="_blank"
+                aria-label="View layer preview"
               >
                 <img
                   className="img-fluid layer-preview"

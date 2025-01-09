@@ -178,37 +178,49 @@ function Event (props) {
       });
     }
   }
+  const buttonStyle = {
+    width: '100%',
+    background: 'none',
+    color: 'white',
+    border: 'none',
+    textAlign: 'left',
+  };
 
   return (
     <li
       id={`sidebar-event-${util.encodeId(event.id)}`}
       ref={(node) => { elRef.current = node; }}
       className={itemClass}
-      onClick={(e) => {
-        e.stopPropagation();
-        onEventSelect();
-      }}
-      onMouseEnter={(e) => {
-        onEventHighlight(true);
-      }}
-      onMouseLeave={(e) => {
-        onEventHighlight(false);
-      }}
     >
-      <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
-      <h4
-        className="title"
+      <button
+        type="button"
+        style={buttonStyle}
+        onClick={(e) => {
+          e.stopPropagation();
+          onEventSelect();
+        }}
+        onMouseEnter={(e) => {
+          onEventHighlight(true);
+        }}
+        onMouseLeave={(e) => {
+          onEventHighlight(false);
+        }}
       >
-        {event.title}
-        {' '}
-        <br />
-        {' '}
-        {!isSelected && (
-          <MonospaceDate date={dateString} />
-        )}
-      </h4>
-      {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
-      {renderDateLists()}
+        <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
+        <h4
+          className="title"
+        >
+          {event.title}
+          {' '}
+          <br />
+          {' '}
+          {!isSelected && (
+            <MonospaceDate date={dateString} />
+          )}
+        </h4>
+        {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
+        {renderDateLists()}
+      </button>
     </li>
   );
 }

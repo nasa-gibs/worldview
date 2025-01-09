@@ -99,14 +99,14 @@
         // Import rules overrides
         "import/no-cycle": "warn",
         // Accesibility rules overrides
-        "jsx-a11y/no-noninteractive-tabindex": "off",             // 2 errors across 2 files
-        "jsx-a11y/no-noninteractive-element-interactions": "off", // 5 errors across 5 files
-        "jsx-a11y/anchor-has-content": "off",                     // 1 error across 1 files
-        "jsx-a11y/control-has-associated-label": "off",           // 1 error across 1 files
+        "jsx-a11y/no-noninteractive-tabindex": "error",             // 2 errors across 2 files
+        "jsx-a11y/no-noninteractive-element-interactions": "error", // 5 errors across 5 files
+        "jsx-a11y/anchor-has-content": "error",                     // 1 error across 1 files
+        "jsx-a11y/control-has-associated-label": "error",           // 1 error across 1 files
         "jsx-a11y/anchor-is-valid": "off",                        // 24 errors across 13 files
-        "jsx-a11y/label-has-associated-control": "off",           // 5 errors across 4 files
+        "jsx-a11y/label-has-associated-control": "error",           // 5 errors across 4 files
         "jsx-a11y/alt-text": "off",                               // 15 errors across 10 files
-        "jsx-a11y/mouse-events-have-key-events": "off",           // 7 errors across 4 files
+        "jsx-a11y/mouse-events-have-key-events": "error",           // 7 errors across 4 files
         "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
         "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files
         // React rules overrides

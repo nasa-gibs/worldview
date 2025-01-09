@@ -62,7 +62,9 @@ class TourBox extends React.Component {
         href="#"
         style={styles}
         onMouseOver={(e) => this.onMouseOver(e)}
+        onFocus={this.onMouseOver}
         onMouseOut={(e) => this.onMouseOut(e)}
+        onBlur={this.onMouseOut}
         className={className + floatBox}
         onClick={(e) => selectTour(e, story, index, storyId)}
       >

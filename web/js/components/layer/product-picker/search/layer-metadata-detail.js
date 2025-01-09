@@ -64,7 +64,7 @@ class LayerMetadataDetail extends React.Component {
         {showPreviewImage
           && (
           <div className="text-center">
-            <a href={previewUrl} rel="noopener noreferrer" target="_blank">
+            <a href={previewUrl} rel="noopener noreferrer" target="_blank" aria-label="View layer preview">
               <img className="img-fluid layer-preview" src={previewUrl} />
             </a>
           </div>

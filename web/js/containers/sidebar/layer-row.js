@@ -602,7 +602,9 @@ function LayerRow (props) {
             style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
             ref={provided.innerRef}
             onMouseOver={mouseOver}
+            onFocus={mouseOver}
             onMouseLeave={mouseLeave}
+            onBlur={mouseLeave}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
