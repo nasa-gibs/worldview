@@ -352,7 +352,8 @@ function LayerRow (props) {
     <>
       {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
       {!isChartingActive && (
-      <a
+      <button
+        type="button"
         id={removeLayerBtnId}
         aria-label={removeLayerBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
@@ -362,9 +363,10 @@ function LayerRow (props) {
           {removeLayerBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="times" fixedWidth />
-      </a>
+      </button>
       )}
-      <a
+      <button
+        type="button"
         id={layerOptionsBtnId}
         aria-label={layerOptionsBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
@@ -375,8 +377,9 @@ function LayerRow (props) {
           {layerOptionsBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
-      </a>
-      <a
+      </button>
+      <button
+        type="button"
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
@@ -387,7 +390,7 @@ function LayerRow (props) {
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" />
-      </a>
+      </button>
     </>
   );
 
@@ -477,7 +480,8 @@ function LayerRow (props) {
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (
-        <a
+        <button
+          type="button"
           id={`hide${encodedLayerId}`}
           className={getVisibilityToggleClass()}
           aria-label={visibilityTitle}
@@ -493,12 +497,13 @@ function LayerRow (props) {
           </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
-        </a>
+        </button>
       )}
       {isChartingActive && (
         <>
           <div />
-          <a
+          <button
+            type="button"
             id={`activate-${encodedLayerId}`}
             className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
             onClick={() => makeActiveForCharting(layer.id)}
@@ -521,7 +526,7 @@ function LayerRow (props) {
                 className="charting-indicator"
               />
             )}
-          </a>
+          </button>
         </>
       )}
       <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />

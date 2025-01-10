@@ -711,41 +711,41 @@ p.recharts-tooltip-label {
 }
 
 /* Layers Info */
-.sidebar-panel li.item a.wv-layers-info {
+.sidebar-panel li.item button.wv-layers-info {
   color: #333;
   text-align: center;
 }
 
-.sidebar-panel li.item a.wv-layers-info .wv-layers-info-icon {
+.sidebar-panel li.item button.wv-layers-info .wv-layers-info-icon {
   border-color: #333;
 }
 
-.sidebar-panel li.item a.wv-layers-info.disabled {
+.sidebar-panel li.item button.wv-layers-info.disabled {
   color: #aaa;
 }
 
-.sidebar-panel li.item a.wv-layers-info.disabled .wv-layers-info-icon {
+.sidebar-panel li.item button.wv-layers-info.disabled .wv-layers-info-icon {
   border-color: #aaa;
 }
 
-.sidebar-panel li.item a.wv-layers-info.disabled:hover {
+.sidebar-panel li.item button.wv-layers-info.disabled:hover {
   cursor: no-drop;
   background-color: transparent;
 }
 
-.sidebar-panel li.layer-hidden a.wv-layers-info {
+.sidebar-panel li.layer-hidden button.wv-layers-info {
   color: #999;
 }
 
-.sidebar-panel li.layer-hidden a.wv-layers-info .wv-layers-info-icon {
+.sidebar-panel li.layer-hidden button.wv-layers-info .wv-layers-info-icon {
   border-color: #999;
 }
 
-.sidebar-panel li.layer-hidden a.wv-layers-info.disabled {
+.sidebar-panel li.layer-hidden button.wv-layers-info.disabled {
   color: #666;
 }
 
-.sidebar-panel li.layer-hidden a.wv-layers-info.disabled .wv-layers-info-icon {
+.sidebar-panel li.layer-hidden button.wv-layers-info.disabled .wv-layers-info-icon {
   border-color: #666;
 }
 

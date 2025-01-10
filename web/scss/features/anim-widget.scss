@@ -162,6 +162,7 @@
   }
 
   & > a,
+  & > button,
   & > div {
     display: inline-block;
     margin: 7px 0 0 10px;
@@ -179,6 +180,8 @@
     background: variables.$wv-dark-blue;
     position: relative;
     border-radius: 5px;
+    padding: 0;
+    border: none;
 
     &.disabled {
       cursor: not-allowed;
@@ -260,7 +263,7 @@
   }
 }
 
-a .wv-animation-widget-icon {
+button .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;

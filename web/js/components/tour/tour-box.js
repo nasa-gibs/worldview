@@ -17,6 +17,8 @@ class TourBox extends React.Component {
     if (backgroundImage) {
       this.setState({
         styles: {
+          border: 'none',
+          padding: '0',
           backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
         },
       });
@@ -29,6 +31,8 @@ class TourBox extends React.Component {
     if (backgroundImageHover) {
       this.setState({
         styles: {
+          border: 'none',
+          padding: '0',
           backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImageHover})`,
         },
       });
@@ -41,6 +45,8 @@ class TourBox extends React.Component {
     if (backgroundImage) {
       this.setState({
         styles: {
+          border: 'none',
+          padding: '0',
           backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
         },
       });
@@ -58,8 +64,8 @@ class TourBox extends React.Component {
       floatBox = ' tour-box-float';
     }
     return (
-      <a
-        href="#"
+      <button
+        type="button"
         style={styles}
         onMouseOver={(e) => this.onMouseOver(e)}
         onFocus={this.onMouseOver}
@@ -78,7 +84,7 @@ class TourBox extends React.Component {
             <p>{description}</p>
           </div>
         </div>
-      </a>
+      </button>
     );
   }
 }

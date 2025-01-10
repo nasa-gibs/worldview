@@ -106,6 +106,11 @@ function Event (props) {
    * Return date list for selected event
    */
   function renderDateLists() {
+    const buttonStyle = {
+      background: 'none',
+      border: 'none',
+      color: 'blue',
+    };
     if (event.geometry.length > 1) {
       return (
         <ul
@@ -126,7 +131,9 @@ function Event (props) {
                   </span>
                 )
                   : (
-                    <a
+                    <button
+                      type="button"
+                      style={buttonStyle}
                       className="'date item-selected"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -134,7 +141,7 @@ function Event (props) {
                       }}
                     >
                       {formatDisplayDate(date)}
-                    </a>
+                    </button>
                   )}
                 {magnitudeOutput(geometry)}
               </li>
