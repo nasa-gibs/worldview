@@ -8,6 +8,7 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
+  SET_SIZE,
   SET_DISABLED_CLASSIFICATION,
   LOADED_CUSTOM_PALETTES,
 } from './constants';
@@ -17,6 +18,7 @@ import {
   clearCustomSelector,
   refreshDisabledSelector,
   setDisabledSelector,
+  setSize as setSizeSelector,
 } from './selectors';
 
 /**
@@ -118,6 +120,27 @@ export function clearCustomPalette(layerId, index, groupName) {
       layerId,
       activeString: groupName,
       palettes: newActivePalettesObj,
+    });
+  };
+}
+
+export function setSize(layerId, size, index, groupName) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = setSizeSelector(
+      layerId,
+      size,
+      index,
+      state.palettes[groupName],
+      state,
+    );
+    dispatch({
+      type: SET_SIZE,
+      groupName,
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+      size,
     });
   };
 }

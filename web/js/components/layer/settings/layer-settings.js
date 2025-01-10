@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 
 import Opacity from './opacity';
 import Palette from './palette';
+import Size from './size';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
 import VectorStyle from './vector-style';
@@ -37,6 +38,7 @@ import {
   setThresholdRangeAndSquash,
   setCustomPalette,
   clearCustomPalette,
+  setSize,
   setToggledClassification,
   refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
@@ -337,14 +339,17 @@ class LayerSettings extends React.Component {
     let renderCustomizations;
     const {
       setOpacity,
+      setSize,
       customPalettesIsActive,
       layer,
       palettedAllowed,
       zot,
+      groupName,
     } = this.props;
     const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
     const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
     const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+    const pointSizeLayer = layer.type === 'vector' && layer.id === 'MODIS_Aqua_Thermal_Anomalies_All';
     const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
     const layerGroup = layer.layergroup;
 
@@ -366,6 +371,15 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
+        {pointSizeLayer && (
+        <Size
+          start={layer.size}
+          setSize={setSize}
+          layer={layer}
+          index={0}
+          groupName={groupName}
+        />
+        )}
         {this.renderGranuleSettings()}
         {renderCustomizations}
         {titilerLayer && <BandSelection layer={layer} />}
@@ -447,6 +461,9 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
+  setSize: (layerId, size, index, groupName) => {
+    dispatch(setSize(layerId, size, index, groupName));
+  },
   updateGranuleLayerOptions: (dates, def, count) => {
     dispatch(updateGranuleLayerOptions(dates, def, count));
   },
@@ -485,6 +502,7 @@ LayerSettings.propTypes = {
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
+  setSize: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
