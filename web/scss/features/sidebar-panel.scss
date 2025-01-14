@@ -3,7 +3,7 @@
 .sidebar-expand {
   position: relative;
 
-  > a {
+  > button {
     float: left;
     left: 10px;
     position: absolute;
@@ -257,7 +257,7 @@ li.item.productsitem.inmotion,
   border-color: #fff;
 }
 
-.productsitem a.visibility {
+.productsitem button.visibility {
   width: 30px;
   background-color: #ccc;
   position: absolute;
@@ -265,6 +265,11 @@ li.item.productsitem.inmotion,
   bottom: 0;
   cursor: pointer;
   border-right: 1px solid #333;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  text-align: left;
+  padding: 0;
 
   &.layer-enabled:hover {
     background: #fff;
@@ -387,12 +392,15 @@ li.item.productsitem.inmotion,
  * End -- Granule active footprint toggle *
  ************************************/
 
-.productsitem a.wv-layers-info,
-.productsitem a.wv-layers-options {
+.productsitem button.wv-layers-info,
+.productsitem button.wv-layers-options {
   position: relative;
   width: 20px;
   height: 20px;
   float: right;
+  border: none;
+  background:none;
+  padding: 0;
 }
 
 .productsitem.inmotion {
@@ -400,9 +408,9 @@ li.item.productsitem.inmotion,
   list-style: none;
 }
 
-.productsitem a.wv-layers-close:hover,
-.productsitem a.wv-layers-info:hover,
-.productsitem a.wv-layers-options:hover {
+.productsitem button.wv-layers-close:hover,
+.productsitem button.wv-layers-info:hover,
+.productsitem button.wv-layers-options:hover {
   background: #fff;
 }
 
@@ -413,7 +421,6 @@ li.item.productsitem.inmotion,
   text-align: center;
   border-radius: 50%;
   padding: 1px;
-  margin-top: 3px;
 }
 
 .layer-info svg.svg-inline--fa.wv-layers-options-icon {
@@ -426,11 +433,11 @@ li.item.productsitem.inmotion,
   margin-left: -6px;
 }
 
-.productsitem.layer-hidden a.wv-layers-options svg.svg-inline--fa.wv-layers-options-icon {
+.productsitem.layer-hidden button.wv-layers-options svg.svg-inline--fa.wv-layers-options-icon {
   background-position: -21px -69px;
 }
 
-.productsitem.layer-hidden a.wv-layers-options:hover svg.svg-inline--fa.wv-layers-options-icon {
+.productsitem.layer-hidden button.wv-layers-options:hover svg.svg-inline--fa.wv-layers-options-icon {
   background-position: 0 -69px;
 }
 
@@ -514,15 +521,17 @@ li.item.productsitem.inmotion,
   }
 }
 
-.productsitem a.button.wv-layers-close {
+.productsitem button.wv-layers-close {
   display: block;
   float: right;
   width: 20px;
   height: 20px;
   position: relative;
+  background: none;
+  border: none;
 }
 
-.productsitem a.button.wv-layers-close svg.svg-inline--fa {
+.productsitem button.wv-layers-close svg.svg-inline--fa {
   width: 12px;
   pointer-events: none;
   position: absolute;
@@ -604,7 +613,7 @@ li.item.productsitem.inmotion,
   height: 42px;
 }
 
-.productsitem.layer-hidden a.visibility {
+.productsitem.layer-hidden button.visibility {
   background: #666;
 }
 
@@ -613,12 +622,12 @@ li.item.productsitem.inmotion,
   cursor: default;
 }
 
-.disabled.layer-hidden a.visibility:hover {
+.disabled.layer-hidden button.visibility:hover {
   background: rgb(255 255 255 / 20%);
   cursor: default;
 }
 
-.productsitem.disabled.layer-hidden a.visibility:hover svg.svg-inline--fa {
+.productsitem.disabled.layer-hidden button.visibility:hover svg.svg-inline--fa {
   color: #c5c5c8;
 }
 
@@ -694,7 +703,7 @@ li.item.productsitem.inmotion,
       margin-top: -13px;
     }
 
-    a.visibility {
+    button.visibility {
       width: 45px;
     }
   }

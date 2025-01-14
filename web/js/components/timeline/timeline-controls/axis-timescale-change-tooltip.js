@@ -52,7 +52,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
           style={{ display: toolTipHovered ? 'block' : 'none' }}
         >
           <div id="timeline-zoom" className="timeline-zoom">
-            <label
+            <p
               style={{
                 textDecoration: 'underline',
                 paddingBottom: '4px',
@@ -60,7 +60,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
               }}
             >
               TIMESCALE
-            </label>
+            </p>
             <span
               id="zoom-years"
               className="zoom-btn zoom-years"
