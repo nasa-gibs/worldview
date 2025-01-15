@@ -162,7 +162,7 @@ class SearchLayerRow extends React.Component {
             </UncontrolledTooltip>
           </div>
         )}
-        <div className={headerClassName} onClick={this.onRowClick}>
+        <button type="button" className={headerClassName} onClick={this.onRowClick}>
           <RenderSplitLayerTitle layer={layer} />
           {recentLayerMode && showDeleteIcon && (
             <Button
@@ -174,7 +174,7 @@ class SearchLayerRow extends React.Component {
               <FontAwesomeIcon icon="trash" />
             </Button>
           )}
-        </div>
+        </button>
       </div>
     );
   }

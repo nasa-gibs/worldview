@@ -152,7 +152,8 @@ class CoordinatesDialog extends Component {
     const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
 
     return (
-      <div
+      <button
+        type="button"
         id={buttonId}
         className={buttonId}
         onClick={() => this.copyToClipboard(formattedCoordinates)}
@@ -169,7 +170,7 @@ class CoordinatesDialog extends Component {
           </UncontrolledTooltip>
         )}
         <FontAwesomeIcon icon="copy" fixedWidth />
-      </div>
+      </button>
     );
   };
 
