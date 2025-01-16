@@ -228,6 +228,9 @@ button:focus {
     width: 35px;
     margin: auto;
     text-align: center;
+    background: none;
+    border: none;
+    padding: 0;
   }
 
   & .date-arrows svg {
@@ -324,6 +327,7 @@ button:focus {
     top: 16px;
     right: 4px;
     background-color: transparent;
+    border: none;
 
     & svg {
       top: 5px;
@@ -372,6 +376,8 @@ button:focus {
   width: 40px;
   vertical-align: middle;
   position: relative;
+  background: none;
+  border: none;
 }
 
 .date-arrow-wrapper {
@@ -569,6 +575,9 @@ button:focus {
 #timeline-header #timeline-interval-btn-container,
 #zoom-btn-container-axis {
   display: block;
+  background: none;
+  border: none;
+  width: 100%;
 }
 
 .timeline-container .wv-tooltip {
@@ -638,6 +647,22 @@ button:focus {
   line-height: 16px;
   color: #ccc;
   padding: 2px 0;
+  background: none;
+  border: none;
+  width: 100%;
+}
+
+.interval-list-btn {
+  display: block;
+  clear: both;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: variables.$wv-monospace-font;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ccc;
+  padding: 2px 0;
 }
 
 .zoom-btn:hover,
@@ -656,6 +681,9 @@ button:focus {
   border-left: variables.$wv-dark-menu-border;
   border-top-right-radius: variables.$wv-menu-border-radius;
   border-bottom-right-radius: variables.$wv-menu-border-radius;
+  border-right: none;
+  background: none;
+  padding: 0;
 }
 
 #timeline-hide:hover,

@@ -41,11 +41,20 @@ function AnimationButton(props) {
   };
 
   const buttonClass = getButtonClassName();
+  let className = `button-action-group mobile-animate-button animate-button-${buttonClass}`;
+  if (isKioskModeActive) {
+    className = 'd-none';
+  } else if (disabled) {
+    className = 'wv-disabled-button button-action-group animate-button';
+  } else if (!isMobile && !isEmbedModeActive) {
+    className = 'button-action-group animate-button';
+  }
 
   return (
-    <div
+    <button
+      type="button"
       onClick={clickAnimationButton}
-      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={className}
       aria-label={labelText}
     >
       <div id={buttonId}>
@@ -61,7 +70,7 @@ function AnimationButton(props) {
           )}
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
       </div>
-    </div>
+    </button>
   );
 }
 
