@@ -475,6 +475,7 @@ button:focus {
   vertical-align: middle;
   box-sizing: border-box;
   width: 55px;
+  border: none;
 }
 
 /* Interval selector */
@@ -569,7 +570,7 @@ button:focus {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding: 4px;
+  padding: 0;
   background-color: variables.$wv-transparent-black;
   border-radius: 3px;
 }
