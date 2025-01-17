@@ -217,14 +217,12 @@ class TimeScaleIntervalChange extends PureComponent {
         onMouseLeave={() => this.setTooltipState(false)}
         onClick={this.onClick}
       >
-
         <span
           id="current-interval"
           className={className}
         >
           {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
         </span>
-
         {!isDisabled ? this.renderTooltip() : null}
 
       </button>

@@ -1254,13 +1254,13 @@ class Timeline extends React.Component {
                       />
                     </div>
                     <div id="zoom-buttons-group" className={isKioskModeActive ? 'd-none' : ''}>
-
-                      <TimeScaleIntervalChange
-                        timeScaleChangeUnit={timeScaleChangeUnit}
-                        hasSubdailyLayers={hasSubdailyLayers}
-                        modalType={customModalType.TIMELINE}
-                      />
-
+                      <div style={{ width: '90px', display: 'block' }}>
+                        <TimeScaleIntervalChange
+                          timeScaleChangeUnit={timeScaleChangeUnit}
+                          hasSubdailyLayers={hasSubdailyLayers}
+                          modalType={customModalType.TIMELINE}
+                        />
+                      </div>
                       {this.renderDateChangeArrows()}
                     </div>
                     <AnimationButton

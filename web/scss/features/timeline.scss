@@ -291,6 +291,8 @@ button:focus {
     width: 34px;
     height: 34px;
     margin-top: -1.5px;
+    padding: 0;
+    vertical-align: top;
 
     svg {
       left: 15px;
@@ -574,10 +576,11 @@ button:focus {
 
 #timeline-header #timeline-interval-btn-container,
 #zoom-btn-container-axis {
+  color: white;
   display: block;
   background: none;
   border: none;
-  width: 100%;
+  width: inherit;
 }
 
 .timeline-container .wv-tooltip {
@@ -610,13 +613,12 @@ button:focus {
 
 .zoom-btn-active,
 .interval-btn-active {
-  width: 90px;
+  width: inherit;
   color: #ccc;
   font-size: 12px;
   line-height: 14px;
   display: block;
   clear: both;
-  cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   font-family: variables.$wv-monospace-font;
@@ -655,13 +657,12 @@ button:focus {
 .interval-list-btn {
   display: block;
   clear: both;
-  cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   font-family: variables.$wv-monospace-font;
   font-size: 14px;
   line-height: 16px;
-  color: #ccc;
+  color: inherit;
   padding: 2px 0;
 }
 
