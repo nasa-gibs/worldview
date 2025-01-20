@@ -336,6 +336,7 @@ function UpdateProjection(props) {
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
       case paletteConstants.SET_SIZE:
+      case paletteConstants.CLEAR_SIZE:
       case layerConstants.ADD_LAYERS_FOR_EVENT:
         return setTimeout(reloadLayers, 100);
       case vectorStyleConstants.SET_FILTER_RANGE:

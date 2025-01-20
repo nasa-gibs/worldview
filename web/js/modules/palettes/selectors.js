@@ -516,6 +516,23 @@ export function setSize(layerId, size, index, palettes, state) {
   return updateLookup(layerId, newPalettes, state);
 }
 
+export function clearSize(layerId, index, palettes, state) {
+  index = lodashIsUndefined(index) ? 0 : index;
+  const active = palettes[layerId];
+  if (!active) {
+    return palettes;
+  }
+  const palette = active.maps[index];
+  if (!palette.size) {
+    return palettes;
+  }
+  delete palette.size;
+  const newPalettes = update(palettes, {
+    [layerId]: { maps: { [index]: { $set: palette } } },
+  }); // remove size key
+  return updateLookup(layerId, newPalettes, state);
+}
+
 export function isPaletteAllowed(layerId, config) {
   const { palette } = config.layers[layerId];
   if (!palette || palette.immutable) {

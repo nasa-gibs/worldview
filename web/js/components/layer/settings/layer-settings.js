@@ -39,6 +39,7 @@ import {
   setCustomPalette,
   clearCustomPalette,
   setSize,
+  clearSize,
   setToggledClassification,
   refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
@@ -340,6 +341,7 @@ class LayerSettings extends React.Component {
     const {
       setOpacity,
       setSize,
+      clearSize,
       customPalettesIsActive,
       layer,
       palettedAllowed,
@@ -375,6 +377,7 @@ class LayerSettings extends React.Component {
         <Size
           start={layer.size}
           setSize={setSize}
+          clearSize={clearSize}
           layer={layer}
           index={0}
           groupName={groupName}
@@ -464,6 +467,9 @@ const mapDispatchToProps = (dispatch) => ({
   setSize: (layerId, size, index, groupName) => {
     dispatch(setSize(layerId, size, index, groupName));
   },
+  clearSize: (layerId, index, groupName) => {
+    dispatch(clearSize(layerId, index, groupName));
+  },
   updateGranuleLayerOptions: (dates, def, count) => {
     dispatch(updateGranuleLayerOptions(dates, def, count));
   },
@@ -503,6 +509,7 @@ LayerSettings.propTypes = {
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
   setSize: PropTypes.func,
+  clearSize: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,

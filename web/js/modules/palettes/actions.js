@@ -9,6 +9,7 @@ import {
   CLEAR_CUSTOM,
   SET_CUSTOM,
   SET_SIZE,
+  CLEAR_SIZE,
   SET_DISABLED_CLASSIFICATION,
   LOADED_CUSTOM_PALETTES,
 } from './constants';
@@ -19,6 +20,7 @@ import {
   refreshDisabledSelector,
   setDisabledSelector,
   setSize as setSizeSelector,
+  clearSize as clearSizeSelector,
 } from './selectors';
 
 /**
@@ -145,6 +147,26 @@ export function setSize(layerId, size, index, groupName) {
   };
 }
 
+export function clearSize(layerId, index, groupName) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = clearSizeSelector(
+      layerId,
+      undefined,
+      index,
+      state.palettes[groupName],
+      state,
+    );
+    dispatch({
+      type: CLEAR_SIZE,
+      groupName,
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+    });
+  };
+}
+
 export function setToggledClassification(layerId, classIndex, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
@@ -210,6 +232,9 @@ export function clearCustoms() {
         if (colormap.disabled) {
           dispatch(setToggledClassification(key, undefined, index, groupName));
         }
+        if (colormap.size) {
+          dispatch(clearSize(key, index, groupName));
+        }
       });
     });
   };
@@ -266,6 +291,9 @@ export function refreshPalettes(activePalettes) {
         }
         if (colormap.disabled) {
           dispatch(refreshDisabledClassification(key, colormap.disabled, index, groupName));
+        }
+        if (colormap.size) {
+          dispatch(setSize(key, colormap.size, index, groupName));
         }
       });
     });
