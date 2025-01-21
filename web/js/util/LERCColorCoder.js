@@ -364,7 +364,7 @@ function drawTile(
                 if (value > max) {
                     value = max;
                 }
-                var colors = color(color_scale, value, min, max);
+                var colors = color(value, min, max);
                 image.data[j * 4] = colors[0];
                 image.data[j * 4 + 1] = colors[1];
                 image.data[j * 4 + 2] = colors[2];
@@ -420,48 +420,8 @@ function isEqual(arr1, arr2) {
 }
 
 /* All of the color functions */
-var color = function(color, value, min, max) {
-    switch (color) {
-        case "Grayscale/Scalar":
-            return colorScales.getGreyScalar(value, min, max);
-            break;
-        case "Grayscale/Logarithmic":
-            return colorScales.getGreyLog(value, min, max);
-            break;
-        case "Jet/Scalar":
-            return colorScales.getJetScalar(value, min, max);
-            break;
-        case "Jet/Logarithmic":
-            return colorScales.getJetLog(value, min, max);
-            break;
-        case "Panoply-diff/Scalar":
-            return colorScales.getPanoplyScalar(value, min, max);
-            break;
-        case "Panoply-diff/Logarithmic":
-            return colorScales.getPanoplyLog(value, min, max);
-            break;
-        case "Parula/Scalar":
-            return colorScales.getParulaScalar(value, min, max);
-            break;
-        case "Parula/Logarithmic":
-            return colorScales.getParulaLog(value, min, max);
-            break;
-        case "Red-Blue/Scalar":
-            return colorScales.getRedBlueScalar(value, min, max);
-            break;
-        case "Red-Blue/Logarithmic":
-            return colorScales.getRedBlueLog(value, min, max);
-            break;
-        case "Cube-Helix/Scalar":
-            return colorScales.getCubeHelixScalar(value, min, max);
-            break;
-        case "Cube-Helix/Logarithmic":
-            return colorScales.getCubeHelixLog(value, min, max);
-            break;
-        case "Diverging":
-            return colorScales.getDiverging(value, min, max);
-            break;
-    }
+var color = function(value, min, max) {
+    return colorScales.getGreyScalar(value, min, max);
 };
 
 /* Finds and draws difference between two layers */
