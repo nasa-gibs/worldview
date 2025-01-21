@@ -678,13 +678,14 @@ button:focus {
   right: 0;
   height: 64px;
   width: 20px;
-  cursor: pointer;
   border-left: variables.$wv-dark-menu-border;
   border-top-right-radius: variables.$wv-menu-border-radius;
   border-bottom-right-radius: variables.$wv-menu-border-radius;
   border-right: none;
   background: none;
   padding: 0;
+  border-top: none;
+  border-bottom: none;
 }
 
 #timeline-hide:hover,
