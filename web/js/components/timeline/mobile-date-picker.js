@@ -125,14 +125,15 @@ function MobileDatePicker(props) {
   return (
     time && (
       <>
-        <div
+        <button
+          type="button"
           className="mobile-date-picker-select-btn"
           onClick={handleClickDateButton}
         >
           <div className="mobile-date-picker-select-btn-text">
             <span>{displayDate}</span>
           </div>
-        </div>
+        </button>
         <DatePicker
           dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
           showCaption

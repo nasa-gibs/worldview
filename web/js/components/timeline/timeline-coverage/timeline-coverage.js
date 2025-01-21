@@ -410,7 +410,8 @@ class TimelineLayerCoveragePanel extends Component {
     return (
       <>
         {/* Timeline Layer Coverage Panel open/close handle */}
-        <div
+        <button
+          type="button"
           id="timeline-layer-coverage-panel-handle"
           aria-label={panelToggleLabelText}
           onClick={this.togglePanelOpenClose}
@@ -420,7 +421,7 @@ class TimelineLayerCoveragePanel extends Component {
             {panelToggleLabelText}
           </UncontrolledTooltip>
           <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
-        </div>
+        </button>
         <div
           className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
           style={panelContainerStyle}

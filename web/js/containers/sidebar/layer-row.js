@@ -403,7 +403,8 @@ function LayerRow (props) {
       : 'Zoom in further to click features.';
     const layerVectorBtnId = `layer-vector-hand-btn-${encodedLayerId}`;
     return (
-      <div
+      <button
+        type="button"
         id={layerVectorBtnId}
         aria-label={title}
         className={runningDataObj ? `${classNames} running` : classNames}
@@ -414,7 +415,7 @@ function LayerRow (props) {
           {title}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="hand-pointer" fixedWidth />
-      </div>
+      </button>
     );
   };
 
