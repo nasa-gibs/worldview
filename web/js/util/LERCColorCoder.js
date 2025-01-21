@@ -7,6 +7,10 @@
 */
 import LERC from "./LercCodec";
 import * as colorScales from "./color_scales";
+import {
+    getPalette,
+    getPaletteLegend,
+  } from '../modules/palettes/selectors';
 
 /* Stores all the pixel data for each layer */
 var layer_array = new Array();
@@ -52,7 +56,16 @@ function parseMinOrMax(value, min) {
     }
 }
 
-export function tileLoader(tile, src, layer, map, tilegrid) {
+/**
+ * GRACEAL add comment here
+ * @param {*} tile
+ * @param {*} src
+ * @param {*} layer
+ * @param {*} map
+ * @param {*} state
+ * @param {*} tilegrid
+ */
+export function tileLoader(tile, src, layer, map, state, tilegrid) {
     console.log("graceal1 in tileloader function");
     console.log(tile);
     console.log(src);
@@ -76,6 +89,7 @@ export function tileLoader(tile, src, layer, map, tilegrid) {
             return response.arrayBuffer();
         })
         .then(buffer => {
+            console.log("graceal1 successfully got the lerc layer request");
             // graceal how do I find no data value?
             //let noDataValue = determineNoDataValue(layer.get("id"));
             const decodedData = lercCodec.decode(buffer, { returnMask: true });
@@ -141,36 +155,38 @@ export function tileLoader(tile, src, layer, map, tilegrid) {
             // copy pixelData to new array with a deep copy, and pass that into drawTiles
 
             let size = tilegrid.getTileSize(zoom);
-            let color_scale = layer.custom;
             let difference = false; // graceal this might need to change at some point
             let average = false; // graceal this might need to change at some point
             let opacity = 255;
             let filter = false;
-            // graceal need to find this correctly to get min/ max
-            const layerColorTable = null;
-            //const layerColorTable = ColorTableManager.getLayerColorTable(layer.get("id"));
-            // min and max from the layer are only defined after the thresholds have been changes once
-            let min = layer.min;
-            let max = layer.max;
-            min = parseMinOrMax(
-                layerColorTable.getValuesByRangeFraction(layer.get("rangeMin")),
-                true
-            );
-            max = parseMinOrMax(
-                layerColorTable.getValuesByRangeFraction(layer.get("rangeMax")),
-                false
-            );
+            console.log("graceal1 layer is ");
+            console.log(layer);
+            const palette = getPalette(layer.id, 0, "active", state);
+            const legend = getPaletteLegend(layer.id, 0, "active", state);
+            console.log("graceal1 trying to get palette and legend");
+            console.log(palette);
+            console.log(legend);
+            let color_scale = palette.legend.colors;
+            console.log("graceal1 color_scale is ");
+            console.log(color_scale);
+
+            const max = palette.legend.colors.length - 1;
+            const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
+            const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
+            console.log("graceal1 min and max are");
+            console.log(start);
+            console.log(end);
+            console.log(max);
 
             drawTile(
-                mapLayer,
                 pixelData,
                 ctx,
                 tile, //or maybe img? was visibleTiles before
                 tilegrid,
                 size,
                 color_scale,
-                min /*this is wrong range[0], 0 works well*/,
-                max /*this is wrong range[1], 300 works well*/,
+                start /*this is wrong range[0], 0 works well*/,
+                end /*this is wrong range[1], 300 works well*/,
                 opacity, // this could be adjusted one day, but fine for now
                 filter, // this could be adjusted one day, but fine for now (this would mean range values need to be correct)
                 difference,
@@ -267,7 +283,6 @@ function getRange(pixelData) {
 * using the color_scale and min, max specified.
 */
 function drawTile(
-    mapLayer,
     pixelData,
     context,
     tile,

@@ -113,6 +113,9 @@ class LayerSettings extends React.Component {
       );
       const palette = getPalette(layer.id, i);
       const max = legend.colors.length - 1;
+      console.log("graceal1 in layer-settings and palette min and max is ");
+      console.log(palette.min);
+      console.log(palette.max);
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
@@ -215,6 +218,10 @@ class LayerSettings extends React.Component {
     const len = paletteLegends.length;
     const palette = getPalette(layer.id, 0);
     const legend = getPaletteLegend(layer.id, 0);
+    console.log("graceal1 in renderCustomPalettes and legend and palette are");
+    console.log(legend);
+    console.log(palette);
+    console.log(groupName);
     const max = palette.legend.colors.length - 1;
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
