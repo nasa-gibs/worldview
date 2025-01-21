@@ -152,7 +152,6 @@ export function clearSize(layerId, index, groupName) {
     const state = getState();
     const newActivePalettesObj = clearSizeSelector(
       layerId,
-      undefined,
       index,
       state.palettes[groupName],
       state,
