@@ -1513,9 +1513,7 @@ class TimelineAxis extends Component {
         onMouseUp={this.setLineTime}
         onWheel={this.handleWheelType}
         onMouseOver={this.showHoverOn}
-        onFocus={this.showHoverOn}
         onMouseLeave={showHoverOff}
-        onBlur={showHoverOff}
         onTouchStart={this.handleMouseDown}
         onTouchEnd={this.setLineTimeTouch}
       >

@@ -145,9 +145,6 @@
     & .interval-btn.interval-btn-active {
       color: #ce4c21;
       display: inline;
-      background: none;
-      border: none;
-      padding: 0;
 
       &.disabled {
         color: #fff;
@@ -165,7 +162,6 @@
   }
 
   & > a,
-  & > button,
   & > div {
     display: inline-block;
     margin: 7px 0 0 10px;
@@ -183,8 +179,6 @@
     background: variables.$wv-dark-blue;
     position: relative;
     border-radius: 5px;
-    padding: 0;
-    border: none;
 
     &.disabled {
       cursor: not-allowed;
@@ -266,7 +260,7 @@
   }
 }
 
-button .wv-animation-widget-icon {
+a .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;

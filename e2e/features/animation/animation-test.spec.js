@@ -64,8 +64,8 @@ test('Disable playback when max frames exceeded', async () => {
   const { playButton, yearStartInput } = selectors
   await page.goto(animationGeostationary)
   await closeModal(page)
-  const animateYearDown = page.locator('.wv-date-range-selector > div > div > button:nth-child(3) > svg.downarrow').first()
-  const animateYearUp = page.locator('.wv-date-range-selector > div > div > button > svg.uparrow').first()
+  const animateYearDown = page.locator('.wv-date-range-selector > div > div > div:nth-child(3) > svg.downarrow').first()
+  const animateYearUp = page.locator('.wv-date-range-selector > div > div > div > svg.uparrow').first()
   await animateYearDown.click()
   await expect(playButton).toHaveClass(/disabled/)
   // Playback re-enabled when frames within the max

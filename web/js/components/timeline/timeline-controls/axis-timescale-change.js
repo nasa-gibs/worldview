@@ -95,7 +95,6 @@ class AxisTimeScaleChange extends PureComponent {
         { timeScale
           ? (
             <div
-              style={{ display: 'inline-block' }}
               onMouseEnter={this.toolTipHoverOn}
               onMouseLeave={this.toolTipHoverOff}
             >
