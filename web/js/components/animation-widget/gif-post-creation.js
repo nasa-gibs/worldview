@@ -61,7 +61,7 @@ export default class GifResults extends Component {
         <ModalHeader close={closeBtn}>GIF Results</ModalHeader>
         <ModalBody>
           <div className="gif-results-dialog-case clearfix">
-            <img src={blobURL} width={imgElWidth} height={imgElHeight} />
+            <img alt="GIF preview" src={blobURL} width={imgElWidth} height={imgElHeight} />
             <div
               className="gif-results-dialog"
               style={{ minHeight: 210 }}

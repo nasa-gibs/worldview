@@ -170,6 +170,9 @@
       overflow: hidden;
       box-sizing: border-box;
       text-decoration: none;
+      background: none;
+      text-align: left;
+      border: none;
     }
 
     & .layer-category-name:hover {
@@ -223,6 +226,10 @@
   position: relative;
   cursor: pointer;
   min-height: 44px;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: start;
 
   & .arrow-icon {
     color: #d54e21;
@@ -335,6 +342,7 @@
   background: #333;
   border-top: 2px solid #d54e21;
   box-shadow: 0 -2px 16px rgb(0 0 0 / 35%);
+  width: 100%;
 }
 
 .layers-all .metadata-more:hover,

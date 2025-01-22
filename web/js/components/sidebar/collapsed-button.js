@@ -18,7 +18,8 @@ class CollapsedButton extends PureComponent {
       <div
         className={classes}
       >
-        <a
+        <button
+          type="button"
           id={buttonId}
           aria-label={labelText}
           onClick={onclick}
@@ -40,7 +41,7 @@ class CollapsedButton extends PureComponent {
               </span>
             )}
           {!isMobile && <FontAwesomeIcon className="expand-icon" icon="caret-down" />}
-        </a>
+        </button>
       </div>
     );
   }

@@ -58,8 +58,10 @@ function MeasurementMetadataDetail (props) {
                 href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
                 rel="noopener noreferrer"
                 target="_blank"
+                aria-label="View layer preview"
               >
                 <img
+                  alt="Layer preview"
                   className="img-fluid layer-preview"
                   src={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
                 />
@@ -85,14 +87,15 @@ function MeasurementMetadataDetail (props) {
           {renderMetadataForLayers()}
         </div>
         {doesMetaDataNeedExpander && (
-          <div
+          <button
+            type="button"
             className="metadata-more"
             onClick={() => setMetadataExpansion(!isMetadataExpanded)}
           >
             <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
               {isMetadataExpanded ? '^' : '...'}
             </span>
-          </div>
+          </button>
         )}
       </div>
     );

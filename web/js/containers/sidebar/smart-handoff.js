@@ -513,9 +513,14 @@ class SmartHandoff extends Component {
               </h1>
               <hr />
               <h2>
-                <a className="help-link" onClick={showNotAvailableModal}>
+                <button
+                  type="button"
+                  style={{ border: 'none', background: 'none', padding: '0' }}
+                  className="help-link"
+                  onClick={showNotAvailableModal}
+                >
                   Why are my layers not available?
-                </a>
+                </button>
               </h2>
             </>
           )}
@@ -585,9 +590,14 @@ class SmartHandoff extends Component {
             application.
           </div>
           <h2>
-            <a className="help-link" onClick={showNotAvailableModal}>
+            <button
+              type="button"
+              style={{ border: 'none', background: 'none', padding: '0' }}
+              className="help-link"
+              onClick={showNotAvailableModal}
+            >
               Why are some layers not available?
-            </a>
+            </button>
           </h2>
           <hr />
           {this.renderLayerChoices()}

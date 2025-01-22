@@ -113,6 +113,9 @@
 .date-arrows {
   display: block;
   height: 10px;
+  background: none;
+  border: none;
+  width: 100%;
 }
 
 .zoom-level-change-arrows .date-arrows {
@@ -120,6 +123,9 @@
   margin-top: -5px;
   padding-bottom: 20px;
   margin-bottom: 5px;
+  background: none;
+  border: none;
+  width: 100%;
 }
 
 .wv-date-selector-widget .date-arrows svg,

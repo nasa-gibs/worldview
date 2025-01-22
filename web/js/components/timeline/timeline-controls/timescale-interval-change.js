@@ -131,60 +131,67 @@ class TimeScaleIntervalChange extends PureComponent {
         style={{ display: toolTipHovered ? 'block' : 'none' }}
       >
         <div id="timeline-interval" className="timeline-interval">
-          <span
+          <button
+            type="button"
             id="interval-years"
             className="interval-btn interval-years"
             onClick={() => this.handleClickInterval('year')}
           >
             Year
-          </span>
-          <span
+          </button>
+          <button
+            type="button"
             id="interval-months"
             className="interval-btn interval-months"
             onClick={() => this.handleClickInterval('month')}
           >
             Month
-          </span>
-          <span
+          </button>
+          <button
+            type="button"
             id="interval-days"
             className="interval-btn interval-days"
             onClick={() => this.handleClickInterval('day')}
           >
             Day
-          </span>
+          </button>
           {hasSubdailyLayers ? (
             <>
-              <span
+              <button
+                type="button"
                 id="interval-hours"
                 className="interval-btn interval-hours"
                 onClick={() => this.handleClickInterval('hour')}
               >
                 Hour
-              </span>
-              <span
+              </button>
+              <button
+                type="button"
                 id="interval-minutes"
                 className="interval-btn interval-minutes"
                 onClick={() => this.handleClickInterval('minute')}
               >
                 Minute
-              </span>
+              </button>
             </>
           ) : null}
-          <span
+          <button
+            type="button"
             id="interval-custom"
             className="interval-btn interval-custom custom-interval-text"
             style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
             onClick={() => this.handleClickInterval('custom')}
           >
             {customIntervalText}
-          </span>
-          <span
+          </button>
+          <button
+            type="button"
             id="interval-custom-static"
             className="interval-btn interval-custom custom-interval-text"
             onClick={() => this.handleClickInterval('custom', true)}
           >
             Custom
-          </span>
+          </button>
         </div>
       </div>
     );
@@ -200,26 +207,25 @@ class TimeScaleIntervalChange extends PureComponent {
       isDisabled,
     } = this.props;
 
-    const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
+    const className = `no-drag interval-list-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
     return (
-      <div
+      <button
+        type="button"
         id="timeline-interval-btn-container"
         className="interval-btn-container noselect no-drag"
         onMouseEnter={() => this.setTooltipState(true)}
         onMouseLeave={() => this.setTooltipState(false)}
         onClick={this.onClick}
       >
-
         <span
           id="current-interval"
           className={className}
         >
           {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
         </span>
-
         {!isDisabled ? this.renderTooltip() : null}
 
-      </div>
+      </button>
     );
   }
 }
