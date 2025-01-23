@@ -23,7 +23,7 @@ function SizeSelect(props) {
 
   return (
     <div className="layer-size-select settings-component">
-      <h2 className="wv-header">Point Size</h2>
+      <h2 className="wv-header">Point Radius</h2>
       <input
         type="range"
         className="form-range"
@@ -39,6 +39,7 @@ function SizeSelect(props) {
       />
       <div className="wv-label wv-label-size mt-1">
         {value <= 0 ? 1 : value}
+        px
       </div>
     </div>
   );
