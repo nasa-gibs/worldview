@@ -67,6 +67,7 @@ function Switch(props) {
         <span
           className="switch-label-text"
           onClick={toggleSwitch}
+          onKeyDown={onKeyDown}
         >
           {label}
         </span>

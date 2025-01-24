@@ -81,16 +81,23 @@ function MobileAnimationWidget (props) {
     onUpdateEndDate(dateObj);
   };
 
+  const buttonStyle = {
+    background: 'none',
+    border: 'none',
+  };
+
   return (
     <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
       <div className="mobile-animation-header" style={{ justifyContent: isEmbedModeActive ? 'flex-start' : 'flex-end' }}>
-        <span
+        <button
+          type="button"
+          style={buttonStyle}
           aria-label="Close"
           onClick={toggleCollapse}
           id="mobile-animation-close"
         >
           <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
-        </span>
+        </button>
       </div>
       <div className="mobile-animation-warning-message-container">
         <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>

@@ -126,6 +126,7 @@ function Event (props) {
                   <span
                     className="active"
                     onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
                   >
                     {formatDisplayDate(date)}
                   </span>

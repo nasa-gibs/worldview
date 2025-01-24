@@ -61,43 +61,48 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             >
               TIMESCALE
             </p>
-            <span
+            <button
+              type="button"
               id="zoom-years"
               className="zoom-btn zoom-years"
               onClick={this.changeTimeScaleYear}
             >
               YEAR
-            </span>
-            <span
+            </button>
+            <button
+              type="button"
               id="zoom-months"
               className="zoom-btn zoom-months"
               onClick={this.changeTimeScaleMonth}
             >
               MONTH
-            </span>
-            <span
+            </button>
+            <button
+              type="button"
               id="zoom-days"
               className="zoom-btn zoom-days"
               onClick={this.changeTimeScaleDay}
             >
               DAY
-            </span>
+            </button>
             {hasSubdailyLayers ? (
               <>
-                <span
+                <button
+                  type="button"
                   id="zoom-hours"
                   className="zoom-btn zoom-hours"
                   onClick={this.changeTimeScaleHour}
                 >
                   HOUR
-                </span>
-                <span
+                </button>
+                <button
+                  type="button"
                   id="zoom-minutes"
                   className="zoom-btn zoom-minutes"
                   onClick={this.changeTimeScaleMinute}
                 >
                   MINUTE
-                </span>
+                </button>
               </>
             ) : null}
           </div>

@@ -67,7 +67,7 @@ export default function DateRanges ({ layer }) {
       >
         <button
           type="button"
-          style={{ background: 'none', border: 'none', color: 'white' }}
+          style={{ background: 'none', border: 'none', color: 'inherit' }}
           onClick={() => {
             getDateRanges();
             setShowRanges(!showRanges);

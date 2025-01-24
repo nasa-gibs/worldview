@@ -95,9 +95,9 @@ function SmartHandoffModal({
       </div>
       )}
 
-      <div className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
+      <button type="button" className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
         <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
-      </div>
+      </button>
 
       <div className="smart-handoff-layer-info">
 

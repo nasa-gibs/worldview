@@ -100,7 +100,6 @@
         "import/no-cycle": "warn",
         // Accesibility rules overrides
         "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
-        "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files
         // React rules overrides
         "react/jsx-props-no-spreading": "warn",                   // 6 errors across 2 files
         "react/jsx-filename-extension": "off",                    // 206 errors across 206 files

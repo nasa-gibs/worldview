@@ -82,6 +82,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: none;
 
   svg.collapse-icon {
     height: 22px;
@@ -327,6 +328,9 @@ li.item.productsitem.inmotion,
   position: absolute;
   right: 4px;
   bottom: 7px;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 .productsitem .layer-pointer-icon svg.svg-inline--fa {
