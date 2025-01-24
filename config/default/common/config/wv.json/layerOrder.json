@@ -1,5 +1,6 @@
 {
 	"layerOrder": [
+    "NOAA_2025_ERI_WMTS",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
