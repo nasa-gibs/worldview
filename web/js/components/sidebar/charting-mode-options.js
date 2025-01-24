@@ -287,7 +287,7 @@ function ChartingModeOptions(props) {
       const data = await getImageStatData(requestURI);
 
       if (!data.ok) {
-        updateChartRequestStatus(false, 'Chart request failed.');
+        updateChartRequestStatus(false, 'An error has occurred while requesting the charting data. Please try again in a few minutes.');
         return;
       }
 
