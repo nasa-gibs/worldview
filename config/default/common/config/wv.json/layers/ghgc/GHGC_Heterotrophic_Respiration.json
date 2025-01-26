@@ -1,0 +1,28 @@
+{
+    "layers": {
+      "GHGC_Heterotrophic_Respiration": {
+        "id": "GHGC_Heterotrophic_Respiration",
+        "layerName": "rh",
+        "title": "Heterotrophic Respiration",
+        "subtitle": "U.S. Greenhouse Gas Center",
+        "description": "ghgc/Heterotrophic_Respiration",
+        "tags": "ghgc rh",
+        "group": "overlays",
+        "layergroup": "Reference",
+        "format": "image/png",
+        "type": "titiler",
+        "disableSnapshot": true,
+        "wrapX": true,
+        "colormapName": "purd",
+        "rescale": "0,0.3",
+        "period": "monthly",
+        "projections": {
+          "geographic": {
+            "source": "GHGC:geographic"
+          }
+        },
+        "startDate": "2003-01-01T00:00:00Z",
+        "endDate": "2017-12-31T23:59:59Z"
+      }
+    }
+  }
