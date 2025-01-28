@@ -2,10 +2,9 @@
   "layers": {
     "NOAA_2025_ERI_WMTS": {
       "id": "NOAA_2025_ERI_WMTS",
-      "layerName": "maxar",
-      "title": "MAXAR",
-      "subtitle": "NOAA-2025_ERI-WMTS",
-      "description": "",
+      "title": "Reflectance (True Color): January 2025 California Fires",
+      "subtitle": "Maxar Constellation",
+      "description": "maxar/NOAA_2025_ERI_WMTS",
       "group": "overlays",
       "tags": "maxar noaa",
       "format": "image/jpgpng",
@@ -34,7 +33,7 @@
         ["2025-01-20", "2025-01-21"]
       ],
       "disableSnapshot": true,
-      "layergroup": "Base Layers",
+      "layergroup": "Corrected Reflectance",
       "wrapX": true,
       "projections": {
         "geographic": {

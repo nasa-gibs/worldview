@@ -1,0 +1,20 @@
+{
+  "measurements": {
+      "Disaster Response": {
+          "id": "disaster-response",
+          "title":    "Disaster Response",
+          "subtitle": "Assorted Sources",
+          "sources": {
+              "NOAA_2025_ERI_WMTS": {
+                  "id": "NOAA_2025_ERI_WMTS",
+                  "title": "Maxar Constellation",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "NOAA_2025_ERI_WMTS"
+                  ]
+              }
+          }
+      }
+  }
+}
