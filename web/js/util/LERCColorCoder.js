@@ -10,7 +10,9 @@ import * as colorScales from "./color_scales";
 import {
     getPalette,
     getPaletteLegend,
+    getLookup as getPaletteLookup,
   } from '../modules/palettes/selectors';
+import { cloneDeep as lodashCloneDeep } from 'lodash';
 
 /* Stores all the pixel data for each layer */
 var layer_array = new Array();
@@ -66,7 +68,8 @@ function parseMinOrMax(value, min) {
  * @param {*} tilegrid
  */
 export function tileLoader(tile, src, layer, map, state, tilegrid) {
-    console.log("graceal1 in tileloader function");
+    console.log("graceal1 in tileloader function with state");
+    console.log(state);
     console.log(tile);
     console.log(src);
     console.log(layer);
@@ -78,6 +81,9 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
     const STATE_LOADING = 1;
     const STATE_LOADED = 2;
     const STATE_ERROR = 3;
+
+    // check if palette changed
+
     // load in the image with crossOrigin allowances
     tile.state = STATE_LOADING;
     tile.changed();
@@ -161,11 +167,16 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
             let filter = false;
             console.log("graceal1 layer is ");
             console.log(layer);
+            console.log(state);
             const palette = getPalette(layer.id, 0, "active", state);
             const legend = getPaletteLegend(layer.id, 0, "active", state);
-            console.log("graceal1 trying to get palette and legend");
+            // graceal just getting a random one right now
+            console.log("graceal1 trying to get palette and legend and lookup");
             console.log(palette);
             console.log(legend);
+            const lookup = getPaletteLookup(layer.id, "active", state);
+            console.log("graceal1 printing lookup")
+            console.log(lookup);
             let color_scale = palette.legend.colors;
             console.log("graceal1 color_scale is ");
             console.log(color_scale);
@@ -184,7 +195,7 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
                 tile, //or maybe img? was visibleTiles before
                 tilegrid,
                 size,
-                color_scale,
+                null,
                 start /*this is wrong range[0], 0 works well*/,
                 end /*this is wrong range[1], 300 works well*/,
                 opacity, // this could be adjusted one day, but fine for now
@@ -206,6 +217,67 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
             tile.state = STATE_ERROR;
             tile.changed();
         });
+}
+
+function changeColorPalette(imageData, lookup, new_canvas, context) {
+    console.log("graceal1 in changeColorPalette with lookup");
+    console.log(lookup);
+    console.log(imageData);
+    const octets = new_canvas.width * new_canvas.height * 4;
+
+    // Process each pixel to color-swap single color palettes
+    const pixels = imageData.data;
+    const colorLookupObj = lodashCloneDeep(lookup);
+    const defaultColor = Object.keys(lookup)[0];
+    const paletteColor = lookup[Object.keys(lookup)[0]];
+    console.log("graceal1 default color in lerc decoder is ");
+    console.log(Object.keys(lookup)[0]);
+    console.log(Object.keys(lookup));
+    console.log(lookup[Object.keys(lookup)[0]]);
+
+    // Load black/transparent into the lookup object
+    colorLookupObj['0,0,0,0'] = {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 0,
+    };
+
+    for (let i = 0; i < octets; i += 4) {
+        const pixelColor = `${pixels[i + 0]},${
+            pixels[i + 1]},${
+            pixels[i + 2]},${
+            pixels[i + 3]}`;
+
+        if (!colorLookupObj[pixelColor]) {
+        // Handle non-transparent pixels that do not match the palette exactly
+            const defaultColorArr = defaultColor.split(',');
+            const pixelColorArr = pixelColor.split(',');
+
+            // Determine difference of pixel from default to replicate anti-aliasing
+            const rDifference = pixelColorArr[0] - defaultColorArr[0];
+            const gDifference = pixelColorArr[1] - defaultColorArr[1];
+            const bDifference = pixelColorArr[2] - defaultColorArr[2];
+            const alphaValue = pixelColorArr[3];
+
+            // Store the resulting pair of pixel color & anti-aliased adjusted color
+            colorLookupObj[pixelColor] = {
+            r: paletteColor.r + rDifference,
+            g: paletteColor.g + gDifference,
+            b: paletteColor.b + bDifference,
+            a: alphaValue,
+            };
+        }
+
+        // set the pixel color
+        imageData.data[i + 0] = colorLookupObj[pixelColor].r;
+        imageData.data[i + 1] = colorLookupObj[pixelColor].g;
+        imageData.data[i + 2] = colorLookupObj[pixelColor].b;
+        imageData.data[i + 3] = colorLookupObj[pixelColor].a;
+    }
+    console.log("graceal1 finished the changeColorPalette function and imageData is ");
+    console.log(imageData);
+    context.putImageData(imageData, 0, 0);
 }
 
 function determineNoDataValue(id) {
@@ -288,7 +360,7 @@ function drawTile(
     tile,
     tilegrid,
     size,
-    color_scale,
+    lookup,
     min,
     max,
     opacity,
@@ -364,7 +436,7 @@ function drawTile(
                 if (value > max) {
                     value = max;
                 }
-                var colors = color(value, min, max);
+                var colors = color("Grayscale/Scalar", value, min, max);
                 image.data[j * 4] = colors[0];
                 image.data[j * 4 + 1] = colors[1];
                 image.data[j * 4 + 2] = colors[2];
@@ -381,7 +453,7 @@ function drawTile(
         for (let j = 0; j < values.length; j++) {
             var value = values[j];
             if (value != no_data_value && value > min && value < max) {
-                var colors = color(color_scale, value, min, max);
+                var colors = color(value, min, max);
                 image.data[j * 4] = colors[0];
                 image.data[j * 4 + 1] = colors[1];
                 image.data[j * 4 + 2] = colors[2];
@@ -400,6 +472,8 @@ function drawTile(
     new_canvas.height = size * devicePixelRatio;
 
     context.putImageData(image, 0, 0);
+
+    //changeColorPalette(image, lookup, new_canvas, context);
 }
 
 /* Judges whether or not two arrays have the same elements */
@@ -420,8 +494,51 @@ function isEqual(arr1, arr2) {
 }
 
 /* All of the color functions */
-var color = function(value, min, max) {
+/*var color = function(value, min, max) {
     return colorScales.getGreyScalar(value, min, max);
+};*/
+var color = function(color, value, min, max) {
+    switch (color) {
+        case "Grayscale/Scalar":
+            return colorScales.getGreyScalar(value, min, max);
+            break;
+        case "Grayscale/Logarithmic":
+            return colorScales.getGreyLog(value, min, max);
+            break;
+        case "Jet/Scalar":
+            return colorScales.getJetScalar(value, min, max);
+            break;
+        case "Jet/Logarithmic":
+            return colorScales.getJetLog(value, min, max);
+            break;
+        case "Panoply-diff/Scalar":
+            return colorScales.getPanoplyScalar(value, min, max);
+            break;
+        case "Panoply-diff/Logarithmic":
+            return colorScales.getPanoplyLog(value, min, max);
+            break;
+        case "Parula/Scalar":
+            return colorScales.getParulaScalar(value, min, max);
+            break;
+        case "Parula/Logarithmic":
+            return colorScales.getParulaLog(value, min, max);
+            break;
+        case "Red-Blue/Scalar":
+            return colorScales.getRedBlueScalar(value, min, max);
+            break;
+        case "Red-Blue/Logarithmic":
+            return colorScales.getRedBlueLog(value, min, max);
+            break;
+        case "Cube-Helix/Scalar":
+            return colorScales.getCubeHelixScalar(value, min, max);
+            break;
+        case "Cube-Helix/Logarithmic":
+            return colorScales.getCubeHelixLog(value, min, max);
+            break;
+        case "Diverging":
+            return colorScales.getDiverging(value, min, max);
+            break;
+    }
 };
 
 /* Finds and draws difference between two layers */

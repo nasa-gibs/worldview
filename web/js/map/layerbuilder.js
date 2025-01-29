@@ -390,13 +390,9 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
-      console.log("graceal1 lookup from checking if the palette is active is ");
-      console.log(lookup)
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-    console.log("graceal1 tileSource is ");
-    console.log(tileSource);
     // graceal get the map in a prettier way
     const { map } = state;
     //graceal check if lerc layer from the format parameter of def which is for the layer

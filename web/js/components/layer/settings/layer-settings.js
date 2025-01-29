@@ -218,10 +218,6 @@ class LayerSettings extends React.Component {
     const len = paletteLegends.length;
     const palette = getPalette(layer.id, 0);
     const legend = getPaletteLegend(layer.id, 0);
-    console.log("graceal1 in renderCustomPalettes and legend and palette are");
-    console.log(legend);
-    console.log(palette);
-    console.log(groupName);
     const max = palette.legend.colors.length - 1;
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
