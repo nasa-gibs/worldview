@@ -7,7 +7,7 @@
           "sources": {
               "NOAA_2025_ERI_WMTS": {
                   "id": "NOAA_2025_ERI_WMTS",
-                  "title": "Maxar Constellation",
+                  "title": "Maxar Constellation and NOAA",
                   "description": "",
                   "image": "",
                   "settings": [
