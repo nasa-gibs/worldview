@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Enhanced Vegetation Index (EVI) *BETA*",
-      "subtitle": "Sentinel-2A & -2B / MSI",
+      "subtitle": "Sentinel-2A, 2B, & 2C / MSI",
       "description": "multi-mission/hls/HLS_EVI_Sentinel",
       "tags": "corrected surface Sentinel msi s30 evi",
       "group": "overlays",
