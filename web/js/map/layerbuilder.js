@@ -1144,6 +1144,7 @@ export default function mapLayerBuilder(config, cache, store) {
         format,
         wrapX: false,
         projection: 'EPSG:3857',
+        maxZoom: 21,
       };
       const tileSource = new OlSourceXYZ(sourceOptions);
 
