@@ -106,7 +106,7 @@
     "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-no-storage": "^1.0.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-react": "^7.37.4",
     "express": "^4.21.0",
     "glob": "^11.0.1",
