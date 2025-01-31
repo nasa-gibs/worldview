@@ -158,12 +158,6 @@ class PaletteThreshold extends React.Component {
       },
     };
 
-    console.log("graceal1 in palette-threshold for "+this.props.layerId);
-    console.log(min);
-    console.log(max);
-    console.log(start);
-    console.log(end);
-
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>

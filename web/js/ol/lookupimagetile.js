@@ -209,9 +209,10 @@ LookupImageTile.prototype.load = async function() {
         const blob = new Blob([encodedBufferImage], { type: 'image/png' });
         const dataURL = `${URL.createObjectURL(blob)}`;
         this.image_.src = dataURL;
-        console.log("graceal1 attaching onImageLoad to the event listener");
+        console.log("graceal1 attaching onImageLoad to the event listener with dataURL");
         console.log(this.sourceOptions);
         console.log(this.image_);
+        console.log(dataURL);
         this.image_.addEventListener('load', onImageLoad);
       } catch (error) {
         that.state = OlTileState.ERROR;
@@ -223,6 +224,7 @@ LookupImageTile.prototype.load = async function() {
       console.log("graceal1 attaching onImageLoad to the event listener");
       console.log(this.sourceOptions);
       console.log(this.image_);
+      console.log(this.image_.src);
       this.image_.addEventListener('load', onImageLoad);
     }
   }

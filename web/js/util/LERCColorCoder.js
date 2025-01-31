@@ -68,14 +68,9 @@ function parseMinOrMax(value, min) {
  * @param {*} tilegrid
  */
 export function tileLoader(tile, src, layer, map, state, tilegrid) {
-    console.log("graceal1 in tileloader function with state");
-    console.log(state);
-    console.log(tile);
-    console.log(src);
+    console.log("graceal1 in tileloader layer is ");
     console.log(layer);
-    console.log(map);
-    console.log(tilegrid);
-    console.log(layer.title);
+    console.log(layer.custom);
     const lercCodec = new LERC();
     const img = tile.getImage();
     const STATE_LOADING = 1;
@@ -88,22 +83,15 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
     tile.state = STATE_LOADING;
     tile.changed();
     let view = map.getView();
-    console.log("graceal1 map view is ");
-    console.log(view);
     fetch(src)
         .then(response => {
             return response.arrayBuffer();
         })
         .then(buffer => {
-            console.log("graceal1 successfully got the lerc layer request");
             // graceal how do I find no data value?
             //let noDataValue = determineNoDataValue(layer.get("id"));
             const decodedData = lercCodec.decode(buffer, { returnMask: true });
             const { pixelData, width, height } = decodedData;
-            /*console.log("graceal1 checking pixelData for no data values");
-            pixelData.forEach(pixel => {
-                if (pixel == noDataValue) console.log("graceal1 match found with no data value");
-            })*/
             var tileStoring = [];
             tileStoring["coord"] = tile.getTileCoord();
             //storePixels(tileStoring, layer.get("id"));
@@ -112,75 +100,22 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext("2d");
-            /*const imageData = ctx.createImageData(width, height);
-            for (let i = 0; i < pixelData.length; i++) {
-                imageData.data[i * 4] = pixelData[i]; // Red
-                imageData.data[i * 4 + 1] = pixelData[i]; // Green
-                imageData.data[i * 4 + 2] = pixelData[i]; // Blue
-                imageData.data[i * 4 + 3] = 255; // Alpha
-            }*/
             //let tilegrid = mapLayer.getSource().getTileGrid();
             let zoom = tilegrid.getZForResolution(view.getResolution(), 0);
 
-            /*console.log("graceal1 pixelData");
-            console.log(pixelData);
-            console.log(src);
-            let valuesOver400 = 0;
-            let locations = [];
-            let index = 0;
-            pixelData.forEach(value => {
-                if (value > 1000 && value != defaultNoDataValue) {
-                    valuesOver400 += 1;
-                    locations.push(index);
-                }
-                index+=1;
-            });
-            console.log("graceal1 pixel values over 1000");
-            console.log(valuesOver400);
-            console.log(locations);
-            let locations = [];
-            let count = 0;
-            let index = 0;
-            let maximum = 0;
-            console.log("graceal1 locations that match number:")
-            pixelData.forEach(value => {
-                if (value == 583) {
-                    count+=1;
-                    locations.push(index);
-                    console.log("i="+index+" col= "+(parseInt(index/tilegrid.getTileSize(zoom)))+ " row= "+(index%tilegrid.getTileSize(zoom)));
-                }
-                if (value > maximum && value!=defaultNoDataValue) maximum = value;
-                index+=1;
-            });
-            console.log("graceal1 pixel values that equal 583");
-            console.log(count);
-            console.log(locations);
-            console.log("graceal1 maximum is ");
-            console.log(maximum);*/
-
             // copy pixelData to new array with a deep copy, and pass that into drawTiles
-
             let size = tilegrid.getTileSize(zoom);
             let difference = false; // graceal this might need to change at some point
             let average = false; // graceal this might need to change at some point
             let opacity = 255;
             let filter = false;
-            console.log("graceal1 layer is ");
-            console.log(layer);
-            console.log(state);
+
+            // graceal trying to get start and end via this process, needs to be updated
             const palette = getPalette(layer.id, 0, "active", state);
             const legend = getPaletteLegend(layer.id, 0, "active", state);
-            // graceal just getting a random one right now
-            console.log("graceal1 trying to get palette and legend and lookup");
+            console.log("graceal1 palette is ");
             console.log(palette);
             console.log(legend);
-            const lookup = getPaletteLookup(layer.id, "active", state);
-            console.log("graceal1 printing lookup")
-            console.log(lookup);
-            let color_scale = palette.legend.colors;
-            console.log("graceal1 color_scale is ");
-            console.log(color_scale);
-
             const max = palette.legend.colors.length - 1;
             const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
             const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
@@ -191,26 +126,25 @@ export function tileLoader(tile, src, layer, map, state, tilegrid) {
 
             drawTile(
                 pixelData,
+                layer,
                 ctx,
                 tile, //or maybe img? was visibleTiles before
                 tilegrid,
                 size,
-                null,
-                start /*this is wrong range[0], 0 works well*/,
-                end /*this is wrong range[1], 300 works well*/,
+                start,
+                end,
                 opacity, // this could be adjusted one day, but fine for now
                 filter, // this could be adjusted one day, but fine for now (this would mean range values need to be correct)
                 difference,
                 average,
-                map
+                map,
+                state
             );
-            //ctx.putImageData(imageData, 0, 0);
+
             img.decodedPixels = pixelData;
             img.src = canvas.toDataURL();
             tile.state = STATE_LOADED;
             tile.changed();
-            //time_elapsed = new Date().getTime() - time_elapsed;
-            //console.log("GRACEAL" + time_elapsed);
         })
         .catch(error => {
             console.error("Tile loading error:", error);
@@ -356,18 +290,19 @@ function getRange(pixelData) {
 */
 function drawTile(
     pixelData,
+    layer,
     context,
     tile,
     tilegrid,
     size,
-    lookup,
     min,
     max,
     opacity,
     filter,
     difference,
     average,
-    map
+    map,
+    state
 ) {
     /* For each tile, find the pixels it contains and draw the appropriate color in that pixel */
     //for (let i = 0; i < tiles.length; i++) {
@@ -473,7 +408,14 @@ function drawTile(
 
     context.putImageData(image, 0, 0);
 
-    //changeColorPalette(image, lookup, new_canvas, context);
+    // if the user has changed the palette, make sure to update the color
+    if (layer.custom) {
+        const lookup = getPaletteLookup(layer.id, "active", state);
+        console.log("graceal1 trying to get lookup");
+        console.log(lookup);
+
+        changeColorPalette(image, lookup, new_canvas, context)
+    }
 }
 
 /* Judges whether or not two arrays have the same elements */

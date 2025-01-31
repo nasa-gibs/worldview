@@ -388,7 +388,8 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
-    if (isPaletteActive(id, options.group, state)) {
+    if (isPaletteActive(id, options.group, state) && def.format !== "image/lerc") {
+      console.log("graceal1 in is palette active if statement");
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
