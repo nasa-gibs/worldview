@@ -1153,9 +1153,7 @@ export default function mapLayerBuilder(config, cache, store) {
         extent: shifted ? RIGHT_WING_EXTENT : extent,
       });
     });
-    // create layerGroup from layers
     const layer = new OlLayerGroup({ layers });
-    // return layerGroup
     return layer;
   };
 
