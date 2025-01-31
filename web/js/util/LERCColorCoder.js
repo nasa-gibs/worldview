@@ -6,7 +6,6 @@
 * range.
 */
 import LERC from "./LercCodec";
-import * as colorScales from "./color_scales";
 import {
     getPalette,
     getPaletteLegend,
