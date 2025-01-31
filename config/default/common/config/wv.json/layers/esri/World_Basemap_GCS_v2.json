@@ -1,0 +1,27 @@
+{
+  "layers": {
+    "World_Basemap_GCS_v2": {
+      "id": "World_Basemap_GCS_v2",
+      "layerName": "World_Basemap_GCS_v2",
+      "title": "Hybrid Reference Layer (WGS84)",
+      "subtitle": "Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
+      "description": "",
+      "group": "overlays",
+      "tags": "esri world basemap gcs v2",
+      "format": "application/x-protobuf",
+      "type": "indexedVector",
+      "disableSnapshot": true,
+      "layergroup": "Reference",
+      "wrapX": true,
+      "serviceName": "VectorTileServer",
+      "tiles": [
+        "tile/{z}/{y}/{x}.pbf"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "ESRI"
+        }
+      }
+    }
+  }
+}

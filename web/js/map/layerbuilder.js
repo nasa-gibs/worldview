@@ -1109,6 +1109,34 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createIndexedVectorLayer = (def, options, day, state) => {
+    const { proj: { selected } } = state;
+    const { maxExtent } = selected;
+    const {
+      layerName,
+      serviceName,
+      tiles,
+      id,
+    } = def;
+
+    const source = config.sources[def.source];
+
+    const sourceOptions = {
+      url: `${source.url}/${layerName}/${serviceName}/${tiles[0]}`,
+      projection: 'EPSG:4326',
+      format: new MVT(),
+    };
+    const vectorTileSource = new SourceVectorTile(sourceOptions);
+
+    const layer = new LayerVectorTile({
+      source: vectorTileSource,
+      extent: maxExtent,
+      className: id,
+    });
+
+    return layer;
+  };
+
   /**
    * Create a new OpenLayers Layer
    * @param {object} def
@@ -1173,6 +1201,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'xyz':
             layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'indexedVector':
+            layer = getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
