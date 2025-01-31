@@ -45,7 +45,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(10)
+  await expect(layersSearchRow).toHaveCount(12)
 })
 
 test('Updating input changes results', async () => {
@@ -220,7 +220,7 @@ test('Selecting a measurement from the grid shows sources and details for first 
   // await expect(maiacAvailableCoverage).toBeVisible()
 })
 
-test('Available grid source layer measuremet does not have unavaiable coverage icon', async () => {
+test('Available grid source layer measurement does not have unavailable coverage icon', async () => {
   const {
     aquaModisTab,
     layerDetailHeader,
