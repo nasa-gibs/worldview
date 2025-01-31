@@ -144,17 +144,10 @@ const useLookup = function(layerId, palettesObj, state) {
 // Looks up options/colormaps/layer.xml colormap entry
 export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
-  console.log("graceal1 groupstr and lookup in getLookup is ");
-  console.log(groupstr);
-  console.log(state.palettes);
-  console.log(state.palettes[groupstr][layerId]);
-  console.log(state.palettes[groupstr][layerId].lookup);
   return state.palettes[groupstr][layerId].lookup;
 }
 
 const updateLookup = function(layerId, palettesObj, state) {
-  console.log("graceal1 in updateLookup with");
-  console.log(layerId);
   let newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
     delete newPalettes[layerId];

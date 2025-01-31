@@ -14,13 +14,9 @@ import {
   } from '../modules/palettes/selectors';
 import { cloneDeep as lodashCloneDeep } from 'lodash';
 
-/* Stores all the pixel data for each layer */
-var layer_array = new Array();
 //var defaultNoDataValue = -3.4027999387901484e38;
 // 65535 is the default for VIIRS Nighttime
 var defaultNoDataValue = 65535;
-var DEFAULT_MIN_RANGE = 0;
-var DEFAULT_MAX_RANGE = 300;
 
 /*
 * Given the name of the layer (will be the key) and the array of values of a

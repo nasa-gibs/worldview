@@ -375,6 +375,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     let sourceURL = def.sourceOverride || configSource.url;
+    // graceal this can be removed later
     if (def.format === "image/lerc") sourceURL = "https://localhost:8080/wmts/epsg4326/best/wmts.cgi";
     const sourceOptions = {
       url: sourceURL + urlParameters,
@@ -389,7 +390,6 @@ export default function mapLayerBuilder(config, cache, store) {
       style: typeof style === 'undefined' ? 'default' : style,
     };
     if (isPaletteActive(id, options.group, state) && def.format !== "image/lerc") {
-      console.log("graceal1 in is palette active if statement");
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }

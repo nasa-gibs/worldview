@@ -35,14 +35,6 @@ class LookupImageTile extends OlImageTile {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
     this.lookup_ = lookup;
     this.canvas_ = null;
-    //graceal1 remove this later
-    this.sourceOptions = sourceOptions;
-    this.tileLoadFunction = tileLoadFunction;
-
-    console.log("graceal1 tile load function for layer");
-    console.log(sourceOptions.layer);
-    console.log(tileLoadFunction);
-
     // Store custom tileLoadFunction
     this.customTileLoadFunction_ = tileLoadFunction;
   }
@@ -51,11 +43,7 @@ LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = async function() {
-  console.log("graceal1 in LookupImageTile.prototype.load");
-  console.log(this.sourceOptions);
-  console.log(this.tileLoadFunction);
   if (this.state === OlTileState.IDLE) {
-    console.log("graceal1 state was idle so redoing the colors");
     this.state = OlTileState.LOADING;
     const that = this;
     this.changed();
@@ -83,9 +71,6 @@ LookupImageTile.prototype.load = async function() {
         const pixels = imageData.data;
         const colorLookupObj = lodashCloneDeep(that.lookup_);
         const defaultColor = Object.keys(that.lookup_)[0];
-        console.log("graceal1 default color in lookupimage tile is ");
-        console.log(that.lookup_);
-        console.log(Object.keys(that.lookup_).length);
         const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
 
         // Load black/transparent into the lookup object
@@ -128,30 +113,22 @@ LookupImageTile.prototype.load = async function() {
           pixels[i + 2] = colorLookupObj[pixelColor].b;
           pixels[i + 3] = colorLookupObj[pixelColor].a;
         }
-        console.log("graceal1 finished the onload function and imageData is ");
-        console.log(imageData);
         g.putImageData(imageData, 0, 0);
       }
 
       // uses the tileload function passed from layerbuilder
-      console.log("graceal1 trying to see if should call custom tile load function");
-      console.log(that.sourceOptions.layer);
-      if (that.customTileLoadFunction_ || that.sourceOptions.layer === "VIIRS_VNP46A1_LERC_v1") {
-        console.log("graceal1 in if statement about using custom tile load function");
+      if (that.customTileLoadFunction_) {
         that.customTileLoadFunction_(that, that.src_);
       }
 
       that.state = OlTileState.LOADED;
       that.changed();
-      console.log("graceal1 removing onImageLoad event listener");
-      console.log(this.sourceOptions);
       that.image_.removeEventListener('load', onImageLoad);
     };
 
     // Process images with category palettes, not continuous palettes
     const lookupCount = Object.keys(this.lookup_).length;
     if (lookupCount > 1 && lookupCount < 25) {
-      console.log("graceal1 setting image processed to true");
       imageProcessed = true;
       const pixelsToDisplay = getPixelColorsToDisplay(this.lookup_);
       try {
@@ -209,10 +186,6 @@ LookupImageTile.prototype.load = async function() {
         const blob = new Blob([encodedBufferImage], { type: 'image/png' });
         const dataURL = `${URL.createObjectURL(blob)}`;
         this.image_.src = dataURL;
-        console.log("graceal1 attaching onImageLoad to the event listener with dataURL");
-        console.log(this.sourceOptions);
-        console.log(this.image_);
-        console.log(dataURL);
         this.image_.addEventListener('load', onImageLoad);
       } catch (error) {
         that.state = OlTileState.ERROR;
@@ -221,10 +194,6 @@ LookupImageTile.prototype.load = async function() {
       }
     } else {
       this.image_.src = this.src_;
-      console.log("graceal1 attaching onImageLoad to the event listener");
-      console.log(this.sourceOptions);
-      console.log(this.image_);
-      console.log(this.image_.src);
       this.image_.addEventListener('load', onImageLoad);
     }
   }

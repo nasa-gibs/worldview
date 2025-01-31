@@ -113,9 +113,6 @@ class LayerSettings extends React.Component {
       );
       const palette = getPalette(layer.id, i);
       const max = legend.colors.length - 1;
-      console.log("graceal1 in layer-settings and palette min and max is ");
-      console.log(palette.min);
-      console.log(palette.max);
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
