@@ -48,30 +48,30 @@ function IntervalSelect(props) {
               {TIME_SCALE_FROM_NUMBER[interval].toUpperCase()}
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem onClick={() => handleChangeZoomLevelMobile('year')}>
-                <span>
+              <DropdownItem>
+                <span onClick={() => handleChangeZoomLevelMobile('year')}>
                   Year
                 </span>
               </DropdownItem>
-              <DropdownItem onClick={() => handleChangeZoomLevelMobile('month')}>
-                <span>
+              <DropdownItem>
+                <span onClick={() => handleChangeZoomLevelMobile('month')}>
                   Month
                 </span>
               </DropdownItem>
-              <DropdownItem onClick={() => handleChangeZoomLevelMobile('day')}>
-                <span>
+              <DropdownItem>
+                <span onClick={() => handleChangeZoomLevelMobile('day')}>
                   Day
                 </span>
               </DropdownItem>
               {hasSubdailyLayers ? (
                 <>
-                  <DropdownItem onClick={() => handleChangeZoomLevelMobile('hour')}>
-                    <span>
+                  <DropdownItem>
+                    <span onClick={() => handleChangeZoomLevelMobile('hour')}>
                       Hour
                     </span>
                   </DropdownItem>
-                  <DropdownItem onClick={() => handleChangeZoomLevelMobile('minute')}>
-                    <span>
+                  <DropdownItem>
+                    <span onClick={() => handleChangeZoomLevelMobile('minute')}>
                       Minute
                     </span>
                   </DropdownItem>

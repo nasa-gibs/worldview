@@ -23,8 +23,7 @@ export default function FilterChips(props) {
       {filterValues.map(({
         field, displayValue, value,
       }) => (
-        <button
-          type="button"
+        <div
           key={field + value}
           className="filter-chip"
           onClick={() => removeFilter(field, value)}
@@ -34,7 +33,7 @@ export default function FilterChips(props) {
             icon="times"
             fixedWidth
           />
-        </button>
+        </div>
       ))}
     </div>
   );

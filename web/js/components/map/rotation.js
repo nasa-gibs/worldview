@@ -63,7 +63,6 @@ function Rotation() {
         onMouseDown={() => { rotateOnClick(10); }}
         onMouseUp={clearIntervalRotation}
         onMouseOut={clearIntervalRotation}
-        onBlur={clearIntervalRotation}
         onMouseMove={(e) => { e.stopPropagation(); }}
       >
         <HoverTooltip
@@ -81,7 +80,6 @@ function Rotation() {
         onMouseDown={resetRotation}
         onMouseUp={clearIntervalRotation}
         onMouseOut={clearIntervalRotation}
-        onBlur={clearIntervalRotation}
         onMouseMove={(e) => { e.stopPropagation(); }}
       >
         <HoverTooltip
@@ -99,7 +97,6 @@ function Rotation() {
         onMouseDown={() => { rotateOnClick(-10); }}
         onMouseUp={clearIntervalRotation}
         onMouseOut={clearIntervalRotation}
-        onBlur={clearIntervalRotation}
         onMouseMove={(e) => { e.stopPropagation(); }}
       >
         <HoverTooltip

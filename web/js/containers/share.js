@@ -293,14 +293,7 @@ class ShareLinkContainer extends Component {
             <p>
               Please
               {' '}
-              <button
-                type="button"
-                style={{ border: 'none', background: 'none', padding: '0' }}
-                onClick={this.openFeedback}
-                id="feedback-url"
-              >
-                contact us
-              </button>
+              <a onClick={this.openFeedback} id="feedback-url">contact us</a>
               {' '}
               to enable Worldview embedding on your website.
             </p>

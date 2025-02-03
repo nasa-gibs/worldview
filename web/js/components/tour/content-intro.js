@@ -13,17 +13,10 @@ function TourIntro(props) {
         <a href="https://earthdata.nasa.gov/" target="_blank" rel="noreferrer">NASA Earthdata</a>
         ), the satellite imagery we provide and events occurring around the world.
         {' '}
-        <button
-          type="button"
-          style={{ border: 'none', background: 'none', padding: '0' }}
-          href="#"
-          title="Start using @NAME@"
-          onClick={props.toggleModalStart}
-          className="start-link"
-        >
+        <a href="#" title="Start using @NAME@" onClick={props.toggleModalStart} className="start-link">
           Start using @NAME@
           <ArrowLineRightCircleFill class="intro-arrow" size="16px" />
-        </button>
+        </a>
       </p>
     </div>
   );

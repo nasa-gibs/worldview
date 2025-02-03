@@ -23,8 +23,8 @@ test.afterAll(async () => {
 test('Mobile comparison A|B toggle buttons are visible and only A is selected by default', async () => {
   await page.goto(swipeAndAIsActive)
   await closeModal(page)
-  const aMobileCompareButton = page.locator('#compare-toggle-selected-A')
-  const bMobileCompareButton = page.locator('#compare-toggle-selected-B')
+  const aMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(1)')
+  const bMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(2)')
   await expect(aMobileCompareButton).toHaveClass(/compare-btn-selected/)
   await expect(bMobileCompareButton).not.toHaveClass(/compare-btn-selected/)
 })
@@ -32,7 +32,7 @@ test('Mobile comparison A|B toggle buttons are visible and only A is selected by
 // toggle select B change compare mode date to B
 test('Toggling to B compare side changes mobile date picker date', async () => {
   const { mobileDatePickerSelectButton } = selectors
-  const bMobileCompareButton = page.locator('#compare-toggle-selected-B')
+  const bMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(2)')
   // confirm initial A mobile date picker date
   await expect(mobileDatePickerSelectButton).toHaveText('2018 AUG 17')
   // click B compare toggle button and confirm B mobile date picker date
@@ -63,8 +63,8 @@ test('Expand mobile layer list and confirm comparison mode button is present and
 // B compare button toggle is selected on B permalink load and A is not selected
 test('B compare button toggle is only selected on B permalink load', async () => {
   await page.goto(spyAndBIsActive)
-  const aMobileCompareButton = page.locator('#compare-toggle-selected-A')
-  const bMobileCompareButton = page.locator('#compare-toggle-selected-B')
+  const aMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(1)')
+  const bMobileCompareButton = page.locator('.comparison-mobile-select-toggle > div:nth-child(2)')
   await expect(aMobileCompareButton).not.toHaveClass(/compare-btn-selected/)
   await expect(bMobileCompareButton).toHaveClass(/compare-btn-selected/)
 })
