@@ -10,39 +10,50 @@ function MobileComparisonToggle (props) {
     toggleActiveCompareState,
   } = props;
 
-  const [isCompareASelected, toggleCompareASelected] = useState(isCompareA);
+  const [isCompareASelected, setCompareASelected] = useState(isCompareA);
   useEffect(() => {
     if (isCompareASelected !== isCompareA) {
-      toggleCompareASelected(isCompareA);
+      setCompareASelected(isCompareA);
     }
   }, [isCompareA]);
-  useEffect(() => {
-    if (isCompareASelected !== isCompareA) {
-      toggleActiveCompareState();
-    }
-  }, [isCompareASelected]);
+
+  if (isCompareASelected !== isCompareA) {
+    toggleActiveCompareState();
+  }
 
   if (!active) {
     return null;
   }
+
+  const handleClick = (evt) => {
+    if (evt.target.id === 'compare-toggle-selected-A') {
+      setCompareASelected(true);
+    } else {
+      setCompareASelected(false);
+    }
+  };
 
   const classA = isCompareASelected ? 'compare-btn-selected' : '';
   const classB = !isCompareASelected ? 'compare-btn-selected' : '';
 
   return (
     <div className="comparison-mobile-select-toggle">
-      <div
+      <button
+        type="button"
+        id="compare-toggle-selected-A"
         className={`compare-toggle-selected-btn ${classA}`}
-        onClick={() => toggleCompareASelected(true)}
+        onClick={handleClick}
       >
         A
-      </div>
-      <div
+      </button>
+      <button
+        type="button"
+        id="compare-toggle-selected-B"
         className={`compare-toggle-selected-btn ${classB}`}
-        onClick={() => toggleCompareASelected(false)}
+        onClick={handleClick}
       >
         B
-      </div>
+      </button>
     </div>
   );
 }

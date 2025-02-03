@@ -45,10 +45,10 @@ function SmartHandoffModal({
     <div>
 
       <div className="smart-handoff-heading">
-        <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">
-          <img src="images/nasa-logo.png" style={{ maxHeight: '38px' }} />
+        <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer" aria-label="Earthdata Search">
+          <img alt="NASA logo" src="images/nasa-logo.png" style={{ maxHeight: '38px' }} />
           <span className="smart-handoff-pipe" />
-          <img src="images/earthdata-search.png" />
+          <img alt="Earthdata Search" src="images/earthdata-search.png" />
         </a>
       </div>
 
@@ -69,7 +69,7 @@ function SmartHandoffModal({
             viewport region in @NAME@ will be used to derive data granules within Earthdata Search.
           </p>
 
-          <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />
+          <img alt="Earthdata Search preview" className="earth-data-gif" src="images/earth-data-search-preview.gif" />
           <p className="earth-data-caption">
             Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
             downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
@@ -95,9 +95,9 @@ function SmartHandoffModal({
       </div>
       )}
 
-      <div className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
+      <button type="button" className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
         <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
-      </div>
+      </button>
 
       <div className="smart-handoff-layer-info">
 

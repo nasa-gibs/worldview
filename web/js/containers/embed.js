@@ -56,7 +56,7 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
       >
         {showClickToInteractMessage && (
           <>
-            <div onClick={handleOverlayClick} className="embed-overlay-bg" />
+            <button type="button" onClick={handleOverlayClick} className="embed-overlay-bg" aria-label="click to interact" />
             <div className="embed-overlay-btn">
               <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth />
               <p>Click anywhere to interact</p>

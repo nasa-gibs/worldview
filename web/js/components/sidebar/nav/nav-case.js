@@ -98,7 +98,8 @@ function NavCase (props) {
       {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
 
-      <div
+      <button
+        type="button"
         id="toggleIconHolder"
         className="sidebar-collapse"
         onClick={toggleSidebar}
@@ -113,7 +114,7 @@ function NavCase (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="right" target="toggleIconHolder">
           Hide sidebar
         </UncontrolledTooltip>
-      </div>
+      </button>
     </Nav>
   );
 }

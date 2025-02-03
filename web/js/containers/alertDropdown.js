@@ -15,7 +15,7 @@ export default function AlertDropdown(isTourActive) {
 
   return (
     <div className="wv-alert-dropdown" hidden={isDistractionFreeModeActive || tourActive || isMobile}>
-      <button type="button" hidden={notifications <= 1} onClick={toggle}>
+      <button type="button" className="multiple-alerts-btn" hidden={notifications <= 1} onClick={toggle}>
         <FontAwesomeIcon
           icon="exclamation-triangle"
           className="wv-alert-icon"

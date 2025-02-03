@@ -158,6 +158,13 @@
       bottom: 0;
       height: 20px;
       width: 23px;
+      background: none;
+      border: none;
+      padding: 0;
+
+      & svg {
+        height: 13px;
+      }
     }
   }
 
@@ -176,9 +183,13 @@
 
   .close-tooltip,
   .minimize-tooltip {
-    padding-left: 6px;
+    padding: 0 0 0 6px;
     margin-left: 8px;
     border-left: 1px solid #777;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    background: none;
 
     &.close-coordinates-tooltip,
     &.minimize-coordinates-tooltip {

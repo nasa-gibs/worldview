@@ -33,13 +33,15 @@ function CategoryCell(props) {
       <div className="category-background-cover" style={categoryBgImage}>
         <div className="category-background-cover">
           <h3>
-            <a
+            <button
+              type="button"
+              style={{ border: 'none', textAlign: 'left' }}
               className="layer-category-name"
               alt={category.title}
               onClick={() => drawMeasurements(category)}
             >
               {category.title}
-            </a>
+            </button>
           </h3>
           <ul>
             {category.measurements
@@ -71,12 +73,13 @@ function CategoryCell(props) {
                       /* eslint react/no-array-index-key: 1 */
                     key={category.id + index}
                   >
-                    <a
+                    <button
+                      type="button"
                       className="layer-category-name"
                       onClick={() => drawMeasurements(category)}
                     >
                       ...
-                    </a>
+                    </button>
                   </li>
                 ) : (
                   <li
@@ -86,12 +89,13 @@ function CategoryCell(props) {
                         `layer-category-item-${category.id}-${current.id}`
                       }
                   >
-                    <a
+                    <button
+                      type="button"
                       className="layer-category-name"
                       onClick={() => drawMeasurements(category, current.id, index)}
                     >
                       {current.title}
-                    </a>
+                    </button>
                     {' '}
                   </li>
                 );
