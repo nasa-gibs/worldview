@@ -18,8 +18,7 @@ function PlayButton({
   const onClick = isDisabled ? () => {} : playing ? pause : play;
 
   return (
-    <button
-      type="button"
+    <a
       id={buttonId}
       aria-label={labelText}
       className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
@@ -37,7 +36,7 @@ function PlayButton({
       {playing
         ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
         : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
-    </button>
+    </a>
   );
 }
 

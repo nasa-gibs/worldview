@@ -30,23 +30,15 @@ function Steps(props) {
     };
   }, []);
 
-  const buttonStyle = {
-    border: 'none',
-    background: 'none',
-    padding: '0',
-  };
-
   return (
     <div className="step-container">
-      <button
-        type="button"
-        style={buttonStyle}
+      <a
         className={isKioskModeActive ? 'd-none' : 'step-previous'}
         aria-label="Previous"
         onClick={decreaseStep}
       >
         <FontAwesomeIcon icon="arrow-circle-left" />
-      </button>
+      </a>
       <div className="step-counter">
         <p>
           Step
@@ -56,9 +48,7 @@ function Steps(props) {
           <span className="step-total">{totalSteps}</span>
         </p>
       </div>
-      <button
-        type="button"
-        style={buttonStyle}
+      <a
         className={isKioskModeActive ? 'd-none' : 'step-next'}
         aria-label="Next"
         onClick={incrementStep}
@@ -66,7 +56,7 @@ function Steps(props) {
         {currentStep === totalSteps
           ? <FontAwesomeIcon icon="check-circle" />
           : <FontAwesomeIcon icon="arrow-circle-right" />}
-      </button>
+      </a>
     </div>
   );
 }
