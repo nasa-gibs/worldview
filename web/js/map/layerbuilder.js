@@ -400,7 +400,7 @@ export default function mapLayerBuilder(config, cache, store) {
     // that is a bit of an ugly if statement so maybe find a dif way
     if (def.format === "image/lerc") {
       tileSource.setTileLoadFunction((tile, src) => {
-        return tileLoader(tile, src, def, map.ui.selected, state, sourceOptions.tileGrid);
+        return tileLoader(tile, src, def, map.ui.selected, state, sourceOptions.tileGrid, options.group);
       });
     }
 
