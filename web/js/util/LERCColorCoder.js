@@ -13,9 +13,6 @@ import {
   } from '../modules/palettes/selectors';
 import { cloneDeep as lodashCloneDeep } from 'lodash';
 
-// graceal this needs to be deleted later
-var defaultNoDataValue = 65535;
-
 /**
  * Loads a lerc layer tile to the map
  * @param {object} tile
@@ -26,9 +23,6 @@ var defaultNoDataValue = 65535;
  * @param {object} tilegrid OlTileGridWMTS
  */
 export function tileLoader(tile, src, layer, map, state, tilegrid, groupString) {
-    console.log("graceal1 layer is ");
-    console.log(layer);
-    console.log("groupstring is "+groupString);
     const lercCodec = new LERC();
     const img = tile.getImage();
     const STATE_LOADING = 1;
@@ -44,8 +38,12 @@ export function tileLoader(tile, src, layer, map, state, tilegrid, groupString) 
             return response.arrayBuffer();
         })
         .then(buffer => {
-            // graceal how do I find no data value?
-            const decodedData = lercCodec.decode(buffer, { returnMask: true, noDataValue: defaultNoDataValue });
+            const palette = getPalette(layer.id, 0, groupString || "active", state);
+            const legend = getPaletteLegend(layer.id, 0, groupString || "active", state);
+
+            let noDataValue = parseFloat(palette.noDataValue);
+            if (Number.isNaN(noDataValue)) console.error("No Data value incorrect for layer "+layer.id + ". Layer might not display correctly");
+            const decodedData = lercCodec.decode(buffer, { returnMask: true, noDataValue: noDataValue });
             const { pixelData, width, height } = decodedData;
 
             const canvas = document.createElement("canvas");
@@ -57,11 +55,6 @@ export function tileLoader(tile, src, layer, map, state, tilegrid, groupString) 
             // copy pixelData to new array with a deep copy, and pass that into drawTiles
             let size = tilegrid.getTileSize(zoom);
             let opacity = 255;
-
-            const palette = getPalette(layer.id, 0, groupString || "active", state);
-            const legend = getPaletteLegend(layer.id, 0, groupString || "active", state);
-            console.log("graceal1 palette is");
-            console.log(palette);
 
             const max = palette.legend.colors.length - 1;
             const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
@@ -81,7 +74,8 @@ export function tileLoader(tile, src, layer, map, state, tilegrid, groupString) 
                 opacity,
                 filter,
                 map,
-                state
+                state,
+                noDataValue
             );
 
             img.decodedPixels = pixelData;
@@ -112,20 +106,20 @@ function drawTile(
     opacity,
     filter,
     map,
-    state
+    state,
+    noDataValue
 ) {
     var tile_coord = tile.getTileCoord();
     var pixel = findDrawTilePixel(tilegrid, tile_coord, map);
     pixel = [Math.round(pixel[0]), Math.round(pixel[1])];
     var image = context.createImageData(size, size);
     var values = pixelData;
-    var no_data_value = defaultNoDataValue;
 
     /* If the filter is not on, display everything, just make numbers above max max color and below min min color */
     if (!filter) {
         for (let j = 0; j < values.length; j++) {
             var value = values[j];
-            if (value != no_data_value) {
+            if (value != noDataValue) {
                 if (value < min) {
                     value = min;
                 }
@@ -148,7 +142,7 @@ function drawTile(
         /* If the filter is on, do not display pixels below min and above max */
         for (let j = 0; j < values.length; j++) {
             var value = values[j];
-            if (value != no_data_value && value > min && value < max) {
+            if (value != noDataValue && value > min && value < max) {
                 var colors = getGreyScalar(value, min, max)
                 image.data[j * 4] = colors[0];
                 image.data[j * 4 + 1] = colors[1];
@@ -178,8 +172,6 @@ function drawTile(
 
 function changeColorPalette(imageData, lookup, new_canvas, context) {
     const octets = new_canvas.width * new_canvas.height * 4;
-    console.log("graceal1 lookup");
-    console.log(lookup)
 
     // Process each pixel to color-swap single color palettes
     const pixels = imageData.data;

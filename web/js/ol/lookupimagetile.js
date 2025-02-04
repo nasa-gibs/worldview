@@ -50,7 +50,6 @@ LookupImageTile.prototype.load = async function() {
     let imageProcessed = false;
 
     const onImageLoad = function() {
-      console.warn("graceal1 in the onImageLoad function");
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;

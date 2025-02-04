@@ -282,6 +282,9 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
  * @returns {Array}
  */
 export function getPaletteAttributeArray(layerId, palettes, state) {
+  console.log("graceal1 in getPaletteAttributeArray");
+  console.log(layerId);
+  console.log(palettes[layerId]);
   try {
     const count = getCount(layerId, state);
     const DEFAULT_OBJ = { isActive: false, value: undefined };
