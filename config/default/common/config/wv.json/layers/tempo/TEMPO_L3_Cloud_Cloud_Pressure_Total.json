@@ -9,8 +9,7 @@
       "group": "overlays",
       "layergroup": "Cloud Pressure",
       "dataAvailability": "dd",
-      "startDate": "2024-05-13T10:30:00Z",
-      "disableSnapshot": true,
+      "startDate": "2023-08-02T15:12:49Z",
       "shiftadjacentdays": false
     }
   }
