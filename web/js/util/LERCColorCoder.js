@@ -22,11 +22,11 @@ const STATE_ERROR = 3;
  * coloring to this new coloring
  * @param {object} imageData
  * @param {object} lookup Lookup from getPaletteLookup
- * @param {object} new_canvas Having new_canvas Fixes issues with retina displays by drawing and scaling on a different canvas
+ * @param {object} newCanvas Having newCanvas Fixes issues with retina displays by drawing and scaling on a different canvas
  * @param {object} context
  */
-function changeColorPalette(imageData, lookup, new_canvas, context) {
-  const octets = new_canvas.width * new_canvas.height * 4;
+function changeColorPalette(imageData, lookup, newCanvas, context) {
+  const octets = newCanvas.width * newCanvas.height * 4;
 
   // Process each pixel to color-swap single color palettes
   const pixels = imageData.data;
@@ -84,14 +84,6 @@ function getImgData(mapLayer, tileCoord) {
     .getImage().decodedPixels;
 }
 
-/* Finds the top left pixel that specifies where a tile should be drawn from */
-function findDrawTilePixel(tilegrid, tileCoord, map) {
-  const extent = tilegrid.getTileCoordExtent(tileCoord);
-  const coord = [extent[0], extent[3]];
-  const pixel = map.getPixelFromCoordinate(coord);
-  return pixel;
-}
-
 // most basic color function that will be used for LERC unless the palette is changed
 function getGreyScalar(val, min, max) {
   const colors = [];
@@ -109,36 +101,30 @@ function drawTile(
   pixelData,
   layer,
   context,
-  tile,
-  tilegrid,
   size,
   min,
   max,
   opacity,
   filter,
-  map,
   state,
   noDataValue,
   groupString,
 ) {
-  const tileCoord = tile.getTileCoord();
-  let pixel = findDrawTilePixel(tilegrid, tileCoord, map);
-  pixel = [Math.round(pixel[0]), Math.round(pixel[1])];
   const image = context.createImageData(size, size);
   const values = pixelData;
 
   /* If the filter is not on, display everything, just make numbers above max max color and below min min color */
   if (!filter) {
-    for (let j = 0; j < values.length; j++) {
-      var value = values[j];
-      if (value != noDataValue) {
+    for (let j = 0; j < values.length; j+=1) {
+      let value = values[j];
+      if (value !== noDataValue) {
         if (value < min) {
           value = min;
         }
         if (value > max) {
           value = max;
         }
-        var colors = getGreyScalar(value, min, max);
+        const colors = getGreyScalar(value, min, max);
         image.data[j * 4] = colors[0];
         image.data[j * 4 + 1] = colors[1];
         image.data[j * 4 + 2] = colors[2];
@@ -152,10 +138,10 @@ function drawTile(
     }
   } else {
     /* If the filter is on, do not display pixels below min and above max */
-    for (let j = 0; j < values.length; j++) {
-      var value = values[j];
-      if (value != noDataValue && value > min && value < max) {
-        var colors = getGreyScalar(value, min, max);
+    for (let j = 0; j < values.length; j+=1) {
+      let value = values[j];
+      if (value !== noDataValue && value > min && value < max) {
+        const colors = getGreyScalar(value, min, max);
         image.data[j * 4] = colors[0];
         image.data[j * 4 + 1] = colors[1];
         image.data[j * 4 + 2] = colors[2];
@@ -169,16 +155,16 @@ function drawTile(
     }
   }
   /* Fixes issues with retina displays by drawing and scaling on a different canvas */
-  const new_canvas = document.createElement('canvas');
-  new_canvas.width = size * devicePixelRatio;
-  new_canvas.height = size * devicePixelRatio;
+  const newCanvas = document.createElement('canvas');
+  newCanvas.width = size * devicePixelRatio;
+  newCanvas.height = size * devicePixelRatio;
 
   context.putImageData(image, 0, 0);
 
   /* if the user has changed the palette, make sure to update the color */
   if (layer.custom) {
     const lookup = getPaletteLookup(layer.id, groupString || 'active', state);
-    changeColorPalette(image, lookup, new_canvas, context);
+    changeColorPalette(image, lookup, newCanvas, context);
   }
 }
 
@@ -231,14 +217,11 @@ export function tileLoader(tile, src, layer, state, tilegrid, groupString) {
         pixelData,
         layer,
         ctx,
-        tile,
-        tilegrid,
         size,
         start,
         end,
         opacity,
         filter,
-        map,
         state,
         noDataValue,
         groupString,
@@ -268,8 +251,8 @@ export function findValue(map, pixel, layer) {
     map.getView().getResolution(),
   );
 
-  const tile_extent = tilegrid.getTileCoordExtent(tileCoord); // this seems right
-  const tilePixel = map.getPixelFromCoordinate([tile_extent[0], tile_extent[3]]);
+  const tileExtent = tilegrid.getTileCoordExtent(tileCoord); // this seems right
+  const tilePixel = map.getPixelFromCoordinate([tileExtent[0], tileExtent[3]]);
   const row = pixel[0] - tilePixel[0];
   const column = pixel[1] - Math.round(tilePixel[1]);
   const zoom = tilegrid.getZForResolution(map.getView().getResolution()); // this seems to be correct
