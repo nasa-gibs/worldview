@@ -28,215 +28,57 @@ function LERC() {
 
   LercCodec.defaultNoDataValue = -3.4027999387901484e38; // smallest Float32 value
 
-  /**
-   * Decode a LERC byte stream and return an object containing the pixel data and some required and optional
-   * information about it, such as the image's width and height.
-   *
-   * @param {ArrayBuffer} input The LERC input byte stream
-   * @param {object} [options] Decoding options, containing any of the following properties:
-   * @config {number} [inputOffset = 0]
-   *        Skip the first inputOffset bytes of the input byte stream. A valid LERC file is expected at that position.
-   * @config {Uint8Array} [encodedMask = null]
-   *        If specified, the decoder will not read mask information from the input and use the specified encoded
-   *        mask data instead. Mask header/data must not be present in the LERC byte stream in this case.
-   * @config {number} [noDataValue = LercCode.defaultNoDataValue]
-   *        Pixel value to use for masked pixels.
-   * @config {ArrayBufferView|Array} [pixelType = Float32Array]
-   *        The desired type of the pixelData array in the return value. Note that it is the caller's responsibility to
-   *        provide an appropriate noDataValue if the default pixelType is overridden.
-   * @config {boolean} [returnMask = false]
-   *        If true, the return value will contain a maskData property of type Uint8Array which has one element per
-   *        pixel, the value of which is 1 or 0 depending on whether that pixel's data is present or masked. If the
-   *        input LERC data does not contain a mask, maskData will not be returned.
-   * @config {boolean} [returnEncodedMask = false]
-   *        If true, the return value will contain a encodedMaskData property, which can be passed into encode() as
-   *        encodedMask.
-   * @config {boolean} [returnFileInfo = false]
-   *        If true, the return value will have a fileInfo property that contains metadata obtained from the
-   *        LERC headers and the decoding process.
-   * @config {boolean} [computeUsedBitDepths = false]
-   *        If true, the fileInfo property in the return value will contain the set of all block bit depths
-   *        encountered during decoding. Will only have an effect if returnFileInfo option is true.
-   * @returns {{width, height, pixelData, minValue, maxValue, noDataValue, [maskData], [encodedMaskData], [fileInfo]}}
-   */
-  LercCodec.decode = function(input, options) {
-    options = options || {};
+  const unstuff = function(src, bitsPerPixel, numPixels, offset, scale, dest, maxValue) {
+    const bitMask = (1 << bitsPerPixel) - 1;
+    let i = 0;
+    let o;
+    let bitsLeft = 0;
+    let n; let
+      buffer;
+    const nmax = Math.ceil((maxValue - offset) / scale);
+    // get rid of trailing bytes that are already part of next block
+    const numInvalidTailBytes = src.length * 4 - Math.ceil(bitsPerPixel * numPixels / 8);
+    src[src.length - 1] <<= 8 * numInvalidTailBytes;
 
-    const skipMask = options.encodedMaskData || options.encodedMaskData === null;
-    const parsedData = parse(input, options.inputOffset || 0, skipMask);
-
-    const noDataValue = options.noDataValue != null ? options.noDataValue : LercCodec.defaultNoDataValue;
-
-    const uncompressedData = uncompressPixelValues(
-      parsedData,
-      options.pixelType || Float32Array,
-      options.encodedMaskData,
-      noDataValue,
-      options.returnMask,
-    );
-
-    const result = {
-      width: parsedData.width,
-      height: parsedData.height,
-      pixelData: uncompressedData.resultPixels,
-      minValue: parsedData.pixels.minValue,
-      maxValue: parsedData.pixels.maxValue,
-      noDataValue,
-    };
-
-    if (uncompressedData.resultMask) {
-      result.maskData = uncompressedData.resultMask;
-    }
-
-    if (options.returnEncodedMask && parsedData.mask) {
-      result.encodedMaskData = parsedData.mask.bitset ? parsedData.mask.bitset : null;
-    }
-
-    if (options.returnFileInfo) {
-      result.fileInfo = formatFileInfo(parsedData);
-      if (options.computeUsedBitDepths) {
-        result.fileInfo.bitDepths = computeUsedBitDepths(parsedData);
+    for (o = 0; o < numPixels; o += 1) {
+      if (bitsLeft === 0) {
+        buffer = src[i++];
+        bitsLeft = 32;
       }
+      if (bitsLeft >= bitsPerPixel) {
+        n = (buffer >>> (bitsLeft - bitsPerPixel)) & bitMask;
+        bitsLeft -= bitsPerPixel;
+      } else {
+        const missingBits = bitsPerPixel - bitsLeft;
+        n = ((buffer & bitMask) << missingBits) & bitMask;
+        buffer = src[i++];
+        bitsLeft = 32 - missingBits;
+        n += buffer >>> bitsLeft;
+      }
+      // pixel values may exceed max due to quantization
+      dest[o] = n < nmax ? offset + n * scale : maxValue;
     }
-
-    return result;
+    return dest;
   };
 
-  var uncompressPixelValues = function(
-    data,
-    TypedArrayClass,
-    maskBitset,
-    noDataValue,
-    storeDecodedMask,
-  ) {
-    let blockIdx = 0;
-    const numX = data.pixels.numBlocksX;
-    const numY = data.pixels.numBlocksY;
-    const blockWidth = Math.floor(data.width / numX);
-    const blockHeight = Math.floor(data.height / numY);
-    const scale = 2 * data.maxZError;
-    maskBitset = maskBitset || (data.mask ? data.mask.bitset : null);
-
-    let resultPixels; let
-      resultMask;
-    resultPixels = new TypedArrayClass(data.width * data.height);
-    if (storeDecodedMask && maskBitset) {
-      resultMask = new Uint8Array(data.width * data.height);
-    }
-    const blockDataBuffer = new Float32Array(blockWidth * blockHeight);
-
-    let xx; let
-      yy;
-    for (let y = 0; y <= numY; y++) {
-      const thisBlockHeight = y !== numY ? blockHeight : data.height % numY;
-      if (thisBlockHeight === 0) {
-        continue;
-      }
-      for (let x = 0; x <= numX; x++) {
-        const thisBlockWidth = x !== numX ? blockWidth : data.width % numX;
-        if (thisBlockWidth === 0) {
-          continue;
-        }
-
-        let outPtr = y * data.width * blockHeight + x * blockWidth;
-        const outStride = data.width - thisBlockWidth;
-
-        const block = data.pixels.blocks[blockIdx];
-
-        var blockData; var blockPtr; var
-          constValue;
-        if (block.encoding < 2) {
-          // block is either uncompressed or bit-stuffed (encodings 0 and 1)
-          if (block.encoding === 0) {
-            // block is uncompressed
-            blockData = block.rawData;
-          } else {
-            // block is bit-stuffed
-            unstuff(
-              block.stuffedData,
-              block.bitsPerPixel,
-              block.numValidPixels,
-              block.offset,
-              scale,
-              blockDataBuffer,
-              data.pixels.maxValue,
-            );
-            blockData = blockDataBuffer;
-          }
-          blockPtr = 0;
-        } else if (block.encoding === 2) {
-          // block is all 0
-          constValue = 0;
-        } else {
-          // block has constant value (encoding === 3)
-          constValue = block.offset;
-        }
-
-        var maskByte;
-        if (maskBitset) {
-          for (yy = 0; yy < thisBlockHeight; yy++) {
-            if (outPtr & 7) {
-              //
-              maskByte = maskBitset[outPtr >> 3];
-              maskByte <<= outPtr & 7;
-            }
-            for (xx = 0; xx < thisBlockWidth; xx++) {
-              if (!(outPtr & 7)) {
-                // read next byte from mask
-                maskByte = maskBitset[outPtr >> 3];
-              }
-              if (maskByte & 128) {
-                // pixel data present
-                if (resultMask) {
-                  resultMask[outPtr] = 1;
-                }
-                resultPixels[outPtr++] = block.encoding < 2 ? blockData[blockPtr++] : constValue;
-              } else {
-                // pixel data not present
-                if (resultMask) {
-                  resultMask[outPtr] = 0;
-                }
-                resultPixels[outPtr++] = noDataValue;
-              }
-              maskByte <<= 1;
-            }
-            outPtr += outStride;
-          }
-        } else {
-          // mask not present, simply copy block over
-          if (block.encoding < 2) {
-            // duplicating this code block for performance reasons
-            // blockData case:
-            for (yy = 0; yy < thisBlockHeight; yy++) {
-              for (xx = 0; xx < thisBlockWidth; xx++) {
-                resultPixels[outPtr++] = blockData[blockPtr++];
-              }
-              outPtr += outStride;
-            }
-          } else {
-            // constValue case:
-            for (yy = 0; yy < thisBlockHeight; yy++) {
-              for (xx = 0; xx < thisBlockWidth; xx++) {
-                resultPixels[outPtr++] = constValue;
-              }
-              outPtr += outStride;
-            }
-          }
-        }
-        if (block.encoding === 1 && blockPtr !== block.numValidPixels) {
-          throw 'Block and Mask do not match';
-        }
-        blockIdx++;
+  const computeUsedBitDepths = function(data) {
+    const numBlocks = data.pixels.numBlocksX * data.pixels.numBlocksY;
+    const bitDepths = {};
+    for (let i = 0; i < numBlocks; i++) {
+      const block = data.pixels.blocks[i];
+      if (block.encoding === 0) {
+        bitDepths.float32 = true;
+      } else if (block.encoding === 1) {
+        bitDepths[block.bitsPerPixel] = true;
+      } else {
+        bitDepths[0] = true;
       }
     }
 
-    return {
-      resultPixels,
-      resultMask,
-    };
+    return Object.keys(bitDepths);
   };
 
-  var formatFileInfo = function(data) {
+  const formatFileInfo = function(data) {
     return {
       fileIdentifierString: data.fileIdentifierString,
       fileVersion: data.fileVersion,
@@ -264,24 +106,7 @@ function LERC() {
     };
   };
 
-  var computeUsedBitDepths = function(data) {
-    const numBlocks = data.pixels.numBlocksX * data.pixels.numBlocksY;
-    const bitDepths = {};
-    for (let i = 0; i < numBlocks; i++) {
-      const block = data.pixels.blocks[i];
-      if (block.encoding === 0) {
-        bitDepths.float32 = true;
-      } else if (block.encoding === 1) {
-        bitDepths[block.bitsPerPixel] = true;
-      } else {
-        bitDepths[0] = true;
-      }
-    }
-
-    return Object.keys(bitDepths);
-  };
-
-  var parse = function(input, fp, skipMask) {
+  const parse = function(input, fp, skipMask) {
     const data = {};
 
     // File header
@@ -457,37 +282,212 @@ function LERC() {
     return data;
   };
 
-  var unstuff = function(src, bitsPerPixel, numPixels, offset, scale, dest, maxValue) {
-    const bitMask = (1 << bitsPerPixel) - 1;
-    let i = 0;
-    let o;
-    let bitsLeft = 0;
-    let n; let
-      buffer;
-    const nmax = Math.ceil((maxValue - offset) / scale);
-    // get rid of trailing bytes that are already part of next block
-    const numInvalidTailBytes = src.length * 4 - Math.ceil(bitsPerPixel * numPixels / 8);
-    src[src.length - 1] <<= 8 * numInvalidTailBytes;
+  const uncompressPixelValues = function(
+    data,
+    TypedArrayClass,
+    maskBitset,
+    noDataValue,
+    storeDecodedMask,
+  ) {
+    let blockIdx = 0;
+    const numX = data.pixels.numBlocksX;
+    const numY = data.pixels.numBlocksY;
+    const blockWidth = Math.floor(data.width / numX);
+    const blockHeight = Math.floor(data.height / numY);
+    const scale = 2 * data.maxZError;
+    maskBitset = maskBitset || (data.mask ? data.mask.bitset : null);
 
-    for (o = 0; o < numPixels; o++) {
-      if (bitsLeft === 0) {
-        buffer = src[i++];
-        bitsLeft = 32;
-      }
-      if (bitsLeft >= bitsPerPixel) {
-        n = (buffer >>> (bitsLeft - bitsPerPixel)) & bitMask;
-        bitsLeft -= bitsPerPixel;
-      } else {
-        const missingBits = bitsPerPixel - bitsLeft;
-        n = ((buffer & bitMask) << missingBits) & bitMask;
-        buffer = src[i++];
-        bitsLeft = 32 - missingBits;
-        n += buffer >>> bitsLeft;
-      }
-      // pixel values may exceed max due to quantization
-      dest[o] = n < nmax ? offset + n * scale : maxValue;
+    let resultPixels; let
+      resultMask;
+    resultPixels = new TypedArrayClass(data.width * data.height);
+    if (storeDecodedMask && maskBitset) {
+      resultMask = new Uint8Array(data.width * data.height);
     }
-    return dest;
+    const blockDataBuffer = new Float32Array(blockWidth * blockHeight);
+
+    let xx; let
+      yy;
+    for (let y = 0; y <= numY; y++) {
+      const thisBlockHeight = y !== numY ? blockHeight : data.height % numY;
+      if (thisBlockHeight === 0) {
+        continue;
+      }
+      for (let x = 0; x <= numX; x++) {
+        const thisBlockWidth = x !== numX ? blockWidth : data.width % numX;
+        if (thisBlockWidth === 0) {
+          continue;
+        }
+
+        let outPtr = y * data.width * blockHeight + x * blockWidth;
+        const outStride = data.width - thisBlockWidth;
+
+        const block = data.pixels.blocks[blockIdx];
+
+        var blockData; var blockPtr; var
+          constValue;
+        if (block.encoding < 2) {
+          // block is either uncompressed or bit-stuffed (encodings 0 and 1)
+          if (block.encoding === 0) {
+            // block is uncompressed
+            blockData = block.rawData;
+          } else {
+            // block is bit-stuffed
+            unstuff(
+              block.stuffedData,
+              block.bitsPerPixel,
+              block.numValidPixels,
+              block.offset,
+              scale,
+              blockDataBuffer,
+              data.pixels.maxValue,
+            );
+            blockData = blockDataBuffer;
+          }
+          blockPtr = 0;
+        } else if (block.encoding === 2) {
+          // block is all 0
+          constValue = 0;
+        } else {
+          // block has constant value (encoding === 3)
+          constValue = block.offset;
+        }
+
+        var maskByte;
+        if (maskBitset) {
+          for (yy = 0; yy < thisBlockHeight; yy++) {
+            if (outPtr & 7) {
+              //
+              maskByte = maskBitset[outPtr >> 3];
+              maskByte <<= outPtr & 7;
+            }
+            for (xx = 0; xx < thisBlockWidth; xx++) {
+              if (!(outPtr & 7)) {
+                // read next byte from mask
+                maskByte = maskBitset[outPtr >> 3];
+              }
+              if (maskByte & 128) {
+                // pixel data present
+                if (resultMask) {
+                  resultMask[outPtr] = 1;
+                }
+                resultPixels[outPtr++] = block.encoding < 2 ? blockData[blockPtr++] : constValue;
+              } else {
+                // pixel data not present
+                if (resultMask) {
+                  resultMask[outPtr] = 0;
+                }
+                resultPixels[outPtr++] = noDataValue;
+              }
+              maskByte <<= 1;
+            }
+            outPtr += outStride;
+          }
+        } else {
+          // mask not present, simply copy block over
+          if (block.encoding < 2) {
+            // duplicating this code block for performance reasons
+            // blockData case:
+            for (yy = 0; yy < thisBlockHeight; yy++) {
+              for (xx = 0; xx < thisBlockWidth; xx++) {
+                resultPixels[outPtr++] = blockData[blockPtr++];
+              }
+              outPtr += outStride;
+            }
+          } else {
+            // constValue case:
+            for (yy = 0; yy < thisBlockHeight; yy++) {
+              for (xx = 0; xx < thisBlockWidth; xx++) {
+                resultPixels[outPtr++] = constValue;
+              }
+              outPtr += outStride;
+            }
+          }
+        }
+        if (block.encoding === 1 && blockPtr !== block.numValidPixels) {
+          throw 'Block and Mask do not match';
+        }
+        blockIdx++;
+      }
+    }
+
+    return {
+      resultPixels,
+      resultMask,
+    };
+  };
+
+  /**
+   * Decode a LERC byte stream and return an object containing the pixel data and some required and optional
+   * information about it, such as the image's width and height.
+   *
+   * @param {ArrayBuffer} input The LERC input byte stream
+   * @param {object} [options] Decoding options, containing any of the following properties:
+   * @config {number} [inputOffset = 0]
+   *        Skip the first inputOffset bytes of the input byte stream. A valid LERC file is expected at that position.
+   * @config {Uint8Array} [encodedMask = null]
+   *        If specified, the decoder will not read mask information from the input and use the specified encoded
+   *        mask data instead. Mask header/data must not be present in the LERC byte stream in this case.
+   * @config {number} [noDataValue = LercCode.defaultNoDataValue]
+   *        Pixel value to use for masked pixels.
+   * @config {ArrayBufferView|Array} [pixelType = Float32Array]
+   *        The desired type of the pixelData array in the return value. Note that it is the caller's responsibility to
+   *        provide an appropriate noDataValue if the default pixelType is overridden.
+   * @config {boolean} [returnMask = false]
+   *        If true, the return value will contain a maskData property of type Uint8Array which has one element per
+   *        pixel, the value of which is 1 or 0 depending on whether that pixel's data is present or masked. If the
+   *        input LERC data does not contain a mask, maskData will not be returned.
+   * @config {boolean} [returnEncodedMask = false]
+   *        If true, the return value will contain a encodedMaskData property, which can be passed into encode() as
+   *        encodedMask.
+   * @config {boolean} [returnFileInfo = false]
+   *        If true, the return value will have a fileInfo property that contains metadata obtained from the
+   *        LERC headers and the decoding process.
+   * @config {boolean} [computeUsedBitDepths = false]
+   *        If true, the fileInfo property in the return value will contain the set of all block bit depths
+   *        encountered during decoding. Will only have an effect if returnFileInfo option is true.
+   * @returns {{width, height, pixelData, minValue, maxValue, noDataValue, [maskData], [encodedMaskData], [fileInfo]}}
+   */
+  LercCodec.decode = function(input, options) {
+    options = options || {};
+
+    const skipMask = options.encodedMaskData || options.encodedMaskData === null;
+    const parsedData = parse(input, options.inputOffset || 0, skipMask);
+
+    const noDataValue = options.noDataValue != null ? options.noDataValue : LercCodec.defaultNoDataValue;
+
+    const uncompressedData = uncompressPixelValues(
+      parsedData,
+      options.pixelType || Float32Array,
+      options.encodedMaskData,
+      noDataValue,
+      options.returnMask,
+    );
+
+    const result = {
+      width: parsedData.width,
+      height: parsedData.height,
+      pixelData: uncompressedData.resultPixels,
+      minValue: parsedData.pixels.minValue,
+      maxValue: parsedData.pixels.maxValue,
+      noDataValue,
+    };
+
+    if (uncompressedData.resultMask) {
+      result.maskData = uncompressedData.resultMask;
+    }
+
+    if (options.returnEncodedMask && parsedData.mask) {
+      result.encodedMaskData = parsedData.mask.bitset ? parsedData.mask.bitset : null;
+    }
+
+    if (options.returnFileInfo) {
+      result.fileInfo = formatFileInfo(parsedData);
+      if (options.computeUsedBitDepths) {
+        result.fileInfo.bitDepths = computeUsedBitDepths(parsedData);
+      }
+    }
+
+    return result;
   };
 
   return LercCodec;
