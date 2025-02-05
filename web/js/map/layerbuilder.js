@@ -66,15 +66,15 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} attributes
    * @param {*} wrapLayer
    */
-  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+  const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state, attributes);
+    const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
-    const layerNext = createLayerFunc(def, options, 1, state, attributes);
-    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
+    const layerNext = await createLayerFunc(def, options, 1, state, attributes);
+    const layerPrior = await createLayerFunc(def, options, -1, state, attributes);
 
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
@@ -1110,7 +1110,7 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const createIndexedVectorLayer = (def, options, day, state) => {
+  const createIndexedVectorLayer = async (def, options, day, state) => {
     const { proj: { selected } } = state;
     const { maxExtent } = selected;
     const {
@@ -1118,6 +1118,7 @@ export default function mapLayerBuilder(config, cache, store) {
       serviceName,
       tiles,
       id,
+      vectorStyle,
     } = def;
 
     const source = config.sources[def.source];
@@ -1144,7 +1145,7 @@ export default function mapLayerBuilder(config, cache, store) {
       declutter: true,
       renderMode: 'hybrid',
     });
-    olmsApplyStyle(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson', {
+    await olmsApplyStyle(layer, vectorStyle.url, {
       resolutions: tileGrid.getResolutions(),
       transformRequest(url, type) {
         if (type === 'Source') {
@@ -1154,7 +1155,7 @@ export default function mapLayerBuilder(config, cache, store) {
         }
       },
     });
-    applyBackground(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json');
+    await applyBackground(layer, vectorStyle.url);
 
     return layer;
   };
@@ -1210,22 +1211,22 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!isGranule) {
         switch (def.type) {
           case 'wmts':
-            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
             layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
-            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'titiler':
             layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
             break;
           case 'xyz':
-            layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
             break;
           case 'indexedVector':
-            layer = getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);

@@ -21,6 +21,10 @@
         "geographic": {
           "source": "ESRI"
         }
+      },
+      "vectorStyle": {
+        "id": "World_Basemap_GCS_v2",
+        "url": "https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json"
       }
     }
   }
