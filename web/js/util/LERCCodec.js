@@ -37,7 +37,7 @@ function LERC() {
       buffer;
     const nmax = Math.ceil((maxValue - offset) / scale);
     // get rid of trailing bytes that are already part of next block
-    const numInvalidTailBytes = (src.length * 4) - (Math.ceil(bitsPerPixel * numPixels / 8));
+    const numInvalidTailBytes = (src.length * 4) - Math.ceil((bitsPerPixel * numPixels) / 8);
     src[src.length - 1] <<= 8 * numInvalidTailBytes;
 
     for (o = 0; o < numPixels; o += 1) {
@@ -114,7 +114,8 @@ function LERC() {
     // console.log(fileIdView);
     data.fileIdentifierString = String.fromCharCode.apply(null, fileIdView);
     if (data.fileIdentifierString.trim() !== 'CntZImage') {
-      throw `Unexpected file identifier string: ${data.fileIdentifierString}`;
+      console.error(`Unexpected file identifier string: ${data.fileIdentifierString}`);
+      return null;
     }
     fp += 10;
     let view = new DataView(input, fp, 24);
@@ -137,7 +138,7 @@ function LERC() {
 
       // Mask Data
       if (data.mask.numBytes > 0) {
-        let bitset = new Uint8Array(Math.ceil((data.width * data.height) / 8));
+        const bitset = new Uint8Array(Math.ceil((data.width * data.height) / 8));
         view = new DataView(input, fp, data.mask.numBytes);
         let cnt = view.getInt16(0, true);
         let ip = 2;
@@ -158,13 +159,14 @@ function LERC() {
           ip += 2;
         } while (ip < data.mask.numBytes);
         if (cnt !== -32768 || op < bitset.length) {
-          throw 'Unexpected end of mask RLE encoding';
+          console.error('Unexpected end of mask RLE encoding');
+          return null;
         }
         data.mask.bitset = bitset;
         fp += data.mask.numBytes;
-      } else if ((data.mask.numBytes | data.mask.numBlocksY | data.mask.maxValue) == 0) {
+      } else if ((data.mask.numBytes | data.mask.numBlocksY | data.mask.maxValue) === 0) {
         // Special case, all nodata
-        var bitset = new Uint8Array(Math.ceil(data.width * data.height / 8));
+        const bitset = new Uint8Array(Math.ceil((data.width * data.height) / 8));
         data.mask.bitset = bitset;
       }
     }
@@ -200,7 +202,8 @@ function LERC() {
         size++;
         block.encoding = headerByte & 63;
         if (block.encoding > 3) {
-          throw `Invalid block encoding (${block.encoding})`;
+          console.error(`Invalid block encoding (${block.encoding})`);
+          return null;
         }
         if (block.encoding === 2) {
           fp++;
@@ -220,7 +223,8 @@ function LERC() {
             block.offset = view.getFloat32(1, true);
             size += 4;
           } else {
-            throw 'Invalid block offset type';
+            console.error('Invalid block offset type');
+            return null;
           }
           minValue = Math.min(block.offset, minValue);
 
@@ -240,13 +244,14 @@ function LERC() {
               block.numValidPixels = view.getUint32(size, true);
               size += 4;
             } else {
-              throw 'Invalid valid pixel count type';
+              console.error('Invalid valid pixel count type');
+              return null;
             }
           }
         }
         fp += size;
 
-        if (block.encoding == 3) {
+        if (block.encoding === 3) {
           continue;
         }
 
@@ -255,7 +260,8 @@ function LERC() {
         if (block.encoding === 0) {
           const numPixels = (data.pixels.numBytes - 1) / 4;
           if (numPixels !== Math.floor(numPixels)) {
-            throw 'uncompressed block has invalid length';
+            console.error('uncompressed block has invalid length');
+            return null;
           }
           arrayBuf = new ArrayBuffer(numPixels * 4);
           store8 = new Uint8Array(arrayBuf);
@@ -267,7 +273,7 @@ function LERC() {
           block.rawData = rawData;
           fp += numPixels * 4;
         } else if (block.encoding === 1) {
-          const dataBytes = Math.ceil(block.numValidPixels * block.bitsPerPixel / 8);
+          const dataBytes = Math.ceil((block.numValidPixels * block.bitsPerPixel) / 8);
           const dataWords = Math.ceil(dataBytes / 4);
           arrayBuf = new ArrayBuffer(dataWords * 4);
           store8 = new Uint8Array(arrayBuf);
@@ -297,9 +303,8 @@ function LERC() {
     const scale = 2 * data.maxZError;
     maskBitset = maskBitset || (data.mask ? data.mask.bitset : null);
 
-    let resultPixels; let
-      resultMask;
-    resultPixels = new TypedArrayClass(data.width * data.height);
+    let resultMask;
+    const resultPixels = new TypedArrayClass(data.width * data.height);
     if (storeDecodedMask && maskBitset) {
       resultMask = new Uint8Array(data.width * data.height);
     }
@@ -404,7 +409,8 @@ function LERC() {
           }
         }
         if (block.encoding === 1 && blockPtr !== block.numValidPixels) {
-          throw 'Block and Mask do not match';
+          console.error('Block and Mask do not match');
+          return null;
         }
         blockIdx++;
       }
@@ -452,6 +458,7 @@ function LERC() {
 
     const skipMask = options.encodedMaskData || options.encodedMaskData === null;
     const parsedData = parse(input, options.inputOffset || 0, skipMask);
+    if (!parsedData) return null;
 
     const noDataValue = options.noDataValue != null ? options.noDataValue : LercCodec.defaultNoDataValue;
 
@@ -462,6 +469,7 @@ function LERC() {
       noDataValue,
       options.returnMask,
     );
+    if (!uncompressedData) return null;
 
     const result = {
       width: parsedData.width,

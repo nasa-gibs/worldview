@@ -190,6 +190,10 @@ export function tileLoader(tile, src, layer, state, tilegrid, groupString) {
       const noDataValue = parseFloat(palette.noDataValue);
       if (Number.isNaN(noDataValue)) console.error(`No Data value incorrect for layer ${layer.id}. Layer might not display correctly`);
       const decodedData = lercCodec.decode(buffer, { returnMask: true, noDataValue });
+      if (!decodedData) {
+        console.error(`Error decoding LERC data for layer ${layer.id}`);
+        return;
+      }
       const { pixelData, width, height } = decodedData;
 
       const canvas = document.createElement('canvas');
