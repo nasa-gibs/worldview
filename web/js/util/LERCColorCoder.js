@@ -26,79 +26,79 @@ const STATE_ERROR = 3;
  * @param {object} context
  */
 function changeColorPalette(imageData, lookup, new_canvas, context) {
-    const octets = new_canvas.width * new_canvas.height * 4;
+  const octets = new_canvas.width * new_canvas.height * 4;
 
-    // Process each pixel to color-swap single color palettes
-    const pixels = imageData.data;
-    const colorLookupObj = lodashCloneDeep(lookup);
-    const defaultColor = Object.keys(lookup)[0];
-    const paletteColor = lookup[Object.keys(lookup)[0]];
+  // Process each pixel to color-swap single color palettes
+  const pixels = imageData.data;
+  const colorLookupObj = lodashCloneDeep(lookup);
+  const defaultColor = Object.keys(lookup)[0];
+  const paletteColor = lookup[Object.keys(lookup)[0]];
 
-    // Load black/transparent into the lookup object
-    colorLookupObj['0,0,0,0'] = {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 0,
-    };
+  // Load black/transparent into the lookup object
+  colorLookupObj['0,0,0,0'] = {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 0,
+  };
 
-    for (let i = 0; i < octets; i += 4) {
-      const pixelColor = `${pixels[i + 0]},${
-        pixels[i + 1]},${
-        pixels[i + 2]},${
-        pixels[i + 3]}`;
+  for (let i = 0; i < octets; i += 4) {
+    const pixelColor = `${pixels[i + 0]},${
+      pixels[i + 1]},${
+      pixels[i + 2]},${
+      pixels[i + 3]}`;
 
-      if (!colorLookupObj[pixelColor]) {
-        // Handle non-transparent pixels that do not match the palette exactly
-        const defaultColorArr = defaultColor.split(',');
-        const pixelColorArr = pixelColor.split(',');
+    if (!colorLookupObj[pixelColor]) {
+      // Handle non-transparent pixels that do not match the palette exactly
+      const defaultColorArr = defaultColor.split(',');
+      const pixelColorArr = pixelColor.split(',');
 
-        // Determine difference of pixel from default to replicate anti-aliasing
-        const rDifference = pixelColorArr[0] - defaultColorArr[0];
-        const gDifference = pixelColorArr[1] - defaultColorArr[1];
-        const bDifference = pixelColorArr[2] - defaultColorArr[2];
-        const alphaValue = pixelColorArr[3];
+      // Determine difference of pixel from default to replicate anti-aliasing
+      const rDifference = pixelColorArr[0] - defaultColorArr[0];
+      const gDifference = pixelColorArr[1] - defaultColorArr[1];
+      const bDifference = pixelColorArr[2] - defaultColorArr[2];
+      const alphaValue = pixelColorArr[3];
 
-        // Store the resulting pair of pixel color & anti-aliased adjusted color
-        colorLookupObj[pixelColor] = {
-          r: paletteColor.r + rDifference,
-          g: paletteColor.g + gDifference,
-          b: paletteColor.b + bDifference,
-          a: alphaValue,
-        };
-      }
-
-      // set the pixel color
-      imageData.data[i + 0] = colorLookupObj[pixelColor].r;
-      imageData.data[i + 1] = colorLookupObj[pixelColor].g;
-      imageData.data[i + 2] = colorLookupObj[pixelColor].b;
-      imageData.data[i + 3] = colorLookupObj[pixelColor].a;
+      // Store the resulting pair of pixel color & anti-aliased adjusted color
+      colorLookupObj[pixelColor] = {
+        r: paletteColor.r + rDifference,
+        g: paletteColor.g + gDifference,
+        b: paletteColor.b + bDifference,
+        a: alphaValue,
+      };
     }
-    context.putImageData(imageData, 0, 0);
+
+    // set the pixel color
+    imageData.data[i + 0] = colorLookupObj[pixelColor].r;
+    imageData.data[i + 1] = colorLookupObj[pixelColor].g;
+    imageData.data[i + 2] = colorLookupObj[pixelColor].b;
+    imageData.data[i + 3] = colorLookupObj[pixelColor].a;
+  }
+  context.putImageData(imageData, 0, 0);
 }
 
 function getImgData(mapLayer, tileCoord) {
-    return mapLayer
-      .getSource()
-      .tileCache.get(tileCoord.join('/'))
-      .getImage().decodedPixels;
-  }
-
-/* Finds the top left pixel that specifies where a tile should be drawn from */
-function findDrawTilePixel(tilegrid, tile_coord, map) {
-    const extent = tilegrid.getTileCoordExtent(tile_coord);
-    const coord = [extent[0], extent[3]];
-    const pixel = map.getPixelFromCoordinate(coord);
-    return pixel;
+  return mapLayer
+    .getSource()
+    .tileCache.get(tileCoord.join('/'))
+    .getImage().decodedPixels;
 }
 
-  // most basic color function that will be used for LERC unless the palette is changed
+/* Finds the top left pixel that specifies where a tile should be drawn from */
+function findDrawTilePixel(tilegrid, tileCoord, map) {
+  const extent = tilegrid.getTileCoordExtent(tileCoord);
+  const coord = [extent[0], extent[3]];
+  const pixel = map.getPixelFromCoordinate(coord);
+  return pixel;
+}
+
+// most basic color function that will be used for LERC unless the palette is changed
 function getGreyScalar(val, min, max) {
-    const colors = [];
-    colors[0] = 255 * (val - min) / (max - min);
-    colors[1] = colors[0];
-    colors[2] = colors[0];
-    return colors;
+  const colors = [];
+  colors[0] = 255 * (val - min) / (max - min);
+  colors[1] = colors[0];
+  colors[2] = colors[0];
+  return colors;
 }
 
 /*
@@ -106,81 +106,81 @@ function getGreyScalar(val, min, max) {
 * using the color_scale and min, max specified.
 */
 function drawTile(
-    pixelData,
-    layer,
-    context,
-    tile,
-    tilegrid,
-    size,
-    min,
-    max,
-    opacity,
-    filter,
-    map,
-    state,
-    noDataValue,
-    groupString
-  ) {
-    const tile_coord = tile.getTileCoord();
-    let pixel = findDrawTilePixel(tilegrid, tile_coord, map);
-    pixel = [Math.round(pixel[0]), Math.round(pixel[1])];
-    const image = context.createImageData(size, size);
-    const values = pixelData;
+  pixelData,
+  layer,
+  context,
+  tile,
+  tilegrid,
+  size,
+  min,
+  max,
+  opacity,
+  filter,
+  map,
+  state,
+  noDataValue,
+  groupString,
+) {
+  const tileCoord = tile.getTileCoord();
+  let pixel = findDrawTilePixel(tilegrid, tileCoord, map);
+  pixel = [Math.round(pixel[0]), Math.round(pixel[1])];
+  const image = context.createImageData(size, size);
+  const values = pixelData;
 
-    /* If the filter is not on, display everything, just make numbers above max max color and below min min color */
-    if (!filter) {
-      for (let j = 0; j < values.length; j++) {
-        var value = values[j];
-        if (value != noDataValue) {
-          if (value < min) {
-            value = min;
-          }
-          if (value > max) {
-            value = max;
-          }
-          var colors = getGreyScalar(value, min, max);
-          image.data[j * 4] = colors[0];
-          image.data[j * 4 + 1] = colors[1];
-          image.data[j * 4 + 2] = colors[2];
-          image.data[j * 4 + 3] = opacity;
-        } else {
-          image.data[j * 4] = 0;
-          image.data[j * 4 + 1] = 0;
-          image.data[j * 4 + 2] = 0;
-          image.data[j * 4 + 3] = 0;
+  /* If the filter is not on, display everything, just make numbers above max max color and below min min color */
+  if (!filter) {
+    for (let j = 0; j < values.length; j++) {
+      var value = values[j];
+      if (value != noDataValue) {
+        if (value < min) {
+          value = min;
         }
-      }
-    } else {
-      /* If the filter is on, do not display pixels below min and above max */
-      for (let j = 0; j < values.length; j++) {
-        var value = values[j];
-        if (value != noDataValue && value > min && value < max) {
-          var colors = getGreyScalar(value, min, max);
-          image.data[j * 4] = colors[0];
-          image.data[j * 4 + 1] = colors[1];
-          image.data[j * 4 + 2] = colors[2];
-          image.data[j * 4 + 3] = opacity;
-        } else {
-          image.data[j * 4] = 0;
-          image.data[j * 4 + 1] = 0;
-          image.data[j * 4 + 2] = 0;
-          image.data[j * 4 + 3] = 0;
+        if (value > max) {
+          value = max;
         }
+        var colors = getGreyScalar(value, min, max);
+        image.data[j * 4] = colors[0];
+        image.data[j * 4 + 1] = colors[1];
+        image.data[j * 4 + 2] = colors[2];
+        image.data[j * 4 + 3] = opacity;
+      } else {
+        image.data[j * 4] = 0;
+        image.data[j * 4 + 1] = 0;
+        image.data[j * 4 + 2] = 0;
+        image.data[j * 4 + 3] = 0;
       }
     }
-    /* Fixes issues with retina displays by drawing and scaling on a different canvas */
-    const new_canvas = document.createElement('canvas');
-    new_canvas.width = size * devicePixelRatio;
-    new_canvas.height = size * devicePixelRatio;
-
-    context.putImageData(image, 0, 0);
-
-    /* if the user has changed the palette, make sure to update the color */
-    if (layer.custom) {
-      const lookup = getPaletteLookup(layer.id, groupString || 'active', state);
-      changeColorPalette(image, lookup, new_canvas, context);
+  } else {
+    /* If the filter is on, do not display pixels below min and above max */
+    for (let j = 0; j < values.length; j++) {
+      var value = values[j];
+      if (value != noDataValue && value > min && value < max) {
+        var colors = getGreyScalar(value, min, max);
+        image.data[j * 4] = colors[0];
+        image.data[j * 4 + 1] = colors[1];
+        image.data[j * 4 + 2] = colors[2];
+        image.data[j * 4 + 3] = opacity;
+      } else {
+        image.data[j * 4] = 0;
+        image.data[j * 4 + 1] = 0;
+        image.data[j * 4 + 2] = 0;
+        image.data[j * 4 + 3] = 0;
+      }
     }
   }
+  /* Fixes issues with retina displays by drawing and scaling on a different canvas */
+  const new_canvas = document.createElement('canvas');
+  new_canvas.width = size * devicePixelRatio;
+  new_canvas.height = size * devicePixelRatio;
+
+  context.putImageData(image, 0, 0);
+
+  /* if the user has changed the palette, make sure to update the color */
+  if (layer.custom) {
+    const lookup = getPaletteLookup(layer.id, groupString || 'active', state);
+    changeColorPalette(image, lookup, new_canvas, context);
+  }
+}
 
 /**
  * Loads a lerc layer tile to the map
@@ -241,7 +241,7 @@ export function tileLoader(tile, src, layer, state, tilegrid, groupString) {
         map,
         state,
         noDataValue,
-        groupString
+        groupString,
       );
 
       img.decodedPixels = pixelData;
