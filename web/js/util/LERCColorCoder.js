@@ -6,7 +6,7 @@
 * range.
 */
 import { cloneDeep as lodashCloneDeep } from 'lodash';
-import LERC from './LERCCodec';
+import LERC from '../lib/LERCCodec';
 import {
   getPalette,
   getPaletteLegend,
