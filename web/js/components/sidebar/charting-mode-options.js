@@ -190,7 +190,7 @@ function ChartingModeOptions(props) {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
       type: timeSpan === 'range' ? 'series' : 'date',
-      steps: 6, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
+      steps: 20, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
       layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
       colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
@@ -277,6 +277,7 @@ function ChartingModeOptions(props) {
   }
 
   async function onRequestChartClick() {
+    if (chartRequestInProgress) return;
     updateChartRequestStatus(true);
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
@@ -408,8 +409,8 @@ function ChartingModeOptions(props) {
     updateAOICoordinates([...bottomLeft, ...topRight]);
   }
 
-  const onAreaOfInterestButtonClick = (evt) => {
-    if (aoiActive) {
+  const onAreaOfInterestButtonClick = (setAOIActive) => {
+    if (setAOIActive) {
       updateAOICoordinates(null);
     } else {
       const {
@@ -419,7 +420,9 @@ function ChartingModeOptions(props) {
         x, y, width: x2 - x, height: y2 - y,
       });
     }
-    toggleAreaOfInterestActive();
+    if (aoiActive !== setAOIActive) {
+      toggleAreaOfInterestActive();
+    }
   };
 
   const layerInfo = getActiveChartingLayer();
@@ -429,7 +432,8 @@ function ChartingModeOptions(props) {
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   const chartRequestMessage = chartRequestInProgress ? 'In progress...' : '';
   const requestBtnText = timeSpanSelection === 'date' ? 'Generate Statistics' : 'Generate Chart';
-  const aoiBtnText = aoiActive ? 'Area Selected' : 'Entire Screen';
+  const entireScreenBtnStatus = aoiActive ? '' : 'btn-active';
+  const aoiSelectedBtnStatus = aoiActive ? 'btn-active' : '';
 
   return (
     <div
@@ -437,7 +441,7 @@ function ChartingModeOptions(props) {
       className="wv-charting-mode-container"
       style={{ display: isChartingActive && !isMobile ? 'block' : 'none' }}
     >
-      <h1 className="charting-title">Charting Mode</h1>
+      <h1 className="charting-title">Charting Mode - BETA</h1>
       <div id="charting-info-container" className="charting-info-container">
         <span id="charting-info-icon">
           <FontAwesomeIcon
@@ -466,15 +470,26 @@ function ChartingModeOptions(props) {
           </UncontrolledTooltip>
         </span>
       </div>
-      <div className="charting-aoi-container">
+      <div className="charting-aoi-title-container">
         <h3>{aoiTextPrompt}</h3>
-        <CustomButton
-          id="edit-coordinates"
-          aria-label={aoiBtnText}
-          className="edit-coordinates btn"
-          onClick={onAreaOfInterestButtonClick}
-          text={aoiBtnText}
-        />
+      </div>
+      <div className="charting-aoi-container">
+        <ButtonGroup>
+          <Button
+            id="charting-date-single-button"
+            className={`charting-button ${entireScreenBtnStatus}`}
+            onClick={() => onAreaOfInterestButtonClick(false)}
+          >
+            Entire Screen
+          </Button>
+          <Button
+            id="charting-date-range-button"
+            className={`charting-button ${aoiSelectedBtnStatus}`}
+            onClick={() => onAreaOfInterestButtonClick(true)}
+          >
+            Area Selected
+          </Button>
+        </ButtonGroup>
       </div>
       <div className="charting-timespan-container">
         <h3>Time:</h3>
@@ -512,6 +527,7 @@ function ChartingModeOptions(props) {
           aria-label={requestBtnText}
           className="charting-create-button btn wv-button red"
           onClick={() => onRequestChartClick()}
+          valid={!chartRequestInProgress}
           text={requestBtnText}
         />
       </div>
@@ -529,7 +545,7 @@ function ChartingModeOptions(props) {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={onBoundaryUpdate}
-          onClose={onAreaOfInterestButtonClick}
+          onClose={() => onAreaOfInterestButtonClick(false)}
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -614,7 +630,7 @@ const mapDispatchToProps = (dispatch) => ({
   openChartingInfoModal: () => {
     dispatch(
       openCustomContent('CHARTING_INFO_MODAL', {
-        headerText: 'Charting Tool',
+        headerText: 'Charting Tool - BETA',
         backdrop: false,
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
