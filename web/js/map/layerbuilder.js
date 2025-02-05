@@ -1142,7 +1142,6 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: maxExtent,
       className: id,
     });
-    // applyStyle(def, layer, state, options);
     olmsApplyStyle(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson', {
       resolutions: tileGrid.getResolutions(),
       transformRequest(url, type) {
