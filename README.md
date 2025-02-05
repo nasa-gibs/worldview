@@ -94,8 +94,6 @@ We welcome your contributions! Feel free to [open an issue](https://github.com/n
 
 Please review [CONTRIBUTING.md](.github/CONTRIBUTING.md) for contribution guidelines before getting started.
 
-Worldview and NASA follow the [Contributor Covenant Code of Conduct](.github/CODE_OF_CONDUCT.md).
-
 ## License
 
 NASA-1.3 (See [LICENSE.md](LICENSE.md))

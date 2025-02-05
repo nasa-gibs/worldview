@@ -98,7 +98,8 @@ const skipLayers = [
   'AERONET_AOD_500NM',
   'AERONET_ANGSTROM_440-870NM',
   'DAILY_AERONET_AOD_500NM',
-  'DAILY_AERONET_ANGSTROM_440-870NM'
+  'DAILY_AERONET_ANGSTROM_440-870NM',
+  'NOAA_2025_ERI_WMTS'
 ]
 
 // NOTE: Only using these properties at this time
@@ -115,17 +116,15 @@ const useKeys = [
 ]
 
 async function main (url) {
-  if (argv.mode === 'profile') console.time('getVisMetadata')
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  const promises = layerOrder.map((layerId) => {
-    if (layerId.includes('_STD') && layerId.includes('_NRT')) return null
-
-    return getMetadata(layerId, url)
-  })
-  await Promise.allSettled(promises)
+  for (const layerId of layerOrder) {
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
+      await getMetadata(layerId, url)
+    }
+  }
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -137,7 +136,6 @@ async function main (url) {
 
   await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
   console.warn(`${prog}: Combined all layer-metadata files into ${path.parse(outputFile).base}`)
-  if (argv.mode === 'profile') console.timeEnd('getVisMetadata')
 }
 
 async function getDAAC (metadata) {

@@ -36,7 +36,7 @@ test('Enabled Corrected Reflectance layers are shown as checked', async () => {
 
 test('"Unavailable" layers show unavailable icon and tooltip', async () => {
   const { weldUnavailableTooltipIcon } = selectors
-  await page.locator('#landsat-weld-1-source-Nav').click()
+  await page.locator('#landsat-weld-2-source-Nav').click()
   await weldUnavailableTooltipIcon.hover()
   const tooltip = await page.locator('.tooltip')
   await expect(tooltip).toBeVisible()
@@ -45,7 +45,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(10)
+  await expect(layersSearchRow).toHaveCount(12)
 })
 
 test('Updating input changes results', async () => {
@@ -155,8 +155,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(15)
-  await expect(layerResultsCountText).toContainText('Showing 15 out of')
+  await expect(layersSearchRow).toHaveCount(17)
+  await expect(layerResultsCountText).toContainText('Showing 17 out of')
 })
 
 test('Finding layer by ID with search', async () => {
@@ -220,7 +220,7 @@ test('Selecting a measurement from the grid shows sources and details for first 
   // await expect(maiacAvailableCoverage).toBeVisible()
 })
 
-test('Available grid source layer measuremet does not have unavaiable coverage icon', async () => {
+test('Available grid source layer measurement does not have unavailable coverage icon', async () => {
   const {
     aquaModisTab,
     layerDetailHeader,

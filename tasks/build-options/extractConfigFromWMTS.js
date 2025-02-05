@@ -27,12 +27,6 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
-  .option('mode', {
-    demandOption: true,
-    alias: 'm',
-    type: 'string',
-    description: 'mode'
-  })
   .epilog('Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON')
 
 const { argv } = options
@@ -81,9 +75,7 @@ class SkipException extends Error {
  * @throws {SkipException}
  */
 async function main () {
-  if (argv.mode === 'profile') console.time('extractConfigFromWMTS')
   for (const entry of entries) {
-    if (argv.mode === 'profile') console.time(`extractConfigFromWMTS-${entry.source}`)
     wv.layers = {}
     wv.sources = {}
     wvMatrixSets = {}
@@ -100,7 +92,6 @@ async function main () {
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
-    if (argv.mode === 'profile') console.timeEnd(`extractConfigFromWMTS-${entry.source}`)
   }
 
   console.warn(`${prog}:${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
@@ -108,7 +99,6 @@ async function main () {
   if (totalErrorCount > 0) {
     throw new Error(`${prog}: Error: ${totalErrorCount} errors occured`)
   }
-  if (argv.mode === 'profile') console.timeEnd('extractConfigFromWMTS')
 }
 
 async function processEntry (entry) {
@@ -152,22 +142,23 @@ async function processEntry (entry) {
     console.error(`${prog}: ERROR: [${gcId}] No layers\n`)
     return { errorCount, warningCount, layerCount }
   }
-  const promises = gcContents.Layer.map((gcLayer) => {
-    layerCount += 1
-    return processLayer(gcLayer, wvLayers, entry)
-  })
-  const results = await Promise.allSettled(promises)
-  const rejected = results.filter(result => result.status === 'rejected')
-  rejected.forEach((reject) => {
-    const error = reject.reason
-    if (error instanceof SkipException) {
-      warningCount += 1
-      console.warn(`${prog}: WARNING: [${gcId}] Skipping\n`)
-    } else {
-      errorCount += 1
-      console.error(`${prog}: ERROR: [${gcId}] ${error}\n`)
+
+  for (const gcLayer of gcContents.Layer) {
+    try {
+      layerCount += 1
+      await processLayer(gcLayer, wvLayers, entry)
+    } catch (error) {
+      if (error instanceof SkipException) {
+        warningCount += 1
+        console.warn(`${prog}: WARNING: [${gcId}] Skipping\n`)
+      } else {
+        errorCount += 1
+        console.error(error.stack)
+        const ident = gcLayer['ows:Identifier']._text
+        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${error}\n`)
+      }
     }
-  })
+  }
 
   if (gcContents.TileMatrixSet === 'Object') {
     processMatrixSet(gcContents.TileMatrixSet, entry)
