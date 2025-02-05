@@ -1,5 +1,6 @@
 {
 	"layerOrder": [
+    "NOAA_2025_ERI_WMTS",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_Customizable_Landsat",
@@ -87,6 +88,7 @@
 		"TEMPO_L2_Cloud_Cloud_Pressure_Total_Granule",
 		"TEMPO_L2_Ozone_Column_Amount_Granule",
 		"TEMPO_L2_Ozone_Cloud_Fraction_Granule",
+		"TEMPO_L2_Ozone_UV_Aerosol_Index_Granule",
 		"TEMPO_L3_Formaldehyde_Vertical_Column",
 		"TEMPO_L3_NO2_Vertical_Column_Stratosphere",
 		"TEMPO_L3_NO2_Vertical_Column_Troposphere",
@@ -94,6 +96,7 @@
 		"TEMPO_L3_Cloud_Cloud_Pressure_Total",
 		"TEMPO_L3_Ozone_Column_Amount",
 		"TEMPO_L3_Ozone_Cloud_Fraction",
+		"TEMPO_L3_Ozone_UV_Aerosol_Index",
 		"VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
 		"VIIRS_NOAA20_DayNightBand_AtSensor_M15",
 		"VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
@@ -160,6 +163,8 @@
 		"VIIRS_NOAA20_Photosynthetically_Available_Radiation",
 		"VIIRS_SNPP_L2_Chlorophyll_A",
 		"VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+		"MERIS_ENVISAT_True_Color",
+		"MERIS_ENVISAT_Chlorophyll_a",
 		"SEAWIFS_ORBVIEW-2_GAC_True_Color",
 		"SEAWIFS_ORBVIEW-2_GAC_Chlorophyll_a",
 		"GOES-East_ABI_GeoColor",

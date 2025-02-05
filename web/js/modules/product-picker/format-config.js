@@ -81,7 +81,7 @@ function setCoverageFacetProp(layer, selectedDate) {
 
 function setTypeProp(layer) {
   const { type } = layer;
-  const rasterTypes = ['wms', 'wmts', 'xyz'];
+  const rasterTypes = ['wms', 'wmts', 'xyz', 'composite:wmts'];
   if (rasterTypes.includes(type)) {
     layer.type = 'Raster (Mosaicked)';
   }
