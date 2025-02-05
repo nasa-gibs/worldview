@@ -7,7 +7,7 @@ import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
-import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
@@ -25,6 +25,7 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import lodashCloneDeep from 'lodash/cloneDeep';
+import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -1121,10 +1122,18 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const source = config.sources[def.source];
 
+    const tileGrid = createXYZ({
+      extent: [-180, -90, 180, 90],
+      tileSize: 512,
+      maxResolution: 180 / 256,
+      maxZoom: 22,
+    });
+
     const sourceOptions = {
       url: `${source.url}/${layerName}/${serviceName}/${tiles[0]}`,
       projection: 'EPSG:4326',
       format: new MVT(),
+      tileGrid,
     };
     const vectorTileSource = new SourceVectorTile(sourceOptions);
 
@@ -1133,6 +1142,18 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: maxExtent,
       className: id,
     });
+    // applyStyle(def, layer, state, options);
+    olmsApplyStyle(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson', {
+      resolutions: tileGrid.getResolutions(),
+      transformRequest(url, type) {
+        if (type === 'Source') {
+          return new Request(
+            url.replace('/VectorTileServer', '/VectorTileServer/'),
+          );
+        }
+      },
+    });
+    applyBackground(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json');
 
     return layer;
   };
