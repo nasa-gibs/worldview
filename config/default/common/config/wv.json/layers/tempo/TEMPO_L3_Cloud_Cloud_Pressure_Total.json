@@ -9,7 +9,7 @@
       "group": "overlays",
       "layergroup": "Cloud Pressure",
       "dataAvailability": "dd",
-      "startDate": "2023-08-02T15:12:49Z",
+      "startDate": "2023-08-02T15:00:00Z",
       "shiftadjacentdays": false
     }
   }
