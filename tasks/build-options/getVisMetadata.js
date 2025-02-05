@@ -172,11 +172,11 @@ async function getMetadata (layerId, baseUrl, count) {
       daynight: [
         'night'
       ],
-      'conceptIds': [],
-      'orbitDirection': [
+      conceptIds: [],
+      orbitDirection: [
         'descending'
       ],
-      'layerPeriod': 'Daily'
+      layerPeriod: 'Daily'
     }
     layerMetadata[layerId] = await getDAAC(metadata)
     let metadataKeys = Object.keys(layerMetadata[layerId])

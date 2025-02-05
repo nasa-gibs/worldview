@@ -396,9 +396,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     // lerc layers need a different tileLoadFunction
     if (def.format === 'image/lerc') {
-      tileSource.setTileLoadFunction((tile, src) =>
-        tileLoader(tile, src, def, state, sourceOptions.tileGrid, options.group)
-      )
+      tileSource.setTileLoadFunction((tile, src) => tileLoader(tile, src, def, state, sourceOptions.tileGrid, options.group));
     }
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
