@@ -37,7 +37,7 @@ function LERC() {
       buffer;
     const nmax = Math.ceil((maxValue - offset) / scale);
     // get rid of trailing bytes that are already part of next block
-    const numInvalidTailBytes = src.length * 4 - Math.ceil(bitsPerPixel * numPixels / 8);
+    const numInvalidTailBytes = (src.length * 4) - (Math.ceil(bitsPerPixel * numPixels / 8));
     src[src.length - 1] <<= 8 * numInvalidTailBytes;
 
     for (o = 0; o < numPixels; o += 1) {
@@ -113,7 +113,7 @@ function LERC() {
     const fileIdView = new Uint8Array(input, fp, 10);
     // console.log(fileIdView);
     data.fileIdentifierString = String.fromCharCode.apply(null, fileIdView);
-    if (data.fileIdentifierString.trim() != 'CntZImage') {
+    if (data.fileIdentifierString.trim() !== 'CntZImage') {
       throw `Unexpected file identifier string: ${data.fileIdentifierString}`;
     }
     fp += 10;
@@ -137,7 +137,7 @@ function LERC() {
 
       // Mask Data
       if (data.mask.numBytes > 0) {
-        var bitset = new Uint8Array(Math.ceil(data.width * data.height / 8));
+        let bitset = new Uint8Array(Math.ceil((data.width * data.height) / 8));
         view = new DataView(input, fp, data.mask.numBytes);
         let cnt = view.getInt16(0, true);
         let ip = 2;
@@ -250,7 +250,7 @@ function LERC() {
           continue;
         }
 
-        var arrayBuf; var
+        let arrayBuf; let
           store8;
         if (block.encoding === 0) {
           const numPixels = (data.pixels.numBytes - 1) / 4;
@@ -323,7 +323,7 @@ function LERC() {
 
         const block = data.pixels.blocks[blockIdx];
 
-        var blockData; var blockPtr; var
+        let blockData; let blockPtr; let
           constValue;
         if (block.encoding < 2) {
           // block is either uncompressed or bit-stuffed (encodings 0 and 1)
@@ -352,7 +352,7 @@ function LERC() {
           constValue = block.offset;
         }
 
-        var maskByte;
+        let maskByte;
         if (maskBitset) {
           for (yy = 0; yy < thisBlockHeight; yy++) {
             if (outPtr & 7) {
@@ -387,16 +387,16 @@ function LERC() {
           if (block.encoding < 2) {
             // duplicating this code block for performance reasons
             // blockData case:
-            for (yy = 0; yy < thisBlockHeight; yy++) {
-              for (xx = 0; xx < thisBlockWidth; xx++) {
+            for (yy = 0; yy < thisBlockHeight; yy += 1) {
+              for (xx = 0; xx < thisBlockWidth; xx += 1) {
                 resultPixels[outPtr++] = blockData[blockPtr++];
               }
               outPtr += outStride;
             }
           } else {
             // constValue case:
-            for (yy = 0; yy < thisBlockHeight; yy++) {
-              for (xx = 0; xx < thisBlockWidth; xx++) {
+            for (yy = 0; yy < thisBlockHeight; yy += 1) {
+              for (xx = 0; xx < thisBlockWidth; xx += 1) {
                 resultPixels[outPtr++] = constValue;
               }
               outPtr += outStride;
