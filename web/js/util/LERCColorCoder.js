@@ -87,9 +87,8 @@ function getImgData(mapLayer, tileCoord) {
 // most basic color function that will be used for LERC unless the palette is changed
 function getGreyScalar(val, min, max) {
   const colors = [];
-  colors[0] = 255 * (val - min) / (max - min);
-  colors[1] = colors[0];
-  colors[2] = colors[0];
+  colors[0] = 255 * ((val - min) / (max - min));
+  [colors[1], colors[2]] = [colors[0], colors[0]];
   return colors;
 }
 
@@ -115,7 +114,7 @@ function drawTile(
 
   /* If the filter is not on, display everything, just make numbers above max max color and below min min color */
   if (!filter) {
-    for (let j = 0; j < values.length; j+=1) {
+    for (let j = 0; j < values.length; j += 1) {
       let value = values[j];
       if (value !== noDataValue) {
         if (value < min) {
@@ -125,9 +124,7 @@ function drawTile(
           value = max;
         }
         const colors = getGreyScalar(value, min, max);
-        image.data[j * 4] = colors[0];
-        image.data[j * 4 + 1] = colors[1];
-        image.data[j * 4 + 2] = colors[2];
+        [image.data[j * 4], image.data[j * 4 + 1], image.data[j * 4 + 2]] = colors;
         image.data[j * 4 + 3] = opacity;
       } else {
         image.data[j * 4] = 0;
@@ -138,13 +135,11 @@ function drawTile(
     }
   } else {
     /* If the filter is on, do not display pixels below min and above max */
-    for (let j = 0; j < values.length; j+=1) {
-      let value = values[j];
+    for (let j = 0; j < values.length; j += 1) {
+      const value = values[j];
       if (value !== noDataValue && value > min && value < max) {
         const colors = getGreyScalar(value, min, max);
-        image.data[j * 4] = colors[0];
-        image.data[j * 4 + 1] = colors[1];
-        image.data[j * 4 + 2] = colors[2];
+        [image.data[j * 4], image.data[j * 4 + 1], image.data[j * 4 + 2]] = colors;
         image.data[j * 4 + 3] = opacity;
       } else {
         image.data[j * 4] = 0;
