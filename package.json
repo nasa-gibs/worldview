@@ -212,6 +212,7 @@
     "tough-cookie": "^5.0.0",
     "upng-js": "^2.1.0",
     "url-template": "^3.1.1",
+    "util": "^0.12.5",
     "what-input": "^5.2.12"
   },
   "overrides": {

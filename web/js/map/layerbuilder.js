@@ -50,7 +50,7 @@ import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
-import { tileLoader } from "../util/LERCColorCoder";
+import { tileLoader } from '../util/LERCColorCoder';
 
 const componentToHex = (c) => {
   const hex = c.toString(16);
@@ -376,7 +376,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     let sourceURL = def.sourceOverride || configSource.url;
     // graceal this can be removed later
-    if (def.format === "image/lerc") sourceURL = "https://localhost:8080/wmts/epsg4326/best/wmts.cgi";
+    if (def.format === 'image/lerc') sourceURL = 'https://localhost:8080/wmts/epsg4326/best/wmts.cgi';
     const sourceOptions = {
       url: sourceURL + urlParameters,
       layer: layer || id,
@@ -396,9 +396,9 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
     // lerc layers need a different tileLoadFunction
     if (def.format === 'image/lerc') {
-      tileSource.setTileLoadFunction((tile, src) => {
-        return tileLoader(tile, src, def, state, sourceOptions.tileGrid, options.group);
-      });
+      tileSource.setTileLoadFunction((tile, src) =>
+        tileLoader(tile, src, def, state, sourceOptions.tileGrid, options.group)
+      )
     }
 
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);

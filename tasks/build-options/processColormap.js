@@ -138,7 +138,7 @@ async function processEntries (colormap) {
   }
 
   if (transparentMap === 'true') {
-    return {transparent: noDataValue}
+    return { transparent: noDataValue }
   }
 
   if (!colormap.Legend) {
@@ -365,7 +365,7 @@ async function processFile (id, xml) {
     if (noDataValue) {
       maps.forEach(map => {
         map.noDataValue = noDataValue
-      });
+      })
     }
 
     const data = {
