@@ -389,18 +389,15 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
-    if (isPaletteActive(id, options.group, state) && def.format !== "image/lerc") {
+    if (isPaletteActive(id, options.group, state) && def.format !== 'image/lerc') {
       const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
-    // graceal get the map in a prettier way
-    const { map } = state;
-    //graceal check if lerc layer from the format parameter of def which is for the layer
-    // that is a bit of an ugly if statement so maybe find a dif way
-    if (def.format === "image/lerc") {
+    // lerc layers need a different tileLoadFunction
+    if (def.format === 'image/lerc') {
       tileSource.setTileLoadFunction((tile, src) => {
-        return tileLoader(tile, src, def, map.ui.selected, state, sourceOptions.tileGrid, options.group);
+        return tileLoader(tile, src, def, state, sourceOptions.tileGrid, options.group);
       });
     }
 

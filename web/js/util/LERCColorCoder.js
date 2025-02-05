@@ -13,6 +13,10 @@ import {
   } from '../modules/palettes/selectors';
 import { cloneDeep as lodashCloneDeep } from 'lodash';
 
+const STATE_LOADING = 1;
+const STATE_LOADED = 2;
+const STATE_ERROR = 3;
+
 /**
  * Loads a lerc layer tile to the map
  * @param {object} tile
@@ -22,12 +26,10 @@ import { cloneDeep as lodashCloneDeep } from 'lodash';
  * @param {object} state State of the map
  * @param {object} tilegrid OlTileGridWMTS
  */
-export function tileLoader(tile, src, layer, map, state, tilegrid, groupString) {
+export function tileLoader(tile, src, layer, state, tilegrid, groupString) {
     const lercCodec = new LERC();
     const img = tile.getImage();
-    const STATE_LOADING = 1;
-    const STATE_LOADED = 2;
-    const STATE_ERROR = 3;
+    const map = state.map.ui.selected;
 
     // load in the image with crossOrigin allowances
     tile.state = STATE_LOADING;
