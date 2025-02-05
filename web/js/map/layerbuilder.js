@@ -1141,6 +1141,8 @@ export default function mapLayerBuilder(config, cache, store) {
       source: vectorTileSource,
       extent: maxExtent,
       className: id,
+      declutter: true,
+      renderMode: 'hybrid',
     });
     olmsApplyStyle(layer, 'https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson', {
       resolutions: tileGrid.getResolutions(),
