@@ -10,7 +10,7 @@ function CompareAlertModalBody() {
             Select the respective tab (A or B) in order to update the layers
             and date of that state.
           </p>
-          <img alt="A-B tabs" src="images/ab-tabs.png" />
+          <img src="images/ab-tabs.png" />
         </li>
         <li className="compare-dialog-list-item">
           <p>
@@ -18,14 +18,14 @@ function CompareAlertModalBody() {
             the deactivated time slider to activate that state and change the
             date.
           </p>
-          <img alt="A-B picks" src="images/ab-picks.png" />
+          <img src="images/ab-picks.png" />
         </li>
         <li className="compare-dialog-list-item">
           <p>
             There are three compare modes. You can choose different modes
             using the selection at the bottom of the layer list.
           </p>
-          <img alt="A-B modes" src="images/ab-modes.png" />
+          <img src="images/ab-modes.png" />
         </li>
       </ul>
     </div>

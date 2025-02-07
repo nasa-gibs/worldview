@@ -38,8 +38,7 @@ export default class Coordinates extends React.Component {
     );
 
     return (
-      <button
-        type="button"
+      <div
         id="coords-panel"
         className="wv-coords-map wv-coords-map-btn"
         onClick={this.changeFormat}
@@ -55,7 +54,7 @@ export default class Coordinates extends React.Component {
             <i className="coord-switch" />
           </div>
         </div>
-      </button>
+      </div>
     );
   }
 }

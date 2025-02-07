@@ -121,9 +121,9 @@ export default function GranuleCount (props) {
         { granulesExist && (
           <span className="granule-size fade-in">{`(${sizeText})`}</span>
         )}
-        <button type="button" className="help-link" onClick={showGranuleHelpModal}>
+        <span className="help-link" onClick={showGranuleHelpModal}>
           <FontAwesomeIcon icon="question-circle" />
-        </button>
+        </span>
       </>
     );
   };

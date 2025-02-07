@@ -60,8 +60,7 @@ export default class AlertUtil extends React.Component {
         className="wv-alert"
         isOpen={isOpen}
       >
-        <button
-          type="button"
+        <div
           className="alert-content"
           title={title}
           onClick={onClick}
@@ -80,16 +79,15 @@ export default class AlertUtil extends React.Component {
               <b>{message}</b>
             </em>
           </div>
-        </button>
+        </div>
         {onDismiss && (
-          <button
-            type="button"
+          <div
             id={`${id}-close`}
             className="close-alert"
             onClick={() => this.closeAlert()}
           >
             <FontAwesomeIcon icon="times" className="exit" size="1x" />
-          </button>
+          </div>
         )}
       </Alert>
     );

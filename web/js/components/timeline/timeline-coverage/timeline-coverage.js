@@ -309,15 +309,9 @@ class TimelineLayerCoveragePanel extends Component {
     const { onInfoClick } = this.props;
     const layerInfoBtnId = 'layer-coverage-info-button';
     const layerInfoBtnTitle = 'Timeline Layer Coverage Information';
-    const buttonStyle = {
-      border: 'none',
-      background: 'none',
-    };
 
     return (
-      <button
-        type="button"
-        style={buttonStyle}
+      <a
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={layerInfoBtnId}
@@ -325,7 +319,7 @@ class TimelineLayerCoveragePanel extends Component {
         onClick={() => onInfoClick()}
       >
         <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" />
-      </button>
+      </a>
     );
   };
 
@@ -410,8 +404,7 @@ class TimelineLayerCoveragePanel extends Component {
     return (
       <>
         {/* Timeline Layer Coverage Panel open/close handle */}
-        <button
-          type="button"
+        <div
           id="timeline-layer-coverage-panel-handle"
           aria-label={panelToggleLabelText}
           onClick={this.togglePanelOpenClose}
@@ -421,7 +414,7 @@ class TimelineLayerCoveragePanel extends Component {
             {panelToggleLabelText}
           </UncontrolledTooltip>
           <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
-        </button>
+        </div>
         <div
           className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
           style={panelContainerStyle}

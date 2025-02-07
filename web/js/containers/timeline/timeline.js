@@ -1254,13 +1254,13 @@ class Timeline extends React.Component {
                       />
                     </div>
                     <div id="zoom-buttons-group" className={isKioskModeActive ? 'd-none' : ''}>
-                      <div style={{ width: '90px', display: 'block' }}>
-                        <TimeScaleIntervalChange
-                          timeScaleChangeUnit={timeScaleChangeUnit}
-                          hasSubdailyLayers={hasSubdailyLayers}
-                          modalType={customModalType.TIMELINE}
-                        />
-                      </div>
+
+                      <TimeScaleIntervalChange
+                        timeScaleChangeUnit={timeScaleChangeUnit}
+                        hasSubdailyLayers={hasSubdailyLayers}
+                        modalType={customModalType.TIMELINE}
+                      />
+
                       {this.renderDateChangeArrows()}
                     </div>
                     <AnimationButton
@@ -1445,8 +1445,7 @@ class Timeline extends React.Component {
                   />
 
                   {/* Open/Close Chevron */}
-                  <button
-                    type="button"
+                  <div
                     id="timeline-hide"
                     aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                     onClick={this.toggleHideTimeline}
@@ -1457,7 +1456,7 @@ class Timeline extends React.Component {
                     <div
                       className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
                     />
-                  </button>
+                  </div>
                 </section>
               )}
           </ErrorBoundary>

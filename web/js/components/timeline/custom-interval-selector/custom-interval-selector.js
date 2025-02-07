@@ -60,6 +60,7 @@ function CustomIntervalSelector(props) {
     <div
       onKeyDown={handleKeyPress}
       className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
+      tabIndex={0}
       ref={(widget) => { customIntervalWidget = widget; }}
     >
       <h3 className="custom-interval-widget-header">Custom Interval Selector</h3>
