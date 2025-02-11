@@ -40,6 +40,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
+    sidebarHeight,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -77,6 +78,7 @@ const FooterContent = React.forwardRef((props, ref) => {
         <ChartingModeOptions
           isChartingActive={isChartingActive}
           isMobile={isMobile}
+          sidebarHeight={sidebarHeight}
         />
         )}
       </div>
@@ -246,4 +248,5 @@ FooterContent.propTypes = {
   isPlaying: PropTypes.bool,
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,
+  sidebarHeight: PropTypes.number,
 };

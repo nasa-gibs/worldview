@@ -16,7 +16,7 @@ import {
 export const initialChartingState = {
   active: false,
   activeLayer: undefined,
-  aoiActive: false,
+  aoiActive: true,
   aoiSelected: false,
   aoiCoordinates: [],
   chartRequestInProgress: false,
@@ -35,7 +35,7 @@ export function chartingReducer(state = initialChartingState, action) {
         return lodashAssign({}, state, {
           active: false,
           activeLayer: undefined,
-          aoiActive: false,
+          aoiActive: true,
           aoiCoordinates: null,
           aoiSelected: false,
           chartRequestInProgress: false,

@@ -524,7 +524,7 @@ div#group-overlays-checkbox-case {
   }
 }
 
-.charting-aoi-title-container {
+.charting-aoi-container {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
@@ -538,6 +538,10 @@ div#group-overlays-checkbox-case {
 
   .edit-coordinates span {
     padding: 3px 9px;
+  }
+
+  .wv-image-input-case {
+    width: 78%;
   }
 }
 
@@ -565,16 +569,28 @@ div#group-overlays-checkbox-case {
   div > .btn-active {
     background: #01457b;
   }
+
+  .btn-group {
+    width: 78%;
+  }
 }
 
 .charting-date-row {
   text-align: right;
   margin-top: 6px;
 
-  .charting-date-button span {
-    padding: 3px 9px;
-    font-weight: normal;
+  .charting-date-button {
+    width: 78%;
+
+    span {
+      padding: 3px 9px;
+      font-weight: normal;
+    }
   }
+}
+
+#map-view-checkbox-case {
+  margin-left: 58px;
 }
 
 .charting-info-container,
@@ -590,6 +606,12 @@ div#group-overlays-checkbox-case {
 
 .modal-dialog.chart-dialog {
   top: 80px;
+}
+
+#charting-date-modal {
+  top: var(--charting-date-modal-offset);
+  left: 305px;
+  right: unset;
 }
 
 .charting-statistics-label {

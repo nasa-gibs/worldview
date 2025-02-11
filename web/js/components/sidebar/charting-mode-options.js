@@ -9,7 +9,6 @@ import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
 import util from '../../util/util';
 import {
-  toggleChartingAOIOnOff,
   updateChartingAOICoordinates,
   updateChartingDateSelection,
   updateRequestInProgressAction,
@@ -24,6 +23,8 @@ import ChartingInfo from '../charting/charting-info';
 import SimpleStatistics from '../charting/simple-statistics';
 import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
+import LatLongSelect from '../image-download/lat-long-inputs';
+import Checkbox from '../util/checkbox';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -54,7 +55,6 @@ function ChartingModeOptions(props) {
     timeSpanEndDate,
     timeSpanSelection,
     timeSpanStartDate,
-    toggleAreaOfInterestActive,
     updateAOICoordinates,
     updateRequestInProgress,
     updateModalOpen,
@@ -67,11 +67,14 @@ function ChartingModeOptions(props) {
     isChartOpen,
     isModalOpen,
     modalId,
+    sidebarHeight,
+    viewExtent,
   } = props;
 
   if (!olMap) return null;
 
   const [isPostRender, setIsPostRender] = useState(false);
+  const [mapViewChecked, setMapViewChecked] = useState(false);
   const [boundaries, setBoundaries] = useState({
     x: screenWidth / 2 - 100,
     y: screenHeight / 2 - 100,
@@ -347,8 +350,15 @@ function ChartingModeOptions(props) {
       timeSpanStartDate: primaryDate,
       timeSpanEndDate: secondaryDate,
     };
+    document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
   }
+
+  useEffect(() => {
+    const isOpen = modalId === 'CHARTING-DATE-MODAL' && isModalOpen;
+    if (!isOpen) return;
+    onDateIconClick();
+  }, [sidebarHeight]);
 
   /**
    * Convert pixel value to latitude longitude value
@@ -370,7 +380,15 @@ function ChartingModeOptions(props) {
 
   olMap.once('postrender', () => {
     setIsPostRender(true);
-    if (isPostRender || !aoiCoordinates || aoiCoordinates.length === 0) return;
+    if (isPostRender) return;
+    if (!aoiCoordinates || aoiCoordinates.length === 0) {
+      setBottomLeftLatLong(getLatLongFromPixelValue(x, y2));
+      setTopRightLatLong(getLatLongFromPixelValue(x2, y));
+      return;
+    }
+    if (viewExtent.every((val, index) => val === aoiCoordinates[index])) {
+      setMapViewChecked(true);
+    }
     const bottomLeft = olMap.getPixelFromCoordinate([aoiCoordinates[0], aoiCoordinates[1]]);
     const topRight = olMap.getPixelFromCoordinate([aoiCoordinates[2], aoiCoordinates[3]]);
     const newBoundaries = {
@@ -407,33 +425,53 @@ function ChartingModeOptions(props) {
     setBottomLeftLatLong(bottomLeft);
     setTopRightLatLong(topRight);
     updateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
   }
 
-  const onAreaOfInterestButtonClick = (setAOIActive) => {
-    if (setAOIActive) {
-      updateAOICoordinates(null);
+  function onLatLongChange(coordsArray) {
+    const bottomLeft = [coordsArray[0], coordsArray[1]];
+    const topRight = [coordsArray[2], coordsArray[3]];
+    const bottomLeftPixel = olMap.getPixelFromCoordinate(bottomLeft);
+    const topRightPixel = olMap.getPixelFromCoordinate(topRight);
+    const newBoundaries = {
+      x: bottomLeftPixel[0],
+      y: topRightPixel[1],
+      x2: topRightPixel[0],
+      y2: bottomLeftPixel[1],
+    };
+    setBoundaries(newBoundaries);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    updateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
+  }
+
+  function toggleMapView() {
+    if (!mapViewChecked) {
+      onLatLongChange(viewExtent);
     } else {
-      const {
-        x, y, x2, y2,
-      } = boundaries;
-      onBoundaryUpdate({
-        x, y, width: x2 - x, height: y2 - y,
-      });
+      const boundaries = {
+        x: screenWidth / 2 - 100,
+        y: screenHeight / 2 - 100,
+        width: 200,
+        height: 200,
+      };
+      onBoundaryUpdate(boundaries);
     }
-    if (aoiActive !== setAOIActive) {
-      toggleAreaOfInterestActive();
-    }
-  };
+    setMapViewChecked(!mapViewChecked);
+  }
 
   const layerInfo = getActiveChartingLayer();
-  const aoiTextPrompt = 'Area of Interest:';
+  const aoiTextPrompt = 'Area:';
   const oneDateBtnStatus = timeSpanSelection === 'date' ? 'btn-active' : '';
   const dateRangeBtnStatus = timeSpanSelection === 'date' ? '' : 'btn-active';
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   const chartRequestMessage = chartRequestInProgress ? 'In progress...' : '';
   const requestBtnText = timeSpanSelection === 'date' ? 'Generate Statistics' : 'Generate Chart';
-  const entireScreenBtnStatus = aoiActive ? '' : 'btn-active';
-  const aoiSelectedBtnStatus = aoiActive ? 'btn-active' : '';
+  const lonlats = [
+    bottomLeftLatLong,
+    topRightLatLong,
+  ];
 
   return (
     <div
@@ -470,27 +508,21 @@ function ChartingModeOptions(props) {
           </UncontrolledTooltip>
         </span>
       </div>
-      <div className="charting-aoi-title-container">
-        <h3>{aoiTextPrompt}</h3>
-      </div>
       <div className="charting-aoi-container">
-        <ButtonGroup>
-          <Button
-            id="charting-date-single-button"
-            className={`charting-button ${entireScreenBtnStatus}`}
-            onClick={() => onAreaOfInterestButtonClick(false)}
-          >
-            Entire Screen
-          </Button>
-          <Button
-            id="charting-date-range-button"
-            className={`charting-button ${aoiSelectedBtnStatus}`}
-            onClick={() => onAreaOfInterestButtonClick(true)}
-          >
-            Area Selected
-          </Button>
-        </ButtonGroup>
+        <h3>{aoiTextPrompt}</h3>
+        <LatLongSelect
+          viewExtent={viewExtent}
+          geoLatLong={lonlats}
+          onLatLongChange={onLatLongChange}
+          crs={crs}
+        />
       </div>
+      <Checkbox
+        id="map-view-checkbox"
+        checked={mapViewChecked}
+        onCheck={toggleMapView}
+        label="Map View"
+      />
       <div className="charting-timespan-container">
         <h3>Time:</h3>
         <ButtonGroup>
@@ -545,7 +577,7 @@ function ChartingModeOptions(props) {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={onBoundaryUpdate}
-          onClose={() => onAreaOfInterestButtonClick(false)}
+          keepSelection
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -584,6 +616,9 @@ const mapStateToProps = (state) => {
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   const timelineStartDate = date.selected < date.selectedB ? date.selected : date.selectedB;
   const timelineEndDate = date.selected < date.selectedB ? date.selectedB : date.selected;
+  const olMap = map.ui.selected;
+  const mapView = olMap?.getView();
+  const viewExtent = mapView?.calculateExtent(olMap.getSize());
   return {
     activeLayers,
     activeLayer,
@@ -592,7 +627,7 @@ const mapStateToProps = (state) => {
     aoiSelected,
     chartRequestInProgress,
     crs,
-    olMap: map.ui.selected,
+    olMap,
     proj,
     projections,
     renderedPalettes,
@@ -608,13 +643,11 @@ const mapStateToProps = (state) => {
     isChartOpen,
     isModalOpen: isOpen,
     modalId: id,
+    viewExtent,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleAreaOfInterestActive: () => {
-    dispatch(toggleChartingAOIOnOff());
-  },
   updateAOICoordinates: (extent) => {
     dispatch(updateChartingAOICoordinates(extent));
   },
@@ -640,7 +673,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   openChartingDateModal: (dateObj, timeSpanSelection) => {
     dispatch(
-      openCustomContent('CHARTING_DATE_MODAL', {
+      openCustomContent('CHARTING-DATE-MODAL', {
         headerText: 'Charting Mode Date Selection',
         backdrop: false,
         bodyComponent: ChartingDateSelector,
@@ -712,7 +745,6 @@ ChartingModeOptions.propTypes = {
   timeSpanSelection: PropTypes.string,
   timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
-  toggleAreaOfInterestActive: PropTypes.func,
   updateRequestInProgress: PropTypes.func,
   updateModalOpen: PropTypes.func,
   updateRequestStatusMessage: PropTypes.func,
@@ -734,4 +766,6 @@ ChartingModeOptions.propTypes = {
   isChartOpen: PropTypes.bool,
   isModalOpen: PropTypes.bool,
   modalId: PropTypes.string,
+  sidebarHeight: PropTypes.number,
+  viewExtent: PropTypes.array,
 };

@@ -5,7 +5,7 @@ function ChartingInfo(props) {
     <div className="charting-info-container">
       <div className="charting-info-text">
         <p className="charting-info">
-          The charting feature is available for beta testing and evaluation. Please send comments and feedback to
+          The charting feature is available for beta testing and evaluation. Please send comments and feedback to&nbsp;
           <a class="charting-feedback" href="mailto:earthdata-support@nasa.gov">earthdata-support@nasa.gov</a>
           .
         </p>

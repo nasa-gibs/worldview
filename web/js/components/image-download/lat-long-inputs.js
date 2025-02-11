@@ -96,9 +96,13 @@ function LatLongSelect(props) {
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
   const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map((coord) => coord.toFixed(4).toString());
 
+  function toggleShowCoordinates() {
+    setShowCoordinates(!showCoordinates);
+  }
+
   return (
     <div className="wv-image-input-case">
-      <div className="wv-image-input-title" onClick={() => { setShowCoordinates(!showCoordinates); }}>
+      <div className="wv-image-input-title" onClick={toggleShowCoordinates}>
         <span>{coordText}</span>
         <span
           title="Hide coordinates"
