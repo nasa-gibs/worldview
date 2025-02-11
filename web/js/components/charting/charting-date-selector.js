@@ -19,6 +19,8 @@ function ChartingDateSelector (props) {
   // Confirm start & end dates are within the min & max dates
   const validStartDate = startdate < layerStartDate ? layerStartDate : startdate;
   const validEndDate = endDate > layerEndDate ? layerEndDate : endDate;
+  validStartDate.setHours(0, 0, 0, 0);
+  validEndDate.setHours(0, 0, 0, 0);
 
   function onDateChange([newStartDate, newEndDate]) {
     if (newStartDate !== timeSpanStartDate) {

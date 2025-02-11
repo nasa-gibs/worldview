@@ -133,6 +133,19 @@ export function serializeDateBWrapper(currentItemState, state, prev) {
 }
 
 /**
+ * Serialize charting date for location
+ *
+ * @method serializeDateChartingWrapper
+ * @param  {Object} currentItemState
+ * @param  {Object} state
+ * @returns {String | undefined} serialized time string OR undefined
+ */
+export function serializeDateChartingWrapper(currentItemState, state) {
+  if (!state.charting.active || !state.charting.timeSpanStartDate) return;
+  return serializeDate(currentItemState);
+}
+
+/**
  * Parse permalink date string and handle max dates if out of valid range or in future
  *
  * @method parsePermalinkDate

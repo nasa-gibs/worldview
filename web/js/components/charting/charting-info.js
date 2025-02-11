@@ -4,6 +4,11 @@ function ChartingInfo(props) {
   return (
     <div className="charting-info-container">
       <div className="charting-info-text">
+        <p className="charting-info">
+          The charting feature is available for beta testing and evaluation. Please send comments and feedback to
+          <a class="charting-feedback" href="mailto:earthdata-support@nasa.gov">earthdata-support@nasa.gov</a>
+          .
+        </p>
         <p className="charting-info">The Charting Tool provides the option to create a line chart for a date range showing change over time, and statistics for a single date (minimum, maximum, mean, and standard deviation) for an area of interest.</p>
 
         <p className="charting-info">Select the layer to be charted by clicking on the radio button to the left of the layer name.</p>

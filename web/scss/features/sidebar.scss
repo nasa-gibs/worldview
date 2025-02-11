@@ -524,7 +524,7 @@ div#group-overlays-checkbox-case {
   }
 }
 
-.charting-aoi-container {
+.charting-aoi-title-container {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
@@ -541,7 +541,11 @@ div#group-overlays-checkbox-case {
   }
 }
 
-.charting-timespan-container {
+.charting-aoi-container .btn-group {
+  margin-left: auto;
+}
+
+.charting-timespan-container, .charting-aoi-container {
   align-items: center;
   margin-top: 10px;
   display: flex;
@@ -647,6 +651,14 @@ button#charting-simple-stats-button {
 .charting-disclaimer {
   text-align: left;
   margin-bottom: 12px;
+}
+
+.charting-feedback {
+  color: #7bf !important;
+}
+
+.charting-feedback:hover {
+  text-decoration: underline !important;
 }
 
 .charting-chart-container {

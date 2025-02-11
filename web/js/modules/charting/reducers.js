@@ -5,6 +5,7 @@ import {
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
   TOGGLE_REQUEST_IN_PROGRESS,
+  TOGGLE_MODAL_OPEN,
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
@@ -23,6 +24,8 @@ export const initialChartingState = {
   timeSpanSelection: 'range',
   timeSpanStartDate: undefined,
   timeSpanEndDate: undefined,
+  fromButton: false,
+  isChartOpen: false,
 };
 export function chartingReducer(state = initialChartingState, action) {
   switch (action.type) {
@@ -40,10 +43,13 @@ export function chartingReducer(state = initialChartingState, action) {
           timeSpanEndDate: undefined,
           timeSpanSelection: 'range',
           timeSpanStartDate: undefined,
+          fromButton: false,
+          isChartOpen: false,
         });
       }
       return lodashAssign({}, state, {
         active: !state.active,
+        fromButton: true,
       });
     case TOGGLE_AOI_ON_OFF:
       return lodashAssign({}, state, {
@@ -52,6 +58,10 @@ export function chartingReducer(state = initialChartingState, action) {
     case TOGGLE_REQUEST_IN_PROGRESS:
       return lodashAssign({}, state, {
         chartRequestInProgress: action.status,
+      });
+    case TOGGLE_MODAL_OPEN:
+      return lodashAssign({}, state, {
+        isChartOpen: action.status,
       });
     case UPDATE_REQUEST_STATUS_MESSAGE:
       return lodashAssign({}, state, {
