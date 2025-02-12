@@ -10,7 +10,7 @@
       "tags": "esri world basemap gcs v2",
       "format": "application/x-protobuf",
       "type": "indexedVector",
-      "disableSnapshot": true,
+      "disableSnapshot": false,
       "layergroup": "Reference",
       "wrapX": true,
       "serviceName": "VectorTileServer",

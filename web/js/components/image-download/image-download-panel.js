@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
   imageSizeValid,
   getDimensions,
-  getDownloadUrl,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
+  snapshot,
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
@@ -34,11 +32,9 @@ function ImageDownloadPanel(props) {
     isWorldfile,
     resolution,
     getLayers,
-    url,
     lonlats,
     projection,
     date,
-    markerCoordinates,
     onPanelChange,
     fileTypeOptions,
     fileTypes,
@@ -59,7 +55,6 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
 
   useEffect(() => {
     const layerList = getLayers();
@@ -70,26 +65,36 @@ function ImageDownloadPanel(props) {
     setShowGranuleWarning(isTruncated);
   }, []);
 
-  const onDownload = (width, height) => {
-    const time = new Date(date.getTime());
-
+  const onDownload = async (width, height) => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
-    const dlURL = getDownloadUrl(
-      url,
-      projection,
-      layerDefs,
-      lonlats,
-      { width, height },
-      time,
-      currFileType,
-      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
-      markerCoordinates,
-      activePalettes,
-    );
+    // const dlURL = getDownloadUrl(
+    //   url,
+    //   projection,
+    //   layerDefs,
+    //   lonlats,
+    //   { width, height },
+    //   time,
+    //   currFileType,
+    //   currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
+    //   markerCoordinates,
+    //   activePalettes,
+    // );
+    const snapshotOptions = {
+      format: 'image/png',
+      resolution: 300,
+      scale: 250,
+      width,
+      height,
+      xOffset: 0,
+      yOffset: 0,
+      map,
+    };
+    const dlURL = await snapshot(snapshotOptions);
 
-    window.open(dlURL, '_blank');
+    const iframe = `<iframe width='100%' height='100%' src=' ${dlURL} '></iframe>`;
+    const x = window.open();
+    x.document.open();
+    x.document.write(iframe);
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
