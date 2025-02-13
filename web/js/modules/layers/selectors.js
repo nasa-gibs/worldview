@@ -835,8 +835,7 @@ export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {
   let maxZoom;
 
   lodashEach(layers, (layer) => {
-    const { matrixSet } = layer.projections[proj];
-    const { source } = layer.projections[proj];
+    const { matrixSet, source } = layer.projections[proj];
     const resolutions = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions;
     if (matrixSet !== undefined && layer.type !== 'vector' && Array.isArray(resolutions)) {
       const zoomLimit = resolutions.length - 1 + zoomOffset;
