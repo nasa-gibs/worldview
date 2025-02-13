@@ -792,10 +792,11 @@ function getZoomLevel(layer, zoom, proj, sources) {
   // lowest-resolution TileMatrix in polar layers
   const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
   const { matrixSet } = layer.projections[proj];
+  const source = layer?.projections?.[proj]?.source;
+  const resolutions = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions;
 
-  if (matrixSet !== undefined && layer.type !== 'vector') {
-    const { source } = layer.projections[proj];
-    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+  if (matrixSet !== undefined && layer.type !== 'vector' && Array.isArray(resolutions)) {
+    const zoomLimit = resolutions.length - 1 + zoomOffset;
     if (zoom > zoomLimit) {
       const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
       return overZoomValue;
