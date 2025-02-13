@@ -216,9 +216,6 @@
   "overrides": {
     "semver": "7.5.4",
     "word-wrap": "1.2.5",
-    "@pmmmwh/react-refresh-webpack-plugin": {
-      "webpack-dev-server": "^5.0.2"
-    },
     "redux-location-state": {
       "redux": "^5.0.1"
     },
