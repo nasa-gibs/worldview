@@ -791,8 +791,7 @@ function getZoomLevel(layer, zoom, proj, sources) {
   // Account for offset between the map's top zoom level and the
   // lowest-resolution TileMatrix in polar layers
   const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
-  const { matrixSet } = layer.projections[proj];
-  const source = layer?.projections?.[proj]?.source;
+  const { matrixSet, source } = layer.projections[proj];
   const resolutions = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions;
 
   if (matrixSet !== undefined && layer.type !== 'vector' && Array.isArray(resolutions)) {
