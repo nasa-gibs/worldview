@@ -125,9 +125,9 @@ export default function MeasureTooltip(props) {
       <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
         <span dangerouslySetInnerHTML={{ __html: tooltipValue }} />
         {!active && (
-          <button type="button" className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
+          <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
             <FontAwesomeIcon icon="times" fixedWidth />
-          </button>
+          </span>
         )}
       </div>
     );

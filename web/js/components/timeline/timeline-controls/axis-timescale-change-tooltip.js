@@ -52,7 +52,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
           style={{ display: toolTipHovered ? 'block' : 'none' }}
         >
           <div id="timeline-zoom" className="timeline-zoom">
-            <p
+            <label
               style={{
                 textDecoration: 'underline',
                 paddingBottom: '4px',
@@ -60,49 +60,44 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
               }}
             >
               TIMESCALE
-            </p>
-            <button
-              type="button"
+            </label>
+            <span
               id="zoom-years"
               className="zoom-btn zoom-years"
               onClick={this.changeTimeScaleYear}
             >
               YEAR
-            </button>
-            <button
-              type="button"
+            </span>
+            <span
               id="zoom-months"
               className="zoom-btn zoom-months"
               onClick={this.changeTimeScaleMonth}
             >
               MONTH
-            </button>
-            <button
-              type="button"
+            </span>
+            <span
               id="zoom-days"
               className="zoom-btn zoom-days"
               onClick={this.changeTimeScaleDay}
             >
               DAY
-            </button>
+            </span>
             {hasSubdailyLayers ? (
               <>
-                <button
-                  type="button"
+                <span
                   id="zoom-hours"
                   className="zoom-btn zoom-hours"
                   onClick={this.changeTimeScaleHour}
                 >
                   HOUR
-                </button>
-                <button
-                  type="button"
+                </span>
+                <span
                   id="zoom-minutes"
                   className="zoom-btn zoom-minutes"
                   onClick={this.changeTimeScaleMinute}
                 >
                   MINUTE
-                </button>
+                </span>
               </>
             ) : null}
           </div>

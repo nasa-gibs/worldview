@@ -94,8 +94,7 @@ class DateChangeArrows extends PureComponent {
         )}
 
         {/* LEFT ARROW */}
-        <button
-          type="button"
+        <div
           className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="left-arrow-group"
           onMouseDown={leftArrowDown}
@@ -110,11 +109,10 @@ class DateChangeArrows extends PureComponent {
             target="left-arrow-group"
           />
           <ArrowChevronLeft class="arrow" size="30px" />
-        </button>
+        </div>
 
         {/* RIGHT ARROW */}
-        <button
-          type="button"
+        <div
           className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="right-arrow-group"
           onMouseDown={rightArrowDown}
@@ -129,11 +127,10 @@ class DateChangeArrows extends PureComponent {
             target="right-arrow-group"
           />
           <ArrowChevronRight class="arrow" size="30px" />
-        </button>
+        </div>
 
         {/* NOW BUTTON */}
-        <button
-          type="button"
+        <div
           className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
           id="now-button-group"
           onClick={handleSelectNowButton}
@@ -151,7 +148,7 @@ class DateChangeArrows extends PureComponent {
               className="arrow"
             />
           </svg>
-        </button>
+        </div>
       </div>
     );
   }

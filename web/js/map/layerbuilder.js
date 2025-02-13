@@ -138,7 +138,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  const getRequestDates = function(def, options) {
+  const getRequestDates = (def, options) => {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -332,7 +332,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} state
    * @returns {object} OpenLayers WMTS layer
    */
-  function createLayerWMTS (def, options, day, state) {
+  const createLayerWMTS = (def, options, day, state) => {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
@@ -400,7 +400,7 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       source: tileSource,
     });
-  }
+  };
 
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
@@ -413,7 +413,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMS layer
    */
-  const createLayerWMS = function(def, options, day, state) {
+  const createLayerWMS = (def, options, day, state) => {
     const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
@@ -501,7 +501,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
-  const createLayerVectorAeronet = function(def, options, day, state, attributes) {
+  const createLayerVectorAeronet = (def, options, day, state, attributes) => {
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -740,7 +740,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
-  const createLayerVector = function(def, options, day, state, attributes) {
+  const createLayerVector = (def, options, day, state, attributes) => {
     if (def.source === 'AERONET') {
       return createLayerVectorAeronet(def, options, day, state, attributes);
     }
@@ -1160,6 +1160,55 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createLayerCompositeWMTS = async (def, options, day, state) => {
+    const { proj } = state;
+    const { shifted, date } = options;
+    const selectedDate = date || getSelectedDate(state);
+    const isoDate = selectedDate.toISOString();
+    const selectedDateString = isoDate.split('T')[0].split('-').join('');
+    const matchedLayers = def.layers.filter((layerName) => layerName.match(/([0-9])+/g)[0] === selectedDateString);
+    // create wmts defs from def.layers
+    const wmtsDefs = matchedLayers.map((layerID) => ({
+      ...def,
+      id: layerID,
+      layerName: layerID,
+      type: 'wmts',
+      layers: undefined,
+    }));
+    // create layers from defs
+    const layers = wmtsDefs.map((wmtsDef) => {
+      const {
+        matrixSet,
+        source,
+        layerName,
+        format,
+        matrixSetLimits,
+      } = wmtsDef;
+      const configSource = config.sources[source];
+      const configMatrixSet = configSource.matrixSets[matrixSet];
+      const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
+
+      const sourceOptions = {
+        url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,
+        layer: layerName,
+        crossOrigin: 'anonymous',
+        format,
+        wrapX: false,
+        projection: 'EPSG:3857',
+        maxZoom: 21,
+      };
+      const tileSource = new OlSourceXYZ(sourceOptions);
+
+      return new OlLayerTile({
+        source: tileSource,
+        className: wmtsDef.id,
+        extent: shifted ? RIGHT_WING_EXTENT : extent,
+      });
+    });
+    const layer = new OlLayerGroup({ layers });
+    return layer;
+  };
+
   /**
    * Create a new OpenLayers Layer
    * @param {object} def
@@ -1227,6 +1276,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'indexedVector':
             layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'composite:wmts':
+            layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);

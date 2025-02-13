@@ -50,7 +50,7 @@ function VectorAlertModalBody() {
           </p>
         </Col>
         <Col>
-          <img alt="Blue pointer icon" src="images/vector-alert.png" />
+          <img src="images/vector-alert.png" />
         </Col>
       </Row>
     </Container>

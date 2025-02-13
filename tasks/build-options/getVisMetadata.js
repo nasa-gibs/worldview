@@ -98,7 +98,8 @@ const skipLayers = [
   'AERONET_AOD_500NM',
   'AERONET_ANGSTROM_440-870NM',
   'DAILY_AERONET_AOD_500NM',
-  'DAILY_AERONET_ANGSTROM_440-870NM'
+  'DAILY_AERONET_ANGSTROM_440-870NM',
+  'NOAA_2025_ERI_WMTS'
 ]
 
 // NOTE: Only using these properties at this time

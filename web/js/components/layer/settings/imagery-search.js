@@ -119,19 +119,10 @@ export default function ImagerySearch({ layer }) {
   }, [page]);
 
   const renderDates = () => {
-    const buttonStyle = {
-      width: '100%',
-      background: 'none',
-      color: 'white',
-      border: 'none',
-      textAlign: 'left',
-    };
     const granuleDates = [...olderGranuleDates, ...newerGranuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
     const renderedDates = [...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
-      <li className="lazyload-list-item" key={date}>
-        <button type="button" style={buttonStyle} onClick={() => handleSelection(date)}>
-          {date}
-        </button>
+      <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
+        {date}
       </li>
     ));
     return renderedDates;

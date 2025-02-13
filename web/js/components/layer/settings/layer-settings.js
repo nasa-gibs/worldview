@@ -10,6 +10,7 @@ import Opacity from './opacity';
 import Palette from './palette';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
+import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
@@ -264,6 +265,34 @@ class LayerSettings extends React.Component {
           paletteOrder={paletteOrder}
         />
       </>
+    );
+  }
+
+  /**
+   * Render Opacity, threshold, and custom palette options
+   */
+  renderVectorStyles() {
+    const {
+      setStyle,
+      clearStyle,
+      groupName,
+      layer,
+      vectorStyles,
+    } = this.props;
+    let customStyle;
+    if (layer.custom && layer.custom[0]) {
+      [customStyle] = layer.custom;
+    }
+    return (
+      <VectorStyle
+        setStyle={setStyle}
+        clearStyle={clearStyle}
+        activeVectorStyle={customStyle || layer.id}
+        layer={layer}
+        index={0}
+        groupName={groupName}
+        vectorStyles={vectorStyles}
+      />
     );
   }
 

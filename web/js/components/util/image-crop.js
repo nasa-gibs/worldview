@@ -114,7 +114,7 @@ function Crop(props) {
         onComplete={onFinishDrag}
         onChange={onDrag}
       >
-        <img alt="" src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
+        <img src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
       </ReactCrop>
     </>,
     document.getElementById('wv-content'),
