@@ -118,9 +118,11 @@ export class VectorInteractions extends React.Component {
 
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
+      let isReferenceLayer = false;
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         if (!layer) return;
         const def = lodashGet(layer, 'wv.def');
+        if (def.layergroup === 'Reference') isReferenceLayer = true;
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
         const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
@@ -131,7 +133,7 @@ export class VectorInteractions extends React.Component {
           isActiveLayer = true;
         }
       });
-      if (isActiveLayer) {
+      if (isActiveLayer && !isReferenceLayer) {
         changeCursor(true);
       }
     } else if (!hasFeatures && isShowingClick) {

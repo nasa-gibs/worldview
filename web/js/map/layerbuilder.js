@@ -7,7 +7,7 @@ import OlSourceXYZ from 'ol/source/XYZ';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
-import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
@@ -25,6 +25,7 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import lodashCloneDeep from 'lodash/cloneDeep';
+import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -1109,6 +1110,65 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createIndexedVectorLayer = async (def, options, day, state) => {
+    const { proj: { selected } } = state;
+    const { crs } = selected;
+    const { shifted } = options;
+    const {
+      layerName,
+      serviceName,
+      tiles,
+      id,
+      vectorStyle,
+      matrixSet,
+      matrixSetLimits,
+    } = def;
+
+    const projection = get(crs);
+    const tileGrid = createXYZ({
+      extent: projection.getExtent(),
+      tileSize: [512, 512],
+      maxResolution: 180 / 256,
+      maxZoom: 22,
+    });
+
+    const configSource = config.sources[def.source];
+    const configMatrixSet = configSource.matrixSets?.[matrixSet] || {
+      resolutions: tileGrid.getResolutions(),
+      tileSize: tileGrid.getTileSize(),
+    };
+    const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
+
+    const sourceOptions = {
+      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
+      projection,
+      format: new MVT(),
+      tileGrid,
+    };
+    const source = new SourceVectorTile(sourceOptions);
+
+    const layer = new LayerVectorTile({
+      source,
+      extent: shifted ? RIGHT_WING_EXTENT : extent,
+      className: id,
+      declutter: true,
+      renderMode: 'hybrid',
+    });
+    await olmsApplyStyle(layer, vectorStyle.url, {
+      resolutions: tileGrid.getResolutions(),
+      transformRequest(url, type) {
+        if (type === 'Source') {
+          return new Request(
+            url.replace('/VectorTileServer', '/VectorTileServer/'),
+          );
+        }
+      },
+    });
+    await applyBackground(layer, vectorStyle.url);
+
+    return layer;
+  };
+
   const createLayerCompositeWMTS = async (def, options, day, state) => {
     const { proj } = state;
     const { shifted, date } = options;
@@ -1222,6 +1282,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'xyz':
             layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'indexedVector':
+            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
             break;
           case 'composite:wmts':
             layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
