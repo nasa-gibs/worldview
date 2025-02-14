@@ -2,7 +2,7 @@
   "layers": {
     "Reference_Labels_15m": {
       "id": "Reference_Labels_15m",
-      "layerName": "Reference_Labels_15m",
+      "layerName": "World_Basemap_GCS_v2",
       "title": "Place Labels",
       "subtitle": "Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
       "description": "reference/Reference_Labels_15m",

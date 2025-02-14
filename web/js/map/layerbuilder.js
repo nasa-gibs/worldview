@@ -1112,35 +1112,44 @@ export default function mapLayerBuilder(config, cache, store) {
 
   const createIndexedVectorLayer = async (def, options, day, state) => {
     const { proj: { selected } } = state;
-    const { maxExtent } = selected;
+    const { crs } = selected;
+    const { shifted } = options;
     const {
       layerName,
       serviceName,
       tiles,
       id,
       vectorStyle,
+      matrixSet,
+      matrixSetLimits,
     } = def;
 
-    const source = config.sources[def.source];
-
+    const projection = get(crs);
     const tileGrid = createXYZ({
-      extent: [-180, -90, 180, 90],
-      tileSize: 512,
+      extent: projection.getExtent(),
+      tileSize: [512, 512],
       maxResolution: 180 / 256,
       maxZoom: 22,
     });
 
+    const configSource = config.sources[def.source];
+    const configMatrixSet = configSource.matrixSets?.[matrixSet] || {
+      resolutions: tileGrid.getResolutions(),
+      tileSize: tileGrid.getTileSize(),
+    };
+    const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
+
     const sourceOptions = {
-      url: `${source.url}/${layerName}/${serviceName}/${tiles[0]}`,
-      projection: 'EPSG:4326',
+      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
+      projection,
       format: new MVT(),
       tileGrid,
     };
-    const vectorTileSource = new SourceVectorTile(sourceOptions);
+    const source = new SourceVectorTile(sourceOptions);
 
     const layer = new LayerVectorTile({
-      source: vectorTileSource,
-      extent: maxExtent,
+      source,
+      extent: shifted ? RIGHT_WING_EXTENT : extent,
       className: id,
       declutter: true,
       renderMode: 'hybrid',
