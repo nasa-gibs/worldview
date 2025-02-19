@@ -9,7 +9,7 @@ function ChartComponent (props) {
     liveData,
   } = props;
 
-  const { data } = liveData;
+  const { data, unit } = liveData;
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -48,6 +48,19 @@ function ChartComponent (props) {
 
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
+
+  const renderCustomAxisTick = ({ x, y, payload }) => {
+    const formattedUnit = unit ? ` ${unit}` : '';
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={3} textAnchor="end" fill="#a6a5a6">
+          {payload.value}
+          {formattedUnit}
+        </text>
+      </g>
+    );
+  };
 
   const yAxisValuesArr = getYAxisValues(data);
 
@@ -107,7 +120,7 @@ function ChartComponent (props) {
               Median:
             </div>
             <div className="charting-statistics-value">
-              {formatToThreeDigits(parseFloat(medianTotal) / count)}
+              {formatToThreeDigits(medianTotal / count)}
             </div>
           </div>
           <div className="charting-statistics-row">
@@ -153,21 +166,35 @@ function ChartComponent (props) {
     );
   }
 
+  const formattedUnit = unit ? ` (${unit})` : '';
+
   return (
     <div className="charting-chart-container">
       <div className="charting-chart-text">
-        <LineChart width={600} height={300} data={data}>
-          <Tooltip />
+        <LineChart
+          width={600}
+          height={300}
+          data={data}
+          margin={{
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: 20,
+          }}
+        >
+          <Tooltip formatter={(value, name) => [value, `${name}${formattedUnit}`]} />
           {' '}
-          <Legend />
           {getLineChart(data)}
           <XAxis dataKey="name" stroke="#a6a5a6" />
-          <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} />
-          <Legend />
+          <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tick={renderCustomAxisTick} />
+          <Legend formatter={(value) => `${value}${formattedUnit}`} />
         </LineChart>
       </div>
       <div className="charting-stat-text">
-        <h3>Average Statistics</h3>
+        <h3>
+          Average Statistics
+          {formattedUnit}
+        </h3>
         <br />
         {getQuickStatistics(data)}
       </div>

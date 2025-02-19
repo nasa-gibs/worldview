@@ -608,10 +608,22 @@ div#group-overlays-checkbox-case {
   top: 80px;
 }
 
+.modal-dialog.chart-error {
+  position: absolute;
+  width: 25%;
+  left: 37.5%;
+  top: 160px;
+}
+
 #charting-date-modal {
   top: var(--charting-date-modal-offset);
   left: 305px;
   right: unset;
+  width: 325px;
+
+  .thru-label {
+    bottom: 22px !important;
+  }
 }
 
 .charting-statistics-label {
@@ -643,6 +655,7 @@ div#group-overlays-checkbox-case {
     float: right;
     margin-right: 10px;
     width: 138px;
+    height: 27.5px;
 
     .button-text {
       display: block;
@@ -662,7 +675,7 @@ div#group-overlays-checkbox-case {
 }
 
 #charting-chart {
-  max-width: 800px;
+  max-width: 825px;
 }
 
 button#charting-simple-stats-button {
@@ -677,6 +690,7 @@ button#charting-simple-stats-button {
 
 .charting-feedback {
   color: #7bf !important;
+  cursor: pointer;
 }
 
 .charting-feedback:hover {
@@ -691,11 +705,6 @@ button#charting-simple-stats-button {
 .charting-stat-text {
   float: left;
   margin-left: 20px;
-}
-
-.charting-request-status {
-  text-align: center;
-  margin-top: 10px;
 }
 
 p.recharts-tooltip-label {

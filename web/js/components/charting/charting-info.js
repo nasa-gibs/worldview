@@ -1,13 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import onClickFeedback from '../../modules/feedback/util';
+import initFeedback from '../../modules/feedback/actions';
 
 function ChartingInfo(props) {
+  const {
+    sendFeedback,
+    feedbackIsInitiated,
+    isMobile,
+  } = props;
   return (
     <div className="charting-info-container">
       <div className="charting-info-text">
         <p className="charting-info">
-          The charting feature is available for beta testing and evaluation. Please send comments and feedback to&nbsp;
-          <a class="charting-feedback" href="mailto:earthdata-support@nasa.gov">earthdata-support@nasa.gov</a>
-          .
+          The charting feature is available for beta testing and evaluation.&nbsp;
+          <span class="charting-feedback" onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}>Please send comments and feedback to us.</span>
         </p>
         <p className="charting-info">The Charting Tool provides the option to create a line chart for a date range showing change over time, and statistics for a single date (minimum, maximum, mean, and standard deviation) for an area of interest.</p>
 
@@ -28,5 +36,32 @@ function ChartingInfo(props) {
   );
 }
 
-export default ChartingInfo;
+const mapStateToProps = (state) => {
+  const {
+    feedback, screenSize,
+  } = state;
+  return {
+    feedbackIsInitiated: feedback.isInitiated,
+    isMobile: screenSize.isMobileDevice,
+  };
+};
 
+const mapDispatchToProps = (dispatch) => ({
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
+    if (!isInitiated) {
+      dispatch(initFeedback());
+    }
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ChartingInfo);
+
+ChartingInfo.propTypes = {
+  feedbackIsInitiated: PropTypes.bool,
+  sendFeedback: PropTypes.func,
+  isMobile: PropTypes.bool,
+};
