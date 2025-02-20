@@ -33,12 +33,6 @@ export default function LocationMarker ({
   const coordinates = [latitude, longitude];
   const title = getDialogTitle(reverseGeocodeResults);
   const [showDialog, setShowDialog] = useState(dialogVisible);
-  const buttonStyle = {
-    background: 'none',
-    color: 'white',
-    border: 'none',
-    textAlign: 'left',
-  };
 
   return (
     <div className="location-dialog-pin-wrapper ">
@@ -52,20 +46,13 @@ export default function LocationMarker ({
           tooltipId={tooltipId}
         />
       )}
-      <button
-        type="button"
-        style={buttonStyle}
-        aria-label="Show coordinates dialog"
+      <img
+        id="marker-pin"
+        src="images/map-pin.png"
+        height="32"
+        width="20"
         onClick={() => setShowDialog(true)}
-      >
-        <img
-          alt="Map marker"
-          id="marker-pin"
-          src="images/map-pin.png"
-          height="32"
-          width="20"
-        />
-      </button>
+      />
     </div>
   );
 }

@@ -228,9 +228,6 @@ button:focus {
     width: 35px;
     margin: auto;
     text-align: center;
-    background: none;
-    border: none;
-    padding: 0;
   }
 
   & .date-arrows svg {
@@ -291,8 +288,6 @@ button:focus {
     width: 34px;
     height: 34px;
     margin-top: -1.5px;
-    padding: 0;
-    vertical-align: top;
 
     svg {
       left: 15px;
@@ -329,7 +324,6 @@ button:focus {
     top: 16px;
     right: 4px;
     background-color: transparent;
-    border: none;
 
     & svg {
       top: 5px;
@@ -378,8 +372,6 @@ button:focus {
   width: 40px;
   vertical-align: middle;
   position: relative;
-  background: none;
-  border: none;
 }
 
 .date-arrow-wrapper {
@@ -471,10 +463,10 @@ button:focus {
 .zoom-level-change-arrows {
   user-select: none;
   background: transparent;
+  border: thin solid transparent;
   vertical-align: middle;
   box-sizing: border-box;
   width: 55px;
-  border: none;
 }
 
 /* Interval selector */
@@ -569,18 +561,14 @@ button:focus {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding: 0;
+  padding: 4px;
   background-color: variables.$wv-transparent-black;
   border-radius: 3px;
 }
 
 #timeline-header #timeline-interval-btn-container,
 #zoom-btn-container-axis {
-  color: white;
   display: block;
-  background: none;
-  border: none;
-  width: inherit;
 }
 
 .timeline-container .wv-tooltip {
@@ -613,12 +601,13 @@ button:focus {
 
 .zoom-btn-active,
 .interval-btn-active {
-  width: inherit;
+  width: 90px;
   color: #ccc;
   font-size: 12px;
   line-height: 14px;
   display: block;
   clear: both;
+  cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   font-family: variables.$wv-monospace-font;
@@ -649,21 +638,6 @@ button:focus {
   line-height: 16px;
   color: #ccc;
   padding: 2px 0;
-  background: none;
-  border: none;
-  width: 100%;
-}
-
-.interval-list-btn {
-  display: block;
-  clear: both;
-  text-transform: uppercase;
-  text-align: center;
-  font-family: variables.$wv-monospace-font;
-  font-size: 14px;
-  line-height: 16px;
-  color: inherit;
-  padding: 2px 0;
 }
 
 .zoom-btn:hover,
@@ -678,14 +652,10 @@ button:focus {
   right: 0;
   height: 64px;
   width: 20px;
+  cursor: pointer;
   border-left: variables.$wv-dark-menu-border;
   border-top-right-radius: variables.$wv-menu-border-radius;
   border-bottom-right-radius: variables.$wv-menu-border-radius;
-  border-right: none;
-  background: none;
-  padding: 0;
-  border-top: none;
-  border-bottom: none;
 }
 
 #timeline-hide:hover,

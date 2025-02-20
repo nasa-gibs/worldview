@@ -48,12 +48,12 @@ function OpacitySlider ({
 
   return (
     <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
-      <p className="wv-slider-label left" style={labelStyle}>
+      <label className="wv-slider-label left" style={labelStyle}>
         <h4 className="left">
           <span>A</span>
           <MonospaceDate date={dateAText} />
         </h4>
-      </p>
+      </label>
       <div className="input-range">
         <div className="range-tooltip">
           {currentValue}
@@ -68,12 +68,12 @@ function OpacitySlider ({
           style={{ '--value-percent': `${currentValue}%` }}
         />
       </div>
-      <p className="wv-slider-label right" style={labelStyle}>
+      <label className="wv-slider-label right" style={labelStyle}>
         <h4 className="right">
           <span>B</span>
           <MonospaceDate date={dateBText} />
         </h4>
-      </p>
+      </label>
     </div>
   );
 }

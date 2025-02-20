@@ -106,11 +106,6 @@ function Event (props) {
    * Return date list for selected event
    */
   function renderDateLists() {
-    const buttonStyle = {
-      background: 'none',
-      border: 'none',
-      color: 'blue',
-    };
     if (event.geometry.length > 1) {
       return (
         <ul
@@ -126,15 +121,12 @@ function Event (props) {
                   <span
                     className="active"
                     onClick={(e) => e.stopPropagation()}
-                    onKeyDown={(e) => e.stopPropagation()}
                   >
                     {formatDisplayDate(date)}
                   </span>
                 )
                   : (
-                    <button
-                      type="button"
-                      style={buttonStyle}
+                    <a
                       className="'date item-selected"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -142,7 +134,7 @@ function Event (props) {
                       }}
                     >
                       {formatDisplayDate(date)}
-                    </button>
+                    </a>
                   )}
                 {magnitudeOutput(geometry)}
               </li>
@@ -186,49 +178,37 @@ function Event (props) {
       });
     }
   }
-  const buttonStyle = {
-    width: '100%',
-    background: 'none',
-    color: 'white',
-    border: 'none',
-    textAlign: 'left',
-  };
 
   return (
     <li
       id={`sidebar-event-${util.encodeId(event.id)}`}
       ref={(node) => { elRef.current = node; }}
       className={itemClass}
+      onClick={(e) => {
+        e.stopPropagation();
+        onEventSelect();
+      }}
+      onMouseEnter={(e) => {
+        onEventHighlight(true);
+      }}
+      onMouseLeave={(e) => {
+        onEventHighlight(false);
+      }}
     >
-      <button
-        type="button"
-        style={buttonStyle}
-        onClick={(e) => {
-          e.stopPropagation();
-          onEventSelect();
-        }}
-        onMouseEnter={(e) => {
-          onEventHighlight(true);
-        }}
-        onMouseLeave={(e) => {
-          onEventHighlight(false);
-        }}
+      <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
+      <h4
+        className="title"
       >
-        <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
-        <h4
-          className="title"
-        >
-          {event.title}
-          {' '}
-          <br />
-          {' '}
-          {!isSelected && (
-            <MonospaceDate date={dateString} />
-          )}
-        </h4>
-        {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
-        {renderDateLists()}
-      </button>
+        {event.title}
+        {' '}
+        <br />
+        {' '}
+        {!isSelected && (
+          <MonospaceDate date={dateString} />
+        )}
+      </h4>
+      {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
+      {renderDateLists()}
     </li>
   );
 }

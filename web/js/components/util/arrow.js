@@ -12,14 +12,13 @@ function Arrow({
   const arrowClassName = `${direction}arrow`;
 
   return (
-    <button
-      type="button"
+    <div
       onClick={onClick}
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
       <ArrowFilledUp className={arrowClassName} size={arrowSize} />
-    </button>
+    </div>
   );
 }
 

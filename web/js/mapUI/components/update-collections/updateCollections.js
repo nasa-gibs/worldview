@@ -30,11 +30,10 @@ function UpdateCollections () {
     const { id, period } = def;
     const { matrixSet } = def.projections[proj.id];
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));
-    const imageType = def.format === 'image/png' ? 'png' : 'jpeg';
 
     const sourceDomain = lookupLayerSource(id);
 
-    const sourceUrl = `${sourceDomain}?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2F${imageType}&TileMatrix=0&TileCol=0&TileRow=0`;
+    const sourceUrl = `${sourceDomain}?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
     try {
       const response = await fetch(sourceUrl);
 

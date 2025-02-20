@@ -93,8 +93,7 @@ function GifButton(props) {
 
   return (
     <>
-      <button
-        type="button"
+      <a
         id="create-gif-button"
         aria-label={labelText}
         className={gifDisabled ? 'wv-icon-case no-drag disabled' : 'wv-icon-case no-drag'}
@@ -112,7 +111,7 @@ function GifButton(props) {
         >
           {showWarning ? warningMessage : labelText}
         </UncontrolledTooltip>
-      </button>
+      </a>
       {isGifActive && <GifContainer onClose={onCloseGif} />}
     </>
   );
