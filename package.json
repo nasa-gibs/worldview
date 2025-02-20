@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "4.57.0",
+  "version": "4.58.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": ">= 20.18.0"
+    "node": ">= 22.14.0"
   },
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
@@ -81,7 +81,7 @@
     "@babel/eslint-parser": "^7.25.9",
     "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/plugin-transform-private-methods": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
     "@playwright/test": "^1.49.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
@@ -119,13 +119,13 @@
     "node-ssh": "^13.2.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.2",
     "postcss-loader": "^8.1.1",
     "react-refresh": "^0.16.0",
     "react-test-renderer": "^18.3.1",
     "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
-    "sass": "^1.83.0",
+    "sass": "^1.85.0",
     "sass-loader": "^16.0.4",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
@@ -135,7 +135,7 @@
     "tar": "^7.4.3",
     "terser-webpack-plugin": "^5.3.11",
     "uuid": "^11.0.3",
-    "webpack": "^5.97.1",
+    "webpack": "^5.98.0",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-middleware": "^7.4.2",
@@ -158,7 +158,7 @@
     "bluebird": "3.7.2",
     "bootstrap": "^5.3.3",
     "cachai": "^1.0.2",
-    "compression": "^1.7.5",
+    "compression": "^1.8.0",
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^3.3.3",
     "dom-scroll-into-view": "^2.0.1",
@@ -178,7 +178,7 @@
     "moment-locales-webpack-plugin": "^1.2.0",
     "node-dir": "^0.1.17",
     "ol": "^8.2.0",
-    "ol-mapbox-style": "^12.4.0",
+    "ol-mapbox-style": "^12.4.1",
     "p-queue": "^8.0.1",
     "proj4": "^2.15.0",
     "prop-types": "^15.8.1",
@@ -186,7 +186,7 @@
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-device-detect": "^2.2.3",
-    "react-dom": "^18.3.0",
+    "react-dom": "^18.3.1",
     "react-draggable": "^4.4.6",
     "react-image-crop": "^11.0.7",
     "react-infinite-scroller": "^1.2.6",
@@ -208,7 +208,7 @@
     "simplebar-react": "^3.3.0",
     "stackblur": "^1.0.0",
     "supercluster": "^8.0.1",
-    "tough-cookie": "^5.0.0",
+    "tough-cookie": "^5.1.1",
     "upng-js": "^2.1.0",
     "url-template": "^3.1.1",
     "what-input": "^5.2.12"
@@ -216,9 +216,6 @@
   "overrides": {
     "semver": "7.5.4",
     "word-wrap": "1.2.5",
-    "@pmmmwh/react-refresh-webpack-plugin": {
-      "webpack-dev-server": "^5.0.2"
-    },
     "redux-location-state": {
       "redux": "^5.0.1"
     },
