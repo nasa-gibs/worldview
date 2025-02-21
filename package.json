@@ -129,7 +129,7 @@
     "sass-loader": "^16.0.4",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
-    "stylelint": "^15.11.0",
+    "stylelint": "^16.14.1",
     "stylelint-config-standard-scss": "^11.1.0",
     "stylelint-high-performance-animation": "^1.10.0",
     "tar": "^7.4.3",
