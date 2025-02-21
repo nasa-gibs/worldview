@@ -9,7 +9,14 @@ function ChartComponent (props) {
     liveData,
   } = props;
 
-  const { data, unit } = liveData;
+  const {
+    data,
+    unit,
+    startDate,
+    endDate,
+    numRangeDays,
+    isTruncated,
+  } = liveData;
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -156,12 +163,6 @@ function ChartComponent (props) {
             </div>
           </div>
         </div>
-        <div className="charting-disclaimer">
-          <strong>Note:</strong>
-          <br />
-          {' '}
-          Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.
-        </div>
       </>
     );
   }
@@ -170,33 +171,63 @@ function ChartComponent (props) {
 
   return (
     <div className="charting-chart-container">
-      <div className="charting-chart-text">
-        <LineChart
-          width={600}
-          height={300}
-          data={data}
-          margin={{
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: 20,
-          }}
-        >
-          <Tooltip formatter={(value, name) => [value, `${name}${formattedUnit}`]} />
-          {' '}
-          {getLineChart(data)}
-          <XAxis dataKey="name" stroke="#a6a5a6" />
-          <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tick={renderCustomAxisTick} />
-          <Legend formatter={(value) => `${value}${formattedUnit}`} />
-        </LineChart>
+      <div className="charting-chart-inner">
+        <div className="charting-chart-text">
+          <LineChart
+            width={600}
+            height={300}
+            data={data}
+            margin={{
+              top: 20,
+              right: 20,
+              left: 20,
+              bottom: 20,
+            }}
+          >
+            <Tooltip formatter={(value, name) => [value, `${name}${formattedUnit}`]} />
+            {' '}
+            {getLineChart(data)}
+            <XAxis dataKey="name" stroke="#a6a5a6" />
+            <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tick={renderCustomAxisTick} />
+            <Legend formatter={(value) => `${value}${formattedUnit}`} />
+          </LineChart>
+        </div>
+        <div className="charting-stat-text">
+          <h3>
+            Average Statistics
+            {formattedUnit}
+          </h3>
+          <br />
+          {getQuickStatistics(data)}
+        </div>
       </div>
-      <div className="charting-stat-text">
-        <h3>
-          Average Statistics
-          {formattedUnit}
-        </h3>
-        <br />
-        {getQuickStatistics(data)}
+      <div className="charting-disclaimer">
+        <strong>Note: </strong>
+        <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
+        {isTruncated
+        && (
+          <>
+            <br />
+            <br />
+            <div>
+              Note: As part of this beta feature release, the number of data points plotted between
+              <b>
+                {` ${startDate} `}
+              </b>
+              and
+              <b>
+                {` ${endDate} `}
+              </b>
+              has been reduced from
+              <b>
+                {` ${numRangeDays} `}
+              </b>
+              to
+              <b> 20</b>
+              .
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
