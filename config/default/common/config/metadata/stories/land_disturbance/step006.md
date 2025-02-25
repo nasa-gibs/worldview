@@ -1,0 +1,1 @@
+Major landslide in Papua New Guinea in late May 2024. Swipe the center bar left and right to see the confirmed land surface disturbance (in red) due to the landslide. Also, try turning on and off the OPERA Vegetation Disturbance Status layer to see the exposed soil due to the landslide.

@@ -1,0 +1,1 @@
+This example shows the confidence levels "First Detection < 50%" and "First Detection >= 50%" in shades of green in the Grampian National Park, Victoria, Australia on December 20, 2024 where a bushfire had just begun around December 17, 2024.
