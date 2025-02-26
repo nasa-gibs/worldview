@@ -97,7 +97,17 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-120.92334499025998,35.39339081276658,-118.47118410883445,36.5345735740097&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,HLS_L30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_Dynamic_Surface_Water_Extent-HLS(disabled=0-4),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map&lg1=true&ca=false&t=2023-04-30-T00%3A00%3A00Z&t1=2023-04-30-T00%3A00%3A00Z"
+          "stepLink": "v=15.225849774434048,0.5430683508921665,15.889511400538362,0.8830824145744638&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9)&lg1=true&ca=false&cm=opacity&s=143.3646,-5.3792&t=2023-12-06--T00%3A00%3A00Z&t1=2024-11-23--T00%3A00%3A00Z"
+        }
+        ,
+        {
+          "id": "010",
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=15.236161841869734,0.534212205332347,15.939286841869734,0.8944445573668722&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9)&lg1=true&ca=false&cm=opacity&s=143.3646,-5.3792&t=2023-12-06-T05%3A50%3A26Z&t1=2024-11-23-T05%3A50%3A26Z"
         }
       ]
     }

@@ -1,2 +1,2 @@
-ROC selective logging from 2023 to 2024
-https://go.nasa.gov/4hDKh4Q
+This example shows selective logging in the Sangha region of the Republic of Congo between 2023 and 2024.
+
