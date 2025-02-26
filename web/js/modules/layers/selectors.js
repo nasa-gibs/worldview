@@ -647,8 +647,8 @@ export function getTitles(config, layerId, projId) {
       tags = forProj.tags;
     }
     const forLayer = config.layers[layerId];
-    title = title || forLayer.title || `[${layerId}]`;
-    subtitle = subtitle || forLayer.subtitle || '';
+    title = title || forLayer.title || forLayer.Title || `[${layerId}]`;
+    subtitle = subtitle || forLayer.subtitle || forLayer.Subtitle || '';
     tags = tags || forLayer.tags || '';
     return {
       title,
