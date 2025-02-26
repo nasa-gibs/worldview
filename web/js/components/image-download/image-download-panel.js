@@ -48,6 +48,7 @@ function ImageDownloadPanel(props) {
     firstLabel,
     geoLatLong,
     onLatLongChange,
+    boundaries,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -66,32 +67,22 @@ function ImageDownloadPanel(props) {
   }, []);
 
   const onDownload = async (width, height) => {
+    const calcWidth = boundaries[2] - boundaries[0];
+    const calcHeight = boundaries[3] - boundaries[1];
     const layerList = getLayers();
-    // const dlURL = getDownloadUrl(
-    //   url,
-    //   projection,
-    //   layerDefs,
-    //   lonlats,
-    //   { width, height },
-    //   time,
-    //   currFileType,
-    //   currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
-    //   markerCoordinates,
-    //   activePalettes,
-    // );
     const snapshotOptions = {
       format: 'image/png',
       resolution: 300,
-      scale: 250,
-      width,
-      height,
-      xOffset: 0,
-      yOffset: 0,
+      scale: 10,
+      width: calcWidth,
+      height: calcHeight,
+      xOffset: boundaries[0],
+      yOffset: boundaries[1],
       map,
     };
     const dlURL = await snapshot(snapshotOptions);
 
-    const iframe = `<iframe width='100%' height='100%' src=' ${dlURL} '></iframe>`;
+    const iframe = `<object type='image/png' width='${calcWidth * window.devicePixelRatio}px' height='${calcHeight * window.devicePixelRatio}px' data='${dlURL}'></object>`;
     const x = window.open();
     x.document.open();
     x.document.write(iframe);
@@ -267,6 +258,7 @@ ImageDownloadPanel.propTypes = {
   worldFileOptions: PropTypes.bool,
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
+  boundaries: PropTypes.array,
 };
 
 export default ImageDownloadPanel;

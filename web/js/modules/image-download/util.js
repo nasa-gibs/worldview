@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
 } from 'lodash';
-import { transform/** , getPointResolution */ } from 'ol/proj';
+import { transform, getPointResolution } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
@@ -367,62 +367,58 @@ export function snapshot (options) {
   return new Promise((resolve) => {
     const {
       format,
-      // resolution,
-      // scale,
+      resolution,
+      scale,
       width,
       height,
       xOffset,
       yOffset,
       map,
     } = options;
-    // const dim = [210, 148];
-    // const scaledWidth = Math.round((dim[0] * resolution) / 25.4);
-    // const scaledHeight = Math.round((dim[1] * resolution) / 25.4);
+    const dim = [width, height];
+    const pixelRatio = window.devicePixelRatio;
+    const scaledWidth = Math.round((dim[0] * resolution) / 25.4);
+    const scaledHeight = Math.round((dim[1] * resolution) / 25.4);
+    const [mapWidth, mapHeight] = map.getSize();
+    const deltaWidth = (scaledWidth - mapWidth) / pixelRatio;
+    const deltaHeight = (scaledHeight - mapHeight) / pixelRatio;
+    const calcXOffset = xOffset + deltaWidth;
+    const calcYOffset = yOffset + deltaHeight;
     const exportOptions = {
       useCORS: true,
       allowTaint: true,
-      // ignoreElements (element) {
-      //   const className = element.className || '';
-      //   console.log(className);
-
-      //   return (
-      //     className.includes('ol-control')
-      //     && !className.includes('ol-scale')
-      //     && (!className.includes('ol-attribution')
-      //       || !className.includes('ol-uncollapsible'))
-      //   );
-      // },
-      width,
-      height,
-      x: xOffset,
-      y: yOffset,
+      width: scaledWidth,
+      height: scaledHeight,
+      x: calcXOffset,
+      y: calcYOffset,
     };
-    // const viewResolution = map.getView().getResolution();
-    // const pointResolution = getPointResolution(
-    //   map.getView().getProjection(),
-    //   resolution / 25.4,
-    //   map.getView().getCenter(),
-    // );
-    // const scaleResolution = scale / pointResolution;
+    const viewResolution = map.getView().getResolution();
+    const pointResolution = getPointResolution(
+      map.getView().getProjection(),
+      resolution / 25.4,
+      map.getView().getCenter(),
+      'm',
+    );
+    const scaleResolution = scale / pointResolution;
 
     map.once('rendercomplete', () => {
       html2canvas(map.getViewport(), exportOptions).then((canvas) => {
         const dataURL = canvas.toDataURL(format);
         // Reset original map size
-        // map.getTargetElement().style.width = '';
-        // map.getTargetElement().style.height = '';
-        // map.updateSize();
-        // map.getView().setResolution(viewResolution);
-        // document.body.style.cursor = 'auto';
+        map.getTargetElement().style.width = '';
+        map.getTargetElement().style.height = '';
+        map.getView().setResolution(viewResolution);
+        map.updateSize();
+        document.body.style.cursor = 'auto';
         resolve(dataURL);
       });
     });
 
     // Set print size
-    // map.getTargetElement().style.width = `${scaledWidth}px`;
-    // map.getTargetElement().style.height = `${scaledHeight}px`;
-    // map.updateSize();
-    // map.getView().setResolution(scaleResolution);
+    map.getTargetElement().style.height = `${scaledHeight}px`;
+    map.getTargetElement().style.width = `${scaledWidth}px`;
+    map.getView().setResolution(scaleResolution);
+    map.updateSize();
     map.renderSync();
   });
 }
