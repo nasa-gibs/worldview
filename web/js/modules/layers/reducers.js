@@ -29,6 +29,8 @@ import {
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
   SET_THRESHOLD_RANGE_AND_SQUASH,
   SET_DISABLED_CLASSIFICATION,
+  SET_SIZE,
+  CLEAR_SIZE,
 } from '../palettes/constants';
 import {
   CLEAR_VECTORSTYLE,
@@ -229,6 +231,29 @@ export function layerReducer(state = initialState, action) {
         },
       });
     }
+
+    case CLEAR_SIZE: {
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              size: { $set: undefined },
+            },
+          },
+        },
+      });
+    }
+
+    case SET_SIZE:
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              size: { $set: action.size },
+            },
+          },
+        },
+      });
 
     case SET_FILTER_RANGE: {
       return update(state, {
