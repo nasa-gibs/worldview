@@ -87,7 +87,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "ajv": "^8.17.1",
     "autoprefixer": "^10.4.20",
-    "babel-loader": "^9.2.1",
+    "babel-loader": "^10.0.0",
     "cheerio": "^1.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
