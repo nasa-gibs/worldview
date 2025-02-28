@@ -1,2 +1,1 @@
-Jan 2025 Greater LA Fires
-https://go.nasa.gov/4jqw1Oy
+This is the same area and dates, but with the DIST-ALERT layer overlaid on the HLS imagery. The burned areas that are visible in the imagery are confirmed by DIST-ALERT and show the definite vegetation disturbance in that area.

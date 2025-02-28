@@ -1,2 +1,1 @@
-This example shows selective logging in the Sangha region of the Republic of Congo between 2023 and 2024.
-
+This example shows the construction of roads for selective logging in a logging concession of the Sangha region, Republic of Congo comparing December 6, 2023 on the left "A" side and November 23, 2024 on the right "B" side. Selective logging involves removing only the most valuable tree species, but requires the building of roads deep into the forest for extraction. Once areas are exhausted of these valuable tree species, the logging companies will move into other areas and build more roads which can be seen in these images that are 1 year apart.
