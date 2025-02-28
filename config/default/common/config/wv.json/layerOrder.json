@@ -1167,6 +1167,8 @@
 		"OrbitTracks_Sentinel-2A_Descending",
 		"OrbitTracks_Sentinel-2B_Ascending",
 		"OrbitTracks_Sentinel-2B_Descending",
+		"OrbitTracks_Sentinel-2C_Ascending",
+		"OrbitTracks_Sentinel-2C_Descending",
 		"OrbitTracks_Sentinel-3A_Ascending",
 		"OrbitTracks_Sentinel-3A_Descending",
 		"OrbitTracks_Sentinel-3B_Ascending",
