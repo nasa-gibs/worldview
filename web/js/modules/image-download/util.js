@@ -363,7 +363,31 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
 
+/**
+ * Get the device pixels per millimeter
+ * @returns {number} The number of pixels per millimeter
+ */
+function getDevicePixelsPerMillimeter() {
+  // Create a temporary div element with a known size in millimeters
+  const div = document.createElement('div');
+  div.style.width = '10mm';
+  div.style.height = '10mm';
+  div.style.position = 'absolute';
+  div.style.visibility = 'hidden';
+  document.body.appendChild(div);
+
+  // Get the size of the div in pixels
+  const pixelsPerMillimeter = div.offsetWidth / 10;
+
+  // Remove the temporary div element
+  document.body.removeChild(div);
+
+  // Adjust for device pixel ratio
+  return pixelsPerMillimeter * window.devicePixelRatio;
+}
+
 export function snapshot (options) {
+  document.body.style.cursor = 'wait';
   return new Promise((resolve) => {
     const {
       format,
@@ -375,20 +399,27 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const dim = [width, height];
-    const pixelRatio = window.devicePixelRatio;
-    const scaledWidth = Math.round((dim[0] * resolution) / 25.4);
-    const scaledHeight = Math.round((dim[1] * resolution) / 25.4);
+    const devicePixelsPerMillimeter = getDevicePixelsPerMillimeter();
     const [mapWidth, mapHeight] = map.getSize();
+    const widthMM = mapWidth / devicePixelsPerMillimeter; // Map width in millimeters
+    const heightMM = mapHeight / devicePixelsPerMillimeter; // Map height in millimeters
+    const dim = [widthMM, heightMM]; // size in mm
+    const pixelRatio = window.devicePixelRatio;
+
+    const scaledWidth = Math.round((dim[0] * resolution) / 25.4); // 25.4 mm in an inch
+    const scaledHeight = Math.round((dim[1] * resolution) / 25.4); // 25.4 mm in an inch
     const deltaWidth = (scaledWidth - mapWidth) / pixelRatio;
     const deltaHeight = (scaledHeight - mapHeight) / pixelRatio;
     const calcXOffset = xOffset + deltaWidth;
     const calcYOffset = yOffset + deltaHeight;
+    const calcWidth = width + deltaWidth;
+    const calcHeight = height + deltaHeight;
+
     const exportOptions = {
       useCORS: true,
       allowTaint: true,
-      width: scaledWidth,
-      height: scaledHeight,
+      width: calcWidth,
+      height: calcHeight,
       x: calcXOffset,
       y: calcYOffset,
     };
@@ -417,9 +448,8 @@ export function snapshot (options) {
     // Set print size
     map.getTargetElement().style.height = `${scaledHeight}px`;
     map.getTargetElement().style.width = `${scaledWidth}px`;
-    map.getView().setResolution(scaleResolution);
     map.updateSize();
-    map.renderSync();
+    map.getView().setResolution(scaleResolution);
   });
 }
 

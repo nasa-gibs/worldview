@@ -73,7 +73,7 @@ function ImageDownloadPanel(props) {
     const snapshotOptions = {
       format: 'image/png',
       resolution: 300,
-      scale: 10,
+      scale: 250,
       width: calcWidth,
       height: calcHeight,
       xOffset: boundaries[0],
@@ -82,7 +82,7 @@ function ImageDownloadPanel(props) {
     };
     const dlURL = await snapshot(snapshotOptions);
 
-    const iframe = `<object type='image/png' width='${calcWidth * window.devicePixelRatio}px' height='${calcHeight * window.devicePixelRatio}px' data='${dlURL}'></object>`;
+    const iframe = `<object type='image/png' width='${calcWidth / window.devicePixelRatio}px' height='${calcHeight / window.devicePixelRatio}px' data='${dlURL}'></object>`;
     const x = window.open();
     x.document.open();
     x.document.write(iframe);
