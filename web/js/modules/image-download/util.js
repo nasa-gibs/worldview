@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
 } from 'lodash';
-import { transform, getPointResolution } from 'ol/proj';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
