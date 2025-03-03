@@ -392,7 +392,6 @@ export function snapshot (options) {
     const {
       format,
       resolution,
-      scale,
       width,
       height,
       xOffset,
@@ -404,16 +403,14 @@ export function snapshot (options) {
     const widthMM = mapWidth / devicePixelsPerMillimeter; // Map width in millimeters
     const heightMM = mapHeight / devicePixelsPerMillimeter; // Map height in millimeters
     const dim = [widthMM, heightMM]; // size in mm
-    const pixelRatio = window.devicePixelRatio;
 
     const scaledWidth = Math.round((dim[0] * resolution) / 25.4); // 25.4 mm in an inch
     const scaledHeight = Math.round((dim[1] * resolution) / 25.4); // 25.4 mm in an inch
-    const deltaWidth = (scaledWidth - mapWidth) / pixelRatio;
-    const deltaHeight = (scaledHeight - mapHeight) / pixelRatio;
-    const calcXOffset = xOffset + deltaWidth;
-    const calcYOffset = yOffset + deltaHeight;
-    const calcWidth = width + deltaWidth;
-    const calcHeight = height + deltaHeight;
+
+    const calcXOffset = ((xOffset / devicePixelsPerMillimeter) * resolution) / 25.4;
+    const calcYOffset = ((yOffset / devicePixelsPerMillimeter) * resolution) / 25.4;
+    const calcWidth = ((width / devicePixelsPerMillimeter) * resolution) / 25.4;
+    const calcHeight = ((height / devicePixelsPerMillimeter) * resolution) / 25.4;
 
     const exportOptions = {
       useCORS: true,
@@ -423,14 +420,6 @@ export function snapshot (options) {
       x: calcXOffset,
       y: calcYOffset,
     };
-    const viewResolution = map.getView().getResolution();
-    const pointResolution = getPointResolution(
-      map.getView().getProjection(),
-      resolution / 25.4,
-      map.getView().getCenter(),
-      'm',
-    );
-    const scaleResolution = scale / pointResolution;
 
     map.once('rendercomplete', () => {
       html2canvas(map.getViewport(), exportOptions).then((canvas) => {
@@ -438,7 +427,6 @@ export function snapshot (options) {
         // Reset original map size
         map.getTargetElement().style.width = '';
         map.getTargetElement().style.height = '';
-        map.getView().setResolution(viewResolution);
         map.updateSize();
         document.body.style.cursor = 'auto';
         resolve(dataURL);
@@ -449,7 +437,6 @@ export function snapshot (options) {
     map.getTargetElement().style.height = `${scaledHeight}px`;
     map.getTargetElement().style.width = `${scaledWidth}px`;
     map.updateSize();
-    map.getView().setResolution(scaleResolution);
   });
 }
 

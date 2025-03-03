@@ -73,7 +73,6 @@ function ImageDownloadPanel(props) {
     const snapshotOptions = {
       format: 'image/png',
       resolution: 300,
-      scale: 250,
       width: calcWidth,
       height: calcHeight,
       xOffset: boundaries[0],
