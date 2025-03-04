@@ -3,6 +3,7 @@ import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function ChartComponent (props) {
   const {
@@ -16,10 +17,13 @@ function ChartComponent (props) {
     endDate,
     numRangeDays,
     isTruncated,
+    title,
+    STEP_NUM,
   } = liveData;
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
     return parseFloat(str).toFixed(3);
@@ -56,18 +60,26 @@ function ChartComponent (props) {
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
-  const renderCustomAxisTick = ({ x, y, payload }) => {
-    const formattedUnit = unit ? ` ${unit}` : '';
+  function CustomTooltip({ active, payload, label }) {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label" style={{ color: 'gray' }}>
+            {label}
+          </p>
+          <p className="label" style={{ color: '#000' }}>
+            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+            {`${payload[0].name}${formattedUnit}: `}
+            <b>
+              {payload[0].value}
+            </b>
+          </p>
+        </div>
+      );
+    }
 
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text x={0} y={3} textAnchor="end" fill="#a6a5a6">
-          {payload.value}
-          {formattedUnit}
-        </text>
-      </g>
-    );
-  };
+    return null;
+  }
 
   const yAxisValuesArr = getYAxisValues(data);
 
@@ -123,51 +135,49 @@ function ChartComponent (props) {
       <>
         <div className="charting-statistics-container">
           <div className="charting-statistics-row">
-            <div className="charting-statistics-label">
+            <span className="charting-statistics-label">
               Median:
-            </div>
-            <div className="charting-statistics-value">
+            </span>
+            <span className="charting-statistics-value">
               {formatToThreeDigits(medianTotal / count)}
-            </div>
+            </span>
           </div>
           <div className="charting-statistics-row">
-            <div className="charting-statistics-label">
+            <span className="charting-statistics-label">
               Mean:
-            </div>
-            <div className="charting-statistics-value">
+            </span>
+            <span className="charting-statistics-value">
               {formatToThreeDigits(meanTotal / count)}
-            </div>
+            </span>
           </div>
           <div className="charting-statistics-row">
-            <div className="charting-statistics-label">
+            <span className="charting-statistics-label">
               Min:
-            </div>
-            <div className="charting-statistics-value">
+            </span>
+            <span className="charting-statistics-value">
               {formatToThreeDigits(minTotal / count)}
-            </div>
+            </span>
           </div>
           <div className="charting-statistics-row">
-            <div className="charting-statistics-label">
+            <span className="charting-statistics-label">
               Max:
-            </div>
-            <div className="charting-statistics-value">
+            </span>
+            <span className="charting-statistics-value">
               {formatToThreeDigits(maxTotal / count)}
-            </div>
+            </span>
           </div>
           <div className="charting-statistics-row">
-            <div className="charting-statistics-label">
+            <span className="charting-statistics-label">
               Stdev:
-            </div>
-            <div className="charting-statistics-value">
+            </span>
+            <span className="charting-statistics-value">
               {formatToThreeDigits(stddevTotal / count)}
-            </div>
+            </span>
           </div>
         </div>
       </>
     );
   }
-
-  const formattedUnit = unit ? ` (${unit})` : '';
 
   return (
     <div className="charting-chart-container">
@@ -179,38 +189,53 @@ function ChartComponent (props) {
             data={data}
             margin={{
               top: 20,
-              right: 20,
-              left: 20,
-              bottom: 20,
+              right: 10,
+              left: 30,
+              bottom: 10,
             }}
           >
-            <Tooltip formatter={(value, name) => [value, `${name}${formattedUnit}`]} />
+            <Tooltip content={CustomTooltip} />
             {' '}
             {getLineChart(data)}
             <XAxis dataKey="name" stroke="#a6a5a6" />
-            <YAxis type="number" stroke="#a6a5a6" domain={yAxisValuesArr} tick={renderCustomAxisTick} />
-            <Legend formatter={(value) => `${value}${formattedUnit}`} />
+            <YAxis
+              type="number"
+              stroke="#a6a5a6"
+              domain={yAxisValuesArr}
+              label={{
+                value: `mean${formattedUnit}`,
+                angle: -90,
+                position: 'center',
+                dx: -40,
+              }}
+            />
+            <Legend formatter={() => `${title}`} />
           </LineChart>
         </div>
         <div className="charting-stat-text">
           <h3>
-            Average Statistics
-            {formattedUnit}
+            <b>
+              Average Statistics
+              {formattedUnit}
+            </b>
           </h3>
           <br />
           {getQuickStatistics(data)}
         </div>
       </div>
       <div className="charting-disclaimer">
-        <strong>Note: </strong>
+        <strong className="charting-disclaimer-pre">Note: </strong>
         <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
         {isTruncated
         && (
-          <>
-            <br />
-            <br />
-            <div>
-              Note: As part of this beta feature release, the number of data points plotted between
+          <div className="charting-disclaimer-lower">
+            <FontAwesomeIcon
+              icon="exclamation-triangle"
+              className="wv-alert-icon"
+              size="1x"
+            />
+            <i className="charting-disclaimer-block">
+              As part of this beta feature release, the number of data points plotted between
               <b>
                 {` ${startDate} `}
               </b>
@@ -223,10 +248,12 @@ function ChartComponent (props) {
                 {` ${numRangeDays} `}
               </b>
               to
-              <b> 20</b>
+              <b>
+                {` ${STEP_NUM}`}
+              </b>
               .
-            </div>
-          </>
+            </i>
+          </div>
         )}
       </div>
     </div>
