@@ -726,6 +726,7 @@
 		"OMI_Ozone_DOAS_Total_Column",
 		"OMI_Ozone_TOMS_Total_Column",
 		"OMI_Nitrogen_Dioxide_Tropo_Column",
+		"OMI_Total_NO2_LRC_v1",
 		"OCO-3_Carbon_Dioxide_Total_Column_Average",
 		"OCO-3_Carbon_Dioxide_Global_Mean_Difference",
 		"OCO-3_Solar_Induced_Florescence_757nm",

@@ -184,6 +184,30 @@ async function getMetadata (layerId, baseUrl, count) {
     }
     return
   }
+  if (layerId === 'OMI_Total_NO2_LRC_v1') {
+    const metadata = {
+      title: 'OMI Lerc layer for testing',
+      subtitle: 'Nitrogen Dioxide / OMI',
+      ongoing: true,
+      measurement: 'Nitrogen Dioxide',
+      retentionPeriod: -1,
+      daynight: [
+        'day'
+      ],
+      conceptIds: [],
+      orbitDirection: [
+        'descending'
+      ],
+      layerPeriod: 'Daily'
+    }
+    layerMetadata[layerId] = await getDAAC(metadata)
+    let metadataKeys = Object.keys(layerMetadata[layerId])
+    metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+    for (const key of metadataKeys) {
+      delete layerMetadata[layerId][key]
+    }
+    return
+  }
   if (count) console.warn(`retry #${count} for ${layerId}`)
   return axios({
     method: 'get',

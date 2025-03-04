@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "OMI_Total_NO2_LRC_v1": {
+      "id": "OMI_Total_NO2_LRC_v1",
+      "description": "omi/OMI_Total_NO2_LRC_v1",
+      "tags": "lerc omi",
+      "layergroup": "Aerosol Index",
+      "group": "overlays"
+    }
+  }
+}

@@ -12,7 +12,8 @@
                     "image": "",
                     "settings": [
                         "OMI_Nitrogen_Dioxide_Tropo_Column",
-                        "OrbitTracks_Aura_Ascending"
+                        "OrbitTracks_Aura_Ascending",
+                        "OMI_Total_NO2_LRC_v1"
                     ]
                 },
                 "TEMPO": {
