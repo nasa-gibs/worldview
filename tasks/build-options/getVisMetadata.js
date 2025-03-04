@@ -160,6 +160,31 @@ async function getDAAC (metadata) {
 }
 
 async function getMetadata (layerId, baseUrl, count) {
+  // graceal I will need to know how to create the metadata for the endpoint
+  if (layerId === 'VIIRS_VNP46A1_LERC_v1') {
+    const metadata = {
+      title: 'VIIRS Lerc layer for testing',
+      subtitle: 'Suomi NPP / VIIRS',
+      ongoing: true,
+      measurement: 'Earth at Night',
+      retentionPeriod: -1,
+      daynight: [
+        'night'
+      ],
+      conceptIds: [],
+      orbitDirection: [
+        'descending'
+      ],
+      layerPeriod: 'Daily'
+    }
+    layerMetadata[layerId] = await getDAAC(metadata)
+    let metadataKeys = Object.keys(layerMetadata[layerId])
+    metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+    for (const key of metadataKeys) {
+      delete layerMetadata[layerId][key]
+    }
+    return
+  }
   if (count) console.warn(`retry #${count} for ${layerId}`)
   return axios({
     method: 'get',
