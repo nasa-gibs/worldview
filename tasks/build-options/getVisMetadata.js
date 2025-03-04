@@ -160,7 +160,7 @@ async function getDAAC (metadata) {
 
 async function getMetadata (layerId, baseUrl, count) {
   // graceal I will need to know how to create the metadata for the endpoint
-  if (layerId === 'VIIRS_VNP46A1_LERC_v1') {
+  if (layerId === 'VIIRS_SNPP_DayNightBand_At_Sensor_Radiance_LERC') {
     const metadata = {
       title: 'VIIRS Lerc layer for testing',
       subtitle: 'Suomi NPP / VIIRS',

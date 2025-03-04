@@ -202,7 +202,7 @@ export function tileLoader(tile, src, layer, state, tilegrid, groupString) {
       const ctx = canvas.getContext('2d');
       const zoom = tilegrid.getZForResolution(view.getResolution(), 0);
 
-      // copy pixelData to new array with a deep copy, and pass that into drawTiles
+      // copy pixelData to new array with a deep copy, and pass that into drawTile
       const size = tilegrid.getTileSize(zoom);
       const opacity = 255;
 

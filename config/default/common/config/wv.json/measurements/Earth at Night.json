@@ -17,7 +17,7 @@
                         "VIIRS_Night_Lights",
                         "VIIRS_Black_Marble",
                         "VIIRS_CityLights_2012",
-                        "VIIRS_VNP46A1_LERC_v1"
+                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance_LERC"
                     ]
                 },
                 "NOAA-20/VIIRS": {
