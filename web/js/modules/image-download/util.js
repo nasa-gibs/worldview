@@ -1,4 +1,5 @@
 import html2canvas from 'html2canvas';
+import { Jimp, JimpMime } from 'jimp';
 import {
   get as lodashGet,
 } from 'lodash';
@@ -386,6 +387,32 @@ function getDevicePixelsPerMillimeter() {
   return pixelsPerMillimeter * window.devicePixelRatio;
 }
 
+/**
+ * Convert a PNG image (provided as a data URL) to TIFF
+ * @param {String} dataUrl - The data URL of the input PNG file
+ * @returns {Promise<Blob>} - A promise that resolves to the TIFF Blob
+ */
+export async function convertPngToTiff(dataUrl) {
+  return new Promise((resolve, reject) => {
+    try {
+      // Read the PNG data using Jimp
+      Jimp.read(dataUrl)
+        .then(async (image) => {
+          // Convert the image to TIFF format
+          const tiffBuffer = await image.getBuffer(JimpMime.tiff);
+          // Convert the TIFF buffer to a Blob
+          const blob = new Blob([tiffBuffer], { type: 'image/tiff' });
+          resolve(blob);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 export function snapshot (options) {
   document.body.style.cursor = 'wait';
   return new Promise((resolve) => {
@@ -421,16 +448,23 @@ export function snapshot (options) {
       y: calcYOffset,
     };
 
-    map.once('rendercomplete', () => {
-      html2canvas(map.getViewport(), exportOptions).then((canvas) => {
-        const dataURL = canvas.toDataURL(format);
-        // Reset original map size
-        map.getTargetElement().style.width = '';
-        map.getTargetElement().style.height = '';
-        map.updateSize();
-        document.body.style.cursor = 'auto';
-        resolve(dataURL);
-      });
+    map.once('rendercomplete', async () => {
+      const canvas = await html2canvas(map.getViewport(), exportOptions);
+      const dataURL = canvas.toDataURL(format);
+      // Reset original map size
+      map.getTargetElement().style.width = '';
+      map.getTargetElement().style.height = '';
+      map.updateSize();
+      document.body.style.cursor = 'auto';
+      const geoTiffBlob = await convertPngToTiff(dataURL);
+      const url = URL.createObjectURL(geoTiffBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'output.tif';
+      link.click();
+      URL.revokeObjectURL(url);
+
+      resolve(dataURL);
     });
 
     // Set print size
