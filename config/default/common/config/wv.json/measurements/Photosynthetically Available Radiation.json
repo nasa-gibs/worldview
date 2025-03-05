@@ -3,7 +3,7 @@
         "Photosynthetically Available Radiation": {
             "id": "photosynthetically-available-radiation",
             "title":    "Photosynthetically Available Radiation",
-            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
+            "subtitle": "Terra/MODIS, Aqua/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS, PACE/OCI",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
@@ -53,6 +53,16 @@
                     "settings": [
                         "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "PACE/OCI": {
+                    "id": "pace-oci",
+                    "title": "PACE/OCI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OCI_PACE_Photosynthetically_Available_Radiation",
+                        "OrbitTracks_PACE_Ascending"
                     ]
                 }
             }
