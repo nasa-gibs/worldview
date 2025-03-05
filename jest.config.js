@@ -7,11 +7,10 @@ module.exports = {
     'node_modules'
   ],
   moduleNameMapper: {
-    '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js'
+    '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js',
+    '^ol-mapbox-style$': '<rootDir>/node_modules/ol-mapbox-style/src/index.js'
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox|node-fetch|data-uri-to-buffer|fetch-blob|formdata-polyfill|color-space|color-rgba|color-parse|color-name)/)'
-  ],
+  transformIgnorePatterns: [],
   testPathIgnorePatterns: [
     '<rootDir>/e2e/'
   ],
