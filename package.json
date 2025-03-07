@@ -83,7 +83,7 @@
     "@babel/plugin-transform-private-methods": "^7.25.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
-    "@playwright/test": "^1.50.1",
+    "@playwright/test": "^1.51.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "ajv": "^8.17.1",
     "autoprefixer": "^10.4.20",
@@ -92,7 +92,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
-    "css-minimizer-webpack-plugin": "^7.0.0",
+    "css-minimizer-webpack-plugin": "^7.0.2",
     "css-url-relative-plugin": "^1.1.0",
     "cssnano": "^7.0.6",
     "eslint": "^8.57.1",
@@ -102,7 +102,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^28.10.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-n": "^17.15.1",
+    "eslint-plugin-n": "^17.16.2",
     "eslint-plugin-no-storage": "^1.0.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^7.2.1",
@@ -129,11 +129,11 @@
     "sass-loader": "^16.0.4",
     "shelljs": "^0.8.5",
     "showdown": "^2.1.0",
-    "stylelint": "^16.14.1",
+    "stylelint": "^16.15.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "stylelint-high-performance-animation": "^1.11.0",
     "tar": "^7.4.3",
-    "terser-webpack-plugin": "^5.3.12",
+    "terser-webpack-plugin": "^5.3.14",
     "uuid": "^11.0.3",
     "webpack": "^5.98.0",
     "webpack-bundle-analyzer": "^4.10.2",
@@ -164,7 +164,7 @@
     "dom-scroll-into-view": "^2.0.1",
     "element-resize-detector": "^1.2.4",
     "elm-pep": "^1.0.6",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "fetch-mock-jest": "^1.5.1",
     "file-saver": "^2.0.5",
     "geographiclib-geodesic": "^2.1.1",
@@ -208,7 +208,7 @@
     "simplebar-react": "^3.3.0",
     "stackblur": "^1.0.0",
     "supercluster": "^8.0.1",
-    "tough-cookie": "^5.1.1",
+    "tough-cookie": "^5.1.2",
     "upng-js": "^2.1.0",
     "url-template": "^3.1.1",
     "what-input": "^5.2.12"
@@ -222,6 +222,9 @@
     "eslint-config-standard": {
       "eslint-plugin-n": "^17.1.0",
       "eslint-plugin-promise": "^7.2.1"
+    },
+    "eslint-config-airbnb": {
+      "eslint-plugin-react-hooks": "^5.2.0"
     },
     "fetch-mock-jest": {
       "path-to-regexp": "^8.0.0"
