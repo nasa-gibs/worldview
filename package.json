@@ -154,7 +154,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@khanisak/temperature-converter": "^2.0.1",
     "@reduxjs/toolkit": "^2.6.0",
-    "axios": "^1.8.1",
+    "axios": "^1.8.2",
     "bluebird": "3.7.2",
     "bootstrap": "^5.3.3",
     "cachai": "^1.0.2",
