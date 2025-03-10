@@ -11,6 +11,7 @@
                     "description": "modis/NetPhotosynthesis",
                     "image": "",
                     "settings": [
+                        "MODIS_Aqua_L4_Net_Photosynthesis_Gap_Filled_8Day",
                         "MODIS_Aqua_L4_Net_Photosynthesis_8Day"
                     ]
                 },
@@ -20,6 +21,7 @@
                     "description": "modis/NetPhotosynthesis",
                     "image": "",
                     "settings": [
+                        "MODIS_Terra_L4_Net_Photosynthesis_Gap_Filled_8Day",
                         "MODIS_Terra_L4_Net_Photosynthesis_8Day"
                     ]
                 }

@@ -11,6 +11,7 @@
                       "description": "modis/GrossPrimaryProduction",
                       "image": "",
                       "settings": [
+                              "MODIS_Aqua_L4_Gross_Primary_Productivity_Gap_Filled_8Day",
   			                  "MODIS_Aqua_L4_Gross_Primary_Productivity_8Day"
                       ]
                   },
@@ -20,6 +21,7 @@
                       "description": "modis/GrossPrimaryProduction",
                       "image": "",
                       "settings": [
+                                "MODIS_Terra_L4_Gross_Primary_Productivity_Gap_Filled_8Day",
       			                "MODIS_Terra_L4_Gross_Primary_Productivity_8Day"
                           ]
                       },
