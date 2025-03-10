@@ -82,6 +82,7 @@ function setCoverageFacetProp(layer, selectedDate) {
 function setTypeProp(layer) {
   const { type } = layer;
   const rasterTypes = ['wms', 'wmts', 'xyz', 'composite:wmts'];
+  const vectorTypes = ['vector', 'indexedVector'];
   if (rasterTypes.includes(type)) {
     layer.type = 'Raster (Mosaicked)';
   }
@@ -90,6 +91,9 @@ function setTypeProp(layer) {
   }
   if (layer.type === 'titiler') {
     layer.type = 'Dynamically-rendered';
+  }
+  if (vectorTypes.includes(type)) {
+    layer.type = 'Vector';
   }
   layer.type = capitalizeFirstLetter(layer.type);
   return layer;

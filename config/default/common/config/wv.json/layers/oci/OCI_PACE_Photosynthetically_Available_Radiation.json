@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OCI_PACE_Photosynthetically_Available_Radiation": {
+      "id": "OCI_PACE_Photosynthetically_Available_Radiation",
+      "description": "oci/OCI_PACE_Photosynthetically_Available_Radiation",
+      "tags": "ocean color oci pace plankton par",
+      "group": "overlays",
+      "layergroup": "Photosynthetically Available Radiation",
+      "wrapadjacentdays": true
+    }
+  }
+}
