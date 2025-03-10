@@ -5,7 +5,7 @@ function SimpleStatistics(props) {
   const { data } = props;
 
   const {
-    median, mean, max, min, stdev, timestamp, type, endTimestamp, unit,
+    median, mean, max, min, stdev, timestamp, type, endTimestamp,
   } = data;
 
   let dateStr;
@@ -17,10 +17,9 @@ function SimpleStatistics(props) {
 
   function formatToThreeDigits(str) {
     if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
-      return Number(parseFloat(str).toFixed(3)).toPrecision(3)
-    } else {
-      return parseFloat(str).toFixed(3);
+      return Number(parseFloat(str).toFixed(3)).toPrecision(3);
     }
+    return parseFloat(str).toFixed(3);
   }
 
   return (
@@ -34,45 +33,45 @@ function SimpleStatistics(props) {
           </div>
         </div>
         <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Median:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(median)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Mean:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(mean)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Min:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(min)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Max:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(max)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Stdev:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(stdev)}
-            </span>
-          </div>
+          <span className="charting-statistics-label">
+            Median:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(median)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Mean:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(mean)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Min:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(min)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Max:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(max)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Stdev:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(stdev)}
+          </span>
+        </div>
       </div>
       <div className="charting-disclaimer">
         <strong>Note:</strong>

@@ -16,7 +16,7 @@ import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import {
   toggleChartingModeOnOff,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose as closeModal } from '../../modules/modal/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
@@ -24,7 +24,6 @@ import {
   toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
-import { onClose as closeModal } from '../../modules/modal/actions';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {

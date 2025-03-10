@@ -153,7 +153,7 @@ function ChartingModeOptions(props) {
     onUpdateEndDate(initialEndDate);
     return () => {
       isMounted.current = false;
-    }
+    };
   }, []);
 
   useEffect(() => {
