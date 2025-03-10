@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -77,10 +77,12 @@ function ChartingModeOptions(props) {
     modalId,
     sidebarHeight,
     viewExtent,
+    maxExtent,
   } = props;
 
   if (!olMap) return null;
 
+  const isMounted = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
   const [boundaries, setBoundaries] = useState({
@@ -146,8 +148,12 @@ function ChartingModeOptions(props) {
   }, [projections]);
 
   useEffect(() => {
+    isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
+    return () => {
+      isMounted.current = false;
+    }
   }, []);
 
   useEffect(() => {
@@ -169,7 +175,7 @@ function ChartingModeOptions(props) {
   }
 
   useEffect(() => {
-    if (modalId === 'CHARTING-CHART' || modalId === 'CHARTING_STATS_MODAL') {
+    if (modalId === 'CHARTING-CHART' || modalId === 'CHARTING-STATS-MODAL') {
       updateModalOpen(isModalOpen);
       if (!isModalOpen) {
         updateChartRequestStatus(false);
@@ -307,6 +313,11 @@ function ChartingModeOptions(props) {
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
 
+      if (!isMounted.current) {
+        updateChartRequestStatus(false);
+        return;
+      }
+
       if (!data.ok) {
         updateChartRequestStatus(false);
         openChartingErrorModal('An error has occurred while requesting the charting data. Please try again in a few minutes.');
@@ -351,7 +362,7 @@ function ChartingModeOptions(props) {
   }
 
   useEffect(() => {
-    const isOpen = (modalId === 'CHARTING-CHART' || modalId === 'CHARTING_STATS_MODAL') && isModalOpen;
+    const isOpen = (modalId === 'CHARTING-CHART' || modalId === 'CHARTING-STATS-MODAL') && isModalOpen;
     if (isChartOpen && !isOpen && Object.keys(renderedPalettes).length > 0) {
       const layerInfo = getActiveChartingLayer();
       const paletteName = layerInfo.palette.id;
@@ -398,6 +409,7 @@ function ChartingModeOptions(props) {
 
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
+  const [isWithinWings, setIsWithinWings] = useState(false);
 
   olMap.once('postrender', () => {
     setIsPostRender(true);
@@ -428,8 +440,13 @@ function ChartingModeOptions(props) {
       y2: bottomLeft[1],
     };
     setBoundaries(newBoundaries);
-    setBottomLeftLatLong(getLatLongFromPixelValue(x, y2));
-    setTopRightLatLong(getLatLongFromPixelValue(x2, y));
+    setBottomLeftLatLong([aoiCoordinates[0], aoiCoordinates[1]]);
+    setTopRightLatLong([aoiCoordinates[2], aoiCoordinates[3]]);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
   });
 
   /**
@@ -456,6 +473,11 @@ function ChartingModeOptions(props) {
     setTopRightLatLong(topRight);
     debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
     setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
   }
 
   function onLatLongChange(coordsArray) {
@@ -474,6 +496,11 @@ function ChartingModeOptions(props) {
     setTopRightLatLong(topRight);
     debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
     setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
   }
 
   function toggleMapView() {
@@ -601,7 +628,7 @@ function ChartingModeOptions(props) {
           aria-label={requestBtnText}
           className="charting-create-button btn wv-button red"
           onClick={() => onRequestChartClick()}
-          valid={!chartRequestInProgress}
+          valid={!chartRequestInProgress && !isWithinWings}
           text={requestBtnText}
         />
       </div>
@@ -643,7 +670,7 @@ const mapStateToProps = (state) => {
   } = state;
   const renderedPalettes = palettes.rendered;
   const activeLayers = layers.active.layers;
-  const { crs } = proj.selected;
+  const { crs, maxExtent } = proj.selected;
   const { screenWidth, screenHeight } = screenSize;
   const {
     activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
@@ -681,6 +708,7 @@ const mapStateToProps = (state) => {
     isModalOpen: isOpen,
     modalId: id,
     viewExtent,
+    maxExtent,
   };
 };
 
@@ -726,8 +754,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
   displaySimpleStats: (data) => {
     dispatch(
-      openCustomContent('CHARTING_STATS_MODAL', {
-        headerText: `${data.title} - ${data.subtitle} Simple Statistics`,
+      openCustomContent('CHARTING-STATS-MODAL', {
+        headerText: `BETA | ${data.title} - ${data.subtitle}${data.unit ? ` (${data.unit})` : ''} Simple Statistics`,
         backdrop: false,
         bodyComponent: SimpleStatistics,
         wrapClassName: 'unclickable-behind-modal',
@@ -815,4 +843,5 @@ ChartingModeOptions.propTypes = {
   modalId: PropTypes.string,
   sidebarHeight: PropTypes.number,
   viewExtent: PropTypes.array,
+  maxExtent: PropTypes.array,
 };

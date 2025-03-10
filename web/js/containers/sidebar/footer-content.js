@@ -24,6 +24,7 @@ import {
   toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+import { onClose as closeModal } from '../../modules/modal/actions';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
@@ -37,6 +38,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     isChartingActive,
     isCompareActive,
     isMobile,
+    closeModalAction,
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
@@ -61,6 +63,8 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCharting();
     if (!isChartingActive) {
       openChartingInfoModal();
+    } else {
+      closeModalAction();
     }
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
@@ -183,6 +187,9 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(toggleOverlayGroupsAction());
     });
   },
+  closeModalAction: () => {
+    dispatch(closeModal());
+  },
   openChartingInfoModal: () => {
     // This is the charting tool info window from the wireframes
     dispatch(
@@ -241,6 +248,7 @@ FooterContent.propTypes = {
   isChartingActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  closeModalAction: PropTypes.func,
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,

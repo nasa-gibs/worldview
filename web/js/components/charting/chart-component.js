@@ -26,7 +26,11 @@ function ChartComponent (props) {
   const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
-    return parseFloat(str).toFixed(3);
+    if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
+      return Number(parseFloat(str).toFixed(3)).toPrecision(3)
+    } else {
+      return parseFloat(str).toFixed(3);
+    }
   }
 
   /**
@@ -71,7 +75,7 @@ function ChartComponent (props) {
             <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
             {`${payload[0].name}${formattedUnit}: `}
             <b>
-              {payload[0].value}
+              {formatToThreeDigits(payload[0].value)}
             </b>
           </p>
         </div>
@@ -202,6 +206,7 @@ function ChartComponent (props) {
               type="number"
               stroke="#a6a5a6"
               domain={yAxisValuesArr}
+              tickFormatter={(tick) => formatToThreeDigits(tick)}
               label={{
                 value: `mean${formattedUnit}`,
                 angle: -90,

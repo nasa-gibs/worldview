@@ -626,6 +626,26 @@ div#group-overlays-checkbox-case {
   }
 }
 
+#charting-stats-modal {
+  width: 300px;
+
+  .modal-title {
+    margin-right: 10px;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+  }
+}
+
+.charting-simple.charting-statistics-container {
+  padding: 0 18px;
+  margin: auto;
+}
+
 .charting-statistics-row {
   margin: 0 0 1em;
   padding: 0.25em 0;
