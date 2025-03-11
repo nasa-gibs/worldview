@@ -532,8 +532,8 @@ export async function convertPngToTiff(dataUrl) {
         // ExtraSamples (alpha data)
         ifd.setUint16(entryOffset, 338, true);
         ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-        ifd.setUint32(entryOffset + 4, 1, true);
-        ifd.setUint16(entryOffset + 8, 2, true);
+        ifd.setUint32(entryOffset + 4, 1, true); // 1 extra sample
+        ifd.setUint16(entryOffset + 8, 1, true); // Value 1 = Associated alpha data (premultiplied)
         entryOffset += 12;
 
         // Next IFD offset (0 for last IFD)
@@ -782,7 +782,7 @@ export async function convertTiffToGeoTiff(tiffBlob, options) {
     // GeoKeyDirectoryTag (34735)
     newView.setUint16(pos, 34735, true);
     newView.setUint16(pos + 2, 3, true); // SHORT
-    newView.setUint32(pos + 4, 16, true); // 4 keys * 4 values
+    newView.setUint32(pos + 4, 16, true); // 4 * 4 values (header + 3 keys)
     newView.setUint32(pos + 8, geoKeyDirectoryOffset, true);
     pos += 12;
 
@@ -808,17 +808,30 @@ export async function convertTiffToGeoTiff(tiffBlob, options) {
       epsgCode = parseInt(options.crs.split(':')[1], 10);
     }
 
-    // Set GeoKeyDirectory values
-    const geoKeys = [
-      1, 1, 0, 4, // Version/revision/minor/number of keys
-      1024, 0, 1, 2, // GTModelTypeGeoKey (2 = Geographic)
-      1025, 0, 1, 1, // GTRasterTypeGeoKey (1 = PixelIsArea)
-      2048, 0, 1, epsgCode, // GeographicTypeGeoKey (parsed from CRS)
-      2054, 0, 1, 9001, // GeogLinearUnitsGeoKey (9001 = meters)
-    ];
-    for (let i = 0; i < geoKeys.length; i += 1) {
-      newView.setUint16(geoKeyDirectoryOffset + (i * 2), geoKeys[i], true);
-    }
+    // Set GeoKeyDirectory values directly using DataView
+    // GeoKeyDirectory header
+    newView.setUint16(geoKeyDirectoryOffset, 1, true); // KeyDirectoryVersion
+    newView.setUint16(geoKeyDirectoryOffset + 2, 1, true); // KeyRevision
+    newView.setUint16(geoKeyDirectoryOffset + 4, 0, true); // MinorRevision
+    newView.setUint16(geoKeyDirectoryOffset + 6, 3, true); // NumberOfKeys (3 keys instead of 4)
+
+    // Key 1: GTModelTypeGeoKey (2 = Geographic)
+    newView.setUint16(geoKeyDirectoryOffset + 8, 1024, true); // KeyID
+    newView.setUint16(geoKeyDirectoryOffset + 10, 0, true); // TIFFTagLocation (0 = value is inline)
+    newView.setUint16(geoKeyDirectoryOffset + 12, 1, true); // Count MUST BE 1 for inline values
+    newView.setUint16(geoKeyDirectoryOffset + 14, 2, true); // Value (2 = Geographic)
+
+    // Key 2: GTRasterTypeGeoKey (1 = PixelIsArea)
+    newView.setUint16(geoKeyDirectoryOffset + 16, 1025, true); // KeyID
+    newView.setUint16(geoKeyDirectoryOffset + 18, 0, true); // TIFFTagLocation
+    newView.setUint16(geoKeyDirectoryOffset + 20, 1, true); // Count MUST BE 1
+    newView.setUint16(geoKeyDirectoryOffset + 22, 1, true); // Value (1 = PixelIsArea)
+
+    // Key 3: GeographicTypeGeoKey (EPSG code)
+    newView.setUint16(geoKeyDirectoryOffset + 24, 2048, true); // KeyID
+    newView.setUint16(geoKeyDirectoryOffset + 26, 0, true); // TIFFTagLocation
+    newView.setUint16(geoKeyDirectoryOffset + 28, 1, true); // Count MUST BE 1
+    newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true); // Value (EPSG code)
 
     // Set ModelPixelScale values (pixel size in map units)
     // GeoTIFF expects [width_per_pixel, height_per_pixel, 0]
@@ -911,7 +924,7 @@ export function snapshot (options) {
         const url = URL.createObjectURL(geoTiffBlob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'output.tif';
+        link.download = 'screenshot.tif';
         link.click();
         URL.revokeObjectURL(url);
 
