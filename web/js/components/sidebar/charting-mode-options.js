@@ -85,6 +85,7 @@ function ChartingModeOptions(props) {
   const isMounted = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
+  const [isWithinWings, setIsWithinWings] = useState(false);
   const [boundaries, setBoundaries] = useState({
     x: screenWidth / 2 - 100,
     y: screenHeight / 2 - 100,
@@ -107,6 +108,24 @@ function ChartingModeOptions(props) {
     const endDate = end === undefined ? timelineEndDate : end;
     return { initialStartDate: startDate, initialEndDate: endDate };
   }
+
+  /**
+   * Convert pixel value to latitude longitude value
+   * @param {Array} pixelX
+   * @param {Array} pixelY
+   *
+   * @returns {Array}
+   */
+  function getLatLongFromPixelValue(pixelX, pixelY) {
+    const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
+    if (!coordinate) return [0, 0];
+    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
+
+    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
+  }
+
+  const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
+  const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
   /**
    * Filters the layers array & returns those with visible set to 'true'.
@@ -151,6 +170,18 @@ function ChartingModeOptions(props) {
     isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
+    if (maxExtent) {
+      let inLeftWing;
+      let inRightWing;
+      if (aoiCoordinates && aoiCoordinates.length > 0) {
+        inLeftWing = aoiCoordinates[0] < maxExtent[0] && aoiCoordinates[2] < maxExtent[0];
+        inRightWing = aoiCoordinates[0] > maxExtent[2] && aoiCoordinates[2] > maxExtent[2];
+      } else {
+        inLeftWing = bottomLeftLatLong[0] < maxExtent[0] && topRightLatLong[0] < maxExtent[0];
+        inRightWing = bottomLeftLatLong[0] > maxExtent[2] && topRightLatLong[0] > maxExtent[2];
+      }
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
     return () => {
       isMounted.current = false;
     };
@@ -228,7 +259,7 @@ function ChartingModeOptions(props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://worldview.sit.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
@@ -392,25 +423,6 @@ function ChartingModeOptions(props) {
     onDateIconClick();
   }, [sidebarHeight]);
 
-  /**
-   * Convert pixel value to latitude longitude value
-   * @param {Array} pixelX
-   * @param {Array} pixelY
-   *
-   * @returns {Array}
-   */
-  function getLatLongFromPixelValue(pixelX, pixelY) {
-    const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
-    if (!coordinate) return [0, 0];
-    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
-
-    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
-  }
-
-  const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
-  const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
-  const [isWithinWings, setIsWithinWings] = useState(false);
-
   olMap.once('postrender', () => {
     setIsPostRender(true);
     if (isPostRender) return;
@@ -424,8 +436,15 @@ function ChartingModeOptions(props) {
       onUpdateEndDate(endDate);
     }
     if (!aoiCoordinates || aoiCoordinates.length === 0) {
-      setBottomLeftLatLong(getLatLongFromPixelValue(x, y2));
-      setTopRightLatLong(getLatLongFromPixelValue(x2, y));
+      const bottomLeft = getLatLongFromPixelValue(x, y2);
+      const topRight = getLatLongFromPixelValue(x2, y);
+      setBottomLeftLatLong(bottomLeft);
+      setTopRightLatLong(topRight);
+      if (maxExtent) {
+        const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+        const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+        setIsWithinWings(inLeftWing || inRightWing);
+      }
       return;
     }
     if (viewExtent.every((val, index) => val === aoiCoordinates[index])) {
@@ -443,8 +462,8 @@ function ChartingModeOptions(props) {
     setBottomLeftLatLong([aoiCoordinates[0], aoiCoordinates[1]]);
     setTopRightLatLong([aoiCoordinates[2], aoiCoordinates[3]]);
     if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      const inLeftWing = aoiCoordinates[0] < maxExtent[0] && aoiCoordinates[2] < maxExtent[0];
+      const inRightWing = aoiCoordinates[0] > maxExtent[2] && aoiCoordinates[2] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
   });
