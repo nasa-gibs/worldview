@@ -20,6 +20,8 @@ function ChartingLayerMenu (props) {
     isActive,
     isEmbedModeActive,
     updateActiveChartingLayer,
+    renderedPalettes,
+    activeChartingLayer,
   } = props;
 
   let minHeight = '100px';
@@ -38,8 +40,10 @@ function ChartingLayerMenu (props) {
   };
 
   useEffect(() => {
-    updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
-  }, []);
+    if (!activeChartingLayer && Object.keys(renderedPalettes).length > 0) {
+      updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
+    }
+  }, [renderedPalettes]);
 
   return isActive && (
     <div id="layers-scroll-container" style={scrollContainerStyles}>
@@ -59,23 +63,25 @@ function ChartingLayerMenu (props) {
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
   const {
-    compare, charting, embed, layers, animation, screenSize,
+    compare, charting, embed, layers, animation, screenSize, palettes,
   } = state;
   const isCompareActive = compare.active;
   const isChartingActive = charting.active;
+  const activeChartingLayer = charting.activeLayer;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
   const { groupOverlays } = layers[compareState];
   const activeLayersMap = getActiveLayersMap(state);
   let { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
   let overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
+  const renderedPalettes = palettes.rendered;
   if (isEmbedModeActive) {
     // remove hidden layers and reference layers overlay group
     baselayers = baselayers.filter((layer) => layer.visible);
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.map((layer) => ({ ...layer, shouldHide: !(Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous') }));
+  const activeLayersWithPalettes = overlays.map((layer) => ({ ...layer, shouldHide: !(Object.prototype.hasOwnProperty.call(layer, 'palette') && renderedPalettes[layer.palette.id] && renderedPalettes[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily') }));
 
   return {
     isAnimating: animation.isPlaying,
@@ -89,6 +95,8 @@ const mapStateToProps = (state, ownProps) => {
     groupOverlays,
     activeLayersMap,
     activeLayersWithPalettes,
+    renderedPalettes,
+    activeChartingLayer,
   };
 };
 

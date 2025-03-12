@@ -142,7 +142,7 @@ RenderCoordinates.propTypes = {
 
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   onDragStop: PropTypes.func,
   bottomLeftStyle: PropTypes.object,
   coordinates: PropTypes.object,

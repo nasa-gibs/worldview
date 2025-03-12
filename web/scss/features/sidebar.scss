@@ -539,9 +539,17 @@ div#group-overlays-checkbox-case {
   .edit-coordinates span {
     padding: 3px 9px;
   }
+
+  .wv-image-input-case {
+    width: 78%;
+  }
 }
 
-.charting-timespan-container {
+.charting-aoi-container .btn-group {
+  margin-left: auto;
+}
+
+.charting-timespan-container, .charting-aoi-container {
   align-items: center;
   margin-top: 10px;
   display: flex;
@@ -561,16 +569,28 @@ div#group-overlays-checkbox-case {
   div > .btn-active {
     background: #01457b;
   }
+
+  .btn-group {
+    width: 78%;
+  }
 }
 
 .charting-date-row {
   text-align: right;
   margin-top: 6px;
 
-  .charting-date-button span {
-    padding: 3px 9px;
-    font-weight: normal;
+  .charting-date-button {
+    width: 78%;
+
+    span {
+      padding: 3px 9px;
+      font-weight: normal;
+    }
   }
+}
+
+#map-view-checkbox-case {
+  margin-left: 58px;
 }
 
 .charting-info-container,
@@ -588,15 +608,52 @@ div#group-overlays-checkbox-case {
   top: 80px;
 }
 
-.charting-statistics-label {
-  font-weight: bolder;
-  min-width: 40%;
+.modal-dialog.chart-error {
+  position: absolute;
+  width: 25%;
+  left: 37.5%;
+  top: 160px;
+}
+
+#charting-date-modal {
+  top: var(--charting-date-modal-offset);
+  left: 305px;
+  right: unset;
+  width: 325px;
+
+  .thru-label {
+    bottom: 22px !important;
+  }
+}
+
+#charting-stats-modal {
+  width: 300px;
+
+  .modal-title {
+    margin-right: 10px;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+  }
+}
+
+.charting-simple.charting-statistics-container {
+  padding: 0 18px;
+  margin: auto;
 }
 
 .charting-statistics-row {
-  display: flex;
   margin: 0 0 1em;
-  padding: 0.25em;
+  padding: 0.25em 0;
+}
+
+.charting-statistics-value {
+  float: right;
+  font-weight: bold;
 }
 
 .recharts-legend-item {
@@ -605,6 +662,27 @@ div#group-overlays-checkbox-case {
 
 .charting-disclaimer {
   line-height: 1.3em;
+  text-align: left;
+  padding: 18px;
+}
+
+.charting-disclaimer-pre {
+  margin-right: 8px;
+}
+
+.charting-disclaimer-lower {
+  margin-top: 10px;
+}
+
+.wv-alert-icon {
+  color: #d54e21;
+  font-size: 1.4em;
+  margin: 10px 18px 0 8px;
+  float: left;
+}
+
+.charting-disclaimer-block {
+  line-height: 20px;
 }
 
 .charting-buttons {
@@ -617,6 +695,7 @@ div#group-overlays-checkbox-case {
     float: right;
     margin-right: 10px;
     width: 138px;
+    height: 27.5px;
 
     .button-text {
       display: block;
@@ -636,20 +715,28 @@ div#group-overlays-checkbox-case {
 }
 
 #charting-chart {
-  max-width: 800px;
+  max-width: 850px;
 }
 
 button#charting-simple-stats-button {
   border-right: 3px solid black;
 }
 
-.charting-info,
-.charting-disclaimer {
+.charting-info {
   text-align: left;
   margin-bottom: 12px;
 }
 
-.charting-chart-container {
+.charting-feedback {
+  color: #7bf !important;
+  cursor: pointer;
+}
+
+.charting-feedback:hover {
+  text-decoration: underline !important;
+}
+
+.charting-chart-inner {
   display: flex;
   justify-content: space-between;
 }
@@ -657,11 +744,8 @@ button#charting-simple-stats-button {
 .charting-stat-text {
   float: left;
   margin-left: 20px;
-}
-
-.charting-request-status {
-  text-align: center;
-  margin-top: 10px;
+  padding: 18px;
+  width: 100%;
 }
 
 p.recharts-tooltip-label {
@@ -673,6 +757,29 @@ p.recharts-tooltip-label {
   color: #ccc;
   margin: 3px 0 8px;
   line-height: 1.4em;
+}
+
+.custom-tooltip {
+  background-color: #fff;
+  border: 1px solid #666;
+  padding: 12px;
+
+  .label {
+    line-height: 20px;
+
+    b {
+      float: right;
+      margin-left: 5px;
+    }
+  }
+}
+
+.custom-data-rect {
+  width: 10px;
+  display: inline-block;
+  height: 11px;
+  margin-bottom: -1px;
+  margin-right: 6px;
 }
 
 #products-holder footer .action {
