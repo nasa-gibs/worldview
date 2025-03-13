@@ -653,11 +653,14 @@ export async function convertTiffToGeoTiff(tiffBlob, options) {
     // Read image data
     const imageData = new Uint8Array(arrayBuffer, stripOffsets, stripByteCounts);
 
-    // Calculate proper georeferencing parameters
+    // Calculate proper georeferencing parameters with exact pixel size
     const [minX, minY, maxX, maxY] = options.bbox;
-    const pixelWidth = (maxX - minX) / width;
-    const pixelHeight = (maxY - minY) / height;
+    const bboxWidth = options.bboxWidth || (maxX - minX);
+    const bboxHeight = options.bboxHeight || (maxY - minY);
 
+    // Use canvas dimensions if provided, otherwise use the TIFF dimensions
+    const pixelWidth = bboxWidth / width;
+    const pixelHeight = bboxHeight / height;
 
     // Create new GeoTIFF from scratch
     // Header (8 bytes)
@@ -877,50 +880,66 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const devicePixelsPerMillimeter = getDevicePixelsPerMillimeter();
-    const [mapWidth, mapHeight] = map.getSize();
-    const widthMM = mapWidth / devicePixelsPerMillimeter; // Map width in millimeters
-    const heightMM = mapHeight / devicePixelsPerMillimeter; // Map height in millimeters
-    const dim = [widthMM, heightMM]; // size in mm
 
-    const scaledWidth = Math.round((dim[0] * resolution) / 25.4); // 25.4 mm in an inch
-    const scaledHeight = Math.round((dim[1] * resolution) / 25.4); // 25.4 mm in an inch
-
-    const calcXOffset = ((xOffset / devicePixelsPerMillimeter) * resolution) / 25.4;
-    const calcYOffset = ((yOffset / devicePixelsPerMillimeter) * resolution) / 25.4;
-    const calcWidth = ((width / devicePixelsPerMillimeter) * resolution) / 25.4;
-    const calcHeight = ((height / devicePixelsPerMillimeter) * resolution) / 25.4;
-
-    // Get accurate geographic bounding box for the capture area
-    const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
+    // Calculate geographic extent BEFORE resizing
+    const topLeft = map.getCoordinateFromPixel([xOffset, yOffset]);
     const topRight = map.getCoordinateFromPixel([xOffset + width, yOffset]);
-    const bbox = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
+    const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
+    const bottomRight = map.getCoordinateFromPixel([xOffset + width, yOffset + height]);
 
-    const exportOptions = {
-      useCORS: true,
-      allowTaint: true,
-      width: calcWidth,
-      height: calcHeight,
-      x: calcXOffset,
-      y: calcYOffset,
-    };
+    // Calculate bounds
+    const minX = Math.min(topLeft[0], bottomLeft[0]);
+    const maxX = Math.max(topRight[0], bottomRight[0]);
+    const minY = Math.min(bottomLeft[1], bottomRight[1]);
+    const maxY = Math.max(topLeft[1], topRight[1]);
+    const bbox = [minX, minY, maxX, maxY];
 
-    const geotiffOptions = {
-      bbox,
-      crs: map.getView().getProjection().getCode(),
-      resolution,
-    };
+    const scaleFactor = resolution / 96;
 
     map.once('rendercomplete', async () => {
       try {
-        const canvas = await html2canvas(map.getViewport(), exportOptions);
-        const dataURL = canvas.toDataURL(format);
-        // Reset original map size
-        map.getTargetElement().style.width = '';
-        map.getTargetElement().style.height = '';
-        map.updateSize();
+        map.renderSync();
+
+        // Create our output canvas with exact dimensions we want
+        const outputCanvas = document.createElement('canvas');
+        outputCanvas.width = width * scaleFactor;
+        outputCanvas.height = height * scaleFactor;
+        const ctx = outputCanvas.getContext('2d');
+
+        // Capture the map at its CURRENT size (no scaling)
+        const capturedCanvas = await html2canvas(map.getViewport(), {
+          useCORS: true,
+          allowTaint: true,
+          scrollX: 0,
+          scrollY: 0,
+          scale: scaleFactor,
+          logging: false,
+          imageTimeout: 0,
+          removeContainer: true,
+        });
+
+        // Draw only the selected region to our output canvas
+        ctx.drawImage(
+          capturedCanvas,
+          xOffset * scaleFactor, // source x
+          yOffset * scaleFactor, // source y
+          width * scaleFactor, // source width
+          height * scaleFactor, // source height
+          0, // dest x
+          0, // dest y
+          width * scaleFactor, // dest width
+          height * scaleFactor, // dest height
+        );
+
+        // Continue with geotiff creation using output canvas
+        const dataURL = outputCanvas.toDataURL(format);
         const tiffBlob = await convertPngToTiff(dataURL);
-        const geoTiffBlob = await convertTiffToGeoTiff(tiffBlob, geotiffOptions);
+        const geoTiffBlob = await convertTiffToGeoTiff(tiffBlob, {
+          bbox,
+          crs: map.getView().getProjection().getCode(),
+          resolution,
+        });
+
         const url = URL.createObjectURL(geoTiffBlob);
         const link = document.createElement('a');
         link.href = url;
@@ -931,19 +950,13 @@ export function snapshot (options) {
         resolve(dataURL);
         document.body.style.cursor = 'auto';
       } catch (error) {
-        console.error('Error creating GeoTIFF:', error);
-        map.getTargetElement().style.width = '';
-        map.getTargetElement().style.height = '';
-        map.updateSize();
+        console.error('Error creating screenshot:', error);
         document.body.style.cursor = 'auto';
         reject(error);
       }
     });
 
-    // Set print size
-    map.getTargetElement().style.height = `${scaledHeight}px`;
-    map.getTargetElement().style.width = `${scaledWidth}px`;
-    map.updateSize();
+    map.renderSync();
   });
 }
 
