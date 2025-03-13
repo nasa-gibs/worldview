@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
 } from 'lodash';
-import { transform } from 'ol/proj';
+import { transform, getPointResolution } from 'ol/proj';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
@@ -364,34 +364,11 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
 }
 
 /**
- * Get the device pixels per millimeter
- * @returns {number} The number of pixels per millimeter
- */
-function getDevicePixelsPerMillimeter() {
-  // Create a temporary div element with a known size in millimeters
-  const div = document.createElement('div');
-  div.style.width = '10mm';
-  div.style.height = '10mm';
-  div.style.position = 'absolute';
-  div.style.visibility = 'hidden';
-  document.body.appendChild(div);
-
-  // Get the size of the div in pixels
-  const pixelsPerMillimeter = div.offsetWidth / 10;
-
-  // Remove the temporary div element
-  document.body.removeChild(div);
-
-  // Adjust for device pixel ratio
-  return pixelsPerMillimeter * window.devicePixelRatio;
-}
-
-/**
  * Convert a PNG image (provided as a data URL) to TIFF
  * @param {String} dataUrl - The data URL of the input PNG file
  * @returns {Promise<Blob>} - A promise that resolves to the TIFF Blob
  */
-export async function convertPngToTiff(dataUrl) {
+export async function convertPngToTiff (dataUrl) {
   return new Promise((resolve, reject) => {
     try {
       // Create an image element to load the PNG data
@@ -584,7 +561,7 @@ export async function convertPngToTiff(dataUrl) {
  * @param {Number} options.resolution - Image resolution in DPI
  * @returns {Promise<Blob>} - A promise that resolves to the GeoTIFF Blob
  */
-export async function convertTiffToGeoTiff(tiffBlob, options) {
+export async function convertTiffToGeoTiff (tiffBlob, options) {
   try {
     // Extract image data from TIFF
     const arrayBuffer = await tiffBlob.arrayBuffer();
@@ -881,7 +858,18 @@ export function snapshot (options) {
       map,
     } = options;
 
-    // Calculate geographic extent BEFORE resizing
+    const view = map.getView();
+
+    // Save original map size
+    const mapElement = map.getTargetElement();
+    const originalWidth = mapElement.style.width;
+    const originalHeight = mapElement.style.height;
+
+    // Save original viewport size
+    const [origMapWidth, origMapHeight] = map.getSize();
+    const viewResolution = map.getView().getResolution();
+
+    // Calculate geographic extent
     const topLeft = map.getCoordinateFromPixel([xOffset, yOffset]);
     const topRight = map.getCoordinateFromPixel([xOffset + width, yOffset]);
     const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
@@ -894,7 +882,24 @@ export function snapshot (options) {
     const maxY = Math.max(topLeft[1], topRight[1]);
     const bbox = [minX, minY, maxX, maxY];
 
+    // Calculate scale factor based on resolution
     const scaleFactor = resolution / 96;
+
+    // Scale the entire map up to the target resolution
+    const scaledMapWidth = origMapWidth * scaleFactor;
+    const scaledMapHeight = origMapHeight * scaleFactor;
+
+    // Calculate scaled positions for cropping
+    const scaledXOffset = xOffset * scaleFactor;
+    const scaledYOffset = yOffset * scaleFactor;
+    const scaledWidth = width * scaleFactor;
+    const scaledHeight = height * scaleFactor;
+
+    const scaledResolution = getPointResolution(
+      map.getView().getProjection(),
+      viewResolution / scaleFactor,
+      map.getView().getCenter(),
+    );
 
     map.once('rendercomplete', async () => {
       try {
@@ -902,17 +907,17 @@ export function snapshot (options) {
 
         // Create our output canvas with exact dimensions we want
         const outputCanvas = document.createElement('canvas');
-        outputCanvas.width = width * scaleFactor;
-        outputCanvas.height = height * scaleFactor;
+        outputCanvas.width = scaledWidth;
+        outputCanvas.height = scaledHeight;
         const ctx = outputCanvas.getContext('2d');
 
-        // Capture the map at its CURRENT size (no scaling)
+        // Capture the map at its new scaled size
         const capturedCanvas = await html2canvas(map.getViewport(), {
           useCORS: true,
           allowTaint: true,
           scrollX: 0,
           scrollY: 0,
-          scale: scaleFactor,
+          scale: 1, // No additional scaling since we already scaled the map
           logging: false,
           imageTimeout: 0,
           removeContainer: true,
@@ -921,15 +926,21 @@ export function snapshot (options) {
         // Draw only the selected region to our output canvas
         ctx.drawImage(
           capturedCanvas,
-          xOffset * scaleFactor, // source x
-          yOffset * scaleFactor, // source y
-          width * scaleFactor, // source width
-          height * scaleFactor, // source height
+          scaledXOffset, // source x
+          scaledYOffset, // source y
+          scaledWidth, // source width
+          scaledHeight, // source height
           0, // dest x
           0, // dest y
-          width * scaleFactor, // dest width
-          height * scaleFactor, // dest height
+          scaledWidth, // dest width
+          scaledHeight, // dest height
         );
+
+        // Reset map to original size
+        mapElement.style.width = originalWidth;
+        mapElement.style.height = originalHeight;
+        map.updateSize();
+        view.setResolution(viewResolution);
 
         // Continue with geotiff creation using output canvas
         const dataURL = outputCanvas.toDataURL(format);
@@ -938,6 +949,9 @@ export function snapshot (options) {
           bbox,
           crs: map.getView().getProjection().getCode(),
           resolution,
+          // These help ensure the right scaling
+          captureWidth: scaledWidth,
+          captureHeight: scaledHeight,
         });
 
         const url = URL.createObjectURL(geoTiffBlob);
@@ -950,11 +964,23 @@ export function snapshot (options) {
         resolve(dataURL);
         document.body.style.cursor = 'auto';
       } catch (error) {
+        // Reset map size in case of error
+        mapElement.style.width = originalWidth;
+        mapElement.style.height = originalHeight;
+        map.updateSize();
+        view.setResolution(viewResolution);
+
         console.error('Error creating screenshot:', error);
         document.body.style.cursor = 'auto';
         reject(error);
       }
     });
+
+    // Resize the map container
+    mapElement.style.width = `${scaledMapWidth}px`;
+    mapElement.style.height = `${scaledMapHeight}px`;
+    map.updateSize();
+    view.setResolution(scaledResolution);
 
     map.renderSync();
   });
