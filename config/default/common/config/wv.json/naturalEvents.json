@@ -119,6 +119,14 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
+                        false
+                    ],
+                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -507,6 +515,14 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
+                        false
+                    ],
+                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -663,6 +679,10 @@
                         false
                     ],
                     [
+                        "OCI_PACE_True_Color",
+                        false
+                    ],
+                    [
                         "MODIS_Terra_L2_Chlorophyll_A",
                         false
                     ],
@@ -680,6 +700,10 @@
                     ],
                     [
                         "VIIRS_SNPP_L2_Chlorophyll_A",
+                        false
+                    ],
+                    [
+                        "OCI_PACE_Chlorophyll_a",
                         false
                     ]
                 ],
@@ -858,6 +882,14 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
