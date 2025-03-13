@@ -943,7 +943,7 @@ export function snapshot (options) {
         view.setResolution(viewResolution);
 
         // Continue with geotiff creation using output canvas
-        const dataURL = outputCanvas.toDataURL(format);
+        const dataURL = outputCanvas.toDataURL(format, 1);
         const tiffBlob = await convertPngToTiff(dataURL);
         const geoTiffBlob = await convertTiffToGeoTiff(tiffBlob, {
           bbox,
