@@ -913,6 +913,7 @@ export function snapshot (options) {
 
         // Capture the map at its new scaled size
         const capturedCanvas = await html2canvas(map.getViewport(), {
+          backgroundColor: null,
           useCORS: true,
           allowTaint: true,
           scrollX: 0,
