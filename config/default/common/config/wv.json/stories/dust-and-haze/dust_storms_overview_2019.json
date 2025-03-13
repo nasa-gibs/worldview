@@ -34,7 +34,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=12.475446192767667,-0.4793315568688481,72.85535571312502,32.3886089797392&t=2019-04-22-T00%3A00%3A00Z&as=2019-04-22-T00%3A00%3A00Z&ae=2019-04-28-T00%3A00%3A00Z&l=AIRS_L2_Dust_Score_Day(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=dust_storms_overview_2019&al=true&av=1.5&ab=on"
+          "stepLink": "v=12.475446192767667,-0.4793315568688481,72.85535571312502,32.3886089797392&t=2019-04-22-T00%3A00%3A00Z&as=2019-04-22-T00%3A00%3A00Z&ae=2019-04-28-T00%3A00%3A00Z&l=AIRS_L2_Dust_Score_Day(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=1.5&ab=on"
         },
         {
           "id": "004",

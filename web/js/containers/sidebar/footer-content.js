@@ -16,7 +16,7 @@ import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import {
   toggleChartingModeOnOff,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose as closeModal } from '../../modules/modal/actions';
 import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
@@ -37,9 +37,11 @@ const FooterContent = React.forwardRef((props, ref) => {
     isChartingActive,
     isCompareActive,
     isMobile,
+    closeModalAction,
     openChartingInfoModal,
     toggleCharting,
     toggleCompare,
+    sidebarHeight,
   } = props;
 
   const compareBtnText = !isCompareActive
@@ -60,6 +62,8 @@ const FooterContent = React.forwardRef((props, ref) => {
     toggleCharting();
     if (!isChartingActive) {
       openChartingInfoModal();
+    } else {
+      closeModalAction();
     }
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
@@ -77,6 +81,7 @@ const FooterContent = React.forwardRef((props, ref) => {
         <ChartingModeOptions
           isChartingActive={isChartingActive}
           isMobile={isMobile}
+          sidebarHeight={sidebarHeight}
         />
         )}
       </div>
@@ -181,6 +186,9 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(toggleOverlayGroupsAction());
     });
   },
+  closeModalAction: () => {
+    dispatch(closeModal());
+  },
   openChartingInfoModal: () => {
     // This is the charting tool info window from the wireframes
     dispatch(
@@ -239,6 +247,7 @@ FooterContent.propTypes = {
   isChartingActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  closeModalAction: PropTypes.func,
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
@@ -246,4 +255,5 @@ FooterContent.propTypes = {
   isPlaying: PropTypes.bool,
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,
+  sidebarHeight: PropTypes.number,
 };

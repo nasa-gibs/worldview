@@ -8,18 +8,20 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/NetPhotosynthesis",
+                    "description": "",
                     "image": "",
                     "settings": [
+                        "MODIS_Aqua_L4_Net_Photosynthesis_Gap_Filled_8Day",
                         "MODIS_Aqua_L4_Net_Photosynthesis_8Day"
                     ]
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/NetPhotosynthesis",
+                    "description": "",
                     "image": "",
                     "settings": [
+                        "MODIS_Terra_L4_Net_Photosynthesis_Gap_Filled_8Day",
                         "MODIS_Terra_L4_Net_Photosynthesis_8Day"
                     ]
                 }
