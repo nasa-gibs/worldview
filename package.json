@@ -173,6 +173,7 @@
     "imagesloaded": "^5.0.0",
     "immutability-helper": "^3.1.1",
     "jsdom-worker": "^0.3.0",
+    "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "masonry-layout": "^4.2.2",
     "moment": "^2.30.1",
