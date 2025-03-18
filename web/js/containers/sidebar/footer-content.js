@@ -88,14 +88,26 @@ const FooterContent = React.forwardRef((props, ref) => {
       <div className="product-buttons">
         {!isMobile && !isCompareActive && chartFeature
           && (
-          <Button
-            id="chart-toggle-button"
-            aria-label={chartBtnText}
-            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!chartFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-            text={chartBtnText}
-          />
+          <>
+            <Button
+              id="chart-toggle-button"
+              aria-label={chartBtnText}
+              className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+              style={!chartFeature ? { display: 'none' } : null}
+              onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+              text={chartBtnText}
+            />
+            {!chartingModeAccessible
+            && (
+              <UncontrolledTooltip
+                id="center-align-tooltip"
+                placement="bottom"
+                target="chart-toggle-button"
+              >
+                Add an overlay layer with a color palette to start charting a single variable.
+              </UncontrolledTooltip>
+            )}
+          </>
           )}
         {!isChartingActive
           && (

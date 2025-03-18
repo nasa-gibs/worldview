@@ -698,8 +698,15 @@ const mapStateToProps = (state) => {
     isOpen, id,
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const timelineStartDate = date.selected < date.selectedB ? date.selected : date.selectedB;
-  const timelineEndDate = date.selected < date.selectedB ? date.selectedB : date.selected;
+  const dateSelected = util.dateAdd(date.selected, 'day', 1);
+  const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
+  const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
+  const timelineStartDate = date.appNow < dateTenAfter
+    ? dateTenBefore
+    : dateSelected;
+  const timelineEndDate = date.appNow < dateTenAfter
+    ? dateSelected
+    : dateTenAfter;
   const olMap = map.ui.selected;
   const mapView = olMap?.getView();
   const viewExtent = mapView?.calculateExtent(olMap.getSize());
