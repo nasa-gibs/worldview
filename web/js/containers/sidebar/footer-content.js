@@ -205,7 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
     // This is the charting tool info window from the wireframes
     dispatch(
       openCustomContent('CHARTING_INFO_MODAL', {
-        headerText: 'Charting Tool',
+        headerText: 'Charting Tool - BETA',
         backdrop: false,
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
