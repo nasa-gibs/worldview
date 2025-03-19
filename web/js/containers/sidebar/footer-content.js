@@ -104,7 +104,7 @@ const FooterContent = React.forwardRef((props, ref) => {
                 placement="bottom"
                 target="chart-toggle-button"
               >
-                Add an overlay layer with a color palette to start charting a single variable.
+                Add a layer with a color palette to create a time series chart of a single variable
               </UncontrolledTooltip>
             )}
           </>
