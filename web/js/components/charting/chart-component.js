@@ -249,7 +249,7 @@ function ChartComponent (props) {
               </b>
               has been reduced from
               <b>
-                {` ${numRangeDays} days`}
+                {` ${numRangeDays} days `}
               </b>
               to
               <b>

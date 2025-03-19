@@ -136,9 +136,9 @@ function ChartingModeOptions(props) {
 
   function formatDateString(dateObj) {
     const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
+    const year = date.getUTCFullYear();
+    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -698,7 +698,7 @@ const mapStateToProps = (state) => {
     isOpen, id,
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const dateSelected = util.dateAdd(date.selected, 'day', 1);
+  const dateSelected = date.selected;
   const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
   const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
   const timelineStartDate = date.appNow < dateTenAfter
