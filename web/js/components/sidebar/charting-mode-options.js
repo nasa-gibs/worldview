@@ -78,6 +78,7 @@ function ChartingModeOptions(props) {
     sidebarHeight,
     viewExtent,
     maxExtent,
+    date,
   } = props;
 
   if (!olMap) return null;
@@ -154,6 +155,28 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
+
+  useEffect(() => {
+    const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
+    const dateEarliest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[0].startDate)
+      : date.selected;
+    const dateLatest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[filteredLayers[0].dateRanges.length - 1].endDate)
+      : date.selected;
+    let timeSpanFixedStartDate = timeSpanStartDate;
+    let timeSpanFixedEndDate = timeSpanEndDate;
+    if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
+      timeSpanFixedStartDate = dateEarliest;
+      timeSpanFixedEndDate = util.dateAdd(dateEarliest, 'day', 10);
+    }
+    if (dateLatest < timeSpanStartDate || dateLatest < timeSpanEndDate) {
+      timeSpanFixedStartDate = util.dateAdd(dateLatest, 'day', -10);
+      timeSpanFixedEndDate = dateLatest;
+    }
+    onUpdateStartDate(timeSpanFixedStartDate);
+    onUpdateEndDate(timeSpanFixedEndDate);
+  }, [timeSpanStartDate, timeSpanEndDate, activeLayer]);
 
   useEffect(() => {
     if (!init) {
@@ -411,8 +434,6 @@ function ChartingModeOptions(props) {
     const dateModalInput = {
       layerStartDate,
       layerEndDate,
-      timeSpanStartDate: primaryDate,
-      timeSpanEndDate: secondaryDate,
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
@@ -700,35 +721,14 @@ const mapStateToProps = (state) => {
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   const dateSelected = date.selected;
-  const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
-  const dateEarliest = activeLayer && filteredLayers.length > 0
-    ? new Date(filteredLayers[0].dateRanges[0].startDate)
-    : date.selected;
-  const dateLatest = activeLayer && filteredLayers.length > 0
-    ? new Date(filteredLayers[0].dateRanges[filteredLayers[0].dateRanges.length - 1].endDate)
-    : date.selected;
   const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
   const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
-  let timelineStartDate = date.appNow < dateTenAfter
+  const timelineStartDate = date.appNow < dateTenAfter
     ? dateTenBefore
     : dateSelected;
-  let timelineEndDate = date.appNow < dateTenAfter
+  const timelineEndDate = date.appNow < dateTenAfter
     ? dateSelected
     : dateTenAfter;
-  let timeSpanFixedStartDate = timeSpanStartDate;
-  let timeSpanFixedEndDate = timeSpanEndDate;
-  if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
-    timelineStartDate = dateEarliest;
-    timelineEndDate = util.dateAdd(dateEarliest, 'day', 10);
-    timeSpanFixedStartDate = dateEarliest;
-    timeSpanFixedEndDate = util.dateAdd(dateEarliest, 'day', 10);
-  }
-  if (dateLatest < timeSpanStartDate || dateLatest < timeSpanEndDate) {
-    timelineStartDate = util.dateAdd(dateLatest, 'day', -10);
-    timelineEndDate = dateLatest;
-    timeSpanFixedStartDate = util.dateAdd(dateLatest, 'day', -10);
-    timeSpanFixedEndDate = dateLatest;
-  }
   const olMap = map.ui.selected;
   const mapView = olMap?.getView();
   const viewExtent = mapView?.calculateExtent(olMap.getSize());
@@ -745,8 +745,8 @@ const mapStateToProps = (state) => {
     projections,
     renderedPalettes,
     timeSpanSelection,
-    timeSpanStartDate: timeSpanFixedStartDate,
-    timeSpanEndDate: timeSpanFixedEndDate,
+    timeSpanStartDate,
+    timeSpanEndDate,
     timelineStartDate,
     timelineEndDate,
     screenWidth,
@@ -757,6 +757,7 @@ const mapStateToProps = (state) => {
     modalId: id,
     viewExtent,
     maxExtent,
+    date,
   };
 };
 
@@ -790,8 +791,7 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
         bodyComponentProps: {
-          layerStartDate: dateObj.layerStartDate,
-          layerEndDate: dateObj.layerEndDate,
+          ...dateObj,
           timeSpanSelection,
         },
       }),
@@ -906,4 +906,5 @@ ChartingModeOptions.propTypes = {
   sidebarHeight: PropTypes.number,
   viewExtent: PropTypes.array,
   maxExtent: PropTypes.array,
+  date: PropTypes.object,
 };
