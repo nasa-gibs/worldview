@@ -23,7 +23,7 @@ function ChartingInfo(props) {
 
         <p className="charting-info">Select your area of interest by adjusting the area selection box, editing the bounding box coordinates in “Edit Coordinates” or checking the “Entire Screen” checkbox.</p>
 
-        <p className="charting-info">The default date selection is a date range of the past 7 days. Click on the dates to change the date range in the “Charting Mode Date Selection” box. Click on the red “Generate Chart” button to generate a chart of change over time. (As part of this beta feature release, the number of plotted data points may be reduced if it exceeds 31 points).</p>
+        <p className="charting-info">Click on the dates to change the date range in the “Charting Mode Date Selection” box. Click on the red “Generate Chart” button to generate a chart of change over time. (As part of this beta feature release, the number of plotted data points may be reduced if it exceeds 31 points).</p>
 
         <p className="charting-info">To select a single date, select “One Date”. Click on the date to change the date in date selection box. Click on the red “Generate Statistics” button to generate a list of statistics including median, mean, minimum, maximum, and standard deviation.</p>
 

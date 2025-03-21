@@ -78,6 +78,7 @@ function ChartingModeOptions(props) {
     sidebarHeight,
     viewExtent,
     maxExtent,
+    date,
   } = props;
 
   if (!olMap) return null;
@@ -136,9 +137,9 @@ function ChartingModeOptions(props) {
 
   function formatDateString(dateObj) {
     const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
+    const year = date.getUTCFullYear();
+    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -154,6 +155,28 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
+
+  useEffect(() => {
+    const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
+    const dateEarliest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[0].startDate)
+      : date.selected;
+    const dateLatest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[filteredLayers[0].dateRanges.length - 1].endDate)
+      : date.selected;
+    let timeSpanFixedStartDate = timeSpanStartDate;
+    let timeSpanFixedEndDate = timeSpanEndDate;
+    if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
+      timeSpanFixedStartDate = dateEarliest;
+      timeSpanFixedEndDate = util.dateAdd(dateEarliest, 'day', 10);
+    }
+    if (dateLatest < timeSpanStartDate || dateLatest < timeSpanEndDate) {
+      timeSpanFixedStartDate = util.dateAdd(dateLatest, 'day', -10);
+      timeSpanFixedEndDate = dateLatest;
+    }
+    onUpdateStartDate(timeSpanFixedStartDate);
+    onUpdateEndDate(timeSpanFixedEndDate);
+  }, [timeSpanStartDate, timeSpanEndDate, activeLayer]);
 
   useEffect(() => {
     if (!init) {
@@ -343,6 +366,7 @@ function ChartingModeOptions(props) {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
       const requestURI = getImageStatStatsRequestURL(uriParameters);
       const data = await getImageStatData(requestURI);
+      // const data = {"ok": true, "body": {"mean": {"2025-01-04T00:00:00Z": 109.14145061728395, "2025-01-05T00:00:00Z": 102.46549298633806, "2025-01-06T00:00:00Z": 89.0058912037037, "2025-01-07T00:00:00Z": 105.31996913580247, "2025-01-08T00:00:00Z": 109.35773765432099, "2025-01-09T00:00:00Z": 100.97341203703704, "2025-01-10T00:00:00Z": 104.80849940271418, "2025-01-11T00:00:00Z": 94.48743132716048, "2025-01-12T00:00:00Z": 107.26074074074077, "2025-01-13T00:00:00Z": 102.7649961419753, "2025-01-14T00:00:00Z": 100.83687422839503, "2025-01-15T00:00:00Z": 111.20136745619142, "2025-01-16T00:00:00Z": 98.83392901234569, "2025-01-17T00:00:00Z": 103.0888325617284, "2025-01-18T00:00:00Z": 97.44668672839506, "2025-01-19T00:00:00Z": 96.48049768518517, "2025-01-20T00:00:00Z": 99.61178101535242, "2025-01-21T00:00:00Z": 103.18231712962964, "2025-01-22T00:00:00Z": 104.05121373456787, "2025-01-23T00:00:00Z": 103.14101929012347, "2025-01-24T00:00:00Z": 108.85679475308643, "2025-01-25T00:00:00Z": 110.67623520422615, "2025-01-26T00:00:00Z": 96.22579166666668, "2025-01-27T00:00:00Z": 94.8297561728395, "2025-01-28T00:00:00Z": 100.1577986111111, "2025-01-29T00:00:00Z": 111.82437345679013, "2025-01-30T00:00:00Z": 103.21351716317905, "2025-01-31T00:00:00Z": 99.219037037037, "2025-02-01T00:00:00Z": 107.10420216049383, "2025-02-02T00:00:00Z": 99.04462577160493, "2025-02-13T00:00:00Z": 103.90129622260257}, "median": {"2025-01-04T00:00:00Z": "107.8", "2025-01-05T00:00:00Z": "102.2", "2025-01-06T00:00:00Z": "88.2", "2025-01-07T00:00:00Z": "100.8", "2025-01-08T00:00:00Z": "105.0", "2025-01-09T00:00:00Z": "100.8", "2025-01-10T00:00:00Z": "105.0", "2025-01-11T00:00:00Z": "93.8", "2025-01-12T00:00:00Z": "106.4", "2025-01-13T00:00:00Z": "102.2", "2025-01-14T00:00:00Z": "100.8", "2025-01-15T00:00:00Z": "110.6", "2025-01-16T00:00:00Z": "96.6", "2025-01-17T00:00:00Z": "103.6", "2025-01-18T00:00:00Z": "98.0", "2025-01-19T00:00:00Z": "96.6", "2025-01-20T00:00:00Z": "99.4", "2025-01-21T00:00:00Z": "102.2", "2025-01-22T00:00:00Z": "102.2", "2025-01-23T00:00:00Z": "105.0", "2025-01-24T00:00:00Z": "106.4", "2025-01-25T00:00:00Z": "110.6", "2025-01-26T00:00:00Z": "92.4", "2025-01-27T00:00:00Z": "93.8", "2025-01-28T00:00:00Z": "100.8", "2025-01-29T00:00:00Z": "103.6", "2025-01-30T00:00:00Z": "103.6", "2025-01-31T00:00:00Z": "99.4", "2025-02-01T00:00:00Z": "106.4", "2025-02-02T00:00:00Z": "98.0", "2025-02-13T00:00:00Z": "103.6"}, "max": {"2025-01-04T00:00:00Z": 148.4, "2025-01-05T00:00:00Z": 116.2, "2025-01-06T00:00:00Z": 95.2, "2025-01-07T00:00:00Z": 159.6, "2025-01-08T00:00:00Z": 168.0, "2025-01-09T00:00:00Z": 116.2, "2025-01-10T00:00:00Z": 124.6, "2025-01-11T00:00:00Z": 107.8, "2025-01-12T00:00:00Z": 121.8, "2025-01-13T00:00:00Z": 121.8, "2025-01-14T00:00:00Z": 107.8, "2025-01-15T00:00:00Z": 126.0, "2025-01-16T00:00:00Z": 131.6, "2025-01-17T00:00:00Z": 116.2, "2025-01-18T00:00:00Z": 123.2, "2025-01-19T00:00:00Z": 106.4, "2025-01-20T00:00:00Z": 112.0, "2025-01-21T00:00:00Z": 130.2, "2025-01-22T00:00:00Z": 162.4, "2025-01-23T00:00:00Z": 116.2, "2025-01-24T00:00:00Z": 182.0, "2025-01-25T00:00:00Z": 138.6, "2025-01-26T00:00:00Z": 151.2, "2025-01-27T00:00:00Z": 117.6, "2025-01-28T00:00:00Z": 105.0, "2025-01-29T00:00:00Z": 186.2, "2025-01-30T00:00:00Z": 124.6, "2025-01-31T00:00:00Z": 110.6, "2025-02-01T00:00:00Z": 131.6, "2025-02-02T00:00:00Z": 113.4, "2025-02-13T00:00:00Z": 123.2}, "min": {"2025-01-04T00:00:00Z": 93.8, "2025-01-05T00:00:00Z": 91.0, "2025-01-06T00:00:00Z": 84.0, "2025-01-07T00:00:00Z": 91.0, "2025-01-08T00:00:00Z": 93.8, "2025-01-09T00:00:00Z": 92.4, "2025-01-10T00:00:00Z": 92.4, "2025-01-11T00:00:00Z": 85.4, "2025-01-12T00:00:00Z": 99.4, "2025-01-13T00:00:00Z": 89.6, "2025-01-14T00:00:00Z": 89.6, "2025-01-15T00:00:00Z": 99.4, "2025-01-16T00:00:00Z": 86.8, "2025-01-17T00:00:00Z": 92.4, "2025-01-18T00:00:00Z": 86.8, "2025-01-19T00:00:00Z": 84.0, "2025-01-20T00:00:00Z": 92.4, "2025-01-21T00:00:00Z": 93.8, "2025-01-22T00:00:00Z": 85.4, "2025-01-23T00:00:00Z": 79.8, "2025-01-24T00:00:00Z": 91.0, "2025-01-25T00:00:00Z": 93.8, "2025-01-26T00:00:00Z": 85.4, "2025-01-27T00:00:00Z": 89.6, "2025-01-28T00:00:00Z": 93.8, "2025-01-29T00:00:00Z": 79.8, "2025-01-30T00:00:00Z": 89.6, "2025-01-31T00:00:00Z": 88.2, "2025-02-01T00:00:00Z": 96.6, "2025-02-02T00:00:00Z": 91.0, "2025-02-13T00:00:00Z": 93.8}, "stdev": {"2025-01-04T00:00:00Z": 6.230234652212983, "2025-01-05T00:00:00Z": 4.923362226179881, "2025-01-06T00:00:00Z": 1.9718491080278, "2025-01-07T00:00:00Z": 11.434223091889399, "2025-01-08T00:00:00Z": 14.117071510406829, "2025-01-09T00:00:00Z": 3.171954726021351, "2025-01-10T00:00:00Z": 5.044716627229322, "2025-01-11T00:00:00Z": 5.183026076763812, "2025-01-12T00:00:00Z": 4.31962008296791, "2025-01-13T00:00:00Z": 5.661950914291762, "2025-01-14T00:00:00Z": 3.5765508612188377, "2025-01-15T00:00:00Z": 6.12907237151492, "2025-01-16T00:00:00Z": 7.355604820741213, "2025-01-17T00:00:00Z": 4.358027463743454, "2025-01-18T00:00:00Z": 4.3199626317267175, "2025-01-19T00:00:00Z": 3.847281174738161, "2025-01-20T00:00:00Z": 4.48778863097294, "2025-01-21T00:00:00Z": 5.037606151935797, "2025-01-22T00:00:00Z": 13.437728688573547, "2025-01-23T00:00:00Z": 6.226883408715712, "2025-01-24T00:00:00Z": 13.90354598736195, "2025-01-25T00:00:00Z": 10.267354456971505, "2025-01-26T00:00:00Z": 11.53193511005517, "2025-01-27T00:00:00Z": 4.100233364608899, "2025-01-28T00:00:00Z": 1.9471146902147087, "2025-01-29T00:00:00Z": 23.61280958092396, "2025-01-30T00:00:00Z": 4.259198132818417, "2025-01-31T00:00:00Z": 3.4569305408209114, "2025-02-01T00:00:00Z": 5.6045241807368855, "2025-02-02T00:00:00Z": 3.6669208317316695, "2025-02-13T00:00:00Z": 3.585492793296826}, "stderr": "0.0035353649612609992", "hist": [["79.8", "496621"], ["90.44", "3382051"], ["101.08", "2933294"], ["111.72", "528542"], ["122.35999999999999", "142514"], ["133.0", "64844"], ["143.64", "29285"], ["154.27999999999997", "9380"], ["164.92", "10143"], ["175.56", "9009"]]}};
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -410,8 +434,6 @@ function ChartingModeOptions(props) {
     const dateModalInput = {
       layerStartDate,
       layerEndDate,
-      timeSpanStartDate: primaryDate,
-      timeSpanEndDate: secondaryDate,
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
@@ -698,7 +720,7 @@ const mapStateToProps = (state) => {
     isOpen, id,
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const dateSelected = util.dateAdd(date.selected, 'day', 1);
+  const dateSelected = date.selected;
   const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
   const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
   const timelineStartDate = date.appNow < dateTenAfter
@@ -723,8 +745,8 @@ const mapStateToProps = (state) => {
     projections,
     renderedPalettes,
     timeSpanSelection,
-    timeSpanEndDate,
     timeSpanStartDate,
+    timeSpanEndDate,
     timelineStartDate,
     timelineEndDate,
     screenWidth,
@@ -735,6 +757,7 @@ const mapStateToProps = (state) => {
     modalId: id,
     viewExtent,
     maxExtent,
+    date,
   };
 };
 
@@ -768,8 +791,7 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
         bodyComponentProps: {
-          layerStartDate: dateObj.layerStartDate,
-          layerEndDate: dateObj.layerEndDate,
+          ...dateObj,
           timeSpanSelection,
         },
       }),
@@ -786,6 +808,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: SimpleStatistics,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'stats-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 150px)',
+        offsetTop: 50,
+        width: 300,
+        height: 360,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           data,
@@ -801,6 +830,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 425px)',
+        offsetTop: 50,
+        width: 850,
+        height: 420,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
@@ -814,7 +850,7 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Charting Error',
         backdrop: false,
         bodyComponent: ChartingError,
-        wrapClassName: 'clickable-behind-modal',
+        wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-error',
         bodyComponentProps: {
           msg,
@@ -870,4 +906,5 @@ ChartingModeOptions.propTypes = {
   sidebarHeight: PropTypes.number,
   viewExtent: PropTypes.array,
   maxExtent: PropTypes.array,
+  date: PropTypes.object,
 };

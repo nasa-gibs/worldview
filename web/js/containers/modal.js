@@ -127,6 +127,7 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       screenHeight,
+      screenWidth,
     } = this.props;
     const { width, height } = this.state;
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
@@ -154,6 +155,7 @@ class ModalContainer extends Component {
       timeout,
       type,
       wrapClassName,
+      stayOnscreen,
     } = newProps;
 
     const isRestrictedDisplay = (isMobile && desktopOnly)
@@ -173,6 +175,9 @@ class ModalContainer extends Component {
         &times;
       </button>
     );
+    const bounds = stayOnscreen ? {
+      left: -(screenWidth / 2 - width / 2), right: screenWidth / 2 - width / 2, top: -style.top, bottom: screenHeight - height - style.top - 5,
+    } : '';
     return (
       <ErrorBoundary>
         <InteractionWrap
@@ -181,6 +186,7 @@ class ModalContainer extends Component {
             <Draggable
               handle={dragHandle}
               disabled={!isDraggable}
+              bounds={bounds}
             >
               {isResizable
                 ? (
@@ -323,4 +329,5 @@ ModalContainer.propTypes = {
   orientation: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  stayOnscreen: PropTypes.bool,
 };
