@@ -628,6 +628,11 @@ div#group-overlays-checkbox-case {
 
 #charting-stats-modal {
   width: 300px;
+  margin: 0 !important;
+
+  .modal-header {
+    cursor: move;
+  }
 
   .modal-title {
     margin-right: 10px;
@@ -719,6 +724,11 @@ div#group-overlays-checkbox-case {
 
 #charting-chart {
   max-width: 850px;
+  margin: 0 !important;
+
+  .modal-header {
+    cursor: move;
+  }
 }
 
 button#charting-simple-stats-button {
