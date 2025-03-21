@@ -78,6 +78,7 @@ function ChartingModeOptions(props) {
     sidebarHeight,
     viewExtent,
     maxExtent,
+    date,
   } = props;
 
   if (!olMap) return null;
@@ -136,9 +137,9 @@ function ChartingModeOptions(props) {
 
   function formatDateString(dateObj) {
     const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
+    const year = date.getUTCFullYear();
+    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -154,6 +155,28 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
+
+  useEffect(() => {
+    const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
+    const dateEarliest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[0].startDate)
+      : date.selected;
+    const dateLatest = activeLayer && filteredLayers.length > 0
+      ? new Date(filteredLayers[0].dateRanges[filteredLayers[0].dateRanges.length - 1].endDate)
+      : date.selected;
+    let timeSpanFixedStartDate = timeSpanStartDate;
+    let timeSpanFixedEndDate = timeSpanEndDate;
+    if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
+      timeSpanFixedStartDate = dateEarliest;
+      timeSpanFixedEndDate = util.dateAdd(dateEarliest, 'day', 10);
+    }
+    if (dateLatest < timeSpanStartDate || dateLatest < timeSpanEndDate) {
+      timeSpanFixedStartDate = util.dateAdd(dateLatest, 'day', -10);
+      timeSpanFixedEndDate = dateLatest;
+    }
+    onUpdateStartDate(timeSpanFixedStartDate);
+    onUpdateEndDate(timeSpanFixedEndDate);
+  }, [timeSpanStartDate, timeSpanEndDate, activeLayer]);
 
   useEffect(() => {
     if (!init) {
@@ -410,8 +433,6 @@ function ChartingModeOptions(props) {
     const dateModalInput = {
       layerStartDate,
       layerEndDate,
-      timeSpanStartDate: primaryDate,
-      timeSpanEndDate: secondaryDate,
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
@@ -698,8 +719,15 @@ const mapStateToProps = (state) => {
     isOpen, id,
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const timelineStartDate = date.selected < date.selectedB ? date.selected : date.selectedB;
-  const timelineEndDate = date.selected < date.selectedB ? date.selectedB : date.selected;
+  const dateSelected = date.selected;
+  const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
+  const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
+  const timelineStartDate = date.appNow < dateTenAfter
+    ? dateTenBefore
+    : dateSelected;
+  const timelineEndDate = date.appNow < dateTenAfter
+    ? dateSelected
+    : dateTenAfter;
   const olMap = map.ui.selected;
   const mapView = olMap?.getView();
   const viewExtent = mapView?.calculateExtent(olMap.getSize());
@@ -716,8 +744,8 @@ const mapStateToProps = (state) => {
     projections,
     renderedPalettes,
     timeSpanSelection,
-    timeSpanEndDate,
     timeSpanStartDate,
+    timeSpanEndDate,
     timelineStartDate,
     timelineEndDate,
     screenWidth,
@@ -728,6 +756,7 @@ const mapStateToProps = (state) => {
     modalId: id,
     viewExtent,
     maxExtent,
+    date,
   };
 };
 
@@ -761,8 +790,7 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
         bodyComponentProps: {
-          layerStartDate: dateObj.layerStartDate,
-          layerEndDate: dateObj.layerEndDate,
+          ...dateObj,
           timeSpanSelection,
         },
       }),
@@ -779,6 +807,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: SimpleStatistics,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'stats-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 150px)',
+        offsetTop: 50,
+        width: 300,
+        height: 360,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           data,
@@ -794,6 +829,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 425px)',
+        offsetTop: 50,
+        width: 850,
+        height: 420,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
@@ -807,7 +849,7 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Charting Error',
         backdrop: false,
         bodyComponent: ChartingError,
-        wrapClassName: 'clickable-behind-modal',
+        wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-error',
         bodyComponentProps: {
           msg,
@@ -863,4 +905,5 @@ ChartingModeOptions.propTypes = {
   sidebarHeight: PropTypes.number,
   viewExtent: PropTypes.array,
   maxExtent: PropTypes.array,
+  date: PropTypes.object,
 };
