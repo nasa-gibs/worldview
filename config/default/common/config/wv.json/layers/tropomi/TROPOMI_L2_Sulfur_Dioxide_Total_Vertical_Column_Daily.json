@@ -2,7 +2,7 @@
   "layers": {
     "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily": {
       "id": "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
-      "description": "tropomi/sentinel-5p/TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
+      "description": "tropomi/TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
       "tags": "sulphur so2",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
