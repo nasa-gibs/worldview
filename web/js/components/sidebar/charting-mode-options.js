@@ -158,12 +158,12 @@ function ChartingModeOptions(props) {
 
   useEffect(() => {
     const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
-    const dateEarliest = activeLayer && filteredLayers.length > 0
-      ? new Date(filteredLayers[0].dateRanges[0].startDate)
+    const dateEarliest = activeLayer && filteredLayers.length > 0 && filteredLayers[0].startDate
+      ? new Date(filteredLayers[0].startDate)
       : date.selected;
-    const dateLatest = activeLayer && filteredLayers.length > 0
-      ? new Date(filteredLayers[0].dateRanges[filteredLayers[0].dateRanges.length - 1].endDate)
-      : date.selected;
+    const dateLatest = activeLayer && filteredLayers.length > 0 && filteredLayers[0].endDate
+      ? new Date(filteredLayers[0].endDate)
+      : date.appNow;
     let timeSpanFixedStartDate = timeSpanStartDate;
     let timeSpanFixedEndDate = timeSpanEndDate;
     if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
@@ -428,8 +428,8 @@ function ChartingModeOptions(props) {
 
   function onDateIconClick() {
     const layerInfo = getActiveChartingLayer();
-    const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-    const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
+    const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
+    const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
     const dateModalInput = {
       layerStartDate,
       layerEndDate,
@@ -449,8 +449,8 @@ function ChartingModeOptions(props) {
     if (isPostRender) return;
     const layerInfo = getActiveChartingLayer();
     if (layerInfo) {
-      const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-      const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
+      const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
+      const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
       const startDate = initialStartDate < layerStartDate ? layerStartDate : initialStartDate;
       const endDate = initialEndDate > layerEndDate ? layerEndDate : initialEndDate;
       onUpdateStartDate(startDate);
