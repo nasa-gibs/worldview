@@ -70,8 +70,10 @@ class App extends React.Component {
     const {
       kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled,
     } = this.props;
+    const githubActionsRunning = process.env.GITHUB_ACTIONS === 'true';
+    const locallyHosted = /localhost/.test(window.location.href);
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled && !githubActionsRunning && !locallyHosted) {
         this.openNotification(notifications, numberOutagesUnseen);
       }
     }
