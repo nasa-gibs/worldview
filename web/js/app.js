@@ -68,12 +68,10 @@ class App extends React.Component {
   componentDidUpdate(prevProps) {
     // Check if the numberUnseen prop has changed
     const {
-      kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled,
+      kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled, hideNotificationsPopup,
     } = this.props;
-    const githubActionsRunning = process.env.GITHUB_ACTIONS === 'true';
-    const locallyHosted = /localhost/.test(window.location.href);
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled && !githubActionsRunning && !locallyHosted) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled && !hideNotificationsPopup) {
         this.openNotification(notifications, numberOutagesUnseen);
       }
     }
@@ -156,6 +154,7 @@ class App extends React.Component {
       locationKey,
       modalId,
       parameters,
+      hideNotificationsPopup,
     } = this.props;
     const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
@@ -166,7 +165,7 @@ class App extends React.Component {
         <MapInteractions />
         <AlertDropdown isTourActive={isTourActive} />
         <div>
-          {isTourActive && numberOutagesUnseen === 0 && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
+          {isTourActive && (numberOutagesUnseen === 0 || hideNotificationsPopup) && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
@@ -195,6 +194,8 @@ function mapStateToProps(state) {
   } = notifications;
   const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
   const e2eModeEnabled = state.ui.isE2eModeActive;
+  const githubActionsRunning = process.env.GITHUB_ACTIONS === 'true';
+  const locallyHosted = /localhost/.test(window.location.href);
   return {
     state,
     kioskModeEnabled,
@@ -213,6 +214,7 @@ function mapStateToProps(state) {
     parameters: state.parameters,
     locationKey: state.location.key,
     modalId: state.modal.id,
+    hideNotificationsPopup: githubActionsRunning || locallyHosted,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -267,6 +269,7 @@ App.propTypes = {
   numberOutagesUnseen: PropTypes.number,
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
+  hideNotificationsPopup: PropTypes.bool,
 };
 
 App.defaultProps = {
