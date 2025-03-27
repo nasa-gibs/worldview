@@ -16,56 +16,61 @@ function SimpleStatistics(props) {
   }
 
   function formatToThreeDigits(str) {
+    if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
+      return Number(parseFloat(str).toFixed(3)).toPrecision(3);
+    }
     return parseFloat(str).toFixed(3);
   }
 
   return (
     <>
-      <div className="charting-statistics-container">
+      <div className="charting-statistics-container charting-simple">
         <div className="charting-statistics-row">
           <div className="charting-statistics-label">
-            {dateStr}
+            <b>
+              {dateStr}
+            </b>
           </div>
         </div>
         <div className="charting-statistics-row">
-          <div className="charting-statistics-label">
+          <span className="charting-statistics-label">
             Median:
-          </div>
-          <div className="charting-statistics-value">
+          </span>
+          <span className="charting-statistics-value">
             {formatToThreeDigits(median)}
-          </div>
+          </span>
         </div>
         <div className="charting-statistics-row">
-          <div className="charting-statistics-label">
+          <span className="charting-statistics-label">
             Mean:
-          </div>
-          <div className="charting-statistics-value">
+          </span>
+          <span className="charting-statistics-value">
             {formatToThreeDigits(mean)}
-          </div>
+          </span>
         </div>
         <div className="charting-statistics-row">
-          <div className="charting-statistics-label">
+          <span className="charting-statistics-label">
             Min:
-          </div>
-          <div className="charting-statistics-value">
+          </span>
+          <span className="charting-statistics-value">
             {formatToThreeDigits(min)}
-          </div>
+          </span>
         </div>
         <div className="charting-statistics-row">
-          <div className="charting-statistics-label">
+          <span className="charting-statistics-label">
             Max:
-          </div>
-          <div className="charting-statistics-value">
+          </span>
+          <span className="charting-statistics-value">
             {formatToThreeDigits(max)}
-          </div>
+          </span>
         </div>
         <div className="charting-statistics-row">
-          <div className="charting-statistics-label">
+          <span className="charting-statistics-label">
             Stdev:
-          </div>
-          <div className="charting-statistics-value">
+          </span>
+          <span className="charting-statistics-value">
             {formatToThreeDigits(stdev)}
-          </div>
+          </span>
         </div>
       </div>
       <div className="charting-disclaimer">
