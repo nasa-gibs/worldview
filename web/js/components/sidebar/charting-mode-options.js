@@ -128,13 +128,6 @@ function ChartingModeOptions(props) {
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
-  /**
-   * Filters the layers array & returns those with visible set to 'true'.
-   */
-  function getLiveLayers() {
-    return activeLayers.filter((obj) => obj.visible === true);
-  }
-
   function formatDateString(dateObj) {
     const date = new Date(dateObj);
     const year = date.getUTCFullYear();
@@ -144,8 +137,7 @@ function ChartingModeOptions(props) {
   }
 
   function getActiveChartingLayer() {
-    const liveLayers = getLiveLayers();
-    const filteredLayerList = liveLayers.filter((layer) => layer.id === activeLayer);
+    const filteredLayerList = activeLayers.filter((layer) => layer.id === activeLayer);
     if (filteredLayerList.length > 0) {
       return filteredLayerList[0];
     }
@@ -193,6 +185,9 @@ function ChartingModeOptions(props) {
     isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
+    if (!aoiCoordinates || aoiCoordinates.length === 0) {
+      debouncedUpdateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
+    }
     if (maxExtent) {
       let inLeftWing;
       let inRightWing;
@@ -461,6 +456,7 @@ function ChartingModeOptions(props) {
       const topRight = getLatLongFromPixelValue(x2, y);
       setBottomLeftLatLong(bottomLeft);
       setTopRightLatLong(topRight);
+      debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
       if (maxExtent) {
         const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
         const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
