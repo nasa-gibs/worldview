@@ -1122,6 +1122,8 @@
 		"OrbitTracks_Calipso_Descending",
 		"OrbitTracks_CloudSat_Ascending",
 		"OrbitTracks_CloudSat_Descending",
+		"OrbitTracks_EarthCARE_Ascending",
+		"OrbitTracks_EarthCARE_Descending",
 		"OrbitTracks_GCOM-C_Ascending",
 		"OrbitTracks_GCOM-C_Descending",
 		"OrbitTracks_GCOM-W1_Ascending",
