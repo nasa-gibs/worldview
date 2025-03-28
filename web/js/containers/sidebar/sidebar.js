@@ -452,7 +452,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily').length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
