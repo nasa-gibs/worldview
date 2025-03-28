@@ -452,8 +452,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const manuallyBlockedLayers = ['LIS_Very_High_Resolution_Lightning_Daily_Climatology_LIS_Mean_Flash_Rate'];
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !manuallyBlockedLayers.includes(layer.id)).length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
