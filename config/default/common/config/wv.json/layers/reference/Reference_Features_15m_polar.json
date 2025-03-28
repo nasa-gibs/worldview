@@ -1,0 +1,21 @@
+{
+  "layers": {
+    "Reference_Features_15m": {
+      "id": "Reference_Features_15m",
+      "title": "Coastlines / Borders / Roads",
+      "description": "reference/Reference_Features_15m",
+      "tags": "osm reference, country, countries, state, province",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "projections": {
+        "arctic": {
+          "id": "Reference_Features",
+          "tags": "osm reference, country, countries, state, province",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        }
+      }
+    }
+  }
+}
