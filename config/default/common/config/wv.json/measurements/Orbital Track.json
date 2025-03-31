@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, NOAA-21, OCO-2, PACE, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-3A, Sentinel-3B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
+            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, EarthCARE, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, NOAA-21, OCO-2, PACE, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-2C, Sentinel-3A, Sentinel-3B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
             "sources": {
               "Aqua/Space-Track.org": {
                   "id": "space-track-org-aqua",
@@ -63,6 +63,16 @@
                     "settings": [
                         "OrbitTracks_CYGNSS_Ascending",
                         "OrbitTracks_CYGNSS_Descending"
+                    ]
+                },
+                "EarthCARE/Space-Track.org": {
+                    "id": "space-track-org-earthcare",
+                    "title": "EarthCARE/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_EarthCARE_Ascending",
+                        "OrbitTracks_EarthCARE_Descending"
                     ]
                 },
                 "GCOM-C/Space-Track.org": {
@@ -283,6 +293,16 @@
                     "settings": [
                         "OrbitTracks_Sentinel-2B_Ascending",
                         "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "Sentinel-2C/Space-Track.org": {
+                    "id": "space-track-org-sentinel-2c",
+                    "title": "Sentinel-2C/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_Sentinel-2C_Ascending",
+                        "OrbitTracks_Sentinel-2C_Descending"
                     ]
                 },
                 "Sentinel-3A/Space-Track.org": {

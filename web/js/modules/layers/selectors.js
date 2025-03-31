@@ -140,7 +140,8 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
 const getActiveLayersEmbed = (state, activeString) => {
   const { compare, layers } = state;
   const activeLayers = layers[activeString || compare.activeString].layers;
-  return activeLayers.filter((layer) => layer.visible);
+  const filteredLayers = activeLayers.filter((layer) => layer.visible);
+  return filteredLayers.length !== activeLayers.length ? filteredLayers : activeLayers;
 };
 
 /**

@@ -13,8 +13,8 @@
         "format": "image/png",
         "type": "titiler",
         "period": "daily",
-        "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending"],
-        "orbitDirection": ["descending", "descending"],
+       "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending", "OrbitTracks_Sentinel-2C_Descending"],
+      "orbitDirection": ["descending", "descending", "descending"],
         "bandCombo": {
             "assets": ["B8A", "B11"],
             "expression": "(B8A-B11)/(B8A+B11)",

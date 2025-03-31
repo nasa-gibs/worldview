@@ -4,11 +4,11 @@ import {
   UPDATE_AOI_COORDINATES,
   TOGGLE_AOI_SELECTED_ON_OFF,
   TOGGLE_REQUEST_IN_PROGRESS,
+  TOGGLE_MODAL_OPEN,
   UPDATE_CHARTING_DATE_SELECTION,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
   UPDATE_ACTIVE_CHART,
-  UPDATE_REQUEST_STATUS_MESSAGE,
 } from './constants';
 
 export function toggleChartingModeOnOff() {
@@ -26,9 +26,9 @@ export function updateRequestInProgressAction(status) {
     dispatch({ type: TOGGLE_REQUEST_IN_PROGRESS, status });
   };
 }
-export function updateRequestStatusMessageAction(message) {
+export function updateModalOpenAction(status) {
   return (dispatch) => {
-    dispatch({ type: UPDATE_REQUEST_STATUS_MESSAGE, message });
+    dispatch({ type: TOGGLE_MODAL_OPEN, status });
   };
 }
 export function toggleAOISelected(action = null) {
