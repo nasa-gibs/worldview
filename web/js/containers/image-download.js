@@ -183,6 +183,7 @@ class ImageDownloadContainer extends Component {
           fileType={fileType}
           resolutions={resolutions}
           lonlats={[lonLat1, lonLat2]}
+          boundaries={[x, y, x2, y2]}
           resolution={newResolution}
           isWorldfile={isWorldfile}
           hasSubdailyLayers={hasSubdailyLayers}

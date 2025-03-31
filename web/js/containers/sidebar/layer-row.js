@@ -154,7 +154,7 @@ function LayerRow (props) {
         const requests = [fetch(olderUrl, { headers }), fetch(newerUrl, { headers })];
         const responses = await Promise.allSettled(requests);
         const [olderRes, newerRes] = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
-        if (!olderRes.ok || !newerRes.ok) return;
+        if (!olderRes?.ok || !newerRes?.ok) return;
         const jsonRequests = [olderRes.json(), newerRes.json()];
         const jsonResponses = await Promise.allSettled(jsonRequests);
         const [olderGranules, newerGranules] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
