@@ -6,7 +6,8 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Lightning",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "disableCharting": true
     }
   }
 }
