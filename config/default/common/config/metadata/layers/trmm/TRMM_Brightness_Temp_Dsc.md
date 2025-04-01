@@ -6,4 +6,4 @@ Brightness Temperature is a descriptive measure of radiation in terms of the tem
 
 The spatial resolution is 13 km x 5 km, the imagery resolution is 2 km and temporal availability is daily.
 
-References: GPM_1CTRMMTMI [doi:10.5067/GPM/TMI/TRMM/1C/05](https://doi.org/10.5067/GPM/TMI/TRMM/1C/05)
+References: GPM_1CTRMMTMI [doi:10.5067/GPM/TMI/TRMM/1C/07](https://doi.org/10.5067/GPM/TMI/TRMM/1C/07)
