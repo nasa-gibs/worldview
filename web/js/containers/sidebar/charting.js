@@ -81,7 +81,7 @@ const mapStateToProps = (state, ownProps) => {
     overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
     overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
-  const activeLayersWithPalettes = overlays.map((layer) => ({ ...layer, shouldHide: !(Object.prototype.hasOwnProperty.call(layer, 'palette') && renderedPalettes[layer.palette.id] && renderedPalettes[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily') }));
+  const activeLayersWithPalettes = overlays.map((layer) => ({ ...layer, shouldHide: !(Object.prototype.hasOwnProperty.call(layer, 'palette') && renderedPalettes[layer.palette.id] && renderedPalettes[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily') || layer.disableCharting }));
 
   return {
     isAnimating: animation.isPlaying,
