@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "AJAX_Alpha_Jet_Flight_Track": {
+      "id": "AJAX_Alpha_Jet_Flight_Track",
+      "title": "AJAX Alpha Jet Flight Track",
+      "subtitle": "AJAX_JFT_LL",
+      "group": "overlays",
+      "type": "vector",
+      "vectorStyle": {
+        "id": "AJAX_Alpha_Jet_Flight_Track",
+        "geographic": {
+          "id": "AJAX_Alpha_Jet_Flight_Track"
+        }
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false
+    }
+  }
+}

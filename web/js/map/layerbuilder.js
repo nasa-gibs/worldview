@@ -815,7 +815,17 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    const orderFunction = (a, b) => {
+      const aProps = a.getProperties();
+      const bProps = b.getProperties();
+      const aValue = aProps?.G_Alt || 0;
+      const bValue = bProps?.G_Alt || 0;
+
+      return aValue - bValue;
+    };
+
     const layer = new LayerVectorTile({
+      renderOrder: orderFunction,
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
