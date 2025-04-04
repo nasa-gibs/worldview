@@ -829,7 +829,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const aValue = aProps?.[property] || 0;
       const bValue = bProps?.[property] || 0;
 
-      return sortMethods[order](aValue, bValue);
+      return sortMethods[order]?.(aValue, bValue);
     };
 
     const layer = new LayerVectorTile({
