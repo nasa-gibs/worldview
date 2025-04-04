@@ -114,6 +114,9 @@ Example:
 * **count**: Used to override the default number of granules displayed on the map and in the granule count slider component for granule layers.
 * **dataAvailability**: String - `cmr` or `dd`. Get the layer's data availability from either the CMR API or GIBS DescribeDomains request.
 * **shiftadjacentdays**: Boolean - Whether or not to shift granules across the dateline when they're for an adjacent day. Defaults to `true` when `null` or `undefined`.
+* **renderOrder**: Object - An object describing the method of sorting the features and the property on which to sort the features. Only applicable for layers with `"type": "vector"`:
+  * **property**: String - The feature property to use when sorting the features.
+  * **order**: String - The sorting method. Only `"ascending"` and `"descending"` are valid values. Any other value will result in the features not being sorted.
 
 ## Full Example
 
