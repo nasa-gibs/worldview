@@ -815,13 +815,21 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    const sortMethods = {
+      descending: (a, b) => a - b,
+      ascending: (a, b) => b - a,
+    };
+
     const orderFunction = (a, b) => {
+      const { renderOrder } = def;
+      if (!renderOrder) return null;
+      const { property, order } = renderOrder;
       const aProps = a.getProperties();
       const bProps = b.getProperties();
-      const aValue = aProps?.G_Alt || 0;
-      const bValue = bProps?.G_Alt || 0;
+      const aValue = aProps?.[property] || 0;
+      const bValue = bProps?.[property] || 0;
 
-      return aValue - bValue;
+      return sortMethods[order](aValue, bValue);
     };
 
     const layer = new LayerVectorTile({

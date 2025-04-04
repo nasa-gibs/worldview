@@ -13,7 +13,11 @@
         }
       },
       "wrapX": false,
-      "wrapadjacentdays": false
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "G_Alt",
+        "order": "descending"
+      }
     }
   }
 }
