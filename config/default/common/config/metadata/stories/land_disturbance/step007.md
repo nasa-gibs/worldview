@@ -1,3 +1,1 @@
 Here is a before and after comparison of burned area due to fires that ravaged the Greater Los Angeles area of California using the Harmonized Landsat and Sentinel-2 (HLS) false-color imagery. The left "A" side shows the burned area as a result of the Franklin Fire that occurred in December 2024. The right "B" side shows the burned area to the east of Malibu, due to the Palisades Fire that occurred in January 2025.
-
-(NOTE: DDV DOESN'T HAVE IMAGERY YET FOR FEB 23)
