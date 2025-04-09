@@ -4,7 +4,7 @@
       "id": "hls_intro",
       "type": "default",
       "title": "Harmonized Landsat Sentinel-2",
-      "description": "Introducing daily 30 meter resolution imagery!",
+      "description": "Introducing 30-meter resolution imagery every 2-3 days!",
       "backgroundImage": "hls-overview.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
