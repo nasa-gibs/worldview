@@ -39,6 +39,8 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
 
 function ChartingModeOptions(props) {
   const {
@@ -297,11 +299,18 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
+      const parsedData = JSON.parse(data);
       // This is the response when the imageStat server fails
       if (data === 'Internal Server Error') {
         return {
           ok: false,
-          body: data,
+          error: SERVER_ERROR_MESSAGE,
+        };
+      }
+      if (data === null || parsedData.status === 204) {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
         };
       }
 
@@ -312,7 +321,7 @@ function ChartingModeOptions(props) {
     } catch (error) {
       return {
         ok: false,
-        error,
+        error: SERVER_ERROR_MESSAGE,
       };
     }
   }
@@ -369,7 +378,7 @@ function ChartingModeOptions(props) {
 
       if (!data.ok) {
         updateChartRequestStatus(false);
-        openChartingErrorModal('An error has occurred while requesting the charting data. Please try again in a few minutes.');
+        openChartingErrorModal(data.error);
         return;
       }
 
