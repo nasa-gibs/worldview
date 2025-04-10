@@ -213,11 +213,11 @@ function ChartingModeOptions(props) {
     }
   }, [fromButton]);
 
-  function formatDateForImageStat(dateStr) {
-    const dateParts = dateStr.split(' ');
-    const year = dateParts[0];
-    const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
-    const day = dateParts[2];
+  function formatDateForImageStat(dateObj) {
+    const date = new Date(dateObj);
+    const year = date.getUTCFullYear();
+    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -252,8 +252,8 @@ function ChartingModeOptions(props) {
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(primaryDate);
-    const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const startDateForImageStat = formatDateForImageStat(initialStartDate);
+    const endDateForImageStat = formatDateForImageStat(initialEndDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
