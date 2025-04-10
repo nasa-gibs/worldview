@@ -299,15 +299,21 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-      const parsedData = JSON.parse(data);
       // This is the response when the imageStat server fails
+      if (data === null) {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
+        };
+      }
       if (data === 'Internal Server Error') {
         return {
           ok: false,
           error: SERVER_ERROR_MESSAGE,
         };
       }
-      if (data === null || parsedData.status === 204) {
+      const parsedData = JSON.parse(data);
+      if (parsedData.status === 204) {
         return {
           ok: false,
           error: NO_DATA_ERROR_MESSAGE,
