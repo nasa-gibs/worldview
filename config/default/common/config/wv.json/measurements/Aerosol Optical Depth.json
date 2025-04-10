@@ -103,7 +103,7 @@
                         "OrbitTracks_Suomi_NPP_Ascending"
                       ]
                 },
-                "Suomi NPP/OMPS": {
+                "Suomi NPP/OMPS LP": {
                     "id": "suomi-npp-omps-lp",
                     "title": "Suomi NPP/OMPS LP",
                     "description": "viirs/Aerosol",
