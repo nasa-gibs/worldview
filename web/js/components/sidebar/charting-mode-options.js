@@ -322,7 +322,7 @@ function ChartingModeOptions(props) {
 
       return {
         ok: true,
-        body: JSON.parse(data),
+        body: parsedData,
       };
     } catch (error) {
       return {
