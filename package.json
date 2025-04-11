@@ -146,8 +146,8 @@
   },
   "dependencies": {
     "@edsc/earthdata-react-icons": "^0.0.2",
-    "@elastic/react-search-ui": "^1.22.0",
-    "@elastic/react-search-ui-views": "^1.22.0",
+    "@elastic/react-search-ui": "1.22.0",
+    "@elastic/react-search-ui-views": "1.22.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
