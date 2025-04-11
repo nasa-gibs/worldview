@@ -300,7 +300,7 @@ function ChartingModeOptions(props) {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
       // This is the response when the imageStat server fails
-      if (!data) {
+      if (!data || data === 'null') {
         return {
           ok: false,
           error: NO_DATA_ERROR_MESSAGE,
