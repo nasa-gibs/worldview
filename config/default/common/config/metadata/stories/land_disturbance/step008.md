@@ -1,1 +1,1 @@
-This is the same area of southern California and dates, but with the DIST-ALERT layer overlaid on the HLS imagery. The burned areas that are visible in the imagery are confirmed by DIST-ALERT and show the definite vegetation disturbance in that area.
+This is the same area and dates in southern California, but with the DIST-ALERT layer overlaid on the HLS imagery. The burned areas that are visible in the imagery are confirmed by DIST-ALERT and show the definite vegetation disturbance in that area.
