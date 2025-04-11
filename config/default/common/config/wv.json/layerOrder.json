@@ -1,6 +1,6 @@
 {
 	"layerOrder": [
-    "AJAX_Alpha_Jet_Flight_Track",
+		"AJAX_Alpha_Jet_Ozone",
     "NOAA_2025_ERI_WMTS",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",

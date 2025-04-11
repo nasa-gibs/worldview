@@ -1,19 +1,19 @@
 {
   "version": 8,
-  "name": "AJAX_Alpha_Jet_Flight_Track",
+  "name": "AJAX_Alpha_Jet_Ozone",
   "sources": {
-    "AJAX_Alpha_Jet_Flight_Track": {
+    "AJAX_Alpha_Jet_Ozone": {
       "type": "vector",
       "tiles": [
-        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/AJAX_Alpha_Jet_Flight_Track/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/AJAX_Alpha_Jet_Ozone/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     }
   },
   "layers": [
     {
-      "id": "AJAX_Alpha_Jet_Flight_Track",
-      "source": "AJAX_Alpha_Jet_Flight_Track",
-      "source-layer": "AJAX_Alpha_Jet_Flight_Track",
+      "id": "AJAX_Alpha_Jet_Ozone",
+      "source": "AJAX_Alpha_Jet_Ozone",
+      "source-layer": "AJAX_Alpha_Jet_Ozone",
       "type": "circle",
       "layout": {
         "circle-sort-key": ["get", "G_Alt"]
