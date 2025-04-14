@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance_LERC": {
+      "id": "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance_LERC",
+      "description": "viirs/snpp/VIIRS_SNPP_DayNightBand_At_Sensor_Radiance_LERC",
+      "tags": "lerc night snpp lights city urban nighttime black marble vnp46a1",
+      "layergroup": "Earth at Night",
+      "group": "overlays"
+    }
+  }
+}
