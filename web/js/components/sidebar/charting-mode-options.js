@@ -39,6 +39,8 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
 
 function ChartingModeOptions(props) {
   const {
@@ -211,11 +213,11 @@ function ChartingModeOptions(props) {
     }
   }, [fromButton]);
 
-  function formatDateForImageStat(dateStr) {
-    const dateParts = dateStr.split(' ');
-    const year = dateParts[0];
-    const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
-    const day = dateParts[2];
+  function formatDateForImageStat(dateObj) {
+    const date = new Date(dateObj);
+    const year = date.getUTCFullYear();
+    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -250,8 +252,8 @@ function ChartingModeOptions(props) {
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(primaryDate);
-    const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const startDateForImageStat = formatDateForImageStat(initialStartDate);
+    const endDateForImageStat = formatDateForImageStat(initialEndDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
@@ -298,21 +300,34 @@ function ChartingModeOptions(props) {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
       // This is the response when the imageStat server fails
+      if (!data || data === 'null') {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
+        };
+      }
       if (data === 'Internal Server Error') {
         return {
           ok: false,
-          body: data,
+          error: SERVER_ERROR_MESSAGE,
+        };
+      }
+      const parsedData = JSON.parse(data);
+      if (parsedData.status === 204) {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
         };
       }
 
       return {
         ok: true,
-        body: JSON.parse(data),
+        body: parsedData,
       };
     } catch (error) {
       return {
         ok: false,
-        error,
+        error: SERVER_ERROR_MESSAGE,
       };
     }
   }
@@ -369,7 +384,7 @@ function ChartingModeOptions(props) {
 
       if (!data.ok) {
         updateChartRequestStatus(false);
-        openChartingErrorModal('An error has occurred while requesting the charting data. Please try again in a few minutes.');
+        openChartingErrorModal(data.error);
         return;
       }
 
