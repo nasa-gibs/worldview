@@ -5,8 +5,10 @@ The HLS project began with Landsat 8, Sentinel-2A, and Sentinel-2B. Landsat 9 la
 - Landsat 8: April 11, 2013 - Present
 - Landsat 9: May 31, 2022 - Present
 
-On January 21, 2025, Sentinel-2C satellite replaced Sentinel-2A satellite. The HLS Sentinel-2 layers contains a mix of imagery from Sentinel-2A, Sentinel-2B, and Sentinel-2C.
-- Sentinel-2A: November 28, 2015 to January 22, 2025
+On January 21, 2025, the Sentinel-2C satellite replaced Sentinel-2A satellite. In addition, a [temporary one year extension campaign](https://sentinels.copernicus.eu/-/sentinel-2a-extended-campaign-starting-march-13-2025) of Sentinel-2A began on March 13, 2025. This campaign provides increased observations over Europe, and tropical regions of Africa and South America.
+
+This layer contains a mix of imagery from Sentinel-2A, Sentinel-2B, and Sentinel-2C:
+- Sentinel-2A: November 28, 2015 to January 22, 2025; March 14, 2025 to approximately March 2026.
 - Sentinel-2B: September 18, 2017 to Present
 - Sentinel-2C: January 21, 2025 to Present
 
