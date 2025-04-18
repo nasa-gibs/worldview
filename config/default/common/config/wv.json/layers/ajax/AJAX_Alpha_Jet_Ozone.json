@@ -11,6 +11,7 @@
       "ongoing": false,
       "disableCharting": true,
       "disableSnapshot": true,
+      "disableCustomPalettes": true,
       "layergroup": "Ozone",
       "vectorStyle": {
         "id": "AJAX_Alpha_Jet_Ozone",
