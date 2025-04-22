@@ -68,6 +68,12 @@
                 "placementBeacon": "top"
               },
               {
+                "target": "#chart-toggle-button",
+                "title": "Time-Series Charts and Statistics",
+                "content": "Select a layer with a color palette to create single variable time-series line charts and simple statistics for an area of interest.",
+                "placementBeacon": "bottom"
+              },
+              {
                 "target": "#date-selector-main",
                 "title": "Date Selector",
                 "content": "Change the date (and time of day if you have Geostationary layers loaded) by typing into the date fields, or by clicking on the up and down arrows by each field.",
