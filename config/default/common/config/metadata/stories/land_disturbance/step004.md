@@ -1,0 +1,1 @@
+By December 25, 2024, the same area is now classified wirh confidence levels "Provisional < 50%" in khaki green and "Provisional >= 50%" in orange, showing further confirmation of land surface disturbance. The surrounding area is now also displaying first detection confidence levels, indicating more vegetation disturbance has occurred due to the spreading bushfires.

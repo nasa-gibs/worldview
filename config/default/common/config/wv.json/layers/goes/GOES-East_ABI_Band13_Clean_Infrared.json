@@ -4,7 +4,7 @@
       "id": "GOES-East_ABI_Band13_Clean_Infrared",
       "description": "goes/GOES-East_ABI_Band13_Clean_Infrared",
       "group": "overlays",
-      "tags": "geostationary geo",
+      "tags": "geostationary geo GOES-19",
       "layergroup": "Geostationary",
       "palette": {
         "immutable": true

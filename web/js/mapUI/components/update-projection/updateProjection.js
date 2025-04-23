@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
@@ -53,6 +53,12 @@ function UpdateProjection(props) {
     renderedPalettes,
     requestPalette,
   } = props;
+
+  const layerStateRef = useRef(layerState);
+
+  useEffect(() => {
+    layerStateRef.current = layerState;
+  }, [layerState]);
 
   /**
   * Remove Layers from map
@@ -124,9 +130,9 @@ function UpdateProjection(props) {
         compareMapUi.destroy();
       }
       clearLayers(saveCache);
-      const defs = getLayers(layerState, { reverse: true });
+      const defs = getLayers(layerStateRef.current, { reverse: true });
       const layerPromises = defs.map((def) => {
-        const options = getGranuleOptions(layerState, def, compare.activeString, granuleOptions);
+        const options = getGranuleOptions(layerStateRef.current, def, compare.activeString, granuleOptions);
         return createLayer(def, options);
       });
       const layerResults = await Promise.allSettled(layerPromises);
@@ -138,7 +144,7 @@ function UpdateProjection(props) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       clearLayers(saveCache);
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerState, granuleOptions));
+      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
       mapUI?.setLayers(compareLayerGroups);
       compareMapUi.create(mapUI, compare.mode);
