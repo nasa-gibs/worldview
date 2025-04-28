@@ -97,7 +97,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=15.225849774434048,0.5430683508921665,15.889511400538362,0.8830824145744638&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9),Land_Water_Map&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9),Land_Water_Map&lg1=true&ca=false&cm=swipe&t=2023-12-06-T00%3A00%3A00Z&t1=2024-11-23-T00%3A00%3A00Z"
+          "stepLink": "v=15.112450753816251,0.5386812739685273,15.86974776027525,0.9133252689382546&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9-0),Land_Water_Map(hidden)&lg=true&l1=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),OPERA_L3_DIST-ALERT-HLS_Color_Index(disabled=9-0),HLS_L30_Nadir_BRDF_Adjusted_Reflectance,Land_Water_Map(hidden)&lg1=true&ca=true&cv=51&t=2023-12-06-T05%3A00%3A00Z&t1=2024-12-01-T05%3A00%3A00Z"
         }
         ,
         {
