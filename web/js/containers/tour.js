@@ -534,7 +534,7 @@ const mapDispatchToProps = (dispatch) => ({
     ) {
       layers = layersParse12(parameters.l, config);
       if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
-        layers.push(layersParse12(parameters.l1, config));
+        layers.push(...layersParse12(parameters.l1, config));
       }
       layers = uniqBy(layers, 'id');
 

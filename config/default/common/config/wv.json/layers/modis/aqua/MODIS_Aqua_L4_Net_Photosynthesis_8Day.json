@@ -3,7 +3,7 @@
     "MODIS_Aqua_L4_Net_Photosynthesis_8Day": {
       "id": "MODIS_Aqua_L4_Net_Photosynthesis_8Day",
       "description": "modis/aqua/MODIS_Aqua_L4_Net_Photosynthesis_8Day",
-      "tags": "",
+      "tags": "gap filled",
       "group": "overlays",
       "layergroup": "Photosynthesis, Net"
     }
