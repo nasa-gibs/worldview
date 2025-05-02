@@ -7,7 +7,7 @@
       "title": "Enhanced Vegetation Index (EVI) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_EVI_Landsat",
-      "tags": "corrected surface landsat oli l30 evi",
+      "tags": "surface landsat oli l30 evi",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",

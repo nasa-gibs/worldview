@@ -7,7 +7,7 @@
         "title": "Snow Index (NDSI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDSI_Landsat",
-        "tags": "corrected surface landsat oli l30 ndsi",
+        "tags": "surface landsat oli l30 ndsi",
         "group": "overlays",
         "layergroup": "Snow Indices",
         "format": "image/png",
