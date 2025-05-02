@@ -215,7 +215,6 @@
   },
   "overrides": {
     "semver": "7.5.4",
-    "word-wrap": "1.2.5",
     "redux-location-state": {
       "redux": "^5.0.1"
     },
@@ -228,8 +227,7 @@
     },
     "fetch-mock-jest": {
       "path-to-regexp": "^8.0.0"
-    },
-    "ws": "^8.17.1"
+    }
   },
   "browserslist": [
     "last 2 versions",
