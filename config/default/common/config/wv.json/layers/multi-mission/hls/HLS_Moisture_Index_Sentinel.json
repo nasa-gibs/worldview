@@ -19,7 +19,8 @@
             "assets": ["B8A", "B11"],
             "expression": "(B8A-B11)/(B8A+B11)",
             "rescale": "-1,1",
-            "colormap_name": "bwr_r"
+            "colormap_name": "bwr_r",
+            "bands_regex": "B[0-9][0-9A-Za-z]"
         },
         "disableSnapshot": true,
         "minZoom": 7,
