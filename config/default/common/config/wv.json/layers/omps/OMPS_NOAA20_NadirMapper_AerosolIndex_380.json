@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_NOAA20_NadirMapper_AerosolIndex_360": {
+      "id": "OMPS_NOAA20_NadirMapper_AerosolIndex_360",
+      "description": "omps/OMPS_NOAA20_NadirMapper_AerosolIndex_360",
+      "tags": "ai",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Aerosol Index"
+    }
+  }
+}
