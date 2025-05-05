@@ -8,6 +8,12 @@
                 "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/dustHaze"
             },
             {
+                "id": "floods",
+                "title": "Floods",
+                "description": "Related to aspects of actual flooding--e.g., inundation, water extending beyond river and lake extents.",
+                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/floods"
+            },
+            {
                 "id": "manmade",
                 "title": "Manmade",
                 "description": "Events that have been human-induced and are extreme in their extent.",
@@ -953,6 +959,60 @@
                     [
                         "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
+                    ]
+                ],
+                "Floods": [
+                    [
+                        "Reference_Features_15m",
+                        true
+                    ],
+                    [
+                        "Reference_Labels_15m",
+                        true
+                    ],
+                    [
+                        "MODIS_Terra_CorrectedReflectance_TrueColor",
+                        true
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        true
+                    ],
+                    [
+                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "MODIS_Combined_Flood_3-Day",
+                        true
+                    ],
+                    [
+                        "MODIS_Combined_Flood_2-Day",
+                        false
+                    ],
+                    [
+                        "OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
+                        false
+                    ],
+                    [
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+                        false
+                    ],
+                    [
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
+                        false
+                    ],
+                    [
+                        "IMERG_Precipitation_Rate",
+                        true
                     ]
                 ],
                 "Dust and Haze": [
