@@ -84,7 +84,7 @@
     "@babel/preset-env": "^7.27.1",
     "@babel/preset-react": "^7.27.1",
     "@playwright/test": "^1.52.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.16",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.0",
     "ajv": "^8.17.1",
     "autoprefixer": "^10.4.21",
     "babel-loader": "^10.0.0",
