@@ -1,7 +1,6 @@
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
 import UPNG from 'upng-js';
-import { cloneDeep as lodashCloneDeep } from 'lodash';
 
 /**
    * @method getPixelColorsToDisplay
@@ -68,7 +67,7 @@ LookupImageTile.prototype.load = async function () {
 
         // Process each pixel to color-swap single color palettes
         const pixels = imageData.data;
-        const colorLookupObj = lodashCloneDeep(that.lookup_);
+        const colorLookupObj = structuredClone(that.lookup_);
         const defaultColor = Object.keys(that.lookup_)[0];
         const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
 
