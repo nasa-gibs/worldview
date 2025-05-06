@@ -42,14 +42,14 @@ class LookupImageTile extends OlImageTile {
 LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
-LookupImageTile.prototype.load = async function() {
+LookupImageTile.prototype.load = async function () {
   if (this.state === OlTileState.IDLE) {
     this.state = OlTileState.LOADING;
     const that = this;
     this.changed();
     let imageProcessed = false;
 
-    const onImageLoad = function() {
+    const onImageLoad = function () {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
@@ -81,13 +81,10 @@ LookupImageTile.prototype.load = async function() {
         };
 
         for (let i = 0; i < octets; i += 4) {
-          const pixelColor = `${pixels[i + 0]},${
-            pixels[i + 1]},${
-            pixels[i + 2]},${
-            pixels[i + 3]}`;
+          const pixelColor = `${pixels[i + 0]},${pixels[i + 1]},${pixels[i + 2]},${pixels[i + 3]}`;
 
           if (!colorLookupObj[pixelColor]) {
-          // Handle non-transparent pixels that do not match the palette exactly
+            // Handle non-transparent pixels that do not match the palette exactly
             const defaultColorArr = defaultColor.split(',');
             const pixelColorArr = pixelColor.split(',');
 
@@ -138,25 +135,23 @@ LookupImageTile.prototype.load = async function() {
         const decodedPNG = UPNG.decode(buffer);
         const { width, height } = decodedPNG;
 
-        // Create an array buffer matching the pixel dimensions of the provided image
-        const bufferSize = height * width * 4;
-        const arrBuffer = new Uint32Array(bufferSize);
+        that.canvas_ = document.createElement('canvas');
+        that.canvas_.width = width;
+        that.canvas_.height = height;
+        const ctx = that.canvas_.getContext('2d');
+        const imageData = ctx.createImageData(width, height);
+        const outputData = imageData.data;
 
-        // Extract the pixel data. This is an array of integers corresponding to the colormap
-        // i.e. if pixelData[0] == 5, this pixel is the color of the 5th entry in the colormap
+        // Extract the pixel data
         const pixelData = decodedPNG.data;
 
-        let encodedBufferImage;
-
-        if (decodedPNG.tabs && decodedPNG.tabs.PLTE) {
-          // Extract the colormap values. This is an array of integers representing rgba values.
-          // Used in sets of 4 (i.e. colorMapArr[0] = r, colorMapArr[1] = b, etc.)
-          // colorMapArr assumes a max of 256 colors
+        if (decodedPNG?.tabs?.PLTE) {
+          // Extract the colormap values
           const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
-          // iterate through the pixelData, drawing each pixel using the appropriate color
+          // Iterate through pixelData, setting colors directly on imageData
           for (let i = 0; i < pixelData.length; i += 1) {
-            const arrBuffIndex = i * 4;
+            const outputIndex = i * 4;
             const lookupIndex = pixelData[i] * 4;
 
             // Determine desired RGBA for this pixel
@@ -164,58 +159,66 @@ LookupImageTile.prototype.load = async function() {
             const g = colorMapArr[lookupIndex + 1];
             const b = colorMapArr[lookupIndex + 2];
             const a = 255;
-            // Concatentate to 'r,g,b,a' string & check if that color is in the pixelsToDisplay array
+
+            // Concatenate to 'r,g,b,a' string & check if that color is in pixelsToDisplay
             const rgbaStr = `${r},${g},${b},${a}`;
             const drawThisColor = pixelsToDisplay[rgbaStr];
 
-            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
+            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise transparent
             if (drawThisColor !== undefined) {
-              arrBuffer[arrBuffIndex + 0] = r;
-              arrBuffer[arrBuffIndex + 1] = g;
-              arrBuffer[arrBuffIndex + 2] = b;
-              arrBuffer[arrBuffIndex + 3] = a;
+              outputData[outputIndex] = r;
+              outputData[outputIndex + 1] = g;
+              outputData[outputIndex + 2] = b;
+              outputData[outputIndex + 3] = a;
             } else {
-            // console.log('drawThisColor undefined, rgbaStr:', rgbaStr);
-              arrBuffer[arrBuffIndex] = 0;
-              arrBuffer[arrBuffIndex + 1] = 0;
-              arrBuffer[arrBuffIndex + 2] = 0;
-              arrBuffer[arrBuffIndex + 3] = 0;
+              outputData[outputIndex] = 0;
+              outputData[outputIndex + 1] = 0;
+              outputData[outputIndex + 2] = 0;
+              outputData[outputIndex + 3] = 0;
             }
           }
-
-          // Encode the image, creating a new PNG file
-          encodedBufferImage = UPNG.encode([arrBuffer], decodedPNG.width, decodedPNG.height, decodedPNG.depth);
         } else {
+          // For non-indexed PNG, copy pixel data to output
+          outputData.set(pixelData);
+
+          // Apply transparency based on color proximity
           for (let i = 0; i < pixelData.length; i += 4) {
             const r = pixelData[i];
             const g = pixelData[i + 1];
             const b = pixelData[i + 2];
 
-            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise draw transparent
+            // Calculate color difference
             let smallestDiff = 765; // Maximum difference
             Object.keys(pixelsToDisplay).forEach((pix) => {
               const pixSplit = pix.split(',');
-              const biggestDiff = Math.max(Math.abs(parseInt(r, 10) - parseInt(pixSplit[0], 10)), Math.abs(parseInt(g, 10) - parseInt(pixSplit[1], 10)), Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10)));
+              const biggestDiff = Math.max(
+                Math.abs(parseInt(r, 10) - parseInt(pixSplit[0], 10)),
+                Math.abs(parseInt(g, 10) - parseInt(pixSplit[1], 10)),
+                Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10)),
+              );
               if (smallestDiff > biggestDiff) {
                 smallestDiff = biggestDiff;
               }
             });
-            // Use difference to see how far away a color is from any pixelsToDisplay
+
             // If difference is large enough, don't display the color
-            // This helps prevent edges of color dots from not being displayed accidentally
             if (smallestDiff > 10) {
-              pixelData[i + 3] = 0;
+              outputData[i + 3] = 0;
             }
           }
-
-          // Encode the image, creating a new PNG file
-          encodedBufferImage = UPNG.encode([pixelData], decodedPNG.width, decodedPNG.height, 32);
         }
 
-        const blob = new Blob([encodedBufferImage], { type: 'image/png' });
-        const dataURL = `${URL.createObjectURL(blob)}`;
-        this.image_.src = dataURL;
-        this.image_.addEventListener('load', onImageLoad);
+        // Put imageData directly to canvas
+        ctx.putImageData(imageData, 0, 0);
+
+        // Mark as loaded
+        that.state = OlTileState.LOADED;
+        that.changed();
+
+        // Call custom tile load function if provided
+        if (that.customTileLoadFunction_) {
+          that.customTileLoadFunction_(that, that.src_);
+        }
       } catch (error) {
         that.state = OlTileState.ERROR;
         that.changed();
@@ -227,7 +230,6 @@ LookupImageTile.prototype.load = async function() {
     }
   }
 };
-
 export default function lookupFactory(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
     return new LookupImageTile(
