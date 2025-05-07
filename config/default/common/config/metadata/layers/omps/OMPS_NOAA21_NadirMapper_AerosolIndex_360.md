@@ -1,6 +1,6 @@
 The Aerosol Index at 360nm layer indicates the presence of ultraviolet (UV)-absorbing particles in the air (aerosols) such as desert dust, volcanic ash, and smoke particles in the atmosphere; it is related to both the thickness of the aerosol layer located in the atmosphere and to the height of the layer.
 
-The Aerosol Index at 360nm layer is similar to the AI at 380 nm but uses the 331 / 360 nm wavelength pair. It provides a link to the AI determined from the heritage AI products provided by the Total Ozone Mapping Spectrometer instruments as well as to the current AI products from TROPOMI and TEMPO.
+The Aerosol Index at 360nm layer is similar to the AI at 380 nm but uses the 331 / 360 nm wavelength pair. It provides a link to the AI determined from the heritage AI products provided by the Total Ozone Mapping Spectrometer (TOMS) instruments as well as to the current AI products from the TROPOspheric Monitoring Instrument (TROPOMI) and the Tropospheric Emissions: Monitoring of Pollution (TEMPO) instrument.
 
 The Aerosol Index is a unitless value that typically ranges from 0 to 5, with higher values indicating heavier concentrations that could reduce visibility or impact human health such as dust storms or biomass burning smoke located in the lower troposphere (1-3 km).
 
