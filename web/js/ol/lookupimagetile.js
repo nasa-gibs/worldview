@@ -63,7 +63,10 @@ LookupImageTile.prototype.load = async function () {
       g.drawImage(that.image_, 0, 0);
 
       // If pixels were processed already, we skip this transformation
-      if (!imageProcessed) processImage(that.canvas_, that.lookup_);
+      if (!imageProcessed) {
+        processImage(that.canvas_, that.lookup_);
+        imageProcessed = true;
+      }
 
       // uses the tileload function passed from layerbuilder
       if (that.customTileLoadFunction_) {
