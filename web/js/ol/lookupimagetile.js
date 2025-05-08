@@ -183,6 +183,7 @@ LookupImageTile.prototype.load = async function () {
       } catch (error) {
         that.state = OlTileState.ERROR;
         that.changed();
+        // eslint-disable-next-line no-console
         console.error('Error:', error);
       }
     } else {

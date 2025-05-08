@@ -128,7 +128,7 @@ const extractIndexedData = (pixels, palette, width, height, alphaValues) => {
   }
 
   return indexedData;
-}
+};
 
 /**
  * Use Canvas to decode the PNG pixel data
@@ -162,7 +162,7 @@ const getPixelDataFromCanvas = async (buffer) => {
   } finally {
     URL.revokeObjectURL(blobUrl);
   }
-}
+};
 
 /**
  * PNG Chunk Parser - Reads PNG binary format and extracts key chunks
