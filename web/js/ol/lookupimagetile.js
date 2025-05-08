@@ -170,6 +170,7 @@ LookupImageTile.prototype.load = async function () {
           ctx.putImageData(newImageData, 0, 0);
         } else {
           processImage(that.canvas_, that.lookup_);
+          imageProcessed = true;
         }
 
         // Mark as loaded
