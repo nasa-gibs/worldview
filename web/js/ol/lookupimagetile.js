@@ -1,229 +1,7 @@
 /* eslint-disable func-names */
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
-
-/**
- * Extract indexed data for palette-based PNGs
- * @param {Uint8ClampedArray} pixels - RGBA pixel data from canvas
- * @param {Uint8Array} palette - PLTE data
- * @param {Uint8Array} alphaValues - tRNS data (optional)
- * @param {Number} width - Image width
- * @param {Number} height - Image height
- * @returns {Uint8Array} - Array of palette indices
- */
-function extractIndexedData(pixels, palette, alphaValues, width, height) {
-  // Create a map of RGB values to palette indices for lookup
-  const paletteMap = new Map();
-  const indexedData = new Uint8Array(width * height);
-
-  // Build palette map
-  for (let i = 0; i < palette.length; i += 3) {
-    const r = palette[i];
-    const g = palette[i + 1];
-    const b = palette[i + 2];
-    // Alpha is 255 unless specified in tRNS
-    const a = alphaValues && (i / 3) < alphaValues.length ? alphaValues[i / 3] : 255;
-    const key = `${r},${g},${b},${a}`;
-    paletteMap.set(key, i / 3);
-  }
-
-  // Map each pixel to its palette index
-  for (let i = 0, j = 0; i < pixels.length; i += 4, j += 1) {
-    const r = pixels[i];
-    const g = pixels[i + 1];
-    const b = pixels[i + 2];
-    const a = pixels[i + 3];
-
-    // Try to find this color in the palette
-    const key = `${r},${g},${b},${a}`;
-
-    if (paletteMap.has(key)) {
-      indexedData[j] = paletteMap.get(key);
-    } else if (a === 0) {
-      // Fully transparent pixel - use index 0
-      indexedData[j] = 0;
-    } else {
-      // Find closest color in palette
-      let bestIndex = 0;
-      let bestDiff = Infinity;
-
-      for (let p = 0; p < palette.length; p += 3) {
-        const pr = palette[p];
-        const pg = palette[p + 1];
-        const pb = palette[p + 2];
-        const pa = alphaValues && p / 3 < alphaValues.length ? alphaValues[p / 3] : 255;
-
-        // Skip transparent entries when looking for opaque colors
-        if (!(a > 0 && pa === 0)) {
-          const diff = Math.abs(r - pr) + Math.abs(g - pg) + Math.abs(b - pb) + Math.abs(a - pa);
-
-          if (diff < bestDiff) {
-            bestDiff = diff;
-            bestIndex = p / 3;
-          }
-        }
-      }
-
-      indexedData[j] = bestIndex;
-    }
-  }
-
-  return indexedData;
-}
-
-/**
- * Use Canvas to decode the PNG pixel data
- * @param {ArrayBuffer} buffer - PNG data
- * @returns {Promise<Object>} - Canvas and pixel data
- */
-async function getPixelDataFromCanvas(buffer) {
-  const blob = new Blob([buffer], { type: 'image/png' });
-  const blobUrl = URL.createObjectURL(blob);
-
-  try {
-    // Create an image and wait for it to load
-    const img = await new Promise((resolve, reject) => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = (err) => reject(new Error(`Failed to load PNG: ${err}`));
-      image.src = blobUrl;
-    });
-
-    // Draw the image to canvas
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-
-    // Get pixel data
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-    return { pixels: imageData.data, canvas };
-  } finally {
-    URL.revokeObjectURL(blobUrl);
-  }
-}
-
-/**
- * PNG Chunk Parser - Reads PNG binary format and extracts key chunks
- * @param {ArrayBuffer} buffer - Raw PNG data as ArrayBuffer
- * @returns {Promise<Object>} Decoded PNG information
- */
-async function parsePNG(buffer) {
-  // Function to read a PNG chunk
-  function readChunk(dataView, offset) {
-    const length = dataView.getUint32(offset, false); // Big-endian
-    const type = String.fromCharCode(
-      dataView.getUint8(offset + 4),
-      dataView.getUint8(offset + 5),
-      dataView.getUint8(offset + 6),
-      dataView.getUint8(offset + 7),
-    );
-
-    // Extract chunk data
-    const data = new Uint8Array(buffer, offset + 8, length);
-
-    // Calculate next chunk position (length + type + data + CRC)
-    const nextChunkOffset = offset + 8 + length + 4;
-
-    return {
-      type,
-      data,
-      length,
-      nextOffset: nextChunkOffset,
-    };
-  }
-
-  // Verify PNG signature
-  const dataView = new DataView(buffer);
-  const signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
-
-  for (let i = 0; i < signature.length; i += 1) {
-    if (dataView.getUint8(i) !== signature[i]) throw new Error('Invalid PNG signature');
-  }
-
-  // Start parsing chunks after signature
-  let offset = 8;
-  let ihdrChunk = null;
-  let plteChunk = null;
-  let trnsChunk = null;
-
-  // Read chunks until we find what we need or reach the end
-  while (offset < buffer.byteLength) {
-    const chunk = readChunk(dataView, offset);
-
-    if (chunk.type === 'IHDR') {
-      ihdrChunk = chunk;
-    } else if (chunk.type === 'PLTE') {
-      plteChunk = chunk;
-    } else if (chunk.type === 'tRNS') {
-      trnsChunk = chunk;
-    } else if (chunk.type === 'IEND') {
-      break;
-    }
-
-    offset = chunk.nextOffset;
-  }
-
-  // We need IHDR to proceed
-  if (!ihdrChunk) throw new Error('Missing IHDR chunk');
-
-  // Parse IHDR data
-  const ihdrView = new DataView(ihdrChunk.data.buffer, ihdrChunk.data.byteOffset, ihdrChunk.data.byteLength);
-  const width = ihdrView.getUint32(0, false);
-  const height = ihdrView.getUint32(4, false);
-  const bitDepth = ihdrView.getUint8(8);
-  const colorType = ihdrView.getUint8(9);
-
-  // Get actual pixel data using canvas (more reliable than trying to implement decompression)
-  const { pixels, canvas } = await getPixelDataFromCanvas(buffer);
-
-  // Process palette if available
-  let palette = null;
-  let alphaValues = null;
-  const isIndexed = colorType === 3; // Color type 3 is indexed color
-
-  if (plteChunk) {
-    palette = new Uint8Array(plteChunk.data);
-  }
-
-  // Process transparency if available
-  if (trnsChunk && plteChunk) {
-    // For indexed color, tRNS contains alpha values for palette entries
-    alphaValues = new Uint8Array(trnsChunk.data);
-  }
-
-  // Create indexed data if this is an indexed color PNG
-  let indexedData = null;
-  if (isIndexed && palette) {
-    // For true indexed PNGs, the pixel data is already indices
-    // We'll need to extract it from the canvas data
-    indexedData = extractIndexedData(pixels, palette, alphaValues, width, height);
-  }
-
-  return {
-    width,
-    height,
-    bitDepth,
-    colorType,
-    isIndexed,
-    data: isIndexed ? indexedData : new Uint8Array(pixels.buffer),
-    rgba: new Uint8Array(pixels.buffer),
-    tabs: palette ? {
-      PLTE: palette,
-      tRNS: alphaValues || undefined,
-    } : undefined,
-    canvas,
-  };
-}
-
-/**
- * Replacement for decodePNG that properly parses PNG chunks
- */
-async function decodePNG(buffer) {
-  return parsePNG(buffer);
-}
+import { decodePNG, processImage } from './util';
 
 /**
    * @method getPixelColorsToDisplay
@@ -283,62 +61,9 @@ LookupImageTile.prototype.load = async function () {
       that.canvas_.height = that.image_.height;
       const g = that.canvas_.getContext('2d');
       g.drawImage(that.image_, 0, 0);
-      const octets = that.canvas_.width * that.canvas_.height * 4;
 
       // If pixels were processed already, we skip this transformation
-      if (!imageProcessed) {
-        const imageData = g.getImageData(
-          0,
-          0,
-          that.canvas_.width,
-          that.canvas_.height,
-        );
-
-        // Process each pixel to color-swap single color palettes
-        const pixels = imageData.data;
-        const colorLookupObj = structuredClone(that.lookup_);
-        const defaultColor = Object.keys(that.lookup_)[0];
-        const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
-
-        // Load black/transparent into the lookup object
-        colorLookupObj['0,0,0,0'] = {
-          r: 0,
-          g: 0,
-          b: 0,
-          a: 0,
-        };
-
-        for (let i = 0; i < octets; i += 4) {
-          const pixelColor = `${pixels[i + 0]},${pixels[i + 1]},${pixels[i + 2]},${pixels[i + 3]}`;
-
-          if (!colorLookupObj[pixelColor]) {
-            // Handle non-transparent pixels that do not match the palette exactly
-            const defaultColorArr = defaultColor.split(',');
-            const pixelColorArr = pixelColor.split(',');
-
-            // Determine difference of pixel from default to replicate anti-aliasing
-            const rDifference = pixelColorArr[0] - defaultColorArr[0];
-            const gDifference = pixelColorArr[1] - defaultColorArr[1];
-            const bDifference = pixelColorArr[2] - defaultColorArr[2];
-            const alphaValue = pixelColorArr[3];
-
-            // Store the resulting pair of pixel color & anti-aliased adjusted color
-            colorLookupObj[pixelColor] = {
-              r: paletteColor.r + rDifference,
-              g: paletteColor.g + gDifference,
-              b: paletteColor.b + bDifference,
-              a: alphaValue,
-            };
-          }
-
-          // set the pixel color
-          pixels[i + 0] = colorLookupObj[pixelColor].r;
-          pixels[i + 1] = colorLookupObj[pixelColor].g;
-          pixels[i + 2] = colorLookupObj[pixelColor].b;
-          pixels[i + 3] = colorLookupObj[pixelColor].a;
-        }
-        g.putImageData(imageData, 0, 0);
-      }
+      if (!imageProcessed) processImage(that.canvas_, that.lookup_);
 
       // uses the tileload function passed from layerbuilder
       if (that.customTileLoadFunction_) {
@@ -377,7 +102,7 @@ LookupImageTile.prototype.load = async function () {
           // Extract the colormap values
           const colorMapArr = getColormap(decodedPNG.tabs.PLTE);
 
-          // Iterate through pixelData, setting colors directly on imageData
+          // Iterate through pixelData, setting colors directly on outputData
           for (let i = 0; i < pixelData.length; i += 1) {
             const outputIndex = i * 4;
             // Make sure the index is valid
@@ -408,7 +133,7 @@ LookupImageTile.prototype.load = async function () {
             }
           }
         } else {
-          // For non-indexed PNG, copy pixel data to output
+          // For non-indexed PNG, copy pixel data to output, this will throw an error if the lengths differ
           outputData.set(pixelData);
 
           // Apply transparency based on color proximity
@@ -444,59 +169,7 @@ LookupImageTile.prototype.load = async function () {
           // Put imageData directly to canvas
           ctx.putImageData(newImageData, 0, 0);
         } else {
-          // If pixels were processed already, we skip this transformation
-          const octets = that.canvas_.width * that.canvas_.height * 4;
-          const imageData = ctx.getImageData(
-            0,
-            0,
-            that.canvas_.width,
-            that.canvas_.height,
-          );
-
-          // Process each pixel to color-swap single color palettes
-          const pixels = imageData.data;
-          const colorLookupObj = structuredClone(that.lookup_);
-          const defaultColor = Object.keys(that.lookup_)[0];
-          const paletteColor = that.lookup_[Object.keys(that.lookup_)[0]];
-
-          // Load black/transparent into the lookup object
-          colorLookupObj['0,0,0,0'] = {
-            r: 0,
-            g: 0,
-            b: 0,
-            a: 0,
-          };
-
-          for (let i = 0; i < octets; i += 4) {
-            const pixelColor = `${pixels[i + 0]},${pixels[i + 1]},${pixels[i + 2]},${pixels[i + 3]}`;
-
-            if (!colorLookupObj[pixelColor]) {
-              // Handle non-transparent pixels that do not match the palette exactly
-              const defaultColorArr = defaultColor.split(',');
-              const pixelColorArr = pixelColor.split(',');
-
-              // Determine difference of pixel from default to replicate anti-aliasing
-              const rDifference = pixelColorArr[0] - defaultColorArr[0];
-              const gDifference = pixelColorArr[1] - defaultColorArr[1];
-              const bDifference = pixelColorArr[2] - defaultColorArr[2];
-              const alphaValue = pixelColorArr[3];
-
-              // Store the resulting pair of pixel color & anti-aliased adjusted color
-              colorLookupObj[pixelColor] = {
-                r: paletteColor.r + rDifference,
-                g: paletteColor.g + gDifference,
-                b: paletteColor.b + bDifference,
-                a: alphaValue,
-              };
-            }
-
-            // set the pixel color
-            pixels[i + 0] = colorLookupObj[pixelColor].r;
-            pixels[i + 1] = colorLookupObj[pixelColor].g;
-            pixels[i + 2] = colorLookupObj[pixelColor].b;
-            pixels[i + 3] = colorLookupObj[pixelColor].a;
-          }
-          ctx.putImageData(imageData, 0, 0);
+          processImage(that.canvas_, that.lookup_);
         }
 
         // Mark as loaded
