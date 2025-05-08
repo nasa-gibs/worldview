@@ -9,6 +9,7 @@ const dateOptions = {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
+  timeZone: 'UTC',
 };
 const parseGranuleTimestamp = (granule) => new Date(granule.time_start);
 const maxExtent = [-180, -90, 180, 90];
