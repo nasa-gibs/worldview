@@ -19,7 +19,8 @@
         "assets": ["B06", "B07"],
         "expression": "(B06-B07)/(B06+B07)",
         "rescale": "-1,1",
-        "colormap_name": "puor"
+        "colormap_name": "puor",
+        "bands_regex": "B[0-9][0-9]"
       },
       "disableSnapshot": true,
       "minZoom": 7,

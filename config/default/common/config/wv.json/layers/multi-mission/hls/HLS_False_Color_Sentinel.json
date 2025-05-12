@@ -18,7 +18,9 @@
       "bandCombo": {
         "r": "B08",
         "g": "B04",
-        "b": "B03"
+        "b": "B03",
+        "color_formula": "Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35",
+        "bands_regex": "B[0-9][0-9A-Za-z]"
       },
       "wrapX": false,
       "disableSnapshot": true,
