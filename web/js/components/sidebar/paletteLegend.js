@@ -373,7 +373,7 @@ class PaletteLegend extends React.Component {
         {({ isVisible }) => (
           <div className={legendClass} key={`${legend.id}_${legendIndex}`}>
             {legend.colors.map((color, keyIndex) => {
-              const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
+              const isActiveKey = activeKeyObj?.index === keyIndex;
               let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
