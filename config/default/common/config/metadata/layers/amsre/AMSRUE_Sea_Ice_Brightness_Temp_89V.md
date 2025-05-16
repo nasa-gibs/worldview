@@ -2,6 +2,6 @@ The AMSR-UE Sea Ice Brightness Temperature (89V GHz) layer displays sea ice brig
 
 Brightness temperature data are particularly useful for sea ice studies because of the relatively high contrast in emissivities between open water and sea ice.
 
-The imagery resolution is 2 km and sensor resolution is 6.25 km. The temporal resolution was daily.
+The imagery resolution is 2 km in the Geographic projection and 1 km in the Arctic and Antarctic projections, and the sensor resolution is 6.25 km. The temporal resolution was daily.
 
 References: AU_SI6 [doi:10.5067/NX1R09ORNOZN](https://doi.org/10.5067/NX1R09ORNOZN)
