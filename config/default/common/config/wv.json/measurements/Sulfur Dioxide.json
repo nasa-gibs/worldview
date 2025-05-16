@@ -3,7 +3,7 @@
         "Sulfur Dioxide": {
             "id": "sulfur-dioxide",
             "title":    "Sulfur Dioxide",
-            "subtitle": "Aqua/AIRS, Aura/MLS, Aura/OMI, NOAA-20/OMPS, Suomi NPP/OMPS, MERRA-2",
+            "subtitle": "Aqua/AIRS, Aura/MLS, Aura/OMI, NOAA-20/OMPS, Suomi NPP/OMPS, Sentinel-5P/TROPOMI, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -70,6 +70,15 @@
                        "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
                        "OrbitTracks_Suomi_NPP_Ascending"
 
+                    ]
+                },
+                "TROPOMI": {
+                    "id": "sentinel-5p-tropomi",
+                    "title": "Sentinel-5P/TROPOMI",
+                    "description": "tropomi/SO2",
+                    "image": "",
+                    "settings": [
+                       "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily"
                     ]
                 },
                 "MERRA-2": {

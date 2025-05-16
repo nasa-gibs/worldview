@@ -695,6 +695,7 @@
 		"AIRS_L3_Surface_Relative_Humidity_Monthly_Night",
 		"AIRS_L3_Surface_Air_Temperature_Monthly_Day",
 		"AIRS_L3_Surface_Air_Temperature_Monthly_Night",
+		"TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
 		"OMPS_SNPP_LimbProfiler_Aerosol_OpticalDepth",
 		"OMPS_SNPP_LimbProfiler_AerosolHeight",
 		"OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_12KM",
