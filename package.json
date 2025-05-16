@@ -127,7 +127,7 @@
     "run-script-os": "^1.1.6",
     "sass": "^1.87.0",
     "sass-loader": "^16.0.4",
-    "shelljs": "^0.9.2",
+    "shelljs": "^0.10.0",
     "showdown": "^2.1.0",
     "stylelint": "^16.19.0",
     "stylelint-config-standard-scss": "^14.0.0",
