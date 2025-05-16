@@ -1,4 +1,4 @@
-The AMSR-UE Sea Ice Brightness Temperature (89H GHz) layer displays sea ice brightness temperatures (TBs) in kelvins at the Polar regions for the 89 GHz vertical (V) polarization average daily 89.0 GHz brightness temperature for the Advanced Microwave Scanning Radiometer (AMSR) for EOS (AMSR-E) and AMSR2 instruments. The brightness temperatures are derived from Level 1R data that has been spatially resampled by the Japan Aerospace Exploration Agency (JAXA) to unify AMSR-E and AMSR2 observations.
+The AMSR-UE Sea Ice Brightness Temperature (89V GHz) layer displays sea ice brightness temperatures (TBs) in kelvins at the Polar regions for the 89 GHz vertical (V) polarization average daily 89.0 GHz brightness temperature for the Advanced Microwave Scanning Radiometer (AMSR) for EOS (AMSR-E) and AMSR2 instruments. The brightness temperatures are derived from Level 1R data that has been spatially resampled by the Japan Aerospace Exploration Agency (JAXA) to unify AMSR-E and AMSR2 observations.
 
 Brightness temperature data are particularly useful for sea ice studies because of the relatively high contrast in emissivities between open water and sea ice.
 
