@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "AMSRUE_Sea_Ice_Brightness_Temp_89V": {
+      "id": "AMSRUE_Sea_Ice_Brightness_Temp_89V",
+      "description": "amsre/AMSRUE_Sea_Ice_Brightness_Temp_89V",
+      "group": "overlays",
+      "layergroup": "Sea Ice Brightness Temperature"
+    }
+  }
+}

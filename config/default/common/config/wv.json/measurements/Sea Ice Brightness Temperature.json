@@ -4,7 +4,7 @@
             "id": "sea-ice-brightness-temperature",
             "title":    "Sea Ice Brightness Temperature",
             "disableUnitConversion": true,
-            "subtitle": "Aqua/AMSR-E, GCOM-W1/AMSR2",
+            "subtitle": "Aqua/AMSR-E, Aqua/AMSRU-E, GCOM-W1/AMSR2",
             "sources": {
                 "Aqua/AMSR-E": {
                         "id": "aqua-amsre",
@@ -18,6 +18,18 @@
                             "AMSRE_Brightness_Temp_89V_Night",
                             "AMSRE_Sea_Ice_Brightness_Temp_89H",
                             "AMSRE_Sea_Ice_Brightness_Temp_89V",
+                            "OrbitTracks_Aqua_Ascending",
+                            "OrbitTracks_Aqua_Descending"
+                        ]
+                    },
+                    "Aqua/AMSRU-E": {
+                        "id": "aqua-amsre",
+                        "title": "Aqua/AMSR-UE",
+                        "description": "",
+                        "image": "",
+                        "settings": [
+                            "AMSRUE_Sea_Ice_Brightness_Temp_89H",
+                            "AMSRUE_Sea_Ice_Brightness_Temp_89V",
                             "OrbitTracks_Aqua_Ascending",
                             "OrbitTracks_Aqua_Descending"
                         ]

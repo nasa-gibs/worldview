@@ -3,7 +3,7 @@
         "Sea Ice": {
             "id": "sea-ice",
             "title":    "Sea Ice",
-            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, Aqua/AMSRU-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -51,6 +51,18 @@
                     "settings": [
                         "AMSRE_Sea_Ice_Concentration_12km",
                         "AMSRE_Sea_Ice_Concentration_25km",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "Aqua/AMSRU-E": {
+                    "id": "aqua-amsr-e",
+                    "title": "Aqua/AMSR-UE",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AMSRUE_Sea_Ice_Concentration_12km",
+                        "AMSRUE_Sea_Ice_Concentration_25km",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]
