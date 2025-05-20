@@ -369,194 +369,194 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
  * @param {Blob} pngBlob - The PNG image as a Blob
  * @returns {Promise<Blob>} - A promise that resolves to the TIFF Blob
  */
-export async function convertPngToTiff(pngBlob) {
-  // Validate input
-  if (!(pngBlob instanceof Blob)) {
-    throw new Error('Input must be a Blob');
-  }
+export function convertPngToTiff(pngBlob) {
+  return new Promise((resolve, reject) => {
+    // Validate input
+    if (!(pngBlob instanceof Blob)) reject(new Error('Input must be a Blob'));
 
-  // Create an object URL from the blob
-  const objectUrl = URL.createObjectURL(pngBlob);
+    // Create an object URL from the blob
+    const objectUrl = URL.createObjectURL(pngBlob);
 
-  // Create an image element to load the PNG data
-  const img = new Image();
-  img.crossOrigin = 'Anonymous';
+    // Create an image element to load the PNG data
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
 
-  img.onload = () => {
-    // Revoke the object URL to free memory
-    URL.revokeObjectURL(objectUrl);
+    img.onload = () => {
+      // Revoke the object URL to free memory
+      URL.revokeObjectURL(objectUrl);
 
-    // Create a canvas to draw the image
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
+      // Create a canvas to draw the image
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
 
-    // Draw the image on the canvas
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
+      // Draw the image on the canvas
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
 
-    // Get the image data
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const pixels = imageData.data;
+      // Get the image data
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imageData.data;
 
-    // Create the TIFF header and IFD
-    const header = new Uint8Array([
-      0x49, 0x49, // Little endian byte order
-      0x2A, 0x00, // TIFF identifier (42)
-      0x08, 0x00, 0x00, 0x00, // Offset to first IFD
-    ]);
+      // Create the TIFF header and IFD
+      const header = new Uint8Array([
+        0x49, 0x49, // Little endian byte order
+        0x2A, 0x00, // TIFF identifier (42)
+        0x08, 0x00, 0x00, 0x00, // Offset to first IFD
+      ]);
 
-    // Calculate offsets and sizes
-    const samplesPerPixel = 4; // RGBA
-    const bitsPerSample = [8, 8, 8, 8]; // 8 bits per sample for each channel
+      // Calculate offsets and sizes
+      const samplesPerPixel = 4; // RGBA
+      const bitsPerSample = [8, 8, 8, 8]; // 8 bits per sample for each channel
 
-    // IFD entries
-    const ifdCount = 14;
-    const ifdSize = 2 + ifdCount * 12 + 4; // 2 for count, 12 per entry, 4 for next IFD offset
-    const bitsPerSampleOffset = 8 + ifdSize;
-    const stripOffsetsOffset = bitsPerSampleOffset + bitsPerSample.length * 2;
-    const stripByteCountsOffset = stripOffsetsOffset + 4;
-    const imageDataOffset = stripByteCountsOffset + 4;
+      // IFD entries
+      const ifdCount = 14;
+      const ifdSize = 2 + ifdCount * 12 + 4; // 2 for count, 12 per entry, 4 for next IFD offset
+      const bitsPerSampleOffset = 8 + ifdSize;
+      const stripOffsetsOffset = bitsPerSampleOffset + bitsPerSample.length * 2;
+      const stripByteCountsOffset = stripOffsetsOffset + 4;
+      const imageDataOffset = stripByteCountsOffset + 4;
 
-    // Create the IFD
-    const ifd = new DataView(new ArrayBuffer(ifdSize));
-    ifd.setUint16(0, ifdCount, true); // Number of IFD entries
+      // Create the IFD
+      const ifd = new DataView(new ArrayBuffer(ifdSize));
+      ifd.setUint16(0, ifdCount, true); // Number of IFD entries
 
-    let entryOffset = 2;
+      let entryOffset = 2;
 
-    // Set IFD entries
-    // ImageWidth
-    ifd.setUint16(entryOffset, 256, true);
-    ifd.setUint16(entryOffset + 2, 4, true); // LONG
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, img.width, true);
-    entryOffset += 12;
+      // Set IFD entries
+      // ImageWidth
+      ifd.setUint16(entryOffset, 256, true);
+      ifd.setUint16(entryOffset + 2, 4, true); // LONG
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, img.width, true);
+      entryOffset += 12;
 
-    // ImageLength
-    ifd.setUint16(entryOffset, 257, true);
-    ifd.setUint16(entryOffset + 2, 4, true); // LONG
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, img.height, true);
-    entryOffset += 12;
+      // ImageLength
+      ifd.setUint16(entryOffset, 257, true);
+      ifd.setUint16(entryOffset + 2, 4, true); // LONG
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, img.height, true);
+      entryOffset += 12;
 
-    // BitsPerSample
-    ifd.setUint16(entryOffset, 258, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, samplesPerPixel, true);
-    ifd.setUint32(entryOffset + 8, bitsPerSampleOffset, true);
-    entryOffset += 12;
+      // BitsPerSample
+      ifd.setUint16(entryOffset, 258, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, samplesPerPixel, true);
+      ifd.setUint32(entryOffset + 8, bitsPerSampleOffset, true);
+      entryOffset += 12;
 
-    // Compression (no compression)
-    ifd.setUint16(entryOffset, 259, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint16(entryOffset + 8, 1, true);
-    entryOffset += 12;
+      // Compression (no compression)
+      ifd.setUint16(entryOffset, 259, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint16(entryOffset + 8, 1, true);
+      entryOffset += 12;
 
-    // PhotometricInterpretation (RGB)
-    ifd.setUint16(entryOffset, 262, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint16(entryOffset + 8, 2, true);
-    entryOffset += 12;
+      // PhotometricInterpretation (RGB)
+      ifd.setUint16(entryOffset, 262, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint16(entryOffset + 8, 2, true);
+      entryOffset += 12;
 
-    // StripOffsets
-    ifd.setUint16(entryOffset, 273, true);
-    ifd.setUint16(entryOffset + 2, 4, true); // LONG
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, imageDataOffset, true);
-    entryOffset += 12;
+      // StripOffsets
+      ifd.setUint16(entryOffset, 273, true);
+      ifd.setUint16(entryOffset + 2, 4, true); // LONG
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, imageDataOffset, true);
+      entryOffset += 12;
 
-    // SamplesPerPixel
-    ifd.setUint16(entryOffset, 277, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint16(entryOffset + 8, samplesPerPixel, true);
-    entryOffset += 12;
+      // SamplesPerPixel
+      ifd.setUint16(entryOffset, 277, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint16(entryOffset + 8, samplesPerPixel, true);
+      entryOffset += 12;
 
-    // RowsPerStrip
-    ifd.setUint16(entryOffset, 278, true);
-    ifd.setUint16(entryOffset + 2, 4, true); // LONG
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, img.height, true);
-    entryOffset += 12;
+      // RowsPerStrip
+      ifd.setUint16(entryOffset, 278, true);
+      ifd.setUint16(entryOffset + 2, 4, true); // LONG
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, img.height, true);
+      entryOffset += 12;
 
-    // StripByteCounts
-    ifd.setUint16(entryOffset, 279, true);
-    ifd.setUint16(entryOffset + 2, 4, true); // LONG
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, pixels.length, true);
-    entryOffset += 12;
+      // StripByteCounts
+      ifd.setUint16(entryOffset, 279, true);
+      ifd.setUint16(entryOffset + 2, 4, true); // LONG
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, pixels.length, true);
+      entryOffset += 12;
 
-    // XResolution (72 dpi)
-    ifd.setUint16(entryOffset, 282, true);
-    ifd.setUint16(entryOffset + 2, 5, true); // RATIONAL
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, stripByteCountsOffset + 4, true);
-    entryOffset += 12;
+      // XResolution (72 dpi)
+      ifd.setUint16(entryOffset, 282, true);
+      ifd.setUint16(entryOffset + 2, 5, true); // RATIONAL
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, stripByteCountsOffset + 4, true);
+      entryOffset += 12;
 
-    // YResolution (72 dpi)
-    ifd.setUint16(entryOffset, 283, true);
-    ifd.setUint16(entryOffset + 2, 5, true); // RATIONAL
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint32(entryOffset + 8, stripByteCountsOffset + 12, true);
-    entryOffset += 12;
+      // YResolution (72 dpi)
+      ifd.setUint16(entryOffset, 283, true);
+      ifd.setUint16(entryOffset + 2, 5, true); // RATIONAL
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint32(entryOffset + 8, stripByteCountsOffset + 12, true);
+      entryOffset += 12;
 
-    // PlanarConfiguration (contiguous)
-    ifd.setUint16(entryOffset, 284, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint16(entryOffset + 8, 1, true);
-    entryOffset += 12;
+      // PlanarConfiguration (contiguous)
+      ifd.setUint16(entryOffset, 284, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint16(entryOffset + 8, 1, true);
+      entryOffset += 12;
 
-    // ResolutionUnit (inch)
-    ifd.setUint16(entryOffset, 296, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true);
-    ifd.setUint16(entryOffset + 8, 2, true);
-    entryOffset += 12;
+      // ResolutionUnit (inch)
+      ifd.setUint16(entryOffset, 296, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true);
+      ifd.setUint16(entryOffset + 8, 2, true);
+      entryOffset += 12;
 
-    // ExtraSamples (alpha data)
-    ifd.setUint16(entryOffset, 338, true);
-    ifd.setUint16(entryOffset + 2, 3, true); // SHORT
-    ifd.setUint32(entryOffset + 4, 1, true); // 1 extra sample
-    ifd.setUint16(entryOffset + 8, 1, true); // Value 1 = Associated alpha data (premultiplied)
-    entryOffset += 12;
+      // ExtraSamples (alpha data)
+      ifd.setUint16(entryOffset, 338, true);
+      ifd.setUint16(entryOffset + 2, 3, true); // SHORT
+      ifd.setUint32(entryOffset + 4, 1, true); // 1 extra sample
+      ifd.setUint16(entryOffset + 8, 1, true); // Value 1 = Associated alpha data (premultiplied)
+      entryOffset += 12;
 
-    // Next IFD offset (0 for last IFD)
-    ifd.setUint32(entryOffset, 0, true);
+      // Next IFD offset (0 for last IFD)
+      ifd.setUint32(entryOffset, 0, true);
 
-    // Create the BitsPerSample array
-    const bitsPerSampleArray = new Uint16Array(bitsPerSample);
+      // Create the BitsPerSample array
+      const bitsPerSampleArray = new Uint16Array(bitsPerSample);
 
-    // Create the XResolution and YResolution values (72/1 as RATIONAL)
-    const resolutionData = new DataView(new ArrayBuffer(16));
-    resolutionData.setUint32(0, 72, true); // Numerator
-    resolutionData.setUint32(4, 1, true); // Denominator
-    resolutionData.setUint32(8, 72, true); // Numerator
-    resolutionData.setUint32(12, 1, true); // Denominator
+      // Create the XResolution and YResolution values (72/1 as RATIONAL)
+      const resolutionData = new DataView(new ArrayBuffer(16));
+      resolutionData.setUint32(0, 72, true); // Numerator
+      resolutionData.setUint32(4, 1, true); // Denominator
+      resolutionData.setUint32(8, 72, true); // Numerator
+      resolutionData.setUint32(12, 1, true); // Denominator
 
-    // Combine all parts of the TIFF file
-    const headerSize = header.length;
+      // Combine all parts of the TIFF file
+      const headerSize = header.length;
 
-    const tiffData = new Uint8Array(imageDataOffset + pixels.length);
-    tiffData.set(header, 0);
-    tiffData.set(new Uint8Array(ifd.buffer), headerSize);
-    tiffData.set(new Uint8Array(bitsPerSampleArray.buffer), bitsPerSampleOffset);
-    tiffData.set(new Uint8Array(resolutionData.buffer), stripByteCountsOffset + 4);
-    tiffData.set(pixels, imageDataOffset);
+      const tiffData = new Uint8Array(imageDataOffset + pixels.length);
+      tiffData.set(header, 0);
+      tiffData.set(new Uint8Array(ifd.buffer), headerSize);
+      tiffData.set(new Uint8Array(bitsPerSampleArray.buffer), bitsPerSampleOffset);
+      tiffData.set(new Uint8Array(resolutionData.buffer), stripByteCountsOffset + 4);
+      tiffData.set(pixels, imageDataOffset);
 
-    // Create the TIFF Blob
-    const tiffBlob = new Blob([tiffData], { type: 'image/tiff' });
-    return tiffBlob;
-  };
+      // Create the TIFF Blob
+      const tiffBlob = new Blob([tiffData], { type: 'image/tiff' });
+      resolve(tiffBlob);
+    };
 
-  img.onerror = () => {
-    URL.revokeObjectURL(objectUrl);
-    throw new Error('Failed to load image from Blob');
-  };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Failed to load image from Blob'));
+    };
 
-  img.src = objectUrl;
+    img.src = objectUrl;
+  });
 }
 
 /**
@@ -849,7 +849,7 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
 
 /**
  * Convert a PNG image to a georeferenced KML file
- * @param {String} dataUrl - The data URL of the input PNG image
+ * @param {Blob} imageBlob - The input PNG Blob
  * @param {Object} options - Additional options for georeferencing
  * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
  * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
@@ -857,42 +857,63 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
  * @param {String} options.description - Optional description for the KML overlay
  * @returns {Promise<Blob>} - A promise that resolves to the KML Blob
  */
-export async function convertPngToKml (dataUrl, options) {
-  // Extract the base64 part of the data URL
-  const base64Data = dataUrl.split(',')[1];
+export function convertPngToKml(pngBlob, options) {
+  return new Promise((resolve, reject) => {
+    try {
+      // Validate input
+      if (!(pngBlob instanceof Blob)) reject(new Error('Input must be a Blob'));
 
-  const [minX, minY, maxX, maxY] = options.bbox;
+      // KML requires coordinates in EPSG:4326 (WGS84)
+      if (options.crs !== 'EPSG:4326') reject(new Error('KML requires WGS84 coordinates'));
 
-  // KML requires coordinates in EPSG:4326 (WGS84)
-  if (options.crs !== 'EPSG:4326') {
-    throw new Error('KML requires WGS84 coordinates');
-  }
+      const reader = new FileReader();
 
-  // Create the KML document
-  const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-    <kml xmlns="http://www.opengis.net/kml/2.2">
-      <Document>
-        <name>${options.name || 'Image Overlay'}</name>
-        <GroundOverlay>
-          <name>${options.name || 'Image Overlay'}</name>
-          ${options.description ? `<description>${options.description}</description>` : ''}
-          <Icon>
-            <href>data:image/png;base64,${base64Data}</href>
-          </Icon>
-          <LatLonBox>
-            <north>${maxY}</north>
-            <south>${minY}</south>
-            <east>${maxX}</east>
-            <west>${minX}</west>
-            <rotation>0</rotation>
-          </LatLonBox>
-        </GroundOverlay>
-      </Document>
-    </kml>`;
+      reader.onload = () => {
+        try {
+          // Extract the base64 part of the data URL
+          const dataUrl = reader.result;
+          const base64Data = dataUrl.split(',')[1];
 
-  // Create the KML Blob
-  const kmlBlob = new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
-  return kmlBlob;
+          const [minX, minY, maxX, maxY] = options.bbox;
+
+          // Create the KML document
+          const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+            <kml xmlns="http://www.opengis.net/kml/2.2">
+              <Document>
+                <name>${options.name || 'Image Overlay'}</name>
+                <GroundOverlay>
+                  <name>${options.name || 'Image Overlay'}</name>
+                  ${options.description ? `<description>${options.description}</description>` : ''}
+                  <Icon>
+                    <href>data:image/png;base64,${base64Data}</href>
+                  </Icon>
+                  <LatLonBox>
+                    <north>${maxY}</north>
+                    <south>${minY}</south>
+                    <east>${maxX}</east>
+                    <west>${minX}</west>
+                    <rotation>0</rotation>
+                  </LatLonBox>
+                </GroundOverlay>
+              </Document>
+            </kml>`;
+          // Create the KML Blob
+          const kmlBlob = new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
+          resolve(kmlBlob);
+        } catch (error) {
+          console.error('Error creating KML content:', error);
+          reject(error);
+        }
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read image data'));
+
+      reader.readAsDataURL(pngBlob);
+    } catch (error) {
+      console.error('Error creating KML:', error);
+      reject(error);
+    }
+  });
 }
 
 export function createWorldFile(options) {
@@ -1131,6 +1152,7 @@ export function snapshot (options) {
           link.download = 'screenshot.tif';
           link.click();
           URL.revokeObjectURL(url);
+
           // const worldFileBlob = await createWorldFile({
           //   bbox,
           //   width: scaledWidth,
@@ -1138,7 +1160,7 @@ export function snapshot (options) {
           // });
 
           // zip.file('screenshot.png', blob);
-          // zip.file('screenshot.tif', geoTiffBlob);
+          // zip.file('screenshot.tif', tiffBlob);
           // zip.file('screenshot.pgw', worldFileBlob);
           // const zipBlob = await zip.generateAsync({
           //   type: 'blob',
@@ -1153,7 +1175,8 @@ export function snapshot (options) {
           // link.download = 'screenshotPNG.zip';
           // link.click();
           // URL.revokeObjectURL(url);
-          // const kmlBlob = await convertPngToKml(dataURL, {
+
+          // const kmlBlob = await convertPngToKml(blob, {
           //   bbox,
           //   crs: map.getView().getProjection().getCode(),
           //   name: 'Worldview Snapshot',
