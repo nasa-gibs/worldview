@@ -90,6 +90,7 @@ function LayerRow (props) {
     isInProjection,
     tracksForLayer,
     isVectorLayer,
+    isChartableLayer,
     measurementDescriptionPath,
     isAnimating,
     palettes,
@@ -253,6 +254,7 @@ function LayerRow (props) {
           isMobile={isMobile}
           palettes={palettes}
           showingVectorHand={isVectorLayer && isVisible}
+          showingChartingIcon={isChartableLayer && isVisible}
         />
       );
     }
@@ -415,6 +417,24 @@ function LayerRow (props) {
     );
   };
 
+  const renderChartingIcon = () => {
+    const title = 'Create time series charts or get statistics of this layer by selecting Start Charting in the lower left corner.';
+    const layerChartableBtnId = `layer-chartable-btn-${encodedLayerId}`;
+    return (
+      <div
+        id={layerChartableBtnId}
+        aria-label={title}
+        className="layer-chartable-icon"
+        onMouseDown={stopPropagation}
+      >
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerChartableBtnId}>
+          {title}
+        </UncontrolledTooltip>
+        <i />
+      </div>
+    );
+  };
+
   const mouseOver = () => {
     if (isMobile) return;
     events.trigger(SIDEBAR_LAYER_HOVER, layer.id, true);
@@ -549,7 +569,12 @@ function LayerRow (props) {
 
           {hasPalette ? getPaletteLegend() : ''}
         </div>
-        {isVectorLayer && isVisible ? renderVectorIcon() : null}
+        {isVisible && (isChartableLayer || isVectorLayer) && (
+          <div className="layer-buttons-container">
+            {isVectorLayer ? renderVectorIcon() : null}
+            {isChartableLayer ? renderChartingIcon() : null}
+          </div>
+        )}
         {tracksForLayer.length > 0 && (
           <div className="layer-tracks">
             {tracksForLayer.map((track) => (
@@ -645,6 +670,7 @@ const makeMapStateToProps = () => {
     const { isEmbedModeActive } = embed;
     const selectedMap = lodashGet(map, 'ui.selected');
     const isVector = layer.type === 'vector';
+    const isChartable = Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting;
     const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
     const tracksForLayer = getActiveLayers(state).filter(
       (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
@@ -672,6 +698,7 @@ const makeMapStateToProps = () => {
       isMobile,
       isVisible,
       isVectorLayer: isVector,
+      isChartableLayer: isChartable,
       isAnimating: animation.isPlaying,
       hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
@@ -814,6 +841,7 @@ LayerRow.propTypes = {
   openGranuleAlertModal: PropTypes.func,
   zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
+  isChartableLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isChartingActive: PropTypes.bool,
   activeChartingLayer: PropTypes.string,

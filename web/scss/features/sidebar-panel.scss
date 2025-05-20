@@ -315,15 +315,21 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-/* ***********************************
- * Vector layer pointer icon *
- *************************************/
-.productsitem .layer-main .layer-pointer-icon {
+.layer-buttons-container {
   position: absolute;
   right: 4px;
   bottom: 7px;
+  display: flex;
+
+  & > div {
+    position: relative;
+    margin-left: 4px;
+  }
 }
 
+/* ***********************************
+ * Vector layer pointer icon *
+ *************************************/
 .productsitem .layer-pointer-icon svg.svg-inline--fa {
   color: #22a;
 }
@@ -364,6 +370,20 @@ li.item.productsitem.inmotion,
 
 /************************************
  * End -- vector layer pointer icon *
+ ************************************/
+
+ /* ***********************************
+ * Chartable layer icon *
+ *************************************/
+.layer-chartable-icon i {
+  display: block;
+  width: 13px;
+  height: 13px;
+  background: url("../images/layers/charting/charting_icon_filled.svg");
+}
+
+/************************************
+ * End -- chartable layer icon *
  ************************************/
 
 /* ***********************************
