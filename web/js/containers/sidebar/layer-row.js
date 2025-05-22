@@ -450,23 +450,24 @@ function LayerRow (props) {
   const getLayerItemClasses = () => {
     let baseClasses = 'item productsitem layer-enabled';
     if (isAnimating) baseClasses += ' disabled';
-    if (!isVisible || disabled) {
+    if (!isVisible || disabled || layer.shouldHide) {
       baseClasses += ' layer-hidden';
     } else {
       baseClasses += ' layer-visible';
     }
     if (activeZot || zot) baseClasses += ' zotted';
+    if (layer.shouldHide) baseClasses += ' mini';
     return baseClasses;
   };
 
   const getVisibilityToggleClass = () => {
     let baseClasses = 'visibility';
-    if (disabled || isAnimating) {
+    if (disabled || isAnimating || layer.shouldHide) {
       baseClasses += ' disabled';
     } else {
       baseClasses += ' layer-enabled';
     }
-    if (isVisible && !disabled) {
+    if (isVisible && !disabled && !layer.shouldHide) {
       baseClasses += ' layer-visible';
     } else {
       baseClasses += ' layer-hidden';
@@ -516,66 +517,72 @@ function LayerRow (props) {
         </a>
       )}
       {isChartingActive && (
-        <>
-          <div />
-          <a
-            id={`activate-${encodedLayerId}`}
-            className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
-            onClick={() => makeActiveForCharting(layer.id)}
-          >
-            <UncontrolledTooltip
-              id="center-align-tooltip"
-              placement="right"
-              target={`activate-${encodedLayerId}`}
+        !layer.shouldHide ? (
+          <>
+            <div />
+            <a
+              id={`activate-${encodedLayerId}`}
+              className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
+              onClick={() => makeActiveForCharting(layer.id)}
             >
-              Select layer for processing
-            </UncontrolledTooltip>
-            {layer.id === activeChartingLayer ? (
-              <FontAwesomeIcon
-                icon={faCircleDot}
-                className="charting-indicator"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faCircle}
-                className="charting-indicator"
-              />
-            )}
-          </a>
-        </>
+              <UncontrolledTooltip
+                id="center-align-tooltip"
+                placement="right"
+                target={`activate-${encodedLayerId}`}
+              >
+                Select layer for processing
+              </UncontrolledTooltip>
+              {layer.id === activeChartingLayer ? (
+                <FontAwesomeIcon
+                  icon={faCircleDot}
+                  className="charting-indicator"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  className="charting-indicator"
+                />
+              )}
+            </a>
+          </>
+        ) : (
+          <a className={getVisibilityToggleClass()} />
+        )
       )}
       <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
-        <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
+        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
           <h4 title={names.title}>{names.title}</h4>
-          <div className="instrument-collection">
-            <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          {!layer.shouldHide && (
+            <div className="instrument-collection">
+              <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
 
-            {collections && isVisible ? (
-              <h6>
-                <span id="collection-identifier" className={collectionClass}>
-                  {collections.version} {collections.type}
-                  <UncontrolledTooltip id="center-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
-                    {collectionIdentifierDescription}
-                  </UncontrolledTooltip>
-                </span>
-              </h6>
-            ) : ''}
-          </div>
+              {collections && isVisible ? (
+                <h6>
+                  <span id="collection-identifier" className={collectionClass}>
+                    {collections.version} {collections.type}
+                    <UncontrolledTooltip id="center-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+                      {collectionIdentifierDescription}
+                    </UncontrolledTooltip>
+                  </span>
+                </h6>
+              ) : ''}
+            </div>
+          )}
 
-          {hasPalette ? getPaletteLegend() : ''}
+          {hasPalette && !layer.shouldHide ? getPaletteLegend() : ''}
         </div>
-        {isVisible && (isChartableLayer || isVectorLayer) && (
+        {isVisible && !layer.shouldHide && (isChartableLayer || isVectorLayer) && (
           <div className="layer-buttons-container">
             {isVectorLayer ? renderVectorIcon() : null}
-            {isChartableLayer ? renderChartingIcon() : null}
+            {isChartableLayer && !isChartingActive ? renderChartingIcon() : null}
           </div>
         )}
-        {tracksForLayer.length > 0 && (
+        {tracksForLayer.length > 0 && !layer.shouldHide && (
           <div className="layer-tracks">
             {tracksForLayer.map((track) => (
               <OrbitTrack
@@ -586,7 +593,7 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && !hideZoomAlert && !isLayerNotificationDismissable && (
+        {showZoomAlert && !hideZoomAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="zoom-alert"
             isOpen
@@ -597,7 +604,7 @@ function LayerRow (props) {
             onClick={openZoomAlertModal}
           />
         )}
-        {showGranuleAlert && !hideGranuleAlert && !isLayerNotificationDismissable && (
+        {showGranuleAlert && !hideGranuleAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="granule-alert"
             isOpen
@@ -612,38 +619,36 @@ function LayerRow (props) {
     </>
   );
 
-  if (!layer.shouldHide) {
-    return (
-      <Draggable
-        isDragDisabled={isEmbedModeActive || isAnimating}
-        draggableId={`${encodedLayerId}-${compareState}`}
-        index={index}
-        direction="vertical"
-      >
-        {(provided, snapshot) => (isInProjection ? (
-          <li
-            id={`${compareState}-${encodedLayerId}`}
-            className={getLayerItemClasses()}
-            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-            ref={provided.innerRef}
-            onMouseOver={mouseOver}
-            onMouseLeave={mouseLeave}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            {renderLayerRow()}
-          </li>
-        ) : (
-          <li
-            className="layer-list-placeholder"
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          />
-        ))}
-      </Draggable>
-    );
-  }
+  return (
+    <Draggable
+      isDragDisabled={isEmbedModeActive || isAnimating}
+      draggableId={`${encodedLayerId}-${compareState}`}
+      index={index}
+      direction="vertical"
+    >
+      {(provided, snapshot) => (isInProjection ? (
+        <li
+          id={`${compareState}-${encodedLayerId}`}
+          className={getLayerItemClasses()}
+          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+          ref={provided.innerRef}
+          onMouseOver={mouseOver}
+          onMouseLeave={mouseLeave}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {renderLayerRow()}
+        </li>
+      ) : (
+        <li
+          className="layer-list-placeholder"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        />
+      ))}
+    </Draggable>
+  );
 }
 
 const makeMapStateToProps = () => {

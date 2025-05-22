@@ -251,6 +251,18 @@ li.item.productsitem.inmotion,
   position: relative;
   border: 1px solid #333;
   overflow: hidden;
+
+  &.mini {
+    min-height: 22px;
+
+    a.visibility.layer-hidden.disabled:hover {
+      cursor: grab;
+    }
+
+    .layer-main {
+      min-height: 22px;
+    }
+  }
 }
 
 .sidebar-panel li.item.productsitem:hover {
