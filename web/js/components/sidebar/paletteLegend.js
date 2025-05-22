@@ -449,10 +449,10 @@ class PaletteLegend extends React.Component {
 
   render() {
     const {
-      paletteId, layer, isCustomPalette, showingVectorHand,
+      paletteId, layer, isCustomPalette, showingVectorHand, showingChartingIcon,
     } = this.props;
     const { isHoveringLegend } = this.state;
-    const customClass = showingVectorHand && layer.id.includes('AERONET') ? ' vector-palette' : isCustomPalette ? ' is_custom' : '';
+    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
     if (!layer.palette) return;
     return (
       <div

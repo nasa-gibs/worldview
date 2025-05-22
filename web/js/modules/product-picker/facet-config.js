@@ -69,4 +69,11 @@ export default [
     tooltip: 'Granule-based rasters cover the spatial footprint of individual data files; mosaics assemble granules into spatially continuous maps. Vectors provide additional attribute information or flow visualizations.',
     hideZeroCount: true,
   },
+  {
+    field: 'analysis',
+    label: 'Analysis',
+    filterType: 'any',
+    tooltip: 'Create time series charts or get statistics of a single variable',
+    hideZeroCount: true,
+  },
 ];

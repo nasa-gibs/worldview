@@ -10,7 +10,7 @@ const writeFile = promisify(fs.writeFile)
 const prog = path.basename(__filename)
 
 const options = yargs
-  .usage('Usage: $0 [config] [inputDir] [outputDir]')
+  .usage('Usage: $0 [config] [inputDir] [outputDir] [layersDir]')
   .option('config', {
     demandOption: true,
     alias: 'c',
@@ -29,20 +29,29 @@ const options = yargs
     type: 'string',
     description: 'wmts output directory'
   })
+  .option('layersDir', {
+    demandOption: true,
+    alias: 'l',
+    type: 'string',
+    description: 'wmts layers directory'
+  })
   .epilog('Converts colormaps to JSON files')
 
 const { argv } = options
-if (!argv.config && !argv.inputDir && !argv.outputDir) {
+if (!argv.config && !argv.inputDir && !argv.outputDir && !argv.layersDir) {
   throw new Error('Invalid number of arguments')
 }
 
 const config = argv.config
 const inputDir = argv.inputDir
 const outputDir = argv.outputDir
+const layersDir = argv.layersDir
 
 const skips = config.skipPalettes || []
 let errorCount = 0
 let fileCount = 0
+
+const colormapTypes = {}
 
 const walk = (dir) => {
   let results = []
@@ -75,6 +84,24 @@ async function main () {
       console.error(`${prog}: ERROR: ${error}`)
       errorCount += 1
     }
+  }
+
+  try {
+    const wmtsFiles = fs.readdirSync(layersDir)
+    for (const file of wmtsFiles) {
+      if (!file.endsWith('.json')) continue
+      const data = await fs.promises.readFile(path.join(layersDir, file), 'utf8')
+      const jsonData = JSON.parse(data)
+      Object.keys(jsonData.layers).forEach((id) => {
+        const hasPaletteId = Object.prototype.hasOwnProperty.call(jsonData.layers[id], 'palette') &&
+          Object.prototype.hasOwnProperty.call(jsonData.layers[id].palette, 'id')
+        const colormapId = hasPaletteId ? jsonData.layers[id].palette.id : id
+        if (Object.prototype.hasOwnProperty.call(colormapTypes, colormapId)) jsonData.layers[id].colormapType = colormapTypes[colormapId]
+      })
+      await writeFile(path.join(layersDir, file), JSON.stringify(jsonData, null, 2), { encoding: 'utf-8' })
+    }
+  } catch (error) {
+    console.error(`${prog}: ERROR: ${error}`)
   }
 
   console.warn(`${prog}: ${errorCount} error(s), ${fileCount} file(s)`)
@@ -351,6 +378,8 @@ async function processFile (id, xml) {
       id,
       maps
     }
+
+    colormapTypes[id] = maps[0].legend.type
 
     const outputFile = path.join(outputDir, `${id}.json`)
     await writeFile(outputFile, JSON.stringify(data, null, 2), { encoding: 'utf-8' })
