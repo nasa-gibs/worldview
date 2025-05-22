@@ -92,8 +92,11 @@ async function main () {
       if (!file.endsWith('.json')) continue
       const data = await fs.promises.readFile(path.join(layersDir, file), 'utf8')
       const jsonData = JSON.parse(data)
-      Object.keys(jsonData.layers).filter((id) => Object.prototype.hasOwnProperty.call(colormapTypes, id)).forEach((id) => {
-        jsonData.layers[id].colormapType = colormapTypes[id]
+      Object.keys(jsonData.layers).forEach((id) => {
+        const hasPaletteId = Object.prototype.hasOwnProperty.call(jsonData.layers[id], 'palette') &&
+          Object.prototype.hasOwnProperty.call(jsonData.layers[id].palette, 'id')
+        const colormapId = hasPaletteId ? jsonData.layers[id].palette.id : id
+        if (Object.prototype.hasOwnProperty.call(colormapTypes, colormapId)) jsonData.layers[id].colormapType = colormapTypes[colormapId]
       })
       await writeFile(path.join(layersDir, file), JSON.stringify(jsonData, null, 2), { encoding: 'utf-8' })
     }
