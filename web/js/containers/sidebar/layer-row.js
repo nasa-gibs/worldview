@@ -418,7 +418,7 @@ function LayerRow (props) {
   };
 
   const renderChartingIcon = () => {
-    const title = 'Create time series charts or get statistics of this layer by selecting Start Charting in the lower left corner.';
+    const title = 'Select Start Charting to create time series charts or get statistics for this layer';
     const layerChartableBtnId = `layer-chartable-btn-${encodedLayerId}`;
     return (
       <div

@@ -160,7 +160,7 @@ class SearchLayerRow extends React.Component {
                   autohide={isMobile}
                   delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
                 >
-                  <div dangerouslySetInnerHTML={{ __html: 'Create time series charts or get statistics of a single variable' }} />
+                  <div dangerouslySetInnerHTML={{ __html: 'Create time series charts or get statistics for this layer' }} />
                 </UncontrolledTooltip>
               </div>
             )}
