@@ -652,15 +652,17 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   ]);
 
   // Count basic + geo tags
-  const numTags = 11 + 4; // Basic TIFF tags + GeoTIFF tags
+  const numTags = 14 + 4; // Basic TIFF tags + GeoTIFF tags
 
   // Calculate offsets
   const ifdSize = 2 + (numTags * 12) + 4; // Count + entries + next IFD pointer
   const bitsPerSampleOffset = 8 + ifdSize;
-  const geoKeyDirectoryOffset = bitsPerSampleOffset + (samplesPerPixel * 2);
+  const rationalValuesOffset = bitsPerSampleOffset + (samplesPerPixel * 2);
+  const geoKeyDirectoryOffset = rationalValuesOffset + 16; // Space for 2 RATIONAL values (8 bytes each)
   const modelPixelScaleOffset = geoKeyDirectoryOffset + 34;
   const modelTiepointOffset = modelPixelScaleOffset + 24;
   const geoAsciiParamsOffset = modelTiepointOffset + 48;
+
   // Calculate proper alignment for the image data
   const asciiParamsSize = options.crs.length + 1; // +1 for null terminator
   const padding = (8 - ((geoAsciiParamsOffset + asciiParamsSize) % 8)) % 8;
@@ -751,11 +753,32 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   newView.setUint32(pos + 8, imageData.length, true);
   pos += 12;
 
+  // XResolution
+  newView.setUint16(pos, 282, true);
+  newView.setUint16(pos + 2, 5, true); // RATIONAL
+  newView.setUint32(pos + 4, 1, true);
+  newView.setUint32(pos + 8, rationalValuesOffset, true);
+  pos += 12;
+
+  // YResolution
+  newView.setUint16(pos, 283, true);
+  newView.setUint16(pos + 2, 5, true); // RATIONAL
+  newView.setUint32(pos + 4, 1, true);
+  newView.setUint32(pos + 8, rationalValuesOffset + 8, true);
+  pos += 12;
+
   // PlanarConfiguration
   newView.setUint16(pos, 284, true);
   newView.setUint16(pos + 2, 3, true); // SHORT
   newView.setUint32(pos + 4, 1, true);
   newView.setUint16(pos + 8, planarConfig, true);
+  pos += 12;
+
+  // ResolutionUnit (inch)
+  newView.setUint16(pos, 296, true);
+  newView.setUint16(pos + 2, 3, true); // SHORT
+  newView.setUint32(pos + 4, 1, true);
+  newView.setUint16(pos + 8, 2, true); // 2 = inches
   pos += 12;
 
   // ExtraSamples (for alpha channel)
@@ -801,6 +824,15 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   for (let i = 0; i < samplesPerPixel; i += 1) {
     newView.setUint16(bitsPerSampleOffset + (i * 2), bitsPerSample[i] || 8, true);
   }
+
+  // Set resolution values (default to 300 DPI if not specified)
+  const dpi = options.resolution || 300;
+  // XResolution (numerator/denominator)
+  newView.setUint32(rationalValuesOffset, dpi, true); // Numerator
+  newView.setUint32(rationalValuesOffset + 4, 1, true); // Denominator
+  // YResolution (numerator/denominator)
+  newView.setUint32(rationalValuesOffset + 8, dpi, true); // Numerator
+  newView.setUint32(rationalValuesOffset + 12, 1, true); // Denominator
 
   // Set GeoKeyDirectory values directly using DataView
   // GeoKeyDirectory header
@@ -1065,7 +1097,7 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const dpi = 600;
+    const dpi = 300;
     const view = map.getView();
 
     // Save original map size
@@ -1115,7 +1147,7 @@ export function snapshot (options) {
     map.once('rendercomplete', async () => {
       try {
         const zip = new JSZip();
-        map.renderSync();
+        // map.renderSync();
 
         // Create our output canvas with exact dimensions we want
         const outputCanvas = document.createElement('canvas');
