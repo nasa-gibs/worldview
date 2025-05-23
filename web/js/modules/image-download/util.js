@@ -576,9 +576,7 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   // Check for TIFF header
   const byteOrder = dataView.getUint16(0);
   const isLittleEndian = byteOrder === 0x4949; // 'II' for Intel (little-endian)
-  if (byteOrder !== 0x4949 && byteOrder !== 0x4D4D) {
-    throw new Error('Not a valid TIFF file');
-  }
+  if (!isLittleEndian && byteOrder !== 0x4D4D) throw new Error('Not a valid TIFF file');
 
   // Skip to IFD
   const ifdOffset = dataView.getUint32(4, isLittleEndian);
@@ -654,7 +652,7 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   ]);
 
   // Count basic + geo tags
-  const numTags = 10 + 4; // Basic TIFF tags + GeoTIFF tags
+  const numTags = 11 + 4; // Basic TIFF tags + GeoTIFF tags
 
   // Calculate offsets
   const ifdSize = 2 + (numTags * 12) + 4; // Count + entries + next IFD pointer
@@ -663,7 +661,16 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   const modelPixelScaleOffset = geoKeyDirectoryOffset + 34;
   const modelTiepointOffset = modelPixelScaleOffset + 24;
   const geoAsciiParamsOffset = modelTiepointOffset + 48;
-  const imageDataOffset = geoAsciiParamsOffset + options.crs.length + 1;
+  // Calculate proper alignment for the image data
+  const asciiParamsSize = options.crs.length + 1; // +1 for null terminator
+  const padding = (8 - ((geoAsciiParamsOffset + asciiParamsSize) % 8)) % 8;
+  const imageDataOffset = geoAsciiParamsOffset + asciiParamsSize + padding;
+
+  // Parse EPSG code from CRS
+  let epsgCode = 4326; // Default to WGS84
+  if (options?.crs.includes('EPSG:')) {
+    epsgCode = parseInt(options.crs.split(':')[1], 10);
+  }
 
   // Create buffer for the GeoTIFF
   const totalSize = imageDataOffset + imageData.length;
@@ -751,6 +758,13 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   newView.setUint16(pos + 8, planarConfig, true);
   pos += 12;
 
+  // ExtraSamples (for alpha channel)
+  newView.setUint16(pos, 338, true); // Tag ID for ExtraSamples
+  newView.setUint16(pos + 2, 3, true); // SHORT
+  newView.setUint32(pos + 4, 1, true); // 1 value
+  newView.setUint16(pos + 8, 2, true); // Value 2 = Unassociated Alpha
+  pos += 12;
+
   // ModelPixelScaleTag (33550)
   newView.setUint16(pos, 33550, true);
   newView.setUint16(pos + 2, 12, true); // DOUBLE
@@ -788,12 +802,6 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
     newView.setUint16(bitsPerSampleOffset + (i * 2), bitsPerSample[i] || 8, true);
   }
 
-  // Parse EPSG code from CRS
-  let epsgCode = 4326; // Default to WGS84
-  if (options.crs && options.crs.includes('EPSG:')) {
-    epsgCode = parseInt(options.crs.split(':')[1], 10);
-  }
-
   // Set GeoKeyDirectory values directly using DataView
   // GeoKeyDirectory header
   newView.setUint16(geoKeyDirectoryOffset, 1, true); // KeyDirectoryVersion
@@ -801,23 +809,33 @@ export async function convertTiffToGeoTiff (tiffBlob, options) {
   newView.setUint16(geoKeyDirectoryOffset + 4, 0, true); // MinorRevision
   newView.setUint16(geoKeyDirectoryOffset + 6, 3, true); // NumberOfKeys (3 keys instead of 4)
 
-  // Key 1: GTModelTypeGeoKey (2 = Geographic)
-  newView.setUint16(geoKeyDirectoryOffset + 8, 1024, true); // KeyID
-  newView.setUint16(geoKeyDirectoryOffset + 10, 0, true); // TIFFTagLocation (0 = value is inline)
-  newView.setUint16(geoKeyDirectoryOffset + 12, 1, true); // Count MUST BE 1 for inline values
-  newView.setUint16(geoKeyDirectoryOffset + 14, 2, true); // Value (2 = Geographic)
-
   // Key 2: GTRasterTypeGeoKey (1 = PixelIsArea)
   newView.setUint16(geoKeyDirectoryOffset + 16, 1025, true); // KeyID
   newView.setUint16(geoKeyDirectoryOffset + 18, 0, true); // TIFFTagLocation
   newView.setUint16(geoKeyDirectoryOffset + 20, 1, true); // Count MUST BE 1
   newView.setUint16(geoKeyDirectoryOffset + 22, 1, true); // Value (1 = PixelIsArea)
 
-  // Key 3: GeographicTypeGeoKey (EPSG code)
-  newView.setUint16(geoKeyDirectoryOffset + 24, 2048, true); // KeyID
-  newView.setUint16(geoKeyDirectoryOffset + 26, 0, true); // TIFFTagLocation
-  newView.setUint16(geoKeyDirectoryOffset + 28, 1, true); // Count MUST BE 1
-  newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true); // Value (EPSG code)
+  // Key 1: GTModelTypeGeoKey (2 = Geographic)
+  newView.setUint16(geoKeyDirectoryOffset + 8, 1024, true); // KeyID
+  newView.setUint16(geoKeyDirectoryOffset + 10, 0, true); // TIFFTagLocation (0 = value is inline)
+  newView.setUint16(geoKeyDirectoryOffset + 12, 1, true); // Count MUST BE 1 for inline values
+  if (epsgCode === 4326) {
+    newView.setUint16(geoKeyDirectoryOffset + 14, 2, true); // Value (2 = Geographic)
+
+    // Key 3: GeographicTypeGeoKey (EPSG code)
+    newView.setUint16(geoKeyDirectoryOffset + 24, 2048, true); // KeyID
+    newView.setUint16(geoKeyDirectoryOffset + 26, 0, true); // TIFFTagLocation
+    newView.setUint16(geoKeyDirectoryOffset + 28, 1, true); // Count MUST BE 1
+    newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true); // Value (EPSG code)
+  } else { // epsgCode === 3413 || epsgCode === 3031
+    newView.setUint16(geoKeyDirectoryOffset + 14, 1, true); // Value (1 = Projected)
+
+    // Use ProjectedCSTypeGeoKey instead of GeographicTypeGeoKey
+    newView.setUint16(geoKeyDirectoryOffset + 24, 3072, true); // ProjectedCSTypeGeoKey
+    newView.setUint16(geoKeyDirectoryOffset + 26, 0, true);
+    newView.setUint16(geoKeyDirectoryOffset + 28, 1, true);
+    newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true);
+  }
 
   // Set ModelPixelScale values (pixel size in map units)
   // GeoTIFF expects [width_per_pixel, height_per_pixel, 0]
@@ -1047,7 +1065,7 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const dpi = 300;
+    const dpi = 600;
     const view = map.getView();
 
     // Save original map size
@@ -1138,10 +1156,11 @@ export function snapshot (options) {
         view.setResolution(viewResolution);
 
         outputCanvas.toBlob(async (blob) => {
+          const crs = map.getView().getProjection().getCode();
           const tiffBlob = await convertPngToTiff(blob); // Convert PNG blob to TIFF Blob
           const geoTiffBlob = await convertTiffToGeoTiff(tiffBlob, {
             bbox,
-            crs: map.getView().getProjection().getCode(),
+            crs,
             resolution: dpi,
             captureWidth: scaledWidth,
             captureHeight: scaledHeight,
@@ -1149,7 +1168,7 @@ export function snapshot (options) {
           const url = URL.createObjectURL(geoTiffBlob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'screenshot.tif';
+          link.download = `screenshot${crs}.tif`;
           link.click();
           URL.revokeObjectURL(url);
 
