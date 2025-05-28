@@ -41,7 +41,7 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opacities) {
+const imageUtilProcessKMZOrbitTracks = (layersArray, layerWraps, opacities) => {
   const processedLayersArray = [...layersArray];
   const processedLayerWraps = [...layerWraps];
   const processedOpacities = [...opacities];
@@ -1097,16 +1097,16 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const dpi = 300;
+    const dpi = 600;
     const view = map.getView();
 
     // Save original map size
     const mapElement = map.getTargetElement();
-    const originalWidth = mapElement.style.width;
-    const originalHeight = mapElement.style.height;
+    const originalStyleWidth = mapElement.style.width;
+    const originalStyleHeight = mapElement.style.height;
 
     // Save original viewport size
-    const [origMapWidth, origMapHeight] = map.getSize();
+    const [originalWidth, originalHeight] = map.getSize();
     const viewResolution = map.getView().getResolution();
 
     // Calculate geographic extent
@@ -1122,12 +1122,13 @@ export function snapshot (options) {
     const maxY = Math.max(topLeft[1], topRight[1]);
     const bbox = [minX, minY, maxX, maxY];
 
+    const projection = view.getProjection();
     // Calculate scale factor based on resolution
     const scaleFactor = dpi / 96;
 
     // Scale the entire map up to the target resolution
-    const scaledMapWidth = origMapWidth * scaleFactor;
-    const scaledMapHeight = origMapHeight * scaleFactor;
+    const scaledMapWidth = originalWidth * scaleFactor;
+    const scaledMapHeight = originalHeight * scaleFactor;
 
     // Calculate scaled positions for cropping
     const scaledXOffset = xOffset * scaleFactor;
@@ -1135,7 +1136,6 @@ export function snapshot (options) {
     const scaledWidth = width * scaleFactor;
     const scaledHeight = height * scaleFactor;
 
-    const projection = view.getProjection();
     // const units = projection.getUnits();
     const center = view.getCenter();
     const scaledResolution = getPointResolution(
@@ -1182,8 +1182,8 @@ export function snapshot (options) {
         );
 
         // Reset map to original size
-        mapElement.style.width = originalWidth;
-        mapElement.style.height = originalHeight;
+        mapElement.style.width = originalStyleWidth;
+        mapElement.style.height = originalStyleHeight;
         map.updateSize();
         view.setResolution(viewResolution);
 
@@ -1253,8 +1253,8 @@ export function snapshot (options) {
         }, format, 1);
       } catch (error) {
         // Reset map size in case of error
-        mapElement.style.width = originalWidth;
-        mapElement.style.height = originalHeight;
+        mapElement.style.width = originalStyleWidth;
+        mapElement.style.height = originalStyleHeight;
         map.updateSize();
         view.setResolution(viewResolution);
 
