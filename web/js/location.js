@@ -468,6 +468,21 @@ const getParameters = function(config, parameters) {
         },
       },
     },
+    cm: {
+      stateKey: 'compare.mode',
+      initialState: 'swipe',
+      options: {
+        parse: (param) => (config.initialIsMobile ? 'swipe' : param),
+      },
+    },
+    cv: {
+      stateKey: 'compare.value',
+      initialState: 50,
+      type: 'number',
+      options: {
+        parse: (param) => (config.initialIsMobile ? 50 : param),
+      },
+    },
     cha: {
       stateKey: 'charting.active',
       initialState: false,
@@ -519,21 +534,6 @@ const getParameters = function(config, parameters) {
       stateKey: 'charting.isChartOpen',
       initialState: false,
       type: 'bool',
-    },
-    cm: {
-      stateKey: 'compare.mode',
-      initialState: 'swipe',
-      options: {
-        parse: (param) => (config.initialIsMobile ? 'swipe' : param),
-      },
-    },
-    cv: {
-      stateKey: 'compare.value',
-      initialState: 50,
-      type: 'number',
-      options: {
-        parse: (param) => (config.initialIsMobile ? 50 : param),
-      },
     },
     tr: {
       stateKey: 'tour.selected',

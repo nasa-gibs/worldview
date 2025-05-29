@@ -59,3 +59,8 @@ Worldview uses the analytics framework [Google Tag Manager](https://developers.g
 
 to disable this feature, set:
 `"googleTagManager": false`
+
+## Charting Mode
+
+This feature queries GIBS ImageStat to collect data across a time range for a selected layer, then creates a visualization of that data via a line chart. To enable,
+edit `config/default/common/features.json` and set `"charting"` to `true` to enable the 'Start Charting' button on the bottom of the layer list sidebar (enabled by default).
