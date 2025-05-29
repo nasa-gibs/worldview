@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import JSZip from 'jszip';
 import { transform, getPointResolution } from 'ol/proj';
+import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
@@ -569,332 +570,38 @@ export function convertPngToTiff(pngBlob) {
  * @returns {Promise<Blob>} - A promise that resolves to the GeoTIFF Blob
  */
 export async function convertTiffToGeoTiff (tiffBlob, options) {
-  // Extract image data from TIFF
-  const arrayBuffer = await tiffBlob.arrayBuffer();
-  const dataView = new DataView(arrayBuffer);
+  const proj4Defs = {
+    'EPSG:4326': 'epsg:4326',
+    'EPSG:3413': '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs',
+    'EPSG:3031': '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs',
+  };
+  const file = new File([tiffBlob], 'image.tif', { type: 'image/tiff' });
+  const gdal = await initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package', useWorker: false });
+  const openResult = await gdal.open(file);
+  const dataset = openResult.datasets[0];
+  const srs = proj4Defs[options.crs];
 
-  // Check for TIFF header
-  const byteOrder = dataView.getUint16(0);
-  const isLittleEndian = byteOrder === 0x4949; // 'II' for Intel (little-endian)
-  if (!isLittleEndian && byteOrder !== 0x4D4D) throw new Error('Not a valid TIFF file');
+  const width = options.captureWidth || options.width || dataset.info.size[0];
+  const height = options.captureHeight || options.height || dataset.info.size[1];
+  const bbox = options.bbox.map((coord) => `${coord}`);
 
-  // Skip to IFD
-  const ifdOffset = dataView.getUint32(4, isLittleEndian);
-  const numEntries = dataView.getUint16(ifdOffset, isLittleEndian);
+  const translateOpts = [
+    '-strict',
+    '-stats',
+    '-of', 'GTiff', // Output format
+    '-a_srs', srs, // Set the spatial reference system
+    '-outsize', `${width}`, `${height}`, // Set the output size
+    '-r', 'average', // Resampling method
+    '-a_ullr', `${bbox[0]}`, `${bbox[3]}`, `${bbox[2]}`, `${bbox[1]}`, // Set the bounding box
+  ];
 
-  // Extract basic TIFF info
-  let width = 0;
-  let height = 0;
-  let bitsPerSample = [];
-  let samplesPerPixel = 0;
-  let compression = 1;
-  let photometric = 0;
-  let stripOffsets = 0;
-  let stripByteCounts = 0;
-  let rowsPerStrip = 0;
-  let planarConfig = 1;
+  const translated = await gdal.gdal_translate(dataset, translateOpts);
 
-  // Read IFD entries
-  for (let i = 0; i < numEntries; i += 1) {
-    const entryOffset = ifdOffset + 2 + (i * 12);
-    const tag = dataView.getUint16(entryOffset, isLittleEndian);
-    const count = dataView.getUint32(entryOffset + 4, isLittleEndian);
-    const valueOffset = dataView.getUint32(entryOffset + 8, isLittleEndian);
+  gdal.close(dataset);
+  const output = await gdal.getFileBytes(translated);
+  const blob = new Blob([output], { type: 'image/tiff' });
 
-    if (tag === 256) { // ImageWidth
-      width = count === 1 ? valueOffset : dataView.getUint32(valueOffset, isLittleEndian);
-    } else if (tag === 257) { // ImageLength
-      height = count === 1 ? valueOffset : dataView.getUint32(valueOffset, isLittleEndian);
-    } else if (tag === 258) { // BitsPerSample
-      if (count === 1) {
-        bitsPerSample = [valueOffset];
-      } else {
-        bitsPerSample = [];
-        for (let j = 0; j < count; j += 1) {
-          bitsPerSample.push(dataView.getUint16(valueOffset + j * 2, isLittleEndian));
-        }
-      }
-    } else if (tag === 259) { // Compression
-      compression = valueOffset;
-    } else if (tag === 262) { // PhotometricInterpretation
-      photometric = valueOffset;
-    } else if (tag === 273) { // StripOffsets
-      stripOffsets = count === 1 ? valueOffset : dataView.getUint32(valueOffset, isLittleEndian);
-    } else if (tag === 277) { // SamplesPerPixel
-      samplesPerPixel = valueOffset;
-    } else if (tag === 278) { // RowsPerStrip
-      rowsPerStrip = count === 1 ? valueOffset : dataView.getUint32(valueOffset, isLittleEndian);
-    } else if (tag === 279) { // StripByteCounts
-      stripByteCounts = count === 1 ? valueOffset : dataView.getUint32(valueOffset, isLittleEndian);
-    } else if (tag === 284) { // PlanarConfiguration
-      planarConfig = valueOffset;
-    }
-  }
-
-  // Read image data
-  const imageData = new Uint8Array(arrayBuffer, stripOffsets, stripByteCounts);
-
-  // Calculate proper georeferencing parameters with exact pixel size
-  const [minX, minY, maxX, maxY] = options.bbox;
-  const bboxWidth = options.bboxWidth || (maxX - minX);
-  const bboxHeight = options.bboxHeight || (maxY - minY);
-
-  // Use canvas dimensions if provided, otherwise use the TIFF dimensions
-  const pixelWidth = bboxWidth / width;
-  const pixelHeight = bboxHeight / height;
-
-  // Create new GeoTIFF from scratch
-  // Header (8 bytes)
-  const header = new Uint8Array([
-    0x49, 0x49, // Little endian
-    0x2A, 0x00, // TIFF identifier
-    0x08, 0x00, 0x00, 0x00, // Offset to first IFD
-  ]);
-
-  // Count basic + geo tags
-  const numTags = 14 + 4; // Basic TIFF tags + GeoTIFF tags
-
-  // Calculate offsets
-  const ifdSize = 2 + (numTags * 12) + 4; // Count + entries + next IFD pointer
-  const bitsPerSampleOffset = 8 + ifdSize;
-  const rationalValuesOffset = bitsPerSampleOffset + (samplesPerPixel * 2);
-  const geoKeyDirectoryOffset = rationalValuesOffset + 16; // Space for 2 RATIONAL values (8 bytes each)
-  const modelPixelScaleOffset = geoKeyDirectoryOffset + 34;
-  const modelTiepointOffset = modelPixelScaleOffset + 24;
-  const geoAsciiParamsOffset = modelTiepointOffset + 48;
-
-  // Calculate proper alignment for the image data
-  const asciiParamsSize = options.crs.length + 1; // +1 for null terminator
-  const padding = (8 - ((geoAsciiParamsOffset + asciiParamsSize) % 8)) % 8;
-  const imageDataOffset = geoAsciiParamsOffset + asciiParamsSize + padding;
-
-  // Parse EPSG code from CRS
-  let epsgCode = 4326; // Default to WGS84
-  if (options?.crs.includes('EPSG:')) {
-    epsgCode = parseInt(options.crs.split(':')[1], 10);
-  }
-
-  // Create buffer for the GeoTIFF
-  const totalSize = imageDataOffset + imageData.length;
-  const buffer = new ArrayBuffer(totalSize);
-  const newArray = new Uint8Array(buffer);
-  const newView = new DataView(buffer);
-
-  // Set header
-  newArray.set(header, 0);
-
-  // Set IFD count
-  newView.setUint16(8, numTags, true);
-
-  // Current position for IFD entries
-  let pos = 10;
-
-  // Basic TIFF tags
-  // ImageWidth
-  newView.setUint16(pos, 256, true);
-  newView.setUint16(pos + 2, 4, true); // LONG
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, width, true);
-  pos += 12;
-
-  // ImageLength
-  newView.setUint16(pos, 257, true);
-  newView.setUint16(pos + 2, 4, true); // LONG
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, height, true);
-  pos += 12;
-
-  // BitsPerSample
-  newView.setUint16(pos, 258, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, samplesPerPixel, true);
-  newView.setUint32(pos + 8, bitsPerSampleOffset, true);
-  pos += 12;
-
-  // Compression
-  newView.setUint16(pos, 259, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint16(pos + 8, compression, true);
-  pos += 12;
-
-  // PhotometricInterpretation
-  newView.setUint16(pos, 262, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint16(pos + 8, photometric, true);
-  pos += 12;
-
-  // StripOffsets
-  newView.setUint16(pos, 273, true);
-  newView.setUint16(pos + 2, 4, true); // LONG
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, imageDataOffset, true);
-  pos += 12;
-
-  // SamplesPerPixel
-  newView.setUint16(pos, 277, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint16(pos + 8, samplesPerPixel, true);
-  pos += 12;
-
-  // RowsPerStrip
-  newView.setUint16(pos, 278, true);
-  newView.setUint16(pos + 2, 4, true); // LONG
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, rowsPerStrip || height, true);
-  pos += 12;
-
-  // StripByteCounts
-  newView.setUint16(pos, 279, true);
-  newView.setUint16(pos + 2, 4, true); // LONG
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, imageData.length, true);
-  pos += 12;
-
-  // XResolution
-  newView.setUint16(pos, 282, true);
-  newView.setUint16(pos + 2, 5, true); // RATIONAL
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, rationalValuesOffset, true);
-  pos += 12;
-
-  // YResolution
-  newView.setUint16(pos, 283, true);
-  newView.setUint16(pos + 2, 5, true); // RATIONAL
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint32(pos + 8, rationalValuesOffset + 8, true);
-  pos += 12;
-
-  // PlanarConfiguration
-  newView.setUint16(pos, 284, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint16(pos + 8, planarConfig, true);
-  pos += 12;
-
-  // ResolutionUnit (inch)
-  newView.setUint16(pos, 296, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true);
-  newView.setUint16(pos + 8, 2, true); // 2 = inches
-  pos += 12;
-
-  // ExtraSamples (for alpha channel)
-  newView.setUint16(pos, 338, true); // Tag ID for ExtraSamples
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 1, true); // 1 value
-  newView.setUint16(pos + 8, 2, true); // Value 2 = Unassociated Alpha
-  pos += 12;
-
-  // ModelPixelScaleTag (33550)
-  newView.setUint16(pos, 33550, true);
-  newView.setUint16(pos + 2, 12, true); // DOUBLE
-  newView.setUint32(pos + 4, 3, true); // 3 values
-  newView.setUint32(pos + 8, modelPixelScaleOffset, true);
-  pos += 12;
-
-  // ModelTiepointTag (33922)
-  newView.setUint16(pos, 33922, true);
-  newView.setUint16(pos + 2, 12, true); // DOUBLE
-  newView.setUint32(pos + 4, 6, true); // 6 values
-  newView.setUint32(pos + 8, modelTiepointOffset, true);
-  pos += 12;
-
-  // GeoKeyDirectoryTag (34735)
-  newView.setUint16(pos, 34735, true);
-  newView.setUint16(pos + 2, 3, true); // SHORT
-  newView.setUint32(pos + 4, 16, true); // 4 * 4 values (header + 3 keys)
-  newView.setUint32(pos + 8, geoKeyDirectoryOffset, true);
-  pos += 12;
-
-  // GeoAsciiParamsTag (34737)
-  newView.setUint16(pos, 34737, true);
-  newView.setUint16(pos + 2, 2, true); // ASCII
-  newView.setUint32(pos + 4, options.crs.length + 1, true); // Length including null terminator
-  newView.setUint32(pos + 8, geoAsciiParamsOffset, true);
-  pos += 12;
-
-  // Next IFD offset (0 for last/only IFD)
-  newView.setUint32(pos, 0, true);
-  pos += 4;
-
-  // Write BitsPerSample
-  for (let i = 0; i < samplesPerPixel; i += 1) {
-    newView.setUint16(bitsPerSampleOffset + (i * 2), bitsPerSample[i] || 8, true);
-  }
-
-  // Set resolution values (default to 300 DPI if not specified)
-  const dpi = options.resolution || 300;
-  // XResolution (numerator/denominator)
-  newView.setUint32(rationalValuesOffset, dpi, true); // Numerator
-  newView.setUint32(rationalValuesOffset + 4, 1, true); // Denominator
-  // YResolution (numerator/denominator)
-  newView.setUint32(rationalValuesOffset + 8, dpi, true); // Numerator
-  newView.setUint32(rationalValuesOffset + 12, 1, true); // Denominator
-
-  // Set GeoKeyDirectory values directly using DataView
-  // GeoKeyDirectory header
-  newView.setUint16(geoKeyDirectoryOffset, 1, true); // KeyDirectoryVersion
-  newView.setUint16(geoKeyDirectoryOffset + 2, 1, true); // KeyRevision
-  newView.setUint16(geoKeyDirectoryOffset + 4, 0, true); // MinorRevision
-  newView.setUint16(geoKeyDirectoryOffset + 6, 3, true); // NumberOfKeys (3 keys instead of 4)
-
-  // Key 2: GTRasterTypeGeoKey (1 = PixelIsArea)
-  newView.setUint16(geoKeyDirectoryOffset + 16, 1025, true); // KeyID
-  newView.setUint16(geoKeyDirectoryOffset + 18, 0, true); // TIFFTagLocation
-  newView.setUint16(geoKeyDirectoryOffset + 20, 1, true); // Count MUST BE 1
-  newView.setUint16(geoKeyDirectoryOffset + 22, 1, true); // Value (1 = PixelIsArea)
-
-  // Key 1: GTModelTypeGeoKey (2 = Geographic)
-  newView.setUint16(geoKeyDirectoryOffset + 8, 1024, true); // KeyID
-  newView.setUint16(geoKeyDirectoryOffset + 10, 0, true); // TIFFTagLocation (0 = value is inline)
-  newView.setUint16(geoKeyDirectoryOffset + 12, 1, true); // Count MUST BE 1 for inline values
-  if (epsgCode === 4326) {
-    newView.setUint16(geoKeyDirectoryOffset + 14, 2, true); // Value (2 = Geographic)
-
-    // Key 3: GeographicTypeGeoKey (EPSG code)
-    newView.setUint16(geoKeyDirectoryOffset + 24, 2048, true); // KeyID
-    newView.setUint16(geoKeyDirectoryOffset + 26, 0, true); // TIFFTagLocation
-    newView.setUint16(geoKeyDirectoryOffset + 28, 1, true); // Count MUST BE 1
-    newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true); // Value (EPSG code)
-  } else { // epsgCode === 3413 || epsgCode === 3031
-    newView.setUint16(geoKeyDirectoryOffset + 14, 1, true); // Value (1 = Projected)
-
-    // Use ProjectedCSTypeGeoKey instead of GeographicTypeGeoKey
-    newView.setUint16(geoKeyDirectoryOffset + 24, 3072, true); // ProjectedCSTypeGeoKey
-    newView.setUint16(geoKeyDirectoryOffset + 26, 0, true);
-    newView.setUint16(geoKeyDirectoryOffset + 28, 1, true);
-    newView.setUint16(geoKeyDirectoryOffset + 30, epsgCode, true);
-  }
-
-  // Set ModelPixelScale values (pixel size in map units)
-  // GeoTIFF expects [width_per_pixel, height_per_pixel, 0]
-  newView.setFloat64(modelPixelScaleOffset, pixelWidth, true);
-  newView.setFloat64(modelPixelScaleOffset + 8, pixelHeight, true);
-  newView.setFloat64(modelPixelScaleOffset + 16, 0, true);
-
-  // Set ModelTiepoint values (mapping between raster and map coordinates)
-  // GeoTIFF expects [pixel_x, pixel_y, pixel_z, geo_x, geo_y, geo_z]
-  // For upper-left origin point:
-  newView.setFloat64(modelTiepointOffset, 0, true); // Pixel X
-  newView.setFloat64(modelTiepointOffset + 8, 0, true); // Pixel Y
-  newView.setFloat64(modelTiepointOffset + 16, 0, true); // Pixel Z
-  newView.setFloat64(modelTiepointOffset + 24, minX, true); // Geo X (min X)
-  newView.setFloat64(modelTiepointOffset + 32, maxY, true); // Geo Y (max Y - origin at top)
-  newView.setFloat64(modelTiepointOffset + 40, 0, true); // Geo Z
-
-  // Set GeoAsciiParams values (the CRS string)
-  for (let i = 0; i < options.crs.length; i += 1) {
-    newView.setUint8(geoAsciiParamsOffset + i, options.crs.charCodeAt(i));
-  }
-  newView.setUint8(geoAsciiParamsOffset + options.crs.length, 0); // Null terminator
-
-  // Copy image data
-  newArray.set(imageData, imageDataOffset);
-
-  return new Blob([buffer], { type: 'image/tiff' });
+  return blob;
 }
 
 /**
@@ -1097,7 +804,7 @@ export function snapshot (options) {
       yOffset,
       map,
     } = options;
-    const dpi = 600;
+    const dpi = 300;
     const view = map.getView();
 
     // Save original map size
@@ -1135,14 +842,7 @@ export function snapshot (options) {
     const scaledYOffset = yOffset * scaleFactor;
     const scaledWidth = width * scaleFactor;
     const scaledHeight = height * scaleFactor;
-
-    // const units = projection.getUnits();
-    const center = view.getCenter();
-    const scaledResolution = getPointResolution(
-      projection,
-      viewResolution / scaleFactor,
-      center,
-    );
+    const scaledResolution = viewResolution / scaleFactor;
 
     map.once('rendercomplete', async () => {
       try {
