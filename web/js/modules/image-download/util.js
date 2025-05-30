@@ -616,7 +616,6 @@ export function snapshot (options) {
       map,
       worldfile,
     } = options;
-    const dpi = 300;
     const view = map.getView();
 
     // Save original map size
@@ -642,7 +641,7 @@ export function snapshot (options) {
     const bbox = [minX, minY, maxX, maxY];
 
     // Calculate scale factor based on resolution
-    const scaleFactor = dpi / 96;
+    const scaleFactor = resolution / 96;
 
     // Scale the entire map up to the target resolution
     const scaledMapWidth = originalWidth * scaleFactor;
