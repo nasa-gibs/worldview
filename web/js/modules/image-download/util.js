@@ -498,7 +498,7 @@ export async function georeference (inputBlob, options) {
     '-a_srs', crs, // Set the spatial reference system
     '-outsize', `${width}`, `${height}`, // Set the output size
     '-r', 'average', // Resampling method
-    '-a_ullr', `${bbox[0]}`, `${bbox[3]}`, `${bbox[2]}`, `${bbox[1]}`, // Set the bounding box
+    '-a_ullr', bbox[0], bbox[3], bbox[2], bbox[1], // Set the bounding box
   ];
   if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
 
