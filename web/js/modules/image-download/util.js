@@ -13,6 +13,14 @@ import { CRS } from '../map/constants';
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
 export const GRANULE_LIMIT = 30;
+const GDAL_WASM_PATH = 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package';
+const DRIVER_DICT = {
+  tiff: 'GTiff',
+  tif: 'GTiff',
+  jpg: 'JPEG',
+  jpeg: 'JPEG',
+  png: 'PNG',
+};
 
 /**
  * Get a date time snapped to the interval of the layer with the shortest interval.
@@ -451,8 +459,15 @@ export function convertPngToKml(pngBlob, options) {
  * @returns {Promise<Blob>} - A promise that resolves to the GeoTIFF Blob
  */
 export async function georeference (inputBlob, options) {
-  const inputFormat = options.inputFormat || 'png';
-  let outputFormat = options.outputFormat || 'tif';
+  let {
+    outputFormat = 'tif',
+  } = options;
+  const {
+    inputFormat = 'png',
+    crs = 'EPSG:4326',
+    captureHeight,
+    captureWidth,
+  } = options;
   if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif'; // Normalize tiff to tif for consistency
   if (outputFormat === 'jpeg') outputFormat = 'jpg'; // Normalize jpg to jpeg for consistency
   if (outputFormat === 'kml') {
@@ -466,37 +481,26 @@ export async function georeference (inputBlob, options) {
     ];
   }
   const worldfile = options.worldfile ? 'YES' : 'NO';
-  const outputFormatDict = {
-    tiff: 'GTiff',
-    tif: 'GTiff',
-    jpg: 'JPEG',
-    jpeg: 'JPEG',
-    png: 'PNG',
-  };
-  const proj4Defs = {
-    'EPSG:4326': 'epsg:4326',
-    'EPSG:3413': 'epsg:3413',
-    'EPSG:3031': '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs',
-  };
+
   const file = new File([inputBlob], `image.${inputFormat}`, { type: `image/${inputFormat}` });
-  const gdal = await initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package', useWorker: false });
+  const gdal = await initGdalJs({ path: GDAL_WASM_PATH, useWorker: false });
   const openResult = await gdal.open(file);
   const dataset = openResult.datasets[0];
-  const srs = proj4Defs[options.crs];
 
-  const width = options.captureWidth || options.width || dataset.info.size[0];
-  const height = options.captureHeight || options.height || dataset.info.size[1];
+  const width = captureWidth || dataset.info.size[0];
+  const height = captureHeight || dataset.info.size[1];
   const bbox = options.bbox.map((coord) => `${coord}`);
+  const driver = DRIVER_DICT[outputFormat];
 
   const translateOpts = [
     '-strict',
-    '-of', outputFormatDict[outputFormat], // Output format
-    '-a_srs', srs, // Set the spatial reference system
+    '-of', driver, // Output format
+    '-a_srs', crs, // Set the spatial reference system
     '-outsize', `${width}`, `${height}`, // Set the output size
     '-r', 'average', // Resampling method
     '-a_ullr', `${bbox[0]}`, `${bbox[3]}`, `${bbox[2]}`, `${bbox[1]}`, // Set the bounding box
   ];
-  if (outputFormatDict[outputFormat] !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
+  if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
 
   const translate = await gdal.gdal_translate(dataset, translateOpts);
 
