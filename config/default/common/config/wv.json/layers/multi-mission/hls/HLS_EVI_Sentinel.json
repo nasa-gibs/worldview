@@ -19,7 +19,8 @@
         "assets": ["B05", "B04", "B02"],
         "expression": "(2.5*(B05-B04))/(B05+6*B04-7.5*B02+1)",
         "rescale": "-1,1",
-        "colormap_name": "brbg"
+        "colormap_name": "brbg",
+        "bands_regex": "B[0-9][0-9A-Za-z]"
       },
       "disableSnapshot": true,
       "minZoom": 7,

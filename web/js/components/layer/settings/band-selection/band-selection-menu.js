@@ -32,6 +32,8 @@ export default function BandSelection({ layer }) {
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
     b: layer.bandCombo.b,
+    color_formula: layer.bandCombo.color_formula,
+    bands_regex: layer.bandCombo.bands_regex,
   });
 
   const confirmSelection = () => {
