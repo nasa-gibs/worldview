@@ -7,6 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const CssUrlRelativePlugin = require('css-url-relative-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const devMode = process.env.NODE_ENV !== 'production'
 
@@ -38,6 +39,16 @@ if (process.env.DEBUG !== undefined) {
     new webpack.DefinePlugin({ DEBUG: false })
   )
 }
+
+pluginSystem.push(
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: './node_modules/gdal3.js/dist/package/gdal3.js', to: 'gdal3js' },
+      { from: './node_modules/gdal3.js/dist/package/gdal3WebAssembly.wasm', to: 'gdal3js' },
+      { from: './node_modules/gdal3.js/dist/package/gdal3WebAssembly.data', to: 'gdal3js' }
+    ]
+  })
+)
 
 const babelLoaderExcludes = [
   /\.test\.js$/,
@@ -71,11 +82,27 @@ module.exports = {
     devMiddleware: {
       writeToDisk: true
     },
-    static: path.join(__dirname, 'web'),
+    static: [
+      {
+        directory: path.join(__dirname, 'web'),
+        publicPath: '/'
+      },
+      {
+        directory: path.join(__dirname, 'web/build'),
+        publicPath: '/'
+      }
+    ],
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      '.wasm': {
+        'Content-Type': 'application/wasm'
+      }
+    },
     compress: true,
     port: 3000,
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    open: true
   },
   optimization: {
     minimizer: [

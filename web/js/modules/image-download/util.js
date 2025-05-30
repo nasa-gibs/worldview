@@ -9,18 +9,11 @@ import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
 import { CRS } from '../map/constants';
+import { GDAL_WASM_PATH, DRIVER_DICT } from './constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
 export const GRANULE_LIMIT = 30;
-const GDAL_WASM_PATH = 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package';
-const DRIVER_DICT = {
-  tiff: 'GTiff',
-  tif: 'GTiff',
-  jpg: 'JPEG',
-  jpeg: 'JPEG',
-  png: 'PNG',
-};
 
 /**
  * Get a date time snapped to the interval of the layer with the shortest interval.
@@ -483,7 +476,7 @@ export async function georeference (inputBlob, options) {
   const worldfile = options.worldfile ? 'YES' : 'NO';
 
   const file = new File([inputBlob], `image.${inputFormat}`, { type: `image/${inputFormat}` });
-  const gdal = await initGdalJs({ path: GDAL_WASM_PATH, useWorker: false });
+  const gdal = await initGdalJs({ path: GDAL_WASM_PATH, useWorker: true });
   const openResult = await gdal.open(file);
   const dataset = openResult.datasets[0];
 
