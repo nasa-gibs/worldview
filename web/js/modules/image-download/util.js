@@ -700,7 +700,7 @@ export function snapshot (options) {
           const georeferencedOutput = await georeference(pngBlob, {
             bbox,
             crs,
-            resolution: dpi,
+            resolution,
             captureWidth: scaledWidth,
             captureHeight: scaledHeight,
             inputFormat: 'png',
