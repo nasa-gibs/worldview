@@ -70,14 +70,16 @@ function ImageDownloadPanel(props) {
     const calcWidth = boundaries[2] - boundaries[0];
     const calcHeight = boundaries[3] - boundaries[1];
     const layerList = getLayers();
+    const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
     const snapshotOptions = {
-      format: 'image/png',
+      format: snapshotFormat,
       resolution: 300,
       width: calcWidth,
       height: calcHeight,
       xOffset: boundaries[0],
       yOffset: boundaries[1],
       map,
+      worldfile: currIsWorldfile,
     };
     const dlURL = await snapshot(snapshotOptions);
 
