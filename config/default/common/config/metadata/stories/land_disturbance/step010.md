@@ -1,0 +1,1 @@
+This comparison from the State of Pará, Brazil shows forest clearing associated with gold mining in mining concessions between December 20, 2023 and December 9, 2024. Swipe the center bar back and forth to view the areas that have been cleared for mining, shown as confirmed disturbances in yellow and red.

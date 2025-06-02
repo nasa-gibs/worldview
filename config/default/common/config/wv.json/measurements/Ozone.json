@@ -3,8 +3,17 @@
         "Ozone": {
             "id": "ozone",
             "title":    "Ozone",
-            "subtitle": "Aura/MLS, Aura/OMI, Suomi NPP/OMPS, TEMPO, MERRA-2",
+            "subtitle": "AJAX/Alpha Jet, Aura/MLS, Aura/OMI, Suomi NPP/OMPS, TEMPO, MERRA-2",
             "sources": {
+                "AJAX/Alpha Jet": {
+                    "id": "ajax-alpha-jet",
+                    "title": "AJAX/Alpha Jet",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AJAX_Alpha_Jet_Ozone"
+                    ]
+                },
                 "Aura/MLS": {
                     "id": "aura-mls",
                     "title": "Aura/MLS",

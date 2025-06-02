@@ -16,6 +16,9 @@ const pluginSystem = [
   new CssUrlRelativePlugin(),
   new MiniCssExtractPlugin({
     filename: 'wv.css'
+  }),
+  new webpack.DefinePlugin({
+    'process.env.GITHUB_ACTIONS': JSON.stringify(process.env.GITHUB_ACTIONS || 'false')
   })
 ]
 

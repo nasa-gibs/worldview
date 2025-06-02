@@ -57,7 +57,7 @@
                         href="https://www.earthdata.nasa.gov/centers/nsidc-daac" target="_blank"
                         rel="noopener noreferrer">NSIDC
                         DAAC</a></li>
-        <li>Chlorophyll-a layers from <a href="https://www.earthdata.nasa.gov/centers/ob-daac" target="_blank"
+        <li>Ocean biology related layers like Chlorophyll a, Photosynthetically Available Radiation, and Sea Surface Temperature from <a href="https://www.earthdata.nasa.gov/centers/ob-daac" target="_blank"
                         rel="noopener noreferrer">OB.DAAC</a></li>
         <li>Daymet layers from <a href="https://www.earthdata.nasa.gov/centers/ornl-daac" target="_blank"
                         rel="noopener noreferrer">ORNL DAAC</a></li>
@@ -78,8 +78,8 @@
         <li>GeoColor imagery layers from GOES-East and GOES-West are provided by <a
                         href="https://www.star.nesdis.noaa.gov/goes/" target="_blank"
                         rel="noopener noreferrer">NOAA/NESDIS/STAR</a> .</li>
-        <li>Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, Air
-                Mass, Dust, and Fire Temperature) are provided by the <a href="https://weather.msfc.nasa.gov/sport/" target="_blank"
+        <li>Geostationary imagery layers from GOES-East, GOES-West and Himawari-9 (Red Visible, Clean Infrared, Air
+                Mass, Dust, and Fire Temperature) are provided by the <a href="https://weather.ndc.nasa.gov/sport/" target="_blank"
                         rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a> at
                 NASA
                 Marshall Space Flight Center.</li>
@@ -94,12 +94,13 @@
                         href="https://www.openstreetmap.org/" target="_blank"
                         rel="noopener noreferrer">OpenStreetMap</a>, and <a href="https://www.polarview.aq/"
                         target="_blank" rel="noopener noreferrer">PolarView</a>.</li>
-        <li>Coastlines, borders, roads, and place labels courtesy of <a href="https://www.openstreetmap.org/"
+        <li>Coastlines, borders, and roads courtesy of <a href="https://www.openstreetmap.org/"
                         target="_blank" rel="noopener noreferrer">OpenStreetMap</a> and <a
                         href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural
                         Earth</a>.
                 This data is available under the <a href="https://www.openstreetmap.org/copyright" target="_blank"
                         rel="noopener noreferrer">Open Database License</a>. © OpenStreetMap contributors.</li>
+        <li>Place labels are courtesy of Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community via the <a href="https://www.arcgis.com/home/item.html?id=a70340a048224752915ddbed9d2101a7">Hybrid Reference Layer (WGS84)</a>. Alignment of boundaries is a presentation of the feature provided by our data vendors and does not imply endorsement by Esri or any governing authority.</li>
         <li>Natural events database is provided by the <a href="https://eonet.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>.</li>
         <li>User-selectable color palettes are primarily derived from:<ul>

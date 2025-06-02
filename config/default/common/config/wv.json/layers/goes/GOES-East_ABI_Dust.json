@@ -4,7 +4,7 @@
       "id": "GOES-East_ABI_Dust",
       "description": "goes/GOES-East_ABI_Dust",
       "group": "overlays",
-      "tags": "geostationary geo",
+      "tags": "geostationary geo GOES-19",
       "layergroup": "Geostationary",
       "wrapX": true,
       "availability": {

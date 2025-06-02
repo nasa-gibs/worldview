@@ -6,8 +6,5 @@
   "long_url": "https://worldview.earthdata.nasa.gov/?t=2020-08-31-T17%3A05%3A22Z&l=Reference_Labels(hidden),Reference_Features(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor",
   "archived": false,
   "tags": [],
-  "deeplinks": [],
-  "references": {
-    "group": "https://api-ssl.bitly.com/v4/groups/BdcvjW6GKf1"
-  }
+  "deeplinks": []
 }

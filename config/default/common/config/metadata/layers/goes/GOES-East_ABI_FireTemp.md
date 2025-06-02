@@ -14,6 +14,6 @@ To interpret the RGB image, the following is a guide as to what each color repre
 * Water clouds - shades of blue
 * Ice clouds - shades of green
 
-The Geostationary Operational Environmental Satellites (GOES)-East satellite (currently, GOES-16) is centered on 75.2 degrees W, covering the Conterminous US, Canada, Central and South America. The GOES-East ABI imagery is available on a rolling 90-day basis at 10 minute intervals. The sensor resolution is 2 km, the imagery resolution in Worldview/Global Imagery Browse Services (GIBS) is 2 km, the temporal resolution is 10 minutes, and the latency (time from satellite acquisition to availability in GIBS) is approximately 40 minutes.
+The Geostationary Operational Environmental Satellites (GOES)-East satellite (currently, GOES-19) is centered on 75.2 degrees W, covering the Conterminous US, Canada, Central and South America. The GOES-East ABI imagery is available on a rolling 90-day basis at 10 minute intervals. The sensor resolution is 2 km, the imagery resolution in Worldview/Global Imagery Browse Services (GIBS) is 2 km, the temporal resolution is 10 minutes, and the latency (time from satellite acquisition to availability in GIBS) is approximately 40 minutes.
 
 References: [GOES-R: Fire Temperature RGB Quick Guide](https://www.star.nesdis.noaa.gov/goes/documents/QuickGuide_Fire_Temperature_RGB.pdf)

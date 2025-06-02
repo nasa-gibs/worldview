@@ -3,6 +3,7 @@
     "MODIS_Terra_L4_Net_Photosynthesis_8Day": {
       "id": "MODIS_Terra_L4_Net_Photosynthesis_8Day",
       "description": "modis/terra/MODIS_Terra_L4_Net_Photosynthesis_8Day",
+      "tags": "gap filled",
       "group": "overlays",
       "layergroup": "Photosynthesis, Net"
     }

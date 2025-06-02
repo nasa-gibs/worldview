@@ -1,0 +1,1 @@
+This example from December 20, 2024 shows confidence levels "First Detection < 50%" and "First Detection >= 50%" in shades of teal green in Grampian National Park, Victoria, Australia where a bushfire had just begun around December 17, 2024. Smoke emanating from the fires is also visible in the reflectance imagery under the vegetation disturbance status layer.

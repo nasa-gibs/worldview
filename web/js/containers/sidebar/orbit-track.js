@@ -18,7 +18,6 @@ function OrbitTrack(props) {
     getPalette,
     renderedPalette,
     requestPalette,
-    isLoading,
     isDistractionFreeModeActive,
     isMobile,
     parentLayer,
@@ -29,7 +28,7 @@ function OrbitTrack(props) {
   const [palette, setPalette] = useState();
 
   useEffect(() => {
-    if (hasPalette && !isLoading && !renderedPalette) {
+    if (hasPalette && !renderedPalette) {
       requestPalette(trackLayer.id);
       return;
     }
@@ -59,7 +58,6 @@ function OrbitTrack(props) {
 OrbitTrack.propTypes = {
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
-  isLoading: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   paletteLegends: PropTypes.array,
@@ -90,7 +88,6 @@ function mapStateToProps(state, ownProps) {
     trackLayer,
     paletteLegends,
     isCustomPalette,
-    isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     isMobile: screenSize.isMobileDevice,
     isDistractionFreeModeActive,

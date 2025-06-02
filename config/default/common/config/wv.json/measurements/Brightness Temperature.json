@@ -4,7 +4,7 @@
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
             "disableUnitConversion": true,
-            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, NOAA-20/VIIRS+CrIS, NOAA-21/VIIRS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, Suomi NPP/VIIRS+CrIS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, CALIPSO/IIR, GCOM-W1/AMSR2, GPM/GMI, NOAA-20/VIIRS, NOAA-20/VIIRS+CrIS, NOAA-21/VIIRS, TRMM/TMI, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, Suomi NPP/VIIRS+CrIS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
@@ -46,6 +46,22 @@
                         "OrbitTracks_Terra_Descending"
                     ]
                 },
+                "CALIPSO/IIR": {
+                    "id": "calipso/iir",
+                    "title": "CALIPSO/IIR",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Day_CH3",
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Night_CH3",
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Day_CH1_CH3",
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Night_CH1_CH3",
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Day_CH2_CH3",
+                "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Night_CH2_CH3",
+                "OrbitTracks_Calipso_Ascending",
+                "OrbitTracks_Calipso_Descending"
+            ]
+        },
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
                     "title": "GCOM-W1/AMSR2",
@@ -109,7 +125,7 @@
                 ,
                 "TRMM": {
                     "id": "trmm",
-                    "title": "TRMM",
+                    "title": "TRMM/TMI",
                     "description": "",
                     "image": "",
                     "settings": [
